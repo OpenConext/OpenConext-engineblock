@@ -1,0 +1,10 @@
+V Get metadata from serviceregistry
+- Get attributes from attribute provider
+V Show WAYF
+- Multi-level IdPs
+- Implement consent
+- User provisioning
+
+Extra:
+- Refactor Corto further
+- SURFmedia WAYF on metadata
