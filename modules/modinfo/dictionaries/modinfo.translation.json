@@ -1,0 +1,52 @@
+{
+	"modlist_header": {
+		"no": "Tilgjengelige moduler",
+		"de": "Verf\u00fcgbare Module",
+		"sl": "Razpolo\u017eljivi moduli",
+		"pt": "M\u00f3dulos dispon\u00edveis",
+		"sv": "Tillg\u00e4ngliga moduler",
+		"hr": "Raspolo\u017eivi moduli",
+		"da": "Tilg\u00e6ngelige moduler",
+		"fr": "Modules disponibles"
+	},
+	"modlist_name": {
+		"no": "Navn",
+		"de": "Name",
+		"sl": "Ime",
+		"pt": "Nome",
+		"sv": "Namn",
+		"hr": "Naziv",
+		"da": "Navn",
+		"fr": "Nom"
+	},
+	"modlist_status": {
+		"no": "Status",
+		"de": "Status",
+		"sl": "Status",
+		"pt": "Estado",
+		"sv": "Status",
+		"hr": "Status",
+		"da": "Status",
+		"fr": "Statut"
+	},
+	"modlist_enabled": {
+		"no": "P\u00e5sl\u00e5tt",
+		"de": "Aktiviert",
+		"sl": "Vklopljen",
+		"pt": "Activo",
+		"sv": "Aktiv",
+		"hr": "Omogu\u0107en",
+		"da": "Sl\u00e5et til",
+		"fr": "Activ\u00e9"
+	},
+	"modlist_disabled": {
+		"no": "Avsl\u00e5tt",
+		"de": "Deaktiviert",
+		"sl": "Izklopljen",
+		"pt": "Inactivo",
+		"sv": "Ej aktiv",
+		"hr": "Onemogu\u0107en",
+		"da": "Sl\u00e5et fra",
+		"fr": "D\u00e9sactiv\u00e9"
+	}
+}
