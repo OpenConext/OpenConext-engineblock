@@ -114,11 +114,12 @@ if (!defined('CORTO_CONSENT_DB_TABLE')) {
     define('CORTO_CONSENT_DB_TABLE', 'consent');
 }
 
-/**
- * Whether or not to remember the combination of attribute names WITH the values,
- * instead of just the attribute names.
- */
+
 if (!defined('CORTO_CONSENT_STORE_VALUES')) {
+    /**
+     * Whether or not to remember the combination of attribute names WITH the values,
+     * instead of just the attribute names.
+     */
     define('CORTO_CONSENT_STORE_VALUES', true);
 }
 
