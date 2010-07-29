@@ -53,11 +53,13 @@ function engineBlockEnrichAttributes(array $metaData, array $response, array &$a
 
 function engineBlockTranslateAttributeName($name)
 {
-    $attributeName = 'attribute_' . strtolower($name);
-    $translations = json_decode(file_get_contents(CORTO_APPLICATION_OVERRIDES_DIRECTORY . 'configs/attributes.definition.json'));
-    if (!isset($translations->$attributeName)) {
-        return $name;
+    if (isset($GLOBALS['attribute_names']['nl_NL'][$name])) {
+        return $GLOBALS['attribute_names']['nl_NL'][$name];
     }
 
-    return $translations->$attributeName->en;
+    if (isset($GLOBALS['attribute_names']['nl_NL']['urn:mace:dir:attribute-def:' . $name])) {
+        return $GLOBALS['attribute_names']['nl_NL']['urn:mace:dir:attribute-def:' . $name];
+    }
+
+    return $name;
 }

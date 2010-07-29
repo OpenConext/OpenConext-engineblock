@@ -59,6 +59,7 @@ require CORTO_APPLICATION_DIRECTORY . 'lib/Corto/Demo.php';
 cortoRequire('configs/config.inc.php');
 cortoRequire('configs/metadata.inc.php');
 cortoRequire('configs/certificates.inc.php');
+cortoRequire('configs/attribute_names.inc.php');
 
 if (!class_exists('XMLWriter')) {
     die('XMLWriter class does not exist! Please install libxml extension for php.');
