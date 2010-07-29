@@ -49,7 +49,7 @@ function engineBlockSetupMetadata()
 {
     $GLOBALS['metabase']['remote'] = array();
     
-    $metaDataXml = file_get_contents('https://serviceregistry.ebdev.net/simplesaml/module.php/janus/exportentities.php?state=prodaccepted&mimetype=application%2Fxml');
+    $metaDataXml = file_get_contents(ENGINEBLOCK_SERVICEREGISTRY_METADATA_URL);
     $hash = Corto_XmlToHash::xml2hash($metaDataXml);
 
     foreach ($hash['md:EntityDescriptor'] as $entity) {
