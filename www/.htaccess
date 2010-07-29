@@ -6,6 +6,5 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ /engineblock.php/$1 [L] # Send the query string to engineblock.php
 
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^(?!engineblock\.php).* engineblock.php/$0 [L]
+# Requests to the domain (no query string)
+RewriteRule ^$ engineblock.php/ [L]
