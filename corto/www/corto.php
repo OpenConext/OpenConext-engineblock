@@ -504,6 +504,7 @@ function sendResponse($request, $response)
         $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
 
         if (defined('CORTO_CONSENT_DB_DSN') && CORTO_CONSENT_DB_DSN!=='') {
+            $attributesID =  _getAttributesID($attributes);
             try {
                 $dbh = new PDO(CORTO_CONSENT_DB_DSN, CORTO_CONSENT_DB_USER, CORTO_CONSENT_DB_PASSWORD);
                 $table = CORTO_CONSENT_DB_TABLE;
@@ -512,7 +513,7 @@ function sendResponse($request, $response)
                 $statement->execute(array(
                     hash('sha1', $attributes['uid'][0]),
                     $request['saml:Issuer']['__v'],
-                    _getAttributesID($attributes)
+                    $attributesID
                 ));
                 $rows = $statement->fetchAll();
                 if (count($rows)===1) {
