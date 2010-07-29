@@ -504,7 +504,7 @@ function sendResponse($request, $response)
         $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
 
         if (defined('CORTO_CONSENT_DB_DSN') && CORTO_CONSENT_DB_DSN!=='') {
-            $attributesID =  _getAttributesID($attributes);
+            $attributesID = _getAttributesID($attributes);
             try {
                 $dbh = new PDO(CORTO_CONSENT_DB_DSN, CORTO_CONSENT_DB_USER, CORTO_CONSENT_DB_PASSWORD);
                 $table = CORTO_CONSENT_DB_TABLE;
@@ -517,7 +517,8 @@ function sendResponse($request, $response)
                 ));
                 $rows = $statement->fetchAll();
                 if (count($rows)===1) {
-                    $dbh->query('UPDATE {$table} SET usage_date = NOW() WHERE attribute = ' . $attributesID);
+                    $statement = $dbh->prepare('UPDATE {$table} SET usage_date = NOW() WHERE attribute = ?');
+                    $statement->execute(array($attributesID));
 
                     send($response, $GLOBALS['metabase']['remote'][$request['saml:Issuer']['__v']]);
                 }

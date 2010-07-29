@@ -1,10 +1,21 @@
 V Get metadata from serviceregistry
-- Get attributes from attribute provider
+V Get attributes from attribute provider
 V Show WAYF
 - Multi-level IdPs
 V Implement consent
-- User provisioning
+V User provisioning
+- Opzet .dev
+- Kopellen met SURFguest via Espee
 
 Extra:
 - Refactor Corto further
 - SURFmedia WAYF on metadata
+
+       'collabPersonHash', hash van attributen
+       'collabPersonRegistered', wanneer voor 't eerst geprovisioned
+       'collabPersonLastUpdated', wanneer voor 't laatst de attributen (en
+hash) zijn aangepast
+       'collabPersonLastAccessed', wanneer voor 't laatst ingelogd
+       'collabPersonIsGuest', is persoon uit de SURFnet doelgroep of niet
+       'collabPersonId', urn:collab:person:surfnet.nl:hansz
+       'o', surfnet.nl
