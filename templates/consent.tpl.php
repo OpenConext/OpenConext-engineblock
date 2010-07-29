@@ -23,27 +23,37 @@
                 <div class="column content">
                     <div class="item">
                         <span class="h2">Attribuut vrijgave</span>
+                        <img src="/images/startrek_voyager_engine_small.jpg" alt="" style="float: right" />
 
                         <form method="post" action="<?= $action ?>">
                             <input type=hidden name=ID value="<?= $ID ?>">
+                            <input type="hidden" name="consent" value="yes" />
 
                             <p>
                                 Wil je de volgende attributen vrijgeven voor de doel applicatie?
                             </p>
 
-                            <?php foreach ($attributes as $attributename => $attributevalue) { ?>
+                            <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
                             <dl style="margin-left: 60px;">
-                                <dt style="font-weight: bold;"><?=$attributename?></dt>
+                                <dt style="font-weight: bold;"><?=engineBlockTranslateAttributeName($attributeName)?></dt>
                                 <dd>
+                                    <? if (count($attributeValues)==1) { ?>
+                                      <?=$attributeValues[0];?>
+                                    <? } else { ?>
                                     <ul>
-                                    <?php foreach ($attributevalue as $value) { ?>
+                                    <?php foreach ($attributeValues as $value) { ?>
                                         <li><?=$value?></li>
                                     <?php } ?>
                                     </ul>
+                                    <? } ?>
                                 </dd>
                             </dl>
                             <? } ?>
                             <input type=submit value="Bevestig">
+                        </form>
+                        <form method="post" action="<?= $action ?>">
+                            <input type=hidden name=ID value="<?= $ID ?>">
+                            <input type=submit value="Geen toestemming verlenen">
                         </form>
                     </div>
                 </div>

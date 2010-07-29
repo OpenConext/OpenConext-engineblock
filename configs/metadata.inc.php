@@ -88,5 +88,16 @@ function engineBlockSetupMetadata()
 
 function engineBlockEnrichAttributes(array $metaData, array $response, array &$attributes)
 {
-    $attributes['smokes'] = array('nope');
+    $attributes['over-18'] = array('yup');
+}
+
+function engineBlockTranslateAttributeName($name)
+{
+    $attributeName = 'attribute_' . strtolower($name);
+    $translations = json_decode(file_get_contents(CORTO_APPLICATION_OVERRIDES_DIRECTORY . 'configs/attributes.definition.json'));
+    if (!isset($translations->$attributeName)) {
+        return $name;
+    }
+
+    return $translations->$attributeName->en;
 }

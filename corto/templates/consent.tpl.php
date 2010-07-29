@@ -6,7 +6,8 @@
     </head>
     <body>
         <form method="post" action="<?= $action ?>">
-            <input type=hidden name=ID value="<?= $ID ?>">
+            <input type="hidden" name="ID" value="<?= $ID ?>" />
+            <input type="hidden" name="consent" value="yes" />
             C: <?= $c ?>
             Vil du virkelig sende følgende:
             <pre>

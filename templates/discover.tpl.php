@@ -23,6 +23,7 @@
                 <div class="column content">
                     <div class="item">
                         <span class="h2">Identity Provider Selectie <?=($metaDataSP['OrganizationDisplayName']?' - ' . $metaDataSP['OrganizationDisplayName']:'')?></span>
+                        <img src="/images/startrek_voyager_engine_small.jpg" alt="" style="float: right" />
                         <h2>Selecteer je instelling of identiteits verstrekker:</h2>
 
                         <p>Selecteer in de drop down box je instelling om in te loggen bij SURFmedia.

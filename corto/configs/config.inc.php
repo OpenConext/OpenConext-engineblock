@@ -12,8 +12,6 @@
  * @version    $Id:$
  */
 
-die("Old");
-
 error_reporting(E_ALL);
 ini_set('display_errors', true);
 
@@ -58,3 +56,35 @@ define('CORTO_SIGNING_ALGORITHM', 'http://www.w3.org/2000/09/xmldsig#rsa-sha1');
  * Maximum age of a request/response in seconds
  */
 define('CORTO_MAX_AGE_SECONDS', 60);
+
+/**
+ * Whether or not we require user consent.
+ */
+define('CORTO_USE_CONSENT', false);
+
+/**
+ * The Database Source Name to use with PDO when connecting
+ * @link http://en.wikipedia.org/wiki/Database_Source_Name
+ */
+define('CORTO_CONSENT_DB_DSN', '');
+
+/**
+ * The username to connect to the database for storing consent
+ */
+define('CORTO_CONSENT_DB_USER', '');
+
+/**
+ * The password to connect to the database for storing consent
+ */
+define('CORTO_CONSENT_DB_PASSWORD', '');
+
+/**
+ * The table to store consent in
+ */
+define('CORTO_CONSENT_DB_TABLE', 'consent');
+
+/**
+ * Whether or not to remember the combination of attribute names WITH the values,
+ * instead of just the attribute names.
+ */
+define('CORTO_CONSENT_STORE_VALUES', true);

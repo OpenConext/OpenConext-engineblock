@@ -12,7 +12,6 @@
 * @package    Corto
 * @module     Main
 * @author     Mads Freek Petersen, <freek@ruc.dk>
-* @author     Boy Baukema, <boy@ibuildings.com>
 * @licence    MIT License, see http://www.opensource.org/licenses/mit-license.php
 * @copyright  2009-2010 WAYF.dk
 * @version    $Id:$
@@ -497,12 +496,40 @@ function sendResponse($request, $response)
         outFilter($response);
         prepareForSLO($response, 'sent');
 
-        //send($response, $GLOBALS['metabase']['remote'][$request['saml:Issuer']['__v']]);
+        if (!defined('CORTO_USE_CONSENT') || !CORTO_USE_CONSENT) {
+            return send($response, $GLOBALS['metabase']['remote'][$request['saml:Issuer']['__v']]);
+        }
+
+        $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
+
+        if (defined('CORTO_CONSENT_DB_DSN') && CORTO_CONSENT_DB_DSN!=='') {
+            try {
+                $dbh = new PDO(CORTO_CONSENT_DB_DSN, CORTO_CONSENT_DB_USER, CORTO_CONSENT_DB_PASSWORD);
+                $table = CORTO_CONSENT_DB_TABLE;
+                $query = "SELECT * FROM {$table} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ?";
+                $statement = $dbh->prepare($query);
+                $statement->execute(array(
+                    hash('sha1', $attributes['uid'][0]),
+                    $request['saml:Issuer']['__v'],
+                    _getAttributesID($attributes)
+                ));
+                $rows = $statement->fetchAll();
+                if (count($rows)===1) {
+                    $dbh->query('UPDATE {$table} SET usage_date = NOW() WHERE attribute = ' . $attributesID);
+
+                    send($response, $GLOBALS['metabase']['remote'][$request['saml:Issuer']['__v']]);
+                }
+
+            } catch (PDOException $e) {
+                print "Error!: " . $e->getMessage() . "<br/>";
+                die();
+            }
+        }
 
         $id = $response['_ID'];
         $_SESSION['consent'][$id]['request'] = $request;
         $_SESSION['consent'][$id]['response'] = $response;
-        $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
+
         print render(
             'consent',
             array(
@@ -518,11 +545,48 @@ function sendResponse($request, $response)
     send($response, $GLOBALS['metabase']['remote'][$request['saml:Issuer']['__v']]);
 }
 
+
+function _getAttributesID($attributes)
+{
+    $hashBase = NULL;
+    if (CORTO_CONSENT_STORE_VALUES) {
+        ksort($attributes);
+        $hashBase = serialize($attributes);
+    } else {
+            $names = array_keys($attributes);
+            sort($names);
+            $hashBase = implode('|', $names);
+    }
+    return hash('sha1', $hashBase);
+}
+
 function continue2sp()
 {
     $request  = $_SESSION['consent'][$_POST['ID']]['request'];
     $response = $_SESSION['consent'][$_POST['ID']]['response'];
     unset($_SESSION['consent'][$_POST['ID']]);
+
+    $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
+
+    if (defined('CORTO_USE_CONSENT') && CORTO_USE_CONSENT) {
+        if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
+            print render(
+                'noconsent',
+                array()
+            );
+            return;
+        }
+
+        if (defined('CORTO_CONSENT_DB_DSN') && CORTO_CONSENT_DB_DSN!=='') {
+            $dbh = new PDO(CORTO_CONSENT_DB_DSN, CORTO_CONSENT_DB_USER, CORTO_CONSENT_DB_PASSWORD);
+            $statement = $dbh->prepare("INSERT INTO consent (usage_date, hashed_user_id, service_id, attribute) VALUES (NOW(), ?, ?, ?)");
+            $statement->execute(array(
+                hash('sha1', $attributes['uid'][0]),
+                $request['saml:Issuer']['__v'],
+                _getAttributesID($attributes)
+            ));
+        }
+    }
 
     send($response, $GLOBALS['metabase']['remote'][$request['saml:Issuer']['__v']]);
 }

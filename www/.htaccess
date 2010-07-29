@@ -2,11 +2,10 @@ RewriteEngine On
 
 # If the requested url does not map to a file or directory, then forward it to engineblock.php/URL.
 # Note that it MUST be engineblock.php/URL because Corto uses the PATH_INFO server variable
-RewriteCond %{REQUEST_FILENAME} !-f 
-RewriteCond %{REQUEST_FILENAME} !-d 
-RewriteRule ^(.*)$ /engineblock.php/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /engineblock.php/$1 [L] # Send the query string to engineblock.php
 
-# Catch em all
-RewriteCond %{REQUEST_FILENAME} !-f 
-RewriteCond %{REQUEST_FILENAME} !-d 
-RewriteRule .* engineblock.php [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(?!engineblock\.php).* engineblock.php/$0 [L]
