@@ -1,9 +1,16 @@
 <?php
 
 ini_set('display_errors', true);
+ini_set('include_path', ini_get('include_path').':../library');
 
-define('CORTO_APPLICATION_OVERRIDES_DIRECTORY', realpath(dirname(__FILE__).'/../').'/');
-require './../corto/www/corto.php';
+require_once('COIN/Dispatcher.php');
+
+$dispatcher = new COIN_Dispatcher(); 
+$dispatcher->dispatch($_SERVER['REQUEST_URI'], $_REQUEST);
+
+// @TODO: for performance reasons, we may want to bypass all urls starting 
+// with /auth/ and direct them to corto immediately. Fast way to do that 
+// once needed is to have a physical www/auth dir with an index.php file that requries corto.
 
 function engineBlockSetupMetadata()
 {
