@@ -12,7 +12,7 @@
  * @version    $Id:$
  */
 
-class Corto_XmlToHash
+class Corto_XmlToArray
 {
     const PRIVATE_KEY_PREFIX    = '__';
     /**
@@ -57,7 +57,7 @@ class Corto_XmlToHash
         'md:KeyDescriptor',
     );
 
-    public static function xml2hash($xml)
+    public static function xml2array($xml)
     {
         $parser = xml_parser_create();
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
@@ -69,7 +69,7 @@ class Corto_XmlToHash
         }
 
         xml_parser_free($parser);
-        $return = self::_xml2hash($values);
+        $return = self::_xml2array($values);
         return $return[0];
     }
 
@@ -82,7 +82,7 @@ class Corto_XmlToHash
      * @param array $namespaceMapping
      * @return array
      */
-    protected static function _xml2hash(&$elements, $level = 1, $namespaceMapping = array())
+    protected static function _xml2array(&$elements, $level = 1, $namespaceMapping = array())
     {
         $newElement = array();
         while($value = array_shift($elements)) {
@@ -118,7 +118,7 @@ class Corto_XmlToHash
                 $complete[self::VALUE_KEY] = $attributeValue;
             }
             if ($value['type'] == 'open') {
-                $cs = self::_xml2hash($elements, $level + 1, $namespaceMapping);
+                $cs = self::_xml2array($elements, $level + 1, $namespaceMapping);
                 foreach($cs as $c) {
                     $tagName = $c[self::TAG_NAME_KEY];
                     unset($c[self::TAG_NAME_KEY]);
@@ -149,7 +149,7 @@ class Corto_XmlToHash
      * @param string $elementName Specific element to convert, if empty then the top level element is used
      * @return string XML from array
      */
-    public static function hash2xml(array $hash, $elementName = "", $useIndentation=false)
+    public static function array2xml(array $hash, $elementName = "", $useIndentation=false)
     {
         $writer = new XMLWriter();
         $writer->openMemory();
@@ -166,13 +166,13 @@ class Corto_XmlToHash
             }
         }
 
-        self::_hash2xml($hash, $elementName, $writer);
+        self::_array2xml($hash, $elementName, $writer);
 
         $writer->endDocument();
         return $writer->outputMemory();
     }
 
-    protected static function _hash2xml($hash, $elementName, XMLWriter $writer, $level = 0)
+    protected static function _array2xml($hash, $elementName, XMLWriter $writer, $level = 0)
     {
         if ($level > self::MAX_RECURSION_LEVEL) {
             throw new Exception('Recursion threshhold exceed on element: '.$elementName . ' for hashvalue: ' . var_export($hash, true));
@@ -188,7 +188,7 @@ class Corto_XmlToHash
         foreach((array)$hash as $key => $value) {
             if (is_int($key)) {
                 // Normal numeric index, value is probably a hash structure, recurse...
-                self::_hash2xml($value, $elementName, $writer, $level + 1);
+                self::_array2xml($value, $elementName, $writer, $level + 1);
 
             } elseif ($key === self::VALUE_KEY) {
                 $writer->text($value);
@@ -200,7 +200,7 @@ class Corto_XmlToHash
                 $writer->writeAttribute(substr($key, 1), $value);
 
             } else {
-                self::_hash2xml($value, $key, $writer, $level + 1);
+                self::_array2xml($value, $key, $writer, $level + 1);
             }
         }
 
@@ -209,7 +209,7 @@ class Corto_XmlToHash
         }
     }
 
-    public static function attributes2hash($attributes)
+    public static function attributes2array($attributes)
     {
         foreach((array)$attributes as $attribute) {
             foreach ($attribute['saml:AttributeValue'] as $value) {
@@ -219,7 +219,7 @@ class Corto_XmlToHash
         return $res;
     }
 
-    public static function hash2attributes($attributes)
+    public static function array2attributes($attributes)
     {
         foreach((array)$attributes as $name => $attribute) {
             $newAttribute = array(

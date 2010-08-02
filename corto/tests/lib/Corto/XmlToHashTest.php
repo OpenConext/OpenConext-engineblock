@@ -30,7 +30,7 @@ class XmlToHashTest extends PHPUnit_Framework_TestCase
     </samlp:RequestedAuthnContext>
 </samlp:AuthnRequest>
 ';
-        $hash = Corto_XmlToHash::xml2hash($xml);
+        $hash = Corto_XmlToArray::xml2array($xml);
 
         $expectedHash = array (
   '__t' => 'samlp:AuthnRequest',
@@ -66,7 +66,7 @@ class XmlToHashTest extends PHPUnit_Framework_TestCase
   ),
 );
         $this->assertEquals($expectedHash, $hash, 'Example SAML 2.0 Authentication Request');
-        $this->assertEquals($xml, Corto_XmlToHash::hash2xml($hash, '', true), "Example SAML 2.0 Authentication Request - converted to hash and back to xml again gives same result");
+        $this->assertEquals($xml, Corto_XmlToArray::array2xml($hash, '', true), "Example SAML 2.0 Authentication Request - converted to hash and back to xml again gives same result");
 
     }
 
@@ -163,7 +163,7 @@ class XmlToHashTest extends PHPUnit_Framework_TestCase
     </saml:Assertion>
 </samlp:Response>
 ';
-        $hash = Corto_XmlToHash::xml2hash($xml);
+        $hash = Corto_XmlToArray::xml2array($xml);
 
         $expectedHash = array (
   '__t' => 'samlp:Response',
@@ -448,7 +448,7 @@ class XmlToHashTest extends PHPUnit_Framework_TestCase
 );
 
         $this->assertEquals($expectedHash, $hash, "Example SAML 2.0 Authentication Response");
-        $this->assertEquals($xml, Corto_XmlToHash::hash2xml($hash, '', true), "Example SAML 2.0 Authentication Response - converted to hash and back to xml again gives same result");
+        $this->assertEquals($xml, Corto_XmlToArray::array2xml($hash, '', true), "Example SAML 2.0 Authentication Response - converted to hash and back to xml again gives same result");
     }
 
     public function testHashToXml()

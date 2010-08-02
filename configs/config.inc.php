@@ -20,97 +20,104 @@ if (file_exists($localConfigFile)) {
     require $localConfigFile;
 }
 
-/**
- * Print debugging and log to the debug file
- */
 if (!defined('CORTO_DEBUG')) {
+    /**
+     * Print debugging and log to the debug file
+     */
     define('CORTO_DEBUG', true);
 }
 
-/**
- * File path to a file where debugging should be appended
- */
 if (!defined('CORTO_DEBUG_LOG')) {
+    /**
+     * File path to a file where debugging should be appended
+     */
     define('CORTO_DEBUG_LOG', '/tmp/corto_debug.log');
 }
 
-/**
- * Add traces to pages
- */
 if (!defined('CORTO_TRACE')) {
+    /**
+     * Add traces to pages
+     */
     define('CORTO_TRACE', true);
 }
 
-/**
- * Where Are You From URL
- */
 if (!defined('CORTO_WAYF_URL')) {
+    /**
+     * Where Are You From URL
+     */
     define('CORTO_WAYF_URL', CORTO_BASE_URL . 'wayf');
 }
 
-/**
- * Path that the cookies are valid for defaults to the script name (eg: /corto.php)
- */
 if (!defined('CORTO_COOKIE_PATH')) {
+    /**
+     * Path that the cookies are valid for defaults to the script name (eg: /corto.php)
+     */
     define('CORTO_COOKIE_PATH', '/');
 }
 
-/**
- * Use secure cookies
- */
 if (!defined('CORTO_USE_SECURE_COOKIES')) {
+    /**
+     * Use secure cookies
+     */
     define('CORTO_USE_SECURE_COOKIES', false);
 }
 
-/**
- * Signing algoritm to use, in URL form
- *
- * @example http://www.w3.org/2000/09/xmldsig#rsa-sha1
- */
 if (!defined('CORTO_SIGNING_ALGORITM')) {
+    /**
+     * Signing algoritm to use, in URL form
+     *
+     * @example http://www.w3.org/2000/09/xmldsig#rsa-sha1
+     */
     define('CORTO_SIGNING_ALGORITHM', 'http://www.w3.org/2000/09/xmldsig#rsa-sha1');
 }
 
-/**
- * Maximum age of a request/response in seconds
- */
 if (!defined('CORTO_MAX_AGE_SECONDS')) {
+    /**
+     * Maximum age of a request/response in seconds
+     */
     define('CORTO_MAX_AGE_SECONDS', 600);
 }
 
-/**
- * Whether or not we require user consent.
- */
+if (!defined('CORTO_MAX_AGE_SECONDS')) {
+    /**
+     * Maximum number of proxies allowed for a request created by Corto
+     */
+    define('CORTO_MAX_AGE_SECONDS', 3);
+}
+
 if (!defined('CORTO_USE_CONSENT')) {
+    /**
+     * Whether or not we require user consent.
+     */
     define('CORTO_USE_CONSENT', true);
 }
 
-/**
- * The Database Source Name to use with PDO when connecting
- * @link http://en.wikipedia.org/wiki/Database_Source_Name
- */
 if (!defined('CORTO_CONSENT_DB_DSN')) {
+    /**
+     * The Database Source Name to use with PDO when connecting
+     * @link http://en.wikipedia.org/wiki/Database_Source_Name
+     */
     define('CORTO_CONSENT_DB_DSN', 'mysql:host=localhost;dbname=engineblock');
 }
 
-/**
- * The username to connect to the database for storing consent
- */
 if (!defined('CORTO_CONSENT_DB_USER')) {
+    /**
+     * The username to connect to the database for storing consent
+     */
     define('CORTO_CONSENT_DB_USER', 'root');
 }
 
-/**
- * The password to connect to the database for storing consent
- */
 if (!defined('CORTO_CONSENT_DB_PASSWORD')) {
+    /**
+     * The password to connect to the database for storing consent
+     */
     define('CORTO_CONSENT_DB_PASSWORD', 'engineblock');
 }
 
-/**
- * The table to store consent in
- */
 if (!defined('CORTO_CONSENT_DB_TABLE')) {
+    /**
+     * The table to store consent in
+     */
     define('CORTO_CONSENT_DB_TABLE', 'consent');
 }
 

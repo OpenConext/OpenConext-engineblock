@@ -3,21 +3,24 @@
 ini_set('display_errors', true);
 ini_set('include_path', ini_get('include_path').':../library');
 
-require_once('COIN/Dispatcher.php');
+define('CORTO_APPLICATION_OVERRIDES_DIRECTORY', realpath(dirname(__FILE__).'/../').'/');
+require './../corto/www/corto.php';
 
-$dispatcher = new COIN_Dispatcher(); 
-$dispatcher->dispatch($_SERVER['REQUEST_URI'], $_REQUEST);
+//require_once('COIN/Dispatcher.php');
+
+//$dispatcher = new COIN_Dispatcher();
+//$dispatcher->dispatch($_SERVER['PATH_INFO'], $_REQUEST);
 
 // @TODO: for performance reasons, we may want to bypass all urls starting 
 // with /auth/ and direct them to corto immediately. Fast way to do that 
 // once needed is to have a physical www/auth dir with an index.php file that requries corto.
 
-function engineBlockSetupMetadata()
+function engineBlockSetupMetaData()
 {
     $GLOBALS['metabase']['remote'] = array();
 
     $metaDataXml = file_get_contents(ENGINEBLOCK_SERVICEREGISTRY_METADATA_URL);
-    $hash = Corto_XmlToHash::xml2hash($metaDataXml);
+    $hash = Corto_XmlToArray::xml2array($metaDataXml);
 
     foreach ($hash['md:EntityDescriptor'] as $entity) {
         $entityID = $entity['_entityID'];
@@ -47,15 +50,14 @@ function engineBlockSetupMetadata()
             }
         }
 
-
         $GLOBALS['metabase']['remote'][$entityID] = $metaData;
     }
 }
 
-function engineBlockOutfilter(array $metaData, array $response, array &$attributes)
+function engineBlockOutFilter(array $metaData, array $response, array &$attributes)
 {
-    engineBlockEnrichAttributes($attributes);
     engineBlockRegisterUser($attributes);
+    engineBlockEnrichAttributes($attributes);
 }
 
 function engineBlockEnrichAttributes(array &$attributes)
@@ -95,7 +97,7 @@ function engineBlockRegisterUser($attributes)
         }
         $nameCount++;
     }
-    
+
     // No other attributes than uid found
     if (empty($sqlValues)) {
         return false;

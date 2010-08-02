@@ -17,12 +17,16 @@
 * @version    $Id:$
 */
 
-$baseUrl = selfUrl();
+if (!class_exists('XMLWriter')) {
+    die('XMLWriter class does not exist! Please install libxml extension for php.');
+}
+
+$GLOBALS['baseUrl'] = selfUrl();
 
 /**
- * Our location
+ * Our location, ends with /
  *
- * @example http://localhost/corto.php
+ * @example http://localhost/corto.php/
  */
 define('CORTO_BASE_URL', $GLOBALS['baseUrl']);
 
@@ -39,37 +43,30 @@ define('CORTO_APPLICATION_DIRECTORY', dirname(__FILE__).'/../');
 /**
  * @var $ALLOWED_SERVICES array Services that Corto will execute (prevents executing random functions)
  */
-$ALLOWED_SERVICES = array(
-    'demoApp',
-    'singleSignOnService',
-    'assertionConsumerService',
-    'unsolicitedAssertionConsumerService',
-    'sendUnsolicitedAssertion',
-    'artifactResolutionService',
-    'attributeService',
-    'assertionService',
-    'metaDataService',
+$GLOBALS['ALLOWED_SERVICES'] = array(
+    'demoapp',
+    'singlesignonservice',
+    'assertionconsumerservice',
+    'unsolicitedassertionconsumerservice',
+    'sendunsolicitedassertion',
+    'artifactresolutionService',
+    'attributeservice',
+    'assertionservice',
+    'metadataservice',
     'continue2idp',
     'continue2sp',
+    'handlevirtualidp',
 );
 
-require CORTO_APPLICATION_DIRECTORY . 'lib/Corto/XmlToHash.php';
-require CORTO_APPLICATION_DIRECTORY . 'lib/Corto/Demo.php';
-
-cortoRequire('configs/config.inc.php');
-cortoRequire('configs/metadata.inc.php');
-cortoRequire('configs/certificates.inc.php');
-cortoRequire('configs/attribute_names.inc.php');
-
-if (!class_exists('XMLWriter')) {
-    die('XMLWriter class does not exist! Please install libxml extension for php.');
-}
+require CORTO_APPLICATION_DIRECTORY . 'library/Corto/XmlToArray.php';
+require CORTO_APPLICATION_DIRECTORY . 'library/Corto/Demo.php';
 
 /**
  * @var $entityCode string Entity code (array key in metadata['hosted']), default: 'main'
  */
 $entityCode = '';
 $service = '';
+
 if (isset($_SERVER['PATH_INFO'])) {
     // From corto.php/hostedEntity/requestedService get the hosted entity code and the requested service
     $entityCodeAndService = preg_split('/\//', $_SERVER['PATH_INFO'], 0, PREG_SPLIT_NO_EMPTY);
@@ -91,28 +88,49 @@ if (!$service) {
 // From the hosted entity name like entity name_myidp, get a hosted IDP identifier (myIdp in the example).
 $entityComponents = preg_split('/_/', $entityCode, 0, PREG_SPLIT_NO_EMPTY);
 $entityCode = $entityComponents[0];
-$idp = '';
+$idpMd5 = '';
 if (isset($entityComponents[1])) {
-    $idp = $entityComponents[1];
+    $idpMd5 = $entityComponents[1];
 }
 
 /**
- * @var $entityID string URL to currently hosted entity, example: http://localhost/corto.php/main_myidp/Single
+ * @var $GLOBALS['metabase'] Metadata configuration variable
  */
-$entityID = $baseUrl . $entityCode;
-if (isset($metabase['hosted'][$entityID])) {
-    $meta = $metabase['hosted'][$entityID];
+$GLOBALS['metabase'] = array();
+
+cortoRequire('configs/metadata.hosted.inc.php');
+
+/**
+ * @var $entityID string URL to currently hosted entity, example: http://localhost/corto.php/main_abcdef124/Single
+ */
+$entityID = CORTO_BASE_URL . $entityCode;
+if (isset($GLOBALS['metabase']['hosted'][$entityID])) {
+    $meta = $GLOBALS['metabase']['hosted'][$entityID];
 }
 else {
     // Unregistered entity... that's cool with us.
     $meta = array();
 }
 
-if ($idp) {
-    $meta['idp'] = $baseUrl . $idp;
-}
 $meta['EntityID']   = $entityID;
 $meta['entitycode'] = $entityCode;
+
+cortoRequire('configs/config.inc.php');
+cortoRequire('configs/metadata.remote.inc.php');
+cortoRequire('configs/certificates.inc.php');
+cortoRequire('configs/attribute_names.inc.php');
+
+if ($idpMd5) {
+    $remoteEntityIds = array_keys($GLOBALS['metabase']['remote']);
+    foreach ($remoteEntityIds as $remoteEntityId) {
+        if (md5($remoteEntityId) === $idpMd5) {
+            $meta['idp'] = $remoteEntityId;
+            break;
+        }
+    }
+}
+
+$GLOBALS['meta'] = $meta;
 
 session_set_cookie_params(0, CORTO_COOKIE_PATH, '', CORTO_USE_SECURE_COOKIES);
 session_name($entityCode);
@@ -120,7 +138,7 @@ session_start();
 
 prepareParameters();
 
-if (in_array($service, $ALLOWED_SERVICES)) {
+if (in_array(strtolower($service), $GLOBALS['ALLOWED_SERVICES'])) {
     $service();
 }
 else {
@@ -181,7 +199,7 @@ function convertAndVerifyMessages()
             $message = gzinflate(base64_decode($_GET[$req]));
         }
         if ($message) {
-            $_REQUEST[$messageHashKey] = Corto_XmlToHash::xml2hash($message);
+            $_REQUEST[$messageHashKey] = Corto_XmlToArray::xml2array($message);
         }
         if (isset($_GET['j'.$req])) {
             $_REQUEST[$messageHashKey] = json_decode(gzinflate(base64_decode($_GET['j'.$req])), 1);
@@ -274,12 +292,14 @@ function singleSignOnService()
     // If one of the scoped IDP has a cache entry, return that
     $cachedIDPs = array_keys((array)$_SESSION['CachedResponses']);
     if ($commonIDPs = array_intersect($cachedIDPs, $scopedIDPs) || (sizeof($scopedIDPs) == 0 && $commonIDPs = $cachedIDPs)) {
-        sendResponse($request, createResponse($request, null, null, $_SESSION['CachedResponses'][$commonIDPs[0]]));
+        $response = createResponse($request, null, null, $_SESSION['CachedResponses'][$commonIDPs[0]]);
+        sendResponse($request, $response);
     }
 
     // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
     if (isset($request['samlp:Scoping']['_ProxyCount']) && $request['samlp:Scoping']['_ProxyCount'] == 0) {
-        sendResponse($request, createResponse($request, 'ProxyCountExceeded'));
+        $response = createResponse($request, 'ProxyCountExceeded');
+        sendResponse($request, $response);
     }
 
     // If we configured an allowed IDPList then we ignore the original scoping rules
@@ -317,7 +337,8 @@ function singleSignOnService()
 
     // No IdPs found! Send an error response back.
     if (count($candidateIDPs) === 0) {
-        sendResponse($request, createResponse($request, 'NoSupportedIDP'));
+        $response = createResponse($request, 'NoSupportedIDP');
+        sendResponse($request, $response);
     }
 
     // discover should take are of IsPassive ...
@@ -378,7 +399,7 @@ function sendUnsolicitedAssertion()
 
 function artifactResolutionService()
 {
-    $postData = Corto_XmlToHash::xml2hash(file_get_contents("php://input"));
+    $postData = Corto_XmlToArray::xml2array(file_get_contents("php://input"));
     $artifact = $postData['SOAP-ENV:Body']['samlp:ArtifactResolve']['saml:Artifact']['__v'];
     newSession(sha1($artifact), 'artifact');
     $message = $_SESSION['message'];
@@ -401,7 +422,7 @@ function artifactResolutionService()
 
 function attributeService()
 {
-    $postData = Corto_XmlToHash::xml2hash(file_get_contents("php://input"));
+    $postData = Corto_XmlToArray::xml2array(file_get_contents("php://input"));
     $response = createResponse($postData['SOAP-ENV:Body']['samlp:AttributeQuery']);
     soapResponse(array('saml:Response' => $response));
 }
@@ -412,7 +433,7 @@ function assertionService()
     header('Content-Type: application/samlassertion+xml');
     $assertion = $_SESSION['assertion'];
     if ($assertion) {
-        print Corto_XmlToHash::hash2xml($assertion, 'saml:Assertion');
+        print Corto_XmlToArray::array2xml($assertion, 'saml:Assertion');
     }
 }
 
@@ -433,7 +454,7 @@ function metaDataService()
                     'md:NameIDFormat'=>array('__v'=>'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'),
                     'md:SingleSignOnService'=>array(
                         '_Binding' =>$remoteService['SingleSignOnService']['Binding'],
-                        '_Location'=>$remoteService['SingleSignOnService']['Location'],
+                        '_Location'=>CORTO_BASE_URL . 'main_' . md5($entityID) . '/singleSignOnService',
                     ),
                 ),
         );
@@ -446,7 +467,7 @@ function metaDataService()
                             'ds:KeyInfo'=>array(
                                 'ds:X509Data'=>array(
                                     'ds:X509Certificate'=>array(
-                                        '__v' => $GLOBALS['certificates'][$entityID]['public'],
+                                        '__v' => $GLOBALS['certificates']['main']['public'],
                                     ),
                                 ),
                             ),
@@ -457,7 +478,7 @@ function metaDataService()
                             'ds:KeyInfo'=>array(
                                 'ds:X509Data'=>array(
                                     'ds:X509Certificate'=>array(
-                                        '__v' => $GLOBALS['certificates'][$entityID]['public'],
+                                        '__v' => $GLOBALS['certificates']['main']['public'],
                                     ),
                                 ),
                             ),
@@ -468,7 +489,7 @@ function metaDataService()
         $entitiesDescriptor['md:EntityDescriptor'][] = $entityDescriptor;
     }
 
-    $xml = Corto_XmlToHash::hash2xml($entitiesDescriptor, 'md:EntitiesDescriptor', true);
+    $xml = Corto_XmlToArray::array2xml($entitiesDescriptor, 'md:EntitiesDescriptor', true);
     if (CORTO_DEBUG) {
         $dom = new DOMDocument();
         $dom->loadXML($xml);
@@ -497,11 +518,12 @@ function sendResponse($request, $response)
         outFilter($response);
         prepareForSLO($response, 'sent');
 
+        // We don't require consent
         if (!defined('CORTO_USE_CONSENT') || !CORTO_USE_CONSENT) {
             return send($response, $GLOBALS['metabase']['remote'][$request['saml:Issuer']['__v']]);
         }
 
-        $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
+        $attributes = Corto_XmlToArray::attributes2array($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
 
         if (defined('CORTO_CONSENT_DB_DSN') && CORTO_CONSENT_DB_DSN!=='') {
             $attributesID = _getAttributesID($attributes);
@@ -569,7 +591,7 @@ function continue2sp()
     $response = $_SESSION['consent'][$_POST['ID']]['response'];
     unset($_SESSION['consent'][$_POST['ID']]);
 
-    $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
+    $attributes = Corto_XmlToArray::attributes2array($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
 
     if (defined('CORTO_USE_CONSENT') && CORTO_USE_CONSENT) {
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
@@ -579,6 +601,8 @@ function continue2sp()
             );
             return;
         }
+
+        // Consent was given.
 
         if (defined('CORTO_CONSENT_DB_DSN') && CORTO_CONSENT_DB_DSN!=='') {
             $dbh = new PDO(CORTO_CONSENT_DB_DSN, CORTO_CONSENT_DB_USER, CORTO_CONSENT_DB_PASSWORD);
@@ -665,7 +689,7 @@ function handleVirtualIDP()
 
     $combinedAttributes = array();
     foreach((array)$_SESSION['virtual']['hSAMLResponses'] as $idp => $response) {
-        $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
+        $attributes = Corto_XmlToArray::attributes2array($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
         foreach($attributes as $name => $values) {
             foreach($values as $value) {
                 $combinedAttributes[$name][] = $value;
@@ -718,12 +742,12 @@ function soapRequest($soapService, $element)
         CURLOPT_HTTPHEADER          => array('SOAPAction: ""'),
         CURLOPT_RETURNTRANSFER      => 1,
         CURLOPT_SSL_VERIFYPEER      => FALSE,
-        CURLOPT_POSTFIELDS          => Corto_XmlToHash::hash2xml($soapEnvelope),
+        CURLOPT_POSTFIELDS          => Corto_XmlToArray::array2xml($soapEnvelope),
         CURLOPT_HEADER              => 0,
     );
     curl_setopt_array($curlHandler, $curlOptions);
     $curlResult = curl_exec($curlHandler);
-    $soapResponse = Corto_XmlToHash::xml2hash($curlResult);
+    $soapResponse = Corto_XmlToArray::xml2array($curlResult);
     return $soapResponse['SOAP-ENV:Body'];
 }
 
@@ -734,7 +758,7 @@ function soapResponse($element)
         'xmlns:SOAP-ENV' => "http://schemas.xmlsoap.org/soap/envelope/",
         'SOAP-ENV:Body' => $element,
     );
-    print Corto_XmlToHash::hash2xml($soapResponse);
+    print Corto_XmlToArray::array2xml($soapResponse);
 }
 
 function send($message, $metaData)
@@ -767,7 +791,7 @@ function sendHTTPRedirect($message, $metaData)
         unset($message['ds:Signature']);
     }
     $location = $message['_Destination'] . $message['_Recipient']; # shib remember ...
-    $newMessage = $metaData['json'] ? json_encode($message) : Corto_XmlToHash::hash2xml($message);
+    $newMessage = $metaData['json'] ? json_encode($message) : Corto_XmlToArray::array2xml($message);
     $newMessage = urlencode(base64_encode(gzdeflate($newMessage)));
     $newMessage = ($message['__']['ProtocolBinding'] == 'JSON-Redirect' ? "j"  : "") . "$name=" . $newMessage;
     $newMessage .= $message['__']['RelayState'] ? '&RelayState=' . urlencode($message['__']['RelayState']) : "";
@@ -790,12 +814,12 @@ function sendHTTPPost($message, $metaData)
     $name = $message['__']['paramname'];
     $action = $message['_Destination'] . $message['_Recipient'];
     if ($message['__']['ProtocolBinding'] == 'JSON-POST') {
-        if ($rs = $message['__']['RelayState']) {
-            $rs = "&RelayState=$rs";
+        if ($relayState = $message['__']['RelayState']) {
+            $relayState = "&RelayState=$relayState";
         }
         $name = 'j' . $name;
         $encodedMessage = json_encode($message);
-        $signatureHTMLValue = htmlspecialchars(base64_encode(sha1($metaData['sharedkey'] . sha1("$name=$message$rs"))));
+        $signatureHTMLValue = htmlspecialchars(base64_encode(sha1($metaData['sharedkey'] . sha1("$name=$message$relayState"))));
         $extra .= '<input type="hidden" name="Signature" value="' . $signatureHTMLValue . '">';
 
     } else {
@@ -825,11 +849,11 @@ function sendHTTPPost($message, $metaData)
                 $message
             );
         } 
-        $encodedMessage = Corto_XmlToHash::hash2xml($message);
+        $encodedMessage = Corto_XmlToArray::array2xml($message);
     }
 
-    $extra = $message['__']['RelayState'] ? '<input type="hidden" name="RelayState" value="' . htmlspecialchars($message['__']['RelayState']) . '">' : '';
-    $extra .= $message['__']['target'] ? '<input type="hidden" name="target" value="' . htmlspecialchars($message['__']['target']) . '">' : '';
+    $extra  = $message['__']['RelayState'] ? '<input type="hidden" name="RelayState" value="' . htmlspecialchars($message['__']['RelayState']) . '">' : '';
+    $extra .= $message['__']['target']     ? '<input type="hidden" name="target" value="'     . htmlspecialchars($message['__']['target'])     . '">' : '';
     $encodedMessage = htmlspecialchars(base64_encode($encodedMessage));
     print render(
         'form',
@@ -992,7 +1016,7 @@ function createRequest($idp, $scoping = null)
         return $request;
     }
     $request['samlp:Scoping'] = $origRequest['samlp:Scoping'];
-    $request['samlp:Scoping']['_ProxyCount'] = 3;
+    $request['samlp:Scoping']['_ProxyCount'] = CORTO_REQUEST_MAX_PROXIES;
     if ($proxyCount = $origRequest['samlp:Scoping']['_ProxyCount']) {
         $request['samlp:Scoping']['_ProxyCount'] = $proxyCount - 1;
     }
@@ -1145,7 +1169,7 @@ function createResponse($request, $status = null, $attributes = null, $sourceRes
         $attributeStatement['AttributeConsumingServiceIndex'] = '-no AttributeConsumingServiceIndex given-';
     }
     
-    $response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute'] = Corto_XmlToHash::hash2attributes($attributeStatement);
+    $response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute'] = Corto_XmlToArray::array2attributes($attributeStatement);
     $extraAttributes = Array(
         '_Name' => 'xuid',
         '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic',
@@ -1202,12 +1226,12 @@ function sign($privateKey, $element)
     );
 
     $key = openssl_pkey_get_private($privateKey);
-    $canonicalXml = DOMDocument::loadXML(Corto_XmlToHash::hash2xml($element))->firstChild->C14N(true, false);
+    $canonicalXml = DOMDocument::loadXML(Corto_XmlToArray::array2xml($element))->firstChild->C14N(true, false);
 
     $signature['ds:SignedInfo']['ds:Reference']['ds:DigestValue']['__v'] = base64_encode(sha1($canonicalXml, TRUE));
     $signature['ds:SignedInfo']['ds:Reference']['_URI'] = "#" . $element['_ID'];
 
-    $canonicalXml2 = DOMDocument::loadXML(Corto_XmlToHash::hash2xml($signature['ds:SignedInfo']))->firstChild->C14N(true, false);
+    $canonicalXml2 = DOMDocument::loadXML(Corto_XmlToArray::array2xml($signature['ds:SignedInfo']))->firstChild->C14N(true, false);
 
     openssl_sign($canonicalXml2, $signatureValue, $key);
 
@@ -1250,7 +1274,7 @@ function verify($publicKey, $xml, $element)
 function encryptElement($publicKey, $element, $tag = null)
 {
     if ($tag) $element['__t'] = $tag;
-    $data = Corto_XmlToHash::hash2xml($element);
+    $data = Corto_XmlToArray::array2xml($element);
     $cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128,'','cbc','');
     $iv = mcrypt_create_iv(mcrypt_enc_get_iv_size($cipher), MCRYPT_DEV_URANDOM);
     $sessionkey = mcrypt_create_iv(mcrypt_enc_get_key_size($cipher), MCRYPT_DEV_URANDOM);
@@ -1312,7 +1336,7 @@ function decryptElement($privateKey, $element, $asXML = false)
     $decryptedData = mdecrypt_generic($cipher, substr($encryptedData, $ivSize));
     mcrypt_generic_deinit($cipher);
     mcrypt_module_close($cipher);    
-    return $asXML ? $decryptedData : Corto_XmlToHash::xml2hash($decryptedData);
+    return $asXML ? $decryptedData : Corto_XmlToArray::xml2array($decryptedData);
 }
 
 function prepareForSLO($response, $sentorreceived)
@@ -1469,7 +1493,7 @@ function callAttributeFilter($metaData, $callback, &$response)
     }
 
     // Take the attributes out
-    $attributes = Corto_XmlToHash::attributes2hash($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
+    $attributes = Corto_XmlToArray::attributes2array($response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute']);
 
     // Pass em along
     if (is_callable($callback)) {
@@ -1480,7 +1504,7 @@ function callAttributeFilter($metaData, $callback, &$response)
     }
 
     // Put em back
-    $response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute'] = Corto_XmlToHash::hash2attributes($attributes);
+    $response['saml:Assertion']['saml:AttributeStatement']['saml:Attribute'] = Corto_XmlToArray::array2attributes($attributes);
 }
 
 function redirect($location, $message = null)
@@ -1615,7 +1639,7 @@ function debugRequest($url, $message)
     }
     $displayRequest['query'] = $rawRequest;
     
-    $xmlMessage = htmlspecialchars(Corto_XmlToHash::hash2xml($message));
+    $xmlMessage = htmlspecialchars(Corto_XmlToArray::array2xml($message));
     return print_r($displayRequest, 1) .
             $xmlMessage .
             $displayMessage .

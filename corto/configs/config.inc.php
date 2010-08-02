@@ -58,6 +58,11 @@ define('CORTO_SIGNING_ALGORITHM', 'http://www.w3.org/2000/09/xmldsig#rsa-sha1');
 define('CORTO_MAX_AGE_SECONDS', 60);
 
 /**
+ * Maximum number of proxies allowed for a request created by Corto
+ */
+define('CORTO_REQUEST_MAX_PROXIES', 3);
+
+/**
  * Whether or not we require user consent.
  */
 define('CORTO_USE_CONSENT', false);

@@ -60,15 +60,16 @@ class COIN_Dispatcher
      */
     public function shiftUri(&$uri)
     {
-    	$qpos = strpos($uri, "?");
-    	if ($qpos!==false) {
-    		$params = substr($uri,$qpos);
-    		$uri = substr($uri,0,$qpos);
+    	$qPos = strpos($uri, "?");
+        $params = "";
+    	if ($qPos!==false) {
+    		$params = substr($uri,$qPos);
+    		$uri = substr($uri,0,$qPos);
     	}
     	$start = (substr($uri,0,1)=="/")?1:0;
     	$nextSlash = strpos($uri,"/",$start);
     	$return = substr($uri, $start, $nextSlash==false?strlen($uri):$nextSlash-$start);
-    	$uri = $nextSlash==false?"":substr($uri, $nextSlash+1);
+    	$uri = $nextSlash==false?"":substr($uri, $nextSlash);
     	$uri.=$params; 
     	return $return;
     }
