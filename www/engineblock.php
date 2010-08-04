@@ -19,7 +19,14 @@ function engineBlockSetupMetaData()
 {
     $GLOBALS['metabase']['remote'] = array();
 
-    $metaDataXml = file_get_contents(ENGINEBLOCK_SERVICEREGISTRY_METADATA_URL);
+    require CORTO_APPLICATION_OVERRIDES_DIRECTORY . 'library/Zend/Http/Client.php';
+    $client = new Zend_Http_Client(ENGINEBLOCK_SERVICEREGISTRY_METADATA_URL);
+    $metaDataXml = $client->request('GET')->getBody();
+
+    if ($metaDataXml === false) {
+        die("No MetaData returned by Service Registry at: " . ENGINEBLOCK_SERVICEREGISTRY_METADATA_URL);
+    }
+
     $hash = Corto_XmlToArray::xml2array($metaDataXml);
 
     foreach ($hash['md:EntityDescriptor'] as $entity) {
