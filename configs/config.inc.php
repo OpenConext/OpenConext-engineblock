@@ -152,3 +152,7 @@ if (!defined('ENGINEBLOCK_SERVICEREGISTRY_METADATA_URL')) {
         'https://serviceregistry.ebdev.net/simplesaml/module.php/janus/exportentities.php?state=prodaccepted&mimetype=application%2Fxml'
     );
 }
+
+if (!defined('ENGINEBLOCK_SERVICEREGISTRY_API_URL')) {
+	define('ENGINEBLOCK_SERVICEREGISTRY_API_URL', 'http://simplesamlphp.local:10088/simplesaml/module.php/janus/rest.php');
+}
