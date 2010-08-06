@@ -1,6 +1,6 @@
 <?php
 
-require_once 'library/COIN/Dispatcher.php';
+require_once 'COIN/Dispatcher.php';
 
 require_once 'PHPUnit/Framework/TestCase.php';
 
