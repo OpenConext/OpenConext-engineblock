@@ -69,7 +69,7 @@ class COIN_Dispatcher
     	$start = (substr($uri,0,1)=="/")?1:0;
     	$nextSlash = strpos($uri,"/",$start);
     	$return = substr($uri, $start, $nextSlash==false?strlen($uri):$nextSlash-$start);
-    	$uri = $nextSlash==false?"":substr($uri, $nextSlash);
+    	$uri = $nextSlash==false?"":substr($uri, $nextSlash+1);
     	$uri.=$params; 
     	return $return;
     }
