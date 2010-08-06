@@ -136,20 +136,20 @@ class sspmod_janus_Rest
      */
     public function method_metadata($request)
     {
-    	if (!isset($request["EntityID"])) {
-    		throw new Exception("EntityID is required");
+    	if (!isset($request["entityid"])) {
+    		throw new Exception("Parameter entityid is required");
     	}
     	
     	$result = array();
     	
-        $eid = $this->_getEntityFinder()->findEid($request["EntityID"]); 	
+        $eid = $this->_getEntityFinder()->findEid($request["entityid"]); 	
         $this->_entityController->setEntity($eid);
     
         $metadata = $this->_entityController->getMetadata();
 
         $filter = array();
-        if (isset($request["Keys"])) {
-        	$filter = explode(",", $request["Keys"]);
+        if (isset($request["keys"])) {
+        	$filter = explode(",", $request["keys"]);
         }
         
         foreach ($metadata as $metadataEntry) {
@@ -187,21 +187,30 @@ class sspmod_janus_Rest
      */
     public function method_isconnectionallowed($request)
     {
-        if (!isset($request["SPEntityID"])||!isset($request["IDPEntityID"])) {
-            throw new Exception("Both SPEntityID and IDPEntityID are required");
-        }
-        $eid = $this->_getEntityFinder()->findEid($request["SPEntityID"]);    
-        $this->_entityController->setEntity($eid);
-    
-        $blocklist = $this->_entityController->getBlockedEntities();
+    	$allowed = false;
     	
-        $allowed = "yes";
-        if (!isset($request["IDPEntityID"])||array_key_exists($request["IDPEntityID"], $blocklist))
-        {
-        	$allowed = "no";
+        if (!isset($request["spentityid"])||!isset($request["idpentityid"])) {
+            throw new Exception("Both spentityid and idpentityid are required");
         }
         
-        return array("allowed"=>$allowed);
+        $idpEid = $this->_getEntityFinder()->findEid($request["idpentityid"]);    
+      
+        if (!is_null($idpEid)) {       
+	        
+	        $spEid = $this->_getEntityFinder()->findEid($request["spentityid"]);  
+
+	        if ($spEid!=NULL) {
+		        $this->_entityController->setEntity($spEid);
+		    
+		        $blocklist = $this->_entityController->getBlockedEntities();
+		    	
+		        if (!array_key_exists($request["idpentityid"], $blocklist))
+		        {
+		        	$allowed = true;
+		        }
+	        }
+        }    
+        return array("allowed"=>($allowed?"yes":"no"));
     }
     
     /**
@@ -230,10 +239,10 @@ class sspmod_janus_Rest
      */
     public function method_arp($request)
     {
-        if (!isset($request["SPEntityID"])) {
-            throw new Exception("SPEntityID is required");
+        if (!isset($request["spentityid"])) {
+            throw new Exception("Parameter spentityid is required");
         }
-        $eid = $this->_getEntityFinder()->findEid($request["SPEntityID"]);    
+        $eid = $this->_getEntityFinder()->findEid($request["spentityid"]);    
          
         $this->_entityController->setEntity($eid);
     
@@ -242,9 +251,9 @@ class sspmod_janus_Rest
         if ($arp==NULL) return NULL; // no arp set for this SP
         
         $result = array();
-        $result["Name"] = $arp->getName();
-        $result["Description"] = $arp->getDescription();         
-        $result["Attributes"] = $arp->getAttributes();
+        $result["name"] = $arp->getName();
+        $result["description"] = $arp->getDescription();         
+        $result["attributes"] = $arp->getAttributes();
         
         return $result;
     }
@@ -275,13 +284,13 @@ class sspmod_janus_Rest
      */
     public function method_findidentifiersbymetadata($request)
     {
-        if (!isset($request["Key"])||!isset($request["Value"])) {
+        if (!isset($request["key"])||!isset($request["value"])) {
             throw new Exception("Both Key and Value parameters are required");
         }
         
         $result = array();
         
-        $eids = $this->_getEntityFinder()->findEidsByMetadata($request["Key"], $request["Value"]);    
+        $eids = $this->_getEntityFinder()->findEidsByMetadata($request["key"], $request["value"]);    
         
         foreach($eids as $eid) {
         
