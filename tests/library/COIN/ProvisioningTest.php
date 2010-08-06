@@ -1,6 +1,6 @@
 <?php
 
-require_once 'engineblock/library/COIN/Provisioning.php';
+require_once 'COIN/Provisioning.php';
 
 require_once 'PHPUnit/Framework/TestCase.php';
 

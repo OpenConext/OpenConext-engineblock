@@ -1,6 +1,6 @@
 <?php
 
-require_once 'engineblock/library/COIN/UserDirectory.php';
+require_once 'COIN/UserDirectory.php';
 
 require_once 'PHPUnit/Framework/TestCase.php';
 
