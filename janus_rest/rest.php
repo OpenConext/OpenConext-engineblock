@@ -345,7 +345,7 @@ try {
 	// Step 5: Output the necessary headers and the result of the request as JSON.
 	header('Cache-Control: no-cache, must-revalidate');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-	//header('Content-type: application/json'); // disabled for debugging so you don't get the firefox download box everytime.
+	header('Content-type: application/json'); // disable this line for debugging so you don't get the firefox download box everytime.
 	
 	echo json_encode($result);
 } catch (Exception $e) {
