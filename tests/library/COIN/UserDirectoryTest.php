@@ -7,7 +7,8 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * COIN_UserDirectory test case.
  */
-class COIN_UserDirectoryTest extends PHPUnit_Framework_TestCase {
+class COIN_UserDirectoryTest extends PHPUnit_Framework_TestCase 
+{
 	
 	/**
 	 * @var COIN_UserDirectory
@@ -17,7 +18,8 @@ class COIN_UserDirectoryTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Prepares the environment before running a test.
 	 */
-	protected function setUp() {
+	protected function setUp() 
+	{
 		parent::setUp ();
 		
 		// TODO Auto-generated COIN_UserDirectoryTest::setUp()
@@ -30,7 +32,8 @@ class COIN_UserDirectoryTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Cleans up the environment after running a test.
 	 */
-	protected function tearDown() {
+	protected function tearDown() 
+	{
 		// TODO Auto-generated COIN_UserDirectoryTest::tearDown()
 		
 
@@ -42,14 +45,16 @@ class COIN_UserDirectoryTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Constructs the test case.
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		// TODO Auto-generated constructor
 	}
 	
 	/**
 	 * Tests COIN_UserDirectory->registerUserForAttributes()
 	 */
-	public function testRegisterUserForAttributes() {
+	public function testRegisterUserForAttributes() 
+	{
 		// TODO Auto-generated COIN_UserDirectoryTest->testRegisterUserForAttributes()
 		$this->markTestIncomplete ( "registerUserForAttributes test not implemented" );
 		

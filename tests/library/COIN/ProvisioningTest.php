@@ -7,7 +7,8 @@ require_once 'PHPUnit/Framework/TestCase.php';
 /**
  * COIN_Provisioning test case.
  */
-class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase {
+class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase 
+{
 	
 	/**
 	 * @var COIN_Provisioning
@@ -17,7 +18,8 @@ class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Prepares the environment before running a test.
 	 */
-	protected function setUp() {
+	protected function setUp() 
+	{
 		parent::setUp ();
 		
 		// TODO Auto-generated COIN_ProvisioningTest::setUp()
@@ -30,7 +32,8 @@ class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Cleans up the environment after running a test.
 	 */
-	protected function tearDown() {
+	protected function tearDown() 
+	{
 		// TODO Auto-generated COIN_ProvisioningTest::tearDown()
 		
 
@@ -42,7 +45,8 @@ class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase {
 	/**
 	 * Constructs the test case.
 	 */
-	public function __construct() {
+	public function __construct() 
+	{
 		// TODO Auto-generated constructor
 	}
 
