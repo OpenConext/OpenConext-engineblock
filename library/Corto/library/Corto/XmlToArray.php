@@ -1,5 +1,9 @@
 <?php
 
+if (!class_exists('XMLWriter')) {
+    die('XMLWriter class does not exist! Please install libxml extension for php.');
+}
+
 /**
  *
  *
