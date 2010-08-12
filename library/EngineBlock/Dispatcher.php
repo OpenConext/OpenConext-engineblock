@@ -27,7 +27,7 @@ class EngineBlock_Dispatcher
         }
 
         $router = $this->_getRouter($uri);
-
+       
         $module             = $router->getModuleName();
         $controllerName     = $router->getControllerName();
         $action             = $router->getActionName();

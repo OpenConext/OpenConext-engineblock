@@ -20,5 +20,7 @@ class EngineBlock_Router_OpenSocial extends EngineBlock_Router_Abstract
         $this->_actionArguments = array(
             implode('/', array_slice($urlParts, 1))
         );
+        
+        return true;
     }
 }

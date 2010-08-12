@@ -1,14 +1,18 @@
 <?php
+
+define('ENGINEBLOCK_FOLDER_SHINDIG', ENGINEBLOCK_FOLDER_LIBRARY.'shindig/php/');
  
-class Social_Controller_Rest 
+class Social_Controller_Rest extends EngineBlock_Controller_Abstract
 {
     public function indexAction($url)
     {
-        set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_LIBRARIES . 'shindig/php/');
-
+    	$this->setNoRender(); // let shindig do the rendering
+    	
+        set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_SHINDIG);
+        
         include_once('src/common/Config.php');
         include_once('src/common/File.php');
-
+ 
         // You can't inject a Config, so force it
         // to try loading and ignore errors from config file not being there :(
         global $shindigConfig;
@@ -16,17 +20,19 @@ class Social_Controller_Rest
         @Config::setConfig(array());
 
         spl_autoload_register(array(get_class($this), 'shindigAutoLoad'));
-
-        $_REQUEST['REQUEST_URI'] = '/social/rest/' . $url;
+        
+        // Shindig expects urls to be moiunted on /social/rest so we enforce that.
+        $_SERVER['REQUEST_URI'] = '/social/rest/' . $url;
 
         $requestMethod = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getMethod();
         $methodName = 'do' . ucfirst(strtolower($requestMethod));
 
         $servletInstance = new DataServiceServlet();
-        if (is_callable($methodName)) {
+        if (is_callable(array($servletInstance, $methodName))) {
             $servletInstance->$methodName();
         }
         else {
+        	echo "Invalid method";
             // @todo Error out
         }
     }
@@ -59,7 +65,7 @@ class Social_Controller_Rest
         // Check for the presense of this class in our all our directories.
         $fileName = $className . '.php';
         foreach ($locations as $path) {
-            if (file_exists("{$path}/$fileName")) {
+            if (file_exists(ENGINEBLOCK_FOLDER_SHINDIG."{$path}/$fileName")) {
                 require $path . '/' . $fileName;
                 return true;
             }
