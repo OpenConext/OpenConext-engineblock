@@ -13,6 +13,8 @@ require '../library/EngineBlock/ApplicationSingleton.php';
 $application = EngineBlock_ApplicationSingleton::getInstance();
 $application->bootstrap();
 
-EngineBlock_Dispatcher::dispatch();
+$dispatcher = new EngineBlock_Dispatcher();
+$dispatcher->setRouters(array());
+$dispatcher->dispatch();
 
 $application->getHttpResponse()->send();

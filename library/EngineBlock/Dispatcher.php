@@ -26,7 +26,7 @@ class EngineBlock_Dispatcher
             $uri = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getUri();
         }
 
-        $router = $this->getRouter();
+        $router = $this->_getRouter($uri);
 
         $module             = $router->getModuleName();
         $controllerName     = $router->getControllerName();
