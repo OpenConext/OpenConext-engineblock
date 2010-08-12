@@ -17,12 +17,19 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
         // to try loading and ignore errors from config file not being there :(
         global $shindigConfig;
         $shindigConfig = array();
-        @Config::setConfig(array());
+        @Config::setConfig(array('allow_plaintext_token'=>true,
+                                 'person_service' => 'EngineBlock_OpenSocial_ShindigService',
+								 'activity_service' => 'EngineBlock_OpenSocial_ShindigService',
+					             'group_service' => 'EngineBlock_OpenSocial_ShindigService',
+								 ));
 
         spl_autoload_register(array(get_class($this), 'shindigAutoLoad'));
         
         // Shindig expects urls to be moiunted on /social/rest so we enforce that.
         $_SERVER['REQUEST_URI'] = '/social/rest/' . $url;
+        
+        // Shindig wants a security token, but interface F in coin is auth-less so we fake one.
+        $_REQUEST["st"] = $_GET["st"] = $_POST["st"] = "o:v:a:d:u:m:c";
 
         $requestMethod = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getMethod();
         $methodName = 'do' . ucfirst(strtolower($requestMethod));
