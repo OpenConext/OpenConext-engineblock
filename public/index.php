@@ -14,7 +14,7 @@ $application = EngineBlock_ApplicationSingleton::getInstance();
 $application->bootstrap();
 
 $dispatcher = new EngineBlock_Dispatcher();
-$dispatcher->setRouters(array());
+$dispatcher->setRouters(array(new EngineBlock_Router_OpenSocial(), new EngineBlock_Router_Default()));
 $dispatcher->dispatch();
 
 $application->getHttpResponse()->send();
