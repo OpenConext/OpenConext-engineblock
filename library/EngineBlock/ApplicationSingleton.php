@@ -1,7 +1,6 @@
 <?php
 
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , dirname(__FILE__) . '/../');
-define('ENGINEBLOCK_FOLDER_LIBRARIES'  , ENGINEBLOCK_FOLDER_LIBRARY . '../');
 define('ENGINEBLOCK_FOLDER_APPLICATION', dirname(__FILE__) . '/../../application/');
 define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
 
@@ -121,8 +120,8 @@ class EngineBlock_ApplicationSingleton
 
     protected function bootstrapMetaData()
     {
-        $metaData = new EngineBlock_MetaData();
-        $this->setMetaData();
+        //$metaData = new EngineBlock_MetaData();
+        //$this->setMetaData();
     }
 
     public function setConfiguration($applicationConfiguration)
