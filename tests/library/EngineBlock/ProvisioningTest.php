@@ -4,15 +4,15 @@ require_once(dirname(__FILE__) . '/../../autoloading.inc.php');
 require_once 'PHPUnit/Framework/TestCase.php';
 
 /**
- * COIN_Provisioning test case.
+ * EngineBlock_Provisioning test case.
  */
-class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase 
+class EngineBlock_ProvisioningTest extends PHPUnit_Framework_TestCase 
 {
 	
 	/**
-	 * @var COIN_Provisioning
+	 * @var EngineBlock_Provisioning
 	 */
-	private $COIN_Provisioning;
+	private $EngineBlock_Provisioning;
 	
 	/**
 	 * Prepares the environment before running a test.
@@ -24,7 +24,7 @@ class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase
 		// TODO Auto-generated COIN_ProvisioningTest::setUp()
 		
 
-		$this->COIN_Provisioning = new COIN_Provisioning(/* parameters */);
+		$this->EngineBlock_Provisioning = new EngineBlock_Provisioning(/* parameters */);
 	
 	}
 	
@@ -49,5 +49,10 @@ class COIN_ProvisioningTest extends PHPUnit_Framework_TestCase
 		// TODO Auto-generated constructor
 	}
 
+    public function testProvisionUser() {
+        $attributes = array('one' => array('one-value'), 'two' => array('first-value', 'second-value'));
+        $hash = '1234567890';
+        $result = $this->EngineBlock_Provisioning->provisionUser($attributes, $hash);
+        $this->assertTrue($result);
+    }    
 }
-
