@@ -62,6 +62,10 @@ class EngineBlock_ApplicationSingleton
         if (in_array($classNameParts[0], $s_libraries)) {
             $fileName = implode('/', explode('_', $className)).'.php';
 
+            if (!file_exists(ENGINEBLOCK_FOLDER_LIBRARY . $fileName)) {
+                return false;
+            }
+
             include ENGINEBLOCK_FOLDER_LIBRARY . $fileName;
 
             return true;
@@ -70,6 +74,10 @@ class EngineBlock_ApplicationSingleton
         // Module class?
         if (in_array($classNameParts[0], $s_modules)) {
             $fileName = implode('/', explode('_', $className)).'.php';
+
+            if (!file_exists(ENGINEBLOCK_FOLDER_MODULES . $fileName)) {
+                return false;
+            }
 
             include ENGINEBLOCK_FOLDER_MODULES . $fileName;
 
