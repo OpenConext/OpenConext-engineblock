@@ -3,6 +3,8 @@
 require_once dirname(__FILE__) . '/../../autoloading.inc.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
+// @todo replace Zend_Ldap with a mock object so we can test without hitting the actual ldap server
+
 /**
  * EngineBlock_UserDirectory test case.
  */
@@ -65,10 +67,19 @@ class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase
 	
 	}
 
-    public function testGetUser() {
-        $result = $this->EngineBlock_UserDirectory->getUser('urn:collab:person:surfnet.nl:hansz');
+    public function testfindUsersByIdentifier() {
+        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz');
         $this->assertEquals(1, count($result));
-        $this->assertEquals('uid=hansz,o=surfnet.nl,dc=coin,dc=surfnet,dc=nl', $result[0]);
+        $this->assertEquals('uid=hansz,o=surfnet.nl,dc=coin,dc=surfnet,dc=nl', $result[0]["dn"]);
+        
+        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz', array('givenname'));
+        $this->assertEquals(1, count($result));
+        $this->assertEquals(2, count($result[0])); // contains dn and the requested attribuets
+        $this->assertEquals('Hans', $result[0]['givenname'][0]); // cound be multiple so is an array
+        
+        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('batman:or:another:name:that:cant:possibly:exist');
+        $this->assertType("array", $result);
+        $this->assertEquals(0, count($result));
     }
     
     public function testAddUser() {
