@@ -89,6 +89,24 @@ class sspmod_janus_EntityFinder extends sspmod_janus_Database
         return $rows;
     	
     }
+    
+    public function getAllEids($type)
+    {
+        $st = $this->execute(
+            'SELECT DISTINCT eid 
+            FROM '. self::$prefix ."entity
+            WHERE `type` = ?",
+            array($type)
+        );
+
+        if ($st === false) {
+            return 'error_db';
+        }
+
+        $rows = $st->fetchAll(PDO::FETCH_COLUMN, 0);
+        return $rows;
+    	
+    }
 }
 
 /**
@@ -143,26 +161,14 @@ class sspmod_janus_Rest
     	$result = array();
     	
         $eid = $this->_getEntityFinder()->findEid($request["entityid"]); 	
-        $this->_entityController->setEntity($eid);
-    
-        $metadata = $this->_entityController->getMetadata();
-
+        
         $filter = array();
         if (isset($request["keys"])) {
-        	$filter = explode(",", $request["keys"]);
+            $filter = explode(",", $request["keys"]);
         }
         
-        foreach ($metadata as $metadataEntry) {
-        	
-        	$key = $metadataEntry->getKey();
-            if (count($filter)==0 || in_array($key, $filter)) {
-                $result[$key] = $metadataEntry->getValue();
-        	}
-        	
-        }
-        
-        return $result;
-        
+        return $this->_getMetadata($eid, $filter);
+      
     }
     
     /**
@@ -214,13 +220,59 @@ class sspmod_janus_Rest
     }
     
     /**
-     * Not yet implemented, awaits decisions on whitelist/blacklist approach.
+     * Unfinished implementation, awaits blacklist/whitelist implementation in janus.
+     * For now, uses in efficient query that retrieves all eids (regardless of blacklist)
+     * @param array $request The request parameters (typically from $_REQUEST)
+     *        The entries in $request for this method are:
+     * 
+     *        Keys (optional) - one or more comma separated keys of metadata 
+     *                          to retrieve.
+     *                          Note that keys that don't exist are silently 
+     *                          discarded and won't be present in the output.  
      */
-    public function method_idplist()
+    public function method_idplist($request)
     {
         // here we have access to $this->_entityController->getBlockedEntities() 
         // but we need a whitelist approach.
+        if (isset($request["keys"])) {
+            $filter = explode(",", $request["keys"]);
+            
+            // We also need the identifier
+            if (!in_array("entityID", $filter)) {
+                $filter[] = "entityID";
+            }
+        }
+        
+        return $this->_getEntities("saml20-idp");
     }
+    
+    /**
+     * Unfinished implementation, awaits blacklist/whitelist implementation in janus.
+     * For now, uses in efficient query that retrieves all eids (regardless of blacklist)
+     * @param array $request The request parameters (typically from $_REQUEST)
+     *        The entries in $request for this method are:
+     * 
+     *        Keys (optional) - one or more comma separated keys of metadata 
+     *                          to retrieve.
+     *                          Note that keys that don't exist are silently 
+     *                          discarded and won't be present in the output.
+     */
+    public function method_splist($request)
+    {
+        // here we have access to $this->_entityController->getBlockedEntities() 
+        // but we need a whitelist approach.
+        if (isset($request["keys"])) {
+            $filter = explode(",", $request["keys"]);
+            
+            // We also need the identifier
+            if (!in_array("entityID", $filter)) {
+                $filter[] = "entityID";
+            }
+        }
+        
+        return $this->_getEntities("saml20-sp");
+    }
+    
     
     /**
      * Rest method that returns the attributes that can be released to an SP. 
@@ -316,6 +368,65 @@ class sspmod_janus_Rest
         return $this->_entityFinder;
             
     }
+    
+    /**
+     * Get the metadata for one entity
+     * @param String $eid The internal janus entity id
+     * @param Array $keys Optional array of keys to be retrieved. Retrieves all metadata if empty
+     * @return Array an associative array with key/value representations of the metadata
+     */
+    protected function _getMetadata($eid, $keys=array())
+    {
+    	$this->_entityController->setEntity($eid);
+    
+        $metadata = $this->_entityController->getMetadata();        
+        
+        $data = array();
+        
+        // Convert to key/value array
+        foreach ($metadata as $metadataEntry) {
+        	$data[$metadataEntry->getKey()] = $metadataEntry->getValue();
+        }
+        
+        // Enrich with stuff that wasn't in the metadata itself
+        $data["metadataUrl"] = $this->_entityController->getEntity()->getMetadataURL(); 
+        $data["entityID"] = $this->_entityController->getEntity()->getEntityid();
+        
+        
+        // Filter
+        $result = array();
+        foreach ($data as $key=>$value) {
+            
+            if (count($keys)==0 || in_array($key, $keys)) {
+                $result[$key] = $value;
+            }
+            
+        }
+        
+        return $result;
+        
+    }
+    
+    /** 
+     * Retrieve all entity metadata for all entities of a certain type.
+     * @param String $type Supported types: "saml20-idp" or "saml20-sp"
+     * @param Array $keys optional list of metadata keys to retrieve. Retrieves all if blank
+     * @return Array Associative array of all metadata. The key of the array is the identifier
+     */
+    protected function _getEntities($type, $keys=array())
+    {
+    	$result = array();
+        
+        $eids = $this->_getEntityFinder()->getAllEids($type);    
+        
+        foreach($eids as $eid) {
+        
+           $data = $this->_getMetadata($eid, $keys);
+           $result[$data["entityID"]] = $data;          
+      
+        }
+        return $result;
+    }
 }
 
 
@@ -331,7 +442,7 @@ $janus_config = SimpleSAML_Configuration::getConfig('module_janus.php');
 
 // Step 1: resolve the request to a method, and throw a 400 if it's not one 
 // of the methods we know about.
-$availableMethods = array("metadata", "isconnectionallowed", "idplist", "arp", "findidentifiersbymetadata");
+$availableMethods = array("metadata", "isconnectionallowed", "idplist", "splist", "arp", "findidentifiersbymetadata");
 
 if (!isset($_GET["method"]) || !in_array(strtolower($_GET["method"]), $availableMethods)) {
   header("HTTP/1.0 404 Not Found");
@@ -354,7 +465,7 @@ try {
 	// Step 5: Output the necessary headers and the result of the request as JSON.
 	header('Cache-Control: no-cache, must-revalidate');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-	header('Content-type: application/json'); // disable this line for debugging so you don't get the firefox download box everytime.
+//	header('Content-type: application/json'); // disable this line for debugging so you don't get the firefox download box everytime.
 	
 	echo json_encode($result);
 } catch (Exception $e) {
