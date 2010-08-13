@@ -5,6 +5,7 @@
 // By default the rest interface is disabled as it currently doesn't feature
 // authentication and opens up the registry to outside use. Comment this line
 // if you understand the risks and want to enable the REST service.
+header("HTTP/1.1 503 Service Temporarily Unavailable");
 die("REST interface disabled"); 
 
 // for debugging
