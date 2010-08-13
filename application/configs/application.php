@@ -35,7 +35,6 @@ $config['acceptance'] = array_merge($config['production'], array(
  */
 $config['integration'] = array_merge($config['production'], array(
     'ldap.host'                 => 'coin-db.dev.coin.surf.net',
-
     'ServiceRegistry.Location'  => 'https://serviceregistry.dev.coin.surf.net/simplesaml/module.php/janus/rest.php',
 ));
 
@@ -43,5 +42,14 @@ $config['integration'] = array_merge($config['production'], array(
  * Configuration for Ibuildings VM
  */
 $config['ebdev.net'] = array_merge($config['production'], array(
+
+));
+
+/**
+ * Configuration for Ivo's localhost
+ */
+$config['ivodev'] = array_merge($config['production'], array(
+    'ldap.host'   => 'coin-db.dev.coin.surf.net',
+    'ldap.useSsl' => FALSE,
 
 ));
