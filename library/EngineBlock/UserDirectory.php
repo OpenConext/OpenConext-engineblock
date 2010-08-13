@@ -5,7 +5,6 @@ define('ENGINEBLOCK_EDUPERSON_PREFIX', 'urn:mace:dir:attribute-def:');
 class EngineBlock_UserDirectory
 {
     protected $_ldapClient = NULL;
-    protected $_fieldMapper = NULL;
     const USER_ID_ATTRIBUTE = 'uid';
 
     public function registerUserForAttributes($attributes, $attributeHash)
@@ -54,7 +53,14 @@ class EngineBlock_UserDirectory
         if ($this->_ldapClient == NULL) {
             $application = EngineBlock_ApplicationSingleton::getInstance();
             $config = $application->getConfiguration();
-            $ldapOptions = $config['ldap'];
+       
+            $ldapOptions = array('host' => $config['ldap.host'], 
+                                 'useSsl' => $config['ldap.useSsl'], 
+                                 'username' => $config['ldap.username'],
+                                 'password' => $config['ldap.password'],
+                                 'bindRequiresDn' => $config['ldap.bindRequiresDn'],
+                                 'accountDomainName' => $config['ldap.accountDomainName'],
+                                 'baseDn' => $config['ldap.baseDn']);
             $this->_ldapClient = new Zend_Ldap($ldapOptions);
             $this->_ldapClient->bind();
         }
@@ -66,33 +72,17 @@ class EngineBlock_UserDirectory
         $this->_ldapClient = $client;
     }
 
-    /**
-     * @return EngineBlock_UserDirectory_FieldMapper mapper
-     */
-    protected function _getFieldMapper()
-    {
-        if ($this->_fieldMapper == NULL) {
-            $this->_fieldMapper = new EngineBlock_UserDirectory_FieldMapper();
-        }
-        return $this->_fieldMapper;
-    }
 
-    public function setFieldMapper($mapper)
-    {
-        $this->_fieldMapper = $mapper;
-    }
 
-    public function findUsersByIdentifier($identifier, $socialAttributes = array())
+    public function findUsersByIdentifier($identifier, $ldapAttributes = array())
     {
-        //    	$socialAttributes = array(); // HACK
-        $ldapAttributes = $this->_getFieldMapper()->socialToLdapAttributes($socialAttributes);
         $filter = '(&(objectclass=' . ENGINEBLOCK_LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . ENGINEBLOCK_LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
         $collection = $this->_getLdapClient()->search($filter, null, Zend_Ldap::SEARCH_SCOPE_SUB, $ldapAttributes);
         $result = array();
         if (($collection !== NULL) and ($collection !== FALSE)) {
             foreach ($collection as $item) {
-                $result[] = $this->_getFieldMapper()->ldapToSocialData($item, $socialAttributes);
+                $result[] = $item;
             }
         }
         return $result;

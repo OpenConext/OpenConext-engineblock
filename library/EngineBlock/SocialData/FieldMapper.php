@@ -1,5 +1,5 @@
 <?php
-class EngineBlock_UserDirectory_FieldMapper
+class EngineBlock_SocialData_FieldMapper
 {
     // Key: ldap, value: opensocial
     protected $_l2oMap = array(

@@ -2,15 +2,21 @@
 class EngineBlock_SocialData
 {
     protected $_userDirectory = NULL;
+    protected $_fieldMapper = NULL;
+ 
 
-    public function getPerson($identifier, $fields = array())
+    public function getPerson($identifier, $socialAttributes = array())
     {
         $result = array();
-        $persons = $this->_getUserDirectory()->findUsersByIdentifier($identifier, $fields);
+                
+        $ldapAttributes = $this->_getFieldMapper()->socialToLdapAttributes($socialAttributes);
+        
+        $persons = $this->_getUserDirectory()->findUsersByIdentifier($identifier, $ldapAttributes);
         if (count($persons)) {
             // ignore the hypothetical possibility that we get multiple results for now.
-            $result = $persons[0];
+            $result = $this->_getFieldMapper()->ldapToSocialData($persons[0], $socialAttributes);
         }
+          
         return $result;
     }
 
@@ -28,5 +34,21 @@ class EngineBlock_SocialData
     public function setUserDirectory($userDirectory)
     {
         $this->_userDirectory = $userDirectory;
+    }
+    
+    /**
+     * @return EngineBlock_UserDirectory_FieldMapper mapper
+     */
+    protected function _getFieldMapper()
+    {
+        if ($this->_fieldMapper == NULL) {
+            $this->_fieldMapper = new EngineBlock_SocialData_FieldMapper();
+        }
+        return $this->_fieldMapper;
+    }
+
+    public function setFieldMapper($mapper)
+    {
+        $this->_fieldMapper = $mapper;
     }
 }

@@ -28,7 +28,7 @@ class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $config = array();
         require ENGINEBLOCK_FOLDER_APPLICATION . 'configs/application.php';
-        $application->setConfiguration($config);
+        $application->setConfiguration($config['ivodev']);
 		
 		$this->EngineBlock_UserDirectory = new EngineBlock_UserDirectory(/* parameters */);
 	
@@ -70,12 +70,12 @@ class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase
     public function testfindUsersByIdentifier() {
         $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz');
         $this->assertEquals(1, count($result));
-        $this->assertEquals('uid=hansz,o=surfnet.nl,dc=coin,dc=surfnet,dc=nl', $result[0]["dn"]);
+        $this->assertEquals('Hans Zandbelt', $result[0]["displayname"][0]);
         
-        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz', array('givenname'));
+        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz', array('displayname'));
         $this->assertEquals(1, count($result));
-        $this->assertEquals(2, count($result[0])); // contains dn and the requested attribuets
-        $this->assertEquals('Hans', $result[0]['givenname'][0]); // cound be multiple so is an array
+        $this->assertEquals(2, count($result[0])); // contains just the requested attributes + dn
+        $this->assertEquals('Hans Zandbelt', $result[0]['displayname'][0]); 
         
         $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('batman:or:another:name:that:cant:possibly:exist');
         $this->assertType("array", $result);
