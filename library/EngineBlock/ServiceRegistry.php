@@ -163,7 +163,8 @@ class EngineBlock_ServiceRegistry
     protected function _getRestClient()
     {
     	if ($this->_restClient==NULL) {
-    		$this->_restClient = new EngineBlock_Rest_Client(ENGINEBLOCK_SERVICEREGISTRY_API_URL);	
+            $location = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('ServiceRegistry.Location');
+    		$this->_restClient = new EngineBlock_Rest_Client($location);
     	}
     	return $this->_restClient;
     }

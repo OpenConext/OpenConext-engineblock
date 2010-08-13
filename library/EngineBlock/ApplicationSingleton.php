@@ -4,12 +4,18 @@ define('ENGINEBLOCK_FOLDER_LIBRARY'    , dirname(__FILE__) . '/../');
 define('ENGINEBLOCK_FOLDER_APPLICATION', dirname(__FILE__) . '/../../application/');
 define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
 
+class EngineBlock_ApplicationSingleton_BootstrapException extends Exception
+{
+}
+
 class EngineBlock_ApplicationSingleton
 {
     /**
      * @var EngineBlock_ApplicationSingleton
      */
     protected static $s_instance;
+
+    protected $_applicationEnvironmentId;
 
     protected $_httpRequest;
     protected $_httpResponse;
@@ -86,11 +92,13 @@ class EngineBlock_ApplicationSingleton
         return false;
     }
 
-    public function bootstrap()
+    public function bootstrap($applicationEnvironmentId)
     {
+        $this->_applicationEnvironmentId = $applicationEnvironmentId;
+        
         $this->bootstrapAutoLoading();
-        $this->bootstrapHttpCommunication();
         $this->bootstrapConfiguration();
+        $this->bootstrapHttpCommunication();
         $this->bootstrapDateTime();
     }
 
@@ -99,18 +107,24 @@ class EngineBlock_ApplicationSingleton
         spl_autoload_register(array($this, 'autoLoad'));
     }
 
+    protected function bootstrapConfiguration()
+    {
+        $config = array();
+        $configFilePath = ENGINEBLOCK_FOLDER_APPLICATION . 'configs/application.php';
+        require $configFilePath;
+
+        if (!isset($config[$this->_applicationEnvironmentId])) {
+            $message = "No configuration in {$configFilePath} for application environment ID '{$this->_applicationEnvironmentId}'";
+            throw new EngineBlock_ApplicationSingleton_BootstrapException($message);
+        }
+
+        $this->setConfiguration($config[$this->_applicationEnvironmentId]);
+    }
+
     protected function bootstrapHttpCommunication()
     {
         $this->setHttpRequest(EngineBlock_HTTP_Request::createFromEnvironment());
         $this->setHttpResponse(new EngineBlock_Http_Response());
-    }
-
-    protected function bootstrapConfiguration()
-    {
-        $config = array();
-        require ENGINEBLOCK_FOLDER_APPLICATION . 'configs/application.php';
-
-        $this->setConfiguration($config);
     }
 
     protected function bootstrapDateTime()
@@ -133,6 +147,15 @@ class EngineBlock_ApplicationSingleton
     public function getConfiguration()
     {
         return $this->_configuration;
+    }
+
+    public function getConfigurationValue($key, $default = null)
+    {
+        if (isset($this->_configuration[$key])) {
+            return $this->_configuration[$key];
+        }
+
+        return $default;
     }
 
     public function setHttpRequest($request)

@@ -1,4 +1,6 @@
-RewriteEngine On 
+SetEnv APPLICATION_ENV production
+
+RewriteEngine On
 
 # If the requested url does not map to a file or directory, then forward it to index.php/URL.
 # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
