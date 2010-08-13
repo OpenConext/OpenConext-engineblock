@@ -132,12 +132,6 @@ class EngineBlock_ApplicationSingleton
         date_default_timezone_set($this->_configuration['default_timezone']);
     }
 
-    protected function bootstrapMetaData()
-    {
-        //$metaData = new EngineBlock_MetaData();
-        //$this->setMetaData();
-    }
-
     public function setConfiguration($applicationConfiguration)
     {
         $this->_configuration = $applicationConfiguration;
@@ -184,16 +178,5 @@ class EngineBlock_ApplicationSingleton
     public function getHttpResponse()
     {
         return $this->_httpResponse;
-    }
-
-    public function setMetaData($metaData)
-    {
-        $this->_metaData = $metaData;
-        return $this;
-    }
-
-    public function getMetaData()
-    {
-        return $this->_metaData;
     }
 }
