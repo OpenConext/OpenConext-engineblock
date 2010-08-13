@@ -28,8 +28,8 @@ class EngineBlock_ServiceRegistry
     {
     	    	
     	$response = $this->_getRestClient()->metadata()
-    	                                  ->entityid($entityId)
-    	                                  ->get();
+    	                                   ->entityid($entityId)
+    	                                   ->get();
         return $response; 	
     }
     
@@ -60,9 +60,9 @@ class EngineBlock_ServiceRegistry
     public function getMetaDataForKeys($entityId, $keys)
     {
     	$response = $this->_getRestClient()->metadata()
-    	                                  ->entityid($entityId)
-    	                                  ->keys(implode(",", $keys))
-    	                                  ->get();
+    	                                   ->entityid($entityId)
+    	                                   ->keys(implode(",", $keys))
+    	                                   ->get();
     	return $response;
     }    
     
@@ -77,9 +77,9 @@ class EngineBlock_ServiceRegistry
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
     	$response = $this->_getRestClient()->isconnectionallowed()
-    	                                  ->spentityid($spEntityId)
-    	                                  ->idpentityid($idpEntityId)
-    	                                  ->get();
+    	                                   ->spentityid($spEntityId)
+    	                                   ->idpentityid($idpEntityId)
+    	                                   ->get();
     	return (isset($response["allowed"]) && $response["allowed"]=="yes");
     }
     
@@ -99,6 +99,40 @@ class EngineBlock_ServiceRegistry
     	                                  ->spentityid($spEntityId)
     	                                  ->get();
     	return $response;
+    }
+    
+    /**
+     * Retrieve a list of metadata values of all available
+     * IDP entities.
+     * @param array $keys An array of keys to retrieve. Retrieves
+     *                    all available keys if omited or empty
+     * @return array An associative array of values, indexed by IDP 
+     *               identifier. Each value is another associative 
+     *               array with key/value pairs containing the metadata.
+     */
+    public function getIdpList($keys=array())
+    {
+    	$response = $this->_getRestClient()->idplist()
+    	                                   ->keys(implode(",", $keys))
+    	                                   ->get();    	                                
+    	return $response;    	                                  
+    }
+    
+    /**
+     * Retrieve a list of metadata values of all available
+     * SP entities.
+     * @param array $keys An array of keys to retrieve. Retrieves
+     *                    all available keys if omited or empty
+     * @return array An associative array of values, indexed by SP 
+     *               identifier. Each value is another associative 
+     *               array with key/value pairs containing the metadata.
+     */
+    public function getSpList($keys=array())
+    {
+        $response = $this->_getRestClient()->splist()
+                                           ->keys(implode(",", $keys))
+                                           ->get();
+        return $response;                                         
     }
     
     /**

@@ -3,9 +3,11 @@
 
 require_once 'PHPUnit/Framework/TestCase.php';
 
-require_once 'engineblock/configs/config.inc.php';
+ini_set('include_path', ini_get('include_path'.PATH_SEPARATOR.'../../../library/'));
 
 require_once 'RestClientMock.php';
+require_once 'EngineBlock/ServiceRegistry.php';
+
 
 // TODO: replace the calls with a mock rest server, currently tests against
 // actual content in Ivo's janus db.
@@ -109,6 +111,21 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals("http://ivotestsp.local", $result[0]);
       
 	}
+	
+	public function testGetIdpList()
+	{
+		$result = $this->EngineBlock_ServiceRegistry->getIdpList();
+		$this->assertEquals(2, count($result));
+		$this->assertEquals("Ivo's IDP", $result["http://ivotestidp.local"]["name:en"]);
+	}
+	
+    public function testGetSpList()
+    {
+        $result = $this->EngineBlock_ServiceRegistry->getSpList();
+        $this->assertEquals(2, count($result));
+        $this->assertEquals("Ivo's SP", $result["http://ivotestsp.local"]["name:en"]);
+    }
+	
 
 }
 

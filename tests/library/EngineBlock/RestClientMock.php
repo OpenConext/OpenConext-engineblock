@@ -4,7 +4,7 @@ class RestClientMock
 {
 	protected $_method = NULL;
 	protected $_params = array();
-	protected $_methods = array("metadata", "idplist", "findidentifiersbymetadata", "isconnectionallowed", "arp");
+	protected $_methods = array("metadata", "idplist", "splist", "findidentifiersbymetadata", "isconnectionallowed", "arp");
 	
 	public function __construct()
 	{
@@ -46,6 +46,15 @@ class RestClientMock
         if ($this->_method=="findidentifiersbymetadata") {
         	return array("http://ivotestsp.local");
         }
+        if ($this->_method=="idplist") {
+        	return array("http://ivotestidp.local"=>array("name:en"=>"Ivo's IDP", "description:en"=>"A description"),
+        	             "http://ivotestidp2.local"=>array("name:en"=>"Another IDP", "description:en"=>"Another description"));
+        }
+        if ($this->_method=="splist") {
+            return array("http://ivotestsp.local"=>array("name:en"=>"Ivo's SP", "description:en"=>"A description"),
+                         "http://ivotestsp2.local"=>array("name:en"=>"Another SP", "description:en"=>"Another description"));
+        }
+ 
         return NULL;
    	}
 }
