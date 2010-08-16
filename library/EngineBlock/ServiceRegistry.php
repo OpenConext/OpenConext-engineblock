@@ -1,11 +1,6 @@
 <?php
 
 /**
- * Include utility classes
- */
-require "EngineBlock/Rest/Client.php";
- 
-/**
  * Implementation of the Engine Block internal Service Registry interface.
  * 
  * @todo Add memcache caching so we don't hit the rest backend every time.
@@ -164,6 +159,9 @@ class EngineBlock_ServiceRegistry
     {
     	if ($this->_restClient==NULL) {
             $location = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('ServiceRegistry.Location');
+            if (!$location) {
+                throw new EngineBlock_Exception('No Service Registry location provided! Please set "ServiceRegistry.Location" in your application configuration.');
+            }
     		$this->_restClient = new EngineBlock_Rest_Client($location);
     	}
     	return $this->_restClient;
