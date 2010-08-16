@@ -10,10 +10,11 @@ class EngineBlock_Http_Request
     public static function createFromEnvironment()
     {
         $request = new self();
+
         $request->setProtocol((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on'));
         $request->setMethod($_SERVER['REQUEST_METHOD']);
         $request->setHostName($_SERVER['HTTP_HOST']);
-        $request->setUri($_SERVER['REDIRECT_URL']);
+        $request->setUri($_SERVER['SCRIPT_URL']);
         $request->setQueryString($_SERVER['QUERY_STRING']);
 
         return $request;
