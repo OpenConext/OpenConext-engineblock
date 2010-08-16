@@ -7,7 +7,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         
     }
 
-    public function metaDataAction()
+    public function metadataAction()
     {
         // @todo Give the metadata (with assertion consumption URL) for EngineBlock
     }
