@@ -4,6 +4,12 @@ define('ENGINEBLOCK_FOLDER_LIBRARY'    , dirname(__FILE__) . '/../');
 define('ENGINEBLOCK_FOLDER_APPLICATION', dirname(__FILE__) . '/../../application/');
 define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
 
+set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_LIBRARY);
+
+class EngineBlock_Exception extends Exception
+{
+}
+
 class EngineBlock_ApplicationSingleton_BootstrapException extends Exception
 {
 }
@@ -15,19 +21,39 @@ class EngineBlock_ApplicationSingleton
      */
     protected static $s_instance;
 
+    /**
+     * @var string
+     */
     protected $_applicationEnvironmentId;
 
+    /**
+     * @var EngineBlock_Http_Request
+     */
     protected $_httpRequest;
+
+    /**
+     * @var EngineBlock_Http_Response
+     */
     protected $_httpResponse;
 
-    protected $_metaData;
-
+    /**
+     * @var array
+     */
     protected $_configuration;
 
+    /**
+     * @return void
+     */
     protected function __construct()
     {
     }
 
+    /**
+     * Get THE instance of the application singleton.
+     *
+     * @static
+     * @return EngineBlock_ApplicationSingleton
+     */
     public static function getInstance()
     {
         if (!isset(self::$s_instance)) {
@@ -36,6 +62,15 @@ class EngineBlock_ApplicationSingleton
         return self::$s_instance;
     }
 
+    /**
+     * Try to auto-load a class.
+     *
+     * Detects all modules and autoloads any class that begin with 'ModuleName_' and autoloads all EngineBlock_ classes.
+     *
+     * @static
+     * @param string $className
+     * @return bool Whether auto-loading worked
+     */
     public static function autoLoad($className)
     {
         static $s_modules = array();
@@ -51,27 +86,18 @@ class EngineBlock_ApplicationSingleton
             }
         }
 
-        // Find /library/ directories
-        if (empty($s_libraries)) {
-            $iterator = new DirectoryIterator(ENGINEBLOCK_FOLDER_LIBRARY);
-            foreach ($iterator as $item) {
-                if ($item->isDir() && !$item->isDot()) {
-                    $s_libraries[] = (string)$item;
-                }
-            }
-        }
-
         $classNameParts = explode('_', $className);
 
-        // Library class
-        if (in_array($classNameParts[0], $s_libraries)) {
+        // EngineBlock class
+        if ($classNameParts[0] === 'EngineBlock') {
             $fileName = implode('/', explode('_', $className)).'.php';
+            $filePath = ENGINEBLOCK_FOLDER_LIBRARY . $fileName;
 
-            if (!file_exists(ENGINEBLOCK_FOLDER_LIBRARY . $fileName)) {
+            if (!file_exists($filePath)) {
                 return false;
             }
 
-            include ENGINEBLOCK_FOLDER_LIBRARY . $fileName;
+            include $filePath;
 
             return true;
         }
@@ -92,14 +118,25 @@ class EngineBlock_ApplicationSingleton
         return false;
     }
 
+    //////////// BOOTSTRAPPING
+
+    /**
+     * Bootstrap the application for a given environment id (like 'production').
+     *
+     * @param string $applicationEnvironmentId
+     * @return EngineBlock_ApplicationSingleton Bootstrapped application singleton
+     */
     public function bootstrap($applicationEnvironmentId)
     {
         $this->_applicationEnvironmentId = $applicationEnvironmentId;
-        
-        $this->bootstrapAutoLoading();
+
         $this->bootstrapConfiguration();
+
+        $this->bootstrapPhpSettings();
+
+        $this->bootstrapAutoLoading();
         $this->bootstrapHttpCommunication();
-        $this->bootstrapDateTime();
+        return $this;
     }
 
     protected function bootstrapAutoLoading()
@@ -123,20 +160,26 @@ class EngineBlock_ApplicationSingleton
 
     protected function bootstrapHttpCommunication()
     {
-        $this->setHttpRequest(EngineBlock_HTTP_Request::createFromEnvironment());
+        $this->setHttpRequest(EngineBlock_Http_Request::createFromEnvironment());
         $this->setHttpResponse(new EngineBlock_Http_Response());
     }
 
-    protected function bootstrapDateTime()
+    protected function bootstrapPhpSettings()
     {
-        date_default_timezone_set($this->_configuration['default_timezone']);
+        if (isset($this->_configuration['default_timezone'])) {
+            date_default_timezone_set($this->_configuration['default_timezone']);
+        }
+
+        if (isset($this->_configuration['Php.DisplayErrors'])) {
+            ini_set('display_errors', $this->_configuration['Php.DisplayErrors']);
+        }
+
+        if (isset($this->_configuration['Php.ErrorReporting'])) {
+            error_reporting($this->_configuration['Php.ErrorReporting']);
+        }
     }
 
-    public function setConfiguration($applicationConfiguration)
-    {
-        $this->_configuration = $applicationConfiguration;
-        return $this;
-    }
+    //////////// CONFIGURATION
 
     public function getConfiguration()
     {
@@ -152,11 +195,13 @@ class EngineBlock_ApplicationSingleton
         return $default;
     }
 
-    public function setHttpRequest($request)
+    public function setConfiguration($applicationConfiguration)
     {
-        $this->_httpRequest = $request;
+        $this->_configuration = $applicationConfiguration;
         return $this;
     }
+
+    //////////// HTTP COMMUNICATION
 
     /**
      * @return EngineBlock_Http_Request
@@ -166,9 +211,9 @@ class EngineBlock_ApplicationSingleton
         return $this->_httpRequest;
     }
 
-    public function setHttpResponse($response)
+    public function setHttpRequest($request)
     {
-        $this->_httpResponse = $response;
+        $this->_httpRequest = $request;
         return $this;
     }
 
@@ -178,5 +223,11 @@ class EngineBlock_ApplicationSingleton
     public function getHttpResponse()
     {
         return $this->_httpResponse;
+    }
+
+    public function setHttpResponse($response)
+    {
+        $this->_httpResponse = $response;
+        return $this;
     }
 }

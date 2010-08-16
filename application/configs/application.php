@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @var $config Configuration array construct
+ */
+
 $config = array();
 
 /**
@@ -9,7 +13,9 @@ $config = array();
  * Note: All other configurations SHOULD extend from this one 
  */
 $config['production'] = array(
-    'default_timezone' => 'Europe/Amsterdam',
+    'Php.DefaultTimezone' => 'Europe/Amsterdam',
+    'Php.DisplayErrors'   => false,
+    'Php.ErrorReporting'  => E_ALL,
 
     // TODO: sort out the minimal set of required Zend LDAP settings (for now these just work...)
     'ldap.host'                 => '',
@@ -39,10 +45,17 @@ $config['integration'] = array_merge($config['production'], array(
 ));
 
 /**
+ * Note: Add long-lived development environments after here.
+ * Add one-off dev environments in application.local.php
+ */
+
+/**
  * Configuration for Ibuildings VM
  */
 $config['ebdev.net'] = array_merge($config['production'], array(
+    'ServiceRegistry.Location'  => 'https://serviceregistry.ebdev.net/simplesaml/module.php/janus/rest.php',
 
+    'Php.DisplayErrors'   => true,
 ));
 
 /**
@@ -53,3 +66,5 @@ $config['ivodev'] = array_merge($config['production'], array(
     'ldap.useSsl' => FALSE,
 
 ));
+
+@include 'application.local.php';
