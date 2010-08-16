@@ -37,7 +37,7 @@ class EngineBlock_Dispatcher
 
         if (!$controllerInstance->hasAction($action)) {
             // @todo error out!
-            die("Unable to load action '$action'");
+            throw new EngineBlock_Exception("Unable to load action '$action'");
         }
 
         $controllerInstance->handleAction($action, $attributeArguments);
@@ -48,13 +48,13 @@ class EngineBlock_Dispatcher
         $className = $this->_getControllerClassName($module, $controllerName);
         if (!class_exists($className)) {
             // @todo error out!
-            die("Unable to load $className");
+            throw new EngineBlock_Exception("Unable to load $className");
         }
 
         $controllerInstance = new $className($module, $controllerName);
 
         if (!($controllerInstance instanceof EngineBlock_Controller_Abstract)) {
-            die("Controller $className is not an EngineBlock controller (does not extend EngineBlock_Controller_Abstract)!");
+            throw new EngineBlock_Exception("Controller $className is not an EngineBlock controller (does not extend EngineBlock_Controller_Abstract)!");
         }
 
         return $controllerInstance;
@@ -82,10 +82,6 @@ class EngineBlock_Dispatcher
 
     protected function _getControllerClassName($module, $controller)
     {
-        if (isset($this->_controllerMapping[$controller])) {
-            $controller = $this->_controllerMapping[$controller];
-        }
-
         return ucfirst($module) . '_Controller_' . $controller;
     }
 }
