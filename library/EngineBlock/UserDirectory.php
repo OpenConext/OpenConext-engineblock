@@ -1,7 +1,9 @@
 <?php
+
 define('ENGINEBLOCK_LDAP_CLASS_COLLAB_PERSON', 'collabPerson');
 define('ENGINEBLOCK_LDAP_ATTR_COLLAB_PERSON_ID', 'collabPersonId');
 define('ENGINEBLOCK_EDUPERSON_PREFIX', 'urn:mace:dir:attribute-def:');
+
 class EngineBlock_UserDirectory
 {
     protected $_ldapClient = NULL;
