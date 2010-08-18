@@ -72,7 +72,11 @@ $config['acceptance'] = array_merge($config['production'], array(
  * Configuration for engineblock.coin.dev.surf.net
  */
 $config['integration'] = array_merge($config['production'], array(
+    'Php.DisplayErrors'   => true,
+    'Php.ErrorReporting'  => E_ALL - E_NOTICE,
+
     'ldap.host'                 => 'coin-db.dev.coin.surf.net',
+
     'ServiceRegistry.Location'  => 'https://serviceregistry.dev.coin.surf.net/simplesaml/module.php/janus/rest.php',
 ));
 
