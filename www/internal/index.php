@@ -15,7 +15,7 @@ defined('APPLICATION_ENV')
               (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
                                          : 'production'));
 
-require '../library/EngineBlock/ApplicationSingleton.php';
+require '../../library/EngineBlock/ApplicationSingleton.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
 $application->bootstrap(APPLICATION_ENV);

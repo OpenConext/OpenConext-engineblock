@@ -1,6 +1,6 @@
 <?php
 
-ini_set('display_errors', true);
+ini_set('display_errors', false);
 error_reporting(E_ALL);
 
 if(!function_exists('spl_autoload_register')) {
@@ -23,7 +23,6 @@ $application->bootstrap(APPLICATION_ENV);
 $dispatcher = new EngineBlock_Dispatcher();
 $dispatcher->setRouters(array(
     new EngineBlock_Router_Authorization(),
-    new EngineBlock_Router_Default(),
 ));
 $dispatcher->dispatch();
 
