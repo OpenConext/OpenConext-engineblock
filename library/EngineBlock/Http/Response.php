@@ -5,7 +5,13 @@ class EngineBlock_Http_Response
     const HTTP_HEADER_RESPONSE_LOCATION = 'Location';
 
     protected $_headers = array();
-    protected $_body = '';
+    protected $_body    = '';
+
+    public function setHeader($name, $value)
+    {
+        $this->_headers[$name] = $value;
+        return $this;
+    }
 
     public function setRedirectUrl($url)
     {

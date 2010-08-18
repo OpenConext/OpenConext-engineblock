@@ -150,11 +150,12 @@ class EngineBlock_Corto_Adapter
     {
         $proxyHeaders = $this->_proxyServer->getHeaders();
         foreach ($proxyHeaders as $headerName => $headerValue) {
-            if ($headerName !== EngineBlock_Http_Response::HTTP_HEADER_RESPONSE_LOCATION) {
-                continue;
+            if ($headerName === EngineBlock_Http_Response::HTTP_HEADER_RESPONSE_LOCATION) {
+                $response->setRedirectUrl($headerValue);
             }
-
-            $response->setRedirectUrl($headerValue);
+            else {
+                $response->setHeader($headerName, $headerValue);
+            }
         }
     }
 
