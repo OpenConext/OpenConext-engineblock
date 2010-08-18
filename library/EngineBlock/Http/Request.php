@@ -2,10 +2,12 @@
  
 class EngineBlock_Http_Request 
 {
-    protected $_queryString;
-    protected $_uri;
+    protected $_method;
     protected $_protocol;
     protected $_hostName;
+    protected $_uri;
+    protected $_queryParameters = array();
+    protected $_queryString;
 
     public static function createFromEnvironment()
     {
@@ -45,12 +47,34 @@ class EngineBlock_Http_Request
     public function setQueryString($queryString)
     {
         $this->_queryString = $queryString;
+        $this->_setQueryParameters($queryString);
         return $this;
     }
 
     public function getQueryString()
     {
         return $this->_queryString;
+    }
+
+    public function getQueryParameter($name)
+    {
+        if (isset($this->_queryParameters[$name])) {
+            return $this->_queryParameters[$name];
+        }
+    }
+
+    protected function _setQueryParameters($queryString)
+    {
+        $this->_queryParameters = array();
+        $queryParts = explode("&", $queryString);
+        foreach($queryParts as $queryPart) {
+            if (preg_match("/^(.+)=(.*)$/", $queryPart, $keyAndValue))  {
+                $key    = $keyAndValue[1];
+                $value  = $keyAndValue[2];
+
+                $this->_queryParameters[$key] = $value;
+            }
+        }
     }
 
     public function setProtocol($https = false)

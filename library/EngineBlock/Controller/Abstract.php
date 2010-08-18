@@ -71,11 +71,11 @@ class EngineBlock_Controller_Abstract
     protected function renderView($actionName)
     {
         $moduleDir = dirname(__FILE__) . '/../../../application/modules/';
-        $filePath = $moduleDir . $this->_moduleName . '/View/' . $this->_controllerName . '/' . $actionName . '.php';
+        $filePath = $moduleDir . $this->_moduleName . '/View/' . $this->_controllerName . '/' . $actionName . '.phtml';
 
         if (!file_exists($filePath)) {
             // @todo error out!
-            die("View $filePath does not exist");
+            throw new EngineBlock_Exception("View $filePath does not exist");
         }
 
         ob_start();

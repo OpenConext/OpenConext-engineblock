@@ -37,12 +37,46 @@ class EngineBlock_Corto_Adapter
 
     public function singleSignOn($idPProviderHash)
     {
-        $cortoUri = $this->_getCortoUri('singleSignOnService', $idPProviderHash);
+        $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
+    }
+
+    public function idPMetadata()
+    {
+        $this->_callCortoServiceUri('idPMetadataService');
+    }
+
+    public function sPMetadata()
+    {
+        $this->_callCortoServiceUri('sPMetadataService');
+    }
+
+    public function consumeAssertion()
+    {
+        $this->_callCortoServiceUri('assertionConsumerService');
+    }
+
+    public function idPsMetadata()
+    {
+        $this->_callCortoServiceUri('idPsMetaDataService');
+    }
+
+    public function processWayf()
+    {
+        $this->_callCortoServiceUri('continueToIdp');
+    }
+
+    public function processConsent()
+    {
+        $this->_callCortoServiceUri('continueToSP');
+    }
+
+    protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
+    {
+        $cortoUri = $this->_getCortoUri($serviceName, $idPProviderHash);
 
         $this->_initProxy();
 
         $this->_proxyServer->serveRequest($cortoUri);
-
         $this->_processProxyServerResponse();
 
         unset($this->_proxyServer);
@@ -73,11 +107,19 @@ class EngineBlock_Corto_Adapter
         return new EngineBlock_Corto_CoreProxy();
     }
 
-    protected function _configureProxyServer($proxyServer)
+    protected function _configureProxyServer(Corto_ProxyServer $proxyServer)
     {
         $proxyServer->setConfigs(array(
             'debug' => true,
             'trace' => true,
+        ));
+        $proxyServer->setHostedEntities(array(
+            $proxyServer->getHostedEntityUrl('main') => array(
+                'certificates' => array(
+                    'public'    => EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('PublicKey'),
+                    'private'   => EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('PrivateKey'),
+                ),
+            ),
         ));
         $proxyServer->setRemoteEntities($this->_getRemoteEntities());
         $proxyServer->setTemplateSource(
@@ -86,13 +128,14 @@ class EngineBlock_Corto_Adapter
         );
         $proxyServer->setSessionLogDefault(new Corto_Log_File('/tmp/corto_session'));
         $proxyServer->setBindingsModule(new Corto_Module_Bindings($proxyServer));
-        $proxyServer->setServicesModule(new Corto_Module_Services($proxyServer));
+        $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
     }
 
     protected function _getRemoteEntities()
     {
         $serviceRegistry = new EngineBlock_Corto_ServiceRegistry_Adapter(new EngineBlock_ServiceRegistry());
-        return $serviceRegistry->getRemoteMetaData();
+        $metadata = $serviceRegistry->getRemoteMetaData();
+        return $metadata;
     }
 
     protected function _processProxyServerResponse()

@@ -43,14 +43,21 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
         $cortoEntity = array();
         if (isset($serviceRegistryEntity['AssertionConsumerService'][0]['Location'])) {
-            $cortoEntity['AssertionConsumerService'] = $serviceRegistryEntity['AssertionConsumerService'][0]['Location'];
+            $cortoEntity['AssertionConsumerService'] = array(
+                $serviceRegistryEntity['AssertionConsumerService'][0]['Binding'],
+                $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],
+            );
+            $cortoEntity['WantsAssertionsSigned'] = true;
         }
         if (isset($serviceRegistryEntity['SingleSignOnService'][0]['Location'])) {
-            $cortoEntity['SingleSignOnService'] = $serviceRegistryEntity['SingleSignOnService'][0]['Location'];
+            $cortoEntity['SingleSignOnService'] = array(
+                'Binding'   => $serviceRegistryEntity['SingleSignOnService'][0]['Binding'],
+                'Location'  => $serviceRegistryEntity['SingleSignOnService'][0]['Location'],
+            );
         }
         if (isset($serviceRegistryEntity['certData'])) {
-            $cortoEntity['Certificates'] = array(
-                'Public' => $serviceRegistryEntity['certData'],
+            $cortoEntity['certificates'] = array(
+                'public' => $serviceRegistryEntity['certData'],
             );
         }
         if (isset($serviceRegistryEntity['name'])) {

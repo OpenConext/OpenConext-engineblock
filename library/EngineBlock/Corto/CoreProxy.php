@@ -6,14 +6,20 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
     protected $_output;
 
     protected $_serviceToControllerMapping = array(
-        'singleSignOnService'   => '/authentication/idp/single-sign-on',
-        'continueToIdP'         => '/authentication/idp/process-wayf',
-        'assertionConsume'      => '/authentication/sp/consume-assertion',
-        'continueToSP'          => '/authentication/sp/process-consent',
+        'singleSignOnService'       => 'authentication/idp/single-sign-on',
+        'continueToIdP'             => 'authentication/idp/process-wayf',
+        'assertionConsumerService'  => 'authentication/sp/consume-assertion',
+        'continueToSP'              => 'authentication/sp/process-consent',
+        'idPMetadataService'        => 'authentication/idp/metadata',
+        'sPMetadataService'         => 'authentication/sp/metadata',
     );
 
     public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "")
     {
+        if (!isset($this->_serviceToControllerMapping[$serviceName])) {
+            return parent::getHostedEntityUrl($entityCode, $serviceName, $remoteEntityId);
+        }
+
         $scheme = 'http';
         if (isset($_SERVER['HTTPS'])) {
             $scheme = 'https';
@@ -21,15 +27,8 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
 
         $host = $_SERVER['HTTP_HOST'];
 
-        $entityPart = $entityCode;
-
-        $entityPart .= '_' . md5($remoteEntityId);
-
-        if (!$serviceName) {
-            return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : ''). $entityPart;
-        }
-
-        return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : '') . $entityPart . '/' . $serviceName;
+        $mappedUri = $this->_serviceToControllerMapping[$serviceName] . ($remoteEntityId ? '/' . md5($remoteEntityId) : '');
+        return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : '') . $mappedUri;
     }
 
     public function getOutput()
