@@ -6,5 +6,30 @@
     </head>
     <body>
         <h1>Welcome to SURFnet Collaboration Infrastructure EngineBlock OpenSocial API!</h1>
+        <h2>OpenSocial URLs</h2>
+        <ul>
+            <li>
+                <a href="/social/people/{$uid}">
+                    /social/people/{$uid}
+                </a>
+                <br />
+                <p>Get the person information in JSON format.</p>
+                <strong>Example:</strong>
+                <a href="/social/people/urn:collab:person:surfnet.nl:hansz">
+                    /social/people/urn:collab:person:surfnet.nl:hansz
+                </a>
+                <br />
+                <p>Use ?fields=x,y,z to only get fields x,y and z.</p>
+
+                <p>Valid fields are:</p>
+                <ul>
+                    <li>id</li>
+                    <li>name</li>
+                    <li>displayname</li>
+                    <li>nickname</li>
+                    <li>email</li>
+                </ul>
+            </li>
+        </ul>
     </body>
 </html>
