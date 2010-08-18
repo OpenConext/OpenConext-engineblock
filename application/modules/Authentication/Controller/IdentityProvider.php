@@ -10,8 +10,19 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $proxyServer->singleSignOn($idPEntityId);
     }
 
+    public function processWayfAction()
+    {
+        $this->setNoRender();
+
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->processWayf();
+    }
+
     public function metadataAction()
     {
-        // @todo Give the metadata (with single sign on URL) for EngineBlock
+        $this->setNoRender();
+
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->idPMetadata();
     }
 }
