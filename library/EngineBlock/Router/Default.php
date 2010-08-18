@@ -2,9 +2,9 @@
  
 class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 {
-    const DEFAULT_MODULE_NAME     = "Default";
-    const DEFAULT_CONTROLLER_NAME = "Index";
-    const DEFAULT_ACTION_NAME     = "index";
+    protected $DEFAULT_MODULE_NAME     = "Default";
+    protected $DEFAULT_CONTROLLER_NAME = "Index";
+    protected $DEFAULT_ACTION_NAME     = "index";
 
     /**
      * Note that this router interprets ////tekno as /tekno, NOT as /default/index/index/tekno
@@ -17,9 +17,9 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $urlParts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
         $urlPartsCount = count($urlParts);
 
-        $module     = self::DEFAULT_MODULE_NAME;
-        $controller = self::DEFAULT_CONTROLLER_NAME;
-        $action     = self::DEFAULT_ACTION_NAME;
+        $module     = $this->DEFAULT_MODULE_NAME;
+        $controller = $this->DEFAULT_CONTROLLER_NAME;
+        $action     = $this->DEFAULT_ACTION_NAME;
         $arguments  = array();
 
         // Note how we actually use the fall-through

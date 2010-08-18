@@ -2,6 +2,8 @@
  
 class EngineBlock_Router_Authorization extends EngineBlock_Router_Default
 {
+    protected $DEFAULT_MODULE_NAME = 'Authentication';
+
     protected $_controllerMapping = array(
         'idp'   =>'IdentityProvider',
         'sp'    =>'ServiceProvider',
