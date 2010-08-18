@@ -4,18 +4,22 @@ class EngineBlock_SocialData_FieldMapper
     // Key: ldap, value: opensocial
     protected $_l2oMap = array(
         "collabpersonid" => "id" , 
-        "displayname" => array(
-            "displayname" , 
+        "displayName" => array(
+            "displayname",
             "nickname"
-        ) , "mail" => "emails" , 
-        "givenname" => "name"
+        ) ,
+        "mail"      => "emails" ,
+        "givenName" => "name"
     );
+    
     protected $_o2lMap = array(
-        "id" => "collabpersonid" , 
-        "nickname" => "displayname" , 
-        "displayname" => "displayname" , 
-        "emails" => "mail" , "name" => "givenname"
+        "id"            => "collabpersonid" ,
+        "nickname"      => "displayName" ,
+        "displayname"   => "displayName" ,
+        "emails"        => "mail" ,
+        "name"          => "givenName"
     );
+
     protected $_oMultiValueAttributes = array(
         'emails'
     );
