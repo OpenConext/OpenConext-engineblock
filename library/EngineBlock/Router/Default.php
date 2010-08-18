@@ -2,8 +2,8 @@
  
 class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 {
-    const DEFAULT_MODULE_NAME     = "default";
-    const DEFAULT_CONTROLLER_NAME = "index";
+    const DEFAULT_MODULE_NAME     = "Default";
+    const DEFAULT_CONTROLLER_NAME = "Index";
     const DEFAULT_ACTION_NAME     = "index";
 
     /**
