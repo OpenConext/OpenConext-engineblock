@@ -4,20 +4,20 @@ class EngineBlock_SocialData_FieldMapper
     // Key: ldap, value: opensocial
     protected $_l2oMap = array(
         "collabpersonid" => "id" , 
-        "displayName" => array(
-            "displayname",
-            "nickname"
+        "displayname" => array(
+            "displayName",
+            "nickName"
         ) ,
         "mail"      => "emails" ,
-        "givenName" => "name"
+        "givenname" => "name"
     );
     
     protected $_o2lMap = array(
         "id"            => "collabpersonid" ,
-        "nickname"      => "displayName" ,
-        "displayname"   => "displayName" ,
+        "nickname"      => "displayname" ,
+        "displayName"   => "displayname" ,
         "emails"        => "mail" ,
-        "name"          => "givenName"
+        "name"          => "givenname"
     );
 
     protected $_oMultiValueAttributes = array(
@@ -32,7 +32,6 @@ class EngineBlock_SocialData_FieldMapper
     {
         $result = array();
         foreach ($attributes as $socialAttr) {
-            $socialAttr = strtolower($socialAttr);
             if (isset($this->_o2lMap[$socialAttr])) {
                 $result[] = $this->_o2lMap[$socialAttr];
             } else {
@@ -49,7 +48,6 @@ class EngineBlock_SocialData_FieldMapper
         $result = array();
         if (count($socialAttrs)) {
             foreach ($socialAttrs as $socialAttr) {
-                $socialAttr = strtolower($socialAttr);
                 if (isset($this->_o2lMap[$socialAttr])) {
                     $ldapAttr = $this->_o2lMap[$socialAttr];
                     if (isset($data[$ldapAttr])) {
@@ -62,7 +60,6 @@ class EngineBlock_SocialData_FieldMapper
             }
         } else {
             foreach ($data as $ldapAttr => $value) {
-                $ldapAttr = strtolower($ldapAttr);
                 if (isset($this->_l2oMap[$ldapAttr])) {
                     if (is_array($this->_l2oMap[$ldapAttr])) {
                         foreach ($this->_l2oMap[$ldapAttr] as $socialAttr) {
