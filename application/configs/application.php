@@ -59,6 +59,14 @@ PQnYaNUN/Fy2SYtETXTb0CQ9X1rt8ffkFP7ya+5TC83aMg==
     'ldap.baseDn'               => 'dc=coin,dc=surfnet,dc=nl',
 
     'ServiceRegistry.Location'  => '',
+
+    'Grouper.Protocol'          => 'https',
+    'Grouper.Host'              => '',
+    'Grouper.User'              => 'engineblock',
+    'Grouper.Password'          => '',
+    'Grouper.Path'              => '/grouper-ws/servicesRest',
+    'Grouper.Version'           => 'v1_6_000',
+
 );
 
 /**
@@ -99,7 +107,11 @@ $config['ebdev.net'] = array_merge($config['production'], array(
 $config['ivodev'] = array_merge($config['production'], array(
     'ldap.host'   => 'coin-db.dev.coin.surf.net',
     'ldap.useSsl' => FALSE,
-    'ServiceRegistry.Location'  => 'http://simplesamlphp.local:10088/simplesaml/module.php/janus/rest.php'
+    'ServiceRegistry.Location'  => 'http://simplesamlphp.local:10088/simplesaml/module.php/janus/rest.php',
+    'Grouper.Host'              => 'coin-db.dev.coin.surf.net',
+    'Grouper.User'              => 'engineblock',
+    'Grouper.Password'          => '631E9383FD20',
+    
 
 ));
 
