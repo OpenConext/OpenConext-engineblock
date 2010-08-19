@@ -23,6 +23,7 @@ $application->bootstrap(APPLICATION_ENV);
 $dispatcher = new EngineBlock_Dispatcher();
 $dispatcher->setRouters(array(
     new EngineBlock_Router_OpenSocial(),
+    new EngineBlock_Router_Service(),
 ));
 $dispatcher->dispatch();
 
