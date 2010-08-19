@@ -1,17 +1,34 @@
 <?php
+
+/**
+ * Mapper class that makes a translation between OpenSocial and COIN fieldnames. 
+ * @author ivo
+ */
 class EngineBlock_SocialData_FieldMapper
 {
-    // Key: ldap, value: opensocial
+    /**
+     * Mapping of COIN ldap keys to open social fieldnames.
+     * Some fields may map to multiple open social fields
+     * e.g. both displayName and nickName in opensocial 
+     * are based on displayname in COIN ldap.
+     * @var array
+     */
     protected $_l2oMap = array(
         "collabpersonid" => "id" , 
         "displayname" => array(
             "displayName",
-            "nickName"
+            "nickname"
         ) ,
         "mail"      => "emails" ,
         "givenname" => "name"
     );
     
+    /**
+     * Mapping of open social fieldnames to COIN ldap keys
+     * Must contain bare key/value pairs (doesn't support
+     * multiple fields like _l2oMap.)
+     * @var array
+     */
     protected $_o2lMap = array(
         "id"            => "collabpersonid" ,
         "nickname"      => "displayname" ,
@@ -20,29 +37,71 @@ class EngineBlock_SocialData_FieldMapper
         "name"          => "givenname"
     );
 
+    /**
+     * A list of OpenSocial fields that are allowed to have multiple values.
+     * @var array
+     */
     protected $_oMultiValueAttributes = array(
         'emails'
     );
 
     /**
+     * Returns a list of COIN ldap attributes based on a list of 
+     * OpenSocial attributes.
      * 
-     * @param $directoryItem
+     * If a social attribute is passed that has no COIN ldap counterpart,
+     * it will not be converted and will be present in the output as-is.
+     * 
+     * Mind that the mapper is case sensitive.
+     * @todo do we need this case sensitivity?
+     * 
+     * @param array $socialAttrs An array of opensocial attribute names
+     * @return array The list of ldap attributes
      */
-    public function socialToLdapAttributes($attributes)
+    public function socialToLdapAttributes($socialAttrs)
     {
         $result = array();
-        foreach ($attributes as $socialAttr) {
+        foreach ($socialAttrs as $socialAttr) {
             if (isset($this->_o2lMap[$socialAttr])) {
-                $result[] = $this->_o2lMap[$socialAttr];
+                if (!in_array($this->_o2lMap[$socialAttr], $result)) {
+                    $result[] = $this->_o2lMap[$socialAttr];
+                }
             } else {
                 // We have no mapping for this social field, use the key as-is (useful if userregistry contains
                 // custom stuff)
-                $result[] = $socialAttr;
+                if (!in_array($socialAttr, $result)) {
+                    $result[] = $socialAttr;
+                }
             }
         }
         return $result;
     }
 
+    /**
+     * Convert a COIN ldap record to an opensocial record.
+     * 
+     * This method creates an opensocial record based on a COIN ldap record.
+     * Mind you that the number of keys in the input and in the output might
+     * be different, since the mapper can construct multiple opensocial
+     * fields based on single values in coin ldap (eg displayname in ldap is
+     * used for both displayname and nickname in opensocial.
+     * 
+     * The method has awareness of which fields in open social are single
+     * and which are multivalue, and will make sure that in the return value
+     * this is properly reflected.
+     * 
+     * It's possible to pass a list of socialAttrs you are interested in. If
+     * this parameter is non-empty, only the social attributes present in the
+     * array will be present in the output. (unknown keys will be silently
+     * ignored). 
+     *  
+     * @param array $data The record to convert. Keys should be ldap 
+     *                    attributes.
+     * @param array $socialAttrs The list of social attributes that you are
+     *                     interested in. If omited or empty array, will try
+     *                     to get all fields.
+     * @return array An array containing social key/value pairs                  
+     */
     public function ldapToSocialData($data, $socialAttrs = array())
     {
         $result = array();
@@ -75,6 +134,14 @@ class EngineBlock_SocialData_FieldMapper
         return $result;
     }
 
+    /**
+     * Converts a value to either an array or a single value, 
+     * depending on whether the socialAttr passed is a multivalue
+     * key.
+     * @param mixed $value A single value or an array of values
+     * @param String $socialAttr The name of the social attribute that $value 
+     *                           is representing.
+     */
     protected function _pack($value, $socialAttr)
     {
         if (in_array($socialAttr, $this->_oMultiValueAttributes)) {
