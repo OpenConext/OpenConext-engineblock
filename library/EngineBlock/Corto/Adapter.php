@@ -86,7 +86,7 @@ class EngineBlock_Corto_Adapter
     {
         $cortoHostedEntity  = self::DEFAULT_HOSTED_ENTITY;
         $cortoIdPHash       = $idPProviderHash;
-        return '/' . $cortoHostedEntity . ($cortoIdPHash ? $cortoIdPHash : '') . '/' . $cortoServiceName;
+        return '/' . $cortoHostedEntity . ($cortoIdPHash ? '_' . $cortoIdPHash : '') . '/' . $cortoServiceName;
     }
 
     protected function _initProxy()
