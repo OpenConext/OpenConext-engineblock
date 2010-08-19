@@ -57,7 +57,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         }
         if (isset($serviceRegistryEntity['certData'])) {
             $cortoEntity['certificates'] = array(
-                'public' => $serviceRegistryEntity['certData'],
+                'public' => EngineBlock_X509Certificate::getPemFromCertData($serviceRegistryEntity['certData']),
             );
         }
         if (isset($serviceRegistryEntity['name'])) {

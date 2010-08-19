@@ -26,7 +26,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => $entity['certificates']['public'],
+                                    '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
                                 ),
                             ),
                         ),
@@ -37,7 +37,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => $entity['certificates']['public'],
+                                    '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
                                 ),
                             ),
                         ),
@@ -107,7 +107,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $entity['certificates']['public'],
+                                '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
                             ),
                         ),
                     ),
@@ -118,7 +118,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $entity['certificates']['public'],
+                                '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
                             ),
                         ),
                     ),
