@@ -5,7 +5,7 @@ abstract class EngineBlock_Router_Abstract
     protected $_controllerName;
     protected $_moduleName;
     protected $_actionName;
-    protected $_actionArguments;
+    protected $_actionArguments = array();
 
     abstract public function route($uri);
 
