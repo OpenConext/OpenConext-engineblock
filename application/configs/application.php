@@ -99,6 +99,7 @@ $config['ebdev.net'] = array_merge($config['production'], array(
 $config['ivodev'] = array_merge($config['production'], array(
     'ldap.host'   => 'coin-db.dev.coin.surf.net',
     'ldap.useSsl' => FALSE,
+    'ServiceRegistry.Location'  => 'http://simplesamlphp.local:10088/simplesaml/module.php/janus/rest.php'
 
 ));
 
