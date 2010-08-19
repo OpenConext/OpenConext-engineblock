@@ -4,7 +4,7 @@ class EngineBlock_X509Certificate
 {
     public static function getPemFromCertData($certData)
     {
-        $publicKey = implode('', explode("\n", $certData));
+        $publicKey = implode('', explode(" ", $certData));
         $publicKey = "-----BEGIN CERTIFICATE-----" . PHP_EOL .
                 chunk_split($publicKey, 64, PHP_EOL) .
                 "-----END CERTIFICATE-----" . PHP_EOL;
