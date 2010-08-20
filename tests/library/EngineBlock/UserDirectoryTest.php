@@ -12,7 +12,6 @@ require_once 'UserDirectoryMock.php';
  */
 class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase 
 {
-    
     /**
      * @var EngineBlock_UserDirectoryMock
      */
