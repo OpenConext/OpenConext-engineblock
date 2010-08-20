@@ -19,12 +19,10 @@ class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase
     protected $_userDirectory;
     
     /**
-     * Prepares the environment before running a test.
+     * Set the application configuration for LDAP and instantiate a UserDirectory
      */
     protected function setUp() 
     {
-        parent::setUp ();
-
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $config = array();
@@ -35,13 +33,11 @@ class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Cleans up the environment after running a test.
+     * Unset the application configuration
      */
     protected function tearDown() 
     {
-        $this->_userDirectory = null;
-        
-        parent::tearDown ();
+        EngineBlock_ApplicationSingleton::getInstance()->setConfiguration(array());
     }
     
     /**
