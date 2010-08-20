@@ -42,11 +42,27 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      */
     function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
     {
-        echo "PersonService->getPeople called with arguments: <pre>";
-        var_dump(func_get_args());
-        echo "</pre>";
-        //        $identifier = $userId->getUserId($token);
-    //        $result = $this->_getSocialData()->getPersons($identifier)
+        $people = array();
+        
+        $person = new Person('urn:collab:person:surfnet.nl:hansz', 'Hans Zandbelt');
+        $people[] = $person;
+
+        $person = new Person('urn:collab:person:surfguest.nl:smibuildings', "SURFmedia Ibuildings User");
+        $people[] = $person;
+
+        $person = new Person('urn:collab:person:surfguest.nl:relaxnow', "Boy Baukema");
+        $people[] = $person;
+
+        $totalSize = count($people);
+        $collection = new RestfulCollection($people, $options->getStartIndex(), $totalSize);
+        $collection->setItemsPerPage($options->getCount());
+        return $collection;
+
+        // echo "PersonService->getPeople called with arguments: <pre>";
+        // var_dump(func_get_args());
+        // echo "</pre>";
+        // $identifier = $userId->getUserId($token);
+        // $result = $this->_getSocialData()->getPersons($identifier)
     }
 
     /**
