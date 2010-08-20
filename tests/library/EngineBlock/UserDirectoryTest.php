@@ -3,6 +3,8 @@
 require_once dirname(__FILE__) . '/../../autoloading.inc.php';
 require_once 'PHPUnit/Framework/TestCase.php';
 
+require_once 'UserDirectoryMock.php';
+
 // @todo replace Zend_Ldap with a mock object so we can test without hitting the actual ldap server
 
 /**
@@ -10,80 +12,108 @@ require_once 'PHPUnit/Framework/TestCase.php';
  */
 class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase 
 {
-	
-	/**
-	 * @var EngineBlock_UserDirectory
-	 */
-	private $EngineBlock_UserDirectory;
-	
-	/**
-	 * Prepares the environment before running a test.
-	 */
-	protected function setUp() 
-	{
-		parent::setUp ();
-		
-		// TODO Auto-generated EngineBlock_UserDirectoryTest::setUp()
-		
+    
+    /**
+     * @var EngineBlock_UserDirectoryMock
+     */
+    protected $_userDirectory;
+    
+    /**
+     * Prepares the environment before running a test.
+     */
+    protected function setUp() 
+    {
+        parent::setUp ();
+
         $application = EngineBlock_ApplicationSingleton::getInstance();
+
         $config = array();
         require ENGINEBLOCK_FOLDER_APPLICATION . 'configs/application.php';
         $application->setConfiguration($config['ivodev']);
-		
-		$this->EngineBlock_UserDirectory = new EngineBlock_UserDirectory(/* parameters */);
-	
-	}
-	
-	/**
-	 * Cleans up the environment after running a test.
-	 */
-	protected function tearDown() 
-	{
-		// TODO Auto-generated EngineBlock_UserDirectoryTest::tearDown()
-		
+        
+        $this->_userDirectory = new EngineBlock_UserDirectoryMock();
+    }
+    
+    /**
+     * Cleans up the environment after running a test.
+     */
+    protected function tearDown() 
+    {
+        $this->_userDirectory = null;
+        
+        parent::tearDown ();
+    }
+    
+    /**
+     * Tests EngineBlock_UserDirectory->registerUserForAttributes()
+     */
+    public function testRegisterUserForAttributes()
+    {
+        $this->markTestIncomplete ( "registerUserForAttributes test not implemented" );
 
-		$this->EngineBlock_UserDirectory = null;
-		
-		parent::tearDown ();
-	}
-	
-	/**
-	 * Constructs the test case.
-	 */
-	public function __construct() 
-	{
-		// TODO Auto-generated constructor
-	}
-	
-	/**
-	 * Tests EngineBlock_UserDirectory->registerUserForAttributes()
-	 */
-	public function testRegisterUserForAttributes() 
-	{
-		// TODO Auto-generated EngineBlock_UserDirectoryTest->testRegisterUserForAttributes()
-		$this->markTestIncomplete ( "registerUserForAttributes test not implemented" );
-		
-		$this->EngineBlock_UserDirectory->registerUserForAttributes(/* parameters */);
-	
-	}
+//        $this->_userDirectory->registerUserForAttributes();
+    }
 
-    public function testfindUsersByIdentifier() {
-        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz');
+    public function testCommonNameFromAttributes()
+    {
+        $attributes = array(
+            'givenName'     => array('Hans'),
+            'sn'            => array('Zandbelt'),
+            'displayName'   => array('Da Hansz'),
+            'mail'          => array('hans.zandbelt@surfnet.nl'),
+            'uid'           => array('urn:collab:person:surfnet.nl:hansz'),
+            'random'        => array('42'),
+        );
+
+        $cN = $this->_userDirectory->getCommonNameFromAttributes($attributes);
+        $cNExpected = "Hans Zandbelt";
+        $this->assertEquals($cNExpected, $cN, "Given all attributes, prefer the combination of given name and surname");
+
+        unset($attributes['givenName']);
+        $cN = $this->_userDirectory->getCommonNameFromAttributes($attributes);
+        $cNExpected = "Zandbelt";
+        $this->assertEquals($cNExpected, $cN, "With no given name, only a surname, use only the surname as common name.");
+
+        unset($attributes['sn']);
+        $cN = $this->_userDirectory->getCommonNameFromAttributes($attributes);
+        $cNExpected = "Da Hansz";
+        $this->assertEquals($cNExpected, $cN, "With no given name and surname, use the display name as common name.");
+
+        unset($attributes['displayName']);
+        $cN = $this->_userDirectory->getCommonNameFromAttributes($attributes);
+        $cNExpected = "hans.zandbelt@surfnet.nl";
+        $this->assertEquals($cNExpected, $cN, "Given only mail and uid, prefer mail as common name");
+
+        unset($attributes['mail']);
+        $cN = $this->_userDirectory->getCommonNameFromAttributes($attributes);
+        $cNExpected = "urn:collab:person:surfnet.nl:hansz";
+        $this->assertEquals($cNExpected, $cN, "Given only the uid, use the UID");
+
+        unset($attributes['uid']);
+        $cN = $this->_userDirectory->getCommonNameFromAttributes($attributes);
+        $cNExpected = "";
+        $this->assertEquals($cNExpected, $cN, "Given NO identifying attributes, return empty string for common name");
+    }
+
+    public function testfindUsersByIdentifier()
+    {
+        $result = $this->_userDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz');
         $this->assertEquals(1, count($result));
         $this->assertEquals('Hans Zandbelt', $result[0]["displayname"][0]);
-        
-        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz', array('displayname'));
+
+        $result = $this->_userDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz', array('displayname'));
         $this->assertEquals(1, count($result));
         $this->assertEquals(2, count($result[0])); // contains just the requested attributes + dn
-        $this->assertEquals('Hans Zandbelt', $result[0]['displayname'][0]); 
-        
-        $result = $this->EngineBlock_UserDirectory->findUsersByIdentifier('batman:or:another:name:that:cant:possibly:exist');
+        $this->assertEquals('Hans Zandbelt', $result[0]['displayname'][0]);
+
+        $result = $this->_userDirectory->findUsersByIdentifier('batman:or:another:name:that:cant:possibly:exist');
         $this->assertType("array", $result);
         $this->assertEquals(0, count($result));
     }
-    
-    public function testAddUser() {
-        $result = $this->EngineBlock_UserDirectory->addUser('test.nl', array('urn:mace:dir:attribute-def:uid' => array('pietje')), '1234567890');
+
+    public function testAddUser()
+    {
+        $result = $this->_userDirectory->addUser('test.nl', array('urn:mace:dir:attribute-def:uid' => array('pietje')), '1234567890');
         $this->assertTrue($result);
-    }    
+    }
 }

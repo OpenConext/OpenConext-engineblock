@@ -119,6 +119,7 @@ class EngineBlock_Corto_Adapter
                     'public'    => EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('PublicKey'),
                     'private'   => EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('PrivateKey'),
                 ),
+                'infilter' => array(get_class($this), 'filterInputAttributes'),
             ),
         ));
         $proxyServer->setRemoteEntities($this->_getRemoteEntities());
@@ -129,6 +130,11 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setSessionLogDefault(new Corto_Log_File('/tmp/corto_session'));
         $proxyServer->setBindingsModule(new Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
+    }
+
+    public static function filterInputAttributes($entityMetaData, $response, $attributes)
+    {
+        
     }
 
     protected function _getRemoteEntities()

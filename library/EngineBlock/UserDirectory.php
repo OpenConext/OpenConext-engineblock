@@ -1,8 +1,8 @@
 <?php
 
-define('ENGINEBLOCK_LDAP_CLASS_COLLAB_PERSON', 'collabPerson');
-define('ENGINEBLOCK_LDAP_ATTR_COLLAB_PERSON_ID', 'collabPersonId');
-define('ENGINEBLOCK_EDUPERSON_PREFIX', 'urn:mace:dir:attribute-def:');
+define('ENGINEBLOCK_LDAP_CLASS_COLLAB_PERSON'   , 'collabPerson');
+define('ENGINEBLOCK_LDAP_ATTR_COLLAB_PERSON_ID' , 'collabPersonId');
+define('ENGINEBLOCK_EDUPERSON_PREFIX'           , 'urn:mace:dir:attribute-def:');
 
 require_once 'Zend/Ldap.php';
 
@@ -76,8 +76,6 @@ class EngineBlock_UserDirectory
         $this->_ldapClient = $client;
     }
 
-
-
     public function findUsersByIdentifier($identifier, $ldapAttributes = array())
     {
         $filter = '(&(objectclass=' . ENGINEBLOCK_LDAP_CLASS_COLLAB_PERSON . ')';
@@ -92,27 +90,33 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
-    private function _getCommonNameFromAttributes($attrs)
+    protected function _getCommonNameFromAttributes($attributes)
     {
-        $result = NULL;
-        if ((array_key_exists('givenName', $attrs)) and (array_key_exists('sn', $attrs))) {
-            $result = $attrs['givenName'][0] . ' ' . $attrs['sn'][0];
-        } else 
-            if (array_key_exists('sn', $attrs)) {
-                $result = $attrs['sn'][0];
-            } else 
-                if (array_key_exists('displayName', $attrs)) {
-                    $result = $attrs['displayName'][0];
-                } else 
-                    if (array_key_exists('mail', $attrs)) {
-                        $result = $attrs['mail'][0];
-                    } else 
-                        if (array_key_exists('givenName', $attrs)) {
-                            $result = $attrs['givenName'][0];
-                        } else {
-                            $result = $attrs['uid'][0];
-                        }
-        return $result;
+        if (isset($attributes['givenName'][0]) && isset($attributes['sn'][0])) {
+            return $attributes['givenName'][0] . ' ' . $attributes['sn'][0];
+        }
+
+        if (isset($attributes['sn'][0])) {
+            return $result = $attributes['sn'][0];
+        }
+
+        if (isset($attributes['displayName'][0])) {
+            return $attributes['displayName'][0];
+        }
+
+        if (isset($attributes['mail'])) {
+            return $attributes['mail'][0];
+        }
+
+        if (isset($attributes['givenName'])) {
+            return $attributes['givenName'][0];
+        }
+
+        if (isset($attributes['uid'][0])) {
+            return $attributes['uid'][0];
+        }
+
+        return ;
     }
 
     public function addOrganization($organization)
