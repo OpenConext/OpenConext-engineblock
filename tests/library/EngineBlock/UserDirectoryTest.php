@@ -90,7 +90,7 @@ class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($cNExpected, $cN, "Given NO identifying attributes, return empty string for common name");
     }
 
-    public function testfindUsersByIdentifier()
+    public function testFindUsersByIdentifier()
     {
         $result = $this->_userDirectory->findUsersByIdentifier('urn:collab:person:surfnet.nl:hansz');
         $this->assertEquals(1, count($result));
