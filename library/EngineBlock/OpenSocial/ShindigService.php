@@ -30,7 +30,7 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
         }
         $identifier = $userId->getUserId($token);
         $result = $this->_getSocialData()->getPerson($identifier, array_values($fields));
-        return $result;
+        return array($result);
     }
 
     /**
@@ -42,7 +42,9 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      */
     function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
     {
-        var_dump($userId);
+        echo "PersonService->getPeople called with arguments: <pre>";
+        var_dump(func_get_args());
+        echo "</pre>";
         //        $identifier = $userId->getUserId($token);
     //        $result = $this->_getSocialData()->getPersons($identifier)
     }
@@ -57,7 +59,7 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      */
     function getPersonGroups($userId, GroupId $groupId, SecurityToken $token)
     {
-        throw new SocialSpiException("Not implemented by EngineBlock", ResponseError::$INTERNAL_ERROR);
+        throw new SocialSpiException("GetPersonGroups Not implemented by EngineBlock", ResponseError::$INTERNAL_ERROR);
     }
 
     public function getActivities($userIds, $groupId, $appId, $sortBy, $filterBy, $filterOp, $filterValue, $startIndex, $count, $fields, $activityIds, $token)
