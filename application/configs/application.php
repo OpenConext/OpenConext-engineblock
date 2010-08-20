@@ -118,5 +118,7 @@ $config['ivodev'] = array_merge($config['production'], array(
 /**
  * Note: Add one-off dev environments in application.local.php
  */
+if (file_exists('application.local.php')) {
+    @include 'application.local.php';
+}
 
-@include 'application.local.php';
