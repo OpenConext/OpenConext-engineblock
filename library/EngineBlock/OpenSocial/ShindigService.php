@@ -76,8 +76,8 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
     function getPersonGroups($userId, GroupId $groupId, SecurityToken $token)
     {
         $groups = array();
-        $groups[] = array('id'=>'test:a-team', 'name'=>'The A-Team');
-        $groups[] = array('id'=>'test:coin', 'name'=>'COIN Dev Team');
+        $groups[] = array('id'=>'test:a-team', 'title'=>'The A-Team');
+        $groups[] = array('id'=>'test:coin', 'title'=>'COIN Dev Team');
 
         return $groups;
     }

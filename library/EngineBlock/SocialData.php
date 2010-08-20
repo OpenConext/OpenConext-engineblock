@@ -4,7 +4,6 @@ class EngineBlock_SocialData
     protected $_userDirectory = NULL;
     protected $_fieldMapper = NULL;
  
-
     public function getPerson($identifier, $socialAttributes = array())
     {
         $result = array();
