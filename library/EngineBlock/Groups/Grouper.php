@@ -1,12 +1,74 @@
 <?php
+
 class EngineBlock_Groups_Grouper
 {
+    /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     */
+    public function getGroups($userIdentifier)
+    {
+        $request = <<<XML
+<WsRestGetGroupsRequest>
+    <subjectLookups>
+        <WsSubjectLookup>
+            <subjectId>$userIdentifier</subjectId>
+        </WsSubjectLookup>
+    </subjectLookups>
+    <actAsSubjectLookup>
+        <subjectId>$userIdentifier</subjectId>
+    </actAsSubjectLookup>
+</WsRestGetGroupsRequest>
+XML;
+        $result = $this->_doRest('subjects', $request);
+        #   print_r($result);
+        $groups = array();
+        if (isset($result) and ($result !== FALSE) and (! empty($result->results->WsGetGroupsResult->wsGroups))) {
+            foreach ($result->results->WsGetGroupsResult->wsGroups->WsGroup as $group) {
+                $groups[] = $this->_groupXmlToArray($group);
+            }
+        }
+        return $groups;
+    }
 
+    function getMembers($userId, $groupName)
+    {
+        $userIdEncoded   = htmlentities($userId);
+        $groupXmlEncoded = htmlentities($groupName);
+        $request = <<<XML
+<WsRestGetMembersRequest>
+  <includeSubjectDetail>T</includeSubjectDetail>
+  <wsGroupLookups>
+    <WsGroupLookup>
+      <groupName>$groupXmlEncoded</groupName>
+    </WsGroupLookup>
+  </wsGroupLookups>
+  <actAsSubjectLookup>
+    <subjectId>$userIdEncoded</subjectId>
+  </actAsSubjectLookup>
+</WsRestGetMembersRequest>
+XML;
+        
+        $result = $this->_doRest('groups', $request);
+
+        $members = array();
+        if (isset($result) and ($result !== FALSE) and (isset($result->results->WsGetMembersResult->wsSubjects->WsSubject))) {
+            foreach ($result->results->WsGetMembersResult->wsSubjects->WsSubject as $member) {
+                $members[] = $this->_memberXmlToArray($member);
+            }
+        }
+        else {
+            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>'. var_export($result, true));
+        }
+        
+        return $members;
+    }
+    
     /**
      * Implements REST calls to the Grouper Web Services API 
      * 
      * @copyright 2009 SURFnet BV
      * @version $Id$
+     * @return SimpleXMLElement
      */
     protected function _doRest($operation, $request, $expect = array('SUCCESS'))
     {
@@ -17,28 +79,52 @@ class EngineBlock_Groups_Grouper
             throw new EngineBlock_Exception('No Grouper Host specified! Please set "Grouper.Host" in your application configuration.');     
         }
        
-        $url = $cfg['Grouper.Protocol'] . '://' . $cfg['Grouper.User'] . ':' . $cfg['Grouper.Password'] . '@' . $cfg['Grouper.Host'] . (isset($cfg['Grouper.Port'])?':'.$cfg['Grouper.Port']:'') . $cfg['Grouper.Path'] .'/'. $cfg['Grouper.Version'] . '/' . $operation;
+        $url = $cfg['Grouper.Protocol'] .
+                '://' .
+                $cfg['Grouper.User'] .
+                ':' .
+                $cfg['Grouper.Password'] .
+                '@' .
+                $cfg['Grouper.Host'] .
+                (isset($cfg['Grouper.Port'])?':'.$cfg['Grouper.Port']:'') .
+                $cfg['Grouper.Path'] .
+                '/' .
+                $cfg['Grouper.Version'] . '/' .
+                $operation;
+
         $ch = curl_init($url);
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            
             'Content-Type: text/xml; charset=UTF-8'
         ));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // todo was 2 but ssl certificate of grouper gave an error during dev.
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         curl_setopt($ch, CURLOPT_VERBOSE, 0);
+
+        $responseFailed = false;
         $response = curl_exec($ch);
-        $error = curl_error($ch);
-        $info = curl_getinfo($ch);
+
+        $info = array('http_code'=>'');
+        $error = "";
         if ($response !== FALSE) {
-            if (($error != '') or ($info['http_code'] >= 300))
-                $response = FALSE;
+            $error  = curl_error($ch);
+            $info   = curl_getinfo($ch);
+            if (($error != '') or ($info['http_code'] >= 300)) {
+                $responseFailed = true;
+            }
         }
-        if ($response == FALSE) {
-            throw new Exception('Could not execute grouper webservice request: [error: ' . $error . '] [http code: ' . $info['http_code'] . ']');
-        }
+
         curl_close($ch);
+
+        if ($response === FALSE || $responseFailed === true) {
+            throw new Exception('Could not execute grouper webservice request:' .
+                                ' [url: ' . $url . ']' .
+                                ' [error: ' . $error . ']' .
+                                ' [http code: ' . $info['http_code'] . ']' .
+                                ' [response: ' . $response . ']');
+        }
         
         $result = @simplexml_load_string($response);
         if ($result === FALSE) {
@@ -52,55 +138,35 @@ class EngineBlock_Groups_Grouper
         return $result;
     }
 
-    protected function _x2pGroup($group)
+    protected function _groupXmlToArray(SimpleXMLElement $group)
     {
         $result = array();
-        if (! empty($group->name))
+        if (! empty($group->name)) {
             $result['name'] = (string) $group->name;
+        }
         $result['description'] = (! empty($group->description)) ? (string) $group->description : "";
-        if (! empty($group->extension))
+        if (! empty($group->extension)) {
             $result['extension'] = (string) $group->extension;
-        if (! empty($group->displayExtension))
+        }
+        if (! empty($group->displayExtension)) {
             $result['displayExtension'] = (string) $group->displayExtension;
-        if (! empty($group->uuid))
+        }
+        if (! empty($group->uuid)) {
             $result['uuid'] = (string) $group->uuid;
+        }
         return $result;
     }
 
-    protected function _x2pMember($member)
+    protected function _memberXmlToArray(SimpleXMLElement $member)
     {
         $result = array();
-        if (! empty($member->id))
+        if (! empty($member->id)) {
             $result['id'] = (string) $member->id;
-        if (! empty($member->name))
-            $result['name'] = (string) $member->name;
-        return $result;
-    }
-
-    /**
-     * Retrieve the list of groups that the specified subject is a member of.
-     */
-    public function getGroups($userIdentifier)
-    {
-        $request = '<WsRestGetGroupsRequest>
-    <subjectLookups>
-        <WsSubjectLookup>
-            <subjectId>' . $userIdentifier . '</subjectId>
-        </WsSubjectLookup>
-    </subjectLookups>
-    <actAsSubjectLookup>
-        <subjectId>' . $userIdentifier . '</subjectId>
-    </actAsSubjectLookup>
-</WsRestGetGroupsRequest>';
-        $result = $this->_doRest('subjects', $request);
-        #   print_r($result);
-        $groups = array();
-        if (isset($result) and ($result !== FALSE) and (! empty($result->results->WsGetGroupsResult->wsGroups))) {
-            foreach ($result->results->WsGetGroupsResult->wsGroups->WsGroup as $group) {
-                $groups[] = $this->_x2pGroup($group);
-            }
         }
-        return $groups;
+        if (! empty($member->name)) {
+            $result['name'] = (string) $member->name;
+        }
+        return $result;
     }
 
     /*

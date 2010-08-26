@@ -2,6 +2,7 @@
 class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonService, GroupService
 {
     protected $_ebSocialData = NULL;
+    protected $_grouperAdapter = null;
 
     /**
      * @return EngineBlock_SocialData
@@ -42,28 +43,31 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
 
     /**
      * Returns a list of people that correspond to the passed in person ids.
-     * @param ids The ids of the people to fetch.
+     * @param array $userId The ids of the people to fetch.
+     * @param GroupId $groupId The id of the group
      * @param options Request options for filtering/sorting/paging
      * @param fields set of contact fields to return, as array('fieldName' => 1)
      * @return a list of people.
      */
     function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
     {
-        $people = array();
-        
-        $person = new Person('urn:collab:person:surfnet.nl:hansz', 'Hans Zandbelt');
-        $people[] = $person;
+        if ($groupId->getGroupId()!=='self') {
+            $groupId = $groupId->getGroupId();
+            $groupId = array_shift($groupId);
 
-        $person = new Person('urn:collab:person:surfguest.nl:smibuildings', "SURFmedia Ibuildings User");
-        $people[] = $person;
+            /**
+             * @var UserId $groupMemberUid
+             */
+            $groupMemberUid = array_shift($userId);
+            $groupMemberUid = $groupMemberUid->getUserId($token);
 
-        $person = new Person('urn:collab:person:surfguest.nl:relaxnow', "Boy Baukema");
-        $people[] = $person;
+            $people = $this->_getGrouperAdapter()->getGroupMembers($groupMemberUid, $groupId);
 
-        $totalSize = count($people);
-        $collection = new RestfulCollection($people, $options->getStartIndex(), $totalSize);
-        $collection->setItemsPerPage($options->getCount());
-        return $collection;
+            $totalSize = count($people);
+            $collection = new RestfulCollection($people, $options->getStartIndex(), $totalSize);
+            $collection->setItemsPerPage($options->getCount());
+            return $collection;
+        }
 
         // echo "PersonService->getPeople called with arguments: <pre>";
         // var_dump(func_get_args());
@@ -87,6 +91,17 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
         $groups[] = array('id'=>'test:coin', 'title'=>'COIN Dev Team');
 
         return $groups;
+    }
+
+    /**
+     * @return EngineBlock_OpenSocial_Groups_Grouper_Adapter
+     */
+    protected function _getGrouperAdapter()
+    {
+        if (!$this->_grouperAdapter) {
+            $this->_grouperAdapter = new EngineBlock_OpenSocial_Groups_Grouper_Adapter();
+        }
+        return $this->_grouperAdapter;
     }
 
     public function getActivities($userIds, $groupId, $appId, $sortBy, $filterBy, $filterOp, $filterValue, $startIndex, $count, $fields, $activityIds, $token)
