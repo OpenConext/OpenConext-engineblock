@@ -7,11 +7,18 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      * @return EngineBlock_SocialData
      */
     protected function _getSocialData()
-    {
+    {   
         // hmm, we can't do dependency injection here since Shindig instantiates our 
         // EngineBlock_OpenSocial_ShindigService for us.
         if (is_null($this->_ebSocialData)) {
-            $this->_ebSocialData = new EngineBlock_SocialData();
+            
+            // @todo This is a hack.. do we have a cleaner way to retrieve the appId?
+            $appId = NULL;
+            if (isset($_REQUEST["appid"])) {
+                $appId = $_REQUEST["appid"]; 
+            } 
+            
+            $this->_ebSocialData = new EngineBlock_SocialData($appId);
         }
         return $this->_ebSocialData;
     }
