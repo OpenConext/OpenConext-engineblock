@@ -116,13 +116,12 @@ class EngineBlock_UserDirectory
             return $attributes['uid'][0];
         }
 
-        return ;
+        return "";
     }
 
     public function addOrganization($organization)
     {
         $info = array(
-            
             'o' => $organization , 
             'objectclass' => array(
                 
@@ -131,7 +130,7 @@ class EngineBlock_UserDirectory
             )
         );
         $dn = 'o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
-        if (! $this->_getLdapClient()->exists($dn)) {
+        if (!$this->_getLdapClient()->exists($dn)) {
             $result = $this->_getLdapClient()->add($dn, $info);
             $result = ($result instanceof Zend_Ldap);
         } else {
@@ -145,39 +144,46 @@ class EngineBlock_UserDirectory
     {
         $now = date(DATE_RFC822);
         $info = array();
-        $info['collabPersonHash'] = $attributeHash;
-        $info['collabPersonRegistered'] = $now;
-        $info['collabPersonLastUpdated'] = $now;
-        $info['collabPersonLastAccessed'] = $now;
+        $info['collabPersonHash']           = $attributeHash;
+        $info['collabPersonRegistered']     = $now;
+        $info['collabPersonLastUpdated']    = $now;
+        $info['collabPersonLastAccessed']   = $now;
         // TODO: find out about IDP (need reference)? pass in parameter? call external module?
         $info['collabPersonIsGuest'] = FALSE;
-        foreach (array(
-            'uid' , 'cn' , 
-            'sn' , 'mail' , 
-            'displayName' , 
+
+        $identifyingAttributes = array(
+            'uid',
+            'cn' ,
+            'sn' ,
+            'mail',
+            'displayName' ,
             'givenName'
-        ) as $attribute) {
-            if (array_key_exists(ENGINEBLOCK_EDUPERSON_PREFIX . $attribute, $attributes)) {
-                $info[$attribute] = $attributes[ENGINEBLOCK_EDUPERSON_PREFIX . $attribute];
+        );
+        foreach ($identifyingAttributes as $identifyingAttribute) {
+            if (array_key_exists(ENGINEBLOCK_EDUPERSON_PREFIX . $identifyingAttribute, $attributes)) {
+                $info[$identifyingAttribute] = $attributes[ENGINEBLOCK_EDUPERSON_PREFIX . $identifyingAttribute];
             }
         }
         // check mandatory attributes (uid)
-        if (! array_key_exists('cn', $info))
+        if (! array_key_exists('cn', $info)) {
             $info['cn'] = $this->_getCommonNameFromAttributes($info);
-        if (! array_key_exists('sn', $info))
+        }
+        if (! array_key_exists('sn', $info)) {
             $info['sn'] = $info['cn'];
+        }
         $info['objectClass'] = array(
-            'collabPerson' , 
-            'nlEduPerson' , 
-            'inetOrgPerson' , 
-            'organizationalPerson' , 
-            'person' , 'top'
+            'collabPerson',
+            'nlEduPerson',
+            'inetOrgPerson',
+            'organizationalPerson',
+            'person',
+            'top',
         );
         $info['o'] = $organization;
         $info['collabPersonId'] = 'urn:collab:person:' . $organization . ':' . $info['uid'][0];
         $dn = 'uid=' . $info['uid'][0] . ',o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
         $this->addOrganization($organization);
-        if (! $this->_getLdapClient()->exists($dn)) {
+        if (!$this->_getLdapClient()->exists($dn)) {
             $result = $this->_getLdapClient()->add($dn, $info);
             $result = ($result instanceof Zend_Ldap);
         } else {
