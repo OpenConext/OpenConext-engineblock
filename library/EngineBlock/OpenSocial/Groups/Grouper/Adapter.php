@@ -20,15 +20,4 @@ class EngineBlock_OpenSocial_Groups_Grouper_Adapter
     {
         return $member;
     }
-
-    /**
-     * @return EngineBlock_Groups_Grouper Grouper REST client
-     */
-    protected function _getGrouperClient()
-    {
-        if (!isset($this->_grouperClient)) {
-            $this->_grouperClient = new EngineBlock_Groups_Grouper();
-        }
-        return $this->_grouperClient;
-    }
 }

@@ -4,9 +4,29 @@ define('ENGINEBLOCK_SERVICEREGISTRY_GADGETBASEURL_FIELD', 'coin:gadgetbaseurl');
 
 class EngineBlock_SocialData
 {
+    /**
+     * @var EngineBlock_UserDirectory
+     */
     protected $_userDirectory = NULL;
+
+    /**
+     * @var EngineBlock_Groups_Grouper
+     */
+    protected $_grouperClient = null;
+
+    /**
+     * @var EngineBlock_ServiceRegistry
+     */
     protected $_serviceRegistry = NULL;
+
+    /**
+     * @var EngineBlock_SocialData_FieldMapper
+     */
     protected $_fieldMapper = NULL;
+
+    /**
+     * @var String
+     */
     protected $_appId = NULL;
     
     /**
@@ -37,6 +57,45 @@ class EngineBlock_SocialData
         return $result;
     }
 
+    public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array())
+    {
+        $groupMembers = $this->_getGrouperClient()->getMembers($groupMemberUid, $groupId);
+
+        $people = array();
+        foreach ($groupMembers as $groupMember) {
+            $people[] = $this->getPerson($groupMember['id'], $socialAttributes);
+        }
+        return $people;
+    }
+
+    protected function _enforceArp($record)
+    {
+        // @todo not implemented
+        return $record;
+
+        // @todo: the below is a pseudocode implementation of an arp enforcer. Not tested.
+
+        // Find out the SP Identifier based on the app id.
+        // E.g. if the appid = 'weather.gadget.google.com' and in Janus there is a field
+        // called coin:gadgetbaseurl which is set to .*\.gadget\.google\.com, then
+        // the SP identifier of that entry will be returned by findIdentifiersBymetadata.
+        $result = $this->_getServiceRegistry()->
+                         findIdentifiersByMetadata(ENGINEBLOCK_SERVICEREGISTRY_GADGETBASEURL_FIELD,
+                                                   $this->_appId);
+
+        if (count($result)) {
+            $spIdentifier = $result[0];
+            $arp = $this->_getServiceRegistry()->getArp($spIdentifier);
+
+            // @todo filter attributes based on arp.
+
+            return $record;
+
+        }
+
+        return array(); // something went wrong, as a precaution we don't give back any data
+    }
+
     /**
      * @return EngineBlock_UserDirectory
      */
@@ -51,6 +110,17 @@ class EngineBlock_SocialData
     public function setUserDirectory($userDirectory)
     {
         $this->_userDirectory = $userDirectory;
+    }
+
+    /**
+     * @return EngineBlock_Groups_Grouper Grouper REST client
+     */
+    protected function _getGrouperClient()
+    {
+        if (!isset($this->_grouperClient)) {
+            $this->_grouperClient = new EngineBlock_Groups_Grouper();
+        }
+        return $this->_grouperClient;
     }
     
     /**
@@ -84,33 +154,4 @@ class EngineBlock_SocialData
     {
         $this->_fieldMapper = $mapper;
     }
-    
-    protected function _enforceArp($record)
-    {
-        // @todo not implemented
-        return $record;
-        
-        // @todo: the below is a pseudocode implementation of an arp enforcer. Not tested.
-        
-        // Find out the SP Identifier based on the app id.
-        // E.g. if the appid = 'weather.gadget.google.com' and in Janus there is a field
-        // called coin:gadgetbaseurl which is set to .*\.gadget\.google\.com, then 
-        // the SP identifier of that entry will be returned by findIdentifiersBymetadata.
-        $result = $this->_getServiceRegistry()->
-                         findIdentifiersByMetadata(ENGINEBLOCK_SERVICEREGISTRY_GADGETBASEURL_FIELD, 
-                                                   $this->_appId);
-        
-        if (count($result)) {
-            $spIdentifier = $result[0];
-            $arp = $this->_getServiceRegistry()->getArp($spIdentifier);
-            
-            // @todo filter attributes based on arp.
-            
-            return $record;
-            
-        }
-        
-        return array(); // something went wrong, as a precaution we don't give back any data
-    }
-        
 }

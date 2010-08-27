@@ -2,7 +2,6 @@
 class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonService, GroupService
 {
     protected $_ebSocialData = NULL;
-    protected $_grouperAdapter = null;
 
     /**
      * @return EngineBlock_SocialData
@@ -52,28 +51,32 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
     function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
     {
         if ($groupId->getGroupId()!=='self') {
-            $groupId = $groupId->getGroupId();
-            $groupId = array_shift($groupId);
+            if (count($userId) > 1) {
+                $message = "Getting the group members for a group given *multiple* uids is not implemented by EngineBlock (try picking one uid)";
+                throw new SocialSpiException($message, ResponseError::$INTERNAL_ERROR);
+            }
 
-            /**
-             * @var UserId $groupMemberUid
-             */
             $groupMemberUid = array_shift($userId);
             $groupMemberUid = $groupMemberUid->getUserId($token);
 
-            $people = $this->_getGrouperAdapter()->getGroupMembers($groupMemberUid, $groupId);
+            $groupId = $groupId->getGroupId();
+            $groupId = array_shift($groupId);
 
-            $totalSize = count($people);
-            $collection = new RestfulCollection($people, $options->getStartIndex(), $totalSize);
-            $collection->setItemsPerPage($options->getCount());
-            return $collection;
+            $people = $this->_getSocialData()->getGroupMembers($groupMemberUid, $groupId, $fields);
+        }
+        else {
+            $fields = array_values($fields);
+            $people = array();
+            $socialData = $this->_getSocialData();
+            foreach ($userId as $userId) {
+                $people[] = $socialData->getPerson($userId, $fields);
+            }
         }
 
-        // echo "PersonService->getPeople called with arguments: <pre>";
-        // var_dump(func_get_args());
-        // echo "</pre>";
-        // $identifier = $userId->getUserId($token);
-        // $result = $this->_getSocialData()->getPersons($identifier)
+        $totalSize = count($people);
+        $collection = new RestfulCollection($people, $options->getStartIndex(), $totalSize);
+        $collection->setItemsPerPage($options->getCount());
+        return $collection;
     }
 
     /**
@@ -91,17 +94,6 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
         $groups[] = array('id'=>'test:coin', 'title'=>'COIN Dev Team');
 
         return $groups;
-    }
-
-    /**
-     * @return EngineBlock_OpenSocial_Groups_Grouper_Adapter
-     */
-    protected function _getGrouperAdapter()
-    {
-        if (!$this->_grouperAdapter) {
-            $this->_grouperAdapter = new EngineBlock_OpenSocial_Groups_Grouper_Adapter();
-        }
-        return $this->_grouperAdapter;
     }
 
     public function getActivities($userIds, $groupId, $appId, $sortBy, $filterBy, $filterOp, $filterValue, $startIndex, $count, $fields, $activityIds, $token)
