@@ -85,6 +85,9 @@ $config['integration'] = array_merge($config['production'], array(
 
     'ldap.host'                 => 'coin-db.dev.coin.surf.net',
 
+    'Grouper.Host'		=> 'coin-db.dev.coin.surf.net',
+    'Grouper.Password'          => '631E9383FD20',
+
     'ServiceRegistry.Location'  => 'https://serviceregistry.dev.coin.surf.net/simplesaml/module.php/janus/rest.php',
 ));
 
