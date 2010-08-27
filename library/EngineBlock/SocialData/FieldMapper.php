@@ -154,10 +154,16 @@ class EngineBlock_SocialData_FieldMapper
         return $result;
     }
 
-    public function grouperToSocialData($data)
+    /**
+     * Convert a Grouper (group) array to an OpenSocial array.
+     *
+     * @param  $group Group record
+     * @return array OpenSocial record
+     */
+    public function grouperToSocialData($group)
     {
         $result = array();
-        foreach ($data as $grouperAttribute => $value) {
+        foreach ($group as $grouperAttribute => $value) {
             if (isset($this->_g2oMap[$grouperAttribute])) {
                 $openSocialKey = $this->_g2oMap[$grouperAttribute];
                 $result[$openSocialKey] = $value;
