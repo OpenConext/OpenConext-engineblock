@@ -57,6 +57,17 @@ class EngineBlock_SocialData
         return $result;
     }
 
+    public function getGroupsForPerson($identifier)
+    {
+        $grouperGroups = $this->_getGrouperClient()->getGroups($identifier);
+
+        $openSocialGroups = array();
+        foreach ($grouperGroups as $group) {
+            $openSocialGroups[] = $this->_getFieldMapper()->grouperToSocialData($group);
+        }
+        return $openSocialGroups;
+    }
+
     public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array())
     {
         $groupMembers = $this->_getGrouperClient()->getMembers($groupMemberUid, $groupId);
@@ -140,7 +151,7 @@ class EngineBlock_SocialData
     }
     
     /**
-     * @return EngineBlock_UserDirectory_FieldMapper mapper
+     * @return EngineBlock_SocialData_FieldMapper mapper
      */
     protected function _getFieldMapper()
     {

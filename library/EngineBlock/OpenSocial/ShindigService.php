@@ -81,19 +81,21 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
 
     /**
      * Fetch groups for a list of ids.
-     * @param UserId The user id to perform the action for
-     * @param GroupId optional grouping ID 
-     * @param token The SecurityToken for this request
+     * @param UserId        $userId     The user id to perform the action for
+     * @param GroupId       $groupId    Optional grouping ID
+     * @param SecurityToken $token      The SecurityToken for this request
      * @return ResponseItem a response item with the error code set if
      * there was a problem
      */
     function getPersonGroups($userId, GroupId $groupId, SecurityToken $token)
     {
-        $groups = array();
-        $groups[] = array('id'=>'test:a-team', 'title'=>'The A-Team');
-        $groups[] = array('id'=>'test:coin', 'title'=>'COIN Dev Team');
+        $groupId = $groupId->getGroupId();
+        if ($groupId && $groupId !== 'self') {
+            $message = "Getting person groups for a given group is not implemented by EngineBlock";
+            throw new SocialSpiException($message, ResponseError::$INTERNAL_ERROR);
+        }
 
-        return $groups;
+        return $this->_getSocialData()->getGroupsForPerson($userId->getUserId($token));
     }
 
     public function getActivities($userIds, $groupId, $appId, $sortBy, $filterBy, $filterOp, $filterValue, $startIndex, $count, $fields, $activityIds, $token)

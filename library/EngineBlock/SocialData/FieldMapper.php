@@ -7,10 +7,10 @@
 class EngineBlock_SocialData_FieldMapper
 {
     /**
-     * Mapping of COIN ldap keys to open social fieldnames.
+     * Mapping of COIN ldap keys to open social field names.
      * Some fields may map to multiple open social fields
-     * e.g. both displayName and nickName in opensocial 
-     * are based on displayname in COIN ldap.
+     * e.g. both displayName and nickName in OpenSocial
+     * are based on display name in COIN ldap.
      * @var array
      */
     protected $_l2oMap = array(
@@ -24,7 +24,7 @@ class EngineBlock_SocialData_FieldMapper
     );
     
     /**
-     * Mapping of open social fieldnames to COIN ldap keys
+     * Mapping of open social field names to COIN ldap keys
      * Must contain bare key/value pairs (doesn't support
      * multiple fields like _l2oMap.)
      * @var array
@@ -35,6 +35,26 @@ class EngineBlock_SocialData_FieldMapper
         "displayName"   => "displayname" ,
         "emails"        => "mail" ,
         "name"          => "givenname"
+    );
+
+    /**
+     * Mapping of OpenSocial fieldnames to Grouper field names.
+     *
+     * @var array
+     */
+    protected $_o2gMap = array(
+        'id'    => 'name',
+        'title' => 'displayExtension',
+    );
+
+    /**
+     * Mapping of Grouper field names to OpenSocial keys.
+     *
+     * @var array
+     */
+    protected $_g2oMap = array(
+        'name'              => 'id',
+        'displayExtension'  => 'title',
     );
 
     /**
@@ -55,22 +75,22 @@ class EngineBlock_SocialData_FieldMapper
      * Mind that the mapper is case sensitive.
      * @todo do we need this case sensitivity?
      * 
-     * @param array $socialAttrs An array of opensocial attribute names
+     * @param array $socialAttrs An array of OpenSocial attribute names
      * @return array The list of ldap attributes
      */
     public function socialToLdapAttributes($socialAttrs)
     {
         $result = array();
-        foreach ($socialAttrs as $socialAttr) {
-            if (isset($this->_o2lMap[$socialAttr])) {
-                if (!in_array($this->_o2lMap[$socialAttr], $result)) {
-                    $result[] = $this->_o2lMap[$socialAttr];
+        foreach ($socialAttrs as $socialAttribute) {
+            if (isset($this->_o2lMap[$socialAttribute])) {
+                if (!in_array($this->_o2lMap[$socialAttribute], $result)) {
+                    $result[] = $this->_o2lMap[$socialAttribute];
                 }
             } else {
                 // We have no mapping for this social field, use the key as-is (useful if userregistry contains
                 // custom stuff)
-                if (!in_array($socialAttr, $result)) {
-                    $result[] = $socialAttr;
+                if (!in_array($socialAttribute, $result)) {
+                    $result[] = $socialAttribute;
                 }
             }
         }
@@ -106,11 +126,11 @@ class EngineBlock_SocialData_FieldMapper
     {
         $result = array();
         if (count($socialAttrs)) {
-            foreach ($socialAttrs as $socialAttr) {
-                if (isset($this->_o2lMap[$socialAttr])) {
-                    $ldapAttr = $this->_o2lMap[$socialAttr];
+            foreach ($socialAttrs as $socialAttribute) {
+                if (isset($this->_o2lMap[$socialAttribute])) {
+                    $ldapAttr = $this->_o2lMap[$socialAttribute];
                     if (isset($data[$ldapAttr])) {
-                        $result[$socialAttr] = $this->_pack($data[$ldapAttr], $socialAttr);
+                        $result[$socialAttribute] = $this->_pack($data[$ldapAttr], $socialAttribute);
                     } else {    // if there's no opensocial equivalent for this field
                     // assume this is stuff we're not allowed to share
                     // so do not include it in the result.
@@ -121,14 +141,29 @@ class EngineBlock_SocialData_FieldMapper
             foreach ($data as $ldapAttr => $value) {
                 if (isset($this->_l2oMap[$ldapAttr])) {
                     if (is_array($this->_l2oMap[$ldapAttr])) {
-                        foreach ($this->_l2oMap[$ldapAttr] as $socialAttr) {
-                            $result[$socialAttr] = $this->_pack($value, $socialAttr);
+                        foreach ($this->_l2oMap[$ldapAttr] as $socialAttribute) {
+                            $result[$socialAttribute] = $this->_pack($value, $socialAttribute);
                         }
                     } else {
-                        $result[$this->_l2oMap[$ldapAttr]] = $this->_pack($value, $socialAttr);
+                        $result[$this->_l2oMap[$ldapAttr]] = $this->_pack($value, $socialAttribute);
                     }
                 } else {    // ignore value
                 }
+            }
+        }
+        return $result;
+    }
+
+    public function grouperToSocialData($data)
+    {
+        $result = array();
+        foreach ($data as $grouperAttribute => $value) {
+            if (isset($this->_g2oMap[$grouperAttribute])) {
+                $openSocialKey = $this->_g2oMap[$grouperAttribute];
+                $result[$openSocialKey] = $value;
+            }
+            else {
+                // Ignore values not present in the mapping
             }
         }
         return $result;
