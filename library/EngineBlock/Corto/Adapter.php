@@ -67,7 +67,12 @@ class EngineBlock_Corto_Adapter
 
     public function processConsent()
     {
-        $this->_callCortoServiceUri('continueToSP');
+        $this->_callCortoServiceUri('processConsentService');
+    }
+
+    public function processedAssertionConsumer()
+    {
+        $this->_callCortoServiceUri('processedAssertionConsumerService');
     }
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
@@ -109,20 +114,38 @@ class EngineBlock_Corto_Adapter
 
     protected function _configureProxyServer(Corto_ProxyServer $proxyServer)
     {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
         $proxyServer->setConfigs(array(
-            'debug' => true,
-            'trace' => true,
+            'debug' => $application->getConfigurationValue('debug', false),
+            'trace' => $application->getConfigurationValue('debug', false),
+            'ConsentDbDsn'      => $application->getConfigurationValue('Consent.Db.Dsn'),
+            'ConsentDbUser'     => $application->getConfigurationValue('Consent.Db.User'),
+            'ConsentDbPassword' => $application->getConfigurationValue('Consent.Db.Password'),
+            'ConsentDbTable'    => $application->getConfigurationValue('Consent.Db.Table'),
         ));
         $proxyServer->setHostedEntities(array(
             $proxyServer->getHostedEntityUrl('main') => array(
                 'certificates' => array(
-                    'public'    => EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('PublicKey'),
-                    'private'   => EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('PrivateKey'),
+                    'public'    => $application->getConfigurationValue('PublicKey'),
+                    'private'   => $application->getConfigurationValue('PrivateKey'),
                 ),
                 'infilter' => array(get_class($this), 'filterInputAttributes'),
+                'Processing' => array(
+                    'Consent' => array(
+                        'Binding'  => 'INTERNAL',
+                        'Location' => $proxyServer->getHostedEntityUrl('main', 'provideConsentService'),
+                    ),
+                ),
             ),
         ));
-        $proxyServer->setRemoteEntities($this->_getRemoteEntities());
+        $proxyServer->setRemoteEntities($this->_getRemoteEntities() + array(
+            $proxyServer->getHostedEntityUrl('main', 'idPMetadataService') => array(
+                'certificates' => array(
+                    'public'    => $application->getConfigurationValue('PublicKey'),
+                    'private'   => $application->getConfigurationValue('PrivateKey'),
+                ),
+            )
+        ));
         $proxyServer->setTemplateSource(
             Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
             array('FilePath'=>ENGINEBLOCK_FOLDER_LIBRARY_CORTO . '../templates/')

@@ -12,7 +12,33 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         'continueToSP'              => 'authentication/sp/process-consent',
         'idPMetadataService'        => 'authentication/idp/metadata',
         'sPMetadataService'         => 'authentication/sp/metadata',
+        'provideConsentService'     => 'authentication/idp/provide-consent',
+        'processConsentService'     => 'authentication/idp/process-consent',
+        'processedAssertionConsumerService' => 'authentication/proxy/processed-assertion'
     );
+
+    public function getParametersFromUrl($url)
+    {
+        $parameters = array(
+            'EntityCode'        => 'main',
+            'ServiceName'       => '',
+            'RemoteIdPMd5Hash'  => '',
+        );
+        $urlPath = parse_url($url, PHP_URL_PATH); // /authentication/x/ServiceName[/remoteIdPMd5Hash]
+        if ($urlPath[0] === '/') {
+            $urlPath = substr($urlPath, 1);
+        }
+
+        foreach ($this->_serviceToControllerMapping as $serviceName => $controllerUri) {
+            if (strstr($urlPath, $controllerUri)) {
+                $urlPath = str_replace($controllerUri, $serviceName, $urlPath);
+                list($parameters['ServiceName'], $parameters['RemoteIdPMd5Hash']) = explode('/', $urlPath);
+                return $parameters;
+            }
+        }
+
+        throw new Corto_ProxyServer_Exception("Unable to map URL '$url' to EngineBlock URL");
+    }
 
     public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "")
     {
