@@ -1,5 +1,8 @@
 <?php
- 
+
+/**
+ * Route /service/ requests to the Service module with the Rest controller.
+ */
 class EngineBlock_Router_Service extends EngineBlock_Router_Abstract
 {
     public function route($uri)

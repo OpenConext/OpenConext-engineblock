@@ -22,7 +22,8 @@ $application->bootstrap(APPLICATION_ENV);
 
 $dispatcher = new EngineBlock_Dispatcher();
 $dispatcher->setRouters(array(
-    new EngineBlock_Router_Authorization(),
+    new EngineBlock_Router_Authentication(),
+    new EngineBlock_Router_CatchAll('authentication', 'index', 'index'),
 ));
 $dispatcher->dispatch();
 

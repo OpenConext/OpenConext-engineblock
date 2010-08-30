@@ -1,6 +1,9 @@
 <?php
- 
-class EngineBlock_Router_Authorization extends EngineBlock_Router_Default
+
+/**
+ * Routes /authorization/ urls
+ */
+class EngineBlock_Router_Authentication extends EngineBlock_Router_Default
 {
     protected $DEFAULT_MODULE_NAME = 'Authentication';
 
@@ -8,6 +11,13 @@ class EngineBlock_Router_Authorization extends EngineBlock_Router_Default
         'idp'   =>'IdentityProvider',
         'sp'    =>'ServiceProvider',
     );
+
+    public function route($uri)
+    {
+        parent::route($uri);
+        // Only route /authentication/ urls
+        return (strtolower($this->_moduleName)===strtolower($this->DEFAULT_MODULE_NAME));
+    }
 
     public function getControllerName()
     {

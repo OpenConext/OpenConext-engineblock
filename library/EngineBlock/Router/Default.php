@@ -1,5 +1,9 @@
 <?php
- 
+
+
+/**
+ * Default router, expects a format like /module/controller/action and routes it.
+ */
 class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 {
     protected $DEFAULT_MODULE_NAME     = "Default";
