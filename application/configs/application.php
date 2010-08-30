@@ -58,6 +58,16 @@ PQnYaNUN/Fy2SYtETXTb0CQ9X1rt8ffkFP7ya+5TC83aMg==
     'ldap.accountDomainName'    => 'dev.coin.surf.net',
     'ldap.baseDn'               => 'dc=coin,dc=surfnet,dc=nl',
 
+    'Db.Write.0.Dsn'            => '',
+    'Db.Write.0.User'           => 'engineblock',
+    'Db.Write.0.Password'       => '',
+
+    'Db.Read.0.Dsn'             => '',
+    'Db.Read.0.User'            => 'engineblock',
+    'Db.Read.0.Password'        => '',
+
+    'Consent.Db.Table'          => 'consent',
+
     'ServiceRegistry.Location'  => '',
 
     'Grouper.Protocol'          => 'https',
@@ -80,12 +90,12 @@ $config['acceptance'] = array_merge($config['production'], array(
  * Configuration for engineblock.coin.dev.surf.net
  */
 $config['integration'] = array_merge($config['production'], array(
-    'Php.DisplayErrors'   => true,
-    'Php.ErrorReporting'  => E_ALL - E_NOTICE,
+    'Php.DisplayErrors'         => true,
+    'Php.ErrorReporting'        => E_ALL - E_NOTICE,
 
     'ldap.host'                 => 'coin-db.dev.coin.surf.net',
 
-    'Grouper.Host'		=> 'coin-db.dev.coin.surf.net',
+    'Grouper.Host'              => 'coin-db.dev.coin.surf.net',
     'Grouper.Password'          => '631E9383FD20',
 
     'ServiceRegistry.Location'  => 'https://serviceregistry.dev.coin.surf.net/simplesaml/module.php/janus/rest.php',
@@ -99,23 +109,35 @@ $config['integration'] = array_merge($config['production'], array(
  * Configuration for Ibuildings VM
  */
 $config['ebdev.net'] = array_merge($config['production'], array(
+    'Php.DisplayErrors'         => true,
+    'Php.ErrorReporting'        => E_ALL - E_NOTICE,
+
+    'ldap.host'                 => 'ebdev',
+    'ldap.useSsl'               => FALSE,
+
     'ServiceRegistry.Location'  => 'https://serviceregistry.ebdev.net/simplesaml/module.php/janus/rest.php',
 
-    'Php.DisplayErrors'   => true,
+    'Db.Write.0.Dsn'       => 'mysql:host=localhost;dbname=engineblock',
+    'Db.Write.0.User'      => 'root',
+    'Db.Write.0.Password'  => 'engineblock',
+
+    'Php.DisplayErrors'         => true,
+
+    'Grouper.Host'              => 'ebdev',
+    'Grouper.Password'          => '631E9383FD20',
 ));
 
 /**
  * Configuration for Ivo's localhost
  */
 $config['ivodev'] = array_merge($config['production'], array(
-    'ldap.host'   => 'coin-db.dev.coin.surf.net',
-    'ldap.useSsl' => FALSE,
-    'ServiceRegistry.Location'  => 'http://simplesamlphp.local:10088/simplesaml/module.php/janus/rest.php',
-    'Grouper.Host'              => 'coin-db.dev.coin.surf.net',
-    'Grouper.User'              => 'engineblock',
-    'Grouper.Password'          => '631E9383FD20',
-    
+    'ldap.host'                 => 'coin-db.dev.coin.surf.net',
+    'ldap.useSsl'               => FALSE,
 
+    'ServiceRegistry.Location'  => 'http://simplesamlphp.local:10088/simplesaml/module.php/janus/rest.php',
+
+    'Grouper.Host'              => 'coin-db.dev.coin.surf.net',
+    'Grouper.Password'          => '631E9383FD20',
 ));
 
 /**
