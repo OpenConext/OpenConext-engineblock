@@ -25,4 +25,12 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->idPMetadata();
     }
+
+    public function processConsentAction()
+    {
+        $this->setNoRender();
+
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->processConsent();
+    }
 }

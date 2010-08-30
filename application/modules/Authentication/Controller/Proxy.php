@@ -16,4 +16,12 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->idPsMetadata(EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryString());
     }
+
+    public function processedAssertionAction()
+    {
+        $this->setNoRender();
+
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->processedAssertionConsumer();
+    }
 }
