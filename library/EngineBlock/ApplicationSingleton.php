@@ -195,6 +195,18 @@ class EngineBlock_ApplicationSingleton
         return $default;
     }
 
+    public function getConfigurationValuesForPrefix($keyPrefix)
+    {
+        $values = array();
+        $keys = array_keys($this->_configuration);
+        foreach ($keys as $key) {
+            if (strpos($key, $keyPrefix) === 0) {
+                $values[$key] = $this->_configuration[$key];
+            }
+        }
+        return $values;
+    }
+
     public function setConfiguration($applicationConfiguration)
     {
         $this->_configuration = $applicationConfiguration;

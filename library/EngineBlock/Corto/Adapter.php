@@ -118,9 +118,6 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
-            'ConsentDbDsn'      => $application->getConfigurationValue('Consent.Db.Dsn'),
-            'ConsentDbUser'     => $application->getConfigurationValue('Consent.Db.User'),
-            'ConsentDbPassword' => $application->getConfigurationValue('Consent.Db.Password'),
             'ConsentDbTable'    => $application->getConfigurationValue('Consent.Db.Table'),
         ));
         $proxyServer->setHostedEntities(array(
@@ -148,7 +145,7 @@ class EngineBlock_Corto_Adapter
         ));
         $proxyServer->setTemplateSource(
             Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
-            array('FilePath'=>ENGINEBLOCK_FOLDER_LIBRARY_CORTO . '../templates/')
+            array('FilePath'=>ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/')
         );
         $proxyServer->setSessionLogDefault(new Corto_Log_File('/tmp/corto_session'));
         $proxyServer->setBindingsModule(new Corto_Module_Bindings($proxyServer));
