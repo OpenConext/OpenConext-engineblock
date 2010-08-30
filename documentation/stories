@@ -1,7 +1,0 @@
-V As a person on an SP I want to send an Authentication Request for a preselected IdP with the HTTP-Redirect binding
-to my Identity Provider via EngineBlocks Single Sign On Service.
-
-- As a person on an SP I want to select an IdP from a list when I send an authentication request
-with the HTTP-Redirect binding without an IdP preselected
-
-- As a person who just selected an IdP I want to send my authentication request to that idp
