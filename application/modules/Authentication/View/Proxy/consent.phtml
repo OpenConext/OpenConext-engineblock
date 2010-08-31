@@ -42,10 +42,10 @@ if (!isset($attributes)) {
                                 Wil je de volgende attributen vrijgeven voor de doel applicatie?
                             </p>
 
-                            <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
+                            <?php foreach ($attributes as $uid => $attributeValues) { ?>
                             <dl style="margin-left: 60px;">
                                 <dt style="font-weight: bold;">
-                                    <?=$attributeName?>
+                                    <?=$this->getAttributeName($uid, 'nl_NL')?>
                                 </dt>
                                 <dd>
                                     <? /** Single attribute value */ if (count($attributeValues)==1) { ?>

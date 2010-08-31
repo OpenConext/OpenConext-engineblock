@@ -39,7 +39,7 @@
                         <form method="post" action="<?= $action ?>">
                             <input type=hidden name=ID value="<?= $ID ?>">
                             <p>
-                                <select name=idp>
+                                <select name="idp">
                                 <? foreach($idpList as $idp): ?>
                                     <? if (isset($metaDataRemote[$idp]['OrganizationDisplayName'])) { ?>
                                     <option value="<?=$idp?>"><?=htmlentities($metaDataRemote[$idp]['OrganizationDisplayName'])?></option>
