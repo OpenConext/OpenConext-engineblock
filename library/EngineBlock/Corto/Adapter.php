@@ -120,6 +120,9 @@ class EngineBlock_Corto_Adapter
             'trace' => $application->getConfigurationValue('debug', false),
             'ConsentDbTable'    => $application->getConfigurationValue('Consent.Db.Table'),
         ));
+        $attributes = array();
+        require ENGINEBLOCK_FOLDER_LIBRARY_CORTO . '../configs/attributes.inc.php';
+        $proxyServer->setAttributeMetadata($attributes);
         $proxyServer->setHostedEntities(array(
             $proxyServer->getHostedEntityUrl('main') => array(
                 'certificates' => array(
