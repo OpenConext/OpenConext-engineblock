@@ -45,6 +45,7 @@ class EngineBlock_SocialData_FieldMapper
     protected $_o2gMap = array(
         'id'    => 'name',
         'title' => 'displayExtension',
+        'description' => 'description',
     );
 
     /**
@@ -55,6 +56,7 @@ class EngineBlock_SocialData_FieldMapper
     protected $_g2oMap = array(
         'name'              => 'id',
         'displayExtension'  => 'title',
+        'description'       => 'description',
     );
 
     /**
