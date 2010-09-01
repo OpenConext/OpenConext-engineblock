@@ -6,15 +6,15 @@ class EngineBlock_Provisioning
     
     protected function _getUserDirectory()
     {
-        if ($this->$_userDirectory==NULL) {
-            $this->$_userDirectory = new EngineBlock_UserDirectory();
+        if ($this->_userDirectory==NULL) {
+            $this->_userDirectory = new EngineBlock_UserDirectory();
         }
-        return $this->$_userDirectory;
+        return $this->_userDirectory;
     }
 
     public function setUserDirectory($userDirectory)
     {
-        $this->$_userDirectory = $userDirectory;     
+        $this->_userDirectory = $userDirectory;
     }
     
     public function provisionUser($attributes, $attributeHash) {

@@ -115,21 +115,24 @@ class EngineBlock_Corto_Adapter
     protected function _configureProxyServer(Corto_ProxyServer $proxyServer)
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
+
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
             'ConsentDbTable'    => $application->getConfigurationValue('Consent.Db.Table'),
         ));
+
         $attributes = array();
         require ENGINEBLOCK_FOLDER_LIBRARY_CORTO . '../configs/attributes.inc.php';
         $proxyServer->setAttributeMetadata($attributes);
+
         $proxyServer->setHostedEntities(array(
             $proxyServer->getHostedEntityUrl('main') => array(
                 'certificates' => array(
                     'public'    => $application->getConfigurationValue('PublicKey'),
                     'private'   => $application->getConfigurationValue('PrivateKey'),
                 ),
-                'infilter' => array(get_class($this), 'filterInputAttributes'),
+                'infilter' => array($this, 'filterInputAttributes'),
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
@@ -138,6 +141,7 @@ class EngineBlock_Corto_Adapter
                 ),
             ),
         ));
+
         $proxyServer->setRemoteEntities($this->_getRemoteEntities() + array(
             $proxyServer->getHostedEntityUrl('main', 'idPMetadataService') => array(
                 'certificates' => array(
@@ -146,18 +150,65 @@ class EngineBlock_Corto_Adapter
                 ),
             )
         ));
+
         $proxyServer->setTemplateSource(
             Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
             array('FilePath'=>ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/')
         );
+
         $proxyServer->setSessionLogDefault(new Corto_Log_File('/tmp/corto_session'));
         $proxyServer->setBindingsModule(new Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
     }
 
-    public static function filterInputAttributes($entityMetaData, $response, $attributes)
+    /**
+     * Called by Corto whenever it receives an Assertion with attributes from an Identity Provider
+     *
+     * @param  $entityMetaData
+     * @param  $response
+     * @param  $attributes
+     * @return void
+     */
+    public function filterInputAttributes(array $entityMetaData, array $response, array &$attributes)
     {
-        
+        $attributes = $this->_enrichAttributes($attributes);
+        $attributes = $this->_provisionUser($attributes);
+    }
+
+    protected function _enrichAttributes($attributes)
+    {
+        $aggregatedAttributes = $this->_getAttributeAggregator(
+            $this->_getAttributeProviders()
+        )->getAttributes($attributes['uid'][0]);
+        return array_merge_recursive($attributes, $aggregatedAttributes);
+    }
+
+    protected function _getAttributeProviders()
+    {
+        return array(new EngineBlock_AttributeProvider_Dummy());
+    }
+
+    protected function _getAttributeAggregator($providers)
+    {
+        return new EngineBlock_AttributeAggregator($providers);
+    }
+
+    protected function _provisionUser($attributes)
+    {
+        return $this->_getProvisioning()->provisionUser(
+            $attributes,
+            $this->_getAttributesHash($attributes)
+        );
+    }
+
+    protected function _getAttributesHash($attributes)
+    {
+        return sha1(var_export($attributes, 1));
+    }
+
+    protected function _getProvisioning()
+    {
+        return new EngineBlock_Provisioning();
     }
 
     protected function _getRemoteEntities()

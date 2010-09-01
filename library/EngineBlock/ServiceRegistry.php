@@ -8,24 +8,24 @@
  */
 class EngineBlock_ServiceRegistry 
 {
-	/**
-	 * The REST client used to communicate to the Janus service registry.
-	 * @var $_restClient EngineBlock_Rest_Client
-	 */
-	protected $_restClient = NULL;
-	
-	/**
-	 * Retrieve all known metadata about an (SP or IDP) entity.
-	 * @param string $entityId The URN of the entity 
-	 * @return array An array with key/value pairs.
-	 */
+    /**
+     * The REST client used to communicate to the Janus service registry.
+     * @var $_restClient EngineBlock_Rest_Client
+     */
+    protected $_restClient = NULL;
+    
+    /**
+     * Retrieve all known metadata about an (SP or IDP) entity.
+     * @param string $entityId The URN of the entity 
+     * @return array An array with key/value pairs.
+     */
     public function getMetadata($entityId) 
     {
-    	    	
-    	$response = $this->_getRestClient()->metadata()
-    	                                   ->entityid($entityId)
-    	                                   ->get();
-        return $response; 	
+                
+        $response = $this->_getRestClient()->metadata()
+                                           ->entityid($entityId)
+                                           ->get();
+        return $response;     
     }
     
     /**
@@ -39,9 +39,9 @@ class EngineBlock_ServiceRegistry
         $response = $this->_getRestClient()->metadata()
                                           ->entityid($entityId)
                                           ->keys($key)
-                                          ->get();	
+                                          ->get();    
         if (isset($response[$key])) {
-        	return $response[$key];
+            return $response[$key];
         }
         return NULL;
     }
@@ -54,11 +54,11 @@ class EngineBlock_ServiceRegistry
      */
     public function getMetaDataForKeys($entityId, $keys)
     {
-    	$response = $this->_getRestClient()->metadata()
-    	                                   ->entityid($entityId)
-    	                                   ->keys(implode(",", $keys))
-    	                                   ->get();
-    	return $response;
+        $response = $this->_getRestClient()->metadata()
+                                           ->entityid($entityId)
+                                           ->keys(implode(",", $keys))
+                                           ->get();
+        return $response;
     }    
     
     /**
@@ -71,11 +71,11 @@ class EngineBlock_ServiceRegistry
      */
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
-    	$response = $this->_getRestClient()->isconnectionallowed()
-    	                                   ->spentityid($spEntityId)
-    	                                   ->idpentityid($idpEntityId)
-    	                                   ->get();
-    	return (isset($response["allowed"]) && $response["allowed"]=="yes");
+        $response = $this->_getRestClient()->isconnectionallowed()
+                                           ->spentityid($spEntityId)
+                                           ->idpentityid($idpEntityId)
+                                           ->get();
+        return (isset($response["allowed"]) && $response["allowed"]=="yes");
     }
     
     /**
@@ -90,10 +90,10 @@ class EngineBlock_ServiceRegistry
      */
     public function getArp($spEntityId)
     {
-    	$response = $this->_getRestClient()->arp()
-    	                                  ->spentityid($spEntityId)
-    	                                  ->get();
-    	return $response;
+        $response = $this->_getRestClient()->arp()
+                                          ->spentityid($spEntityId)
+                                          ->get();
+        return $response;
     }
     
     /**
@@ -107,10 +107,10 @@ class EngineBlock_ServiceRegistry
      */
     public function getIdpList($keys=array())
     {
-    	$response = $this->_getRestClient()->idplist()
-    	                                   ->keys(implode(",", $keys))
-    	                                   ->get();    	                                
-    	return $response;    	                                  
+        $response = $this->_getRestClient()->idplist()
+                                           ->keys(implode(",", $keys))
+                                           ->get();                                        
+        return $response;                                          
     }
     
     /**
@@ -145,10 +145,10 @@ class EngineBlock_ServiceRegistry
      */
     public function findIdentifiersByMetadata($key, $value)
     {
-    	$response = $this->_getRestClient()->findidentifiersbymetadata()
-    	                                  ->key($key)
-    	                                  ->value($value)
-    	                                  ->get();
+        $response = $this->_getRestClient()->findidentifiersbymetadata()
+                                          ->key($key)
+                                          ->value($value)
+                                          ->get();
         return $response;
     }
     
@@ -157,14 +157,14 @@ class EngineBlock_ServiceRegistry
      */
     protected function _getRestClient()
     {
-    	if ($this->_restClient==NULL) {
+        if ($this->_restClient==NULL) {
             $location = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('ServiceRegistry.Location');
             if (!$location) {
                 throw new EngineBlock_Exception('No Service Registry location provided! Please set "ServiceRegistry.Location" in your application configuration.');
             }
-    		$this->_restClient = new EngineBlock_Rest_Client($location);
-    	}
-    	return $this->_restClient;
+            $this->_restClient = new EngineBlock_Rest_Client($location);
+        }
+        return $this->_restClient;
     }
     
     /**
@@ -176,8 +176,8 @@ class EngineBlock_ServiceRegistry
      */
     public function setRestClient($client) 
     {
-    	$this->_restClient = $client;
-    	
+        $this->_restClient = $client;
+        
     }
     
 }
