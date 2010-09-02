@@ -71,5 +71,5 @@
         </parallel>
     </target>
  
-    <target name="build" depends="clean,prepare,parallel,phpunit,phpcb" />
+    <target name="build" depends="clean,prepare,phpcs,phpmd,phpcpd,phpunit,phpcb" />
 </project>
