@@ -6,7 +6,7 @@ class EngineBlock_UserDirectory
 {
     const USER_ID_ATTRIBUTE          = 'uid';
     const LDAP_CLASS_COLLAB_PERSON   = 'collabPerson';
-    const LDAP_ATTR_COLLAB_PERSON_ID = 'collabPersonId'
+    const LDAP_ATTR_COLLAB_PERSON_ID = 'collabPersonId';
     const EDUPERSON_PREFIX           = 'urn:mace:dir:attribute-def:';
 
     protected $_ldapClient = NULL;
