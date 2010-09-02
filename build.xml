@@ -31,7 +31,7 @@
                        ." />
         </exec>
         <exec dir="${basedir}/build/logs" executable="xsltproc" failonerror="false" output="${basedir}/build/cpd/index.html">
-            <arg line="/path/to/cpd.xsl ${basedir}/build/logs/pmd-cpd.xml" />
+            <arg line="${basedir}/ci/cpd.xsl ${basedir}/build/logs/pmd-cpd.xml" />
         </exec>
     </target>
  
@@ -45,7 +45,7 @@
                        ." />
         </exec>
         <exec dir="${basedir}/build/dependencies" executable="cp" failonerror="false">
-            <arg line="${basedir}/path/to/dependencies.html index.html" />
+            <arg line="${basedir}/ci/dependencies.html index.html" />
         </exec>
     </target>
  
@@ -68,7 +68,7 @@
             <antcall target="phpcs" />
             <antcall target="phpmd" />
             <antcall target="phpcpd" />
-            <antcall target="pdepend" />
+            <!-- antcall target="pdepend" /> disabled because pdepend requires 1.5gb scratch space which we currently dont have -->
         </parallel>
     </target>
  
