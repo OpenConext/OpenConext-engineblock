@@ -68,7 +68,6 @@
             <antcall target="phpcs" />
             <antcall target="phpmd" />
             <antcall target="phpcpd" />
-            <!-- antcall target="pdepend" /> disabled because pdepend requires 1.5gb scratch space which we currently dont have -->
         </parallel>
     </target>
  
