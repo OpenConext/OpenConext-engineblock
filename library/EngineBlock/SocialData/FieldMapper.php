@@ -147,7 +147,8 @@ class EngineBlock_SocialData_FieldMapper
                             $result[$socialAttribute] = $this->_pack($value, $socialAttribute);
                         }
                     } else {
-                        $result[$this->_l2oMap[$ldapAttr]] = $this->_pack($value, $socialAttribute);
+                        $socialAttribute = $this->_l2oMap[$ldapAttr];
+                        $result[$socialAttribute] = $this->_pack($value, $socialAttribute);
                     }
                 } else {    // ignore value
                 }
