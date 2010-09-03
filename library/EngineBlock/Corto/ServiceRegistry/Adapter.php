@@ -44,8 +44,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         $cortoEntity = array();
         if (isset($serviceRegistryEntity['AssertionConsumerService'][0]['Location'])) {
             $cortoEntity['AssertionConsumerService'] = array(
-                $serviceRegistryEntity['AssertionConsumerService'][0]['Binding'],
-                $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],
+                'Binding'  => $serviceRegistryEntity['AssertionConsumerService'][0]['Binding'],
+                'Location' => $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],
             );
             $cortoEntity['WantsAssertionsSigned'] = true;
         }
