@@ -49,10 +49,10 @@ class EngineBlock_ProvisioningTest extends PHPUnit_Framework_TestCase
 		// TODO Auto-generated constructor
 	}
 
-    public function testProvisionUser() {
-        $attributes = array('one' => array('one-value'), 'two' => array('first-value', 'second-value'));
-        $hash = '1234567890';
-        $result = $this->EngineBlock_Provisioning->provisionUser($attributes, $hash);
-        $this->assertTrue($result);
-    }    
+//    public function testProvisionUser() {
+//        $attributes = array('one' => array('one-value'), 'two' => array('first-value', 'second-value'));
+//        $hash = '1234567890';
+//        $result = $this->EngineBlock_Provisioning->provisionUser($attributes, $hash);
+//        $this->assertTrue($result);
+//    }
 }
