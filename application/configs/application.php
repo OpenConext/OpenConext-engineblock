@@ -93,7 +93,17 @@ $config['integration'] = array_merge($config['production'], array(
     'Php.DisplayErrors'         => true,
     'Php.ErrorReporting'        => E_ALL - E_NOTICE,
 
+    'debug'                     => true,
+
     'ldap.host'                 => 'coin-db.dev.coin.surf.net',
+
+    'Db.Write.0.Dsn'            => 'mysql:host=tb1.dev.coin.surf.net;dbname=engine_block',
+    'Db.Write.0.User'           => 'COIN_DB_USER',
+    'Db.Write.0.Password'       => 'COIN_DB_USER',
+
+    'Db.Read.0.Dsn'             => 'mysql:host=tb1.dev.coin.surf.net;dbname=engine_block',
+    'Db.Read.0.User'            => 'COIN_DB_USER',
+    'Db.Read.0.Password'        => 'COIN_DB_USER',
 
     'Grouper.Host'              => 'coin-db.dev.coin.surf.net',
     'Grouper.Password'          => '631E9383FD20',
