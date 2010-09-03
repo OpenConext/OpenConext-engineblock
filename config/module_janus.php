@@ -13,8 +13,8 @@ $config = array(
     'admin.name' => 'WAYF sekretariatet',
     'admin.email' => 'sekretariatet@wayf.dk',
 
-    'auth' => 'mailtoken',
-    'useridattr' => 'mail',
+    'auth' => 'database',
+    'useridattr' => 'email',
 
     /**
      * Mailtoken specific stuff
@@ -1118,6 +1118,15 @@ $config = array(
                 'en' => 'NameID supported by this connection.',
                 'es' => 'Cero o mas elementos de tipo type anyURI que enumeran los formatos de identificacion de nombres soportados por la entidad sistema. Ver la seccion 8.3 de [SAMLCore] para ver algunos posibles valores para este elemento.',
             ),
+        ),
+         'coin:gadgetbaseurl' => array(
+             'type'=>'text',
+             'order' => 180,
+             'default' => '',
+             'description' => array(
+                 'nl' => 'COIN Gadget Base URL regex (bijv. .*\\.gadgets\\.google\\.com)',
+                 'en' => 'COIN Gadget Base URL regex (e.g. .*\\.gadgets\\.google\\.com)',
+             ),
         ),
     ),
 
