@@ -1,0 +1,20 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>SURFnet Collaboration Infrastructure EngineBlock - Error!</title>
+    </head>
+    <body>
+        <h1>Oops! Er is iets mis gegaan!</h1>
+        <p>
+            De beheerder is op de hoogte gesteld. Probeer de actie eventueel opnieuw.
+        </p>
+        <?php if ($exception) { ?>
+        <pre>
+            <?php var_dump($exception); ?>
+        </pre>
+
+        <?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
+        <? } ?>
+    </body>
+</html>

@@ -1,12 +1,5 @@
 <?php
 
-ini_set('display_errors', false);
-error_reporting(E_ALL);
-
-if(!function_exists('spl_autoload_register')) {
-    die('SPL Autoload not available! Please use PHP > v5.1.2');
-}
-
 /**
  * Define application environment
  */

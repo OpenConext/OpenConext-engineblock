@@ -8,6 +8,60 @@ spl_autoload_register(array('EngineBlock_Corto_Adapter', 'cortoAutoLoad'));
 class EngineBlock_Corto_Adapter 
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
+    const MACE_ATTRIBUTE_NAME_NAMESPACE = 'urn:mace:dir:attribute-def:';
+
+    const IDENTIFYING_MACE_ATTRIBUTE = 'urn:mace:dir:attribute-def:uid';
+
+    protected $MACE_ATTRIBUTES = array(
+        'eduCourseMember',
+        'eduPersonEntitlement',
+        'eduPersonAffiliation',
+        'eduPersonNickname',
+        'eduPersonOrgDN',
+        'eduPersonOrgUnitDN',
+        'eduPersonPrimaryAffiliation',
+        'eduPersonPrimaryOrgUnitDN',
+        'eduPersonPrincipalName',
+        'eduPersonScopedAffiliation',
+        'eduPersonTargetedID',
+        'labeledURI',
+        'carLicense',
+        'departmentNumber',
+        'displayName',
+        'employeeNumber',
+        'employeeType',
+        'preferredLanguage',
+        'cn',
+        'sn',
+        'telephoneNumber',
+        'seeAlso',
+        'description',
+        'title',
+        'registeredAddress',
+        'facsimileTelephoneNumber',
+        'street',
+        'postOfficeBox',
+        'postalCode',
+        'postalAddress',
+        'physicalDeliveryOfficeName',
+        'ou',
+        'o',
+        'st',
+        'l',
+        'givenName',
+        'businessCategory',
+        'initials',
+        'homePostalAddress',
+        'roomNumber',
+        'mail',
+        'manager',
+        'uid',
+        'homePhone',
+        'mobile',
+        'pager', 
+    );
+
+    protected $_collaborationAttributes = array();
 
     /**
      * @var EngineBlock_Corto_CoreProxy
@@ -119,7 +173,7 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
-            'ConsentDbTable'    => $application->getConfigurationValue('Consent.Db.Table'),
+            'ConsentDbTable'    => $application->getConfiguration()->authentication->consent->database->table,
         ));
 
         $attributes = array();
@@ -129,10 +183,11 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setHostedEntities(array(
             $proxyServer->getHostedEntityUrl('main') => array(
                 'certificates' => array(
-                    'public'    => $application->getConfigurationValue('PublicKey'),
-                    'private'   => $application->getConfigurationValue('PrivateKey'),
+                    'public'    => $application->getConfiguration()->encryption->key->public,
+                    'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
-                'infilter' => array($this, 'filterInputAttributes'),
+                'infilter'  => array($this, 'filterInputAttributes'),
+                'outfilter' => array($this, 'filterOutputAttributes'),
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
@@ -145,8 +200,8 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setRemoteEntities($this->_getRemoteEntities() + array(
             $proxyServer->getHostedEntityUrl('main', 'idPMetadataService') => array(
                 'certificates' => array(
-                    'public'    => $application->getConfigurationValue('PublicKey'),
-                    'private'   => $application->getConfigurationValue('PrivateKey'),
+                    'public'    => $application->getConfiguration()->encryption->key->public,
+                    'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
             )
         ));
@@ -171,44 +226,66 @@ class EngineBlock_Corto_Adapter
      */
     public function filterInputAttributes(array $entityMetaData, array $response, array &$attributes)
     {
+        $attributes = $this->_prefixMaceAttributes($attributes);
         $attributes = $this->_enrichAttributes($attributes);
-        $attributes = $this->_provisionUser($attributes);
+
+        $this->_collaborationAttributes = $this->_provisionUser($attributes);
     }
 
-    protected function _enrichAttributes($attributes)
+    /**
+     * Called by Corto whenever it receives an Assertion with attributes from an Identity Provider
+     *
+     * @param  array $entityMetaData
+     * @param  array $response
+     * @param  array $attributes
+     * @return void
+     */
+    public function filterOutputAttributes(array $entityMetaData, array $response, array &$attributes)
     {
-        $aggregatedAttributes = $this->_getAttributeAggregator(
+        $attributes = array_merge($attributes, $this->_collaborationAttributes);
+    }
+
+    /**
+     * Sometimes we get MACE attributes without their proper prefix (like a test SimpleSAMLPHP),
+     * so when this happens we have to fix it.
+     *
+     * @param  $attributes
+     * @return void
+     */
+    public function _prefixMaceAttributes(array $attributes)
+    {
+        foreach ($attributes as $name => $values) {
+            if (in_array($name, $this->MACE_ATTRIBUTES)) {
+                $attributes[self::MACE_ATTRIBUTE_NAME_NAMESPACE . $name] = $values;
+                unset($attributes[$name]);
+            }
+        }
+        return $attributes;
+    }
+
+    /**
+     * Enrich the attributes with attributes
+     *
+     * @param  $attributes
+     * @return array
+     */
+    protected function _enrichAttributes(array $attributes)
+    {
+        $aggregator = $this->_getAttributeAggregator(
             $this->_getAttributeProviders()
-        )->getAttributes($attributes['uid'][0]);
+        );
+        $aggregatedAttributes = $aggregator->getAttributes(
+            $attributes[self::IDENTIFYING_MACE_ATTRIBUTE][0]
+        );
         return array_merge_recursive($attributes, $aggregatedAttributes);
     }
 
-    protected function _getAttributeProviders()
-    {
-        return array(new EngineBlock_AttributeProvider_Dummy());
-    }
-
-    protected function _getAttributeAggregator($providers)
-    {
-        return new EngineBlock_AttributeAggregator($providers);
-    }
-
-    protected function _provisionUser($attributes)
+    protected function _provisionUser(array $attributes)
     {
         return $this->_getProvisioning()->provisionUser(
-            $attributes,
-            $this->_getAttributesHash($attributes)
+            $attributes[self::IDENTIFYING_MACE_ATTRIBUTE][0],
+            $attributes
         );
-    }
-
-    protected function _getAttributesHash($attributes)
-    {
-        return sha1(var_export($attributes, 1));
-    }
-
-    protected function _getProvisioning()
-    {
-        return new EngineBlock_Provisioning();
     }
 
     protected function _getRemoteEntities()
@@ -243,5 +320,20 @@ class EngineBlock_Corto_Adapter
     {
         $proxyOutput = $this->_proxyServer->getOutput();
         $response->setBody($proxyOutput);
+    }
+
+    protected function _getAttributeProviders()
+    {
+        return array(new EngineBlock_AttributeProvider_Dummy());
+    }
+
+    protected function _getAttributeAggregator($providers)
+    {
+        return new EngineBlock_AttributeAggregator($providers);
+    }
+
+    protected function _getProvisioning()
+    {
+        return new EngineBlock_Provisioning();
     }
 }

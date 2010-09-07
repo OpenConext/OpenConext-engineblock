@@ -2,9 +2,15 @@
  
 class EngineBlock_Dispatcher 
 {
-    private $_routers = array();
+    protected $_routers = array();
+    protected $_useErrorHandling = true;
 
     public function __construct()
+    {
+        $this->_addDefaultRouter();
+    }
+
+    protected function _addDefaultRouter()
     {
         $this->_routers[] = new EngineBlock_Router_Default();
     }
@@ -20,14 +26,31 @@ class EngineBlock_Dispatcher
         return $this;
     }
 
+    public function setUseErrorHandling($bool)
+    {
+        $this->_useErrorHandling = $bool;
+        return $this;
+    }
+
     public function dispatch($uri = "")
     {
+        try {
+            $this->_dispatch($uri);
+
+        } catch(Exception $e) {
+            $this->_handleDispatchException($e);
+        }
+    }
+
+    protected function _dispatch($uri)
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
         if (!$uri) {
-            $uri = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getUri();
+            $uri = $application->getHttpRequest()->getUri();
         }
 
         $router = $this->_getRouter($uri);
-       
+
         $module             = $router->getModuleName();
         $controllerName     = $router->getControllerName();
         $action             = $router->getActionName();
@@ -36,18 +59,32 @@ class EngineBlock_Dispatcher
         $controllerInstance = $this->_getControllerInstance($module, $controllerName);
 
         if (!$controllerInstance->hasAction($action)) {
-            // @todo error out!
             throw new EngineBlock_Exception("Unable to load action '$action'");
         }
 
+
         $controllerInstance->handleAction($action, $attributeArguments);
+    }
+
+    protected function _handleDispatchException($e)
+    {
+        if (!$this->_useErrorHandling) {
+            throw $e;
+        }
+
+        $errorConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->error;
+        $module         = $errorConfiguration->module;
+        $controllerName = $errorConfiguration->controller;
+        $action         = $errorConfiguration->action;
+
+        $controllerInstance = $this->_getControllerInstance($module, $controllerName);
+        $controllerInstance->handleAction($action, array($e));
     }
 
     protected function _getControllerInstance($module, $controllerName)
     {
         $className = $this->_getControllerClassName($module, $controllerName);
         if (!class_exists($className)) {
-            // @todo error out!
             throw new EngineBlock_Exception("Unable to load $className");
         }
 
@@ -82,6 +119,6 @@ class EngineBlock_Dispatcher
 
     protected function _getControllerClassName($module, $controller)
     {
-        return ucfirst($module) . '_Controller_' . $controller;
+        return ucfirst($module) . '_Controller_' . ucfirst($controller);
     }
 }

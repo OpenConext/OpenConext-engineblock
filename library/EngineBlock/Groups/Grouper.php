@@ -73,23 +73,23 @@ XML;
     protected function _doRest($operation, $request, $expect = array('SUCCESS'))
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        $cfg = $application->getConfiguration();
+        $grouperConfig = $application->getConfiguration()->grouper;
         
-        if (!isset($cfg['Grouper.Host']) || $cfg['Grouper.Host']=='') {
-            throw new EngineBlock_Exception('No Grouper Host specified! Please set "Grouper.Host" in your application configuration.');     
+        if (!isset($grouperConfig->host) || $grouperConfig->host=='') {
+            throw new EngineBlock_Exception('No Grouper Host specified! Please set "grouper.Host" in your application configuration.');     
         }
        
-        $url = $cfg['Grouper.Protocol'] .
+        $url = $grouperConfig->protocol .
                 '://' .
-                $cfg['Grouper.User'] .
+                $grouperConfig->user .
                 ':' .
-                $cfg['Grouper.Password'] .
+                $grouperConfig->password .
                 '@' .
-                $cfg['Grouper.Host'] .
-                (isset($cfg['Grouper.Port'])?':'.$cfg['Grouper.Port']:'') .
-                $cfg['Grouper.Path'] .
+                $grouperConfig->host .
+                (isset($grouperConfig->port)?':'.$grouperConfig->port:'') .
+                $grouperConfig->path .
                 '/' .
-                $cfg['Grouper.Version'] . '/' .
+                $grouperConfig->version . '/' .
                 $operation;
 
         $ch = curl_init($url);

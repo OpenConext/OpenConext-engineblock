@@ -25,6 +25,6 @@ class EngineBlock_Router_Authentication extends EngineBlock_Router_Default
             return $this->_controllerMapping[$this->_controllerName];
         }
 
-        return ucfirst($this->_controllerName);
+        return $this->_controllerName;
     }
 }

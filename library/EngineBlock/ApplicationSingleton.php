@@ -6,6 +6,8 @@ define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modul
 
 set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_LIBRARY);
 
+require_once 'Zend/Config/Ini.php';
+
 class EngineBlock_Exception extends Exception
 {
 }
@@ -16,6 +18,8 @@ class EngineBlock_ApplicationSingleton_BootstrapException extends Exception
 
 class EngineBlock_ApplicationSingleton
 {
+    const DEFAULT_APPLICATION_CONFIGFILE = 'configs/application.ini';
+
     /**
      * @var EngineBlock_ApplicationSingleton
      */
@@ -37,7 +41,7 @@ class EngineBlock_ApplicationSingleton
     protected $_httpResponse;
 
     /**
-     * @var array
+     * @var Zend_Config
      */
     protected $_configuration;
 
@@ -126,61 +130,75 @@ class EngineBlock_ApplicationSingleton
      * @param string $applicationEnvironmentId
      * @return EngineBlock_ApplicationSingleton Bootstrapped application singleton
      */
-    public function bootstrap($applicationEnvironmentId)
+    public function bootstrap($applicationEnvironmentId, $configurationFile = "")
     {
         $this->_applicationEnvironmentId = $applicationEnvironmentId;
 
-        $this->bootstrapConfiguration();
+        $this->_bootstrapConfiguration($configurationFile);
 
-        $this->bootstrapPhpSettings();
+        $this->_bootstrapPhpSettings();
 
-        $this->bootstrapAutoLoading();
-        $this->bootstrapHttpCommunication();
+        $this->_bootstrapAutoLoading();
+        $this->_bootstrapHttpCommunication();
         return $this;
     }
 
-    protected function bootstrapAutoLoading()
+    protected function _bootstrapAutoLoading()
     {
+        if(!function_exists('spl_autoload_register')) {
+            throw new EngineBlock_Exception('SPL Autoload not available! Please use PHP > v5.1.2');
+        }
         spl_autoload_register(array($this, 'autoLoad'));
     }
 
-    protected function bootstrapConfiguration()
+    protected function _bootstrapConfiguration($configFile)
     {
-        $config = array();
-        $configFilePath = ENGINEBLOCK_FOLDER_APPLICATION . 'configs/application.php';
-        require $configFilePath;
-
-        if (!isset($config[$this->_applicationEnvironmentId])) {
-            $message = "No configuration in {$configFilePath} for application environment ID '{$this->_applicationEnvironmentId}'";
-            throw new EngineBlock_ApplicationSingleton_BootstrapException($message);
+        if (!$configFile) {
+            $configFile = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILE;
+        }
+        if (!file_exists($configFile)) {
+            throw new EngineBlock_Exception("Configuration file '$configFile does not exist!'");
         }
 
-        $this->setConfiguration($config[$this->_applicationEnvironmentId]);
+        $env = $this->_applicationEnvironmentId;
+        $configuration = $this->_getConfigurationLoader($configFile)->$env;
+        $this->setConfiguration($configuration);
     }
 
-    protected function bootstrapHttpCommunication()
+    protected function _getConfigurationLoader($environmentId)
+    {
+        return new Zend_Config_Ini($environmentId);
+    }
+
+    protected function _bootstrapHttpCommunication()
     {
         $this->setHttpRequest(EngineBlock_Http_Request::createFromEnvironment());
         $this->setHttpResponse(new EngineBlock_Http_Response());
     }
 
-    protected function bootstrapPhpSettings()
+    protected function _bootstrapPhpSettings()
     {
-        if (isset($this->_configuration['default_timezone'])) {
-            date_default_timezone_set($this->_configuration['default_timezone']);
-        }
+        $settings = $this->_configuration->phpSettings->toArray();
+        $this->_setIniSettings($settings);
+    }
 
-        if (isset($this->_configuration['Php.DisplayErrors'])) {
-            ini_set('display_errors', $this->_configuration['Php.DisplayErrors']);
-        }
-
-        if (isset($this->_configuration['Php.ErrorReporting'])) {
-            error_reporting($this->_configuration['Php.ErrorReporting']);
+    protected function _setIniSettings($settings, $prefix = '')
+    {
+        foreach ($settings as $settingName => $settingValue) {
+            if (is_array($settingValue)) {
+                $this->_setIniSettings((array)$settingValue, $prefix . $settingName . '.');
+            }
+            else {
+                ini_set($prefix . $settingName, $settingValue);
+            }
         }
     }
 
     //////////// CONFIGURATION
 
+    /**
+     * @return Zend_Config
+     */
     public function getConfiguration()
     {
         return $this->_configuration;
@@ -188,26 +206,14 @@ class EngineBlock_ApplicationSingleton
 
     public function getConfigurationValue($key, $default = null)
     {
-        if (isset($this->_configuration[$key])) {
-            return $this->_configuration[$key];
+        if (isset($this->_configuration->$key)) {
+            return $this->_configuration->$key;
         }
 
         return $default;
     }
 
-    public function getConfigurationValuesForPrefix($keyPrefix)
-    {
-        $values = array();
-        $keys = array_keys($this->_configuration);
-        foreach ($keys as $key) {
-            if (strpos($key, $keyPrefix) === 0) {
-                $values[$key] = $this->_configuration[$key];
-            }
-        }
-        return $values;
-    }
-
-    public function setConfiguration($applicationConfiguration)
+    public function setConfiguration(Zend_Config $applicationConfiguration)
     {
         $this->_configuration = $applicationConfiguration;
         return $this;

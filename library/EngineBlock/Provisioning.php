@@ -2,6 +2,9 @@
 
 class EngineBlock_Provisioning
 {
+    /**
+     * @var EngineBlock_UserDirectory
+     */
     protected $_userDirectory = NULL;
     
     protected function _getUserDirectory()
@@ -17,9 +20,15 @@ class EngineBlock_Provisioning
         $this->_userDirectory = $userDirectory;
     }
     
-    public function provisionUser($attributes, $attributeHash) {
-        //$this->_getUserDirectory();
-        //$info = array();
-        return TRUE;
+    public function provisionUser($uid, $attributes) {
+        //$this->_getUserDirectory()->findUsersByIdentifier($uid);
+
+        //return $attributes;
+        return array();
+    }
+
+    protected function _getAttributesHash()
+    {
+        
     }
 }

@@ -158,9 +158,9 @@ class EngineBlock_ServiceRegistry
     protected function _getRestClient()
     {
         if ($this->_restClient==NULL) {
-            $location = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('ServiceRegistry.Location');
+            $location = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry->location;
             if (!$location) {
-                throw new EngineBlock_Exception('No Service Registry location provided! Please set "ServiceRegistry.Location" in your application configuration.');
+                throw new EngineBlock_Exception('No Service Registry location provided! Please set "serviceRegistry.location" in your application configuration.');
             }
             $this->_restClient = new EngineBlock_Rest_Client($location);
         }

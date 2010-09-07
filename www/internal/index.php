@@ -1,12 +1,5 @@
 <?php
 
-ini_set('display_errors', true);
-error_reporting(E_ALL);
-
-if(!function_exists('spl_autoload_register')) {
-    die('SPL Autoload not available! Please use PHP > v5.1.2');
-}
-
 /**
  * Define application environment
  */
@@ -26,6 +19,7 @@ $dispatcher->setRouters(array(
     new EngineBlock_Router_Service(),
     new EngineBlock_Router_CatchAll('default', 'index', 'internal'),
 ));
+$dispatcher->setUseErrorHandling(false);
 $dispatcher->dispatch();
 
 $application->getHttpResponse()->send();

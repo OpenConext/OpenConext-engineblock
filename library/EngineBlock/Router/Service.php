@@ -13,8 +13,8 @@ class EngineBlock_Router_Service extends EngineBlock_Router_Abstract
             return false;
         }
 
-        $this->_moduleName      = 'Service';
-        $this->_controllerName  = 'Rest';
+        $this->_moduleName      = 'service';
+        $this->_controllerName  = 'rest';
         $this->_actionName      = $urlParts[1];
         $this->_actionArguments = array(
             implode('/', array_slice($urlParts, 1))
