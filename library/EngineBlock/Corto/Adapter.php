@@ -226,6 +226,14 @@ class EngineBlock_Corto_Adapter
      */
     public function filterInputAttributes(array $entityMetaData, array $response, array &$attributes)
     {
+        # HACK
+        if (isset($attributes['uid'][0])) {
+            $attributes['uid'][0] = "urn:collab:person:surfguest.nl:" . $attributes['uid'][0];
+        }
+        else if (isset($attributes['urn:mace:dir:attribute-def:uid'][0])) {
+            $attributes['urn:mace:dir:attribute-def:uid'][0] = "urn:collab:person:surfguest.nl:" . $attributes['urn:mace:dir:attribute-def:uid'][0];
+        }
+        # /HACK
         $attributes = $this->_prefixMaceAttributes($attributes);
         $attributes = $this->_enrichAttributes($attributes);
 
