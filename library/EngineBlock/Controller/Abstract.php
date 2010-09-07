@@ -71,7 +71,7 @@ class EngineBlock_Controller_Abstract
     protected function renderView($actionName)
     {
         $moduleDir = dirname(__FILE__) . '/../../../application/modules/';
-        $filePath = $moduleDir . $this->_moduleName . '/View/' . $this->_controllerName . '/' . $actionName . '.phtml';
+        $filePath = $moduleDir . ucfirst($this->_moduleName) . '/View/' . ucfirst($this->_controllerName) . '/' . $actionName . '.phtml';
 
         if (!file_exists($filePath)) {
             // @todo error out!

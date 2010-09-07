@@ -12,14 +12,19 @@ class EngineBlock_Router_OpenSocial extends EngineBlock_Router_Abstract
         if ($urlParts[0] !== 'social') {
             return false;
         }
-
         $this->_moduleName      = 'social';
-        $this->_controllerName  = 'rest';
-        $this->_actionName      = 'index';
-        $this->_actionArguments = array(
-            implode('/', array_slice($urlParts, 1))
-        );
-        
+
+        if (count($urlParts)===1) {
+            $this->_controllerName = 'index';
+            $this->_actionName     = 'index';
+        }
+        else {
+            $this->_controllerName  = 'rest';
+            $this->_actionName      = 'index';
+            $this->_actionArguments = array(
+                implode('/', array_slice($urlParts, 1))
+            );
+        }
         return true;
     }
 }

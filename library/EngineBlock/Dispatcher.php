@@ -62,7 +62,6 @@ class EngineBlock_Dispatcher
             throw new EngineBlock_Exception("Unable to load action '$action'");
         }
 
-
         $controllerInstance->handleAction($action, $attributeArguments);
     }
 
