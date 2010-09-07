@@ -20,6 +20,7 @@ class EngineBlock_UserDirectory
 
     public function findUsersByIdentifier($identifier, $ldapAttributes = array())
     {
+        $test();
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
 

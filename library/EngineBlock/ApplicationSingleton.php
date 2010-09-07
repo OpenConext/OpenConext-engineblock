@@ -127,6 +127,8 @@ class EngineBlock_ApplicationSingleton
     /**
      * Bootstrap the application for a given environment id (like 'production').
      *
+     * Note that the order or bootstrapping is very important.
+     *
      * @param string $applicationEnvironmentId
      * @return EngineBlock_ApplicationSingleton Bootstrapped application singleton
      */
@@ -137,9 +139,10 @@ class EngineBlock_ApplicationSingleton
         $this->_bootstrapConfiguration($configurationFile);
 
         $this->_bootstrapPhpSettings();
-
         $this->_bootstrapAutoLoading();
+        $this->_bootstrapErrorReporting();
         $this->_bootstrapHttpCommunication();
+
         return $this;
     }
 
@@ -192,6 +195,48 @@ class EngineBlock_ApplicationSingleton
                 ini_set($prefix . $settingName, $settingValue);
             }
         }
+    }
+
+    protected function _bootstrapErrorReporting()
+    {
+        register_shutdown_function(array($this, 'handleShutdown'));
+        set_error_handler(array($this, 'handleError'));
+        set_exception_handler(array($this, 'handleException'));
+    }
+
+    public function handleException(Exception $e)
+    {
+        $this->_reportError($e);
+        return false;
+    }
+
+    public function handleError($errorNumber, $errorMesage, $errorFile, $errorLine)
+    {
+        if (!(error_reporting() & $errorNumber)) {
+            // This error code is not included in error_reporting
+            return;
+        }
+
+        $this->_reportError(new Exception($errorMesage . " [$errorFile:$errorLine]", $errorNumber));
+
+        /* Execute PHP internal error handler */
+        return false;
+    }
+
+    public function handleShutdown()
+    {
+        $lastError = error_get_last();
+        if($lastError['type'] === E_ERROR || $lastError['type'] === E_USER_ERROR) {
+            $this->_reportError(new Exception('Fatal error: ' . var_export($lastError, true)));
+        }
+        return false;
+    }
+
+    protected function _reportError(Exception $e)
+    {
+        $reportingConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->error->reports;
+        $reporter = new EngineBlock_Error_Reporter($reportingConfiguration);
+        $reporter->report($e);
     }
 
     //////////// CONFIGURATION
