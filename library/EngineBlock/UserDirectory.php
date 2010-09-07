@@ -158,15 +158,15 @@ class EngineBlock_UserDirectory
     {
         if ($this->_ldapClient == NULL) {
             $application = EngineBlock_ApplicationSingleton::getInstance();
-            $config = $application->getConfigurationValuesForPrefix('ldap.');
+            $config = $application->getConfiguration()->ldap;
 
-            $ldapOptions = array('host'                 => $config['ldap.host'],
-                                 'useSsl'               => $config['ldap.useSsl'],
-                                 'username'             => $config['ldap.username'],
-                                 'password'             => $config['ldap.password'],
-                                 'bindRequiresDn'       => $config['ldap.bindRequiresDn'],
-                                 'accountDomainName'    => $config['ldap.accountDomainName'],
-                                 'baseDn'               => $config['ldap.baseDn']);
+            $ldapOptions = array('host'                 => $config->host,
+                                 'useSsl'               => $config->useSsl,
+                                 'username'             => $config->username,
+                                 'password'             => $config->password,
+                                 'bindRequiresDn'       => $config->bindRequiresDn,
+                                 'accountDomainName'    => $config->accountDomainName,
+                                 'baseDn'               => $config->baseDn);
             $this->_ldapClient = new Zend_Ldap($ldapOptions);
             $this->_ldapClient->bind();
         }
