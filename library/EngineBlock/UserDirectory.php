@@ -30,12 +30,6 @@ class EngineBlock_UserDirectory
             $ldapAttributes
         );
 
-        // By default Zend_Ldap will convert the keys to lowercase because LDAP is supposed to be case insensitive
-        // but we ARE case sensitive and OpenLDAP returns the proper case anyway.
-        $collection->getInnerIterator()->setAttributeNameTreatment(
-            Zend_Ldap_Collection_Iterator_Default::ATTRIBUTE_NATIVE
-        );
-
         // Convert the result fron a Zend_Ldap object to a plain multi-dimensional array
         $result = array();
         if (($collection !== NULL) and ($collection !== FALSE)) {
@@ -162,11 +156,12 @@ class EngineBlock_UserDirectory
 
             $ldapOptions = array('host'                 => $config->host,
                                  'useSsl'               => $config->useSsl,
-                                 'username'             => $config->username,
+                                 'username'             => $config->userName,
                                  'password'             => $config->password,
                                  'bindRequiresDn'       => $config->bindRequiresDn,
                                  'accountDomainName'    => $config->accountDomainName,
                                  'baseDn'               => $config->baseDn);
+
             $this->_ldapClient = new Zend_Ldap($ldapOptions);
             $this->_ldapClient->bind();
         }
