@@ -229,7 +229,8 @@ class EngineBlock_ApplicationSingleton
         if($lastError['type'] === E_ERROR || $lastError['type'] === E_USER_ERROR) {
             $this->_reportError(new Exception('Fatal error: ' . var_export($lastError, true)));
         }
-        return false;
+
+        die('A error occurred, it has been logged and sent to the administrator.');
     }
 
     protected function _reportError(Exception $e)

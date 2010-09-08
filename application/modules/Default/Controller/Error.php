@@ -9,4 +9,14 @@ class Default_Controller_Error extends EngineBlock_Controller_Abstract
             $this->exception = $exception;
         }
     }
+
+    public function testExceptionAction()
+    {
+        throw new Exception('Test exception');
+    }
+
+    public function testErrorAction()
+    {
+        $var();
+    }
 }
