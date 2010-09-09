@@ -101,10 +101,6 @@ class EngineBlock_UserDirectory
 
     protected function _updateUser($user, $newAttributes, $saml2attributes, $idpEntityMetadata)
     {
-        if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH]===$this->_getCollabPersonHash($newAttributes)) {
-            return $newAttributes;
-        }
-
         // Hackish, appearantly LDAP gives us arrays even for single values?
         // So for now we assume arrays with only one value are single valued
         foreach ($user as $userKey => $userValue) {
@@ -112,12 +108,22 @@ class EngineBlock_UserDirectory
                 $user[$userKey] = $userValue[0];
             }
         }
+        
+        if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH]===$this->_getCollabPersonHash($newAttributes)) {
+            $now = date(DATE_RFC822);
+            $newAttributes = $user + $newAttributes;
+            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
 
-        $newAttributes = $user + $newAttributes;
+            $dn = $this->_getDnForLdapAttributes($newAttributes);
+            $this->_getLdapClient()->update($dn, $newAttributes);
+
+            return $newAttributes;
+        }
 
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH] = $this->_getCollabPersonHash($newAttributes);
 
         $now = date(DATE_RFC822);
+        $newAttributes = $user + $newAttributes;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = $this->_getCollabPersonIsGuest(
