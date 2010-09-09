@@ -179,7 +179,7 @@ class EngineBlock_Corto_Adapter
         $responseAttributes = $this->_enrichAttributes($responseAttributes);
 
         $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
-        $response['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'] = 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified';
+        $response['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'] = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
         $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] = $subjectId;
     }
 
