@@ -15,17 +15,18 @@ class EngineBlock_SocialData_FieldMapper
      */
     protected $_l2oMap = array(
         "collabpersonid"            => "id" ,
-        "displayname"               =>  array(
-                                        "displayName",
-                                        "nickname"
-                                    ) ,
-        "mail"                      => "emails" ,
-        "givenname"                 => "name.givenName",
         'uid'                       =>  array(
                                         'account.username',
                                         'account.userId',
                                     ),
+        "givenname"                 => "name.givenName",
         'sn'                        => 'name.familyName',
+        'cn'                        => 'name.formatted',
+        "displayname"               =>  array(
+                                        "displayName",
+                                        "nickname"
+                                    ) ,
+        "mail"                      => "emails",
         'o'                         => 'organizations.name',
         'schachomeorganizationtype' => 'organizations.type',
         'nledupersonorgunit'        => 'organizations.department',
@@ -132,11 +133,6 @@ eduPersonAffiliation 	organizations.title
         return $result;
     }
 
-    public function getAllOpenSocialLdapAttributes()
-    {
-        return array_keys($this->_o2lMap);
-    }
-
     /**
      * Convert a COIN ldap record to an opensocial record.
      * 
@@ -177,8 +173,8 @@ eduPersonAffiliation 	organizations.title
                             if (!empty($parts)) {
                                 if (!isset($result[$part])) {
                                     $result[$part] = array();
-                                    $pointer = &$result[$part];
                                 }
+                                $pointer = &$result[$part];
                             }
                         }
                         $pointer[$part] = $this->_pack($data[$ldapAttribute], $socialAttribute);
@@ -193,7 +189,18 @@ eduPersonAffiliation 	organizations.title
                 if (isset($this->_l2oMap[$ldapAttribute])) {
                     if (is_array($this->_l2oMap[$ldapAttribute])) {
                         foreach ($this->_l2oMap[$ldapAttribute] as $socialAttribute) {
-                            $result[$socialAttribute] = $this->_pack($value, $socialAttribute);
+                            $pointer = &$result;
+                            $parts = explode('.', $socialAttribute);
+                            while (!empty($parts)) {
+                                $part = array_shift($parts);
+                                if (!empty($parts)) {
+                                    if (!isset($result[$part])) {
+                                        $result[$part] = array();
+                                    }
+                                    $pointer = &$result[$part];
+                                }
+                            }
+                            $pointer[$part] = $this->_pack($value, $socialAttribute);
                         }
                     } else {
                         $socialAttribute = $this->_l2oMap[$ldapAttribute];
@@ -204,8 +211,8 @@ eduPersonAffiliation 	organizations.title
                             if (!empty($parts)) {
                                 if (!isset($result[$part])) {
                                     $result[$part] = array();
-                                    $pointer = &$result[$part];
                                 }
+                                $pointer = &$result[$part];
                             }
                         }
                         $pointer[$part] = $this->_pack($value, $socialAttribute);
