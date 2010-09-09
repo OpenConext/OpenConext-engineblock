@@ -1,5 +1,1 @@
-- User provisioning
-  - Mapping SAML2 -> LDAP
-  - Mapping LDAP -> OpenSocial
-- Service Registry Caching
 - Use of Zend Log
