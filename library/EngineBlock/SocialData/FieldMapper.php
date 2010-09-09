@@ -59,7 +59,6 @@ eduPersonAffiliation 	organizations.title
         'nickname'                  => 'displayname',
         'displayName'               => 'displayname',
         'emails'                    => 'mail',
-        'name'                      => 'givenname',
         'account.username'          => 'uid',
         'name.familyName'           => 'sn',
         'name.givenName'            => 'givenname',
