@@ -23,7 +23,6 @@
                 <div class="column content">
                     <div class="item">
                         <span class="h2">Identity Provider Selectie <?=($metaDataSP['OrganizationDisplayName']?' - ' . $metaDataSP['OrganizationDisplayName']:'')?></span>
-                        <img src="/images/startrek_voyager_engine_small.jpg" alt="" style="float: right" />
                         <h2>Selecteer je instelling of identiteits verstrekker:</h2>
 
                         <p>Selecteer in de drop down box je instelling om in te loggen bij SURFmedia.
@@ -41,8 +40,8 @@
                             <p>
                                 <select name="idp">
                                 <? foreach($idpList as $idp): ?>
-                                    <? if (isset($metaDataRemote[$idp]['OrganizationDisplayName'])) { ?>
-                                    <option value="<?=$idp?>"><?=htmlentities($metaDataRemote[$idp]['OrganizationDisplayName'])?></option>
+                                    <? if (isset($remoteEntities[$idp]['OrganizationDisplayName'])) { ?>
+                                    <option value="<?=$idp?>"><?=htmlentities($remoteEntities[$idp]['OrganizationDisplayName'])?></option>
                                     <? } else { ?>
                                     <option><?= $idp ?></option>
                                     <? } ?>
