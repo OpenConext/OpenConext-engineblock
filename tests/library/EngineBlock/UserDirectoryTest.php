@@ -39,15 +39,15 @@ class EngineBlock_UserDirectoryTest extends PHPUnit_Framework_TestCase
 //        EngineBlock_ApplicationSingleton::getInstance()->setConfiguration(array());
 //    }
 //
-//    /**
-//     * Tests EngineBlock_UserDirectory->registerUserForAttributes()
-//     */
-//    public function testRegisterUserForAttributes()
-//    {
-//        $this->markTestIncomplete ( "registerUserForAttributes test not implemented" );
-//
-////        $this->_userDirectory->registerUserForAttributes();
-//    }
+    /**
+     * Tests EngineBlock_UserDirectory->registerUserForAttributes()
+     */
+    public function testRegisterUserForAttributes()
+    {
+        $this->markTestIncomplete ( "registerUserForAttributes test not implemented" );
+
+//        $this->_userDirectory->registerUserForAttributes();
+    }
 //
 //    public function testCommonNameFromAttributes()
 //    {
