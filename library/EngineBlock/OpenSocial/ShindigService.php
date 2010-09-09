@@ -52,10 +52,15 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      * @param GroupId $groupId The id of the group
      * @param options Request options for filtering/sorting/paging
      * @param fields set of contact fields to return, as array('fieldName' => 'fieldName')
+     *        If $fields['all'] is set, all fields are returned.
      * @return a list of people.
      */
     function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
     {
+      if (isset($fields["all"])) {
+          $fields = array(); // clear the default fields
+      }
+        
         if ($groupId->getGroupId()!=='self') {
             if (count($userId) > 1) {
                 $message = "Getting the group members for a group given *multiple* uids is not implemented by EngineBlock (try picking one uid)";
