@@ -166,18 +166,11 @@ eduPersonAffiliation 	organizations.title
                 if (isset($this->_o2lMap[$socialAttribute])) {
                     $ldapAttribute = $this->_o2lMap[$socialAttribute];
                     if (isset($data[$ldapAttribute])) {
-                        $pointer = &$result;
-                        $parts = explode('.', $socialAttribute);
-                        while (!empty($parts)) {
-                            $part = array_shift($parts);
-                            if (!empty($parts)) {
-                                if (!isset($result[$part])) {
-                                    $result[$part] = array();
-                                }
-                                $pointer = &$result[$part];
-                            }
-                        }
-                        $pointer[$part] = $this->_pack($data[$ldapAttribute], $socialAttribute);
+                        $result = $this->_addMultiDimensionalOpenSocialAttribute(
+                            $result,
+                            $socialAttribute,
+                            $this->_pack($data[$ldapAttribute], $socialAttribute)
+                        );
                     } else {    // if there's no opensocial equivalent for this field
                     // assume this is stuff we're not allowed to share
                     // so do not include it in the result.
@@ -189,38 +182,52 @@ eduPersonAffiliation 	organizations.title
                 if (isset($this->_l2oMap[$ldapAttribute])) {
                     if (is_array($this->_l2oMap[$ldapAttribute])) {
                         foreach ($this->_l2oMap[$ldapAttribute] as $socialAttribute) {
-                            $pointer = &$result;
-                            $parts = explode('.', $socialAttribute);
-                            while (!empty($parts)) {
-                                $part = array_shift($parts);
-                                if (!empty($parts)) {
-                                    if (!isset($result[$part])) {
-                                        $result[$part] = array();
-                                    }
-                                    $pointer = &$result[$part];
-                                }
-                            }
-                            $pointer[$part] = $this->_pack($value, $socialAttribute);
+                            $result = $this->_addMultiDimensionalOpenSocialAttribute(
+                                $result,
+                                $socialAttribute,
+                                $this->_pack($value, $socialAttribute)
+                            );
                         }
                     } else {
                         $socialAttribute = $this->_l2oMap[$ldapAttribute];
-                        $pointer = &$result;
-                        $parts = explode('.', $socialAttribute);
-                        while (!empty($parts)) {
-                            $part = array_shift($parts);
-                            if (!empty($parts)) {
-                                if (!isset($result[$part])) {
-                                    $result[$part] = array();
-                                }
-                                $pointer = &$result[$part];
-                            }
-                        }
-                        $pointer[$part] = $this->_pack($value, $socialAttribute);
+                        $result = $this->_addMultiDimensionalOpenSocialAttribute(
+                            $result,
+                            $socialAttribute,
+                            $this->_pack($value, $socialAttribute)
+                        );
                     }
                 } else {    // ignore value
                 }
             }
         }
+        return $result;
+    }
+
+    /**
+     * Stuff a given value for a possibly multi-dimensional (name.formatted) OpenSocial attribute
+     * in a multi-dimensional array.
+     *
+     * Converts 'name.formatted' with value 'John Doe' into array('name'=>array('formatted'=>'John Doe'))
+     *
+     * @param  array  $result
+     * @param  string $socialAttribute
+     * @param  mixed  $value
+     * @return array
+     */
+    protected function _addMultiDimensionalOpenSocialAttribute(array $result, $socialAttribute, $value)
+    {
+        $pointer = &$result;
+        $parts = explode('.', $socialAttribute);
+        while (!empty($parts)) {
+            $part = array_shift($parts);
+            if (!empty($parts)) {
+                if (!isset($result[$part])) {
+                    $result[$part] = array();
+                }
+                $pointer = &$result[$part];
+            }
+        }
+        $pointer[$part] = $value;
         return $result;
     }
 
