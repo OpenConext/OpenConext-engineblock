@@ -6,9 +6,6 @@ define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modul
 
 set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_LIBRARY);
 
-require_once 'Zend/Config/Ini.php';
-require_once 'Zend/Log.php';
-
 class EngineBlock_Exception extends Exception
 {
 }
@@ -97,8 +94,8 @@ class EngineBlock_ApplicationSingleton
 
         $classNameParts = explode('_', $className);
 
-        // EngineBlock class
-        if ($classNameParts[0] === 'EngineBlock') {
+        // Known libraries (like Zend and EngineBlock)
+        if (in_array($classNameParts[0], array('EngineBlock', 'Zend'))) {
             $fileName = implode('/', explode('_', $className)).'.php';
             $filePath = ENGINEBLOCK_FOLDER_LIBRARY . $fileName;
 

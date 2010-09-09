@@ -1,7 +1,5 @@
 <?php
 
-require_once 'Zend/Ldap.php';
-
 class EngineBlock_UserDirectory
 {
     const URN_COLLAB_PERSON_NAMESPACE           = 'urn:collab:person:';
