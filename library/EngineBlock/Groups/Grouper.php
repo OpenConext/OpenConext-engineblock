@@ -1,5 +1,9 @@
 <?php
 
+class EngineBlock_Groups_Grouper_Exception_UserDoesNotExist extends EngineBlock_Exception
+{
+}
+
 class EngineBlock_Groups_Grouper
 {
     /**
@@ -19,8 +23,16 @@ class EngineBlock_Groups_Grouper
     </actAsSubjectLookup>
 </WsRestGetGroupsRequest>
 XML;
-        $result = $this->_doRest('subjects', $request);
-        #   print_r($result);
+        try {
+            $result = $this->_doRest('subjects', $request);
+        }
+        catch(Exception $e) {
+            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
+                throw new EngineBlock_Groups_Grouper_Exception_UserDoesNotExist();
+            }
+            throw $e;
+        }
+
         $groups = array();
         if (isset($result) and ($result !== FALSE) and (! empty($result->results->WsGetGroupsResult->wsGroups))) {
             foreach ($result->results->WsGetGroupsResult->wsGroups->WsGroup as $group) {
@@ -47,7 +59,7 @@ XML;
   </actAsSubjectLookup>
 </WsRestGetMembersRequest>
 XML;
-        
+
         $result = $this->_doRest('groups', $request);
 
         $members = array();

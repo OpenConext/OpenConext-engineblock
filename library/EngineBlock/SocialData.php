@@ -61,7 +61,7 @@ class EngineBlock_SocialData
     public function getGroupsForPerson($identifier)
     {
         $grouperGroups = $this->_getGrouperClient()->getGroups($identifier);
-
+        
         $openSocialGroups = array();
         foreach ($grouperGroups as $group) {
             $openSocialGroups[] = $this->_getFieldMapper()->grouperToSocialData($group);

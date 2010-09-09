@@ -1,4 +1,12 @@
 <?php
+
+class EmptyResponseItem extends ResponseItem {
+    public function getResponse()
+    {
+        return array('entry'=>array());
+    }
+}
+
 class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonService, GroupService
 {
     protected $_ebSocialData = NULL;
@@ -43,6 +51,9 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
         }
         $identifier = $userId->getUserId($token);
         $result = $this->_getSocialData()->getPerson($identifier, array_values($fields));
+        if (empty($result)) {
+            return new EmptyResponseItem();
+        }
         return array($result);
     }
 
@@ -57,10 +68,10 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      */
     function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
     {
-      if (isset($fields["all"])) {
-          $fields = array(); // clear the default fields
-      }
-        
+        if (isset($fields["all"])) {
+            $fields = array(); // clear the default fields
+        }
+
         if ($groupId->getGroupId()!=='self') {
             if (count($userId) > 1) {
                 $message = "Getting the group members for a group given *multiple* uids is not implemented by EngineBlock (try picking one uid)";
@@ -80,7 +91,13 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             $people = array();
             $socialData = $this->_getSocialData();
             foreach ($userId as $userId) {
-                $people[] = $socialData->getPerson($userId, $fields);
+                $person = $socialData->getPerson($userId, $fields);
+                if (!empty($person)) {
+                    $people[] = $person;
+                }
+            }
+            if (empty($people)) {
+                return new EmptyResponseItem();
             }
         }
 
@@ -106,7 +123,11 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             throw new SocialSpiException($message, ResponseError::$INTERNAL_ERROR);
         }
 
-        return $this->_getSocialData()->getGroupsForPerson($userId->getUserId($token));
+        try {
+            return $this->_getSocialData()->getGroupsForPerson($userId->getUserId($token));
+        } catch(EngineBlock_Groups_Grouper_Exception_UserDoesNotExist $e) {
+            return new EmptyResponseItem();
+        }
     }
 
     public function getActivities($userIds, $groupId, $appId, $sortBy, $filterBy, $filterOp, $filterValue, $startIndex, $count, $fields, $activityIds, $token)
