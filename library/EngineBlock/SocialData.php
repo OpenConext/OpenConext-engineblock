@@ -5,22 +5,6 @@ define('ENGINEBLOCK_SERVICEREGISTRY_GADGETBASEURL_FIELD', 'coin:gadgetbaseurl');
 class EngineBlock_SocialData
 {
     /**
-     * Shindig, by default, requests the following fields.
-     *
-     * This is unfortunate because we want to say, if no fields are specifically requested, just return all known fields,
-     * so we have to match the requested fields to the default fields.
-     *
-     * Fortunately we don't support the thumbnailUrl field (yet) so there should never be a case where someone happens
-     * to request these exact fields manually.
-     *
-     * @todo Subclass the Shindig PersonHandler and make the default fields publicly available
-     *       instead of copying them here.
-     *
-     * @var array
-     */
-    protected static $SHINDIG_DEFAULT_FIELDS = array('id', 'displayName', 'gender', 'thumbnailUrl');
-
-    /**
      * @var EngineBlock_UserDirectory
      */
     protected $_userDirectory = NULL;
@@ -59,10 +43,7 @@ class EngineBlock_SocialData
     {
         $result = array();
         $fieldMapper = $this->_getFieldMapper();
-
-        if ($socialAttributes === self::$SHINDIG_DEFAULT_FIELDS) {
-            $socialAttributes = $fieldMapper->getAllOpenSocialLdapAttributes();
-        }
+        
         $ldapAttributes = $fieldMapper->socialToLdapAttributes($socialAttributes);
         
         $persons = $this->_getUserDirectory()->findUsersByIdentifier($identifier, $ldapAttributes);
