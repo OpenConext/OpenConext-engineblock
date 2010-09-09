@@ -207,7 +207,7 @@ class EngineBlock_Corto_Adapter
     protected function _getRemoteEntities()
     {
         $serviceRegistry = new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new EngineBlock_ServiceRegistry_Cached()
+            new EngineBlock_ServiceRegistry_CacheProxy()
         );
         $metadata = $serviceRegistry->getRemoteMetaData();
         return $metadata;

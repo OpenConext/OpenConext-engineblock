@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_ServiceRegistry_Cached 
+class EngineBlock_ServiceRegistry_CacheProxy 
 {
     const DEFAULT_LIFETIME = 3600;
 

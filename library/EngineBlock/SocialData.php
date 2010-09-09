@@ -140,7 +140,7 @@ class EngineBlock_SocialData
     protected function _getServiceRegistry()
     {
         if ($this->_serviceRegistry == NULL) {
-            $this->_serviceRegistry = new EngineBlock_ServiceRegistry_Cached();
+            $this->_serviceRegistry = new EngineBlock_ServiceRegistry_CacheProxy();
         }
         return $this->_serviceRegistry;
     }
