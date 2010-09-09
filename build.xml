@@ -60,6 +60,16 @@
                        ." />
         </exec>
     </target>
+
+    <target name="parallel">
+        <parallel>
+            <antcall target="phpcs" />
+            <antcall target="phpmd" />
+            <antcall target="phpcpd" />
+            <antcall target="pdepend" />
+        </parallel>
+    </target>
+
  
-    <target name="build" depends="clean,prepare,phpcpd,phpunit,phpcb" />
+    <target name="build" depends="clean,prepare,phpcpd,phpunit,phpcb,pdepend" />
 </project>
