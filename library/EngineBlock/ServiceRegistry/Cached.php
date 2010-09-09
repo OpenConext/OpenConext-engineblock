@@ -1,5 +1,5 @@
 <?php
- 
+
 class EngineBlock_ServiceRegistry_Cached 
 {
     const DEFAULT_LIFETIME = 3600;
