@@ -49,13 +49,16 @@ class EngineBlock_Groups_GrouperTest extends PHPUnit_Framework_TestCase
 //    {    // TODO Auto-generated constructor
 //    }
 //
-//    /**
-//     * Tests EngineBlock_Groups_Grouper->getGroups()
-//     */
-//    public function testGetGroups()
-//    {
-//        $groups = $this->EngineBlock_Groups_Grouper->getGroups("urn:collab:person:fontys.nl:874501@fontys.nl");
-//        var_dump($groups);
-//    }
+    /**
+     * Tests EngineBlock_Groups_Grouper->getGroups()
+     */
+    public function testGetGroups()
+    {
+        $this->markTestIncomplete ( "testGetGroups test not implemented" );
+        
+        //$groups = $this->EngineBlock_Groups_Grouper->getGroups("urn:collab:person:fontys.nl:874501@fontys.nl");
+        
+        //var_dump($groups);
+    }
 }
 
