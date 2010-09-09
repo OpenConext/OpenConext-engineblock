@@ -7,6 +7,7 @@ define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modul
 set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_LIBRARY);
 
 require_once 'Zend/Config/Ini.php';
+require_once 'Zend/Log.php';
 
 class EngineBlock_Exception extends Exception
 {
@@ -46,6 +47,11 @@ class EngineBlock_ApplicationSingleton
     protected $_configuration;
 
     /**
+     * @var Zend_Log
+     */
+    protected $_log;
+
+    /**
      * @return void
      */
     protected function __construct()
@@ -78,7 +84,6 @@ class EngineBlock_ApplicationSingleton
     public static function autoLoad($className)
     {
         static $s_modules = array();
-        static $s_libraries = array();
 
         // Find /modules/ directories
         if (empty($s_modules)) {
@@ -136,11 +141,13 @@ class EngineBlock_ApplicationSingleton
     {
         $this->_applicationEnvironmentId = $applicationEnvironmentId;
 
+        $this->_bootstrapAutoLoading();
+
         $this->_bootstrapConfiguration($configurationFile);
 
         $this->_bootstrapPhpSettings();
-        $this->_bootstrapAutoLoading();
         $this->_bootstrapErrorReporting();
+        $this->_bootstrapLogging();
         $this->_bootstrapHttpCommunication();
 
         return $this;
@@ -171,6 +178,15 @@ class EngineBlock_ApplicationSingleton
     protected function _getConfigurationLoader($environmentId)
     {
         return new Zend_Config_Ini($environmentId);
+    }
+
+    protected function _bootstrapLogging()
+    {
+        if (!isset($this->_configuration->logs)) {
+            throw new EngineBlock_Exception("No logs defined! Logging is required, please set logs. in your application.ini");
+        }
+        
+        $this->_log = Zend_Log::factory($this->_configuration->logs);
     }
 
     protected function _bootstrapHttpCommunication()
@@ -226,10 +242,19 @@ class EngineBlock_ApplicationSingleton
     public function handleShutdown()
     {
         $lastError = error_get_last();
-        if($lastError['type'] === E_ERROR || $lastError['type'] === E_USER_ERROR) {
-            $this->_reportError(new Exception('Fatal error: ' . var_export($lastError, true)));
-            die('A error occurred, it has been logged and sent to the administrator.');
+        if($lastError['type'] !== E_ERROR && $lastError['type'] !== E_USER_ERROR) {
+            // Not a fatal error, probably a shutdown
+            return false;
         }
+
+        $this->_reportError(new Exception('Fatal error: ' . var_export($lastError, true)));
+
+        $message = 'A error occurred, it has been logged and sent to the administrator.';
+        if ($this->getConfiguration()->debug) {
+            $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
+            $message .= '<br /><strong style="color: red"><pre>' . var_export($lastError, true) . '</pre></strong>';
+        }
+        die($message);
     }
 
     protected function _reportError(Exception $e)
@@ -240,6 +265,11 @@ class EngineBlock_ApplicationSingleton
     }
 
     //////////// CONFIGURATION
+
+    public function getApplicationEnvironmentId()
+    {
+        return $this->_applicationEnvironmentId;
+    }
 
     /**
      * @return Zend_Config
@@ -293,4 +323,22 @@ class EngineBlock_ApplicationSingleton
         $this->_httpResponse = $response;
         return $this;
     }
+
+    //////////// LOGGING
+
+    /**
+     * @return Zend_Log
+     */
+    public function getLog()
+    {
+        return $this->_log;
+    }
+}
+
+/**
+ * @return Zend_Log
+ */
+function ebLog()
+{
+    return EngineBlock_ApplicationSingleton::getInstance()->getLog();
 }
