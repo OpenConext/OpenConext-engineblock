@@ -26,7 +26,7 @@ class EngineBlock_SocialData_FieldMapper
                                         'account.userId',
                                     ),
         'sn'                        => 'name.familyName',
-        'schachomeorganization'     => 'organizations.name',
+        'o'                         => 'organizations.name',
         'schachomeorganizationtype' => 'organizations.type',
         'nledupersonorgunit'        => 'organizations.department',
         'edupersonaffiliation'      => 'organizations.title',
@@ -55,11 +55,20 @@ eduPersonAffiliation 	organizations.title
      * @var array
      */
     protected $_o2lMap = array(
-        "id"            => "collabpersonid" ,
-        "nickname"      => "displayname" ,
-        "displayName"   => "displayname" ,
-        "emails"        => "mail" ,
-        "name"          => "givenname"
+        'id'                        => 'collabpersonid',
+        'nickname'                  => 'displayname',
+        'displayName'               => 'displayname',
+        'emails'                    => 'mail',
+        'name'                      => 'givenname',
+        'account.username'          => 'uid',
+        'name.familyName'           => 'sn',
+        'name.givenName'            => 'givenname',
+        'name.formatted'            => 'cn',
+        'account.userId'            => 'uid',
+        'organizations.name'        => 'o',
+        'organizations.type'        => 'schachomeorganization',
+        'organizations.department'  => 'schachomeorganizationtype',
+        'organizations.title'       => 'edupersonaffiliation',
     );
 
     /**
@@ -157,7 +166,18 @@ eduPersonAffiliation 	organizations.title
                 if (isset($this->_o2lMap[$socialAttribute])) {
                     $ldapAttr = $this->_o2lMap[$socialAttribute];
                     if (isset($data[$ldapAttr])) {
-                        $result[$socialAttribute] = $this->_pack($data[$ldapAttr], $socialAttribute);
+                        $pointer = &$result;
+                        $parts = explode('.', $socialAttribute);
+                        while (!empty($parts)) {
+                            $part = array_shift($parts);
+                            if (!empty($parts)) {
+                                if (!isset($result[$part])) {
+                                    $result[$part] = array();
+                                    $pointer = &$result[$part];
+                                }
+                            }
+                        }
+                        $pointer[$part] = $this->_pack($data[$ldapAttr], $socialAttribute);
                     } else {    // if there's no opensocial equivalent for this field
                     // assume this is stuff we're not allowed to share
                     // so do not include it in the result.
@@ -173,7 +193,18 @@ eduPersonAffiliation 	organizations.title
                         }
                     } else {
                         $socialAttribute = $this->_l2oMap[$ldapAttr];
-                        $result[$socialAttribute] = $this->_pack($value, $socialAttribute);
+                        $pointer = &$result;
+                        $parts = explode('.', $socialAttribute);
+                        while (!empty($parts)) {
+                            $part = array_shift($parts);
+                            if (!empty($parts)) {
+                                if (!isset($result[$part])) {
+                                    $result[$part] = array();
+                                    $pointer = &$result[$part];
+                                }
+                            }
+                        }
+                        $pointer[$part] = $this->_pack($value, $socialAttribute);
                     }
                 } else {    // ignore value
                 }
