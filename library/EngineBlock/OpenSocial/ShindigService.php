@@ -27,11 +27,17 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      * Returns a Person object for person with $id or false on not found
      *
      * @param UserId $userId
-     * @param fields set of contact fields to return, as array('fieldName' => 1)
+     * @param fields set of contact fields to return, as array('fieldName' => 
+     *                  'fieldName'). This looks weird but it's just the way
+     *                  Shindig passes us the $fields. If $fields['all'] is  
+     *                  set, all known fields are returned.
      * @param security token $token
      */
     function getPerson($userId, $groupId, $fields, SecurityToken $token)
     {
+        if (isset($fields["all"])) {
+            $fields = array(); // clear the default fields
+        }
         if ($userId->getType() != "userId") {
             throw new SocialSpiException("Relative identifiers such as 'viewer', 'me' or 'owner' not supported! (requested: " . ($userId->getType()) . ")");
         }
@@ -45,7 +51,7 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
      * @param array $userId The ids of the people to fetch.
      * @param GroupId $groupId The id of the group
      * @param options Request options for filtering/sorting/paging
-     * @param fields set of contact fields to return, as array('fieldName' => 1)
+     * @param fields set of contact fields to return, as array('fieldName' => 'fieldName')
      * @return a list of people.
      */
     function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
