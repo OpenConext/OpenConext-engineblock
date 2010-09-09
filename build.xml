@@ -25,13 +25,7 @@
  
     <target name="phpcpd">
         <exec dir="${basedir}" executable="phpcpd" failonerror="false">
-            <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml
-                       --exclude build
-                       --exclude tests
-                       --exclude library/Zend
-                       --exclude library/shindig
-                       --exclude library/Corto
-                       ." />
+            <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml --exclude build --exclude tests --exclude library/Zend --exclude library/shindig --exclude library/Corto ." />
         </exec>
         <exec dir="${basedir}/build/logs" executable="xsltproc" failonerror="false" output="${basedir}/build/cpd/index.html">
             <arg line="${basedir}/ci/cpd.xsl ${basedir}/build/logs/pmd-cpd.xml" />
