@@ -3,7 +3,7 @@
 class EngineBlock_Error_Report_Mail 
 {
     const DEFAULT_FROM = 'SURFnet EngineBlock <coin-tech@surfnet.nl>';
-    const DEFAULT_SUBJECT_TEMPLATE = '[EngineBlock Error <?php EngineBlock_ApplicationSingleton::getInstance()->getApplicationEnvironmentId(); ?>] <?php echo $exception->getMessage(); ?>';
+    const DEFAULT_SUBJECT_TEMPLATE = '[EngineBlock Error<?php echo " " . EngineBlock_ApplicationSingleton::getInstance()->getApplicationEnvironmentId(); ?>] <?php echo $exception->getMessage(); ?>';
     const DEFAULT_MESSAGE_TEMPLATE = '
 Oops! Something has gone wrong! Here is the original error:
 <?php var_dump($exception); ?>
