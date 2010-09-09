@@ -6,7 +6,7 @@
  * @todo Add memcache caching so we don't hit the rest backend every time.
  * @author ivo
  */
-class EngineBlock_ServiceRegistry 
+class EngineBlock_ServiceRegistry_Client
 {
     /**
      * The REST client used to communicate to the Janus service registry.
@@ -21,7 +21,6 @@ class EngineBlock_ServiceRegistry
      */
     public function getMetadata($entityId) 
     {
-                
         $response = $this->_getRestClient()->metadata()
                                            ->entityid($entityId)
                                            ->get();
@@ -177,7 +176,5 @@ class EngineBlock_ServiceRegistry
     public function setRestClient($client) 
     {
         $this->_restClient = $client;
-        
     }
-    
 }

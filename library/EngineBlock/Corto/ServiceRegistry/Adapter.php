@@ -3,7 +3,7 @@
 class EngineBlock_Corto_ServiceRegistry_Adapter 
 {
     /**
-     * @var EngineBlock_ServiceRegistry
+     * @var EngineBlock_ServiceRegistry_Client
      */
     protected $_serviceRegistry;
 

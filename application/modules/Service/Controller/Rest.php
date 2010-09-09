@@ -28,7 +28,7 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
     
     protected function _getRegistry()
     {
-        return new EngineBlock_ServiceRegistry();
+        return new EngineBlock_ServiceRegistry_Client();
     }
     
 }

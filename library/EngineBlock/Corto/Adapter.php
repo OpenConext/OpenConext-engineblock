@@ -8,58 +8,8 @@ spl_autoload_register(array('EngineBlock_Corto_Adapter', 'cortoAutoLoad'));
 class EngineBlock_Corto_Adapter 
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
-    const MACE_ATTRIBUTE_NAME_NAMESPACE = 'urn:mace:dir:attribute-def:';
 
     const IDENTIFYING_MACE_ATTRIBUTE = 'urn:mace:dir:attribute-def:uid';
-
-    protected $MACE_ATTRIBUTES = array(
-        'eduCourseMember',
-        'eduPersonEntitlement',
-        'eduPersonAffiliation',
-        'eduPersonNickname',
-        'eduPersonOrgDN',
-        'eduPersonOrgUnitDN',
-        'eduPersonPrimaryAffiliation',
-        'eduPersonPrimaryOrgUnitDN',
-        'eduPersonPrincipalName',
-        'eduPersonScopedAffiliation',
-        'eduPersonTargetedID',
-        'labeledURI',
-        'carLicense',
-        'departmentNumber',
-        'displayName',
-        'employeeNumber',
-        'employeeType',
-        'preferredLanguage',
-        'cn',
-        'sn',
-        'telephoneNumber',
-        'seeAlso',
-        'description',
-        'title',
-        'registeredAddress',
-        'facsimileTelephoneNumber',
-        'street',
-        'postOfficeBox',
-        'postalCode',
-        'postalAddress',
-        'physicalDeliveryOfficeName',
-        'ou',
-        'o',
-        'st',
-        'l',
-        'givenName',
-        'businessCategory',
-        'initials',
-        'homePostalAddress',
-        'roomNumber',
-        'mail',
-        'manager',
-        'uid',
-        'homePhone',
-        'mobile',
-        'pager', 
-    );
 
     protected $_collaborationAttributes = array();
 
@@ -187,7 +137,7 @@ class EngineBlock_Corto_Adapter
                     'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
                 'infilter'  => array($this, 'filterInputAttributes'),
-                'outfilter' => array($this, 'filterOutputAttributes'),
+                //'outfilter' => array($this, 'filterOutputAttributes'),
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
@@ -221,54 +171,15 @@ class EngineBlock_Corto_Adapter
      *
      * @param  $entityMetaData
      * @param  $response
-     * @param  $attributes
+     * @param  $responseAttributes
      * @return void
      */
-    public function filterInputAttributes(array $entityMetaData, array $response, array &$attributes)
+    public function filterInputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
     {
-        # HACK
-        if (isset($attributes['uid'][0])) {
-            $attributes['uid'][0] = "urn:collab:person:surfguest.nl:" . $attributes['uid'][0];
-        }
-        else if (isset($attributes['urn:mace:dir:attribute-def:uid'][0])) {
-            $attributes['urn:mace:dir:attribute-def:uid'][0] = "urn:collab:person:surfguest.nl:" . $attributes['urn:mace:dir:attribute-def:uid'][0];
-        }
-        # /HACK
-        $attributes = $this->_prefixMaceAttributes($attributes);
-        $attributes = $this->_enrichAttributes($attributes);
+        $responseAttributes = $this->_enrichAttributes($responseAttributes);
 
-        $this->_collaborationAttributes = $this->_provisionUser($attributes);
-    }
-
-    /**
-     * Called by Corto whenever it receives an Assertion with attributes from an Identity Provider
-     *
-     * @param  array $entityMetaData
-     * @param  array $response
-     * @param  array $attributes
-     * @return void
-     */
-    public function filterOutputAttributes(array $entityMetaData, array $response, array &$attributes)
-    {
-        $attributes = array_merge($attributes, $this->_collaborationAttributes);
-    }
-
-    /**
-     * Sometimes we get MACE attributes without their proper prefix (like a test SimpleSAMLPHP),
-     * so when this happens we have to fix it.
-     *
-     * @param  $attributes
-     * @return void
-     */
-    public function _prefixMaceAttributes(array $attributes)
-    {
-        foreach ($attributes as $name => $values) {
-            if (in_array($name, $this->MACE_ATTRIBUTES)) {
-                $attributes[self::MACE_ATTRIBUTE_NAME_NAMESPACE . $name] = $values;
-                unset($attributes[$name]);
-            }
-        }
-        return $attributes;
+        $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
+        $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] = $subjectId;
     }
 
     /**
@@ -288,17 +199,16 @@ class EngineBlock_Corto_Adapter
         return array_merge_recursive($attributes, $aggregatedAttributes);
     }
 
-    protected function _provisionUser(array $attributes)
+    protected function _provisionUser(array $attributes, $idpEntityMetadata)
     {
-        return $this->_getProvisioning()->provisionUser(
-            $attributes[self::IDENTIFYING_MACE_ATTRIBUTE][0],
-            $attributes
-        );
+        return $this->_getProvisioning()->provisionUser($attributes, $idpEntityMetadata);
     }
 
     protected function _getRemoteEntities()
     {
-        $serviceRegistry = new EngineBlock_Corto_ServiceRegistry_Adapter(new EngineBlock_ServiceRegistry());
+        $serviceRegistry = new EngineBlock_Corto_ServiceRegistry_Adapter(
+            new EngineBlock_ServiceRegistry_Cached()
+        );
         $metadata = $serviceRegistry->getRemoteMetaData();
         return $metadata;
     }

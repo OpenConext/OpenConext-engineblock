@@ -4,23 +4,28 @@ require_once 'Zend/Ldap.php';
 
 class EngineBlock_UserDirectory
 {
-    const LDAP_CLASS_COLLAB_PERSON   = 'collabPerson';
-    const LDAP_ATTR_COLLAB_PERSON_ID = 'collabPersonId';
+    const URN_COLLAB_PERSON_NAMESPACE           = 'urn:collab:person:';
+    const LDAP_CLASS_COLLAB_PERSON              = 'collabPerson';
+    const LDAP_ATTR_COLLAB_PERSON_ID            = 'collabPersonId';
+    const LDAP_ATTR_COLLAB_PERSON_HASH          = 'collabPersonHash';
+    const LDAP_ATTR_COLLAB_PERSON_REGISTERED    = 'collabPersonRegistered';
+    const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED = 'collabPersonLastAccessed';
+    const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED  = 'collabPersonLastUpdated';
+    const LDAP_ATTR_COLLAB_PERSON_IS_GUEST      = 'collabPersonIsGuest';
 
-    protected $IDENTIFYING_ATTRIBUTES = array(
-            'urn:mace:dir:attribute-def:uid',
-            'urn:mace:dir:attribute-def:cn' ,
-            'urn:mace:dir:attribute-def:sn' ,
-            'urn:mace:dir:attribute-def:mail',
-            'urn:mace:dir:attribute-def:displayName' ,
-            'urn:mace:dir:attribute-def:givenName'
+    protected $LDAP_OBJECT_CLASSES = array(
+        'collabPerson',
+        'nlEduPerson',
+        'inetOrgPerson',
+        'organizationalPerson',
+        'person',
+        'top',
     );
 
     protected $_ldapClient = NULL;
 
     public function findUsersByIdentifier($identifier, $ldapAttributes = array())
     {
-        $test();
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
 
@@ -41,55 +46,127 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
-    // TODO: cleanup, add constants for strings, document
-    public function addUser($organization, $attributes, $attributeHash)
+    public function registerUser(array $saml2attributes, array $idpEntityMetadata)
     {
+        $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
+        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes);
+
+        $uid = $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID];
+        $users = $this->findUsersByIdentifier($uid);
+        switch (count($users)) {
+            case 1:
+                $user = $this->_updateUser($users[0], $ldapAttributes, $saml2attributes, $idpEntityMetadata);
+            case 0:
+                $user = $this->_addUser($ldapAttributes, $saml2attributes, $idpEntityMetadata);
+            default:
+                $message = 'Whoa, multiple users for the same UID for: ' . $uid . '?!?!?';
+                throw new EngineBlock_Exception($message);
+        }
+        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+    }
+
+    protected function _enrichLdapAttributes($ldapAttributes)
+    {
+        if (!isset($ldapAttributes['cn'])) {
+            $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($attributes);
+        }
+        if (!isset($ldapAttributes['sn'])) {
+            $ldapAttributes['sn'] = $ldapAttributes['cn'];
+        }
+        return $ldapAttributes;
+    }
+
+    protected function _addUser($newAttributes, $saml2attributes, $idpEntityMetadata)
+    {
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
+
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonId($newAttributes);
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = $this->_getCollabPersonIsGuest(
+            $newAttributes, $saml2attributes, $idpEntityMetadata);
+
         $now = date(DATE_RFC822);
-        $uid = $attributes['uid'][0];
-        $info = array(
-            'collabPersonId'            => 'urn:collab:person:' . $organization . ':' . $uid,
-            'collabPersonHash'          => $attributeHash,
-            'collabPersonRegistered'    => $now,
-            'collabPersonLastUpdated'   => $now,
-            'collabPersonLastAccessed'  => $now,
-            // TODO: find out about IDP (need reference)? pass in parameter? call external module?
-            'collabPersonIsGuest'       => FALSE,
-            '0'                         => $organization,
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_REGISTERED]    = $now;
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
+        
+        $newAttributes['objectClass'] = $this->LDAP_OBJECT_CLASSES;
+
+        $this->addOrganization($newAttributes['o']);
+
+        $dn = $this->_getDnForLdapAttributes($newAttributes);
+        $this->_getLdapClient()->add($dn, $newAttributes);
+        
+        return $newAttributes;
+    }
+
+    protected function _updateUser($user, $newAttributes, $saml2attributes, $idpEntityMetadata)
+    {
+        if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH]===$this->_getCollabPersonHash($newAttributes)) {
+            return $newAttributes;
+        }
+
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH] = $this->_getCollabPersonHash($newAttributes);
+
+        $now = date(DATE_RFC822);
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = $this->_getCollabPersonIsGuest(
+            $newAttributes, $saml2attributes, $idpEntityMetadata
         );
 
-        foreach ($this->IDENTIFYING_ATTRIBUTES as $identifyingAttribute) {
-            if (array_key_exists($identifyingAttribute, $attributes)) {
-                $info[$identifyingAttribute] = $attributes[$identifyingAttribute];
-            }
-        }
+        $dn = $this->_getDnForLdapAttributes($newAttributes);
+        $this->_getLdapClient()->update($dn, $newAttributes);
+        
+        return $newAttributes;
+    }
 
-        if (! array_key_exists('cn', $info)) {
-            $info['cn'] = $this->_getCommonNameFromAttributes($attributes);
-        }
-        if (! array_key_exists('sn', $info)) {
-            $info['sn'] = $info['cn'];
-        }
-        $info['objectClass'] = array(
-            'collabPerson',
-            'nlEduPerson',
-            'inetOrgPerson',
-            'organizationalPerson',
-            'person',
-            'top',
-        );
+    protected function _getCollabPersonId($attributes)
+    {
+        return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $attributes['uid'];
+    }
 
-        $dn = 'uid=' . $uid . ',o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
+    protected function _getCollabPersonHash($attributes)
+    {
+        return md5($this->_getCollabPersonString($attributes));
+    }
 
-        $this->addOrganization($organization);
-
-        if (!$this->_getLdapClient()->exists($dn)) {
-            $result = $this->_getLdapClient()->add($dn, $info);
-            $result = ($result instanceof Zend_Ldap);
-        } else {
-            // TODO: check hash
-            $result = TRUE;
+    protected function _getCollabPersonString($attributes)
+    {
+        $pairs = array();
+        foreach ($attributes as $name => $value) {
+            $pairs[] = "$name=$value";
         }
-        return $result;
+        return implode('&', $pairs);
+    }
+
+    /**
+     * 1) bestaat het eduPersonEntitlement attribuut met de waarde
+     *   urn:surfnet:entl:instellingsgebruik => instellingsgebruiker
+     * 2) is het een IDP uit de SURFfederatie (statische whitelist in COIN,
+     *  later onderdeel van de Janus info) => instellingsgebruiker
+     * 3) anders => gast
+     */
+    protected function _getCollabPersonIsGuest($attributes, $saml2attributes, $idpEntityMetadata)
+    {
+        $isGuest = true;
+
+        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        if (isset($saml2attributes['urn:surfnet:entl:instellingsgebruik']) &&
+            $saml2attributes['urn:surfnet:entl:instellingsgebruik']==='instellingsgebruiker') {
+            $isGuest = false;
+        }
+        /**
+         * @todo This is a hack for now, this SHOULD be set in the Service Registry with a custom attribute
+         */
+        else if (isset($configuration->federationIdps)) {
+            $isGuest = in_array($idpEntityMetadata['EntityId'], $configuration->federationIdps->toArray());
+        }
+        return $isGuest;
+    }
+
+    protected function _getDnForLdapAttributes($attributes)
+    {
+        return 'uid=' . $attributes['uid'] . ',o=' . $attributes['o'] . ',' . $this->_getLdapClient()->getBaseDn();
     }
 
     public function addOrganization($organization)
@@ -168,44 +245,9 @@ class EngineBlock_UserDirectory
         }
         return $this->_ldapClient;
     }
-}
 
-/**
- *     public function registerUserForAttributes($attributes, $attributeHash)
+    protected function _getSaml2AttributesFieldMapper()
     {
-        if (! defined('ENGINEBLOCK_USER_DB_DSN') && ENGINEBLOCK_USER_DB_DSN) {
-            return false;
-        }
-        $uid = $attributes[self::USER_ID_ATTRIBUTE][0];
-        $dbh = new PDO(ENGINEBLOCK_USER_DB_DSN, ENGINEBLOCK_USER_DB_USER, ENGINEBLOCK_USER_DB_PASSWORD);
-        $statement = $dbh->prepare("INSERT INTO `users` (uid, last_seen) VALUES (?, NOW()) ON DUPLICATE KEY UPDATE last_seen = NOW()");
-        $statement->execute(array(
-            $uid
-        ));
-        $sqlValues = array();
-        $bindValues = array(
-
-            self::USER_ID_ATTRIBUTE => $uid
-        );
-        $nameCount = 1;
-        $valueCount = 1;
-        foreach ($attributes as $attributeName => $attributeValues) {
-            if ($attributeName === self::USER_ID_ATTRIBUTE) {
-                continue;
-            }
-            $bindValues['attributename' . $nameCount] = $attributeName;
-            foreach ($attributeValues as $attributeValue) {
-                $sqlValues[] = "(:uid, :attributename{$nameCount}, :attributevalue{$valueCount})";
-                $bindValues['attributevalue' . $valueCount] = $attributeValue;
-                $valueCount ++;
-            }
-            $nameCount ++;
-        }
-        // No other attributes than uid found
-        if (empty($sqlValues)) {
-            return false;
-        }
-        $statement = $dbh->prepare("INSERT IGNORE INTO `user_attributes` (`user_uid`, `name`, `value`) VALUES " . implode(',', $sqlValues));
-        $statement->execute($bindValues);
+        return new EngineBlock_Saml2Attributes_FieldMapper();
     }
- */
+}

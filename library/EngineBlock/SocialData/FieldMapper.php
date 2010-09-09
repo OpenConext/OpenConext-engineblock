@@ -14,14 +14,39 @@ class EngineBlock_SocialData_FieldMapper
      * @var array
      */
     protected $_l2oMap = array(
-        "collabpersonid" => "id" , 
-        "displayname" => array(
-            "displayName",
-            "nickname"
-        ) ,
-        "mail"      => "emails" ,
-        "givenname" => "name"
+        "collabpersonid"            => "id" ,
+        "displayname"               =>  array(
+                                        "displayName",
+                                        "nickname"
+                                    ) ,
+        "mail"                      => "emails" ,
+        "givenname"                 => "name.givenName",
+        'uid'                       =>  array(
+                                        'account.username',
+                                        'account.userId',
+                                    ),
+        'sn'                        => 'name.familyName',
+        'schachomeorganization'     => 'organizations.name',
+        'schachomeorganizationtype' => 'organizations.type',
+        'nledupersonorgunit'        => 'organizations.department',
+        'edupersonaffiliation'      => 'organizations.title',
     );
+
+/**
+ * schacHomeOrganization:uid 	 id
+uid 	account.username
+sn 	name.familyName
+givenName 	name.givenName
+cn 	name.formatted
+uid 	account.userId
+displayName 	displayName
+mail 	emails
+preferredLanguage
+schacHomeOrganization 	organizations.name
+schacHomeOrganizationType 	organizations.type
+nlEduPersonOrgUnit 	organizations.department
+eduPersonAffiliation 	organizations.title
+ */
     
     /**
      * Mapping of open social field names to COIN ldap keys

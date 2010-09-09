@@ -19,7 +19,7 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
 {
     
     /**
-     * @var EngineBlock_ServiceRegistry
+     * @var EngineBlock_ServiceRegistry_Client
      */
     private $EngineBlock_ServiceRegistry;
     
@@ -33,7 +33,7 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
         // TODO Auto-generated ServiceRegistryTest::setUp()
         
 
-        $this->EngineBlock_ServiceRegistry = new EngineBlock_ServiceRegistry(/* parameters */);
+        $this->EngineBlock_ServiceRegistry = new EngineBlock_ServiceRegistry_Client(/* parameters */);
         $this->EngineBlock_ServiceRegistry->setRestClient(new RestClientMock());
     }
     
