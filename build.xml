@@ -71,5 +71,5 @@
     </target>
 
  
-    <target name="build" depends="clean,prepare,phpcpd,phpunit,phpcs,phpcb,pdepend" />
+    <target name="build" depends="clean,prepare,phpcpd,phpunit,phpcs,phpcb" />
 </project>
