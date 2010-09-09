@@ -38,7 +38,7 @@
                        --jdepend-chart=${basedir}/build/dependencies/jdepend.svg
                        --overview-pyramid=${basedir}/build/dependencies/pyramid.svg
                        --optimization=best
-                       --exclude=build,tests
+                       --exclude=build,tests,library/Zend,library/shindig,library/Corto
                        ." />
         </exec>
         <exec dir="${basedir}/build/dependencies" executable="cp" failonerror="false">
