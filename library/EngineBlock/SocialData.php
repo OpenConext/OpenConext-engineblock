@@ -5,6 +5,22 @@ define('ENGINEBLOCK_SERVICEREGISTRY_GADGETBASEURL_FIELD', 'coin:gadgetbaseurl');
 class EngineBlock_SocialData
 {
     /**
+     * Shindig, by default, requests the following fields.
+     *
+     * This is unfortunate because we want to say, if no fields are specifically requested, just return all known fields,
+     * so we have to match the requested fields to the default fields.
+     *
+     * Fortunately we don't support the thumbnailUrl field (yet) so there should never be a case where someone happens
+     * to request these exact fields manually.
+     *
+     * @todo Subclass the Shindig PersonHandler and make the default fields publicly available
+     *       instead of copying them here.
+     *
+     * @var array
+     */
+    protected static $SHINDIG_DEFAULT_FIELDS = array('id', 'displayName', 'gender', 'thumbnailUrl');
+
+    /**
      * @var EngineBlock_UserDirectory
      */
     protected $_userDirectory = NULL;
@@ -42,13 +58,17 @@ class EngineBlock_SocialData
     public function getPerson($identifier, $socialAttributes = array())
     {
         $result = array();
-                
-        $ldapAttributes = $this->_getFieldMapper()->socialToLdapAttributes($socialAttributes);
+        $fieldMapper = $this->_getFieldMapper();
+
+        if ($socialAttributes === self::$SHINDIG_DEFAULT_FIELDS) {
+            $socialAttributes = $fieldMapper->getAllOpenSocialLdapAttributes();
+        }
+        $ldapAttributes = $fieldMapper->socialToLdapAttributes($socialAttributes);
         
         $persons = $this->_getUserDirectory()->findUsersByIdentifier($identifier, $ldapAttributes);
         if (count($persons)) {
             // ignore the hypothetical possibility that we get multiple results for now.
-            $result = $this->_getFieldMapper()->ldapToSocialData($persons[0], $socialAttributes);
+            $result = $fieldMapper->ldapToSocialData($persons[0], $socialAttributes);
             
             // Make sure we only include attributes that we are allowed to share
             $result = $this->_enforceArp($result);

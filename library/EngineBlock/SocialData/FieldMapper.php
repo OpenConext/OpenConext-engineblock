@@ -111,13 +111,13 @@ eduPersonAffiliation 	organizations.title
      * Mind that the mapper is case sensitive.
      * @todo do we need this case sensitivity?
      * 
-     * @param array $socialAttrs An array of OpenSocial attribute names
+     * @param array $socialAttributes An array of OpenSocial attribute names
      * @return array The list of ldap attributes
      */
-    public function socialToLdapAttributes($socialAttrs)
+    public function socialToLdapAttributes($socialAttributes)
     {
         $result = array();
-        foreach ($socialAttrs as $socialAttribute) {
+        foreach ($socialAttributes as $socialAttribute) {
             if (isset($this->_o2lMap[$socialAttribute])) {
                 if (!in_array($this->_o2lMap[$socialAttribute], $result)) {
                     $result[] = $this->_o2lMap[$socialAttribute];
@@ -131,6 +131,11 @@ eduPersonAffiliation 	organizations.title
             }
         }
         return $result;
+    }
+
+    public function getAllOpenSocialLdapAttributes()
+    {
+        return array_keys($this->_o2lMap);
     }
 
     /**
@@ -153,19 +158,19 @@ eduPersonAffiliation 	organizations.title
      *  
      * @param array $data The record to convert. Keys should be ldap 
      *                    attributes.
-     * @param array $socialAttrs The list of social attributes that you are
+     * @param array $socialAttributes The list of social attributes that you are
      *                     interested in. If omited or empty array, will try
      *                     to get all fields.
      * @return array An array containing social key/value pairs                  
      */
-    public function ldapToSocialData($data, $socialAttrs = array())
+    public function ldapToSocialData($data, $socialAttributes = array())
     {
         $result = array();
-        if (count($socialAttrs)) {
-            foreach ($socialAttrs as $socialAttribute) {
+        if (count($socialAttributes)) {
+            foreach ($socialAttributes as $socialAttribute) {
                 if (isset($this->_o2lMap[$socialAttribute])) {
-                    $ldapAttr = $this->_o2lMap[$socialAttribute];
-                    if (isset($data[$ldapAttr])) {
+                    $ldapAttribute = $this->_o2lMap[$socialAttribute];
+                    if (isset($data[$ldapAttribute])) {
                         $pointer = &$result;
                         $parts = explode('.', $socialAttribute);
                         while (!empty($parts)) {
@@ -177,7 +182,7 @@ eduPersonAffiliation 	organizations.title
                                 }
                             }
                         }
-                        $pointer[$part] = $this->_pack($data[$ldapAttr], $socialAttribute);
+                        $pointer[$part] = $this->_pack($data[$ldapAttribute], $socialAttribute);
                     } else {    // if there's no opensocial equivalent for this field
                     // assume this is stuff we're not allowed to share
                     // so do not include it in the result.
@@ -185,14 +190,14 @@ eduPersonAffiliation 	organizations.title
                 }
             }
         } else {
-            foreach ($data as $ldapAttr => $value) {
-                if (isset($this->_l2oMap[$ldapAttr])) {
-                    if (is_array($this->_l2oMap[$ldapAttr])) {
-                        foreach ($this->_l2oMap[$ldapAttr] as $socialAttribute) {
+            foreach ($data as $ldapAttribute => $value) {
+                if (isset($this->_l2oMap[$ldapAttribute])) {
+                    if (is_array($this->_l2oMap[$ldapAttribute])) {
+                        foreach ($this->_l2oMap[$ldapAttribute] as $socialAttribute) {
                             $result[$socialAttribute] = $this->_pack($value, $socialAttribute);
                         }
                     } else {
-                        $socialAttribute = $this->_l2oMap[$ldapAttr];
+                        $socialAttribute = $this->_l2oMap[$ldapAttribute];
                         $pointer = &$result;
                         $parts = explode('.', $socialAttribute);
                         while (!empty($parts)) {
@@ -239,12 +244,12 @@ eduPersonAffiliation 	organizations.title
      * depending on whether the socialAttr passed is a multivalue
      * key.
      * @param mixed $value A single value or an array of values
-     * @param String $socialAttr The name of the social attribute that $value 
+     * @param String $socialAttributes The name of the social attribute that $value
      *                           is representing.
      */
-    protected function _pack($value, $socialAttr)
+    protected function _pack($value, $socialAttributes)
     {
-        if (in_array($socialAttr, $this->_oMultiValueAttributes)) {
+        if (in_array($socialAttributes, $this->_oMultiValueAttributes)) {
             if (is_array($value)) {
                 return $value;
             } else {
