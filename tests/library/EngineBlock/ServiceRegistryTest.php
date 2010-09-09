@@ -1,12 +1,9 @@
 <?php
 
-
+require_once(dirname(__FILE__) . '/../../autoloading.inc.php');
 require_once 'PHPUnit/Framework/TestCase.php';
 
-ini_set('include_path', ini_get('include_path'.PATH_SEPARATOR.'../../../library/'));
-
 require_once 'RestClientMock.php';
-require_once 'EngineBlock/ServiceRegistry.php';
 
 
 // TODO: replace the calls with a mock rest server, currently tests against
