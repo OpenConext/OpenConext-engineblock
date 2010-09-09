@@ -28,6 +28,9 @@
             <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml
                        --exclude build
                        --exclude tests
+                       --exclude library/Zend
+                       --exclude library/shindig
+                       --exclude library/Corto
                        ." />
         </exec>
         <exec dir="${basedir}/build/logs" executable="xsltproc" failonerror="false" output="${basedir}/build/cpd/index.html">
@@ -62,14 +65,6 @@
                        --coverage-html ${basedir}/build/coverage
                        ." />
         </exec>
-    </target>
- 
-    <target name="parallel">
-        <parallel>
-            <antcall target="phpcs" />
-            <antcall target="phpmd" />
-            <antcall target="phpcpd" />
-        </parallel>
     </target>
  
     <target name="build" depends="clean,prepare,phpcpd,phpunit,phpcb" />
