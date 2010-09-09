@@ -57,17 +57,6 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : '') . $mappedUri;
     }
 
-    protected function _getAttributeDataType($type, $name, $ietfLanguageTag = 'en_US')
-    {
-        if (isset($this->_attributes[$name][$type][$ietfLanguageTag])) {
-            return $this->_attributes[$name][$type][$ietfLanguageTag];
-        }
-
-        
-        var_dump("Unable to find $name, $type, $ietfLanguageTag");
-        // @todo warn the system! requested a unkown UID or langauge...
-    }
-
     public function getOutput()
     {
         return $this->_output;

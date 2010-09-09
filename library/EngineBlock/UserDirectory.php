@@ -4,12 +4,12 @@ class EngineBlock_UserDirectory
 {
     const URN_COLLAB_PERSON_NAMESPACE           = 'urn:collab:person:';
     const LDAP_CLASS_COLLAB_PERSON              = 'collabPerson';
-    const LDAP_ATTR_COLLAB_PERSON_ID            = 'collabPersonId';
-    const LDAP_ATTR_COLLAB_PERSON_HASH          = 'collabPersonHash';
-    const LDAP_ATTR_COLLAB_PERSON_REGISTERED    = 'collabPersonRegistered';
-    const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED = 'collabPersonLastAccessed';
-    const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED  = 'collabPersonLastUpdated';
-    const LDAP_ATTR_COLLAB_PERSON_IS_GUEST      = 'collabPersonIsGuest';
+    const LDAP_ATTR_COLLAB_PERSON_ID            = 'collabpersonid';
+    const LDAP_ATTR_COLLAB_PERSON_HASH          = 'collabpersonhash';
+    const LDAP_ATTR_COLLAB_PERSON_REGISTERED    = 'collabpersonregistered';
+    const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED = 'collabpersonlastAccessed';
+    const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED  = 'collabpersonlastupdated';
+    const LDAP_ATTR_COLLAB_PERSON_IS_GUEST      = 'collabpersonisguest';
 
     protected $LDAP_OBJECT_CLASSES = array(
         'collabPerson',
@@ -49,15 +49,17 @@ class EngineBlock_UserDirectory
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
         $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes);
 
-        $uid = $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID];
+        $uid = $this->_getCollabPersonId($ldapAttributes);
         $users = $this->findUsersByIdentifier($uid);
         switch (count($users)) {
             case 1:
                 $user = $this->_updateUser($users[0], $ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                break;
             case 0:
                 $user = $this->_addUser($ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                break;
             default:
-                $message = 'Whoa, multiple users for the same UID for: ' . $uid . '?!?!?';
+                $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
                 throw new EngineBlock_Exception($message);
         }
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
@@ -102,6 +104,16 @@ class EngineBlock_UserDirectory
         if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH]===$this->_getCollabPersonHash($newAttributes)) {
             return $newAttributes;
         }
+
+        // Hackish, appearantly LDAP gives us arrays even for single values?
+        // So for now we assume arrays with only one value are single valued
+        foreach ($user as $userKey => $userValue) {
+            if (is_array($userValue) && count($userValue) === 1) {
+                $user[$userKey] = $userValue[0];
+            }
+        }
+
+        $newAttributes = $user + $newAttributes;
 
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH] = $this->_getCollabPersonHash($newAttributes);
 
@@ -159,7 +171,7 @@ class EngineBlock_UserDirectory
         else if (isset($configuration->federationIdps)) {
             $isGuest = in_array($idpEntityMetadata['EntityId'], $configuration->federationIdps->toArray());
         }
-        return $isGuest;
+        return ($isGuest?'TRUE':'FALSE');
     }
 
     protected function _getDnForLdapAttributes($attributes)

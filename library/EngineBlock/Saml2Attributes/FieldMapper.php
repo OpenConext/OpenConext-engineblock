@@ -2,6 +2,11 @@
  
 class EngineBlock_Saml2Attributes_FieldMapper
 {
+    protected $_saml2Required = array(
+        'urn:mace:dir:attribute-def:uid',
+        'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+    );
+
     /**
      * Manually converted from LDAP schema files
      *
@@ -63,8 +68,11 @@ class EngineBlock_Saml2Attributes_FieldMapper
 
     public function saml2AttributesToLdapAttributes($attributes)
     {
+        $required = $this->_saml2Required;
         $ldapAttributes = array();
         foreach ($attributes as $saml2Name => $values) {
+
+            // Map it to an LDAP attribute
             if (isset($this->_s2lMap[$saml2Name])) {
                 if (count($values)>1) {
                     ebLog()->notice("Ignoring everything but first value of $saml2Name: ". var_export($values, true));
@@ -72,6 +80,15 @@ class EngineBlock_Saml2Attributes_FieldMapper
                 
                 $ldapAttributes[$this->_s2lMap[$saml2Name]] = $values[0];
             }
+
+            // Check off against required attribute list
+            $requiredAttributeKey = array_search($saml2Name, $required);
+            if ($requiredAttributeKey!==false) {
+                unset($required[$requiredAttributeKey]);
+            }
+        }
+        if (!empty($required)) {
+            throw new EngineBlock_Exception("Missing required SAML2 fields: " . var_export($required, true) . ' in attributes: ' . var_export($attributes, true));
         }
         return $ldapAttributes;
     }
