@@ -68,7 +68,7 @@ class EngineBlock_UserDirectory
     protected function _enrichLdapAttributes($ldapAttributes)
     {
         if (!isset($ldapAttributes['cn'])) {
-            $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($attributes);
+            $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
         }
         if (!isset($ldapAttributes['sn'])) {
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
