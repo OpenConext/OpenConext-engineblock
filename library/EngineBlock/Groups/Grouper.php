@@ -1,11 +1,16 @@
 <?php
 
-class EngineBlock_Groups_Grouper_Exception_UserDoesNotExist extends EngineBlock_Exception
-{
-}
 
-class EngineBlock_Groups_Grouper
+class EngineBlock_Groups_Grouper extends EngineBlock_Groups_Abstract
 {
+    protected $_grouperConfig;
+    
+    public function __construct($grouperConfig)
+    {
+        $this->_grouperConfig = $grouperConfig;
+    }
+    
+    
     /**
      * Retrieve the list of groups that the specified subject is a member of.
      */
@@ -28,7 +33,7 @@ XML;
         }
         catch(Exception $e) {
             if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
-                throw new EngineBlock_Groups_Grouper_Exception_UserDoesNotExist();
+                throw new EngineBlock_Groups_Exception_UserDoesNotExist();
             }
             throw $e;
         }
@@ -42,7 +47,7 @@ XML;
         return $groups;
     }
 
-    function getMembers($userId, $groupName)
+    public function getMembers($userId, $groupName)
     {
         $userIdEncoded   = htmlentities($userId);
         $groupXmlEncoded = htmlentities($groupName);
@@ -84,8 +89,7 @@ XML;
      */
     protected function _doRest($operation, $request, $expect = array('SUCCESS'))
     {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $grouperConfig = $application->getConfiguration()->grouper;
+        $grouperConfig = $this->_grouperConfig;
         
         if (!isset($grouperConfig->host) || $grouperConfig->host=='') {
             throw new EngineBlock_Exception('No Grouper Host specified! Please set "grouper.Host" in your application configuration.');     

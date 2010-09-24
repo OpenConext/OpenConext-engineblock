@@ -10,9 +10,9 @@ class EngineBlock_SocialData
     protected $_userDirectory = NULL;
 
     /**
-     * @var EngineBlock_Groups_Grouper
+     * @var EngineBlock_Groups_Abstract
      */
-    protected $_grouperClient = null;
+    protected $_groupsClient = null;
 
     /**
      * @var EngineBlock_ServiceRegistry_Client
@@ -60,10 +60,10 @@ class EngineBlock_SocialData
 
     public function getGroupsForPerson($identifier)
     {
-        $grouperGroups = $this->_getGrouperClient()->getGroups($identifier);
+        $groupsClientGroups = $this->_getGroupsClient()->getGroups($identifier);
         
         $openSocialGroups = array();
-        foreach ($grouperGroups as $group) {
+        foreach ($groupsClientGroups as $group) {
             $openSocialGroups[] = $this->_getFieldMapper()->grouperToSocialData($group);
         }
         return $openSocialGroups;
@@ -71,7 +71,7 @@ class EngineBlock_SocialData
 
     public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array())
     {
-        $groupMembers = $this->_getGrouperClient()->getMembers($groupMemberUid, $groupId);
+        $groupMembers = $this->_getGroupsClient()->getMembers($groupMemberUid, $groupId);
 
         $people = array();
         foreach ($groupMembers as $groupMember) {
@@ -125,14 +125,14 @@ class EngineBlock_SocialData
     }
 
     /**
-     * @return EngineBlock_Groups_Grouper Grouper REST client
+     * @return EngineBlock_Groups_Abstract Group client
      */
-    protected function _getGrouperClient()
+    protected function _getGroupsClient()
     {
-        if (!isset($this->_grouperClient)) {
-            $this->_grouperClient = new EngineBlock_Groups_Grouper();
+        if (!isset($this->_groupsClient)) {
+            $this->_groupsClient = EngineBlock_Groups_Directory::createGroupsClient("default");
         }
-        return $this->_grouperClient;
+        return $this->_groupsClient;
     }
     
     /**

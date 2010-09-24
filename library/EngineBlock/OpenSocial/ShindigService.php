@@ -125,7 +125,7 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
 
         try {
             return $this->_getSocialData()->getGroupsForPerson($userId->getUserId($token));
-        } catch(EngineBlock_Groups_Grouper_Exception_UserDoesNotExist $e) {
+        } catch(EngineBlock_Groups_Exception_UserDoesNotExist $e) {
             return new EmptyResponseItem();
         }
     }
