@@ -53,9 +53,11 @@ class EngineBlock_SocialData
             
             // Make sure we only include attributes that we are allowed to share
             $result = $this->_enforceArp($result);
+
+            return $result;
+        } else {
+            return false;
         }
-          
-        return $result;
     }
 
     public function getGroupsForPerson($identifier)
@@ -75,7 +77,10 @@ class EngineBlock_SocialData
 
         $people = array();
         foreach ($groupMembers as $groupMember) {
-            $people[] = $this->getPerson($groupMember['id'], $socialAttributes);
+            $person = $this->getPerson($groupMember['id'], $socialAttributes);
+            if ($person) {
+               $people[] = $person; 
+            }
         }
         return $people;
     }
