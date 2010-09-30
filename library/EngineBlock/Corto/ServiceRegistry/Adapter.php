@@ -55,7 +55,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 'Location'  => $serviceRegistryEntity['SingleSignOnService'][0]['Location'],
             );
         }
-        if (isset($serviceRegistryEntity['certData'])) {
+        if (isset($serviceRegistryEntity['certData']) && $serviceRegistryEntity['certData']) {
             $cortoEntity['certificates'] = array(
                 'public' => EngineBlock_X509Certificate::getPemFromCertData($serviceRegistryEntity['certData']),
             );
