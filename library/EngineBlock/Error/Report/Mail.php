@@ -11,6 +11,9 @@ Oops! Something has gone wrong! Here is the original error:
 REQUEST:
 <?php var_dump($_REQUEST); ?>
 
+SESSION:
+<?php var_dump($_SESSION); ?>
+
 SERVER:
 <?php var_dump($_SERVER); ?>
 ';
