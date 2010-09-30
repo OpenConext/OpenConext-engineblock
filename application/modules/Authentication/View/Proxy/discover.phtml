@@ -38,10 +38,10 @@
                         <form method="post" action="<?= $action ?>">
                             <input type=hidden name=ID value="<?= $ID ?>">
                             <p>
-                                <select name="idp">
+                                <select id="idp" name="idp" onkeyup="if (arguments[0]) { if (arguments[0]['keyCode']) { if (arguments[0]['keyCode']===13) { this.form.submit();}}}">
                                 <? foreach($idpList as $idp): ?>
-                                    <? if (isset($remoteEntities[$idp]['OrganizationDisplayName'])) { ?>
-                                    <option value="<?=$idp?>"><?=htmlentities($remoteEntities[$idp]['OrganizationDisplayName'])?></option>
+                                    <? if (isset($remoteEntities[$idp]['Description']['nl'])) { ?>
+                                    <option value="<?=$idp?>"><?=htmlentities($remoteEntities[$idp]['Description']['nl'])?></option>
                                     <? } else { ?>
                                     <option><?= $idp ?></option>
                                     <? } ?>
@@ -49,7 +49,7 @@
                                 </select>
                             </p>
                             <p>
-                                <input type="submit" value="Bevestig">
+                                <input type="submit" value="Bevestig" />
                             </p>
                         </form>
                     </div>
@@ -79,5 +79,8 @@
                 </address>
             </div>
         </div>
+        <script type="text/javascript">
+          document.getElementById('idp').focus();
+        </script>
     </body>
 </html>
