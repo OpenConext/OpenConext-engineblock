@@ -220,7 +220,13 @@ class EngineBlock_ApplicationSingleton
     public function handleException(Exception $e)
     {
         $this->_reportError($e);
-        return false;
+
+        $message = 'A exceptional condition occurred, it has been logged and sent to the administrator.';
+        if ($this->getConfiguration()->debug) {
+            $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
+            $message .= '<br /><strong style="color: red"><pre>' . var_export($e, true) . '</pre></strong>';
+        }
+        die($message);
     }
 
     public function handleError($errorNumber, $errorMesage, $errorFile, $errorLine)
