@@ -138,7 +138,8 @@ class EngineBlock_UserDirectory
 
     protected function _getCollabPersonId($attributes)
     {
-        return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $attributes['uid'];
+        $uid = str_replace('@', '_', $attributes['uid']);
+        return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
     }
 
     protected function _getCollabPersonHash($attributes)
