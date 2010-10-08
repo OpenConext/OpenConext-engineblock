@@ -262,9 +262,11 @@ class EngineBlock_ApplicationSingleton
 
     protected function _reportError(Exception $e)
     {
-        $reportingConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->error->reports;
-        $reporter = new EngineBlock_Error_Reporter($reportingConfiguration);
-        $reporter->report($e);
+        if (isset(EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->error->reports)) {
+            $reportingConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->error->reports;
+            $reporter = new EngineBlock_Error_Reporter($reportingConfiguration);
+            $reporter->report($e);
+        }
     }
 
     //////////// CONFIGURATION
