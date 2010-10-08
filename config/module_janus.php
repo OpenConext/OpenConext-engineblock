@@ -1445,6 +1445,26 @@ $config = array(
                 ),
             ),
         ),
+        
+        // Edit ARP
+        'editarp' => array(
+            'default' => FALSE,
+            'testaccepted' => array(
+                'role' => array(
+                    'all',
+                ),
+            ),
+        ),
+        
+        // Add ARP
+        'addarp' => array(
+            'default' => FALSE,
+            'testaccepted' => array(
+                'role' => array(
+                    'all',
+                ),
+            ),
+        ),
 
         // Add metadata
         'addmetadata' => array(
