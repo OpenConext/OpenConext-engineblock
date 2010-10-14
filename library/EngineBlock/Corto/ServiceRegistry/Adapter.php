@@ -66,12 +66,35 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['description'])) {
             $cortoEntity['Description'] = $serviceRegistryEntity['description'];
         }
+        if (isset($serviceRegistryEntity['displayName'])) {
+            $cortoEntity['DisplayName'] = $serviceRegistryEntity['displayName'];
+        }
+        if (isset($serviceRegistryEntity['logo'][0]['href'])) {
+            $cortoEntity['Logo'] = array(
+                'Href' => $serviceRegistryEntity['logo'][0]['href'],
+                'Height' => $serviceRegistryEntity['logo'][0]['height'],
+                'Width' => $serviceRegistryEntity['logo'][0]['width'],
+                'URL' => $serviceRegistryEntity['logo'][0]['url'],
+            );
+        }
+        if (isset($serviceRegistryEntity['geoLocation'])) {
+            $cortoEntity['GeoLocation'] = $serviceRegistryEntity['geoLocation'];
+        }
         if (isset($serviceRegistryEntity['redirect']['sign'])) {
             $cortoEntity['WantsAuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect']['sign'];
         }
         if (isset($serviceRegistryEntity['redirect']['validate'])) {
             $cortoEntity['WantsAuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect']['validate'];
             $cortoEntity['WantsResponsesSigned']     = (bool)$serviceRegistryEntity['redirect']['validate'];
+        }
+        if (isset($serviceRegistryEntity['organization']['OrganizationName'])) {
+            $cortoEntity['Organization']['Name'] = $serviceRegistryEntity['organization']['OrganizationName'];
+        }
+        if (isset($serviceRegistryEntity['organization']['OrganizationDisplayName'])) {
+            $cortoEntity['Organization']['DisplayName'] = $serviceRegistryEntity['organization']['OrganizationDisplayName'];
+        }
+        if (isset($serviceRegistryEntity['organization']['OrganizationURL'])) {
+            $cortoEntity['Organization']['URL'] = $serviceRegistryEntity['organization']['OrganizationURL'];
         }
         return $cortoEntity;
     }

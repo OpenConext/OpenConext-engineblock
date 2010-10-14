@@ -6,6 +6,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
     {
         $entitiesDescriptor = array(
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
+            '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
             'md:EntityDescriptor' => array()
         );
         foreach ($this->_server->getRemoteEntities() as $entityID => $entity) {
@@ -16,7 +17,45 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 '_entityID'   => $entityID,
                 'md:IDPSSODescriptor' => array(
                     '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
-             ));
+            ));
+
+            if (isset($entity['DisplayName'])) {
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DisplayName'] = array();
+                foreach ($entity['DisplayName'] as $lang => $name) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DisplayName'][] = array(
+                        '_xml:lang' => $lang,
+                        '__v' => $name,
+                    );
+                }
+            }
+
+            if (isset($entity['Logo'])) {
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Logo'] = array(
+                    array(
+                        '_href'   => $entity['Logo']['Href'],
+                        '_height' => $entity['Logo']['Height'],
+                        '_width'  => $entity['Logo']['Width'],
+                        '__v' => $entity['Logo']['URL'],
+                    ),
+                );
+            }
+
+            if (isset($entity['GeoLocation'])) {
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:GeolocationHint'] = array(
+                    array(
+                        '__v' => $entity['GeoLocation'],
+                    ),
+                );
+            }
 
             if (isset($entity['certificates']['public'])) {
                 $entityDescriptor['md:IDPSSODescriptor']['md:KeyDescriptor'] = array(
