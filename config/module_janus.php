@@ -423,22 +423,22 @@ $config = array(
                 'en' => 'A URL to the logo which will be shown next to this IdP in the discovery service.',
             ),
         ),
-        'logo:0:height' => array(
-            'type' => 'text',
-            'order' => 501,
-            'default' => '35',
-            'description' => array(
-                'nl' => '',
-                'en' => 'Logo height in pixels',
-            ),
-        ),
         'logo:0:width' => array(
             'type' => 'text',
-            'order' => 502,
+            'order' => 501,
             'default' => '',
             'description' => array(
                 'nl' => '',
                 'en' => 'Logo width in pixels',
+            ),
+        ),
+        'logo:0:height' => array(
+            'type' => 'text',
+            'order' => 502,
+            'default' => '35',
+            'description' => array(
+                'nl' => '',
+                'en' => 'Logo height in pixels',
             ),
         ),
         'logo:0:href' => array(
@@ -452,7 +452,7 @@ $config = array(
         ),
         'geoLocation' => array(
             'type' => 'text',
-            'order' => 503,
+            'order' => 510,
             'default' => '',
             'description' => array(
                 'nl' => '',
