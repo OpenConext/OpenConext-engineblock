@@ -14,8 +14,25 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
     
     public function metadataAction()
     {
-        $entityId = $_REQUEST["entityid"];
-        
+        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
+        $entityId = $request->getQueryParameter("entityid");
+        $gadgetUrl = $request->getQueryParameter('gadgeturl');
+
+        if (!$entityId && $gadgetUrl) {
+            $identifiers = $this->_getRegistry()->findIdentifiersByMetadata('coin:gadgetbaseurl', $gadgetUrl);
+            if (count($identifiers) > 1) {
+                throw new EngineBlock_Exception('Multiple identifiers found for gadgetbaseurl');
+            }
+            if (count($identifiers)===0) {
+                throw new EngineBlock_Exception('No Entity Id found for gadgetbaseurl');
+            }
+
+            $entityId = $identifiers[0];
+        }
+        else if (!$entityId) {
+            throw new EngineBlock_Exception('No entity id provided to get metadata for?!');
+        }
+
         if (isset($_REQUEST["keys"])) {
             $result = $this->_getRegistry()->getMetaDataForKeys($entityId, explode(",",$_REQUEST["keys"]));   
         } else {
