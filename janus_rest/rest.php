@@ -5,8 +5,9 @@
 // By default the rest interface is disabled as it currently doesn't feature
 // authentication and opens up the registry to outside use. Comment this line
 // if you understand the risks and want to enable the REST service.
-header("HTTP/1.1 503 Service Temporarily Unavailable");
-die("REST interface disabled"); 
+#header("HTTP/1.1 503 Service Temporarily Unavailable");
+#die("REST interface disabled"); 
+
 
 // for debugging
 // error_reporting(E_ALL);
@@ -73,14 +74,13 @@ class sspmod_janus_EntityFinder extends sspmod_janus_Database
      */
     public function findEidsByMetadata($key, $value)
     {
-    	$st = $this->execute(
-            'SELECT DISTINCT eid 
-            FROM '. self::$prefix ."metadata
+        $query=    'SELECT DISTINCT eid 
+            FROM '. self::$prefix ."metadata jm
             WHERE `key` = ?
                AND ((value=?) OR (? REGEXP CONCAT('^',value,'\$')))
-               AND revisionid = (SELECT MAX(revisionid) FROM ".self::$prefix."metadata md WHERE md.eid = eid);",
-            array($key, $value, $value)
-        );
+               AND revisionid = (SELECT MAX(revisionid) FROM ".self::$prefix."metadata WHERE eid = jm.eid);";
+        $data = array($key, $value, $value);
+    	$st = $this->execute($query, $data);
 
         if ($st === false) {
             return 'error_db';
@@ -466,7 +466,7 @@ try {
 	// Step 5: Output the necessary headers and the result of the request as JSON.
 	header('Cache-Control: no-cache, must-revalidate');
 	header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-//	header('Content-type: application/json'); // disable this line for debugging so you don't get the firefox download box everytime.
+	header('Content-type: application/json'); // disable this line for debugging so you don't get the firefox download box everytime.
 	
 	echo json_encode($result);
 } catch (Exception $e) {
