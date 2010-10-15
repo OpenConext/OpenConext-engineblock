@@ -461,15 +461,6 @@ $config = array(
                         ' Use a mapping tool to find the coordinates of a place.</a>',
             ),
         ),
-        'secret' => array(
-            'type' => 'text',
-            'order' => 600,
-            'default' => 'see the silver surfer surf said sea softly',
-            'description' => array(
-                'nl' => 'Fil med logo som bliver vist sammen med forbindelsens navn i discovery servicen.',
-                'en' => 'OAuth secret for this Service Provider.',
-            ),
-        ),
         // Organization fields
         'organization:OrganizationName' => array(
             'type' => 'text',
@@ -576,6 +567,15 @@ $config = array(
                  'nl' => 'COIN Gadget Base URL regex (bijv. .*\\.gadgets\\.google\\.com)',
                  'en' => 'COIN Gadget Base URL regex (e.g. .*\\.gadgets\\.google\\.com)',
              ),
+        ),
+        'coin:oauth:secret' => array(
+            'type' => 'text',
+            'order' => 190,
+            'default' => 'see the silver surfer surf said sea softly',
+            'description' => array(
+                'nl' => 'Fil med logo som bliver vist sammen med forbindelsens navn i discovery servicen.',
+                'en' => 'OAuth secret for this Service Provider.',
+            ),
         ),
         // Certificate fields 
         'certData' => array(
