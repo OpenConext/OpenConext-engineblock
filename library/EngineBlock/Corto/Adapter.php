@@ -123,7 +123,6 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
-            'ConsentDbTable'    => $application->getConfiguration()->authentication->consent->database->table,
         ));
 
         $attributes = array();
