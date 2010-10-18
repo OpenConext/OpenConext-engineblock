@@ -213,7 +213,7 @@ class EngineBlock_UserDirectory
         }
 
         if (isset($attributes['sn'][0])) {
-            return $result = $attributes['sn'][0];
+            return $attributes['sn'][0];
         }
 
         if (isset($attributes['displayName'][0])) {
