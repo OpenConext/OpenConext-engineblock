@@ -517,6 +517,27 @@ $config = array(
             ),
             'required' => true,
         ),
+        'base64attributes' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => true,
+            'description' => array(
+                'da' => 'Base 64 indkode attributter.',
+                'en' => 'Base 64 encode attributes',
+            ),
+            'required' => true,
+        ),
+        'assertion.encryption' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => false,
+            'description' => array(
+                'da' => 'Er assertions fra denne forbindelse krypteret?',
+                'en' => 'Is assertions from this connection encrypted?',
+            ),
+            'required' => false,
+        ),
+
     ),
 
     /*
@@ -730,6 +751,36 @@ $config = array(
                 'en' => 'Validate signature on requests and responses',
             ),
             'required' => true,
+        ),
+       'base64attributes' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => true,
+            'description' => array(
+                'da' => 'Base 64 indkode attributter.',
+                'en' => 'Base 64 encode attributes',
+            ),
+            'required' => true,
+        ),
+        'assertion.encryption' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => false,
+            'description' => array(
+                'da' => 'Er assertions fra denne forbindelse krypteret?',
+                'en' => 'Is assertions from this connection encrypted?',
+            ),
+            'required' => false,
+        ),
+        'NameIDFormat' => array(
+            'type' => 'text',
+            'order' => 840,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'NameID som er understÃ¸ttet for denne forbindelse.',
+                'en' => 'NameID supported by this connection.',
+                'es' => 'Cero o mas elementos de tipo type anyURI que enumeran los formatos de identificacion de nombres soportados por la entidad sistema. Ver la seccion 8.3 de [SAMLCore] para ver algunos posibles valores para este elemento.',
+            ),
         ),
     ),
 
