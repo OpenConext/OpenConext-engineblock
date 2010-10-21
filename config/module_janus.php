@@ -102,7 +102,7 @@ $config = array(
     /*
      * Metadata field used as pretty name for entities
      */
-    'entity.prettyname' => 'displayname:nl',
+    'entity.prettyname' => 'name:nl',
 
     /*
      * Enable entity types
