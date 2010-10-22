@@ -38,15 +38,15 @@ $config = array(
 	),
 
 
-	/*
-	'example-sql' => array(
+
+	'database' => array(
 		'sqlauth:SQL',
-		'dsn' => 'pgsql:host=sql.example.org;port=5432;dbname=simplesaml',
-		'username' => 'simplesaml',
-		'password' => 'secretpassword',
-		'query' => 'SELECT "username", "name", "email" FROM "users" WHERE "username" = :username AND "password" = :password',
+		'dsn' => 'mysql:host=localhost;dbname=janus',
+		'username' => 'root',
+		'password' => 'engineblock',
+		'query' => 'SELECT `username`, `name`, `email` FROM `users` WHERE `username` = :username AND `password` = :password',
 	),
-	*/
+
 
 	/*
 	'example-static' => array(

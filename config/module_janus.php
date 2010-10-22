@@ -102,7 +102,7 @@ $config = array(
     /*
      * Metadata field used as pretty name for entities
      */
-    'entity.prettyname' => 'name:nl',
+    'entity.prettyname' => 'displayname:nl',
 
     /*
      * Enable entity types
@@ -517,27 +517,6 @@ $config = array(
             ),
             'required' => true,
         ),
-        'base64attributes' => array(
-            'type' => 'boolean',
-            'order' => 830,
-            'default' => true,
-            'description' => array(
-                'da' => 'Base 64 indkode attributter.',
-                'en' => 'Base 64 encode attributes',
-            ),
-            'required' => true,
-        ),
-        'assertion.encryption' => array(
-            'type' => 'boolean',
-            'order' => 830,
-            'default' => false,
-            'description' => array(
-                'da' => 'Er assertions fra denne forbindelse krypteret?',
-                'en' => 'Is assertions from this connection encrypted?',
-            ),
-            'required' => false,
-        ),
-
     ),
 
     /*
@@ -594,7 +573,34 @@ $config = array(
             'order' => 190,
             'default' => 'see the silver surfer surf said sea softly',
             'description' => array(
-                'nl' => 'Fil med logo som bliver vist sammen med forbindelsens navn i discovery servicen.',
+                'nl' => '',
+                'en' => 'OAuth secret for this Service Provider.',
+            ),
+        ),
+        'coin:oauth:consumer_key'=> array(
+            'type' => 'text',
+            'order' => 191,
+            'default' => 'gadgetConsumer',
+            'description' => array(
+                'nl' => 'A value used by the Consumer to identify itself to the Service Provider.',
+                'en' => 'A value used by the Consumer to identify itself to the Service Provider.',
+            ),
+        ),
+        'coin:oauth:consumer_secret' => array(
+            'type' => 'text',
+            'order' => 192,
+            'default' => 'gadgetSecret',
+            'description' => array(
+                'nl' => 'A secret used by the Consumer to establish ownership of the Consumer Key.',
+                'en' => 'A secret used by the Consumer to establish ownership of the Consumer Key.',
+            ),
+        ),
+        'coin:oauth:key_type' => array(
+            'type' => 'text',
+            'order' => 193,
+            'default' => 'HMAC_SYMMETRIC',
+            'description' => array(
+                'nl' => '.',
                 'en' => 'OAuth secret for this Service Provider.',
             ),
         ),
@@ -751,36 +757,6 @@ $config = array(
                 'en' => 'Validate signature on requests and responses',
             ),
             'required' => true,
-        ),
-       'base64attributes' => array(
-            'type' => 'boolean',
-            'order' => 830,
-            'default' => true,
-            'description' => array(
-                'da' => 'Base 64 indkode attributter.',
-                'en' => 'Base 64 encode attributes',
-            ),
-            'required' => true,
-        ),
-        'assertion.encryption' => array(
-            'type' => 'boolean',
-            'order' => 830,
-            'default' => false,
-            'description' => array(
-                'da' => 'Er assertions fra denne forbindelse krypteret?',
-                'en' => 'Is assertions from this connection encrypted?',
-            ),
-            'required' => false,
-        ),
-        'NameIDFormat' => array(
-            'type' => 'text',
-            'order' => 840,
-            'default' => 'defaultvalue',
-            'description' => array(
-                'da' => 'NameID som er understÃ¸ttet for denne forbindelse.',
-                'en' => 'NameID supported by this connection.',
-                'es' => 'Cero o mas elementos de tipo type anyURI que enumeran los formatos de identificacion de nombres soportados por la entidad sistema. Ver la seccion 8.3 de [SAMLCore] para ver algunos posibles valores para este elemento.',
-            ),
         ),
     ),
 
