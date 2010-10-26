@@ -161,7 +161,7 @@ class EngineBlock_Corto_Adapter
             array('FilePath'=>ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/')
         );
 
-        $proxyServer->setSessionLogDefault(new Corto_Log_File('/tmp/corto_session'));
+        $proxyServer->setSessionLogDefault($this->_getCortoMemcacheLog());
         $proxyServer->setBindingsModule(new Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
     }
@@ -254,5 +254,16 @@ class EngineBlock_Corto_Adapter
     protected function _getProvisioning()
     {
         return new EngineBlock_Provisioning();
+    }
+
+    protected function _getCortoMemcacheLog()
+    {
+        return new Corto_Log_Memcache($this->_getMemcacheClient());
+    }
+
+    protected function _getMemcacheClient()
+    {
+        $factory = new EngineBlock_Memcache_ConnectionFactory();
+        return $factory->create();
     }
 }

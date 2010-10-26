@@ -13,23 +13,23 @@ class EngineBlock_Database_ConnectionFactory
      * @param  $mode
      * @return PDO
      */
-    public static function create($mode = null)
+    public function create($mode = null)
     {
         if ($mode === null) {
             $mode = self::MODE_WRITE;
         }
 
-        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        $configuration = $this->_getConfiguration();
         if (!isset($configuration->database)) {
             throw new EngineBlock_Exception("No database settings?!");
         }
         $databaseSettings = $configuration->database;
 
         if      ($mode === self::MODE_READ) {
-            return self::_createReadConnection($databaseSettings);
+            return $this->_createReadConnection($databaseSettings);
         }
         else if ($mode === self::MODE_WRITE) {
-            return self::_createWriteConnection($databaseSettings);
+            return $this->_createWriteConnection($databaseSettings);
         }
         else {
             throw new EngineBlock_Exception("Requested database connection with unknown mode '$mode'");
@@ -37,32 +37,30 @@ class EngineBlock_Database_ConnectionFactory
     }
 
     /**
-     * @static
      * @return PDO
      */
-    protected static function _createWriteConnection($databaseSettings)
+    protected function _createWriteConnection($databaseSettings)
     {
         if (!isset($databaseSettings->masters)) {
             throw new EngineBlock_Exception('Unable to find any settings for a database we can write to (masters)');
         }
 
-        return self::_createServerConnection($databaseSettings->masters->toArray(), $databaseSettings);
+        return $this->_createServerConnection($databaseSettings->masters->toArray(), $databaseSettings);
     }
 
     /**
-     * @static
      * @return PDO
      */
-    protected static function _createReadConnection($databaseSettings)
+    protected function _createReadConnection($databaseSettings)
     {
         if (!isset($databaseSettings->slaves)) {
             throw new EngineBlock_Exception('Unable to find any settings for a database we can read from (slaves)');
         }
 
-        return self::_createServerConnection($databaseSettings->slaves->toArray(), $databaseSettings);
+        return $this->_createServerConnection($databaseSettings->slaves->toArray(), $databaseSettings);
     }
 
-    protected static function _createServerConnection($servers, $databaseSettings)
+    protected function _createServerConnection($servers, $databaseSettings)
     {
         $randomServerKey = array_rand($servers);
         $randomServerName = $servers[$randomServerKey];
@@ -81,5 +79,10 @@ class EngineBlock_Database_ConnectionFactory
             $randomServerSettings->password
         );
         return $dbh;
+    }
+
+    protected function _getConfiguration()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
     }
 }
