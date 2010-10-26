@@ -19,10 +19,6 @@ class EngineBlock_Memcache_ConnectionFactory {
             return $this->_memcache;
         }
 
-        if (!extension_loaded('memcache')) {
-            throw new EngineBlock_Memcache_SettingsException("Memcache extension not installed");
-        }
-
         $configuration = $this->_getConfiguration();
         if (!isset($configuration->memcache)) {
             throw new EngineBlock_Memcache_SettingsException("No memcache settings");
@@ -30,7 +26,7 @@ class EngineBlock_Memcache_ConnectionFactory {
         if (!isset($configuration->memcache->servers)) {
             throw new EngineBlock_Memcache_SettingsException("No memcache servers defined");
         }
-        $memcache = new Memcache();
+        $memcache = $this->_getMemcacheClient();
         foreach ($configuration->memcache->servers as $serverName) {
             if (!isset($configuration->memcache->$serverName)) {
                 $serverConfiguration = new stdClass();
@@ -114,6 +110,10 @@ class EngineBlock_Memcache_ConnectionFactory {
 
     protected function _getMemcacheClient()
     {
+        if (!extension_loaded('memcache')) {
+            throw new EngineBlock_Memcache_SettingsException("Memcache extension not installed");
+        }
+
         return new Memcache();
     }
 }
