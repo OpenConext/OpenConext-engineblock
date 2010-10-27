@@ -178,6 +178,11 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         return $entityDescriptor;
     }
 
+    protected function _getConsentUid($response, $attributes)
+    {
+        return $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
+    }
+
     /**
      * @return PDO
      */
