@@ -60,13 +60,22 @@ class EngineBlock_SocialData
         }
     }
 
-    public function getGroupsForPerson($identifier)
+    public function getGroupsForPerson($identifier, $groupId = null)
     {
         $groupsClientGroups = $this->_getGroupsClient()->getGroups($identifier);
-        
+
         $openSocialGroups = array();
         foreach ($groupsClientGroups as $group) {
-            $openSocialGroups[] = $this->_getFieldMapper()->grouperToSocialData($group);
+             $openSocialGroup = $this->_getFieldMapper()->grouperToSocialData($group);
+             if (!$groupId) {
+                $openSocialGroups[] = $openSocialGroup;
+             }
+             else {
+                 // Filter by the group id
+                 if ($openSocialGroup['id']===$groupId) {
+                     $openSocialGroups[] = $openSocialGroup;
+                 }
+             }
         }
         return $openSocialGroups;
     }
