@@ -109,7 +109,7 @@ $config = array(
      * and/or a whitelist (mark idps that are allowed to connect to an sp). 
      * You can enable both to make this choice per entity.
      */
-    'entity.useblacklist' => false,
+    'entity.useblacklist' => true,
     'entity.usewhitelist' => true,
     
     
@@ -526,6 +526,16 @@ $config = array(
             ),
             'required' => true,
         ),
+        'base64attributes' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => true,
+            'description' => array(
+                'da' => 'Base 64 indkode attributter.',
+                'en' => 'Base 64 encode attributes',
+            ),
+            'required' => true,
+        ),
     ),
 
     /*
@@ -764,6 +774,16 @@ $config = array(
             'description' => array(
                 'nl' => 'Valider signatur på requests.',
                 'en' => 'Validate signature on requests and responses',
+            ),
+            'required' => true,
+        ),
+        'base64attributes' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => true,
+            'description' => array(
+                'da' => 'Base 64 indkode attributter.',
+                'en' => 'Base 64 encode attributes',
             ),
             'required' => true,
         ),
