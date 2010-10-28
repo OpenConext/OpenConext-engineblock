@@ -20,7 +20,7 @@ Index: www/editentity.php
 ===================================================================
 --- www/editentity.php	(revision 484)
 +++ www/editentity.php	(working copy)
-@@ -228,28 +228,44 @@
+@@ -228,28 +228,68 @@
      }
  
      // Remote entities
@@ -29,12 +29,24 @@ Index: www/editentity.php
 +    if(isset($_POST['addBlocked'])) {
          $mcontroller->setAllowedAll('no');
 -        foreach($_POST['add'] AS $key) {
++        $current = array_keys($mcontroller->getBlockedEntities());
++        // Add the ones that are selected
 +        foreach($_POST['addBlocked'] AS $key) {
              if($mcontroller->addBlockedEntity($key)) {
                  $update = TRUE;
                  $note .= 'Remote entity added: ' . $key . '<br />';
              }
          }
++        // Remove the ones that were, but are now no longer selected
++        foreach($current as $entityid) {
++            if (!in_array($entityid, $_POST['addBlocked'])) {
++                if ($mcontroller->removeBlockedEntity($entityid)) {
++                    $update = TRUE;
++                    $node .= 'Existing entity removed: '. $entityid . '<br/>';
++                }
++            }
++        }
++        
 +    } else if (count($mcontroller->getBlockedEntities())) {
 +        // There were blocked entities but they were no longer posted; we should clear them all
 +        $mcontroller->clearBlockedEntities();
@@ -44,10 +56,22 @@ Index: www/editentity.php
 +
 +    if(isset($_POST['addAllowed'])) {
 +        $mcontroller->setAllowedAll('no');
++        $current = array_keys($mcontroller->getAllowedEntities());
++        
++        // Add the ones that are selected
 +        foreach($_POST['addAllowed'] AS $key) {
 +            if($mcontroller->addAllowedEntity($key)) {
 +                $update = TRUE;
 +                $note .= 'Remote entity added: ' . $key . '<br />';
++            }
++        }
++        // Remove the ones that were, but are now no longer selected
++        foreach($current as $entityid) {
++            if (!in_array($entityid, $_POST['addAllowed'])) {
++                if ($mcontroller->removeAllowedEntity($entityid)) {
++                    $update = TRUE;
++                    $node .= 'Existing entity removed: '. $entityid . '<br/>';
++                }
 +            }
 +        }
 +    } else if (count($mcontroller->getAllowedEntities())) {
@@ -76,7 +100,7 @@ Index: www/editentity.php
      }
  
      // Change workflow
-@@ -458,10 +474,13 @@
+@@ -458,10 +498,13 @@
  $et->data['uiguard'] = new sspmod_janus_UIguard($janus_config->getValue('access'));
  $et->data['mcontroller'] = $mcontroller;
  $et->data['blocked_entities'] = $mcontroller->getBlockedEntities();
@@ -94,15 +118,7 @@ Index: lib/Entity.php
 ===================================================================
 --- lib/Entity.php	(revision 484)
 +++ lib/Entity.php	(working copy)
-@@ -508,14 +508,14 @@
-      *
-      * The function will only return true if the flag is changed.
-      *
--     * @param string $allowedall String 'yes'/'no'
-+     * @param string $allowedll String 'yes'/'no'
-      *
-      * @return bool True on change, false othervise
-      * @since      Method available since Release 1.0.0
+@@ -515,7 +515,7 @@
       * @todo Should return true on success. Also if the new value is the same as
       * the old one.
       */
@@ -119,7 +135,7 @@ Index: lib/Entity.php
 -     *
 -     * @return string AllowAll flag
 +     * Retrieve the allowall flag for the entity
-+     * @return string allowOrBlockAll flag
++     * @return string allowAll flag
       * @since Method available since Release 1.0.0
       */
 -    public function getAllowedall()
@@ -127,6 +143,23 @@ Index: lib/Entity.php
      {
          return $this->_allowedall;
      }
+@@ -659,7 +658,6 @@
+         }
+         
+         $fieldname = $this->_config->getString('entity.prettyname', NULL);
+-
+         $default = $this->_config->getArray('metadatafields.' . $this->_type);
+ 
+         if(!is_null($fieldname)) {
+@@ -678,7 +676,7 @@
+ 
+             if(empty($rows)) {
+                 $this->_prettyname =  $this->_entityid;
+-            } else if($default[$fieldname]['default'] == $rows[0]['value']) {
++            } else if(isset($defatul[$fieldname]['default']) && $default[$fieldname]['default'] == $rows[0]['value']) {
+                 $this->_prettyname =  $this->_entityid; 
+             } else {
+                 $this->_prettyname = $rows[0]['value'];
 Index: lib/EntityController.php
 ===================================================================
 --- lib/EntityController.php	(revision 484)
@@ -243,7 +276,7 @@ Index: lib/EntityController.php
                  $update = true;
              }
          }
-@@ -831,13 +855,72 @@
+@@ -831,13 +855,80 @@
      {
          assert('is_string($remoteentityid)');
  
@@ -256,7 +289,11 @@ Index: lib/EntityController.php
 +        }
          return true;
      }
-+    
+ 
+     /**
++     * Remove all blockedEntities
++     * @since Method available since Release 1.8.0
++     */
 +    public function clearBlockedEntities()
 +    {
 +        if (count($this->_blocked)) {
@@ -264,8 +301,8 @@ Index: lib/EntityController.php
 +            $this->_modified = true;
 +        }
 +    }
- 
-+        /**
++
++    /**
 +     * Add an entity to the current entitys allowed list
 +     *
 +     * If the blocked entity is alreade sey, the methos will return true.
@@ -273,7 +310,7 @@ Index: lib/EntityController.php
 +     * @param string $remoteentityid Entity id of blocked entity
 +     *
 +     * @return true Return true on success
-+     * @since Method available since Release 1.0.0
++     * @since Method available since Release 1.8.0
 +     */
 +    public function addAllowedEntity($remoteentityid)
 +    {
@@ -288,13 +325,13 @@ Index: lib/EntityController.php
 +        return false;
 +    }
 +
-     /**
++    /**
 +     * remove an entity from the current entity allowed list.
 +     *
 +     * @param string $remoteentityid The entity to be removed
 +     *
 +     * @return true Returns true on success
-+     * @since Method available since Release 1.0.0
++     * @since Method available since Release 1.8.0
 +     */
 +    public function removeAllowedEntity($remoteentityid)
 +    {
@@ -307,6 +344,10 @@ Index: lib/EntityController.php
 +        return true;
 +    }
 +    
++    /**
++     * Remove all allowedEntities
++     * @since Method available since Release 1.8.0
++     */
 +    public function clearAllowedEntities()
 +    {
 +        if (count($this->_allowed)) {
@@ -319,22 +360,29 @@ Index: lib/EntityController.php
       * Load the blocked entities from the database
       *
       * Fetches the entity id of the blocked entities from the database. The 
-@@ -849,9 +932,25 @@
+@@ -849,9 +940,32 @@
       */
      private function _loadBlockedEntities()
      {
 +        return $this->_loadLinkedEntities('blocked');
 +    }
 +    
-+    private function _loadAllowedEntities()
++    /**
++     * Load the allowed entities from the database
++     *
++     * Fetches the entity id of the allowed entities from the database. The 
++     * revision id needs to be set othervise no entities will be returned from 
++     * the database.
++     *
++     * @return bool Return true on success and false on error
++     * @since Method available since Release 1.8.0
++     */
++        private function _loadAllowedEntities()
 +    {
 +        return $this->_loadLinkedEntities('allowed');
 +    }
 +    
 +    /**
-+     * 
-+     * 
-+     * Enter description here ...
 +     * @param String $type must be 'blocked' or 'allowed'
 +     */
 +    private function _loadLinkedEntities($type)
@@ -346,7 +394,7 @@ Index: lib/EntityController.php
              WHERE `eid` = ? AND `revisionid` = ?;',
              array($this->_entity->getEid(), $this->_entity->getRevisionid())
          );
-@@ -861,12 +960,12 @@
+@@ -861,12 +975,12 @@
          }
  
          $row = $st->fetchAll(PDO::FETCH_ASSOC);
@@ -362,20 +410,18 @@ Index: lib/EntityController.php
  
          return true;
      }
-@@ -874,21 +973,26 @@
+@@ -874,21 +988,22 @@
      /**
       * Set the allowedAll flag for the current entity
       *
 -     * When setting the allowedAll flag all blocked entities of the current
-+     * When setting the blockOrAllowAll flag all blocked/allowed (depending on
-+     * configuration entity.blockmode) entities of the current
-      * entity is removed.
+-     * entity is removed.
++     * @param string $allowedall allowedAll flag, 'yes'/'no'
       *
 -     * @param string $allowedall AllowedAll flag, 'yes'/'no'
-+     * @param string $blockorallowall BlockOrAllowAll flag, 'yes'/'no'
-      *
+-     *
 -     * @return bool True if the allowedAll flag was changed. Othervise false. 
-+     * @return bool True if the blockOrAllowAll flag was changed. Othervise false. 
++     * @return bool True if the allowAll flag was changed. Othervise false. 
       * @since      Method available since Release 1.0.0
       */
      public function setAllowedAll($allowedall)
@@ -395,7 +441,7 @@ Index: lib/EntityController.php
          }
          return $return;
      }
-@@ -907,21 +1011,31 @@
+@@ -907,21 +1022,31 @@
       */
      private function _saveBlockedEntities($revision)
      {
@@ -431,7 +477,7 @@ Index: lib/EntityController.php
                  if ($st === false) {
                      return false;
                  }
-@@ -975,7 +1089,6 @@
+@@ -975,7 +1100,6 @@
          foreach ($row AS $data) {
              $this->_users[$data['userid']] = true;
          }
@@ -439,7 +485,7 @@ Index: lib/EntityController.php
  
          return true;
      }
-@@ -1126,9 +1239,10 @@
+@@ -1126,9 +1250,10 @@
      {
          assert('is_string($remoteentityid)');
  
@@ -453,7 +499,7 @@ Index: lib/EntityController.php
          return true;
      }
      
-@@ -1173,7 +1287,6 @@
+@@ -1173,7 +1298,6 @@
          foreach ($row AS $data) {
              $this->_disableConsent[$data['remoteentityid']] = $data;
          }
@@ -461,7 +507,7 @@ Index: lib/EntityController.php
  
          return true;
      }
-@@ -1217,9 +1330,10 @@
+@@ -1217,9 +1341,10 @@
       */
      public function clearConsent()
      {
@@ -475,19 +521,6 @@ Index: lib/EntityController.php
          return true;
      } 
      
-Index: lib/REST/Methods.php
-===================================================================
---- lib/REST/Methods.php	(revision 484)
-+++ lib/REST/Methods.php	(working copy)
-@@ -98,7 +98,7 @@
-         $result['parent'] = $entity->getParent();
-         $result['revisionnote'] = $entity->getRevisionnote();
-         $result['type'] = $entity->gettype();
--        $result['allowedall'] = $entity->getAllowedAll();
-+        $result['blockorallowall'] = $entity->getBlockOrAllowAll();
-         $result['workflow'] = $entity->getWorkflow();
-         $result['metadataurl'] = $entity->getMetadataURL();
-         $result['prettyname'] = $entity->getPrettyname();
 Index: docs/janus.sql
 ===================================================================
 --- docs/janus.sql	(revision 484)
@@ -636,7 +669,7 @@ Index: templates/editentity.php
      });
 +    $(".remote_check_w").change(function(){
 +        if($(this).is(":checked")) {
-+            $("#allownone_check").removeAttr("checked");
++            $("#allowall_check").removeAttr("checked");
 +            $("#allownone_check").removeAttr("checked");
 +             $(".remote_check_b").each( function() {
 +                this.checked = false;
