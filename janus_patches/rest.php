@@ -209,11 +209,22 @@ class sspmod_janus_Rest
 	        if ($spEid!=NULL) {
 		        $this->_entityController->setEntity($spEid);
 		    
-		        $blocklist = $this->_entityController->getBlockedEntities();
-		    	
-		        if (!array_key_exists($request["idpentityid"], $blocklist))
-		        {
-		        	$allowed = true;
+		        if ($this->_entityController->getEntity()->getAllowedAll()=="yes") {
+		            $allowed = true;
+		        } else {
+    		        $entities = $this->_entityController->getAllowedEntities();
+    
+                    // Check the whitelist
+                    if (count($entities)) {
+                        $allowed = (array_key_exists($request["idpentityid"], $entities));
+                    } else {
+                        // Check the blacklist
+                        $entities = $this->_entityController->getBlockedEntities();
+                        if (count($entities)) {
+                            $allowed = (!array_key_exists($request["idpentityid"], $entities));
+                        }
+                        
+                    }
 		        }
 	        }
         }    
