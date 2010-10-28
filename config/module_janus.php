@@ -109,7 +109,7 @@ $config = array(
      * and/or a whitelist (mark idps that are allowed to connect to an sp). 
      * You can enable both to make this choice per entity.
      */
-    'entity.useblacklist' => true,
+    'entity.useblacklist' => false,
     'entity.usewhitelist' => true,
     
     
