@@ -105,6 +105,15 @@ $config = array(
     'entity.prettyname' => 'displayname:nl',
 
     /*
+     * Janus supports a blacklist (mark idps that are not allowed to connect to an sp) 
+     * and/or a whitelist (mark idps that are allowed to connect to an sp). 
+     * You can enable both to make this choice per entity.
+     */
+    'entity.useblacklist' => true,
+    'entity.usewhitelist' => true,
+    
+    
+    /*
      * Enable entity types
      */
     'enable.saml20-sp' =>   true,
