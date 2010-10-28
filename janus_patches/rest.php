@@ -226,13 +226,19 @@ class sspmod_janus_Rest
      * @param array $request The request parameters (typically from $_REQUEST)
      *        The entries in $request for this method are:
      * 
-     *        Keys (optional) - one or more comma separated keys of metadata 
+     *        keys (optional) - one or more comma separated keys of metadata 
      *                          to retrieve.
      *                          Note that keys that don't exist are silently 
      *                          discarded and won't be present in the output.  
+     *        spentityid (optional) - List only those idps which are 
+     *                                whitelisted against the SP identified by
+     *                                this parameter
+     *                      
      */
     public function method_idplist($request)
     {
+        $filter = array();
+        
         // here we have access to $this->_entityController->getBlockedEntities() 
         // but we need a whitelist approach.
         if (isset($request["keys"])) {
@@ -244,7 +250,12 @@ class sspmod_janus_Rest
             }
         }
         
-        return $this->_getEntities("saml20-idp");
+        $spEntityId = NULL;
+        if (isset($request["spentityid"])) { 
+            $spEntityId = $request["spentityid"];
+        }
+        
+        return $this->_getEntities("saml20-idp", $filter, $spEntityId);
     }
     
     /**
@@ -253,7 +264,7 @@ class sspmod_janus_Rest
      * @param array $request The request parameters (typically from $_REQUEST)
      *        The entries in $request for this method are:
      * 
-     *        Keys (optional) - one or more comma separated keys of metadata 
+     *        keys (optional) - one or more comma separated keys of metadata 
      *                          to retrieve.
      *                          Note that keys that don't exist are silently 
      *                          discarded and won't be present in the output.
@@ -271,7 +282,7 @@ class sspmod_janus_Rest
             }
         }
         
-        return $this->_getEntities("saml20-sp");
+        return $this->_getEntities("saml20-sp", $filter);
     }
     
     
@@ -412,13 +423,51 @@ class sspmod_janus_Rest
      * Retrieve all entity metadata for all entities of a certain type.
      * @param String $type Supported types: "saml20-idp" or "saml20-sp"
      * @param Array $keys optional list of metadata keys to retrieve. Retrieves all if blank
+     * @param String $allowedEntityId if passed, returns only those entities that are 
+     *                         whitelisted against the given entity
      * @return Array Associative array of all metadata. The key of the array is the identifier
      */
-    protected function _getEntities($type, $keys=array())
+    protected function _getEntities($type, $keys=array(), $allowedEntityId=NULL)
     {
-    	$result = array();
+        $eids = array();
         
-        $eids = $this->_getEntityFinder()->getAllEids($type);    
+    	if (isset($allowedEntityId)) {
+    	    $eid = $this->_getEntityFinder()->findEid($allowedEntityId);
+    	    $this->_entityController->setEntity($eid);
+    	    $this->_entityController->loadEntity();
+    	    
+    	    if ($this->_entityController->getEntity()->getAllowedAll()=="yes") {
+    	        $eids = $this->_getEntityFinder()->getAllEids($type);
+    	    } else {
+    	        $entities = $this->_entityController->getAllowedEntities();
+
+    	        // Check the whitelist
+    	        if (count($entities)) {
+        	        foreach($entities as $entityid=>$data) {
+        	            $eids[] = $this->_getEntityFinder()->findEid($data["remoteentityid"]);
+    	           }
+    	        } else {
+    	            // Check the blacklist
+    	            $entities = $this->_entityController->getBlockedEntities();
+    	            if (count($entities)) {
+    	                $blockedEids = array();
+    	                foreach ($entities as $entityid=>$data) {
+    	                    $blockedEids[] = $this->_getEntityFinder()->findEid($data["remoteentityid"]);
+    	                }
+                  
+    	                // Return all entities that are not in the blacklist
+    	                $eids = array_diff($this->_getEntityFinder()->getAllEids($type), $blockedEids);
+    	            }
+    	            
+    	        }
+    	    }
+    	    
+    	} else {
+            $eids = $this->_getEntityFinder()->getAllEids($type);    
+    	}
+    	
+        $result = array();
+    	
         
         foreach($eids as $eid) {
         
