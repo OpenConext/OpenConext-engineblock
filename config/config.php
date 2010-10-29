@@ -466,11 +466,6 @@ $config = array (
 	 * This is a highly experimentar feature.
 	 */
 	'metashare.publishurl' => NULL,
-
-
-    'store.dsn' =>'mysqli://localhost/janus',
-    'store.username'=>'root',
-    'store.password'=>'engineblock',
 );
 
 
