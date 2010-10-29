@@ -13,8 +13,10 @@ $config = array(
     'admin.name' => 'WAYF sekretariatet',
     'admin.email' => 'sekretariatet@wayf.dk',
 
-    'auth' => 'database',
-    'useridattr' => 'email',
+    'auth' => 'default-sp',
+    'useridattr' => 'urn:mace:dir:attribute-def:uid',
+    #'auth'=>'admin',
+    #'useridattr' => 'user',
 
     /**
      * Mailtoken specific stuff
@@ -85,7 +87,7 @@ $config = array(
     'store' => array(
         'dsn'       => 'mysql:host=localhost;dbname=janus',
         'username'  => 'root',
-        'password'  => 'engineblock', 
+        'password'  => 'engineblock',
         'prefix'    => 'janus__',
     ),
 
@@ -330,7 +332,7 @@ $config = array(
         'certData' => array(
             'type' => 'text',
             'order' => 210,
-            'default' => 'CHANGE THIS',
+            'default' => '',
             'description' => array(
                 'nl' => 'Base 64 encoded certifikat brugt til denne forbindelse.',
                 'en' => 'Base 64 encoded certificate used for this connection.',
@@ -1149,4 +1151,8 @@ $config = array(
         ),
     ),
 );
-?>
+
+$localConfig = dirname(__FILE__) . '/module_janus.local.php';
+if (file_exists($localConfig)) {
+    require $localConfig;
+}
