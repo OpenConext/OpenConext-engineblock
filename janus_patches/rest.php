@@ -252,7 +252,7 @@ class sspmod_janus_Rest
         
         // here we have access to $this->_entityController->getBlockedEntities() 
         // but we need a whitelist approach.
-        if (isset($request["keys"])) {
+        if (isset($request["keys"]) && $request["keys"]!="") {
             $filter = explode(",", $request["keys"]);
             
             // We also need the identifier
@@ -262,7 +262,7 @@ class sspmod_janus_Rest
         }
         
         $spEntityId = NULL;
-        if (isset($request["spentityid"])) { 
+        if (isset($request["spentityid"]) && $request["spentityid"]!="") { 
             $spEntityId = $request["spentityid"];
         }
         
