@@ -3,9 +3,9 @@
 /**
  * Define application environment
  */
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV',
-              (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
+defined('ENGINEBLOCK_ENV')
+    || define('ENGINEBLOCK_ENV',
+              (getenv('ENGINEBLOCK_ENV') ? getenv('ENGINEBLOCK_ENV')
                                          : 'production'));
 
 require '../../library/EngineBlock/ApplicationSingleton.php';
