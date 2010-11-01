@@ -1,0 +1,45 @@
+<changeSet author="boy@ibuildings.nl" id="1288622909726-1">
+        <insert tableName="user_attributes">
+            <column name="user_uid" value="student"/>
+            <column name="name" value="coin-team-member"/>
+            <column name="value" value="yes"/>
+        </insert>
+        <insert tableName="user_attributes">
+            <column name="user_uid" value="student"/>
+            <column name="name" value="eduPersonAffiliation"/>
+            <column name="value" value="member"/>
+        </insert>
+        <insert tableName="user_attributes">
+            <column name="user_uid" value="student"/>
+            <column name="name" value="eduPersonAffiliation"/>
+            <column name="value" value="student"/>
+        </insert>
+        <insert tableName="user_attributes">
+            <column name="user_uid" value="student"/>
+            <column name="name" value="over-18"/>
+            <column name="value" value="yup"/>
+        </insert>
+    </changeSet>
+    <changeSet author="boy@ibuildings.nl" id="1288622909726-2">
+        <insert tableName="users">
+            <column name="uid" value="student"/>
+            <column name="created" valueDate="2010-07-29T16:16:01.0"/>
+            <column name="last_seen" valueDate="2010-08-02T07:17:14.0"/>
+        </insert>
+    </changeSet>
+    <changeSet author="boy@ibuildings.nl" id="1288622909726-3">
+        <insert tableName="consent">
+            <column name="consent_date" valueDate="2010-08-31T15:12:54.0"/>
+            <column name="usage_date" valueDate="2010-09-01T10:30:05.0"/>
+            <column name="hashed_user_id" value="204036a1ef6e7360e536300ea78c6aeb4a9333dd"/>
+            <column name="service_id" value="https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp"/>
+            <column name="attribute" value="e0d6631863fea8b5face5fc51c1e6f72fbac1d08"/>
+        </insert>
+        <insert tableName="consent">
+            <column name="consent_date" valueDate="2010-09-01T10:25:11.0"/>
+            <column name="usage_date" valueDate="2010-10-06T11:14:42.0"/>
+            <column name="hashed_user_id" value="da39a3ee5e6b4b0d3255bfef95601890afd80709"/>
+            <column name="service_id" value="https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp"/>
+            <column name="attribute" value="1d5435d11e7ebc9fdfeea8ac18ebc4fd10277793"/>
+        </insert>
+    </changeSet>
