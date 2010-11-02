@@ -21,6 +21,7 @@ Requirements
 * LDAP
 * Grouper
 * Service Registry
+* wget
 
 Installation
 ------------
@@ -39,6 +40,8 @@ Where "production" can be replace by your environment of choice.
 
 * Configure application config
 
+Configure your database connection, 
+
   nano application/config/application.ini
 
 * Create the database
@@ -53,16 +56,12 @@ Where "production" can be replace by your environment of choice.
 
   mysql> create database engine_block2 default charset utf8 default collate utf8_unicode_ci;
 
+* Download & Install MySQL JDBC driver
+
+  cd database && ./install_jdbc_driver.sh && cd ..
+
 * Install database schema
 
-  java -jar ./database/liquibase/liquibase.jar \
-
-
-* ...
+  cd database && ./migrate.sh && cd ..
 
 * Install Apache Virtual Hosts
-
-
-
-Upgrade
--------
