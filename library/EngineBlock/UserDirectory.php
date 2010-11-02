@@ -81,8 +81,9 @@ class EngineBlock_UserDirectory
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
 
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonId($newAttributes);
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = $this->_getCollabPersonIsGuest(
-            $newAttributes, $saml2attributes, $idpEntityMetadata);
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
+            $newAttributes, $saml2attributes, $idpEntityMetadata
+        )? 'TRUE' : 'FALSE');
 
         $now = date(DATE_RFC822);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_REGISTERED]    = $now;
@@ -126,9 +127,9 @@ class EngineBlock_UserDirectory
         $newAttributes = $user + $newAttributes;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = $this->_getCollabPersonIsGuest(
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
             $newAttributes, $saml2attributes, $idpEntityMetadata
-        );
+        )? 'TRUE' : 'FALSE');
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
         $this->_getLdapClient()->update($dn, $newAttributes);
@@ -157,11 +158,17 @@ class EngineBlock_UserDirectory
     }
 
     /**
-     * 1) bestaat het eduPersonEntitlement attribuut met de waarde
-     *   urn:surfnet:entl:instellingsgebruik => instellingsgebruiker
-     * 2) is het een IDP uit de SURFfederatie (statische whitelist in COIN,
-     *  later onderdeel van de Janus info) => instellingsgebruiker
-     * 3) anders => gast
+     * Figure out of a person with given attributes is a guest user.
+     *
+     * Algorithm is as follows:
+     * - By default you are a guest.
+     * - Unless you have a 'urn:surfnet:entl:intesllingsgebruik' attribute with the value 'instellingsgebruiker'
+     * - Or, if you do not have this attribute, if your Idp is marked as part of the 'federation' in the EngineBlock configuration
+     *
+     * @param  $attributes
+     * @param  $saml2attributes
+     * @param  $idpEntityMetadata
+     * @return bool
      */
     protected function _getCollabPersonIsGuest($attributes, $saml2attributes, $idpEntityMetadata)
     {
@@ -176,9 +183,9 @@ class EngineBlock_UserDirectory
          * @todo This is a hack for now, this SHOULD be set in the Service Registry with a custom attribute
          */
         else if (isset($configuration->federationIdps)) {
-            $isGuest = in_array($idpEntityMetadata['EntityId'], $configuration->federationIdps->toArray());
+            $isGuest = !in_array($idpEntityMetadata['EntityId'], $configuration->federationIdps->toArray());
         }
-        return ($isGuest?'TRUE':'FALSE');
+        return $isGuest;
     }
 
     protected function _getDnForLdapAttributes($attributes)
