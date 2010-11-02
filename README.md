@@ -4,8 +4,8 @@ SURFnet Collaboration Infrastructure EngineBlock
 The SURFnet Collaboration Infrastructure EngineBlock is a multi-purpose software component
 that has as it's goal the following:
 
-- Publicly Proxy and manage Single Sign On logins
-- Privately offer OpenSocial data based on the SSO user data
+- Publicly Proxy and manage Single Sign On authentication requests and responses
+- Privately offer OpenSocial data based on the SSO user data and Grouper information
 
 Requirements
 ------------
@@ -15,7 +15,6 @@ Requirements
 ** memcache
 ** ldap
 * Java > 1.5
-* JDBC MySQL Driver (Download driver from: http://dev.mysql.com/downloads/connector/j/)
 * MySQL > 5.x
 * Memcached
 * LDAP
@@ -37,10 +36,13 @@ Edit /etc/profile and add:
   export ENGINEBLOCK_ENV="production"
 
 Where "production" can be replace by your environment of choice.
+Then open a new terminal to make sure you have the new environment.
 
 * Configure application config
 
-Configure your database connection, 
+Configure:
+1. Databases
+2. Encryption keys
 
   nano application/config/application.ini
 
@@ -65,3 +67,84 @@ Configure your database connection,
   cd database && ./migrate.sh && cd ..
 
 * Install Apache Virtual Hosts
+
+Install 2 HTTPS virtual hosts.
+Make sure the ENGINEBLOCK_ENV is set.
+Make sure the rewrite rules from www/.htaccess are loaded.
+Protect your engineblock internal interface from external requests.
+
+Example:
+  <VirtualHost *:80>
+        ServerName engineblock-internal.example.com
+    
+        RewriteEngine   on
+        RewriteCond     %{SERVER_PORT} ^80$
+        RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R]
+  </VirtualHost>
+
+  <Virtualhost *:443>
+        ServerAdmin youremail@example.com
+
+        DocumentRoot /var/www/html/coin-engineblock/www/internal
+        ServerName engineblock-internal.example.com
+
+        <Directory "/var/www/html/coin-engineblock/www">
+            AllowOverride None
+        </Directory>
+
+        Include /var/www/html/coin-engineblock/www/.htaccess
+
+        SetEnv ENGINEBLOCK_ENV production
+
+        SSLEngine on
+        SSLCertificateFile      /etc/httpd/ssl/engineblock.pem
+        SSLCertificateKeyFile   /etc/httpd/ssl/engineblock.key
+        SSLCertificateChainFile /etc/httpd/ssl/enbineblock-chain.pem
+  </VirtualHost>
+
+  <VirtualHost *:80>
+        ServerName engineblock.example.com
+
+        RewriteEngine   on
+        RewriteCond     %{SERVER_PORT} ^80$
+        RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R]
+  </VirtualHost>
+
+  <Virtualhost *:443>
+        ServerAdmin youremail@example.com
+
+        DocumentRoot /var/www/html/coin-engineblock/www/public
+        ServerName   engineblock.example.com
+
+        <Directory "/var/www/html/coin-engineblock/www">
+            AllowOverride None
+            Order Allow,Deny
+            # Only allow from private ip adresses
+            # http://www.jpsdomain.org/networking/nat.html
+            allow from 127.0.0.0/8
+            allow from 10.0.0.0/8
+            allow from 172.16.0.0/12
+            allow from 192.168.0.0/16            
+        </Directory>
+
+        Include /var/www/html/coin-engineblock/www/.htaccess
+
+        SetEnv ENGINEBLOCK_ENV production
+
+        SSLEngine on
+        SSLCertificateFile      /etc/httpd/ssl/engineblock.pem
+        SSLCertificateKeyFile   /etc/httpd/ssl/engineblock.key
+        SSLCertificateChainFile /etc/httpd/ssl/enbineblock-chain.pem
+  </VirtualHost>
+
+* Test your EngineBlock instance
+
+Use these URLs to test your Engineblock instance:
+[http://engineblock.example.com][]
+[https://engineblock.example.com][]
+[https://engineblock.example.com/authentication/idp/metadata][]
+[https://engineblock.example.com/authentication/sp/metadata][]
+[https://engineblock.dev.coin.surf.net/authentication/proxy/idps-metadata][]
+[http://engineblock-internal.example.com][]
+[https://engineblock-internal.example.com][]
+[https://engineblock-internal.example.com/social/][]
