@@ -167,9 +167,9 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
     }
 
-    protected function _getConsentConfigurationValue($application, $name, $default = null)
+    protected function _getConsentConfigurationValue($name, $default = null)
     {
-        $configuration = $application->getConfiguration();
+        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
         if (!isset($configuration->authentication)) {
             return $default;
         }
