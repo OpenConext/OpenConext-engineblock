@@ -67,39 +67,21 @@ class EngineBlock_Dispatcher
 
     protected function _handleDispatchException(Exception $e)
     {
-        $this->_reportError($e);
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+
+        $application->reportError($e);
 
         if (!$this->_useErrorHandling) {
             throw $e;
         }
 
-        $errorConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->error;
+        $errorConfiguration = $application->getConfiguration()->error;
         $module         = $errorConfiguration->module;
         $controllerName = $errorConfiguration->controller;
         $action         = $errorConfiguration->action;
 
         $controllerInstance = $this->_getControllerInstance($module, $controllerName);
         $controllerInstance->handleAction($action, array($e));
-    }
-
-    protected function _reportError(Exception $exception)
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        if (!isset($application->getConfiguration()->error)) {
-            return true;
-        }
-        $error = $application->getConfiguration()->error;
-        if (!isset($error->reports)) {
-            return true;
-        }
-
-        $reporter = $this->_getErrorReporter($error->reports);
-        $reporter->report($exception);
-    }
-
-    protected function _getErrorReporter(Zend_Config $reports)
-    {
-        return new EngineBlock_Error_Reporter($reports);
     }
 
     protected function _getControllerInstance($module, $controllerName)
