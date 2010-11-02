@@ -1,6 +1,6 @@
 <?php
  
-class EngineBlock_Error_Report_Mail 
+class EngineBlock_Error_Report_Mail implements EngineBlock_Error_Report_Interface
 {
     const DEFAULT_FROM = 'SURFnet EngineBlock <coin-tech@surfnet.nl>';
     const DEFAULT_SUBJECT_TEMPLATE = '[EngineBlock Error<?php echo " " . EngineBlock_ApplicationSingleton::getInstance()->getApplicationEnvironmentId(); ?>] <?php echo $exception->getMessage(); ?>';
@@ -19,15 +19,18 @@ SERVER:
 ';
 
 
+    /**
+     * @var Zend_Config
+     */
     protected $_config;
     protected $_originalIniSettings = array();
 
-    public function __construct(Zend_Config $config)
+    public function __construct($config)
     {
         $this->_config = $config;
     }
 
-    public function report($exception)
+    public function report(Exception $exception)
     {
         if (!isset($this->_config->to)) {
             throw new Exception('No to address set for mail reporter, unable to report!');

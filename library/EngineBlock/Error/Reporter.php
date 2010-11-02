@@ -15,7 +15,7 @@ class EngineBlock_Error_Reporter
         $this->_reports = $reports;
     }
 
-    public function report($exception)
+    public function report(Exception $exception)
     {
         foreach ($this->_reports as $reportType => $reportConfiguration) {
             $className = 'EngineBlock_Error_Report_' . ucfirst($reportType);
