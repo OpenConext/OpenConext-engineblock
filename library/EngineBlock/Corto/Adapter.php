@@ -123,6 +123,7 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
+            'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true)
         ));
 
         $attributes = array();
@@ -164,6 +165,21 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setSessionLogDefault($this->_getCortoMemcacheLog());
         $proxyServer->setBindingsModule(new Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
+    }
+
+    protected function _getConsentConfigurationValue($application, $name, $default = null)
+    {
+        $configuration = $application->getConfiguration();
+        if (!isset($configuration->authentication)) {
+            return $default;
+        }
+        if (!isset($configuration->authentication->consent)) {
+            return $default;
+        }
+        if (!isset($configuration->authentication->consent->$name)) {
+            return $default;
+        }
+        return $configuration->authentication->consent->$name;
     }
 
     /**
@@ -243,7 +259,9 @@ class EngineBlock_Corto_Adapter
 
     protected function _getAttributeProviders()
     {
-        return array(new EngineBlock_AttributeProvider_Dummy());
+        return array(
+            new EngineBlock_AttributeProvider_Dummy(),
+        );
     }
 
     protected function _getAttributeAggregator($providers)
