@@ -31,7 +31,7 @@ Installation
 
 * Configure environment
 
-Edit /etc/profile and add:
+Edit /etc/profile (as root or with sudo) and add:
 
   export ENGINEBLOCK_ENV="production"
 
@@ -40,9 +40,8 @@ Then open a new terminal to make sure you have the new environment.
 
 * Configure application config
 
-Configure:
-1. Databases
-2. Encryption keys
+Review all configuration settings in 'production' and make sure they are set properly
+for your environment.
 
   nano application/config/application.ini
 
