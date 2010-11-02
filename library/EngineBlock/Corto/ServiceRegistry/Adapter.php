@@ -22,7 +22,16 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         $metadata = array();
         $idPs = $this->_serviceRegistry->getIdpList();
         foreach ($idPs as $idPEntityId => $idP) {
-            $metadata[$idPEntityId] = self::convertServiceRegistryEntityToCortoEntity($idP);
+            try {
+                $metadata[$idPEntityId] = self::convertServiceRegistryEntityToCortoEntity($idP);
+            } catch (Exception $e) {
+                // Whoa, something went wrong trying to convert the SR entity to a Corto entity
+                // We can't use this entity, but we can continue after we've reported
+                // this serious error
+                $application = EngineBlock_ApplicationSingleton::getInstance();
+                $application->reportError($e);
+                continue;
+            }
         }
         return $metadata;
     }
@@ -32,7 +41,16 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         $metadata = array();
         $sPs = $this->_serviceRegistry->getSPList();
         foreach ($sPs as $sPEntityId => $sP) {
-            $metadata[$sPEntityId] = self::convertServiceRegistryEntityToCortoEntity($sP);
+            try {
+                $metadata[$sPEntityId] = self::convertServiceRegistryEntityToCortoEntity($sP);
+            } catch (Exception $e) {
+                // Whoa, something went wrong trying to convert the SR entity to a Corto entity
+                // We can't use this entity, but we can continue after we've reported
+                // this serious error
+                $application = EngineBlock_ApplicationSingleton::getInstance();
+                $application->reportError($e);
+                continue;
+            }
         }
         return $metadata;
     }
@@ -61,6 +79,9 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             );
         }
         if (isset($serviceRegistryEntity['name'])) {
+            if ($serviceRegistryEntity['name']['en']==="EngineBlock Dev Test SP") {
+                throw new Exception('Whoa, cant use this sp man');
+            }
             $cortoEntity['Name'] = $serviceRegistryEntity['name'];
         }
         if (isset($serviceRegistryEntity['description'])) {
