@@ -6,8 +6,8 @@ cd .. &&
 echo "Using: $ENGINEBLOCK_DB_USER:$ENGINEBLOCK_DB_PASSWORD@$ENGINEBLOCK_DB_HOST/$ENGINEBLOCK_DB_NAME" &&
 java -jar database/liquibase/liquibase.jar \
     --classpath=database/mysql-connector-java-5.0.8/mysql-connector-java-5.0.8-bin.jar \
-    --changeLogFile=changelog/db.changelog-1.0.xml \
-    --url="jdbc:mysql://$ENGINEBLOCK_DB_HOST/$ENGINEBLOCK_DB_NAME" \
+    --changeLogFile=database/changelog/db.changelog-master.xml \
+    --url="jdbc:mysql://$ENGINEBLOCK_DB_HOST/$ENGINEBLOCK_DB_NAME?autoReconnect=true&sessionVariables=storage_engine=InnoDB" \
     --username=$ENGINEBLOCK_DB_USER \
     --password=$ENGINEBLOCK_DB_PASSWORD \
     migrate

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
     <changeSet author="boy@ibuildings.nl" id="1288716266181-1">
-        <sql>SET storage_engine = InnoDB;</sql>
         <createTable tableName="consent">
             <column name="consent_date" type="TIMESTAMP">
                 <constraints nullable="false"/>
@@ -21,7 +20,6 @@
         </createTable>
     </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-2">
-        <sql>SET storage_engine = InnoDB;</sql>
         <createTable tableName="user_attributes">
             <column name="user_uid" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -35,7 +33,6 @@
         </createTable>
     </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-3">
-        <sql>SET storage_engine = InnoDB;</sql>
         <createTable tableName="users">
             <column name="uid" type="VARCHAR(255)">
                 <constraints nullable="false" primaryKey="true"/>
