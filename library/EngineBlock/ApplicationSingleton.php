@@ -219,7 +219,7 @@ class EngineBlock_ApplicationSingleton
 
     public function handleException(Exception $e)
     {
-        $this->_reportError($e);
+        $this->reportError($e);
 
         $message = 'A exceptional condition occurred, it has been logged and sent to the administrator.';
         if ($this->getConfiguration()->debug) {
@@ -236,7 +236,7 @@ class EngineBlock_ApplicationSingleton
             return;
         }
 
-        $this->_reportError(new Exception($errorMesage . " [$errorFile:$errorLine]", $errorNumber));
+        $this->reportError(new Exception($errorMesage . " [$errorFile:$errorLine]", $errorNumber));
 
         /* Execute PHP internal error handler */
         return false;

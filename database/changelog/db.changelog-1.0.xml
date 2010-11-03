@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
     <changeSet author="boy@ibuildings.nl" id="1288716266181-1">
+        <sql>SET storage_engine = InnoDB;</sql>
         <createTable tableName="consent">
             <column name="consent_date" type="TIMESTAMP">
                 <constraints nullable="false"/>
@@ -20,6 +21,7 @@
         </createTable>
     </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-2">
+        <sql>SET storage_engine = InnoDB;</sql>
         <createTable tableName="user_attributes">
             <column name="user_uid" type="VARCHAR(255)">
                 <constraints nullable="false"/>
@@ -33,6 +35,7 @@
         </createTable>
     </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-3">
+        <sql>SET storage_engine = InnoDB;</sql>
         <createTable tableName="users">
             <column name="uid" type="VARCHAR(255)">
                 <constraints nullable="false" primaryKey="true"/>
@@ -51,12 +54,6 @@
     <changeSet author="boy@ibuildings.nl" id="1288716266181-5">
         <addPrimaryKey columnNames="user_uid, name, value" tableName="user_attributes"/>
     </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-6">
-        <createIndex indexName="PRIMARY" tableName="consent" unique="true">
-            <column name="hashed_user_id"/>
-            <column name="service_id"/>
-        </createIndex>
-    </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-7">
         <createIndex indexName="hashed_user_id" tableName="consent" unique="false">
             <column name="hashed_user_id"/>
@@ -67,13 +64,6 @@
             <column name="service_id"/>
         </createIndex>
     </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-9">
-        <createIndex indexName="PRIMARY" tableName="user_attributes" unique="true">
-            <column name="name"/>
-            <column name="user_uid"/>
-            <column name="value"/>
-        </createIndex>
-    </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-10">
         <createIndex indexName="name" tableName="user_attributes" unique="false">
             <column name="name"/>
@@ -82,11 +72,6 @@
     <changeSet author="boy@ibuildings.nl" id="1288716266181-11">
         <createIndex indexName="user_uid" tableName="user_attributes" unique="false">
             <column name="user_uid"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-12">
-        <createIndex indexName="PRIMARY" tableName="users" unique="true">
-            <column name="uid"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>

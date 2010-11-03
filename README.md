@@ -15,7 +15,9 @@ Requirements
 ** memcache
 ** ldap
 * Java > 1.5
-* MySQL > 5.x
+* MySQL > 5.x with settings:
+** default-storage-engine=InnoDB (recommended)
+** default-collation=utf8_unicode_ci (recommended)
 * Memcached
 * LDAP
 * Grouper

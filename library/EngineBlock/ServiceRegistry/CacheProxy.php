@@ -4,7 +4,7 @@ class EngineBlock_ServiceRegistry_CacheProxy
 {
     const DEFAULT_LIFETIME = 3600;
 
-    protected function __call($name, $arguments)
+    public function __call($name, $arguments)
     {
         $client = $this->_getClient();
 
