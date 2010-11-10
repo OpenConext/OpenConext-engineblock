@@ -16,6 +16,7 @@ class EngineBlock_Groups_Grouper extends EngineBlock_Groups_Abstract
      */
     public function getGroups($userIdentifier)
     {
+        // todo: this method doesn't take stem into account yet
         $request = <<<XML
 <WsRestGetGroupsRequest>
     <subjectLookups>
@@ -47,10 +48,11 @@ XML;
         return $groups;
     }
 
-    public function getMembers($userId, $groupName)
+    public function getMembers($userIdentifier, $groupIdentifier)
     {
-        $userIdEncoded   = htmlentities($userId);
-        $groupXmlEncoded = htmlentities($groupName);
+        // todo: this method doesn't take stem into account yet
+        $userIdEncoded   = htmlentities($userIdentifier);
+        $groupXmlEncoded = htmlentities($groupIdentifier);
         $request = <<<XML
 <WsRestGetMembersRequest>
   <includeSubjectDetail>T</includeSubjectDetail>
@@ -78,6 +80,57 @@ XML;
         }
         
         return $members;
+    }
+    
+    /**
+     * Check whether the given user is a member of the given group.
+     * @param $userIdentifier The user id to check
+     * @param $groupIdentifier The group to check
+     * @return boolen
+     */
+    public function isMember($userIdentifier, $groupIdentifier)
+    {
+        $userIdEncoded   = htmlentities($userIdentifier);
+        $stem = $this->getGroupStem();
+        
+        $request = <<<XML
+<WsRestHasMemberRequest>
+  <subjectLookups>
+    <WsSubjectLookup>
+      <subjectId>$userIdEncoded</subjectId>
+    </WsSubjectLookup>
+  </subjectLookups>
+  <actAsSubjectLookup>
+    <subjectId>$userIdEncoded</subjectId>
+  </actAsSubjectLookup>
+</WsRestHasMemberRequest>
+XML;
+
+        $filter = urlencode((!is_null($stem)?$stem.":":"").$groupIdentifier);
+        try {
+            
+            $result = $this->_doRest("groups/$filter/members", $request);
+            if ((String)$result->results->WsHasMemberResult->wsSubject->resultCode=="SUCCESS") {
+                return true;
+            }
+        } 
+        catch (Exception $e) {   
+            
+            // If there's an exception, either something went wrong, OR we're not a member (in which case we get an exception
+            // instead of a clean error; since if we're not a member, we're not allowd to make this call.
+            // This means we've got to use a crude way to distinguish between actual exceptions (grouper down/unreachable) and the situation
+            // where we're not a member.
+            $msg = $e->getMessage();
+            if (strpos($msg, "GROUP_NOT_FOUND")!==false) {
+                // Most likely we're not a member.
+                return false;
+            }  else {
+                // Most likely a system failure. Rethrow.
+                throw $e;
+            }
+        }
+        
+        return false;
     }
     
     /**

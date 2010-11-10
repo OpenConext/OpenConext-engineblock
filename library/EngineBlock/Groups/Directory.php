@@ -10,6 +10,7 @@ class EngineBlock_Groups_Directory
     /**
      * Get an instance of a group provider interface
      * @param String $groupProviderIdentifier the identifier that indicates which group provider to instantiate
+     * @return EngineBlock_Groups_Abstract
      */
     public static function createGroupsClient($groupProviderIdentifier="default")
     {

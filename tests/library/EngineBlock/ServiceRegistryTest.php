@@ -112,8 +112,17 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
     public function testGetIdpList()
     {
         $result = $this->EngineBlock_ServiceRegistry->getIdpList();
+        
         $this->assertEquals(2, count($result));
         $this->assertEquals("Ivo's IDP", $result["http://ivotestidp.local"]["name:en"]);
+        
+        $result = $this->EngineBlock_ServiceRegistry->getIdpList(array(), "someSP");
+        $this->assertEquals(1, count($result), "Idplist not correctly filtered by SP");
+
+        $result = $this->EngineBlock_ServiceRegistry->getIdpList(array(), NULL);
+        $this->assertEquals(2, count($result), "Idplist not correctly ignoring NULL sp");
+        
+        
     }
     
     public function testGetSpList()

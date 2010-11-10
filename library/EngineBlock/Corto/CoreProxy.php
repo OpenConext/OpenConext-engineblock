@@ -5,6 +5,11 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
     protected $_headers = array();
     protected $_output;
 
+    protected $_voContext = null;
+    
+    const VO_CONTEXT_KEY          = 'voContext';
+    
+    
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'       => 'authentication/idp/single-sign-on',
         'continueToIdP'             => 'authentication/idp/process-wayf',
@@ -40,8 +45,19 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         throw new Corto_ProxyServer_Exception("Unable to map URL '$url' to EngineBlock URL");
     }
 
+    protected function _createBaseResponse($request)
+    {
+        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
+            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
+            $this->setVirtualOrganisationContext($vo);
+        }
+        
+        return parent::_createBaseResponse($request);
+    }
+    
     public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "")
     {
+        
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
             return parent::getHostedEntityUrl($entityCode, $serviceName, $remoteEntityId);
         }
@@ -53,10 +69,24 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
 
         $host = $_SERVER['HTTP_HOST'];
 
-        $mappedUri = $this->_serviceToControllerMapping[$serviceName] . ($remoteEntityId ? '/' . md5($remoteEntityId) : '');
+        $mappedUri = $this->_serviceToControllerMapping[$serviceName] .
+            ($this->_voContext!=null && $serviceName != "sPMetadataService" ? '/' . "vo:".$this->_voContext : '') .
+            ($remoteEntityId ? '/' . md5($remoteEntityId) : '');
+                    
         return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : '') . $mappedUri;
     }
 
+    public function setVirtualOrganisationContext($voContext)
+    {
+        $this->_voContext = $voContext;
+    }
+    
+    public function getVirtualOrganisationContext()
+    {
+        return $this->_voContext;
+    }
+  
+    
     public function getOutput()
     {
         return $this->_output;

@@ -46,6 +46,9 @@ class RestClientMock
         if ($this->_method=="findidentifiersbymetadata") {
         	return array("http://ivotestsp.local");
         }
+        if ($this->_method=="idplist" && isset($this->_params["spentityid"])) {
+            return array("http://ivotestidp.local"=>array("name:en"=>"Ivo's IDP", "description:en"=>"A description"));
+        }
         if ($this->_method=="idplist") {
         	return array("http://ivotestidp.local"=>array("name:en"=>"Ivo's IDP", "description:en"=>"A description"),
         	             "http://ivotestidp2.local"=>array("name:en"=>"Another IDP", "description:en"=>"Another description"));

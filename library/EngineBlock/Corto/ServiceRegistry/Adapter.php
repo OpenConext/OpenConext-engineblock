@@ -12,6 +12,38 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         $this->_serviceRegistry = $serviceRegistry;
     }
 
+    /**
+     * Given a list of (SAML2) entities, filter out the idps that are not allowed
+     * for the given Service Provider.
+     *
+     * @todo makes a call for EVERY idp to the service registry,
+     *       the SR should just implement 1 call for all allowed IdPs
+     *
+     * @param  $entities
+     * @param  $spEntityId
+     * @return array Filtered entities
+     */
+    public function filterEntitiesBySp(array $entities, $spEntityId)
+    {
+        foreach ($entities as $entityId => $entityData) {
+            if (isset($entityData['SingleSignOnService'])) {
+                // entity is an idp
+                if (!$this->_serviceRegistry->isConnectionAllowed(
+                    $spEntityId,
+                    $entityId
+                )) {
+                    unset($entities[$entityId]);
+                }
+            }
+        }
+        return $entities;
+    }
+    
+    public function isConnectionAllowed($spEntityId, $idpEntityId)
+    {
+        return $this->_serviceRegistry->isConnectionAllowed($spEntityId, $idpEntityId);
+    }
+
     public function getRemoteMetaData()
     {
         return $this->_getRemoteSPsMetaData() + $this->_getRemoteIdPsMetadata();

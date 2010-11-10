@@ -100,14 +100,18 @@ class EngineBlock_ServiceRegistry_Client
      * IDP entities.
      * @param array $keys An array of keys to retrieve. Retrieves
      *                    all available keys if omited or empty
+     * @param String $forSpEntityId An optional identifier of an SP
+     *               If present, idplist will return a list of only the
+     *               idps that this sp is allowed to authenticate against.
      * @return array An associative array of values, indexed by IDP 
      *               identifier. Each value is another associative 
      *               array with key/value pairs containing the metadata.
      */
-    public function getIdpList($keys=array())
+    public function getIdpList($keys=array(), $forSpEntityId=NULL)
     {
         $response = $this->_getRestClient()->idplist()
                                            ->keys(implode(",", $keys))
+                                           ->spentityid($forSpEntityId)
                                            ->get();                                        
         return $response;                                          
     }

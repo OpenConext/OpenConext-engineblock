@@ -2,12 +2,26 @@
  
 class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
-    public function singleSignOnAction($idPEntityId = null)
+    public function singleSignOnAction($argument = null)
     {
         $this->setNoRender();
 
-        $proxyServer = new EngineBlock_Corto_Adapter();
-        $proxyServer->singleSignOn($idPEntityId);
+        try {
+     
+            $proxyServer = new EngineBlock_Corto_Adapter();
+      
+            $idPEntityId = NULL;
+            
+            if (substr($argument, 0, 3)=="vo:") {
+                $proxyServer->setVirtualOrganisationContext(substr($argument,3));
+            } else {
+                $idPEntityId = $argument;
+            }
+
+            $proxyServer->singleSignOn($idPEntityId);
+        } catch(EngineBlock_Groups_Exception_UserDoesNotExist $e) {
+            EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse()->setRedirectUrl('/error/myerror');
+        }
     }
 
     public function processWayfAction()
@@ -18,11 +32,16 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $proxyServer->processWayf();
     }
 
-    public function metadataAction()
+    public function metadataAction($argument = null)
     {
         $this->setNoRender();
-
+        
         $proxyServer = new EngineBlock_Corto_Adapter();
+        
+        if (substr($argument, 0, 3)=="vo:") {
+            $proxyServer->setVirtualOrganisationContext(substr($argument,3));
+        }
+        
         $proxyServer->idPMetadata();
     }
 

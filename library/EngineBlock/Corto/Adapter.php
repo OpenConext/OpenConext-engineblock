@@ -5,6 +5,10 @@ require ENGINEBLOCK_FOLDER_LIBRARY_CORTO . 'Corto/ProxyServer.php';
 
 spl_autoload_register(array('EngineBlock_Corto_Adapter', 'cortoAutoLoad'));
 
+class EngineBlock_Exception_UserNotMember extends EngineBlock_Exception
+{
+}
+
 class EngineBlock_Corto_Adapter 
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
@@ -17,6 +21,31 @@ class EngineBlock_Corto_Adapter
      * @var EngineBlock_Corto_CoreProxy
      */
     protected $_proxyServer;
+    
+    /**
+     * @var String The name of the currently hosted Corto hosted entity.
+     */
+    protected $_hostedEntity;
+    
+    /**
+     * @var String the name of the Virtual Organisation context (if any)
+     */
+    protected $_voContext = NULL;
+
+    /**
+     * @var mixed Callback called on Proxy server after configuration
+     */
+    protected $_remoteEntitiesFilter = NULL;
+    
+    public function __construct($hostedEntity = NULL) {
+        
+        if ($hostedEntity == NULL) {
+            $hostedEntity = self::DEFAULT_HOSTED_ENTITY;
+        }
+        
+        $this->_hostedEntity = $hostedEntity;
+        
+    }
 
     /**
      * Simple autoloader for Corto, tries to autoload all classes with Corto_ from the Corto/library folder.
@@ -41,7 +70,24 @@ class EngineBlock_Corto_Adapter
 
     public function singleSignOn($idPProviderHash)
     {
+        $this->_setRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
+    }
+
+    protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    {
+        /**
+         * Use the binding module to get the request, then
+         * store it in _REQUEST so Corto will think it has received it
+         * from an internal binding, because if Corto would try to
+         * get the request again from the binding module, it would fail.
+         */
+        $request = $_REQUEST['SAMLRequest'] = $proxyServer->getBindingsModule()->receiveRequest();
+        $spEntityId = $request['saml:Issuer']['__v'];
+        return $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
+            $entities,
+            $spEntityId
+        );
     }
 
     public function idPMetadata()
@@ -78,6 +124,11 @@ class EngineBlock_Corto_Adapter
     {
         $this->_callCortoServiceUri('processedAssertionConsumerService');
     }
+    
+    public function setVirtualOrganisationContext($virtualOrganisation)
+    {
+        $this->_voContext = $virtualOrganisation;
+    }
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
     {
@@ -93,9 +144,11 @@ class EngineBlock_Corto_Adapter
 
     protected function _getCortoUri($cortoServiceName, $idPProviderHash = "")
     {
-        $cortoHostedEntity  = self::DEFAULT_HOSTED_ENTITY;
+        $cortoHostedEntity  = $this->_getHostedEntity();
         $cortoIdPHash       = $idPProviderHash;
-        return '/' . $cortoHostedEntity . ($cortoIdPHash ? '_' . $cortoIdPHash : '') . '/' . $cortoServiceName;
+        $result =  '/' . $cortoHostedEntity . ($cortoIdPHash ? '_' . $cortoIdPHash : '') . '/' . $cortoServiceName;
+        
+        return $result;
     }
 
     protected function _initProxy()
@@ -119,6 +172,10 @@ class EngineBlock_Corto_Adapter
     protected function _configureProxyServer(Corto_ProxyServer $proxyServer)
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
+        
+        if ($this->_voContext!=null) {
+            $proxyServer->setVirtualOrganisationContext($this->_voContext);
+        }
 
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
@@ -131,7 +188,7 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setAttributeMetadata($attributes);
 
         $proxyServer->setHostedEntities(array(
-            $proxyServer->getHostedEntityUrl('main') => array(
+            $proxyServer->getHostedEntityUrl($this->_hostedEntity) => array(
                 'certificates' => array(
                     'public'    => $application->getConfiguration()->encryption->key->public,
                     'private'   => $application->getConfiguration()->encryption->key->private,
@@ -141,21 +198,26 @@ class EngineBlock_Corto_Adapter
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
-                        'Location' => $proxyServer->getHostedEntityUrl('main', 'provideConsentService'),
+                        'Location' => $proxyServer->getHostedEntityUrl($this->_hostedEntity, 'provideConsentService'),
                     ),
                 ),
                 'keepsession' => true,
             ),
         ));
 
-        $proxyServer->setRemoteEntities($this->_getRemoteEntities() + array(
-            $proxyServer->getHostedEntityUrl('main', 'idPMetadataService') => array(
+        /**
+         * Add ourselves as valid IdP
+         */
+        $engineBlockEntities = array(
+            $proxyServer->getHostedEntityUrl($this->_hostedEntity, 'idPMetadataService') => array(
                 'certificates' => array(
                     'public'    => $application->getConfiguration()->encryption->key->public,
                     'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
             )
-        ));
+        );
+        $remoteEntities = $this->_getRemoteEntities();
+        $proxyServer->setRemoteEntities($remoteEntities + $engineBlockEntities);
 
         $proxyServer->setTemplateSource(
             Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
@@ -163,8 +225,19 @@ class EngineBlock_Corto_Adapter
         );
 
         $proxyServer->setSessionLogDefault($this->_getCortoMemcacheLog());
-        $proxyServer->setBindingsModule(new Corto_Module_Bindings($proxyServer));
+        
+        $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
+
+        if ($this->_remoteEntitiesFilter) {
+            $proxyServer->setRemoteEntities(call_user_func_array(
+                $this->_remoteEntitiesFilter,
+                array(
+                    $proxyServer->getRemoteEntities(),
+                    $proxyServer
+                )
+            ));
+        }
     }
 
     protected function _getConsentConfigurationValue($name, $default = null)
@@ -192,11 +265,62 @@ class EngineBlock_Corto_Adapter
      */
     public function filterInputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
     {
+        // @todo, do these checks belong in the filterInputAttributes? It's the only hook we've got though with the relevant data.
+        
+        // STAGE 1 - validate if the IDP sending this response is allowed to connect to the SP that made the request.
+        $this->_validateSpIdpConnection($spEntityMetadata, $idpEntityMetadata);
+        
+        // STAGE 2 - determine a Virtual Organization context
+        $vo = NULL;
+        
+        // In filter stage we need to take a look at the VO context      
+        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
+            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
+            $this->setVirtualOrganisationContext($vo);            
+        }
+        
+        // STAGE 3 - provisioning of the user account
         $responseAttributes = $this->_enrichAttributes($responseAttributes);
-
         $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
+        
+        // STAGE 4 - If in VO context, validate the user's membership
+        if (!is_null($vo)) {
+            if (!$this->_validateVOMembership($subjectId, $vo)) {
+                
+                throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");          
+            }
+        }
+        
+        // STAGE 5 - Manipulate the response
         $response['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'] = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
         $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] = $subjectId;
+    }
+    
+    protected function _validateVOMembership($subjectIdentifier, $voIdentifier)
+    {
+        // todo: this is pure happy flow
+        
+        $voClient = new EngineBlock_VORegistry_Client();  
+        $metadata = $voClient->getGroupProviderMetadata($voIdentifier);
+        
+        $client = EngineBlock_Groups_Directory::createGroupsClient($metadata["groupprovideridentifier"]);    
+
+        if (isset($metadata["groupstem"])) {
+            $client->setGroupStem($metadata["groupstem"]);
+        }
+        
+        return $client->isMember($subjectIdentifier, $metadata["groupidentifier"]);
+    }
+    
+    protected function _validateSpIdpConnection($spEntityMetadata, $idpEntityMetadata)
+    {
+        $idpEntityId = $idpEntityMetadata["EntityId"];
+        $spEntityId = $spEntityMetadata["EntityId"];
+        
+        $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
+        if (!$serviceRegistryAdapter->isConnectionAllowed($spEntityId, $idpEntityId)) {
+            throw new EngineBlock_Exception("Received a response from an IDP that is not allowed to connect to the requesting SP");
+        }
     }
 
     /**
@@ -223,11 +347,16 @@ class EngineBlock_Corto_Adapter
 
     protected function _getRemoteEntities()
     {
-        $serviceRegistry = new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new EngineBlock_ServiceRegistry_CacheProxy()
-        );
+        $serviceRegistry = $this->_getServiceRegistryAdapter();
         $metadata = $serviceRegistry->getRemoteMetaData();
         return $metadata;
+    }
+
+    protected function _getServiceRegistryAdapter()
+    {
+        return new EngineBlock_Corto_ServiceRegistry_Adapter(
+            new EngineBlock_ServiceRegistry_CacheProxy()
+        );
     }
 
     protected function _processProxyServerResponse()
@@ -284,4 +413,16 @@ class EngineBlock_Corto_Adapter
         $factory = new EngineBlock_Memcache_ConnectionFactory();
         return $factory->create();
     }
+    
+    protected function _getHostedEntity()
+    {
+        return $this->_hostedEntity;
+    }
+
+    protected function _setRemoteEntitiesFilter($callback)
+    {
+        $this->_remoteEntitiesFilter = $callback;
+        return $this;
+    }
+
 }
