@@ -19,37 +19,8 @@
             </column>
         </createTable>
     </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-2">
-        <createTable tableName="user_attributes">
-            <column name="user_uid" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="name" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="value" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-3">
-        <createTable tableName="users">
-            <column name="uid" type="VARCHAR(255)">
-                <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="created" type="TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_seen" type="DATETIME">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-    </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-4">
         <addPrimaryKey columnNames="hashed_user_id, service_id" tableName="consent"/>
-    </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-5">
-        <addPrimaryKey columnNames="user_uid, name, value" tableName="user_attributes"/>
     </changeSet>
     <changeSet author="boy@ibuildings.nl" id="1288716266181-7">
         <createIndex indexName="hashed_user_id" tableName="consent" unique="false">
@@ -59,16 +30,6 @@
     <changeSet author="boy@ibuildings.nl" id="1288716266181-8">
         <createIndex indexName="service_id" tableName="consent" unique="false">
             <column name="service_id"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-10">
-        <createIndex indexName="name" tableName="user_attributes" unique="false">
-            <column name="name"/>
-        </createIndex>
-    </changeSet>
-    <changeSet author="boy@ibuildings.nl" id="1288716266181-11">
-        <createIndex indexName="user_uid" tableName="user_attributes" unique="false">
-            <column name="user_uid"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>
