@@ -21,7 +21,7 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function getMetadata($entityId) 
     {
-        $response = $this->_getRestClient()->metadata()
+        $response = $this->_getRestClient()->getMetadata()
                                            ->entityid($entityId)
                                            ->get();
         return $response;     
@@ -70,11 +70,11 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
-        $response = $this->_getRestClient()->isconnectionallowed()
+        $response = $this->_getRestClient()->isConnectionAllowed()
                                            ->spentityid($spEntityId)
                                            ->idpentityid($idpEntityId)
                                            ->get();
-        return (isset($response["allowed"]) && $response["allowed"]=="yes");
+        return ($response[0]==true || (isset($response["allowed"]) && $response["allowed"]=="yes"));
     }
     
     /**
@@ -109,7 +109,7 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function getIdpList($keys=array(), $forSpEntityId=NULL)
     {
-        $response = $this->_getRestClient()->idplist()
+        $response = $this->_getRestClient()->getIdpList()
                                            ->keys(implode(",", $keys))
                                            ->spentityid($forSpEntityId)
                                            ->get();                                        
@@ -127,7 +127,7 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function getSpList($keys=array())
     {
-        $response = $this->_getRestClient()->splist()
+        $response = $this->_getRestClient()->getSpList()
                                            ->keys(implode(",", $keys))
                                            ->get();
         return $response;                                         
@@ -161,11 +161,22 @@ class EngineBlock_ServiceRegistry_Client
     protected function _getRestClient()
     {
         if ($this->_restClient==NULL) {
-            $location = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry->location;
+            $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
+            $location = $config->location;
             if (!$location) {
                 throw new EngineBlock_Exception('No Service Registry location provided! Please set "serviceRegistry.location" in your application configuration.');
             }
-            $this->_restClient = new EngineBlock_Rest_Client($location);
+            
+            $user = $config->user;
+            if (!$user) {
+                throw new EngineBlock_Exception('No Service Registry user provided! Please set "serviceRegistry.user" in your application configuration.');
+            }
+            
+            $secret = $config->user_secret;
+            if (!$secret) {
+                throw new EngineBlock_Exception('No Service Registry user secret provided! Please set "serviceRegistry.user_secret" in your application configuration.');
+            }
+            $this->_restClient = new EngineBlock_ServiceRegistry_Janus_Client($location, $user, $secret);
         }
         return $this->_restClient;
     }
