@@ -35,7 +35,7 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function getMetaDataForKey($entityId, $key)
     {
-        $response = $this->_getRestClient()->metadata()
+        $response = $this->_getRestClient()->getMetadata()
                                           ->entityid($entityId)
                                           ->keys($key)
                                           ->get();    
@@ -53,7 +53,7 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function getMetaDataForKeys($entityId, $keys)
     {
-        $response = $this->_getRestClient()->metadata()
+        $response = $this->_getRestClient()->getMetadata()
                                            ->entityid($entityId)
                                            ->keys(implode(",", $keys))
                                            ->get();
@@ -74,7 +74,7 @@ class EngineBlock_ServiceRegistry_Client
                                            ->spentityid($spEntityId)
                                            ->idpentityid($idpEntityId)
                                            ->get();
-        return ($response[0]==true || (isset($response["allowed"]) && $response["allowed"]=="yes"));
+        return ((isset($response[0]) && $response[0]==true) || (isset($response["allowed"]) && $response["allowed"]=="yes"));
     }
     
     /**
@@ -148,7 +148,7 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function findIdentifiersByMetadata($key, $value)
     {
-        $response = $this->_getRestClient()->findidentifiersbymetadata()
+        $response = $this->_getRestClient()->findIdentifiersByMetadata()
                                           ->key($key)
                                           ->value($value)
                                           ->get();

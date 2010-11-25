@@ -36,9 +36,10 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
             $data = array_slice($args, 1) + $this->_data;
             $response = $this->{'rest' . $method}($args[0], $data);
             $this->_data = array();//Initializes for next Rest method.
-            
+                        
             // The next line has been changed to not use Zend_Rest_Client_Result for json responses
-            if ($response->getHeader("Content-Type")=="application/json") {
+            
+            if (strpos($response->getHeader("Content-Type"), "application/json")!==false) {
                 return json_decode($response->getBody(), true);
             } else {
             	return new Zend_Rest_Client_Result($response->getBody());
