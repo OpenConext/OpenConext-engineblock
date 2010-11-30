@@ -294,6 +294,15 @@ class EngineBlock_Corto_Adapter
         // STAGE 5 - Manipulate the response
         $response['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'] = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
         $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] = $subjectId;
+        
+        // STAGE 6 - Log the login in a table
+        $this->_trackLogin($spEntityMetadata['EntityId'], $idpEntityMetadata['EntityId'], $subjectId);
+    }
+    
+    protected function _trackLogin($spEntityId, $idpEntityId, $subjectId)
+    {
+        $tracker = new EngineBlock_Tracker();
+        $tracker->trackLogin($spEntityId, $idpEntityId, $subjectId);
     }
     
     protected function _validateVOMembership($subjectIdentifier, $voIdentifier)
