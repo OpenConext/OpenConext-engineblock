@@ -1,3 +1,4 @@
+echo "Environment: $ENGINEBLOCK_ENV" &&
 ENGINEBLOCK_DB_HOST=$(php get_master_db_setting.php host) &&
 ENGINEBLOCK_DB_NAME=$(php get_master_db_setting.php dbname) &&
 ENGINEBLOCK_DB_USER=$(php get_master_db_setting.php user) &&
