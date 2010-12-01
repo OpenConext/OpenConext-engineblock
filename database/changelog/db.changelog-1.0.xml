@@ -40,7 +40,7 @@
             <column name="loginstamp" type="TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="userid" type="VARCHAR(255)">
+            <column name="userid" type="VARCHAR(1000)">
                 <constraints nullable="false"/>
             </column>
             <column name="spentityid" type="VARCHAR(255)">
