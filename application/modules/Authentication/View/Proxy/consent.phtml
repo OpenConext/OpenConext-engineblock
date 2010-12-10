@@ -12,7 +12,7 @@ if (!isset($attributes)) {
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Identity Provider Selectie - SURFmedia</title>
+        <title>Identity Provider Selection - SURFmedia</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex, nofollow"/>
         <link href="https://espee.surfnet.nl/federate/surfnet/css/screen.css" rel="stylesheet" type="text/css" />
@@ -25,7 +25,7 @@ if (!isset($attributes)) {
                 <a href="http://www.surfnet.nl">
                     <img class="logo" src="https://espee.surfnet.nl/federate/surfnet/img/surfnet_logo.gif" alt="logo" />
                 </a>
-                <span>SURFnet Service Provider</span>
+                <span>SURFconext</span>
                 <span class="left"></span>
                 <span class="right"></span>
                 <img src="https://espee.surfnet.nl/federate/surfnet/img/federatie_header.jpg" alt="header img" />
@@ -33,23 +33,21 @@ if (!isset($attributes)) {
             <div class="main">
                 <div class="column content">
                     <div class="item">
-                        <span class="h2">Attribuut vrijgave</span>
-                        <form method="post" action="<?= $action ?>">
-                            <input type=hidden name=ID value="<?= $ID ?>">
-                            <input type="hidden" name="consent" value="yes" />
+                        <span class="h2">Attribute release</span>
 
-                            <p>
-                                Wil je de volgende attributen vrijgeven voor de doel applicatie?
-                            </p>
+                        <p>
+                            The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.
+                        </p>
 
-                            <?php foreach ($attributes as $uid => $attributeValues) { ?>
-                            <dl style="margin-left: 60px;">
-                                <dt style="font-weight: bold;">
+                        <table>
+                        <?php foreach ($attributes as $uid => $attributeValues) { ?>
+                            <tr>
+                                <td style="font-weight: bold;">
                                     <?=$this->getAttributeName($uid, 'nl_NL')?>
-                                </dt>
-                                <dd>
+                                </td>
+                                <td>
                                     <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                                      <?=$attributeValues[0];?>
+                                    <?=$attributeValues[0];?>
                                     <? } /** Multiple attribute values */ else { ?>
                                     <ul>
                                     <?php foreach ($attributeValues as $value) { ?>
@@ -57,15 +55,45 @@ if (!isset($attributes)) {
                                     <?php } ?>
                                     </ul>
                                     <? } ?>
-                                </dd>
-                            </dl>
-                            <? } ?>
-                            <input type="submit" value="Bevestig" />
+                                </td>
+                            </tr>
+                        <? } ?>
+                        </table>
+                        <br />
+                        <p>
+                            I agree with the release of my profile data.
+                            I agree with the SURFnet Terms of Service for the use of SURFconext
+                            in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%28EN%29"
+                                  target="_blank">
+                                English
+
+                            </a>
+                            <img src="/new_window_icon.gif" alt="opens in a new window" style="border: 0pt none; float: none;" />
+                            /
+                            in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%28NL%29"
+                                  target="_blank">
+                                Dutch
+                            </a>
+                            <img src="/new_window_icon.gif" alt="opens in a new window" style="border: 0pt none; float: none;" />
+                            *
+                        </p>
+
+                        <form method="post" action="<?= $action ?>" style="float: left">
+                            <input type=hidden name=ID value="<?= $ID ?>">
+                            <input type="hidden" name="consent" value="yes" />
+                            <input id="accept_terms_button" type="submit" value="I Accept" style="font-weight: bold;" />
                         </form>
-                        <form method="post" action="<?= $action ?>">
+                        &nbsp;&nbsp;
+                        <form method="post" action="<?= $action ?>" style="float: left; margin-left: 2em">
                             <input type="hidden" name="ID" value="<?= $ID ?>" />
-                            <input type="submit" value="Geen toestemming verlenen" />
+                            <input type="submit" value="I Decline" />
                         </form>
+                        <br style="clear: both" />
+                        <script type="text/javascript">
+                            document.getElementById('accept_terms_button').focus();
+                        </script>
+
+                        <p>* Additional Terms of Services may apply to 3rd party services.</p>
                     </div>
                 </div>
             </div>

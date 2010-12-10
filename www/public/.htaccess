@@ -1,0 +1,12 @@
+SetEnv ENGINEBLOCK_ENV production
+
+RewriteEngine On
+
+# If the requested url does not map to a file or directory, then forward it to index.php/URL.
+# Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
+
+# Requests to the domain (no query string)
+RewriteRule ^$ index.php/ [L]

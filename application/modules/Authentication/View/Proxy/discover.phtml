@@ -14,7 +14,7 @@
                 <a href="http://www.surfnet.nl">
                     <img class="logo" src="https://espee.surfnet.nl/federate/surfnet/img/surfnet_logo.gif" alt="logo" />
                 </a>
-                <span>SURFnet Service Provider</span>
+                <span>SURFconext</span>
                 <span class="left"></span>
                 <span class="right"></span>
                 <img src="https://espee.surfnet.nl/federate/surfnet/img/federatie_header.jpg" alt="header img" />
@@ -22,18 +22,21 @@
             <div class="main">
                 <div class="column content">
                     <div class="item">
-                        <span class="h2">Identity Provider Selectie <?=($metaDataSP['OrganizationDisplayName']?' - ' . $metaDataSP['OrganizationDisplayName']:'')?></span>
-                        <h2>Selecteer je instelling of identiteits verstrekker:</h2>
+                        <span class="h2">
+                            Identity Provider Selection <?=($metaDataSP['OrganizationDisplayName']?' - ' . $metaDataSP['OrganizationDisplayName']:'')?>
+                        </span>
 
-                        <p>Selecteer in de drop down box je instelling om in te loggen bij SURFmedia.
-                           Staat je instelling er niet tussen, gebruik dan je SURFguest account.
+                        <p>Select your identity provider to sign into this application using SURFconext.
+                            If your identity provider is not listed, you may be able to log in with a SURFguest account.
+
                         </p>
-                        <p>Selecteer nu SURFguest uit de lijst indien je voorheen gebruik maakte van een SURFgroepen account.
-                            Voor meer informatie, zie:
-                            <a href="https://www.surfgroepen.nl/sites/communitysupport/surfmedia/support/Pages/SURFguest.aspx">
-                                SURFmedia support
-                            </a>
+
+                        <hr />
+
+                        <p>Selecteer je instelling om in te loggen in deze applicatie via SURFconext.
+                            Als je instelling niet in de lijst staat, kan je mogelijk inloggen met een SURFguest account.
                         </p>
+
 
                         <form method="post" action="<?= $action ?>">
                             <input type=hidden name=ID value="<?= $ID ?>">
@@ -49,7 +52,7 @@
                                 </select>
                             </p>
                             <p>
-                                <input type="submit" value="Bevestig" />
+                                <input type="submit" value="Confirm" />
                             </p>
                         </form>
                     </div>
