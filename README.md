@@ -14,6 +14,7 @@ Requirements
 * PHP 5.2.x with modules:
 ** memcache
 ** ldap
+** libxml
 * Java > 1.5
 * MySQL > 5.x with settings:
 ** default-storage-engine=InnoDB (recommended)
@@ -65,6 +66,8 @@ for your environment.
 
 * Install database schema
 
+NOTE: EngineBlock requires a database password, without it the install script will not function
+
   cd database && ./migrate.sh && cd ..
 
 * Install Apache Virtual Hosts
@@ -91,6 +94,13 @@ Example:
 
         <Directory "/var/www/html/coin-engineblock/www">
             AllowOverride None
+            Order Allow,Deny
+            # Only allow from private ip adresses
+            # http://www.jpsdomain.org/networking/nat.html
+            allow from 127.0.0.0/8
+            allow from 10.0.0.0/8
+            allow from 172.16.0.0/12
+            allow from 192.168.0.0/16            
         </Directory>
 
         Include /var/www/html/coin-engineblock/www/.htaccess
@@ -100,7 +110,7 @@ Example:
         SSLEngine on
         SSLCertificateFile      /etc/httpd/ssl/engineblock.pem
         SSLCertificateKeyFile   /etc/httpd/ssl/engineblock.key
-        SSLCertificateChainFile /etc/httpd/ssl/enbineblock-chain.pem
+        SSLCertificateChainFile /etc/httpd/ssl/engineblock-chain.pem
   </VirtualHost>
 
   <VirtualHost *:80>
@@ -119,13 +129,6 @@ Example:
 
         <Directory "/var/www/html/coin-engineblock/www">
             AllowOverride None
-            Order Allow,Deny
-            # Only allow from private ip adresses
-            # http://www.jpsdomain.org/networking/nat.html
-            allow from 127.0.0.0/8
-            allow from 10.0.0.0/8
-            allow from 172.16.0.0/12
-            allow from 192.168.0.0/16            
         </Directory>
 
         Include /var/www/html/coin-engineblock/www/.htaccess
@@ -135,7 +138,7 @@ Example:
         SSLEngine on
         SSLCertificateFile      /etc/httpd/ssl/engineblock.pem
         SSLCertificateKeyFile   /etc/httpd/ssl/engineblock.key
-        SSLCertificateChainFile /etc/httpd/ssl/enbineblock-chain.pem
+        SSLCertificateChainFile /etc/httpd/ssl/engineblock-chain.pem
   </VirtualHost>
 
 * Test your EngineBlock instance
