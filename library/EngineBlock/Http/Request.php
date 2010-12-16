@@ -71,7 +71,7 @@ class EngineBlock_Http_Request
         foreach($queryParts as $queryPart) {
             if (preg_match("/^(.+)=(.*)$/", $queryPart, $keyAndValue))  {
                 $key    = $keyAndValue[1];
-                $value  = $keyAndValue[2];
+                $value  = urldecode($keyAndValue[2]);
 
                 $this->_queryParameters[$key] = $value;
             }
