@@ -96,7 +96,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         }
 
         $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
-        $spEntityId = urldecode($request->getQueryParameter('sp-entity-id'));
+        $spEntityId = $request->getQueryParameter('sp-entity-id');
         if ($spEntityId) {
             $entityDescriptor = $this->_getSpEntityDescriptor($spEntityId);
             if ($entityDescriptor) {
