@@ -29,6 +29,7 @@ class EngineBlock_ServiceRegistry_Janus_Client extends EngineBlock_Rest_Client
         if ($method=="get") {
             // Sign the request.
             $this->_data["janus_key"] = $this->_user;
+            $this->_data["userid"] = $this->_user;
             
             $signatureData = $this->_data;
             
