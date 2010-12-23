@@ -63,7 +63,8 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $this->_moduleName      = $module;
         $this->_controllerName  = $controller;
         $this->_actionName      = $action;
-        $this->_actionArguments = $arguments;
+ 
+        $this->setActionArguments($arguments);
 
         return true;
     }

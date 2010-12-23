@@ -28,4 +28,14 @@ abstract class EngineBlock_Router_Abstract
     {
         return $this->_actionArguments;
     }
+
+    protected function setActionArguments($arguments)
+    {
+        foreach ($arguments as &$argument) {
+            $argument = urldecode($argument);
+        }
+
+        $this->_actionArguments = $arguments;
+        return $this;
+    }
 }

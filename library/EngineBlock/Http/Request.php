@@ -36,7 +36,7 @@ class EngineBlock_Http_Request
 
     public function setUri($uri)
     {
-        $this->_uri = $uri;
+        $this->_uri = urldecode($uri);
         return $this;
     }
 

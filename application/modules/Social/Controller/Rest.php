@@ -7,7 +7,7 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
     public function indexAction($url)
     {
         $this->setNoRender(); // let shindig do the rendering
-        
+
         set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_SHINDIG);
         
         include_once('src/common/Config.php');
