@@ -193,8 +193,8 @@ class EngineBlock_Corto_Adapter
                     'public'    => $application->getConfiguration()->encryption->key->public,
                     'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
-                'infilter'  => array($this, 'filterInputAttributes'),
-                //'outfilter' => array($this, 'filterOutputAttributes'),
+                //'infilter'  => array($this, 'filterInputAttributes'),
+                'outfilter' => array($this, 'filterOutputAttributes'),
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
@@ -263,10 +263,10 @@ class EngineBlock_Corto_Adapter
      * @param  $responseAttributes
      * @return void
      */
-    public function filterInputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
+    public function filterOutputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
     {
-        // @todo, do these checks belong in the filterInputAttributes? It's the only hook we've got though with the relevant data.
-        
+        // @todo, do these checks belong in the filterOutputAttributes? It's the only hook we've got though with the relevant data.
+
         // STAGE 1 - validate if the IDP sending this response is allowed to connect to the SP that made the request.
         $this->_validateSpIdpConnection($spEntityMetadata, $idpEntityMetadata);
         
@@ -280,8 +280,8 @@ class EngineBlock_Corto_Adapter
         }
         
         // STAGE 3 - provisioning of the user account
-        $responseAttributes = $this->_enrichAttributes($responseAttributes);
         $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
+        $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
         
         // STAGE 4 - If in VO context, validate the user's membership
         if (!is_null($vo)) {
@@ -325,7 +325,7 @@ class EngineBlock_Corto_Adapter
     {
         $idpEntityId = $idpEntityMetadata["EntityId"];
         $spEntityId = $spEntityMetadata["EntityId"];
-        
+
         $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
         if (!$serviceRegistryAdapter->isConnectionAllowed($spEntityId, $idpEntityId)) {
             throw new EngineBlock_Exception("Received a response from an IDP that is not allowed to connect to the requesting SP");
@@ -338,13 +338,13 @@ class EngineBlock_Corto_Adapter
      * @param  $attributes
      * @return array
      */
-    protected function _enrichAttributes(array $attributes)
+    protected function _enrichAttributes($subjectId, array $attributes)
     {
         $aggregator = $this->_getAttributeAggregator(
             $this->_getAttributeProviders()
         );
         $aggregatedAttributes = $aggregator->getAttributes(
-            $attributes[self::IDENTIFYING_MACE_ATTRIBUTE][0]
+            $subjectId
         );
         return array_merge_recursive($attributes, $aggregatedAttributes);
     }
@@ -433,5 +433,4 @@ class EngineBlock_Corto_Adapter
         $this->_remoteEntitiesFilter = $callback;
         return $this;
     }
-
 }
