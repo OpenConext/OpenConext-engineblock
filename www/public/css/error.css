@@ -1,0 +1,45 @@
+#PortalErrorMessage {
+	position: relative;
+	margin: 50px auto 150px auto;
+	width:350px;
+	padding:15px;
+	background:#fd7700 url(../media/bg-primary.png) 0 50% repeat-x;
+	border: 1px solid #babbb0;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-border-radius: 5px;
+	-moz-box-shadow: 0px 3px 8px #aaa;
+	-webkit-box-shadow: 0px 3px 8px #aaa;
+	-box-shadow: 0px 3px 8px #aaa;
+	color: #fff;
+	font-family: "Lucida Sans Unicode","Lucida Grande",Arial,sans-serif;
+}
+#PortalErrorMessage .branding-header {
+	margin:0 -15px 10px -15px;
+	padding:0 15px 10px 15px;
+	border-bottom:1px solid #f9af4d;
+}
+#PortalErrorMessage h1 {
+	margin:0 0 5px 0;
+}
+#PortalErrorMessage h2 {
+	margin:0 0 10px 0;
+}
+
+#PortalErrorMessage p a {
+	color:#5a5b5a;
+}
+
+#PortalErrorMessage p a:hover {
+	color:#000;
+}
+#PortalErrorMessage .button-row {
+	margin:15px -15px -3px -15px;
+	padding:10px 15px 0 15px;
+	border-top:1px solid #f9af4d;
+	width:100%;
+	overflow:hidden;
+}
+#PortalErrorMessage .button-row a {
+	float:right;
+}

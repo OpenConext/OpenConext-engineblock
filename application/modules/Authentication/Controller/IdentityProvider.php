@@ -5,6 +5,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     public function singleSignOnAction($argument = null)
     {
         $this->setNoRender();
+        $application = EngineBlock_ApplicationSingleton::getInstance();
 
         try {
      
@@ -19,8 +20,18 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             }
 
             $proxyServer->singleSignOn($idPEntityId);
-        } catch(EngineBlock_Groups_Exception_UserDoesNotExist $e) {
-            EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse()->setRedirectUrl('/error/myerror');
+        }
+        catch (EngineBlock_Groups_Exception_UserDoesNotExist $e) {
+            $application->getLog()->warn('User does not exist error');
+            $application->getHttpResponse()->setRedirectUrl('/error/myerror');
+        }
+        catch (Corto_Module_Bindings_UnableToReceiveMessageException $e) {
+            $application->getLog()->warn('Unable to receive message');
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
+        }
+        catch (Corto_Module_Services_SessionLostException $e) {
+            $application->getLog()->warn('Session was lost');
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
     }
 
