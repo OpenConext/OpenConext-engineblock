@@ -1,8 +1,17 @@
 <?php
 
-class EngineBlock_ServiceRegistry_CacheProxy 
+class EngineBlock_ServiceRegistry_CacheProxy_Exception extends EngineBlock_Exception
 {
-    const DEFAULT_LIFETIME = 3600;
+}
+
+/**
+ * A Caching Proxy for the Service Registry, will cache all function calls.
+ *
+ * Can even detect Sercvice Registry problems and chug along on the (stale) cache. 
+ */
+class EngineBlock_ServiceRegistry_CacheProxy
+{
+    const DEFAULT_LIFETIME = 5;
 
     public function __call($name, $arguments)
     {
@@ -13,7 +22,34 @@ class EngineBlock_ServiceRegistry_CacheProxy
             return call_user_method_array($name, $client, $arguments);
         }
 
-        return $cache->call(array($client, $name), $arguments);
+        // Clone the original client because calling it will alter the $client object
+        // making it impossible to reuse stale cache
+        $originalClient = clone $client;
+
+        try {
+            return $cache->call(array($client, $name), $arguments);
+
+        } catch(Exception $e) { // Whoa, something went wrong, maybe the SR is down? Trying to use stale cache...
+            if (floatval(phpversion()) > 5.3) {
+                $e = new EngineBlock_ServiceRegistry_CacheProxy_Exception("Service Registry problems?!?", 0, $e);
+            }
+            else {
+                $e = new EngineBlock_ServiceRegistry_CacheProxy_Exception("Service Registry problems?!?", 0);
+            }
+            EngineBlock_ApplicationSingleton::getInstance()->reportError($e);
+
+            // Give any stale cache some more time
+            $callback = array($originalClient, $name);
+            $cacheId = $cache->makeId($callback, $arguments);
+            $cacheBackend = $cache->getBackend();
+            $data = $cacheBackend->load($cacheId, TRUE);
+            if ($data !== false) {
+                $cacheBackend->save($data, $cacheId, array(), self::DEFAULT_LIFETIME);
+            }
+
+            // And try to use that cache.
+            return $cache->call($callback, $arguments);
+        }
     }
 
     /**
