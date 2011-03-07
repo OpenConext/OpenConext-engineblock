@@ -22,9 +22,19 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
             $identifiers = $this->_getRegistry()->findIdentifiersByMetadata('coin:gadgetbaseurl', $gadgetUrl);
             if (count($identifiers) > 1) {
                 throw new EngineBlock_Exception('Multiple identifiers found for gadgetbaseurl');
+                EngineBlock_ApplicationSingleton::getInstance()->getLog()->warn(
+                    "Multiple identifiers found for gadgetbaseurl: '$gadgetUrl'"
+                );
+                echo json_encode(new stdClass());
+                return;
             }
+
             if (count($identifiers)===0) {
-                throw new EngineBlock_Exception('No Entity Id found for gadgetbaseurl');
+                EngineBlock_ApplicationSingleton::getInstance()->getLog()->warn(
+                    "No Entity Id found for gadgetbaseurl '$gadgetUrl'"
+                );
+                echo json_encode(new stdClass());
+                return;
             }
 
             $entityId = $identifiers[0];
@@ -39,13 +49,11 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
             $result = $this->_getRegistry()->getMetadata($entityId);
         }
        
-        echo json_encode($result);
-        
+        echo json_encode($result);   
     }
     
     protected function _getRegistry()
     {
         return new EngineBlock_ServiceRegistry_Client();
-    }
-    
+    }   
 }
