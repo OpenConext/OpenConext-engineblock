@@ -109,7 +109,7 @@ class EngineBlock_UserDirectory
                 $user[$userKey] = $userValue[0];
             }
         }
-        
+
         if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH]===$this->_getCollabPersonHash($newAttributes)) {
             $now = date(DATE_RFC822);
             $newAttributes = $user + $newAttributes;
@@ -124,7 +124,7 @@ class EngineBlock_UserDirectory
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH] = $this->_getCollabPersonHash($newAttributes);
 
         $now = date(DATE_RFC822);
-        $newAttributes = $user + $newAttributes;
+        $newAttributes = array_merge($user, $newAttributes);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
