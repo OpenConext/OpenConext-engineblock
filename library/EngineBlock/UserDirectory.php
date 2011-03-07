@@ -70,6 +70,9 @@ class EngineBlock_UserDirectory
         if (!isset($ldapAttributes['cn'])) {
             $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
         }
+        if (!isset($ldapAttributes['displayName'])) {
+            $ldapAttributes['displayName'] = $ldapAttributes['cn'];
+        }
         if (!isset($ldapAttributes['sn'])) {
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
         }
@@ -215,28 +218,28 @@ class EngineBlock_UserDirectory
 
     protected function _getCommonNameFromAttributes($attributes)
     {
-        if (isset($attributes['givenName'][0]) && isset($attributes['sn'][0])) {
-            return $attributes['givenName'][0] . ' ' . $attributes['sn'][0];
+        if (isset($attributes['givenName']) && isset($attributes['sn'])) {
+            return $attributes['givenName'] . ' ' . $attributes['sn'];
         }
 
-        if (isset($attributes['sn'][0])) {
-            return $attributes['sn'][0];
+        if (isset($attributes['sn'])) {
+            return $attributes['sn'];
         }
 
-        if (isset($attributes['displayName'][0])) {
-            return $attributes['displayName'][0];
+        if (isset($attributes['displayName'])) {
+            return $attributes['displayName'];
         }
 
-        if (isset($attributes['mail'][0])) {
-            return $attributes['mail'][0];
+        if (isset($attributes['mail'])) {
+            return $attributes['mail'];
         }
 
-        if (isset($attributes['givenName'][0])) {
-            return $attributes['givenName'][0];
+        if (isset($attributes['givenName'])) {
+            return $attributes['givenName'];
         }
 
-        if (isset($attributes['uid'][0])) {
-            return $attributes['uid'][0];
+        if (isset($attributes['uid'])) {
+            return $attributes['uid'];
         }
 
         return "";
