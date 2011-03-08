@@ -16,7 +16,7 @@ class EngineBlock_ApplicationSingleton_BootstrapException extends Exception
 
 class EngineBlock_ApplicationSingleton
 {
-    const DEFAULT_APPLICATION_CONFIGFILE = 'configs/application.ini';
+    const DEFAULT_APPLICATION_CONFIGFILEPATTERN = 'configs/application*.ini';
 
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -158,23 +158,56 @@ class EngineBlock_ApplicationSingleton
         spl_autoload_register(array($this, 'autoLoad'));
     }
 
-    protected function _bootstrapConfiguration($configFile)
+    protected function _bootstrapConfiguration($configFilePattern)
     {
-        if (!$configFile) {
-            $configFile = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILE;
-        }
-        if (!file_exists($configFile)) {
-            throw new EngineBlock_Exception("Configuration file '$configFile does not exist!'");
-        }
-
+        $tempConfigFile = $this->_buildTempConfigFile($configFilePattern);
         $env = $this->_applicationEnvironmentId;
-        $configuration = $this->_getConfigurationLoader($configFile)->$env;
+
+        $configuration = $this->_getConfigurationLoader($tempConfigFile)->$env;
         $this->setConfiguration($configuration);
     }
 
-    protected function _getConfigurationLoader($environmentId)
+    protected function _buildTempConfigFile($configFilePattern)
     {
-        return new Zend_Config_Ini($environmentId);
+        if (!$configFilePattern) {
+            $configFilePattern = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILEPATTERN;
+        }
+
+        $configFiles = glob($configFilePattern);
+        if (empty($configFiles)) {
+            throw new EngineBlock_Exception("Configuration files for pattern '$configFilePattern do not exist!'");
+        }
+
+        usort($configFiles, array($this, '_sortConfigFilesByNumberOfParts'));
+
+        $configFileContents = "";
+        foreach ($configFiles as $configFile) {
+            $configFileContents .= file_get_contents($configFile) . PHP_EOL;
+        }
+
+        $tempConfigFile = '/tmp/engineblock.' . $this->_applicationEnvironmentId . '.' . md5($configFileContents) . '.ini';
+        if (!file_exists($tempConfigFile)) {
+            touch ($tempConfigFile);
+            file_put_contents($tempConfigFile, $configFileContents);
+        }
+        return $tempConfigFile;
+    }
+
+    protected function _sortConfigFilesByNumberOfParts($a, $b)
+    {
+        $a = strstr(basename($a), '.');
+        $b = strstr(basename($b), '.');
+        if ($a > $b) {
+            return 1;
+        } else if ($a === $b) {
+            return 0;
+        };
+        return -1;
+    }
+
+    protected function _getConfigurationLoader($configFile)
+    {
+        return new Zend_Config_Ini($configFile);
     }
 
     protected function _bootstrapLogging()
