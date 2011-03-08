@@ -67,7 +67,7 @@ class EngineBlock_ServiceRegistry_CacheProxy
         $backendCaching        = $cachingConfiguration->backend->get('name', 'File');
         $backendCachingOptions = $cachingConfiguration->backend->options->toArray();
         if (isset($backendCachingOptions['file_name_prefix'])) {
-            $backendCachingOptions['file_name_prefix'] .= '-' . $application->getApplicationEnvironmentId();
+            $backendCachingOptions['file_name_prefix'] .= '_' . $application->getApplicationEnvironmentId();
         }
 
         $cache = Zend_Cache::factory(
