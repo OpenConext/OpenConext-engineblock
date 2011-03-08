@@ -57,7 +57,8 @@ class EngineBlock_ServiceRegistry_CacheProxy
      */
     protected function _getCacheFrontend()
     {
-        $serviceRegistryConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $serviceRegistryConfig = $application->getConfiguration()->serviceRegistry;
         if (!isset($serviceRegistryConfig->caching)) {
             return null;
         }
@@ -65,6 +66,10 @@ class EngineBlock_ServiceRegistry_CacheProxy
 
         $backendCaching        = $cachingConfiguration->backend->get('name', 'File');
         $backendCachingOptions = $cachingConfiguration->backend->options->toArray();
+        if (isset($backendCachingOptions['file_name_prefix'])) {
+            $backendCachingOptions['file_name_prefix'] .= '-' . $application->getApplicationEnvironmentId();
+        }
+
         $cache = Zend_Cache::factory(
             'Function',
             $backendCaching,
