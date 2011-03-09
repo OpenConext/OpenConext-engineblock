@@ -1,0 +1,62 @@
+### Eclipse Workspace Patch 1.0
+#P serviceregistry
+Index: modules/janus/lib/UserController.php
+===================================================================
+--- modules/janus/lib/UserController.php	(revision 680)
++++ modules/janus/lib/UserController.php	(working copy)
+@@ -104,27 +104,49 @@
+      */
+     private function _loadEntities($state = null, $state_exclude = null)
+     {
+-        $excludeSQL = ';';
++        // Fetch pretty name for sorting
++        $fieldname = $this->_config->getString('entity.prettyname', NULL);
++
++        $orderBy = ';';
++        if ($fieldname) {
++            $orderBy = 'ORDER BY '. self::$prefix .'metadata.value ASC;';
++        }
++
++        $excludeSQL = '';
+         if (!is_null($state_exclude)) {
+-            $excludeSQL = ' AND `eid` NOT IN (SELECT DISTINCT `eid` FROM janus__entity WHERE `state` IN (\'' . $state_exclude . '\'));';
++            $excludeSQL = ' AND '. self::$prefix .'entity.eid NOT IN (SELECT DISTINCT `eid` FROM janus__entity WHERE `state` IN (\'' . $state_exclude . '\'))';
+         }
+ 
+         $guard = new sspmod_janus_UIguard($this->_config->getArray('access', array()));
+ 
+         if($guard->hasPermission('allentities', null, $this->_user->getType(), TRUE)) {
+             if(!is_null($state)) {
+-                $st = $this->execute('SELECT DISTINCT `eid` FROM '. self::$prefix .'entity WHERE `state` = ?' . $excludeSQL,
+-                    array($state)                     
++                $st = $this->execute(
++                    'SELECT DISTINCT '. self::$prefix .'entity.eid 
++                    FROM '. self::$prefix .'entity 
++                    LEFT JOIN '. self::$prefix .'metadata ON '. self::$prefix .'entity.eid = '. self::$prefix .'metadata.eid
++                    WHERE '. self::$prefix .'entity.state = ?
++                      AND '. self::$prefix .'metadata.key = \''. $fieldname .'\'
++                      AND '. self::$prefix .'metadata.value not like \'\'' . $excludeSQL . $orderBy,
++                    array($state)
+                 );
+             } else {
+-                $st = $this->execute('SELECT DISTINCT `eid` FROM '. self::$prefix .'entity' . $excludeSQL);
++                $st = $this->execute(
++                    'SELECT DISTINCT '. self::$prefix .'entity.eid 
++                    FROM '. self::$prefix .'entity 
++                    LEFT JOIN '. self::$prefix .'metadata ON '. self::$prefix .'entity.eid = '. self::$prefix .'metadata.eid
++                    WHERE '. self::$prefix .'metadata.key = \''. $fieldname .'\' 
++                      AND '. self::$prefix .'metadata.value not like \'\' ' . $excludeSQL . $orderBy);
+             }
+ 
+             if ($st === false) {
+                 return false;
+             }
++        } else {
++            // Append the semicolon again to the excludeSQL,
++            // since this is the end of the query again.
++            $excludeSQL .= ';';
+ 
+-        } else {
+             if(!is_null($state)) {
+                 $st = $this->execute(
+                     'SELECT * 
