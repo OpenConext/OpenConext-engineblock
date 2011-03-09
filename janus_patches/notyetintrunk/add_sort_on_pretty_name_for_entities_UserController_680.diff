@@ -4,17 +4,22 @@ Index: modules/janus/lib/UserController.php
 ===================================================================
 --- modules/janus/lib/UserController.php	(revision 680)
 +++ modules/janus/lib/UserController.php	(working copy)
-@@ -104,27 +104,49 @@
+@@ -104,27 +104,56 @@
       */
      private function _loadEntities($state = null, $state_exclude = null)
      {
 -        $excludeSQL = ';';
 +        // Fetch pretty name for sorting
-+        $fieldname = $this->_config->getString('entity.prettyname', NULL);
++        $fieldName = $this->_config->getString('entity.prettyname', NULL);
 +
-+        $orderBy = ';';
-+        if ($fieldname) {
-+            $orderBy = 'ORDER BY '. self::$prefix .'metadata.value ASC;';
++        $orderBySQL = ';';
++        $fieldNameSQL = '';
++        $joinSQL = '';
++        // If the fieldName is set, also add the fieldName SQL, Join SQL and orderBy SQL
++        if ($fieldName) {
++            $fieldNameSQL = self::$prefix .'metadata.key = \''. $fieldName .'\' AND '. self::$prefix .'metadata.value not like \'\'';
++            $joinSQL = 'LEFT JOIN '. self::$prefix .'metadata ON '. self::$prefix .'entity.eid = '. self::$prefix .'metadata.eid';
++            $orderBySQL = 'ORDER BY '. self::$prefix .'metadata.value ASC;';
 +        }
 +
 +        $excludeSQL = '';
@@ -29,23 +34,25 @@ Index: modules/janus/lib/UserController.php
              if(!is_null($state)) {
 -                $st = $this->execute('SELECT DISTINCT `eid` FROM '. self::$prefix .'entity WHERE `state` = ?' . $excludeSQL,
 -                    array($state)                     
++                if ($fieldNameSQL) {
++                    $fieldNameSQL = ' AND '. $fieldNameSQL;
++                }
 +                $st = $this->execute(
 +                    'SELECT DISTINCT '. self::$prefix .'entity.eid 
-+                    FROM '. self::$prefix .'entity 
-+                    LEFT JOIN '. self::$prefix .'metadata ON '. self::$prefix .'entity.eid = '. self::$prefix .'metadata.eid
-+                    WHERE '. self::$prefix .'entity.state = ?
-+                      AND '. self::$prefix .'metadata.key = \''. $fieldname .'\'
-+                      AND '. self::$prefix .'metadata.value not like \'\'' . $excludeSQL . $orderBy,
++                    FROM '. self::$prefix .'entity
++                    '. $joinSQL .'
++                    WHERE '. self::$prefix .'entity.state = ?'. $fieldNameSQL . $excludeSQL . $orderBySQL,
 +                    array($state)
                  );
              } else {
 -                $st = $this->execute('SELECT DISTINCT `eid` FROM '. self::$prefix .'entity' . $excludeSQL);
++                if ($fieldNameSQL) {
++                    $fieldNameSQL = 'WHERE '. $fieldNameSQL;
++                }
 +                $st = $this->execute(
 +                    'SELECT DISTINCT '. self::$prefix .'entity.eid 
 +                    FROM '. self::$prefix .'entity 
-+                    LEFT JOIN '. self::$prefix .'metadata ON '. self::$prefix .'entity.eid = '. self::$prefix .'metadata.eid
-+                    WHERE '. self::$prefix .'metadata.key = \''. $fieldname .'\' 
-+                      AND '. self::$prefix .'metadata.value not like \'\' ' . $excludeSQL . $orderBy);
++                    '. $joinSQL . $fieldNameSQL . $excludeSQL . $orderBySQL);
              }
  
              if ($st === false) {
