@@ -193,6 +193,8 @@ class EngineBlock_Corto_Adapter
                     'public'    => $application->getConfiguration()->encryption->key->public,
                     'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
+                // Note that we use an input filter because consent requires a presistent NameID
+                // and we only get that after provisioning
                 'infilter'  => array($this, 'filterInputAttributes'),
                 //'outfilter' => array($this, 'filterOutputAttributes'),
                 'Processing' => array(
