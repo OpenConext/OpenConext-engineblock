@@ -193,8 +193,8 @@ class EngineBlock_Corto_Adapter
                     'public'    => $application->getConfiguration()->encryption->key->public,
                     'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
-                //'infilter'  => array($this, 'filterInputAttributes'),
-                'outfilter' => array($this, 'filterOutputAttributes'),
+                'infilter'  => array($this, 'filterInputAttributes'),
+                //'outfilter' => array($this, 'filterOutputAttributes'),
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
@@ -263,7 +263,7 @@ class EngineBlock_Corto_Adapter
      * @param  $responseAttributes
      * @return void
      */
-    public function filterOutputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
+    public function filterInputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
     {
         // @todo, do these checks belong in the filterOutputAttributes? It's the only hook we've got though with the relevant data.
 
