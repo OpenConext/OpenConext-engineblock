@@ -267,12 +267,13 @@ class EngineBlock_Corto_Adapter
      */
     public function filterInputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
     {
-        // @todo, do these checks belong in the filterOutputAttributes? It's the only hook we've got though with the relevant data.
+        // @todo Do these checks belong in the filterInputAttributes?
+        //       It's the only hook we've got though with the relevant data.
 
-        // STAGE 1 - validate if the IDP sending this response is allowed to connect to the SP that made the request.
+        // validate if the IDP sending this response is allowed to connect to the SP that made the request.
         $this->_validateSpIdpConnection($spEntityMetadata, $idpEntityMetadata);
         
-        // STAGE 2 - determine a Virtual Organization context
+        // Determine a Virtual Organization context
         $vo = NULL;
         
         // In filter stage we need to take a look at the VO context      
@@ -281,25 +282,23 @@ class EngineBlock_Corto_Adapter
             $this->setVirtualOrganisationContext($vo);            
         }
         
-        // STAGE 3 - provisioning of the user account
+        // Provisioning of the user account
         $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
         $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
         
-        // STAGE 4 - If in VO context, validate the user's membership
+        // If in VO context, validate the user's membership
         if (!is_null($vo)) {
             if (!$this->_validateVOMembership($subjectId, $vo)) {
                 
                 throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");          
             }
         }
-        
-        // STAGE 5 - Manipulate the response
+
         $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
             '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             '__v'              => $subjectId
         );
 
-        // STAGE 6 - Log the login in a table
         $this->_trackLogin($spEntityMetadata['EntityId'], $idpEntityMetadata['EntityId'], $subjectId);
     }
     
