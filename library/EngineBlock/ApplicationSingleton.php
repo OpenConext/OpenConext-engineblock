@@ -163,8 +163,11 @@ class EngineBlock_ApplicationSingleton
         $tempConfigFile = $this->_buildTempConfigFile($configFilePattern);
         $env = $this->_applicationEnvironmentId;
 
-        $configuration = $this->_getConfigurationLoader($tempConfigFile)->$env;
-        $this->setConfiguration($configuration);
+        $configuration = $this->_getConfigurationLoader($tempConfigFile);
+        if (!isset($configuration->$env)) {
+            throw new EngineBlock_ApplicationSingleton_BootstrapException("Environment '$env' does not exist?!?");
+        }
+        $this->setConfiguration($configuration->$env);
     }
 
     protected function _buildTempConfigFile($configFilePattern)
