@@ -9,6 +9,11 @@ class EngineBlock_Exception_UserNotMember extends EngineBlock_Exception
 {
 }
 
+class EngineBlock_Exception_InvalidConnection extends EngineBlock_Exception
+{
+
+}
+
 class EngineBlock_Corto_Adapter 
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
@@ -194,7 +199,8 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
-            'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true)
+            'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true),
+            'NoSupportedIDPError' => 'user',
         ));
 
         $attributes = array();
@@ -217,7 +223,7 @@ class EngineBlock_Corto_Adapter
                         'Location' => $proxyServer->getHostedEntityUrl($this->_hostedEntity, 'provideConsentService'),
                     ),
                 ),
-                'keepsession' => true,
+                'keepsession' => false,
             ),
         ));
 
@@ -285,7 +291,7 @@ class EngineBlock_Corto_Adapter
         //       It's the only hook we've got though with the relevant data.
 
         // validate if the IDP sending this response is allowed to connect to the SP that made the request.
-        $this->_validateSpIdpConnection($spEntityMetadata, $idpEntityMetadata);
+        $this->validateSpIdpConnection($spEntityMetadata["EntityId"], $idpEntityMetadata["EntityId"]);
         
         // Determine a Virtual Organization context
         $vo = NULL;
@@ -303,7 +309,6 @@ class EngineBlock_Corto_Adapter
         // If in VO context, validate the user's membership
         if (!is_null($vo)) {
             if (!$this->_validateVOMembership($subjectId, $vo)) {
-                
                 throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");          
             }
         }
@@ -338,14 +343,13 @@ class EngineBlock_Corto_Adapter
         return $client->isMember($subjectIdentifier, $metadata["groupidentifier"]);
     }
     
-    protected function _validateSpIdpConnection($spEntityMetadata, $idpEntityMetadata)
+    public function validateSpIdpConnection($spEntityId, $idpEntityId)
     {
-        $idpEntityId = $idpEntityMetadata["EntityId"];
-        $spEntityId = $spEntityMetadata["EntityId"];
-
         $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
         if (!$serviceRegistryAdapter->isConnectionAllowed($spEntityId, $idpEntityId)) {
-            throw new EngineBlock_Exception("Received a response from an IDP that is not allowed to connect to the requesting SP");
+            throw new EngineBlock_Exception_InvalidConnection(
+                "Received a response from an IDP that is not allowed to connect to the requesting SP"
+            );
         }
     }
 
