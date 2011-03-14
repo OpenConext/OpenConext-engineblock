@@ -92,7 +92,7 @@
             <br /><br />
             in: <strong id="secondsRemaining"></strong>
             <br /><br />
-            <a id="cancel" href="#" onclick="$('#dialog').dialog('close');">CANCEL</a>
+            <a id="cancel" href="#" onclick="$('#dialog').dialog('close');">CANCEL</a> (or press ESC)
         </div>
         <? endif; ?>
         <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
@@ -152,6 +152,7 @@
                 });
                 $( "#dialog" ).dialog( {
                     modal: true,
+                    dialogClass: "ui-popup",
                     close: function(event, ui) {
                         countdown.stop();
                     }
