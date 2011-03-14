@@ -90,6 +90,19 @@ class EngineBlock_Corto_Adapter
         );
     }
 
+    protected function _filterRemoteEntitiesBySpQueryParam(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    {
+        $claimedSpEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+        if (!$claimedSpEntityId) {
+            return $entities;
+        }
+
+        return $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
+            $entities,
+            $claimedSpEntityId
+        );
+    }
+
     public function idPMetadata()
     {
         $this->_callCortoServiceUri('idPMetadataService');
@@ -107,6 +120,7 @@ class EngineBlock_Corto_Adapter
 
     public function idPsMetadata()
     {
+        $this->_setRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
         $this->_callCortoServiceUri('idPsMetaDataService');
     }
 
