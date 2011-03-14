@@ -30,12 +30,16 @@ if (!isset($message)) {
             <noscript><input type="submit" value="Submit" /></noscript>
 
             <? if ($trace): ?>
-            <input type="submit" value="Submit" />
+            <input id="submitbutton" type="submit" value="Submit" />
             <pre>
                 <?= $trace ?>
             </pre>
             <? endif; ?>
 
         </form>
+
+        <script type="text/javascript">
+            document.getElementById('submitbutton').focus();
+        </script>
     </body>
 </html>

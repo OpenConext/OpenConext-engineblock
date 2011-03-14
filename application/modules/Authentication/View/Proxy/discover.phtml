@@ -6,6 +6,8 @@
         <meta name="robots" content="noindex, nofollow"/>
         <link href="https://espee.surfnet.nl/federate/surfnet/css/screen.css" rel="stylesheet" type="text/css" />
         <link href="https://espee.surfnet.nl/federate/surfnet/css/table.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="/css/ext/jqueryui/1.8.2/themes/base/jquery-ui.css" type="text/css" media="all"/>
+        <link rel="stylesheet" href="/css/popup.css" type="text/css" media="all"/>
     </head>
     <body>
 
@@ -37,14 +39,15 @@
                             Als je instelling niet in de lijst staat, kan je mogelijk inloggen met een SURFguest account.
                         </p>
 
-
                         <form method="post" action="<?= $action ?>">
                             <input type=hidden name=ID value="<?= $ID ?>">
                             <p>
                                 <select id="idp" name="idp" onkeyup="if (arguments[0]) { if (arguments[0]['keyCode']) { if (arguments[0]['keyCode']===13) { this.form.submit();}}}">
                                 <? foreach($idpList as $idp): ?>
-                                    <? if (isset($remoteEntities[$idp]['Description']['nl'])) { ?>
-                                    <option value="<?=$idp?>"><?=htmlentities($remoteEntities[$idp]['Description']['nl'])?></option>
+                                    <? if (isset($remoteEntities[$idp]['Description']['en'])) { ?>
+                                    <option value="<?=$idp?>" <?php if ($idp===$preselectedIdp) echo 'selected="selected"'; ?>>
+                                        <?=htmlentities($remoteEntities[$idp]['Description']['nl'])?>
+                                    </option>
                                     <? } else { ?>
                                     <option><?= $idp ?></option>
                                     <? } ?>
@@ -82,8 +85,79 @@
                 </address>
             </div>
         </div>
+        <?php if ($preselectedIdp) : ?>
+        <div id="dialog" style="display: none;">
+            Logging you in to: <br />
+            <strong><?php echo $remoteEntities[$preselectedIdp]['Description']['en']; ?></strong>
+            <br /><br />
+            in: <strong id="secondsRemaining"></strong>
+            <br /><br />
+            <a id="cancel" href="#" onclick="$('#dialog').dialog('close');">CANCEL</a>
+        </div>
+        <? endif; ?>
+        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
+        <script src="/javascript/jquery-ui-1.8.10.custom.min.js"></script>
+
         <script type="text/javascript">
-          document.getElementById('idp').focus();
+            document.getElementById('idp').focus();
+
+            <?php if ($preselectedIdp) : ?>
+            (function(){
+                var preselectedIdp = <?php echo json_encode($preselectedIdp); ?>;
+                var preselectedIdpData = <?php echo json_encode($remoteEntities[$preselectedIdp]); ?>;
+
+
+                var Timer = function(seconds, onComplete, onTick) {
+                    seconds++;
+                    var public =  {
+                        stopped: false,
+
+                        tick: function() {
+                            var that = this;
+
+                            if (seconds-- <= 0) {
+                                if (onComplete) {
+                                    onComplete();
+                                }
+                            }
+                            else if (!this.stopped) {
+                                window.setTimeout(function() {
+                                    if (onTick) {
+                                        onTick();
+                                    }
+                                    that.tick();
+                                }, 1000);
+                            }
+                        },
+
+                        getSeconds: function() {
+                            return seconds;
+                        },
+
+                        stop: function() {
+                            this.stopped = true;
+                        }
+
+                    };
+
+                    // Start ticking
+                    public.tick();
+                    return public;
+                };
+
+                var countdown = new Timer(5, function() {
+                   $('#idp').attr('value', preselectedIdp).parents('form')[0].submit();
+                }, function() {
+                    $('#secondsRemaining').html(countdown.getSeconds());
+                });
+                $( "#dialog" ).dialog( {
+                    modal: true,
+                    close: function(event, ui) {
+                        countdown.stop();
+                    }
+                });
+            }());
+            <?php endif; ?>
         </script>
     </body>
 </html>
