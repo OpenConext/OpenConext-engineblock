@@ -6,80 +6,24 @@
  * @author Sixto Martín, <smartin@yaco.es>
  * @package simpleSAMLphp
  * @subpackage JANUS
- * @version $Id: module_janus.php 419 2010-06-07 13:07:31Z jach@wayf.dk $
+ * @version $Id: module_janus.php 607 2011-02-14 13:24:14Z jach@wayf.dk $
  */
 $config = array(
 
-    'admin.name' => 'WAYF sekretariatet',
-    'admin.email' => 'sekretariatet@wayf.dk',
+    'admin.name' => 'JANUS admin',
+    'admin.email' => 'janusadmin@example.org',
 
-    'auth' => 'default-sp',
-    'useridattr' => 'urn:mace:dir:attribute-def:uid',
-    #'auth'=>'admin',
-    #'useridattr' => 'user',
-
-    /**
-     * Mailtoken specific stuff
+    /*
+     * Authenticate against the default-sp
      */
+    #'auth' => 'default-sp',
+    #'useridattr' => 'urn:mace:dir:attribute-def:uid',
 
-    // Token lifetime in seconds
-    'token.lifetime' => 3600*24,
-
-    // Content of token mail
-    'email' => array(
-        'en' => array(
-            'body' => '
-                <html>
-                <head>
-                <title>JANUS token</title>
-                </head>
-                <body>
-                <p>To login to JANUS click the following link:</p>
-                <a href="%RETURNURL%?token=%TOKEN%&source=mailtoken">%RETURNURL%?token=%TOKEN%&source=mailtoken</a>
-                <p>If the link does not work, please try to copy the link
-                directly into your browsers address bar.</p>
-                <p>In case of problems contact the WAYF Secreteriat.</p>
-                <br />
-                <p>Best regards</p>
-                <p>WAYF Secreteriat</p>
-                <p>sekretariat@wayf.dk</p>
-                </body>
-                </html>',
-            'headers' => 'MIME-Version: 1.0' . "\r\n".
-                'Content-type: text/html; charset=iso-8859-1' . "\r\n".
-                'From: JANUS <no-reply@wayf.dk>' . "\r\n" .
-                'Reply-To: WAYF <sekretariatet@wayf.dk>' . "\r\n" .
-                'X-Mailer: PHP/' . phpversion(),
-            'subject' => 'JANUS: Login token',
-        ),
-        'da' => array(
-            'body' => '
-                <html>
-                <head>
-                <title>JANUS token</title>
-                </head>
-                <body>
-                <p>For at logge ind i JANUS, klik p&aring; linket:</p>
-                <a href="%RETUENURL%?token=%TOKEN%&source=mailtoken">%RETURNURL%?token=%TOKEN%&source=mailtoken</a>
-                <p>Hvis det ikke virker, pr&oslash;v at kopiere linket til
-                adressefeltet i din browser.</p>
-                <p>I tilf&aelig;lde af problemer med JANUS, kontakt WAYF
-                sekretariatet.</p>
-                <br />
-                <p>Venlig hilsen</p>
-                <p>WAYF sekretariatet</p>
-                <p>sekretariat@wayf.dk</p>
-                </body>
-                </html>
-            ',
-            'headers' => 'MIME-Version: 1.0' . "\r\n".
-                'Content-type: text/html; charset=iso-8859-1' . "\r\n".
-                'From: JANUS <no-reply@wayf.dk>' . "\r\n" .
-                'Reply-To: WAYF <sekretariatet@wayf.dk>' . "\r\n" .
-                'X-Mailer: PHP/' . phpversion(),
-            'subject' => 'JANUS: Login token',
-        ),
-    ),
+    /*
+     * Authenticate against the admin auth source 
+     */
+    'auth'=>'admin',
+    'useridattr' => 'user',
 
     /*
      * Configuration for the database connection.
@@ -107,15 +51,6 @@ $config = array(
     'entity.prettyname' => 'displayname:nl',
 
     /*
-     * Janus supports a blacklist (mark idps that are not allowed to connect to an sp) 
-     * and/or a whitelist (mark idps that are allowed to connect to an sp). 
-     * You can enable both to make this choice per entity.
-     */
-    'entity.useblacklist' => true,
-    'entity.usewhitelist' => true,
-    
-    
-    /*
      * Enable entity types
      */
     'enable.saml20-sp' =>   true,
@@ -123,11 +58,20 @@ $config = array(
     'enable.shib13-sp' =>   false,
     'enable.shib13-idp' =>  false,
 
+    /*
+     * JANUS supports a blacklist (mark idps that are not allowed to connect to an sp)
+     * and/or a whitelist (mark idps that are allowed to connect to an sp). 
+     * You can enable both to make this choice per entity.
+     */
+    'entity.useblacklist' => true,
+    'entity.usewhitelist' => true,
 
     /*
-     * Enable self user creation
+     * Default ARP
      */
-    'usercreation.allow' => true,
+    'entity.defaultarp' => array(
+        'eduPersonTargetdID', 
+    ),
 
     /*
      * Configuration of systems in JANUS.
@@ -199,105 +143,25 @@ $config = array(
     'workflowstate.default' => 'testaccepted',
 
     /*
-     * Allowed attribute names
+     * Allowed attributes
      */
-    'attributes' => array(
-        'cn' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'sn' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'gn' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'eduPersonPrincipalName' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'mail' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'eduPersonPrimaryAffiliation' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'organizationName' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'norEduPersonNIN' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'schacPersonalUniqueID' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'eduPersonScopedAffiliation' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'preferredLanguage' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'eduPersonEntitlement' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'norEduPersonLIN' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'eduPersonAssurance' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'schacHomeOrganization' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
-        'eduPersonTargetdID' => array(
-            'description' => array(
-                'da' => 'Beskrivelsen',
-                'en' => 'The description',
-            ),
-        ),
+    'attributes' => array( 
+        'cn',   
+        'sn',       
+        'gn',       
+        'eduPersonPrincipalName',
+        'mail', 
+        'eduPersonPrimaryAffiliation',
+        'organizationName',
+        'norEduPersonNIN',
+        'schacPersonalUniqueID',
+        'eduPersonScopedAffiliation',
+        'preferredLanguage',
+        'eduPersonEntitlement',
+        'norEduPersonLIN',
+        'eduPersonAssurance',
+        'schacHomeOrganization',
+        'eduPersonTargetedID',
     ),
 
     /*
@@ -306,11 +170,19 @@ $config = array(
     'metadatafields.saml20-idp' => array(
         // Endpoint fields
         'SingleSignOnService:0:Binding' => array(
-            'type' => 'text',
+            'type' => 'select',
+            'select_values' => array(
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:PAOS', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:URI'
+            ),
+            'default' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             'order' => 110,
-            'default' => '',
             'description' => array(
-                'nl' => 'Endepunkts type for forbindelser der understøtter Single Sign On profilen [SAMLProf].',
+                'da' => 'Endepunkts type for forbindelser der understøtter Single Sign On profilen [SAMLProf].',
                 'en' => 'Binding for the single sign on endpoint for connection that supports Single Sign On profile [SAMLProf].',
                 'es' => 'Uno o más elementos de tipo EndpointType que describen los receptores que soportan los perfiles del protocolo de Peticion de Autenticacion definidos en [SAMLProf].',
             ),
@@ -319,44 +191,99 @@ $config = array(
         'SingleSignOnService:0:Location' => array(
             'type' => 'text',
             'order' => 120,
-            'default' => '',
+            'default' => 'CHANGE THIS',
             'description' => array(
-                'nl' => 'Endepunkt for forbindelser der understøtter Single Sign On profilen [SAMLProf].',
+                'da' => 'Endepunkt for forbindelser der understøtter Single Sign On profilen [SAMLProf].',
                 'en' => 'Endpoint for connection that supports the Single Sign On profile [SAMLProf].',
                 'es' => 'Uno o más elementos de tipo EndpointType que describen los receptores que soportan los perfiles del protocolo de Peticion de Autenticacion definidos en [SAMLProf].',
             ),
             'required' => true,
             'validate' => 'isurl',
         ),
+        'SingleLogoutService:0:Binding' => array(
+            'type' => 'select',
+            'select_values' => array(
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:PAOS', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:URI'
+            ),
+            'default' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            'order' => 130,
+            'description' => array(
+                'da' => 'Endepunkts type for forbindelser der understøtter Single logout profilen [SAMLProf].',
+                'en' => 'Binding for the single logout endpoint for connection that supports Single Logout profile [SAMLProf].',
+                'es' => 'Cero o más elementos de tipo EndpointType que describen los receptores que soportan los profiles de Single Logout definidos en [SAMLProf].',
+            ),
+            'required' => false,
+        ),
+        'SingleLogoutService:0:Location' => array(
+            'type' => 'text',
+            'order' => 140,
+            'default' => 'CHANGE THIS',
+            'description' => array(
+                'da' => 'Endepunkt for forbindelser der understøtter Single logout profilen [SAMLProf].',
+                'en' => 'Endpoint for connection that supports the Single Logout profile [SAMLProf].',
+                'es' => 'Cero o más elementos de tipo EndpointType que describen los receptores que soportan los profiles de Single Logout definidos en [SAMLProf].',
+            ),
+            'required' => false,
+            'validate' => 'isurl',
+        ),
         // Certificate fields 
         'certData' => array(
             'type' => 'text',
             'order' => 210,
-            'default' => '',
+            'default' => 'CHANGE THIS',
             'description' => array(
-                'nl' => 'Base 64 encoded certifikat brugt til denne forbindelse.',
+                'da' => 'Base 64 encoded certifikat brugt til denne forbindelse.',
                 'en' => 'Base 64 encoded certificate used for this connection.',
                 'es' => 'Certificado codificado en base 64.',
             ),
             'required' => true,
         ),
-        // Information fields
-        'name:nl' => array(
+        'certFingerprint:0' => array(
             'type' => 'text',
-            'order' => 310,
-            'default' => '',
+            'order' => 220,
+            'default' => 'CHANGE THIS',
             'description' => array(
-                'nl' => 'De nederlandse naam van deze verbinding',
-                'en' => 'The dutch name of this connection.',
+                'da' => 'En eller flere fingerprints for certifikater brugt til denne forbindelse.',
+                'en' => 'One or more fingerprint for the certificate userd for the connection.',
+                'es' => 'Pequeña secuencia de bytes obtenida aplicando una funcion hash al certificado certData.',
+            ),
+            'required' => false,
+            'validate' => 'leneq40',
+        ),
+        'certificate' => array(
+            'type' => 'file',
+            'order' => 230,
+            'description' => array(
+                'da' => 'Fil med certifikat for forbindelsen',
+                'en' => 'File containing a certificate for the connection',                
+            ),
+            'filetype' => '*.pem', // *.jpg; *.gif; *.*
+            'maxsize' => '3 M', // Valid units are B, KB, MB, and GB. The default unit is KB.            
+            'required' => false,
+        ),
+        // Information fields
+        'name:da' => array(
+            'type' => 'text',
+            'order' => 3100,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Forbindelsens navn på dansk.',
+                'en' => 'The danishh name of this connection.',
+                'es' => 'El nombre danés de esta conexión.',
             ),
             'required' => true,
         ),
         'name:en' => array(
             'type' => 'text',
             'order' => 311,
-            'default' => '',
+            'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Forbindelsens navn på engelsk',
+                'da' => 'Forbindelsens navn på engelsk',
                 'en' => 'The english name of this connection.',
                 'es' => 'El nombre Inglés de esta conexión.',
             ),
@@ -385,10 +312,10 @@ $config = array(
         ),
         'description:nl' => array(
             'type' => 'text',
-            'order' => 330,
-            'default' => '',
+            'order' => 320,
+            'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Dansk beskrivelse af forbindelsen.',
+                'da' => 'Dansk beskrivelse af forbindelsen.',
                 'en' => 'A danish description of this connection.',
                 'es' => 'Una descripción danés de esta conexión.',
             ),
@@ -396,10 +323,10 @@ $config = array(
         ),
         'description:en' => array(
             'type' => 'text',
-            'order' => 331,
+            'order' => 321,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Engelsk beskrivelse af forbindelsen.',
+                'da' => 'Engelsk beskrivelse af forbindelsen.',
                 'en' => 'A english description of this connection.',
                 'es' => 'Una descripción Inglés de esta conexión.',
             ),
@@ -407,20 +334,20 @@ $config = array(
         ),
         'url:nl' => array(
             'type' => 'text',
-            'order' => 400,
+            'order' => 330,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'En URL til flere informationer om forbindelsen.',
+                'da' => 'En URL til flere informationer om forbindelsen.',
                 'en' => 'An URL pointing to more information about the connection.',
                 'es' => 'URL del proveedor de identidad.',
             ),
         ),
         'url:en' => array(
             'type' => 'text',
-            'order' => 401,
+            'order' => 331,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'En URL til flere informationer om forbindelsen.',
+                'da' => 'En URL til flere informationer om forbindelsen.',
                 'en' => 'An URL pointing to more information about the connection.',
                 'es' => 'URL del proveedor de identidad.',
             ),
@@ -472,36 +399,108 @@ $config = array(
                         ' Use a mapping tool to find the coordinates of a place.</a>',
             ),
         ),
-        // Organization fields
-        'organization:OrganizationName' => array(
-            'type' => 'text',
-            'order' => 700,
-            'default' => 'defaultvalue',
-            'supported' => array('nl','en','es'),
+        'icon' => array(
+            'type' => 'file',
+            'order' => 340,
             'description' => array(
-                'nl' => 'Navn på organisationen som forbindelsen tilhører.',
+                'da' => 'Fil med logo som bliver vist sammen med forbindelsens navn i discovery servicen.',
+                'en' => 'A file containing a logo which will be shown next to this IdP in the discovery service.',                
+            ),
+            'filetype' => '*.jpg', // *.jpg; *.gif; *.*
+            'maxsize' => '100', // Valid units are B, KB, MB, and GB. The default unit is KB.            
+        ),
+        // Contact person fields
+        'contacts:0:contactType' => array(
+            'type' => 'select',
+            'order' => 410,
+            'default' => 'technical',
+            'select_values' => array("technical", "support", "administrative", "billing", "other"),
+            'description' => array(
+                'da' => 'Kontaktpersonens type',
+                'en' => 'The type of the contact person.',
+                'es' => 'Especifica los tipos de contactos. Los posibles valores son: technical, support, administrative, billing, and other.',
+            ),
+        ),
+        'contacts:0:givenName' => array(
+            'type' => 'text',
+            'order' => 421,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Fornavn på kontaktperson',
+                'en' => 'The contact persons given name.',
+                'es' => 'Cadena opcional que especifica el apodo de la persona de contacto.',
+            ),
+        ),
+        'contacts:0:surName' => array(
+            'type' => 'text',
+            'order' => 422,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Efternavn på kontaktperson.',
+                'en' => 'The contact persons surname.',
+                'es' => 'Cadena opcional que especifica los apellidos de la persona de contacto.',
+            ),
+        ),
+        'contacts:0:emailAddress' => array(
+            'type' => 'text',
+            'order' => 430,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Kontaktpersonens emailadresse.',
+                'en' => 'Email address of the contact person.',
+                'es' => 'Cero o mas elementos que representan los emails pertenecientes a la persona de contacto.',
+            ),
+        ),
+        'contacts:0:telephoneNumber' => array(
+            'type' => 'text',
+            'order' => 440,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Telefon nummer på kontaktperson.',
+                'en' => 'Phone number for the contact person.',
+                'es' => 'Cero o mas cadenas que especifican el numero de telefono de la persona de contacto.',
+            ),
+        ),
+        'contacts:0:company' => array(
+            'type' => 'text',
+            'order' => 450,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Virksomhed for kontaktperson tilhører.',
+                'en' => 'The company that the contact person is associated with.',
+                'es' => 'Cadena que especifica el nombre de la empresa de la persona de contacto.',
+            ),
+        ),
+        // Organization fields
+        'OrganizationName' => array(
+            'type' => 'text',
+            'order' => 510,
+            'default' => 'defaultvalue',
+            'supported' => array('da','en','es'),
+            'description' => array(
+                'da' => 'Navn på organisationen som forbindelsen tilhører.',
                 'en' => 'Optional element identifying the organization responsible for the SAML entity described by the element.',
                 'es' => 'Elemento opcional que identifica la organización responsable de la entidad SAML.',
             ),
         ),
-        'organization:OrganizationDisplayName' => array(
+        'OrganizationDisplayName' => array(
             'type' => 'text',
-            'order' => 701,
+            'order' => 520,
             'default' => 'defaultvalue',
-            'supported' => array('nl','en','es'),
+            'supported' => array('da','en','es'),
             'description' => array(
-                'nl' => 'Beskrivelse af organisationen som forbindelsen tilhører.',
-                'en' => 'Optional element describing the organization responsible for the SAML entity.',
-                'es' => 'Elemento opcional que describe la organización responsable de la entidad SAML.',
+                'da' => 'DA - Description',
+                'en' => 'Optional element identifying the organization responsible for the SAML entity described by the element (Name for human consumption).',
+                'es' => 'Elemento opcional que identifica la organización responsable de la entidad SAML (Nombre comprensible para el usuario).',
             ),
         ),
-        'organization:OrganizationURL' => array(
+        'OrganizationURL' => array(
             'type' => 'text',
-            'order' => 702,
+            'order' => 530,
             'default' => 'defaultvalue',
-            'supported' => array('nl','en','es'),
+            'supported' => array('da','en','es'),
             'description' => array(
-                'nl' => 'En URL til flere informationer om forbindelsen.',
+                'da' => 'En URL til flere informationer om forbindelsen.',
                 'en' => 'URL that specify a location to which to direct a user for additional information.',
                 'es' => 'URL que especifica una dirección a la que se puede dirigir un usuario para obtener información adicional.',
             ),
@@ -510,20 +509,22 @@ $config = array(
         // Control fields
         'redirect.sign' => array(
             'type' => 'boolean',
-            'order' => 800,
+            'order' => 810,
             'default' => true,
+            'default_allow' => true,
             'description' => array(
-                'nl' => 'Kræv signering af requests.',
+                'da' => 'Kræv signering af requests.',
                 'en' => 'Demand signing of requests.',
             ),
             'required' => true,
         ),
         'redirect.validate' => array(
             'type' => 'boolean',
-            'order' => 810,
+            'order' => 820,
             'default' => true,
+            'default_allow' => true,
             'description' => array(
-                'nl' => 'Valider signatur på requests.',
+                'da' => 'Valider signatur på requests.',
                 'en' => 'Validate signature on requests and responses',
             ),
             'required' => true,
@@ -532,11 +533,23 @@ $config = array(
             'type' => 'boolean',
             'order' => 830,
             'default' => true,
+            'default_allow' => true,
             'description' => array(
                 'da' => 'Base 64 indkode attributter.',
                 'en' => 'Base 64 encode attributes',
             ),
             'required' => true,
+        ),
+        'assertion.encryption' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => false,
+            'default_allow' => true,
+            'description' => array(
+                'da' => 'Er assertions fra denne forbindelse krypteret?',
+                'en' => 'Is assertions from this connection encrypted?',
+            ),
+            'required' => false,
         ),
     ),
 
@@ -546,11 +559,19 @@ $config = array(
     'metadatafields.saml20-sp' => array(
         // Endpoint fields
         'AssertionConsumerService:0:Binding' => array(
-            'type' => 'text',
+            'type' => 'select',
+            'select_values' => array(
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:PAOS', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:URI'
+            ),
+            'default' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             'order' => 110,
-            'default' => '',
             'description' => array(
-                'nl' => 'Endepunkts type for forbindelser der understøtter Authentication Request protokollen [SAMLProf].',
+                'da' => 'Endepunkts type for forbindelser der understøtter Authentication Request protokollen [SAMLProf].',
                 'en' => 'Binding for the endpoint for connection that supports the Authentication Request protocol [SAMLProf].',
                 'es' => 'Uno o mas elementos que describen los endpoints indexados que soportan los perfiles del protocolo de Peticion de Autenticacion definido en [SAMLProf]. Todos los proveedores de servicios soportan al menos un endpoint por definicion.',
             ),
@@ -559,9 +580,9 @@ $config = array(
         'AssertionConsumerService:0:Location' => array(
             'type' => 'text',
             'order' => 120,
-            'default' => '',
+            'default' => 'CHANGE THIS',
             'description' => array(
-                'nl' => 'Endepunkt for forbindelser der understøtter Authentication Request protokollen [SAMLProf].',
+                'da' => 'Endepunkt for forbindelser der understøtter Authentication Request protokollen [SAMLProf].',
                 'en' => 'Endpoint for connection that supports the Authentication Request protocol [SAMLProf].',
                 'es' => 'Uno o mas elementos que describen los endpoints indexados que soportan los perfiles del protocolo de Peticion de Autenticacion definido en [SAMLProf]. Todos los proveedores de servicios soportan al menos un endpoint por definicion.',
             ),
@@ -573,11 +594,40 @@ $config = array(
             'order' => 130,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Endepunkts index for forbindelser der understøtter Authentication Request protokollen [SAMLProf].',
+                'da' => 'Endepunkts index for forbindelser der understøtter Authentication Request protokollen [SAMLProf].',
                 'en' => 'Index for the endpoint for connection that supports the Authentication Request protocol [SAMLProf].',
                 'es' => 'Uno o mas elementos que describen los endpoints indexados que soportan los perfiles del protocolo de Peticion de Autenticacion definido en [SAMLProf]. Todos los proveedores de servicios soportan al menos un endpoint por definicion.',
             ),
             'required' => false,
+            'validate' => 'isurl',
+        ),
+        'SingleLogoutService:0:Binding' => array(
+            'type' => 'select',
+            'select_values' => array(
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:SOAP', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:PAOS', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', 
+                'urn:oasis:names:tc:SAML:2.0:bindings:URI'
+            ),
+            'default' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            'order' => 140,
+            'description' => array(
+                'da' => 'Endepunkts type for forbindelser der understøtter Single Logout profilen [SAMLProf].',
+                'en' => 'Binding for the single logout endpoint for connection that supports Single Logout profile [SAMLProf].',
+                'es' => 'Cero o más elementos de tipo EndpointType que describen los receptores que soportan los profiles de Single Logout definidos en [SAMLProf].',
+            ),
+        ),
+        'SingleLogoutService:0:Location' => array(
+            'type' => 'text',
+            'order' => 150,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Endepunkt for forbindelser der understøtter Single Sign Logout profilen [SAMLProf].',
+                'en' => 'Endpoint for connection that supports the Single Sign Logout profile [SAMLProf].',
+                'es' => 'Cero o más elementos de tipo EndpointType que describen los receptores que soportan los profiles de Single Logout definidos en [SAMLProf].',
+            ),
             'validate' => 'isurl',
         ),
         'coin:gadgetbaseurl' => array(
@@ -629,13 +679,36 @@ $config = array(
         'certData' => array(
             'type' => 'text',
             'order' => 210,
-            'default' => '',
+            'default' => 'CHANGE THIS',
             'description' => array(
-                'nl' => 'Base 64 encoded certifikat brugt til denne forbindelse.',
+                'da' => 'Base 64 encoded certifikat brugt til denne forbindelse.',
                 'en' => 'Base 64 encoded certificate used for this connection.',
                 'es' => 'Certificado codificado en base 64.',
             ),
             'required' => true,
+        ),
+        'certFingerprint:0' => array(
+            'type' => 'text',
+            'order' => 220,
+            'default' => 'CHANGE THIS',
+            'description' => array(
+                'da' => 'En eller flere fingerprints for certifikater brugt til denne forbindelse.',
+                'en' => 'One or more fingerprint for the certificate userd for the connection.',
+                'es' => 'Pequeña secuencia de bytes obtenida aplicando una funcion hash al certificado certData.',
+            ),
+            'required' => false,
+            'validate' => 'leneq40',
+        ),
+        'certificate' => array(
+            'type' => 'file',
+            'order' => 230,
+            'description' => array(
+                'da' => 'Fil med certifikat for forbindelsen',
+                'en' => 'File containing a certificate for the connection',                
+            ),
+            'filetype' => '*.pem', // *.jpg; *.gif; *.*
+            'maxsize' => '3 M', // Valid units are B, KB, MB, and GB. The default unit is KB.            
+            'required' => false,
         ),
         // Information fields
         'name:nl' => array(
@@ -643,8 +716,8 @@ $config = array(
             'order' => 310,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Forbindelsens navn på dansk.',
-                'en' => 'The danishh name of this connection.',
+                'da' => 'Forbindelsens navn på dansk.',
+                'en' => 'The Dutch name of this connection.',
                 'es' => 'El nombre danés de esta conexión.',
             ),
             'required' => true,
@@ -654,7 +727,7 @@ $config = array(
             'order' => 311,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Forbindelsens navn på engelsk',
+                'da' => 'Forbindelsens navn på engelsk',
                 'en' => 'The english name of this connection.',
                 'es' => 'El nombre Inglés de esta conexión.',
             ),
@@ -683,21 +756,21 @@ $config = array(
         ),
         'description:nl' => array(
             'type' => 'text',
-            'order' => 330,
+            'order' => 320,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Dansk beskrivelse af forbindelsen.',
-                'en' => 'A danish description of this connection.',
+                'da' => 'Dansk beskrivelse af forbindelsen.',
+                'en' => 'A Dutch description of this connection.',
                 'es' => 'Una descripción danés de esta conexión.',
             ),
             'required' => true,
         ),
         'description:en' => array(
             'type' => 'text',
-            'order' => 331,
+            'order' => 321,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'Engelsk beskrivelse af forbindelsen.',
+                'da' => 'Engelsk beskrivelse af forbindelsen.',
                 'en' => 'A english description of this connection.',
                 'es' => 'Una descripción Inglés de esta conexión.',
             ),
@@ -705,54 +778,126 @@ $config = array(
         ),
         'url:nl' => array(
             'type' => 'text',
-            'order' => 400,
+            'order' => 330,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'En URL til flere informationer om forbindelsen.',
+                'da' => 'En URL til flere informationer om forbindelsen.',
                 'en' => 'An URL pointing to more information about the connection.',
                 'es' => 'URL del proveedor de identidad.',
             ),
         ),
         'url:en' => array(
             'type' => 'text',
-            'order' => 401,
+            'order' => 331,
             'default' => 'defaultvalue',
             'description' => array(
-                'nl' => 'En URL til flere informationer om forbindelsen.',
+                'da' => 'En URL til flere informationer om forbindelsen.',
                 'en' => 'An URL pointing to more information about the connection.',
                 'es' => 'URL del proveedor de identidad.',
             ),
         ),
-        // Organization fields
-        'organization:OrganizationName' => array(
-            'type' => 'text',
-            'order' => 501,
-            'default' => 'defaultvalue',
-            'supported' => array('nl','en','es'),
+        'icon' => array(
+            'type' => 'file',
+            'order' => 340,
             'description' => array(
-                'nl' => 'Navn på organisationen som forbindelsen tilhører.',
+                'da' => 'Fil med logo som bliver vist sammen med forbindelsens navn i discovery servicen.',
+                'en' => 'A file containing a logo which will be shown next to this IdP in the discovery service.',                
+            ),
+            'filetype' => '*.jpg', // *.jpg; *.gif; *.*
+            'maxsize' => '100', // Valid units are B, KB, MB, and GB. The default unit is KB.            
+        ),
+        // Contact person fields
+        'contacts:0:contactType' => array(
+            'type' => 'select',
+            'order' => 410,
+            'default' => 'technical',
+            'select_values' => array("technical", "support", "administrative", "billing", "other"),
+            'description' => array(
+                'da' => 'Kontaktpersonens type',
+                'en' => 'The type of the contact person.',
+                'es' => 'Especifica los tipos de contactos. Los posibles valores son: technical, support, administrative, billing, and other.',
+            ),
+        ),
+        'contacts:0:givenName' => array(
+            'type' => 'text',
+            'order' => 421,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Fornavn på kontaktperson',
+                'en' => 'The contact persons given name.',
+                'es' => 'Cadena opcional que especifica el apodo de la persona de contacto.',
+            ),
+        ),
+        'contacts:0:surName' => array(
+            'type' => 'text',
+            'order' => 422,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Efternavn på kontaktperson.',
+                'en' => 'The contact persons surname.',
+                'es' => 'Cadena opcional que especifica los apellidos de la persona de contacto.',
+            ),
+        ),
+        'contacts:0:emailAddress' => array(
+            'type' => 'text',
+            'order' => 430,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Kontaktpersonens emailadresse.',
+                'en' => 'Email address of the contact person.',
+                'es' => 'Cero o mas elementos que representan los emails pertenecientes a la persona de contacto.',
+            ),
+        ),
+        'contacts:0:telephoneNumber' => array(
+            'type' => 'text',
+            'order' => 440,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Telefon nummer på kontaktperson.',
+                'en' => 'Phone number for the contact person.',
+                'es' => 'Cero o mas cadenas que especifican el numero de telefono de la persona de contacto.',
+            ),
+        ),
+        'contacts:0:company' => array(
+            'type' => 'text',
+            'order' => 450,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'Virksomhed for kontaktperson tilhører.',
+                'en' => 'The company that the contact person is associated with.',
+                'es' => 'Cadena que especifica el nombre de la empresa de la persona de contacto.',
+            ),
+        ),
+        // Organization fields
+        'OrganizationName' => array(
+            'type' => 'text',
+            'order' => 510,
+            'default' => 'defaultvalue',
+            'supported' => array('da','en','es'),
+            'description' => array(
+                'da' => 'Navn på organisationen som forbindelsen tilhører.',
                 'en' => 'Optional element identifying the organization responsible for the SAML entity described by the element.',
                 'es' => 'Elemento opcional que identifica la organización responsable de la entidad SAML.',
             ),
         ),
-        'organization:OrganizationDisplayName' => array(
+        'OrganizationDisplayName' => array(
             'type' => 'text',
-            'order' => 502,
+            'order' => 520,
             'default' => 'defaultvalue',
-            'supported' => array('nl','en','es'),
+            'supported' => array('da','en','es'),
             'description' => array(
-                'nl' => 'Beskrivelse af organisationen som forbindelsen tilhører.',
-                'en' => 'Optional element describing the organization responsible for the SAML entity.',
-                'es' => 'Elemento opcional que describe la organización responsable de la entidad SAML.',
+                'da' => 'DA - Description',
+                'en' => 'Optional element identifying the organization responsible for the SAML entity described by the element (Name for human consumption).',
+                'es' => 'Elemento opcional que identifica la organización responsable de la entidad SAML (Nombre comprensible para el usuario).',
             ),
         ),
-        'organization:OrganizationURL' => array(
+        'OrganizationURL' => array(
             'type' => 'text',
-            'order' => 503,
+            'order' => 530,
             'default' => 'defaultvalue',
-            'supported' => array('nl','en','es'),
+            'supported' => array('da','en','es'),
             'description' => array(
-                'nl' => 'En URL til flere informationer om forbindelsen.',
+                'da' => 'En URL til flere informationer om forbindelsen.',
                 'en' => 'URL that specify a location to which to direct a user for additional information.',
                 'es' => 'URL que especifica una dirección a la que se puede dirigir un usuario para obtener información adicional.',
             ),
@@ -763,8 +908,9 @@ $config = array(
             'type' => 'boolean',
             'order' => 810,
             'default' => true,
+            'default_allow' => true,
             'description' => array(
-                'nl' => 'Kræv signering af requests.',
+                'da' => 'Kræv signering af requests.',
                 'en' => 'Demand signing of requests.',
             ),
             'required' => true,
@@ -773,8 +919,9 @@ $config = array(
             'type' => 'boolean',
             'order' => 820,
             'default' => true,
+            'default_allow' => true,
             'description' => array(
-                'nl' => 'Valider signatur på requests.',
+                'da' => 'Valider signatur på requests.',
                 'en' => 'Validate signature on requests and responses',
             ),
             'required' => true,
@@ -783,11 +930,33 @@ $config = array(
             'type' => 'boolean',
             'order' => 830,
             'default' => true,
+            'default_allow' => true,
             'description' => array(
                 'da' => 'Base 64 indkode attributter.',
                 'en' => 'Base 64 encode attributes',
             ),
             'required' => true,
+        ),
+        'assertion.encryption' => array(
+            'type' => 'boolean',
+            'order' => 830,
+            'default' => false,
+            'default_allow' => true,
+            'description' => array(
+                'da' => 'Er assertions fra denne forbindelse krypteret?',
+                'en' => 'Is assertions from this connection encrypted?',
+            ),
+            'required' => false,
+        ),
+        'NameIDFormat' => array(
+            'type' => 'text',
+            'order' => 840,
+            'default' => 'defaultvalue',
+            'description' => array(
+                'da' => 'NameID som er understøttet for denne forbindelse.',
+                'en' => 'NameID supported by this connection.',
+                'es' => 'Cero o mas elementos de tipo type anyURI que enumeran los formatos de identificacion de nombres soportados por la entidad sistema. Ver la seccion 8.3 de [SAMLCore] para ver algunos posibles valores para este elemento.',
+            ),
         ),
     ),
 
@@ -813,6 +982,20 @@ $config = array(
      * Uncomment to enable the cron job
      */
     //'cron' => array('daily'),
+
+    /*
+     * Configuration of JANUS aggregators
+     */
+    'aggregators' => array(
+        'prod-sp' => array(
+            'state' => 'prodaccepted',
+            'type' => 'saml20-sp',    
+        ),    
+        'prod-idp' => array(
+            'state' => 'prodaccepted',
+            'type' => 'saml20-idp',    
+        ),    
+    ),
 
     'export.external' => array(
         'filesystem' => array(
@@ -1063,13 +1246,6 @@ $config = array(
             ),
         ),
         
-        // Federation tab
-        'federationtab' => array(
-            'role' => array(
-                'admin',
-            ),
-        ),
-        
         // Access to all entities
         'allentities' => array(
             'role' => array(
@@ -1151,8 +1327,4 @@ $config = array(
         ),
     ),
 );
-
-$localConfig = dirname(__FILE__) . '/module_janus.local.php';
-if (file_exists($localConfig)) {
-    require $localConfig;
-}
+?>
