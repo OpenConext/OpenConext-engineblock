@@ -216,7 +216,7 @@ class EngineBlock_Corto_Adapter
                 // Note that we use an input filter because consent requires a presistent NameID
                 // and we only get that after provisioning
                 'infilter'  => array($this, 'filterInputAttributes'),
-                //'outfilter' => array($this, 'filterOutputAttributes'),
+                'outfilter' => array($this, 'filterOutputAttributes'),
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
@@ -278,7 +278,11 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * Called by Corto whenever it receives an Assertion with attributes from an Identity Provider
+     * Called by Corto whenever it receives an Assertion with attributes from an Identity Provider.
+     *
+     * Note we have to do everything that relies on the actual idpEntityMetadata here, because in the
+     * filterOutputAttributes the idp metadata points to us (Corto / EngineBlock) not the actual idp we received
+     * the response from.
      *
      * @param  $entityMetaData
      * @param  $response
@@ -304,7 +308,7 @@ class EngineBlock_Corto_Adapter
         
         // Provisioning of the user account
         $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
-        $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
+        $_SESSION['subjectId'] = $subjectId;
         
         // If in VO context, validate the user's membership
         if (!is_null($vo)) {
@@ -313,12 +317,32 @@ class EngineBlock_Corto_Adapter
             }
         }
 
+        $this->_trackLogin($spEntityMetadata['EntityId'], $idpEntityMetadata['EntityId'], $subjectId);
+    }
+
+    /**
+     * Called by Corto just as it prepares to send the response to the SP
+     *
+     * Note that we HAVE to do response fiddling here because the filterInputAttributes only operates on the 'original'
+     * response we got from the Idp, after that a NEW response gets created.
+     * The filterOutputAttributes actually operates on this NEW response, destined for the SP.
+     *
+     * @param  $response
+     * @param  $responseAttributes
+     * @return void
+     */
+    public function filterOutputAttributes(&$response, &$responseAttributes)
+    {
+        $subjectId = $_SESSION['subjectId'];
+
+        // Attribute Aggregation
+        $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
+
+        // Adjust the NameID, set the collab:person uid
         $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
             '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             '__v'              => $subjectId
         );
-
-        $this->_trackLogin($spEntityMetadata['EntityId'], $idpEntityMetadata['EntityId'], $subjectId);
     }
     
     protected function _trackLogin($spEntityId, $idpEntityId, $subjectId)
