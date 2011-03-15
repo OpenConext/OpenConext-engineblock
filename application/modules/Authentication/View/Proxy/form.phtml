@@ -22,6 +22,7 @@ if (!isset($message)) {
                 Since your browser does not support JavaScript, you must press the button below once to proceed.
             </p>
         </noscript>
+        <p>Processing... please wait (may take up to 30 seconds)</p>
         <form method="post" action=" <?= $action ?>">
             <input type="hidden" name="<?= $name ?>" value="<?= $message ?>" />
 
@@ -34,12 +35,11 @@ if (!isset($message)) {
             <pre>
                 <?= $trace ?>
             </pre>
+            <script type="text/javascript">
+                document.getElementById('submitbutton').focus();
+            </script>
             <? endif; ?>
 
         </form>
-
-        <script type="text/javascript">
-            document.getElementById('submitbutton').focus();
-        </script>
     </body>
 </html>
