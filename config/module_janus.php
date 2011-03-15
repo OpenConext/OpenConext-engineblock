@@ -13,17 +13,10 @@ $config = array(
     'admin.name' => 'JANUS admin',
     'admin.email' => 'janusadmin@example.org',
 
-    /*
-     * Authenticate against the default-sp
-     */
-    #'auth' => 'default-sp',
-    #'useridattr' => 'urn:mace:dir:attribute-def:uid',
-
-    /*
-     * Authenticate against the admin auth source 
-     */
-    'auth'=>'admin',
-    'useridattr' => 'user',
+    'auth' => 'default-sp',
+    'useridattr' => 'urn:mace:dir:attribute-def:uid',
+#    'auth'=>'admin',
+#    'useridattr' => 'user',
 
     /*
      * Configuration for the database connection.
@@ -1327,4 +1320,8 @@ $config = array(
         ),
     ),
 );
-?>
+
+$localConfig = dirname(__FILE__) . '/module_janus.local.php'; 
+if (file_exists($localConfig)) { 
+    require $localConfig; 
+} 
