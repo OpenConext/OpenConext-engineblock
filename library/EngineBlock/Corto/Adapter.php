@@ -14,6 +14,11 @@ class EngineBlock_Exception_InvalidConnection extends EngineBlock_Exception
 
 }
 
+class EngineBlock_Exception_ReceivedErrorStatusCode extends EngineBlock_Exception
+{
+
+}
+
 class EngineBlock_Corto_Adapter 
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
@@ -291,8 +296,15 @@ class EngineBlock_Corto_Adapter
      */
     public function filterInputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
     {
-        // @todo Do these checks belong in the filterInputAttributes?
-        //       It's the only hook we've got though with the relevant data.
+        if ($response['samlp:Status']['samlp:StatusCode']['_Value']!=='urn:oasis:names:tc:SAML:2.0:status:Success') {
+            // Idp returned an error
+            throw new EngineBlock_Exception_ReceivedErrorStatusCode(
+                'Response received with Status: ' .
+                $response['samlp:Status']['samlp:StatusCode']['_Value'] .
+                ' - ' .
+                $response['samlp:Status']['samlp:StatusMessage']['__v']
+            );
+        }
 
         // validate if the IDP sending this response is allowed to connect to the SP that made the request.
         $this->validateSpIdpConnection($spEntityMetadata["EntityId"], $idpEntityMetadata["EntityId"]);
