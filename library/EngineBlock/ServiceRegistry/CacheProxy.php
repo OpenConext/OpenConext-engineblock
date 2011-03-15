@@ -19,7 +19,7 @@ class EngineBlock_ServiceRegistry_CacheProxy
 
         $cache = $this->_getCacheFrontend();
         if (!$cache) {
-            return call_user_method_array($name, $client, $arguments);
+            return call_user_func_array(array($client, $name), $arguments);
         }
 
         // Clone the original client because calling it will alter the $client object
