@@ -57,7 +57,8 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 );
             }
 
-            if (isset($entity['certificates']['public'])) {
+            $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
+            if (isset($certificates['public'])) {
                 $entityDescriptor['md:IDPSSODescriptor']['md:KeyDescriptor'] = array(
                     array(
                         '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
@@ -65,7 +66,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
+                                    '__v' => self::_getCertDataFromPem($certificates['public']),
                                 ),
                             ),
                         ),
@@ -76,7 +77,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
+                                    '__v' => self::_getCertDataFromPem($certificates['public']),
                                 ),
                             ),
                         ),
