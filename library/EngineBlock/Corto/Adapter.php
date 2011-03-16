@@ -355,6 +355,13 @@ class EngineBlock_Corto_Adapter
             '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             '__v'              => $subjectId
         );
+
+        // Attribute manipulation / mangling
+        $responseAttributes = $this->_manipulateAttributes(
+            $subjectId,
+            $responseAttributes,
+            $response
+        );
     }
     
     protected function _trackLogin($spEntityId, $idpEntityId, $subjectId)
@@ -404,6 +411,15 @@ class EngineBlock_Corto_Adapter
             $subjectId
         );
         return array_merge_recursive($attributes, $aggregatedAttributes);
+    }
+
+    protected function _manipulateAttributes($subjectId, array $attributes, array $response)
+    {
+        $manipulators = $this->_getAttributeManipulators();
+        foreach ($manipulators as $manipulator) {
+            $attributes = $manipulator->manipulate($subjectId, $attributes, $response);
+        }
+        return $attributes;
     }
 
     protected function _provisionUser(array $attributes, $idpEntityMetadata)
@@ -456,6 +472,13 @@ class EngineBlock_Corto_Adapter
     {
         return array(
             new EngineBlock_AttributeProvider_Dummy(),
+        );
+    }
+
+    protected function _getAttributeManipulators()
+    {
+        return array(
+            new EngineBlock_AttributeManipulator_File()
         );
     }
 

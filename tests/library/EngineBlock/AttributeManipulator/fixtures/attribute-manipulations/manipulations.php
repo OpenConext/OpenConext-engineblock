@@ -1,0 +1,3 @@
+<?php
+
+$attributes['general'] = 'test';
