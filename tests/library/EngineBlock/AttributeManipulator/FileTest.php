@@ -50,11 +50,12 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
         );
         $this->assertEquals(
             array(
-                 'test' => '1',
-                 'email'=>'test@example.com',
-                 'uid'=>$subjectId, 
-                 'sp'=>$response['_Destination'],
-                 'general'=>'test',
+                'test' => '1',
+                'general' => 'test',
+                'email'=>'test@example.com',
+                'uid'=>$subjectId,
+                'sp'=>$response['__']['destinationid'],
+                'general'=>'test',
             ),
             $attributes,
             "Testing attribute renaming and using the subjectId and response"
