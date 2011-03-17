@@ -19,7 +19,6 @@ class EngineBlock_AttributeManipulator_File
     protected function _doGeneralManipulation($subjectId, $attributes, $response)
     {
         $file = $this->_fileLocation . DIRECTORY_SEPARATOR . self::FILE_NAME;
-
         if (!$this->_fileExists($file)) {
             return $attributes;
         }
@@ -31,13 +30,12 @@ class EngineBlock_AttributeManipulator_File
 
     protected function _doSpSpecificManipulation($subjectId, $attributes, $response)
     {
-        $spEntityId = $response['_Destination'];
+        $spEntityId = $response['__']['destinationid'];
         $file = $this->_fileLocation .
                 DIRECTORY_SEPARATOR .
                 $this->_getDirectoryNameForEntityId($spEntityId) .
                 DIRECTORY_SEPARATOR .
                 self::FILE_NAME;
-
         if (!$this->_fileExists($file)) {
             return $attributes;
         }
@@ -89,7 +87,11 @@ class EngineBlock_AttributeManipulator_File
     {
         $location = $this->_getFileLocationFromConfiguration();
         if (substr($location, 0, 1) !== '/') {
-            $location = realpath(ENGINEBLOCK_FOLDER_ROOT . $location);
+            $realLocation = realpath(ENGINEBLOCK_FOLDER_ROOT . $location);
+            if ($realLocation === FALSE) {
+                throw new EngineBlock_Exception("Location '$location' does not exist, relative from the EngineBlock root: " . ENGINEBLOCK_FOLDER_ROOT);
+            }
+            $location = $realLocation;
         }
         $this->_fileLocation = $location;
         return $this;
