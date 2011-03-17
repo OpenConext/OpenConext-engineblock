@@ -1,7 +1,7 @@
-Index: Methods.php
+Index: modules/janus/lib/REST/Methods.php
 ===================================================================
---- Methods.php	(revision 702)
-+++ Methods.php	(working copy)
+--- modules/janus/lib/REST/Methods.php	(revision 746)
++++ modules/janus/lib/REST/Methods.php	(working copy)
 @@ -132,7 +132,7 @@
          return $result;
      }
@@ -11,7 +11,7 @@ Index: Methods.php
      public static function method_isConnectionAllowed($data, &$status)
      {
          if (!isset($data["spentityid"]) || !isset($data["idpentityid"])) {
-@@ -140,31 +140,25 @@
+@@ -140,33 +140,69 @@
              return '';
          }
  
@@ -22,63 +22,50 @@ Index: Methods.php
              $sprevisionid = $data['sprevision'];
          }
  
--        $specontroller = new sspmod_janus_EntityController(SimpleSAML_Configuration::getConfig('module_janus.php'));
 +        $isSpAllowed = self::_checkSPMetadataIsConnectionAllowed($data, $sprevisionid);
- 
--        $specontroller->setEntity($data['spentityid'], $sprevisionid);
++
 +        // Check the IdP metadata whether the SP-IdP connection is allowed.
 +        $idprevisionid = null;
- 
--        if ($specontroller->getAllowedAll()!="yes") {
--            
--            $spbloked = $specontroller->getBlockedEntities();
--            if(count($spbloked) && !array_key_exists($data['idpentityid'], $spbloked)) {
--                return array(true);
--            }         
--            $spallowed = $specontroller->getAllowedEntities();
--            if (count($spallowed) && array_key_exists($data['idpentityid'], $spallowed)) {
--                return array(true);
--            }
--    
--            return array(false);
--    
++
 +        if(isset($data['idprevision']) && ctype_digit($data['idprevision'])) {
 +            $idprevisionid = $data['idprevision'];
-         }
--        return array(true);
++        }
 +
 +        $isIdpAllowed = self::_checkIdpMetadataIsConnectionAllowed($data, $idprevisionid);
 +
 +        return ($isSpAllowed && $isIdpAllowed) ? array(true) : array(false);
-     }
- 
-     public static function method_findIdentifiersByMetadata($data, &$status)
-@@ -341,4 +335,46 @@
-         }
-         return $result;
-     }
++    }
 +
 +    protected static function _checkSPMetadataIsConnectionAllowed(array $data, $revisionId=NULL)
 +    {
-+        $specontroller = new sspmod_janus_EntityController(SimpleSAML_Configuration::getConfig('module_janus.php'));
-+
+         $specontroller = new sspmod_janus_EntityController(SimpleSAML_Configuration::getConfig('module_janus.php'));
+ 
+-        $specontroller->setEntity($data['spentityid'], $sprevisionid);
 +        $specontroller->setEntity($data['spentityid'], $revisionId);
+ 
+         if ($specontroller->getAllowedAll()!="yes") {
+-            
 +
-+        if ($specontroller->getAllowedAll()!="yes") {
-+
-+            $spbloked = $specontroller->getBlockedEntities();
-+            if(count($spbloked) && !array_key_exists($data['idpentityid'], $spbloked)) {
+             $spbloked = $specontroller->getBlockedEntities();
+             if(count($spbloked) && !array_key_exists($data['idpentityid'], $spbloked)) {
+-                return array(true);
+-            }         
 +               return true;
 +            }
-+            $spallowed = $specontroller->getAllowedEntities();
-+            if (count($spallowed) && array_key_exists($data['idpentityid'], $spallowed)) {
+             $spallowed = $specontroller->getAllowedEntities();
+             if (count($spallowed) && array_key_exists($data['idpentityid'], $spallowed)) {
+-                return array(true);
 +                return true;
-+            }
+             }
+-    
+-            return array(false);
+-    
 +            return false;
-+        }
+         }
+-        return array(true);
 +        return true;
-+    }
-+
+     }
+ 
 +    protected static function _checkIdPMetadataIsConnectionAllowed(array $data, $revisionId=NULL)
 +    {
 +        $idpcontroller = new sspmod_janus_EntityController(SimpleSAML_Configuration::getConfig('module_janus.php'));
@@ -99,4 +86,7 @@ Index: Methods.php
 +        }
 +        return true;
 +    }
- }
++
+     public static function method_findIdentifiersByMetadata($data, &$status)
+     {
+         if (!isset($data["key"]) || !isset($data["value"]) || !isset($data['userid'])) {
