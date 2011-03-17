@@ -24,11 +24,11 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
 
     public function test_manipulation()
     {
-        EngineBlock_AttributeManipulator_FileMock::setMockFileLocation('./fixtures/attribute-manipulations/');
+        EngineBlock_AttributeManipulator_FileMock::setMockFileLocation(dirname(__FILE_) . '/fixtures/attribute-manipulations/');
         $fileManipulator = new EngineBlock_AttributeManipulator_FileMock();
 
         $subjectId = 'urn:collab:person:example.com:testuser';
-        $response = array('_Destination'=>'https://example.com');
+        $response = array('__'=>array('destinationid'=>'https://example.com'));
         $defaultAttributes = array('test'=>'1');
 
         $attributes = $fileManipulator->manipulate(
@@ -42,7 +42,7 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
             'Test basic manipulation'
         );
 
-        $response['_Destination'] = "https://example.com/test/response";
+        $response['__'] = array('destinationid'=>"https://example.com/test/response");
         $attributes = $fileManipulator->manipulate(
             $subjectId,
             array_merge($defaultAttributes, array('urn:mace:dir:attribute-def:mail'=>'test@example.com')),
