@@ -1,10 +1,51 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
     <head>
-        <title>No idps</title>
+        <title>SURFnet Collaboration Infrastructure EngineBlock - Error!</title>
+
+        <link rel="stylesheet" href="/css/reset.css">
+        <link rel="stylesheet" href="/css/default.css">
+        <link rel="stylesheet" href="/css/error.css">
     </head>
     <body>
-        No idps, unable to proceed.
+        <div id="PageContainer">
+
+                    <div id="PortalErrorMessage">
+                        <div class="branding-header">
+                            <img src="/media/logo-surfnet-small.png" alt="SURFnet" />
+                        </div>
+
+                        <h1>No Identity Providers available</h1>
+
+                        <p>
+                            The application you came from (your 'Service Provider') is not allowed to connect with any IdP.
+                            Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
+                            this service.
+                            <br /><br />
+                        </p>
+
+                        <p>
+                            If this does not solve your problem, visit
+                            <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the support page</a>.
+                            Here you can find more information about possible causes
+                            and how you can contact the support team.
+                        </p>
+
+                        <div class="button-row">
+                            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(); return false;">
+                                Go back
+                                <span class="btn-wrap-right">&nbsp;</span>
+                            </a>
+                        </div>
+                    </div>
+
+                        <?php if ($exception) { ?>
+        <pre>
+            <?php var_dump($exception); ?>
+        </pre>
+
+        <?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
+        <? } ?>
+        </div>
     </body>
 </html>
