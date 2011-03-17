@@ -1,10 +1,35 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
     <head>
-        <title>No consent</title>
+        <title>SURFnet Collaboration Infrastructure EngineBlock - Error!</title>
+
+        <link rel="stylesheet" href="/css/reset.css">
+        <link rel="stylesheet" href="/css/default.css">
+        <link rel="stylesheet" href="/css/error.css">
     </head>
     <body>
-        No consent given, unable to proceed.
+        <div id="PageContainer">
+
+                    <div id="PortalErrorMessage">
+                        <div class="branding-header">
+                            <img src="/media/logo-surfnet-small.png" alt="SURFnet" />
+                        </div>
+
+                        <h1>No consent given</h1>
+
+                        <p>
+                            No consent given to release your data to the service, unable to proceed.
+                            <br /><br />
+                        </p>
+                    </div>
+
+                        <?php if ($exception) { ?>
+        <pre>
+            <?php var_dump($exception); ?>
+        </pre>
+
+        <?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
+        <? } ?>
+        </div>
     </body>
 </html>
