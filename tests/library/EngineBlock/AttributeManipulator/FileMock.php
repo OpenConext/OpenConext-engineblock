@@ -9,14 +9,14 @@ class EngineBlock_AttributeManipulator_FileMock extends EngineBlock_AttributeMan
         return parent::_getDirectoryNameForEntityId($entityId);
     }
 
-    public static function _getFileLocation()
-    {
-        return self::$_mockFileLocation;
-    }
-
-    public function _setFileLocation($filePath)
+    public static function setMockFileLocation($filePath)
     {
         self::$_mockFileLocation = $filePath;
+    }
+
+    public function _setFileLocation()
+    {
+        $this->_fileLocation = self::$_mockFileLocation;
         return $this;
     }
 }

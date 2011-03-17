@@ -24,8 +24,8 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
 
     public function test_manipulation()
     {
+        EngineBlock_AttributeManipulator_FileMock::setMockFileLocation('./fixtures/attribute-manipulations/');
         $fileManipulator = new EngineBlock_AttributeManipulator_FileMock();
-        $fileManipulator->_setFileLocation('./fixtures/attribute-manipulations/');
 
         $subjectId = 'urn:collab:person:example.com:testuser';
         $response = array('_Destination'=>'https://example.com');
