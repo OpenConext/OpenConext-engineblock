@@ -10,7 +10,15 @@ class EngineBlock_AttributeManipulator_File
 
     public function manipulate($subjectId, array $attributes, array $response)
     {
-        $this->_fileLocation = static::_getFileLocation();
+        if (floatval(phpversion()) >= 5.3) {
+            // PHP 5.2 lexer doesn't enjoy the PHP 5.3 Late Static Binding 'static' keyword
+            // for now we want compatibility, but we also want to make this testable,
+            // so to compromise we use eval... for now...
+            $this->_fileLocation = eval("static::_getFileLocation()");
+        }
+        else {
+            $this->_fileLocation = self::_getFileLocation();            
+        }
         $attributes = $this->_doGeneralManipulation($subjectId, $attributes, $response);
         $attributes = $this->_doSpSpecificManipulation($subjectId, $attributes, $response);
         return $attributes;
