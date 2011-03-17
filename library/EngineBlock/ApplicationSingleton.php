@@ -3,7 +3,7 @@
 define('ENGINEBLOCK_FOLDER_ROOT'       , dirname(__FILE__) . '/../../');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
-define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_ROOT . 'modules/');
+define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
 
 set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_LIBRARY);
 
