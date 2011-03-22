@@ -10,7 +10,10 @@ class EngineBlock_AttributeManipulator_File
 
     public function manipulate($subjectId, array $attributes, array $response)
     {
-        $this->_setFileLocation();
+        if (!$this->_setFileLocation()) {
+            // If there is a problem with the file location, then we skip manipulation
+            return $attributes;
+        }
         $attributes = $this->_doGeneralManipulation($subjectId, $attributes, $response);
         $attributes = $this->_doSpSpecificManipulation($subjectId, $attributes, $response);
         return $attributes;
@@ -89,7 +92,8 @@ class EngineBlock_AttributeManipulator_File
         if (substr($location, 0, 1) !== '/') {
             $realLocation = realpath(ENGINEBLOCK_FOLDER_ROOT . $location);
             if ($realLocation === FALSE) {
-                throw new EngineBlock_Exception("Location '$location' does not exist, relative from the EngineBlock root: " . ENGINEBLOCK_FOLDER_ROOT);
+                ebLog()->warn("Location '$location' does not exist, relative from the EngineBlock root: " . ENGINEBLOCK_FOLDER_ROOT);
+                return false;
             }
             $location = $realLocation;
         }
