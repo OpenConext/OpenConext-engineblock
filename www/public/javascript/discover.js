@@ -56,8 +56,8 @@ var Discover = function() {
                     keyboardNavigator.enabled = true;
                 });
 
-                $('#tabThumbs').click(library.showList);
-                $('#tabList').click(library.showThumbs);
+                $('#tabThumbs').click(library.showThumbs);
+                $('#tabList').click(library.showList);
 
                 // set thums/list view based on cookie
                 if ($.cookie("tabs") == 'thumbs') {
