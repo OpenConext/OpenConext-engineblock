@@ -38,7 +38,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         }
         return $entities;
     }
-    
+
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
         return $this->_serviceRegistry->isConnectionAllowed($spEntityId, $idpEntityId);
@@ -148,6 +148,10 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         }
         if (isset($serviceRegistryEntity['organization']['OrganizationURL'])) {
             $cortoEntity['Organization']['URL'] = $serviceRegistryEntity['organization']['OrganizationURL'];
+        }
+        // The Keywords for the WAYF
+        if (isset($serviceRegistryEntity['keywords'])) {
+            $cortoEntity['Keywords'] = $serviceRegistryEntity['keywords'];
         }
         return $cortoEntity;
     }

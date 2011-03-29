@@ -57,6 +57,20 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 );
             }
 
+            if (isset($entity['Keywords'])) {
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
+                }
+                foreach ($entity['Keywords'] as $lang => $name) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Keywords'][] = array(
+                        array(
+                            '_lang' => $lang,
+                            '__v' => $name,
+                        ),
+                    );
+                }
+            }
+
             $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
             if (isset($certificates['public'])) {
                 $entityDescriptor['md:IDPSSODescriptor']['md:KeyDescriptor'] = array(
@@ -192,5 +206,26 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         // We only use the write connection because consent is 3 queries of which only 1 light select query.
         $factory = new EngineBlock_Database_ConnectionFactory();
         return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+    }
+
+    protected function _transformIdpsForWayf($idps) {
+        $wayfIdps = array();
+        foreach($idps as $idp) {
+            $remoteEntities = $this->_server->getRemoteEntities();
+            $metadata = ($remoteEntities[$idp]);
+
+            $wayfIdp = array(
+                'Name_nl' => isset($metadata['Name']['nl']) ? $metadata['Name']['nl'] : 'Geen naam gevonden',
+                'Name_en' => isset($metadata['Name']['en']) ? $metadata['Name']['en'] : 'No Name found',
+                'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL'] : '/media/idp-logo-not-found.png' ,
+                'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en']) : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
+                'Access' => '1',
+                'ID' => md5($idp),
+                'EntityId' => $idp,
+            );
+            $wayfIdps[] = $wayfIdp;
+        }
+
+        return $wayfIdps;
     }
 }
