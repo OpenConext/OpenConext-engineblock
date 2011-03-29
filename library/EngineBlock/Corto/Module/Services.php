@@ -64,7 +64,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 foreach ($entity['Keywords'] as $lang => $name) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Keywords'][] = array(
                         array(
-                            '_lang' => $lang,
+                            '_xml:lang' => $lang,
                             '__v' => $name,
                         ),
                     );
