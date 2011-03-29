@@ -168,7 +168,7 @@ var Discover = function() {
             if (filter == this.searchText) {
                 filter = '';
             }
-            this.displayIdps(this.filterIdps(filter));
+            library.displayIdps(library.filterIdps(filter));
         },
 
         filterIdps : function(filter) {
@@ -268,7 +268,7 @@ var Discover = function() {
                     var org = $('ul#organisationsContainer li.selected a').attr('alt');
                     //if no select suggestion
                     if (org == undefined) {
-                        this.selectSuggestion();
+                        library.selectSuggestion();
                     }
 
                     //action no access or access
