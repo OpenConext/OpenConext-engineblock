@@ -47,7 +47,7 @@ var Discover = function() {
                 //Disable or enable keyboardNavigator if search field gets or looses focus
                 $('#searchBox').focus(function() {
                     // clear searchbox text on focus
-                    if ($('#searchBox').val() == searchText) {
+                    if ($('#searchBox').val() == library.searchText) {
                         $('#searchBox').val('');
                     }
                 });
