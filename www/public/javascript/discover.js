@@ -72,7 +72,7 @@ var Discover = function() {
                     library.fillSuggestion();
                 }
 
-                if (library.selectedId != undefined) library.selectSuggestion();
+                if (library.selectedId != '') library.selectSuggestion();
 
             } else if (currentPage == 'help') {
 
