@@ -21,7 +21,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (Corto_Module_Bindings_UnknownIssuerException $e) {
-            $application->getLog()->warn('Unknown issuer');
+            $application->getLog()->warn($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer');
         }
     }
