@@ -345,6 +345,8 @@ class EngineBlock_Corto_Adapter
     {
         $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
 
+        $subjectId = $_SESSION['subjectId'];
+
         // Attribute Aggregation
         $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
 
