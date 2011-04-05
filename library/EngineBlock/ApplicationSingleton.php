@@ -181,7 +181,7 @@ class EngineBlock_ApplicationSingleton
             }
 
             if (isset($environmentConfiguration->env->path)) {
-                if (strpos(__DIR__, $environmentConfiguration->env->path)) {
+                if (strpos(__DIR__, $environmentConfiguration->env->path)===0) {
                     $environmentMatches = true;
                 }
                 else {
