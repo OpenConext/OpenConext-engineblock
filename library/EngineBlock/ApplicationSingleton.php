@@ -128,20 +128,20 @@ class EngineBlock_ApplicationSingleton
     //////////// BOOTSTRAPPING
 
     /**
-     * Bootstrap the application for a given environment id (like 'production').
+     * Bootstrap the application.
      *
      * Note that the order or bootstrapping is very important.
      *
-     * @param string $applicationEnvironmentId
      * @return EngineBlock_ApplicationSingleton Bootstrapped application singleton
      */
-    public function bootstrap($applicationEnvironmentId, $configurationFile = "")
+    public function bootstrap()
     {
-        $this->_applicationEnvironmentId = $applicationEnvironmentId;
-
         $this->_bootstrapAutoLoading();
 
-        $this->_bootstrapConfiguration($configurationFile);
+        $this->_bootstrapConfiguration();
+
+        $this->_setEnvironmentId();
+        $this->_bootstrapEnvironmentConfiguration();
 
         $this->_bootstrapPhpSettings();
         $this->_bootstrapErrorReporting();
@@ -149,6 +149,68 @@ class EngineBlock_ApplicationSingleton
         $this->_bootstrapHttpCommunication();
 
         return $this;
+    }
+
+    protected function _setEnvironmentId()
+    {
+        // Get from predefined constant
+        if (defined('ENGINEBLOCK_ENV')) {
+            $this->_applicationEnvironmentId = ENGINEBLOCK_ENV;
+            return;
+        }
+        // Get from environment variable (from Apache or the shell)
+        if (getenv('ENGINEBLOCK_ENV')) {
+            $this->_applicationEnvironmentId = getenv('ENGINEBLOCK_ENV');
+            define('ENGINEBLOCK_ENV', $this->_applicationEnvironmentId);
+            return;
+        }
+
+        foreach ($this->_configuration as $environmentId => $environmentConfiguration) {
+            if (!isset($environmentConfiguration->env)) {
+                continue;
+            }
+
+            $environmentMatches = false;
+            if (isset($environmentConfiguration->env->host)) {
+                if (gethostname()===$environmentConfiguration->env->host) {
+                    $environmentMatches = true;
+                }
+                else {
+                    continue;
+                }
+            }
+
+            if (isset($environmentConfiguration->env->path)) {
+                if (strpos(__DIR__, $environmentConfiguration->env->path)) {
+                    $environmentMatches = true;
+                }
+                else {
+                    continue;
+                }
+            }
+            if ($environmentMatches) {
+                $this->_applicationEnvironmentId = $environmentId;
+                define('ENGINEBLOCK_ENV', $environmentId);
+                return;
+            }
+        }
+
+        throw new EngineBlock_ApplicationSingleton_BootstrapException('Unable to detect an environment!');
+    }
+
+    protected function _bootstrapConfiguration()
+    {
+        $tempConfigFile = $this->_buildTempConfigFile();
+        $this->setConfiguration($this->_getConfigurationLoader($tempConfigFile));
+    }
+
+    protected function _bootstrapEnvironmentConfiguration()
+    {
+        $env = $this->_applicationEnvironmentId;
+        if (!isset($this->_configuration->$env)) {
+            throw new EngineBlock_ApplicationSingleton_BootstrapException("Environment '$env' does not exist?!?");
+        }
+        $this->_configuration = $this->_configuration->$env;
     }
 
     protected function _bootstrapAutoLoading()
@@ -159,23 +221,9 @@ class EngineBlock_ApplicationSingleton
         spl_autoload_register(array($this, 'autoLoad'));
     }
 
-    protected function _bootstrapConfiguration($configFilePattern)
+    protected function _buildTempConfigFile()
     {
-        $tempConfigFile = $this->_buildTempConfigFile($configFilePattern);
-        $env = $this->_applicationEnvironmentId;
-
-        $configuration = $this->_getConfigurationLoader($tempConfigFile);
-        if (!isset($configuration->$env)) {
-            throw new EngineBlock_ApplicationSingleton_BootstrapException("Environment '$env' does not exist?!?");
-        }
-        $this->setConfiguration($configuration->$env);
-    }
-
-    protected function _buildTempConfigFile($configFilePattern)
-    {
-        if (!$configFilePattern) {
-            $configFilePattern = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILEPATTERN;
-        }
+        $configFilePattern = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILEPATTERN;
 
         $configFiles = glob($configFilePattern);
         if (empty($configFiles)) {

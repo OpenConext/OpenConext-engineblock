@@ -15,16 +15,10 @@ if (!in_array($requestedProperty, $AVAILABLE_PROPERTIES)) {
     exit("Please use one of the following properties: " . implode(', ', $AVAILABLE_PROPERTIES) . PHP_EOL);
 }
 
-// Define application environment
-defined('ENGINEBLOCK_ENV')
-    || define('ENGINEBLOCK_ENV',
-              (getenv('ENGINEBLOCK_ENV') ? getenv('ENGINEBLOCK_ENV')
-                                         : 'production'));
-
 // Load up EngineBlock Application so it can load the configuration for us
 require '../library/EngineBlock/ApplicationSingleton.php';
 $application = EngineBlock_ApplicationSingleton::getInstance();
-$application->bootstrap(ENGINEBLOCK_ENV);
+$application->bootstrap();
 
 // Get configuration and see if we have database configuration with masters
 $configuration = $application->getConfiguration();

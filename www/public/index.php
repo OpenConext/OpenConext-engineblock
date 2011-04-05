@@ -1,17 +1,9 @@
 <?php
 
-/**
- * Define application environment
- */
-defined('ENGINEBLOCK_ENV')
-    || define('ENGINEBLOCK_ENV',
-              (getenv('ENGINEBLOCK_ENV') ? getenv('ENGINEBLOCK_ENV')
-                                         : 'production'));
-
 require '../../library/EngineBlock/ApplicationSingleton.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
-$application->bootstrap(ENGINEBLOCK_ENV);
+$application->bootstrap();
 
 $dispatcher = new EngineBlock_Dispatcher();
 $dispatcher->setRouters(array(
