@@ -96,6 +96,7 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'Binding'   => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
                     'Location'  => "https://idp.testing.dev.coin.surf.net/simplesaml/saml2/idp/SSOService.php"
                 ),
+                "GuestQualifier" => "All",
                 "certificates" => array(
                     'public' => "-----BEGIN CERTIFICATE-----
 MIICgTCCAeoCCQCbOlrWDdX7FTANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMC
