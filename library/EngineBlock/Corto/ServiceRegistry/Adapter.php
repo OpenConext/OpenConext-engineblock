@@ -104,6 +104,14 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 'Binding'   => $serviceRegistryEntity['SingleSignOnService'][0]['Binding'],
                 'Location'  => $serviceRegistryEntity['SingleSignOnService'][0]['Location'],
             );
+
+            // Only for IdPs
+            $cortoEntity['GuestQualifier'] = 'All';
+            if (isset($serviceRegistryEntity['coin']['guest_qualifier'])) {
+                if (in_array($serviceRegistryEntity['coin']['guest_qualifier'], array('All', 'Some', 'None'))) {
+                    $cortoEntity['GuestQualifier'] = $serviceRegistryEntity['coin']['guest_qualifier'];
+                }
+            }
         }
         if (isset($serviceRegistryEntity['certData']) && $serviceRegistryEntity['certData']) {
             $cortoEntity['certificates'] = array(

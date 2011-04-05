@@ -341,9 +341,9 @@ class EngineBlock_Corto_Adapter
      * @param  $responseAttributes
      * @return void
      */
-    public function filterOutputAttributes(&$response, &$responseAttributes)
+    public function filterOutputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
     {
-        $subjectId = $_SESSION['subjectId'];
+        $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
 
         // Attribute Aggregation
         $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
@@ -391,6 +391,35 @@ class EngineBlock_Corto_Adapter
             throw new EngineBlock_Exception_InvalidConnection(
                 "Received a response from an IDP that is not allowed to connect to the requesting SP"
             );
+        }
+    }
+
+    protected function _addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata)
+    {
+        // Determine guest status
+        if (!isset($idpEntityMetadata['GuestQualifier'])) {
+            throw new EngineBlock_Exception('No GuestQualifier for IdP? ' . var_export($idpEntityMetadata, true));
+        }
+
+        switch ($idpEntityMetadata['GuestQualifier']) {
+            case 'All':
+                $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
+                    0 => 'guest',
+                );
+                return $responseAttributes;
+            case 'Some':
+                if (!isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'][0])) {
+                    ebLog()->warn("Idp guestQualifier is set to 'Some' however, the surfPersonAffiliation attribute was not provided, setting it to 'guest' and continuing". var_export($idpEntityMetadata, true) . var_export($responseAttributes, true));
+                    $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
+                        0 => 'guest',
+                    );
+                }
+                return $responseAttributes;
+            case 'None':
+                $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
+                    0 => 'member',
+                );
+                return $responseAttributes;
         }
     }
 
