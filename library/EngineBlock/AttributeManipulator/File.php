@@ -14,9 +14,8 @@ class EngineBlock_AttributeManipulator_File
             // If there is a problem with the file location, then we skip manipulation
             return;
         }
-        $attributes = $this->_doGeneralManipulation($subjectId, $attributes, $response);
-        $attributes = $this->_doSpSpecificManipulation($subjectId, $attributes, $response);
-        return $attributes;
+        $this->_doGeneralManipulation($subjectId, $attributes, $response);
+        $this->_doSpSpecificManipulation($subjectId, $attributes, $response);
     }
 
     protected function _doGeneralManipulation(&$subjectId, &$attributes, &$response)
@@ -28,7 +27,7 @@ class EngineBlock_AttributeManipulator_File
 
         $this->_verifyPhpSyntax($file);
 
-        return $this->_include($file, $subjectId, $attributes, $response);
+        $this->_include($file, $subjectId, $attributes, $response);
     }
 
     protected function _doSpSpecificManipulation($subjectId, $attributes, $response)
@@ -45,7 +44,7 @@ class EngineBlock_AttributeManipulator_File
         
         $this->_verifyPhpSyntax($file);
 
-        return $this->_include($file, $subjectId, $attributes, $response);
+        $this->_include($file, $subjectId, $attributes, $response);
     }
 
     protected function _getSpEntityIdFromResponse($response)

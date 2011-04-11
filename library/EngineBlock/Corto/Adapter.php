@@ -448,7 +448,6 @@ class EngineBlock_Corto_Adapter
         foreach ($manipulators as $manipulator) {
             $attributes = $manipulator->manipulate($subjectId, $attributes, $response);
         }
-        return $attributes;
     }
 
     protected function _provisionUser(array $attributes, $idpEntityMetadata)
