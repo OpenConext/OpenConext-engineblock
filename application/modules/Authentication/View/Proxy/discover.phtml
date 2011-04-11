@@ -52,7 +52,13 @@
             <li id="c${ID}" class="${NoAccessClass}"><a alt="${Alt}" href="#"><img src="${Logo}" /><span>${Name}</span>${NoAccess}</a></li>
         </script>
         <script id="idpListSuggestionTemplate" type="text/x-jquery-tmpl">
-            <a alt="${Alt}" class="${NoAccessClass}" href="#"><p>${Suggestion}</p><img class="logo" src="${Logo}" /><span>${Name} ${NoAccess}</span></a>
+            <p>
+                <a alt="${Alt}" class="${NoAccessClass}" href="#">
+                    ${Suggestion}
+                    <img class="logo" src="${Logo}" />
+                    <span>${Name} ${NoAccess}</span>
+                </a>
+            </p>
         </script>
         <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
         <script type="text/javascript" src="/javascript/jquery.mousewheel.min.js"></script>
