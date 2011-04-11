@@ -29,11 +29,11 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
 
         $subjectId = 'urn:collab:person:example.com:testuser';
         $response = array('__'=>array('destinationid'=>'https://example.com'));
-        $defaultAttributes = array('test'=>'1');
+        $attributes = array('test'=>'1');
 
-        $attributes = $fileManipulator->manipulate(
+        $fileManipulator->manipulate(
             $subjectId,
-            $defaultAttributes,
+            $attributes,
             $response
         );
         $this->assertEquals(
@@ -43,9 +43,10 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
         );
 
         $response['__'] = array('destinationid'=>"https://example.com/test/response");
-        $attributes = $fileManipulator->manipulate(
+        $attributes = array_merge($attributes, array('urn:mace:dir:attribute-def:mail'=>'test@example.com'));
+        $fileManipulator->manipulate(
             $subjectId,
-            array_merge($defaultAttributes, array('urn:mace:dir:attribute-def:mail'=>'test@example.com')),
+            $attributes,
             $response
         );
         $this->assertEquals(
@@ -53,6 +54,7 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
                 'test' => '1',
                 'general' => 'test',
                 'email'=>'test@example.com',
+                'example.com' => 'test',
                 'uid'=>$subjectId,
                 'sp'=>$response['__']['destinationid'],
                 'general'=>'test',

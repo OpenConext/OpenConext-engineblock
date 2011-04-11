@@ -30,7 +30,7 @@ class EngineBlock_AttributeManipulator_File
         $this->_include($file, $subjectId, $attributes, $response);
     }
 
-    protected function _doSpSpecificManipulation($subjectId, $attributes, $response)
+    protected function _doSpSpecificManipulation(&$subjectId, &$attributes, &$response)
     {
         $spEntityId = $this->_getSpEntityIdFromResponse($response);
         $file = $this->_fileLocation .
@@ -38,8 +38,9 @@ class EngineBlock_AttributeManipulator_File
                 $this->_getDirectoryNameForEntityId($spEntityId) .
                 DIRECTORY_SEPARATOR .
                 self::FILE_NAME;
+        
         if (!$this->_fileExists($file)) {
-            return $attributes;
+            return;
         }
         
         $this->_verifyPhpSyntax($file);
