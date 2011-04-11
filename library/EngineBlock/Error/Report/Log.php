@@ -23,7 +23,7 @@ class EngineBlock_Error_Report_Log implements EngineBlock_Error_Report_Interface
         else {
             // Catch-22, we don't have a log, so we can't report that we don't have a log as an error
             // We assume that if this is the case something serious is very wrong and we panic
-            die("Panic! Unable to log errors, please contact your administrator and ask him to check the log file.");
+            die("Panic! Unable to log errors, please contact your administrator and ask him to check the log file." . PHP_EOL);
         }
     }
 }
