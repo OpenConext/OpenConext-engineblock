@@ -446,7 +446,7 @@ class EngineBlock_Corto_Adapter
     {
         $manipulators = $this->_getAttributeManipulators();
         foreach ($manipulators as $manipulator) {
-            $attributes = $manipulator->manipulate($subjectId, $attributes, $response);
+            $manipulator->manipulate($subjectId, $attributes, $response);
         }
     }
 
