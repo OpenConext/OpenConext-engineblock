@@ -8,22 +8,22 @@ class EngineBlock_AttributeManipulator_File
 
     protected $_fileLocation;
 
-    public function manipulate($subjectId, array $attributes, array $response)
+    public function manipulate(&$subjectId, array &$attributes, array &$response)
     {
         if (!$this->_setFileLocation()) {
             // If there is a problem with the file location, then we skip manipulation
-            return $attributes;
+            return;
         }
         $attributes = $this->_doGeneralManipulation($subjectId, $attributes, $response);
         $attributes = $this->_doSpSpecificManipulation($subjectId, $attributes, $response);
         return $attributes;
     }
 
-    protected function _doGeneralManipulation($subjectId, $attributes, $response)
+    protected function _doGeneralManipulation(&$subjectId, &$attributes, &$response)
     {
         $file = $this->_fileLocation . DIRECTORY_SEPARATOR . self::FILE_NAME;
         if (!$this->_fileExists($file)) {
-            return $attributes;
+            return;
         }
 
         $this->_verifyPhpSyntax($file);
@@ -33,7 +33,7 @@ class EngineBlock_AttributeManipulator_File
 
     protected function _doSpSpecificManipulation($subjectId, $attributes, $response)
     {
-        $spEntityId = $response['__']['destinationid'];
+        $spEntityId = $this->_getSpEntityIdFromResponse($response);
         $file = $this->_fileLocation .
                 DIRECTORY_SEPARATOR .
                 $this->_getDirectoryNameForEntityId($spEntityId) .
@@ -46,6 +46,11 @@ class EngineBlock_AttributeManipulator_File
         $this->_verifyPhpSyntax($file);
 
         return $this->_include($file, $subjectId, $attributes, $response);
+    }
+
+    protected function _getSpEntityIdFromResponse($response)
+    {
+        return $response['__']['destinationid'];
     }
 
     protected function _fileExists($file)
@@ -66,10 +71,9 @@ class EngineBlock_AttributeManipulator_File
         }
     }
 
-    protected function _include($filePath, $subjectId, $attributes, $response)
+    protected function _include($filePath, &$subjectId, &$attributes, &$response)
     {
         include $filePath;
-        return $attributes;
     }
 
     protected static function _getDirectoryNameForEntityId($entityId)

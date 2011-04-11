@@ -350,17 +350,17 @@ class EngineBlock_Corto_Adapter
         // Attribute Aggregation
         $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
 
+        // Attribute / NameId / Response manipulation / mangling
+        $this->_manipulateAttributes(
+            $subjectId,
+            $responseAttributes,
+            $response
+        );
+
         // Adjust the NameID, set the collab:person uid
         $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
             '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             '__v'              => $subjectId
-        );
-
-        // Attribute manipulation / mangling
-        $responseAttributes = $this->_manipulateAttributes(
-            $subjectId,
-            $responseAttributes,
-            $response
         );
     }
     
@@ -442,7 +442,7 @@ class EngineBlock_Corto_Adapter
         return array_merge_recursive($attributes, $aggregatedAttributes);
     }
 
-    protected function _manipulateAttributes($subjectId, array $attributes, array $response)
+    protected function _manipulateAttributes(&$subjectId, array &$attributes, array &$response)
     {
         $manipulators = $this->_getAttributeManipulators();
         foreach ($manipulators as $manipulator) {
