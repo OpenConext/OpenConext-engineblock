@@ -1,0 +1,13 @@
+Index: modules/janus/www/editentity.php
+===================================================================
+--- modules/janus/www/editentity.php	(revision 784)
++++ modules/janus/www/editentity.php	(working copy)
+@@ -137,7 +137,7 @@
+ 
+     // Change entityID
+     if(isset($_POST['entityid'])) {
+-        if(check_uri($_POST['entityid'])) {
++        if(check_uri($_POST['entityid']) || true) { # HACK: For SURFnetGuests : https://espee-test.surfnet.nl/federate/metadata/saml20/SURFnetGuests
+             if($entity->setEntityid($_POST['entityid'])) {
+                 $update = TRUE;
+                 $note .= 'Changed entityID: ' . $_POST['entityid'] . '<br />';

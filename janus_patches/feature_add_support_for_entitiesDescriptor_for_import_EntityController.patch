@@ -1,0 +1,115 @@
+Index: modules/janus/lib/EntityController.php
+===================================================================
+--- modules/janus/lib/EntityController.php	(revision 610)
++++ modules/janus/lib/EntityController.php	(working copy)
+@@ -537,14 +537,53 @@
+ 
+         // Parse metadata
+         try {
+-            $parser = SimpleSAML_Metadata_SAMLParser::parseString($metadata);  
++            $entities = SimpleSAML_Metadata_SAMLParser::parseDescriptorsString($metadata);
+         } catch (Exception $e) {
+             SimpleSAML_Logger::error(
+                 'importMetadata20SP - Metadata not valid SAML 2.0' . var_export($e, true)
+             );
++
+             return 'error_not_valid_saml20';
+         }
+ 
++        SimpleSAML_Logger::debug('Entities Found: '. count($entities));
++        if (count($entities) > 1) {
++
++            // We found multiple entities, So we have to loop through them
++            // in order to select the entity ID which we want to import
++            foreach($entities as $entityId => $parser) {
++
++                if ($entityId === $this->_entity->getEntityid()) {
++                    SimpleSAML_Logger::debug('Matching EntityIDs found for: '. $entityId);
++
++                    // Import metadata
++                    SimpleSAML_Logger::debug('Processing EntityID: '. $entityId);
++                    return self::_importMetadata20SP($parser, $updated);
++                }
++            }
++            // Apparently the entity was not found in supplied metadata, Log error
++            SimpleSAML_Logger::error(
++                'importMetadata20SP - EntityId not found'
++            );
++
++            return 'error_entityid_not_found';
++
++        } else if (count($entities) == 1) {
++            $parser = $entities[key($entities)];
++            return self::_importMetadata20SP($parser, $updated);
++        } else {
++            // The parsed metadata contains no entities
++            SimpleSAML_Logger::error(
++                'importMetadata20SP - EntityId not found'
++            );
++
++            return 'error_entityid_not_found';
++        }
++    }
++
++    private function _importMetadata20SP($parser, &$updated)
++    {
++
+         $parsedmetadata = $parser->getMetadata20SP();
+ 
+         $parsedmetadata = self::re_parse_metadata($parsedmetadata);
+@@ -663,14 +702,54 @@
+ 
+         // Parse metadata
+         try {
+-            $parser = SimpleSAML_Metadata_SAMLParser::parseString($metadata);  
++            $entities = SimpleSAML_Metadata_SAMLParser::parseDescriptorsString($metadata);
+         } catch (Exception $e) {
+             SimpleSAML_Logger::error(
+                 'importMetadata20IdP - Metadata not valid SAML 2.0' . var_export($e, true)
+             );
++
+             return 'error_not_valid_saml20';
+         }
+ 
++        SimpleSAML_Logger::debug('Entities Found: '. count($entities));
++        if (count($entities) > 1) {
++
++            // We found multiple entities, So we have to loop through them
++            // in order to select the entity ID which we want to import
++            foreach($entities as $entityId => $parser) {
++
++                if ($entityId === $this->_entity->getEntityid()) {
++                    SimpleSAML_Logger::debug('Matching EntityIDs found for: '. $entityId);
++
++                    // Import metadata
++                    SimpleSAML_Logger::debug('Processing EntityID: '. $entityId);
++                    return self::_importMetadata20IdP($parser, $updated);
++                }
++            }
++            // Apparently the entity was not found in supplied metadata, Log error
++            SimpleSAML_Logger::error(
++                'importMetadata20IdP - EntityId not found'
++            );
++
++            return 'error_entityid_not_found';
++
++        } else if (count($entities) == 1) {
++            $parser = $entities[key($entities)];
++            return self::_importMetadata20IdP($parser, $updated);
++        } else {
++            // The parsed metadata contains no entities
++            SimpleSAML_Logger::error(
++                'importMetadata20IdP - EntityId not found'
++            );
++
++            return 'error_entityid_not_found';
++        }
++    }
++
++
++    private function _importMetadata20IdP($parser, &$updated)
++    {
++
+         $parsedmetadata = $parser->getMetadata20IdP();
+ 
+         $parsedmetadata = self::re_parse_metadata($parsedmetadata);

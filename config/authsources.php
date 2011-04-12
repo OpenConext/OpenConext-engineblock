@@ -27,6 +27,13 @@ $config = array(
 		// The URL to the discovery service.
 		// Can be NULL/unset, in which case a builtin discovery service will be used.
 		'discoURL' => NULL,
+
+        'authproc' => array(
+            20 => array(
+                   'class' => 'saml:NameIDAttribute',
+                   'format' => '%V',
+            ),
+        ),
 	),
 
 
