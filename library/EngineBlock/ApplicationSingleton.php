@@ -237,7 +237,7 @@ class EngineBlock_ApplicationSingleton
             $configFileContents .= file_get_contents($configFile) . PHP_EOL;
         }
 
-        $tempConfigFile = '/tmp/engineblock.' . $this->_applicationEnvironmentId . '.' . md5($configFileContents) . '.ini';
+        $tempConfigFile = '/tmp/engineblock.' . md5($configFileContents) . '.ini';
         if (!file_exists($tempConfigFile)) {
             touch ($tempConfigFile);
             file_put_contents($tempConfigFile, $configFileContents);
