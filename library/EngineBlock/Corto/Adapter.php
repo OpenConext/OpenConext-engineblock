@@ -209,7 +209,7 @@ class EngineBlock_Corto_Adapter
         ));
 
         $attributes = array();
-        require ENGINEBLOCK_FOLDER_LIBRARY_CORTO . '../configs/attributes.inc.php';
+        require ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.inc.php';
         $proxyServer->setAttributeMetadata($attributes);
 
         $proxyServer->setHostedEntities(array(
