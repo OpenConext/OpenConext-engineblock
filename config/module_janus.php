@@ -37,7 +37,7 @@ $config = array(
     /*
      * Automatically create a new user if user do not exists on login
      */
-    'user.autocreate' => false,
+    'user.autocreate' => true,
 
     /*
      * Dashboard configuration.
