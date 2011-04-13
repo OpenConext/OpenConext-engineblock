@@ -53,8 +53,7 @@ class EngineBlock_ServiceRegistry_Janus_Client extends EngineBlock_Rest_Client
                         
             $hash_string = hash('sha512', $prepend_secret);
             $this->_data["janus_sig"]=$hash_string;
-                       
-        }        
+        }
         return parent::__call($method, $args);
     }
 }
