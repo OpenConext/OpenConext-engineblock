@@ -127,15 +127,9 @@ class EngineBlock_ServiceRegistry_Client
      */
     public function getSpList($keys=array())
     {
-        try {
         $response = $this->_getRestClient()->getSpList()
                                            ->keys(implode(",", $keys))
                                            ->get();
-        } catch (Exception $e) {
-            echo "<pre>";
-        var_dump($this->_getRestClient()->getHttpClient()->getLastRequest());
-        var_dump($this->_getRestClient()->getHttpClient()->getLastResponse());exit;
-        }
         return $response;                                         
     }
     
