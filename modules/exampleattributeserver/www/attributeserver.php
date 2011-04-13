@@ -13,7 +13,7 @@ $idpEntityId = $metadata->getMetaDataCurrentEntityID('saml20-idp-hosted');
 
 $spEntityId = $query->getIssuer();
 if ($spEntityId === NULL) {
-	throw new SimpleSAML_Errro_BadRequest('Missing <saml:Issuer> in <samlp:AttributeQuery>.');
+	throw new SimpleSAML_Error_BadRequest('Missing <saml:Issuer> in <samlp:AttributeQuery>.');
 }
 
 $idpMetadata = $metadata->getMetadataConfig($idpEntityId, 'saml20-idp-hosted');
@@ -63,16 +63,23 @@ if (count($returnAttributes) === 0) {
 
 /* $returnAttributes contains the attributes we should return. Send them. */
 $assertion = new SAML2_Assertion();
-$assertion->setDestination($endpoint);
 $assertion->setIssuer($idpEntityId);
 $assertion->setNameId($query->getNameId());
 $assertion->setNotBefore(time());
 $assertion->setNotOnOrAfter(time() + 5*60);
-$assertion->setInResponseTo($query->getId());
 $assertion->setValidAudiences(array($spEntityId));
 $assertion->setAttributes($returnAttributes);
 $assertion->setAttributeNameFormat($attributeNameFormat);
-sspmod_saml2_Message::addSign($idpMetadata, $spMetadata, $assertion);
+
+$sc = new SAML2_XML_saml_SubjectConfirmation();
+$sc->Method = SAML2_Const::CM_BEARER;
+$sc->SubjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
+$sc->SubjectConfirmationData->NotOnOrAfter = time() + 5*60;
+$sc->SubjectConfirmationData->Recipient = $endpoint;
+$sc->SubjectConfirmationData->InResponseTo = $query->getId();
+$assertion->setSubjectConfirmation(array($sc));
+
+sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $assertion);
 
 $response = new SAML2_Response();
 $response->setRelayState($query->getRelayState());
@@ -80,8 +87,7 @@ $response->setDestination($endpoint);
 $response->setIssuer($idpEntityId);
 $response->setInResponseTo($query->getId());
 $response->setAssertions(array($assertion));
-sspmod_saml2_Message::addSign($idpMetadata, $spMetadata, $response);
+sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $response);
 
 $binding = new SAML2_HTTPPost();
-$binding->setDestination(sspmod_saml2_Message::getDebugDestination());
 $binding->send($response);

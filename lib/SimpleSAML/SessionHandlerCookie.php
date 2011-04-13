@@ -11,7 +11,7 @@
  * @author Olav Morken, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
  * @abstract
- * @version $Id: SessionHandlerCookie.php 2190 2010-02-24 09:52:55Z olavmrk $
+ * @version $Id: SessionHandlerCookie.php 2494 2010-08-09 08:51:38Z olavmrk $
  */
 abstract class SimpleSAML_SessionHandlerCookie
 extends SimpleSAML_SessionHandler {
@@ -51,18 +51,16 @@ extends SimpleSAML_SessionHandler {
 		/* We don't have a valid session. Create a new session id. */
 		$this->session_id = self::createSessionID();
 
-		$config = SimpleSAML_Configuration::getInstance();
-		$secureFlag = $config->getBoolean('session.cookie.secure', FALSE);
-		setcookie('SimpleSAMLSessionID', $this->session_id, 0, '/', NULL, $secureFlag);
+		$this->setCookie('SimpleSAMLSessionID', $this->session_id);
 	}
 
 
-	/* This function retrieves the session id of the current session.
+	/**
+	 * Retrieve the session id of saved in the session cookie.
 	 *
-	 * Returns:
-	 *  The session id of the current session.
+	 * @return string  The session id saved in the cookie.
 	 */
-	public function getSessionId() {
+	public function getCookieSessionId() {
 		return $this->session_id;
 	}
 

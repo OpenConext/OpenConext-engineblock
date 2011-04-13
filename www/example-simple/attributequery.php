@@ -21,7 +21,6 @@ function sendQuery($dataId, $url, $nameId) {
 	$query->setNameId($nameId);
 
 	$binding = new SAML2_HTTPRedirect();
-	$binding->setDestination(sspmod_saml2_Message::getDebugDestination());
 	$binding->send($query);
 }
 
@@ -47,7 +46,11 @@ function handleResponse() {
 	$idpMetadata = $GLOBALS['metadata']->getMetaDataConfig($idpEntityId, 'saml20-idp-remote');
 	$spMetadata =  $GLOBALS['metadata']->getMetaDataConfig($GLOBALS['spEntityId'], 'saml20-sp-hosted');
 
-	$assertion = sspmod_saml2_Message::processResponse($spMetadata, $idpMetadata, $response);
+	$assertion = sspmod_saml_Message::processResponse($spMetadata, $idpMetadata, $response);
+	if (count($assertion) > 1) {
+		throw new SimpleSAML_Error_Exception('More than one assertion in received response.');
+	}
+	$assertion = $assertion[0];
 
 	$dataId = $response->getRelayState();
 	if ($dataId === NULL) {

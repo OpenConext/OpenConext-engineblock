@@ -83,6 +83,8 @@ class SimpleSAML_Auth_Simple {
 	 *  - 'KeepPost': If the current request is a POST request, keep the POST
 	 *    data until after the authentication.
 	 *  - 'ReturnTo': The URL the user should be returned to after authentication.
+	 *  - 'ReturnCallback': The function we should call after the user has
+	 *    finished authentication.
 	 *
 	 * @param array $params  Various options to the authentication request.
 	 */
@@ -96,11 +98,13 @@ class SimpleSAML_Auth_Simple {
 
 		if (array_key_exists('ReturnTo', $params)) {
 			$returnTo = (string)$params['ReturnTo'];
+		} else if (array_key_exists('ReturnCallback', $params)) {
+			$returnTo = (array)$params['ReturnCallback'];
 		} else {
 			$returnTo = SimpleSAML_Utilities::selfURL();
 		}
 
-		if ($keepPost && $_SERVER['REQUEST_METHOD'] === 'POST') {
+		if (is_string($returnTo) && $keepPost && $_SERVER['REQUEST_METHOD'] === 'POST') {
 			$returnTo = SimpleSAML_Utilities::createPostRedirectLink($returnTo, $_POST);
 		}
 
@@ -111,13 +115,14 @@ class SimpleSAML_Auth_Simple {
 		}
 
 
-		/*
-		 * An URL to restart the authentication, in case the user bookmarks
-		 * something, e.g. the discovery service page.
-		 */
-		$restartURL = $this->getLoginURL($returnTo);
-
-		$params[SimpleSAML_Auth_State::RESTART] = $restartURL;
+		if (!isset($params[SimpleSAML_Auth_State::RESTART]) && is_string($returnTo)) {
+			/*
+			 * An URL to restart the authentication, in case the user bookmarks
+			 * something, e.g. the discovery service page.
+			 */
+			$restartURL = $this->getLoginURL($returnTo);
+			$params[SimpleSAML_Auth_State::RESTART] = $restartURL;
+		}
 
 		SimpleSAML_Auth_Default::initLogin($this->authSource, $returnTo, $errorURL, $params);
 		assert('FALSE');
@@ -129,26 +134,83 @@ class SimpleSAML_Auth_Simple {
 	 *
 	 * This function logs the user out. It will never return. By default,
 	 * it will cause a redirect to the current page after logging the user
-	 * out, but a different URL can be given with the $url parameter.
+	 * out, but a different URL can be given with the $params parameter.
 	 *
-	 * @param string|NULL $url  The url the user should be redirected to after logging out.
-	 *                          Defaults to the current page.
+	 * Generic parameters are:
+	 *  - 'ReturnTo': The URL the user should be returned to after logout.
+	 *  - 'ReturnCallback': The function that should be called after logout.
+	 *  - 'ReturnStateParam': The parameter we should return the state in when redirecting.
+	 *  - 'ReturnStateStage': The stage the state array should be saved with.
+	 *
+	 * @param string|array|NULL $params  Either the url the user should be redirected to after logging out,
+	 *                                   or an array with parameters for the logout. If this parameter is
+	 *                                   NULL, we will return to the current page.
 	 */
-	public function logout($url = NULL) {
-		assert('is_string($url) || is_null($url)');
+	public function logout($params = NULL) {
+		assert('is_array($params) || is_string($params) || is_null($params)');
 
-		if ($url === NULL) {
-			$url = SimpleSAML_Utilities::selfURL();
+		if ($params === NULL) {
+			$params = SimpleSAML_Utilities::selfURL();
+		}
+
+		if (is_string($params)) {
+			$params = array(
+				'ReturnTo' => $params,
+			);
+		}
+
+		assert('is_array($params)');
+		assert('isset($params["ReturnTo"]) || isset($params["ReturnCallback"])');
+
+		if (isset($params['ReturnStateParam']) || isset($params['ReturnStateStage'])) {
+			assert('isset($params["ReturnStateParam"]) && isset($params["ReturnStateStage"])');
 		}
 
 		$session = SimpleSAML_Session::getInstance();
-		if (!$session->isValid($this->authSource)) {
-			/* Not authenticated to this authentication source. */
-			SimpleSAML_Utilities::redirect($url);
-			assert('FALSE');
+		if ($session->isValid($this->authSource)) {
+			$state = $session->getAuthData($this->authSource, 'LogoutState');
+			if ($state !== NULL) {
+				$params = array_merge($state, $params);
+			}
+
+			$session->doLogout($this->authSource);
+
+			$params['LogoutCompletedHandler'] = array(get_class(), 'logoutCompleted');
+
+			$as = SimpleSAML_Auth_Source::getById($this->authSource);
+			if ($as !== NULL) {
+				$as->logout($params);
+			}
 		}
 
-		SimpleSAML_Auth_Default::initLogout($url);
+		self::logoutCompleted($params);
+	}
+
+
+	/**
+	 * Called when logout operation completes.
+	 *
+	 * This function never returns.
+	 *
+	 * @param array $state  The state after the logout.
+	 */
+	public static function logoutCompleted($state) {
+		assert('is_array($state)');
+		assert('isset($state["ReturnTo"]) || isset($state["ReturnCallback"])');
+
+		if (isset($state['ReturnCallback'])) {
+			call_user_func($state['ReturnCallback'], $state);
+			assert('FALSE');
+		} else {
+			$params = array();
+			if (isset($state['ReturnStateParam']) || isset($state['ReturnStateStage'])) {
+				assert('isset($state["ReturnStateParam"]) && isset($state["ReturnStateStage"])');
+				$stateID = SimpleSAML_Auth_State::saveState($state, $state['ReturnStateStage']);
+				$params[$state['ReturnStateParam']] = $stateID;
+			}
+
+			SimpleSAML_Utilities::redirect($state['ReturnTo'], $params);
+		}
 	}
 
 
@@ -170,7 +232,41 @@ class SimpleSAML_Auth_Simple {
 
 		/* Authenticated. */
 		$session = SimpleSAML_Session::getInstance();
-		return $session->getAttributes();
+		return $session->getAuthData($this->authSource, 'Attributes');
+	}
+
+
+	/**
+	 * Retrieve authentication data.
+	 *
+	 * @param string $name  The name of the parameter, e.g. 'Attribute', 'Expire' or 'saml:sp:IdP'.
+	 * @return mixed|NULL  The value of the parameter, or NULL if it isn't found or we are unauthenticated.
+	 */
+	public function getAuthData($name) {
+		assert('is_string($name)');
+
+		if (!$this->isAuthenticated()) {
+			return NULL;
+		}
+
+		$session = SimpleSAML_Session::getInstance();
+		return $session->getAuthData($this->authSource, $name);
+	}
+
+
+	/**
+	 * Retrieve all authentication data.
+	 *
+	 * @return array|NULL  All persistent authentication data, or NULL if we aren't authenticated.
+	 */
+	public function getAuthDataArray() {
+
+		if (!$this->isAuthenticated()) {
+			return NULL;
+		}
+
+		$session = SimpleSAML_Session::getInstance();
+		return $session->getAuthState($this->authSource);
 	}
 
 

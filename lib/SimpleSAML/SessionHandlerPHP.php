@@ -9,7 +9,7 @@
  *
  * @author Olav Morken, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: SessionHandlerPHP.php 2190 2010-02-24 09:52:55Z olavmrk $
+ * @version $Id: SessionHandlerPHP.php 2497 2010-08-09 08:52:00Z olavmrk $
  */
 class SimpleSAML_SessionHandlerPHP extends SimpleSAML_SessionHandler {
 
@@ -32,11 +32,16 @@ class SimpleSAML_SessionHandlerPHP extends SimpleSAML_SessionHandler {
 		 */
 		if(session_id() === '') {
 			$config = SimpleSAML_Configuration::getInstance();
-			
-			$cookiepath = ($config->getBoolean('session.phpsession.limitedpath', FALSE) ? '/' . $config->getBaseURL() : '/');
-			$secureFlag = $config->getBoolean('session.cookie.secure', FALSE);
-			session_set_cookie_params(0, $cookiepath, NULL, $secureFlag);
-			
+
+			$params = $this->getCookieParams();
+
+			$version = explode('.', PHP_VERSION);
+			if ((int)$version[0] === 5 && (int)$version[1] < 2) {
+				session_set_cookie_params($params['lifetime'], $params['path'], $params['domain'], $params['secure']);
+			} else {
+				session_set_cookie_params($params['lifetime'], $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+			}
+
 			$cookiename = $config->getString('session.phpsession.cookiename', NULL);
 			if (!empty($cookiename)) session_name($cookiename);
 
@@ -60,44 +65,51 @@ class SimpleSAML_SessionHandlerPHP extends SimpleSAML_SessionHandler {
 	}
 
 
-	/* This function retrieves the session id of the current session.
+	/**
+	 * Retrieve the session id of saved in the session cookie.
 	 *
-	 * Returns:
-	 *  The session id of the current session.
+	 * @return string  The session id saved in the cookie.
 	 */
-	public function getSessionId() {
+	public function getCookieSessionId() {
 		return session_id();
 	}
 
 
-	/* This function is used to store data in this session object.
+	/**
+	 * Save the current session to the PHP session array.
 	 *
-	 * See the information in SimpleSAML_SessionHandler::set(...) for
-	 * more information.
+	 * @param SimpleSAML_Session $session  The session object we should save.
 	 */
-	public function set($key, $value) {
-		$_SESSION[$key] = $value;
+	public function saveSession(SimpleSAML_Session $session) {
+
+		$_SESSION['SimpleSAMLphp_SESSION'] = serialize($session);
 	}
 
 
-	/* This function retrieves a value from this session object.
+	/**
+	 * Load the session from the PHP session array.
 	 *
-	 * See the information in SimpleSAML_SessionHandler::get(...) for
-	 * more information.
+	 * @param string|NULL $sessionId  The ID of the session we should load, or NULL to use the default.
+	 * @return SimpleSAML_Session|NULL  The session object, or NULL if it doesn't exist.
 	 */
-	public function get($key) {
-		/* Check if key exists first to avoid notice-messages in the
-		 * log.
-		 */
-		if (!isset($_SESSION)) return NULL;
-		if(!array_key_exists($key, $_SESSION)) {
-			/* We should return NULL if we don't have that
-			 * key in the session.
-			 */
+	public function loadSession($sessionId = NULL) {
+		assert('is_string($sessionId) || is_null($sessionId)');
+
+		if ($sessionId !== NULL && $sessionId !== session_id()) {
+			throw new SimpleSAML_Error_Exception('Cannot load PHP session with a specific ID.');
+		}
+
+		if (!isset($_SESSION['SimpleSAMLphp_SESSION'])) {
 			return NULL;
 		}
 
-		return $_SESSION[$key];
+		$session = $_SESSION['SimpleSAMLphp_SESSION'];
+		assert('is_string($session)');
+
+		$session = unserialize($session);
+		assert('$session instanceof SimpleSAML_Session');
+
+		return $session;
 	}
 
 
@@ -114,6 +126,30 @@ class SimpleSAML_SessionHandlerPHP extends SimpleSAML_SessionHandler {
 		return array_key_exists($cookieName, $_COOKIE);
 	}
 
-}
 
-?>
+	/**
+	 * Get the cookie parameters that should be used for session cookies.
+	 *
+	 * This function contains some adjustments from the default to provide backwards-compatibility.
+	 *
+	 * @return array
+	 * @link http://www.php.net/manual/en/function.session-get-cookie-params.php
+	 */
+	public function getCookieParams() {
+
+		$config = SimpleSAML_Configuration::getInstance();
+
+		$ret = parent::getCookieParams();
+
+		if ($config->hasValue('session.phpsession.limitedpath') && $config->hasValue('session.cookie.path')) {
+			throw new SimpleSAML_Error_Exception('You cannot set both the session.phpsession.limitedpath and session.cookie.path options.');
+		} elseif ($config->hasValue('session.phpsession.limitedpath')) {
+			$ret['path'] = $config->getBoolean('session.phpsession.limitedpath', FALSE) ? '/' . $config->getBaseURL() : '/';
+		}
+
+		$ret['httponly'] = $config->getBoolean('session.phpsession.httponly', FALSE);
+
+		return $ret;
+	}
+
+}

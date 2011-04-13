@@ -33,7 +33,7 @@ try {
 	
 	
 } catch (Exception $exception) {
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'METADATA', $exception);
+	throw new SimpleSAML_Error_Error('METADATA', $exception);
 }
 
 /*
@@ -41,7 +41,7 @@ try {
  * we should redirect the user to after a successful authentication.
  */
 if (!array_key_exists('RelayState', $_REQUEST)) {
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'NORELAYSTATE');
+	throw new SimpleSAML_Error_Error('NORELAYSTATE');
 }
 
 
@@ -62,7 +62,7 @@ function casValidate($cas) {
 
 		if (isset($cas['validate'])) { # cas v1 yes|no\r<username> style
 			$paramPrefix = strpos($cas['validate'], '?') ? '&' : '?';
-			$result = file_get_contents($cas['validate'] . $paramPrefix . 'ticket=' . $ticket . '&service=' . urlencode($service) );
+			$result = SimpleSAML_Utilities::fetch($cas['validate'] . $paramPrefix . 'ticket=' . $ticket . '&service=' . urlencode($service) );
 			$res = preg_split("/\r?\n/",$result);
 			
 			if (strcmp($res[0], "yes") == 0) {
@@ -73,7 +73,7 @@ function casValidate($cas) {
 		} elseif (isset($cas['serviceValidate'])) { # cas v2 xml style
 			$paramPrefix = strpos($cas['serviceValidate'], '?') ? '&' : '?';
 
-			$result = file_get_contents($cas['serviceValidate'] . $paramPrefix . 'ticket=' . $ticket . '&service=' . urlencode($service) );
+			$result = SimpleSAML_Utilities::fetch($cas['serviceValidate'] . $paramPrefix . 'ticket=' . $ticket . '&service=' . urlencode($service) );
 
 			$dom = DOMDocument::loadXML($result);
 			$xPath = new DOMXpath($dom);
@@ -135,7 +135,7 @@ try {
 	SimpleSAML_Utilities::redirect($relaystate);
 
 } catch(Exception $exception) {
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'CASERROR', $exception);
+	throw new SimpleSAML_Error_Error('CASERROR', $exception);
 }
 
 

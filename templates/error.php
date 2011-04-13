@@ -9,10 +9,10 @@
 ?>
 
 
-	<h2><?php echo $this->t('title_' . $this->data['errorCode']); ?></h2>
+	<h2><?php echo $this->t($this->data['dictTitle']); ?></h2>
 
 <?php
-echo htmlspecialchars($this->t('descr_' . $this->data['errorCode'], $this->data['parameters']));
+echo htmlspecialchars($this->t($this->data['dictDescr'], $this->data['parameters']));
 ?>
 
 	<div class="trackidtext">
@@ -47,10 +47,10 @@ if (isset($this->data['errorReportAddress'])) {
 	<form action="<?php echo htmlspecialchars($this->data['errorReportAddress']); ?>" method="post">
 	
 		<p><?php echo $this->t('report_text'); ?></p>
-		<p><?php echo $this->t('report_email'); ?> <input type="text" size="25" name="email" value="<?php echo($this->data['email']); ?>" />
+		<p><?php echo $this->t('report_email'); ?> <input type="text" size="25" name="email" value="<?php echo htmlspecialchars($this->data['email']); ?>" /></p>
 	
 		<p>
-		<textarea style="width: 300px; height: 100px" name="text"><?php echo $this->t('report_explain'); ?></textarea>
+		<textarea name="text" rows="6" cols="43"><?php echo $this->t('report_explain'); ?></textarea>
 		</p><p>
 		<input type="hidden" name="reportId" value="<?php echo $this->data['error']['reportId']; ?>" />
 		<input type="submit" name="send" value="<?php echo $this->t('report_submit'); ?>" />

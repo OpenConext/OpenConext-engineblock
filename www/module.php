@@ -140,7 +140,7 @@ try {
 
 	/* Find MIME type for file, based on extension. */
 	$contentType = NULL;
-	if (preg_match('#\.([^/]+)$#D', $path, $type)) {
+       if (preg_match('#\.([^/\.]+)$#D', $path, $type)) {
 		$type = strtolower($type[1]);
 		if (array_key_exists($type, $mimeTypes)) {
 			$contentType = $mimeTypes[$type];
@@ -164,6 +164,10 @@ try {
 
 	header('Content-Type: ' . $contentType);
 	header('Content-Length: ' . $contentLength);
+	header('Cache-Control: public,max-age=86400');
+	header('Expires: ' . gmdate('D, j M Y H:i:s \G\M\T', time() + 10*60));
+	header('Last-Modified: ' . gmdate('D, j M Y H:i:s \G\M\T', filemtime($path)));
+
 	readfile($path);
 	exit();
 

@@ -5,7 +5,7 @@
  *
  * @author Andreas Åkre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: Utilities.php 2354 2010-06-23 11:20:37Z olavmrk $
+ * @version $Id: Utilities.php 2754 2011-03-07 13:25:34Z olavmrk $
  */
 class SimpleSAML_Utilities {
 
@@ -50,17 +50,6 @@ class SimpleSAML_Utilities {
 		return $currenthost;# . self::getFirstPathElement() ;
 	}
 
-	/**
-	 * Will return https
-	 */
-	public static function getSelfProtocol() {
-		$s = empty($_SERVER["HTTPS"]) ? ''
-			: ($_SERVER["HTTPS"] == "on") ? 's'
-			: '';
-		if ( empty($_SERVER["HTTPS"]) && $_SERVER["SERVER_PORT"] == 443) $s = 's';
-		$protocol = self::strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s;
-		return $protocol;
-	}
 
 	/**
 	 * Will return https://sp.example.org
@@ -68,8 +57,12 @@ class SimpleSAML_Utilities {
 	public static function selfURLhost() {
 	
 		$currenthost = self::getSelfHost();
-	
-		$protocol = self::getSelfProtocol();
+
+		if (SimpleSAML_Utilities::isHTTPS()) {
+			$protocol = 'https';
+		} else {
+			$protocol = 'http';
+		}
 		
 		$portnumber = $_SERVER["SERVER_PORT"];
 		$port = ':' . $portnumber;
@@ -111,21 +104,15 @@ class SimpleSAML_Utilities {
 	public static function selfURLNoQuery() {
 	
 		$selfURLhost = self::selfURLhost();
-		return $selfURLhost . self::getScriptName();
-	
-	}
-	
-	public static function getScriptName() {
-		$scriptname = $_SERVER['SCRIPT_NAME'];
-		if (preg_match('|^/.*?(/.*)$|', $_SERVER['SCRIPT_NAME'], $matches)) {
-			#$scriptname = $matches[1];
+		$selfURLhost .= $_SERVER['SCRIPT_NAME'];
+		if (isset($_SERVER['PATH_INFO'])) {
+			$selfURLhost .= $_SERVER['PATH_INFO'];
 		}
-		if (array_key_exists('PATH_INFO', $_SERVER)) $scriptname .= $_SERVER['PATH_INFO'];
-		
-		return $scriptname;
+		return $selfURLhost;
+	
 	}
-	
-	
+
+
 	/**
 	 * Will return sp.example.org/foo
 	 */
@@ -153,21 +140,16 @@ class SimpleSAML_Utilities {
 
 	public static function selfURL() {
 		$selfURLhost = self::selfURLhost();
-		return $selfURLhost . self::getRequestURI();	
-	}
-	
-	public static function getRequestURI() {
-		
-		$requesturi = $_SERVER['REQUEST_URI'];
 
-		if ($requesturi[0] !== '/') {
+		$requestURI = $_SERVER['REQUEST_URI'];
+		if ($requestURI[0] !== '/') {
 			/* We probably have an url on the form: http://server/. */
-			if (preg_match('#^https?://[^/]*(/.*)#i', $requesturi, $matches)) {
-				$requesturi = $matches[1];
+			if (preg_match('#^https?://[^/]*(/.*)#i', $requestURI, $matches)) {
+				$requestURI = $matches[1];
 			}
 		}
 
-		return $requesturi;
+		return $selfURLhost . $requestURI;
 	}
 
 
@@ -240,10 +222,6 @@ class SimpleSAML_Utilities {
 	}
 
 
-	public static function strleft($s1, $s2) {
-		return substr($s1, 0, strpos($s1, $s2));
-	}
-	
 	public static function checkDateConditions($start=NULL, $end=NULL) {
 		$currentTime = time();
 	
@@ -262,12 +240,8 @@ class SimpleSAML_Utilities {
 		}
 		return TRUE;
 	}
-	
-	public static function cert_fingerprint($pem) {
-		$x509data = base64_decode( $pem );
-		return strtolower( sha1( $x509data ) );
-	}
-	
+
+
 	public static function generateID() {
 		return '_' . self::stringToHex(self::generateRandomBytes(21));
 	}
@@ -284,129 +258,6 @@ class SimpleSAML_Utilities {
 			$instant = time();
 		}
 		return gmdate('Y-m-d\TH:i:s\Z', $instant);
-	}
-	
-	public static function generateTrackID() {		
-		$uniqueid = substr(md5(uniqid(rand(), true)), 0, 10);
-		return $uniqueid;
-	}
-	
-	public static function array_values_equals($array, $equalsvalue) {
-		$foundkeys = array();
-		foreach ($array AS $key => $value) {
-			if ($value === $equalsvalue) $foundkeys[] = $key;
-		}
-		return $foundkeys;
-	}
-	
-	public static function checkAssocArrayRules($target, $required, $optional = array()) {
-
-		$results = array(
-			'required.found' 		=> array(),
-			'required.notfound'		=> array(),
-			'optional.found'		=> array(),
-			'optional.notfound'		=> array(),
-			'leftovers'				=> array()
-		);
-		
-		foreach ($target AS $key => $value) {
-			if(in_array($key, $required)) {
-				$results['required.found'][$key] = $value;
-			} elseif (in_array($key, $optional)) {
-				$results['optional.found'][$key] = $value;
-			} else {
-				$results['leftovers'][$key] = $value;
-			}
-		}
-		
-		foreach ($required AS $key) {
-			if (!array_key_exists($key, $target)) {
-				$results['required.notfound'][] = $key;
-			}
-		}
-		
-		foreach ($optional AS $key) {
-			if (!array_key_exists($key, $target)) {
-				$results['optional.notfound'][] = $key;
-			}
-		}
-		return $results;
-	}
-	
-
-	/**
-	 * Build a backtrace.
-	 *
-	 * This function takes in an exception and optionally a start depth, and
-	 * builds a backtrace from that depth. The backtrace is returned as an
-	 * array of strings, where each string represents one level in the stack.
-	 *
-	 * @param Exception $exception  The exception.
-	 * @param int $startDepth  The depth we should print the backtrace from.
-	 * @return array  The backtrace as an array of strings.
-	 */
-	public static function buildBacktrace(Exception $exception, $startDepth = 0) {
-
-		assert('is_int($startDepth)');
-
-		$bt = array();
-
-		/* Position in the top function on the stack. */
-		$pos = $exception->getFile() . ':' . $exception->getLine();
-
-		foreach($exception->getTrace() as $t) {
-
-			$function = $t['function'];
-			if(array_key_exists('class', $t)) {
-				$function = $t['class'] . '::' . $function;
-			}
-
-			$bt[] = $pos . ' (' . $function . ')';
-
-			if(array_key_exists('file', $t)) {
-				$pos = $t['file'] . ':' . $t['line'];
-			} else {
-				$pos = '[builtin]';
-			}
-		}
-
-		$bt[] = $pos . ' (N/A)';
-
-		/* Remove $startDepth elements from the top of the backtrace. */
-		$bt = array_slice($bt, $startDepth);
-
-		return $bt;
-	}
-
-
-	/**
-	 * Format a backtrace from an exception.
-	 *
-	 * This function formats a backtrace from an exception in a simple format
-	 * which doesn't include the variables passed to functions.
-	 *
-	 * The bactrace has the following format:
-	 *  0: <filename>:<line> (<current function>)
-	 *  1: <filename>:<line> (<previous fucntion>)
-	 *  ...
-	 *  N: <filename>:<line> (N/A)
-	 *
-	 * @param Exception $e  The exception we should format the backtrace for.
-	 * @param int $startDepth  The first frame we should include in the backtrace.
-	 * @return string  The formatted backtrace.
-	 */
-	public static function formatBacktrace(Exception $e, $startDepth = 0) {
-		assert('$e instanceof Exception');
-		assert('is_int($startDepth)');
-
-		$trace = '';
-
-		$bt = self::buildBacktrace($e, $startDepth);
-		foreach($bt as $depth => $t) {
-			$trace .= $depth . ': ' . $t . "\n";
-		}
-
-		return $trace;
 	}
 
 
@@ -555,83 +406,11 @@ class SimpleSAML_Utilities {
 	 * @param mixed $errorCode  Either a string with the error code, or an array with the error code and
 	 *                          additional parameters.
 	 * @param Exception $e  The exception which caused the error.
+	 * @deprecated
 	 */
 	public static function fatalError($trackId = 'na', $errorCode = null, Exception $e = null) {
 
-		$config = SimpleSAML_Configuration::getInstance();
-		$session = SimpleSAML_Session::getInstance();
-
-		if (is_array($errorCode)) {
-			$parameters = $errorCode;
-			unset($parameters[0]);
-			$errorCode = $errorCode[0];
-		} else {
-			$parameters = array();
-		}
-
-		// Get the exception message if there is any exception provided.
-		$emsg   = (empty($e) ? 'No exception available' : $e->getMessage());
-		$etrace = (empty($e) ? 'No exception available' : self::formatBacktrace($e));
-
-		if (!empty($errorCode) && count($parameters) > 0) {
-			$reptext = array();
-			foreach($parameters as $k => $v) {
-				$reptext[] = '"' . $k . '"' . ' => "' . $v . '"';
-			}
-			$reptext = '(' . implode(', ', $reptext) . ')';
-			$error = $errorCode . $reptext;
-		} elseif(!empty($errorCode)) {
-			$error = $errorCode;
-		} else {
-			$error = 'na';
-		}
-
-		// Log a error message
-		SimpleSAML_Logger::error($_SERVER['PHP_SELF'].' - UserError: ErrCode:' . $error . ': ' . urlencode($emsg) );
-		if (!empty($e)) {
-			SimpleSAML_Logger::error('Exception: ' . get_class($e));
-			SimpleSAML_Logger::error('Backtrace:');
-			foreach (explode("\n", $etrace) as $line) {
-				SimpleSAML_Logger::error($line);
-			}
-		}
-
-		$reportId = SimpleSAML_Utilities::stringToHex(SimpleSAML_Utilities::generateRandomBytes(4));
-		SimpleSAML_Logger::error('Error report with id ' . $reportId . ' generated.');
-
-		$errorData = array(
-			'exceptionMsg' => $emsg,
-			'exceptionTrace' => $etrace,
-			'reportId' => $reportId,
-			'trackId' => $trackId,
-			'url' => self::selfURLNoQuery(),
-			'version' => $config->getVersion(),
-		);
-		$session->setData('core:errorreport', $reportId, $errorData);
-
-		$t = new SimpleSAML_XHTML_Template($config, 'error.php', 'errors');
-		$t->data['showerrors'] = $config->getBoolean('showerrors', true);
-		$t->data['error'] = $errorData;
-		$t->data['errorCode'] = $errorCode;
-		$t->data['parameters'] = $parameters;
-
-		/* Check if there is a valid technical contact email address. */
-		if($config->getString('technicalcontact_email', 'na@example.org') !== 'na@example.org') {
-			/* Enable error reporting. */
-			$baseurl = SimpleSAML_Utilities::selfURLhost() . '/' . $config->getBaseURL();
-			$t->data['errorReportAddress'] = $baseurl . 'errorreport.php';
-		}
-
-		$attributes = $session->getAttributes();
-		if (is_array($attributes) && array_key_exists('mail', $attributes) && count($attributes['mail']) > 0) {
-			$email = $attributes['mail'][0];
-		} else {
-			$email = '';
-		}
-		$t->data['email'] = $email;
-
-		$t->show();
-		exit;
+		throw new SimpleSAML_Error_Error($errorCode, $e);
 	}
 
 
@@ -694,6 +473,11 @@ class SimpleSAML_Utilities {
 			$url = self::selfURLhost() . $url;
 		}
 
+		/* Verify that the URL is to a http or https site. */
+		if (!preg_match('@^https?://@i', $url)) {
+			throw new SimpleSAML_Error_Exception('Redirect to invalid URL: ' . $url);
+		}
+
 		/* Determine which prefix we should put before the first
 		 * parameter.
 		 */
@@ -740,6 +524,10 @@ class SimpleSAML_Utilities {
 			$code = 303;
 		} else {
 			$code = 302;
+		}
+
+		if (strlen($url) > 2048) {
+			SimpleSAML_Logger::warning('Redirecting to URL longer than 2048 bytes.');
 		}
 
 		/* Set the location header. */
@@ -1093,67 +881,6 @@ class SimpleSAML_Utilities {
 	}
 
 
-	/**
-	 * This function is used to generate a non-revesible unique identifier for a user.
-	 * The identifier should be persistent (unchanging) for a given SP-IdP federation.
-	 * The identifier can be shared between several different SPs connected to the same IdP, or it
-	 * can be unique for each SP.
-	 *
-	 * @param $idpEntityId  The entity id of the IdP.
-	 * @param $spEntityId   The entity id of the SP.
-	 * @param $attributes   The attributes of the user.
-	 * @param $idpset       Allows to select another metadata set. (to support both saml2 or shib13)
-	 * @param $sppset       Allows to select another metadata set. (to support both saml2 or shib13)
-	 * @return A non-reversible unique identifier for the user.
-	 */
-	public static function generateUserIdentifier($idpEntityId, $spEntityId, array &$state, $idpset = 'saml20-idp-hosted', $spset = 'saml20-sp-remote') {
-	
-		$metadataHandler = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
-		$idpMetadata = $metadataHandler->getMetaData($idpEntityId, $idpset);
-		$spMetadata = $metadataHandler->getMetaData($spEntityId, $spset);
-
-		if (isset($state['UserID'])) {
-			$attributeValue = $state['UserID'];
-		} else {
-			if(array_key_exists('userid.attribute', $spMetadata)) {
-				$attributeName = $spMetadata['userid.attribute'];
-			} elseif(array_key_exists('userid.attribute', $idpMetadata)) {
-				$attributeName = $idpMetadata['userid.attribute'];
-			} else {
-				$attributeName = 'eduPersonPrincipalName';
-			}
-
-			if(!array_key_exists($attributeName, $attributes)) {
-				throw new Exception('Missing attribute "' . $attributeName . '" for user. Cannot' .
-					' generate user id.');
-			}
-
-			$attributeValue = $attributes[$attributeName];
-			if(count($attributeValue) !== 1) {
-				throw new Exception('Attribute "' . $attributeName . '" for user did not contain exactly' .
-					' one value. Cannot generate user id.');
-			}
-
-			$attributeValue = $attributeValue[0];
-			if(empty($attributeValue)) {
-				throw new Exception('Attribute "' . $attributeName . '" for user was empty. Cannot' .
-					' generate user id.');
-			}
-		}
-
-		$secretSalt = self::getSecretSalt();
-
-		$uidData = 'uidhashbase' . $secretSalt;
-		$uidData .= strlen($idpEntityId) . ':' . $idpEntityId;
-		$uidData .= strlen($spEntityId) . ':' . $spEntityId;
-		$uidData .= strlen($attributeValue) . ':' . $attributeValue;
-		$uidData .= $secretSalt;
-
-		$userid = hash('sha1', $uidData);
-
-		return $userid;
-	}
-
 	public static function generateRandomBytesMTrand($length) {
 	
 		/* Use mt_rand to generate $length random bytes. */
@@ -1290,8 +1017,7 @@ class SimpleSAML_Utilities {
 	 */
 	public static function resolveURL($url, $base = NULL) {
 		if($base === NULL) {
-			$config = SimpleSAML_Configuration::getInstance();
-			$base = self::selfURLhost() . '/' . $config->getBaseURL();
+			$base = SimpleSAML_Utilities::getBaseURL();
 		}
 
 
@@ -1522,35 +1248,28 @@ class SimpleSAML_Utilities {
 		assert('is_bool($required)');
 		assert('is_string($prefix)');
 
-		$ret = array();
+		$keys = $metadata->getPublicKeys(NULL, FALSE, $prefix);
+		if ($keys !== NULL) {
+			foreach ($keys as $key) {
+				if ($key['type'] !== 'X509Certificate') {
+					continue;
+				}
+				if ($key['signing'] !== TRUE) {
+					continue;
+				}
+				$certData = $key['X509Certificate'];
+				$pem = "-----BEGIN CERTIFICATE-----\n" .
+					chunk_split($certData, 64) .
+					"-----END CERTIFICATE-----\n";
+				$certFingerprint = strtolower(sha1(base64_decode($certData)));
 
-		if ($metadata->hasValue($prefix . 'certData')) {
-			/* Full certificate data available from metadata. */
-			$certData = $metadata->getString($prefix . 'certData');
-			$certData = str_replace(array("\r", "\n", "\t", ' '), '', $certData);
-			$ret['certData'] = $certData;
-
-			/* Recreate PEM-encoded certificate. */
-			$ret['PEM'] = "-----BEGIN CERTIFICATE-----\n" .
-				chunk_split($ret['certData'], 64) .
-				"-----END CERTIFICATE-----\n";
-
-		} elseif ($metadata->hasValue($prefix . 'certificate')) {
-			/* Reference to certificate file. */
-			$file = SimpleSAML_Utilities::resolveCert($metadata->getString($prefix . 'certificate'));
-			$data = @file_get_contents($file);
-			if ($data === FALSE) {
-				throw new Exception('Unable to load certificate/public key from file "' . $file . '"');
+				return array(
+					'certData' => $certData,
+					'PEM' => $pem,
+					'certFingerprint' => array($certFingerprint),
+				);
 			}
-			$ret['PEM'] = $data;
-
-			/* Extract certificate data (if this is a certificate). */
-			$pattern = '/^-----BEGIN CERTIFICATE-----([^-]*)^-----END CERTIFICATE-----/m';
-			if (preg_match($pattern, $data, $matches)) {
-				/* We have a certificate. */
-				$ret['certData'] = str_replace(array("\r", "\n"), '', $matches[1]);
-			}
-
+			/* No valid key found. */
 		} elseif ($metadata->hasValue($prefix . 'certFingerprint')) {
 			/* We only have a fingerprint available. */
 			$fps = $metadata->getArrayizeString($prefix . 'certFingerprint');
@@ -1565,24 +1284,14 @@ class SimpleSAML_Utilities {
 			 * return an array with only the fingerprint(s) immediately.
 			 */
 			return array('certFingerprint' => $fps);
+		}
 
+		/* No public key/certificate available. */
+		if ($required) {
+			throw new Exception('No public key / certificate found in metadata.');
 		} else {
-			/* No public key/certificate available. */
-			if ($required) {
-				throw new Exception('No public key / certificate found in metadata.');
-			} else {
-				return NULL;
-			}
+			return NULL;
 		}
-
-		if (array_key_exists('certData', $ret)) {
-			/* This is a certificate - calculate the fingerprint. */
-			$ret['certFingerprint'] = array(
-				strtolower(sha1(base64_decode($ret['certData'])))
-			);
-		}
-
-		return $ret;
 	}
 
 
@@ -1805,7 +1514,8 @@ class SimpleSAML_Utilities {
 		/* Not authenticated as admin user. Start authentication. */
 
 		if (SimpleSAML_Auth_Source::getById('admin') !== NULL) {
-			SimpleSAML_Auth_Default::initLogin('admin', $returnTo);
+			$as = new SimpleSAML_Auth_Simple('admin');
+			$as->login();
 		} else {
 			/* For backwards-compatibility. */
 
@@ -2185,40 +1895,6 @@ class SimpleSAML_Utilities {
 
 
 	/**
-	 * Retrieve the authority for the given IdP metadata.
-	 *
-	 * This function provides backwards-compatibility with
-	 * previous versions of simpleSAMLphp.
-	 *
-	 * @param array $idpmetadata  The IdP metadata.
-	 * @return string  The authority that should be used to validate the session.
-	 */
-	public static function getAuthority(array $idpmetadata) {
-
-		if (isset($idpmetadata['authority'])) {
-			return $idpmetadata['authority'];
-		}
-
-		$candidates = array(
-			'auth/login-admin.php' => 'login-admin',
-			'auth/login-auto.php' => 'login-auto',
-			'auth/login-cas-ldap.php' => 'login-cas-ldap',
-			'auth/login-feide.php' => 'login-feide',
-			'auth/login-ldapmulti.php' => 'login-ldapmulti',
-			'auth/login-radius.php' => 'login-radius',
-			'auth/login-tlsclient.php' => 'tlsclient',
-			'auth/login-wayf-ldap.php' => 'login-wayf-ldap',
-			'auth/login.php' => 'login',
-		);
-		if (isset($candidates[$idpmetadata['auth']])) {
-			return $candidates[$idpmetadata['auth']];
-		}
-		throw new SimpleSAML_Error_Exception('You need to set \'authority\' in the metadata for ' .
-			var_export($idpmetadata['entityid'], TRUE) . '.');
-	}
-
-
-	/**
 	 * Check for session cookie, and show missing-cookie page if it is missing.
 	 *
 	 * @param string|NULL $retryURL  The URL the user should access to retry the operation.
@@ -2240,6 +1916,82 @@ class SimpleSAML_Utilities {
 		SimpleSAML_Utilities::redirect($url);
 	}
 
-}
 
-?>
+	/**
+	 * Helper function to log messages that we send or receive.
+	 *
+	 * @param string|DOMElement $message  The message, as an XML string or an XML element.
+	 * @param string $type  Whether this message is sent or received, encrypted or decrypted.
+	 */
+	public static function debugMessage($message, $type) {
+		assert('is_string($message) || $message instanceof DOMElement');
+
+		$globalConfig = SimpleSAML_Configuration::getInstance();
+		if (!$globalConfig->getBoolean('debug', FALSE)) {
+			/* Message debug disabled. */
+			return;
+		}
+
+		if ($message instanceof DOMElement) {
+			$message = $message->ownerDocument->saveXML($message);
+		}
+
+		switch ($type) {
+		case 'in':
+			SimpleSAML_Logger::debug('Received message:');
+			break;
+		case 'out':
+			SimpleSAML_Logger::debug('Sending message:');
+			break;
+		case 'decrypt':
+			SimpleSAML_Logger::debug('Decrypted message:');
+			break;
+		case 'encrypt':
+			SimpleSAML_Logger::debug('Encrypted message:');
+			break;
+		default:
+			assert(FALSE);
+		}
+
+		$str = self::formatXMLString($message);
+		foreach (explode("\n", $str) as $line) {
+			SimpleSAML_Logger::debug($line);
+		}
+	}
+
+
+	/**
+	 * Helper function to retrieve a file or URL with proxy support.
+	 *
+	 * An exception will be thrown if we are unable to retrieve the data.
+	 *
+	 * @param string $path  The path or URL we should fetch.
+	 * @param array $context  Extra context options. This parameter is optional.
+	 * @return string  The data we fetched.
+	 */
+	public static function fetch($path, $context = array()) {
+		assert('is_string($path)');
+
+		$config = SimpleSAML_Configuration::getInstance();
+
+		$proxy = $config->getString('proxy', NULL);
+		if ($proxy !== NULL) {
+			if (!isset($context['http']['proxy'])) {
+				$context['http']['proxy'] = $proxy;
+			}
+			if (!isset($context['http']['request_fulluri'])) {
+				$context['http']['request_fulluri'] = TRUE;
+			}
+		}
+
+		$context = stream_context_create($context);
+
+		$data = file_get_contents($path, FALSE, $context);
+		if ($data === FALSE) {
+			throw new SimpleSAML_Error_Exception('Error fetching ' . var_export($path, TRUE) . ':' . self::getLastError());
+		}
+
+		return $data;
+	}
+
+}

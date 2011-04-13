@@ -69,6 +69,14 @@ class SAML2_AuthnRequest extends SAML2_Request {
 
 
 	/**
+	 * The index of the AssertionConsumerService.
+	 *
+	 * @var int|NULL
+	 */
+	private $assertionConsumerServiceIndex;
+
+
+	/**
 	 * What authentication context was requested.
 	 *
 	 * Array with the following elements.
@@ -79,6 +87,12 @@ class SAML2_AuthnRequest extends SAML2_Request {
 	 */
 	private $requestedAuthnContext;
 
+	/**
+	 * Request extensions.
+	 *
+	 * @var array
+	 */
+	private $extensions;
 
 	/**
 	 * Constructor for SAML 2 authentication request messages.
@@ -105,6 +119,10 @@ class SAML2_AuthnRequest extends SAML2_Request {
 
 		if ($xml->hasAttribute('ProtocolBinding')) {
 			$this->protocolBinding = $xml->getAttribute('ProtocolBinding');
+		}
+
+		if ($xml->hasAttribute('AssertionConsumerServiceIndex')) {
+			$this->assertionConsumerServiceIndex = (int)$xml->getAttribute('AssertionConsumerServiceIndex');
 		}
 
 		$nameIdPolicy = SAML2_Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
@@ -165,6 +183,8 @@ class SAML2_AuthnRequest extends SAML2_Request {
 			}
 
 		}
+
+		$this->extensions = SAML2_XML_samlp_Extensions::getList($xml);
 	}
 
 
@@ -325,6 +345,28 @@ class SAML2_AuthnRequest extends SAML2_Request {
 
 
 	/**
+	 * Retrieve the value of the AssertionConsumerServiceIndex attribute.
+	 *
+	 * @return int|NULL  The AssertionConsumerServiceIndex attribute.
+	 */
+	public function getAssertionConsumerServiceIndex() {
+		return $this->assertionConsumerServiceIndex;
+	}
+
+
+	/**
+	 * Set the value of the AssertionConsumerServiceIndex attribute.
+	 *
+	 * @param string|NULL $assertionConsumerServiceIndex  The AssertionConsumerServiceIndex attribute.
+	 */
+	public function setAssertionConsumerServiceIndex($assertionConsumerServiceIndex) {
+		assert('is_int($assertionConsumerServiceIndex) || is_null($assertionConsumerServiceIndex)');
+
+		$this->assertionConsumerServiceIndex = $assertionConsumerServiceIndex;
+	}
+
+
+	/**
 	 * Retrieve the RequestedAuthnContext.
 	 *
 	 * @return array|NULL  The RequestedAuthnContext.
@@ -343,6 +385,28 @@ class SAML2_AuthnRequest extends SAML2_Request {
 		assert('is_array($requestedAuthnContext) || is_null($requestedAuthnContext)');
 
 		$this->requestedAuthnContext = $requestedAuthnContext;
+	}
+
+
+	/**
+	 * Retrieve the Extensions.
+	 *
+	 * @return SAML2_XML_samlp_Extensions.
+	 */
+	public function getExtensions() {
+		return $this->extensions;
+	}
+
+
+	/**
+	 * Set the Extensions.
+	 *
+	 * @param array|NULL $extensions The Extensions.
+	 */
+	public function setExtensions($extensions) {
+		assert('is_array($extensions) || is_null($extensions)');
+
+		$this->extensions = $extensions;
 	}
 
 

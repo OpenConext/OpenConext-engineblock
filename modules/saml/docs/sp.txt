@@ -42,6 +42,23 @@ All these parameters override the equivalent option from the configuration.
 :   *Note*: SAML 2 specific.
 
 
+Authentication data
+-------------------
+
+Some SAML-specific attributes are available to the application after authentication.
+To retrieve these attributes, the application can use the `getAuthData()`-function from the [SP API](./simplesamlphp-sp-api).
+The following attributes are available:
+
+`saml:sp:IdP`
+:   The entityID of the IdP the user is authenticated against.
+
+`saml:sp:NameID`
+:   The NameID the user was issued by the IdP.
+    This is an associative array with the various fields from the NameID.
+
+`saml:sp:SessionIndex`
+:   The SessionIndex we received from the IdP.
+
 
 Examples
 --------
@@ -241,6 +258,8 @@ Options
 :   A file with a certificate _and_ private key that should be used when issuing SOAP requests from this SP.
     If this option isn't specified, the SP private key and certificate will be used.
 
+:   This option can also be set to `FALSE`, in which case no client certificate will be used.
+
 `saml.SOAPClient.privatekey_pass`
 :   The passphrase of the privatekey in `saml.SOAPClient.certificate`.
 
@@ -251,6 +270,24 @@ Options
 :   This option can also be set in the `shib13-idp-remote` metadata, in which case the setting in `shib13-idp-remote` takes precedence.
 
 :   *Note*: SAML 1 specific.
+
+`sign.authnrequest`
+:   Whether to sign authentication requests sent from this SP.
+
+:   Note that this option also exists in the IdP-remote metadata, and
+    any value in the IdP-remote metadata overrides the one configured
+    in the SP configuration.
+
+:   *Note*: SAML 2 specific.
+
+`sign.logout`
+:   Whether to sign logout messages sent from this SP.
+
+:   Note that this option also exists in the IdP-remote metadata, and
+    any value in the IdP-remote metadata overrides the one configured
+    in the SP configuration.
+
+:   *Note*: SAML 2 specific.
 
 `redirect.sign`
 :   Whether authentication requests, logout requests and logout responses sent from this SP should be signed. The default is `FALSE`.
@@ -276,3 +313,12 @@ Options
             'en' => 'http://sp.example.net/en/info.html',
             'no' => 'http://sp.example.net/no/info.html',
         ),
+
+`validate.logout`
+:   Whether we require signatures on logout messages sent to this SP.
+
+:   Note that this option also exists in the IdP-remote metadata, and
+    any value in the IdP-remote metadata overrides the one configured
+    in the IdP metadata.
+
+:   *Note*: SAML 2 specific.

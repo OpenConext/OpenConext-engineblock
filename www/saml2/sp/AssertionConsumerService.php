@@ -8,7 +8,7 @@ require_once('../../_include.php');
  *
  * @author Andreas Aakre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: AssertionConsumerService.php 2305 2010-05-19 13:04:33Z olavmrk $
+ * @version $Id: AssertionConsumerService.php 2642 2010-11-16 14:31:18Z olavmrk $
  * @abstract
  */
 
@@ -37,14 +37,15 @@ function finishLogin($authProcState) {
 	assert('array_key_exists("Source", $authProcState)');
 	assert('array_key_exists("entityid", $authProcState["Source"])');
 
-	global $session;
+	$authData = array(
+		'Attributes' => $authProcState['Attributes'],
+		'saml:sp:NameID' => $authProcState['core:saml20-sp:NameID'],
+		'saml:sp:SessionIndex' => $authProcState['core:saml20-sp:SessionIndex'],
+		'saml:sp:IdP' => $authProcState['Source']['entityid'],
+	);
 
-	/* Update the session information */
-	$session->doLogin('saml2');
-	$session->setAttributes($authProcState['Attributes']);
-	$session->setNameID($authProcState['core:saml20-sp:NameID']);
-	$session->setSessionIndex($authProcState['core:saml20-sp:SessionIndex']);
-	$session->setIdP($authProcState['Source']['entityid']);
+	global $session;
+	$session->doLogin('saml2', $authData);
 
 	SimpleSAML_Utilities::redirect($authProcState['core:saml20-sp:TargetURL']);
 }
@@ -52,7 +53,7 @@ function finishLogin($authProcState) {
 SimpleSAML_Logger::info('SAML2.0 - SP.AssertionConsumerService: Accessing SAML 2.0 SP endpoint AssertionConsumerService');
 
 if (!$config->getBoolean('enable.saml20-sp', TRUE))
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'NOACCESS');
+	throw new SimpleSAML_Error_Error('NOACCESS');
 
 if (array_key_exists(SimpleSAML_Auth_ProcessingChain::AUTHPARAM, $_REQUEST)) {
 	/* We have returned from the authentication processing filters. */
@@ -98,14 +99,18 @@ try {
 		}
 		if(empty($info['RelayState'])) {
 			/* RelayState missing. */
-			SimpleSAML_Utilities::fatalError($session->getTrackID(), 'NORELAYSTATE');
+			throw new SimpleSAML_Error_Error('NORELAYSTATE');
 		}
 	}
 
 
 	try {
-		$assertion = sspmod_saml2_Message::processResponse($spMetadata, $idpMetadata, $response);
-	} catch (sspmod_saml2_Error $e) {
+		$assertion = sspmod_saml_Message::processResponse($spMetadata, $idpMetadata, $response);
+		if (count($assertion) > 1) {
+			throw new SimpleSAML_Error_Exception('More than one assertion in received response.');
+		}
+		$assertion = $assertion[0];
+	} catch (sspmod_saml_Error $e) {
 		/* The status of the response wasn't "success". */
 
 		$status = $response->getStatus();
@@ -115,7 +120,7 @@ try {
 		}
 
 		/* We don't have an error handler. Show an error page. */
-		SimpleSAML_Utilities::fatalError($session->getTrackID(), 'RESPONSESTATUSNOSUCCESS', $e);
+		throw new SimpleSAML_Error_Error('RESPONSESTATUSNOSUCCESS', $e);
 	}
 
 
@@ -156,7 +161,7 @@ try {
 	finishLogin($authProcState);
 
 } catch(Exception $exception) {
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'PROCESSASSERTION', $exception);
+	throw new SimpleSAML_Error_Error('PROCESSASSERTION', $exception);
 }
 
 

@@ -5,7 +5,7 @@
  *
  * @author Andreas Åkre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: HTTPPost.php 2286 2010-05-07 09:14:10Z olavmrk $
+ * @version $Id: HTTPPost.php 2542 2010-09-10 13:14:09Z olavmrk $
  */
 class SimpleSAML_Bindings_Shib13_HTTPPost {
 
@@ -79,22 +79,12 @@ class SimpleSAML_Bindings_Shib13_HTTPPost {
 
 		$response = $responsedom->saveXML();
 
-		if ($this->configuration->getBoolean('debug', FALSE)) {
-			$p = new SimpleSAML_XHTML_Template($this->configuration, 'post-debug.php');
-			$p->data['header'] = 'SAML (Shibboleth 1.3) Response Debug-mode';
-			$p->data['RelayStateName'] = 'TARGET';
-			$p->data['RelayState'] = $relayState;
-			$p->data['destination'] = $shire;
-			$p->data['response'] = str_replace("\n", "", base64_encode($response));
-			$p->data['responseHTML'] = htmlspecialchars(SimpleSAML_Utilities::formatXMLString($response));
-			$p->show();
+		SimpleSAML_Utilities::debugMessage($response, 'out');
 
-		} else {
-			SimpleSAML_Utilities::postRedirect($shire, array(
-				'TARGET' => $relayState,
-				'SAMLResponse' => base64_encode($response),
-			));
-		}
+		SimpleSAML_Utilities::postRedirect($shire, array(
+			'TARGET' => $relayState,
+			'SAMLResponse' => base64_encode($response),
+		));
 
 	}
 
@@ -113,6 +103,8 @@ class SimpleSAML_Bindings_Shib13_HTTPPost {
 		}
 		$rawResponse = $post['SAMLResponse'];
 		$samlResponseXML = base64_decode($rawResponse);
+
+		SimpleSAML_Utilities::debugMessage($samlResponseXML, 'in');
 
 		SimpleSAML_Utilities::validateXMLDocument($samlResponseXML, 'saml11');
 

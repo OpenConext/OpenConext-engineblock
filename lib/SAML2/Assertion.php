@@ -53,6 +53,16 @@ class SAML2_Assertion implements SAML2_SignedElement {
 
 
 	/**
+	 * The encrypted Attributes.
+	 *
+	 * If this is not NULL, the Attributes needs decryption before it can be accessed.
+	 *
+	 * @var array|NULL
+	 */
+	 private $encryptedAttribute;
+
+
+	 /**
 	 * The earliest time this assertion is valid, as an UNIX timestamp.
 	 *
 	 * @var int
@@ -66,24 +76,6 @@ class SAML2_Assertion implements SAML2_SignedElement {
 	 * @var int
 	 */
 	private $notOnOrAfter;
-
-
-	/**
-	 * The destination URL for this assertion.
-	 *
-	 * @var string|NULL
-	 */
-	private $destination;
-
-
-	/**
-	 * The id of the request this assertion is sent as a response to.
-	 *
-	 * This should be NULL if this isn't a response to a request.
-	 *
-	 * @var string|NULL
-	 */
-	private $inResponseTo;
 
 
 	/**
@@ -184,6 +176,22 @@ class SAML2_Assertion implements SAML2_SignedElement {
 	private $signatureData;
 
 
+	/**
+	 * Boolean that indicates if attributes are encrypted in the
+	 * assertion or not.
+	 *
+	 * @var boolean
+	 */
+	private $requiredEncAttributes;
+
+
+	/**
+	 * The SubjectConfirmation elements of the Subject in the assertion.
+	 *
+	 * @var array  Array of SAML2_XML_saml_SubjectConfirmation elements.
+	 */
+	private $SubjectConfirmation;
+
 
 	/**
 	 * Constructor for SAML 2 assertions.
@@ -200,6 +208,7 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		$this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
 		$this->certificates = array();
 		$this->AuthenticatingAuthority = array();
+		$this->SubjectConfirmation = array();
 
 		if ($xml === NULL) {
 			return;
@@ -227,6 +236,7 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		$this->parseConditions($xml);
 		$this->parseAuthnStatement($xml);
 		$this->parseAttributes($xml);
+		$this->parseEncryptedAttributes($xml);
 		$this->parseSignature($xml);
 	}
 
@@ -264,45 +274,10 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		$subjectConfirmation = SAML2_Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
 		if (empty($subjectConfirmation)) {
 			throw new Exception('Missing <saml:SubjectConfirmation> in <saml:Subject>.');
-		} elseif (count($subjectConfirmation) > 1) {
-			throw new Exception('More than one <saml:SubjectConfirmation> in <saml:Subject>.');
-		}
-		$subjectConfirmation = $subjectConfirmation[0];
-
-		if (!$subjectConfirmation->hasAttribute('Method')) {
-			throw new Exception('Missing required attribute "Method" on <saml:SubjectConfirmation>-node.');
-		}
-		$method = $subjectConfirmation->getAttribute('Method');
-
-		if ($method !== SAML2_Const::CM_BEARER) {
-			throw new Exception('Unsupported subject confirmation method: ' . var_export($method, TRUE));
 		}
 
-		$confirmationData = SAML2_Utils::xpQuery($subjectConfirmation, './saml_assertion:SubjectConfirmationData');
-		if (empty($confirmationData)) {
-			return;
-		} elseif (count($confirmationData) > 1) {
-			throw new Exception('More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation> is currently unsupported.');
-		}
-		$confirmationData = $confirmationData[0];
-
-		if ($confirmationData->hasAttribute('NotBefore')) {
-			$notBefore = SimpleSAML_Utilities::parseSAML2Time($confirmationData->getAttribute('NotBefore'));
-			if ($this->notBefore === NULL || $this->notBefore < $notBefore) {
-				$this->notBefore = $notBefore;
-			}
-		}
-		if ($confirmationData->hasAttribute('NotOnOrAfter')) {
-			$notOnOrAfter = SimpleSAML_Utilities::parseSAML2Time($confirmationData->getAttribute('NotOnOrAfter'));
-			if ($this->notOnOrAfter === NULL || $this->notOnOrAfter > $notOnOrAfter) {
-				$this->notOnOrAfter = $notOnOrAfter;
-			}
-		}
-		if ($confirmationData->hasAttribute('InResponseTo')) {
-			$this->inResponseTo = $confirmationData->getAttribute('InResponseTo');;
-		}
-		if ($confirmationData->hasAttribute('Recipient')) {
-			$this->destination = $confirmationData->getAttribute('Recipient');;
+		foreach ($subjectConfirmation as $sc) {
+			$this->SubjectConfirmation[] = new SAML2_XML_saml_SubjectConfirmation($sc);
 		}
 	}
 
@@ -382,6 +357,7 @@ class SAML2_Assertion implements SAML2_SignedElement {
 
 		$as = SAML2_Utils::xpQuery($xml, './saml_assertion:AuthnStatement');
 		if (empty($as)) {
+			$this->authnInstant = NULL;
 			return;
 		} elseif (count($as) > 1) {
 			throw new Exception('More that one <saml:AuthnStatement> in <saml:Assertion> not supported.');
@@ -468,6 +444,17 @@ class SAML2_Assertion implements SAML2_SignedElement {
 				$this->attributes[$name][] = trim($value->textContent);
 			}
 		}
+	}
+
+
+	/**
+	 * Parse encrypted attribute statements in assertion.
+	 *
+	 * @param DOMElement $xml  The XML element with the assertion.
+	 */
+	private function parseEncryptedAttributes(DOMElement $xml) {
+
+		$this->encryptedAttribute = SAML2_Utils::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute');
 	}
 
 
@@ -625,6 +612,36 @@ class SAML2_Assertion implements SAML2_SignedElement {
 
 
 	/**
+	 * Encrypt the NameID in the Assertion.
+	 *
+	 * @param XMLSecurityKey $key  The encryption key.
+	 */
+	public function encryptNameId(XMLSecurityKey $key) {
+
+		/* First create a XML representation of the NameID. */
+		$doc = new DOMDocument();
+		$root = $doc->createElement('root');
+		$doc->appendChild($root);
+		SAML2_Utils::addNameId($root, $this->nameId);
+		$nameId = $root->firstChild;
+
+		SimpleSAML_Utilities::debugMessage($nameId, 'encrypt');
+
+		/* Encrypt the NameID. */
+		$enc = new XMLSecEnc();
+		$enc->setNode($nameId);
+		$enc->type = XMLSecEnc::Element;
+
+		$symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+		$symmetricKey->generateSessionKey();
+		$enc->encryptKey($key, $symmetricKey);
+
+		$this->encryptedNameId = $enc->encryptNode($symmetricKey);
+		$this->nameId = NULL;
+	}
+
+
+	/**
 	 * Decrypt the NameId of the subject in the assertion.
 	 *
 	 * @param XMLSecurityKey $key  The decryption key.
@@ -637,9 +654,51 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		}
 
 		$nameId = SAML2_Utils::decryptElement($this->encryptedNameId, $key);
+		SimpleSAML_Utilities::debugMessage($nameId, 'decrypt');
 		$this->nameId = SAML2_Utils::parseNameId($nameId);
 
 		$this->encryptedNameId = NULL;
+	}
+
+
+	public function decryptAttributes($key){
+		if($this->encryptedAttribute === null){
+			return;
+		}
+		$attributes = $this->encryptedAttribute;
+		foreach ($attributes as $attributeEnc) {
+			/*Decrypt node <EncryptedAttribute>*/
+			$attribute = SAML2_Utils::decryptElement($attributeEnc->getElementsByTagName('EncryptedData')->item(0), $key);
+
+			if (!$attribute->hasAttribute('Name')) {
+				throw new Exception('Missing name on <saml:Attribute> element.');
+			}
+			$name = $attribute->getAttribute('Name');
+
+			if ($attribute->hasAttribute('NameFormat')) {
+				$nameFormat = $attribute->getAttribute('NameFormat');
+			} else {
+				$nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+			}
+
+			if ($firstAttribute) {
+				$this->nameFormat = $nameFormat;
+				$firstAttribute = FALSE;
+			} else {
+				if ($this->nameFormat !== $nameFormat) {
+					$this->nameFormat = SAML2_Const::NAMEFORMAT_UNSPECIFIED;
+				}
+			}
+
+			if (!array_key_exists($name, $this->attributes)) {
+				$this->attributes[$name] = array();
+			}
+
+			$values = SAML2_Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+			foreach ($values as $value) {
+				$this->attributes[$name][] = trim($value->textContent);
+			}
+		}
 	}
 
 
@@ -700,55 +759,12 @@ class SAML2_Assertion implements SAML2_SignedElement {
 
 
 	/**
-	 * Retrieve the destination URL of this assertion.
+	 * Set $EncryptedAttributes if attributes will send encrypted
 	 *
-	 * This function returns NULL if there are no restrictions on which URL can
-	 * receive the assertion.
-	 *
-	 * @return string|NULL  The destination URL of this assertion.
+	 * @param boolean $ea  TRUE to encrypt attributes in the assertion.
 	 */
-	public function getDestination() {
-
-		return $this->destination;
-	}
-
-
-	/**
-	 * Set the destination URL of this assertion.
-	 *
-	 * @return string|NULL  The destination URL of this assertion.
-	 */
-	public function setDestination($destination) {
-		assert('is_string($destination) || is_null($destination)');
-
-		$this->destination = $destination;
-	}
-
-
-	/**
-	 * Retrieve the request this assertion is sent in response to.
-	 *
-	 * Can be NULL, in which case this assertion isn't sent in response to a specific request.
-	 *
-	 * @return string|NULL  The id of the request this assertion is sent in response to.
-	 */
-	public function getInResponseTo() {
-
-		return $this->inResponseTo;
-	}
-
-
-	/**
-	 * Set the request this assertion is sent in response to.
-	 *
-	 * Can be set to NULL, in which case this assertion isn't sent in response to a specific request.
-	 *
-	 * @param string|NULL $inResponseTo  The id of the request this assertion is sent in response to.
-	 */
-	public function setInResponseTo($inResponseTo) {
-		assert('is_string($inResponseTo) || is_null($inResponseTo)');
-
-		$this->inResponseTo = $inResponseTo;
+	public function setEncryptedAttributes($ea) {
+		$this->requiredEncAttributes = $ea;
 	}
 
 
@@ -781,7 +797,7 @@ class SAML2_Assertion implements SAML2_SignedElement {
 	/**
 	 * Retrieve the AuthnInstant of the assertion.
 	 *
-	 * @return int  The timestamp the user was authenticated.
+	 * @return int|NULL  The timestamp the user was authenticated, or NULL if the user isn't authenticated.
 	 */
 	public function getAuthnInstant() {
 
@@ -792,10 +808,10 @@ class SAML2_Assertion implements SAML2_SignedElement {
 	/**
 	 * Set the AuthnInstant of the assertion.
 	 *
-	 * @param int $authnInstant  The timestamp the user was authenticated.
+	 * @param int|NULL $authnInstant  The timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
 	 */
 	public function setAuthnInstant($authnInstant) {
-		assert('is_int($authnInstant)');
+		assert('is_int($authnInstant) || is_null($authnInstant)');
 
 		$this->authnInstant = $authnInstant;
 	}
@@ -955,6 +971,27 @@ class SAML2_Assertion implements SAML2_SignedElement {
 
 
 	/**
+	 * Retrieve the SubjectConfirmation elements we have in our Subject element.
+	 *
+	 * @return array  Array of SAML2_XML_saml_SubjectConfirmation elements.
+	 */
+	public function getSubjectConfirmation() {
+		return $this->SubjectConfirmation;
+	}
+
+
+	/**
+	 * Set the SubjectConfirmation elements that should be included in the assertion.
+	 *
+	 * @param array $SubjectConfirmation Array of SAML2_XML_saml_SubjectConfirmation elements.
+	 */
+	public function setSubjectConfirmation(array $SubjectConfirmation) {
+
+		$this->SubjectConfirmation = $SubjectConfirmation;
+	}
+
+
+	/**
 	 * Retrieve the private key we should use to sign the assertion.
 	 *
 	 * @return XMLSecurityKey|NULL The key, or NULL if no key is specified.
@@ -975,6 +1012,28 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		$this->signatureKey = $signatureKey;
 	}
 
+
+	/**
+	 * Return the key we should use to encrypt the assertion.
+	 *
+	 * @return XMLSecurityKey|NULL The key, or NULL if no key is specified..
+	 *
+	 */
+
+
+	public function getEncryptionKey() {
+		return $this->encryptionKey;
+	}
+
+
+	/**
+	 * Set the private key we should use to encrypt the attributes.
+	 *
+	 * @param XMLSecurityKey|NULL $key
+	 */
+	public function setEncryptionKey(XMLSecurityKey $Key = NULL) {
+		$this->encryptionKey = $Key;
+	}
 
 	/**
 	 * Set the certificates that should be included in the assertion.
@@ -1033,7 +1092,10 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		$this->addSubject($root);
 		$this->addConditions($root);
 		$this->addAuthnStatement($root);
-		$this->addAttributeStatement($root);
+		if($this->requiredEncAttributes == false)
+			$this->addAttributeStatement($root);
+		else
+			$this->addEncryptedAttributeStatement($root);
 
 		if ($this->signatureKey !== NULL) {
 			SAML2_Utils::insertSignature($this->signatureKey, $this->certificates, $root, $issuer->nextSibling);
@@ -1050,7 +1112,7 @@ class SAML2_Assertion implements SAML2_SignedElement {
 	 */
 	private function addSubject(DOMElement $root) {
 
-		if ($this->nameId === NULL) {
+		if ($this->nameId === NULL && $this->encryptedNameId === NULL) {
 			/* We don't have anything to create a Subject node for. */
 			return;
 		}
@@ -1058,24 +1120,16 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		$subject = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:Subject');
 		$root->appendChild($subject);
 
-		SAML2_Utils::addNameId($subject, $this->nameId);
-
-		$sc = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:SubjectConfirmation');
-		$subject->appendChild($sc);
-
-		$sc->setAttribute('Method', SAML2_Const::CM_BEARER);
-
-		$scd = $root->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:SubjectConfirmationData');
-		$sc->appendChild($scd);
-
-		if ($this->notOnOrAfter !== NULL) {
-			$scd->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
+		if ($this->encryptedNameId === NULL) {
+			SAML2_Utils::addNameId($subject, $this->nameId);
+		} else {
+			$eid = $subject->ownerDocument->createElementNS(SAML2_Const::NS_SAML, 'saml:' . 'EncryptedID');
+			$subject->appendChild($eid);
+			$eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, TRUE));
 		}
-		if ($this->destination !== NULL) {
-			$scd->setAttribute('Recipient', $this->destination);
-		}
-		if ($this->inResponseTo !== NULL) {
-			$scd->setAttribute('InResponseTo', $this->inResponseTo);
+
+		foreach ($this->SubjectConfirmation as $sc) {
+			$sc->toXML($subject);
 		}
 	}
 
@@ -1115,8 +1169,8 @@ class SAML2_Assertion implements SAML2_SignedElement {
 	 */
 	private function addAuthnStatement(DOMElement $root) {
 
-		if ($this->authnContext === NULL) {
-			/* No authentication context => no authentication statement. */
+		if ($this->authnContext === NULL || $this->authnInstant === NULL) {
+			/* No authentication context or AuthnInstant => no authentication statement. */
 			return;
 		}
 
@@ -1194,6 +1248,74 @@ class SAML2_Assertion implements SAML2_SignedElement {
 		}
 	}
 
-}
 
-?>
+	/**
+	 * Add an EncryptedAttribute Statement-node to the assertion.
+	 *
+	 * @param DOMElement $root  The assertion element we should add the Encrypted Attribute Statement to.
+	 */
+	private function addEncryptedAttributeStatement(DOMElement $root) {
+
+		if ($this->requiredEncAttributes == FALSE)
+			return;
+
+		$document = $root->ownerDocument;
+
+		$attributeStatement = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeStatement');
+		$root->appendChild($attributeStatement);
+
+		foreach ($this->attributes as $name => $values) {
+			$document2 = new DOMDocument();
+			$attribute = $document2->createElementNS(SAML2_Const::NS_SAML, 'saml:Attribute');
+			$attribute->setAttribute('Name', $name);
+			$document2->appendChild($attribute);
+
+			if ($this->nameFormat !== SAML2_Const::NAMEFORMAT_UNSPECIFIED) {
+				$attribute->setAttribute('NameFormat', $this->nameFormat);
+			}
+
+			foreach ($values as $value) {
+				if (is_string($value)) {
+					$type = 'xs:string';
+				} elseif (is_int($value)) {
+					$type = 'xs:integer';
+				} else {
+					$type = NULL;
+				}
+
+				$attributeValue = $document2->createElementNS(SAML2_Const::NS_SAML, 'saml:AttributeValue');
+				$attribute->appendChild($attributeValue);
+				if ($type !== NULL) {
+					$attributeValue->setAttributeNS(SAML2_Const::NS_XSI, 'xsi:type', $type);
+				}
+
+				if ($value instanceof DOMNodeList) {
+					for ($i = 0; $i < $value->length; $i++) {
+						$node = $document2->importNode($value->item($i), TRUE);
+						$attributeValue->appendChild($node);
+					}
+				} else {
+					$attributeValue->appendChild($document2->createTextNode($value));
+				}
+			}
+			/*Once the attribute nodes are built, the are encrypted*/
+			$EncAssert = new XMLSecEnc();
+			$EncAssert->setNode($document2->documentElement);
+			$EncAssert->type = 'http://www.w3.org/2001/04/xmlenc#Element';
+			/*
+			 * Attributes are encrypted with a session key and this one with
+			 * $EncryptionKey
+			 */
+			$symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES256_CBC);
+			$symmetricKey->generateSessionKey();
+			$EncAssert->encryptKey($this->encryptionKey, $symmetricKey);
+			$EncrNode = $EncAssert->encryptNode($symmetricKey);
+
+			$EncAttribute = $document->createElementNS(SAML2_Const::NS_SAML, 'saml:EncryptedAttribute');
+			$attributeStatement->appendChild($EncAttribute);
+			$n = $document->importNode($EncrNode,true);
+			$EncAttribute->appendChild($n);
+		}
+	}
+
+}

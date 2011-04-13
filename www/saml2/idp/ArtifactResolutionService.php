@@ -24,18 +24,30 @@ if (!$idpMetadata->getBoolean('saml20.sendartifact', FALSE)) {
 	throw new SimpleSAML_Error_Error('NOACCESS');
 }
 
+$store = SimpleSAML_Store::getInstance();
+if ($store === FALSE) {
+	throw new Exception('Unable to send artifact without a datastore configured.');
+}
+
 $binding = new SAML2_SOAP();
 $request = $binding->receive();
 if (!($request instanceof SAML2_ArtifactResolve)) {
 	throw new Exception('Message received on ArtifactResolutionService wasn\'t a ArtifactResolve request.');
 }
 $artifact = $request->getArtifact();
-$responseData = SimpleSAML_Memcache::get('artifact:' . $artifact);
-$document = new DOMDocument();
-$document->loadXML($responseData);
-$responseXML = $document->firstChild;
-$artifactResponse = new SAML2_ArtifactResponse();
 
+$responseData = $store->get('artifact', $artifact);
+$store->delete('artifact', $artifact);
+
+if ($responseData !== NULL) {
+	$document = new DOMDocument();
+	$document->loadXML($responseData);
+	$responseXML = $document->firstChild;
+} else {
+	$responseXML = NULL;
+}
+
+$artifactResponse = new SAML2_ArtifactResponse();
 $artifactResponse->setIssuer($idpEntityId);
 $artifactResponse->setInResponseTo($request->getId());
 $artifactResponse->setAny($responseXML);

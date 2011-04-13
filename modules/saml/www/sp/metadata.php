@@ -19,6 +19,11 @@ if (!($source instanceof sspmod_saml_Auth_Source_SP)) {
 $entityId = $source->getEntityId();
 $spconfig = $source->getMetadata();
 
+$metaArray20 = array(
+	'AssertionConsumerService' => SimpleSAML_Module::getModuleURL('saml/sp/saml2-acs.php/' . $sourceId),
+	'SingleLogoutService' => SimpleSAML_Module::getModuleURL('saml/sp/saml2-logout.php/' . $sourceId),
+);
+
 $ed = new SAML2_XML_md_EntityDescriptor();
 $ed->entityID = $entityId;
 
@@ -34,6 +39,14 @@ $slo->Binding = SAML2_Const::BINDING_HTTP_REDIRECT;
 $slo->Location = SimpleSAML_Module::getModuleURL('saml/sp/saml2-logout.php/' . $sourceId);
 $sp->SingleLogoutService[] = $slo;
 
+$store = SimpleSAML_Store::getInstance();
+if ($store instanceof SimpleSAML_Store_SQL) {
+	/* We can properly support SOAP logout. */
+	$slo = new SAML2_XML_md_EndpointType();
+	$slo->Binding = SAML2_Const::BINDING_SOAP;
+	$slo->Location = SimpleSAML_Module::getModuleURL('saml/sp/saml2-logout.php/' . $sourceId);
+	$sp->SingleLogoutService[] = $slo;
+}
 
 $acs = new SAML2_XML_md_IndexedEndpointType();
 $acs->index = 0;
@@ -59,8 +72,11 @@ $acs->Binding = 'urn:oasis:names:tc:SAML:1.0:profiles:artifact-01';
 $acs->Location = SimpleSAML_Module::getModuleURL('saml/sp/saml1-acs.php/' . $sourceId . '/artifact');
 $sp->AssertionConsumerService[] = $acs;
 
-$certInfo = SimpleSAML_Utilities::loadPublicKey($spconfig);
+$keys = array();
+$certInfo = SimpleSAML_Utilities::loadPublicKey($spconfig, FALSE, 'new_');
 if ($certInfo !== NULL && array_key_exists('certData', $certInfo)) {
+	$hasNewCert = TRUE;
+
 	$certData = $certInfo['certData'];
 	$kd = SAML2_Utils::createKeyDescriptor($certData);
 	$kd->use = 'signing';
@@ -69,6 +85,39 @@ if ($certInfo !== NULL && array_key_exists('certData', $certInfo)) {
 	$kd = SAML2_Utils::createKeyDescriptor($certData);
 	$kd->use = 'encryption';
 	$sp->KeyDescriptor[] = $kd;
+
+	$keys[] = array(
+		'type' => 'X509Certificate',
+		'signing' => TRUE,
+		'encryption' => TRUE,
+		'X509Certificate' => $certInfo['certData'],
+	);
+
+} else {
+	$hasNewCert = FALSE;
+}
+
+$certInfo = SimpleSAML_Utilities::loadPublicKey($spconfig);
+if ($certInfo !== NULL && array_key_exists('certData', $certInfo)) {
+	$certData = $certInfo['certData'];
+	$kd = SAML2_Utils::createKeyDescriptor($certData);
+	$kd->use = 'signing';
+	$sp->KeyDescriptor[] = $kd;
+
+	if (!$hasNewCert) {
+		/* Don't include the old certificate for encryption when we have a newer certificate. */
+		$kd = SAML2_Utils::createKeyDescriptor($certData);
+		$kd->use = 'encryption';
+		$sp->KeyDescriptor[] = $kd;
+	}
+
+	$keys[] = array(
+		'type' => 'X509Certificate',
+		'signing' => TRUE,
+		'encryption' => ($hasNewCert ? FALSE : TRUE),
+		'X509Certificate' => $certInfo['certData'],
+	);
+
 } else {
 	$certData = NULL;
 }
@@ -96,6 +145,15 @@ if ($name !== NULL && !empty($attributes)) {
 		$acs->RequestedAttribute[] = $a;
 	}
 
+	$metaArray20['name'] = $name;
+	if ($description !== NULL) {
+		$metaArray20['description'] = $description;
+	}
+
+	$metaArray20['attributes'] = $attributes;
+	if ($nameFormat !== NULL) {
+		$metaArray20['attributes.NameFormat'] = $nameFormat;
+	}
 }
 
 $orgName = $spconfig->getLocalizedString('OrganizationName', NULL);
@@ -114,6 +172,10 @@ if ($orgName !== NULL) {
 	}
 
 	$ed->Organization = $o;
+
+	$metaArray20['OrganizationName'] = $orgName;
+	$metaArray20['OrganizationDisplayName'] = $o->OrganizationDisplayName;
+	$metaArray20['OrganizationURL'] = $o->OrganizationURL;
 }
 
 $c = new SAML2_XML_md_ContactPerson();
@@ -142,13 +204,14 @@ $xml = $ed->toXML();
 SimpleSAML_Utilities::formatDOMElement($xml);
 $xml = $xml->ownerDocument->saveXML($xml);
 
-$metaArray20 = array(
-	'AssertionConsumerService' => SimpleSAML_Module::getModuleURL('saml/sp/saml2-acs.php/' . $sourceId),
-	'SingleLogoutService' => SimpleSAML_Module::getModuleURL('saml/sp/saml2-logout.php/' . $sourceId),
-);
-if ($certData !== NULL) {
-	$metaArray20['certData'] = $certData;
+if (count($keys) === 1) {
+	$metaArray20['certData'] = $keys[0]['X509Certificate'];
+} elseif (count($keys) > 1) {
+	$metaArray20['keys'] = $keys;
 }
+
+/* Sign the metadata if enabled. */
+$xml = SimpleSAML_Metadata_Signer::sign($xml, $sp, 'SAML 2 SP');
 
 if (array_key_exists('output', $_REQUEST) && $_REQUEST['output'] == 'xhtml') {
 
@@ -158,14 +221,6 @@ if (array_key_exists('output', $_REQUEST) && $_REQUEST['output'] == 'xhtml') {
 	$t->data['metadata'] = htmlspecialchars($xml);
 	$t->data['metadataflat'] = '$metadata[' . var_export($entityId, TRUE) . '] = ' . var_export($metaArray20, TRUE) . ';';
 	$t->data['metaurl'] = $source->getMetadataURL();
-
-	$t->data['idpsend'] = array();
-	$t->data['sentok'] = FALSE;
-	$t->data['adminok'] = FALSE;
-	$t->data['adminlogin'] = NULL;
-
-	$t->data['techemail'] = $config->getString('technicalcontact_email', NULL);
-
 	$t->show();
 } else {
 	header('Content-Type: application/samlmetadata+xml');

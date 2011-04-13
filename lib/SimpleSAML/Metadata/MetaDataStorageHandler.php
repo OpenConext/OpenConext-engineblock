@@ -5,7 +5,7 @@
  *
  * @author Andreas Åkre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: MetaDataStorageHandler.php 2305 2010-05-19 13:04:33Z olavmrk $
+ * @version $Id: MetaDataStorageHandler.php 2720 2011-01-19 11:55:44Z olavmrk $
  */ 
 class SimpleSAML_Metadata_MetaDataStorageHandler {
 
@@ -146,6 +146,10 @@ class SimpleSAML_Metadata_MetaDataStorageHandler {
 				if (array_key_exists('expire', $le)) {
 					if ($le['expire'] < time()) {
 						unset($srcList[$key]);
+						SimpleSAML_Logger::warning("Dropping metadata entity " .
+							var_export($key,true) . ", expired " .
+							SimpleSAML_Utilities::generateTimestamp($le['expire']) .
+							".");
 					}
 				}
 			}
@@ -286,7 +290,7 @@ class SimpleSAML_Metadata_MetaDataStorageHandler {
 			}
 		}
 
-		throw new Exception('Unable to locate metadata for \'' . $index . '\' in set \'' . $set . '\'.');
+		throw new SimpleSAML_Error_MetadataNotFound($index);
 	}
 
 

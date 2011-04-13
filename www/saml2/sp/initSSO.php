@@ -10,7 +10,7 @@ $session = SimpleSAML_Session::getInstance();
 SimpleSAML_Logger::info('SAML2.0 - SP.initSSO: Accessing SAML 2.0 SP initSSO script');
 
 if (!$config->getBoolean('enable.saml20-sp', TRUE))
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'NOACCESS');
+	throw new SimpleSAML_Error_Error('NOACCESS');
 
 /*
  * Incomming URL parameters
@@ -21,7 +21,7 @@ if (!$config->getBoolean('enable.saml20-sp', TRUE))
  */		
 
 if (empty($_GET['RelayState'])) {
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'NORELAYSTATE');
+	throw new SimpleSAML_Error_Error('NORELAYSTATE');
 }
 
 $reachableIDPs = array();
@@ -70,7 +70,7 @@ try {
 	
 
 } catch (Exception $exception) {
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'METADATA', $exception);
+	throw new SimpleSAML_Error_Error('METADATA', $exception);
 }
 
 /*
@@ -89,7 +89,7 @@ if ($idpentityid === NULL) {
 	} elseif($config->getString('idpdisco.url.saml20', NULL) !== NULL) {
 		$discourl = $config->getString('idpdisco.url.saml20');
 	} else {
-		$discourl = SimpleSAML_Utilities::selfURLhost() . '/' . $config->getBaseURL() . 'saml2/sp/idpdisco.php';
+		$discourl = SimpleSAML_Utilities::getBaseURL() . 'saml2/sp/idpdisco.php';
 	}
 
 	if ($config->getBoolean('idpdisco.extDiscoveryStorage', NULL) != NULL) {
@@ -132,7 +132,7 @@ try {
 	$spMetadata = $metadata->getMetaDataConfig($spentityid, 'saml20-sp-hosted');
 	$idpMetadata = $metadata->getMetaDataConfig($idpentityid, 'saml20-idp-remote');
 
-	$ar = sspmod_saml2_Message::buildAuthnRequest($spMetadata, $idpMetadata);
+	$ar = sspmod_saml_Message::buildAuthnRequest($spMetadata, $idpMetadata);
 
 	$assertionConsumerServiceURL = $metadata->getGenerated('AssertionConsumerService', 'saml20-sp-hosted');
 	$ar->setAssertionConsumerServiceURL($assertionConsumerServiceURL);
@@ -165,11 +165,10 @@ try {
 	$session->setData('SAML2:SP:SSO:Info', $ar->getId(), $info);
 
 	$b = new SAML2_HTTPRedirect();
-	$b->setDestination(sspmod_SAML2_Message::getDebugDestination());
 	$b->send($ar);
 
 } catch(Exception $exception) {
-	SimpleSAML_Utilities::fatalError($session->getTrackID(), 'CREATEREQUEST', $exception);
+	throw new SimpleSAML_Error_Error('CREATEREQUEST', $exception);
 }
 
 ?>

@@ -122,15 +122,21 @@ class SimpleSAML_Bindings_Shib13_Artifact {
 		$artifacts = self::getArtifacts();
 		$request = self::buildRequest($artifacts);
 
+		SimpleSAML_Utilities::debugMessage($msgStr, 'out');
+
 		$url = $idpMetadata->getDefaultEndpoint('ArtifactResolutionService', array('urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding'));
 		$url = $url['Location'];
 
-		$certData = SimpleSAML_Utilities::loadPublicKey($idpMetadata, TRUE);
-		if (!array_key_exists('PEM', $certData)) {
-			throw new SimpleSAML_Error_Exception('Missing one of certData or certificate in metadata for '
-				. var_export($idpMetadata->getString('entityid'), TRUE));
+		$peerPublicKeys = $idpMetadata->getPublicKeys('signing', TRUE);
+		$certData = '';
+		foreach ($peerPublicKeys as $key) {
+			if ($key['type'] !== 'X509Certificate') {
+				continue;
+			}
+			$certData .= "-----BEGIN CERTIFICATE-----\n" .
+				chunk_split($key['X509Certificate'], 64) .
+				"-----END CERTIFICATE-----\n";
 		}
-		$certData = $certData['PEM'];
 
 		$file = SimpleSAML_Utilities::getTempDir() . '/' . sha1($certData) . '.crt';
 		if (!file_exists($file)) {
@@ -154,13 +160,14 @@ class SimpleSAML_Bindings_Shib13_Artifact {
 					'Content-Type: text/xml',
 			),
 		);
-		$context = stream_context_create($opts);
 
 		/* Fetch the artifact. */
-		$response = file_get_contents($url, FALSE, $context);
+		$response = SimpleSAML_Utilities::fetch($url, $opts);
 		if ($response === FALSE) {
 			throw new SimpleSAML_Error_Exception('Failed to retrieve assertion from IdP.');
 		}
+
+		SimpleSAML_Utilities::debugMessage($response, 'in');
 
 		/* Find the response in the SOAP message. */
 		$response = self::extractResponse($response);

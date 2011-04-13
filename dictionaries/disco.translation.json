@@ -4,7 +4,7 @@
 		"nn": "Vel innloggingsteneste",
 		"sv": "V\u00e4lj din identitetsleverant\u00f6r",
 		"es": "Seleccione su proveedor de identidad",
-		"fr": "S\u00e9l\u00e9ctionnez votre fournisseur d'identit\u00e9",
+		"fr": "S\u00e9lectionnez votre fournisseur d'identit\u00e9",
 		"de": "W\u00e4hlen Sie Ihren Identity Provider",
 		"nl": "Kies je Identity Provider",
 		"sl": "Izberite IdP doma\u010de organizacije",
@@ -16,14 +16,19 @@
 		"pt-BR": "Selecione seu provedor de identidade",
 		"pt": "Escolha o seu fornecedor de identidade (IdP)",
 		"pl": "wybierz swojego Dostawc\u0119 To\u017csamo\u015bci.",
-		"tr": "Kimlik sa\u011flay\u0131c\u0131n\u0131z\u0131 se\u00e7iniz."
+		"cs": "Zvol sv\u00e9ho poskytovatele identity (IdP)",
+		"tr": "Kimlik sa\u011flay\u0131c\u0131n\u0131z\u0131 se\u00e7iniz.",
+		"lt": "Pasirinkite savo tapatybi\u0173 tiek\u0117j\u0105",
+		"it": "Selezionare il proprio identity provider",
+		"ja": "\u30a2\u30a4\u30c7\u30f3\u30c6\u30a3\u30c6\u30a3\u30d7\u30ed\u30d0\u30a4\u30c0\u3092\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044",
+		"zh-tw": "\u9078\u64c7\u4f60\u7684\u8b58\u5225\u63d0\u4f9b\u8005(idp)"
 	},
 	"selectidp_full": {
 		"no": "Vennligst velg hvilken identitetsleverand\u00f8r du vil bruke for \u00e5 logge inn:",
 		"nn": "Vel innloggingsteneste (IdP) der du \u00f8nskjer \u00e5 logga inn.",
 		"sv": "V\u00e4lj vilken identitetsleverant\u00f6r du vill logga in med:",
 		"es": "Por favor, seleccione el proveedor de identidad donde desea autenticarse",
-		"fr": "S\u00e9l\u00e9ctionnez le fournisseur d'identit\u00e9 aupr\u00e8s duquel vous souhaitez vous authentifier:",
+		"fr": "S\u00e9lectionnez le fournisseur d'identit\u00e9 aupr\u00e8s duquel vous souhaitez vous authentifier :",
 		"de": "Bitte w\u00e4hlen Sie den Identity Provider, bei dem Sie Sich authentifizieren m\u00f6chten:",
 		"nl": "Selecteer de Identity Provider waar je wil authenticeren:",
 		"sl": "Izberite IdP, na katerem se boste avtenticirali:",
@@ -35,14 +40,19 @@
 		"pt-BR": "Por favor selecione o provedor de identidade ao qual deseja se autenticar",
 		"pt": "Por favor, escolha o  fornecedor de identidade (IdP) que ir\u00e1 usar para se autenticar:",
 		"pl": "Prosz\u0119 wybra\u0107 Dostawc\u0119 To\u017csamo\u015bci, przez kt\u00f3rego  chcesz si\u0119 uwierzytelni\u0107:",
-		"tr": "L\u00fctfen, kimlik do\u011frulamas\u0131 yapaca\u011f\u0131n\u0131z kimlik sa\u011flay\u0131c\u0131y\u0131 se\u00e7iniz: "
+		"cs": "Pros\u00edm zvolte sve\u00e9ho poskytovatele identity, kter\u00fd v\u00e1m dovol\u00ed se p\u0159ihl\u00e1sit",
+		"tr": "L\u00fctfen, kimlik do\u011frulamas\u0131 yapaca\u011f\u0131n\u0131z kimlik sa\u011flay\u0131c\u0131y\u0131 se\u00e7iniz: ",
+		"lt": "Pra\u0161ome pasirinkite tapatybi\u0173 tiek\u0117j\u0105, kuriame norite autentikuotis:",
+		"it": "Si prega di selezionare l'identity provider con il quale autenticarsi:",
+		"ja": "\u8a8d\u8a3c\u3092\u884c\u3044\u305f\u3044\u30a2\u30a4\u30c7\u30f3\u30c6\u30a3\u30c6\u30a3\u30d7\u30ed\u30d0\u30a4\u30c0\u3092\u9078\u629e\u3057\u3066\u304f\u3060\u3055\u3044:",
+		"zh-tw": "\u8acb\u9078\u64c7\u60a8\u6240\u8981\u524d\u5f80\u8a8d\u8b49\u7684\u9a57\u8b49\u63d0\u4f9b\u8005\uff1a"
 	},
 	"select": {
 		"no": "Velg",
 		"nn": "Vel",
 		"sv": "V\u00e4lj",
 		"es": "Seleccione",
-		"fr": "S\u00e9l\u00e9ctionner",
+		"fr": "S\u00e9lectionner",
 		"de": "Auswahl",
 		"nl": "Kies",
 		"sl": "Izberite",
@@ -54,7 +64,12 @@
 		"pt-BR": "Selecione",
 		"pt": "Escolher",
 		"pl": "Wybierz",
-		"tr": "Se\u00e7"
+		"cs": "Zvol",
+		"tr": "Se\u00e7",
+		"lt": "Pasirinkite",
+		"it": "Selezionare",
+		"ja": "\u9078\u629e",
+		"zh-tw": "\u9078\u64c7"
 	},
 	"remember": {
 		"no": "Husk mitt valg",
@@ -73,7 +88,12 @@
 		"pt-BR": "Lembrar minha escolha",
 		"pt": "Lembrar esta escolha",
 		"pl": "Zapami\u0119taj m\u00f3j wyb\u00f3r",
-		"tr": "Se\u00e7imimi hat\u0131rla"
+		"cs": "Zapamatuj moji volbu",
+		"tr": "Se\u00e7imimi hat\u0131rla",
+		"lt": "Prisiminti pasirinkim\u0105",
+		"it": "Ricorda la mia scelta",
+		"ja": "\u9078\u629e\u3092\u8a18\u61b6\u3059\u308b",
+		"zh-tw": "\u8a18\u4f4f\u6211\u7684\u9078\u64c7"
 	},
 	"icon_prefered_idp": {
 		"no": "[Foretrukket valg]",
@@ -89,7 +109,12 @@
 		"pl": "Preferowany wyb\u00f3r",
 		"tr": "[Tercih edilen se\u00e7enek]",
 		"fr": "[Choix pr\u00e9f\u00e9r\u00e9]",
-		"hr": "[Prvenstveni odabir]"
+		"hr": "[Prvenstveni odabir]",
+		"nn": "Beste val",
+		"lt": "[Rekomenduojame]",
+		"it": "[Scelta preferita]",
+		"ja": "[\u63a8\u5968\u3059\u308b\u9078\u629e]",
+		"zh-tw": "\u559c\u597d\u9078\u64c7"
 	},
 	"previous_auth": {
 		"no": "Du har tidligere valg \u00e5 autentisere deg hos",
@@ -102,7 +127,14 @@
 		"fi": "Olet aikaisemmin valinnut identiteettil\u00e4hteeksesi",
 		"pt": "Escolheu autenticar-se anteriormente em",
 		"fr": "Pr\u00e9c\u00e9demment, vous aviez choisi de vous authentifier sur",
-		"hr": "Prethodno ste odabrali autentikaciju kroz"
+		"hr": "Prethodno ste odabrali autentikaciju kroz",
+		"nn": "Du har tidlegare logga inn ved",
+		"lt": "Anks\u010diau pasirinkote autentikuotis",
+		"it": "Precedentemente si \u00e8 scelto di autenticarsi con",
+		"hu": "Kor\u00e1bban ezt a szem\u00e9lyazonoss\u00e1g-szolg\u00e1ltat\u00f3t (IdP) v\u00e1lasztotta: ",
+		"ja": "\u524d\u56de\u9078\u629e\u3057\u305f\u8a8d\u8a3c: ",
+		"zh-tw": "\u60a8\u5148\u524d\u5df2\u9078\u64c7\u8a8d\u8b49\u65bc",
+		"pl": "Poprzednio wybra\u0142e\u015b"
 	},
 	"login_at": {
 		"no": "Logg inn hos",
@@ -115,6 +147,13 @@
 		"fi": "Kirjaudu",
 		"pt": "Entrar em",
 		"fr": "S'authentifier sur",
-		"hr": "Prijavi se kroz"
+		"hr": "Prijavi se kroz",
+		"nn": "Logg inn ved",
+		"lt": "Prisijungti prie",
+		"it": "Effettua il login con",
+		"hu": "Bel\u00e9p\u00e9s ide:",
+		"ja": "\u30ed\u30b0\u30a4\u30f3: ",
+		"zh-tw": "\u767b\u5165\u81f3",
+		"pl": "Zaloguj w"
 	}
 }

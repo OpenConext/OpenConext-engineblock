@@ -7,7 +7,7 @@
  *
  * @author Andreas �kre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: MetaDataStorageHandlerFlatFile.php 2179 2010-02-14 19:38:59Z hans.zandbelt $
+ * @version $Id: MetaDataStorageHandlerFlatFile.php 2389 2010-07-09 06:54:25Z olavmrk $
  */
 class SimpleSAML_Metadata_MetaDataStorageHandlerFlatFile extends SimpleSAML_Metadata_MetaDataStorageSource {
 
@@ -117,8 +117,7 @@ class SimpleSAML_Metadata_MetaDataStorageHandlerFlatFile extends SimpleSAML_Meta
 	private function generateDynamicHostedEntityID($set) {
 
 		/* Get the configuration. */
-		$config = SimpleSAML_Configuration::getInstance();
-		$baseurl = SimpleSAML_Utilities::selfURLhost() . '/' . $config->getBaseURL();
+		$baseurl = SimpleSAML_Utilities::getBaseURL();
 
 		if ($set === 'saml20-idp-hosted') {
 			return $baseurl . 'saml2/idp/metadata.php';

@@ -64,6 +64,16 @@ $config = array(
 	*/
 
 	/*
+	// This authentication source serves as an example of integration with an
+	// external authentication engine. Take a look at the comment in the beginning
+	// of modules/exampleauth/lib/Auth/Source/External.php for a description of
+	// how to adjust it to your own site.
+	'example-external' => array(
+		'exampleauth:External',
+	),
+	*/
+
+	/*
 	'yubikey' => array(
 		'authYubiKey:YubiKey',
  		'id' => '000',
@@ -76,6 +86,36 @@ $config = array(
 		'openid:OpenIDConsumer',
 		'attributes.required' => array('nickname'),
 		'attributes.optional' => array('fullname', 'email',),
+		// 'sreg.validate' => FALSE,
+		'attributes.ax_required' => array('http://axschema.org/namePerson/friendly'),
+		'attributes.ax_optional' => array('http://axschema.org/namePerson','http://axschema.org/contact/email'),
+	),
+	*/
+
+	/*
+	// Example of an authsource that authenticates against Google.
+	// See: http://code.google.com/apis/accounts/docs/OpenID.html
+	'google' => array(
+		'openid:OpenIDConsumer',
+		// Googles OpenID endpoint.
+		'target' => 'https://www.google.com/accounts/o8/id',
+		// Custom realm
+		// 'realm' => 'http://*.example.org',
+		// Attributes that google can supply.
+		'attributes.ax_required' => array(
+			//'http://axschema.org/namePerson/first',
+			//'http://axschema.org/namePerson/last',
+			//'http://axschema.org/contact/email',
+			//'http://axschema.org/contact/country/home',
+			//'http://axschema.org/pref/language',
+		),
+		// custom extension arguments
+		'extension.args' => array(
+			//'http://specs.openid.net/extensions/ui/1.0' => array(
+			//	'mode' => 'popup',
+			//	'icon' => 'true',
+			//),
+		),
 	),
 	*/
 
@@ -95,11 +135,44 @@ $config = array(
 	*/
 
 	/*
+	// LinkedIn OAuth Authentication API.
+	// Register your application to get an API key here:
+	//  https://www.linkedin.com/secure/developer
+	'linkedin' => array(
+		'authlinkedin:LinkedIn',
+		'key' => 'xxxxxxxxxxxxxxxx',
+		'secret' => 'xxxxxxxxxxxxxxxx',
+	),
+	*/
+
+	/*
 	// Twitter OAuth Authentication API.
 	// Register your application to get an API key here:
 	//  http://twitter.com/oauth_clients
 	'twitter' => array(
 		'authtwitter:Twitter',
+		'key' => 'xxxxxxxxxxxxxxxx',
+		'secret' => 'xxxxxxxxxxxxxxxx',
+	),
+	*/
+
+	/*
+	// MySpace OAuth Authentication API.
+	// Register your application to get an API key here:
+	//  http://developer.myspace.com/
+	'myspace' => array(
+		'authmyspace:MySpace',
+		'key' => 'xxxxxxxxxxxxxxxx',
+		'secret' => 'xxxxxxxxxxxxxxxx',
+	),
+	*/
+
+	/*
+	// Windows Live ID Authentication API.
+	// Register your application to get an API key here:
+	//  https://manage.dev.live.com
+	'windowslive' => array(
+		'authwindowslive:LiveID',
 		'key' => 'xxxxxxxxxxxxxxxx',
 		'secret' => 'xxxxxxxxxxxxxxxx',
 	),

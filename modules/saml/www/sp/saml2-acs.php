@@ -47,15 +47,75 @@ SimpleSAML_Logger::debug('Received SAML2 Response from ' . var_export($idp, TRUE
 $idpMetadata = $source->getIdPmetadata($idp);
 
 try {
-	$assertion = sspmod_saml2_Message::processResponse($spMetadata, $idpMetadata, $response);
-} catch (sspmod_saml2_Error $e) {
+	$assertions = sspmod_saml_Message::processResponse($spMetadata, $idpMetadata, $response);
+} catch (sspmod_saml_Error $e) {
 	/* The status of the response wasn't "success". */
 	$e = $e->toException();
 	SimpleSAML_Auth_State::throwException($state, $e);
 }
 
-$nameId = $assertion->getNameId();
-$sessionIndex = $assertion->getSessionIndex();
+
+$authenticatingAuthority = NULL;
+$nameId = NULL;
+$sessionIndex = NULL;
+$expire = NULL;
+$attributes = array();
+$foundAuthnStatement = FALSE;
+foreach ($assertions as $assertion) {
+
+	/* Check for duplicate assertion (replay attack). */
+	$store = SimpleSAML_Store::getInstance();
+	if ($store !== FALSE) {
+		$aID = $assertion->getId();
+		if ($store->get('saml.AssertionReceived', $aID) !== NULL) {
+			$e = new SimpleSAML_Error_Exception('Received duplicate assertion.');
+			SimpleSAML_Auth_State::throwException($state, $e);
+		}
+
+		$notOnOrAfter = $assertion->getNotOnOrAfter();
+		if ($notOnOrAfter === NULL) {
+			$notOnOrAfter = time() + 24*60*60;
+		} else {
+			$notOnOrAfter += 60; /* We allow 60 seconds clock skew, so add it here also. */
+		}
+
+		$store->set('saml.AssertionReceived', $aID, TRUE, $notOnOrAfter);
+	}
+
+
+	if ($authenticatingAuthority === NULL) {
+		$authenticatingAuthority = $assertion->getAuthenticatingAuthority();
+	}
+	if ($nameId === NULL) {
+		$nameId = $assertion->getNameId();
+	}
+	if ($sessionIndex === NULL) {
+		$sessionIndex = $assertion->getSessionIndex();
+	}
+	if ($expire === NULL) {
+		$expire = $assertion->getSessionNotOnOrAfter();
+	}
+
+	$attributes = array_merge($attributes, $assertion->getAttributes());
+
+	if ($assertion->getAuthnInstant() !== NULL) {
+		/* Assertion contains AuthnStatement, since AuthnInstant is a required attribute. */
+		$foundAuthnStatement = TRUE;
+	}
+}
+
+if (!$foundAuthnStatement) {
+	$e = new SimpleSAML_Error_Exception('No AuthnStatement found in assertion(s).');
+	SimpleSAML_Auth_State::throwException($state, $e);
+}
+
+if ($expire === NULL) {
+	/* Just expire the logout associtaion 24 hours into the future. */
+	$expire = time() + 24*60*60;
+}
+
+/* Register this session in the logout store. */
+sspmod_saml_SP_LogoutStore::addSession($sourceId, $nameId, $sessionIndex, $expire);
 
 /* We need to save the NameID and SessionIndex for logout. */
 $logoutState = array(
@@ -65,9 +125,17 @@ $logoutState = array(
 	'saml:logout:SessionIndex' => $sessionIndex,
 	);
 $state['LogoutState'] = $logoutState;
-$state['saml:AuthenticatingAuthority'] = $assertion->getAuthenticatingAuthority();
+$state['saml:AuthenticatingAuthority'] = $authenticatingAuthority;
 $state['saml:AuthenticatingAuthority'][] = $idp;
 $state['PersistentAuthData'][] = 'saml:AuthenticatingAuthority';
 
-$source->handleResponse($state, $idp, $assertion->getAttributes());
+$state['saml:sp:IdP'] = $idp;
+$state['PersistentAuthData'][] = 'saml:sp:IdP';
+$state['saml:sp:NameID'] = $nameId;
+$state['PersistentAuthData'][] = 'saml:sp:NameID';
+$state['saml:sp:SessionIndex'] = $sessionIndex;
+$state['PersistentAuthData'][] = 'saml:sp:SessionIndex';
+
+
+$source->handleResponse($state, $idp, $attributes);
 assert('FALSE');

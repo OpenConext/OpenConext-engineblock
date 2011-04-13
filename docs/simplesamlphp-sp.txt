@@ -7,7 +7,7 @@ SimpleSAMLphp Service Provider QuickStart
 	http://daringfireball.net/projects/markdown/syntax
 -->
 
-  * Version: `$Id: simplesamlphp-sp.txt 2363 2010-06-24 06:45:28Z olavmrk $`
+  * Version: `$Id: simplesamlphp-sp.txt 2711 2011-01-12 14:25:46Z olavmrk $`
 
 <!-- {{TOC}} -->
 
@@ -51,7 +51,7 @@ Some Identity Providers / Federations may require that your Service Providers ho
 Create a self-signed certificate in the `cert/` directory.
 
 	cd cert
-	openssl req -new -x509 -days 3652 -nodes -out saml.crt -keyout saml.pem
+	openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes -out saml.crt -keyout saml.pem
 
 
 Then edit your `authsources.php` entry, and add references to your certificate:

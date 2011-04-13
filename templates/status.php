@@ -12,9 +12,11 @@ $this->includeAtTemplateBase('includes/header.php');
 
 <p><?php echo($this->t('{status:intro}')); ?></p>
 
-<p><?php echo($this->t('{status:validfor}', array('%SECONDS%' => $this->data['remaining']))); ?></p>
-
 <?php
+if (isset($this->data['remaining'])) {
+	echo('<p>' . $this->t('{status:validfor}', array('%SECONDS%' => $this->data['remaining'])) . '</p>');
+}
+
 if(isset($this->data['sessionsize'])) {
 	echo('<p>' . $this->t('{status:sessionsize}', array('%SIZE%' => $this->data['sessionsize'])) . '</p>');
 }
@@ -28,7 +30,11 @@ $attributes = $this->data['attributes'];
 
 function present_list($attr) {
 	if (is_array($attr) && count($attr) > 1) {
-		$str = '<ul><li>' . join('</li><li>', $attr) . '</li></ul>';
+		$str = '<ul>';
+		foreach ($attr as $value) {
+			$str .= '<li>' . htmlspecialchars($attr) . '</li>';
+		}
+		$str .= '</ul>';
 		return $str;
 	} else {
 		return htmlspecialchars($attr[0]);
@@ -58,11 +64,8 @@ function present_attributes($t, $attributes, $nameParent) {
 	foreach ($attributes as $name => $value) {
 	
 		$nameraw = $name;
-		$nameTag = '{attributes:attribute_' . $parentStr . str_replace(":", "_", strtolower($name) ) . '}';
-		if ($t->getTag($nameTag) !== NULL) {
-			$name = $t->t($nameTag);
-		}
-		
+		$name = $t->getAttributeTranslation($parentStr . $nameraw);
+
 		if (preg_match('/^child_/', $nameraw)) {
 			$parentName = preg_replace('/^child_/', '', $nameraw);
 			foreach($value AS $child) {
@@ -73,7 +76,7 @@ function present_attributes($t, $attributes, $nameParent) {
 				$str .= '<tr class="' . $alternate[($i++ % 2)] . '"><td class="attrname">' . htmlspecialchars($name) . '</td><td class="attrvalue"><ul>';
 				foreach ($value AS $listitem) {
 					if ($nameraw === 'jpegPhoto') {
-						$str .= '<li><img src="data:image/jpeg;base64,' . $listitem . '" /></li>';
+						$str .= '<li><img src="data:image/jpeg;base64,' . htmlspecialchars($listitem) . '" /></li>';
 					} else {
 						$str .= '<li>' . present_assoc($listitem) . '</li>';
 					}

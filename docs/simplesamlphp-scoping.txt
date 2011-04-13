@@ -7,7 +7,7 @@ Scoping
     http://daringfireball.net/projects/markdown/syntax
 -->
 
-  * Version: `$Id: simplesamlphp-scoping.txt 2298 2010-05-12 13:15:14Z jach@wayf.dk $`
+  * Version: `$Id: simplesamlphp-scoping.txt 2651 2010-11-16 14:32:43Z olavmrk $`
 
 <!-- {{TOC}} -->
 
@@ -84,13 +84,13 @@ were involved in the authentication of the user, SimpleSAMLphp addes the
 AuthenticatingAuthority elements.
 
 The list of authenticating authorities (the AuthenticatingAuthority element) 
-can be retrived as an array from the session object.
+can be retrived as an array from the authentication data.
 
-    # Get the current persistent authentication state
-    $authstate = $session->getAuthState();
-    
+    # Get the authentication source.
+    $as = new SimpleSAML_Auth_Simple();
+
     # Get the AuthenticatingAuthority
-    $aa = $authstate['saml:AuthenticatingAuthority'];
+    $aa = $as->getAuthData('saml:AuthenticatingAuthority');
 
 Support
 -------

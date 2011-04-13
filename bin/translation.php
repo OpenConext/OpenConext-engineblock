@@ -11,10 +11,6 @@ if (count($argv) !== 3) {
 	echo "Wrong number of parameters. Run:   " . $argv[0] . " [pulldef,push,pull] filename\n"; exit;
 }
 
-// Needed in order to make session_start to be called before output is printed.
-$session = SimpleSAML_Session::getInstance();
-
-
 $action = $argv[1];
 $file = $argv[2];
 
@@ -23,9 +19,14 @@ $translationconfig = SimpleSAML_Configuration::getConfig('translation.php');
 $application = $translationconfig->getString('application', 'simplesamlphp');
 $base = $translationconfig->getString('baseurl') . '/module.php/translationportal/';
 
-if (!preg_match('/^(.*?)(\.definition|\.translation)?\.(json|php)/', $file, $match)) 
+if (!preg_match('/^(.*?)(?:\.(definition|translation))?\.(json|php)/', $file, $match))
 	throw new Exception('Illlegal file name. Must end on (definition|translation).json');
 $fileWithoutExt = $match[1];
+if (!empty($match[2])) {
+	$type = $match[2];
+} else {
+	$type = 'definition';
+}
 
 $basefile = basename($fileWithoutExt);
 
@@ -39,13 +40,13 @@ echo 'File base: [' . $basefile . ']'. "\n";
 switch($action) {
 	case 'pulldef':
 		
-		$content = file_get_contents($base . 'export.php?aid=' . $application . '&type=def&file=' . $basefile);
+		$content = SimpleSAML_Utilities::fetch($base . 'export.php?aid=' . $application . '&type=def&file=' . $basefile);
 		file_put_contents($fileWithoutExt . '.definition.json' , $content);
 		break;
 		
 	case 'pull':
 
-		$content = file_get_contents($base . 'export.php?aid=' . $application . '&type=translation&file=' . $basefile);
+		$content = SimpleSAML_Utilities::fetch($base . 'export.php?aid=' . $application . '&type=translation&file=' . $basefile);
 		file_put_contents($fileWithoutExt . '.translation.json' , $content);
 		break;
 	
@@ -53,7 +54,7 @@ switch($action) {
 
 		#$content = file_get_contents($base . 'export.php?aid=' . $application . '&type=translation&file=' . $basefile);
 		#file_put_contents($fileWithoutExt . '.translation.json' , $content);
-		push($file, $basefile, $application);
+		push($file, $basefile, $application, $type);
 		
 		break;
 		
@@ -91,7 +92,7 @@ function convert_translation($data) {
 	return $data;
 }
 
-function push($file, $fileWithoutExt, $aid) {
+function push($file, $fileWithoutExt, $aid, $type) {
 	
 	if (!file_exists($file)) throw new Exception('Could not find file: ' . $file);
 	
@@ -145,7 +146,7 @@ function push($file, $fileWithoutExt, $aid) {
 	}
 
 	$pushURL = $baseurl . '/module.php/translationportal/push.php';
-	$request = array('data' => base64_encode($fileContent), 'file' => $fileWithoutExt, 'aid' => $aid);
+	$request = array('data' => base64_encode($fileContent), 'file' => $fileWithoutExt, 'aid' => $aid, 'type' => $type);
 	
 	$result = $consumer->postRequest($pushURL, $accessToken, $request);
 	

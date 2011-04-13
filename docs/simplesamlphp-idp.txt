@@ -7,7 +7,7 @@ SimpleSAMLphp Identity Provider QuickStart
 	http://daringfireball.net/projects/markdown/syntax
 -->
 
-  * Version: `$Id: simplesamlphp-idp.txt 2279 2010-05-04 11:11:13Z olavmrk $`
+  * Version: `$Id: simplesamlphp-idp.txt 2711 2011-01-12 14:25:46Z olavmrk $`
 
 <!-- {{TOC}} -->
 
@@ -27,6 +27,9 @@ Authentication module
 ---------------------
 
 The next step is to configure the way users authenticate on your IdP. Various modules in the `modules/` directory provides methods for authenticating your users. This is an overview of those that are included in the simpleSAMLphp distribution:
+
+[`authX509:authX509userCert`](./authX509:authX509)
+: Authenticate against a LDAP database with a SSL client certificate.
 
 `exampleauth:UserPass`
 : Authenticate against a list of usernames and passwords.
@@ -49,6 +52,9 @@ The next step is to configure the way users authenticate on your IdP. Various mo
 
 [`InfoCard:ICAuth`](./InfoCard:usage)
 : Authenticate with an InfoCard.
+
+[`multiauth:MultiAuth`](./multiauth:multiauth)
+: Allow the user to select from a list of authentication sources.
 
 `openid:OpenIDConsumer`
 : Authenticate against an OpenID provider.
@@ -141,6 +147,20 @@ For more information about available options in the idp-hosted metadata
 files, see the [IdP hosted reference](simplesamlphp-reference-idp-hosted).
 
 
+Using the `uri` NameFormat on attributes
+----------------------------------------
+
+The [interoperable SAML 2 profile](http://saml2int.org/profile/current) specifies that attributes should be delivered using the `urn:oasis:names:tc:SAML:2.0:attrname-format:uri` NameFormat.
+We therefore recommended enabling this in new installations.
+This can be done by adding the following to the saml20-idp-hosted configuration:
+
+    'AttributeNameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+    'authproc' => array(
+        // Convert LDAP names to oids.
+        100 => array('class' => 'core:AttributeMap', 'name2oid'),
+    ),
+
+
 Adding SPs to the IdP
 ---------------------
 
@@ -169,7 +189,7 @@ Here is an example of an `openssl`-command which can be used to generate a new p
 
 This key and certificate can be used to sign SAML messages:
 
-    openssl req -new -x509 -days 3652 -nodes -out example.org.crt -keyout example.org.pem
+    openssl req -newkey rsa:2048 -new -x509 -days 3652 -nodes -out example.org.crt -keyout example.org.pem
 
 The certificate above will be valid for 10 years.
 

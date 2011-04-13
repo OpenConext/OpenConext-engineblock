@@ -35,7 +35,12 @@ $metadata = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
 $idpMetadata = $source->getIdPMetadata($idpEntityId);
 $spMetadata = $source->getMetadata();
 
-sspmod_saml2_Message::validateMessage($idpMetadata, $spMetadata, $message);
+sspmod_saml_Message::validateMessage($idpMetadata, $spMetadata, $message);
+
+$destination = $message->getDestination();
+if ($destination !== NULL && $destination !== SimpleSAML_Utilities::selfURLNoQuery()) {
+	throw new SimpleSAML_Error_Exception('Destination in logout message is wrong.');
+}
 
 if ($message instanceof SAML2_LogoutResponse) {
 
@@ -46,10 +51,11 @@ if ($message instanceof SAML2_LogoutResponse) {
 	}
 
 	if (!$message->isSuccess()) {
-		SimpleSAML_Logger::warning('Unsuccessful logout. Status was: ' . sspmod_saml2_Message::getResponseError($message));
+		SimpleSAML_Logger::warning('Unsuccessful logout. Status was: ' . sspmod_saml_Message::getResponseError($message));
 	}
 
 	$state = SimpleSAML_Auth_State::loadState($relayState, 'saml:slosent');
+	$state['saml:sp:LogoutStatus'] = $message->getStatus();
 	SimpleSAML_Auth_Source::completeLogout($state);
 
 } elseif ($message instanceof SAML2_LogoutRequest) {
@@ -57,16 +63,49 @@ if ($message instanceof SAML2_LogoutResponse) {
 	SimpleSAML_Logger::debug('module/saml2/sp/logout: Request from ' . $idpEntityId);
 	SimpleSAML_Logger::stats('saml20-idp-SLO idpinit ' . $spEntityId . ' ' . $idpEntityId);
 
-	/* Notify source of logout, so that it may call logout callbacks. */
-	$source->handleLogout($idpEntityId);
+	if ($message->isNameIdEncrypted()) {
+		try {
+			$keys = sspmod_saml_Message::getDecryptionKeys($idpMetadata, $spMetadata);
+		} catch (Exception $e) {
+			throw new SimpleSAML_Error_Exception('Error decrypting NameID: ' . $e->getMessage());
+		}
+
+		$lastException = NULL;
+		foreach ($keys as $i => $key) {
+			try {
+				$message->decryptNameId($key);
+				SimpleSAML_Logger::debug('Decryption with key #' . $i . ' succeeded.');
+				$lastException = NULL;
+				break;
+			} catch (Exception $e) {
+				SimpleSAML_Logger::debug('Decryption with key #' . $i . ' failed with exception: ' . $e->getMessage());
+				$lastException = $e;
+			}
+		}
+		if ($lastException !== NULL) {
+			throw $lastException;
+		}
+	}
+
+	$nameId = $message->getNameId();
+	$sessionIndexes = $message->getSessionIndexes();
+
+	$numLoggedOut = sspmod_saml_SP_LogoutStore::logoutSessions($sourceId, $nameId, $sessionIndexes);
+	if ($numLoggedOut === FALSE) {
+		/* This type of logout was unsupported. Use the old method. */
+		$source->handleLogout($idpEntityId);
+		$numLoggedOut = count($sessionIndexes);
+	}
 
 	/* Create an send response. */
-	$lr = sspmod_saml2_Message::buildLogoutResponse($spMetadata, $idpMetadata);
+	$lr = sspmod_saml_Message::buildLogoutResponse($spMetadata, $idpMetadata);
 	$lr->setRelayState($message->getRelayState());
 	$lr->setInResponseTo($message->getId());
 
-	$binding = new SAML2_HTTPRedirect();
-	$binding->setDestination(sspmod_SAML2_Message::getDebugDestination());
+	if ($numLoggedOut < count($sessionIndexes)) {
+		SimpleSAML_Logger::warning('Logged out of ' . $numLoggedOut  . ' of ' . count($sessionIndexes) . ' sessions.');
+	}
+
 	$binding->send($lr);
 } else {
 	throw new SimpleSAML_Error_BadRequest('Unknown message received on logout endpoint: ' . get_class($message));

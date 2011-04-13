@@ -20,11 +20,18 @@ class SAML2_HTTPArtifact extends SAML2_Binding {
 	 */
 	public function getRedirectURL(SAML2_Message $message) {
 
+		$store = SimpleSAML_Store::getInstance();
+		if ($store === FALSE) {
+			throw new Exception('Unable to send artifact without a datastore configured.');
+		}
+
 		$generatedId = pack('H*', ((string)  SimpleSAML_Utilities::stringToHex(SimpleSAML_Utilities::generateRandomBytes(20))));
 		$artifact = base64_encode("\x00\x04\x00\x00" . sha1($message->getIssuer(), TRUE) . $generatedId) ;
 		$artifactData = $message->toUnsignedXML();
 		$artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
-		SimpleSAML_Memcache::set('artifact:' . $artifact, $artifactDataString);
+
+		$store->set('artifact', $artifact, $artifactDataString, time() + 15*60);
+
 		$params = array(
 			'SAMLart' => $artifact,
 		);
@@ -98,7 +105,7 @@ class SAML2_HTTPArtifact extends SAML2_Binding {
 		$ar->setDestination($endpoint['Location']);
 
 		/* Sign the request */
-		sspmod_saml2_Message::addSign($this->spMetadata, $idpmetadata, $ar); // Shoaib - moved from the SOAPClient.
+		sspmod_saml_Message::addSign($this->spMetadata, $idpmetadata, $ar); // Shoaib - moved from the SOAPClient.
 
 		$soap = new SAML2_SOAPClient();
 
@@ -110,6 +117,11 @@ class SAML2_HTTPArtifact extends SAML2_Binding {
 		}
 
 		$xml = $artifactResponse->getAny();
+		if ($xml === NULL) {
+			/* Empty ArtifactResponse - possibly because of Artifact replay? */
+			return NULL;
+		}
+
 		$samlresponse = SAML2_Message::fromXML($xml);
 		$samlresponse->addValidator(array(get_class($this), 'validateSignature'), $artifactResponse);
 
