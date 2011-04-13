@@ -500,21 +500,23 @@ $config = array(
             'type' => 'text',
             'order' => 190,
             'default' => 'see the silver surfer surf said sea softly',
+            'default_allow' => true,
         ),
         'coin:oauth:consumer_key'=> array(
             'type' => 'text',
             'order' => 191,
-            'default' => 'gadgetConsumer',
+            'default' => '',
         ),
         'coin:oauth:consumer_secret' => array(
             'type' => 'text',
             'order' => 192,
-            'default' => 'gadgetSecret',
+            'default' => '',
         ),
         'coin:oauth:key_type' => array(
             'type' => 'text',
             'order' => 193,
             'default' => 'HMAC_SYMMETRIC',
+            'default_allow' => true,
         ),
         // Certificate fields
         'certData' => array(
@@ -522,7 +524,7 @@ $config = array(
             'order' => 210,
             'default' => '',
             'default_allow' => false,
-            'required' => true,
+            'required' => false,
         ),
         'certFingerprint:#' => array(
             'type' => 'text',
