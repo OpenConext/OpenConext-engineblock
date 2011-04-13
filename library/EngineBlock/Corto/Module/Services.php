@@ -5,8 +5,11 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
     public function idPsMetadataService()
     {
         $entitiesDescriptor = array(
+            Corto_XmlToArray::TAG_NAME_KEY => 'md:EntitiesDescriptor',
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
             '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
+            '_ID' => $this->_server->getNewId(),
+            'ds:Signature' => '__placeholder__',
             'md:EntityDescriptor' => array()
         );
         foreach ($this->_server->getRemoteEntities() as $entityID => $entity) {
@@ -80,7 +83,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => self::_getCertDataFromPem($certificates['public']),
+                                    '__v' => $this->_server->getCertDataFromPem($certificates['public']),
                                 ),
                             ),
                         ),
@@ -91,7 +94,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => self::_getCertDataFromPem($certificates['public']),
+                                    '__v' => $this->_server->getCertDataFromPem($certificates['public']),
                                 ),
                             ),
                         ),
@@ -119,7 +122,9 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             }
         }
 
-        $xml = Corto_XmlToArray::array2xml($entitiesDescriptor, 'md:EntitiesDescriptor', true);
+        $entitiesDescriptor = $this->_server->sign($entitiesDescriptor);
+
+        $xml = Corto_XmlToArray::array2xml($entitiesDescriptor);
 
         $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd';
         if ($this->_server->getConfig('debug', false) && ini_get('allow_url_fopen') && file_exists($schemaUrl)) {
@@ -162,7 +167,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
+                                '__v' => $this->_server->getCertDataFromPem($entity['certificates']['public']),
                             ),
                         ),
                     ),
@@ -173,7 +178,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => self::_getCertDataFromPem($entity['certificates']['public']),
+                                '__v' => $this->_server->getCertDataFromPem($entity['certificates']['public']),
                             ),
                         ),
                     ),
