@@ -1,0 +1,187 @@
+Index: modules/janus/dictionaries/editentity.translation.json
+===================================================================
+--- modules/janus/dictionaries/editentity.translation.json	(revision 784)
++++ modules/janus/dictionaries/editentity.translation.json	(working copy)
+@@ -100,6 +100,10 @@
+ 		"da": "Importer XML",
+ 		"es": "Importar XML"
+ 	},
++    "tab_edit_entity_import_json": {
++		"da": "Importer JSON",
++		"es": "Importar JSON"
++	},
+ 	"tab_edit_entity_entry": {
+ 		"da": "Felt",
+ 		"es": "Entrada"
+Index: modules/janus/dictionaries/editentity.definition.json
+===================================================================
+--- modules/janus/dictionaries/editentity.definition.json	(revision 784)
++++ modules/janus/dictionaries/editentity.definition.json	(working copy)
+@@ -77,6 +77,9 @@
+ 	"tab_edit_entity_import_xml": {
+ 		"en": "Import XML"
+ 	},
++    "tab_edit_entity_import_json": {
++		"en": "Import JSON"
++	},
+ 	"tab_edit_entity_entry": {
+ 		"en": "Entry"
+ 	},
+Index: modules/janus/lib/MetaExport.php
+===================================================================
+--- modules/janus/lib/MetaExport.php	(revision 784)
++++ modules/janus/lib/MetaExport.php	(working copy)
+@@ -16,6 +16,8 @@
+     
+     const XMLREADABLE = '__XML_READABLE_METADATA__';
+ 
++    const PHPARRAY = '__PHP_ARRAY_METADATA__';
++
+     private static $_error;
+ 
+     public static function getError()
+@@ -23,6 +25,11 @@
+         return self::$_error;
+     }
+ 
++    public static function getPHPArrayMetadata($eid, $revision, array $option = null)
++    {
++        return self::getMetadata($eid, $revision, self::PHPARRAY, $option);
++    }
++
+     public static function getFlatMetadata($eid, $revision, array $option = null)
+     {   
+         return self::getMetadata($eid, $revision, self::FLATFILE, $option);
+@@ -166,6 +173,8 @@
+                         return $metaBuilder->getEntityDescriptor();
+                     case self::XMLREADABLE:
+                         return $metaBuilder->getEntityDescriptorText();
++                    case self::PHPARRAY:
++                        return $metaArray;
+                     case self::FLATFILE:
+                     default:
+                         return $metaflat;
+Index: modules/janus/templates/editentity.php
+===================================================================
+--- modules/janus/templates/editentity.php	(revision 784)
++++ modules/janus/templates/editentity.php	(working copy)
+@@ -1111,10 +1111,18 @@
+     ?>
+     <table>
+         <tr>
+-            <td>XML:</td>
++            <td style="width: 40px">XML:</td>
+             <td><textarea name="meta_xml" cols="80" rows="20"></textarea></td>
+         </tr>
+     </table>
++
++    <h2><?php echo $this->t('tab_edit_entity_import_json'); ?></h2>
++    <table>
++        <tr>
++            <td style="width: 40px">JSON:</td>
++            <td><textarea name="meta_json" cols="80" rows="3"></textarea></td>
++        </tr>
++    </table>
+     <?php
+     } else {
+         echo $this->t('error_import_metadata_permission');
+Index: modules/janus/templates/metadata.php
+===================================================================
+--- modules/janus/templates/metadata.php	(revision 784)
++++ modules/janus/templates/metadata.php	(working copy)
+@@ -48,12 +48,18 @@
+ $this->data['head']  = '<link rel="stylesheet" type="text/css" href="/' . $this->data['baseurlpath'] . 'module.php/janus/resources/style.css" />' . "\n";
+ $this->data['head'] .= '<script type="text/javascript">
+ $(document).ready(function() {
+-                  $("#metadataxml").hide();
+-                  $("#showhide").click(function() {
+-                                       $("#metadataxml").toggle("slow");
+-                                       return true;
+-                                       });
+-                  });
++    $("#metadataxml").hide();
++    $("#metadatajson").hide();
++
++    $("#showhide").click(function() {
++        $("#metadataxml").toggle("slow");
++        return true;
++    });
++    $("#showhidejson").click(function() {
++        $("#metadatajson").toggle("slow");
++        return true;
++    });
++});
+ </script>';
+ $this->includeAtTemplateBase('includes/header.php');
+ ?>
+@@ -81,10 +87,14 @@
+ <div id="metadataxml">
+ <pre class="metadatabox"><?php echo $this->data['metadata']; ?></pre>
+ </div>
++<br />
++<a id="showhidejson">Show/Hide JSON</a>
++<div id="metadatajson">
++    <pre class="metadatabox"><?php echo $this->data['metadatajson']; ?></pre>
++</div>
+ 
+ 
+ 
+-
+ <br />
+ <br />
+ 
+Index: modules/janus/www/editentity.php
+===================================================================
+--- modules/janus/www/editentity.php	(revision 784)
++++ modules/janus/www/editentity.php	(working copy)
+@@ -237,6 +237,29 @@
+         }
+     }
+ 
++    if (!empty($_POST['meta_json'])) {
++        function convert_stdobject_to_array($object)
++        {
++            $object = (array)$object;
++
++            foreach($object as $key => $value){
++                if(is_array($value) || (is_object($value) && get_class($value)==='stdClass')){
++                    $object[$key] = convert_stdobject_to_array($value);
++                }
++            }
++            return $object;
++        }
++
++        $metaStdClass = json_decode($_POST['meta_json']);
++        ini_set('display_errors', true);
++        $metaArray = convert_stdobject_to_array($metaStdClass);
++        $metaArray = $mcontroller->array_flatten_sep(':', $metaArray);
++        foreach ($metaArray as $key => $value) {
++            $mcontroller->updateMetadata($key, $value);
++        }
++        $mcontroller->saveEntity();
++    }
++
+     // Disable consent
+     if(isset($_POST['add-consent'])) {
+         $mcontroller->clearConsent();
+Index: modules/janus/www/exportentity.php
+===================================================================
+--- modules/janus/www/exportentity.php	(revision 784)
++++ modules/janus/www/exportentity.php	(working copy)
+@@ -47,6 +47,8 @@
+ );
+ 
+ $metaflat = sspmod_janus_MetaExport::getFlatMetadata($eid, $revisionid);
++
++$metaarray = sspmod_janus_MetaExport::getPHPArrayMetadata($eid, $revisionid);
+                                                      
+ // Error generating som of the metadata
+ if(empty($metaflat) || empty($metaxml)) {
+@@ -64,6 +66,7 @@
+     $t->data['metaurl'] = SimpleSAML_Utilities::selfURLNoQuery();
+     $t->data['metadata'] = htmlentities($metaxml);
+     $t->data['metadataflat'] = htmlentities($metaflat, ENT_COMPAT, 'UTF-8');
++    $t->data['metadatajson'] = json_encode($metaarray);
+     $t->data['revision'] = $revisionid;
+     $t->data['eid'] = $eid;
+ 
