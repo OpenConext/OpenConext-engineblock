@@ -24,7 +24,12 @@ class EngineBlock_VORegistry_Client
     public function getGroupProviderMetadata($voIdentifier)
     {
         // @todo replace hardcoded values with actual lookup in VORegistry
-        return array("groupprovideridentifier"=>"default",
+		if ($voIdentifier == "votest1")
+        		return array("groupprovideridentifier"=>"default",
+                	"groupidentifier"=>"votest1group",
+                	"groupstem"=>"nl:votest1");
+        		
+    	return array("groupprovideridentifier"=>"default",
                      "groupidentifier"=>"pci_members",
                      "groupstem"=>"nl:pci");    
     }
