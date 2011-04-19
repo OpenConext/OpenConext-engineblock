@@ -26,23 +26,20 @@ class EngineBlock_VORegistry_Client
         // @todo replace hardcoded values with actual lookup in VORegistry
         switch ($voIdentifier) {
             case "votest1":
-                $metadata = array("groupprovideridentifier"=>"default",
-                                  "groupidentifier"=>"votest1group",
-                	          "groupstem"=>"nl:votest1");
+                return array("groupprovideridentifier"=>"default",
+                              "groupidentifier"=>"votest1group",
+                	      "groupstem"=>"nl:votest1");
                 break;
             case "managementvo":
-                $metadata = array("groupprovideridentifier"=>"default",
-                                  "groupidentifier"=>"managementvotest",
-                                  "groupstem"=>"nl:surfnet:management");
+                return array("groupprovideridentifier"=>"default",
+                             "groupidentifier"=>"managementvotest",
+                             "groupstem"=>"nl:surfnet:management");
+                break;
     	    default:
-                $metadata = array("groupprovideridentifier"=>"default",
+                return array("groupprovideridentifier"=>"default",
                                   "groupidentifier"=>"pci_members",
                                   "groupstem"=>"nl:pci");
                 break;
         }
-        return $metadata;
     }
-    
-  
-    
 }
