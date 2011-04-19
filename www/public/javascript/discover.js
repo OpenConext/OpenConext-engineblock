@@ -119,9 +119,9 @@ var Discover = function() {
             }
             idp['Alt'] = encodeURIComponent(idp['EntityId']);
 
-            idp['Suggestion'] = 'Onze Suggestie::';
+            idp['Suggestion'] = 'Onze Suggestie:';
             if ((this.lang == 'en')) {
-                idp['Suggestion'] = 'Our Suggestion::';
+                idp['Suggestion'] = 'Our Suggestion:';
             }
 
             if (idp['Access'] == 0) {
