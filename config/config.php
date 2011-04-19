@@ -76,8 +76,8 @@ $config = array (
 	 * The email address will be used as the recipient address for error reports, and
 	 * also as the technical contact in generated metadata.
 	 */
-	'technicalcontact_name'     => 'Administrator',
-	'technicalcontact_email'    => 'na@example.org',
+	'technicalcontact_name'     => 'SURFconext Beheer',
+	'technicalcontact_email'    => 'boy@ibuildings.nl',
 
 	/*
 	 * The timezone of the server. This option should be set to the timezone you want
