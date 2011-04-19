@@ -3,6 +3,20 @@
 
 class EngineBlock_Groups_Grouper extends EngineBlock_Groups_Abstract
 {
+    /**
+     * Result in metadata when a member
+     * 
+     * @var String
+     */
+    const IS_MEMBER = 'IS_MEMBER';
+
+    /**
+     * Result in metadata when not a member
+     *
+     * @var String
+     */
+    const IS_NOT_MEMBER = 'IS_NOT_MEMBER';
+
     protected $_grouperConfig;
     
     public function __construct($grouperConfig)
@@ -110,7 +124,7 @@ XML;
         try {
             
             $result = $this->_doRest("groups/$filter/members", $request);
-            if ((String)$result->results->WsHasMemberResult->wsSubject->resultCode=="SUCCESS") {
+            if ((String)$result->results->WsHasMemberResult->resultMetadata->resultCode==self::IS_MEMBER) {
                 return true;
             }
         } 
