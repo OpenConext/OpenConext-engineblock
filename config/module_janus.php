@@ -321,10 +321,11 @@ $config = array(
             'order' => 510,
             'default' => '',
         ),
-	    'keywords:#' => array(
+        'keywords:#' => array(
             'type' => 'text',
             'order' => 511,
             'default' => '',
+            'supported'=>array('en','nl'),
         ),
         // Contact person fields
         'contacts:#:contactType' => array(
