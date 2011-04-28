@@ -79,11 +79,11 @@ $this->includeAtTemplateBase('includes/header.php');
             <ul>
                 <?php foreach ($entities as $entity): ?>
                 <li class="entity">
-                    <h2>
+                    <h2 name="<?php echo $entity['Id']; ?>">
                         <?php echo $entity['Name']; ?>
                     </h2>
 
-                    <div class="messages">
+                    <div class="entity-messages messages">
                     </div>
 
                     <script class="messages-template" type="text/x-jquery-tmpl">
@@ -161,7 +161,7 @@ $this->includeAtTemplateBase('includes/header.php');
                             </h3>
                             <a href="${Url}">${Url}</a>
 
-                            <div class="messages">
+                            <div class="entity-endpoint-messages messages">
                             </div>
 
                             <div class="entity-endpoint-certificate-representation">

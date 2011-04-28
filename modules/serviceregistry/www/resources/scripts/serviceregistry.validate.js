@@ -1,8 +1,6 @@
 $(function(){
-    
-
     $('li.entity .entity-id').each(function(index, element) {
-        var appendCertificateChain = function(CertificateChain, element) {
+        var getCertificateVisualRepresentationHtml = function(CertificateChain) {
             var html = ''
             for (var i = 0; i < CertificateChain.length; i++) {
                 var certificate = CertificateChain[i];
@@ -19,31 +17,33 @@ $(function(){
                     html += '<img class="certificate-chain" src="resources/images/icons/chain.gif" alt="" title="" />';
                 }
             }
-            element.append(html + '<br style="clear: both" />');
+            return html + '<br style="clear: both" />';
         };
 
         var entityEl = $(element).parents('li.entity');
+
+        // Get the Entity ID from the current element
         var entityId = $.trim(this.innerHTML);
 
         $.getJSON('get-entity-certificate.php?eid=' + encodeURIComponent(entityId), function(data) {
-            var entityMessagesTmpl = entityEl.find('.messages-template');
-            entityMessagesTmpl = entityMessagesTmpl.tmpl({
+            entityEl.find('.messages-template').tmpl({
                   Errors: data.Errors,
                   Warnings: data.Warnings
-            }).appendTo(entityEl.find('.messages'));
+            }).appendTo(entityEl.find('.entity-messages'));
 
             var certInfoEl = entityEl.find('div.entity-certificate-information');
 
             if (data.CertificateChain.length > 0) {
-                appendCertificateChain(data.CertificateChain, entityEl.find('.entity-certificate-representation'));
+                entityEl.find('.entity-certificate-representation').append(
+                        getCertificateVisualRepresentationHtml(data.CertificateChain)
+                );
 
                 var notBeforeDate = new Date();
                 notBeforeDate.setTime(data.CertificateChain[0].NotBefore.UnixTime * 1000);
                 var notAfterDate  = new Date();
                 notAfterDate.setTime(data.CertificateChain[0].NotAfter.UnixTime * 1000);
 
-                var certInfoTmpl = entityEl.find('.entity-certificate-information-template');
-                var certInfoTmpl = certInfoTmpl.tmpl({
+                entityEl.find('.entity-certificate-information-template').tmpl({
                     'Subject': data.CertificateChain[0].Subject.DN,
                     'Starts_relative': (notBeforeDate.toUTCString()),
                     'Starts_natural': (DateHelper.distanceOfTimeInWords(new Date, notBeforeDate)),
@@ -55,23 +55,31 @@ $(function(){
             certInfoEl.find('img.loading-image').remove();
         });
 
-        var endpointsEl         = entityEl.find('.entity-endpoints');
-        var endpointsTemplateEl = entityEl.find('.entity-endpoint-template');
-
         $.getJSON('get-entity-endpoints.php?eid=' + encodeURIComponent(entityId), function(data) {
+            var endpointsEl         = entityEl.find('.entity-endpoints');
+            var endpointsTemplateEl = entityEl.find('.entity-endpoint-template');
             for (var endpointName in data) {
                 if (data.hasOwnProperty(endpointName)) {
+                    // Create endpoint node from template
                     var endpointEl = endpointsTemplateEl.tmpl({
                         Name: endpointName,
                         Url: data[endpointName].Url
                     });
 
+                    // Add errors and warnings as messages
+                    entityEl.find('.messages-template').tmpl({
+                          Errors: data[endpointName].Errors,
+                          Warnings: data[endpointName].Warnings
+                    }).appendTo(endpointEl.find('.entity-endpoint-messages'));
+
+                    // If we have certificates
                     if (data[endpointName].CertificateChain.length > 0) {
-                        appendCertificateChain(
-                                data[endpointName].CertificateChain,
-                                endpointEl.find('.entity-endpoint-certificate-representation')
+                        // Add the visual representation
+                        endpointEl.find('.entity-endpoint-certificate-representation').append(
+                            getCertificateVisualRepresentationHtml(data[endpointName].CertificateChain)
                         );
 
+                        // Add the tabular data
                         var notBeforeDate = new Date();
                         notBeforeDate.setTime(data[endpointName].CertificateChain[0].NotBefore.UnixTime * 1000);
                         var notAfterDate  = new Date();
@@ -87,16 +95,7 @@ $(function(){
                         }).appendTo(endpointEl.find('.entity-endpoint-certificate-information'));
                     }
 
-                    var entityMessagesTmpl = entityEl.find('.messages-template');
-                    entityMessagesTmpl = entityMessagesTmpl.tmpl({
-                          Errors: data[endpointName].Errors,
-                          Warnings: data[endpointName].Warnings
-                    }).appendTo(endpointEl.find('.messages'));
-
                     endpointEl.appendTo(endpointsEl);
-
-                    //endpointsEl.find()
-
                 }
             }
             endpointsEl.prev('img.loading-image').remove();

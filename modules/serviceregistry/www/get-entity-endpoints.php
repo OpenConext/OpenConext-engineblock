@@ -65,6 +65,17 @@ class EntityEndpointsServer
                     $endpointResponse->Url = $binding['Location'];
                 }
 
+                $locationParsed = parse_url($binding['Location']);
+                if (!$locationParsed) {
+                    $endpointResponse->Errors[] = "Endpoint is not a valid URL";
+                    return $this->_sendResponse();
+                }
+
+                if (strtolower($locationParsed['scheme'])!=='https') {
+                    $endpointResponse->Errors[] = "Endpoint is not HTTPS";
+                    return $this->_sendResponse();
+                }
+
                 $sslUrl = new OpenSsl_Url($binding['Location']);
                 $connectSuccess = $sslUrl->connect();
                 if (!$connectSuccess) {
