@@ -76,6 +76,11 @@ class OpenSsl_Certificate
         return ($this->getIssuerDn()===$this->getSubjectDn());
     }
 
+    public function isRootCA()
+    {
+        return $this->isRootCertificateAuthority();
+    }
+
     public function isRootCertificateAuthority()
     {
         return (

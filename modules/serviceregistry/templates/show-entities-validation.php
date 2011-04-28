@@ -24,12 +24,47 @@ $this->data['head']   = '
 .entity .messages .warning {
     background-color: #F0E68C;
 }
+img.certificate, img.certificate-chain {
+    float:left;
+}
+img.certificate-chain {
+    margin-top: 25px;
+}
+
+div.certificate-image-container {
+    text-decoration:none;
+    position:relative;
+    float:left;
+}
+
+.selfsigned-overlay {
+    background-color: white;
+    font-weight: bold;
+    left: 16%;
+    opacity: 0.5;
+    position: absolute;
+    top: 48%;
+}
+.rootca-overlay {
+    background-color: white;
+    font-weight: bold;
+    left: 13%;
+    opacity: 0.5;
+    position: absolute;
+    top: 20%;
+}
+
 </style>
 ';
 $this->includeAtTemplateBase('includes/header.php');
 ?>
 
 <div id="tabdiv">
+    <p style="font-size: large; text-align: center;">
+        <a href="<?php echo SimpleSAML_Module::getModuleURL('janus/index.php'); ?>">Go to the JANUS Dashboard</a>
+    </p>
+    <hr />
+
     <ul>
         <?php foreach ($this->data['entities'] as $type => $entities): ?>
         <li class="entity-type">
@@ -131,6 +166,9 @@ $this->includeAtTemplateBase('includes/header.php');
 
                             <div class="entity-endpoint-certificate-representation">
                             </div>
+
+                            <div class="entity-endpoint-certificate-information">
+                            </div>
                         </li>
                     </script>
                 </li>
@@ -139,6 +177,10 @@ $this->includeAtTemplateBase('includes/header.php');
         </li>
         <?php endforeach; ?>
     </ul>
+    <hr />
+    <p style="font-size: large; text-align: center;">
+        <a href="<?php echo SimpleSAML_Module::getModuleURL('janus/index.php'); ?>">Go to the JANUS Dashboard</a>
+    </p>
 </div>
 <script type="text/javascript" src="resources/scripts/datehelper.js"></script>
 <script type="text/javascript" src="resources/scripts/jquery.tmpl.min.js"></script>

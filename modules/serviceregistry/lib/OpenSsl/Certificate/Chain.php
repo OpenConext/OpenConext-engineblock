@@ -24,8 +24,4 @@ class OpenSsl_Certificate_Chain
     {
         return $this->_certificates;
     }
-
-    public function validate()
-    {
-    }
 }

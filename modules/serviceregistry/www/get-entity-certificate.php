@@ -111,6 +111,8 @@ class EntityCertificateServer
                 'NotAfter' => array(
                     'UnixTime' => $certificate->getValidUntilUnixTime(),
                 ),
+                'RootCa' => $certificate->isRootCa(),
+                'SelfSigned' => $certificate->isSelfSigned(),
             );
         }
     }

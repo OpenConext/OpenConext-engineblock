@@ -13,15 +13,40 @@ class OpenSsl_Certificate_Validator
      */
     protected $_certificate;
 
-    protected $_validationErrors = array();
+    /**
+     * @var array
+     */
+    protected $_warnings = array();
 
+    /**
+     * @var array
+     */
+    protected $_errors = array();
+
+    /**
+     * @var bool
+     */
+    protected $_ignoreOnSelfSigned = false;
+
+    /**
+     * @var bool
+     */
     protected $_warnOnSelfSigned = false;
 
+    /**
+     * @var bool
+     */
     protected $_isValid;
 
     public function __construct(OpenSsl_Certificate $certificate)
     {
         $this->_certificate = $certificate;
+    }
+
+    public function setIgnoreSelfSigned($mustIgnore)
+    {
+        $this->_ignoreOnSelfSigned = $mustIgnore;
+        return $this;
     }
 
     public function setWarnOnSelfSigned($mustWarn)
@@ -32,25 +57,31 @@ class OpenSsl_Certificate_Validator
 
     public function validate()
     {
-        $this->_validateCertificate();
-        $this->_validateRevocationWithCrl();
-        $this->_validateRevocationWithOcsp();
+        $this->_validateWithOpenSsl();
 
         return $this->_isValid;
     }
 
-    protected function _validateCertificate()
+    protected function _validateWithOpenSsl()
     {
         $command = new OpenSSL_Command_Verify();
         $command->execute($this->_certificate->getPem());
-    }
+        $results = $command->getParsedResults();
+        
+        $this->_isValid = $results['valid'];
+        foreach ($results['errors'] as $openSslErrorCode => $openSslError) {
+            if ($openSslErrorCode === OPENSSL_X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT) {
+                if ($this->_ignoreOnSelfSigned) {
+                    continue;
+                }
+                else if ($this->_warnOnSelfSigned) {
+                    $this->_warnings[] = 'OpenSSL: ' . $openSslError['description'];
+                    continue;
+                }
+            }
 
-    protected function _validateRevocationWithCrl()
-    {
-    }
-
-    protected function _validateRevocationWithOcsp()
-    {
+            $this->_errors[] = 'OpenSSL: ' . $openSslError['description'];
+        }
     }
 
     public function isValid()
@@ -64,11 +95,11 @@ class OpenSsl_Certificate_Validator
 
     public function getWarnings()
     {
-        
+        return $this->_warnings;
     }
 
     public function getErrors()
     {
-        return $this->_validationErrors;
+        return $this->_errors;
     }
 }

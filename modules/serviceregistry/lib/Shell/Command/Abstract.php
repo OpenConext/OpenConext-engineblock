@@ -42,6 +42,7 @@ abstract class Shell_Command_Abstract implements Shell_Command_Interface
             $errors .= fgets($pipes[2]);
         }
         fclose($pipes[1]);
+        fclose($pipes[2]);
 
         $this->_errors = $errors;
         $this->_output = $output;

@@ -12,18 +12,16 @@ class OpenSsl_Certificate_Chain_Factory
     {
         if (!$chain) {
             $chain = new OpenSsl_Certificate_Chain();
-            $chain->addCertificate($certificate);
         }
+        $chain->addCertificate($certificate);
 
         // Root CA, add it and stop building
         if ($certificate->isRootCertificateAuthority()) {
-            $chain->addCertificate($certificate);
             return $chain;
         }
 
         // Self signed?
         if ($certificate->isSelfSigned()) {
-            $chain->addCertificate($certificate);
             return $chain;
         }
 
