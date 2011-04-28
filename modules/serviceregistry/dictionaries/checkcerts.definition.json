@@ -1,0 +1,279 @@
+{
+	"text_dashboard": {
+		"en": "Dashboard"
+	},
+	"text_entity_created": {
+		"en": "Connection created"
+	},
+	"text_idp&sp-all": {
+		"en": "All identity Providers (IdP) and all service Providers (SP)"
+	},
+	"text_idp-all": {
+		"en": "All Identity Providers (IdP)"
+	},
+	"text_sp-all": {
+		"en": "All Service Providers (SP)"
+	},
+	"text_saml20-all": {
+		"en": "Alle SAML Identity Providers (IdP) and all SAML Service Providers (SP)"
+	},
+	"text_shib13-all": {
+		"en": "All Shib Identity Providers (IdP) and all Shib Service Providers (SP)"
+	},
+	"error_header": {
+		"en": "Error"
+	},
+	"error_entity_not_url": {
+		"en": "The connection ID should be a valid absolute URI complying to RFC 2396.<br />The syntax is &lt;scheme&gt;:&lt;scheme-specific-part&gt;"
+	},
+	"error_user_inactive": {
+		"en": "Access error. User is inactive."
+	},
+	"error_auth_user": {
+		"en": "Unknown error when authorizating the user to access JANUS"
+	},
+	"edit_entity_header": {
+		"en": "Edit connection"
+	},
+	"tab_edit_entity_connection": {
+		"en": "Connection"
+	},
+	"tab_edit_entity_connection_metadataurl": {
+		"en": "Metadata URL"
+	},
+	"tab_edit_entity_connection_arp": {
+		"en": "ARP"
+	},
+	"tab_edit_entity_connection_revision": {
+		"en": "Revision"
+	},
+	"tab_edit_entity_revision_note": {
+		"en": "Revision note"
+	},
+	"tab_edit_entity_history": {
+		"en": "History"
+	},
+	"tab_edit_entity_show_hide": {
+		"en": "Show\/Hide complete history"
+	},
+	"tab_edit_entity_loading_revisions": {
+		"en": "Loading revisions ..."
+	},
+	"tab_edit_entity_import_from_url": {
+		"en": "Import from URL"
+	},
+	"tab_edit_entity_export": {
+		"en": "Export"
+	},
+	"tab_edit_entity_export_metadata": {
+		"en": "Export metadata"
+	},	
+	"admin_type": {
+		"en": "Type"
+	},
+	"tab_edit_entity_select": {
+		"en": "Select"
+	},
+	"tab_edit_entity_import_xml": {
+		"en": "Import XML"
+	},
+    "tab_edit_entity_import_json": {
+		"en": "Import JSON"
+	},
+	"tab_edit_entity_entry": {
+		"en": "Entry"
+	},
+	"tab_edit_entity_value": {
+		"en": "Value"
+	},
+	"tab_edit_entity_parent_revision": {
+		"en": "Parent revision"
+	},
+	"tab_edit_entity_state": {
+		"en": "State"
+	},
+	"tab_disable_consent": {
+		"en": "Consent disabling"
+	},
+	"tab_disable_consent_help": {
+		"en": "Mark all services that you want to disable consent for."
+	},
+	"tab_edit_entity_connection_entityid": {
+		"en": "Connection ID"
+	},
+	"tab_remote_entity_saml20-sp": {
+		"en": "Identity Provider (IdP)"
+	},
+	"tab_remote_entity_saml20-idp": {
+		"en": "Service Provider (SP)"
+	},
+	"tab_remote_entity_blacklist": {
+	    "en": "Blacklist"
+	},
+	"tab_remote_entity_whitelist":  {
+	    "en": "Whitelist"
+	},
+	"tab_remote_entity_help_blacklist_saml20-idp": {
+		"en": "Mark services that your users are not allowed to access."
+	},
+	"tab_remote_entity_help_blacklist_saml20-sp": {
+		"en": "Mark those identity providers which are not allowed to acces your service."
+	},
+	"tab_remote_entity_help_whitelist_saml20-idp": {
+        "en": "Mark only those services that your users are allowed to access."
+    },
+    "tab_remote_entity_help_whitelist_saml20-sp": {
+        "en": "Mark only those identity providers which are allowed to acces your service."
+    },
+	"tab_remote_entity_allowall": {
+		"en": "Allow all"
+	},
+    "tab_remote_entity_allownone": {
+        "en": "Allow none"
+    },
+	"tab_metadata": {
+		"en": "Metadata"
+	},
+	"tab_import_metadata": {
+		"en": "Import metadata"
+	},	
+	"text_entities_filter_state": {
+		"en": "State"
+	},
+	"text_entities_filter_state_exclude": {
+		"en": "Exclude"
+	},
+	"text_entities_filter": {
+		"en": "Filter"
+	},
+	"text_entities_filter_select": {
+		"en": "-- No filtering"
+	},
+	"status_metadata_parsed_ok": {
+		"en": "Metadata imported"
+	},
+	"delete_metadata_question": {
+		"en": "Remove metadata?"
+	},
+	"delete_attribute_question": {
+		"en": "Remove attribute?"
+	},
+	"add_metadata_from_url_desc": {
+		"en": "Get metadata from a URL. This URL must target a xml file with the metadatas of the entity."
+	},
+	"get_metadata": {
+		"en": "Get metadata"
+	},
+	"error_import_metadata_permission": {
+		"en": "You do not have permission to import metadata."
+	},
+	"error_import_metadata_url": {
+		"en": "Can not import. Invalid metadata URL."
+	},
+	"error_entityid_no_match": {
+		"en": "Entity id in metadata do not match"
+	},
+	"error_metadata_not_parsed": {
+		"en": "Error when parsing imported metadata"
+	},
+	"error_metadata_not_parsed_due_expiration": {
+		"en": "Error when importing metadata due metadata are expired"
+	},
+	"error_not_valid_saml20": {
+		"en": "Error when parsing imported metadata. Not valid SAML 2.0 metadata"
+	},
+    "error_not_valid_json": {
+		"en": "Error when parsing imported metadata. Not valid JSON metadata"
+	},
+    "error_metadata_wrong_entity": {
+        "en": "Error when parsing imported metadata. JSON is not for this entity."
+    },
+	"error_mail_not_send": {
+		"en": "Email Not Sent"
+	},
+	"error_no_access": {
+		"en": "You do not have access to this resource"
+	},
+	"text_help": {
+		"en": "Help"
+	},
+	"error_user_not_created": {
+		"en": "The user was not created"
+	},
+	"error_user_not_created_due_params": {
+		"en": "The user was not created. Verify that the user ID and type are valid"
+	},
+	"federation_entities_header": {
+		"en": "Federation entities"
+	},
+	"externalexportok": {
+		"en": "Metadata exported to external destination"
+	},
+	"validation_metadata_column": {
+		"en": "Valid Metadata"
+	},
+	"validation_certificate_column": {
+		"en": "Valid Certificate"
+	},
+	"validation_identity_column": {
+		"en": "Entity ID or Name"
+	},
+	"validation_problem": {
+		"en": "Validation problem"
+	},
+	"validation_warning": {
+		"en": "Validation warning"
+	},
+	"validation_success": {
+		"en": "Validation success"
+	},
+	"cert_not_found": {
+		"en": "Certificate not found in entity metadata"
+	},
+	"missing_require_metadata": {
+		"en": "The following metadatafields of the entity are required but not present:"
+	},
+	"hour_expires": {
+		"en": "Expires in %META_EXPIRES_TIME% hour(s)"
+	},
+	"hour_expired": {
+		"en": "Expired %META_EXPIRED_TIME% hour(s) ago"
+	},
+	"day_expires": {
+		"en": "Expires in %CERT_EXPIRES_TIME% day(s)"
+	},
+	"expired": {
+		"en": "Expired"
+	},
+	"no_expired": {
+		"en": "Not Expired"
+	},
+	"metadata_expired": {
+		"en": "Metadata expired"
+	},
+	"choose_file": {
+		"en": "Choose file"
+	},
+	"tab_edit_entity_save": {
+		"en": "Save"
+	},
+
+    "entity_cert_missing": {
+      "en": "No certificate data for this entity"
+    },
+    "endpoint_unreachable": {
+        "en": "Endpoint 'LOCATION' is not reachable by Service Registry?"
+    },
+    "endpoint_domain_mismatch": {
+        "en": "Endpoint certificate is not valid for <strong>HOST</strong> (it is valid for <strong>CN</strong> or one of the following: <strong>SUBJECTALT</strong>)"
+    },
+    "entity_binding_no_location": {
+        "en": "Binding KEY has no Location?"
+    },
+    "entity_cert_expired": {
+        "en": "Entity certificate has expired"
+    },
+    "entity_cert_not_yet_valid": {
+        "en": "Entity certificate is not yet valid"
+    }
+}

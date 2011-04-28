@@ -1,0 +1,333 @@
+{
+	"text_dashboard": {
+		"no": "Skrivebord",
+		"da": "Kontrolpanel",
+		"es": "Panel"
+	},
+	"choose_file": {
+		"no": "Velg fil",
+		"da": "V\u00e6lg fil"
+	},
+	"text_entity_created": {
+		"da": "Forbindelse oprettet",
+		"es": "Conexi\u00f3n creada"
+	},
+	"text_idp&sp-all": {
+		"da": "Alle institutioner (IdP) og alle tjenester (SP)",
+		"es": "Proveedores de Identidad (IdP) y Proveedores de Servicio (SP)"
+	},
+	"text_idp-all": {
+		"da": "Alle Institutioner (IdP)",
+		"es": "Todos los Proveedores de Identidad (IdP)"
+	},
+	"text_sp-all": {
+		"da": "Alle Tjenester (SP)",
+		"es": "Todos los Proveedores de Servicio (SP)"
+	},
+	"text_saml20-all": {
+		"da": "Alle SAML Institutioner (IdP) og alle SAML Tjenester (SP)",
+		"es": "Proveedores de Identidad SAML(IdP) y Proveedores de Servicio SAML(SP)"
+	},
+	"text_shib13-all": {
+		"da": "Alle Shib Institutioner (IdP) og alle Shib Tjenester (SP)",
+		"es": "Proveedores de Identidad Shib (IdP) y Proveedores de Servicio Shib (SP)"
+	},
+	"error_user_inactive": {
+		"da": "Adgangsfejl. Brugeren er inaktiv.",
+		"es": "Error de acceso. Usuario est\u00e1 inactivo."
+	},
+	"error_auth_user": {
+		"da": "Adgangsfejl. Brugeren er inaktiv.",
+		"es": "Error desconocido cuando authorizating al usuario acceder a JANUS"
+	},
+	"edit_entity_header": {
+		"da": "Rediger forbindelse",
+		"es": "Editar conexi\u00f3n"
+	},
+	"tab_edit_entity_connection": {
+		"da": "Forbindelse",
+		"es": "Conexi\u00f3n"
+	},
+	"tab_edit_entity_connection_metadataurl": {
+		"da": "Metadata URL",
+		"es": "URL de metadatos"
+	},
+	"tab_edit_entity_connection_arp": {
+		"da": "ARP",
+		"es": "ARP"
+	},
+	"tab_edit_entity_connection_revision": {
+		"da": "Revision",
+		"es": "Revisi\u00f3n"
+	},
+	"tab_edit_entity_revision_note": {
+		"da": "Revisionsnote",
+		"es": "Notas de la revisi\u00f3n"
+	},
+	"tab_edit_entity_history": {
+		"da": "Historik",
+		"es": "Hist\u00f3rico"
+	},
+	"tab_edit_entity_show_hide": {
+		"da": "Vis\/Gem hele historikken",
+		"es": "Mostrar\/Ocultar la historia completa"
+	},
+	"tab_edit_entity_loading_revisions": {
+		"es": "Cargando revisiones ...",
+		"da": "Henter revisioner..."
+	},
+	"tab_edit_entity_import_from_url": {
+		"da": "Importer fra URL",
+		"es": "Importar de una URL"
+	},
+	"tab_edit_entity_export": {
+		"da": "Eksporter",
+		"es": "Exportar"
+	},
+	"tab_edit_entity_export_metadata": {
+		"da": "Eksporter metadata",
+		"es": "Exportar medatados"
+	},
+	"tab_edit_entity_save": {
+		"da": "Gem",
+		"es": "Guardar"
+	},
+	"tab_edit_entity_select": {
+		"da": "V\u00e6lg",
+		"es": "Seleccionar"
+	},
+	"tab_edit_entity_import_xml": {
+		"da": "Importer XML",
+		"es": "Importar XML"
+	},
+    "tab_edit_entity_import_json": {
+		"da": "Importer JSON",
+		"es": "Importar JSON"
+	},
+	"tab_edit_entity_entry": {
+		"da": "Felt",
+		"es": "Entrada"
+	},
+	"tab_edit_entity_value": {
+		"da": "V\u00e6rdi",
+		"es": "Valor"
+	},
+	"tab_edit_entity_parent_revision": {
+		"da": "Forrig revision",
+		"es": "Revisi\u00f3n padre"
+	},
+	"tab_edit_entity_state": {
+		"da": "Tilstand",
+		"es": "Estado"
+	},
+	"tab_disable_consent": {
+		"da": "Administrativ samtykke"
+	},
+	"tab_disable_consent_help": {
+		"da": "Herunder kan du give samtykke for alle brugere."
+	},
+	"tab_edit_entity_connection_entityid": {
+		"da": "Forbindelses ID",
+		"es": "ID de conexi\u00f3n"
+	},
+	"tab_remote_entity_saml20-sp": {
+		"da": "Institution (IdP)",
+		"es": "Proveedores de Identidad (IdP)"
+	},
+	"tab_remote_entity_saml20-idp": {
+		"da": "Tjenester (SP)",
+		"es": "Proveedores de Servicio (SP)"
+	},
+	"tab_remote_entity_blacklist": {
+		"da": "Blacklist",
+		"es": "Blacklist"
+	},
+	"tab_remote_entity_whitelist": {
+		"da": "Whitelist",
+		"es": "Whitelist"
+	},
+	"tab_remote_entity_help_blacklist_saml20-idp": {
+		"da": "Marker de tjenester som du ikke \u00f8nsker dine brugere skal have adgang til.",
+		"es": "Marca los servicios a los que a tus usuarios no les est\u00e1 permitido acceder"
+	},
+	"tab_remote_entity_help_blacklist_saml20-sp": {
+		"da": "Marker de institutioner som du ikke \u00f8nsker brugere fra.",
+		"es": "Marca aquellos Proveedores de identidad a los que no les est\u00e1 permitido el acceso a tu servicio."
+	},
+	"tab_remote_entity_help_whitelist_saml20-idp": {
+		"da": "Mark only those services that your users are allowed to access.",
+		"es": "Mark only those services that your users are allowed to access."
+	},
+	"tab_remote_entity_help_whitelist_saml20-sp": {
+		"da": "Mark only those identity providers which are allowed to acces your service.",
+		"es": "Mark only those identity providers which are allowed to acces your service."
+	},
+	"tab_remote_entity_allowall": {
+		"da": "Tillad alle",
+		"es": "Permitir todos"
+	},
+	"tab_remote_entity_allownone": {
+		"da": "Allow none",
+		"es": "Allow none"
+	},
+	"tab_metadata": {
+		"da": "Metadata",
+		"es": "Metadatos"
+	},
+	"tab_import_metadata": {
+		"da": "Importer metadata",
+		"es": "Importar metadatos"
+	},
+	"text_entities_filter": {
+		"da": "Filtrer forbindelser"
+	},
+	"text_entities_filter_select": {
+		"da": "-- Ingen filtrering"
+	},
+	"status_metadata_parsed_ok": {
+		"da": "Metadata importeret korrekt",
+		"es": "Metadatos importados"
+	},
+	"delete_metadata_question": {
+		"da": "Vil du slette metadata?",
+		"es": "\u00bfBorrar metadatos?"
+	},
+	"delete_attribute_question": {
+		"da": "Vil du slette attribute?",
+		"es": "\u00bfBorrar atributo?"
+	},
+	"add_metadata_from_url_desc": {
+		"da": "Hent metadata fra en URL. Denne URL skal pege p\u00e5 en xml-fil med metadata.",
+		"es": "Obtener los metadatos a partir de una url. Esta url debe apuntar a un xml que contenga los metadatos de la entidad."
+	},
+	"get_metadata": {
+		"da": "Hent metadata",
+		"es": "Obtener metadatos"
+	},
+	"error_import_metadata_permission": {
+		"da": "Du har ikke tilladelse til at importere metadata",
+		"es": "No tienes permisos para importar metadatos."
+	},
+	"error_import_metadata_url": {
+		"da": "Kan ikke importere. Ugyldig metadata URL.",
+		"es": "No se pudo importar. URL de metadatos no V\u00e1lida."
+	},
+	"error_entityid_no_match": {
+		"da": "Entity id i metadata er ikke korrekt",
+		"es": "El identificador de entidad no concuerda con los metadatos"
+	},
+	"error_metadata_not_parsed": {
+		"da": "Fejl ved import af metadata",
+		"es": "Error mientras se parseaban los metadatos importados"
+	},
+	"error_metadata_not_parsed_due_expiration": {
+		"da": "Fejl under import af metadata, fordi de var for\u00e6ldede",
+		"es": "Error mientras se importaban los metadatos debido a que estaban caducados"
+	},
+	"error_not_valid_saml20": {
+		"da": "Fejl ved import af metadata. Ikke gyldig SAML 2.0 metadata"
+	},
+    "error_not_valid_json": {
+		"da": "Fejl ved import af metadata. Ikke gyldig JSON metadata"
+	},
+	"error_mail_not_send": {
+		"da": "Emailen er ikke sendt",
+		"es": "Email no enviado"
+	},
+	"error_no_access": {
+		"da": "Du har ikke adgang til denne ressource",
+		"es": "No tienes acceso para acceder a este recurso"
+	},
+	"text_help": {
+		"da": "Hj\u00e6lp",
+		"es": "Ayuda"
+	},
+	"error_user_not_created": {
+		"da": "Brugeren blev ikke oprettet",
+		"es": "Usuario no creado"
+	},
+	"error_user_not_created_due_params": {
+		"da": "Brugeren blev ikke oprettet. Kontroller, at bruger-id og type er gyldige",
+		"es": "usuario no creado. Compruebe que el ID de usuario y el tipo son v\u00e1lidos"
+	},
+	"federation_entities_header": {
+		"da": "Federation enheder",
+		"es": "Entidades de la federaci\u00f3n"
+	},
+	"externalexportok": {
+		"da": "Metadata eksporteret til ekstern destination",
+		"es": "Metadatos exportados a destino externo"
+	},
+	"validation_metadata_column": {
+		"da": "Metadata gyldigt",
+		"es": "Metadatos v\u00e1lidos"
+	},
+	"validation_certificate_column": {
+		"da": "Gyldigt certifikat",
+		"es": "Certificado v\u00e1lido"
+	},
+	"validation_identity_column": {
+		"da": "Enheds-ID eller navn",
+		"es": "ID de Entidad o Nombre"
+	},
+	"validation_problem": {
+		"da": "Validering Problem",
+		"es": "Problema de validaci\u00f3n"
+	},
+	"validation_warning": {
+		"da": "Mulige validering sp\u00f8rgsm\u00e5l",
+		"es": "Posible problema de validaci\u00f3n"
+	},
+	"validation_success": {
+		"da": "Korrekt validering",
+		"es": "Validaci\u00f3n correcta"
+	},
+	"cert_not_found": {
+		"da": "Certifikat ikke findes i virksomheden metadata",
+		"es": "No se encontro certificado en los metadatos de la entidad"
+	},
+	"missing_require_metadata": {
+		"da": "F\u00f8lgende metadatafields af den enhed, der kr\u00e6ves, men ikke til stede:",
+		"es": "Los siguientes metadatos son requeridos pero no existen en la entidad:"
+	},
+	"hour_expires": {
+		"da": "Udl\u00f8ber i %META_EXPIRES_TIME% timer",
+		"es": "Caduca en %META_EXPIRES_TIME% hora(s)"
+	},
+	"hour_expired": {
+		"da": "Udl\u00f8bet %META_EXPIRED_TIME% timer siden",
+		"es": "Caduc\u00f3 hace %META_EXPIRED_TIME% hora(s)"
+	},
+	"day_expires": {
+		"da": "Udl\u00f8ber i %CERT_EXPIRES_TIME% dage",
+		"es": "Caduca en %CERT_EXPIRES_TIME% d\u00eda(s)"
+	},
+	"expired": {
+		"da": "Udl\u00f8bet",
+		"es": "Caducado"
+	},
+	"no_expired": {
+		"da": "Ikke er udl\u00f8bet",
+		"es": "No Caducado"
+	},
+	"metadata_expired": {
+		"da": "Metadata er udl\u00f8bet",
+		"es": "Metadatos Caducados"
+	},
+	"text_entities_filter_state": {
+		"da": "State"
+	},
+	"text_entities_filter_state_exclude": {
+		"da": "Udeluk"
+	},
+	"admin_type": {
+		"da": "Type",
+		"es": "Tipo"
+	},
+	"error_header": {
+		"da": "Fejl"
+	},
+	"error_entity_not_url": {
+		"da": "Forbindelses ID skal v\u00e6re en gyldig URI jf. RFC 2396.<br \/>Syntaksen er &lt;skema&gt;:&lt;skema-specifik-del&gt;"
+	}
+}

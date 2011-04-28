@@ -2,6 +2,19 @@
 
 class sspmod_serviceregistry_EntityController extends sspmod_janus_EntityController
 {
+    /**
+     * @throws Exception
+     * @return OpenSsl_Certificate
+     */
+    public function getCertificate()
+    {
+        $metadata = $this->getMetaArray();
+        if (!isset($metadata['certData']) || trim($metadata['certData'])==="") {
+            throw new Janus_Exception_NoCertData("Unable to create certificate object, certData metadata missing!");
+        }
+        return Janus_CertificateFactory::create($metadata['certData']);
+    }
+
     public function getMetadataCaching()
     {
         $currentEntity = $this->getEntity();
