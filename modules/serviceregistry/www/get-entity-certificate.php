@@ -99,7 +99,7 @@ class EntityCertificateServer
             $this->_response->CertificateChain[] = array(
                 'Subject' => array(
                     'DN' => $certificate->getSubjectDn(),
-                    'CN' => $certificateSubject['CN'],
+                    'CN' => (isset($certificateSubject['CN'])?$certificateSubject['CN']:$certificateSubject['O']),
                 ),
                 'SubjectAlternative' => array(
                     'DNS' => $certificate->getSubjectAltNames(),

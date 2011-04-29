@@ -24,13 +24,13 @@ function serviceregistry_hook_cron(&$cron_info) {
 
     SimpleSAML_Logger::info('cron [janus]: Running cron in cron tag [' . $cron_info['tag'] . '] ');
 
+    $hasErrors = false;
+
     try {
         $janus_config           = SimpleSAML_Configuration::getConfig('module_janus.php');
         $serviceregistry_config = SimpleSAML_Configuration::getConfig('module_serviceregistry.php');
 
         $cron_tags = $serviceregistry_config->getArray('cron_tags', array());
-
-        $hasErrors = false;
 
         if (!in_array($cron_info['tag'], $cron_tags)) {
             return; // Nothing to do: it's not our time
@@ -54,7 +54,6 @@ function serviceregistry_hook_cron(&$cron_info) {
             $entity_id = $entity->getEntityId();
             $metadata_url = $entity->getMetadataURL();
             $metadata_caching_info = $entity_controller->getMetadataCaching();
-            $metadata_url = '';
 
             if (empty($metadata_url)) {
                 $cron_info['summary'][] = "[Warning][$entity_id] No metadata url. ";
@@ -184,6 +183,8 @@ function _serviceregistry_hook_cron_getMetaDataCachingInfo($xml, $entity_id)
     $validUntil = _serviceregistry_hook_cron_getEarliestDateFromXml($validUntil, $spValidUntil);
     $validUntil = _serviceregistry_hook_cron_getEarliestDateFromXml($validUntil, $idpValidUntil);
 
+    // @todo parse cacheDurations with lib/Xml/Duration.php first
+
     $defaultCacheDuration = strtotime(SERVICEREGISTRY_DEFAULT_CACHE_UNTIL);
     $cacheDuration = _serviceregistry_hook_cron_getEarliestDateFromXml($defaultCacheDuration, $entitiesCacheDuration);
     $cacheDuration = _serviceregistry_hook_cron_getEarliestDateFromXml($cacheDuration, $entityCacheDuration);
@@ -207,91 +208,4 @@ function _serviceregistry_hook_cron_getEarliestDateFromXml($validUntil, $xmlVali
         $validUntil = $xmlValidUntil;
     }
     return $validUntil;
-}
-
-/**
- * Parse an XML duration and return the UNIX timestamp when the duration ends.
- *
- * "The duration data type is used to specify a time interval.
- *
- * The time interval is specified in the following form "PnYnMnDTnHnMnS" where:
- *
- *  P indicates the period (required)
- *  nY indicates the number of years
- *  nM indicates the number of months
- *  nD indicates the number of days
- *  T indicates the start of a time section (required if you are going to specify hours, minutes, or seconds)
- *  nH indicates the number of hours
- *  nM indicates the number of minutes
- *  nS indicates the number of seconds"
- * @url http://www.w3schools.com/Schema/schema_dtypes_date.asp
- *
- * @param  $duration
- *
- * @return void
- */
-function _serviceregistry_hook_cron_getUnixTimeFromDuration($duration, $time = NULL)
-{
-    if ($time === NULL) {
-        $time = time();
-    }
-
-    $sign = '+';
-    if (strpos($duration, '-') === 0) {
-        $sign = '-';
-        // throw away the sign
-        $duration = substr($duration, 1);
-    }
-    if (substr($duration,0,1)!=='P') {
-        throw new Exception("Duration '$duration' is not in the XML duration format?!?");
-    }
-    // throw away the P
-    $duration = substr($duration, 1);
-
-    $timeMode = false;
-    do {
-        $matches = array();
-        $matched = preg_match('|^(\d+)(\w{1})|', $duration, $matches);
-
-        if ($matched > 0) {
-            $amount = $matches[1];
-            switch ($matches[2]) {
-                case 'Y':
-                    $unitOfTime = 'years';
-                    break;
-                case 'M':
-                    if (!$timeMode) {
-                        $unitOfTime = 'months';
-                    }
-                    else {
-                       $unitOfTime = 'minutes';
-                    }
-                    break;
-                case 'D':
-                    $unitOfTime = 'days';
-                    break;
-                case 'H':
-                    $unitOfTime = 'hours';
-                    break;
-                case 'S':
-                    $unitOfTime = 'seconds';
-                    break;
-                default:
-                    throw new Exception("Unrecognized character '{$matches[2]}' in XML duration '$duration'");
-            }
-            $interval = "$sign$amount $unitOfTime";
-            //echo "{$matches[0]} => $interval" . PHP_EOL;
-            $time = strtotime($interval, $time);
-
-            $duration = substr($duration, strlen($matches[0]));
-        }
-        else if (substr($duration, 0, 1) === 'T') {
-            $matched = 1;
-            $timeMode = true;
-            $duration = substr($duration, 1);
-        }
-    }
-    while ($matched!==0);
-
-    return $time;
 }

@@ -93,11 +93,11 @@ class EntityEndpointsServer
                 $urlHost = $sslUrl->getHost();
 
                 $matches = false;;
-                if (doesHostnameMatchPattern($urlHost, $urlCertificateCn)) {
+                if ($this->_doesHostnameMatchPattern($urlHost, $urlCertificateCn)) {
                     $matches = true;
                 }
                 foreach ($urlCertificateAltNames as $altName) {
-                    if (doesHostnameMatchPattern($urlHost, $altName)) {
+                    if ($this->_doesHostnameMatchPattern($urlHost, $altName)) {
                         $matches = true;
                     }
                 }
@@ -145,6 +145,42 @@ class EntityEndpointsServer
         return $this->_sendResponse();
     }
 
+
+    /**
+     * Match patterns from certificates like:
+     * test.example.com
+     * or
+     * *.test.example.com
+     *
+     * @param string $hostname
+     * @param string $pattern
+     * @return bool
+     */
+    protected function _doesHostnameMatchPattern($hostname, $pattern)
+    {
+        if ($hostname === $pattern) {
+            return true; // Exact match
+        }
+
+        if (!substr($pattern, 0, 2)==='*.') {
+            return false; // Not an exact match, not a wildcard pattern, so no match...
+        }
+
+        $pattern = substr($pattern, 2);
+
+        if ($hostname === $pattern) {
+            return true; // Exact match for pattern root, eg *.example.com also matches example.com
+        }
+
+        // Remove sub-domain
+        $hostname = substr($hostname, strpos($hostname, '.') + 1);
+        if ($hostname === $pattern) {
+            return true;
+        }
+
+        return false;
+    }
+
     protected function _sendResponse()
     {
         $this->_outputContentType('application/json');
@@ -160,39 +196,4 @@ class EntityEndpointsServer
     {
         echo json_encode($this->_response);
     }
-}
-
-/**
- * Match patterns from certificates like:
- * test.example.com
- * or
- * *.test.example.com
- *
- * @param string $hostname
- * @param string $pattern
- * @return bool
- */
-function doesHostnameMatchPattern($hostname, $pattern)
-{
-    if ($hostname === $pattern) {
-        return true; // Exact match
-    }
-
-    if (!substr($pattern, 0, 2)==='*.') {
-        return false; // Not an exact match, not a wildcard pattern, so no match...
-    }
-
-    $pattern = substr($pattern, 2);
-
-    if ($hostname === $pattern) {
-        return true; // Exact match for pattern root, eg *.example.com also matches example.com
-    }
-
-    // Remove sub-domain
-    $hostname = substr($hostname, strpos($hostname, '.') + 1);
-    if ($hostname === $pattern) {
-        return true;
-    }
-
-    return false;
 }
