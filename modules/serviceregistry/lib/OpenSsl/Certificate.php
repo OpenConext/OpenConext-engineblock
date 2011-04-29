@@ -102,6 +102,12 @@ class OpenSsl_Certificate
         );
     }
 
+    /**
+     * @todo this is quick and dirty, I have no idea whether this will work with more complicated certs,
+     *       then again, I have yet to see a cert that doesn't work with this...
+     *
+     * @return array
+     */
     public function getCertificateAuthorityIssuerUrls()
     {
         if (!isset($this->_parsed['extensions']['authorityInfoAccess'])) {
@@ -110,30 +116,6 @@ class OpenSsl_Certificate
 
         $matches = array();
         preg_match_all('/CA.+((https?|ftp):\/\/.+)/', $this->_parsed['extensions']['authorityInfoAccess'], $matches);
-
-        return $matches[1];
-    }
-
-    public function getOcspUrls()
-    {
-        if (!isset($this->_parsed['extensions']['authorityInfoAccess'])) {
-            return array();
-        }
-
-        $matches = array();
-        preg_match_all('/OCSP.+((https?|ftp):\/\/.+)/', $this->_parsed['extensions']['authorityInfoAccess'], $matches);
-
-        return $matches[1];
-    }
-
-    public function getCrlDistributionPointUrls()
-    {
-        if (!isset($this->_parsed['extensions']['crlDistributionPoints'])) {
-            return array();
-        }
-
-        $matches = array();
-        preg_match_all('/URI:((https?|ftp):\/\/.+)/', $this->_parsed['extensions']['crlDistributionPoints'], $matches);
 
         return $matches[1];
     }
