@@ -39,6 +39,8 @@ class EntityEndpointsServer
 
     public function serve($entityId)
     {
+        OpenSsl_Certificate_Chain_Factory::loadRootCertificatesFromFile('/etc/pki/tls/certs/ca-bundle.pem');
+        
         $this->_loadEntityMetadata($entityId);
 
         foreach ($this->_endpointMetadataFields as $endPointMetaKey) {
@@ -114,7 +116,7 @@ class EntityEndpointsServer
                     $endpointResponse->CertificateChain[] = array(
                         'Subject' => array(
                             'DN' => $certificate->getSubjectDn(),
-                            'CN' => $certificateSubject['CN'],
+                            'CN' => (isset($certificateSubject['CN'])?$certificateSubject['CN']:$certificateSubject['O']),
                         ),
                         'SubjectAlternative' => array(
                             'DNS' => $certificate->getSubjectAltNames(),
@@ -128,7 +130,7 @@ class EntityEndpointsServer
                         'NotAfter' => array(
                             'UnixTime' => $certificate->getValidUntilUnixTime(),
                         ),
-                        'RootCa' => $certificate->isRootCa(),
+                        'RootCa'     => $certificate->getTrustedRootCertificateAuthority(),
                         'SelfSigned' => $certificate->isSelfSigned(),
                     );
                 }

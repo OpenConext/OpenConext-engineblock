@@ -9,6 +9,8 @@ class OpenSsl_Certificate
 
     protected $_textData;
 
+    protected $_trustedRootCertificateAuthority = false;
+
     public function __construct($pemData)
     {
         $this->_pemData = $pemData;
@@ -17,6 +19,17 @@ class OpenSsl_Certificate
         if ($this->_parsed === false) {
             throw new OpenSsl_Certificate_Exception_NotAValidPem("Data '$pemData' is not a valid X.509 PEM certificate");
         }
+    }
+
+    public function setTrustedRootCertificateAuthority($isTrusted)
+    {
+        $this->_trustedRootCertificateAuthority = $isTrusted;
+        return $this;
+    }
+
+    public function getTrustedRootCertificateAuthority()
+    {
+        return $this->_trustedRootCertificateAuthority;
     }
 
     public function getSubject()
@@ -76,12 +89,12 @@ class OpenSsl_Certificate
         return ($this->getIssuerDn()===$this->getSubjectDn());
     }
 
-    public function isRootCA()
+    public function isCA()
     {
-        return $this->isRootCertificateAuthority();
+        return $this->isCertificateAuthority();
     }
 
-    public function isRootCertificateAuthority()
+    public function isCertificateAuthority()
     {
         return (
                 isset($this->_parsed['extensions']['basicConstraints']) &&

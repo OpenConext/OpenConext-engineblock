@@ -45,6 +45,8 @@ class EntityCertificateServer
     
     public function serve($entityId)
     {
+        OpenSsl_Certificate_Chain_Factory::loadRootCertificatesFromFile('/etc/pki/tls/certs/ca-bundle.pem');
+        
         if (!$this->_loadEntityCertificate($entityId)) {
             return $this->_sendResponse();
         }
@@ -111,7 +113,7 @@ class EntityCertificateServer
                 'NotAfter' => array(
                     'UnixTime' => $certificate->getValidUntilUnixTime(),
                 ),
-                'RootCa' => $certificate->isRootCa(),
+                'RootCa' => $certificate->getTrustedRootCertificateAuthority(),
                 'SelfSigned' => $certificate->isSelfSigned(),
             );
         }
