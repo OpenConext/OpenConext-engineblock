@@ -1016,7 +1016,7 @@ $config = array(
         ),
         'experimental' => array(
             'role' => array(
-                'admin'
+                'experimental'
             ),
         ),
     ),

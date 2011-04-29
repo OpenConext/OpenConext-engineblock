@@ -61,7 +61,7 @@ $this->includeAtTemplateBase('includes/header.php');
 
 <div id="tabdiv">
     <p style="font-size: large; text-align: center;">
-        <a href="<?php echo SimpleSAML_Module::getModuleURL('janus/index.php'); ?>">Go to the JANUS Dashboard</a>
+        <a href="<?php echo SimpleSAML_Module::getModuleURL('janus/index.php'); ?>">Go back to the JANUS Dashboard</a>
     </p>
     <hr />
 
@@ -179,7 +179,7 @@ $this->includeAtTemplateBase('includes/header.php');
     </ul>
     <hr />
     <p style="font-size: large; text-align: center;">
-        <a href="<?php echo SimpleSAML_Module::getModuleURL('janus/index.php'); ?>">Go to the JANUS Dashboard</a>
+        <a href="<?php echo SimpleSAML_Module::getModuleURL('janus/index.php'); ?>">Go back to the JANUS Dashboard</a>
     </p>
 </div>
 <script type="text/javascript" src="resources/scripts/datehelper.js"></script>

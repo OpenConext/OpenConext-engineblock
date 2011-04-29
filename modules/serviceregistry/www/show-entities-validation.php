@@ -1,6 +1,15 @@
 <?php
 
+$session = SimpleSAML_Session::getInstance();
+
 $janusConfig = SimpleSAML_Configuration::getConfig('module_janus.php');
+$authSource = $janusConfig->getValue('auth', 'login-admin');
+
+// Validate user
+if (!$session->isValid($authSource)) {
+    SimpleSAML_Utilities::redirect(SimpleSAML_Module::getModuleURL('janus/index.php', array('selectedtab'=>"'federation'")));
+}
+
 $entities = array();
 
 $util = new sspmod_janus_AdminUtil();
