@@ -16,29 +16,9 @@ class OpenSsl_Certificate_Chain_Factory
             throw new Exception("Unable to load Root certificates, file '$filePath' does not exist");
         }
 
-        $inputLines = file($filePath);
+        $fileContents = file_get_contents($filePath);
+        $certificatesFound = OpenSsl_Certificate_Utility::getCertificatesFromText($fileContents);
 
-        $certificatesFound = array();
-        $recording = false;
-        foreach ($inputLines as $inputLine) {
-            if (trim($inputLine) === "-----BEGIN CERTIFICATE-----") {
-                $certificate = "";
-
-                $recording = true;
-            }
-
-            if ($recording) {
-                $certificate .= $inputLine;
-            }
-
-            if (trim($inputLine) === "-----END CERTIFICATE-----") {
-                $certificate = new OpenSsl_Certificate($certificate);
-                $certificate->setTrustedRootCertificateAuthority(true);
-                $certificatesFound[$certificate->getSubjectDN()] = $certificate;
-
-                $recording = false;
-            }
-        }
         self::setRootCertificates($certificatesFound);
     }
 
@@ -47,7 +27,37 @@ class OpenSsl_Certificate_Chain_Factory
         self::$s_rootCertificates = $list;
     }
 
-    public static function create(OpenSsl_Certificate $certificate, OpenSsl_Certificate_Chain $chain = null)
+    public static function createFromCertificates(array $certificates)
+    {
+        $chain = new OpenSsl_Certificate_Chain();
+        foreach ($certificates as $certificate) {
+            // Root CA?
+            if (isset(self::$s_rootCertificates[$certificate->getIssuerDn()])) {
+                $certificate->setTrustedRootCertificateAuthority(true);
+            }
+
+            $chain->addCertificate($certificate);
+        }
+        return $chain;
+    }
+
+    public static function createFromPems(array $pems)
+    {
+        $chain = new OpenSsl_Certificate_Chain();
+        foreach ($pems as $pem) {
+            $certificate = new OpenSsl_Certificate($pem);
+
+            // Root CA?
+            if (isset(self::$s_rootCertificates[$certificate->getIssuerDn()])) {
+                $certificate->setTrustedRootCertificateAuthority(true);
+            }
+
+            $chain->addCertificate($certificate);
+        }
+        return $chain;
+    }
+
+    public static function createFromCertificateIssuerUrl(OpenSsl_Certificate $certificate, OpenSsl_Certificate_Chain $chain = null)
     {
         if (!$chain) {
             $chain = new OpenSsl_Certificate_Chain();
@@ -71,7 +81,6 @@ class OpenSsl_Certificate_Chain_Factory
          */
         $issuerUrls = $certificate->getCertificateAuthorityIssuerUrls();
         if (empty($issuerUrls)) {
-            var_dump($chain);
             throw new OpenSsl_Certificate_Chain_Exception_BuildingFailedIssuerUrlNotFound("Unable to get issuer certificate?");
         }
 
@@ -92,7 +101,7 @@ class OpenSsl_Certificate_Chain_Factory
             }
 
             $issuerCertificate = new OpenSsl_Certificate($issuerCertificate);
-            return self::create($issuerCertificate, $chain);
+            return self::createFromCertificateIssuerUrl($issuerCertificate, $chain);
         }
 
         throw new OpenSsl_Certificate_Chain_Exception_BuildingFailedIssuerUrlNotFound(

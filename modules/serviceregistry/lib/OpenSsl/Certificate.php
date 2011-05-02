@@ -32,8 +32,11 @@ class OpenSsl_Certificate
         return $this->_trustedRootCertificateAuthority;
     }
 
-    public function getSubject()
+    public function getSubject($partName = '')
     {
+        if ($partName!=='') {
+            return $this->_parsed['subject'][$partName];
+        }
         return $this->_parsed['subject'];
     }
 
@@ -60,7 +63,7 @@ class OpenSsl_Certificate
     {
         $dnParts = array();
         foreach ($this->_parsed['subject'] as $key => $value) {
-            $dnParts []= "$key=$value";
+            $dnParts []= "/$key=$value";
         }
         return implode(',', $dnParts);
     }
@@ -74,7 +77,7 @@ class OpenSsl_Certificate
     {
         $dnParts = array();
         foreach ($this->_parsed['issuer'] as $key => $value) {
-            $dnParts []= "$key=$value";
+            $dnParts []= "/$key=$value";
         }
         return implode(',', $dnParts);
     }
@@ -128,5 +131,13 @@ class OpenSsl_Certificate
     public function getValidUntilUnixTime()
     {
         return $this->_parsed['validTo_time_t'];
+    }
+
+    public function getValidHostNames()
+    {
+        $names = $this->getSubjectAltNames();
+        array_unshift($names, $this->getSubject('CN'));
+        $names = array_keys(array_flip($names)); // Remove duplicates
+        return $names;
     }
 }

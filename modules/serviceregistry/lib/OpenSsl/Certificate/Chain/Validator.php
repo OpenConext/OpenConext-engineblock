@@ -8,6 +8,9 @@
  */ 
 class OpenSsl_Certificate_Chain_Validator
 {
+    const ERROR_PREFIX = 'OpenSSL: ';
+    const WARNING_PREFIX = 'OpenSSL: ';
+    
     protected $_chain;
 
     protected $_ignoreOnSelfSigned = false;
@@ -19,6 +22,8 @@ class OpenSsl_Certificate_Chain_Validator
     protected $_warnings = array();
 
     protected $_errors = array();
+
+    protected $_trustedRootCertificateAuthorityFile;
 
     public function __construct(OpenSsl_Certificate_Chain $chain)
     {
@@ -37,9 +42,38 @@ class OpenSsl_Certificate_Chain_Validator
         return $this;
     }
 
+    public function setTrustedRootCertificateAuthorityFile($file)
+    {
+        $this->_trustedRootCertificateAuthorityFile = $file;
+        return $this;
+    }
+
     public function validate()
     {
+        $this->_validateSequence();
         $this->_validateWithOpenSsl();
+    }
+
+    protected function _validateSequence()
+    {
+        $chainCertificates = $this->_chain->getCertificates();
+
+        $certificate = array_shift($chainCertificates);
+        $count = 1;
+
+        $prevIssuer = $certificate->getIssuerDn();
+
+        while(!empty($chainCertificates)) {
+            $certificate = array_shift($chainCertificates);
+            $count++;
+
+            $subjectDn = $certificate->getSubjectDn();
+            if ($prevIssuer !== $subjectDn) {
+                $this->_valid = false;
+                $this->_errors[] = "Problem in chain, certificate $count ($subjectDn) does not match the expected issuer ($prevIssuer)";
+            }
+            $prevIssuer = $certificate->getIssuerDn();
+        }
     }
 
     protected function _validateWithOpenSsl()
@@ -52,23 +86,26 @@ class OpenSsl_Certificate_Chain_Validator
         }
 
         $command = new OpenSSL_Command_Verify();
+        if (isset($this->_trustedRootCertificateAuthorityFile)) {
+            $command->setCertificateAuthorityFile($this->_trustedRootCertificateAuthorityFile);
+        }
         $command->execute($chainPems)->getOutput();
 
         $results = $command->getParsedResults();
         
-        $this->_isValid = $results['valid'];
+        $this->_valid = $results['valid'];
         foreach ($results['errors'] as $openSslErrorCode => $openSslError) {
             if ($openSslErrorCode === OPENSSL_X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT) {
                 if ($this->_ignoreOnSelfSigned) {
                     continue;
                 }
                 else if ($this->_warnOnSelfSigned) {
-                    $this->_warnings[] = 'OpenSSL: ' . $openSslError['description'];
+                    $this->_warnings[] = self::WARNING_PREFIX . $openSslError['description'];
                     continue;
                 }
             }
 
-            $this->_errors[] = 'OpenSSL: ' . $openSslError['description'];
+            $this->_errors[] = self::ERROR_PREFIX . $openSslError['description'];
         }
     }
 

@@ -337,6 +337,14 @@ class OpenSsl_Command_Verify extends Shell_Command_Abstract
         ),
     );
 
+    protected $_certificateAuthorityFile;
+
+    public function setCertificateAuthorityFile($file)
+    {
+        $this->_certificateAuthorityFile = $file;
+        return $this;
+    }
+
     protected function _buildCommand()
     {
         return self::COMMAND;

@@ -8,12 +8,12 @@
  */ 
 class OpenSsl_Url
 {
-    const HTTP_PORT = 80;
-    const HTTP_CONNECTION_TIMEOUT = 30;
-    const HTTP_SUCCESS_CODE = 200;
-
     protected $_url;
     protected $_parsed;
+    protected $_trustedRootCertificateAuthorityFile;
+
+    protected $_serverCertificatePem;
+    protected $_serverCertificateChainPem;
 
     /**
      * @var OpenSsl_Command_SClient
@@ -25,13 +25,24 @@ class OpenSsl_Url
         $this->_url     = $url;
         $this->_parsed  = parse_url($url);
         if (!$this->_parsed) {
-            throw new Exception("Url '$url' is not a valid URL");
+            throw new OpenSsl_Url_UnparsableUrlException("Url '$url' is not a valid URL");
         }
     }
 
-    public function getHost()
+    public function setTrustedRootCertificateAuthorityFile($file)
+    {
+        $this->_trustedRootCertificateAuthorityFile = $file;
+        return $this;
+    }
+
+    public function getHostName()
     {
         return $this->_parsed['host'];
+    }
+
+    public function getUrl()
+    {
+        return $this->_url;
     }
 
     public function isHttps()
@@ -41,15 +52,19 @@ class OpenSsl_Url
 
     public function connect()
     {
-        $sslClientcommand = new OpenSsl_Command_SClient();
-        $sslClientcommand->setConnectTo($this->_parsed['host']);
-        $sslClientcommand->execute();
-        $this->_connection = $sslClientcommand;
+        $command = new OpenSsl_Command_SClient();
+        $command->setConnectTo($this->_parsed['host']);
+        $command->setShowCerts(true);
+        if (isset($this->_trustedRootCertificateAuthorityFile)) {
+            $command->setCertificateAuthorityFile($this->_trustedRootCertificateAuthorityFile);
+        }
+        $command->execute();
+        $this->_connection = $command;
 
-        return ($sslClientcommand->getExitStatus() === 0);
+        return ($command->getExitStatus() === 0);
     }
 
-    public function getCertificate()
+    public function getServerCertificate()
     {
         if (!$this->_connection) {
             $this->connect();
@@ -60,5 +75,64 @@ class OpenSsl_Url
         $pem = $x509Command->getOutput();
 
         return new OpenSsl_Certificate($pem);
+    }
+
+    public function getServerCertificateChain()
+    {
+        $blocks = explode("\n---\n", $this->_connection->getOutput());
+        $certificateOutput = $blocks[1];
+
+        $certificatesFound = OpenSsl_Certificate_Utility::getCertificatesFromText($certificateOutput);
+        return OpenSsl_Certificate_Chain_Factory::createFromCertificates($certificatesFound);
+    }
+
+    public function isCertificateValidForUrlHostname()
+    {
+        $urlCertificate = $this->getServerCertificate();
+
+        $urlHost = $this->getHostName();
+        $validHostNames = $urlCertificate->getValidHostNames();
+
+        foreach ($validHostNames as $hostName) {
+            if ($this->_doesHostnameMatchPattern($urlHost, $hostName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Match patterns from certificates like:
+     * test.example.com
+     * or
+     * *.test.example.com
+     *
+     * @param string $hostname
+     * @param string $pattern
+     * @return bool
+     */
+    protected function _doesHostnameMatchPattern($hostname, $pattern)
+    {
+        if ($hostname === $pattern) {
+            return true; // Exact match
+        }
+
+        if (!substr($pattern, 0, 2)==='*.') {
+            return false; // Not an exact match, not a wildcard pattern, so no match...
+        }
+
+        $pattern = substr($pattern, 2);
+
+        if ($hostname === $pattern) {
+            return true; // Exact match for pattern root, eg *.example.com also matches example.com
+        }
+
+        // Remove sub-domain
+        $hostname = substr($hostname, strpos($hostname, '.') + 1);
+        if ($hostname === $pattern) {
+            return true;
+        }
+
+        return false;
     }
 }

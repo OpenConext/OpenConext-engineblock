@@ -1,10 +1,13 @@
 <?php
 
-define('DAY_IN_SECONDS', 86400);
 ini_set('display_errors', true);
 require '_includes.php';
 
+$srConfig = SimpleSAML_Configuration::getConfig('module_serviceregistry.php');
+$rootCertificatesFile = $srConfig->getString('ca_bundle_file');
+
 $server = new EntityCertificateServer();
+$server->setTrustedRootCertificateAuthoritiesFile($rootCertificatesFile);
 $server->serve($_GET['eid']);
 
 class EntityCertificateServer
@@ -21,17 +24,16 @@ class EntityCertificateServer
      */
     protected $_certificateChain;
 
-    protected $_certificateExpiryWarningDays = 30;
+    protected $_trustedRootCertificateAuthoritiesFile;
     
     public function __construct()
     {
         $this->_initializeResponse();
     }
 
-    public function setCertificateExpiryWarningDays($days)
+    public function setTrustedRootCertificateAuthoritiesFile($file)
     {
-        $this->_certificateExpiryWarningDays = $days;
-        return $this;
+        $this->_trustedRootCertificateAuthoritiesFile = $file;
     }
 
     protected function _initializeResponse()
@@ -45,8 +47,6 @@ class EntityCertificateServer
     
     public function serve($entityId)
     {
-        OpenSsl_Certificate_Chain_Factory::loadRootCertificatesFromFile('/etc/pki/tls/certs/ca-bundle.pem');
-        
         if (!$this->_loadEntityCertificate($entityId)) {
             return $this->_sendResponse();
         }
@@ -75,23 +75,22 @@ class EntityCertificateServer
 
     protected function _checkCertificateValidity()
     {
-        if ($this->_certificate->getValidFromUnixTime() > time()) {
-            $this->_response->Errors[] = "Entity certificate is not yet valid";
-        }
-        if ($this->_certificate->getValidUntilUnixTime() < time()) {
-            $this->_response->Errors[] = "Entity certificate has expired";
-        }
+        $validator = new OpenSsl_Certificate_Validator($this->_certificate);
+        $validator->setIgnoreSelfSigned(true);
+        $validator->validate();
 
-        // Check if the certificate is still valid in x days, add a warning if it is not
-        $entityMetadataMinimumValidityUnixTime = time() + ($this->_certificateExpiryWarningDays * DAY_IN_SECONDS);
-        if (!$this->_certificate->getValidUntilUnixTime() > $entityMetadataMinimumValidityUnixTime) {
-            $this->_response->Warnings[] = "Entity certificate will expire in less than {$this->_certificateExpiryWarningDays} days";
-        }
+        $this->_response->Warnings = array_merge($this->_response->Warnings, $validator->getWarnings());
+        $this->_response->Errors   = array_merge($this->_response->Errors,   $validator->getErrors());
     }
 
     protected function _loadCertificateChain()
     {
-        $this->_certificateChain = OpenSsl_Certificate_Chain_Factory::create($this->_certificate);
+        if (isset($this->_trustedRootCertificateAuthoritiesFile)) {
+            OpenSsl_Certificate_Chain_Factory::loadRootCertificatesFromFile(
+                $this->_trustedRootCertificateAuthoritiesFile
+            );
+        }
+        $this->_certificateChain = OpenSsl_Certificate_Chain_Factory::createFromCertificateIssuerUrl($this->_certificate);
         $certificates = $this->_certificateChain->getCertificates();
         foreach ($certificates as $certificate) {
             $certificateSubject = $certificate->getSubject();
@@ -123,6 +122,9 @@ class EntityCertificateServer
     {
         $validator = new OpenSsl_Certificate_Chain_Validator($this->_certificateChain);
         $validator->setIgnoreSelfSigned(true);
+        if (isset($this->_trustedRootCertificateAuthoritiesFile)) {
+            $validator->setTrustedRootCertificateAuthorityFile($this->_trustedRootCertificateAuthoritiesFile);
+        }
         $validator->validate();
 
         $this->_response->Warnings = array_merge($this->_response->Warnings, $validator->getWarnings());

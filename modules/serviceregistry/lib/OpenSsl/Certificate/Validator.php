@@ -3,11 +3,16 @@
  *
  */
 
+define('DAY_IN_SECONDS', 86400);
+
 /**
  *
  */
 class OpenSsl_Certificate_Validator
 {
+    const ERROR_PREFIX      = 'OpenSSL: ';
+    const WARNING_PREFIX    = 'OpenSSL: ';
+
     /**
      * @var sspmod_serviceregistry_Certificate
      */
@@ -23,6 +28,8 @@ class OpenSsl_Certificate_Validator
      */
     protected $_errors = array();
 
+    protected $_certificateExpiryWarningDays = 30;
+
     /**
      * @var bool
      */
@@ -37,6 +44,8 @@ class OpenSsl_Certificate_Validator
      * @var bool
      */
     protected $_isValid;
+
+    protected $_trustedRootCertificateAuthorityFile;
 
     public function __construct(OpenSsl_Certificate $certificate)
     {
@@ -55,32 +64,65 @@ class OpenSsl_Certificate_Validator
         return $this;
     }
 
+    public function setTrustedRootCertificateAuthorityFile($file)
+    {
+        $this->_trustedRootCertificateAuthorityFile = $file;
+        return $this;
+    }
+
+    public function setCertificateExpiryWarningDays($days)
+    {
+        $this->_certificateExpiryWarningDays = $days;
+        return $this;
+    }
+
     public function validate()
     {
+        $this->_validateExpiry();
         $this->_validateWithOpenSsl();
 
         return $this->_isValid;
+    }
+    
+    protected function _validateExpiry()
+    {
+        if ($this->_certificate->getValidFromUnixTime() > time()) {
+            $this->_errors[] = "Entity certificate is not yet valid";
+        }
+        if ($this->_certificate->getValidUntilUnixTime() < time()) {
+            $this->_errors[] = "Entity certificate has expired";
+        }
+
+        // Check if the certificate is still valid in x days, add a warning if it is not
+        $entityMetadataMinimumValidityUnixTime = time() + ($this->_certificateExpiryWarningDays * DAY_IN_SECONDS);
+        if (!$this->_certificate->getValidUntilUnixTime() > $entityMetadataMinimumValidityUnixTime) {
+            $this->_warnings[] = "Entity certificate will expire in less than {$this->_certificateExpiryWarningDays} days";
+        }
     }
 
     protected function _validateWithOpenSsl()
     {
         $command = new OpenSSL_Command_Verify();
+        if (isset($this->_trustedRootCertificateAuthorityFile)) {
+            $command->setCertificateAuthorityFile($this->_trustedRootCertificateAuthorityFile);
+        }
         $command->execute($this->_certificate->getPem());
         $results = $command->getParsedResults();
         
         $this->_isValid = $results['valid'];
+
         foreach ($results['errors'] as $openSslErrorCode => $openSslError) {
             if ($openSslErrorCode === OPENSSL_X509_V_ERR_DEPTH_ZERO_SELF_SIGNED_CERT) {
                 if ($this->_ignoreOnSelfSigned) {
                     continue;
                 }
                 else if ($this->_warnOnSelfSigned) {
-                    $this->_warnings[] = 'OpenSSL: ' . $openSslError['description'];
+                    $this->_warnings[] = self::WARNING_PREFIX . $openSslError['description'];
                     continue;
                 }
             }
 
-            $this->_errors[] = 'OpenSSL: ' . $openSslError['description'];
+            $this->_errors[] = self::ERROR_PREFIX . $openSslError['description'];
         }
     }
 

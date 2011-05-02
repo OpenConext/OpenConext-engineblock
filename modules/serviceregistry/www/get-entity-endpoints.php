@@ -5,20 +5,35 @@
 ini_set('display_errors', true);
 require '_includes.php';
 
+$srConfig = SimpleSAML_Configuration::getConfig('module_serviceregistry.php');
+$rootCertificatesFile = $srConfig->getString('ca_bundle_file');
+
 $server = new EntityEndpointsServer();
+$server->setTrustedRootCertificateAuthoritiesFile($rootCertificatesFile);
 $server->serve($_GET['eid']);
 
 class EntityEndpointsServer
 {
     protected $_response;
 
-    protected $_endpointMetadataFields = array('SingleSignOnService', 'AssertionConsumerService', 'SingleLogoutService');
+    protected $_endpointMetadataFields = array(
+        'SingleSignOnService',
+        'AssertionConsumerService',
+        'SingleLogoutService'
+    );
 
     protected $_entityMetadata;
+
+    protected $_trustedRootCertificateAuthoritiesFile;
 
     public function __construct()
     {
         $this->_initializeResponse();
+    }
+
+    public function setTrustedRootCertificateAuthoritiesFile($file)
+    {
+        $this->_trustedRootCertificateAuthoritiesFile = $file;
     }
 
     protected function _initializeResponse()
@@ -39,7 +54,11 @@ class EntityEndpointsServer
 
     public function serve($entityId)
     {
-        OpenSsl_Certificate_Chain_Factory::loadRootCertificatesFromFile('/etc/pki/tls/certs/ca-bundle.pem');
+        if (isset($this->_trustedRootCertificateAuthoritiesFile)) {
+            OpenSsl_Certificate_Chain_Factory::loadRootCertificatesFromFile(
+                $this->_trustedRootCertificateAuthoritiesFile
+            );
+        }
         
         $this->_loadEntityMetadata($entityId);
 
@@ -67,47 +86,34 @@ class EntityEndpointsServer
                     $endpointResponse->Url = $binding['Location'];
                 }
 
-                $locationParsed = parse_url($binding['Location']);
-                if (!$locationParsed) {
+                try {
+                    $sslUrl = new OpenSsl_Url($binding['Location']);
+                }
+                catch (Exception $e) {
                     $endpointResponse->Errors[] = "Endpoint is not a valid URL";
                     return $this->_sendResponse();
                 }
 
-                if (strtolower($locationParsed['scheme'])!=='https') {
+                if (!$sslUrl->isHttps()) {
                     $endpointResponse->Errors[] = "Endpoint is not HTTPS";
                     return $this->_sendResponse();
                 }
 
-                $sslUrl = new OpenSsl_Url($binding['Location']);
+
                 $connectSuccess = $sslUrl->connect();
                 if (!$connectSuccess) {
                     $endpointResponse->Errors[] = "Endpoint is unreachable";
                     return $this->_sendResponse();
                 }
 
-                $urlCertificate = $sslUrl->getCertificate();
 
-                $urlCertificateSubject = $urlCertificate->getSubject();
-                $urlCertificateCn = $urlCertificateSubject['CN'];
-                $urlCertificateAltNames = $urlCertificate->getSubjectAltNames();
-                $urlHost = $sslUrl->getHost();
-
-                $matches = false;;
-                if ($this->_doesHostnameMatchPattern($urlHost, $urlCertificateCn)) {
-                    $matches = true;
-                }
-                foreach ($urlCertificateAltNames as $altName) {
-                    if ($this->_doesHostnameMatchPattern($urlHost, $altName)) {
-                        $matches = true;
-                    }
+                if (!$sslUrl->isCertificateValidForUrlHostname()) {
+                    $urlHostName = $sslUrl->getHostName();
+                    $validHostNames = $sslUrl->getServerCertificate()->getValidHostNames();
+                    $endpointResponse->Errors[] = "Certificate does not match the hostname '$urlHostName' (instead it matches " . implode(', ', $validHostNames) . ")";
                 }
 
-                if (!$matches) {
-                    $matchesHostNames = $urlCertificateCn . (!empty($urlCertificateAltNames)?',' . implode(', ', $urlCertificateAltNames):'');
-                    $endpointResponse->Errors[] = "Certificate does not match the hostname '$urlHost' (instead it matches $matchesHostNames)";
-                }
-
-                $urlChain = OpenSsl_Certificate_Chain_Factory::create($urlCertificate);
+                $urlChain = $sslUrl->getServerCertificateChain();
 
                 $certificates = $urlChain->getCertificates();
                 foreach ($certificates as $certificate) {
@@ -143,42 +149,6 @@ class EntityEndpointsServer
             }
         }
         return $this->_sendResponse();
-    }
-
-
-    /**
-     * Match patterns from certificates like:
-     * test.example.com
-     * or
-     * *.test.example.com
-     *
-     * @param string $hostname
-     * @param string $pattern
-     * @return bool
-     */
-    protected function _doesHostnameMatchPattern($hostname, $pattern)
-    {
-        if ($hostname === $pattern) {
-            return true; // Exact match
-        }
-
-        if (!substr($pattern, 0, 2)==='*.') {
-            return false; // Not an exact match, not a wildcard pattern, so no match...
-        }
-
-        $pattern = substr($pattern, 2);
-
-        if ($hostname === $pattern) {
-            return true; // Exact match for pattern root, eg *.example.com also matches example.com
-        }
-
-        // Remove sub-domain
-        $hostname = substr($hostname, strpos($hostname, '.') + 1);
-        if ($hostname === $pattern) {
-            return true;
-        }
-
-        return false;
     }
 
     protected function _sendResponse()
