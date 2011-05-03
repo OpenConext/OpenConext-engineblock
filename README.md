@@ -11,7 +11,7 @@ Requirements
 ------------
 * Apache with modules:
 ** mod_php
-* PHP 5.2.x with modules:
+* PHP 5.3.x with modules:
 ** memcache
 ** ldap
 ** libxml
