@@ -4,7 +4,6 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
 {
     public function handleAction($actionName, $arguments)
     {
-        $this->setNoRender();
         return parent::handleAction($actionName, $arguments);
     }
     
@@ -14,19 +13,20 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
     
     public function metadataAction()
     {
+        $this->setNoRender();
+
         $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
         $entityId = $request->getQueryParameter("entityid");
         $gadgetUrl = $request->getQueryParameter('gadgeturl');
 
-        if (!$entityId && $gadgetUrl) {
+        // If we were only handed a gadget url, no entity id, lookup the Service Provider entity id
+        if ($gadgetUrl && !$entityId) {
             $identifiers = $this->_getRegistry()->findIdentifiersByMetadata('coin:gadgetbaseurl', $gadgetUrl);
             if (count($identifiers) > 1) {
-                throw new EngineBlock_Exception('Multiple identifiers found for gadgetbaseurl');
-                EngineBlock_ApplicationSingleton::getInstance()->getLog()->warn(
+                eblog()->warn(
                     "Multiple identifiers found for gadgetbaseurl: '$gadgetUrl'"
                 );
-                echo json_encode(new stdClass());
-                return;
+                throw new EngineBlock_Exception('Multiple identifiers found for gadgetbaseurl');
             }
 
             if (count($identifiers)===0) {
@@ -39,7 +39,8 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
 
             $entityId = $identifiers[0];
         }
-        else if (!$entityId) {
+
+        if (!$entityId) {
             throw new EngineBlock_Exception('No entity id provided to get metadata for?!');
         }
 
@@ -48,7 +49,8 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
         } else {
             $result = $this->_getRegistry()->getMetadata($entityId);
         }
-       
+
+        header('Content-Type: application/json');
         echo json_encode($result);   
     }
     
