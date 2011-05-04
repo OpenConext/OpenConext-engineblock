@@ -138,9 +138,12 @@ class EngineBlock_ApplicationSingleton
     {
         $this->_bootstrapAutoLoading();
 
+        $this->_setEnvironmentIdByEnvironment();
+
         $this->_bootstrapConfiguration();
 
-        $this->_setEnvironmentId();
+        $this->_setEnvironmentIdByDetection();
+
         $this->_bootstrapEnvironmentConfiguration();
 
         $this->_bootstrapPhpSettings();
@@ -151,17 +154,23 @@ class EngineBlock_ApplicationSingleton
         return $this;
     }
 
-    protected function _setEnvironmentId()
+    protected function _setEnvironmentIdByEnvironment()
     {
         // Get from predefined constant
         if (defined('ENGINEBLOCK_ENV')) {
             $this->_applicationEnvironmentId = ENGINEBLOCK_ENV;
-            return;
         }
         // Get from environment variable (from Apache or the shell)
-        if (getenv('ENGINEBLOCK_ENV')) {
+        else if (getenv('ENGINEBLOCK_ENV')) {
             $this->_applicationEnvironmentId = getenv('ENGINEBLOCK_ENV');
             define('ENGINEBLOCK_ENV', $this->_applicationEnvironmentId);
+        }
+    }
+
+    protected function _setEnvironmentIdByDetection()
+    {
+        if (isset($this->_applicationEnvironmentId)) {
+            // Detection not required.
             return;
         }
 
@@ -223,13 +232,12 @@ class EngineBlock_ApplicationSingleton
 
     protected function _buildTempConfigFile()
     {
-        $configFilePattern = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILEPATTERN;
+        $configFiles = $this->_getConfigFiles();
 
-        $configFiles = glob($configFilePattern);
-        if (empty($configFiles)) {
-            throw new EngineBlock_Exception("Configuration files for pattern '$configFilePattern do not exist!'");
-        }
-
+        // Sort config files by number of parts
+        // so prod, dev.coin, dev, dev.coin.new will be sorted as:
+        // dev, dev.coin, dev.coin.new, prod
+        // For easier debugging.
         usort($configFiles, array($this, '_sortConfigFilesByNumberOfParts'));
 
         $configFileContents = "";
@@ -243,6 +251,45 @@ class EngineBlock_ApplicationSingleton
             file_put_contents($tempConfigFile, $configFileContents);
         }
         return $tempConfigFile;
+    }
+
+    /**
+     * Get a list of all configuration files required.
+     *
+     * Because Zend_Config is slow with parsing to it's internal structure
+     * (performance tests showed it takes 20% of the total time if it has to parse all configuration files)
+     * we check if we have an explicit environment id yet (from the environment) if so, then we ignore all other
+     * environments, if not then we have to include everything for auto-detection of environments.
+     *
+     * @return array
+     */
+    protected function _getConfigFiles()
+    {
+        if (isset($this->_applicationEnvironmentId)) {
+            return $this->_getConfigFilesForEnvironment();
+        }
+        else {
+            return $this->_getConfigFilesForAll();
+        }
+    }
+
+    protected function _getConfigFilesForEnvironment()
+    {
+        return array(
+            ENGINEBLOCK_FOLDER_APPLICATION . 'configs/application.ini',
+            ENGINEBLOCK_FOLDER_APPLICATION . "configs/application.{$this->_applicationEnvironmentId}.ini",
+        );
+    }
+
+    protected function _getConfigFilesForAll()
+    {
+        $configFilePattern = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILEPATTERN;
+
+        $configFiles = glob($configFilePattern);
+        if (empty($configFiles)) {
+            throw new EngineBlock_Exception("Configuration files for pattern '$configFilePattern do not exist!'");
+        }
+        return $configFiles;
     }
 
     protected function _sortConfigFilesByNumberOfParts($a, $b)
@@ -318,12 +365,13 @@ class EngineBlock_ApplicationSingleton
     {
         if (!(error_reporting() & $errorNumber)) {
             // This error code is not included in error_reporting
-            return;
+            // Execute PHP internal error handler
+            return false;
         }
 
         $this->reportError(new Exception($errorMesage . " [$errorFile:$errorLine]", $errorNumber));
 
-        /* Execute PHP internal error handler */
+        // Execute PHP internal error handler
         return false;
     }
 
