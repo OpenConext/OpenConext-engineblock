@@ -138,7 +138,7 @@ var Discover = function() {
                 if (idp['Access'] == 0) {
                     //TODO implemented action on no access
                 } else {
-                    $('#Idp').attr('value', decodeURIComponent(idp['EntityId']));
+                    $('#Idp').attr('value', encodeURIComponent(idp['EntityId']));
                     $('#IdpListForm').submit();
                 }                
             });
