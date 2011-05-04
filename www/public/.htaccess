@@ -1,5 +1,3 @@
-SetEnv ENGINEBLOCK_ENV production
-
 RewriteEngine On
 
 # If the requested url does not map to a file or directory, then forward it to index.php/URL.
