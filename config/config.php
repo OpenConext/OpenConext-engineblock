@@ -77,7 +77,7 @@ $config = array (
 	 * also as the technical contact in generated metadata.
 	 */
 	'technicalcontact_name'     => 'SURFconext Beheer',
-	'technicalcontact_email'    => 'boy@ibuildings.nl',
+	'technicalcontact_email'    => 'boy@ibuildings.nl,coin-beheer@surfnet.nl',
 
 	/*
 	 * The timezone of the server. This option should be set to the timezone you want
