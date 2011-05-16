@@ -191,17 +191,22 @@ var Discover = function() {
             filter = filter.toLowerCase();
 
             // filter idps based on keywords
-            for (var idp in this.idpList) {
+            for ( var idp in this.idpList) {
+                var inKeywords = false;
                 if (this.idpList[idp].hasOwnProperty('Keywords')) {
-                    var inKeywords = false;
-                    for (var keyword in this.idpList[idp]['Keywords']) {
+                    for ( var keyword in this.idpList[idp]['Keywords']) {
                         if (this.idpList[idp]['Keywords'][keyword].toLowerCase().indexOf(filter) >= 0) {
                             inKeywords = true;
                         }
                     }
-                    if (inKeywords) {
-                        filteredResults.push(this.idpList[idp]);
+                // No keywords present, filter based on IdP Name
+                } else {
+                    if (this.idpList[idp].hasOwnProperty('Name') && this.idpList[idp]['Name'].toLowerCase().indexOf(filter) >= 0) {
+                        inKeywords = true;
                     }
+                }
+                if (inKeywords) {
+                    filteredResults.push(this.idpList[idp]);
                 }
             }
             return filteredResults;
