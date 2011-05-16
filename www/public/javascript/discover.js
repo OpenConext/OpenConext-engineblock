@@ -188,6 +188,8 @@ var Discover = function() {
                 return this.idpList;
             }
 
+            filter = filter.toLowerCase();
+
             // filter idps based on keywords
             for (var idp in this.idpList) {
                 if (this.idpList[idp].hasOwnProperty('Keywords')) {
