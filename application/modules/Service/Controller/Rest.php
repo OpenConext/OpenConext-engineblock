@@ -16,7 +16,7 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
         $this->setNoRender();
 
         $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
-        $entityId = $request->getQueryParameter("entityid");
+        $entityId  = $request->getQueryParameter("entityid");
         $gadgetUrl = $request->getQueryParameter('gadgeturl');
 
         // If we were only handed a gadget url, no entity id, lookup the Service Provider entity id
@@ -51,9 +51,46 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
         }
 
         header('Content-Type: application/json');
-        echo json_encode($result);   
+        echo json_encode($result);
     }
-    
+
+    /**
+     * Get all ServiceProviders
+     *
+     * Optionally:
+     * - Specify desired keys (defaults to 'all'): &keys=all or keys=name:en,name:nl
+     * - Specify required metadata keys (defaults to no required fields),
+     *   example: &required=name:nl,coin:oauth:secret
+     */
+    public function spAction()
+    {
+        $this->setNoRender();
+        
+        if (isset($_REQUEST["keys"])) {
+            $serviceProviders = $this->_getRegistry()->getSpList(explode(",",$_REQUEST["keys"]));
+        } else {
+            $serviceProviders = $this->_getRegistry()->getSpList();
+        }
+
+        if (isset($_REQUEST['required'])) {
+            $requiredKeys = explode(",",$_REQUEST["required"]);
+            foreach ($serviceProviders as $entityId => $serviceProvider) {
+                foreach ($requiredKeys as $requiredKey) {
+                    if (!isset($serviceProvider[$requiredKey])) {
+                        unset($serviceProviders[$entityId]);
+                        break;
+                    }
+                }
+            }
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($serviceProviders);
+    }
+
+    /**
+     * @return EngineBlock_ServiceRegistry_Client
+     */
     protected function _getRegistry()
     {
         return new EngineBlock_ServiceRegistry_CacheProxy();
