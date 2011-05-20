@@ -519,28 +519,40 @@ $config = array(
             'default' => 'HMAC_SYMMETRIC',
             'default_allow' => true,
         ),
-        'coin:oauth:app_title' => array(
+        'coin:oauth:public_key' => array(
             'type' => 'text',
             'order' => 194,
+            'default' => '',
+            'default_allow' => true,
+        ),
+        'coin:oauth:app_title' => array(
+            'type' => 'text',
+            'order' => 195,
             'default' => 'Application Title',
             'default_allow' => true,
         ),
         'coin:oauth:app_description' => array(
             'type' => 'text',
-            'order' => 195,
+            'order' => 196,
             'default' => 'description',
             'default_allow' => true,
         ),  
         'coin:oauth:app_thumbnail' => array(
             'type' => 'text',
-            'order' => 196,
+            'order' => 197,
             'default' => 'http://www.surfnet.nl/thumb.png',
             'default_allow' => true,
         ),
         'coin:oauth:app_icon' => array(
             'type' => 'text',
-            'order' => 197,
+            'order' => 198,
             'default' => 'http://www.surfnet.nl/icon.gif',
+            'default_allow' => true,
+        ),
+        'coin:oauth:callback_url' => array(
+            'type' => 'text',
+            'order' => 199,
+            'default' => '',
             'default_allow' => true,
         ),
         // Certificate fields
