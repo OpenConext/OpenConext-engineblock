@@ -123,9 +123,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             $cortoEntity['WantsAssertionsSigned'] = true;
 
             // Only for SPs
-
             if (isset($serviceRegistryEntity['coin']['expects_oids']) && $serviceRegistryEntity['coin']['expects_oids']) {
-                $serviceRegistryEntity['ExpectsOids'] = true;
+                $cortoEntity['ExpectsOids'] = true;
             }
         }
         if (isset($serviceRegistryEntity['SingleSignOnService'][0]['Location'])) {

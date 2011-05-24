@@ -458,7 +458,7 @@ class EngineBlock_Corto_Adapter
             '__v'              => $subjectId
         );
 
-        $responseAttributes = $this->_mapUrnsToOids($responseAttributes, $idpEntityMetadata);
+        $responseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
     }
 
     protected function _addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata)
