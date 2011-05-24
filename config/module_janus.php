@@ -231,6 +231,7 @@ $config = array(
             'default' => 'All',
             'required' => false,
         ),
+        
         // Certificate fields 
         'certData' => array(
             'type' => 'text',
@@ -255,6 +256,7 @@ $config = array(
             'maxsize' => '3 M', // Valid units are B, KB, MB, and GB. The default unit is KB.
             'required' => false,
         ),
+
         // Information fields
         'name:#' => array(
             'type' => 'text',
@@ -291,6 +293,7 @@ $config = array(
             'filetype' => '*.jpg', // *.jpg; *.gif; *.*
             'maxsize' => '100', // Valid units are B, KB, MB, and GB. The default unit is KB.
         ),
+        
         // MDUI stuff
         'logo:#:url'  => array(
             'type' => 'text',
@@ -327,6 +330,7 @@ $config = array(
             'default' => '',
             'supported'=>array('en','nl'),
         ),
+        
         // Contact person fields
         'contacts:#:contactType' => array(
             'type' => 'select',
@@ -371,6 +375,7 @@ $config = array(
             'default_allow' => false,
             'supported' => array(0)
         ),
+        
         // Organization fields
         'OrganizationName:#' => array(
             'type' => 'text',
@@ -394,6 +399,7 @@ $config = array(
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
         ),
+        
         // Control fields
         'redirect.sign' => array(
             'type' => 'boolean',
@@ -491,6 +497,7 @@ $config = array(
             'validate' => 'isurl',
             'supported' => array(0),
         ),
+
         // COIN stuff
         'coin:gadgetbaseurl' => array(
              'type'=>'text',
@@ -555,6 +562,13 @@ $config = array(
             'default' => '',
             'default_allow' => true,
         ),
+        'coin:expects_oids' => array(
+            'type' => 'boolean',
+            'order' => 200,
+            'default' => false,
+            'required' => FALSE,
+        ),
+
         // Certificate fields
         'certData' => array(
             'type' => 'text',
@@ -579,6 +593,7 @@ $config = array(
             'maxsize' => '3 M', // Valid units are B, KB, MB, and GB. The default unit is KB.
             'required' => false,
         ),
+
         // Information fields
         'name:#' => array(
             'type' => 'text',
@@ -614,6 +629,7 @@ $config = array(
             'filetype' => '*.jpg', // *.jpg; *.gif; *.*
             'maxsize' => '100', // Valid units are B, KB, MB, and GB. The default unit is KB.
         ),
+
         // Contact person fields
         'contacts:#:contactType' => array(
             'type' => 'select',
@@ -658,6 +674,7 @@ $config = array(
             'default_allow' => false,
             'supported' => array(0)
         ),
+
         // Organization fields
         'OrganizationName:#' => array(
             'type' => 'text',
@@ -681,6 +698,7 @@ $config = array(
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
         ),
+        
         // Control fields
         'redirect.sign' => array(
             'type' => 'boolean',
