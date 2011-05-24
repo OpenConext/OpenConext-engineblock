@@ -24,16 +24,16 @@
  */
 
 /**
- * See also: https://wiki.surfnetlabs.nl/display/coin2011/DEV-US0108
+ * See also: https://wiki.surfnetlabs.nl/display/coin2011/DEV-US0107
  */
 class EngineBlock_AttributeMapper_Urn2Oid extends EngineBlock_AttributeMapper_Abstract
 {
     protected $_mapping = array(
-        'urn:oid:1.3.6.1.4.1.5923.1.1.1.6'      => 'urn:mace:dir:attribute-def:eduPersonPrincipalName', // Represented as a NameID element, OR as an attribute name/value pair
-        'urn:oid:2.5.4.4'                       => 'urn:mace:dir:attribute-def:sn', // Surname
-        'urn:oid:2.5.4.42'                      => 'urn:mace:dir:attribute-def:givenName', // givenName
-        'urn:oid:2.16.840.1.113730.3.1.241'     => 'urn:mace:dir:attribute-def:displayName', // displayName
-        'urn:oid:0.9.2342.19200300.100.1.3'     => 'urn:mace:dir:attribute-def:mail', //mail
-        'urn:oid:1.3.6.1.4.1.1466.115.121.1.15' => 'urn:mace:terena.org:schac:homeOrganization', //Domain name of the home organization
+        'urn:mace:dir:attribute-def:eduPersonPrincipalName' => 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6', // Represented as a NameID element, OR as an attribute name/value pair
+        'urn:mace:dir:attribute-def:sn'                     => 'urn:oid:2.5.4.4', // Surname
+        'urn:mace:dir:attribute-def:givenName'              => 'urn:oid:2.5.4.42', // givenName
+        'urn:mace:dir:attribute-def:displayName'            => 'urn:oid:2.16.840.1.113730.3.1.241', // displayName
+        'urn:mace:dir:attribute-def:mail'                   => 'urn:oid:0.9.2342.19200300.100.1.3', //mail
+        'urn:mace:terena.org:schac:homeOrganization'        => 'urn:oid:1.3.6.1.4.1.1466.115.121.1.15', //Domain name of the home organization
     );
 }
