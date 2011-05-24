@@ -309,13 +309,21 @@ class EngineBlock_Corto_Adapter
      * Note we have to do everything that relies on the actual idpEntityMetadata here, because in the
      * filterOutputAttributes the idp metadata points to us (Corto / EngineBlock) not the actual idp we received
      * the response from.
-     *
-     * @param  $entityMetaData
-     * @param  $response
-     * @param  $responseAttributes
+     * 
+     * @throws EngineBlock_Exception_ReceivedErrorStatusCode
+     * @param array $response
+     * @param array $responseAttributes
+     * @param array $request
+     * @param array $spEntityMetadata
+     * @param array $idpEntityMetadata
      * @return void
      */
-    public function filterInputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
+    public function filterInputAttributes(array &$response,
+        array &$responseAttributes,
+        array $request,
+        array $spEntityMetadata,
+        array $idpEntityMetadata
+    )
     {
         if ($response['samlp:Status']['samlp:StatusCode']['_Value']!=='urn:oasis:names:tc:SAML:2.0:status:Success') {
             // Idp returned an error
@@ -329,28 +337,84 @@ class EngineBlock_Corto_Adapter
 
         // validate if the IDP sending this response is allowed to connect to the SP that made the request.
         $this->validateSpIdpConnection($spEntityMetadata["EntityId"], $idpEntityMetadata["EntityId"]);
-        
-        // Determine a Virtual Organization context
-        $vo = NULL;
-        
-        // In filter stage we need to take a look at the VO context      
-        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
-            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
-            $this->setVirtualOrganisationContext($vo);            
-        }
-        
+
+        // map oids to URNs
+        $responseAttributes = $this->_mapOidsToUrns($responseAttributes, $idpEntityMetadata);
+
         // Provisioning of the user account
         $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
         $_SESSION['subjectId'] = $subjectId;
-        
+
+        $this->_handleVirtualOrganizationResponse($request, $subjectId);
+
+        $this->_trackLogin($spEntityMetadata['EntityId'], $idpEntityMetadata['EntityId'], $subjectId);
+    }
+
+    public function validateSpIdpConnection($spEntityId, $idpEntityId)
+    {
+        $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
+        if (!$serviceRegistryAdapter->isConnectionAllowed($spEntityId, $idpEntityId)) {
+            throw new EngineBlock_Exception_InvalidConnection(
+                "Received a response from an IDP that is not allowed to connect to the requesting SP"
+            );
+        }
+    }
+
+    protected function _mapOidsToUrns(array $responseAttributes, array $idpEntityMetadata)
+    {
+        $mapper = new EngineBlock_AttributeMapper_Oid2Urn();
+        return $mapper->map($responseAttributes);
+    }
+
+    protected function _provisionUser(array $attributes, $idpEntityMetadata)
+    {
+        return $this->_getProvisioning()->provisionUser($attributes, $idpEntityMetadata);
+    }
+
+    protected function _handleVirtualOrganizationResponse($request, $subjectId)
+    {
+        // Determine a Virtual Organization context
+        $vo = NULL;
+
+        // In filter stage we need to take a look at the VO context
+        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
+            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
+            $this->setVirtualOrganisationContext($vo);
+        }
+
         // If in VO context, validate the user's membership
         if (!is_null($vo)) {
             if (!$this->_validateVOMembership($subjectId, $vo)) {
-                throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");          
+                throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");
             }
         }
+    }
 
-        $this->_trackLogin($spEntityMetadata['EntityId'], $idpEntityMetadata['EntityId'], $subjectId);
+    protected function _trackLogin($spEntityId, $idpEntityId, $subjectId)
+    {
+        $tracker = new EngineBlock_Tracker();
+        $tracker->trackLogin($spEntityId, $idpEntityId, $subjectId);
+    }
+
+    /**
+     * @todo this is pure happy flow
+     *
+     * @param  $subjectIdentifier
+     * @param  $voIdentifier
+     * @return boolean
+     */
+    protected function _validateVOMembership($subjectIdentifier, $voIdentifier)
+    {
+        $voClient = new EngineBlock_VORegistry_Client();
+        $metadata = $voClient->getGroupProviderMetadata($voIdentifier);
+
+        $client = EngineBlock_Groups_Directory::createGroupsClient($metadata["groupprovideridentifier"]);
+
+        if (isset($metadata["groupstem"])) {
+            $client->setGroupStem($metadata["groupstem"]);
+        }
+
+        return $client->isMember($subjectIdentifier, $metadata["groupidentifier"]);
     }
 
     /**
@@ -360,11 +424,19 @@ class EngineBlock_Corto_Adapter
      * response we got from the Idp, after that a NEW response gets created.
      * The filterOutputAttributes actually operates on this NEW response, destined for the SP.
      *
-     * @param  $response
-     * @param  $responseAttributes
+     * @param array $response
+     * @param array $responseAttributes
+     * @param array $request
+     * @param array $spEntityMetadata
+     * @param array $idpEntityMetadata
      * @return void
      */
-    public function filterOutputAttributes(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
+    public function filterOutputAttributes(array &$response,
+        array &$responseAttributes,
+        array $request,
+        array $spEntityMetadata,
+        array $idpEntityMetadata
+    )
     {
         $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
 
@@ -385,38 +457,8 @@ class EngineBlock_Corto_Adapter
             '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             '__v'              => $subjectId
         );
-    }
-    
-    protected function _trackLogin($spEntityId, $idpEntityId, $subjectId)
-    {
-        $tracker = new EngineBlock_Tracker();
-        $tracker->trackLogin($spEntityId, $idpEntityId, $subjectId);
-    }
-    
-    protected function _validateVOMembership($subjectIdentifier, $voIdentifier)
-    {
-        // todo: this is pure happy flow
-        
-        $voClient = new EngineBlock_VORegistry_Client();  
-        $metadata = $voClient->getGroupProviderMetadata($voIdentifier);
-        
-        $client = EngineBlock_Groups_Directory::createGroupsClient($metadata["groupprovideridentifier"]);    
 
-        if (isset($metadata["groupstem"])) {
-            $client->setGroupStem($metadata["groupstem"]);
-        }
-        
-        return $client->isMember($subjectIdentifier, $metadata["groupidentifier"]);
-    }
-    
-    public function validateSpIdpConnection($spEntityId, $idpEntityId)
-    {
-        $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
-        if (!$serviceRegistryAdapter->isConnectionAllowed($spEntityId, $idpEntityId)) {
-            throw new EngineBlock_Exception_InvalidConnection(
-                "Received a response from an IDP that is not allowed to connect to the requesting SP"
-            );
-        }
+        $responseAttributes = $this->_mapUrnsToOids($responseAttributes, $idpEntityMetadata);
     }
 
     protected function _addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata)
@@ -473,9 +515,14 @@ class EngineBlock_Corto_Adapter
         }
     }
 
-    protected function _provisionUser(array $attributes, $idpEntityMetadata)
+    protected function _mapUrnsToOids(array $responseAttributes, array $spEntityMetadata)
     {
-        return $this->_getProvisioning()->provisionUser($attributes, $idpEntityMetadata);
+        if (!isset($spEntityMetadata['ExpectsOids']) || !$spEntityMetadata['ExpectsOids']) {
+            return $responseAttributes;
+        }
+
+        $mapper = new EngineBlock_AttributeMapper_Urn2Oid();
+        return $mapper->map($responseAttributes);
     }
 
     protected function _getRemoteEntities()

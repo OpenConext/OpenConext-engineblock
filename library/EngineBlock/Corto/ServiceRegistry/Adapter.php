@@ -121,6 +121,12 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 'Location' => $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],
             );
             $cortoEntity['WantsAssertionsSigned'] = true;
+
+            // Only for SPs
+
+            if (isset($serviceRegistryEntity['coin']['expects_oids']) && $serviceRegistryEntity['coin']['expects_oids']) {
+                $serviceRegistryEntity['ExpectsOids'] = true;
+            }
         }
         if (isset($serviceRegistryEntity['SingleSignOnService'][0]['Location'])) {
             $cortoEntity['SingleSignOnService'] = array(
@@ -142,9 +148,6 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             );
         }
         if (isset($serviceRegistryEntity['name'])) {
-            if ($serviceRegistryEntity['name']['en']==="EngineBlock Dev Test SP") {
-                throw new Exception('Whoa, cant use this sp man');
-            }
             $cortoEntity['Name'] = $serviceRegistryEntity['name'];
         }
         if (isset($serviceRegistryEntity['description'])) {
