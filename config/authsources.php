@@ -1,5 +1,14 @@
 <?php
 
+$presetIdp = NULL;
+$metadata = array();
+
+// If there is only one IdP (Like only this environments EngineBlock)
+require_once __DIR__ . "/../metadata/saml20-idp-remote.php";
+if (!empty($metadata) && count($metadata) === 1) {
+    $presetIdp = array_shift(array_keys($metadata));
+}
+
 $config = array(
 
 	// This is a authentication source which handles admin authentication.
@@ -22,7 +31,7 @@ $config = array(
 
 		// The entity ID of the IdP this should SP should contact.
 		// Can be NULL/unset, in which case the user will be shown a list of available IdPs.
-		'idp' => NULL,
+		'idp' => $presetIdp,
 
 		// The URL to the discovery service.
 		// Can be NULL/unset, in which case a builtin discovery service will be used.
