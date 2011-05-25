@@ -347,7 +347,7 @@ class EngineBlock_Corto_Adapter
 
         $this->_handleVirtualOrganizationResponse($request, $subjectId);
 
-        $this->_trackLogin($spEntityMetadata['EntityId'], $idpEntityMetadata['EntityId'], $subjectId);
+        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
     }
 
     public function validateSpIdpConnection($spEntityId, $idpEntityId)
