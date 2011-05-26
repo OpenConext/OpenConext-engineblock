@@ -50,6 +50,8 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
         
         // Shindig expects urls to be moiunted on /social/rest so we enforce that.
         $_SERVER['REQUEST_URI'] = '/social/rest/' . $url;
+        // We only support JSON
+        $_SERVER['CONTENT_TYPE'] = 'application/json';
         
         // Shindig wants a security token, but interface F in coin is auth-less so we fake one.
         $_REQUEST["st"] = $_GET["st"] = $_POST["st"] = "o:v:a:d:u:m:c";
