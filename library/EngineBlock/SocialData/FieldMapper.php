@@ -38,6 +38,7 @@ class EngineBlock_SocialData_FieldMapper
      */
     protected $_l2oMap = array(
         "collabpersonid"            => "id" ,
+        'collabpersonisguest'       => 'person.tags',
         'uid'                       =>  array(
                                         'account.username',
                                         'account.userId',
@@ -55,22 +56,6 @@ class EngineBlock_SocialData_FieldMapper
         'nledupersonorgunit'        => 'organizations.department',
         'edupersonaffiliation'      => 'organizations.title',
     );
-
-/**
- * schacHomeOrganization:uid 	 id
-uid 	account.username
-sn 	name.familyName
-givenName 	name.givenName
-cn 	name.formatted
-uid 	account.userId
-displayName 	displayName
-mail 	emails
-preferredLanguage
-schacHomeOrganization 	organizations.name
-schacHomeOrganizationType 	organizations.type
-nlEduPersonOrgUnit 	organizations.department
-eduPersonAffiliation 	organizations.title
- */
     
     /**
      * Mapping of open social field names to COIN ldap keys
@@ -146,8 +131,8 @@ eduPersonAffiliation 	organizations.title
                     $result[] = $this->_o2lMap[$socialAttribute];
                 }
             } else {
-                // We have no mapping for this social field, use the key as-is (useful if userregistry contains
-                // custom stuff)
+                // We have no mapping for this social field, use the key as-is
+                // (useful if userregistry contains custom stuff)
                 if (!in_array($socialAttribute, $result)) {
                     $result[] = $socialAttribute;
                 }
@@ -157,13 +142,13 @@ eduPersonAffiliation 	organizations.title
     }
 
     /**
-     * Convert a COIN ldap record to an opensocial record.
+     * Convert a COIN ldap record to an OpenSocial record.
      * 
-     * This method creates an opensocial record based on a COIN ldap record.
+     * This method creates an OpenSocial record based on a COIN ldap record.
      * Mind you that the number of keys in the input and in the output might
-     * be different, since the mapper can construct multiple opensocial
+     * be different, since the mapper can construct multiple OpenSocial
      * fields based on single values in coin ldap (eg displayname in ldap is
-     * used for both displayname and nickname in opensocial.
+     * used for both displayname and nickname in OpenSocial.
      * 
      * The method has awareness of which fields in open social are single
      * and which are multivalue, and will make sure that in the return value
@@ -176,51 +161,36 @@ eduPersonAffiliation 	organizations.title
      *  
      * @param array $data The record to convert. Keys should be ldap 
      *                    attributes.
-     * @param array $socialAttributes The list of social attributes that you are
-     *                     interested in. If omited or empty array, will try
+     * @param array $requestedAttributes The list of social attributes that you are
+     *                     interested in. If omitted or empty array, will try
      *                     to get all fields.
      * @return array An array containing social key/value pairs                  
      */
-    public function ldapToSocialData($data, $socialAttributes = array())
+    public function ldapToSocialData($data, $requestedAttributes = array())
     {
         $result = array();
-        if (count($socialAttributes)) {
-            foreach ($socialAttributes as $socialAttribute) {
-                if (isset($this->_o2lMap[$socialAttribute])) {
-                    $ldapAttribute = $this->_o2lMap[$socialAttribute];
-                    if (isset($data[$ldapAttribute])) {
-                        $result = $this->_addMultiDimensionalOpenSocialAttribute(
-                            $result,
-                            $socialAttribute,
-                            $this->_pack($data[$ldapAttribute], $socialAttribute)
-                        );
-                    } else {    // if there's no opensocial equivalent for this field
-                    // assume this is stuff we're not allowed to share
-                    // so do not include it in the result.
+        foreach ($data as $ldapAttribute => $value) {
+            if (isset($this->_l2oMap[$ldapAttribute])) {
+                $socialAttributes = (array)$this->_l2oMap[$ldapAttribute];
+                foreach ($socialAttributes as $socialAttribute) {
+                    if (!empty($requestedAttributes) && !in_array($socialAttribute, $requestedAttributes)) {
+                        continue; // Did not request this attribute, skip it.
                     }
-                }
-            }
-        } else {
-            foreach ($data as $ldapAttribute => $value) {
-                if (isset($this->_l2oMap[$ldapAttribute])) {
-                    if (is_array($this->_l2oMap[$ldapAttribute])) {
-                        foreach ($this->_l2oMap[$ldapAttribute] as $socialAttribute) {
-                            $result = $this->_addMultiDimensionalOpenSocialAttribute(
-                                $result,
-                                $socialAttribute,
-                                $this->_pack($value, $socialAttribute)
-                            );
-                        }
-                    } else {
-                        $socialAttribute = $this->_l2oMap[$ldapAttribute];
+
+                    $converterMethod = 'convertLdap' . $ldapAttribute;
+                    if (method_exists($this, $converterMethod)) {
+                        $result = $this->$converterMethod($result, $value);
+                    }
+                    else {
                         $result = $this->_addMultiDimensionalOpenSocialAttribute(
                             $result,
                             $socialAttribute,
                             $this->_pack($value, $socialAttribute)
                         );
                     }
-                } else {    // ignore value
                 }
+            }
+            else { // ignore value
             }
         }
         return $result;
@@ -282,24 +252,29 @@ eduPersonAffiliation 	organizations.title
      * @param mixed $value A single value or an array of values
      * @param String $socialAttributes The name of the social attribute that $value
      *                           is representing.
+     * @return mixed
      */
     protected function _pack($value, $socialAttributes)
     {
         if (in_array($socialAttributes, $this->_oMultiValueAttributes)) {
-            if (is_array($value)) {
-                return $value;
-            } else {
-                return array(
-                    
-                    $value
-                );
-            }
+            return (array)$value;
         } else {
             if (is_array($value)) {
-                return $value[0];
+                return array_shift($value);
             } else {
                 return $value;
             }
         }
+    }
+
+    public function convertLdapCollabPersonIsGuest($result, $collabPersonIsGuest)
+    {
+        if ($collabPersonIsGuest) {
+            $result['tags'][] = 'guest';
+        }
+        else {
+            $result['tags'][] = 'member';
+        }
+        return $result;
     }
 }

@@ -341,6 +341,9 @@ class EngineBlock_Corto_Adapter
         // map oids to URNs
         $responseAttributes = $this->_mapOidsToUrns($responseAttributes, $idpEntityMetadata);
 
+        // Is a guest user?
+        $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
+
         // Provisioning of the user account
         $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
         $_SESSION['subjectId'] = $subjectId;
@@ -438,8 +441,6 @@ class EngineBlock_Corto_Adapter
         array $idpEntityMetadata
     )
     {
-        $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
-
         $subjectId = $_SESSION['subjectId'];
 
         // Attribute Aggregation
@@ -469,11 +470,12 @@ class EngineBlock_Corto_Adapter
         }
 
         switch ($idpEntityMetadata['GuestQualifier']) {
-            case 'All':
+            case 'None':
                 $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
-                    0 => 'guest',
+                    0 => 'member',
                 );
                 return $responseAttributes;
+
             case 'Some':
                 if (!isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'][0])) {
                     ebLog()->warn("Idp guestQualifier is set to 'Some' however, the surfPersonAffiliation attribute was not provided, setting it to 'guest' and continuing". var_export($idpEntityMetadata, true) . var_export($responseAttributes, true));
@@ -482,9 +484,11 @@ class EngineBlock_Corto_Adapter
                     );
                 }
                 return $responseAttributes;
-            case 'None':
+
+            default:
+            case 'All':
                 $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
-                    0 => 'member',
+                    0 => 'guest',
                 );
                 return $responseAttributes;
         }

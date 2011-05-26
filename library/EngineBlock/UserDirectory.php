@@ -186,32 +186,14 @@ class EngineBlock_UserDirectory
     /**
      * Figure out of a person with given attributes is a guest user.
      *
-     * Algorithm is as follows:
-     * - By default you are a guest.
-     * - Unless you have a 'urn:surfnet:entl:intesllingsgebruik' attribute with the value 'instellingsgebruiker'
-     * - Or, if you do not have this attribute, if your Idp is marked as part of the 'federation' in the EngineBlock configuration
-     *
-     * @param  $attributes
-     * @param  $saml2attributes
-     * @param  $idpEntityMetadata
+     * @param array $attributes
+     * @param array $saml2attributes
+     * @param array $idpEntityMetadata
      * @return bool
      */
-    protected function _getCollabPersonIsGuest($attributes, $saml2attributes, $idpEntityMetadata)
+    protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
     {
-        $isGuest = true;
-
-        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-        if (isset($saml2attributes['urn:surfnet:entl:instellingsgebruik']) &&
-            $saml2attributes['urn:surfnet:entl:instellingsgebruik']==='instellingsgebruiker') {
-            $isGuest = false;
-        }
-        /**
-         * @todo This is a hack for now, this SHOULD be set in the Service Registry with a custom attribute
-         */
-        else if (isset($configuration->federationIdps)) {
-            $isGuest = !in_array($idpEntityMetadata['EntityId'], $configuration->federationIdps->toArray());
-        }
-        return $isGuest;
+        return ($saml2attributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'][0]!=='member');
     }
 
     protected function _getDnForLdapAttributes($attributes)
