@@ -1,0 +1,17 @@
+Index: modules/janus/lib/Validation/Metadata.php
+===================================================================
+--- modules/janus/lib/Validation/Metadata.php	(revision 328)
++++ modules/janus/lib/Validation/Metadata.php	(revision )
+@@ -24,5 +24,10 @@
+                 return true;
+             }
+         ',
+-    ),
++    ),
++    'isemail' => array(
++        'code' => '
++            return (strpos($value,"@") != false) ? true : false;
++        ',
++    ),
+ );
+ 
