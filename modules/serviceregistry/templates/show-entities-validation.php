@@ -24,62 +24,9 @@
  */
 
 $this->data['jquery'] = array('version' => '1.6', 'core' => TRUE, 'ui' => TRUE, 'css' => TRUE);
-$this->data['head']   = '
-<style type="text/css">
-.header-25 {
-    font-weight: bold;
-    text-decoration: underline;
-    font-size: small;
-}
-
-.entity .messages p {
-    margin:  0px;
-    padding: 5px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.entity .messages .error {
-    background-color: #CD5C5C;
-    color: white;
-}
-
-.entity .messages .warning {
-    background-color: #F0E68C;
-}
-img.certificate, img.certificate-chain {
-    float:left;
-}
-img.certificate-chain {
-    margin-top: 25px;
-}
-
-div.certificate-image-container {
-    text-decoration:none;
-    position:relative;
-    float:left;
-}
-
-.selfsigned-overlay {
-    background-color: white;
-    font-weight: bold;
-    left: 16%;
-    opacity: 0.5;
-    position: absolute;
-    top: 48%;
-}
-.rootca-overlay {
-    background-color: white;
-    font-weight: bold;
-    left: 13%;
-    opacity: 0.5;
-    position: absolute;
-    top: 20%;
-}
-
-</style>
-';
+$this->data['head'] .= '<link rel="stylesheet" type="text/css" href="resources/styles/serviceregistry.validate.css" />'."\n";
 $this->includeAtTemplateBase('includes/header.php');
+
 ?>
 
 <div id="tabdiv">

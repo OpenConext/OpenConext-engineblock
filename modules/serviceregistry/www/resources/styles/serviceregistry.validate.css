@@ -1,0 +1,87 @@
+.header-25 {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: small;
+}
+
+.entity .messages p {
+    margin:  0px;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.entity .messages .error {
+    background-color: #CD5C5C;
+    color: white;
+}
+
+.entity .messages .warning {
+    background-color: #F0E68C;
+}
+img.certificate, img.certificate-chain {
+    float:left;
+}
+img.certificate-chain {
+    margin-top: 25px;
+}
+
+div.certificate-image-container {
+    text-decoration:none;
+    position:relative;
+    float:left;
+}
+
+.selfsigned-overlay {
+    background-color: white;
+    font-weight: bold;
+    left: 16%;
+    opacity: 0.5;
+    position: absolute;
+    top: 48%;
+}
+.rootca-overlay {
+    background-color: white;
+    font-weight: bold;
+    left: 13%;
+    opacity: 0.5;
+    position: absolute;
+    top: 20%;
+}
+
+/* METADATA VALIDATIONS */
+
+div#MetadataValidation {
+    margin: 0 0 0 10px;
+}
+
+table.entity-metadata-table {
+    width: 50%
+}
+
+td, tr, th {
+    padding: 0;
+    margin: 0;
+}
+
+td.error {
+    background-color: #CD5C5C;
+    color: white;
+}
+
+td.warning {
+    background-color: #F0E68C;
+}
+
+td.good {
+    background-color: #aad64f;
+}
+
+ul.entity-metadata li {
+    margin: 0 0 0 20px;
+    list-style: square;
+}
+
+span.message {
+    margin:  0 0 0 5px;
+}

@@ -51,3 +51,5 @@ require SERVICE_REGISTRY_LIBRARY . '/OpenSsl/Url.php';
 
 require SERVICE_REGISTRY_LIBRARY . '/Janus/Exception/NoCertData.php';
 require SERVICE_REGISTRY_LIBRARY . '/Janus/CertificateFactory.php';
+
+require SERVICE_REGISTRY_LIBRARY . '/Metadata/Validator.php';

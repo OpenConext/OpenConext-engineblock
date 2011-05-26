@@ -5,7 +5,7 @@ $(function(){
             for (var i = 0; i < CertificateChain.length; i++) {
                 var certificate = CertificateChain[i];
                 html += '<div class="certificate-image-container"><img ' +
-                            'src="resources/images/icons/certificate.png" ' +
+                            'src="/simplesaml/module.php/serviceregistry/resources/images/icons/certificate.png" ' +
                             'class="certificate"' +
                             'alt="" ' +
                             'title="' + certificate.Subject.DN + '" />' +
@@ -14,7 +14,7 @@ $(function(){
                     '</div>';
 
                 if (i < CertificateChain.length-1) { // not at the end of the chain
-                    html += '<img class="certificate-chain" src="resources/images/icons/chain.gif" alt="" title="" />';
+                    html += '<img class="certificate-chain" src="/simplesaml/module.php/serviceregistry/resources/images/icons/chain.gif" alt="" title="" />';
                 }
             }
             return html + '<br style="clear: both" />';
@@ -25,7 +25,7 @@ $(function(){
         // Get the Entity ID from the current element
         var entityId = $.trim(this.innerHTML);
 
-        $.getJSON('get-entity-certificate.php?eid=' + encodeURIComponent(entityId), function(data) {
+        $.getJSON('/simplesaml/module.php/serviceregistry/get-entity-certificate.php?eid=' + encodeURIComponent(entityId), function(data) {
             entityEl.find('.messages-template').tmpl({
                   Errors: data.Errors,
                   Warnings: data.Warnings
@@ -55,7 +55,7 @@ $(function(){
             certInfoEl.find('img.loading-image').remove();
         });
 
-        $.getJSON('get-entity-endpoints.php?eid=' + encodeURIComponent(entityId), function(data) {
+        $.getJSON('/simplesaml/module.php/serviceregistry/get-entity-endpoints.php?eid=' + encodeURIComponent(entityId), function(data) {
             var endpointsEl         = entityEl.find('.entity-endpoints');
             var endpointsTemplateEl = entityEl.find('.entity-endpoint-template');
             for (var endpointName in data) {

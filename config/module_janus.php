@@ -189,6 +189,7 @@ $config = array(
             'default_allow' => false,
             'required' => true,
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:Binding' => array(
@@ -214,6 +215,7 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:ResponseLocation' => array(
@@ -223,13 +225,15 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'coin:guest_qualifier' => array(
             'type' => 'text',
             'order' => 193,
             'default' => 'All',
-            'required' => false,
+            'default_allow' => true,
+            'required' => true,
         ),
         
         // Certificate fields 
@@ -247,6 +251,7 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'leneq40',
+            'validate_error' => 'The value must be 40 characters long',
             'supported' => array(0),
         ),
         'certificate' => array(
@@ -263,6 +268,7 @@ $config = array(
             'order' => 310,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array('en', 'nl'),
         ),
         'displayName:#' => array(
@@ -278,6 +284,7 @@ $config = array(
             'order' => 320,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array('en', 'nl'),
         ),
         'url:#' => array(
@@ -299,24 +306,32 @@ $config = array(
             'type' => 'text',
             'order' => 500,
             'default' => 'https://.png',
+            'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'logo:#:width' => array(
             'type' => 'text',
             'order' => 501,
             'default' => '',
+            'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'logo:#:height' => array(
             'type' => 'text',
             'order' => 502,
-            'default' => '35',
+            'default' => '',
+            'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'logo:#:href' => array(
             'type' => 'text',
             'order' => 503,
             'default' => 'https://.png',
+            'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'geoLocation' => array(
@@ -328,6 +343,8 @@ $config = array(
             'type' => 'text',
             'order' => 511,
             'default' => '',
+            'default_allow' => false,
+            'required' => true,
             'supported'=>array('en','nl'),
         ),
         
@@ -338,6 +355,7 @@ $config = array(
             'default' => 'technical',
             'select_values' => array("technical", "support", "administrative", "billing", "other"),
             'default_allow' => true,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:givenName' => array(
@@ -345,6 +363,7 @@ $config = array(
             'order' => 421,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:surName' => array(
@@ -352,6 +371,7 @@ $config = array(
             'order' => 422,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:emailAddress' => array(
@@ -359,6 +379,9 @@ $config = array(
             'order' => 430,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
+            'validate' => 'isemail',
+            'validate_error' => 'The value must be a valid email address',
             'supported' => array(0)
         ),
         'contacts:#:telephoneNumber' => array(
@@ -366,6 +389,7 @@ $config = array(
             'order' => 440,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:company' => array(
@@ -398,6 +422,7 @@ $config = array(
             'default_allow' => false,
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
         
         // Control fields
@@ -452,6 +477,7 @@ $config = array(
             'default_allow' => false,
             'required' => true,
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'AssertionConsumerService:#:index' => array(
@@ -461,6 +487,7 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:Binding' => array(
@@ -486,6 +513,7 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:ResponseLocation' => array(
@@ -495,72 +523,95 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
 
         // COIN stuff
         'coin:gadgetbaseurl' => array(
-             'type'=>'text',
-             'order' => 180,
-             'default' => '',
+            'type'=>'text',
+            'order' => 180,
+            'default' => '',
+            'default_allow' => false,
+            'required' => false,
         ),
         'coin:oauth:secret' => array(
             'type' => 'text',
             'order' => 190,
             'default' => 'see the silver surfer surf said sea softly',
             'default_allow' => true,
+            'required' => false,
         ),
         'coin:oauth:consumer_key'=> array(
             'type' => 'text',
             'order' => 191,
             'default' => '',
+            'default_allow' => false,
+            'required' => false,
         ),
         'coin:oauth:consumer_secret' => array(
             'type' => 'text',
             'order' => 192,
             'default' => '',
+            'default_allow' => false,
+            'required' => false,
         ),
         'coin:oauth:key_type' => array(
             'type' => 'text',
             'order' => 193,
             'default' => 'HMAC_SYMMETRIC',
             'default_allow' => true,
+            'required' => false,
         ),
         'coin:oauth:public_key' => array(
             'type' => 'text',
             'order' => 194,
             'default' => '',
-            'default_allow' => true,
+            'default_allow' => false,
+            'required' => false,
         ),
         'coin:oauth:app_title' => array(
             'type' => 'text',
             'order' => 195,
             'default' => 'Application Title',
-            'default_allow' => true,
+            'default_allow' => false,
+            'required' => false,
         ),
         'coin:oauth:app_description' => array(
             'type' => 'text',
             'order' => 196,
             'default' => 'description',
-            'default_allow' => true,
+            'default_allow' => false,
+            'required' => false,
+
         ),  
         'coin:oauth:app_thumbnail' => array(
             'type' => 'text',
             'order' => 197,
             'default' => 'http://www.surfnet.nl/thumb.png',
-            'default_allow' => true,
+            'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
+            'default_allow' => false,
+            'required' => false,
+
         ),
         'coin:oauth:app_icon' => array(
             'type' => 'text',
             'order' => 198,
             'default' => 'http://www.surfnet.nl/icon.gif',
-            'default_allow' => true,
+            'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
+            'default_allow' => false,
+            'required' => false,
         ),
         'coin:oauth:callback_url' => array(
             'type' => 'text',
             'order' => 199,
             'default' => '',
-            'default_allow' => true,
+            'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
+            'default_allow' => false,
+            'required' => false,
         ),
         'coin:expects_oids' => array(
             'type' => 'boolean',
@@ -584,6 +635,7 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'leneq40',
+            'validate_error' => 'The value must be 40 characters long',
             'supported' => array(0),
         ),
         'certificate' => array(
@@ -600,6 +652,7 @@ $config = array(
             'order' => 310,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array('en', 'nl')
         ),
         'displayName:#' => array(
@@ -607,6 +660,7 @@ $config = array(
             'order' => 315,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array('en', 'nl')
         ),
         'description:#' => array(
@@ -614,6 +668,7 @@ $config = array(
             'order' => 320,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array('en', 'nl')
         ),
         'url:#' => array(
@@ -637,6 +692,7 @@ $config = array(
             'default' => 'technical',
             'select_values' => array("technical", "support", "administrative", "billing", "other"),
             'default_allow' => true,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:givenName' => array(
@@ -644,6 +700,7 @@ $config = array(
             'order' => 421,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:surName' => array(
@@ -651,6 +708,7 @@ $config = array(
             'order' => 422,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:emailAddress' => array(
@@ -658,6 +716,9 @@ $config = array(
             'order' => 430,
             'default' => '',
             'default_allow' => false,
+            'validate' => 'isemail',
+            'validate_error' => 'The value must be a valid email address',
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:telephoneNumber' => array(
@@ -697,6 +758,7 @@ $config = array(
             'default_allow' => false,
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
         
         // Control fields
