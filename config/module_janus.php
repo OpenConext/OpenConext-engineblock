@@ -674,6 +674,7 @@ $config = array(
             'order' => 330,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array('en', 'nl')
         ),
         'icon' => array(
@@ -724,6 +725,7 @@ $config = array(
             'order' => 440,
             'default' => '',
             'default_allow' => false,
+            'required' => true,
             'supported' => array(0)
         ),
         'contacts:#:company' => array(

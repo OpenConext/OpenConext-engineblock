@@ -88,13 +88,15 @@ class Metadata_Validator {
             if (!array_key_exists($k, $entityMetadata) && $this->_isRequired($v)) {
                 $errors[] = self::$_MISSING_REQUIRED_FIELD;
 
+                $this->_setValidations($k, $errors, $warnings);
+
             } else if (array_key_exists($k, $entityMetadata)) {
                 $this->_validateDefaultValue($entityMetadata, $k, $v, $errors, $warnings);
                 $this->_validateCustomValidates($entityMetadata, $k, $v, $errors, $warnings);
+
+                $this->_setValidations($k, $errors, $warnings);
             }
             // Do nothing is key is not present and field is not required
-
-            $this->_setValidations($k, $errors, $warnings);
         }
     }
 
