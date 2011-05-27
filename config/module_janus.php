@@ -486,8 +486,6 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => false,
-            'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:Binding' => array(
