@@ -85,3 +85,19 @@ ul.entity-metadata li {
 span.message {
     margin:  0 0 0 5px;
 }
+
+.metadata-messages p {
+    margin:  0px;
+    padding: 5px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.metadata-messages .error {
+    background-color: #CD5C5C;
+    color: white;
+}
+
+.metadata-messages .warning {
+    background-color: #F0E68C;
+}
