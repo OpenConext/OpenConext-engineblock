@@ -98,6 +98,14 @@ class Metadata_Validator {
         }
     }
 
+    /**
+     * Expand the metadata config array, replace AssertionConsumerService:#:Binding
+     * with AssertionConsumerService:0:Binding according to the number of possible
+     * values specified in the configuration
+     *
+     * @param  $metadataConfig the config array
+     * @return array
+     */
     protected function _loadExpandedMetadataConfig($metadataConfig)
     {
         $metadataInfo = array();
@@ -123,6 +131,15 @@ class Metadata_Validator {
         return $implodedEntityMetadata;
     }
 
+    /**
+     * Implode the array with metadata so that it is of the following form
+     * array ( 'AssertionConsumerService:0:Binding' => 'value');
+     *
+     * @param  $data the array to implode
+     * @param string $implodedKey the imploded key
+     * @param  $implodedEntityMetadata the array containing the imploded entries
+     * @return void
+     */
     protected function _implodeEntityMetadataValues($data, $implodedKey = '', &$implodedEntityMetadata)
     {
 
@@ -135,11 +152,25 @@ class Metadata_Validator {
        }
     }
 
+    /**
+     * Check if a value is required
+     *
+     * @param  $metadata The metadata config entry specified in module.janus.config
+     * @return bool
+     */
     protected function _isRequired($metadata)
     {
         return (array_key_exists('required', $metadata) && $metadata['required'] === true);
     }
 
+    /**
+     * Write the validations to the _validations object
+     *
+     * @param  $key the current key (metadata entry)
+     * @param  $errors the array containing errors
+     * @param  $warnings the array containing warnings
+     * @return void
+     */
     protected function _setValidations($key, $errors, $warnings)
     {
         if (count($errors) > 0 || count($warnings) > 0) {
@@ -149,15 +180,43 @@ class Metadata_Validator {
         }
     }
 
+    /**
+     * Validate the default default values defined in the module_janus.php config.
+     *
+     * @param  $entityMetadata the metadata to validate
+     * @param  $k the current key (metadata entry)
+     * @param  $v the Janus configuration value array
+     * @param  $errors the array containing errors
+     * @param  $warnings the array containing warnings
+     * @return void
+     */
     protected function _validateDefaultValue($entityMetadata, $k, $v, &$errors, &$warnings)
     {
         if (array_key_exists('default_allow', $v) && $v['default_allow'] === false) {
-            if ($v['default'] == $entityMetadata[$k]) {
+            // Validations go wrong if the default value equals '' and the entered value is an integer.
+            // Hence, transform the default to 'null' if this is the case.
+            if (gettype($entityMetadata[$k]) == 'integer' && $v['default'] === '') {
+                $default = null;
+            } else {
+                $default = $v['default'];
+            }
+            if ($default === $entityMetadata[$k]) {
                 $errors[] = self::$_DEFAULT_VALUE_NOT_ALLOWED;
             }
         }
     }
 
+    /**
+     * Validate the custom validation functions specified in the Metadata.php file in janus
+     * (modules/janus/lib/Validation/Metadata.php).
+     *
+     * @param  $entityMetadata the metadata to validate
+     * @param  $k the current key (metadata entry)
+     * @param  $v the Janus configuration value array
+     * @param  $errors the array containing errors
+     * @param  $warnings the array containing warnings
+     * @return void
+     */
     protected function _validateCustomValidates($entityMetadata, $k, $v, &$errors, &$warnings)
     {
         $functions = array();
