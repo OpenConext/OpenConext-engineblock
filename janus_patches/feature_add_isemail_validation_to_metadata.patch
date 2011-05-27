@@ -5,8 +5,8 @@ Index: modules/janus/lib/Validation/Metadata.php
 @@ -24,5 +24,10 @@
                  return true;
              }
-         ',
--    ),
+         ',                  
+-    ),                    
 +    ),
 +    'isemail' => array(
 +        'code' => '
