@@ -46,7 +46,7 @@ Then open a new terminal to make sure you have the new environment.
 Review all configuration settings in 'production' and make sure they are set properly
 for your environment.
 
-  nano application/config/application.ini
+  nano application/configs/application.ini
 
 * Create the database
 
