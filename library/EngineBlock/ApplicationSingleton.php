@@ -28,7 +28,7 @@ define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
 define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
 
-set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_LIBRARY);
+set_include_path(ENGINEBLOCK_FOLDER_LIBRARY . PATH_SEPARATOR . get_include_path());
 
 class EngineBlock_Exception extends Exception
 {
@@ -119,7 +119,7 @@ class EngineBlock_ApplicationSingleton
         $classNameParts = explode('_', $className);
 
         // Known libraries (like Zend and EngineBlock)
-        if (in_array($classNameParts[0], array('EngineBlock', 'Zend'))) {
+        if (in_array($classNameParts[0], array('EngineBlock', 'Osapi', 'Zend'))) {
             $fileName = implode('/', explode('_', $className)).'.php';
             $filePath = ENGINEBLOCK_FOLDER_LIBRARY . $fileName;
 
