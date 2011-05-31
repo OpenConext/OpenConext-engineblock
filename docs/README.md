@@ -1,6 +1,6 @@
-# SURFnet Collaboration Infrastructure EngineBlock #
+# SURFnet SURFconext EngineBlock #
 
-The SURFnet Collaboration Infrastructure EngineBlock is a multi-purpose software component
+The SURFnet SURFconext EngineBlock is a multi-purpose software component
 that has as it's goal the following:
 
 1. Publicly Proxy and manage Single Sign On authentication requests and responses
@@ -208,7 +208,7 @@ If you are using this pattern, an update can be done with the following:
 
 1. Download and deploy a new version in a new directory.
 
-2. Check out the release notes in docs/RELEASENOTES-X.Y.Z.md (where X.Y.Z is the version number) for any
+2. Check out the release notes in docs/release_notes/X.Y.Z.md (where X.Y.Z is the version number) for any
    additional steps.
 
 3. Change the symlink.
