@@ -1,0 +1,14 @@
+Index: modules/janus/lib/Validation/Metadata.php
+===================================================================
+--- modules/janus/lib/Validation/Metadata.php	(revision )
++++ modules/janus/lib/Validation/Metadata.php	(revision )
+@@ -30,4 +30,9 @@ $functions = array(
+             return (strpos($value,"@") != false) ? true : false;
+         ',
+     ),
++    'lengteq20' => array(
++        'code' => '
++            return (strlen($value) >= 20);
++        ',
++    ),
+ );

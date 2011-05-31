@@ -538,6 +538,8 @@ $config = array(
             'order' => 190,
             'default' => 'see the silver surfer surf said sea softly',
             'default_allow' => true,
+            'validate' => 'lengteq20',
+            'validate_error' => 'The value must be at least 20 characters long',
             'required' => false,
         ),
         'coin:oauth:consumer_key'=> array(
@@ -552,6 +554,8 @@ $config = array(
             'order' => 192,
             'default' => '',
             'default_allow' => false,
+            'validate' => 'lengteq20',
+            'validate_error' => 'The value must be at least 20 characters long',
             'required' => false,
         ),
         'coin:oauth:key_type' => array(
