@@ -531,6 +531,8 @@ $config = array(
             'order' => 180,
             'default' => '',
             'default_allow' => false,
+            'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/.*)',
             'required' => false,
         ),
         'coin:oauth:secret' => array(

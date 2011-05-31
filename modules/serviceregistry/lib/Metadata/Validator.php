@@ -84,6 +84,7 @@ class Metadata_Validator {
             // Required field
             $errors = array();
             $warnings = array();
+
             // Missing required field
             if (!array_key_exists($k, $entityMetadata) && $this->_isRequired($v)) {
                 $errors[] = self::$_MISSING_REQUIRED_FIELD;
@@ -119,6 +120,8 @@ class Metadata_Validator {
                     unset($expandedValue['supported']);
                     $metadataInfo[$expandedKey] = $expandedValue;
                 }
+            } else if (!array_key_exists('supported', $metadataConfig)) {
+                $metadataInfo[$k] = $v;
             }
         }
 
