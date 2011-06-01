@@ -40,7 +40,8 @@ class EngineBlock_ApplicationSingleton_BootstrapException extends Exception
 
 class EngineBlock_ApplicationSingleton
 {
-    const DEFAULT_APPLICATION_CONFIGFILEPATTERN = 'configs/application*.ini';
+    const CONFIG_FILE_DEFAULT = 'configs/application.ini';
+    const CONFIG_FILE_ENVIORNMENT = '/etc/surfconext/engineblock.ini';
 
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -177,6 +178,14 @@ class EngineBlock_ApplicationSingleton
         return $this;
     }
 
+    protected function _bootstrapAutoLoading()
+    {
+        if(!function_exists('spl_autoload_register')) {
+            throw new EngineBlock_Exception('SPL Autoload not available! Please use PHP > v5.1.2');
+        }
+        spl_autoload_register(array($this, 'autoLoad'));
+    }
+
     protected function _setEnvironmentIdByEnvironment()
     {
         // Get from predefined constant
@@ -188,6 +197,12 @@ class EngineBlock_ApplicationSingleton
             $this->_applicationEnvironmentId = getenv('ENGINEBLOCK_ENV');
             define('ENGINEBLOCK_ENV', $this->_applicationEnvironmentId);
         }
+    }
+
+    protected function _bootstrapConfiguration()
+    {
+        $tempConfigFile = $this->_buildTempConfigFile();
+        $this->setConfiguration($this->_getConfigurationLoader($tempConfigFile));
     }
 
     protected function _setEnvironmentIdByDetection()
@@ -230,12 +245,6 @@ class EngineBlock_ApplicationSingleton
         throw new EngineBlock_ApplicationSingleton_BootstrapException('Unable to detect an environment!');
     }
 
-    protected function _bootstrapConfiguration()
-    {
-        $tempConfigFile = $this->_buildTempConfigFile();
-        $this->setConfiguration($this->_getConfigurationLoader($tempConfigFile));
-    }
-
     protected function _bootstrapEnvironmentConfiguration()
     {
         $env = $this->_applicationEnvironmentId;
@@ -245,86 +254,24 @@ class EngineBlock_ApplicationSingleton
         $this->_configuration = $this->_configuration->$env;
     }
 
-    protected function _bootstrapAutoLoading()
-    {
-        if(!function_exists('spl_autoload_register')) {
-            throw new EngineBlock_Exception('SPL Autoload not available! Please use PHP > v5.1.2');
-        }
-        spl_autoload_register(array($this, 'autoLoad'));
-    }
-
     protected function _buildTempConfigFile()
     {
-        $configFiles = $this->_getConfigFiles();
-
-        // Sort config files by number of parts
-        // so prod, dev.coin, dev, dev.coin.new will be sorted as:
-        // dev, dev.coin, dev.coin.new, prod
-        // For easier debugging.
-        usort($configFiles, array($this, '_sortConfigFilesByNumberOfParts'));
+        $configFiles = array(
+            ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
+            self::CONFIG_FILE_ENVIORNMENT,
+        );
 
         $configFileContents = "";
         foreach ($configFiles as $configFile) {
             $configFileContents .= file_get_contents($configFile) . PHP_EOL;
         }
 
-        $tempConfigFile = '/tmp/engineblock.' . md5($configFileContents) . '.ini';
+        $tempConfigFile = '/tmp/surfconext.engineblock.' . md5($configFileContents) . '.ini';
         if (!file_exists($tempConfigFile)) {
             touch ($tempConfigFile);
             file_put_contents($tempConfigFile, $configFileContents);
         }
         return $tempConfigFile;
-    }
-
-    /**
-     * Get a list of all configuration files required.
-     *
-     * Because Zend_Config is slow with parsing to it's internal structure
-     * (performance tests showed it takes 20% of the total time if it has to parse all configuration files)
-     * we check if we have an explicit environment id yet (from the environment) if so, then we ignore all other
-     * environments, if not then we have to include everything for auto-detection of environments.
-     *
-     * @return array
-     */
-    protected function _getConfigFiles()
-    {
-        if (isset($this->_applicationEnvironmentId)) {
-            return $this->_getConfigFilesForEnvironment();
-        }
-        else {
-            return $this->_getConfigFilesForAll();
-        }
-    }
-
-    protected function _getConfigFilesForEnvironment()
-    {
-        return array(
-            ENGINEBLOCK_FOLDER_APPLICATION . 'configs/application.ini',
-            ENGINEBLOCK_FOLDER_APPLICATION . "configs/application.{$this->_applicationEnvironmentId}.ini",
-        );
-    }
-
-    protected function _getConfigFilesForAll()
-    {
-        $configFilePattern = ENGINEBLOCK_FOLDER_APPLICATION . self::DEFAULT_APPLICATION_CONFIGFILEPATTERN;
-
-        $configFiles = glob($configFilePattern);
-        if (empty($configFiles)) {
-            throw new EngineBlock_Exception("Configuration files for pattern '$configFilePattern do not exist!'");
-        }
-        return $configFiles;
-    }
-
-    protected function _sortConfigFilesByNumberOfParts($a, $b)
-    {
-        $a = strstr(basename($a), '.');
-        $b = strstr(basename($b), '.');
-        if ($a > $b) {
-            return 1;
-        } else if ($a === $b) {
-            return 0;
-        };
-        return -1;
     }
 
     protected function _getConfigurationLoader($configFile)
