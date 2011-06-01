@@ -9,3 +9,8 @@ $config = array (
     'validate_entity_endpoints_cron_tags' => array('daily'),
     'ca_bundle_file' => '/etc/pki/tls/certs/ca-bundle.crt',
 );
+
+$localConfig = '/etc/surfconext/serviceregistry.module_serviceregistry.php';
+if (file_exists($localConfig)) {
+    require $localConfig;
+}

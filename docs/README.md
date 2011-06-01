@@ -17,65 +17,125 @@ It's responsibilities are twofold:
     - default-collation=utf8_unicode_ci (recommended)
 * EngineBlock
 
+**NOTE**
+While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,
+it is only regularly tested with RedHat Enterprise Linux and CentOS.
+
+
 ## Installation ##
 
+If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination server,
+if not, then that would be step 1 for the installation.
 
-* Check out the Service Registry
+If you have an installed copy and your server meets all the requirements above, then please follow the steps below
+to start your installation.
 
-* Install vhosts, based on these:
 
-    <VirtualHost *:80>
-        ServerName serviceregistry.example.com
+### First, create an empty database ###
 
-        RewriteEngine   on
-        RewriteCond     %{SERVER_PORT} ^80$
-        RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R]
-  </VirtualHost>
-  <Virtualhost *:443>
-        ServerAdmin youremail@example.com
+**EXAMPLE**
 
-        DocumentRoot /var/www/serviceregistry/www
-        ServerName serviceregistry.example.com
+    mysql -p
+    Enter password:
+    Welcome to the MySQL monitor.  Commands end with ; or \g.
+    Your MySQL connection id is 21
+    Server version: 5.0.77 Source distribution
 
-        Alias /simplesaml /var/www/serviceregistry/www
+    Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
 
-        SSLEngine on
-        SSLCertificateFile      /etc/httpd/ssl/example.pem
-        SSLCertificateKeyFile   /etc/httpd/ssl/example.key
-        SSLCertificateChainFile /etc/httpd/ssl/chain-example.pem
-  </VirtualHost>
+    mysql> create database serviceregistry default charset utf8 default collate utf8_unicode_ci;
 
-* Create database
 
-* Set the database connection
+### Then configure the application ###
 
-* Set the SAML metadata for EngineBlock
+Copy over the example configuration files and directory from the *docs/etc/* directory to */etc/surfconext/*:
 
-* Apply JANUS patches
+    sudo mkdir /etc/surfconext
+    sudo cp -Rvf docs/etc/* /etc/surfconext/
 
-./bin/apply_janus_patches.sh
+Then edit the copied files with your favorite editor and review the settings to make sure it matches your configuration.
 
-* Enable the JANUS module
-  touch modules/janus/enable
 
-* Run:
-  php /bin/initialise_janus.php
- 
-  This does the following:
-  * Installs the database schema for JANUS
-  * Applies the JANUS patches
-  * Adds the admin user
-  * Adds a user for engineblock with full rights
+### Run install script ###
 
-* Switch the Service Registry to log in with 'admin'.
+    ./bin/install.sh
 
-* Log in to JANUS with the admin user
+What this does for you is:
+* Installs the database schema for JANUS
+* Applies the JANUS patches
+* Adds the admin user
+* Adds a user for engineblock with full rights
 
-* Add the Service Registry as an SP in JANUS
 
-* Add Identity Providers
+### Configure HTTP server ###
 
-* Enjoy your Service Registry!
+Install 2 HTTPS virtual hosts, one that points to
+Make sure the ENGINEBLOCK_ENV is set.
+
+**EXAMPLE**
+
+    SetEnv ENGINEBLOCK_ENV !!ENV!!
+
+Make sure you have the following alias (or it's functional equivalent):
+
+    Alias /simplesaml /var/www/serviceregistry/www
+
+Note that the Service Registry SHOULD run on HTTPS, you can redirect users from HTTP to HTTPS
+with the following Apache rewrite rules on a *:80 VirtualHost:
+
+    RewriteEngine   on
+    RewriteCond     %{SERVER_PORT} ^80$
+    RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
+
+
+### Bootstrap the Service Registry ###
+
+1. Log in to JANUS with the admin user
+
+    Go to your Service Registry instance.
+    Go to the **Federation** tab.
+    Click **JANUS module**.
+    Log in with the admin user and the password you configured in */etc/surfconext/serviceregistry.config.php*.
+
+2. Add the Service Registry as an SP in JANUS
+
+    The Service Registry logs in to the EngineBlock that it supplies with it's data.
+    This is wonderfully cyclic, but it does mean that while in admin mode you have to add the Service Registry
+    as a Service Provider in it's self.
+
+    You can find the metadata for the Service Registry as a Service Provider with the following:
+    Go to your Service Registry instance.
+    Go to the **Federation** tab.
+    Click \[ Show metadata \].
+
+3. Add Identity Providers
+
+    Add at least one Identity Provider that you can use to log in to the Service Registry later.
+
+
+### Test your EngineBlock instance ###
+
+Go to your Service Registry instance.
+Go to the **Authentication** tab.
+Click **Test configured authentication sources**
+Click **default-sp**.
+
+You should now be able to log in successfully via your configured EngineBlock instance.
+
+
+### Switch to Single Sign On via EngineBlock ###
+
+Edit */etc/surfconext/serviceregistry.module_janus.php* and change:
+
+    $config['auth'] = 'admin'; // Admin password (for installing or debugging)
+    #$config['auth'] = 'default-sp'; // Single Sign On via EngineBlock
+
+To:
+
+    #$config['auth'] = 'admin'; // Admin password (for installing or debugging)
+    $config['auth'] = 'default-sp'; // Single Sign On via EngineBlock
+
+And enjoy your new Service Registry instance!
 
 
 ## Updating ##

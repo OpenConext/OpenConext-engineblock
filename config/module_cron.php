@@ -11,3 +11,8 @@ $config = array (
 	'debug_message' => TRUE,
 	'sendemail'     => FALSE,
 );
+
+$localConfig = '/etc/surfconext/serviceregistry.module_cron.php';
+if (file_exists($localConfig)) {
+    require $localConfig;
+}

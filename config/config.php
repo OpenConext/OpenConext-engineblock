@@ -12,7 +12,7 @@ $config = array (
 	 * See the user manual for more details.
 	 */
 	'baseurlpath'           => 'simplesaml/',
-	'certdir'               => 'cert/',
+	'certdir'               => '/etc/surfconext/serviceregistry-certs/',
 	'loggingdir'            => 'log/',
 	'datadir'               => 'data/',
 
@@ -76,8 +76,8 @@ $config = array (
 	 * The email address will be used as the recipient address for error reports, and
 	 * also as the technical contact in generated metadata.
 	 */
-	'technicalcontact_name'     => 'SURFconext Beheer',
-	'technicalcontact_email'    => 'boy@ibuildings.nl,coin-beheer@surfnet.nl,coin-logs@list.surfnet.nl',
+	'technicalcontact_name'     => '',
+	'technicalcontact_email'    => '',
 
 	/*
 	 * The timezone of the server. This option should be set to the timezone you want
@@ -560,5 +560,10 @@ $config = array (
 	 *   'proxy' => 'tcp://proxy.example.com:5100'
 	 */
 	'proxy' => NULL,
-
 );
+
+$localConfig = "/etc/surfconext/serviceregistry.config.php";
+if (!file_exists($localConfig)) {
+    die('No local config file at ' . $localConfig);
+}
+require $localConfig;

@@ -1239,7 +1239,8 @@ $config = array(
      */
 );
 
-$localConfig = dirname(__FILE__) . '/module_janus.local.php';
-if (file_exists($localConfig)) {
-    require $localConfig;
+$localConfig = '/etc/surfconext/serviceregistry.module_janus.php';
+if (!file_exists($localConfig)) {
+    die('No local JANUS config file at ' . $localConfig);
 }
+require $localConfig;
