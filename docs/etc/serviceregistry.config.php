@@ -37,7 +37,7 @@ $config['secretsalt'] = 'defaultsecretsalt';
  * The email address will be used as the recipient address for error reports, and
  * also as the technical contact in generated metadata.
  */
-$config['technicalcontact_name'] = '';
+$config['technicalcontact_name']  = '';
 $config['technicalcontact_email'] = '';
 
 /*

@@ -58,13 +58,20 @@ Then edit the copied files with your favorite editor and review the settings to 
 
 ### Run install script ###
 
-    ./bin/install.sh
+Install the database schema for JANUS
 
-What this does for you is:
-* Installs the database schema for JANUS
-* Applies the JANUS patches
-* Adds the admin user
-* Adds a user for engineblock with full rights
+    mysql -h HOST -u USER -pPASSWORD serviceregistry < database/install.sql
+    mysql -h HOST -u USER -pPASSWORD serviceregistry < database/initial.sql
+    mysql -h HOST -u USER -pPASSWORD serviceregistry < database/patch*.sql
+
+Note that the initial.sql adds the 'admin' user AND an 'engine' user with the secret 'engineblock'.
+It is recommended that you change the password of the 'engine' user for production setups with the following SQL statement:
+
+    UPDATE `janus`.`janus__user` SET `secret` = 'MYSECRET' WHERE `janus__user`.`userid` ='engine';
+
+Apply the JANUS patches
+
+    ./bin/apply_janus_patches.sh
 
 
 ### Configure HTTP server ###
@@ -164,6 +171,4 @@ If you are using this pattern, an update can be done with the following:
 
 4. Change the symlink.
 
-5. Run the database migrations script.
-
-    cd database && ./update && cd ..
+5. Run new patches in database/.
