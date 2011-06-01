@@ -6,6 +6,7 @@ that has as it's goal the following:
 1. Publicly Proxy and manage Single Sign On authentication requests and responses
 2. Privately offer OpenSocial data based on the SSO user data and Grouper information
 
+
 ## Requirements ##
 
 * Linux
@@ -29,6 +30,7 @@ that has as it's goal the following:
 While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,
 it is only regularly tested with RedHat Enterprise Linux and CentOS.
 
+
 ## Installation ##
 
 If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination server,
@@ -36,6 +38,7 @@ if not, then that would be step 1 for the installation.
 
 If you have an installed copy and your server meets all the requirements above, then please follow the steps below
 to start your installation.
+
 
 ### What you NEED to know about EngineBlock ###
 
@@ -49,15 +52,15 @@ So a normal setup would be something like this:
     | development   |   | staging    |  | production |
     | testing       |   |            |  |            |
 
-In this scenario, Server 3 would have an */etc/surfconext/application.ini* that starts with:
+In this scenario, Server 2 would have an */etc/surfconext/application.ini* that starts with:
 
-    [production : base]
+    [staging : base]
 
 and in the Apache Virtual Host would be the following:
 
-    SetEnv ENGINEBLOCK_ENV production
+    SetEnv ENGINEBLOCK_ENV staging
 
-So whenever a request comes in for EngineBlock, Apache would tell EngineBlock to load up the 'production'
+So whenever a request comes in for EngineBlock, Apache would tell EngineBlock to load up the 'staging'
 configuration values.
 
 This is a big help for Server 1, which can have the following in it's configuration file:
@@ -69,6 +72,7 @@ This is a big help for Server 1, which can have the following in it's configurat
      .... Different configuration values ...
 
 With that out of the way, let's get started!
+
 
 ### First, create an empty database ###
 
@@ -84,16 +88,21 @@ With that out of the way, let's get started!
 
     mysql> create database engineblock default charset utf8 default collate utf8_unicode_ci;
 
+
 ### Then configure application config ###
 
 Copy over the example configuration file from the *docs* directory to */etc/surfconext/engineblock.ini*:
 
     sudo mkdir /etc/surfconext
-    sudo cp docs/example.application.ini /etc/surfconext/engineblock.ini
+    sudo cp docs/example.engineblock.ini /etc/surfconext/engineblock.ini
 
 Then edit this file with your favorite editor and review the settings to make sure it matches your configuration.
-The settings in the *example.application.ini* are a subset of all configuration options, which can be found, along
+The settings in the *example.engineblock.ini* are a subset of all configuration options, which can be found, along
 with their default value in *application/configs/application.ini*.
+
+Note that EngineBlock requires you to set a path to a logfile, but you have to make sure that this file
+is writable by your webserver user.
+
 
 ### Next, configure environment ###
 
@@ -124,12 +133,14 @@ based on the hostname (you can check which hostname it uses with *hostname -f*).
 The *env.path* configuration will make EngineBlock autodetect which settings to use
 for a particulair path that EngineBlock is installed in.
 
+
 ### Download & Install MySQL JDBC driver ###
 
 EngineBlock uses a Java tool called 'LiquiBase' for updating the database, however this tool requires the JDBC
 driver to talk to MySQL, and as this is GPL, it has to be downloaded separately.
 
     cd database && ./install_jdbc_driver.sh && cd ..
+
 
 ### Install database schema ###
 
@@ -138,7 +149,8 @@ To install the initial database, just call the 'update' script in *database/*, l
     cd database && ./update && cd ..
 
 **NOTE**
-EngineBlock requires a database password, without it the install script will not function
+EngineBlock requires database settings, without it the install script will not function
+
 
 ### Configure HTTP server ###
 
@@ -168,6 +180,7 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
     RewriteCond     %{SERVER_PORT} ^80$
     RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
 
+
 ### Finally, test your EngineBlock instance ###
 
 Use these URLs to test your Engineblock instance:
@@ -180,6 +193,7 @@ Use these URLs to test your Engineblock instance:
 [https://engineblock-internal.example.com][]
 [https://engineblock-internal.example.com/social/][]
 
+
 ### Optional: Install attribute-manipulations ###
 
 EngineBlock has the concept of Attribute Manipulations, which allows you to manipulations per Service Provider on
@@ -190,6 +204,7 @@ that EngineBlock is located in.
 
 For more documentation please see 
 [https://svn.surfnet.nl/svn/coin-eb/attribute-manipulations/trunk/][SURFnets attribute manipulations].
+
 
 ## Updating ##
 
