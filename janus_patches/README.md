@@ -10,8 +10,8 @@ as an external, this has been done for these reasons:
 Unfortunately we do have to tweak JANUS for our needs, we do this using the UNIX diff and patch tools.
 
 
-Rules for patches
------------------
+Guidelines for patches
+----------------------
 ALL patches MUST end with .patch
 
 ALL patches MUST be made with the subversion diff binding (svn diff).
