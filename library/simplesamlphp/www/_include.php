@@ -1,7 +1,5 @@
 <?php
 
-require_once __DIR__ .'/../../../public/_include.php';
-
 /* Remove magic quotes. */
 if(get_magic_quotes_gpc()) {
 	foreach(array('_GET', '_POST', '_COOKIE', '_REQUEST') as $a) {

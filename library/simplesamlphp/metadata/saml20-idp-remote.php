@@ -8,9 +8,10 @@
  */
 
 
-require_once 'Surfnet/Application.php';
-$application = new Surfnet_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
-$appConfig = $application->getConfig();
+require_once __DIR__. '../../../EngineBlock/ApplicationSingleton.php';
+$application = EngineBlock_ApplicationSingleton::getInstance();
+$application->bootstrap();
+$appConfig = $application->getConfiguration();
 
 $metadata[$appConfig->auth->simplesamlphp->idp->entityId] = array(
     'entityid' => $appConfig->auth->simplesamlphp->idp->entityId,

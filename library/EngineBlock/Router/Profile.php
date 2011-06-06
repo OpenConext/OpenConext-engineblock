@@ -23,9 +23,18 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class Authentication_Controller_Index extends EngineBlock_Controller_Abstract
+/**
+ * Routes /authorization/ urls
+ */
+class EngineBlock_Router_Profile extends EngineBlock_Router_Default
 {
-    public function indexAction()
+    protected $DEFAULT_MODULE_NAME = 'Profile';
+
+    public function route($uri)
     {
+        parent::route($uri);
+        // Only route /profile/ urls
+        return (strtolower($this->_moduleName)===strtolower($this->DEFAULT_MODULE_NAME));
     }
+
 }

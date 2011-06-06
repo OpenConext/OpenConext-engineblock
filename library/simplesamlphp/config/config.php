@@ -7,9 +7,10 @@
  * $Id$
  */
 
-require_once 'Surfnet/Application.php';
-$application = new Surfnet_Application(APPLICATION_ENV, APPLICATION_PATH . '/configs/application.ini');
-$appConfig = $application->getConfig();
+require_once __DIR__. '../../../EngineBlock/ApplicationSingleton.php';
+$application = EngineBlock_ApplicationSingleton::getInstance();
+$application->bootstrap();
+$appConfig = $application->getConfiguration();
 
 $config = array (
 
@@ -92,8 +93,8 @@ $config = array (
 	 * The email address will be used as the recipient address for error reports, and
 	 * also as the technical contact in generated metadata.
 	 */
-	'technicalcontact_name'     => 'Marc Veldman',
-	'technicalcontact_email'    => 'marc@ibuildings.nl',
+        'technicalcontact_name'     => 'SURFconext Beheer',
+	'technicalcontact_email'    => 'coin-beheer@surfnet.nl',
 
 	/*
 	 * The timezone of the server. This option should be set to the timezone you want
