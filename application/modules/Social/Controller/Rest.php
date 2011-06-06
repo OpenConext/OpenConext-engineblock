@@ -31,7 +31,7 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
     {
         $this->setNoRender(); // let shindig do the rendering
 
-        set_include_path(get_include_path() . PATH_SEPARATOR . ENGINEBLOCK_FOLDER_SHINDIG);
+        set_include_path(ENGINEBLOCK_FOLDER_SHINDIG . PATH_SEPARATOR . get_include_path());
         
         include_once('src/common/Config.php');
         include_once('src/common/File.php');
