@@ -23,11 +23,13 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+$lang = 'en';
+$displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Identity Provider Selection <?=($metaDataSP['DisplayName']?' - ' . $metaDataSP['DisplayName']['en']:'')?></title>
+        <title>Identity Provider Selection <?=($displayName?' - ' . $displayName : '')?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex, nofollow"/>
         <link href="https://wayf.surfnet.nl/federate/discovery/css/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
@@ -41,14 +43,14 @@
             <input id="Idp" type="hidden" name="idp" value="">
         </form>
         <div id="wrapper">
-            <div id="header"><b><font size="4"><?=($metaDataSP['Name']['en']?$metaDataSP['DisplayName']['nl']:'')?></font></b></div>
+            <div id="header"><b><font size="4"><?=$displayName?></font></b></div>
             <div id="main">
                 <ul class="nav">
                     <li class="active"><a href="#">EN</a></li>
                     <li><a href="#">NL</a></li>
                 </ul>
                 <h1>Where do you want to log in?</h1>
-                <p>Select your institution and log in there for <i><?=($metaDataSP['Name']['en']?$metaDataSP['DisplayName']['nl']:'')?></i>:</p>
+                <p>Select your institution and log in there for <i><?=$displayName?></i>:</p>
                 <?php if ($preselectedIdp) : ?>
                 <div id="IdpSuggestion" class="suggestion">
                 </div>
@@ -98,7 +100,7 @@
         <script type="text/javascript">
 
             var discoveryScreen = new Discover();
-            discoveryScreen.setLanguage('en');
+            discoveryScreen.setLanguage('<?=$lang?>');
             discoveryScreen.setSearchText('or search for a institution');
             discoveryScreen.setIdpList(<? echo json_encode($idpList); ?>);
 
