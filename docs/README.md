@@ -183,7 +183,7 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
     RewriteCond     %{SERVER_PORT} ^80$
     RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
 
-For all virtual hosts you should specify a different DocumentRoot.
+For all virtual hosts you should specify a different *DocumentRoot*.
 
 1st virtual host:
 
@@ -197,8 +197,9 @@ For all virtual hosts you should specify a different DocumentRoot.
 
     DocumentRoot    /opt/www/engineblock/www/profile
 
-Also for the 3rd virtual host (profile interface) you should specify an extra RewriteCond.
-Add it behind the last RewriteCond descriptive in your virtual host configuration:
+Also for the 3rd virtual host (profile interface) you should specify an extra *RewriteCond*.
+Add it behind the last *RewriteCond* descriptive (but before the *RewriteRule* descriptive) in your virtual host
+configuration:
 
     RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
 
