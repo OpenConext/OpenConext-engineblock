@@ -24,18 +24,37 @@
  */
 
 /**
- * A generic group provider that only does REST, no RPC.
+ * Todo this only supports basic functionality, for more see:
+ * @url https://spaces.internet2.edu/display/Grouper/Grouper+Web+Services#GrouperWebServices-Operations
  */
-class Osapi_Provider_PlainRest extends osapiProvider {
-  public function __construct($name, $restEndpoint, osapiHttpProvider $httpProvider = null) {
-    parent::__construct(
-        '',
-        '',
-        '',
-        $restEndpoint,
-        '',
-        $name,
-        true,
-        $httpProvider);
-  }
+interface Grouper_Client_Interface
+{
+    /**
+     * Set the subjectId on behalf of which and for which all requests are done.
+     *
+     * @abstract
+     * @param  $subjectId
+     * @return Grouper_Client_Interface
+     */
+    public function setSubjectId($subjectId);
+
+    /**
+     * @abstract
+     * @return array
+     */
+    public function getGroups();
+
+    /**
+     * @abstract
+     * @param string $groupName
+     * @return void
+     */
+    public function getMembers($groupName);
+
+    /**
+     * @abstract
+     * @param string $groupName
+     * @return bool
+     */
+    public function hasMember($groupName);
 }

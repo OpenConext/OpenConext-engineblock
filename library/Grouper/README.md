@@ -1,284 +1,15 @@
-<?php
-/**
- * SURFconext EngineBlock
- *
- * LICENSE
- *
- * Copyright 2011 SURFnet bv, The Netherlands
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- *
- * @category  SURFconext EngineBlock
- * @package
- * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- */
+# PHP Internet2 Grouper Client #
 
-class EngineBlock_Groups_Grouper extends EngineBlock_Groups_Abstract
-{
-    /**
-     * Result in metadata when a member
-     * 
-     * @var String
-     */
-    const IS_MEMBER = 'IS_MEMBER';
+Client to access Internet2 Grouper, converted from code given by Hans Zandbelt of SURFnet.
 
-    /**
-     * Result in metadata when not a member
-     *
-     * @var String
-     */
-    const IS_NOT_MEMBER = 'IS_NOT_MEMBER';
+## Unconverted methods ##
 
-    protected $_grouperConfig;
-    
-    public function __construct($grouperConfig)
-    {
-        $this->_grouperConfig = $grouperConfig;
-    }
-    
-    
-    /**
-     * Retrieve the list of groups that the specified subject is a member of.
-     */
-    public function getGroups($userIdentifier)
-    {
-        // todo: this method doesn't take stem into account yet
-        $request = <<<XML
-<WsRestGetGroupsRequest>
-    <subjectLookups>
-        <WsSubjectLookup>
-            <subjectId>$userIdentifier</subjectId>
-        </WsSubjectLookup>
-    </subjectLookups>
-    <actAsSubjectLookup>
-        <subjectId>$userIdentifier</subjectId>
-    </actAsSubjectLookup>
-</WsRestGetGroupsRequest>
-XML;
-        try {
-            $result = $this->_doRest('subjects', $request);
-        }
-        catch(Exception $e) {
-            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
-                throw new EngineBlock_Groups_Exception_UserDoesNotExist();
-            }
-            throw $e;
-        }
-
-        $groups = array();
-        if (isset($result) and ($result !== FALSE) and (! empty($result->results->WsGetGroupsResult->wsGroups))) {
-            foreach ($result->results->WsGetGroupsResult->wsGroups->WsGroup as $group) {
-                $groups[] = $this->_groupXmlToArray($group);
-            }
-        }
-        return $groups;
-    }
-
-    public function getMembers($userIdentifier, $groupIdentifier)
-    {
-        // todo: this method doesn't take stem into account yet
-        $userIdEncoded   = htmlentities($userIdentifier);
-        $groupXmlEncoded = htmlentities($groupIdentifier);
-        $request = <<<XML
-<WsRestGetMembersRequest>
-  <includeSubjectDetail>T</includeSubjectDetail>
-  <wsGroupLookups>
-    <WsGroupLookup>
-      <groupName>$groupXmlEncoded</groupName>
-    </WsGroupLookup>
-  </wsGroupLookups>
-  <actAsSubjectLookup>
-    <subjectId>$userIdEncoded</subjectId>
-  </actAsSubjectLookup>
-</WsRestGetMembersRequest>
-XML;
-
-        $result = $this->_doRest('groups', $request);
-
-        $members = array();
-        if (isset($result) and ($result !== FALSE) and (isset($result->results->WsGetMembersResult->wsSubjects->WsSubject))) {
-            foreach ($result->results->WsGetMembersResult->wsSubjects->WsSubject as $member) {
-                $members[] = $this->_memberXmlToArray($member);
-            }
-        }
-        else {
-            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>'. var_export($result, true));
-        }
-        
-        return $members;
-    }
-    
-    /**
-     * Check whether the given user is a member of the given group.
-     * @param $userIdentifier The user id to check
-     * @param $groupIdentifier The group to check
-     * @return boolen
-     */
-    public function isMember($userIdentifier, $groupIdentifier)
-    {
-        $userIdEncoded   = htmlentities($userIdentifier);
-        $stem = $this->getGroupStem();
-        
-        $request = <<<XML
-<WsRestHasMemberRequest>
-  <subjectLookups>
-    <WsSubjectLookup>
-      <subjectId>$userIdEncoded</subjectId>
-    </WsSubjectLookup>
-  </subjectLookups>
-  <actAsSubjectLookup>
-    <subjectId>$userIdEncoded</subjectId>
-  </actAsSubjectLookup>
-</WsRestHasMemberRequest>
-XML;
-
-        $filter = urlencode((!is_null($stem)?$stem.":":"").$groupIdentifier);
-        try {
-            
-            $result = $this->_doRest("groups/$filter/members", $request);
-            if ((String)$result->results->WsHasMemberResult->resultMetadata->resultCode==self::IS_MEMBER) {
-                return true;
-            }
-        } 
-        catch (Exception $e) {   
-            
-            // If there's an exception, either something went wrong, OR we're not a member (in which case we get an exception
-            // instead of a clean error; since if we're not a member, we're not allowd to make this call.
-            // This means we've got to use a crude way to distinguish between actual exceptions (grouper down/unreachable) and the situation
-            // where we're not a member.
-            $msg = $e->getMessage();
-            if (strpos($msg, "GROUP_NOT_FOUND")!==false) {
-                // Most likely we're not a member.
-                return false;
-            }  else {
-                // Most likely a system failure. Rethrow.
-                throw $e;
-            }
-        }
-        
-        return false;
-    }
-    
-    /**
-     * Implements REST calls to the Grouper Web Services API 
-     * 
-     * @copyright 2009 SURFnet BV
-     * @version $Id$
-     * @return SimpleXMLElement
-     */
-    protected function _doRest($operation, $request, $expect = array('SUCCESS'))
-    {
-        $grouperConfig = $this->_grouperConfig;
-        
-        if (!isset($grouperConfig->host) || $grouperConfig->host=='') {
-            throw new EngineBlock_Exception('No Grouper Host specified! Please set "grouper.Host" in your application configuration.');     
-        }
-       
-        $url = $grouperConfig->protocol .
-                '://' .
-                $grouperConfig->user .
-                ':' .
-                $grouperConfig->password .
-                '@' .
-                $grouperConfig->host .
-                (isset($grouperConfig->port)?':'.$grouperConfig->port:'') .
-                $grouperConfig->path .
-                '/' .
-                $grouperConfig->version . '/' .
-                $operation;
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: text/xml; charset=UTF-8'
-        ));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_VERBOSE, 0);
-
-        $responseFailed = false;
-        $response = curl_exec($ch);
-
-        $info = array('http_code'=>'');
-        $error = "";
-        if ($response !== FALSE) {
-            $error  = curl_error($ch);
-            $info   = curl_getinfo($ch);
-            if (($error != '') or ($info['http_code'] >= 300)) {
-                $responseFailed = true;
-            }
-        }
-
-        curl_close($ch);
-
-        if ($response === FALSE || $responseFailed === true) {
-            throw new Exception('Could not execute grouper webservice request:' .
-                                ' [url: ' . $url . ']' .
-                                ' [error: ' . $error . ']' .
-                                ' [http code: ' . $info['http_code'] . ']' .
-                                ' [response: ' . $response . ']');
-        }
-        
-        $result = @simplexml_load_string($response);
-        if ($result === FALSE) {
-            print_r($response);
-            exit();
-        }
-        if (! in_array($result->resultMetadata->resultCode, $expect)) {
-            print_r($response);
-            throw new Exception($result->resultMetadata->resultCode);
-        }
-        return $result;
-    }
-
-    protected function _groupXmlToArray(SimpleXMLElement $group)
-    {
-        $result = array();
-        if (! empty($group->name)) {
-            $result['name'] = (string) $group->name;
-        }
-        $result['description'] = (! empty($group->description)) ? (string) $group->description : "";
-        if (! empty($group->extension)) {
-            $result['extension'] = (string) $group->extension;
-        }
-        if (! empty($group->displayExtension)) {
-            $result['displayExtension'] = (string) $group->displayExtension;
-        }
-        if (! empty($group->uuid)) {
-            $result['uuid'] = (string) $group->uuid;
-        }
-        return $result;
-    }
-
-    protected function _memberXmlToArray(SimpleXMLElement $member)
-    {
-        $result = array();
-        if (! empty($member->id)) {
-            $result['id'] = (string) $member->id;
-        }
-        if (! empty($member->name)) {
-            $result['name'] = (string) $member->name;
-        }
-        return $result;
-    }
 
     /*
      * ALL METHODS BELOW HERE ARE FROM SAMPLE PROVIDED BY HANS. UNTESTED AND SHOULD BE CONVERTED TO
      * METHODS AS NEEDED (e.g. grouper_get_group should be named ->getGroup)
-     * 
-     * 
+     *
+     *
 function grouper_get_group($id, $act_as = NULL) {
     $request = '<WsRestGroupSaveLiteRequest>';
     $request .= '<groupName>' . $id . '</groupName>';
@@ -288,7 +19,7 @@ function grouper_get_group($id, $act_as = NULL) {
     $request .= '</WsRestGroupSaveLiteRequest>';
 
     $result = $this->_doRest('groups/' . urlencode($id) , $request, array('SUCCESS_UPDATED', 'SUCCESS_NO_CHANGES_NEEDED'));
-    
+
     $group = NULL;
     if (isset($result) and ($result !== FALSE) and (!empty($result->wsGroup))) {
         $group = array(
@@ -514,13 +245,12 @@ function grouper_get_group($id, $act_as = NULL) {
 </WsRestAssignGrouperPrivilegesLiteRequest>';
         #  <actAsSubjectId>GrouperSystem</actAsSubjectId>
         return $this->_doRest('grouperPrivileges', $request, $allowed ? array(
-            'SUCCESS' , 
-            'SUCCESS_ALLOWED' , 
+            'SUCCESS' ,
+            'SUCCESS_ALLOWED' ,
             'SUCCESS_ALLOWED_ALREADY_EXISTED'
         ) : array(
-            
-            'SUCCESS_NOT_ALLOWED' , 
+
+            'SUCCESS_NOT_ALLOWED' ,
             'SUCCESS_NOT_ALLOWED_DIDNT_EXIST'
         ));
-    } */
-}
+    }

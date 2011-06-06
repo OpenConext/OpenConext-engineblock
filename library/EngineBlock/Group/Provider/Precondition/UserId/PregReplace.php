@@ -24,18 +24,34 @@
  */
 
 /**
- * A generic group provider that only does REST, no RPC.
+ *
  */
-class Osapi_Provider_PlainRest extends osapiProvider {
-  public function __construct($name, $restEndpoint, osapiHttpProvider $httpProvider = null) {
-    parent::__construct(
-        '',
-        '',
-        '',
-        $restEndpoint,
-        '',
-        $name,
-        true,
-        $httpProvider);
-  }
+class EngineBlock_Group_Provider_Precondition_UserId_PregReplace
+{
+    protected $_provider;
+    protected $_search;
+
+    public function __construct(EngineBlock_Group_Provider_Interface $provider, Zend_Config $options)
+    {
+        $this->_provider = $provider;
+        $this->_search   = $options->search;
+        $this->_replace  = $options->replace;
+    }
+
+    public function validate()
+    {
+        $oldUserId = $this->_provider->getUserId();
+        if (!$oldUserId) {
+            return false;
+        }
+
+        $newUserId = preg_replace($this->_search, $this->_replace, $oldUserId);
+        if (!$newUserId || $newUserId === $oldUserId) {
+            return false;
+        }
+
+        $this->_provider->setUserId($newUserId);
+
+        return true;
+    }
 }

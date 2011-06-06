@@ -80,28 +80,6 @@ class EngineBlock_SocialData_FieldMapper
     );
 
     /**
-     * Mapping of OpenSocial fieldnames to Grouper field names.
-     *
-     * @var array
-     */
-    protected $_o2gMap = array(
-        'id'    => 'name',
-        'title' => 'displayExtension',
-        'description' => 'description',
-    );
-
-    /**
-     * Mapping of Grouper field names to OpenSocial keys.
-     *
-     * @var array
-     */
-    protected $_g2oMap = array(
-        'name'              => 'id',
-        'displayExtension'  => 'title',
-        'description'       => 'description',
-    );
-
-    /**
      * A list of OpenSocial fields that are allowed to have multiple values.
      * @var array
      */
@@ -221,27 +199,6 @@ class EngineBlock_SocialData_FieldMapper
             }
         }
         $pointer[$part] = $value;
-        return $result;
-    }
-
-    /**
-     * Convert a Grouper (group) array to an OpenSocial array.
-     *
-     * @param  $group Group record
-     * @return array OpenSocial record
-     */
-    public function grouperToSocialData($group)
-    {
-        $result = array();
-        foreach ($group as $grouperAttribute => $value) {
-            if (isset($this->_g2oMap[$grouperAttribute])) {
-                $openSocialKey = $this->_g2oMap[$grouperAttribute];
-                $result[$openSocialKey] = $value;
-            }
-            else {
-                // Ignore values not present in the mapping
-            }
-        }
         return $result;
     }
 

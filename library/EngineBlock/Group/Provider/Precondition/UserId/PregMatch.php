@@ -24,18 +24,21 @@
  */
 
 /**
- * A generic group provider that only does REST, no RPC.
- */
-class Osapi_Provider_PlainRest extends osapiProvider {
-  public function __construct($name, $restEndpoint, osapiHttpProvider $httpProvider = null) {
-    parent::__construct(
-        '',
-        '',
-        '',
-        $restEndpoint,
-        '',
-        $name,
-        true,
-        $httpProvider);
-  }
+ *
+ */ 
+class EngineBlock_Group_Provider_Precondition_UserId_PregMatch
+{
+    protected $_provider;
+    protected $_search;
+
+    public function __construct(EngineBlock_Group_Provider_Interface $provider, $options)
+    {
+        $this->_provider = $provider;
+        $this->_search = $options['search'];
+    }
+
+    public function validate()
+    {
+        preg_match($this->_search, $this->_provider->getUserId());
+    }
 }

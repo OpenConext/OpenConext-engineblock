@@ -24,18 +24,7 @@
  */
 
 /**
- * A generic group provider that only does REST, no RPC.
+ * HACK, load up the Shindig OAuth library as it's the same as the OpenSocial Clients one.
  */
-class Osapi_Provider_PlainRest extends osapiProvider {
-  public function __construct($name, $restEndpoint, osapiHttpProvider $httpProvider = null) {
-    parent::__construct(
-        '',
-        '',
-        '',
-        $restEndpoint,
-        '',
-        $name,
-        true,
-        $httpProvider);
-  }
-}
+
+require_once 'external/OAuth.php';

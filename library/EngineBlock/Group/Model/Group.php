@@ -23,24 +23,9 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_OpenSocial_Groups_Grouper_Adapter 
+class EngineBlock_Group_Model_Group implements EngineBlock_Group_Model_Interface
 {
-    /**
-     * @var EngineBlock_Groups_Grouper
-     */
-    protected $_grouperClient;
-
-    public function getGroupMembers($groupMemberUid, $groupName)
-    {
-        $members = $this->_getGrouperClient()->getMembers($groupMemberUid, $groupName);
-        foreach ($members as &$member) {
-            $member = self::_getOpenSocialPersonFromGrouperMember($member);
-        }
-        return $members;
-    }
-
-    protected static function _getOpenSocialPersonFromGrouperMember($member)
-    {
-        return $member;
-    }
+    public $id;
+    public $title;
+    public $description;
 }

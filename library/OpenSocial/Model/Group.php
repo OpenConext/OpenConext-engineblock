@@ -22,20 +22,3 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-
-/**
- * A generic group provider that only does REST, no RPC.
- */
-class Osapi_Provider_PlainRest extends osapiProvider {
-  public function __construct($name, $restEndpoint, osapiHttpProvider $httpProvider = null) {
-    parent::__construct(
-        '',
-        '',
-        '',
-        $restEndpoint,
-        '',
-        $name,
-        true,
-        $httpProvider);
-  }
-}

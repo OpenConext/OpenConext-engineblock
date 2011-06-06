@@ -33,7 +33,7 @@ class EngineBlock_SocialData
     protected $_userDirectory = NULL;
 
     /**
-     * @var EngineBlock_Groups_Abstract
+     * @var EngineBlock_Groups_Provider_Abstract
      */
     protected $_groupsClient = null;
 
@@ -61,19 +61,55 @@ class EngineBlock_SocialData
     {
         $this->_appId = $appId;
     }
-    
+
+    public function getGroupsForPerson($identifier, $groupId = null)
+    {
+        $engineBlockGroups = $this->_getGroupsClient($identifier)->getGroups();
+
+        $openSocialGroups = array();
+        foreach ($engineBlockGroups as $group) {
+             $openSocialGroup = $this->_mapEngineBlockGroupToOpenSocialGroup($group);
+
+             if ($groupId && $openSocialGroup['id'] !== $groupId) {
+                continue;
+             }
+
+             $openSocialGroups[] = $openSocialGroup;
+        }
+        return $openSocialGroups;
+    }
+
+    public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array())
+    {
+        $groupMembers = $this->_getGroupsClient($groupMemberUid)->getMembers($groupId);
+
+        $people = array();
+        /**
+         * @var EngineBlock_Group_Model_GroupMember $groupMember
+         */
+        foreach ($groupMembers as $groupMember) {
+            $person = $this->getPerson($groupMember->id, $socialAttributes);
+
+            if (!$person) {
+                continue;
+            }
+            
+            $people[] = $person;
+        }
+        return $people;
+    }
+
     public function getPerson($identifier, $socialAttributes = array())
     {
-        $result = array();
         $fieldMapper = $this->_getFieldMapper();
-        
+
         $ldapAttributes = $fieldMapper->socialToLdapAttributes($socialAttributes);
-        
+
         $persons = $this->_getUserDirectory()->findUsersByIdentifier($identifier, $ldapAttributes);
         if (count($persons)) {
             // ignore the hypothetical possibility that we get multiple results for now.
             $result = $fieldMapper->ldapToSocialData($persons[0], $socialAttributes);
-            
+
             // Make sure we only include attributes that we are allowed to share
             $result = $this->_enforceArp($result);
 
@@ -83,38 +119,13 @@ class EngineBlock_SocialData
         }
     }
 
-    public function getGroupsForPerson($identifier, $groupId = null)
+    protected function _mapEngineBlockGroupToOpenSocialGroup(EngineBlock_Group_Model_Group $group)
     {
-        $groupsClientGroups = $this->_getGroupsClient()->getGroups($identifier);
-
-        $openSocialGroups = array();
-        foreach ($groupsClientGroups as $group) {
-             $openSocialGroup = $this->_getFieldMapper()->grouperToSocialData($group);
-             if (!$groupId) {
-                $openSocialGroups[] = $openSocialGroup;
-             }
-             else {
-                 // Filter by the group id
-                 if ($openSocialGroup['id']===$groupId) {
-                     $openSocialGroups[] = $openSocialGroup;
-                 }
-             }
-        }
-        return $openSocialGroups;
-    }
-
-    public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array())
-    {
-        $groupMembers = $this->_getGroupsClient()->getMembers($groupMemberUid, $groupId);
-
-        $people = array();
-        foreach ($groupMembers as $groupMember) {
-            $person = $this->getPerson($groupMember['id'], $socialAttributes);
-            if ($person) {
-               $people[] = $person; 
-            }
-        }
-        return $people;
+        return array(
+            'id'            => $group->id,
+            'description'   => $group->description,
+            'title'         => $group->title,
+        );
     }
 
     protected function _enforceArp($record)
@@ -162,12 +173,22 @@ class EngineBlock_SocialData
     }
 
     /**
-     * @return EngineBlock_Groups_Abstract Group client
+     * @return EngineBlock_Group_Provider_Abstract Group client
      */
-    protected function _getGroupsClient()
+    protected function _getGroupsClient($userId)
     {
         if (!isset($this->_groupsClient)) {
-            $this->_groupsClient = EngineBlock_Groups_Directory::createGroupsClient("default");
+            $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+            $providers = $config->groupProviders;
+            $providerConfigs = array();
+            foreach ($providers as $provider) {
+                if (!isset($config->$provider)) {
+                    throw new EngineBlock_Exception("Group Provider '$provider' mentioned, but no config found.");
+                }
+                $providerConfigs[] = $config->$provider;
+            }
+            $providerConfigs = new Zend_Config($providerConfigs);
+            $this->_groupsClient = EngineBlock_Group_Provider_Aggregator::createFromConfigs($providerConfigs, $userId);
         }
         return $this->_groupsClient;
     }

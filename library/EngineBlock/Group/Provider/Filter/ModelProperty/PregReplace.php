@@ -23,19 +23,25 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-/**
- * A generic group provider that only does REST, no RPC.
- */
-class Osapi_Provider_PlainRest extends osapiProvider {
-  public function __construct($name, $restEndpoint, osapiHttpProvider $httpProvider = null) {
-    parent::__construct(
-        '',
-        '',
-        '',
-        $restEndpoint,
-        '',
-        $name,
-        true,
-        $httpProvider);
-  }
+class EngineBlock_Group_Provider_Filter_ModelProperty_PregReplace implements EngineBlock_Group_Provider_Filter_Interface
+{
+    protected $_options;
+
+    public function __construct(Zend_Config $options)
+    {
+        $this->_options = $options;
+    }
+
+    public function filter($data)
+    {
+        $modelProperties = array_keys(get_object_vars($data));
+        foreach ($modelProperties as $modelProperty) {
+            if (isset($this->_options->property) && $modelProperty !== $this->_options->property) {
+                continue;
+            }
+
+            $data->$modelProperty = preg_replace($this->_options->search, $this->_options->replace, $data->$modelProperty);
+        }
+        return $data;
+    }
 }

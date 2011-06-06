@@ -24,18 +24,11 @@
  */
 
 /**
- * A generic group provider that only does REST, no RPC.
- */
-class Osapi_Provider_PlainRest extends osapiProvider {
-  public function __construct($name, $restEndpoint, osapiHttpProvider $httpProvider = null) {
-    parent::__construct(
-        '',
-        '',
-        '',
-        $restEndpoint,
-        '',
-        $name,
-        true,
-        $httpProvider);
-  }
+ *
+ */ 
+interface EngineBlock_Group_Provider_Filter_Interface
+{
+    public function __construct(Zend_Config $options);
+    
+    public function filter($data);
 }

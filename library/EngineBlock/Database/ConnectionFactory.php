@@ -29,7 +29,8 @@ class EngineBlock_Database_ConnectionFactory
     const MODE_WRITE    = 'w';
 
     /**
-     * Create a new Database connection, for a given mode self::MODE_READ and self::MODE_WRITE, defaults to write mode.
+     * Create a new Database connection, for a given mode self::MODE_READ and self::MODE_WRITE,
+     * defaults to write mode.
      *
      * @static
      * @throws EngineBlock_Exception
