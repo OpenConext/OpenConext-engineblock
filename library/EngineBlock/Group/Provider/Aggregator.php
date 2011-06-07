@@ -58,6 +58,17 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         $this->_providers = $providers;
     }
 
+    public function setGroupStem($stemIdentifier)
+    {
+        parent::setGroupStem($stemIdentifier);
+
+        foreach ($this->_providers as $provider) {
+            $provider->setGroupStem($stemIdentifier);
+        }
+
+        return $this;
+    }
+
     public function getGroups()
     {
         $groups = array();
