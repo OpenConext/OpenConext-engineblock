@@ -203,6 +203,10 @@ configuration:
 
     RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
 
+Also set an alias for simplesaml for the third virtual host:
+
+    Alias /simplesaml /opt/www/engineblock/library/simplesamlphp/www
+
 
 ### Finally, test your EngineBlock instance ###
 
