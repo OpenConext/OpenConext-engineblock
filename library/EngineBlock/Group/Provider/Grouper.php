@@ -78,7 +78,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getMembers($groupIdentifier)
     {
-        $subjects = $this->_grouperClient->getMembers($groupIdentifier);
+        $subjects = $this->_grouperClient->getMembers($this->_getStemmedGroupId($groupIdentifier));
 
         $members = array();
         foreach ($subjects as $subject) {
@@ -95,7 +95,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
      */
     public function isMember($groupIdentifier)
     {
-        return $this->_grouperClient->hasMember($groupIdentifier);
+        return $this->_grouperClient->hasMember($this->_getStemmedGroupId($groupIdentifier));
     }
 
     protected function _mapGrouperGroupToEngineBlockGroup(Grouper_Model_Group $grouperGroup)

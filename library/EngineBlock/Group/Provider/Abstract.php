@@ -156,4 +156,12 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
     {
         return $this->_stem;
     }
+
+    protected function _getStemmedGroupId($groupIdentifier)
+    {
+        if (isset($this->_stem) && !empty($this->_stem)) {
+            return $this->_stem . ':' . $groupIdentifier;
+        }
+        return $groupIdentifier;
+    }
 }

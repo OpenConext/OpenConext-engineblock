@@ -128,7 +128,7 @@ class EngineBlock_Group_Provider_OpenSocial extends EngineBlock_Group_Provider_A
         $batch = $openSocialClient->newBatch();
         $batch->add($peopleService->get(array(
             'userId'    =>  $this->_userId,
-            'groupId'   =>  $groupIdentifier)
+            'groupId'   =>  $this->_getStemmedGroupId($groupIdentifier))
         ));
         $results = $batch->execute();
 
@@ -169,7 +169,7 @@ class EngineBlock_Group_Provider_OpenSocial extends EngineBlock_Group_Provider_A
          * @var osapiGroup $osapiGroup
          */
         foreach ($osapiGroups as $osapiGroup) {
-            if ($osapiGroup->id === $groupIdentifier) {
+            if ($osapiGroup->id === $this->_getStemmedGroupId($groupIdentifier)) {
                 return true;
             }
         }
