@@ -144,6 +144,7 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
     public function setGroupStem($stemIdentifier)
     {
         $this->_stem = $stemIdentifier;
+        return $this;
     }
     
     /**

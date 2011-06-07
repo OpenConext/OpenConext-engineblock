@@ -31,6 +31,8 @@
  *
  * So what we do is we use include_path trickery to make the OS client look in /Osapi/Hack
  * for it's stuff FIRST.
+ * There is an external/Oauth.php which just requires the Shindig OAuth library
+ * which it already has included, so everything chugs along. Sweet!
  */
 
 $osHackPath = realpath(ENGINEBLOCK_FOLDER_LIBRARY . '/Osapi/Hack') . '/';
