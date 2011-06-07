@@ -23,6 +23,13 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+/**
+ *
+ * @todo This is too tightly coupled to LDAP, we should be able to switch to a simple database
+ *
+ * @throws EngineBlock_Exception
+ *
+ */
 class EngineBlock_UserDirectory
 {
     const URN_COLLAB_PERSON_NAMESPACE           = 'urn:collab:person';
@@ -86,6 +93,31 @@ class EngineBlock_UserDirectory
                 throw new EngineBlock_Exception($message);
         }
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+    }
+
+    /**
+     * Make sure an organization exists in the directory
+     *
+     * @param  $organization
+     * @return bool
+     */
+    public function addOrganization($organization)
+    {
+        $info = array(
+            'o' => $organization ,
+            'objectclass' => array(
+                'organization' ,
+                'top'
+            )
+        );
+        $dn = 'o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
+        if (!$this->_getLdapClient()->exists($dn)) {
+            $result = $this->_getLdapClient()->add($dn, $info);
+            $result = ($result instanceof Zend_Ldap);
+        } else {
+            $result = TRUE;
+        }
+        return $result;
     }
 
     protected function _enrichLdapAttributes($ldapAttributes)
@@ -201,26 +233,6 @@ class EngineBlock_UserDirectory
         return 'uid=' . $attributes['uid'] . ',o=' . $attributes['o'] . ',' . $this->_getLdapClient()->getBaseDn();
     }
 
-    public function addOrganization($organization)
-    {
-        $info = array(
-            'o' => $organization ,
-            'objectclass' => array(
-                'organization' ,
-                'top'
-            )
-        );
-        $dn = 'o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
-        if (!$this->_getLdapClient()->exists($dn)) {
-            $result = $this->_getLdapClient()->add($dn, $info);
-            $result = ($result instanceof Zend_Ldap);
-        } else {
-            $result = TRUE;
-        }
-        return $result;
-    }
-
-
     protected function _getCommonNameFromAttributes($attributes)
     {
         if (isset($attributes['givenName']) && isset($attributes['sn'])) {
@@ -250,9 +262,14 @@ class EngineBlock_UserDirectory
         return "";
     }
 
+    /**
+     * @param  $client
+     * @return EngineBlock_UserDirectory
+     */
     public function setLdapClient($client)
     {
         $this->_ldapClient = $client;
+        return $this;
     }
 
     /**
@@ -264,13 +281,15 @@ class EngineBlock_UserDirectory
             $application = EngineBlock_ApplicationSingleton::getInstance();
             $config = $application->getConfiguration()->ldap;
 
-            $ldapOptions = array('host'                 => $config->host,
-                                 'useSsl'               => $config->useSsl,
-                                 'username'             => $config->userName,
-                                 'password'             => $config->password,
-                                 'bindRequiresDn'       => $config->bindRequiresDn,
-                                 'accountDomainName'    => $config->accountDomainName,
-                                 'baseDn'               => $config->baseDn);
+            $ldapOptions = array(
+                'host'                 => $config->host,
+                'useSsl'               => $config->useSsl,
+                'username'             => $config->userName,
+                'password'             => $config->password,
+                'bindRequiresDn'       => $config->bindRequiresDn,
+                'accountDomainName'    => $config->accountDomainName,
+                'baseDn'               => $config->baseDn
+            );
 
             $this->_ldapClient = new Zend_Ldap($ldapOptions);
             $this->_ldapClient->bind();
