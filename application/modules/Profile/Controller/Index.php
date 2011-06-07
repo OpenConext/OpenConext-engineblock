@@ -25,17 +25,54 @@
 
 class Profile_Controller_Index extends EngineBlock_Controller_Abstract
 {
-    /**
-     * @var Surfnet_Identity
-     */
     protected $_identity;
+
+    protected $_attributes;
 
     public function indexAction()
     {
         // Require authentication
         $this->_initAuthentication();
 
-        echo $this->_identity->id;
+        // Initialize the attributes
+        $this->setAttributes();
+
+        $this->__set('attributes', $this->_identity);
+    }
+
+    public function setAttributes()
+    {
+        $attributes = array();
+        require ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.inc.php';
+
+        $this->_attributes = $attributes;
+    }
+
+    public function getAttributeName($uid, $ietfLanguageTag = 'en_US')
+    {
+        $name = $this->_getAttributeDataType('Name', $uid, $ietfLanguageTag);
+        if (!$name) {
+            $name = $uid;
+        }
+        return $name;
+    }
+
+    public function getAttributeDescription($uid, $ietfLanguageTag = 'en_US')
+    {
+        $description = $this->_getAttributeDataType('Description', $uid, $ietfLanguageTag);
+        if (!$description) {
+            $description = '';
+        }
+        return $description;
+    }
+
+    protected function _getAttributeDataType($type, $name, $ietfLanguageTag = 'en_US')
+    {
+        if (isset($this->_attributes[$name][$type][$ietfLanguageTag])) {
+            return $this->_attributes[$name][$type][$ietfLanguageTag];
+        }
+        // @todo warn the system! requested a unkown UID or langauge...
+        return $name;
     }
 
     protected function _initAuthentication()

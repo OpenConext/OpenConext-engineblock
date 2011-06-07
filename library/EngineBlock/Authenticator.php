@@ -44,10 +44,6 @@ class EngineBlock_Authenticator
 
         $res = $auth->authenticate($adapter);
 
-        $samlIdentity = $res->getIdentity();
-        $identity = new Surfnet_Identity($samlIdentity['nameid'][0]);
-        $identity->displayName = $samlIdentity[self::AUTH_DISPLAY_NAME_SAML_ATTRIBUTE][0];
-
-        return $identity;
+        return $res->getIdentity();
     }
 }
