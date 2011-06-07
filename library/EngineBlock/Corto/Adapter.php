@@ -411,13 +411,23 @@ class EngineBlock_Corto_Adapter
         $voClient = new EngineBlock_VORegistry_Client();
         $metadata = $voClient->getGroupProviderMetadata($voIdentifier);
 
-        $client = EngineBlock_Groups_Directory::createGroupsClient($metadata["groupprovideridentifier"]);
+        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        $providers = $config->groupProviders;
+        $providerConfigs = array();
+        foreach ($providers as $provider) {
+            if (!isset($config->$provider)) {
+                throw new EngineBlock_Exception("Group Provider '$provider' mentioned, but no config found.");
+            }
+            $providerConfigs[] = $config->$provider;
+        }
+        $providerConfigs = new Zend_Config($providerConfigs);
+        $groupProvider = EngineBlock_Group_Provider_Aggregator::createFromConfigs($providerConfigs, $subjectIdentifier);
 
         if (isset($metadata["groupstem"])) {
-            $client->setGroupStem($metadata["groupstem"]);
+            $groupProvider->setGroupStem($metadata["groupstem"]);
         }
 
-        return $client->isMember($subjectIdentifier, $metadata["groupidentifier"]);
+        return $groupProvider->isMember($metadata["groupidentifier"]);
     }
 
     /**
