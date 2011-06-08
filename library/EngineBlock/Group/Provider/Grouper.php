@@ -101,8 +101,8 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
     protected function _mapGrouperGroupToEngineBlockGroup(Grouper_Model_Group $grouperGroup)
     {
         $engineBlockGroup = new EngineBlock_Group_Model_Group();
-        $engineBlockGroup->id           = $grouperGroup->id;
-        $engineBlockGroup->title        = $grouperGroup->name;
+        $engineBlockGroup->id           = $grouperGroup->name;
+        $engineBlockGroup->title        = $grouperGroup->displayExtension;
         $engineBlockGroup->description  = $grouperGroup->description;
         return $engineBlockGroup;
     }
