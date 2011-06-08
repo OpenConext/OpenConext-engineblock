@@ -1,0 +1,69 @@
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+
+#PortalErrorMessage {
+	position: relative;
+	margin: 50px auto 150px auto;
+	width:350px;
+	padding:15px;
+	background:#fd7700 url(../media/bg-primary.png) 0 50% repeat-x;
+	border: 1px solid #babbb0;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-border-radius: 5px;
+	-moz-box-shadow: 0px 3px 8px #aaa;
+	-webkit-box-shadow: 0px 3px 8px #aaa;
+	-box-shadow: 0px 3px 8px #aaa;
+	color: #fff;
+	font-family: "Lucida Sans Unicode","Lucida Grande",Arial,sans-serif;
+}
+#PortalErrorMessage .branding-header {
+	margin:0 -15px 10px -15px;
+	padding:0 15px 10px 15px;
+	border-bottom:1px solid #f9af4d;
+}
+#PortalErrorMessage h1 {
+	margin:0 0 5px 0;
+}
+#PortalErrorMessage h2 {
+	margin:0 0 10px 0;
+}
+
+#PortalErrorMessage p a {
+	color:#5a5b5a;
+}
+
+#PortalErrorMessage p a:hover {
+	color:#000;
+}
+#PortalErrorMessage .button-row {
+	margin:15px -15px -3px -15px;
+	padding:10px 15px 0 15px;
+	border-top:1px solid #f9af4d;
+	width:100%;
+	overflow:hidden;
+}
+#PortalErrorMessage .button-row a {
+	float:right;
+}

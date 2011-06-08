@@ -327,4 +327,16 @@ $attributes = array (
       'en_US' => 'Status of this account in the SURFfederation',
     ),
   ),
+  'nameid' => array( // federative identifier
+    'Name' =>
+    array (
+      'nl_NL' => 'Federatieve Identifier',
+      'en_US' => 'Federative Identifier',
+    ),
+    'Description' =>
+    array (
+      'nl_NL' => 'Status van deze account in de SURFfederatie',
+      'en_US' => 'Status of this account in the SURFfederation',
+    ),
+  ),
 );

@@ -4,78 +4,63 @@
         <title>SURFconext - My Profile</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex, nofollow"/>
-        <link href="https://espee.surfnet.nl/federate/surfnet/css/screen.css" rel="stylesheet" type="text/css" />
-        <link href="https://espee.surfnet.nl/federate/surfnet/css/table.css" rel="stylesheet" type="text/css" />
+        <link href="/css/screen.css" rel="stylesheet" type="text/css" />
+        <!--[if lt IE 8 ]><link href="/css/screen_ie.css" rel="stylesheet" type="text/css" media="screen" /><![endif]-->
     </head>
     <body>
-
         <div class="wrapper">
-            <div class="header">
-                <a href="http://www.surfnet.nl">
-                    <img class="logo" src="https://espee.surfnet.nl/federate/surfnet/img/surfnet_logo.gif" alt="logo" />
-                </a>
-                <span>SURFconext</span>
-                <span class="left"></span>
-                <span class="right"></span>
-                <img src="https://espee.surfnet.nl/federate/surfnet/img/federatie_header.jpg" alt="header img" />
-            </div>
+            <div class="header"><b><font size="4">SURFconext</font></b><span class="logo"><img src="/media/surfconext.png" alt="SURFconext" /></span></div>
             <div class="main">
-                <div class="column content">
-                    <div class="item">
-                        <span class="h2">My Profile</span>
+                <ul class="nav">
+                    <li class="active"><a href="#">EN</a></li>
+                </ul>
+                <h1>My Profile</h1>
+                <div>
+                    <p>
+                        The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.
+                    </p>
+                    <br />
 
-                        <p>
-                            The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.
-                        </p>
-
-                        <table>
-                        <?php foreach ($attributes as $uid => $attributeValues) { ?>
+                    <table>
+                        <thead>
                             <tr>
-                                <td style="font-weight: bold;">
-                                    <?=$this->getAttributeName($uid, 'en_US')?>
-                                </td>
-                                <td>
-                                    <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                                    <?=$attributeValues[0];?>
-                                    <? } /** Multiple attribute values */ else { ?>
-                                    <ul>
-                                    <?php foreach ($attributeValues as $value) { ?>
-                                        <li><?=$value?></li>
-                                    <?php } ?>
-                                    </ul>
-                                    <? } ?>
-                                </td>
+                                <th>Attribute</th>
+                                <th>Value</th>
                             </tr>
-                        <? } ?>
-                        </table>
-                        <br />
-                        <a href="/DeleteUser"
-                    </div>
+                        </thead>
+                    <?php foreach ($attributes as $uid => $attributeValues) { ?>
+                        <tr>
+                            <td style="font-weight: bold;">
+                                <?=$this->getAttributeName($uid, 'en_US')?>
+                            </td>
+                            <td>
+                                <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                                <?=$attributeValues[0];?>
+                                <? } /** Multiple attribute values */ else { ?>
+                                <ul>
+                                <?php foreach ($attributeValues as $value) { ?>
+                                    <li><?=$value?></li>
+                                <?php } ?>
+                                </ul>
+                                <? } ?>
+                            </td>
+                        </tr>
+                    <? } ?>
+                    </table>
+                    <hr />
+                    <h2>Leave SURFconext</h2>
+                    <p>
+                        If you want to leave SURFconext and delete all the information that is stored about you, please click the link below. Please note that you are also logged out. k <br />
+                        <a href="/profile/deleteuser">Delete my information!</a>
+                    </p>
+                </div>
+                <div class="bottom">
+                    <hr />
+                    <p>This service is made possible by <a href='http://www.surfnet.nl/'>SURFnet</a>.</p>
                 </div>
             </div>
-            <div class="footer">
-                <p>Also visit:</p>
-                <ul>
-                    <li><a href="http://www.surfnet.nl">SURFnet</a></li>
-                </ul>
-                <address>
-                    <span><strong>SURFnet bv</strong></span>
-                    <span>Radboudkwartier 273</span>
-                    <span>Postbus 19035</span>
-                    <span>3501 DA Utrecht</span>
-                    <span>T +31 302 305 305</span>
-                    <span>F +31 302 305 329</span>
-                    <a href="mailto:help@surfmedia.nl">
-                        help@surfmedia.nl
-                    </a>
-                    <a class="extra" href="http://www.surfnet.nl/nl/pages/copyright.aspx">
-                        Copyright
-                    </a>
-                    <a class="extra" href="http://www.surfnet.nl/nl/pages/disclaimer.aspx">
-                        Disclaimer
-                    </a>
-                </address>
-            </div>
         </div>
+        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="/javascript/screen.js"></script>
     </body>
 </html>

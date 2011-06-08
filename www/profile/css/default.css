@@ -1,0 +1,225 @@
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+
+body {
+    font-family: "Lucida Sans Unicode","Lucida Grande",Arial,sans-serif;
+    font-size:11px;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    margin: 0 0 10px 0;
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    margin-left:5px;
+}
+h2, .h2 {
+    font-size: 18px;
+    font-family: Arial, sans serif;
+}
+h3, .h3 {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom:5px;
+}
+h4, .h4 {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom:5px;
+}
+
+dl,dt,dd,ul,ol,li {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin: 0;
+    padding: 0;
+    line-height:16px;
+}
+
+input.text {
+    border: 1px solid #d4d4d0;
+    background-color:#fff;
+    padding: 2px;
+    font-family: "Lucida Sans Unicode","Lucida Grande",Arial,sans-serif;
+    -moz-box-shadow:-1px 1px 1px #999999 inset;
+    -webkit-box-shadow:-1px 1px 1px #999999 inset;
+    box-shadow:-1px 1px 1px #999999 inset;
+    font-size:11px;
+}
+
+textarea {
+    font-family: "Lucida Sans Unicode","Lucida Grande",Arial,sans-serif;
+}
+table {
+    margin: 0;
+    padding: 0;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+table th,table td {
+    margin:0;
+    padding:0;
+}
+
+fieldset {
+    width: 100%;
+    overflow: hidden;
+    display: block;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+a {
+    outline: none;
+    text-decoration: none;
+    color: #f86d00;
+}
+
+.button-primary,
+.ui-popup button.ui-button.ui-priority-primary,
+.button-secondary,
+.ui-popup button.ui-button.ui-priority-secondary,
+.button-tertiary,
+.ui-popup button.ui-button.ui-priority-tertiary  {
+	display:block;
+	position:relative;
+	padding: 2px 5px 5px 15px;
+	margin-right:10px;
+	border:none;
+	color:#fff;
+	white-space:nowrap;
+	cursor: pointer;
+	height:27px;
+	font-size:11px;
+	opacity:1;
+	background: #f1f1f1 url(../media/bg-buttons.png) 0 -100px no-repeat;
+	outline: 0;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+}
+
+.button-tertiary,
+.ui-popup button.ui-button.ui-priority-tertiary  {
+	background-color: #ff9600;
+}
+
+.ui-popup.tertiary button.ui-button.ui-priority-tertiary {
+	background-color: #424340;
+}
+
+a.button-primary,
+a.button-secondary,
+a.button-tertiary {
+	position:relative;
+	padding-top:4px;
+	height:17px;
+	float:left;
+}
+
+.btn-wrapper,
+.ui-popup.ui-dialog .btn-wrapper {
+	display:block;
+	border:1px solid red;
+}
+
+.btn-wrap-right {
+	position:absolute;
+	right:-10px;
+	top:0px;
+	display:block;
+	float:right;
+	width:10px;
+	height:27px;
+	background:transparent url(../media/bg-buttons.png) 100% -100px no-repeat !important;
+}
+/* = Firefox only */
+@-moz-document url-prefix(){
+	.btn-wrap-right {
+		right:5px;
+		top:-4px;
+	}
+}
+/*/ Firefox only */
+
+
+a .btn-wrap-right {
+	right:-10px;
+	top:0px;
+}
+.button-primary.hover,
+.ui-popup button.ui-button.ui-priority-primary.ui-state-hover {
+	background-position: 0 -150px !important;
+}
+.btn-wrap-right.hover  {
+	background-position: 100% -150px !important;
+}
+
+.button-secondary,
+.ui-popup button.ui-button.ui-priority-secondary {
+	background-position: 0 0 !important;
+}
+.button-secondary.hover,
+.ui-popup button.ui-button.ui-priority-secondary.ui-state-hover {
+	background-position: 0 -51px !important;
+}
+.button-secondary .btn-wrap-right,
+.ui-popup button.ui-button.ui-priority-secondary .btn-wrap-right {
+	background-position: 100% 0px !important;
+}
+.button-secondary .btn-wrap-right.hover,
+.ui-popup button.ui-button.ui-priority-secondary .btn-wrap-right.hover{
+	background-position: 100% -51px !important;
+}
+
+.button-tertiary,
+.ui-popup button.ui-button.ui-priority-tertiary {
+	background-position: 0 -200px !important;
+}
+.button-tertiary.hover,
+.ui-popup button.ui-button.ui-priority-tertiary.ui-state-hover {
+	background-position: 0 -250px !important;
+}
+.button-tertiary .btn-wrap-right,
+.ui-popup button.ui-button.ui-priority-tertiary .btn-wrap-right {
+	background-position: 100% -200px !important;
+}
+.button-tertiary .btn-wrap-right.hover,
+.ui-popup button.ui-button.ui-priority-tertiary .btn-wrap-right.hover {
+	background-position: 100% -250px !important;
+}
