@@ -84,6 +84,7 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                     'Location' => "https://sp.testing.dev.coin.surf.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp"
                 ),
                 'WantsAssertionsSigned' => true,
+                'MustProvisionExternally' => false,
                 "certificates" => array(
                     'public' => "-----BEGIN CERTIFICATE-----
 MIICgTCCAeoCCQCbOlrWDdX7FTANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMC
