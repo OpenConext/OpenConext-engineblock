@@ -37,7 +37,10 @@ class EngineBlock_Cleanup_CleanupService {
     public function cleanupUser($uid)
     {
         // Delete the user from the LDAP
-        $this->_deleteLdapUser($uid);
+        //$this->_deleteLdapUser($uid);
+
+        // Delte the user consent
+        $this->_deleteUserConsent($uid);
 
         // Delete the cookies and session
         $this->_deleteFromEnvironment();
@@ -52,6 +55,45 @@ class EngineBlock_Cleanup_CleanupService {
     {
         $userDirectory = new EngineBlock_UserDirectory();
         $userDirectory->deleteUser($uid);
+    }
+
+    /**
+     * Delete the user consent form the database
+     *
+     * @param  $uid
+     * @return void
+     */
+    protected function _deleteUserConsent($uid)
+    {
+        $factory = $this->_getDatabaseConnection();
+
+        $query = "DELETE FROM consent
+                    WHERE hashed_user_id = ?";
+        $parameters = array(
+            sha1($this->_getUserId($uid))
+        );
+        echo 'UID: '. $this->_getUserId($uid);
+        echo 'UID_Hash: '. sha1($this->_getUserId($uid));
+
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+
+        echo '<pre>'; var_dump($statement); exit();
+    }
+
+    protected function _getDatabaseConnection()
+    {
+        $factory = new EngineBlock_Database_ConnectionFactory();
+        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+    }
+
+    protected function _getUserId($uid)
+    {
+        $uidParts = explode(":", $uid);
+        if (count($uidParts) >= 4) {
+            return $uidParts[4];
+        }
+        return null;
     }
 
     /**
