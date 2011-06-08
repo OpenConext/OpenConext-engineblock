@@ -72,13 +72,9 @@ class EngineBlock_Cleanup_CleanupService {
         $parameters = array(
             sha1($this->_getUserId($uid))
         );
-        echo 'UID: '. $this->_getUserId($uid);
-        echo 'UID_Hash: '. sha1($this->_getUserId($uid));
 
         $statement = $factory->prepare($query);
         $statement->execute($parameters);
-
-        echo '<pre>'; var_dump($statement); exit();
     }
 
     protected function _getDatabaseConnection()
