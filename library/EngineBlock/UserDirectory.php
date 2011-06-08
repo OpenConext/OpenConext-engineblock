@@ -198,7 +198,7 @@ class EngineBlock_UserDirectory
 
     protected function _updateUser($user, $newAttributes, $saml2attributes, $idpEntityMetadata)
     {
-        // Hackish, appearantly LDAP gives us arrays even for single values?
+        // Hackish, apparently LDAP gives us arrays even for single values?
         // So for now we assume arrays with only one value are single valued
         foreach ($user as $userKey => $userValue) {
             if (is_array($userValue) && count($userValue) === 1) {
