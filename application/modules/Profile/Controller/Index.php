@@ -32,7 +32,7 @@ class Profile_Controller_Index extends EngineBlock_Controller_Abstract
     public function indexAction()
     {
         // Require authentication
-        $this->_initAuthentication();
+        $this->_identity = $this->_initAuthentication();
 
         // Initialize the attributes
         $this->setAttributes();
@@ -73,10 +73,5 @@ class Profile_Controller_Index extends EngineBlock_Controller_Abstract
         }
         // @todo warn the system! requested a unkown UID or langauge...
         return $name;
-    }
-
-    protected function _initAuthentication()
-    {
-        $this->_identity = EngineBlock_Authenticator::authenticate();
     }
 }

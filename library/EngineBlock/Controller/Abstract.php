@@ -63,7 +63,7 @@ class EngineBlock_Controller_Abstract
             return;
         }
 
-        $renderedView = $this->renderView($actionName);
+        $renderedView = $this->_renderView($actionName);
         EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse()->setBody($renderedView);
     }
 
@@ -91,7 +91,7 @@ class EngineBlock_Controller_Abstract
         return $this;
     }
 
-    protected function renderView($actionName)
+    protected function _renderView($actionName)
     {
         $moduleDir = dirname(__FILE__) . '/../../../application/modules/';
         $filePath = $moduleDir . ucfirst($this->_moduleName) . '/View/' . ucfirst($this->_controllerName) . '/' . $actionName . '.phtml';
@@ -110,5 +110,15 @@ class EngineBlock_Controller_Abstract
         ob_end_clean();
 
         return $renderedView;
+    }
+
+    protected function _initAuthentication()
+    {
+       return EngineBlock_Authenticator::authenticate();
+    }
+
+    protected function _redirectToUrl($url)
+    {
+        EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse()->setRedirectUrl($url);
     }
 }

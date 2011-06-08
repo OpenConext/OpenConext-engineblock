@@ -52,6 +52,14 @@ class EngineBlock_UserDirectory
 
     protected $_ldapClient = NULL;
 
+    protected $_ldapConfig = NULL;
+
+    public function __construct()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $this->_ldapConfig = $application->getConfiguration()->ldap;
+    }
+
     public function findUsersByIdentifier($identifier, $ldapAttributes = array())
     {
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
@@ -93,6 +101,36 @@ class EngineBlock_UserDirectory
                 throw new EngineBlock_Exception($message);
         }
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+    }
+
+    /**
+     * Delete a user from the LDAP if he/she wants to be removed from the SURFconext platform
+     *
+     * @param  $uid
+     * @return void
+     */
+    public function deleteUser($uid)
+    {
+        $dn = $this->_buildUserDn($uid);
+        $this->_getLdapClient()->delete($dn, false);
+    }
+
+    /**
+     * Build the user dn based on the UID
+     *
+     * @param  $uid
+     * @return null|string
+     */
+    protected function _buildUserDn($uid)
+    {
+        $uidParts = explode(':', $uid);
+
+        if (count($uidParts) >=4) {
+            // Only use the third and fourth part, other parts contain person namespace
+            return 'uid='. $uidParts[4] .',o='. $uidParts[3] .','. $this->_ldapConfig->baseDn;
+        }
+
+        return null;
     }
 
     /**
@@ -278,17 +316,15 @@ class EngineBlock_UserDirectory
     protected function _getLdapClient()
     {
         if ($this->_ldapClient == NULL) {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            $config = $application->getConfiguration()->ldap;
 
             $ldapOptions = array(
-                'host'                 => $config->host,
-                'useSsl'               => $config->useSsl,
-                'username'             => $config->userName,
-                'password'             => $config->password,
-                'bindRequiresDn'       => $config->bindRequiresDn,
-                'accountDomainName'    => $config->accountDomainName,
-                'baseDn'               => $config->baseDn
+                'host'                 => $this->_ldapConfig->host,
+                'useSsl'               => $this->_ldapConfig->useSsl,
+                'username'             => $this->_ldapConfig->userName,
+                'password'             => $this->_ldapConfig->password,
+                'bindRequiresDn'       => $this->_ldapConfig->bindRequiresDn,
+                'accountDomainName'    => $this->_ldapConfig->accountDomainName,
+                'baseDn'               => $this->_ldapConfig->baseDn
             );
 
             $this->_ldapClient = new Zend_Ldap($ldapOptions);
