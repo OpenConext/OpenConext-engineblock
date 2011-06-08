@@ -32,11 +32,36 @@ class EngineBlock_Provisioning
 
     /**
      * @param  $saml2Attributes
-     * @return array Collaboration attributes to add after consent
+     * @return string User Id of provisioned user.
      */
-    public function provisionUser(array $saml2Attributes, $idpEntityMetadata)
+    public function provisionUser(array $saml2Attributes, array $spEntityMetadata, array $idpEntityMetadata)
     {
-        return $this->_getUserDirectory()->registerUser($saml2Attributes, $idpEntityMetadata);
+        $userId = $this->_getUserDirectory()->registerUser($saml2Attributes, $idpEntityMetadata);
+
+        $this->_provisionToExternals($userId, $saml2Attributes, $spEntityMetadata, $idpEntityMetadata);
+
+        return $userId;
+    }
+
+    protected function _provisionToExternals($userId, $saml2Attributes, $spEntityMetadata, $idpEntityMetadata)
+    {
+        $provisioners = $this->_getProvisioners();
+        foreach ($provisioners as $provisionerConfig) {
+            $className = $provisionerConfig->className;
+            $provisioner = new $className($provisionerConfig);
+            $provisioner->provisionUser($userId, $saml2Attributes, $spEntityMetadata, $idpEntityMetadata);
+        }
+    }
+
+    protected function _getProvisioners()
+    {
+        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        if (!isset($config->provisioners)) {
+            return array();
+        }
+        else {
+            return $config->provisioners;
+        }
     }
 
     protected function _getUserDirectory()

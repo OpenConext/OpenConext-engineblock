@@ -30,6 +30,21 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
 {
     protected $_providers = array();
 
+    public static function createFromConfigFor($userId)
+    {
+        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        $providers = $config->groupProviders;
+        $providerConfigs = array();
+        foreach ($providers as $provider) {
+            if (!isset($config->$provider)) {
+                throw new EngineBlock_Exception("Group Provider '$provider' mentioned, but no config found.");
+            }
+            $providerConfigs[] = $config->$provider;
+        }
+        $providerConfigs = new Zend_Config($providerConfigs);
+        return self::createFromConfigs($providerConfigs, $userId);
+    }
+
     public static function createFromConfigs(Zend_Config $config, $userId)
     {
         $providers = array();

@@ -35,7 +35,7 @@ class EngineBlock_SocialData
     /**
      * @var EngineBlock_Groups_Provider_Abstract
      */
-    protected $_groupsClient = null;
+    protected $_groupProvider = null;
 
     /**
      * @var EngineBlock_ServiceRegistry_Client
@@ -64,7 +64,7 @@ class EngineBlock_SocialData
 
     public function getGroupsForPerson($identifier, $groupId = null)
     {
-        $engineBlockGroups = $this->_getGroupsClient($identifier)->getGroups();
+        $engineBlockGroups = $this->_getGroupProvider($identifier)->getGroups();
 
         $openSocialGroups = array();
         foreach ($engineBlockGroups as $group) {
@@ -81,7 +81,7 @@ class EngineBlock_SocialData
 
     public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array())
     {
-        $groupMembers = $this->_getGroupsClient($groupMemberUid)->getMembers($groupId);
+        $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId);
 
         $people = array();
         /**
@@ -173,24 +173,15 @@ class EngineBlock_SocialData
     }
 
     /**
-     * @return EngineBlock_Group_Provider_Abstract Group client
+     * @param string $userId Id of the user (urn:collab:...)
+     * @return EngineBlock_Group_Provider_Abstract
      */
-    protected function _getGroupsClient($userId)
+    protected function _getGroupProvider($userId)
     {
-        if (!isset($this->_groupsClient)) {
-            $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-            $providers = $config->groupProviders;
-            $providerConfigs = array();
-            foreach ($providers as $provider) {
-                if (!isset($config->$provider)) {
-                    throw new EngineBlock_Exception("Group Provider '$provider' mentioned, but no config found.");
-                }
-                $providerConfigs[] = $config->$provider;
-            }
-            $providerConfigs = new Zend_Config($providerConfigs);
-            $this->_groupsClient = EngineBlock_Group_Provider_Aggregator::createFromConfigs($providerConfigs, $userId);
+        if (!isset($this->_groupProvider)) {
+            $this->_groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor($userId);
         }
-        return $this->_groupsClient;
+        return $this->_groupProvider;
     }
     
     /**

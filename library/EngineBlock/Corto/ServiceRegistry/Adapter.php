@@ -115,6 +115,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         $serviceRegistryEntity = self::convertServiceRegistryEntityToMultiDimensionalArray($serviceRegistryEntity);
 
         $cortoEntity = array();
+
+        // For SPs
         if (isset($serviceRegistryEntity['AssertionConsumerService'][0]['Location'])) {
             $cortoEntity['AssertionConsumerService'] = array(
                 'Binding'  => $serviceRegistryEntity['AssertionConsumerService'][0]['Binding'],
@@ -126,7 +128,27 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             if (isset($serviceRegistryEntity['coin']['expects_oids']) && $serviceRegistryEntity['coin']['expects_oids']) {
                 $cortoEntity['ExpectsOids'] = true;
             }
+
+            $cortoEntity['MustProvisionExternally'] = false;
+            if (isset($serviceRegistryEntity['coin']['is_provision_sp']) && $serviceRegistryEntity['coin']['is_provision_sp']) {
+                $cortoEntity['MustProvisionExternally'] = true;
+
+                if (isset($serviceRegistryEntity['coin']['provision_type'])) {
+                    $cortoEntity['ExternalProvisionType'] = $serviceRegistryEntity['coin']['provision_type'];
+                }
+                if (isset($serviceRegistryEntity['coin']['provision_domain'])) {
+                    $cortoEntity['ExternalProvisionDomain'] = $serviceRegistryEntity['coin']['provision_domain'];
+                }
+                if (isset($serviceRegistryEntity['coin']['provision_admin'])) {
+                    $cortoEntity['ExternalProvisionAdmin'] = $serviceRegistryEntity['coin']['provision_admin'];
+                }
+                if (isset($serviceRegistryEntity['coin']['provision_password'])) {
+                    $cortoEntity['ExternalProvisionPassword'] = $serviceRegistryEntity['coin']['provision_password'];
+                }
+            }
         }
+
+        // For Idps
         if (isset($serviceRegistryEntity['SingleSignOnService'][0]['Location'])) {
             $cortoEntity['SingleSignOnService'] = array(
                 'Binding'   => $serviceRegistryEntity['SingleSignOnService'][0]['Binding'],
@@ -141,6 +163,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 }
             }
         }
+
+        // In general
         if (isset($serviceRegistryEntity['certData']) && $serviceRegistryEntity['certData']) {
             $cortoEntity['certificates'] = array(
                 'public' => EngineBlock_X509Certificate::getPemFromCertData($serviceRegistryEntity['certData']),

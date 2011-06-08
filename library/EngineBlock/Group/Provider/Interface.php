@@ -95,4 +95,22 @@ interface EngineBlock_Group_Provider_Interface
      * @return boolean
      */
     public function isMember($groupIdentifier);
+
+    /**
+     * @abstract
+     * @return string
+     */
+    public function getGroupStem();
+
+    /**
+     * Some group provider implementations are able to host more than one set
+     * of groups. In many implementations this is called a 'stem', and by
+     * setting the stem we can choose which set of groups to use. While we use
+     * the term 'stem' here, other implementations are free to implement the
+     * filtering as they see fit. Implementations that don't support multiple
+     * sets of groups, they can simply ignore this call
+     * @param String $stemIdentifier
+     * @return EngineBlock_Group_Provider_Interface
+     */
+    public function setGroupStem($stemIdentifier);
 }

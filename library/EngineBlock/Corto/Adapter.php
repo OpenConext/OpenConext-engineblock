@@ -345,7 +345,7 @@ class EngineBlock_Corto_Adapter
         $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
 
         // Provisioning of the user account
-        $subjectId = $this->_provisionUser($responseAttributes, $idpEntityMetadata);
+        $subjectId = $this->_provisionUser($responseAttributes, $spEntityMetadata, $idpEntityMetadata);
         $_SESSION['subjectId'] = $subjectId;
 
         $this->_handleVirtualOrganizationResponse($request, $subjectId);
@@ -369,9 +369,9 @@ class EngineBlock_Corto_Adapter
         return $mapper->map($responseAttributes);
     }
 
-    protected function _provisionUser(array $attributes, $idpEntityMetadata)
+    protected function _provisionUser($attributes, $spEntityMetadata, $idpEntityMetadata)
     {
-        return $this->_getProvisioning()->provisionUser($attributes, $idpEntityMetadata);
+        return $this->_getProvisioning()->provisionUser($attributes, $spEntityMetadata, $idpEntityMetadata);
     }
 
     protected function _handleVirtualOrganizationResponse($request, $subjectId)
@@ -411,17 +411,7 @@ class EngineBlock_Corto_Adapter
         $voClient = new EngineBlock_VORegistry_Client();
         $metadata = $voClient->getGroupProviderMetadata($voIdentifier);
 
-        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-        $providers = $config->groupProviders;
-        $providerConfigs = array();
-        foreach ($providers as $provider) {
-            if (!isset($config->$provider)) {
-                throw new EngineBlock_Exception("Group Provider '$provider' mentioned, but no config found.");
-            }
-            $providerConfigs[] = $config->$provider;
-        }
-        $providerConfigs = new Zend_Config($providerConfigs);
-        $groupProvider = EngineBlock_Group_Provider_Aggregator::createFromConfigs($providerConfigs, $subjectIdentifier);
+        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor($subjectIdentifier);
 
         if (isset($metadata["groupstem"])) {
             $groupProvider->setGroupStem($metadata["groupstem"]);

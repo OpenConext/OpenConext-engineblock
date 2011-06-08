@@ -140,6 +140,7 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
      * filtering as they see fit. Implementations that don't support multiple
      * sets of groups, they can simply ignore this call 
      * @param String $stemIdentifier
+     * @return EngineBlock_Group_Provider_Interface
      */
     public function setGroupStem($stemIdentifier)
     {
