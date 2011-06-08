@@ -226,11 +226,11 @@ class EngineBlock_SocialData_FieldMapper
 
     public function convertLdapCollabPersonIsGuest($result, $collabPersonIsGuest)
     {
-        if ($collabPersonIsGuest) {
-            $result['tags'][] = 'guest';
+        if ($collabPersonIsGuest[0] === "FALSE") {
+            $result['tags'][] = 'member';
         }
         else {
-            $result['tags'][] = 'member';
+            $result['tags'][] = 'guest';
         }
         return $result;
     }
