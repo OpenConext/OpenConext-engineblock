@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Provisioner_ProvisioningMaster
+class EngineBlock_Provisioner_ProvisioningManager
 {
     protected $_url;
 
@@ -49,16 +49,24 @@ class EngineBlock_Provisioner_ProvisioningMaster
 
         // https://os.XXX.surfconext.nl/provisioning-manager/provisioning/jit.shtml?
         // provisionDomain=apps.surfnet.nl&provisionAdmin=admin%40apps.surfnet.nl&
-        // provisionPassword=P%26qdq6qP&provisionType=GOOGLE
+        // provisionPassword=xxxxx&provisionType=GOOGLE
         
         $client = new Zend_Http_Client($this->_url);
-        $client
+        $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
+
             ->setParameterGet('provisionType'       , $spMetadata['ExternalProvisionType'])
             ->setParameterGet('provisionDomain'     , $spMetadata['ExternalProvisionDomain'])
             ->setParameterGet('provisionAdmin'      , $spMetadata['ExternalProvisionAdmin'])
-            ->setParameterGet('provisionPassword'   , $spMetadata['ExternalProvisionPassword']);
-        $client->setRawData(json_encode($this->_getData($userId, $attributes)));
-        $client->request('POST');
+            ->setParameterGet('provisionPassword'   , $spMetadata['ExternalProvisionPassword'])
+
+            ->setRawData(json_encode($this->_getData($userId, $attributes)))
+
+            ->request('POST');
+
+        ebLog()->debug("PROVISIONING: Sent HTTP request to provision user using " . __CLASS__);
+        ebLog()->debug("PROVISIONING: URI: " . $client->getUri(true));
+        ebLog()->debug("PROVISIONING: REQUEST: " . $client->getLastRequest());
+        ebLog()->debug("PROVISIONING: RESPONSE: " . $client->getLastResponse());
     }
 
     /**
