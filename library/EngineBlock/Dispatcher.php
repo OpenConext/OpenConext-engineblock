@@ -72,7 +72,7 @@ class EngineBlock_Dispatcher
             $uri = $application->getHttpRequest()->getUri();
         }
 
-        $router = $this->_getRouter($uri);
+        $router = $this->_getFirstRoutableRouterFor($uri);
 
         $module             = $router->getModuleName();
         $controllerName     = $router->getControllerName();
@@ -124,12 +124,12 @@ class EngineBlock_Dispatcher
     }
 
     /**
-     * 
+     * Returns the first router that is capable of routing the given URI
      *
      * @param  string $uri
      * @return EngineBlock_Router_Abstract
      */
-    protected function _getRouter($uri)
+    protected function _getFirstRoutableRouterFor($uri)
     {
         /**
          * @var EngineBlock_Router_Interface $router
