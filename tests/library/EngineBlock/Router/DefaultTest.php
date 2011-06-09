@@ -45,23 +45,23 @@ class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstra
             "EngineBlock_Router_Default",
             '//////module/',
             true,
-            'module'
+            'Module'
         );
         
         $this->_testRoute(
             "EngineBlock_Router_Default",
             '/module//',
             true,
-            'module'
+            'Module'
         );
 
         $this->_testRoute(
             "EngineBlock_Router_Default",
             '/module////controller////action',
             true,
-            'module',
-            'controller',
-            'action'
+            'Module',
+            'Controller',
+            'Action'
         );
 
         $this->_testRoute(
@@ -73,26 +73,26 @@ class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstra
             "EngineBlock_Router_Default",
             '/module/controller',
             true,
-            'module',
-            'controller'
+            'Module',
+            'Controller'
         );
 
         $this->_testRoute(
             "EngineBlock_Router_Default",
             '/module/controller/action',
             true,
-            'module',
-            'controller',
-            'action'
+            'Module',
+            'Controller',
+            'Action'
         );
 
         $this->_testRoute(
             "EngineBlock_Router_Default",
             '/module/controller/action/arg1',
             true,
-            'module',
-            'controller',
-            'action',
+            'Module',
+            'Controller',
+            'Action',
             array(
                 'arg1'
             )
@@ -102,9 +102,9 @@ class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstra
             "EngineBlock_Router_Default",
             '/module/controller/action/arg1/arg2',
             true,
-            'module',
-            'controller',
-            'action',
+            'Module',
+            'Controller',
+            'Action',
             array(
                 'arg1',
                 'arg2'
@@ -115,9 +115,9 @@ class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstra
             "EngineBlock_Router_Default",
             '/module/controller/action/~!@#$%^&*()+-={}[]\|;:\'",<>.?',
             true,
-            'module',
-            'controller',
-            'action',
+            'Module',
+            'Controller',
+            'Action',
             array(
                 '~!@#$%^&*()+-={}[]\|;:\'",<>.?'
             )
