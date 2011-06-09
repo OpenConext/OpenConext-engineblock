@@ -22,10 +22,3 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-
-require_once(dirname(__FILE__) . '/../../../autoloading.inc.php');
-
-class Test_EngineBlock_Router_Default 
-{
-
-}
