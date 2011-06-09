@@ -37,7 +37,7 @@ class EngineBlock_Cleanup_CleanupService {
     public function cleanupUser($uid)
     {
         // Delete the user from the LDAP
-        //$this->_deleteLdapUser($uid);
+        $this->_deleteLdapUser($uid);
 
         // Delte the user consent
         $this->_deleteUserConsent($uid);
@@ -70,7 +70,7 @@ class EngineBlock_Cleanup_CleanupService {
         $query = "DELETE FROM consent
                     WHERE hashed_user_id = ?";
         $parameters = array(
-            sha1($this->_getUserId($uid))
+            sha1($uid)
         );
 
         $statement = $factory->prepare($query);
@@ -81,15 +81,6 @@ class EngineBlock_Cleanup_CleanupService {
     {
         $factory = new EngineBlock_Database_ConnectionFactory();
         return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
-    }
-
-    protected function _getUserId($uid)
-    {
-        $uidParts = explode(":", $uid);
-        if (count($uidParts) >= 4) {
-            return $uidParts[4];
-        }
-        return null;
     }
 
     /**
