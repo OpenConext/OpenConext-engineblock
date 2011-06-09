@@ -32,7 +32,7 @@ class EngineBlock_Router_OpenSocial extends EngineBlock_Router_Abstract
     {
         $urlParts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
 
-        if ($urlParts[0] !== 'social') {
+        if (!isset($urlParts[0]) || $urlParts[0] !== 'social') {
             return false;
         }
 
