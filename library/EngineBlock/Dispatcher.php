@@ -132,7 +132,7 @@ class EngineBlock_Dispatcher
     protected function _getRouter($uri)
     {
         /**
-         * @var EngineBlock_Router_Abstract $router
+         * @var EngineBlock_Router_Interface $router
          */
         foreach ($this->_routers as $router) {
             $routable = $router->route($uri);

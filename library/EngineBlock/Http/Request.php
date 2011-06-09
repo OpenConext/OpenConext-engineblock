@@ -40,8 +40,7 @@ class EngineBlock_Http_Request
         $request->setMethod($_SERVER['REQUEST_METHOD']);
         $request->setHostName($_SERVER['HTTP_HOST']);
         
-        $elems = explode("?", $_SERVER['REQUEST_URI']); // strip the parameters.
-        $request->setUri($elems[0]);
+        $request->setUri(substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], '?') + 1));
         $request->setQueryString($_SERVER['QUERY_STRING']);        
         return $request;
     }

@@ -28,7 +28,7 @@
  */
 class EngineBlock_Router_Authentication extends EngineBlock_Router_Default
 {
-    protected $DEFAULT_MODULE_NAME = 'Authentication';
+    const DEFAULT_MODULE_NAME = 'Authentication';
 
     protected $_controllerMapping = array(
         'Idp'   =>'IdentityProvider',

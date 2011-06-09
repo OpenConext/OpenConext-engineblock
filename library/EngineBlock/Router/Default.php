@@ -28,9 +28,9 @@
  */
 class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 {
-    protected $DEFAULT_MODULE_NAME     = "Default";
-    protected $DEFAULT_CONTROLLER_NAME = "Index";
-    protected $DEFAULT_ACTION_NAME     = "index";
+    const DEFAULT_MODULE_NAME     = "Default";
+    const DEFAULT_CONTROLLER_NAME = "Index";
+    const DEFAULT_ACTION_NAME     = "index";
 
     /**
      * Note that this router interprets ////tekno as /tekno, NOT as /default/index/index/tekno
@@ -43,24 +43,27 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $urlParts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
         $urlPartsCount = count($urlParts);
 
-        $module     = $this->DEFAULT_MODULE_NAME;
-        $controller = $this->DEFAULT_CONTROLLER_NAME;
-        $action     = $this->DEFAULT_ACTION_NAME;
+        $module     = static::DEFAULT_MODULE_NAME;
+        $controller = static::DEFAULT_CONTROLLER_NAME;
+        $action     = static::DEFAULT_ACTION_NAME;
         $arguments  = array();
 
         // Note how we actually use the fall-through
         switch($urlPartsCount)
         {
             case 3:
+                // /module/controller/action
                 if ($urlParts[2]) {
                     $action     = $urlParts[2];
                 }
 
             case 2:
+                // /module/controller => /module/controller/index
                 if ($urlParts[1]) {
                     $controller = $this->_convertUrlToCamelCase($urlParts[1]);
                 }
 
+                // /module => /module/index/index
             case 1:
                 if ($urlParts[0]) {
                     $module     = $urlParts[0];

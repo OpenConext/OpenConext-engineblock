@@ -23,14 +23,12 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-abstract class EngineBlock_Router_Abstract
+abstract class EngineBlock_Router_Abstract implements EngineBlock_Router_Interface
 {
     protected $_controllerName;
     protected $_moduleName;
     protected $_actionName;
     protected $_actionArguments = array();
-
-    abstract public function route($uri);
 
     public function getControllerName()
     {
@@ -54,11 +52,12 @@ abstract class EngineBlock_Router_Abstract
 
     protected function setActionArguments($arguments)
     {
-        foreach ($arguments as &$argument) {
-            $argument = urldecode($argument);
+        $decodedArguments = array();
+        foreach ($arguments as $argument) {
+            $decodedArguments[] = rawurldecode($argument);
         }
 
-        $this->_actionArguments = $arguments;
+        $this->_actionArguments = $decodedArguments;
         return $this;
     }
 }

@@ -28,7 +28,7 @@
  */
 class EngineBlock_Router_Service extends EngineBlock_Router_Abstract
 {
-    protected $DEFAULT_ACTION_NAME     = "index";
+    const DEFAULT_ACTION_NAME     = "index";
 
     public function route($uri)
     {
