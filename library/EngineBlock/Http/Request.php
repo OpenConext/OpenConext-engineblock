@@ -39,8 +39,14 @@ class EngineBlock_Http_Request
         $request->setProtocol((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on'));
         $request->setMethod($_SERVER['REQUEST_METHOD']);
         $request->setHostName($_SERVER['HTTP_HOST']);
-        
-        $request->setUri(substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], '?') + 1));
+
+        $queryStart = strpos($_SERVER['REQUEST_URI'], '?');
+        if ($queryStart !== false) {
+            $request->setUri(substr($_SERVER['REQUEST_URI'], 0, $queryStart));
+        }
+        else {
+            $request->setUri($_SERVER['REQUEST_URI']);
+        }
         $request->setQueryString($_SERVER['QUERY_STRING']);        
         return $request;
     }
