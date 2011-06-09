@@ -58,7 +58,7 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 
             case 2:
                 if ($urlParts[1]) {
-                    $controller = $urlParts[1];
+                    $controller = $this->_convertUrlToCamelCase($urlParts[1]);
                 }
 
             case 1:
@@ -74,7 +74,7 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
                     $action     = $urlParts[2];
                 }
                 if ($urlParts[1]) {
-                    $controller = $urlParts[1];
+                    $controller = $this->_convertUrlToCamelCase($urlParts[1]);
                 }
                 if ($urlParts[0]) {
                     $module     = $urlParts[0];
@@ -89,5 +89,10 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $this->setActionArguments($arguments);
 
         return true;
+    }
+
+    protected function _convertUrlToCamelCase($name)
+    {
+        return implode(array_map('ucfirst', explode('-', $name)));
     }
 }
