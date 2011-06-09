@@ -48,7 +48,7 @@ class Test_EngineBlock_Router_OpenSocialTest extends PHPUnit_Framework_TestCase
         $router = new EngineBlock_Router_OpenSocial();
         $routable = $router->route($uri);
         $this->assertTrue($routable, "OpenSocial router knows to route '$uri'");
-        $this->assertEquals('social', $router->getModuleName()    , 'OpenSocial router routes to social module');
-        $this->assertEquals('rest'  , $router->getControllerName(), 'OpenSocial people call routes to rest controller');
+        $this->assertEquals('Social', $router->getModuleName()    , 'OpenSocial router routes to social module');
+        $this->assertEquals('Rest'  , $router->getControllerName(), 'OpenSocial people call routes to rest controller');
     }
 }
