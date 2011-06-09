@@ -38,7 +38,7 @@ class Profile_Controller_DeleteUser extends EngineBlock_Controller_Abstract
         $cleanupService->cleanupUser($uid);
 
         $this->setNoRender(true);
-        $this->_redirectToUrl('/Profile/DeleteUser/success');
+        $this->_redirectToUrl('/profile/delete-user/success');
     }
 
     public function successAction()
