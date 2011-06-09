@@ -348,6 +348,12 @@ class EngineBlock_Corto_Adapter
         $subjectId = $this->_provisionUser($responseAttributes, $spEntityMetadata, $idpEntityMetadata);
         $_SESSION['subjectId'] = $subjectId;
 
+        // Adjust the NameID in the OLD response (for consent), set the collab:person uid
+        $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
+            '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+            '__v'              => $subjectId
+        );
+
         $this->_handleVirtualOrganizationResponse($request, $subjectId);
 
         $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
@@ -453,7 +459,7 @@ class EngineBlock_Corto_Adapter
             $response
         );
 
-        // Adjust the NameID, set the collab:person uid
+        // Adjust the NameID in the NEW response, set the collab:person uid
         $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
             '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             '__v'              => $subjectId
