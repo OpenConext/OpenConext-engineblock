@@ -39,7 +39,7 @@ class EngineBlock_Router_Authentication extends EngineBlock_Router_Default
     {
         parent::route($uri);
         // Only route /authentication/ urls
-        return (strtolower($this->_moduleName)===strtolower($this->DEFAULT_MODULE_NAME));
+        return ($this->_moduleName === self::DEFAULT_MODULE_NAME);
     }
 
     public function getControllerName()

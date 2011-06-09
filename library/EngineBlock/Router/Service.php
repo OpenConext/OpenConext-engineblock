@@ -28,7 +28,7 @@
  */
 class EngineBlock_Router_Service extends EngineBlock_Router_Abstract
 {
-    const DEFAULT_ACTION_NAME     = "index";
+    const DEFAULT_ACTION_NAME     = "Index";
 
     public function route($uri)
     {
@@ -38,18 +38,18 @@ class EngineBlock_Router_Service extends EngineBlock_Router_Abstract
             return false;
         }
 
-        $this->_moduleName      = 'service';
-        $this->_controllerName  = 'rest';
+        $this->_moduleName      = 'Service';
+        $this->_controllerName  = 'Rest';
         if (isset($urlParts[1]) && !empty($urlParts[1])) {
             $this->_actionName      = $urlParts[1];
         }
         else {
-            $this->_actionName      = $this->DEFAULT_ACTION_NAME;
+            $this->_actionName      = self::DEFAULT_ACTION_NAME;
         }
         $this->_actionArguments = array(
             implode('/', array_slice($urlParts, 1))
         );
-        
+
         return true;
     }
 }

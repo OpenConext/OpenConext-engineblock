@@ -30,7 +30,7 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 {
     const DEFAULT_MODULE_NAME     = "Default";
     const DEFAULT_CONTROLLER_NAME = "Index";
-    const DEFAULT_ACTION_NAME     = "index";
+    const DEFAULT_ACTION_NAME     = "Index";
 
     /**
      * Note that this router interprets ////tekno as /tekno, NOT as /default/index/index/tekno
@@ -54,19 +54,19 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
             case 3:
                 // /module/controller/action
                 if ($urlParts[2]) {
-                    $action     = $urlParts[2];
+                    $action     = $this->_convertHyphenatedToCamelCase($urlParts[2]);
                 }
 
             case 2:
                 // /module/controller => /module/controller/index
                 if ($urlParts[1]) {
-                    $controller = $this->_convertUrlToCamelCase($urlParts[1]);
+                    $controller = $this->_convertHyphenatedToCamelCase($urlParts[1]);
                 }
 
                 // /module => /module/index/index
             case 1:
                 if ($urlParts[0]) {
-                    $module     = $urlParts[0];
+                    $module     = $this->_convertHyphenatedToCamelCase($urlParts[0]);
                 }
 
             case 0:
@@ -74,13 +74,13 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 
             default: // URL: /authentication/idp/single-sign-on/myidp/other/arguments/in/url
                 if ($urlParts[2]) {
-                    $action     = $urlParts[2];
+                    $action     = $this->_convertHyphenatedToCamelCase($urlParts[2]);
                 }
                 if ($urlParts[1]) {
-                    $controller = $this->_convertUrlToCamelCase($urlParts[1]);
+                    $controller = $this->_convertHyphenatedToCamelCase($urlParts[1]);
                 }
                 if ($urlParts[0]) {
-                    $module     = $urlParts[0];
+                    $module     = $this->_convertHyphenatedToCamelCase($urlParts[0]);
                 }
                 $arguments = array_slice($urlParts, 3);
         }
@@ -94,7 +94,13 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         return true;
     }
 
-    protected function _convertUrlToCamelCase($name)
+    /**
+     * Convert a-hyphenated-string to AHyphenatedString
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function _convertHyphenatedToCamelCase($name)
     {
         return implode(array_map('ucfirst', explode('-', $name)));
     }
