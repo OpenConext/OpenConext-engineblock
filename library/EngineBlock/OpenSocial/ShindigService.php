@@ -95,21 +95,7 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             $fields = array(); // clear the default fields
         }
 
-        if ($groupId->getGroupId()!=='self') {
-            if (count($userId) > 1) {
-                $message = "Getting the group members for a group given *multiple* uids is not implemented by EngineBlock (try picking one uid)";
-                throw new SocialSpiException($message, ResponseError::$INTERNAL_ERROR);
-            }
-
-            $groupMemberUid = array_shift($userId);
-            $groupMemberUid = $groupMemberUid->getUserId($token);
-
-            $groupId = $groupId->getGroupId();
-            $groupId = array_shift($groupId);
-
-            $people = $this->_getSocialData()->getGroupMembers($groupMemberUid, $groupId, $fields);
-        }
-        else {
+        if ($groupId->getGroupId() === 'self') {
             $fields = array_values($fields);
             $people = array();
             $socialData = $this->_getSocialData();
@@ -122,6 +108,23 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             if (empty($people)) {
                 return new EmptyResponseItem();
             }
+        }
+        else if ($groupId->getType() === 'all') {
+            throw new SocialSpiException("Not implemented by EngineBlock", ResponseError::$INTERNAL_ERROR);
+        }
+        else {
+            if (count($userId) > 1) {
+                $message = "Getting the group members for a group given *multiple* uids is not implemented by EngineBlock (try picking one uid)";
+                throw new SocialSpiException($message, ResponseError::$INTERNAL_ERROR);
+            }
+
+            $groupMemberUid = array_shift($userId);
+            $groupMemberUid = $groupMemberUid->getUserId($token);
+
+            $groupId = $groupId->getGroupId();
+            $groupId = array_shift($groupId);
+
+            $people = $this->_getSocialData()->getGroupMembers($groupMemberUid, $groupId, $fields);
         }
 
         $totalSize = count($people);
