@@ -26,20 +26,23 @@
 require_once(dirname(__FILE__) . '/../../../autoloading.inc.php');
 
 require_once 'Abstract.php';
+require_once 'AssertionBuilder.php';
 
 class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstract
 {
     public function testRoutables()
     {
-        $this->_testRoute(
-            'EngineBlock_Router_Default',
-            ''
-        );
+        Test_EngineBlock_Router_AssertionBuilder::create($this)
+            ->routerClass('EngineBlock_Router_Default')
+            ->uri('')
+            ->routable()
+            ->test();
 
-        $this->_testRoute(
-            "EngineBlock_Router_Default",
-            '///'
-        );
+        Test_EngineBlock_Router_AssertionBuilder::create($this)
+            ->routerClass('EngineBlock_Router_Default')
+            ->uri('///')
+            ->routable()
+            ->test();
 
         $this->_testRoute(
             "EngineBlock_Router_Default",
@@ -85,7 +88,10 @@ class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstra
             'Controller',
             'Action'
         );
+    }
 
+    public function testArguments()
+    {
         $this->_testRoute(
             "EngineBlock_Router_Default",
             '/module/controller/action/arg1',
@@ -122,5 +128,29 @@ class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstra
                 '~!@#$%^&*()+-={}[]\|;:\'",<>.?'
             )
         );
+    }
+
+    public function testRequired()
+    {
+        Test_EngineBlock_Router_AssertionBuilder::create($this)
+            ->routerClass('EngineBlock_Router_Default')
+            ->uri('/default/index/index')
+            ->routable()
+            ->test();
+
+        Test_EngineBlock_Router_AssertionBuilder::create($this)
+            ->routerClass('EngineBlock_Router_Default')
+            ->uri('/default/index/index')
+            ->requireModule('Test')
+            ->notRoutable()
+            ->test();
+
+        Test_EngineBlock_Router_AssertionBuilder::create($this)
+            ->routerClass('EngineBlock_Router_Default')
+            ->uri('/test/index/index')
+            ->requireModule('Test')
+            ->routable()
+            ->expectModule('Test')
+            ->test();
     }
 }

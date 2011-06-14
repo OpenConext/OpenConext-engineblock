@@ -25,30 +25,50 @@
 
 require_once(dirname(__FILE__) . '/../../../autoloading.inc.php');
 
-class Test_EngineBlock_Router_OpenSocialTest extends PHPUnit_Framework_TestCase
+require_once 'Abstract.php';
+require_once 'AssertionBuilder.php';
+
+class Test_EngineBlock_Router_OpenSocialTest extends Test_EngineBlock_Router_Abstract
 {
     public function testUnroutables()
     {
-        $router = new EngineBlock_Router_OpenSocial();
-        $routable = $router->route('');
-        $this->assertFalse($routable, "OpenSocial router does not route empty uri");
+        Test_EngineBlock_Router_AssertionBuilder::create($this)
+            ->routerClass('EngineBlock_Router_OpenSocial')
+            ->uri('')
+            ->notRoutable()
+            ->test();
 
-        $router = new EngineBlock_Router_OpenSocial();
-        $routable = $router->route('/');
-        $this->assertFalse($routable, "OpenSocial router does not route /");
+        Test_EngineBlock_Router_AssertionBuilder::create($this)
+            ->routerClass('EngineBlock_Router_OpenSocial')
+            ->uri('/')
+            ->notRoutable()
+            ->test();
 
-        $router = new EngineBlock_Router_OpenSocial();
-        $routable = $router->route('/default/index/index');
-        $this->assertFalse($routable, "OpenSocial router does not route /default/index/index");
+        $this->_testRoute(
+            'EngineBlock_Router_OpenSocial',
+            '/',
+            false
+        );
+
+        $this->_testRoute(
+            'EngineBlock_Router_OpenSocial',
+            '/default/index/index',
+            false
+        );
     }
 
     public function testPeopleRoutables()
     {
-        $uri = '/social/people/1234/@all';
-        $router = new EngineBlock_Router_OpenSocial();
-        $routable = $router->route($uri);
-        $this->assertTrue($routable, "OpenSocial router knows to route '$uri'");
-        $this->assertEquals('Social', $router->getModuleName()    , 'OpenSocial router routes to social module');
-        $this->assertEquals('Rest'  , $router->getControllerName(), 'OpenSocial people call routes to rest controller');
+        $this->_testRoute(
+            'EngineBlock_Router_OpenSocial',
+            '/social/people/1234/@all',
+            true,
+            'Social',
+            'Rest',
+            'Index',
+            array(
+                'people/1234/@all'
+            )
+        );
     }
 }

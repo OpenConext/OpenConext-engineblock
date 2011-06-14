@@ -28,6 +28,10 @@
  */
 class EngineBlock_Router_OpenSocial extends EngineBlock_Router_Abstract
 {
+    const DEFAULT_MODULE_NAME     = "Social";
+    const DEFAULT_CONTROLLER_NAME = "Rest";
+    const DEFAULT_ACTION_NAME     = "Index";
+
     public function route($uri)
     {
         $urlParts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);

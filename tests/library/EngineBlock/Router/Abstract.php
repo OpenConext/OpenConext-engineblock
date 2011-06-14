@@ -30,6 +30,8 @@ abstract class Test_EngineBlock_Router_Abstract extends PHPUnit_Framework_TestCa
      * controller $controller (null is the default controller), action $action (null is the default action) and
      * with action arguments $arguments (empty array by default).
      *
+     * @deprecated In favor of Test_EngineBlock_Router_AssertionBuilder
+     *
      * @param string $routerClass
      * @param string $uri
      * @param bool   $routable
@@ -42,13 +44,13 @@ abstract class Test_EngineBlock_Router_Abstract extends PHPUnit_Framework_TestCa
     protected function _testRoute($routerClass, $uri, $routable=true, $module = null, $controller = null, $action = null, $arguments = array())
     {
         if (is_null($module)) {
-            $module = $routerClass::DEFAULT_MODULE_NAME;
+            $module     = $routerClass::DEFAULT_MODULE_NAME;
         }
         if (is_null($controller)) {
             $controller = $routerClass::DEFAULT_CONTROLLER_NAME;
         }
         if (is_null($action)) {
-            $action = $routerClass::DEFAULT_ACTION_NAME;
+            $action     = $routerClass::DEFAULT_ACTION_NAME;
         }
 
         $router = new $routerClass();

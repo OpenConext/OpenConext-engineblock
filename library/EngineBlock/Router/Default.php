@@ -31,6 +31,10 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
     const DEFAULT_MODULE_NAME     = "Default";
     const DEFAULT_CONTROLLER_NAME = "Index";
     const DEFAULT_ACTION_NAME     = "Index";
+    
+    protected $_requiredModule;
+    protected $_requiredController;
+    protected $_requiredAction;
 
     /**
      * Note that this router interprets ////tekno as /tekno, NOT as /default/index/index/tekno
@@ -43,14 +47,35 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $urlParts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
         $urlPartsCount = count($urlParts);
 
-        $module     = static::DEFAULT_MODULE_NAME;
-        $controller = static::DEFAULT_CONTROLLER_NAME;
-        $action     = static::DEFAULT_ACTION_NAME;
+        if (!isset($this->_requiredModule)) {
+            $module     = static::DEFAULT_MODULE_NAME;
+        }
+        else {
+            $module = null;
+        }
+
+        if (!isset($this->_requiredController)) {
+            $controller = static::DEFAULT_CONTROLLER_NAME;
+        }
+        else {
+            $controller = null;
+        }
+
+        if (!isset($this->_requiredAction)) {
+            $action     = static::DEFAULT_ACTION_NAME;
+        }
+        else {
+            $action = null;
+        }
         $arguments  = array();
 
         // Note how we actually use the fall-through
         switch($urlPartsCount)
         {
+            default: // More than 3 parts
+                // /module/controller/action/arg1/arg2/etc
+                $arguments = array_slice($urlParts, 3);
+
             case 3:
                 // /module/controller/action
                 if ($urlParts[2]) {
@@ -63,26 +88,30 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
                     $controller = $this->_convertHyphenatedToCamelCase($urlParts[1]);
                 }
 
-                // /module => /module/index/index
             case 1:
+                // /module => /module/index/index
                 if ($urlParts[0]) {
                     $module     = $this->_convertHyphenatedToCamelCase($urlParts[0]);
                 }
 
             case 0:
                 break;
+        }
 
-            default: // URL: /authentication/idp/single-sign-on/myidp/other/arguments/in/url
-                if ($urlParts[2]) {
-                    $action     = $this->_convertHyphenatedToCamelCase($urlParts[2]);
-                }
-                if ($urlParts[1]) {
-                    $controller = $this->_convertHyphenatedToCamelCase($urlParts[1]);
-                }
-                if ($urlParts[0]) {
-                    $module     = $this->_convertHyphenatedToCamelCase($urlParts[0]);
-                }
-                $arguments = array_slice($urlParts, 3);
+        if (!$module || !$controller || !$action) {
+            return false;
+        }
+
+        if ($this->_requiredModule && $module !== $this->_requiredModule) {
+            return false;
+        }
+
+        if ($this->_requiredController && $controller !== $this->_requiredController) {
+            return false;
+        }
+
+        if ($this->_requiredAction && $action !== $this->_requiredAction) {
+            return false;
         }
 
         $this->_moduleName      = $module;
@@ -92,6 +121,24 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $this->setActionArguments($arguments);
 
         return true;
+    }
+    
+    public function requireModule($moduleName = "") 
+    {
+        $this->_requiredModule = $moduleName;
+        return $this;
+    }
+    
+    public function requireController($controllerName = "")
+    {
+        $this->_requiredController = $controllerName;
+        return $this;
+    }
+    
+    public function requireAction($actionName = "")
+    {
+        $this->_requiredAction = $actionName;
+        return $this;
     }
 
     /**
