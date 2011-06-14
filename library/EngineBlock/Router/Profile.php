@@ -34,7 +34,7 @@ class EngineBlock_Router_Profile extends EngineBlock_Router_Default
     {
         parent::route($uri);
         // Only route /profile/ urls
-        return (strtolower($this->_moduleName)===strtolower($this->DEFAULT_MODULE_NAME));
+        return (strtolower($this->_moduleName)===strtolower(self::DEFAULT_MODULE_NAME));
     }
 
 }
