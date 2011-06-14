@@ -29,8 +29,11 @@ $application = EngineBlock_ApplicationSingleton::getInstance();
 $application->bootstrap();
 
 $dispatcher = new EngineBlock_Dispatcher();
+
+$profileRouter = new EngineBlock_Router_Default();
+$profileRouter->requireModule('authentication');
 $dispatcher->setRouters(array(
-    new EngineBlock_Router_Profile(),
+    $profileRouter,
     new EngineBlock_Router_CatchAll('profile', 'index', 'index'),
 ));
 $dispatcher->dispatch();
