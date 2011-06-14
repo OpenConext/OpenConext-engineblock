@@ -22,3 +22,70 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
+
+require_once(dirname(__FILE__) . '/../../../autoloading.inc.php');
+
+require_once 'Abstract.php';
+
+class Test_EngineBlock_Router_AuthenticationTest extends Test_EngineBlock_Router_Abstract
+{
+    public function testUnroutables()
+    {
+        $this->_testRoute(
+            'EngineBlock_Router_Authentication',
+            '/default/index/index',
+            false
+        );
+
+        // no short form for module
+        $this->_testRoute(
+            'EngineBlock_Router_Authentication',
+            '/auth/index/index',
+            false
+        );
+    }
+
+    public function testPeopleRoutables()
+    {
+        // No url, routes to default module / controller / action
+        $this->_testRoute(
+            'EngineBlock_Router_Authentication',
+            ''
+        );
+
+        // No url, routes to default module / controller / action
+        $this->_testRoute(
+            'EngineBlock_Router_Authentication',
+            '/'
+        );
+
+        // Short form
+        $this->_testRoute(
+            'EngineBlock_Router_Authentication',
+            '/authentication/idp/metadata',
+            true,
+            'Authentication',
+            'IdentityProvider',
+            'Metadata'
+        );
+
+        $this->_testRoute(
+            'EngineBlock_Router_Authentication',
+            '/authentication/sp/metadata',
+            true,
+            'Authentication',
+            'ServiceProvider',
+            'Metadata'
+        );
+
+        // Long form
+        $this->_testRoute(
+            'EngineBlock_Router_Authentication',
+            '/authentication/identity-provider/metadata',
+            true,
+            'Authentication',
+            'IdentityProvider',
+            'Metadata'
+        );
+    }
+}
