@@ -22,3 +22,62 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
+
+require_once(dirname(__FILE__) . '/../../../autoloading.inc.php');
+
+require_once 'Abstract.php';
+
+class Test_EngineBlock_Router_ProfileTest extends Test_EngineBlock_Router_Abstract
+{
+    public function testUnroutables()
+    {
+        // Don't route default urls
+        $this->_testRoute(
+            'EngineBlock_Router_Profile',
+            '/default/index/index',
+            false
+        );
+
+        // Don't route authentication urls
+        $this->_testRoute(
+            'EngineBlock_Router_Profile',
+            '/authentication/index/index',
+            false
+        );
+    }
+
+    public function testPeopleRoutables()
+    {
+        // No url, routes to default module / controller / action
+        $this->_testRoute(
+            'EngineBlock_Router_Profile',
+            ''
+        );
+
+        // No url, routes to default module / controller / action
+        $this->_testRoute(
+            'EngineBlock_Router_Profile',
+            '/'
+        );
+
+        // Route /profile/index/index
+        $this->_testRoute(
+            'EngineBlock_Router_Profile',
+            '/profile',
+            true,
+            'Profile',
+            'Index',
+            'Index'
+        );
+
+        // Route /profile/delete-user/success
+        $this->_testRoute(
+            'EngineBlock_Router_Profile',
+            '/profile/delete-user/success',
+            true,
+            'Profile',
+            'DeleteUser',
+            'Success'
+        );
+    }
+}
