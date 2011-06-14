@@ -99,6 +99,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         foreach ($this->_providers as $provider) {
             $members = array_merge($members, $provider->getMembers($groupIdentifier));
         }
+        return $members;
     }
 
     public function isMember($groupIdentifier)

@@ -184,9 +184,8 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
         if (isset($this->_memberCache[$groupIdentifier]) && !empty($this->_memberCache[$groupIdentifier])) {
             return $this->_memberCache[$groupIdentifier];
         }
-        
         $this->_memberCache[$groupIdentifier] = $this->_provider->getMembers($groupIdentifier);
-        return $this->_memberCache;
+        return $this->_memberCache[$groupIdentifier];
     }
 
     /**
