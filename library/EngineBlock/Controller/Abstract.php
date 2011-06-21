@@ -69,24 +69,7 @@ class EngineBlock_Controller_Abstract
 
     protected function _getMethodNameFromAction($actionName)
     {
-        return $this->_convertDashedToCamelCase($actionName) . 'Action';
-    }
-
-    protected function _convertDashedToCamelCase($string)
-    {
-        $parts = explode('-', $string);
-        $ret = array_shift($parts);
-
-        foreach ($parts as $part)
-        {
-            $ret .= ucfirst($part);
-        }
-        return $ret;
-    }
-
-    protected function _getMethodNameFromActionName($actionName)
-    {
-        return $actionName;
+        return lcfirst($actionName) . 'Action';
     }
 
     public function setNoRender($noRender = true)
@@ -99,7 +82,7 @@ class EngineBlock_Controller_Abstract
     {
         $moduleDir = dirname(__FILE__) . '/../../../application/modules/';
         $filePath = $moduleDir . ucfirst($this->_moduleName) . '/View/';
-        $filePath .= ucfirst($this->_controllerName) . '/' . ucfirst($this->_convertDashedToCamelCase($actionName)) . '.phtml';
+        $filePath .= ucfirst($this->_controllerName) . '/' . $actionName . '.phtml';
 
         if (!file_exists($filePath)) {
             // @todo error out!

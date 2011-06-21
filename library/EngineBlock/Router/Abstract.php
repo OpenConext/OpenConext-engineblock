@@ -60,4 +60,15 @@ abstract class EngineBlock_Router_Abstract implements EngineBlock_Router_Interfa
         $this->_actionArguments = $decodedArguments;
         return $this;
     }
+
+    /**
+     * Convert a-hyphenated-string to AHyphenatedString
+     *
+     * @param string $name
+     * @return string
+     */
+    protected function _convertHyphenatedToCamelCase($name)
+    {
+        return implode(array_map('ucfirst', explode('-', $name)));
+    }
 }
