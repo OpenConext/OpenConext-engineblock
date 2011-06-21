@@ -54,7 +54,8 @@ var Discover = function() {
                 //Create scrollbar
                 $('#scrollViewport').jScrollPane({
                     maintainPosition: false,
-                    enableKeyboardNavigation: false
+                    enableKeyboardNavigation: true,
+					showArrows: true
                 });
 
                 //Get start organisations
@@ -210,24 +211,26 @@ var Discover = function() {
             if (filter === '') {
                 return this.idpList;
             }
-
+			
             filter = filter.toLowerCase();
 
             // filter idps based on keywords
             for ( var idp in this.idpList) {
                 var inKeywords = false;
+				// Filter first on keywords
                 if (this.idpList[idp].hasOwnProperty('Keywords')) {
                     for ( var keyword in this.idpList[idp]['Keywords']) {
                         if (this.idpList[idp]['Keywords'][keyword].toLowerCase().indexOf(filter) >= 0) {
                             inKeywords = true;
                         }
                     }
-                // No keywords present, filter based on IdP Name
-                } else {
-                    if (this.idpList[idp].hasOwnProperty('Name') && this.idpList[idp]['Name'].toLowerCase().indexOf(filter) >= 0) {
-                        inKeywords = true;
-                    }
+                // Filter based on IdP Name
+                } 
+				var nameProp = 'Name_' + this.language;
+                if (this.idpList[idp].hasOwnProperty(nameProp) && this.idpList[idp][nameProp].toLowerCase().indexOf(filter) >= 0) {
+                	inKeywords = true;
                 }
+                
                 if (inKeywords) {
                     filteredResults.push(this.idpList[idp]);
                 }
