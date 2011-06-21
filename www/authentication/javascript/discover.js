@@ -226,7 +226,7 @@ var Discover = function() {
                     }
                 // Filter based on IdP Name
                 } 
-				var nameProp = 'Name_' + this.language;
+				var nameProp = 'Name_' + this.lang;
                 if (this.idpList[idp].hasOwnProperty(nameProp) && this.idpList[idp][nameProp].toLowerCase().indexOf(filter) >= 0) {
                 	inKeywords = true;
                 }
