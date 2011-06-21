@@ -61,6 +61,13 @@ class EngineBlock_VORegistry_Client
                 );
                 break;
 
+            case "serviceregistryvo":
+                return array(
+                    "groupidentifier"=>"managementvotest",
+                    "groupstem"=>"nl:surfnet:management"
+                );
+                break;
+
            default:
                 return array(
                     "groupidentifier"=>"pci_members",
