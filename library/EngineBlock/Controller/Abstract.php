@@ -69,7 +69,7 @@ class EngineBlock_Controller_Abstract
 
     protected function _getMethodNameFromAction($actionName)
     {
-        return $this->_convertDashedToCamelCase($methodName) . 'Action';
+        return $this->_convertDashedToCamelCase($actionName) . 'Action';
     }
 
     protected function _convertDashedToCamelCase($string)
@@ -99,7 +99,7 @@ class EngineBlock_Controller_Abstract
     {
         $moduleDir = dirname(__FILE__) . '/../../../application/modules/';
         $filePath = $moduleDir . ucfirst($this->_moduleName) . '/View/';
-        $filePath .= ucfirst($this->_controllerName) . '/' . $this->_convertDashedToCamelCase($actionName) . '.phtml';
+        $filePath .= ucfirst($this->_controllerName) . '/' . ucfirst($this->_convertDashedToCamelCase($actionName)) . '.phtml';
 
         if (!file_exists($filePath)) {
             // @todo error out!
