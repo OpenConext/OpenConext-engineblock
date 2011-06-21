@@ -31,10 +31,10 @@ $application->bootstrap();
 $dispatcher = new EngineBlock_Dispatcher();
 
 $profileRouter = new EngineBlock_Router_Default();
-$profileRouter->requireModule('authentication');
+$profileRouter->requireModule('Profile');
 $dispatcher->setRouters(array(
     $profileRouter,
-    new EngineBlock_Router_CatchAll('profile', 'index', 'index'),
+    new EngineBlock_Router_CatchAll('Profile', 'Index', 'Index'),
 ));
 $dispatcher->dispatch();
 
