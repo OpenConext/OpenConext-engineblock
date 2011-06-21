@@ -140,15 +140,4 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $this->_requiredAction = $actionName;
         return $this;
     }
-
-    /**
-     * Convert a-hyphenated-string to AHyphenatedString
-     *
-     * @param string $name
-     * @return string
-     */
-    protected function _convertHyphenatedToCamelCase($name)
-    {
-        return implode(array_map('ucfirst', explode('-', $name)));
-    }
 }
