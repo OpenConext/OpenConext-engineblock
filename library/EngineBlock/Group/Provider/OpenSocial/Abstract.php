@@ -58,8 +58,9 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract extends EngineBloc
         $provider->configurePreconditions($config);
         $provider->configureGroupFilters($config);
         $provider->configureGroupMemberFilters($config);
+        $decoratedProvider = $provider->configureDecoratorChain($config);
 
-        return $provider;
+        return $decoratedProvider;
     }
 
     protected function __construct($id, $name, $endpointUrl, osapiAuth $auth)
