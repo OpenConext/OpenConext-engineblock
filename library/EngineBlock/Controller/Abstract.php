@@ -29,6 +29,7 @@ class EngineBlock_Controller_Abstract
     protected $_controllerName;
     protected $_viewData = array();
     protected $_noRender = false;
+    protected $_rendered = false;
 
     public function __construct($moduleName, $controllerName)
     {
@@ -55,34 +56,42 @@ class EngineBlock_Controller_Abstract
 
     public function handleAction($actionName, $arguments)
     {
+        if (method_exists($this, 'init')) {
+            $this->init();
+        }
+
         $methodName = $this->_getMethodNameFromAction($actionName);
 
-        call_user_method_array($methodName, $this, $arguments);
+        call_user_func_array(array($this, $methodName), $arguments);
 
-        if ($this->_noRender) {
+        if ($this->_noRender || $this->_rendered) {
             return;
         }
 
-        $renderedView = $this->_renderView($actionName);
-        EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse()->setBody($renderedView);
+        $this->renderAction($actionName);
+    }
+
+    public function renderAction($actionName)
+    {
+        $output = $this->_getViewRenderer()->setData($this->_viewData)->render(
+            $this->_getViewScriptPath($actionName)
+        );
+
+        EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse()->setBody($output);
+
+        $this->_rendered = true;
+    }
+
+    protected function _getViewScriptPath($actionName)
+    {
+        $moduleDir = ENGINEBLOCK_FOLDER_APPLICATION . '/modules/' . ucfirst($this->_moduleName);
+        $filePath = $moduleDir . '/View/' . ucfirst($this->_controllerName) . '/' . $actionName . '.phtml';
+        return $filePath;
     }
 
     protected function _getMethodNameFromAction($actionName)
     {
-        $actionParts = explode('-', $actionName);
-        $methodName = array_shift($actionParts);
-
-        foreach ($actionParts as $actionPart)
-        {
-            $methodName .= ucfirst($actionPart);
-        }
-
-        return $methodName . 'Action';
-    }
-
-    protected function _getMethodNameFromActionName($actionName)
-    {
-        return $actionName;
+        return lcfirst($actionName) . 'Action';
     }
 
     public function setNoRender($noRender = true)
@@ -91,26 +100,7 @@ class EngineBlock_Controller_Abstract
         return $this;
     }
 
-    protected function _renderView($actionName)
-    {
-        $moduleDir = dirname(__FILE__) . '/../../../application/modules/';
-        $filePath = $moduleDir . ucfirst($this->_moduleName) . '/View/' . ucfirst($this->_controllerName) . '/' . $actionName . '.phtml';
-
-        if (!file_exists($filePath)) {
-            // @todo error out!
-            throw new EngineBlock_Exception("View $filePath does not exist");
-        }
-
-        ob_start();
-        
-        extract($this->_viewData);
-        require $filePath;
-
-        $renderedView = ob_get_contents();
-        ob_end_clean();
-
-        return $renderedView;
-    }
+    // CONVENIENCE METHODS
 
     protected function _initAuthentication()
     {
@@ -120,5 +110,22 @@ class EngineBlock_Controller_Abstract
     protected function _redirectToUrl($url)
     {
         EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse()->setRedirectUrl($url);
+    }
+
+    protected function _getRequest()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
+    }
+
+    protected function _getResponse()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse();
+    }
+    
+    // DEPENDENCIES
+
+    protected function _getViewRenderer()
+    {
+        return new EngineBlock_View_Renderer();
     }
 }
