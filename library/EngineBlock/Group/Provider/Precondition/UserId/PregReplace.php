@@ -26,7 +26,7 @@
 /**
  *
  */
-class EngineBlock_Group_Provider_Precondition_UserId_PregReplace
+class EngineBlock_Group_Provider_Precondition_UserId_PregReplace implements EngineBlock_Group_Provider_Precondition_Interface
 {
     protected $_provider;
     protected $_search;

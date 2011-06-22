@@ -37,6 +37,14 @@ interface EngineBlock_Group_Provider_Interface
     public static function createFromConfigs(Zend_Config $config, $userId);
 
     /**
+     * Get the ID of this provider (plain alphanumeric string for use in configs, URLs and such)
+     *
+     * @abstract
+     * @return void
+     */
+    public function getId();
+
+    /**
      * Set the ID of the User to provide group information for
      *
      * @abstract
@@ -46,6 +54,14 @@ interface EngineBlock_Group_Provider_Interface
     public function setUserId($userId);
 
     /**
+     * Get the display name for this group provider
+     *
+     * @abstract
+     * @return void
+     */
+    public function getDisplayName();
+
+    /**
      * Get the ID of the User that group information will be provided for
      *
      * @abstract
@@ -53,8 +69,22 @@ interface EngineBlock_Group_Provider_Interface
      */
     public function getUserId();
 
-    public function addPrecondition($className, $options);
+    /**
+     * Add a precondition for use of this provider.
+     *
+     * @abstract
+     * @param string $className
+     * @param array $options
+     * @return EngineBlock_Group_Provider_Interface
+     */
+    public function addPrecondition($className, Zend_Config $options);
 
+    /**
+     * Get the preconditions for use of this provider.
+     *
+     * @abstract
+     * @return array
+     */
     public function getPreconditions();
 
     /**

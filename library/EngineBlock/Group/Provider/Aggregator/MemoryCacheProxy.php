@@ -30,7 +30,7 @@
 class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBlock_Group_Provider_Interface
 {
     /**
-     * @var EngineBlock_Group_Provider_Interface
+     * @var EngineBlock_Group_Provider_Aggregator
      */
     protected $_provider;
 
@@ -64,6 +64,26 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
         $this->_provider = $provider;
     }
 
+    public function getId()
+    {
+        return $this->_provider->getId();
+    }
+
+    public function getDisplayName()
+    {
+        return $this->_provider->getDisplayName();
+    }
+
+    public function getProviders()
+    {
+        return $this->_provider->getProviders();
+    }
+
+    public function getInvalidProviders()
+    {
+        return $this->_provider->getInvalidProviders();
+    }
+
     /**
      * Set the ID of the User to provide group information for
      *
@@ -90,7 +110,7 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
         return $this->_provider->getUserId();
     }
 
-    public function addPrecondition($className, $options)
+    public function addPrecondition($className, Zend_Config $options)
     {
         $this->_clearCache();
 

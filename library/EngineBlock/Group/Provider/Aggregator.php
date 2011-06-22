@@ -24,22 +24,38 @@
  */
 
 /**
- *
+ * Aggregate groups from multiple providers
  */ 
 class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_Abstract
 {
+    /**
+     * All known and usable group providers
+     *
+     * @var array
+     */
     protected $_providers = array();
+
+    /**
+     * Known but unusable group providers (based on preconditions)
+     * 
+     * @var array
+     */
+    protected $_invalidProviders = array();
 
     public static function createFromConfigFor($userId)
     {
         $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
         $providers = $config->groupProviders;
         $providerConfigs = array();
-        foreach ($providers as $provider) {
-            if (!isset($config->$provider)) {
-                throw new EngineBlock_Exception("Group Provider '$provider' mentioned, but no config found.");
+        foreach ($providers as $providerConfigKey) {
+            if (!isset($config->$providerConfigKey)) {
+                eblog()->error("Group Provider '$providerConfigKey' mentioned, but no config found.");
+                continue;
             }
-            $providerConfigs[] = $config->$provider;
+
+            $providerConfig = $config->$providerConfigKey->toArray();
+            $providerConfig['id'] = $providerConfigKey;
+            $providerConfigs[] = $providerConfig;
         }
         $providerConfigs = new Zend_Config($providerConfigs);
         return self::createFromConfigs($providerConfigs, $userId);
@@ -48,6 +64,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     public static function createFromConfigs(Zend_Config $config, $userId)
     {
         $providers = array();
+        $invalidProviders = array();
         foreach ($config as $providerConfig) {
             $className = $providerConfig->className;
 
@@ -55,17 +72,20 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 throw new EngineBlock_Exception("No classname specified in provider config");
             }
             if (!class_exists($className, true)) {
-                throw new EngineBlock_Exception("Classname from Provider config '$className' does not exist!");
+                throw new EngineBlock_Exception("Classname from Provider config '$className' does not exist or cannot be autoloaded!");
             }
             $provider = $className::createFromConfigs($providerConfig, $userId);
 
             if (!$provider->validatePreconditions()) {
+                $invalidProviders[] = $provider;
                 continue;
             }
 
             $providers[] = $provider;
         }
-        return new self($providers);
+        $aggregator = new self($providers);
+        $aggregator->_invalidProviders = $invalidProviders;
+        return $aggregator;
     }
 
     public function __construct(array $providers)
@@ -73,10 +93,30 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         $this->_providers = $providers;
     }
 
+    public function getDisplayName()
+    {
+        $names = array();
+        foreach ($this->_providers as $provider) {
+            $names[] = $provider->getDisplayName();
+        }
+        return 'Multiple (' . implode(', ', $names) . ')';
+    }
+
+    public function getProviders()
+    {
+        return $this->_providers;
+    }
+
+    public function getInvalidProviders()
+    {
+        return $this->_invalidProviders;
+    }
+
     public function setGroupStem($stemIdentifier)
     {
         parent::setGroupStem($stemIdentifier);
 
+        // Propagate the groupStem onto all providers
         foreach ($this->_providers as $provider) {
             $provider->setGroupStem($stemIdentifier);
         }
@@ -88,7 +128,8 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         $groups = array();
         foreach ($this->_providers as $provider) {
-            $groups = array_merge($groups, $provider->getGroups());
+            $providerGroups = $provider->getGroups();
+            $groups = array_merge($groups, $providerGroups);
         }
         return $groups;
     }
@@ -97,18 +138,24 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         $members = array();
         foreach ($this->_providers as $provider) {
-            $members = array_merge($members, $provider->getMembers($groupIdentifier));
+            $providerMembers = $provider->getMembers($groupIdentifier);
+            $members = array_merge($members, $providerMembers);
         }
         return $members;
     }
 
     public function isMember($groupIdentifier)
     {
+        // Loop through all providers
         foreach ($this->_providers as $provider) {
+            // And when we find a provider that knows the groupIdentifier and has the current user
+            // as a member of this group, we return true
             if ($provider->isMember($groupIdentifier)) {
                 return true;
             }
         }
+        // If none of the known providers knows the groupIdentifier or has the current user as a member
+        // then he's not a member of this group.
         return false;
     }
 }

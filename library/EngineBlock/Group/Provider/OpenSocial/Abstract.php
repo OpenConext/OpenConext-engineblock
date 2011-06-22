@@ -23,48 +23,35 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-/**
- * Shindig and the OpenSocial Client both use the same OAuth library.
- *
- * So when Shindig calls EngineBlock stuff and EngineBlock calls the OS client,
- * it breaks because it already knows an OAuthException class.
- *
- * So what we do is we use include_path trickery to make the OS client look in /Osapi/Hack
- * for it's stuff FIRST.
- * There is an external/Oauth.php which just requires the Shindig OAuth library
- * which it already has included, so everything chugs along. Sweet!
- */
-
-$osHackPath = realpath(ENGINEBLOCK_FOLDER_LIBRARY . '/Osapi/Hack') . '/';
-$osApiPath  = realpath(ENGINEBLOCK_FOLDER_LIBRARY . '/opensocial-php-client/src/osapi') . '/';
-set_include_path($osHackPath . PATH_SEPARATOR . $osApiPath . PATH_SEPARATOR . get_include_path());
-
-require_once 'osapi.php';
-
-osapiLogger::setAppender(new osapiConsoleAppender());
+require 'Osapi/Loader.php';
 
 /**
- *
+ * The OpenSocial group provider, gets groups from an OpenSocial REST API.
  */ 
-class EngineBlock_Group_Provider_OpenSocial extends EngineBlock_Group_Provider_Abstract
+abstract class EngineBlock_Group_Provider_OpenSocial_Abstract extends EngineBlock_Group_Provider_Abstract
 {
+    /**
+     * @var string
+     */
     protected $_name;
 
+    /**
+     * @var string
+     */
     protected $_url;
 
-    protected $_openSocialAuth;
-
     /**
-     * @var osapi
+     * @var \osapi
      */
     protected $_openSocialClient;
 
-    public static function createFromConfigs(Zend_Config $config, $userId)
+    public static function createFromConfigsWithAuth(Zend_Config $config, osapiAuth $auth, $userId)
     {
-        $provider = new self(
+        $provider = new static(
+            $config->id,
             $config->name,
             $config->url,
-            new osapiHttpBasic($config->auth->user, $config->auth->password)
+            $auth
         );
         $provider->setUserId($userId);
 
@@ -75,11 +62,17 @@ class EngineBlock_Group_Provider_OpenSocial extends EngineBlock_Group_Provider_A
         return $provider;
     }
 
-    protected function __construct($name, $endpointUrl, osapiAuth $auth)
+    protected function __construct($id, $name, $endpointUrl, osapiAuth $auth)
     {
+        $this->_id   = $id;
         $this->_name = $name;
         $this->_url  = $endpointUrl;
         $this->_openSocialAuth = $auth;
+    }
+
+    public function getDisplayName()
+    {
+        return $this->_name;
     }
 
     public function getGroups()
@@ -98,7 +91,7 @@ class EngineBlock_Group_Provider_OpenSocial extends EngineBlock_Group_Provider_A
         $result = array_shift($batch->execute());
 
         if ($result instanceof osapiError) {
-            throw new EngineBlock_Exception("OpenSocial client error: " . var_export($result, true));
+            $this->_handleError($result);
         }
 
         /**
@@ -223,6 +216,22 @@ class EngineBlock_Group_Provider_OpenSocial extends EngineBlock_Group_Provider_A
     protected function _setDefaultOpenSocialClient()
     {
         $provider = new Osapi_Provider_PlainRest($this->_name, $this->_url);
-        $this->_openSocialClient = new osapi($provider, $this->_openSocialAuth);
+        $openSocialClient = new osapi($provider, $this->_openSocialAuth);
+        
+        $this->_openSocialClient = $openSocialClient;
+    }
+
+    protected function _handleError(osapiError $error)
+    {
+        if ($error->getErrorCode() === 401) {
+            throw new EngineBlock_Group_Provider_Exception_Unauthorized(
+                "OpenSocial client error: " . var_export($error, true)
+            );
+        }
+        else {
+            throw new EngineBlock_Group_Provider_Exception(
+                "OpenSocial client error: " . var_export($error, true)
+            );
+        }
     }
 }

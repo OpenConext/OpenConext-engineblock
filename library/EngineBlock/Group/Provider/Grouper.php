@@ -25,6 +25,8 @@
 
 class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abstract
 {
+    protected $_name;
+
     /**
      * @var Grouper_Client_Interface
      */
@@ -43,6 +45,8 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
     {
         $grouperClient = Grouper_Client_Rest::createFromConfig($config);
         $provider = new self($grouperClient);
+        $provider->_id   = $config->id;
+        $provider->_name = $config->name;
         $provider->setUserId($userId);
 
         $provider->configurePreconditions($config);
@@ -55,6 +59,11 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
     public function __construct(Grouper_Client_Interface $grouperClient)
     {
         $this->_grouperClient = $grouperClient;
+    }
+
+    public function getDisplayName()
+    {
+        return $this->_name;
     }
 
     public function setUserId($userId)

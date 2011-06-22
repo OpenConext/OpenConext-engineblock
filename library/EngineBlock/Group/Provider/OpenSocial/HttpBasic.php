@@ -23,22 +23,15 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-/**
- *
- */ 
-class EngineBlock_Group_Provider_Precondition_UserId_PregMatch implements EngineBlock_Group_Provider_Precondition_Interface
+class EngineBlock_Group_Provider_OpenSocial_HttpBasic extends EngineBlock_Group_Provider_OpenSocial_Abstract
 {
-    protected $_provider;
-    protected $_search;
-
-    public function __construct(EngineBlock_Group_Provider_Interface $provider, Zend_Config $options)
+    public static function createFromConfigs(Zend_Config $config, $userId)
     {
-        $this->_provider = $provider;
-        $this->_search = $options['search'];
-    }
+        $auth = new osapiHttpBasic(
+            $config->auth->user,
+            $config->auth->password
+        );
 
-    public function validate()
-    {
-        return preg_match($this->_search, $this->_provider->getUserId());
+        return self::createFromConfigsWithAuth($config, $auth, $userId);
     }
 }
