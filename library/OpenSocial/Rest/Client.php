@@ -35,8 +35,6 @@ class OpenSocial_Rest_Client
     public function __construct(Zend_Http_Client $httpClient)
     {
         $this->_httpClient = $httpClient;
-        OpenSocial_Rest_Client::create($httpClient)->people()->uid('abcd')->friends()->get();
-        OpenSocial_Rest_Client::create($httpClient)->people()->uid('abcd')->self()->post(array());
     }
 
     public function getHttpClient()
@@ -60,9 +58,11 @@ class OpenSocial_Rest_Client
         $uri = $this->_getPreparedUri($uri, $params);
         $uri = $this->_prependSlash($uri);
 
-        $response = $this->_httpClient->setUri($uri)->request(Zend_Http_Client::GET);
-
         $serviceType = $this->_getServiceTypeFromUri($uri);
+
+        $uri = $this->_httpClient->getUri(true) . $uri;
+
+        $response = $this->_httpClient->setUri($uri)->request(Zend_Http_Client::GET);
 
         return $this->_mapResponseToModels($serviceType, $response);
     }
@@ -70,7 +70,7 @@ class OpenSocial_Rest_Client
     protected function _getPreparedUri($uri, $params)
     {
         foreach ($params as $key => $value) {
-            $uri = str_replace("{$key}", $value, $uri);
+            $uri = str_replace('{' . $key . '}', $value, $uri);
         }
         return $uri;
     }
@@ -88,7 +88,7 @@ class OpenSocial_Rest_Client
     protected function _getServiceTypeFromUri($uri)
     {
         $secondSlashPos = strpos($uri, '/', 1);
-        $firstUriPart = substr($uri, 1, $secondSlashPos);
+        $firstUriPart = substr($uri, 1, $secondSlashPos - 1);
         return ucfirst($firstUriPart);
     }
 
@@ -100,11 +100,15 @@ class OpenSocial_Rest_Client
      */
     protected function _mapResponseToModels($serviceType, Zend_Http_Response $response)
     {
-        if ($response->getHeader('Content-Type') === 'application/json') {
+        if (substr($response->getHeader('Content-Type'), 0, 16)  === 'application/json') {
             $mapperClass = 'OpenSocial_Rest_Mapper_Json_' . $serviceType;
             if (!class_exists($mapperClass, true)) {
                 throw new OpenSocial_Rest_Exception("Mapper class $mapperClass not found!");
             }
+
+            /**
+             * @var OpenSocial_Rest_Mapper_Interface $mapper
+             */
             $mapper = new $mapperClass();
             return $mapper->map($response->getBody());
         }

@@ -28,6 +28,6 @@ class OpenSocial_Rest_Mapper_Json_Groups
 {
     protected function _mapEntryToModel(stdClass $entry)
     {
-        return $this->_copyEntryPropertiesToModel($entry, new OpenSocial_Model_Group());;
+        return $this->_copyEntryPropertiesToModel($entry, new OpenSocial_Model_Group());
     }
 }

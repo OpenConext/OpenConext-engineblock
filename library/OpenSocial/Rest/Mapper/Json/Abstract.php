@@ -31,18 +31,19 @@ abstract class OpenSocial_Rest_Mapper_Json_Abstract
         $data = json_decode($responseBody);
 
         if (isset($data->entry)) {
-            return array($this->_mapEntryToModel($data->entry));
-        }
-        else if (isset($data->entries)) {
-            $groups = array();
-            foreach ($data->entries as $entry) {
-                $groups[] = $this->_mapEntryToModel($entry);
+            if (!is_array($data->entry)) {
+                return array($this->_mapEntryToModel($data->entry));
             }
-            return $groups;
+            else {
+                $groups = array();
+                foreach ($data->entry as $entry) {
+                    $groups[] = $this->_mapEntryToModel($entry);
+                }
+                return $groups;
+            }
         }
-        else {
-            throw new OpenSocial_Rest_Exception("No entry / entries found in response?");
-        }
+
+        throw new OpenSocial_Rest_Exception("No entry / entries found in response?");
     }
 
     abstract protected function _mapEntryToModel(stdClass $entry);
@@ -54,6 +55,6 @@ abstract class OpenSocial_Rest_Mapper_Json_Abstract
                 $model->$key = $value;
             }
         }
-        return $this;
+        return $model;
     }
 }
