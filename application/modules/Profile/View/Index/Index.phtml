@@ -100,7 +100,7 @@ if (!isset($metadata)) {
                             $invalidProviders[] = $groupProvider;
                         }
                         catch(Exception $e) {
-                            ebLog()->error($e->getMessage());
+                            ebLog()->err($e->getMessage());
                         }
                         if (!empty($groups)):
                     ?>
@@ -116,22 +116,20 @@ if (!isset($metadata)) {
 
                     <?php
                         foreach ($invalidProviders as $groupProvider) {
-                            if ($groupProvider instanceof EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged) {
-                                /**
-                                 * @var EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged $groupProvider
-                                 */
+                            /**
+                             * @var EngineBlock_Group_Provider_Interface $groupProvider
+                             */
 
-                                // Remove the precondition that this provider needs an access token
-                                $groupProvider->removePreconditionByClassName(
-                                    'EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists'
-                                );
+                            // Remove the precondition that this provider needs an access token
+                            $groupProvider->removePreconditionByClassName(
+                                'EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists'
+                            );
 
-                                // Then if it matches all other preconditions
-                                // (like 'user should belong to a specific schacHomeOrganization')
-                                // add it as an OAuth group Provider
-                                if ($groupProvider->validatePreconditions()) {
-                                    $oauthGroupProviders[] = $groupProvider;
-                                }
+                            // Then if it matches all other preconditions
+                            // (like 'user should belong to a specific schacHomeOrganization')
+                            // add it as an OAuth group Provider
+                            if ($groupProvider->validatePreconditions()) {
+                                $oauthGroupProviders[] = $groupProvider;
                             }
                         }
                     ?>
