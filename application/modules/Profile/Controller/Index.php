@@ -23,55 +23,13 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class Profile_Controller_Index extends EngineBlock_Controller_Abstract
+class Profile_Controller_Index extends Default_Controller_LoggedIn
 {
-    protected $_identity;
-
-    protected $_attributes;
-
     public function indexAction()
     {
-        // Require authentication
-        $this->_identity = $this->_initAuthentication();
-
-        // Initialize the attributes
-        $this->setAttributes();
-
-        $this->__set('attributes', $this->_identity);
-    }
-
-    public function setAttributes()
-    {
-        $attributes = array();
-        require ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.inc.php';
-
-        $this->_attributes = $attributes;
-    }
-
-    public function getAttributeName($uid, $ietfLanguageTag = 'en_US')
-    {
-        $name = $this->_getAttributeDataType('Name', $uid, $ietfLanguageTag);
-        if (!$name) {
-            $name = $uid;
-        }
-        return $name;
-    }
-
-    public function getAttributeDescription($uid, $ietfLanguageTag = 'en_US')
-    {
-        $description = $this->_getAttributeDataType('Description', $uid, $ietfLanguageTag);
-        if (!$description) {
-            $description = '';
-        }
-        return $description;
-    }
-
-    protected function _getAttributeDataType($type, $name, $ietfLanguageTag = 'en_US')
-    {
-        if (isset($this->_attributes[$name][$type][$ietfLanguageTag])) {
-            return $this->_attributes[$name][$type][$ietfLanguageTag];
-        }
-        // @todo warn the system! requested a unkown UID or langauge...
-        return $name;
+        $this->metadata = new EngineBlock_AttributeMetadata();
+        $this->aggregator = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor(
+            $this->attributes['nameid'][0]
+        );
     }
 }

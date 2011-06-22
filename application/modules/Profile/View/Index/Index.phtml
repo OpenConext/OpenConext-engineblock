@@ -1,3 +1,25 @@
+<?php
+/**
+ * @var array $attributes
+ */
+if (!isset($attributes)) {
+    throw new EngineBlock_Exception("Missing required parameter for view /profile/index: attributes");
+}
+
+/**
+ * @var EngineBlock_Group_Provider_Aggregator $aggregator
+ */
+if (!isset($aggregator)) {
+    throw new EngineBlock_Exception("Missing required parameter for view /profile/index: aggregator");
+}
+
+/**
+ * @var EngineBlock_AttributeMetadata $metadata
+ */
+if (!isset($metadata)) {
+    throw new EngineBlock_Exception("Missing required parameter for view /profile/index: metadata");
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
@@ -5,11 +27,20 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex, nofollow"/>
         <link href="/css/screen.css" rel="stylesheet" type="text/css" />
-        <!--[if lt IE 8 ]><link href="/css/screen_ie.css" rel="stylesheet" type="text/css" media="screen" /><![endif]-->
+        <!--[if lt IE 8 ]>
+        <link href="/css/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
+        <![endif]-->
     </head>
     <body>
         <div class="wrapper">
-            <div class="header"><b><font size="4">SURFconext</font></b><span class="logo"><img src="/media/surfconext.png" alt="SURFconext" /></span></div>
+            <div class="header">
+                <b>
+                    <font size="4">SURFconext</font>
+                </b>
+                <span class="logo">
+                    <img src="/media/surfconext.png" alt="SURFconext" />
+                </span>
+            </div>
             <div class="main">
                 <ul class="nav">
                     <li class="active"><a href="#">EN</a></li>
@@ -17,7 +48,9 @@
                 <h1>My Profile</h1>
                 <div>
                     <p>
-                        The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.
+                        The following profile data have been provided by your home institution.
+                        These data as well as your group membership data (e.g.SURFteams)
+                        will be stored in SURFconext and shared with services accessed via SURFconext.
                     </p>
                     <br />
 
@@ -28,10 +61,10 @@
                                 <th>Value</th>
                             </tr>
                         </thead>
-                    <?php foreach ($attributes as $uid => $attributeValues) { ?>
+                    <?php foreach ($attributes as $attributeId => $attributeValues) { ?>
                         <tr>
                             <td style="font-weight: bold;">
-                                <?=$this->getAttributeName($uid, 'en_US')?>
+                                <?=$metadata->getName($attributeId, 'en_US')?>
                             </td>
                             <td>
                                 <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
@@ -47,6 +80,75 @@
                         </tr>
                     <? } ?>
                     </table>
+
+                    <hr />
+                    <h2>My Groups</h2>
+                    <p>
+                        Your membership to various groups for various providers.
+                    </p>
+
+                    <?php
+
+                    $invalidProviders = $aggregator->getInvalidProviders();
+                    foreach ($aggregator->getProviders() as $groupProvider):?>
+                    <h3><?php echo $groupProvider->getDisplayName(); ?></h3>
+                    <?php
+                        $groups = array();
+                        try{
+                            $groups = $groupProvider->getGroups();
+                        } catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
+                            $invalidProviders[] = $groupProvider;
+                        }
+                        catch(Exception $e) {
+                            ebLog()->error($e->getMessage());
+                        }
+                        if (!empty($groups)):
+                    ?>
+                    <ul>
+                        <?php foreach ($groups as $group): ?>
+                        <li><?php echo $group->displayName; ?></li>
+                        <?php endforeach; ?>
+                    </ul>
+                    <?php else: ?>
+                        <p>No groups</p>
+                    <?php endif; ?>
+                    <?php endforeach; ?>
+
+                    <?php
+                        foreach ($invalidProviders as $groupProvider) {
+                            if ($groupProvider instanceof EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged) {
+                                /**
+                                 * @var EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged $groupProvider
+                                 */
+
+                                // Remove the precondition that this provider needs an access token
+                                $groupProvider->removePreconditionByClassName(
+                                    'EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists'
+                                );
+
+                                // Then if it matches all other preconditions
+                                // (like 'user should belong to a specific schacHomeOrganization')
+                                // add it as an OAuth group Provider
+                                if ($groupProvider->validatePreconditions()) {
+                                    $oauthGroupProviders[] = $groupProvider;
+                                }
+                            }
+                        }
+                    ?>
+                    <?php if (!empty($oauthGroupProviders)): ?>
+                    <h3>Authentication required</h3>
+                    <p>In order to get extra groups you need to authorize their use.</p>
+                    <ul>
+                    <? foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
+                        <li>
+                            <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId(); ?>">
+                                <?php echo $oauthGroupProvider->getDisplayName(); ?>
+                            </a>
+                        </li>
+                    <?php endforeach;?>
+                    </ul>
+                    <?php endif; ?>
+
                     <hr />
                     <h2>Leave SURFconext</h2>
                     <p>
