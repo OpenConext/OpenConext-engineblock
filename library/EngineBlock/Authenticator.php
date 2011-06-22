@@ -36,6 +36,12 @@ class EngineBlock_Authenticator
 {
     const AUTH_DISPLAY_NAME_SAML_ATTRIBUTE = 'urn:mace:dir:attribute-def:cn';
 
+    /**
+     * Authenticate the user.
+     *
+     * @static
+     * @return EngineBlock_User
+     */
     public static function authenticate()
     {
         $auth = Zend_Auth::getInstance();
