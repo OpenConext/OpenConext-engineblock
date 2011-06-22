@@ -34,7 +34,7 @@ class EngineBlock_Group_Provider_Precondition_UserId_PregMatch implements Engine
     public function __construct(EngineBlock_Group_Provider_Interface $provider, Zend_Config $options)
     {
         $this->_provider = $provider;
-        $this->_search = $options['search'];
+        $this->_search = $options->search;
     }
 
     public function validate()
