@@ -40,7 +40,7 @@ interface EngineBlock_Group_Provider_Interface
      * Get the ID of this provider (plain alphanumeric string for use in configs, URLs and such)
      *
      * @abstract
-     * @return void
+     * @return string
      */
     public function getId();
 
@@ -57,7 +57,7 @@ interface EngineBlock_Group_Provider_Interface
      * Get the display name for this group provider
      *
      * @abstract
-     * @return void
+     * @return string
      */
     public function getDisplayName();
 
@@ -74,10 +74,10 @@ interface EngineBlock_Group_Provider_Interface
      *
      * @abstract
      * @param string $className
-     * @param array $options
+     * @param Zend_Config|null $options
      * @return EngineBlock_Group_Provider_Interface
      */
-    public function addPrecondition($className, Zend_Config $options);
+    public function addPrecondition($className, $options = null);
 
     /**
      * Get the preconditions for use of this provider.
@@ -97,6 +97,8 @@ interface EngineBlock_Group_Provider_Interface
      * @return bool
      */
     public function validatePreconditions();
+
+    public function removePreconditionByClassName($className);
 
     public function addGroupFilter(EngineBlock_Group_Provider_Filter_Interface $filter);
 
