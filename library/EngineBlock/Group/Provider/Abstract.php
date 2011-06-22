@@ -97,7 +97,7 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
         return $groupIdentifier;
     }
 
-    public function addPrecondition($className, Zend_Config $options = null)
+    public function addPrecondition($className, $options = null)
     {
         $this->_preconditions[] = array(
             'className' => $className,
@@ -190,5 +190,32 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
     public function getMemberFilters()
     {
         return $this->_memberFilters;
+    }
+
+    /**
+     * Check if there are any decorators specified in the configuration,
+     * if so, apply them and return the decorated provider.
+     *
+     * @return EngineBlock_Group_Provider_Interface
+     */
+    public function configureDecoratorChain(Zend_Config $config)
+    {
+        if (!isset($config->decorators) || empty($config->decorators)) {
+            return $this;
+        }
+
+        $decoratedProvider = $this;
+        foreach ($config->decorators as $decoratorConfig) {
+            $decoratorClassName = $decoratorConfig->className;
+            if (!class_exists($decoratorClassName, true)) {
+                throw new EngineBlock_Group_Provider_Exception("Decorator $decoratorClassName does not exist");
+            }
+
+            $decoratedProvider = $decoratorClassName::createFromConfigsWithProvider(
+                $decoratedProvider,
+                $decoratorConfig
+            );
+        }
+        return $decoratedProvider;
     }
 }
