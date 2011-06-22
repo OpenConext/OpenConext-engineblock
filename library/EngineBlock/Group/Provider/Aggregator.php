@@ -58,7 +58,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
             $providerConfigs[] = $providerConfig;
         }
         $providerConfigs = new Zend_Config($providerConfigs);
-        return self::createFromConfigs($providerConfigs, $userId);
+        return static::createFromConfigs($providerConfigs, $userId);
     }
 
     public static function createFromConfigs(Zend_Config $config, $userId)
@@ -83,7 +83,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
 
             $providers[] = $provider;
         }
-        $aggregator = new self($providers);
+        $aggregator = new static($providers);
         $aggregator->_invalidProviders = $invalidProviders;
         return $aggregator;
     }
