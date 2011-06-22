@@ -97,14 +97,15 @@ class EngineBlock_Dispatcher
         if (!$this->_useErrorHandling) {
             throw $e;
         }
+        else {
+            $errorConfiguration = $application->getConfiguration()->error;
+            $module         = $errorConfiguration->module;
+            $controllerName = $errorConfiguration->controller;
+            $action         = $errorConfiguration->action;
 
-        $errorConfiguration = $application->getConfiguration()->error;
-        $module         = $errorConfiguration->module;
-        $controllerName = $errorConfiguration->controller;
-        $action         = $errorConfiguration->action;
-
-        $controllerInstance = $this->_getControllerInstance($module, $controllerName);
-        $controllerInstance->handleAction($action, array($e));
+            $controllerInstance = $this->_getControllerInstance($module, $controllerName);
+            $controllerInstance->handleAction($action, array($e));
+        }
     }
 
     protected function _getControllerInstance($module, $controllerName)
