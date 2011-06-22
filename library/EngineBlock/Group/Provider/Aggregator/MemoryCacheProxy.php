@@ -110,7 +110,12 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
         return $this->_provider->getUserId();
     }
 
-    public function addPrecondition($className, Zend_Config $options)
+    /**
+     * @param string $className
+     * @param Zend_Config|null $options
+     * @return EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy
+     */
+    public function addPrecondition($className, $options = null)
     {
         $this->_clearCache();
 
@@ -135,6 +140,11 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
     public function validatePreconditions()
     {
         return $this->_provider->validatePreconditions();
+    }
+
+    public function removePreconditionByClassName($className)
+    {
+        return $this->_provider->removePreconditionByClassName($className);
     }
 
     /**
