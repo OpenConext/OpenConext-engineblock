@@ -86,12 +86,12 @@ div#wrapper {
 	width:478px;
 }
 div#header {
-	background: url(../img/headerBck.gif) no-repeat left bottom;
+	background: url(../media/headerBck.gif) no-repeat left bottom;
 	padding: 15px 0 34px 22px;
 	margin-bottom: 10px;
 }
 div#main {
-	background: url(../img/contentBck.gif) no-repeat left top;
+	background: url(../media/contentBck.gif) no-repeat left top;
 	padding: 12px 14px 0px 14px;
 	margin-bottom:20px;
 	position:relative;/*height: 472px;*/
@@ -114,7 +114,7 @@ ul.nav li {
 	float:left;
 	list-style:none;
 	font-weight:bold;
-	background: url(../img/divider.gif) no-repeat left 3px;
+	background: url(../media/divider.gif) no-repeat left 3px;
 	margin-left: 5px;
 	padding-left: 6px;
 }
@@ -124,7 +124,7 @@ ul.nav li a {
 }
 ul.nav li.active a {
 	color: #1166a4;
-	background: url(../img/menu_active.gif) no-repeat center bottom;
+	background: url(../media/menu_active.gif) no-repeat center bottom;
 }
 ul.nav li.first {
 	background: none;
@@ -153,16 +153,16 @@ ul.tabs li {
 	cursor:pointer;
 }
 ul.tabs li.thumbs {
-	background: url(../img/thumbs2.gif) no-repeat left top;
+	background: url(../media/thumbs2.gif) no-repeat left top;
 }
 ul.tabs li.active.thumbs {
-	background-image: url(../img/thumbs1.gif);
+	background-image: url(../media/thumbs1.gif);
 }
 ul.tabs li.list {
-	background: url(../img/list2.gif) no-repeat left top;
+	background: url(../media/list2.gif) no-repeat left top;
 }
 ul.tabs li.active.list {
-	background-image: url(../img/list1.gif);
+	background-image: url(../media/list1.gif);
 }
 /*           NAV          */
 /*++++++++++++++++++++++++*/
@@ -171,7 +171,7 @@ ul.tabs li.active.list {
 /*         CONTENT        */
 
 div.suggestion {
-	background: url(../img/bck1.png) no-repeat left top;
+	background: url(../media/bck1.png) no-repeat left top;
 	width: 451px;
 	height:76px;
 	display:block;
@@ -197,7 +197,7 @@ div.suggestion a.noAccess span {
 div.suggestion a.noAccess em {
 	color: #cc0000;
 	font-style:normal;
-/*	background: url(../img/noAccess.png) repeat;*/
+/*	background: url(../media/noAccess.png) repeat;*/
 	display:block;
 	font-size:11px;
 }
@@ -209,7 +209,7 @@ div.dimmed a.noAccess em {
 	padding-left:145px;
 	height:23px;
 	padding-top:43px;
-	background: url(../img/dimmedSuggestion.png) left top;	
+	background: url(../media/dimmedSuggestion.png) left top;	
 }
 div.suggestion a.noAccess:hover em {
 	text-decoration:underline;
@@ -247,7 +247,7 @@ div.suggestion img.logo {
 	margin: 12px 0 0 10px;
 }
 div#main div.bottom {
-	background: url(../img/contentBtm.gif) no-repeat left bottom;
+	background: url(../media/contentBtm.gif) no-repeat left bottom;
 	width:478px;
 	padding: 8px 14px 10px 14px;
 	position: relative;
@@ -256,7 +256,7 @@ div#main div.bottom {
 	margin-left:-14px;
 }
 div.results {
-	background: url(../img/bck2.gif) no-repeat left top;
+	background: url(../media/bck2.gif) no-repeat left top;
 	width: 451px;
 	height:239px;
 	display:block;
@@ -270,7 +270,7 @@ p.back {
 	padding-bottom: 10px;
 }
 p.back a {
-	background: url(../img/back.png) no-repeat left center;
+	background: url(../media/back.png) no-repeat left center;
 	padding: 1px 0 2px 22px;
 	margin-left:-3px;
 }
@@ -278,10 +278,10 @@ p.warning {
 	padding: 7px 0 7px 35px;
 	font-weight:bold;
 	text-transform:uppercase;
-	background: #f6ff03 url(../img/warning.png) no-repeat 10px center;
+	background: #f6ff03 url(../media/warning.png) no-repeat 10px center;
 }
 p.noresults {
-	background:url(../img/warning.png) no-repeat center 95px;
+	background:url(../media/warning.png) no-repeat center 95px;
 	text-align: center;
 	padding-top: 115px;
 }
@@ -305,7 +305,7 @@ ul#organisationsContainer li {
 
 }
 ul#organisationsContainer li a {
-	background: url(../img/bullet2.gif) no-repeat 7px center;
+	background: url(../media/bullet2.gif) no-repeat 7px center;
 	padding: 0 0 0 14px;
 	display:block;
 }
@@ -368,14 +368,14 @@ ul#organisationsContainer.thumbs li a img {
 	margin: 0 auto;
 }
 ul#organisationsContainer.thumbs li a:hover, ul#organisationsContainer.thumbs li.selected a {
-	background: url(../img/selectionHover.gif) no-repeat left top;
+	background: url(../media/selectionHover.gif) no-repeat left top;
 }
 
 ul#organisationsContainer.thumbs li a:hover span,  ul#organisationsContainer.thumbs li a:hover em {
 	text-decoration:underline;
 }
 ul#organisationsContainer.thumbs li.selected a, ul.thumbs li.selected a:hover {
-	background: url(../img/selection.gif) no-repeat left top;
+	background: url(../media/selection.gif) no-repeat left top;
 }
 ul#organisationsContainer.thumbs span {
 	position: absolute;
@@ -388,7 +388,7 @@ ul#organisationsContainer.thumbs span {
 ul#organisationsContainer.thumbs li em {
 	color: #cc0000;
 	font-style:normal;
-	background: url(../img/selectionNodatabase.png) no-repeat left top;
+	background: url(../media/selectionNodatabase.png) no-repeat left top;
 	display:block;
 	height: 105px;
 	width: 139px;
@@ -424,13 +424,13 @@ ul#faq li ul {padding:0;}
 ul#faq li ul li {
 	border:none;
 	padding-left:10px;
-	background:url(../img/bullet1.gif) no-repeat 3px 7px;
+	background:url(../media/bullet1.gif) no-repeat 3px 7px;
 }
 ul#faq li h3 {
 	padding-right:10px;
 	color: #419bda;
 	cursor:pointer;
-	background: url(../img/down.gif) no-repeat right 6px;
+	background: url(../media/down.gif) no-repeat right 6px;
 	font-size:12px;
 }
 ul#faq li.open {
@@ -446,7 +446,7 @@ span.openClose {
 	cursor: pointer;
 	float: right;
 	color: #288dd5;
-	background: url(../img/up.gif) no-repeat right 6px;
+	background: url(../media/up.gif) no-repeat right 6px;
 	padding-right: 12px;
 	clear:both;
 	display:none;
@@ -481,7 +481,7 @@ label.error {
 	color: #CC0000;
 }
 span.errorMessage {
-	background: url(../img/formError.gif) no-repeat left 1px;
+	background: url(../media/formError.gif) no-repeat left 1px;
 	padding-left: 20px;
 	margin: 0px 0px 0px 80px;
 	color: #CC0000;
@@ -490,7 +490,7 @@ span.errorMessage {
 input {
 	width:365px;
 	height:26px;
-	background: url(../img/input.gif) no-repeat left top;
+	background: url(../media/input.gif) no-repeat left top;
 	border: none;
 	padding: 0px 5px 2px 5px;
 	margin-bottom: 10px;
@@ -498,7 +498,7 @@ input {
 textarea {
 	width: 365px;
 	height: 130px;
-	background: url(../img/textarea.gif) no-repeat left top;
+	background: url(../media/textarea.gif) no-repeat left top;
 	border: none;
 	padding: 5px 5px 5px 5px;
 	margin-bottom: 10px;
@@ -507,7 +507,7 @@ textarea {
 input.search {
 	width: 461px;
 	height: 18px;
-	background-image: url(../img/search.gif);
+	background-image: url(../media/search.gif);
 	padding:7px 25px 7px 5px;
 	font:13px/13px Arial,Helvetica,sans-serif
 }
@@ -518,12 +518,12 @@ input.search:focus {
 }
 span.button {
 	display:block;
-	background: url(../img/buttonRight.gif) no-repeat right top;
+	background: url(../media/buttonRight.gif) no-repeat right top;
 	float:right;
 	margin-right: -2px;
 }
 span.button input {
-	background: url(../img/buttonLeft.gif) no-repeat left top;
+	background: url(../media/buttonLeft.gif) no-repeat left top;
 	width: auto;
 	height: 32px;
 	padding-left: 3px;
@@ -574,7 +574,7 @@ a.cancel {
 }
 .jspTrack {	 /* Scroll track */
 	width:10px;
-	background: #E2EBF4 url(../img/scrollBck.gif) no-repeat left top;
+	background: #E2EBF4 url(../media/scrollBck.gif) no-repeat left top;
 }
 .jspDrag { /* Scroll handle */
 	width:8px;
@@ -588,11 +588,11 @@ a.cancel {
 
 .jspArrowUp {
 	height:13px;
-	background:url(../img/slider_up.gif) no-repeat left 5px;
+	background:url(../media/slider_up.gif) no-repeat left 5px;
 }
 .jspArrowDown {
 	height:10px;
-	background:url(../img/slider_down.gif) no-repeat left 2px;
+	background:url(../media/slider_down.gif) no-repeat left 2px;
 }
 
 /*         SCROLL         */
