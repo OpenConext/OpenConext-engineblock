@@ -23,27 +23,27 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class Surfnet_Auth_Adapter_Saml implements Zend_Auth_Adapter_Interface
+class EngineBlock_User
 {
-    /**
-     * Performs an authentication attempt using SimpleSAMLphp
-     *
-     * @throws Zend_Auth_Adapter_Exception If authentication cannot be performed
-     * @return Zend_Auth_Result
-     */
-    public function authenticate()
+    private $_attributes = array();
+
+    public function __construct(array $attributes)
     {
-        require_once('simplesamlphp/lib/_autoload.php');
+        $this->_attributes = $attributes;
+    }
 
-        $as = new SimpleSAML_Auth_Simple('default-sp');
-        $as->requireAuth();
+    public function getUid()
+    {
+        return $this->_attributes['nameid'][0];
+    }
 
-        // If SimpleSAMLphp didn't stop it, then the user is logged in.
+    public function getDisplayName()
+    {
+        return $this->_attributes['urn:mace:dir:attribute-def:displayName'][0];
+    }
 
-        return new Zend_Auth_Result(
-            Zend_Auth_Result::SUCCESS,
-            new EngineBlock_User($as->getAttributes()),
-            array("Authentication Successful")
-        );
+    public function getAttributes()
+    {
+        return $this->_attributes;
     }
 }
