@@ -23,8 +23,11 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+define('ENGINEBLOCK_FOLDER_SHINDIG', ENGINEBLOCK_FOLDER_LIBRARY . 'shindig/php/');
+set_include_path(ENGINEBLOCK_FOLDER_SHINDIG . PATH_SEPARATOR . get_include_path());
+
 /**
  * HACK, load up the Shindig OAuth library as it's the same as the OpenSocial Clients one.
  */
 
-require_once 'external/OAuth.php';
+require_once 'external/OAuth/OAuth.php';
