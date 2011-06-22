@@ -90,6 +90,13 @@ class EngineBlock_Http_Request
         if (isset($this->_queryParameters[$name])) {
             return $this->_queryParameters[$name];
         }
+
+        throw new EngineBlock_Exception("Expected Query param '$name' not found in request");
+    }
+
+    public function getQueryParameters()
+    {
+        return $this->_queryParameters;
     }
 
     protected function _setQueryParameters($queryString)
