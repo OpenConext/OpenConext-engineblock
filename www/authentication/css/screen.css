@@ -586,14 +586,15 @@ a.cancel {
 	outline: none;
 }
 
-.jspArrowUp {
+.jspArrowUp , .jspArrowUp.jspDisabled {
 	height:13px;
 	background:url(../media/slider_up.gif) no-repeat left 5px;
 }
-.jspArrowDown {
+.jspArrowDown , .jspArrowDown.jspDisabled {
 	height:10px;
 	background:url(../media/slider_down.gif) no-repeat left 2px;
 }
+
 
 /*         SCROLL         */
 /*++++++++++++++++++++++++*/
