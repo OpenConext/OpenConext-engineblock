@@ -30,16 +30,6 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
      */
     protected $_accessTokenHelper;
 
-    /**
-     * @var \osapiAuth
-     */
-    protected $_openSocialAuth;
-
-    /**
-     * @var \osapi
-     */
-    protected $_openSocialClient;
-
     public static function createFromConfigs(Zend_Config $config, $userId)
     {
         $databaseFactory = new EngineBlock_Database_ConnectionFactory();
@@ -47,26 +37,36 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
             EngineBlock_Database_ConnectionFactory::MODE_READ
         );
 
-        $auth = new Osapi_Auth_ThreeLegged(
-            $config->auth->consumerKey,
-            $config->auth->consumerSecret,
-            new Osapi_Storage_Database($databaseAdapter),
-            new Osapi_Provider_PlainRest($config->name, $config->url),
-            $userId,
-            $config->name
+        $accessTokenHelper = new EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken(
+            $config->id,
+            $databaseAdapter,
+            $userId
         );
 
-        $provider = self::createFromConfigsWithAuth($config, $auth, $userId);
+        $httpClient = new Zend_Oauth_Client($config->auth->toArray(), $config->url, $config);
 
-        $provider->setAccessTokenHelper(new EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken(
-            $databaseAdapter,
-            $provider,
-            $userId
-        ));
+        $accessToken = $accessTokenHelper->loadAccessToken();
+        if ($accessToken) {
+            $httpClient->setToken($accessToken);
+        }
+
+        $openSocialRestClient = new OpenSocial_Rest_Client($httpClient);
+
+        $provider = new self(
+            $config->id,
+            $config->name,
+            $openSocialRestClient
+        );
+
+        $provider->setUserId($userId);
+
+        $provider->setAccessTokenHelper($accessTokenHelper);
 
         $provider->addPrecondition('EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists');
-        
-        return $provider;
+
+        $decoratedProvider = $provider->configureDecoratorChain($config);
+
+        return $decoratedProvider;
     }
 
     public function setAccessTokenHelper($helper)
@@ -77,14 +77,15 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
 
     public function setAccessToken($accessToken)
     {
-        $this->_accessTokenHelper->set($accessToken);
+        $this->_accessTokenHelper->storeAccessToken($accessToken);
+        $this->_openSocialRestClient->getHttpClient()->setToken($accessToken);
     }
 
     /**
      * @return osapiAuth
      */
-    public function getOpenSocialAuth()
+    public function getOpenSocialRestClient()
     {
-        return $this->_openSocialAuth;
+        return $this->_openSocialRestClient;
     }
 }

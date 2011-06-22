@@ -33,6 +33,7 @@ class EngineBlock_Group_Exception_UserDoesNotExist extends EngineBlock_Exception
 abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_Provider_Interface
 {
     protected $_id;
+    protected $_name;
     protected $_userId;
     protected $_stem = NULL;
 
@@ -43,6 +44,11 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
     public function getId()
     {
         return $this->_id;
+    }
+
+    public function getDisplayName()
+    {
+        return $this->_name;
     }
 
     public function getUserId()

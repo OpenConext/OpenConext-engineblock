@@ -23,15 +23,26 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Group_Provider_OpenSocial_HttpBasic extends EngineBlock_Group_Provider_OpenSocial_Abstract
+class EngineBlock_Group_Provider_OpenSocial_HttpBasic 
+    extends EngineBlock_Group_Provider_OpenSocial_Abstract
 {
     public static function createFromConfigs(Zend_Config $config, $userId)
     {
-        $auth = new osapiHttpBasic(
+        $httpClient = new Zend_Http_Client();
+        $httpClient->setAuth(
             $config->auth->user,
             $config->auth->password
         );
 
-        return self::createFromConfigsWithAuth($config, $auth, $userId);
+        $openSocialRestClient = new OpenSocial_Rest_Client($httpClient);
+        $provider = new self($config->id, $config->name, $openSocialRestClient);
+
+        $provider->configurePreconditions($config);
+        $provider->configureGroupFilters($config);
+        $provider->configureGroupMemberFilters($config);
+
+        $decoratedProvider = $provider->configureDecoratorChain($config);
+
+        return $decoratedProvider;
     }
 }

@@ -44,9 +44,8 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
     public static function createFromConfigs(Zend_Config $config, $userId)
     {
         $grouperClient = Grouper_Client_Rest::createFromConfig($config);
-        $provider = new static($grouperClient);
-        $provider->_id   = $config->id;
-        $provider->_name = $config->name;
+        $provider = new self($id, $name, $grouperClient);
+
         $provider->setUserId($userId);
 
         $provider->configurePreconditions($config);
@@ -57,14 +56,11 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         return $decoratedProvider;
     }
 
-    public function __construct(Grouper_Client_Interface $grouperClient)
+    public function __construct($id, $name, Grouper_Client_Interface $grouperClient)
     {
+        $this->_id   = $id;
+        $this->_name = $name;
         $this->_grouperClient = $grouperClient;
-    }
-
-    public function getDisplayName()
-    {
-        return $this->_name;
     }
 
     public function setUserId($userId)

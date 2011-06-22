@@ -23,216 +23,68 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require 'Osapi/Loader.php';
-
-/**
- * The OpenSocial group provider, gets groups from an OpenSocial REST API.
- */ 
-abstract class EngineBlock_Group_Provider_OpenSocial_Abstract extends EngineBlock_Group_Provider_Abstract
+abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
+    extends EngineBlock_Group_Provider_Abstract
 {
     /**
-     * @var string
+     * @var OpenSocial_Rest_Client
      */
-    protected $_name;
+    protected $_openSocialRestClient;
 
-    /**
-     * @var string
-     */
-    protected $_url;
-
-    /**
-     * @var \osapi
-     */
-    protected $_openSocialClient;
-
-    public static function createFromConfigsWithAuth(Zend_Config $config, osapiAuth $auth, $userId)
+    public function __construct($id, $name, $openSocialRestClient)
     {
-        $provider = new static(
-            $config->id,
-            $config->name,
-            $config->url,
-            $auth
-        );
-        $provider->setUserId($userId);
-
-        $provider->configurePreconditions($config);
-        $provider->configureGroupFilters($config);
-        $provider->configureGroupMemberFilters($config);
-        $decoratedProvider = $provider->configureDecoratorChain($config);
-
-        return $decoratedProvider;
-    }
-
-    protected function __construct($id, $name, $endpointUrl, osapiAuth $auth)
-    {
-        $this->_id   = $id;
+        $this->_id = $id;
         $this->_name = $name;
-        $this->_url  = $endpointUrl;
-        $this->_openSocialAuth = $auth;
+        $this->_openSocialRestClient = $openSocialRestClient;
     }
 
-    public function getDisplayName()
-    {
-        return $this->_name;
-    }
-
+    /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     * @return array A list of groups
+     */
     public function getGroups()
     {
-        $this->_requireUserId();
-
-        $openSocialClient = $this->_getOpenSocialClient();
-
-        /**
-         * @var osapiGroups $groupsService
-         */
-        $groupsService = $openSocialClient->groups;
-
-        $batch = $openSocialClient->newBatch();
-        $batch->add($groupsService->get(array('userId'=>$this->_userId)));
-        $result = array_shift($batch->execute());
-
-        if ($result instanceof osapiError) {
-            $this->_handleError($result);
-        }
-
-        /**
-         * @var osapiCollection $collection
-         */
-        $collection  = $result['data'];
-        $osapiGroups = $collection->getList();
-
-        $groups = array();
-        foreach ($osapiGroups as $osapiGroup) {
-            $groups[] = $this->_mapOsapiGroupToEngineBlockGroup($osapiGroup);
-        }
-        return $groups;
+        $openSocialGroups = $this->_openSocialRestClient->get(
+            '/groups/{uid}',
+            array(
+                'uid' => $this->_userId,
+            )
+        );
+        return $openSocialGroups;
     }
 
+    /**
+     * Get the members of a given group
+     * @param String $groupIdentifier The name of the group to retrieve members of
+     * @return array A list of members
+     */
     public function getMembers($groupIdentifier)
     {
-        $this->_requireUserId();
-        
-        $openSocialClient = $this->_getOpenSocialClient();
-
-        /**
-         * @var osapiGroups $peopleService
-         */
-        $peopleService = $openSocialClient->people;
-
-        $batch = $openSocialClient->newBatch();
-        $batch->add($peopleService->get(array(
-            'userId'    =>  $this->_userId,
-            'groupId'   =>  $this->_getStemmedGroupId($groupIdentifier))
-        ));
-        $results = $batch->execute();
-
-        /**
-         * @var osapiCollection $collection
-         */
-        $collection = $results['data'];
-        $osapiPeople = $collection->getList();
-
-        $members = array();
-        foreach ($osapiPeople as $osapiPerson) {
-            $members[] = $this->_mapOsapiPersonToEngineBlockGroupMember($osapiPerson);
-        }
-        return $members;
+        $openSocialPeople = $this->_openSocialRestClient->get(
+            '/people/{uid}/{gid}',
+            array(
+                'uid' => $this->_userId,
+                'gid' => $groupIdentifier,
+            )
+        );
+        return $openSocialPeople;
     }
 
+    /**
+     * Check whether the given user is a member of the given group.
+     * @param String $groupIdentifier The group to check
+     * @return boolean
+     */
     public function isMember($groupIdentifier)
     {
-        $this->_requireUserId();
-        
-        $openSocialClient = $this->_getOpenSocialClient();
+        $members = $this->getMembers($groupIdentifier);
 
-        /**
-         * @var osapiGroups $groupsService
-         */
-        $groupsService = $openSocialClient->groups;
-
-        $batch = $openSocialClient->newBatch();
-        $batch->add($groupsService->get(array('userId'=>$this->_userId)));
-        $results = $batch->execute();
-
-        /**
-         * @var osapiCollection $collection
-         */
-        $collection = $results['data'];
-        $osapiGroups = $collection->getList();
-        /**
-         * @var osapiGroup $osapiGroup
-         */
-        foreach ($osapiGroups as $osapiGroup) {
-            if ($osapiGroup->id === $this->_getStemmedGroupId($groupIdentifier)) {
+        foreach ($members as $member) {
+            if ($member->id === $this->_userId) {
                 return true;
             }
         }
-        return false;
-    }
-
-    protected function _mapOsapiGroupToEngineBlockGroup(osapiGroup $osapiGroup)
-    {
-        $group = new EngineBlock_Group_Model_Group();
-        $group->id          = $osapiGroup->id;
-        $group->title       = $osapiGroup->title;
-        $group->description = $osapiGroup->description;
-
-        $filters = $this->getGroupFilters();
-        foreach ($filters as $filter) {
-            $group = $filter->filter($group);
-        }
-
-        return $group;
-    }
-
-    protected function _mapOsapiPersonToEngineBlockGroupMember(osapiPerson $osapiPerson)
-    {
-        $groupMember = new EngineBlock_Group_Model_GroupMember();
-        $groupMember->id = $osapiPerson->id;
-
-        $filters = $this->getMemberFilters();
-        foreach ($filters as $filter) {
-            $groupMember = $filter->filter($groupMember);
-        }
-
-        return $groupMember;
-    }
-
-    /**
-     * @return osapi
-     */
-    protected function _getOpenSocialClient()
-    {
-        if (isset($this->_openSocialClient)) {
-            return $this->_openSocialClient;
-        }
-
-        $this->_setDefaultOpenSocialClient();
-        return $this->_openSocialClient;
-    }
-
-    /**
-     * @return osapi
-     */
-    protected function _setDefaultOpenSocialClient()
-    {
-        $provider = new Osapi_Provider_PlainRest($this->_name, $this->_url);
-        $openSocialClient = new osapi($provider, $this->_openSocialAuth);
         
-        $this->_openSocialClient = $openSocialClient;
-    }
-
-    protected function _handleError(osapiError $error)
-    {
-        if ($error->getErrorCode() === 401) {
-            throw new EngineBlock_Group_Provider_Exception_Unauthorized(
-                "OpenSocial client error: " . var_export($error, true)
-            );
-        }
-        else {
-            throw new EngineBlock_Group_Provider_Exception(
-                "OpenSocial client error: " . var_export($error, true)
-            );
-        }
+        return false;
     }
 }

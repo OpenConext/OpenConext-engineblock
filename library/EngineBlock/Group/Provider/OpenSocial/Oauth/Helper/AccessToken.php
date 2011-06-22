@@ -25,62 +25,48 @@
 
 class EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken
 {
-    const STORAGE_KEY_TEMPLATE = 'OAuth:[[ConsumerKey]]:[[ProviderName]]:[[UserId]]';
-
-    protected $_storageKey;
-
+    protected $_providerId;
     protected $_connection;
-    protected $_provider;
-    protected $_storage;
     protected $_userId;
 
-    public function __construct(PDO $databaseConnection,
-        $provider,
-        $userId
-    )
+    public function __construct($providerId, PDO $databaseConnection, $userId)
     {
+        $this->_providerId = $providerId;
         $this->_connection = $databaseConnection;
-        $this->_provider   = $provider;
-        $this->_storage    = $this->_getStorage();
         $this->_userId     = $userId;
     }
 
-    protected function _getStorage()
+    public function loadAccessToken()
     {
-        return new Osapi_Storage_Database($this->_connection);
+        $query = "SELECT * FROM group_provider_user_oauth WHERE provider_id=? AND user_id=?";
+        $params = array(
+            $this->_providerId,
+            $this->_userId
+        );
+        $statement = $this->_connection->prepare($query);
+        $statement->execute($params);
+        $row = $statement->fetch(PDO::FETCH_ASSOC);
+
+        $accessToken = new Zend_Oauth_Token_Access();
+        $accessToken->setToken($row['oauth_token']);
+        $accessToken->setTokenSecret($row['oauth_secret']);
+        return $accessToken;
     }
 
-    public function get()
+    public function storeAccessToken(Zend_Oauth_Token_Access $accessToken)
     {
-        return $this->_storage->get($this->_getStorageKey());
-    }
-
-    public function set($accessToken)
-    {
-        return $this->_storage->set($this->_getStorageKey(), $accessToken);
-    }
-
-    public function delete()
-    {
-        return $this->_storage->delete($this->_getStorageKey());
-    }
-
-    protected function _getStorageKey()
-    {
-        if (isset($this->_storageKey)) {
-            return $this->_storageKey;
-        }
-
-        /**
-         * @var Osapi_Auth_ThreeLegged $openSocialAuth
-         */
-        $openSocialAuth = $this->_provider->getOpenSocialAuth();
-        $storageKey = static::STORAGE_KEY_TEMPLATE;
-        $storageKey = str_replace('[[ConsumerKey]]' , $openSocialAuth->getConsumerKey() , $storageKey);
-        $storageKey = str_replace('[[UserId]]'      , $this->_userId                    , $storageKey);
-        $storageKey = str_replace('[[ProviderName]]', $this->_provider->getDisplayName(), $storageKey);
-        $this->_storageKey = $storageKey;
-
-        return $this->_storageKey;
+        $query = "INSERT INTO group_provider_user_oauth (provider_id, user_id, oauth_token, oauth_secret)
+        VALUES(?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE oauth_token=VALUES(oauth_token), oauth_secret=VALUES(oauth_secret)";
+        $params = array(
+            $this->_providerId,
+            $this->_userId,
+            $accessToken->getToken(),
+            $accessToken->getTokenSecret()
+        );
+        $statement = $this->_connection->prepare($query);
+        $statement->execute($params);
+        var_dump($statement->errorInfo());
+        return true;
     }
 }
