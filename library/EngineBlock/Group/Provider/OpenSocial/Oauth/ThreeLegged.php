@@ -58,15 +58,21 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
 
         $provider = self::createFromConfigsWithAuth($config, $auth, $userId);
 
-        $provider->_accessTokenHelper = new EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken(
+        $provider->setAccessTokenHelper(new EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken(
             $databaseAdapter,
             $provider,
             $userId
-        );
+        ));
 
         $provider->addPrecondition('EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists');
         
         return $provider;
+    }
+
+    public function setAccessTokenHelper($helper)
+    {
+        $this->_accessTokenHelper = $helper;
+        return $this;
     }
 
     public function setAccessToken($accessToken)
