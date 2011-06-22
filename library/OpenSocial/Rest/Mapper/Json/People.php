@@ -23,9 +23,11 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class OpenSocial_Model_Group
-    implements OpenSocial_Model_Interface
+class OpenSocial_Rest_Mapper_Json_People
+    extends OpenSocial_Rest_Mapper_Json_Abstract
 {
-    public $id;
-    public $title;
+    protected function _mapEntryToModel(stdClass $entry)
+    {
+        return $this->_copyEntryPropertiesToModel($entry, new OpenSocial_Model_Person());
+    }
 }

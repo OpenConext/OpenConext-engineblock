@@ -23,9 +23,34 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class OpenSocial_Model_Group
+class OpenSocial_Model_Person
     implements OpenSocial_Model_Interface
 {
     public $id;
-    public $title;
+    public $name;
+    public $nickname;
+    public $displayName;
+    public $updated;
+
+    public $anniversary;
+    public $birthday;
+    public $connected;
+    public $gender;
+    public $note;
+    public $preferredUsername;
+    public $published;
+    public $utcOffset;
+
+    // plurals
+    public $emails          = array();
+    public $urls            = array();
+    public $phoneNumbers    = array();
+    public $ims             = array();
+    public $photos          = array();
+    public $tags            = array();
+    public $relationships   = array();
+    public $addresses       = array();
+    public $organizations   = array();
+    public $accounts        = array();
+    public $appdata         = array();
 }

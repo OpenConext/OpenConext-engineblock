@@ -23,9 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class OpenSocial_Model_Group
-    implements OpenSocial_Model_Interface
+class OpenSocial_Rest_Exception extends Exception
 {
-    public $id;
-    public $title;
 }

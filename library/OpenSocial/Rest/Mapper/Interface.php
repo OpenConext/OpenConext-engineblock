@@ -23,9 +23,14 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class OpenSocial_Model_Group
-    implements OpenSocial_Model_Interface
+interface OpenSocial_Rest_Mapper_Interface
 {
-    public $id;
-    public $title;
+    /**
+     * Map the response body, in a specific format, to an array of models
+     *
+     * @abstract
+     * @param  $responseBody
+     * @return array
+     */
+    public function map($responseBody);
 }
