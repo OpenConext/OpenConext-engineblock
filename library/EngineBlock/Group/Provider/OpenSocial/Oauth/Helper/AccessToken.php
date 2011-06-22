@@ -25,7 +25,7 @@
 
 class EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken
 {
-    const STORAGE_KEY_TEMPLATE = 'OAuth:[[ConsumerKey]]:[[UserId]]:[[ProviderName]]';
+    const STORAGE_KEY_TEMPLATE = 'OAuth:[[ConsumerKey]]:[[ProviderName]]:[[UserId]]';
 
     protected $_storageKey;
 
@@ -35,7 +35,7 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken
     protected $_userId;
 
     public function __construct(PDO $databaseConnection,
-        EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged $provider,
+        $provider,
         $userId
     )
     {
@@ -75,7 +75,7 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken
          * @var Osapi_Auth_ThreeLegged $openSocialAuth
          */
         $openSocialAuth = $this->_provider->getOpenSocialAuth();
-        $storageKey = self::STORAGE_KEY_TEMPLATE;
+        $storageKey = static::STORAGE_KEY_TEMPLATE;
         $storageKey = str_replace('[[ConsumerKey]]' , $openSocialAuth->getConsumerKey() , $storageKey);
         $storageKey = str_replace('[[UserId]]'      , $this->_userId                    , $storageKey);
         $storageKey = str_replace('[[ProviderName]]', $this->_provider->getDisplayName(), $storageKey);
