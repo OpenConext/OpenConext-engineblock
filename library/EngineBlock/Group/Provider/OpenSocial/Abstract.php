@@ -50,7 +50,23 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
                 'uid' => $this->_userId,
             )
         );
-        return $openSocialGroups;
+        return $this->_mapOpenSocialGroupsToEngineBlockGroups($openSocialGroups);
+    }
+
+    protected function _mapOpenSocialGroupsToEngineBlockGroups(array $openSocialGroups)
+    {
+        $groups = array();
+        foreach ($openSocialGroups as $openSocialGroup) {
+            /**
+             * @var OpenSocial_Model_Group $openSocialGroup
+             */
+
+            $group = new EngineBlock_Group_Model_Group();
+            $group->id = $openSocialGroup->id;
+            $group->title = $openSocialGroup->title;
+            $groups[] = $group;
+        }
+        return $groups;
     }
 
     /**
@@ -67,7 +83,22 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
                 'gid' => $groupIdentifier,
             )
         );
-        return $openSocialPeople;
+        return $this->_mapOpenSocialPeopleToEngineBlockGroupMembers($openSocialPeople);
+    }
+
+    protected function _mapOpenSocialPeopleToEngineBlockGroupMembers(array $openSocialPeople)
+    {
+        $members = array();
+        foreach ($openSocialPeople as $openSocialPerson) {
+            /**
+             * @var OpenSocial_Model_Person $openSocialPerson
+             */
+
+            $member = new EngineBlock_Group_Model_GroupMember();
+            $member->id = $openSocialPerson->id;
+            $members[] = $member;
+        }
+        return $members;
     }
 
     /**
