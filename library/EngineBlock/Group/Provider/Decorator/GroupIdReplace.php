@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Group_Provider_Decorator_UserIdReplace
+class EngineBlock_Group_Provider_Decorator_GroupIdReplace
     extends EngineBlock_Group_Provider_Decorator_Abstract
 {
     /**
@@ -36,21 +36,11 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      */
     protected $_replace;
 
-    /**
-     * @var string
-     */
-    protected $_userId;
-
-    /**
-     * @var string
-     */
-    protected $_userIdReplaced;
-
     public static function createFromConfigsWithProvider(EngineBlock_Group_Provider_Interface $provider, Zend_Config $config)
     {
         if (!isset($config->search) || !isset($config->replace)) {
             throw new EngineBlock_Group_Provider_Exception(
-                "Missing configuration for UserIdReplace decorator, please make sure .search and .replace are set"
+                "Missing configuration for groupIdReplace decorator, please make sure .search and .replace are set"
             );
         }
         return new self($provider, $config->search, $config->replace);
@@ -61,41 +51,6 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
         $this->_provider = $provider;
         $this->_search   = $search;
         $this->_replace  = $replace;
-
-        $this->_loadReplacedUserId();
-    }
-
-    protected function _loadReplacedUserId()
-    {
-        $this->_userId = $this->_provider->getUserId();
-        $this->_userIdReplaced = preg_replace($this->_search, $this->_replace, $this->_userId);
-    }
-
-    /**
-     * Set the ID of the User to provide group information for
-     *
-     * @abstract
-     * @param string $userId
-     * @return EngineBlock_Group_Provider_Interface
-     */
-    public function setUserId($userId)
-    {
-        $this->_provider->setUserId($userId);
-        $this->_loadReplacedUserId();
-        return $this;
-    }
-
-    /**
-     * Retrieve the list of groups that the specified subject is a member of.
-     * @return array A list of groups
-     */
-    public function getGroups()
-    {
-        $this->_provider->setUserId($this->_userIdReplaced);
-        $results = $this->_provider->getGroups();
-        $this->_provider->setUserId($this->_userId);
-
-        return $results;
     }
 
     /**
@@ -105,24 +60,20 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      */
     public function getMembers($groupIdentifier)
     {
-        $this->_provider->setUserId($this->_userIdReplaced);
-        $results = $this->_provider->getMembers($groupIdentifier);
-        $this->_provider->setUserId($this->_userId);
+        $groupIdentifier = preg_replace($this->_search, $this->_replace, $groupIdentifier);
 
-        return $results;
+        return parent::getMembers($groupIdentifier);
     }
 
     /**
-     * Check whether the given user is a member of the given group.
+     * Check whether the given group is a member of the given group.
      * @param String $groupIdentifier The group to check
      * @return boolean
      */
     public function isMember($groupIdentifier)
     {
-        $this->_provider->setUserId($this->_userIdReplaced);
-        $results = $this->_provider->isMember($groupIdentifier);
-        $this->_provider->setUserId($this->_userId);
+        $groupIdentifier = preg_replace($this->_search, $this->_replace, $groupIdentifier);
 
-        return $results;
+        return parent::isMember($groupIdentifier);
     }
 }
