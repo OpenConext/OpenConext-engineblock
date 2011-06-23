@@ -59,10 +59,12 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
         );
 
         $provider->setUserId($userId);
-
         $provider->setAccessTokenHelper($accessTokenHelper);
-
         $provider->addPrecondition('EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists');
+
+        $provider->configurePreconditions($config);
+        $provider->configureGroupFilters($config);
+        $provider->configureGroupMemberFilters($config);
 
         $decoratedProvider = $provider->configureDecoratorChain($config);
 
