@@ -101,6 +101,7 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
 
             $member = new EngineBlock_Group_Model_GroupMember();
             $member->id = $openSocialPerson->id;
+            $member->displayName = $openSocialPerson->displayName;
             
             foreach ($this->_memberFilters as $memberFilter) {
                 $member = $memberFilter->filter($member);
