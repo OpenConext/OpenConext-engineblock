@@ -35,23 +35,19 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
     {
         $this->setNoRender();
 
+        $_SESSION['return_url'] = $this->_getRequest()->getQueryParameter('return_url');
+
         $providerConfig = $this->_getProviderConfiguration($providerId);
         $consumer = new Zend_Oauth_Consumer($providerConfig->auth);
 
         // Do an HTTP request to the provider to fetch a request token
         $requestToken = $consumer->getRequestToken();
 
-        // persist the token to storage
+        // persist the token to session as we redirect the user to the provider
         if (!isset($_SESSION['request_token'])) {
             $_SESSION['request_token'] = array();
         }
         $_SESSION['request_token'][$providerId] = serialize($requestToken);
-
-        // Even though the Provider may SAY it supports 1.0a,
-        // by providing a oauth_callback_confirmed=true
-        // it may not actually redirect back
-        // so we have to send the callback again.
-        Zend_Oauth_Client::$supportsRevisionA = false;
 
         // redirect the user to the provider
         $consumer->redirect();
@@ -92,7 +88,7 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
             $providerConfig,
             $this->attributes['nameid'][0]
         );
-        $provider->setAccessToken($token->getToken());
+        $provider->setAccessToken($token);
 
         if (!$provider->validatePreconditions()) {
             throw new EngineBlock_Group_Provider_Exception(
@@ -100,10 +96,10 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
             );
         }
 
-        var_dump($provider->getGroups());
-
         // Now that we have an Access Token, we can discard the Request Token
         $_SESSION['request_token'][$providerId] = null;
+
+        $this->_redirectToUrl($_SESSION['return_url']);
     }
 
     protected function _getProviderConfiguration($providerId)
