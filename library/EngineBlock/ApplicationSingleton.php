@@ -201,8 +201,33 @@ class EngineBlock_ApplicationSingleton
 
     protected function _bootstrapConfiguration()
     {
-        $tempConfigFile = $this->_buildTempConfigFile();
-        $this->setConfiguration($this->_getConfigurationLoader($tempConfigFile));
+        $configContent = $this->_getAllConfigsContent();
+        $this->setConfiguration($this->_getConfigurationLoader($configContent));
+    }
+
+    /**
+     * Concatenate the INI files from /application/configs/application.ini
+     * and from /etc/surfconext/engineblock.ini and return the result as a string.
+     *
+     * @return string
+     */
+    protected function _getAllConfigsContent()
+    {
+        $configFiles = array(
+            ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
+            self::CONFIG_FILE_ENVIORNMENT,
+        );
+
+        $configFileContents = "";
+        foreach ($configFiles as $configFile) {
+            $configFileContents .= file_get_contents($configFile) . PHP_EOL;
+        }
+        return $configFileContents;
+    }
+
+    protected function _getConfigurationLoader($configContent)
+    {
+        return new EngineBlock_Config_Ini($configContent);
     }
 
     protected function _setEnvironmentIdByDetection()
@@ -252,31 +277,6 @@ class EngineBlock_ApplicationSingleton
             throw new EngineBlock_ApplicationSingleton_BootstrapException("Environment '$env' does not exist?!?");
         }
         $this->_configuration = $this->_configuration->$env;
-    }
-
-    protected function _buildTempConfigFile()
-    {
-        $configFiles = array(
-            ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
-            self::CONFIG_FILE_ENVIORNMENT,
-        );
-
-        $configFileContents = "";
-        foreach ($configFiles as $configFile) {
-            $configFileContents .= file_get_contents($configFile) . PHP_EOL;
-        }
-
-        $tempConfigFile = '/tmp/surfconext.engineblock.' . md5($configFileContents) . '.ini';
-        if (!file_exists($tempConfigFile)) {
-            touch ($tempConfigFile);
-            file_put_contents($tempConfigFile, $configFileContents);
-        }
-        return $tempConfigFile;
-    }
-
-    protected function _getConfigurationLoader($configFile)
-    {
-        return new Zend_Config_Ini($configFile);
     }
 
     protected function _bootstrapLogging()
