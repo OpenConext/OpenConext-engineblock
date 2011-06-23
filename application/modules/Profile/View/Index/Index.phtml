@@ -106,7 +106,7 @@ if (!isset($metadata)) {
                     ?>
                     <ul>
                         <?php foreach ($groups as $group): ?>
-                        <li><?php echo $group->displayName; ?></li>
+                        <li><?php echo $group->title; ?></li>
                         <?php endforeach; ?>
                     </ul>
                     <?php else: ?>
@@ -139,7 +139,8 @@ if (!isset($metadata)) {
                     <ul>
                     <? foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
                         <li>
-                            <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId(); ?>">
+                            <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId();
+                                ?>?return_url=/">
                                 <?php echo $oauthGroupProvider->getDisplayName(); ?>
                             </a>
                         </li>
