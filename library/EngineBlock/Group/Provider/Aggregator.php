@@ -128,8 +128,14 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         $groups = array();
         foreach ($this->_providers as $provider) {
-            $providerGroups = $provider->getGroups();
-            $groups = array_merge($groups, $providerGroups);
+            try {
+                $providerGroups = $provider->getGroups();
+                $groups = array_merge($groups, $providerGroups);
+            }
+            catch (Exception $e) {
+                $providerId = $provider->getId();
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . print_r($provider, true));
+            }
         }
         return $groups;
     }
@@ -138,8 +144,14 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         $members = array();
         foreach ($this->_providers as $provider) {
-            $providerMembers = $provider->getMembers($groupIdentifier);
-            $members = array_merge($members, $providerMembers);
+            try {
+                $providerMembers = $provider->getMembers($groupIdentifier);
+                $members = array_merge($members, $providerMembers);
+            }
+            catch (Exception $e) {
+                $providerId = $provider->getId();
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . print_r($provider, true));
+            }
         }
         return $members;
     }
@@ -148,10 +160,16 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         // Loop through all providers
         foreach ($this->_providers as $provider) {
-            // And when we find a provider that knows the groupIdentifier and has the current user
-            // as a member of this group, we return true
-            if ($provider->isMember($groupIdentifier)) {
-                return true;
+            try {
+                // And when we find a provider that knows the groupIdentifier and has the current user
+                // as a member of this group, we return true
+                if ($provider->isMember($groupIdentifier)) {
+                    return true;
+                }
+            }
+            catch (Exception $e) {
+                $providerId = $provider->getId();
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . print_r($provider, true));
             }
         }
         // If none of the known providers knows the groupIdentifier or has the current user as a member
