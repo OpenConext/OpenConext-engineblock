@@ -50,7 +50,13 @@ class EngineBlock_Database_ConnectionFactory
         $databaseSettings = $configuration->database;
 
         if      ($mode === self::MODE_READ) {
-            return $this->_createReadConnection($databaseSettings);
+            try {
+                return $this->_createReadConnection($databaseSettings);
+            }
+            catch (Exception $e) {
+                ebLog()->err("Unable to create a Read connection, trying to create a write connection, exception: " . print_r($e, true));
+                return $this->_createWriteConnection($databaseSettings);
+            }
         }
         else if ($mode === self::MODE_WRITE) {
             return $this->_createWriteConnection($databaseSettings);
