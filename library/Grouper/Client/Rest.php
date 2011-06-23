@@ -44,19 +44,14 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
     const IS_NOT_MEMBER = 'IS_NOT_MEMBER';
 
     /**
-     * @var bool
-     */
-    protected $_doSslHostValidation = true;
-
-    /**
-     * @var bool
-     */
-    protected $_doSslCertificateValidation = true;
-
-    /**
      * @var string
      */
     protected $_endpointUrl;
+
+    /**
+     * @var array
+     */
+    protected $_options;
 
     /**
      * @var string
@@ -81,46 +76,17 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
                 '/' .
                 $config->version . '/';
 
-        $grouper = new self($url);
-
-        if (isset($config->ssl) && isset($config->ssl->verify)) {
-            if (isset($config->ssl->verify->host)) {
-                $grouper->setSslHostValication($config->ssl->verify->host);
-            }
-            if (isset($config->ssl->verify->cert)) {
-                $grouper->setSslCertValidation($config->ssl->verify->cert);
-            }
-        }
-
+        $grouper = new self($url, $config->toArray());
         return $grouper;
     }
 
     /**
      * @param string $endpointUrl
      */
-    public function __construct($endpointUrl)
+    public function __construct($endpointUrl, array $options = array())
     {
         $this->_endpointUrl = $endpointUrl;
-    }
-
-    /**
-     * @param boolean $validate
-     * @return Grouper_Client_Rest
-     */
-    public function setSslHostValication($validate)
-    {
-        $this->_doSslHostValidation = $validate;
-        return $this;
-    }
-
-    /**
-     * @param boolean $validate
-     * @return Grouper_Client_Rest
-     */
-    public function setSslCertValidation($validate)
-    {
-        $this->_doSslCertificateValidation = $validate;
-        return $this;
+        $this->_options = $options;
     }
 
     /**
@@ -289,8 +255,12 @@ XML;
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, $this->_doSslHostValidation);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, $this->_doSslCertificateValidation);
+        foreach ($this->_options as $key => $value) {
+            $constantName = 'CURLOPT_' . strtoupper($key);
+            if (defined($constantName)) {
+                curl_setopt($ch, constant($constantName), $value);
+            }
+        }
 
         $responseFailed = false;
         $response = curl_exec($ch);
