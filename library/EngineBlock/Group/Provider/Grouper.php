@@ -110,6 +110,11 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         $engineBlockGroup->id           = $grouperGroup->name;
         $engineBlockGroup->title        = $grouperGroup->displayExtension;
         $engineBlockGroup->description  = $grouperGroup->description;
+
+        foreach ($this->_groupFilters as $groupFilter) {
+            $engineBlockGroup = $groupFilter->filter($engineBlockGroup);
+        }
+
         return $engineBlockGroup;
     }
 
@@ -117,6 +122,11 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
     {
         $engineBlockMember = new EngineBlock_Group_Model_GroupMember();
         $engineBlockMember->id = $grouperSubject->id;
+
+        foreach ($this->_memberFilters as $memberFilter) {
+            $engineBlockMember = $memberFilter->filter($engineBlockMember);
+        }
+
         return $engineBlockMember;
     }
 }

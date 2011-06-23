@@ -64,6 +64,11 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
             $group = new EngineBlock_Group_Model_Group();
             $group->id = $openSocialGroup->id;
             $group->title = $openSocialGroup->title;
+            
+            foreach ($this->_groupFilters as $groupFilter) {
+                $group = $groupFilter->filter($group);
+            }
+            
             $groups[] = $group;
         }
         return $groups;
@@ -96,6 +101,11 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
 
             $member = new EngineBlock_Group_Model_GroupMember();
             $member->id = $openSocialPerson->id;
+            
+            foreach ($this->_memberFilters as $memberFilter) {
+                $member = $memberFilter->filter($member);
+            }
+            
             $members[] = $member;
         }
         return $members;
