@@ -24,7 +24,7 @@
  */
 
 abstract class EngineBlock_Group_Provider_Decorator_Abstract
-    implements EngineBlock_Group_Provider_Decorator_Interface
+    implements EngineBlock_Group_Provider_Decorator_Interface, EngineBlock_Group_Provider_Interface
 {
     /**
      * @var EngineBlock_Group_Provider_Interface
@@ -155,6 +155,11 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
     public function validatePreconditions()
     {
         return $this->_provider->validatePreconditions();
+    }
+
+    public function removePreconditionByClassName($className)
+    {
+        $this->_provider->removePreconditionByClassName($className);
     }
 
     public function addGroupFilter(EngineBlock_Group_Provider_Filter_Interface $filter)
