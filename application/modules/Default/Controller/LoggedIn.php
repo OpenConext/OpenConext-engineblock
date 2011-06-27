@@ -27,6 +27,7 @@ abstract class Default_Controller_LoggedIn extends EngineBlock_Controller_Abstra
 {
     public function init()
     {
-        $this->attributes = $this->_initAuthentication()->getAttributes();
+        $this->user       = $this->_initAuthentication();
+        $this->attributes = $this->user->getAttributes();
     }
 }

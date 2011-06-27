@@ -29,13 +29,8 @@ class Profile_Controller_DeleteUser extends EngineBlock_Controller_Abstract
 
     public function indexAction()
     {
-        // Require authentication
-        $this->_identity = $this->_initAuthentication();
-
-        $uid = $this->_identity['nameid'][0];
-
-        $cleanupService = new EngineBlock_Cleanup_CleanupService();
-        $cleanupService->cleanupUser($uid);
+        $currentUser = $this->_initAuthentication();
+        $currentUser->delete();
 
         $this->setNoRender(true);
         $this->_redirectToUrl('/profile/delete-user/success');

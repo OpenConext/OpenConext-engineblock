@@ -46,4 +46,75 @@ class EngineBlock_User
     {
         return $this->_attributes;
     }
+
+        /**
+     * Completely remove a user from the SURFconext platform. Currently this consists of removing the user from the:
+     * - LDAP
+     *
+     * @param string $uid
+     * @return void
+     */
+    public function delete()
+    {
+        // Delete the user from the LDAP
+        $this->_deleteLdapUser();
+
+        // Delte the user consent
+        $this->_deleteUserConsent();
+
+        // Delete the cookies and session
+        $this->_deleteFromEnvironment();
+    }
+
+    /**
+     * Delete the user from the SURFconext LDAP.
+     *
+     * @param  $uid
+     * @return void
+     */
+    protected function _deleteLdapUser()
+    {
+        $userDirectory = new EngineBlock_UserDirectory();
+        $userDirectory->deleteUser($this->getUid());
+    }
+
+    /**
+     * Delete the user consent form the database
+     *
+     * @param  $uid
+     * @return void
+     */
+    protected function _deleteUserConsent()
+    {
+        $factory = $this->_getDatabaseConnection();
+
+        $query = "DELETE FROM consent
+                    WHERE hashed_user_id = ?";
+        $parameters = array(
+            sha1($this->getUid())
+        );
+
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+    }
+
+    /**
+     * @return PDO
+     */
+    protected function _getDatabaseConnection()
+    {
+        $factory = new EngineBlock_Database_ConnectionFactory();
+        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+    }
+
+    /**
+     * Delete the cookies and environment
+     *
+     * @return void
+     */
+    protected function _deleteFromEnvironment()
+    {
+        $_COOKIE = array();
+        $_SESSION = array();
+    }
 }
