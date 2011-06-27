@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_View_Renderer
+class EngineBlock_View
 {
     protected $_data = array();
 
@@ -37,7 +37,7 @@ class EngineBlock_View_Renderer
         return $this;
     }
 
-    public function render($viewScriptPath)
+    public function render($viewScriptPath, $useLayout = true)
     {
         if (!file_exists($viewScriptPath)) {
             throw new EngineBlock_Exception("View $viewScriptPath does not exist");
@@ -50,7 +50,20 @@ class EngineBlock_View_Renderer
         $renderedView = ob_get_contents();
         ob_end_clean();
 
-        return $renderedView;
+        if (!$useLayout) {
+            return $renderedView;
+        }
+
+        $layout = $this->layout();
+        $layout->content = $renderedView;
+        $renderedPage = $layout->render();
+
+        return $renderedPage;
+    }
+
+    public function layout()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getLayout();
     }
 
     /**

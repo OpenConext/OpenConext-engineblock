@@ -78,6 +78,8 @@ class EngineBlock_ApplicationSingleton
      */
     protected $_translator;
 
+    protected $_layout;
+
     /**
      * @return void
      */
@@ -179,7 +181,8 @@ class EngineBlock_ApplicationSingleton
         $this->_bootstrapErrorReporting();
         $this->_bootstrapLogging();
         $this->_bootstrapHttpCommunication();
-        
+
+        $this->_bootstrapLayout();
         $this->_bootstrapTranslations();
 
         return $this;
@@ -329,6 +332,29 @@ class EngineBlock_ApplicationSingleton
         set_exception_handler(array($this, 'handleException'));
     }
 
+    protected function _bootstrapLayout()
+    {
+        $layout = new Zend_Layout();
+
+        // Set a layout script path:
+        $layout->setLayoutPath(ENGINEBLOCK_FOLDER_APPLICATION . 'layouts/scripts/');
+
+        // Defaults
+        $defaultsConfig = $this->_configuration->defaults;
+        $layout->title  = $defaultsConfig->title;
+        $layout->header = $defaultsConfig->header;
+
+        // choose a different layout script:
+        $layout->setLayout($defaultsConfig->layout);
+
+        $this->_layout = $layout;
+    }
+
+    public function getLayout()
+    {
+        return $this->_layout;
+    }
+
     protected function _bootstrapTranslations()
     {
         $translate = new Zend_Translate(
@@ -348,6 +374,9 @@ class EngineBlock_ApplicationSingleton
         $lang = strtolower($this->_httpRequest->getQueryParameter('lang'));
         if ($lang && $translate->getAdapter()->isAvailable($lang)) {
             $translate->setLocale($lang);
+        }
+        else {
+            $translate->setLocale('en');
         }
 
         $this->_translator = $translate;

@@ -126,6 +126,6 @@ class EngineBlock_Controller_Abstract
 
     protected function _getViewRenderer()
     {
-        return new EngineBlock_View_Renderer();
+        return new EngineBlock_View();
     }
 }
