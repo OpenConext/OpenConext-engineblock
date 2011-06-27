@@ -74,7 +74,7 @@ $config = array (
 	 * This password will give access to the installation page of simpleSAMLphp with
 	 * metadata listing and diagnostics pages.
 	 */
-	'auth.adminpassword'		=> 'seg7vuk',
+	'auth.adminpassword'		=> 'admin123',
 	'admin.protectindexpage'	=> false,
 	'admin.protectmetadata'		=> false,
 
@@ -213,14 +213,14 @@ $config = array (
 	 * through https. If the user can access the service through
 	 * both http and https, this must be set to FALSE.
 	 */
-	'session.cookie.secure' => FALSE,
+	'session.cookie.secure' => TRUE,
 
 	/*
 	 * Options to override the default settings for php sessions.
 	 */
 	'session.phpsession.cookiename'  => null,
 	'session.phpsession.savepath'    => null,
-	'session.phpsession.httponly'    => FALSE,
+	'session.phpsession.httponly'    => TRUE,
 	
 	/*
 	 * Languages available and what language is default
