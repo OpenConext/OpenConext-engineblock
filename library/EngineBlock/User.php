@@ -56,11 +56,11 @@ class EngineBlock_User
      */
     public function delete()
     {
-        // Delete the user from the LDAP
         $this->_deleteLdapUser();
 
-        // Delte the user consent
         $this->_deleteUserConsent();
+
+        $this->_deleteOauthTokens();
 
         // Delete the cookies and session
         $this->_deleteFromEnvironment();
@@ -90,6 +90,20 @@ class EngineBlock_User
 
         $query = "DELETE FROM consent
                     WHERE hashed_user_id = ?";
+        $parameters = array(
+            sha1($this->getUid())
+        );
+
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+    }
+
+    protected function _deleteOauthTokens()
+    {
+        $factory = $this->_getDatabaseConnection();
+
+        $query = "DELETE FROM group_provider_user_oauth
+                    WHERE user_id = ?";
         $parameters = array(
             sha1($this->getUid())
         );
