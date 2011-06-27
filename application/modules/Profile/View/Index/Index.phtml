@@ -45,7 +45,7 @@ if (!isset($metadata)) {
                 <ul class="nav">
                     <li class="active"><a href="#">EN</a></li>
                 </ul>
-                <h1>My Profile</h1>
+                <h1><?php echo $this->translate('my_profile_header'); ?></h1>
                 <div>
                     <p>
                         The following profile data have been provided by your home institution.
@@ -129,6 +129,7 @@ if (!isset($metadata)) {
                             // Then if it matches all other preconditions
                             // (like 'user should belong to a specific schacHomeOrganization')
                             // add it as an OAuth group Provider
+
                             if ($groupProvider->validatePreconditions()) {
                                 $oauthGroupProviders[] = $groupProvider;
                             }

@@ -74,6 +74,11 @@ class EngineBlock_ApplicationSingleton
     protected $_log;
 
     /**
+     * @var Zend_Translate
+     */
+    protected $_translator;
+
+    /**
      * @return void
      */
     protected function __construct()
@@ -174,6 +179,7 @@ class EngineBlock_ApplicationSingleton
         $this->_bootstrapErrorReporting();
         $this->_bootstrapLogging();
         $this->_bootstrapHttpCommunication();
+        $this->_bootstrapTranslations();
 
         return $this;
     }
@@ -291,7 +297,10 @@ class EngineBlock_ApplicationSingleton
     protected function _bootstrapHttpCommunication()
     {
         $this->setHttpRequest(EngineBlock_Http_Request::createFromEnvironment());
-        $this->setHttpResponse(new EngineBlock_Http_Response());
+
+        $response = new EngineBlock_Http_Response();
+        $response->setHeader('Strict-Transport-Security', 'max-age=15768000; includeSubDomains');
+        $this->setHttpResponse($response);
     }
 
     protected function _bootstrapPhpSettings()
@@ -317,6 +326,29 @@ class EngineBlock_ApplicationSingleton
         register_shutdown_function(array($this, 'handleShutdown'));
         set_error_handler(array($this, 'handleError'));
         set_exception_handler(array($this, 'handleException'));
+    }
+
+    protected function _bootstrapTranslations()
+    {
+        $translate = new Zend_Translate(
+            'Array',
+            ENGINEBLOCK_FOLDER_ROOT . '/languages/en.php',
+            'en'
+        );
+
+        $translate->addTranslation(
+            array(
+                'content' => ENGINEBLOCK_FOLDER_ROOT . '/languages/nl.php',
+                'locale'  => 'nl'
+            )
+        );
+//        $translate->setLocale('auto');
+        $this->_translator = $translate;
+    }
+
+    public function getTranslator()
+    {
+        return $this->_translator;
     }
 
     public function handleException(Exception $e)

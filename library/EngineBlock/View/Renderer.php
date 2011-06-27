@@ -52,4 +52,13 @@ class EngineBlock_View_Renderer
 
         return $renderedView;
     }
+
+    public function translate($from, $arg1 = null)
+    {
+        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
+
+        $arguments = func_get_args();
+        $arguments[0] = $translator->translate($from);
+        return call_user_func_array('sprintf', $arguments);
+    }
 }
