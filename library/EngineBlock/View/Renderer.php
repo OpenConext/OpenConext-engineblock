@@ -53,6 +53,33 @@ class EngineBlock_View_Renderer
         return $renderedView;
     }
 
+    /**
+     * Translate a string.
+     *
+     * Alias for 'translate'
+     *
+     * @example <?php echo $this->t('logged_in_as', $this->user->getDisplayName()); ?>
+     *
+     * @param string $from Identifier for string
+     * @param string $arg1 Argument to parse in with sprintf
+     * @return string
+     */
+    public function t($from, $arg1 = null)
+    {
+        return call_user_func_array(array($this, 'translate'), func_get_args());
+    }
+
+    /**
+     * Translate a string.
+     *
+     * Has an alias called 't'.
+     *
+     * @example <?php echo $this->translate('logged_in_as', $this->user->getDisplayName()); ?>
+     *
+     * @param string $from Identifier for string
+     * @param string $arg1 Argument to parse in with sprintf
+     * @return string
+     */
     public function translate($from, $arg1 = null)
     {
         $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
