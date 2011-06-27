@@ -179,6 +179,7 @@ class EngineBlock_ApplicationSingleton
         $this->_bootstrapErrorReporting();
         $this->_bootstrapLogging();
         $this->_bootstrapHttpCommunication();
+        
         $this->_bootstrapTranslations();
 
         return $this;
@@ -296,11 +297,11 @@ class EngineBlock_ApplicationSingleton
 
     protected function _bootstrapHttpCommunication()
     {
-        $this->setHttpRequest(EngineBlock_Http_Request::createFromEnvironment());
+        $this->_httpRequest = EngineBlock_Http_Request::createFromEnvironment();
 
         $response = new EngineBlock_Http_Response();
         $response->setHeader('Strict-Transport-Security', 'max-age=15768000; includeSubDomains');
-        $this->setHttpResponse($response);
+        $this->_httpResponse = $response;
     }
 
     protected function _bootstrapPhpSettings()
@@ -342,7 +343,13 @@ class EngineBlock_ApplicationSingleton
                 'locale'  => 'nl'
             )
         );
-//        $translate->setLocale('auto');
+
+        // If the URL has &lang=nl in it, then use that locale
+        $lang = strtolower($this->_httpRequest->getQueryParameter('lang'));
+        if ($lang && $translate->getAdapter()->isAvailable($lang)) {
+            $translate->setLocale($lang);
+        }
+
         $this->_translator = $translate;
     }
 
