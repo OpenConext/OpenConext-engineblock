@@ -24,6 +24,7 @@
  */
 
 $lang = $this->language();
+$uri = $_SERVER[REQUEST_URI];
 $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -46,8 +47,8 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
             <div id="header"><b><font size="4"><?=$displayName?></font></b></div>
             <div id="main">
                 <ul class="nav">
-                    <li id="lang_en"><a href="?lang=en">EN</a></li>
-                    <li id="lang_nl"><a href="?lang=nl">NL</a></li>
+                    <li id="lang_en"><a href="#">EN</a></li>
+                    <li id="lang_nl"><a href="#">NL</a></li>
                 </ul>
                 <h1> <?php echo $this->t('index_header'); ?></h1>
                 <p><?php echo $this->t('index_description', $displayName); ?></p>
@@ -103,9 +104,9 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
             discoveryScreen.setLanguage('<?=$lang?>');
             discoveryScreen.setSearchText('<?php echo $this->t('search'); ?>');
             discoveryScreen.setIdpList(<? echo json_encode($idpList); ?>);
-
+            discoveryScreen.setUri('<?=$uri?>');
             <?php if ($preselectedIdp) : ?>
-            discoveryScreen.setSelectedEntityId(<? echo json_encode($preselectedIdp); ?>);
+                discoveryScreen.setSelectedEntityId(<? echo json_encode($preselectedIdp); ?>);
             <? endif; ?>
 
             discoveryScreen.show();

@@ -38,6 +38,10 @@ var Discover = function() {
             library.idpList = idpList;
         },
 
+        setUri : function(uri) {
+            library.uri = uri;
+        },
+
         setSelectedEntityId : function(selectedEntityId) {
             library.selectedEntityId = selectedEntityId;
         },
@@ -126,6 +130,7 @@ var Discover = function() {
         idpList : '',
         selectedId : '',
         selectedEntityId : '',
+        uri : '',
 
         selectIdpJSON : function() {
             for (var idp in this.idpList) {
@@ -137,43 +142,51 @@ var Discover = function() {
         },
 
         selectLanguage : function() {
-            $("#lang_en").toggleClass('active', this.lang == 'en');
-            $("#lang_nl").toggleClass('active', this.lang != 'en');
+            var le = $("#lang_en");
+            var ln = $("#lang_nl");
+            le.toggleClass('active', this.lang == 'en');
+            ln.toggleClass('active', this.lang != 'en');
+            var regexp = new RegExp("(&|\\?)lang=[^\&]*");
+            le.find('a:first').attr('href', this.uri.replace(regexp,'') + '&lang=en');
+            ln.find('a:first').attr('href', this.uri.replace(regexp,'') + '&lang=nl');
         },
 
         fillSuggestion : function() {
             var idp = this.selectIdpJSON();
-            this.selectedId = idp['ID'];
+            if (idp) {
+                this.selectedId = idp['ID'];
 
-            idp['Name'] = idp['Name_nl'];
-            if ((this.lang == 'en') & (idp['Name_en']!=undefined)) {
-                idp['Name'] = idp['Name_en'];
-            }
-            idp['Alt'] = encodeURIComponent(idp['EntityId']);
-
-            idp['Suggestion'] = 'Onze Suggestie:';
-            if ((this.lang == 'en')) {
-                idp['Suggestion'] = 'Our Suggestion:';
-            }
-
-            if (idp['Access'] == 0) {
-                idp['noAccess'] = '<em>Geen toegang. &raquo;</em>';
-                if (this.lang == 'en') {
-                    idp['noAccess'] = '<em>No access. &raquo;</em>';
+                idp['Name'] = idp['Name_nl'];
+                if ((this.lang == 'en') & (idp['Name_en']!=undefined)) {
+                    idp['Name'] = idp['Name_en'];
                 }
-                idp['NoAccessClass'] = 'noAccess';
-                idp['Name'] = this.clipString(idp['Name'], 45); //Clip string to prevent overlap with 'No access' label
-            }
-            var html = $('#idpListSuggestionTemplate').tmpl(idp);
-            $('#IdpSuggestion').append(html).click(function() {
-                //action no access or access
+                idp['Alt'] = encodeURIComponent(idp['EntityId']);
+
+                idp['Suggestion'] = 'Onze Suggestie:';
+                if ((this.lang == 'en')) {
+                    idp['Suggestion'] = 'Our Suggestion:';
+                }
+
                 if (idp['Access'] == 0) {
-                    //TODO implemented action on no access
-                } else {
-                    $('#Idp').attr('value', idp['Alt']);
-                    $('#IdpListForm').submit();
-                }                
-            });
+                    idp['noAccess'] = '<em>Geen toegang. &raquo;</em>';
+                    if (this.lang == 'en') {
+                        idp['noAccess'] = '<em>No access. &raquo;</em>';
+                    }
+                    idp['NoAccessClass'] = 'noAccess';
+                    idp['Name'] = this.clipString(idp['Name'], 45); //Clip string to prevent overlap with 'No access' label
+                }
+                var html = $('#idpListSuggestionTemplate').tmpl(idp);
+                $('#IdpSuggestion').append(html).click(function() {
+                    //action no access or access
+                    if (idp['Access'] == 0) {
+                        //TODO implemented action on no access
+                    } else {
+                        $('#Idp').attr('value', idp['Alt']);
+                        $('#IdpListForm').submit();
+                    }
+                });
+
+            }
         },
 
         /**
