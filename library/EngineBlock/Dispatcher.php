@@ -82,7 +82,7 @@ class EngineBlock_Dispatcher
         $controllerInstance = $this->_getControllerInstance($module, $controllerName);
 
         if (!$controllerInstance->hasAction($action)) {
-            throw new EngineBlock_Exception("Unable to load action '$action'");
+            throw new EngineBlock_Exception("Unable to load action '$action' for uri '$uri'");
         }
 
         $controllerInstance->handleAction($action, $attributeArguments);
@@ -112,7 +112,7 @@ class EngineBlock_Dispatcher
     {
         $className = $this->_getControllerClassName($module, $controllerName);
         if (!class_exists($className)) {
-            throw new EngineBlock_Exception("Unable to load $className");
+            throw new EngineBlock_Exception("Unable to load controller '$className'");
         }
 
         $controllerInstance = new $className($module, $controllerName);
