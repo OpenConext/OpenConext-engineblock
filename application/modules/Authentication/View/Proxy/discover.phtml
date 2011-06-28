@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-$lang = 'en';
+$lang = $this->language();
 $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -46,20 +46,20 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
             <div id="header"><b><font size="4"><?=$displayName?></font></b></div>
             <div id="main">
                 <ul class="nav">
-                    <li class="active"><a href="#">EN</a></li>
-                    <li><a href="#">NL</a></li>
+                    <li id="lang_en"><a href="?lang=en">EN</a></li>
+                    <li id="lang_nl"><a href="?lang=nl">NL</a></li>
                 </ul>
-                <h1> Where do you want to log in</h1>
-                <p>Select your institution and log in there for <i><?=$displayName?></i>:</p>
+                <h1> <?php echo $this->t('index_header'); ?></h1>
+                <p><?php echo $this->t('index_description', $displayName); ?></p>
                 <?php if ($preselectedIdp) : ?>
                 <div id="IdpSuggestion" class="suggestion">
                 </div>
                 <? endif; ?>
-                <input class="search" id="searchBox" value="or search for a institution"/>
+                <input class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
 
                 <div class="results">
                     <div id="noResultsMessage" style="display:none">
-                        <p class="noresults">No results found</p>
+                        <p class="noresults"><?php echo $this->t('no_results'); ?></p>
                     </div>
 
                     <div id="scrollViewport">
@@ -71,7 +71,7 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
                     </ul>
                 </div>
                 <div class="bottom">
-                    <p>This service is made possible by <a href='http://www.surffederatie.nl/'>SURFfederatie</a> part of SURFnet.</p>
+                    <p><?php echo $this->t('footer'); ?></p>
                 </div>
             </div>
         </div>
@@ -101,7 +101,7 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
 
             var discoveryScreen = new Discover();
             discoveryScreen.setLanguage('<?=$lang?>');
-            discoveryScreen.setSearchText('or search for a institution');
+            discoveryScreen.setSearchText('<?php echo $this->t('search'); ?>');
             discoveryScreen.setIdpList(<? echo json_encode($idpList); ?>);
 
             <?php if ($preselectedIdp) : ?>

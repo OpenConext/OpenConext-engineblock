@@ -114,6 +114,8 @@ var Discover = function() {
                     $('#scrollViewport').data('jsp').reinitialise();
                 });
             }
+            $("#lang_en").toggleClass('active', libray.lang == 'en');
+            $("#lang_nl").toggleClass('active', libray.lang != 'en');
         }
     };
 

@@ -17,13 +17,13 @@ return array(
 	"no_results"			=>	"No results found",
 
 	//Footer
-	"footer"				=>	"This service is made possible by <a href='http://www.surffederatie.nl/'>SURFfederatie</a> part of SURFnet.",
+	"footer"				=>	"This service is made possible by <a href='http://www.surfconext.nl/'>SURFconext</a> part of SURFnet.",
 
 	//Help
 	"help"					=>	"Help",
-	"help_description"		=>	"<p>Check the FAQ if you have any questions about this screen or about SURFfederatie.</p> 
+	"help_description"		=>	"<p>Check the FAQ if you have any questions about this screen or about SURFconext.</p>
 
-	<p>If your question is not in the FAQ or if the answer you get doesnít help, then send an e-mail to <a href='mailto:info@surffederatie.nl'>info@surffederatie.nl</a></p>",
+	<p>If your question is not in the FAQ or if the answer you get doesnít help, then send an e-mail to <a href='mailto:info@surfconext.nl'>info@surfconext.nl</a></p>",
 
 	//Form
 	"sorry"					=>	"Unfortunately,",

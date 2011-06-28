@@ -129,4 +129,54 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
     {
         $this->_headers[$name] = $value;
     }
+
+      /**
+     * Translate a string.
+     *
+     * Alias for 'translate'
+     *
+     * @example <?php echo $this->t('logged_in_as', $this->user->getDisplayName()); ?>
+     *
+     * @param string $from Identifier for string
+     * @param string $arg1 Argument to parse in with sprintf
+     * @return string
+     */
+    public function t($from, $arg1 = null)
+    {
+        return call_user_func_array(array($this, 'translate'), func_get_args());
+    }
+
+    /**
+     * Translate a string.
+     *
+     * Has an alias called 't'.
+     *
+     * @example <?php echo $this->translate('logged_in_as', $this->user->getDisplayName()); ?>
+     *
+     * @param string $from Identifier for string
+     * @param string $arg1 Argument to parse in with sprintf
+     * @return string
+     */
+    public function translate($from, $arg1 = null)
+    {
+        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
+
+        $arguments = func_get_args();
+        $arguments[0] = $translator->translate($from);
+        return call_user_func_array('sprintf', $arguments);
+    }
+
+	/**
+     * Return the language.
+     *
+     * @example <?php echo $this->language(); ?>
+     *
+     * @return string
+     */
+    public function language()
+    {
+        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
+
+        return $translator->getLocale();
+    }
 }

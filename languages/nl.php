@@ -17,13 +17,13 @@ return array(
 	"no_results"			=>	"Geen resultaten gevonden",
 
 	//Footer
-	"footer"			=>	"Deze dienst maakt gebruik van de <a href='http://www.surffederatie.nl/'>SURFfederatie</a> van SURFnet.",
+	"footer"			=>	"Deze dienst maakt gebruik van <a href='http://www.surfconext.nl//'>SURFconext</a> van SURFnet.",
 
 	//Help
 	"help_header"			=>	"Help",
-	"help_description"		=>	"<p>Heb je vragen over dit scherm of de SURFfederatie, kijk dan naar de antwoorden bij de veelgestelde vragen.</p>
+	"help_description"		=>	"<p>Heb je vragen over dit scherm of de SURFconext, kijk dan naar de antwoorden bij de veelgestelde vragen.</p>
 
-	<p>Staat je vraag er niet bij, of ben je niet tevreden met een antwoord? Stuur dan een mail aan <a href='mailto:info@surffederatie.nl'>info@surffederatie.nl</a></p>",
+	<p>Staat je vraag er niet bij, of ben je niet tevreden met een antwoord? Stuur dan een mail aan <a href='mailto:info@surfconext.nl'>info@surfconext.nl</a></p>",
 
 	//Form
 	"sorry"					=>	"Helaas,",
