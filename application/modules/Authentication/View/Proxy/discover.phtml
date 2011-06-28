@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-$lang = 'en';
+$lang = echo $this->language();
 $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -49,7 +49,7 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
                     <li class="active"><a href="#">EN</a></li>
                     <li><a href="#">NL</a></li>
                 </ul>
-                <h1>Where do you want to log in?</h1>
+                <h1> <?php echo $this->t('index_header'); ?></h1>
                 <p>Select your institution and log in there for <i><?=$displayName?></i>:</p>
                 <?php if ($preselectedIdp) : ?>
                 <div id="IdpSuggestion" class="suggestion">

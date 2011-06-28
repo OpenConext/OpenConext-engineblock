@@ -101,4 +101,18 @@ class EngineBlock_View
         $arguments[0] = $translator->translate($from);
         return call_user_func_array('sprintf', $arguments);
     }
+
+	/**
+     * Return the language.
+     *
+     * @example <?php echo $this->language(); ?>
+     *
+     * @return string
+     */
+    public function language()
+    {
+        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
+
+        return $translator->getLocale();
+    }
 }
