@@ -83,6 +83,8 @@ var Discover = function() {
                 $('#tabThumbs').click(library.showThumbs);
                 $('#tabList').click(library.showList);
 
+                library.selectLanguage();
+
                 // set thums/list view based on cookie
                 if ($.cookie("tabs") == 'thumbs') {
                     library.showThumbs();
@@ -114,8 +116,7 @@ var Discover = function() {
                     $('#scrollViewport').data('jsp').reinitialise();
                 });
             }
-            $("#lang_en").toggleClass('active', libray.lang == 'en');
-            $("#lang_nl").toggleClass('active', libray.lang != 'en');
+
         }
     };
 
@@ -133,6 +134,11 @@ var Discover = function() {
                 }
             }
             return null;
+        },
+
+        selectLanguage : function() {
+            $("#lang_en").toggleClass('active', this.lang == 'en');
+            $("#lang_nl").toggleClass('active', this.lang != 'en');
         },
 
         fillSuggestion : function() {
