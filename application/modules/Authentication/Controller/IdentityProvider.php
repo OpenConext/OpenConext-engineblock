@@ -90,4 +90,9 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->processConsent();
     }
+
+    public function helpAction($argument = null)
+    {
+       
+    }
 }

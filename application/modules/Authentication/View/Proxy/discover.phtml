@@ -24,7 +24,7 @@
  */
 
 $lang = $this->language();
-$uri = $_SERVER[REQUEST_URI];
+$uri = $_SERVER['REQUEST_URI'];
 $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -47,6 +47,7 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
             <div id="header"><b><font size="4"><?=$displayName?></font></b></div>
             <div id="main">
                 <ul class="nav">
+                    <li id="help"><a href="authentication/idp/help.php">HELP</a></li>
                     <li id="lang_en"><a href="#">EN</a></li>
                     <li id="lang_nl"><a href="#">NL</a></li>
                 </ul>
