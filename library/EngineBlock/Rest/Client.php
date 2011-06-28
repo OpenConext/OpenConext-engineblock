@@ -48,29 +48,29 @@ require_once("Zend/Rest/Client.php");
  */
 class EngineBlock_Rest_Client extends Zend_Rest_Client
 {
-    public function __call($method, $args)
+    /**
+     * @return array|Zend_Rest_Client_Result
+     */
+    public function get($args = array())
     {
-        if ($method=='get') {
-        	
-            if (!isset($args[0])) {
-                $args[0] = $this->_uri->getPath();
-            }
-            $this->_data['rest'] = 1;
-            $data = array_slice($args, 1) + $this->_data;
-            $response = $this->{'rest' . $method}($args[0], $data);
-            $this->_data = array();//Initializes for next Rest method.
-                        
-            // The next line has been changed to not use Zend_Rest_Client_Result for json responses
-            
-            if (strpos($response->getHeader("Content-Type"), "application/json")!==false) {
-                return json_decode($response->getBody(), true);
-            } else {
-            	return new Zend_Rest_Client_Result($response->getBody());
-            }
+        if (!isset($args[0])) {
+            $args[0] = $this->_uri->getPath();
+        }
+        $this->_data['rest'] = 1;
+        $data = array_slice($args, 1) + $this->_data;
+
+        $response = $this->restGet($args[0], $data);
+
+        $this->_data = array();//Initializes for next Rest method.
+
+        if ($response->getStatus() !== 200) {
+            throw new EngineBlock_Exception("Response status !== 200");
+        }
+
+        if (strpos($response->getHeader("Content-Type"), "application/json")!==false) {
+            return json_decode($response->getBody(), true);
         } else {
-        	// In all other situations we're happy with the default behaviour.
-        	return parent::__call($method, $args);
+            return new Zend_Rest_Client_Result($response->getBody());
         }
     }
-   	
 }
