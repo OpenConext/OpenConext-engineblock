@@ -197,7 +197,7 @@ var Discover = function() {
 
             } else {
                 //apparantly there is a cookie for a selected IDP, but it's not allowed for this SP
-                $('#preselectedIdp').remove();
+                $('#IdpSuggestion').remove();
             }
         },
 
