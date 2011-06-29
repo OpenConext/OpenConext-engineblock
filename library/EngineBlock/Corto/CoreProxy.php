@@ -179,4 +179,20 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
 
         return $translator->getLocale();
     }
+
+    public function layout()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getLayout();
+    }
+
+    public function renderTemplate($templateName, $vars = array(), $parentTemplates = array())
+    {
+        $renderedView = parent::renderTemplate($templateName, $vars, $parentTemplates);
+
+        $layout = $this->layout();
+        $layout->content = $renderedView;
+        $renderedPage = $layout->render();
+
+        return $renderedPage;
+    }
 }
