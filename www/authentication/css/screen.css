@@ -407,7 +407,7 @@ ul#organisationsContainer.thumbs li em {
 /*           FAQ          */
 
 div#help {
-    display: block;
+    display: none;
 }
 
 ul#faq {
