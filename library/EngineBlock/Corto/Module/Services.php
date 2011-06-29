@@ -29,7 +29,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
     {
         $presetIdp = $this->_server->getCookie('selectedIdp');
 
-        if ($presetIdp) {
+        if ($presetIdp && !$this->_server->getVirtualOrganisationContext()) {
             $this->_server->getSessionLog()->debug("Found selected IdP in cookie, scoping request to: $presetIdp");
             return array($presetIdp);
         }

@@ -171,6 +171,11 @@ class EngineBlock_Corto_Adapter
     {
         $this->_callCortoServiceUri('processedAssertionConsumerService');
     }
+
+    public function getVirtualOrganisationContext()
+    {
+        return $this->_voContext;
+    }
     
     public function setVirtualOrganisationContext($virtualOrganisation)
     {
@@ -201,7 +206,7 @@ class EngineBlock_Corto_Adapter
     protected function _initProxy()
     {
         if (isset($this->_proxyServer)) {
-            return true;
+            return;
         }
 
         $proxyServer = $this->_getCoreProxy();
@@ -216,7 +221,7 @@ class EngineBlock_Corto_Adapter
         return new EngineBlock_Corto_CoreProxy();
     }
 
-    protected function _configureProxyServer(Corto_ProxyServer $proxyServer)
+    protected function _configureProxyServer(EngineBlock_Corto_CoreProxy $proxyServer)
     {
         $proxyServer->setSystemLog($this->_getSystemLog());
         $proxyServer->setSessionLogDefault($this->_getSessionLog());
