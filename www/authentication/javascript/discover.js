@@ -145,7 +145,7 @@ var Discover = function() {
             $("#help_nav a").live("click", function(e) {
                 e.preventDefault();
                 $("#content").toggle(false);
-                $.get('authentication/idp/help&lang='+this.lang, function(data) {
+                $.get('/authentication/idp/help&lang='+this.lang, function(data) {
                     $("#help").html(data);
                 });
                 $("#help").toggle(true);
