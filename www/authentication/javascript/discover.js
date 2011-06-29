@@ -147,6 +147,9 @@ var Discover = function() {
 
             $("#back_link").live("click", function(e) {
                 e.preventDefault();
+                le.toggleClass('active', this.lang == 'en');
+                ln.toggleClass('active', this.lang != 'en');
+                $("#help_nav").removeClass('active');
                 $("#content").toggle(true);
                 $("#help").toggle(false);
             });
