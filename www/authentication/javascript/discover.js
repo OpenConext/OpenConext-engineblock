@@ -139,8 +139,10 @@ var Discover = function() {
                     help.html(data);
                     $("#help").toggle(true);
                     library.prepareFaq();
-
                 });
+                $("#lang_en").removeClass('active');
+                $("#lang_nl").removeClass('active');
+                $("#help_nav").addClass('active');
             });
 
             $("#back_link").live("click", function(e) {
