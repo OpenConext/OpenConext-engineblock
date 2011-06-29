@@ -218,6 +218,9 @@ class EngineBlock_Corto_Adapter
 
     protected function _configureProxyServer(Corto_ProxyServer $proxyServer)
     {
+        $proxyServer->setSystemLog($this->_getSystemLog());
+        $proxyServer->setSessionLogDefault($this->_getSessionLog());
+
         $application = EngineBlock_ApplicationSingleton::getInstance();
         
         if ($this->_voContext!=null) {
@@ -286,6 +289,21 @@ class EngineBlock_Corto_Adapter
                 )
             ));
         }
+    }
+
+    protected function _getSystemLog()
+    {
+        return $this->_getLog();
+    }
+
+    protected function _getSessionLog()
+    {
+        return $this->_getLog();
+    }
+
+    protected function _getLog()
+    {
+        return new EngineBlock_Corto_Log_Adapter();
     }
 
     protected function _getConsentConfigurationValue($name, $default = null)
@@ -598,17 +616,6 @@ class EngineBlock_Corto_Adapter
     protected function _getProvisioning()
     {
         return new EngineBlock_Provisioning();
-    }
-
-    protected function _getCortoMemcacheLog()
-    {
-        return new Corto_Log_Memcache($this->_getMemcacheClient());
-    }
-
-    protected function _getMemcacheClient()
-    {
-        $factory = new EngineBlock_Memcache_ConnectionFactory();
-        return $factory->create();
     }
     
     protected function _getHostedEntity()
