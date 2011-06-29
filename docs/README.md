@@ -207,6 +207,39 @@ Also set an alias for simplesaml for the third virtual host:
 
     Alias /simplesaml /opt/www/engineblock/library/simplesamlphp/www
 
+### Virtual host for static files ###
+
+Engineblock needs a fourth virtual host for media, style and script files, below an example virtual host configuration
+is given.
+
+**Note** Please make the virtual host an https virtual host because otherwise Internet Explorer will give you messages
+about some content not coming from a secure connection.
+
+Fill the DocumentRoot of the static virtual host with the contents of:
+
+    https://svn.surfnet.nl/sv/coin-eb/static/branches/!!VERSION!!
+
+Take the same version of the static content as you have checked out of Engineblock.
+
+**EXAMPLE**
+
+    <Virtualhost *:443>
+       DocumentRoot "/opt/www/static
+       ServerName static.example.com
+
+        ErrorLog                logs/static_error_log
+        TransferLog             logs/static_access_log
+
+        SSLEngine on
+
+        SSLProtocol -ALL +SSLv3 +TLSv1
+        SSLCipherSuite ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:!RC4-MD5:RC4+RSA:+HIGH:+MEDIUM
+
+        SSLCertificateFile      /etc/httpd/keys/static.example.com.pem
+        SSLCertificateKeyFile   /etc/httpd/keys/static.example.com.key
+        SSLCACertificateFile    /etc/httpd/keys/static.example.com_cabundle.pem
+
+    </VirtualHost>
 
 ### Finally, test your EngineBlock instance ###
 
@@ -219,6 +252,7 @@ Use these URLs to test your Engineblock instance:
 [http://engineblock-internal.example.com][]
 [https://engineblock-internal.example.com][]
 [https://engineblock-internal.example.com/social/][]
+[https://static.example.com][]
 
 
 ### Optional: Install attribute-manipulations ###
