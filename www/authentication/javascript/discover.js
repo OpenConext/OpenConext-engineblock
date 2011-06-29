@@ -137,7 +137,7 @@ var Discover = function() {
                 $.get('/authentication/idp/help?lang='+library.lang, function(data) {
                     var help = $("#help");
                     help.html(data);
-                    $("#help").toggle(true);
+                    help.toggle(true);
                     library.prepareFaq();
                 });
                 $("#lang_en").removeClass('active');
@@ -156,7 +156,11 @@ var Discover = function() {
 
         prepareFaq : function() {
             //Create scrollbar
-		    $('#scrollViewportHelp').jScrollPane();
+            $('#scrollViewportHelp').jScrollPane({
+                maintainPosition: false,
+                enableKeyboardNavigation: true,
+                showArrows: true
+            });
             //Attach click handler to open and close help items
             $("#faq li").click(function(e) {
                 $(this).toggleClass("open");
