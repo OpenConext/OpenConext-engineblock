@@ -50,76 +50,68 @@ var Discover = function() {
             //Get current page to determine which functions to call
             var currentPage = $('body').attr('class');
 
-            if (currentPage == 'index') {
+            //Initialize keyboard navigator
+            keyboardNavigator.init();
 
-                //Initialize keyboard navigator
-                keyboardNavigator.init();
+            //Create scrollbar
+            $('#scrollViewport').jScrollPane({
+                maintainPosition: false,
+                enableKeyboardNavigation: true,
+                showArrows: true
+            });
 
-                //Create scrollbar
-                $('#scrollViewport').jScrollPane({
-                    maintainPosition: false,
-                    enableKeyboardNavigation: true,
-					showArrows: true
-                });
+            //Get start organisations
+            library.loadIdps($('#searchBox').val());
 
-                //Get start organisations
-                library.loadIdps($('#searchBox').val());
+            //Hook up search box event
+            $('#searchBox').typeWatch({
+                callback: library.loadIdps,
+                wait: 300,
+                captureLength: -1 //Capture empty value as well
+            });
 
-                //Hook up search box event
-                $('#searchBox').typeWatch({
-                    callback: library.loadIdps,
-                    wait: 300,
-                    captureLength: -1 //Capture empty value as well
-                });
-
-                //Disable or enable keyboardNavigator if search field gets or looses focus
-                $('#searchBox').focus(function() {
-                    // clear searchbox text on focus
-                    if ($('#searchBox').val() == library.searchText) {
-                        $('#searchBox').val('');
-                    }
-                });
-
-                $('#searchBox').blur(function() {
-                    keyboardNavigator.enabled = true;
-                });
-
-                $('#tabThumbs').click(library.showThumbs);
-                $('#tabList').click(library.showList);
-
-                library.selectLanguage();
-
-                // set thums/list view based on cookie
-                if ($.cookie("tabs") == 'thumbs') {
-                    library.showThumbs();
+            //Disable or enable keyboardNavigator if search field gets or looses focus
+            $('#searchBox').focus(function() {
+                // clear searchbox text on focus
+                if ($('#searchBox').val() == library.searchText) {
+                    $('#searchBox').val('');
                 }
-                if ($.cookie("tabs") == 'list') {
-                    library.showList();
-                }
+            });
 
-                // In case of a preselected IdP fill the suggestion
-                if (library.selectedEntityId !== '') {
-                    library.fillSuggestion();
-                }
+            $('#searchBox').blur(function() {
+                keyboardNavigator.enabled = true;
+            });
 
-                if (library.selectedId != '') library.selectSuggestion();
+            $('#tabThumbs').click(library.showThumbs);
+            $('#tabList').click(library.showList);
 
-            } else if (currentPage == 'help') {
+            library.initLinks();
 
-                //Create scrollbar
-                $('#scrollViewport').jScrollPane();
-
-                //Attach click handler to open and close help items
-                $("#faq li").click(function () {
-                    $(this).toggleClass("open");
-
-                    //Close all faq items except the clicked one
-                    $('#faq li').not(this).removeClass('open');
-
-                    //Reinitialise scrollbar
-                    $('#scrollViewport').data('jsp').reinitialise();
-                });
+            // set thums/list view based on cookie
+            if ($.cookie("tabs") == 'thumbs') {
+                library.showThumbs();
             }
+            if ($.cookie("tabs") == 'list') {
+                library.showList();
+            }
+
+            // In case of a preselected IdP fill the suggestion
+            if (library.selectedEntityId !== '') {
+                library.fillSuggestion();
+            }
+
+            if (library.selectedId != '') library.selectSuggestion();
+
+            //Attach click handler to open and close help items
+            $("#faq li").click(function () {
+                $(this).toggleClass("open");
+
+                //Close all faq items except the clicked one
+                $('#faq li').not(this).removeClass('open');
+
+                //Reinitialise scrollbar
+                $('#scrollViewport').data('jsp').reinitialise();
+            });
 
         }
     };
@@ -141,14 +133,31 @@ var Discover = function() {
             return null;
         },
 
-        selectLanguage : function() {
+        initLinks : function() {
             var le = $("#lang_en");
             var ln = $("#lang_nl");
             le.toggleClass('active', this.lang == 'en');
             ln.toggleClass('active', this.lang != 'en');
             var regexp = new RegExp("(&|\\?)lang=[^\&]*");
-            le.find('a:first').attr('href', this.uri.replace(regexp,'') + '&lang=en');
-            ln.find('a:first').attr('href', this.uri.replace(regexp,'') + '&lang=nl');
+            le.find('a:first').attr('href', this.uri.replace(regexp, '') + '&lang=en');
+            ln.find('a:first').attr('href', this.uri.replace(regexp, '') + '&lang=nl');
+
+            $("#help_nav a").live("click", function(e) {
+                e.preventDefault();
+                $("#content").toggle(false);
+                $.get('authentication/idp/help.php&lang='+this.lang, function(data) {
+                    $("#help").html(data);
+                });
+                $("#help").toggle(true);
+            });
+
+            $("#back_link").live("click", function(e) {
+                e.preventDefault();
+                $("#content").toggle(true);
+                $("#help").toggle(false);
+            });
+
+
         },
 
         fillSuggestion : function() {
@@ -157,7 +166,7 @@ var Discover = function() {
                 this.selectedId = idp['ID'];
 
                 idp['Name'] = idp['Name_nl'];
-                if ((this.lang == 'en') & (idp['Name_en']!=undefined)) {
+                if ((this.lang == 'en') & (idp['Name_en'] != undefined)) {
                     idp['Name'] = idp['Name_en'];
                 }
                 idp['Alt'] = encodeURIComponent(idp['EntityId']);
@@ -186,6 +195,9 @@ var Discover = function() {
                     }
                 });
 
+            } else {
+                //apparantly there is a cookie for a selected IDP, but it's not allowed for this SP
+                $('#preselectedIdp').remove();
             }
         },
 
@@ -232,26 +244,26 @@ var Discover = function() {
             if (filter === '') {
                 return this.idpList;
             }
-			
+
             filter = filter.toLowerCase();
 
             // filter idps based on keywords
-            for ( var idp in this.idpList) {
+            for (var idp in this.idpList) {
                 var inKeywords = false;
-				// Filter first on keywords
+                // Filter first on keywords
                 if (this.idpList[idp].hasOwnProperty('Keywords')) {
-                    for ( var keyword in this.idpList[idp]['Keywords']) {
+                    for (var keyword in this.idpList[idp]['Keywords']) {
                         if (this.idpList[idp]['Keywords'][keyword].toLowerCase().indexOf(filter) >= 0) {
                             inKeywords = true;
                         }
                     }
-                // Filter based on IdP Name
-                } 
-				var nameProp = 'Name_' + this.lang;
-                if (this.idpList[idp].hasOwnProperty(nameProp) && this.idpList[idp][nameProp].toLowerCase().indexOf(filter) >= 0) {
-                	inKeywords = true;
+                    // Filter based on IdP Name
                 }
-                
+                var nameProp = 'Name_' + this.lang;
+                if (this.idpList[idp].hasOwnProperty(nameProp) && this.idpList[idp][nameProp].toLowerCase().indexOf(filter) >= 0) {
+                    inKeywords = true;
+                }
+
                 if (inKeywords) {
                     filteredResults.push(this.idpList[idp]);
                 }

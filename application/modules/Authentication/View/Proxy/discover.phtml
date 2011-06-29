@@ -47,30 +47,34 @@ $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDa
             <div id="header"><b><font size="4"><?=$displayName?></font></b></div>
             <div id="main">
                 <ul class="nav">
-                    <li id="help"><a href="authentication/idp/help.php">HELP</a></li>
+                    <li id="help_nav"><a href="#">HELP</a></li>
                     <li id="lang_en"><a href="#">EN</a></li>
                     <li id="lang_nl"><a href="#">NL</a></li>
                 </ul>
                 <h1> <?php echo $this->t('index_header'); ?></h1>
-                <p><?php echo $this->t('index_description', $displayName); ?></p>
-                <?php if ($preselectedIdp) : ?>
-                <div id="IdpSuggestion" class="suggestion">
+                <div id="content">
+                    <p><?php echo $this->t('index_description', $displayName); ?></p>
+                    <?php if ($preselectedIdp) : ?>
+                    <div id="IdpSuggestion" class="suggestion">
+                    </div>
+                    <? endif; ?>
+                    <input class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
+
+                    <div class="results">
+                        <div id="noResultsMessage" style="display:none">
+                            <p class="noresults"><?php echo $this->t('no_results'); ?></p>
+                        </div>
+
+                        <div id="scrollViewport">
+                            <ul class="thumbs clearfix" id="organisationsContainer"></ul>
+                        </div>
+                        <ul id="resultTabs" class="tabs">
+                            <li class="thumbs active" id="tabThumbs">Thumbnails</li>
+                            <li class="list" id="tabList">List</li>
+                        </ul>
+                    </div>
                 </div>
-                <? endif; ?>
-                <input class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
-
-                <div class="results">
-                    <div id="noResultsMessage" style="display:none">
-                        <p class="noresults"><?php echo $this->t('no_results'); ?></p>
-                    </div>
-
-                    <div id="scrollViewport">
-                        <ul class="thumbs clearfix" id="organisationsContainer"></ul>
-                    </div>
-                    <ul id="resultTabs" class="tabs">
-                        <li class="thumbs active" id="tabThumbs">Thumbnails</li>
-                        <li class="list" id="tabList">List</li>
-                    </ul>
+                <div id="help">
                 </div>
                 <div class="bottom">
                     <p><?php echo $this->t('footer'); ?></p>

@@ -406,6 +406,10 @@ ul#organisationsContainer.thumbs li em {
 /*++++++++++++++++++++++++*/
 /*           FAQ          */
 
+div#help {
+    display: block;
+}
+
 ul#faq {
 	list-style: none;
 	margin: 0;
