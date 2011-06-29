@@ -45,7 +45,7 @@ class EngineBlock_Corto_Log_Adapter implements Corto_Log_Interface
      */
     public function debug($message)
     {
-        ebLog()->debug("[{$this->_id}] " . $message);
+        ebLog()->debug($this->_getPrefix() . $message);
     }
 
     /**
@@ -54,7 +54,7 @@ class EngineBlock_Corto_Log_Adapter implements Corto_Log_Interface
      */
     public function err($message)
     {
-        ebLog()->err("[{$this->_id}] " . $message);
+        ebLog()->err($this->_getPrefix() . $message);
     }
 
     /**
@@ -63,6 +63,11 @@ class EngineBlock_Corto_Log_Adapter implements Corto_Log_Interface
      */
     public function warn($message)
     {
-        ebLog()->warn("[{$this->_id}] " . $message);
+        ebLog()->warn($this->_getPrefix() . $message);
+    }
+
+    protected function _getPrefix()
+    {
+        return 'CORTO' . (isset($this->_id)? '[' . $this->_id . '] ': '');
     }
 }
