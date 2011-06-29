@@ -130,7 +130,6 @@ var Discover = function() {
             var regexp = new RegExp("(&|\\?)lang=[^\&]*");
             le.find('a:first').attr('href', this.uri.replace(regexp, '') + '&lang=en');
             ln.find('a:first').attr('href', this.uri.replace(regexp, '') + '&lang=nl');
-
             $("#help_nav a").live("click", function(e) {
                 e.preventDefault();
                 $("#content").toggle(false);
@@ -140,8 +139,8 @@ var Discover = function() {
                     help.toggle(true);
                     library.prepareFaq();
                 });
-                $("#lang_en").removeClass('active');
-                $("#lang_nl").removeClass('active');
+                le.removeClass('active');
+                ln.removeClass('active');
                 $("#help_nav").addClass('active');
             });
 
@@ -160,8 +159,6 @@ var Discover = function() {
         prepareFaq : function() {
             //Create scrollbar
             $('#scrollViewportHelp').jScrollPane({
-                maintainPosition: false,
-                enableKeyboardNavigation: true,
                 showArrows: true
             });
             //Attach click handler to open and close help items
