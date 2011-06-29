@@ -76,7 +76,7 @@ class EngineBlock_Log extends Zend_Log
      */
     public function alert($msg)
     {
-
+        parent::alert($msg);
     }
 
     /**
