@@ -295,7 +295,7 @@ class EngineBlock_ApplicationSingleton
             throw new EngineBlock_Exception("No logs defined! Logging is required, please set logs. in your application.ini");
         }
         
-        $this->_log = Zend_Log::factory($this->_configuration->logs);
+        $this->_log = EngineBlock_Log::factory($this->_configuration->logs);
     }
 
     protected function _bootstrapHttpCommunication()
@@ -431,13 +431,15 @@ class EngineBlock_ApplicationSingleton
         die($message);
     }
 
-    public function reportError(Exception $e)
+    public function reportError(Exception $exception)
     {
-        if (isset($this->getConfiguration()->error->reports)) {
-            $reportingConfiguration = $this->getConfiguration()->error->reports;
-            $reporter = new EngineBlock_Error_Reporter($reportingConfiguration);
-            $reporter->report($e);
+        $log = ebLog();
+        if (!$log) {
+            return false;
         }
+
+        $log->err($exception->getMessage());
+        $log->debug($exception->getTraceAsString());
     }
 
     //////////// CONFIGURATION
@@ -503,7 +505,7 @@ class EngineBlock_ApplicationSingleton
     //////////// LOGGING
 
     /**
-     * @return Zend_Log
+     * @return EngineBlock_Log
      */
     public function getLog()
     {
@@ -512,7 +514,7 @@ class EngineBlock_ApplicationSingleton
 }
 
 /**
- * @return Zend_Log
+ * @return EngineBlock_Log
  */
 function ebLog()
 {
