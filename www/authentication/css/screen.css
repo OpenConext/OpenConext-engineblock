@@ -562,7 +562,7 @@ a.cancel {
 /*++++++++++++++++++++++++*/
 /*         SCROLL         */
 
-#scrollViewport {
+#scrollViewport , #scrollViewportHelp {
 	overflow:hidden;
 /*	height:239px;*/
 	height:235px;	
