@@ -137,8 +137,9 @@ var Discover = function() {
                 $.get('/authentication/idp/help?lang='+library.lang, function(data) {
                     var help = $("#help");
                     help.html(data);
-                    library.prepareFaq();
                     $("#help").toggle(true);
+                    library.prepareFaq();
+
                 });
             });
 
@@ -162,7 +163,7 @@ var Discover = function() {
                 $('#faq li').not(this).removeClass('open');
 
                 //Reinitialise scrollbar
-              //  $('#scrollViewportHelp').data('jsp').reinitialise();
+                $('#scrollViewportHelp').data('jsp').reinitialise();
             });
 
         },
