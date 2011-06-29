@@ -59,6 +59,7 @@ var Discover = function() {
             });
 
             //Get start organisations
+            library.sortIdps();
             library.loadIdps($('#searchBox').val());
 
             //Hook up search box event
@@ -237,6 +238,15 @@ var Discover = function() {
 
                 return clippedString + appendString;
             }
+        },
+
+        sortIdps : function() {
+            this.idpList.sort(function(o1, o2){
+                 var prop = 'Name_'+library.lang;
+                 var v1 = o1.hasOwnProperty(prop) ? o1[prop] : o1['Name_nl'];
+                 var v2 = o2.hasOwnProperty(prop) ? o2[prop] : o2['Name_nl'];
+                 return v1.localeCompare(v2);
+             });
         },
 
         /**
