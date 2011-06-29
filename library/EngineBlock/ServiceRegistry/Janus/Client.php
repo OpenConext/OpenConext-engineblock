@@ -43,38 +43,44 @@ class EngineBlock_ServiceRegistry_Janus_Client extends EngineBlock_Rest_Client
         
         $this->_user = $user;
         $this->_secret = $secret;
-    }    
-    
-    public function __call($method, $args)
+    }
+
+    public function get($args = array())
     {
-        if ($method=="get") {
-            // Sign the request.
-            $this->_data["janus_key"] = $this->_user;
-            $this->_data["userid"] = $this->_user;
-            
-            $signatureData = $this->_data;
-            
-            if (isset($this->_data["janus_sig"])) {
-                unset($this->_data["janus_sig"]); // don't sign an old signature if present
-            }
-            
-            // rest=1 will later be added to the request by zend's rest client; we need to make this part
-            // of the signature because janus rest will evaluate all params for the sig, even the ones we don't use
-            $signatureData['rest'] = 1;
-            
-            ksort($signatureData);
-            
-            $concat_string = '';
-            foreach($signatureData AS $key => $value) {
-                if (!is_null($value)) { // zend rest will skip null values
-                    $concat_string .= $key . $value;
-                }
-            }
-            $prepend_secret = $this->_secret . $concat_string;
-                        
-            $hash_string = hash('sha512', $prepend_secret);
-            $this->_data["janus_sig"]=$hash_string;
+        // Sign the request.
+        $this->_data["janus_key"]   = $this->_user;
+        $this->_data["userid"]      = $this->_user;
+
+        $this->_setSignature();
+
+        return parent::get($args);
+    }
+
+    protected function _setSignature()
+    {
+        // don't sign an old signature if present
+        if (isset($this->_data["janus_sig"])) {
+            unset($this->_data["janus_sig"]);
         }
-        return parent::__call($method, $args);
+
+        $signatureData = $this->_data;
+
+        // rest=1 will later be added to the request by zend's rest client;
+        // we need to make this part of the signature because janus rest
+        // will evaluate all params for the sig, even the ones we don't use
+        $signatureData['rest'] = 1;
+
+        ksort($signatureData);
+
+        $concatString = '';
+        foreach($signatureData AS $key => $value) {
+            if (!is_null($value)) { // zend rest will skip null values
+                $concatString .= $key . $value;
+            }
+        }
+        $prependSecret = $this->_secret . $concatString;
+
+        $hashString = hash('sha512', $prependSecret);
+        $this->_data["janus_sig"] = $hashString;
     }
 }
