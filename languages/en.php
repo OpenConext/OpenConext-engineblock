@@ -21,7 +21,7 @@ return array(
     'footer'                => 'This service is made possible by <a href="http://www.surfconext.nl/">SURFconext</a> part of SURFnet.',
 
     //Help
-    'help'                  => 'Help',
+    'help_header'           => 'Help',
     'help_description'      => '<p>Check the FAQ if you have any questions about this screen or about SURFconext.</p>
 
     <p>If your question is not in the FAQ or if the answer you get doesnít help, then send an e-mail to <a href="mailto:info@surfconext.nl">info@surfconext.nl</a></p>',

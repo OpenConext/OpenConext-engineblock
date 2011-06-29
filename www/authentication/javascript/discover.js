@@ -47,8 +47,6 @@ var Discover = function() {
         },
 
         show : function() {
-            //Get current page to determine which functions to call
-            var currentPage = $('body').attr('class');
 
             //Initialize keyboard navigator
             keyboardNavigator.init();
@@ -100,18 +98,9 @@ var Discover = function() {
                 library.fillSuggestion();
             }
 
-            if (library.selectedId != '') library.selectSuggestion();
-
-            //Attach click handler to open and close help items
-            $("#faq li").click(function () {
-                $(this).toggleClass("open");
-
-                //Close all faq items except the clicked one
-                $('#faq li').not(this).removeClass('open');
-
-                //Reinitialise scrollbar
-                $('#scrollViewport').data('jsp').reinitialise();
-            });
+            if (library.selectedId != '') {
+                library.selectSuggestion();
+            }
 
         }
     };
@@ -146,9 +135,11 @@ var Discover = function() {
                 e.preventDefault();
                 $("#content").toggle(false);
                 $.get('/authentication/idp/help?lang='+this.lang, function(data) {
-                    $("#help").html(data);
+                    var help = $("#help");
+                    help.html(data);
+                    library.prepareFaq();
+                    $("#help").toggle(true);
                 });
-                $("#help").toggle(true);
             });
 
             $("#back_link").live("click", function(e) {
@@ -157,6 +148,20 @@ var Discover = function() {
                 $("#help").toggle(false);
             });
 
+
+        },
+
+        prepareFaq : function() {
+            //Attach click handler to open and close help items
+            $("#faq li").live(function () {
+                $(this).toggleClass("open");
+
+                //Close all faq items except the clicked one
+                $('#faq li').not(this).removeClass('open');
+
+                //Reinitialise scrollbar
+                $('#scrollViewport').data('jsp').reinitialise();
+            });
 
         },
 
