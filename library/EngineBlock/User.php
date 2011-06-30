@@ -105,7 +105,7 @@ class EngineBlock_User
         $query = "DELETE FROM group_provider_user_oauth
                     WHERE user_id = ?";
         $parameters = array(
-            sha1($this->getUid())
+            $this->getUid()
         );
 
         $statement = $factory->prepare($query);
