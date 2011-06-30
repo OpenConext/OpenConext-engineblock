@@ -27,15 +27,15 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 {
     protected function _getScopedIdPs($request = null)
     {
-        $presetIdp = $this->_server->getCookie('selectedIdp');
+        $scopedIdPs = parent::_getScopedIdPs($request);
 
-        if ($presetIdp && !$this->_server->getVirtualOrganisationContext()) {
-            $this->_server->getSessionLog()->debug("Found selected IdP in cookie, scoping request to: $presetIdp");
-            return array($presetIdp);
+        $presetIdP = $this->_server->getCookie('selectedIdp');
+
+        if ($presetIdP && (empty($scopedIdPs) || in_array($presetIdP, $scopedIdPs))) {
+            $this->_server->getSessionLog()->debug("Found selected IdP in cookie, scoping request to: $presetIdP");
+            return array($presetIdP);
         }
-        else {
-            return parent::_getScopedIdPs($request);
-        }
+        return $scopedIdPs;
     }
 
     public function idPsMetadataService()
