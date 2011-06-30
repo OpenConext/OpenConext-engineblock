@@ -31,6 +31,7 @@ class EngineBlock_Http_Request
     protected $_uri;
     protected $_queryParameters = array();
     protected $_queryString;
+    protected $_postParameters;
 
     public static function createFromEnvironment()
     {
@@ -47,7 +48,8 @@ class EngineBlock_Http_Request
         else {
             $request->setUri($_SERVER['REQUEST_URI']);
         }
-        $request->setQueryString($_SERVER['QUERY_STRING']);        
+        $request->setQueryString($_SERVER['QUERY_STRING']);
+        $request->_setPostParameters($_POST);
         return $request;
     }
 
@@ -110,6 +112,35 @@ class EngineBlock_Http_Request
                 $this->_queryParameters[$key] = $value;
             }
         }
+    }
+
+    protected function _setPostParameters($params)
+    {
+        $this->_postParameters = $params;
+    }
+
+    /**
+     * Get all the POST parameters for the given request
+     *
+     * @return all POST parameters as an array for the given request
+     */
+    public function getPostParameters()
+    {
+        return $this->_postParameters;
+    }
+
+    /**
+     * Get the value of a specific POST variable based on a given parameter name
+     *
+     * @param $param the name of the post parameter
+     * @return the value of the requested post parameter || null when it doesn't exist
+     */
+    public function getPostParameter($param)
+    {
+        if (array_key_exists($param, $this->_postParameters)) {
+            return $this->_postParameters[$param];
+        }
+        return null;
     }
 
     public function setProtocol($https = false)
