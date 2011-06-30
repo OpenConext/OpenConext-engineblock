@@ -32,7 +32,6 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
     
     const VO_CONTEXT_KEY          = 'voContext';
     
-    
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'       => 'authentication/idp/single-sign-on',
         'continueToIdP'             => 'authentication/idp/process-wayf',
@@ -80,7 +79,6 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
     
     public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "")
     {
-        
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
             return parent::getHostedEntityUrl($entityCode, $serviceName, $remoteEntityId);
         }
@@ -108,7 +106,6 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
     {
         return $this->_voContext;
     }
-  
     
     public function getOutput()
     {
@@ -130,7 +127,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         $this->_headers[$name] = $value;
     }
 
-      /**
+    /**
      * Translate a string.
      *
      * Alias for 'translate'
