@@ -91,7 +91,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         $host = $_SERVER['HTTP_HOST'];
 
         $mappedUri = $this->_serviceToControllerMapping[$serviceName] .
-            ($this->_voContext!=null && $serviceName != "sPMetadataService" ? '/' . "vo:".$this->_voContext : '') .
+            ($this->_voContext!=null && $serviceName != "sPMetadataService" ? '/' . "vo:" . $this->_voContext : '') .
             ($remoteEntityId ? '/' . md5($remoteEntityId) : '');
                     
         return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : '') . $mappedUri;
@@ -120,6 +120,14 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
     public function sendOutput($rawOutput)
     {
         $this->_output = $rawOutput;
+    }
+
+    public function setCookie($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
+    {
+        if (isset($this->_voContext)) {
+            $name .= '_' . $this->_voContext;
+        }
+        return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 
     public function sendHeader($name, $value)

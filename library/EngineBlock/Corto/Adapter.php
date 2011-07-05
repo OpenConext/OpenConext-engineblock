@@ -259,7 +259,7 @@ class EngineBlock_Corto_Adapter
                         'Location' => $proxyServer->getHostedEntityUrl($this->_hostedEntity, 'provideConsentService'),
                     ),
                 ),
-                'keepsession' => true,
+                'keepsession' => false,
             ),
         ));
 
@@ -440,7 +440,9 @@ class EngineBlock_Corto_Adapter
         $voClient = new EngineBlock_VORegistry_Client();
         $metadata = $voClient->getGroupProviderMetadata($voIdentifier);
 
-        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor($subjectIdentifier);
+        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor(
+            $subjectIdentifier
+        );
 
         if (isset($metadata["groupstem"])) {
             $groupProvider->setGroupStem($metadata["groupstem"]);
