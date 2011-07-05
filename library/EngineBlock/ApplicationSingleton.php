@@ -371,7 +371,7 @@ class EngineBlock_ApplicationSingleton
         );
 
         // If the URL has &lang=nl in it or the lang var is posted, or a lang cookie was set, then use that locale
-        $cookieLang = $this->_httpResponse->getCookie('lang');
+        $cookieLang = $this->_httpRequest->getCookie('lang');
         $getLang = $this->_httpRequest->getQueryParameter('lang');
         $postLang = $this->_httpRequest->getPostParameter('lang');
 

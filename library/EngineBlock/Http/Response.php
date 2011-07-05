@@ -64,21 +64,6 @@ class EngineBlock_Http_Response
     }
 
     /**
-     * Get a specific cookie name
-     *
-     * @param $name the cookie name to retrieve
-     * @param null $defaultValue the default value to return
-     * @return the cookie value if available otherwise the @var $defaultValue
-     */
-    public function getCookie($name, $defaultValue = null)
-    {
-        if (isset($_COOKIE[$name])) {
-            return $_COOKIE[$name];
-        }
-        return $defaultValue;
-    }
-
-    /**
      * Set a cookie
      *
      * @param $name the cookie name
