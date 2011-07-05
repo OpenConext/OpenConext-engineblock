@@ -25,50 +25,6 @@
 
 class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 {
-    protected function _getScopedIdPs(array $request)
-    {
-        $idpEntities = array();
-        $remoteEntities = $this->_server->getRemoteEntities();
-        foreach ($remoteEntities as $entityId => $remoteEntity) {
-            if (isset($remoteEntity['SingleSignOn'])) {
-                $idpEntities[$entityId] = $remoteEntity;
-            }
-        }
-
-        // Check if the request has scoping, if so remove them from the idps to check
-        $scopedIdps = parent::_getScopedIdPs($request);
-        if (!empty($scopedIdps)) {
-            $idpEntityIds = array_keys($idpEntities);
-            foreach ($idpEntityIds as $idpEntityId) {
-                if (!in_array($idpEntityId, $scopedIdps)) {
-                    unset($idpEntities[$idpEntityId]);
-                }
-            }
-        }
-
-        $spEntityId = $request['saml:Issuer']['__v'];
-        $idpEntities = $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
-            $idpEntities,
-            $spEntityId
-        );
-        $idpEntityIds = array_keys($idpEntities);
-
-        $presetIdP = $this->_server->getCookie('selectedIdp'); 
-
-        if ($presetIdP && in_array($presetIdP, $idpEntityIds)) {
-            $this->_server->getSessionLog()->debug("Found selected IdP in cookie, scoping request to: $presetIdP"); 
-            return array($presetIdP); 
-        }
-        return $idpEntityIds;
-    }
-
-    protected function _getServiceRegistryAdapter()
-    {
-        return new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new EngineBlock_ServiceRegistry_CacheProxy()
-        );
-    }
-    
     public function idPsMetadataService()
     {
         $entitiesDescriptor = array(
