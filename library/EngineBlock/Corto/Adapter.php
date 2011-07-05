@@ -259,7 +259,7 @@ class EngineBlock_Corto_Adapter
                         'Location' => $proxyServer->getHostedEntityUrl($this->_hostedEntity, 'provideConsentService'),
                     ),
                 ),
-                'keepsession' => false,
+                'keepsession' => true,
             ),
         ));
 
