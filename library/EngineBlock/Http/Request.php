@@ -170,35 +170,4 @@ class EngineBlock_Http_Request
         return $this->_hostName;
     }
 
-    /**
-     * Get a specific cookie name
-     *
-     * @param $name the cookie name to retrieve
-     * @param null $defaultValue the default value to return
-     * @return the cookie value if available otherwise the @var $defaultValue
-     */
-    public function getCookie($name, $defaultValue = null)
-    {
-        if (isset($_COOKIE[$name])) {
-            return $_COOKIE[$name];
-        }
-        return $defaultValue;
-    }
-
-    /**
-     * Set a cookie
-     *
-     * @param $name the cookie name
-     * @param $value the cookie value
-     * @param null $expire the expiration time
-     * @param null $path the cookie path
-     * @param null $domain the cookie domain
-     * @param null $secure secure cookie?
-     * @param null $httpOnly http only
-     * @return bool true on success, false on failure
-     */
-    public function setCookie($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
-    {
-        return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
-    }
 }
