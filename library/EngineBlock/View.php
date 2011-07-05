@@ -102,7 +102,7 @@ class EngineBlock_View
         return call_user_func_array('sprintf', $arguments);
     }
 
-	/**
+    /**
      * Return the language.
      *
      * @example <?php echo $this->language(); ?>
@@ -114,5 +114,43 @@ class EngineBlock_View
         $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
 
         return $translator->getLocale();
+    }
+
+    /**
+     * Return the url of the Static vhost containing media, script and css files
+     *
+     * @example <?php echo $this->staticUrl(); ?>
+     * 
+     * @return string
+     */
+    public static function staticUrl()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $settings = $application->getConfiguration();
+        return $settings->static->protocol . '://'. $settings->static->host;
+    }
+
+    /**
+     * Set the language on the query string and return the new query string
+     *
+     * @example <?php echo $this->setLanguage('en'); ?>
+     *
+     * @param $lang the language to set
+     * @return string the new query string
+     */
+    public static function setLanguage($lang)
+    {
+        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
+        $queryString = '';
+        $queryParameters = $request->getQueryParameters();
+
+        $queryParameters['lang'] = $lang;
+
+        foreach ($queryParameters as $key => $value) {
+            $queryString .= (strlen($queryString) == 0) ? '?' : '&' ;
+            $queryString .= $key. '=' .urlencode($value);
+        }
+
+        return strlen($queryString) > 0 ? $queryString : '';
     }
 }

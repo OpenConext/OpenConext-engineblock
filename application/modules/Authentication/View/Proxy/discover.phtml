@@ -26,95 +26,64 @@
 $lang = $this->language();
 $uri = $_SERVER['REQUEST_URI'];
 $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set different layout
+$layout->setLayout('discover');
+
+// Set Layout variables
+$layout->header = $displayName;
+$layout->subheader = $this->t('idp_selection_subheader');
+$layout->title = $this->t('idp_selection_title', $displayName);
+$layout->footerText = $this->t('footer');
+
+// Set javascript
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.mousewheel.min.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.jscrollpane.min.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.tmpl.min.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/keyboardNavigator.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/typewatch.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.cookie.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/discover.js');
+$preselectedIdpJson = isset($preselectedIdp) ? 'discoveryScreen.setSelectedEntityId('.json_encode($preselectedIdp).')' : '';
+$layout->getView()->inlineScript()->appendScript("
+    var discoveryScreen = new Discover();
+    discoveryScreen.setLanguage('". $lang ."');
+    discoveryScreen.setSearchText('". $this->t('search') ."');
+    discoveryScreen.setIdpList(". json_encode($idpList) .");
+    discoveryScreen.setUri('". $uri. "');
+    ". $preselectedIdpJson ."
+    discoveryScreen.show();");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Identity Provider Selection <?=($displayName?' - ' . $displayName : '')?></title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="robots" content="noindex, nofollow"/>
-        <link href="/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-		<link href="/css/screen.css" rel="stylesheet" type="text/css" />
-        <!--[if lt IE 8 ]><link href="https://wayf.surfnet.nl/federate/discovery/css/screen_ie.css" rel="stylesheet" type="text/css" media="screen" /><![endif]-->
+<div id="content">
+    <form id="IdpListForm" method="post" action="<?= $action ?>">
+        <input id="ID" type="hidden" name="ID" value="<?= $ID ?>">
+        <input id="Idp" type="hidden" name="idp" value="">
+    </form>
+    <p><?php echo $this->t('idp_selection_desc', $displayName); ?></p>
+    <?php if ($preselectedIdp) : ?>
+    <div id="IdpSuggestion" class="suggestion">
+    </div>
+    <? endif; ?>
+    <input class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
 
-    </head>
-    <body class="index">
-        <form id="IdpListForm" method="post" action="<?= $action ?>">
-            <input id="ID" type="hidden" name="ID" value="<?= $ID ?>">
-            <input id="Idp" type="hidden" name="idp" value="">
-        </form>
-        <div id="wrapper">
-            <div id="header"><b><font size="4"><?=$displayName?></font></b></div>
-            <div id="main">
-                <ul class="nav">
-                    <li id="help_nav"><a href="#">HELP</a></li>
-                    <li id="lang_en"><a href="#">EN</a></li>
-                    <li id="lang_nl"><a href="#">NL</a></li>
-                </ul>
-                <h1> <?php echo $this->t('index_header'); ?></h1>
-                <div id="content">
-                    <p><?php echo $this->t('index_description', $displayName); ?></p>
-                    <?php if ($preselectedIdp) : ?>
-                    <div id="IdpSuggestion" class="suggestion">
-                    </div>
-                    <? endif; ?>
-                    <input class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
-
-                    <div class="results">
-                        <div id="noResultsMessage" style="display:none">
-                            <p class="noresults"><?php echo $this->t('no_results'); ?></p>
-                        </div>
-
-                        <div id="scrollViewport">
-                            <ul class="thumbs clearfix" id="organisationsContainer"></ul>
-                        </div>
-                        <ul id="resultTabs" class="tabs">
-                            <li class="thumbs active" id="tabThumbs">Thumbnails</li>
-                            <li class="list" id="tabList">List</li>
-                        </ul>
-                    </div>
-                </div>
-                <div id="help">
-                </div>
-                <div class="bottom">
-                    <p><?php echo $this->t('footer'); ?></p>
-                </div>
-            </div>
+    <div class="results">
+        <div id="noResultsMessage" style="display:none">
+            <p class="noresults"><?php echo $this->t('no_results'); ?></p>
         </div>
 
-        <script id="idpListTemplate" type="text/x-jquery-tmpl">
-            <li id="c${ID}" class="${NoAccessClass}"><a alt="${Alt}" href="#"><img src="${Logo}" /><span>${Name}</span>${NoAccess}</a></li>
-        </script>
-        <script id="idpListSuggestionTemplate" type="text/x-jquery-tmpl">
-            <p>
-                <a alt="${Alt}" class="${NoAccessClass}" href="#">
-                    ${Suggestion}
-                    <img class="logo" src="${Logo}" />
-                    <span>${Name} ${NoAccess}</span>
-                </a>
-            </p>
-        </script>
-        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.mousewheel.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.jscrollpane.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.tmpl.min.js"></script>
-        <script type="text/javascript" src="/javascript/keyboardNavigator.js"></script>
-        <script type="text/javascript" src="/javascript/typewatch.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.cookie.js"></script>
-        <script type="text/javascript" src="/javascript/discover.js"></script>
-
-        <script type="text/javascript">
-
-            var discoveryScreen = new Discover();
-            discoveryScreen.setLanguage('<?=$lang?>');
-            discoveryScreen.setSearchText('<?php echo $this->t('search'); ?>');
-            discoveryScreen.setIdpList(<? echo json_encode($idpList); ?>);
-            discoveryScreen.setUri('<?=$uri?>');
-            <?php if ($preselectedIdp) : ?>
-                discoveryScreen.setSelectedEntityId(<? echo json_encode($preselectedIdp); ?>);
-            <? endif; ?>
-
-            discoveryScreen.show();
-        </script>
-    </body>
-</html>
+        <div id="scrollViewport">
+            <ul class="thumbs clearfix" id="organisationsContainer"></ul>
+        </div>
+        <ul id="resultTabs" class="tabs">
+            <li class="thumbs active" id="tabThumbs">Thumbnails</li>
+            <li class="list" id="tabList">List</li>
+        </ul>
+    </div>
+</div>
+<div id="help">
+</div>

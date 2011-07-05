@@ -7,15 +7,22 @@ return array(
     'back'                  => 'terug',
     'attribute'             => 'Attribuut',
     'value'                 => 'Waarde',
+    'post_data'             => 'POST Data',
+    'processing'            => 'Bezig met verwerken... een ogenblik geduld alstublieft (dit kan tot 30 seconden duren)',
+    'note'                  => 'Mededeling',
+    'note_no_script'        => 'Uw browser ondersteunt geen javascript. U moet op de onderstaande knop drukken om door te gaan.',
+    'go_back'               => '&lt;&lt; Ga terug',
+    'authentication_urls'   => 'Authenticatie URLs',
 
-    //Index
-    'search'                => 'of zoek een instelling',
-    'index_header'          => 'Waar wil je inloggen?',
-    'index_description'     => 'Selecteer jouw instelling en log daar in voor <i>%s</i>',
-    'our_suggestion'        => 'Onze suggestie:',
-    'no_access'             => 'Geen toegang.',
-    'no_access_more_info'   => 'Geen toegang. &raquo;',
-    'no_results'            => 'Geen resultaten gevonden',
+    //WAYF
+    'idp_selection_title'       => 'Identity Provider Selectie - %s',
+    'idp_selection_subheader'   => 'Waar wil je inloggen?',
+    'search'                    => 'of zoek een instelling',
+    'idp_selection_desc'        => 'Selecteer jouw instelling en log daar in voor <i>%s</i>',
+    'our_suggestion'            => 'Onze suggestie:',
+    'no_access'                 => 'Geen toegang.',
+    'no_access_more_info'       => 'Geen toegang. &raquo;',
+    'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
     'footer'                => 'Deze dienst maakt gebruik van <a href="http://www.surfconext.nl/">SURFconext</a> van SURFnet.',
@@ -90,4 +97,64 @@ Heb je vragen over de omgang met je persoonsgegevens binnen de SURFfederatie, da
     'profile_extra_groups_desc'         => 'Om uw instellingsgroepen te zien moet u het gebruik hiervoor binnen SURFconext autoriseren.',
     'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link. NB. U wordt hierdoor ook automatisch uitgelogd.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn gegevens!',
+
+    //Delete User
+    'deleteuser_success_header'         => 'Uw informatie is succesvol verwijderd',
+    'deleteuser_success_subheader'      => 'Tot ziens...',
+    'deleteuser_success_desc'           => 'Uw informatie is succesvol verwijderd van SURFconext. U <strong>Moet</strong> uw browser opnieuw starten om het proces af te ronden. Doet u dit niet dan kunnen wij niet garanderen dat uw profiel van het SURFconext platform is verwijderd',
+
+
+    //Consent
+    'consent_header'                    => 'Attribuut Vrijgave',
+    'consent_subheader'                 => 'Autoriseer vrijgave van uw gegevens aan <i>%s</i>',
+    'consent_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan aanverwante diensten.',
+    'consent_terms_of_service'          => '<p>Ik ga akkoord met de vrijgave van mijn profielgegevens.</p>
+        Ik ga akkoord met de Gebruikersvoorwaarden van SURFnet voor het gebruik van SURFconext. Zie de gebruikersvoorwaarden in het
+        <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">Engels</a>
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
+        / in het <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Nederlands</a>
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" /><br />
+        <br />
+        Het is mogelijk dat er additionele gebruikersvoorwaarden zijn voor diensten aangeboden door derden.',
+    'consent_accept'                    => 'Ik Accepteer',
+    'consent_decline'                   => 'Ik Wijs af',
+
+    //Error screens
+    'error_help_desc'                   => '<p>
+        Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de support pagina</a> als dit uw probleem niet oplost.
+        Op deze pagina vindt u meer informatie over de mogelijke oorzaken en hoe u contact kan opnemen met het support team.
+    </p>',
+    'error_no_consent'                  => 'Geen autorisatie gegeven',
+    'error_no_consent_desc'             => 'U hebt geen autorisatie gegeven om uw attributen vrij te geven aan de service. Zonder deze autorisatie kunt u niet verder.<br /><br /> Om toch door te gaan dient u uw browser opnieuw te starten, nogmaals in te loggen en vervolgens uw attributen vrij te geven aan de dienst.',
+    'error_no_idps'                     => 'Error - Geen Identity Providers gevonden',
+    'error_no_idps_desc'                => '<p>
+        De application waar u vandaan komt (uw &lsquo;Service Provider&rsquo;) mag met geen enkele Identity Provider verbinden.
+        Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de administrator(s) van
+        deze dienst.
+        <br /><br />
+    </p>',
+    'error_session_lost'                => 'Error - Uw sessie is verloren gegaan..',
+    'error_session_lost_desc'           => '<p>
+        Uw sessie is ergens verloren gegaan.<br />
+        Misschien heeft u uw cookies uitgezet?<br />
+        Ga alstublieft terug en probeer het opnieuw.
+        <br /><br />
+    </p>',
+    'error_message_timeout'             => 'Error - Bericht time-out..',
+    'error_message_timeout_desc'        => 'We hebben een bericht ontvangen dat niet meer geldig is. Probeer opnieuw in te loggen alstublieft.',
+    'error_no_message'                  => 'Error - Geen bericht ontvangen..',
+    'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
+    'error_unknown_issuer'              => 'Error - Onbekende aanvrager..',
+    'error_unknown_issuer_desc'         => '<p>
+        We hebben een bericht ontvangen van iemand die we nog niet kennen..
+        Ga naar <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de support pagina</a> als je een ontwikkelaar bent en wil  je dienst wilt aansluiten op SURFconext.
+        Geef ons vervolgens je endpoint gegevens.
+        <br /><br />
+    </p>',
+    'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
+    'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij je Identity Provider, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie.',
+    'error_generic'                     => 'Error - Foutmelding..',
+    'error_generic_desc'                => '<p>
+        Het is niet mogelijk om in te loggen. Probeert u het alstublieft opnieuw.
+    </p>',
 );

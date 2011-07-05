@@ -370,13 +370,30 @@ class EngineBlock_ApplicationSingleton
             )
         );
 
-        // If the URL has &lang=nl in it, then use that locale
-        $lang = strtolower($this->_httpRequest->getQueryParameter('lang'));
+        // If the URL has &lang=nl in it or the lang var is posted, or a lang cookie was set, then use that locale
+        $cookieLang = $this->_httpRequest->getCookie('lang');
+        $getLang = $this->_httpRequest->getQueryParameter('lang');
+        $postLang = $this->_httpRequest->getPostParameter('lang');
+
+        $lang = null;
+        if ($getLang) {
+            $lang = strtolower($getLang);
+        } else if ($postLang) {
+            $lang = strtolower($postLang);
+        } else {
+            $lang = strtolower($cookieLang);
+        }
+
+        $cookieDomain = $this->getConfigurationValue('cookie')->lang->domain;
+        $cookieExpiry = strlen($this->getConfigurationValue('cookie')->lang->expiry) > 0 ? time()+$this->getConfigurationValue('cookie')->lang->expiry : null;
+
         if ($lang && $translate->getAdapter()->isAvailable($lang)) {
             $translate->setLocale($lang);
+            $this->_httpRequest->setCookie('lang', $lang, $cookieExpiry, '/', $cookieDomain);
         }
         else {
             $translate->setLocale('en');
+            $this->_httpRequest->setCookie('lang', 'en', $cookieExpiry, '/', $cookieDomain);
         }
 
         $this->_translator = $translate;

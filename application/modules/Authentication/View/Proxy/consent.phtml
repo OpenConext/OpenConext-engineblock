@@ -32,118 +32,74 @@ if (!isset($ID)) {
 if (!isset($attributes)) {
     throw new EngineBlock_Exception('No Attributes given to consent screen');
 }
+
+// The current language
+$lang = $this->language();
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set different layout
+$layout->setLayout('consent');
+
+// Set Layout variables
+$layout->header = $this->t('consent_header');
+$layout->title = $layout->title . ' - '. $layout->header;
+$layout->subheader = $this->t('consent_subheader', $sp['Name'][$lang]);
+$layout->footerText = $this->t('footer');
+
+// Set new window icon
+$newWindowIcon = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
+$layout->getView()->inlineScript()->appendScript("document.getElementById('accept_terms_button').focus();");
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Identity Provider Selection - SURFmedia</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="robots" content="noindex, nofollow"/>
-        <link href="https://espee.surfnet.nl/federate/surfnet/css/screen.css" rel="stylesheet" type="text/css" />
-        <link href="https://espee.surfnet.nl/federate/surfnet/css/table.css" rel="stylesheet" type="text/css" />
-    </head>
-    <body>
-
-        <div class="wrapper">
-            <div class="header">
-                <a href="http://www.surfnet.nl">
-                    <img class="logo" src="https://espee.surfnet.nl/federate/surfnet/img/surfnet_logo.gif" alt="logo" />
-                </a>
-                <span>SURFconext</span>
-                <span class="left"></span>
-                <span class="right"></span>
-                <img src="https://espee.surfnet.nl/federate/surfnet/img/federatie_header.jpg" alt="header img" />
-            </div>
-            <div class="main">
-                <div class="column content">
-                    <div class="item">
-                        <span class="h2">Attribute release</span>
-
-                        <p>
-                            The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.
-                        </p>
-
-                        <table>
-                        <?php foreach ($attributes as $uid => $attributeValues) { ?>
-                            <tr>
-                                <td style="font-weight: bold;">
-                                    <?=$this->getAttributeName($uid, 'en_US')?>
-                                </td>
-                                <td>
-                                    <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                                    <?=$attributeValues[0];?>
-                                    <? } /** Multiple attribute values */ else { ?>
-                                    <ul>
-                                    <?php foreach ($attributeValues as $value) { ?>
-                                        <li><?=$value?></li>
-                                    <?php } ?>
-                                    </ul>
-                                    <? } ?>
-                                </td>
-                            </tr>
-                        <? } ?>
-                        </table>
-                        <br />
-                        <p>
-                            I agree with the release of my profile data.
-                            I agree with the SURFnet Terms of Service for the use of SURFconext
-                            in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%28EN%29"
-                                  target="_blank">
-                                English
-
-                            </a>
-                            <img src="/new_window_icon.gif" alt="opens in a new window" style="border: 0pt none; float: none;" />
-                            /
-                            in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%28NL%29"
-                                  target="_blank">
-                                Dutch
-                            </a>
-                            <img src="/new_window_icon.gif" alt="opens in a new window" style="border: 0pt none; float: none;" />
-                            <br />
-                            Additional Terms of Services may apply to 3rd party services.
-                        </p>
-                        <br />
-
-                        <form method="post" action="<?= $action ?>" style="float: left">
-                            <input type=hidden name=ID value="<?= $ID ?>">
-                            <input type="hidden" name="consent" value="yes" />
-                            <input id="accept_terms_button" type="submit" value="I Accept" style="font-weight: bold;" />
-                        </form>
-                        &nbsp;&nbsp;
-                        <form method="post" action="<?= $action ?>" style="float: left; margin-left: 2em">
-                            <input type="hidden" name="ID" value="<?= $ID ?>" />
-                            <input type="submit" value="I Decline" />
-                        </form>
-                        <br style="clear: both" />
-                        <script type="text/javascript">
-                            document.getElementById('accept_terms_button').focus();
-                        </script>
-                    </div>
-                </div>
-            </div>
-            <div class="footer">
-                <p>Bezoek ook:</p>
+<div>
+    <p>
+        <?php echo $this->t('consent_store_info'); ?>
+    </p>
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo $this->t('attribute'); ?></th>
+                <th><?php echo $this->t('value'); ?></th>
+            </tr>
+        </thead>
+    <?php foreach ($attributes as $uid => $attributeValues) { ?>
+        <tr>
+            <td style="font-weight: bold;">
+                <?=$this->getAttributeName($uid, $lang)?>
+            </td>
+            <td>
+                <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?=$attributeValues[0];?>
+                <? } /** Multiple attribute values */ else { ?>
                 <ul>
-                    <li><a href="http://www.surfnet.nl">SURFnet</a></li>
+                <?php foreach ($attributeValues as $value) { ?>
+                    <li><?=$value?></li>
+                <?php } ?>
                 </ul>
-                <address>
-                    <span><strong>SURFnet bv</strong></span>
-                    <span>Radboudkwartier 273</span>
-                    <span>Postbus 19035</span>
-                    <span>3501 DA Utrecht</span>
-                    <span>T +31 302 305 305</span>
-                    <span>F +31 302 305 329</span>
-                    <a href="mailto:help@surfmedia.nl">
-                        help@surfmedia.nl
-                    </a>
-                    <a class="extra" href="http://www.surfnet.nl/nl/pages/copyright.aspx">
-                        Copyright
-                    </a>
-                    <a class="extra" href="http://www.surfnet.nl/nl/pages/disclaimer.aspx">
-                        Disclaimer
-                    </a>
-                </address>
-            </div>
-        </div>
-    </body>
-</html>
+                <? } ?>
+            </td>
+        </tr>
+    <? } ?>
+    </table>
+    <br />
+    <p>
+        <?php echo $this->t('consent_terms_of_service', $newWindowIcon, $newWindowIcon); ?>
+    </p>
+    <br />
+
+    <form method="post" action="<?= $action ?>" style="float: left">
+        <input type=hidden name=ID value="<?= $ID ?>">
+        <input type="hidden" name="consent" value="yes" />
+        <input id="accept_terms_button" type="submit" value="<?php echo $this->t('consent_accept'); ?>" style="font-weight: bold;" />
+    </form>
+    &nbsp;&nbsp;
+    <form method="post" action="<?= $action ?>" style="float: left; margin-left: 2em">
+        <input type="hidden" name="ID" value="<?= $ID ?>" />
+        <input type="submit" value="<?php echo $this->t('consent_decline'); ?>" />
+    </form>
+</div>

@@ -23,55 +23,37 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey-narrow');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - ' .$this->t('error_session_lost');
+$layout->header = $layout->title;
+$layout->subheader = $this->t('error_session_lost');
+$layout->footerText = $this->t('footer');
+
 ?>
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>SURFnet Collaboration Infrastructure EngineBlock - Error!</title>
-
-        <link rel="stylesheet" href="/css/reset.css">
-        <link rel="stylesheet" href="/css/default.css">
-        <link rel="stylesheet" href="/css/error.css">
-    </head>
-    <body>
-        <div id="PageContainer">
-
-                    <div id="PortalErrorMessage">
-                        <div class="branding-header">
-                            <img src="/media/logo-surfnet-small.png" alt="SURFnet" />
-                        </div>
-
-                        <h1>Whoops, your session was lost..</h1>
-
-                        <p>
-                            Somewhere along the way, your session with us was lost. <br />
-                            Maybe you have cookies disabled? <br />
-                            Please go back and try again.
-                            <br /><br />
-                        </p>
-
-                        <p>
-                            If this does not solve your problem, visit
-                            <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the support page</a>.
-                            Here you can find more information about possible causes
-                            and how you can contact the support team.
-                        </p>
-
-                        <div class="button-row">
-                            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-                                Go back
-                                <span class="btn-wrap-right">&nbsp;</span>
-                            </a>
-                        </div>
-                    </div>
-
-                        <?php if ($exception) { ?>
-        <pre>
-            <?php var_dump($exception); ?>
-        </pre>
-
-        <?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-        <? } ?>
+<div class="error-wrapper">
+    <div class="error-icon"></div>
+    <div class="error-text">
+        <?= $this->t('error_session_lost_desc'); ?>
+        <?= $this->t('error_help_desc'); ?>
+        <div class="button-row">
+            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
+            <?= $this->t('go_back'); ?>
+            <span class="btn-wrap-right">&nbsp;</span>
+            </a>
         </div>
-    </body>
-</html>
+    </div>
+</div>
+
+<?php if ($exception) { ?>
+<pre>
+    <?php var_dump($exception); ?>
+</pre>
+
+<?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
+<? } ?>

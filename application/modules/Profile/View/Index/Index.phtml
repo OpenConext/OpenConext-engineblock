@@ -19,151 +19,128 @@ if (!isset($aggregator)) {
 if (!isset($metadata)) {
     throw new EngineBlock_Exception("Missing required parameter for view /profile/index: metadata");
 }
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// The current language
+$lang = $this->language();
+
+$layout->header = $this->t('profile_header');
+$layout->subheader = $this->t('profile_sub_header');
+$layout->title = $layout->title . ' - ' . $layout->subheader;
+$layout->footerText = $this->t('footer');
+
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>SURFconext - My Profile</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="robots" content="noindex, nofollow"/>
-        <link href="/css/screen.css" rel="stylesheet" type="text/css" />
-        <!--[if lt IE 8 ]>
-        <link href="/css/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
-        <![endif]-->
-    </head>
-    <body>
-        <div class="wrapper">
-            <div class="header">
-                <b>
-                    <font size="4">SURFconext</font>
-                </b>
-                <span class="logo">
-                    <img src="/media/surfconext.png" alt="SURFconext" />
-                </span>
-            </div>
-            <div class="main">
-                <ul class="nav">
-                    <li class="active"><a href="#">EN</a></li>
+<div>
+    <p>
+        <?php echo $this->t('profile_store_info'); ?>
+    </p>
+    <br />
+
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo $this->t('attribute'); ?></th>
+                <th><?php echo $this->t('value'); ?></th>
+            </tr>
+        </thead>
+    <?php foreach ($attributes as $attributeId => $attributeValues) { ?>
+        <tr>
+            <td style="font-weight: bold;">
+                <?=$metadata->getName($attributeId, $lang)?>
+            </td>
+            <td>
+                <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?=$attributeValues[0];?>
+                <? } /** Multiple attribute values */ else { ?>
+                <ul>
+                <?php foreach ($attributeValues as $value) { ?>
+                    <li><?=$value?></li>
+                <?php } ?>
                 </ul>
-                <h1><?php echo $this->translate('my_profile_header'); ?></h1>
-                <div>
-                    <p>
-                        The following profile data have been provided by your home institution.
-                        These data as well as your group membership data (e.g.SURFteams)
-                        will be stored in SURFconext and shared with services accessed via SURFconext.
-                    </p>
-                    <br />
+                <? } ?>
+            </td>
+        </tr>
+    <? } ?>
+    </table>
 
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Attribute</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                    <?php foreach ($attributes as $attributeId => $attributeValues) { ?>
-                        <tr>
-                            <td style="font-weight: bold;">
-                                <?=$metadata->getName($attributeId, 'en_US')?>
-                            </td>
-                            <td>
-                                <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                                <?=$attributeValues[0];?>
-                                <? } /** Multiple attribute values */ else { ?>
-                                <ul>
-                                <?php foreach ($attributeValues as $value) { ?>
-                                    <li><?=$value?></li>
-                                <?php } ?>
-                                </ul>
-                                <? } ?>
-                            </td>
-                        </tr>
-                    <? } ?>
-                    </table>
+    <hr />
+    <h2><?php echo $this->t('profile_header_my_groups'); ?></h2>
+    <p>
+        <?php echo $this->t('profile_group_membership_desc'); ?> Your membership to various groups for various providers.
+    </p>
 
-                    <hr />
-                    <h2>My Groups</h2>
-                    <p>
-                        Your membership to various groups for various providers.
-                    </p>
+    <?php
 
-                    <?php
+    $invalidProviders = $aggregator->getInvalidProviders();
+    foreach ($aggregator->getProviders() as $groupProvider):?>
+    <h3><?php echo $groupProvider->getDisplayName(); ?></h3>
+    <?php
+        $groups = array();
+        try{
+            $groups = $groupProvider->getGroups();
+        } catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
+            $invalidProviders[] = $groupProvider;
+        }
+        catch(Exception $e) {
+            ebLog()->err($e->getMessage());
+        }
+        if (!empty($groups)):
+    ?>
+    <ul>
+        <?php foreach ($groups as $group): ?>
+        <li><?php echo $group->title; ?></li>
+        <?php endforeach; ?>
+    </ul>
+    <?php else: ?>
+        <p><?php echo $this->t('profile_no_groups'); ?></p>
+    <?php endif; ?>
+    <br />
+    <?php endforeach; ?>
 
-                    $invalidProviders = $aggregator->getInvalidProviders();
-                    foreach ($aggregator->getProviders() as $groupProvider):?>
-                    <h3><?php echo $groupProvider->getDisplayName(); ?></h3>
-                    <?php
-                        $groups = array();
-                        try{
-                            $groups = $groupProvider->getGroups();
-                        } catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
-                            $invalidProviders[] = $groupProvider;
-                        }
-                        catch(Exception $e) {
-                            ebLog()->err($e->getMessage());
-                        }
-                        if (!empty($groups)):
-                    ?>
-                    <ul>
-                        <?php foreach ($groups as $group): ?>
-                        <li><?php echo $group->title; ?></li>
-                        <?php endforeach; ?>
-                    </ul>
-                    <?php else: ?>
-                        <p>No groups</p>
-                    <?php endif; ?>
-                    <br />
-                    <?php endforeach; ?>
+    <?php
+        foreach ($invalidProviders as $groupProvider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $groupProvider
+             */
 
-                    <?php
-                        foreach ($invalidProviders as $groupProvider) {
-                            /**
-                             * @var EngineBlock_Group_Provider_Interface $groupProvider
-                             */
+            // Remove the precondition that this provider needs an access token
+            $groupProvider->removePreconditionByClassName(
+                'EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists'
+            );
 
-                            // Remove the precondition that this provider needs an access token
-                            $groupProvider->removePreconditionByClassName(
-                                'EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists'
-                            );
+            // Then if it matches all other preconditions
+            // (like 'user should belong to a specific schacHomeOrganization')
+            // add it as an OAuth group Provider
 
-                            // Then if it matches all other preconditions
-                            // (like 'user should belong to a specific schacHomeOrganization')
-                            // add it as an OAuth group Provider
+            if ($groupProvider->validatePreconditions()) {
+                $oauthGroupProviders[] = $groupProvider;
+            }
+        }
+    ?>
+    <?php if (!empty($oauthGroupProviders)): ?>
+    <h3><?php echo $this->t('profile_header_auth_needed'); ?></h3>
+    <p><?php echo $this->t('profile_extra_groups_desc'); ?></p>
+    <ul>
+    <? foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
+        <li>
+            <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId();
+                ?>?return_url=/">
+                <?php echo $oauthGroupProvider->getDisplayName(); ?>
+            </a>
+        </li>
+    <?php endforeach;?>
+    </ul>
+    <?php endif; ?>
 
-                            if ($groupProvider->validatePreconditions()) {
-                                $oauthGroupProviders[] = $groupProvider;
-                            }
-                        }
-                    ?>
-                    <?php if (!empty($oauthGroupProviders)): ?>
-                    <h3>Authentication required</h3>
-                    <p>In order to get extra groups you need to authorize their use.</p>
-                    <ul>
-                    <? foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
-                        <li>
-                            <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId();
-                                ?>?return_url=/">
-                                <?php echo $oauthGroupProvider->getDisplayName(); ?>
-                            </a>
-                        </li>
-                    <?php endforeach;?>
-                    </ul>
-                    <?php endif; ?>
-
-                    <hr />
-                    <h2>Leave SURFconext</h2>
-                    <p>
-                        If you want to leave SURFconext and delete all the information that is stored about you, please click the link below. Please note that you are also logged out.<br />
-                        <a href="/profile/delete-user">Delete my information!</a>
-                    </p>
-                </div>
-                <div class="bottom">
-                    <hr />
-                    <p>This service is made possible by <a href='http://www.surfnet.nl/'>SURFnet</a>.</p>
-                </div>
-            </div>
-        </div>
-        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
-        <script type="text/javascript" src="/javascript/screen.js"></script>
-    </body>
-</html>
+    <hr />
+    <h2><?php echo $this->t('profile_header_leave_surfconext'); ?></h2>
+    <p>
+        <?php echo $this->t('profile_leave_surfconext_desc'); ?><br />
+        <a href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
+</p>
+</div>

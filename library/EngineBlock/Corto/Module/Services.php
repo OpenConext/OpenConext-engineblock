@@ -163,6 +163,48 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $this->_server->sendOutput($xml);
     }
 
+    /**
+     * Ask the user for consent over all of the attributes being sent to the SP.
+     *
+     * Note this is part 1/2 of the Corto Consent Internal Response Processing service.
+     *
+     * @return void
+     */
+    public function provideConsentService()
+    {
+        $response = $this->_server->getBindingsModule()->receiveResponse();
+        $_SESSION['consent'][$response['_ID']]['response'] = $response;
+
+        $attributes = Corto_XmlToArray::attributes2array(
+                $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
+        );
+        $serviceProviderEntityId = $attributes['ServiceProvider'][0];
+        unset($attributes['ServiceProvider']);
+
+        $priorConsent = $this->_hasStoredConsent($serviceProviderEntityId, $response, $attributes);
+        if ($priorConsent) {
+            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
+
+            $response['_Destination'] = $response['__']['Return'];
+            $response['__']['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
+
+            return $this->_server->getBindingsModule()->send(
+                $response,
+                $this->_server->getRemoteEntity($serviceProviderEntityId)
+            );
+        }
+
+        $html = $this->_server->renderTemplate(
+                'consent',
+                array(
+                    'action'        => $this->_server->getCurrentEntityUrl('processConsentService'),
+                    'ID'            => $response['_ID'],
+                    'attributes'    => $attributes,
+                    'sp'            => $this->_server->getRemoteEntity($serviceProviderEntityId),
+        ));
+        $this->_server->sendOutput($html);
+    }
+
     protected function _getSpEntityDescriptor($spEntityId)
     {
         $entity = $this->_server->getRemoteEntity($spEntityId);
@@ -245,7 +287,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $wayfIdp = array(
                 'Name_nl' => isset($metadata['Name']['nl']) ? $metadata['Name']['nl'] : 'Geen naam gevonden',
                 'Name_en' => isset($metadata['Name']['en']) ? $metadata['Name']['en'] : 'No Name found',
-                'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL'] : '/media/idp-logo-not-found.png' ,
+                'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL'] : EngineBlock_View::staticUrl(). '/media/idp-logo-not-found.png' ,
                 'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en']) : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
                 'Access' => '1',
                 'ID' => md5($idp),

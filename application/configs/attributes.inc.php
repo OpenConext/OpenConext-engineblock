@@ -33,310 +33,310 @@ $attributes = array (
   array (
     'Name' =>
     array (
-      'nl_NL' => 'UID',
-      'en_US' => 'UID',
+      'nl' => 'UID',
+      'en' => 'UID',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'jouw unieke gebruikersnaam binnen jouw instelling',
-      'en_US' => 'your unique username within your organization',
+      'nl' => 'jouw unieke gebruikersnaam binnen jouw instelling',
+      'en' => 'your unique username within your organization',
     ),
   ),
   'urn:mace:dir:attribute-def:sn' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Achternaam',
-      'en_US' => 'Surname',
+      'nl' => 'Achternaam',
+      'en' => 'Surname',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'jouw achternaam',
-      'en_US' => 'your surname',
+      'nl' => 'jouw achternaam',
+      'en' => 'your surname',
     ),
   ),
   'urn:mace:dir:attribute-def:givenName' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Voornaam',
-      'en_US' => 'Name',
+      'nl' => 'Voornaam',
+      'en' => 'Name',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'voornaam/roepnaam',
-      'en_US' => 'your name',
+      'nl' => 'voornaam/roepnaam',
+      'en' => 'your name',
     ),
   ),
   'urn:mace:dir:attribute-def:cn' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Volledige persoonsnaam',
-      'en_US' => 'Full Name',
+      'nl' => 'Volledige persoonsnaam',
+      'en' => 'Full Name',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'volledige persoonsnaam',
-      'en_US' => 'your full name',
+      'nl' => 'volledige persoonsnaam',
+      'en' => 'your full name',
     ),
   ),
   'urn:mace:dir:attribute-def:displayName' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Weergavenaam',
-      'en_US' => 'Display Name',
+      'nl' => 'Weergavenaam',
+      'en' => 'Display Name',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'weergave naam zoals getoond in applicaties',
-      'en_US' => 'display name as shown in applications',
+      'nl' => 'weergave naam zoals getoond in applicaties',
+      'en' => 'display name as shown in applications',
     ),
   ),
   'urn:mace:dir:attribute-def:mail' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'E-mailadres',
-      'en_US' => 'E-mailaddress',
+      'nl' => 'E-mailadres',
+      'en' => 'E-mailaddress',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'jouw e-mailadres zoals bekend binnen jouw instelling',
-      'en_US' => 'your e-mailaddress as known within your organization',
+      'nl' => 'jouw e-mailadres zoals bekend binnen jouw instelling',
+      'en' => 'your e-mailaddress as known within your organization',
     ),
   ),
   'urn:mace:dir:attribute-def:eduPersonAffiliation' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Relatie',
-      'en_US' => 'Relation',
+      'nl' => 'Relatie',
+      'en' => 'Relation',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'geeft de relatie aan tussen jou en jouw instelling',
-      'en_US' => 'relation between your and your organization',
+      'nl' => 'geeft de relatie aan tussen jou en jouw instelling',
+      'en' => 'relation between your and your organization',
     ),
   ),
   'urn:mace:dir:attribute-def:eduPersonEntitlement' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Rechtaanduiding',
-      'en_US' => 'Entitlement',
+      'nl' => 'Rechtaanduiding',
+      'en' => 'Entitlement',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'rechtaanduiding; URI (URL of URN) dat een recht op iets aangeeft; wordt bepaald door een contract tussen dienstaanbieder en instelling',
-      'en_US' => 'entitlement which decides upon your authorization within the application',
+      'nl' => 'rechtaanduiding; URI (URL of URN) dat een recht op iets aangeeft; wordt bepaald door een contract tussen dienstaanbieder en instelling',
+      'en' => 'entitlement which decides upon your authorization within the application',
     ),
   ),
   'urn:mace:dir:attribute-def:eduPersonPrincipalName' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Net-ID',
-      'en_US' => 'Net-ID',
+      'nl' => 'Net-ID',
+      'en' => 'Net-ID',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'jouw unieke gebruikersnaam binnen jouw instelling aangevuld met "@instellingsnaam.nl"',
-      'en_US' => 'your unique username within your organization augmented with "@organizationname.nl"',
+      'nl' => 'jouw unieke gebruikersnaam binnen jouw instelling aangevuld met "@instellingsnaam.nl"',
+      'en' => 'your unique username within your organization augmented with "@organizationname.nl"',
     ),
   ),
   'urn:mace:dir:attribute-def:preferredLanguage' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Voorkeurstaal',
-      'en_US' => 'Preferred Language',
+      'nl' => 'Voorkeurstaal',
+      'en' => 'Preferred Language',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'een tweeletterige afkorting van de voorkeurstaal volgens de ISO 639 taalafkortings codetabel; geen subcodes',
-      'en_US' => 'a two letter abbreviation according to ISO 639; no subcodes',
+      'nl' => 'een tweeletterige afkorting van de voorkeurstaal volgens de ISO 639 taalafkortings codetabel; geen subcodes',
+      'en' => 'a two letter abbreviation according to ISO 639; no subcodes',
     ),
   ),
   'urn:mace:terena.org:attribute-def:schacHomeOrganization' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Organisatie',
-      'en_US' => 'Organization',
+      'nl' => 'Organisatie',
+      'en' => 'Organization',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'aanduiding voor de organisatie van een persoon gebruikmakend van de domeinnaam van de organisatie; syntax conform RFC 1035',
-      'en_US' => 'name for the organization, making use of the domain name of the  organization conform RFC 1035',
+      'nl' => 'aanduiding voor de organisatie van een persoon gebruikmakend van de domeinnaam van de organisatie; syntax conform RFC 1035',
+      'en' => 'name for the organization, making use of the domain name of the  organization conform RFC 1035',
     ),
   ),
   'urn:mace:terena.org:attribute-def:schacHomeOrganizationType' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Type Organisatie',
-      'en_US' => 'Type of Organization',
+      'nl' => 'Type Organisatie',
+      'en' => 'Type of Organization',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'aanduiding voor het type organisatie waartoe een persoon behoort, gebruikmakend van de waarden zoals geregisteerd door Terena op: http://www.terena.org/registry/terena.org/schac/homeOrganizationType',
-      'en_US' => 'type of organization to which the user belongs',
+      'nl' => 'aanduiding voor het type organisatie waartoe een persoon behoort, gebruikmakend van de waarden zoals geregisteerd door Terena op: http://www.terena.org/registry/terena.org/schac/homeOrganizationType',
+      'en' => 'type of organization to which the user belongs',
     ),
   ),
   'urn:mace:surffederatie.nl:attribute-def:nlEduPersonHomeOrganization' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Weergavenaam van de Instelling',
-      'en_US' => 'Display name of Organization',
+      'nl' => 'Weergavenaam van de Instelling',
+      'en' => 'Display name of Organization',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'weergavenaam van de instelling',
-      'en_US' => 'display name of the organization',
+      'nl' => 'weergavenaam van de instelling',
+      'en' => 'display name of the organization',
     ),
   ),
   'urn:mace:surffederatie.nl:attribute-def:nlEduPersonOrgUnit' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Afdelingsnaam',
-      'en_US' => 'Unitname',
+      'nl' => 'Afdelingsnaam',
+      'en' => 'Unitname',
     ),
     'Description' =>
     array (
-      'nl_NL' => ' naam van de afdeling',
-      'en_US' => 'unit name',
+      'nl' => ' naam van de afdeling',
+      'en' => 'unit name',
     ),
   ),
   'urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Opleiding',
-      'en_US' => 'Study Branch',
+      'nl' => 'Opleiding',
+      'en' => 'Study Branch',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft',
-      'en_US' => 'study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown',
+      'nl' => 'opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft',
+      'en' => 'study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown',
     ),
   ),
   'urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Studielinknummer',
-      'en_US' => 'Studielinknummer',
+      'nl' => 'Studielinknummer',
+      'en' => 'Studielinknummer',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'studielinknummer van student zoals geregistreerd bij www.studielink.nl',
-      'en_US' => 'studielinknummer of the student as registered at www.studielink.nl',
+      'nl' => 'studielinknummer van student zoals geregistreerd bij www.studielink.nl',
+      'en' => 'studielinknummer of the student as registered at www.studielink.nl',
     ),
   ),
   'urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'DAI',
-      'en_US' => 'DAI',
+      'nl' => 'DAI',
+      'en' => 'DAI',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'Digital Author Identifier (DAI) zoals beschreven op: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
-      'en_US' => 'Digital Author Identifier (DAI) as described at: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
+      'nl' => 'Digital Author Identifier (DAI) zoals beschreven op: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
+      'en' => 'Digital Author Identifier (DAI) as described at: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
     ),
   ),
   'urn:mace:surffederatie_nl:attribute-def:nlEduPersonHomeOrganization' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Weergavenaam van de Instelling',
-      'en_US' => 'Display name of Organization',
+      'nl' => 'Weergavenaam van de Instelling',
+      'en' => 'Display name of Organization',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'weergavenaam van de instelling',
-      'en_US' => 'display name of the organization',
+      'nl' => 'weergavenaam van de instelling',
+      'en' => 'display name of the organization',
     ),
   ),
   'urn:mace:surffederatie_nl:attribute-def:nlEduPersonOrgUnit' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Afdelingsnaam',
-      'en_US' => 'Unitname',
+      'nl' => 'Afdelingsnaam',
+      'en' => 'Unitname',
     ),
     'Description' =>
     array (
-      'nl_NL' => ' naam van de afdeling',
-      'en_US' => 'unit name',
+      'nl' => ' naam van de afdeling',
+      'en' => 'unit name',
     ),
   ),
   'urn:mace:surffederatie_nl:attribute-def:nlEduPersonStudyBranch' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Opleiding',
-      'en_US' => 'Study Branch',
+      'nl' => 'Opleiding',
+      'en' => 'Study Branch',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft',
-      'en_US' => 'study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown',
+      'nl' => 'opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft',
+      'en' => 'study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown',
     ),
   ),
   'urn:mace:surffederatie_nl:attribute-def:nlStudielinkNummer' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'Studielinknummer',
-      'en_US' => 'Studielinknummer',
+      'nl' => 'Studielinknummer',
+      'en' => 'Studielinknummer',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'studielinknummer van student zoals geregistreerd bij www.studielink.nl',
-      'en_US' => 'studielinknummer of the student as registered at www.studielink.nl',
+      'nl' => 'studielinknummer van student zoals geregistreerd bij www.studielink.nl',
+      'en' => 'studielinknummer of the student as registered at www.studielink.nl',
     ),
   ),
   'urn:mace:surffederatie_nl:attribute-def:nlDigitalAuthorIdentifier' =>
   array (
     'Name' =>
     array (
-      'nl_NL' => 'DAI',
-      'en_US' => 'DAI',
+      'nl' => 'DAI',
+      'en' => 'DAI',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'Digital Author Identifier (DAI) zoals beschreven op: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
-      'en_US' => 'Digital Author Identifier (DAI) as described at: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
+      'nl' => 'Digital Author Identifier (DAI) zoals beschreven op: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
+      'en' => 'Digital Author Identifier (DAI) as described at: http://www.surffoundation.nl/smartsite.dws?ch=eng&id=13480',
     ),
   ),
   'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1' => array( // surfPersonAffiliation
     'Name' =>
     array (
-      'nl_NL' => 'Accountstatus',
-      'en_US' => 'Accountstatus',
+      'nl' => 'Accountstatus',
+      'en' => 'Accountstatus',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'Status van deze account in de SURFfederatie',
-      'en_US' => 'Status of this account in the SURFfederation',
+      'nl' => 'Status van deze account in de SURFfederatie',
+      'en' => 'Status of this account in the SURFfederation',
     ),
   ),
   'nameid' => array( // federative identifier
     'Name' =>
     array (
-      'nl_NL' => 'Federatieve Identifier',
-      'en_US' => 'Federative Identifier',
+      'nl' => 'Federatieve Identifier',
+      'en' => 'Federative Identifier',
     ),
     'Description' =>
     array (
-      'nl_NL' => 'Status van deze account in de SURFfederatie',
-      'en_US' => 'Status of this account in the SURFfederation',
+      'nl' => 'Status van deze account in de SURFfederatie',
+      'en' => 'Status of this account in the SURFfederation',
     ),
   ),
 );

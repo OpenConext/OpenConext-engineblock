@@ -32,22 +32,40 @@ if (!isset($name)) {
 if (!isset($message)) {
     throw new EngineBlock_Exception('No message given to HTTP Post screen');
 }
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('form');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - '. $this->t('post_data');
+$layout->header = $layout->title;
+$layout->subheader = $this->t('post_data');
+$layout->footerText = $this->t('footer');
+
+if (!$trace) {
+    $layout->getView()->inlineScript()->appendScript("
+    $(document).ready(function() {
+        $('#ProcessForm').submit();
+    });");
+}
+
+$layout->getView()->inlineScript()->appendScript("
+$(document).ready(function() {
+    $('#submitbutton').focus();
+});");
+
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>POST data</title>
-    </head>
-    <body <? if (!$trace): ?>onload="document.forms[0].submit()"<? endif; ?>>
         <noscript>
             <p>
-                <strong>Note:</strong>
-                Since your browser does not support JavaScript, you must press the button below once to proceed.
+                <strong><?php echo $this->t('note'); ?>:</strong>
+                    <?php echo $this->t('note_no_script'); ?>
             </p>
         </noscript>
-        <p>Processing... please wait (may take up to 30 seconds)</p>
-        <form method="post" action=" <?= $action ?>">
+        <p><?php echo $this->t('processing'); ?></p>
+        <form id="ProcessForm" method="post" action=" <?= $action ?>">
             <input type="hidden" name="<?= $name ?>" value="<?= $message ?>" />
 
             <?= $xtra ?>
@@ -56,14 +74,11 @@ if (!isset($message)) {
 
             <? if ($trace): ?>
             <input id="submitbutton" type="submit" value="Submit" />
-            <pre>
-                <?= $trace ?>
-            </pre>
-            <script type="text/javascript">
-                document.getElementById('submitbutton').focus();
-            </script>
+            <div class="trace-wrapper">
+                <pre>
+                    <?= $trace ?>
+                </pre>
+            </div>
             <? endif; ?>
 
         </form>
-    </body>
-</html>

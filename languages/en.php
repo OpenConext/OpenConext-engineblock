@@ -7,15 +7,23 @@ return array(
     'back'                  => 'back',
     'attribute'             => 'Attribute',
     'value'                 => 'Value',
+    'post_data'             => 'POST Data',
+    'processing'            => 'Processing... please wait (may take up to 30 seconds)',
+    'note'                  => 'Note',
+    'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below once to proceed.',
+    'go_back'               => '&lt;&lt; Go back',
+    'authentication_urls'   => 'Authentication URLs',
 
-    //Index
-    'search'                => 'or search for a institution',
-    'index_header'          => 'Where would you like to log in?',
-    'index_description'     => 'Select your institution and log in there for <i>%s</i>',
-    'our_suggestion'        => 'Our suggestion:',
-    'no_access'             => 'No access',
-    'no_access_more_info'   => 'No access. &raquo;',
-    'no_results'            => 'No results found',
+    //WAYF
+    'idp_selection_title'       => 'Identity Provider Selection - %s',
+    'idp_selection_subheader'   => 'Where would you like to log in?',
+    'search'                    => 'or search for a institution',
+    'idp_selection_desc'        => 'Select your institution and log in there for <i>%s</i>',
+    'our_suggestion'            => 'Our suggestion:',
+    'no_access'                 => 'No access',
+    'no_access_more_info'       => 'No access. &raquo;',
+    'no_results'                => 'No results found',
+    'error_header'              => 'Error',
 
     //Footer
     'footer'                => 'This service is made possible by <a href="http://www.surfconext.nl/">SURFconext</a> part of SURFnet.',
@@ -89,4 +97,67 @@ If you have any questions about how your personal details will be dealt with wit
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',
     'profile_leave_surfconext_desc'     => 'If you want to leave SURFconext and delete all the information that is stored about you, please click the link below. Please note that you are also logged out.',
     'profile_leave_surfconext_link'     => 'Delete my information!',
+
+    //Delete User
+    'deleteuser_success_header'         => 'Your information has been successfully deleted',
+    'deleteuser_success_subheader'      => 'Bye Bye...',
+    'deleteuser_success_desc'           => 'Your information has been successfully deleted from SURFconext. To complete the process you <strong>MUST</strong>
+    restart your browser. If you don\'t do this, we cannot guarantee that your profile is completely erased from SURFconext.',
+
+    //Consent
+    'consent_header'                    => 'Attribute Release',
+    'consent_subheader'                 => 'Please provide consent for <i>%s</i>',
+    'consent_store_info'                => 'The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.',
+    'consent_terms_of_service'          => '<p>I agree with the release of my profile data.</p>
+        I agree with the SURFnet Terms of Service for the use of SURFconext
+        in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">English</a>
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
+        / in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Dutch</a>
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" /><br />
+        <br />
+        Additional Terms of Services may apply to 3rd party services.',
+    'consent_accept'                    => 'I Accept',
+    'consent_decline'                   => 'I Decline',
+
+    //Error screens
+    'error_help_desc'               => '<p>
+        If this does not solve your problem, visit
+        <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the support page</a>.
+        Here you can find more information about possible causes
+        and how you can contact the support team.
+    </p>',
+    'error_no_consent'              => 'No consent given',
+    'error_no_consent_desc'         => 'No consent given to release your data to the service, unable to proceed.<br /><br /> In order to proceed you need to restart your browser, login again, and provide consent.',
+    'error_no_idps'                 => 'Error - No Identity Providers found',
+    'error_no_idps_desc'            => '<p>
+        The application you came from (your &lsquo;Service Provider&rsquo;) is not allowed to connect with any IdP.
+        Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
+        this service.
+        <br /><br />
+    </p>',
+    'error_session_lost'            => 'Error - your session was lost..',
+    'error_session_lost_desc'       => '<p>
+        Somewhere along the way, your session with us was lost. <br />
+        Maybe you have cookies disabled? <br />
+        Please go back and try again.
+        <br /><br />
+    </p>',
+    'error_message_timeout'         => 'Error - Message time-out..',
+    'error_message_timeout_desc'    => 'We received an out of date message. Please try again.',
+    'error_no_message'              => 'Error - No message received..',
+    'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
+    'error_unknown_issuer'          => 'Error - Unknown issuer..',
+    'error_unknown_issuer_desc'     => '<p>
+        We received a message from someone we don&#39;t know yet..
+        If you are an implementer and want to connect your service with SURFconext,
+        please go to <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the support page</a>
+        and give us your endpoint data.
+        <br /><br />
+    </p>',
+    'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
+    'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation.',
+    'error_generic'                     => 'Error - An error occured..',
+    'error_generic_desc'                => '<p>
+        It is not possible to sign in. Please try again.
+    </p>',
 );

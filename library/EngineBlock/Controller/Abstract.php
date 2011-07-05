@@ -30,6 +30,7 @@ class EngineBlock_Controller_Abstract
     protected $_viewData = array();
     protected $_noRender = false;
     protected $_rendered = false;
+    protected $_view;
 
     public function __construct($moduleName, $controllerName)
     {
@@ -73,7 +74,7 @@ class EngineBlock_Controller_Abstract
 
     public function renderAction($actionName)
     {
-        $output = $this->_getViewRenderer()->setData($this->_viewData)->render(
+        $output = $this->_getView()->setData($this->_viewData)->render(
             $this->_getViewScriptPath($actionName)
         );
 
@@ -124,8 +125,20 @@ class EngineBlock_Controller_Abstract
     
     // DEPENDENCIES
 
-    protected function _getViewRenderer()
+    /**
+     * @return EngineBlock_View
+     */
+    protected function _getView()
     {
-        return new EngineBlock_View();
+        if (!isset($this->_view)) {
+            $this->_view = new EngineBlock_View();
+        }
+        return $this->_view;
+    }
+
+    protected function _setView($view)
+    {
+        $this->_view = $view;
+        return $this;
     }
 }
