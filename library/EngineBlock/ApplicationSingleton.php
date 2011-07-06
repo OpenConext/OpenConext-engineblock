@@ -384,10 +384,11 @@ class EngineBlock_ApplicationSingleton
             $lang = strtolower($cookieLang);
         }
 
-        $cookieDomain = $this->getConfigurationValue('cookie')->lang->domain;
+        $langCookieConfig = $this->getConfigurationValue('cookie')->lang;
+        $cookieDomain = $langCookieConfig->domain;
         $cookieExpiry = null;
-        if (isset($this->getConfigurationValue('cookie')->lang->expiry)) {
-            $cookieExpiry =  time() + $this->getConfigurationValue('cookie')->lang->expiry;
+        if (isset($langCookieConfig->expiry) && $langCookieConfig->expiry > 0) {
+            $cookieExpiry =  time() + $langCookieConfig->expiry;
         }
 
         if ($lang && $translate->getAdapter()->isAvailable($lang)) {
