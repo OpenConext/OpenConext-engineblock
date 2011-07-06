@@ -385,7 +385,10 @@ class EngineBlock_ApplicationSingleton
         }
 
         $cookieDomain = $this->getConfigurationValue('cookie')->lang->domain;
-        $cookieExpiry = strlen($this->getConfigurationValue('cookie')->lang->expiry) > 0 ? time()+$this->getConfigurationValue('cookie')->lang->expiry : null;
+        $cookieExpiry = null;
+        if (isset($this->getConfigurationValue('cookie')->lang->expiry)) {
+            $cookieExpiry =  time() + $this->getConfigurationValue('cookie')->lang->expiry;
+        }
 
         if ($lang && $translate->getAdapter()->isAvailable($lang)) {
             $translate->setLocale($lang);
