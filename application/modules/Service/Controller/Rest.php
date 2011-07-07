@@ -56,7 +56,8 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
                 EngineBlock_ApplicationSingleton::getInstance()->getLog()->warn(
                     "No Entity Id found for gadgetbaseurl '$gadgetUrl'"
                 );
-                echo json_encode(new stdClass());
+                $this->_getResponse()->setHeader('Content-Type', 'application/json');
+                $this->_getResponse()->setBody(json_encode(new stdClass()));
                 return;
             }
 
@@ -73,8 +74,8 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
             $result = $this->_getRegistry()->getMetadata($entityId);
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($result);
+        $this->_getResponse()->setHeader('Content-Type', 'application/json');
+        $this->_getResponse()->setBody(json_encode($result));
     }
 
     /**
@@ -107,8 +108,8 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
             }
         }
 
-        header('Content-Type: application/json');
-        echo json_encode($serviceProviders);
+        $this->_getResponse()->setHeader('Content-Type', 'application/json');
+        $this->_getResponse()->setBody(json_encode($serviceProviders));
     }
 
     /**
