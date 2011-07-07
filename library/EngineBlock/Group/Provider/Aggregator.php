@@ -134,7 +134,8 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
             }
             catch (Exception $e) {
                 $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . print_r($provider, true));
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
             }
         }
         return $groups;
@@ -150,7 +151,8 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
             }
             catch (Exception $e) {
                 $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . print_r($provider, true));
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
             }
         }
         return $members;
@@ -169,7 +171,8 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
             }
             catch (Exception $e) {
                 $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . print_r($provider, true));
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
             }
         }
         // If none of the known providers knows the groupIdentifier or has the current user as a member
