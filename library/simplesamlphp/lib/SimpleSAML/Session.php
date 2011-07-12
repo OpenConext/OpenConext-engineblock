@@ -8,7 +8,7 @@
  * information about all the currently logged in SPs. This is used when the user initiate a 
  * Single-Log-Out.
  *
- * @author Andreas Åkre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
+ * @author Andreas ï¿½kre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
  * @version $Id: Session.php 2636 2010-11-16 14:30:23Z olavmrk $
  */
@@ -498,7 +498,7 @@ class SimpleSAML_Session {
 
 		$this->authToken = SimpleSAML_Utilities::generateID();
 		$sessionHandler = SimpleSAML_SessionHandler::getSessionHandler();
-		$sessionHandler->setCookie('SimpleSAMLAuthToken', $this->authToken);
+		$sessionHandler->setCookie($globalConfig->getString('session.authtoken.cookiename', 'SimpleSAMLAuthToken'), $this->authToken);
 	}
 
 
@@ -993,11 +993,13 @@ class SimpleSAML_Session {
 		}
 
 		if ($checkToken && $session->authToken !== NULL) {
-			if (!isset($_COOKIE['SimpleSAMLAuthToken'])) {
+			$globalConfig = SimpleSAML_Configuration::getInstance();
+			$authTokenCookieName = $globalConfig->getString('session.authtoken.cookiename', 'SimpleSAMLAuthToken');
+			if (!isset($_COOKIE[$authTokenCookieName])) {
 				SimpleSAML_Logger::warning('Missing AuthToken cookie.');
 				return NULL;
 			}
-			if ($_COOKIE['SimpleSAMLAuthToken'] !== $session->authToken) {
+			if ($_COOKIE[$authTokenCookieName] !== $session->authToken) {
 				SimpleSAML_Logger::warning('Invalid AuthToken cookie.');
 				return NULL;
 			}

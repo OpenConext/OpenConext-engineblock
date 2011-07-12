@@ -221,7 +221,12 @@ $config = array (
 	'session.phpsession.cookiename'  => null,
 	'session.phpsession.savepath'    => null,
 	'session.phpsession.httponly'    => TRUE,
-	
+
+	/*
+	 * Option to override the default settings for the auth token cookie
+	 */
+	'session.authtoken.cookiename' => 'EB_SimpleSAMLAuthToken',
+
 	/*
 	 * Languages available and what language is default
 	 */
