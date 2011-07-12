@@ -1,0 +1,48 @@
+Index: config/config.php
+===================================================================
+--- config/config.php	(revision 587)
++++ config/config.php	(revision )
+@@ -204,8 +204,13 @@
+ 	'session.phpsession.cookiename'  => null,
+ 	'session.phpsession.savepath'    => null,
+ 	'session.phpsession.httponly'    => FALSE,
+-	
++
+ 	/*
++	 * Option to override the default settings for the auth token cookie
++	 */
++	'session.authtoken.cookiename' => null,
++
++	/*
+ 	 * Languages available and what language is default
+ 	 */
+ 	'language.available'	=> array('en', 'no', 'nn', 'se', 'da', 'de', 'sv', 'fi', 'es', 'fr', 'it', 'nl', 'lb', 'cs', 'sl', 'lt', 'hr', 'hu', 'pl', 'pt', 'pt-BR', 'tr', 'ja', 'zh-tw'),
+Index: lib/SimpleSAML/Session.php
+===================================================================
+--- lib/SimpleSAML/Session.php	(revision 452)
++++ lib/SimpleSAML/Session.php	(revision )
+@@ -498,7 +498,7 @@
+ 
+ 		$this->authToken = SimpleSAML_Utilities::generateID();
+ 		$sessionHandler = SimpleSAML_SessionHandler::getSessionHandler();
+-		$sessionHandler->setCookie('SimpleSAMLAuthToken', $this->authToken);
++		$sessionHandler->setCookie($globalConfig->getString('session.authtoken.cookiename', 'SimpleSAMLAuthToken'), $this->authToken);
+ 	}
+ 
+ 
+@@ -993,11 +993,13 @@
+ 		}
+ 
+ 		if ($checkToken && $session->authToken !== NULL) {
+-			if (!isset($_COOKIE['SimpleSAMLAuthToken'])) {
++			$globalConfig = SimpleSAML_Configuration::getInstance();
++			$authTokenCookieName = $globalConfig->getString('session.authtoken.cookiename', 'SimpleSAMLAuthToken');
++			if (!isset($_COOKIE[$authTokenCookieName])) {
+ 				SimpleSAML_Logger::warning('Missing AuthToken cookie.');
+ 				return NULL;
+ 			}
+-			if ($_COOKIE['SimpleSAMLAuthToken'] !== $session->authToken) {
++			if ($_COOKIE[$authTokenCookieName] !== $session->authToken) {
+ 				SimpleSAML_Logger::warning('Invalid AuthToken cookie.');
+ 				return NULL;
+ 			}
