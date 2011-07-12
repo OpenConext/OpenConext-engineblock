@@ -208,7 +208,7 @@ $config = array (
 	/*
 	 * Option to override the default settings for the auth token cookie
 	 */
-	'session.authtoken.cookiename' => null,
+	'session.authtoken.cookiename' => 'SR_SimpleSAMLAuthToken',
 
 	/*
 	 * Languages available and what language is default
