@@ -292,3 +292,5 @@ If you are using this pattern, an update can be done with the following:
 4. Run the database migrations script.
 
     cd database && ./update && cd ..
+
+
