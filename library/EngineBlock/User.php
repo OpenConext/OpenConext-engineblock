@@ -74,7 +74,11 @@ class EngineBlock_User
      */
     protected function _deleteLdapUser()
     {
-        $userDirectory = new EngineBlock_UserDirectory();
+        $ldapConfig = EngineBlock_ApplicationSingleton::getInstance()
+                                                      ->getConfiguration()
+                                                      ->ldap;
+
+        $userDirectory = new EngineBlock_UserDirectory($ldapConfig);
         $userDirectory->deleteUser($this->getUid());
     }
 

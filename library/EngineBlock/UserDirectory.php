@@ -54,10 +54,9 @@ class EngineBlock_UserDirectory
 
     protected $_ldapConfig = NULL;
 
-    public function __construct()
+    public function __construct($ldapConfig)
     {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $this->_ldapConfig = $application->getConfiguration()->ldap;
+        $this->_ldapConfig = $ldapConfig;
     }
 
     public function findUsersByIdentifier($identifier, $ldapAttributes = array())

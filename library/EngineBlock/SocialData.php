@@ -162,7 +162,10 @@ class EngineBlock_SocialData
     protected function _getUserDirectory()
     {
         if ($this->_userDirectory == NULL) {
-            $this->_userDirectory = new EngineBlock_UserDirectory();
+            $ldapConfig = EngineBlock_ApplicationSingleton::getInstance()
+                                                          ->getConfiguration()
+                                                          ->ldap;
+            $this->_userDirectory = new EngineBlock_UserDirectory($config);
         }
         return $this->_userDirectory;
     }
