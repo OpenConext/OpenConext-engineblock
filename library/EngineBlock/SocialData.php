@@ -165,7 +165,7 @@ class EngineBlock_SocialData
             $ldapConfig = EngineBlock_ApplicationSingleton::getInstance()
                                                           ->getConfiguration()
                                                           ->ldap;
-            $this->_userDirectory = new EngineBlock_UserDirectory($config);
+            $this->_userDirectory = new EngineBlock_UserDirectory($ldapConfig);
         }
         return $this->_userDirectory;
     }
