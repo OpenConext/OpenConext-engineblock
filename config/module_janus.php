@@ -623,41 +623,41 @@ $config = array(
             'default' => false,
             'required' => FALSE,
         ),
-		'coin:is_provision_sp' => array(
-			'type' => 'boolean',
+        'coin:is_provision_sp' => array(
+            'type' => 'boolean',
             'order' => 201,
             'default' => false,
             'required' => false,
-		),
-		'coin:provision_domain' => array(
-			'type' => 'text',
+        ),
+        'coin:provision_domain' => array(
+            'type' => 'text',
             'order' => 202,
             'default' => 'description',
             'default_allow' => false,
             'required' => false,
-		),
-		'coin:provision_admin' => array(
-			'type' => 'text',
+        ),
+        'coin:provision_admin' => array(
+            'type' => 'text',
             'order' => 203,
             'default' => 'description',
             'default_allow' => false,
             'required' => false,
-		),
-		'coin:provision_password' => array(
-			'type' => 'text',
+        ),
+        'coin:provision_password' => array(
+            'type' => 'text',
             'order' => 204,
             'default' => 'description',
             'default_allow' => false,
             'required' => false,
-		),
-		'coin:provision_type' => array(
-			'type' => 'text',
+        ),
+        'coin:provision_type' => array(
+            'type' => 'text',
             'order' => 205,
-			'select_values' => array("none", "google"),
+            'select_values' => array("none", "google"),
             'default' => 'google',
             'default_allow' => false,
             'required' => false,
-		),
+        ),
         // Certificate fields
         'certData' => array(
             'type' => 'text',
