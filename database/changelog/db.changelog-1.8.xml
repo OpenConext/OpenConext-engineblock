@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd?">
+    <changeSet author="patrick@ibuildings.nl" id="1.8">
+        <createTable tableName="virtual_organisation">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id" tableName="virtual_organisation"/>
+        <createTable tableName="virtual_organisation_group">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_stem" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id,group_id" tableName="virtual_organisation_group"/>
+    </changeSet>
+</databaseChangeLog>
