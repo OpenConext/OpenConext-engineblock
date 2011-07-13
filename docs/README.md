@@ -289,8 +289,11 @@ If you are using this pattern, an update can be done with the following:
 
 3. Change the symlink.
 
-4. Run the database migrations script.
+4. Install & Run the database migrations script.
 
+    EngineBlock uses a Java tool called 'LiquiBase' for updating the database, however this tool requires the JDBC
+    driver to talk to MySQL, and as this is GPL, it has to be downloaded separately.
+
+
+    cd database && ./install_jdbc_driver.sh && cd ..
     cd database && ./update && cd ..
-
-
