@@ -70,7 +70,6 @@
             <antcall target="pdepend" />
         </parallel>
     </target>
-
  
     <target name="build" depends="clean,prepare,phpcpd,phpunit,phpcs,phpcb" />
 </project>
