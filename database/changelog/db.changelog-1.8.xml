@@ -23,4 +23,15 @@
         </createTable>
         <addPrimaryKey columnNames="vo_id,group_id" tableName="virtual_organisation_group"/>
     </changeSet>
+    <changeSet id="1.8.1" author="patrick@ibuildings.nl">
+        <createTable tableName="virtual_organisation_idp">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idp_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id,idp_id" tableName="virtual_organisation_idp"/>
+    </changeSet>
 </databaseChangeLog>
