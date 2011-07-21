@@ -437,18 +437,8 @@ class EngineBlock_Corto_Adapter
      */
     protected function _validateVOMembership($subjectIdentifier, $voIdentifier)
     {
-        $voClient = new EngineBlock_VORegistry_Client();
-        $metadata = $voClient->getGroupProviderMetadata($voIdentifier);
-
-        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor(
-            $subjectIdentifier
-        );
-
-        if (isset($metadata["groupstem"])) {
-            $groupProvider->setGroupStem($metadata["groupstem"]);
-        }
-
-        return $groupProvider->isMember($metadata["groupidentifier"]);
+        $validator = new EngineBlock_VirtualOrganization_Validator();
+        return $validator->isMember($voIdentifier, $subjectIdentifier);
     }
 
     /**
