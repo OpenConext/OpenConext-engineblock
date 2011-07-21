@@ -377,7 +377,7 @@ class EngineBlock_Corto_Adapter
             '__v'              => $subjectId
         );
 
-        $this->_handleVirtualOrganizationResponse($request, $subjectId);
+        $this->_handleVirtualOrganizationResponse($request, $subjectId, $idpEntityMetadata["EntityId"]);
 
         $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
     }
@@ -403,7 +403,7 @@ class EngineBlock_Corto_Adapter
         return $this->_getProvisioning()->provisionUser($attributes, $spEntityMetadata, $idpEntityMetadata);
     }
 
-    protected function _handleVirtualOrganizationResponse($request, $subjectId)
+    protected function _handleVirtualOrganizationResponse($request, $subjectId, $idpEntityId)
     {
         // Determine a Virtual Organization context
         $vo = NULL;
@@ -416,7 +416,7 @@ class EngineBlock_Corto_Adapter
 
         // If in VO context, validate the user's membership
         if (!is_null($vo)) {
-            if (!$this->_validateVOMembership($subjectId, $vo)) {
+            if (!$this->_validateVOMembership($subjectId, $vo, $idpEntityId)) {
                 throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");
             }
         }
@@ -435,10 +435,10 @@ class EngineBlock_Corto_Adapter
      * @param  $voIdentifier
      * @return boolean
      */
-    protected function _validateVOMembership($subjectIdentifier, $voIdentifier)
+    protected function _validateVOMembership($subjectIdentifier, $voIdentifier, $idpEntityId)
     {
         $validator = new EngineBlock_VirtualOrganization_Validator();
-        return $validator->isMember($voIdentifier, $subjectIdentifier);
+        return $validator->isMember($voIdentifier, $subjectIdentifier, $idpEntityId);
     }
 
     /**

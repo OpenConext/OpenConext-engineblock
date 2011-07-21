@@ -76,7 +76,15 @@ class EngineBlock_VirtualOrganization
              WHERE voi.vo_id = ?"
         );
         $stmt->execute(array($this->_id));
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $idpRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $idps = array();
+        foreach ($idpRecords as $idpRecord) {
+            $idp = new EngineBlock_VirtualOrganization_Idp();
+            $idp->entityId = $idpRecord['idp_id'];
+            $idps[] = $idp;
+        }
+        return $idps;
     }
 
     protected function _load()

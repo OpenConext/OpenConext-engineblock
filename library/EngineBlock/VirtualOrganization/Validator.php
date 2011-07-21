@@ -25,12 +25,24 @@
 
 class EngineBlock_VirtualOrganization_Validator
 {
-    public function isMember($voId, $subjectId)
+    public function isMember($voId, $subjectId, $idp)
+    {
+        $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
+        if ($this->_isMemberOfGroups($virtualOrganization, $subjectId)) {
+            return true;
+        }
+        if ($this->_isMemberOfIdps($virtualOrganization, $idp)) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function _isMemberOfGroups(EngineBlock_VirtualOrganization $virtualOrganization, $subjectId)
     {
         $groupProvider = $this->_getGroupProvider($subjectId);
 
         try {
-            $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
+
             $groups = $virtualOrganization->getGroups();
 
             foreach ($groups as $group) {
@@ -42,7 +54,20 @@ class EngineBlock_VirtualOrganization_Validator
         } catch (EngineBlock_VirtualOrganization_VoIdentifierNotFoundException $e) {
             ebLog()->warn($e->getMessage());
         }
+        return false;
+    }
 
+    protected function _isMemberOfIdps(EngineBlock_VirtualOrganization $virtualOrganization, $idp)
+    {
+        $voIdps = $virtualOrganization->getIdps();
+        foreach ($voIdps as $voIdp) {
+            /**
+             * @var EngineBlock_VirtualOrganization_Idp $idp
+             */
+            if ($voIdp === $idp) {
+                return true;
+            }
+        }
         return false;
     }
 
