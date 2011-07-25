@@ -75,9 +75,8 @@ class EngineBlock_Corto_Adapter
         if ($hostedEntity == NULL) {
             $hostedEntity = self::DEFAULT_HOSTED_ENTITY;
         }
-        
+
         $this->_hostedEntity = $hostedEntity;
-        
     }
 
     /**
@@ -294,6 +293,9 @@ class EngineBlock_Corto_Adapter
                 )
             ));
         }
+
+        // This sets the time (in seconds) the entity metadata is valid.
+        $proxyServer->setCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400);
     }
 
     protected function _getSystemLog()

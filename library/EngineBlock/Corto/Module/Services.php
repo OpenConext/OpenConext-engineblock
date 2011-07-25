@@ -39,7 +39,8 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             if (!isset($entity['SingleSignOnService'])) continue;
 
             $entityDescriptor = array(
-                '_validUntil' => $this->_server->timeStamp(strtotime('tomorrow') - time()),
+                '_validUntil' => $this->_server->timeStamp(
+                    $this->_server->getCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400)),
                 '_entityID'   => $entityID,
                 'md:IDPSSODescriptor' => array(
                     '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
@@ -132,7 +133,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 '_Binding'  => self::DEFAULT_REQUEST_BINDING,
                 '_Location' => $this->_server->getCurrentEntityUrl('singleSignOnService', $entityID),
             );
-            
+
             $entitiesDescriptor['md:EntityDescriptor'][] = $entityDescriptor;
         }
 
@@ -223,7 +224,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
             ),
         );
-        
+
         if (isset($entity['certificates']['public'])) {
             $entityDescriptor['md:SPSSODescriptor']['md:KeyDescriptor'] = array(
                 array(
