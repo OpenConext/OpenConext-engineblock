@@ -16,52 +16,52 @@ return array(
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selectie - %s',
-    'idp_selection_subheader'   => 'Waar wil je inloggen?',
+    'idp_selection_subheader'   => 'Login via je eigen instelling',
     'search'                    => 'of zoek een instelling',
-    'idp_selection_desc'        => 'Selecteer jouw instelling en log daar in voor <i>%s</i>',
+    'idp_selection_desc'        => 'Selecteer jouw instelling en log in voor <i>%s</i>',
     'our_suggestion'            => 'Onze suggestie:',
     'no_access'                 => 'Geen toegang.',
     'no_access_more_info'       => 'Geen toegang. &raquo;',
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
-    'footer'                => 'Deze dienst maakt gebruik van <a href="http://www.surfconext.nl/">SURFconext</a> van SURFnet.',
+    'footer'                => 'Deze dienst is powered by <a href="http://www.surfconext.nl/">SURFconext</a> - aangeboden door SURFnet.',
 
     //Help
     'help_header'           => 'Help',
-    'help_description'      => '<p>Heb je vragen over dit scherm of de SURFconext, kijk dan naar de antwoorden bij de veelgestelde vragen.</p>
+    'help_description'      => '<p>Heb je vragen over dit scherm of de SURFconext dienstverlening, bekijk dan de antwoorden bij de FAQ hieronder.</p>
 
-    <p>Staat je vraag er niet bij, of ben je niet tevreden met een antwoord? Stuur dan een mail aan <a href="mailto:info@surfconext.nl">info@surfconext.nl</a></p>',
+    <p>Staat je vraag er niet bij, of ben je niet tevreden met een antwoord? Bezoek dan <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a> of stuur een mail naar <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
-    "close_question"        =>      "Close",
+    'close_question'        =>      'Sluit',
 
     //Help questions
-    "question_screen"                   =>      "Waarom dit scherm?",
-    "answer_screen"                     =>      "<p>Je kunt met je instellingsaccount inloggen bij deze dienst. In dit scherm geef je aan bij welke instelling je wilt inloggen.</p>",
-    "question_surfconext"               =>      "Wat is SURFfederatie?",
-    "answer_surfconext"                 =>      "<p>SURFfederatie zorgt dat jij met je gebruikersnaam en wachtwoord van je instelling toegang krijgt tot online diensten van een groot aantal externe aanbieders, zoals webshops, videodiensten en (wetenschappelijke) artikelen. SURFfederatie is een centrale, betrouwbare 'bemiddelaar' tussen jouw instelling en de aanbieders van de online diensten.</p>",
-    "question_log_in"                   =>      "Hoe werkt inloggen via SURFfederatie?",
-    "answer_log_in"                     =>      "<ul>
-	                        <li>Je selecteert in dit scherm je eigen instelling.</li>
-							<li>Je wordt doorgestuurd naar een inlogpagina van je eigen instelling.Daar log je in.</li>
-							<li>Je instelling geeft door aan SURFfederatie dat je succesvol bent ingelogd.</li>
-							<li>Je wordt doorgestuurd naar de dienst waarop je ingelogd hebt; deze kun je nu gebruiken.</li>
-                        </ul>",
-    "question_security"                 =>      "Is SURFfederatie betrouwbaar?",
-    "answer_security"                   =>      "<p>Jouw instelling en SURFfederatie hechten veel belang aan de privacy van gebruikers.<br />
+    'question_screen'                   =>      'Waarom dit scherm?',
+    'answer_screen'                     =>      '<p>Je kunt met je instellingsaccount inloggen bij deze dienst. In dit scherm geef je aan via welke instelling je wilt inloggen.</p>',
+    'question_surfconext'               =>      'Wat is SURFconext?',
+    'answer_surfconext'                 =>      '<p>SURFconext is een verbindingsinfrastructuur die een aantal bouwstenen voor online samenwerking met elkaar verbindt. Die bouwstenen zijn services voor federatieve authenticatie (SURFfederatie), groepsbeheer (SURFteams), sociale netwerken en cloud applicaties van verschillende aanbieders. SURFfederatie is een centrale component die het mogelijk maakt om met je eigen instellingsaccount toegang te krijgen tot diensten van verschillende aanbieders. Deze componenten samen worden onder de noemer SURFconext aangeboden door SURFnet.</p>',
+    'question_log_in'                   =>      'Hoe werkt inloggen via SURFconext?',
+    'answer_log_in'                     =>      '<ul>
+                            <li>Je selecteert in dit scherm je eigen instelling.</li>
+                            <li>Je wordt doorgestuurd naar een inlogpagina van je eigen instelling.Daar log je in.</li>
+                            <li>Je instelling geeft door aan SURFconext dat je succesvol bent ingelogd.</li>
+                            <li>Je wordt doorgestuurd naar de dienst waarop je hebt ingelogd om deze te gaan gebruiken.</li>
+                        </ul>',
+    'question_security'                 =>      'Is de SURFconext infrastructuur veilig?',
+    'answer_security'                   =>      '<p>Jouw instelling en SURFnet hechten veel belang aan de privacy van gebruikers.<br />
 <br />
-Persoonsgegevens worden alleen verstrekt aan een dienstaanbieder wanneer dat noodzakelijk is voor het gebruik van de dienst. Contractuele afspraken tussen jouw instelling, SURFfederatie en de dienstaanbieder waarborgen dat er zorgvuldig wordt omgegaan met jouw persoonsgegevens.<br />
+Persoonsgegevens worden alleen verstrekt aan een dienstaanbieder wanneer dat noodzakelijk is voor het gebruik van de dienst. Contractuele afspraken tussen jouw instelling, SURFnet en de dienstaanbieder waarborgen dat er zorgvuldig wordt omgegaan met jouw persoonsgegevens.<br />
 <br />
-Heb je vragen over de omgang met je persoonsgegevens binnen de SURFfederatie, dan kun je terecht bij je eigen instelling of de dienstaanbieder waarbij je probeert in te loggen.
-</p>",
-    "question_institution_not_listed"   =>      "Ik zie mijn instelling er niet tussen staan, wat nu?",
-    "answer_institution_not_listed"     =>      "<p>Staat jouw instelling niet in de lijst? Dan is jouw instelling waarschijnlijk nog niet aangesloten bij SURFfederatie. Ga terug naar de pagina van de dienst; soms biedt een dienst ook alternatieve manieren van inloggen aan.</p>",
-    "question_institution_no_access"    =>      "Mijn instelling geeft geen toegang tot deze dienst, wat nu?",
-    "answer_institution_no_access"      =>      "<p>Het kan zijn dat je instelling wel is aangesloten op SURFfederatie, maar (nog) geen afspraken heeft gemaakt met een dienstaanbieder over het gebruik van deze dienst. Dan heb je geen toegang tot de dienst. Klik op jouw instelling. Je kunt dan een verzoek tot toegang kunt indienen bij je instelling. Wellicht is jouw verzoek voor je instelling aanleiding om alsnog afspraken met deze dienstaanbieder te maken.</p>",
-    "question_asked_institution_access"  =>      "Ik heb toegang aangevraagd voor mijn instelling, maar mijn instelling heeft nog steeds geen toegang. Waarom niet?",
-    "answer_asked_institution_access"    =>      "<p>SURFnet stuurt je verzoek door aan de juiste persoon binnen jouw instelling. Deze moet daarop actie ondernemen. SURFnet heeft geen controle over de snelheid waarmee je antwoord of toegang krijgt.</p>",
-    "question_cannot_select"            =>      "Ik kan mijn instelling niet selecteren, wat nu?",
-    "answer_cannot_select"              =>      "<p>Het keuzescherm van SURFfederatie is te gebruiken in de meest gangbare browsers waaronder, Internet Explorer 7 en 8, Firefox, Chrome en Safari. Andere browsers worden mogelijk niet ondersteund. Verder moet je browser het gebruik van cookies en javascript toestaan.</p>",
+Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lezen op <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>. Heeft u vragen ten aanzien van het privacybeleid van SURFconext, mail deze dan naar de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+</p>',
+    'question_institution_not_listed'   =>      'Ik zie mijn instelling er niet tussen staan, wat nu?',
+    'answer_institution_not_listed'     =>      '<p>Staat jouw instelling niet in de lijst? Dan is jouw instelling waarschijnlijk nog niet aangesloten bij de SURFfederatie. Ga terug naar de pagina van de dienst; soms biedt een dienst ook alternatieve manieren om in te loggen.</p>',
+    'question_institution_no_access'    =>      'Mijn instelling geeft geen toegang tot deze dienst, wat nu?',
+    'answer_institution_no_access'      =>      '<p>Het kan zijn dat je instelling wel is aangesloten op SURFfederatie maar (nog) geen afspraken heeft gemaakt met de dienstaanbieder over het gebruik van deze dienst. Wij zullen je verzoek doorsturen naar de verantwoordelijke binnen jouw instelling die de toegang tot diensten organiseert. Wellicht is jouw verzoek voor je instelling aanleiding om alsnog afspraken met deze dienstaanbieder te maken.</p>',
+    'question_asked_institution_access'  =>      'Ik heb toegang aangevraagd voor mijn instelling, maar mijn instelling geeft nog steeds geen toegang. Waarom niet?',
+    'answer_asked_institution_access'    =>      '<p>Blijkbaar is jouw instelling nog niet tot een overeenkomst met de dienstaanbieder gekomen of, het gebruik van deze dienst is niet wenselijk binnen jouw instelling. SURFnet heeft geen controle over de snelheid waarmee je antwoord of toegang krijgt. Die verantwoordelijkheid en zeggenschap ligt bij de instelling.</p>',
+    'question_cannot_select'            =>      'Ik kan in mijn browser mijn instelling niet selecteren, wat nu?',
+    'answer_cannot_select'              =>      '<p>Het keuzescherm van SURFfederatie is te gebruiken in de meest gangbare browsers waaronder, Internet Explorer 7 en 8, Firefox, Chrome en Safari. Andere browsers worden mogelijk niet ondersteund. Verder moet je browser het gebruik van cookies en javascript toestaan.</p>',
 
     //Form
     'sorry'                 => 'Helaas,',
@@ -78,11 +78,11 @@ Heb je vragen over de omgang met je persoonsgegevens binnen de SURFfederatie, da
     'send'                  => 'Verstuur',
 
     'send_confirm'          => 'Je verzoek is verzonden',
-    'send_confirm_desc'     => '<p>SURFnet stuurt je verzoek door aan de juiste persoon binnen jouw instelling. Het is aan deze persoon om actie te nemen op jouw verzoek. Het kan zijn dat er nog afspraken gemaakt moeten worden tussen jouw instelling en de dienstaanbieder.</p>
+    'send_confirm_desc'     => '<p>SURFnet stuurt je verzoek door aan de juiste persoon binnen jouw instelling. Het is aan deze persoon om actie te ondernemen op basis van jouw verzoek. Het kan zijn dat er nog afspraken gemaakt moeten worden tussen jouw instelling en de dienstaanbieder.</p>
 
     <p>SURFnet faciliteert het doorsturen van je verzoek maar heeft geen controle over de snelheid waarmee je antwoord of toegang krijgt.</p>
 
-    <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:info@surffederatie.nl">info@surffederatie.nl</a></p>',
+    <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:info@surfconext.nl">info@surfconext.nl</a></p>',
 
     //Profile
     'profile_header'                    => 'SURFconext - Mijn Profiel',
@@ -91,23 +91,23 @@ Heb je vragen over de omgang met je persoonsgegevens binnen de SURFfederatie, da
     'profile_header_surfteams'          => 'SURFteams',
     'profile_header_auth_needed'        => 'Authenticatie vereist',
     'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan aanverwante diensten.',
-    'profile_group_membership_desc'     => 'Uw lidmaatschap voor uw groepen van verschillende aanbieders.',
+    'profile_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan diensten die u via SURFconext benadert.',
+    'profile_group_membership_desc'     => 'U bent lid van de volgende groepen.',
     'profile_no_groups'                 => 'Geen Groepen',
     'profile_extra_groups_desc'         => 'Om uw instellingsgroepen te zien moet u het gebruik hiervoor binnen SURFconext autoriseren.',
-    'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link. NB. U wordt hierdoor ook automatisch uitgelogd.',
-    'profile_leave_surfconext_link'     => 'Verwijder mijn gegevens!',
+    'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link.',
+    'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
 
     //Delete User
-    'deleteuser_success_header'         => 'Uw informatie is succesvol verwijderd',
-    'deleteuser_success_subheader'      => 'Tot ziens...',
-    'deleteuser_success_desc'           => 'Uw informatie is succesvol verwijderd van SURFconext. U <strong>Moet</strong> uw browser opnieuw starten om het proces af te ronden. Doet u dit niet dan kunnen wij niet garanderen dat uw profiel van het SURFconext platform is verwijderd',
+    'deleteuser_success_header'         => 'SURFconext exit procedure',
+    'deleteuser_success_subheader'      => 'U bent bijna klaar..',
+    'deleteuser_success_desc'           => '<strong>Belangrijk!</strong> Om de exit procedure succesvol af te ronden, moet u nu uw browser afsluiten.',
 
 
     //Consent
-    'consent_header'                    => 'Attribuut Vrijgave',
-    'consent_subheader'                 => 'Autoriseer vrijgave van uw gegevens aan <i>%s</i>',
-    'consent_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan aanverwante diensten.',
+    'consent_header'                    => 'Profiel Vrijgave',
+    'consent_subheader'                 => 'Autoriseer vrijgave van uw profiel aan <i>%s</i>',
+    'consent_store_info'                => 'Van uw instelling hebben wij de volgende profielgegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan aanverwante diensten.',
     'consent_terms_of_service'          => '<p>Ik ga akkoord met de vrijgave van mijn profielgegevens.</p>
         Ik ga akkoord met de Gebruikersvoorwaarden van SURFnet voor het gebruik van SURFconext. Zie de gebruikersvoorwaarden in het
         <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">Engels</a>
@@ -125,12 +125,11 @@ Heb je vragen over de omgang met je persoonsgegevens binnen de SURFfederatie, da
         Op deze pagina vindt u meer informatie over de mogelijke oorzaken en hoe u contact kan opnemen met het support team.
     </p>',
     'error_no_consent'                  => 'Geen autorisatie gegeven',
-    'error_no_consent_desc'             => 'U hebt geen autorisatie gegeven om uw attributen vrij te geven aan de service. Zonder deze autorisatie kunt u niet verder.<br /><br /> Om toch door te gaan dient u uw browser opnieuw te starten, nogmaals in te loggen en vervolgens uw attributen vrij te geven aan de dienst.',
+    'error_no_consent_desc'             => 'U hebt geen autorisatie gegeven om uw profielgegevens vrij te geven aan de service. Zonder deze autorisatie kunt u niet verder.<br /><br /> Om toch door te gaan dient u uw browser opnieuw te starten, nogmaals in te loggen en vervolgens uw profielgegevens vrij te geven aan de dienst.',
     'error_no_idps'                     => 'Error - Geen Identity Providers gevonden',
     'error_no_idps_desc'                => '<p>
-        De application waar u vandaan komt (uw &lsquo;Service Provider&rsquo;) mag met geen enkele Identity Provider verbinden.
-        Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de administrator(s) van
-        deze dienst.
+        De application die u probeert te benaderen (uw &lsquo;Service Provider&rsquo;) is niet toegankelijk via de SURFconext infrastructuur.
+        Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de helpdesk van SURFconext via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br /><br />
     </p>',
     'error_session_lost'                => 'Error - Uw sessie is verloren gegaan..',
@@ -152,7 +151,8 @@ Heb je vragen over de omgang met je persoonsgegevens binnen de SURFfederatie, da
         <br /><br />
     </p>',
     'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
-    'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij je Identity Provider, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie.',
+    'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij je Identity Provider, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie. Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
+        of neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> indien u meer informatie wenst.',
     'error_generic'                     => 'Error - Foutmelding..',
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeert u het alstublieft opnieuw.
