@@ -192,9 +192,4 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
 
         return $renderedPage;
     }
-
-    public function setCurrentEntitySetting($name, $value)
-    {
-        $this->_entities['current'][$name] = $value;
-    }
 }

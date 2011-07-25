@@ -259,6 +259,7 @@ class EngineBlock_Corto_Adapter
                     ),
                 ),
                 'keepsession' => true,
+                'idpMetadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
             ),
         ));
 
@@ -293,9 +294,6 @@ class EngineBlock_Corto_Adapter
                 )
             ));
         }
-
-        // This sets the time (in seconds) the entity metadata is valid.
-        $proxyServer->setCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400);
     }
 
     protected function _getSystemLog()
