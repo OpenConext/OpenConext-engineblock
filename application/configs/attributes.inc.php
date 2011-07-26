@@ -339,4 +339,8 @@ $attributes = array (
       'en' => 'Status of this account in the SURFfederation',
     ),
   ),
+  'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2' => array( // VO Name attribute
+      'nl' => 'Naam Virtuele Organisatie',
+      'en' => 'Virtual Organisation Name',
+  ),
 );

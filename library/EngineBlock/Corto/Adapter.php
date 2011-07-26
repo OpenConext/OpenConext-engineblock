@@ -48,6 +48,8 @@ class EngineBlock_Corto_Adapter
 
     const IDENTIFYING_MACE_ATTRIBUTE = 'urn:mace:dir:attribute-def:uid';
 
+    const VO_NAME_ATTRIBUTE = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
+
     protected $_collaborationAttributes = array();
 
     /**
@@ -379,6 +381,11 @@ class EngineBlock_Corto_Adapter
 
         $this->_handleVirtualOrganizationResponse($request, $subjectId, $idpEntityMetadata["EntityId"]);
 
+        if ($this->getVirtualOrganisationContext()) {
+            $this->_addVoNameAttribute($responseAttributes, $this->getVirtualOrganisationContext());
+            var_dump($responseAttributes, true);die();
+        }
+
         $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
     }
 
@@ -624,5 +631,10 @@ class EngineBlock_Corto_Adapter
     {
         $this->_remoteEntitiesFilter = $callback;
         return $this;
+    }
+
+    protected function _addVoNameAttribute($responseAttributes, $voContext)
+    {
+        $responseAttributes[self::VO_NAME_ATTRIBUTE] = $voContext;
     }
 }
