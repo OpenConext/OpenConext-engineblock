@@ -340,7 +340,15 @@ $attributes = array (
     ),
   ),
   'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2' => array( // VO Name attribute
+    'Name' =>
+    array(
       'nl' => 'Naam Virtuele Organisatie',
       'en' => 'Virtual Organisation Name',
+    ),
+    'Description' =>
+    array(
+      'nl' => 'De naam van de Virtuele Organisatie waarvoor je bent ingelogd.',
+      'en' => 'The name of the Virtual Urganisation for which you have authenticated',
+    ),
   ),
 );
