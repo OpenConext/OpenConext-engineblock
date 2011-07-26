@@ -382,8 +382,7 @@ class EngineBlock_Corto_Adapter
         $this->_handleVirtualOrganizationResponse($request, $subjectId, $idpEntityMetadata["EntityId"]);
 
         if ($this->getVirtualOrganisationContext()) {
-            $this->_addVoNameAttribute($responseAttributes, $this->getVirtualOrganisationContext());
-            var_dump($responseAttributes, true);die();
+            $responseAttributes = $this->_addVoNameAttribute($responseAttributes, $this->getVirtualOrganisationContext());
         }
 
         $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
@@ -636,5 +635,7 @@ class EngineBlock_Corto_Adapter
     protected function _addVoNameAttribute($responseAttributes, $voContext)
     {
         $responseAttributes[self::VO_NAME_ATTRIBUTE] = $voContext;
+
+        return $responseAttributes;
     }
 }
