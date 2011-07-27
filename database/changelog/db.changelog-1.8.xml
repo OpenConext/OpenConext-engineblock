@@ -64,4 +64,11 @@
         </createTable>
         <addPrimaryKey columnNames="vo_id,stem_id" tableName="virtual_organisation_stem"/>
     </changeSet>
+    <changeSet id="1.8.5" author="stein.welberg@everett.nl">
+        <addColumn tableName="virtual_organisation">
+            <column name="vo_type" type="ENUM('GROUP','STEM','IDP')">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
