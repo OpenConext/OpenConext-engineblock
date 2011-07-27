@@ -65,11 +65,9 @@ class EngineBlock_VirtualOrganization_Validator
         $groupProvider = $this->_getGroupProvider($subjectId);
 
         try {
-
             $groups = $virtualOrganization->getGroups();
-
+            
             foreach ($groups as $group) {
-                $groupProvider->setGroupStem($group->stem);
                 if ($groupProvider->isMember($group->id)) {
                     return true;
                 }
