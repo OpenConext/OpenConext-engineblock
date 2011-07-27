@@ -46,7 +46,7 @@ class EngineBlock_VirtualOrganization
     {
         $this->_load();
         
-        return $this->_data['type'];
+        return $this->_data['vo_type'];
     }
 
     public function getStem()
@@ -104,7 +104,7 @@ class EngineBlock_VirtualOrganization
     {
         $db = $this->_getDbConnection();
         $stmt = $db->prepare(
-            "SELECT vo.vo_id, vo.type
+            "SELECT vo.vo_id, vo.vo_type
              FROM `virtual_organisation` vo
              WHERE vo.vo_id = ?
              LIMIT 0,1"
