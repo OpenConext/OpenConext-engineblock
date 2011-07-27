@@ -34,4 +34,26 @@
         </createTable>
         <addPrimaryKey columnNames="vo_id,idp_id" tableName="virtual_organisation_idp"/>
     </changeSet>
+    <changeSet id="1.8.2" author="boy@ibuildings.nl">
+        <createTable tableName="virtual_organisation_attribute">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="sp_entity_id" type="VARCHAR(1024)">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id_pattern" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="attribute_name" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="attribute_value" type="VARCHAR(1024)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1.8.3" author="boy@ibuildings.nl">
+        <addPrimaryKey columnNames="vo_id,attribute_name" tableName="virtual_organisation_attribute" />
+    </changeSet>
 </databaseChangeLog>
