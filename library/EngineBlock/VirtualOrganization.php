@@ -44,6 +44,8 @@ class EngineBlock_VirtualOrganization
 
     public function getType()
     {
+        $this->_load();
+        
         return $this->_data['type'];
     }
 
