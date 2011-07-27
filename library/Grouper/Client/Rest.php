@@ -194,7 +194,6 @@ XML;
     </actAsSubjectLookup>
 </WsRestGetGroupsRequest>
 XML;
-
         try {
             $result = $this->_doRest('subjects', $request);
         }
@@ -206,8 +205,8 @@ XML;
         }
 
         $groups = array();
-        if (isset($result) and ($result !== FALSE) and (! empty($result->groupResults))) {
-            foreach ($result->groupResults->WsGroup as $group) {
+        if (isset($result) and ($result !== FALSE) and (! empty($result->results->WsGetGroupsResult))) {
+            foreach ($result->results->WsGetGroupsResult->wsGroups->WsGroup as $group) {
                 $groups[] = $this->_mapXmlToGroupModel($group);
             }
         }
