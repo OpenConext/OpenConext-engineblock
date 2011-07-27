@@ -17,9 +17,6 @@
             <column name="group_id" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="group_stem" type="VARCHAR(255)">
-                <constraints nullable="false"/>
-            </column>
         </createTable>
         <addPrimaryKey columnNames="vo_id,group_id" tableName="virtual_organisation_group"/>
     </changeSet>
@@ -55,5 +52,16 @@
     </changeSet>
     <changeSet id="1.8.3" author="boy@ibuildings.nl">
         <addPrimaryKey columnNames="vo_id,attribute_name" tableName="virtual_organisation_attribute" />
+    </changeSet>
+    <changeSet id="1.8.4" author="stein.welberg@everett.nl">
+        <createTable tableName="virtual_organisation_stem">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stem_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id,stem_id" tableName="virtual_organisation_stem"/>
     </changeSet>
 </databaseChangeLog>
