@@ -40,7 +40,7 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
 
     protected $_isMemberCache = array();
 
-    protected $_isMemberInStemCache = array();
+    protected $_isMemberInStemCache;
 
     public static function createFromConfigFor($userId)
     {
@@ -242,7 +242,7 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
      */
     public function isMemberInStem()
     {
-        if (isset($this->_isMemberInStemCache)) {
+        if (isset($this->_isMemberInStemCache) && $this->_isMemberInStemCache !== NULL) {
             return $this->_isMemberInStemCache;
         }
 
@@ -255,7 +255,7 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
         $this->_groupCache = array();
         $this->_memberCache = array();
         $this->_isMemberCache = array();
-        $this->_isMemberInStemCache = array();
+        unset($this->_isMemberInStemCache);
         return $this;
     }
 }
