@@ -11,5 +11,6 @@ java -jar database/liquibase/liquibase.jar \
     --url="jdbc:mysql://$ENGINEBLOCK_DB_HOST/$ENGINEBLOCK_DB_NAME?autoReconnect=true&sessionVariables=storage_engine=InnoDB" \
     --username=$ENGINEBLOCK_DB_USER \
     --password=$ENGINEBLOCK_DB_PASSWORD \
+    --logLevel=info \
     migrate
 cd -
