@@ -17,7 +17,7 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
     {
         $attributes = array();
 
-        $query = "SELECT * FROM virtual_organisation_attributes WHERE vo_id=? AND sp_entity_id = ?";
+        $query = "SELECT * FROM virtual_organisation_attribute WHERE vo_id=? AND sp_entity_id = ?";
         $statement = $this->getDatabaseConnection()->prepare($query);
         $statement->execute(array($this->_voId, $this->_spEntityId));
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
