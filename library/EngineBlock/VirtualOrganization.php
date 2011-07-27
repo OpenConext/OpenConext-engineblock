@@ -25,6 +25,8 @@
 
 class EngineBlock_VirtualOrganization
 {
+    const STEM_PREFIX = 'vo:';
+
     protected $_id;
     protected $_data;
     protected $_db;
@@ -40,6 +42,16 @@ class EngineBlock_VirtualOrganization
         return $id;
     }
 
+    public function getType()
+    {
+        return $this->_data['type'];
+    }
+
+    public function getStem()
+    {
+        return self::STEM_PREFIX . $this->_id;
+    }
+
     public function getGroups()
     {
         $this->_load();
@@ -47,7 +59,7 @@ class EngineBlock_VirtualOrganization
         // Get the records
         $db = $this->_getDbConnection();
         $stmt = $db->prepare(
-            "SELECT vog.group_id, vog.group_stem
+            "SELECT vog.group_id
              FROM `virtual_organisation_group` vog
              WHERE vog.vo_id = ?"
         );
@@ -59,7 +71,6 @@ class EngineBlock_VirtualOrganization
         foreach ($groupRecords as $groupRecord) {
             $group = new EngineBlock_VirtualOrganization_Group();
             $group->id = $groupRecord['group_id'];
-            $group->stem = $groupRecord['group_stem'];
             $groups[] = $group;
         }
         return $groups;
@@ -91,7 +102,7 @@ class EngineBlock_VirtualOrganization
     {
         $db = $this->_getDbConnection();
         $stmt = $db->prepare(
-            "SELECT vo.vo_id
+            "SELECT vo.vo_id, vo.type
              FROM `virtual_organisation` vo
              WHERE vo.vo_id = ?
              LIMIT 0,1"

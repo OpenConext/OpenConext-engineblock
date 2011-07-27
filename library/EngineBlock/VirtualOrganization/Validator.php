@@ -28,13 +28,36 @@ class EngineBlock_VirtualOrganization_Validator
     public function isMember($voId, $subjectId, $idp)
     {
         $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
-        if ($this->_isMemberOfGroups($virtualOrganization, $subjectId)) {
-            return true;
+        $voType = $virtualOrganization->getType();
+
+        switch ($voType) {
+            case 'GROUP':
+                if ($this->_isMemberOfGroups($virtualOrganization, $subjectId)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
+            case 'IDP':
+                if ($this->_isMemberOfIdps($virtualOrganization, $idp)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
+            case 'STEM':
+                if ($this->_isMemberOfStem($virtualOrganization, $subjectId)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
+            default:
+                throw new EngineBlock_Exception("Unknown Virtual Organization type '$voType'");
         }
-        if ($this->_isMemberOfIdps($virtualOrganization, $idp)) {
-            return true;
-        }
-        return false;
     }
 
     protected function _isMemberOfGroups(EngineBlock_VirtualOrganization $virtualOrganization, $subjectId)
@@ -69,6 +92,13 @@ class EngineBlock_VirtualOrganization_Validator
             }
         }
         return false;
+    }
+
+    protected function _isMemberOfStem(EngineBlock_VirtualOrganization $virtualOrganization, $subjectId)
+    {
+        return $this->_getGroupProvider($subjectId)
+                ->setGroupStem($virtualOrganization->getStem())
+                ->isMemberInStem();
     }
 
     protected function _getGroupProvider($subjectId)

@@ -26,5 +26,4 @@
 class EngineBlock_VirtualOrganization_Group
 {
     public $id;
-    public $stem;
 }
