@@ -325,7 +325,7 @@ XML;
                 ' [response: ' . $response . ']'
             );
         }
-var_dump(nl2br(htmlentities($response)));
+
         $result = simplexml_load_string($response);
         if ($result === FALSE) {
             throw new Grouper_Client_Exception("Unable to parse response '$response' as XML");
