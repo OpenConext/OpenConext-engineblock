@@ -129,4 +129,24 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
         
         return false;
     }
+
+    public function isMemberInStem()
+    {
+        $openSocialGroups = $this->_openSocialRestClient->get(
+            '/groups/{uid}',
+            array(
+                'uid' => $this->_userId,
+            )
+        );
+
+        foreach ($openSocialGroups as $openSocialGroup) {
+            /**
+             * @var OpenSocial_Model_Group $openSocialGroup
+             */
+            if (strpos($openSocialGroup->id, $this->_stem) === 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -129,6 +129,20 @@ interface EngineBlock_Group_Provider_Interface
     public function isMember($groupIdentifier);
 
     /**
+     * Check whether the current user is in a group in the current stem.
+     *
+     * @example: User urn:collab:person:example.edu:john.doe is in
+     * the groups: urn:collab:group:internet2.edu:grouper,
+     * urn:collab:group:surfnet.nl:grouper
+     * Given a stem of urn:collab:group:internet2.edu this method will return true.
+     * Given a stem of urn:collab:group:janet.edu this method will return false.
+     *
+     * @param String $groupIdentifier The group to check
+     * @return boolean
+     */
+    public function isMemberInStem();
+
+    /**
      * @abstract
      * @return string
      */

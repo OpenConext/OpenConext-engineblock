@@ -179,4 +179,24 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         // then he's not a member of this group.
         return false;
     }
+
+    public function isMemberInStem()
+    {
+        foreach ($this->_providers as $provider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $provider
+             */
+            try {
+                if ($provider->isMemberInStem()) {
+                    return true;
+                }
+            }
+            catch (Exception $e) {
+                $providerId = $provider->getId();
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
+            }
+        }
+        return false;
+    }
 }

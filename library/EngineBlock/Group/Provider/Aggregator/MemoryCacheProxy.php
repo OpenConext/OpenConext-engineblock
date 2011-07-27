@@ -40,6 +40,8 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
 
     protected $_isMemberCache = array();
 
+    protected $_isMemberInStemCache = array();
+
     public static function createFromConfigFor($userId)
     {
         return new self(EngineBlock_Group_Provider_Aggregator::createFromConfigFor($userId));
@@ -233,11 +235,27 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
         return $this->_isMemberCache[$groupIdentifier];
     }
 
+    /**
+     * Check whether the given user is a member of the given group.
+     * @param String $groupIdentifier The group to check
+     * @return boolean
+     */
+    public function isMemberInStem()
+    {
+        if (isset($this->_isMemberInStemCache)) {
+            return $this->_isMemberInStemCache;
+        }
+
+        $this->_isMemberInStemCache = $this->_provider->isMemberInStem();
+        return $this->_isMemberInStemCache;
+    }
+
     protected function _clearCache()
     {
         $this->_groupCache = array();
-        $this->_isMemberCache = array();
         $this->_memberCache = array();
+        $this->_isMemberCache = array();
+        $this->_isMemberInStemCache = array();
         return $this;
     }
 }
