@@ -86,6 +86,11 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
         return $this->_provider->isMember($groupIdentifier);
     }
 
+    public function isMemberInStem()
+    {
+        return $this->_provider->isMemberInStem();
+    }
+
     /**
      * Get the ID of this provider (plain alphanumeric string for use in configs, URLs and such)
      *
