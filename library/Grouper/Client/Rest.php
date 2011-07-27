@@ -90,21 +90,10 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
     }
 
     /**
-     * @param string $subjectId
-     * @return Grouper_Client_Rest
-     */
-    public function setSubjectId($subjectId)
-    {
-        $this->_subjectId = $subjectId;
-        return $this;
-    }
-
-    /**
      * Retrieve the list of groups that the specified subject is a member of.
      */
     public function getGroups()
     {
-        // todo: this method doesn't take stem into account yet
         $this->_requireSubjectId();
 
         $subjectIdEncoded = htmlentities($this->_subjectId);
@@ -141,7 +130,6 @@ XML;
 
     public function getMembers($groupName)
     {
-        // todo: this method doesn't take stem into account yet
         $this->_requireSubjectId();
         
         $subjectIdEncoded = htmlentities($this->_subjectId);
@@ -160,7 +148,15 @@ XML;
 </WsRestGetMembersRequest>
 XML;
 
-        $result = $this->_doRest('groups', $request);
+        try {
+            $result = $this->_doRest('groups', $request);
+        }
+        catch(Exception $e) {
+            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
+                throw new Grouper_Client_Exception_SubjectNotFound();
+            }
+            throw $e;
+        }
 
         $members = array();
         if (isset($result) and ($result !== FALSE) and (isset($result->results->WsGetMembersResult->wsSubjects->WsSubject))) {
@@ -173,6 +169,49 @@ XML;
         }
 
         return $members;
+    }
+
+    public function getGroupsByStem($stem)
+    {
+        $this->_requireSubjectId();
+
+        $subjectIdEncoded = htmlentities($this->_subjectId);
+        $stemEncoded = htmlentities($stem);
+
+        $request = <<<XML
+<WsRestGetGroupsRequest>
+    <subjectLookups>
+        <WsSubjectLookup>
+            <subjectId>$subjectIdEncoded</subjectId>
+        </WsSubjectLookup>
+    </subjectLookups>
+    <wsStemLookup>
+        <stemName>$stemEncoded</stemName>
+    </wsStemLookup>
+    <stemScope>ALL_IN_SUBTREE</stemScope>
+    <actAsSubjectLookup>
+        <subjectId>$subjectIdEncoded</subjectId>
+    </actAsSubjectLookup>
+</WsRestGetGroupsRequest>
+XML;
+
+        try {
+            $result = $this->_doRest('subjects', $request);
+        }
+        catch(Exception $e) {
+            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
+                throw new Grouper_Client_Exception_SubjectNotFound();
+            }
+            throw $e;
+        }
+
+        $groups = array();
+        if (isset($result) and ($result !== FALSE) and (! empty($result->groupResults))) {
+            foreach ($result->groupResults->WsGroup as $group) {
+                $groups[] = $this->_mapXmlToGroupModel($group);
+            }
+        }
+        return $groups;
     }
 
     /**
@@ -286,7 +325,7 @@ XML;
                 ' [response: ' . $response . ']'
             );
         }
-
+var_dump(nl2br(htmlentities($response)));
         $result = simplexml_load_string($response);
         if ($result === FALSE) {
             throw new Grouper_Client_Exception("Unable to parse response '$response' as XML");
@@ -323,6 +362,16 @@ XML;
             }
         }
         return $subject;
+    }
+
+    /**
+     * @param string $subjectId
+     * @return Grouper_Client_Rest
+     */
+    public function setSubjectId($subjectId)
+    {
+        $this->_subjectId = $subjectId;
+        return $this;
     }
 
     protected function _requireSubjectId()

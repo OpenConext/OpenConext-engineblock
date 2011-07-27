@@ -39,10 +39,19 @@ interface Grouper_Client_Interface
     public function setSubjectId($subjectId);
 
     /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     *
      * @abstract
      * @return array
      */
     public function getGroups();
+
+    /**
+     * @abstract
+     * @param $stem
+     * @return void
+     */
+    public function getGroupsByStem($stem);
 
     /**
      * @abstract
