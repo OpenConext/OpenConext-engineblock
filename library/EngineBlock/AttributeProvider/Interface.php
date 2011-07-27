@@ -26,12 +26,6 @@
 interface EngineBlock_AttributeProvider_Interface
 {
     /**
-     * Retrieve the identifier of the attribute provider
-     * @return String The URN that identifies this AttributeProvider.
-     */
-    public function getIdentifier();
-
-    /**
      * Retrieve all attributes that the AttributeProvider provides for the
      * given user.
      * @param String $uid The URN of a user, for example

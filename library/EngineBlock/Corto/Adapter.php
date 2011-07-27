@@ -471,7 +471,12 @@ class EngineBlock_Corto_Adapter
         $subjectId = $_SESSION['subjectId'];
 
         // Attribute Aggregation
-        $responseAttributes = $this->_enrichAttributes($subjectId, $responseAttributes);
+        $responseAttributes = $this->_enrichAttributes(
+            $idpEntityMetadata["EntityId"],
+            $spEntityMetadata["EntityId"],
+            $subjectId,
+            $responseAttributes
+        );
 
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
@@ -527,10 +532,10 @@ class EngineBlock_Corto_Adapter
      * @param  $attributes
      * @return array
      */
-    protected function _enrichAttributes($subjectId, array $attributes)
+    protected function _enrichAttributes($idpEntityId, $spEntityId, $subjectId, array $attributes)
     {
         $aggregator = $this->_getAttributeAggregator(
-            $this->_getAttributeProviders()
+            $this->_getAttributeProviders($idpEntityId, $spEntityId)
         );
         $aggregatedAttributes = $aggregator->getAttributes(
             $subjectId
@@ -597,11 +602,13 @@ class EngineBlock_Corto_Adapter
         $response->setBody($proxyOutput);
     }
 
-    protected function _getAttributeProviders()
+    protected function _getAttributeProviders($idpEntityId, $spEntityId)
     {
-        return array(
-            new EngineBlock_AttributeProvider_Dummy(),
-        );
+        $providers = array();
+        if (isset($this->_voContext)) {
+            $providers[] = new EngineBlock_AttributeProvider_VoManage($this->_voContext, $spEntityId, $idpEntityId);
+        }
+        return $providers;
     }
 
     protected function _getAttributeManipulators()
