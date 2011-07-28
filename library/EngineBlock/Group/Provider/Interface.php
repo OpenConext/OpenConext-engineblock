@@ -115,6 +115,13 @@ interface EngineBlock_Group_Provider_Interface
     public function getGroups();
 
     /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     * @param $stem The name of the stem where the groups belong to
+     * @return array A list of groups
+     */
+    public function getGroupsByStem($stem);
+
+    /**
      * Get the members of a given group
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members

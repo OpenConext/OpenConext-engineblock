@@ -207,6 +207,21 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
     }
 
     /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     * @param $stem The name of the stem where the groups belong to
+     * @return array A list of groups
+     */
+    public function getGroupsByStem($stem)
+    {
+        if (!empty($this->_groupCache)) {
+            return $this->_groupCache;
+        }
+
+        $this->_groupCache = $this->_provider->getGroupsByStem($stem);
+        return $this->_groupCache;
+    }
+
+    /**
      * Get the members of a given group
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
@@ -258,4 +273,7 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
         unset($this->_isMemberInStemCache);
         return $this;
     }
+
+
+
 }
