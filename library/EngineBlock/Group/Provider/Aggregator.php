@@ -141,6 +141,23 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         return $groups;
     }
 
+    public function getGroupsByStem($stem)
+    {
+        $groups = array();
+        foreach ($this->_providers as $provider) {
+            try {
+                $providerGroups = $provider->getGroupsByStem($stem);
+                $groups = array_merge($groups, $providerGroups);
+            }
+            catch (Exception $e) {
+                $providerId = $provider->getId();
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
+            }
+        }
+        return $groups;
+    }
+
     public function getMembers($groupIdentifier)
     {
         $members = array();
