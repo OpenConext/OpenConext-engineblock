@@ -82,6 +82,17 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         return $groups;
     }
 
+    public function getGroupsByStem($stem)
+    {
+        $grouperGroups = $this->_grouperClient->getGroupsByStem($stem);
+
+        $groups = array();
+        foreach ($grouperGroups as $group) {
+            $groups[] = $this->_mapGrouperGroupToEngineBlockGroup($group);
+        }
+        return $groups;
+    }
+
     public function getMembers($groupIdentifier)
     {
         $subjects = $this->_grouperClient->getMembers(
