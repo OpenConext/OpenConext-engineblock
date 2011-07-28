@@ -67,6 +67,14 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
     }
 
     /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     * @return array A list of groups
+     */
+    public function getGroupsByStem($stem)
+    {
+        return $this->_provider->getGroupsByStem($stem);
+    }
+    /**
      * Get the members of a given group
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
