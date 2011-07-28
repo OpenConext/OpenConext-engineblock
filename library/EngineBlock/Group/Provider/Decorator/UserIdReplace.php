@@ -99,6 +99,20 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
     }
 
     /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     * @param string $stem
+     * @return array A list of groups
+     */
+    public function getGroupsByStem($stem)
+    {
+        $this->_provider->setUserId($this->_userIdReplaced);
+        $results = $this->_provider->getGroupsByStem($stem);
+        $this->_provider->setUserId($this->_userId);
+
+        return $results;
+    }
+
+    /**
      * Get the members of a given group
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
