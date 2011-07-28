@@ -90,4 +90,6 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
     {
         return $this->_openSocialRestClient;
     }
+
+
 }

@@ -53,6 +53,22 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
         return $this->_mapOpenSocialGroupsToEngineBlockGroups($openSocialGroups);
     }
 
+    /**
+     * Retrieve the list of groups that the specified subject is a member of.
+     * @param $stem The name of the stem where the groups belong to
+     * @return array A list of groups
+     */
+    public function getGroupsByStem($stem)
+    {
+        $openSocialGroups = $this->_openSocialRestClient->get(
+            '/groups/{uid}?vo=' + $stem,
+            array(
+                'uid' => $this->_userId,
+            )
+        );
+        return $this->_mapOpenSocialGroupsToEngineBlockGroups($openSocialGroups);
+    }
+
     protected function _mapOpenSocialGroupsToEngineBlockGroups(array $openSocialGroups)
     {
         $groups = array();
