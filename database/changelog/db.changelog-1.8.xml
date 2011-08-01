@@ -93,7 +93,7 @@
             <column name="vo_type" value="GROUP" />
         </insert>
         <insert tableName="virtual_organisation_group">
-            <column name="vo_id" value="serviceregistryvo" />
+            <column name="vo_id" value="votest1" />
             <column name="group_id" value="nl:votest1:votest1group" />
         </insert>
         <insert tableName="virtual_organisation">
