@@ -217,7 +217,7 @@ about some content not coming from a secure connection.
 
 Fill the DocumentRoot of the static virtual host with the contents of:
 
-    https://svn.surfnet.nl/sv/coin-eb/static/branches/!!VERSION!!
+    https://svn.surfnet.nl/svn/coin-eb/static/tags/!!VERSION!!
 
 Take the same version of the static content as you have checked out of Engineblock.
 
@@ -297,3 +297,13 @@ If you are using this pattern, an update can be done with the following:
 
     cd database && ./install_jdbc_driver.sh && cd ..
     cd database && ./update && cd ..
+
+5. Install new Static content for engineblock.
+
+    Check out the corresponding version of the static content. The content can be found at:
+
+        https://svn.surfnet.nl/svn/coin-eb/static/tags/!!VERSION!!
+
+    *NOTE* Please use the same recommended practice for the static content as for engineblock. So, create a new
+    directory for every tag you check out and change the symlink to make that version the 'current' version used by
+    Apache.
