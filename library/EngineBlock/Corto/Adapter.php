@@ -506,7 +506,7 @@ class EngineBlock_Corto_Adapter
                 $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
                     0 => 'member',
                 );
-                return $responseAttributes;
+                break;
 
             case 'Some':
                 if (!isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'][0])) {
@@ -515,21 +515,25 @@ class EngineBlock_Corto_Adapter
                         0 => 'guest',
                     );
                 }
-                return $responseAttributes;
+                break;
 
             default:
             case 'All':
                 $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
                     0 => 'guest',
                 );
-                return $responseAttributes;
+                break;
         }
+        return $responseAttributes;
     }
 
     /**
-     * Enrich the attributes with attributes
+     * Enrich the current set of attributes with attributes from other sources.
      *
-     * @param  $attributes
+     * @param string $idpEntityId
+     * @param string $spEntityId
+     * @param string $subjectId
+     * @param array $attributes
      * @return array
      */
     protected function _enrichAttributes($idpEntityId, $spEntityId, $subjectId, array $attributes)
@@ -537,10 +541,10 @@ class EngineBlock_Corto_Adapter
         $aggregator = $this->_getAttributeAggregator(
             $this->_getAttributeProviders($idpEntityId, $spEntityId)
         );
-        $aggregatedAttributes = $aggregator->getAttributes(
+        return $aggregator->aggregateFor(
+            $attributes,
             $subjectId
         );
-        return array_merge_recursive($attributes, $aggregatedAttributes);
     }
 
     protected function _manipulateAttributes(&$subjectId, array &$attributes, array &$response)

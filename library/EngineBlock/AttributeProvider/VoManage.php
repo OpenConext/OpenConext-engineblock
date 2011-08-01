@@ -13,6 +13,11 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
         $this->_spEntityId  = $spEntityId;
     }
 
+    public function getStrategy()
+    {
+        return EngineBlock_AttributeProvider_Interface::STRATEGY_ADD;
+    }
+
     public function getAttributes($subjectId)
     {
         $attributes = array();

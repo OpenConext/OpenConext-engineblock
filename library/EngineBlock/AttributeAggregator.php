@@ -33,17 +33,78 @@ class EngineBlock_AttributeAggregator
 {
     protected $_providers = array();
 
+    /**
+     * Create a new aggregator for a set of providers
+     *
+     * @param array $providers
+     */
     public function __construct(array $providers)
     {
         $this->_providers = $providers;
     }
 
-    public function getAttributes($uid)
+    /**
+     * Aggregate attributes from all providers and enhance the original attributes with them.
+     *
+     * @param array  $attributes Existing attributes to enhance
+     * @param string $uid        URN for user (example: urn:collab:person:example.edu:john.doe)
+     * @return array             Enhanced attributes
+     */
+    public function aggregateFor(array $attributes, $uid)
     {
-        $attributes = array();
         foreach ($this->_providers as $provider) {
-            $attributes = array_merge_recursive($attributes, $provider->getAttributes($uid));
+            $providerAttributes = $provider->getAttributes($uid);
+
+            switch ($provider->getStrategy()) {
+                case EngineBlock_AttributeProvider_Interface::STRATEGY_ADD:
+                    $attributes = $this->_addAttributes($attributes, $providerAttributes);
+                    break;
+
+                case EngineBlock_AttributeProvider_Interface::STRATEGY_MERGE:
+                    $attributes = $this->_mergeAttributes($attributes, $providerAttributes);
+                    break;
+
+                default:
+                    throw new EngineBlock_Exception("Unknown attribute strategy for provider: " . get_class($provider));
+            }
         }
         return $attributes;
+    }
+
+    /**
+     * Add new attributes, but don't overwrite existing attributes
+     *
+     * @param array $ebAttributes       Attributes by EngineBlock (from IdP)
+     * @param array $providerAttributes Attributes from provider
+     * @return array New attributes to use
+     */
+    protected function _addAttributes(array $ebAttributes, array $providerAttributes)
+    {
+        foreach ($providerAttributes as $attribName => $attribValues) {
+            if (!isset($ebAttributes[$attribName])) {
+                $ebAttributes[$attribName] = $attribValues;
+            }
+            else {
+                // @todo we may need to differentiate between single and multi-valued attributes
+                //       for instance the Idp could have provided an e-mail attribute, but
+                //       attribute aggregation could add another e-mail.
+                //       however we don't want to add a new value for the uid attribute.
+                //       So for now, if EB already has an attribute, we ignore attributes from aggregation.
+                continue;
+            }
+        }
+        return $ebAttributes;
+    }
+
+    /**
+     * Merge the attributes, add new ones or overwrite existing ones.
+     *
+     * @param array $ebAttributes       Attributes by EngineBlock (from IdP)
+     * @param array $providerAttributes Attributes from provider
+     * @return array New attributes to use
+     */
+    protected function _mergeAttributes(array $ebAttributes, array $providerAttributes)
+    {
+        return array_merge_recursive($ebAttributes, $providerAttributes);
     }
 }
