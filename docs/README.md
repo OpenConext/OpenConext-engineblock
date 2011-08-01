@@ -45,6 +45,10 @@ to start your installation.
 
     mysql> create database serviceregistry default charset utf8 default collate utf8_unicode_ci;
 
+### Check out the application ###
+
+Before you can start configuring you have to check out the application (if you didn't already do so). e.g. put it
+in /var/www.
 
 ### Then configure the application ###
 
@@ -55,6 +59,12 @@ Copy over the example configuration files and directory from the *docs/etc/* dir
 
 Then edit the copied files with your favorite editor and review the settings to make sure it matches your configuration.
 
+### Enable Janus Module ###
+
+Janus must be enabled, since it is not by default. This is because it is an external library in our svn. To enable
+janus execute the following command from the directory you checked out the serviceregistry application:
+
+    touch modules/janus/enable
 
 ### Run install script ###
 
@@ -172,3 +182,7 @@ If you are using this pattern, an update can be done with the following:
 4. Change the symlink.
 
 5. Run new patches in database/.
+
+6. Enable the janus module:
+
+    touch modules/janus/enable
