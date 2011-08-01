@@ -25,6 +25,9 @@
 
 interface EngineBlock_AttributeProvider_Interface
 {
+    const STRATEGY_MERGE = 'merge';
+    const STRATEGY_ADD   = 'add';
+
     /**
      * Retrieve all attributes that the AttributeProvider provides for the
      * given user.
@@ -40,4 +43,6 @@ interface EngineBlock_AttributeProvider_Interface
      *                 AttributeProvider is the source (@see getIdentifier()).
      */
     public function getAttributes($uid);
+
+    public function getStrategy();
 }

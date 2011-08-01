@@ -29,4 +29,9 @@ class EngineBlock_AttributeProvider_Dummy implements EngineBlock_AttributeProvid
     {
         return array();
     }
+
+    public function getStrategy()
+    {
+        return EngineBlock_AttributeProvider_Interface::STRATEGY_MERGE;
+    }
 }
