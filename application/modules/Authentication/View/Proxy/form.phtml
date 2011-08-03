@@ -37,27 +37,32 @@ if (!isset($message)) {
  * @var Zend_Layout $layout
  */
 $layout = $this->layout();
-$layout->setLayout('form');
+$layout->setLayout('empty');
 
 // Set Layout properties
 $layout->title = $layout->title. ' - '. $this->t('post_data');
-$layout->header = $layout->title;
-$layout->subheader = $this->t('post_data');
-$layout->footerText = $this->t('footer');
-
-if (!$trace) {
-    $layout->getView()->inlineScript()->appendScript("
-    $(document).ready(function() {
-        $('#ProcessForm').submit();
-    });");
-}
-
-$layout->getView()->inlineScript()->appendScript("
-$(document).ready(function() {
-    $('#submitbutton').focus();
-});");
-
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="robots" content="noindex, nofollow"/>
+        <title><?= $layout->title; ?></title>
+        <style type="text/css">
+        body {
+            color:#333;
+            font: 12px/17px Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 0;
+            background: #e7e7e7;
+        }
+        p {
+            padding: 0;
+            margin: 10px 0 0 10px;
+        }
+        </style>
+    </head>
+    <body <? if (!$trace): ?>onload="document.forms[0].submit()"<? endif; ?>>
         <noscript>
             <p>
                 <strong><?php echo $this->t('note'); ?>:</strong>
@@ -74,11 +79,14 @@ $(document).ready(function() {
 
             <? if ($trace): ?>
             <input id="submitbutton" type="submit" value="Submit" />
-            <div class="trace-wrapper">
-                <pre>
-                    <?= $trace ?>
-                </pre>
-            </div>
+            <pre>
+                <?= $trace ?>
+            </pre>
+            <script type="text/javascript">
+                document.getElementById('submitbutton').focus();
+            </script>
             <? endif; ?>
 
         </form>
+    </body>
+</html>
