@@ -74,6 +74,8 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
             $result = $this->_getRegistry()->getMetadata($entityId);
         }
 
+        $result['entityId'] = $entityId;
+
         $this->_getResponse()->setHeader('Content-Type', 'application/json');
         $this->_getResponse()->setBody(json_encode($result));
     }
