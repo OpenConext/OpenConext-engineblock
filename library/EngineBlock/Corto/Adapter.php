@@ -539,7 +539,7 @@ class EngineBlock_Corto_Adapter
     protected function _enrichAttributes($idpEntityId, $spEntityId, $subjectId, array $attributes)
     {
         $aggregator = $this->_getAttributeAggregator(
-            $this->_getAttributeProviders($spEntityId)
+            $this->_getAttributeProviders($spEntityId, isset($attributes[self::VO_NAME_ATTRIBUTE]) ? $attributes[self::VO_NAME_ATTRIBUTE][0] : null)
         );
         return $aggregator->aggregateFor(
             $attributes,
@@ -606,11 +606,11 @@ class EngineBlock_Corto_Adapter
         $response->setBody($proxyOutput);
     }
 
-    protected function _getAttributeProviders($spEntityId)
+    protected function _getAttributeProviders($spEntityId, $voContext = null)
     {
         $providers = array();
-        if (isset($this->_voContext)) {
-            $providers[] = new EngineBlock_AttributeProvider_VoManage($this->_voContext, $spEntityId);
+        if ($voContext) {
+            $providers[] = new EngineBlock_AttributeProvider_VoManage($voContext, $spEntityId);
         }
         return $providers;
     }
