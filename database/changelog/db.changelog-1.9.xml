@@ -31,6 +31,6 @@
                 <constraints nullable="false" />
             </column>
         </createTable>
-        <addUniqueConstraint tableName="virtual_organisation_attribute" columnNames="vo_id (200),sp_entity_id (200),user_id_pattern (200),attribute_name_saml (200),attribute_name_opensocial (200)"/>
+        <sql>ALTER TABLE virtual_organisation_attribute ADD UNIQUE (vo_id (200),sp_entity_id (200),user_id_pattern (200),attribute_name_saml (200),attribute_name_opensocial (200));</sql>
     </changeSet>
 </databaseChangeLog>
