@@ -92,7 +92,7 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
     /**
      * Retrieve the list of groups that the specified subject is a member of.
      */
-    public function getGroups()
+    public function getGroups($stem = null)
     {
         $this->_requireSubjectId();
 
@@ -104,6 +104,18 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
             <subjectId>$subjectIdEncoded</subjectId>
         </WsSubjectLookup>
     </subjectLookups>
+XML;
+        if ($stem) {
+            $stemEncoded = htmlentities($stem);
+            $request .= <<<XML
+    <wsStemLookup>
+        <stemName>$stemEncoded</stemName>
+    </wsStemLookup>
+    <stemScope>ALL_IN_SUBTREE</stemScope>
+XML;
+        }
+
+        $request .= <<<XML
     <actAsSubjectLookup>
         <subjectId>$subjectIdEncoded</subjectId>
     </actAsSubjectLookup>
@@ -169,48 +181,6 @@ XML;
         }
 
         return $members;
-    }
-
-    public function getGroupsByStem($stem)
-    {
-        $this->_requireSubjectId();
-
-        $subjectIdEncoded = htmlentities($this->_subjectId);
-        $stemEncoded = htmlentities($stem);
-
-        $request = <<<XML
-<WsRestGetGroupsRequest>
-    <subjectLookups>
-        <WsSubjectLookup>
-            <subjectId>$subjectIdEncoded</subjectId>
-        </WsSubjectLookup>
-    </subjectLookups>
-    <wsStemLookup>
-        <stemName>$stemEncoded</stemName>
-    </wsStemLookup>
-    <stemScope>ALL_IN_SUBTREE</stemScope>
-    <actAsSubjectLookup>
-        <subjectId>$subjectIdEncoded</subjectId>
-    </actAsSubjectLookup>
-</WsRestGetGroupsRequest>
-XML;
-        try {
-            $result = $this->_doRest('subjects', $request);
-        }
-        catch(Exception $e) {
-            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
-                throw new Grouper_Client_Exception_SubjectNotFound();
-            }
-            throw $e;
-        }
-
-        $groups = array();
-        if (isset($result) and ($result !== FALSE) and (! empty($result->results->WsGetGroupsResult))) {
-            foreach ($result->results->WsGetGroupsResult->wsGroups->WsGroup as $group) {
-                $groups[] = $this->_mapXmlToGroupModel($group);
-            }
-        }
-        return $groups;
     }
 
     /**
