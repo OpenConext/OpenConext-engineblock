@@ -25,7 +25,7 @@
 
 class EngineBlock_AttributeProvider_Dummy implements EngineBlock_AttributeProvider_Interface
 {
-    public function getAttributes($uid)
+    public function getAttributes($uid, $format = self::FORMAT_SAML)
     {
         return array();
     }

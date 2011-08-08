@@ -73,7 +73,12 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             throw new SocialSpiException("Relative identifiers such as 'viewer', 'me' or 'owner' not supported! (requested: " . ($userId->getType()) . ")");
         }
         $identifier = $userId->getUserId($token);
-        $result = $this->_getSocialData()->getPerson($identifier, array_values($fields));
+        $result = $this->_getSocialData()->getPerson(
+            $identifier,
+            array_values($fields),
+            isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null,
+            isset($_REQUEST['sp-entity-id']) ? $_REQUEST['sp-entity-id'] : null
+        );
         if (empty($result)) {
             return new EmptyResponseItem();
         }
@@ -100,7 +105,13 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             $people = array();
             $socialData = $this->_getSocialData();
             foreach ($userId as $userId) {
-                $person = $socialData->getPerson($userId, $fields);
+                $person = $socialData->getPerson(
+                    $userId,
+                    $fields,
+                    isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null,
+                    isset($_REQUEST['sp-entity-id']) ? $_REQUEST['sp-entity-id'] : null
+                );
+
                 if (!empty($person)) {
                     $people[] = $person;
                 }
@@ -124,7 +135,13 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             $groupId = $groupId->getGroupId();
             $groupId = array_shift($groupId);
 
-            $people = $this->_getSocialData()->getGroupMembers($groupMemberUid, $groupId, $fields);
+            $people = $this->_getSocialData()->getGroupMembers(
+                $groupMemberUid,
+                $groupId,
+                $fields,
+                isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null,
+                isset($_REQUEST['sp-entity-id']) ? $_REQUEST['sp-entity-id'] : null
+            );
         }
 
         $totalSize = count($people);
@@ -151,7 +168,8 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
         try {
             return $this->_getSocialData()->getGroupsForPerson(
                 $userId->getUserId($token),
-                $groupId
+                $groupId,
+                isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null
             );
         } catch(EngineBlock_Groups_Exception_UserDoesNotExist $e) {
             return new EmptyResponseItem();

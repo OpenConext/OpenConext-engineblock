@@ -31,6 +31,9 @@
  */
 class EngineBlock_AttributeAggregator 
 {
+    const FORMAT_OPENSOCIAL = 'opensocial';
+    const FORMAT_SAML       = 'saml';
+
     protected $_providers = array();
 
     /**
@@ -50,10 +53,13 @@ class EngineBlock_AttributeAggregator
      * @param string $uid        URN for user (example: urn:collab:person:example.edu:john.doe)
      * @return array             Enhanced attributes
      */
-    public function aggregateFor(array $attributes, $uid)
+    public function aggregateFor(array $attributes, $uid, $format = FORMAT_SAML)
     {
+        /**
+         * @var EngineBlock_AttributeProvider_Interface $provider
+         */
         foreach ($this->_providers as $provider) {
-            $providerAttributes = $provider->getAttributes($uid);
+            $providerAttributes = $provider->getAttributes($uid, $format);
 
             switch ($provider->getStrategy()) {
                 case EngineBlock_AttributeProvider_Interface::STRATEGY_ADD:
@@ -103,7 +109,7 @@ class EngineBlock_AttributeAggregator
      * @param array $providerAttributes Attributes from provider
      * @return array New attributes to use
      */
-    protected function _mergeAttributes(array $ebAttributes, array $providerAttributes)
+    protected function _mergeAttributes(EngineBlock_Attributes $ebAttributes, array $providerAttributes)
     {
         return array_merge_recursive($ebAttributes, $providerAttributes);
     }

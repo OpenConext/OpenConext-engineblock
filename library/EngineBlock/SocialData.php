@@ -48,6 +48,11 @@ class EngineBlock_SocialData
     protected $_fieldMapper = NULL;
 
     /**
+     * @var EngineBlock_AttributeAggregator
+     */
+    protected $_attributeAggregator;
+
+    /**
      * @var String
      */
     protected $_appId = NULL;
@@ -62,16 +67,23 @@ class EngineBlock_SocialData
         $this->_appId = $appId;
     }
 
-    public function getGroupsForPerson($identifier, $groupId = null)
+    /**
+     * @param string $identifier
+     * @param null|string $groupId
+     * @param null|string $voId
+     * @return array OpenSocial groups
+     */
+    public function getGroupsForPerson($identifier, $groupId = null, $voId = null)
     {
+        $groupStem = '';
+        if ($voId) {
+            $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
+            $groupStem = $virtualOrganization->getStem();
+        }
+
         $engineBlockGroups = NULL;
         $groupProvider = $this->_getGroupProvider($identifier);
-        if (isset($_REQUEST["vo"])) {
-            $virtualOrganization = new EngineBlock_VirtualOrganization($_REQUEST["vo"]);
-            $engineBlockGroups = $groupProvider->getGroupsByStem($virtualOrganization->getStem());
-        } else {
-            $engineBlockGroups = $groupProvider->getGroups();
-        }
+        $engineBlockGroups = $groupProvider->getGroups($groupStem);
         
         $openSocialGroups = array();
         foreach ($engineBlockGroups as $group) {
@@ -86,7 +98,7 @@ class EngineBlock_SocialData
         return $openSocialGroups;
     }
 
-    public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array())
+    public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array(), $voId = null, $spEntityId = null)
     {
         $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId);
 
@@ -95,33 +107,44 @@ class EngineBlock_SocialData
          * @var EngineBlock_Group_Model_GroupMember $groupMember
          */
         foreach ($groupMembers as $groupMember) {
-            $person = $this->getPerson($groupMember->id, $socialAttributes);
+            $person = $this->getPerson($groupMember->id, $socialAttributes, $voId, $spEntityId);
 
             if (!$person) {
                 continue;
             }
-            
+
             $people[] = $person;
         }
         return $people;
     }
 
-    public function getPerson($identifier, $socialAttributes = array())
+    public function getPerson($identifier, $socialAttributes = array(), $voId = null, $spEntityId = null)
     {
         $fieldMapper = $this->_getFieldMapper();
 
         $ldapAttributes = $fieldMapper->socialToLdapAttributes($socialAttributes);
 
         $persons = $this->_getUserDirectory()->findUsersByIdentifier($identifier, $ldapAttributes);
-        if (count($persons)) {
-            // ignore the hypothetical possibility that we get multiple results for now.
-            $result = $fieldMapper->ldapToSocialData($persons[0], $socialAttributes);
+        if (count($persons) === 1) {
+            $person = array_shift($persons);
+            $person = $fieldMapper->ldapToSocialData($person, $socialAttributes);
+
+            if ($voId && $spEntityId) {
+                $person = $this->_getAttributeAggregator($voId, $spEntityId)->aggregateFor(
+                    $person,
+                    $person['id'],
+                    EngineBlock_AttributeAggregator::FORMAT_OPENSOCIAL
+                );
+            }
 
             // Make sure we only include attributes that we are allowed to share
-            $result = $this->_enforceArp($result);
+            $person = $this->_enforceArp($person);
 
-            return $result;
-        } else {
+            return $person;
+        } else if (count($persons) > 1) {
+            throw new EngineBlock_Exception("More than 1 person found for identifier $identifier");
+        }
+        else {
             return false;
         }
     }
@@ -192,6 +215,18 @@ class EngineBlock_SocialData
             $this->_groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor($userId);
         }
         return $this->_groupProvider;
+    }
+
+    protected function _getAttributeAggregator($voId, $spEntityId)
+    {
+        if (!isset($this->_attributeAggregator)) {
+            $this->_attributeAggregator = new EngineBlock_AttributeAggregator(
+                array(
+                    new EngineBlock_AttributeProvider_VoManage($voId, $spEntityId),
+                )
+            );
+        }
+        return $this->_attributeAggregator;
     }
     
     /**
