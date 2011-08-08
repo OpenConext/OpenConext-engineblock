@@ -53,7 +53,7 @@ class EngineBlock_AttributeAggregator
      * @param string $uid        URN for user (example: urn:collab:person:example.edu:john.doe)
      * @return array             Enhanced attributes
      */
-    public function aggregateFor(array $attributes, $uid, $format = FORMAT_SAML)
+    public function aggregateFor(array $attributes, $uid, $format = self::FORMAT_SAML)
     {
         /**
          * @var EngineBlock_AttributeProvider_Interface $provider
