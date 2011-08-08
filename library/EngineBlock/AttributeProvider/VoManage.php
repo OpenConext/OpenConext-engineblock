@@ -40,7 +40,7 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
         foreach ($rows as $row) {
             $userIdRegex = $this->_convertPatternToRegex($row['user_id_pattern']);
             if (preg_match($userIdRegex, $subjectId)) {
-                $attributes[$row['attribute_name']][] = $row['attribute_value'];
+                $attributes[$row[$attributeFieldName]][] = $row['attribute_value'];
             }
         }
 
@@ -54,7 +54,7 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
         // Escape the pattern for use in a regex
         $pattern = preg_quote($pattern);
         // Convert the wildcards to a regex pattern (.* = one or more characters of any kind)
-        return str_replace('&SEARCH&', '.*', $pattern);
+        return '|' . str_replace('&SEARCH&', '.*', $pattern) . '|';
     }
 
     protected function getDatabaseConnection()
