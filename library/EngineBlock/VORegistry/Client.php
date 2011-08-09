@@ -67,6 +67,13 @@ class EngineBlock_VORegistry_Client
                     "groupstem"=>"nl:surfnet:management"
                 );
                 break;
+                
+            case "surfmedia_dienstvo":
+                return array(
+                    "groupidentifier"=>"surfmedia_dienst",
+                    "groupstem"=>"nl:surfnet:diensten"
+                );
+                break;
 
            default:
                 return array(
