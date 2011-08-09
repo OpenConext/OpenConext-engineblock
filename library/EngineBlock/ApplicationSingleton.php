@@ -127,7 +127,7 @@ class EngineBlock_ApplicationSingleton
         $classNameParts = explode('_', $className);
 
         // Known libraries (like Zend and EngineBlock)
-        if (in_array($classNameParts[0], array('Grouper', 'EngineBlock', 'OpenSocial', 'Zend'))) {
+        if (in_array($classNameParts[0], array('Grouper', 'EngineBlock', 'OpenSocial', 'Zend', 'Surfnet'))) {
             $fileName = implode('/', explode('_', $className)).'.php';
             $filePath = ENGINEBLOCK_FOLDER_LIBRARY . $fileName;
 

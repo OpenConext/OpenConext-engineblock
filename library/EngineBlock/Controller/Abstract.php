@@ -55,7 +55,7 @@ class EngineBlock_Controller_Abstract
         return method_exists($this, $methodName);
     }
 
-    public function handleAction($actionName, $arguments)
+    public function handleAction($actionName, $arguments=array())
     {
         if (method_exists($this, 'init')) {
             $this->init();

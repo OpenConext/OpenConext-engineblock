@@ -98,6 +98,35 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
 
+    //VO Manage
+    'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',
+    'vomanage_sub_header'               => 'VO Gebruikersattributen',    
+    'vomanage_index_intro'              => 'Beheer de gebruikersattributen van een Virtuele Organisatie.',
+    'vomanage_index_add'                => 'Toevoegen',
+    'vomanage_index_edit'               => 'Bewerken',
+    'vomanage_index_delete'             => 'Verwijderen',
+    'vomanage_index_selectvo'           => 'Andere VO selecteren',
+    'vomanage_selectvo_intro'           => 'Selecteer eerst een Virtuele Organisatie.',
+    'vomanage_selectvo_header'          => 'Beschikbare Virtuele Organisaties:',
+    'vomanage_selectvo_submit'          => 'Selecteer',
+    'vomanage_add_intro'                => 'Maak een nieuw gebruikersattribuut aan.',
+    'vomanage_add_save'                 => 'Opslaan',
+    'vomanage_add_cancel'               => 'Annuleren',
+    'vomanage_edit_intro'               => 'Bewerk een gebruikersattribuut.',
+    'vomanage_edit_save'                => 'Opslaan',
+    'vomanage_edit_cancel'              => 'Annuleren',
+    'vomanage_save_success'             => 'De gegevens zijn succesvol opgeslagen.',
+    'vomanage_save_fail'                => 'Er is een fout opgetreden bij het opslaan van de gegevens.',
+    'vomanage_save_back'                => 'Terug naar het overzicht',
+    'vomanage_of'                       => 'van',
+    // form errors
+    'Field is obligatory, but no input given' => 'Verplicht veld',
+    'xor_error'                         => 'Eén van deze velden moet een geldige waarde bevatten.',
+    // SQL errors
+    '23000'                             => 'Fout: Deze combinatie bestaat al.',
+    
+    
+    
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'U bent bijna klaar..',

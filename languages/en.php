@@ -99,6 +99,34 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more 3rd party application(s) with your institutional account. In addition, your group membership(s) may be shared with these applications. If you would like to quit using SURFconext and delete your SURFconext profile, please click the link below.',
     'profile_leave_surfconext_link'     => 'Delete my SURFconext profile!',
 
+    //Profile
+    'vomanage_header'                   => 'SURFconext - VO User Attributes',
+    'vomanage_sub_header'               => 'VO User Attributes',
+    'vomanage_index_intro'              => 'Manage the user attributes of a Virtual Organisation.',
+    'vomanage_index_add'                => 'Add new',
+    'vomanage_index_edit'               => 'Edit',
+    'vomanage_index_delete'             => 'Delete',
+    'vomanage_index_selectvo'           => 'Select another VO',
+    'vomanage_selectvo_intro'           => 'Before accessing the user attributes, select a Virtual Organisation first.',
+    'vomanage_selectvo_header'          => 'Available Virtual Organisations:',
+    'vomanage_selectvo_submit'          => 'Select',
+    'vomanage_add_intro'                => 'Create a new user attribute.',
+    'vomanage_add_save'                 => 'Save',
+    'vomanage_add_cancel'               => 'Cancel',
+    'vomanage_edit_intro'               => 'Edit a user attribute.',
+    'vomanage_edit_save'                => 'Save',
+    'vomanage_edit_cancel'              => 'Cancel',
+    'vomanage_save_success'             => 'The data has been succesfully stored.',
+    'vomanage_save_fail'                => 'An error occurred while saving the data.',
+    'vomanage_save_back'                => 'Back to index',
+    'vomanage_of'                       => 'of',
+    // form errors
+    'Field is obligatory, but no input given' => 'Obligatory field',
+    'xor_error'                         => 'One of these fields must contain a valid value.',
+    // SQL errors
+    '23000'                             => 'Error: This combination already exists.',
+    
+    
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'You are almost done..',

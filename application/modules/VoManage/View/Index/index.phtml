@@ -1,0 +1,73 @@
+<?php
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// The current language
+$lang = $this->language();
+
+$layout->header = $this->t('vomanage_header');
+$layout->subheader = $this->t('vomanage_sub_header');
+$layout->title = $layout->title . ' - ' . $layout->subheader;
+$layout->footerText = $this->t('footer');
+
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/vomanage.js');
+?>
+<div>
+    <br/>
+        <h2><?php echo $this->t('vomanage_index_intro'); ?></h2>
+    <br/>
+    <form id="actionform" method="POST">
+        <table class="datatable">
+            <thead>
+                <tr>
+                    <th><?php echo $this->t('sp_entity_id'); ?></th>
+                    <th><?php echo $this->t('user_id_pattern'); ?></th>
+                    <th><?php echo $this->t('attribute_name_saml'); ?></th>
+                    <th><?php echo $this->t('attribute_name_opensocial'); ?></th>
+                    <th><?php echo $this->t('attribute_value'); ?></th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+        <?php if (count($resultSet) > 0) : ?>
+            <?php foreach ($resultSet as $i => $row) { ?>
+                <tr>
+                    <td>
+                        <?php echo $row['sp_entity_id_display']; ?>
+                    </td>
+                    <td>
+                        <?php echo $row['user_id_pattern']; ?>
+                    </td>
+                    <td>
+                        <?php echo $row['attribute_name_saml']; ?>
+                    </td>
+                    <td>
+                        <?php echo $row['attribute_name_opensocial']; ?>
+                    </td>
+                    <td>
+                        <?php echo $row['attribute_value']; ?>
+                    </td>
+                    <td style="width: 36px"><a href="#" onclick="$('#action').val('edit'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/edit.png" alt="<?php echo $this->t('vomanage_index_edit'); ?>"/></a>&nbsp;<a href="#" onclick="$('#action').val('delete'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/delete.png" alt="<?php echo $this->t('vomanage_index_delete'); ?>"/></a>
+                    </td>
+                </tr>
+            <? } ?>
+            </table>
+            <div class="datatable_footer">Records 1 - <?php echo count($resultSet); ?> <?php echo $this->t('vomanage_of'); ?> <?php echo count($resultSet); ?></div>
+        <?php else : ?>
+                <tr><td colspan="5"></td></tr>
+            </table>
+            <div class="datatable_footer">No records found.</div>
+        <?php endif; ?>
+        <p>
+            <input type="hidden" id="id" name="id" value=""/>
+            <input type="hidden" id="vo_id" name="vo_id" value="<?php echo $vo_id; ?>"/>
+            <input type="hidden" id="action" name="action" value=""/>
+            <input type="button" name="add" value="<?php echo $this->t('vomanage_index_add'); ?>" 
+                   onclick="$('#action').val('add'); $('#actionform').submit();"/>
+            <input type="button" name="selectvo" value="<?php echo $this->t('vomanage_index_selectvo'); ?>" 
+                   onclick="$('#vo_id').val(''); $('#action').val('selectvo'); $('#actionform').submit();"/>
+        </p>
+    </form>
+</div>
