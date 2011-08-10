@@ -37,7 +37,7 @@ $layout->footerText = $this->t('footer');
 
         <form id="actionform" method="POST">
             <input type="hidden" id="vo_id" name="vo_id" value="<?php echo $vo_id; ?>"/>
-            <input type="hidden" id="action" name="action" value="index"/>
+            <input type="hidden" id="action" name="action" value="Index"/>
             <input type="submit" name="backtoindex" value="<?php echo $this->t('vomanage_save_back'); ?>"/>
         </form>
         </p>
@@ -130,7 +130,7 @@ $layout->footerText = $this->t('footer');
         </table>
         <br/>
         <input type="hidden" name="vo_id" value="<?php echo $vo_id; ?>"/>
-        <input type="hidden" id="action" name="action" value="add"/>
+        <input type="hidden" id="action" name="action" value="Add"/>
         <input type="hidden" id="formaction" name="formaction" value=""/>
         <input type="button" name="save" value="<?php echo $this->t('vomanage_add_save'); ?>" 
                onclick="$('#formaction').val('save'); $('#addform').submit();"/>

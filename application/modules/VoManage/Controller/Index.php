@@ -4,7 +4,7 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
 {
     protected $m_vo_id = '';
     protected $m_action = '';
-    protected $m_allowedActions = array('index', 'selectvo', 'add', 'edit', 'delete');
+    protected $m_allowedActions = array('Index', 'SelectVo', 'Add', 'Edit', 'Delete');
     
     /**
      * VO selection
@@ -16,7 +16,7 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
         if (strlen($vo_id) > 0) {
             // go to attribute list
             $this->m_vo_id = $vo_id;
-            $this->handleAction("index");
+            $this->handleAction("Index");
             return;
         }
         // show VO list
@@ -81,7 +81,7 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
             $this->data = $data;
         } elseif ($formAction == 'cancel') {
             // return to index, ignore dispatching
-            $this->handleAction('index', array(FALSE));
+            $this->handleAction('Index', array(FALSE));
         } else {
             // initial values
             $this->data = array('user_id_pattern' => 'urn:collab:person:*');
@@ -105,7 +105,7 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
             $this->data = $data;
         } elseif ($formAction == 'cancel') {
             // return to index, ignore dispatching
-            $this->handleAction('index', array(FALSE));
+            $this->handleAction('Index', array(FALSE));
         }
         // form data
         $this->spList = $this->getServiceProviders();        
@@ -129,13 +129,13 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
             $this->data = $data;
         } elseif ($formAction == 'cancel') {
             // return to index, ignore dispatching
-            $this->handleAction('index', array(FALSE));
+            $this->handleAction('Index', array(FALSE));
         }
     }
     
     protected function dispatchAction($postVars) {
-        $this->m_action = strtolower(trim(html_entity_decode($this->_getRequest()->getPostParameter("action"))));
-        if (in_array($this->m_action, $this->m_allowedActions) && $this->m_action != 'index') {
+        $this->m_action = trim(html_entity_decode($this->_getRequest()->getPostParameter("action")));
+        if (in_array($this->m_action, $this->m_allowedActions) && $this->m_action != 'Index') {
             $this->handleAction($this->m_action);
         }
         return;

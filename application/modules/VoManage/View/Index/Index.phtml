@@ -56,7 +56,7 @@ $layout->footerText = $this->t('footer');
                         <?php else : echo $row['attribute_value'][0]; endif; ?>
                     <?php else : echo $row['attribute_value']; endif; ?>
                     </td>
-                    <td style="width: 36px"><a href="#" onclick="$('#action').val('edit'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/edit.png" alt="<?php echo $this->t('vomanage_index_edit'); ?>"/></a>&nbsp;<a href="#" onclick="$('#action').val('delete'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/delete.png" alt="<?php echo $this->t('vomanage_index_delete'); ?>"/></a>
+                    <td style="width: 36px"><a href="#" onclick="$('#action').val('Edit'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/edit.png" alt="<?php echo $this->t('vomanage_index_edit'); ?>"/></a>&nbsp;<a href="#" onclick="$('#action').val('Delete'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/delete.png" alt="<?php echo $this->t('vomanage_index_delete'); ?>"/></a>
                     </td>
                 </tr>
             <? } ?>
@@ -72,9 +72,9 @@ $layout->footerText = $this->t('footer');
             <input type="hidden" id="vo_id" name="vo_id" value="<?php echo $vo_id; ?>"/>
             <input type="hidden" id="action" name="action" value=""/>
             <input type="button" name="add" value="<?php echo $this->t('vomanage_index_add'); ?>" 
-                   onclick="$('#action').val('add'); $('#actionform').submit();"/>
+                   onclick="$('#action').val('Add'); $('#actionform').submit();"/>
             <input type="button" name="selectvo" value="<?php echo $this->t('vomanage_index_selectvo'); ?>" 
-                   onclick="$('#vo_id').val(''); $('#action').val('selectvo'); $('#actionform').submit();"/>
+                   onclick="$('#vo_id').val(''); $('#action').val('SelectVo'); $('#actionform').submit();"/>
         </p>
     </form>
 </div>
