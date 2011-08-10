@@ -28,10 +28,9 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
             throw new EngineBlock_Exception("Unknown format '$format' for VoManage Attribute Provider");
         }
 
-        $query = "
-        SELECT $attributeFieldName, attribute_value, user_id_pattern
-        FROM virtual_organisation_attribute
-        WHERE vo_id=? AND sp_entity_id = ?";
+        $query = "SELECT $attributeFieldName, attribute_value, user_id_pattern
+                  FROM virtual_organisation_attribute
+                  WHERE vo_id = ? AND sp_entity_id = ?";
         $statement = $this->getDatabaseConnection()->prepare($query);
         $statement->execute(array($this->_voId, $this->_spEntityId));
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
@@ -40,7 +39,14 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
         foreach ($rows as $row) {
             $userIdRegex = $this->_convertPatternToRegex($row['user_id_pattern']);
             if (preg_match($userIdRegex, $subjectId)) {
-                $attributes[$row[$attributeFieldName]][] = $row['attribute_value'];
+                if ($format == self::FORMAT_OPENSOCIAL) {
+                    $attributes[$this->_voId][] = array(
+                        'key' => $this->_voId.'_'.$row[$attributeFieldName],
+                        'value' => json_decode($row['attribute_value']),
+                    );
+                } elseif ($format == self::FORMAT_SAML) {
+                    $attributes[$row[$attributeFieldName]][] = json_decode($row['attribute_value']);
+                }
             }
         }
 
