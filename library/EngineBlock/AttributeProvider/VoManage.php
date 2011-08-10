@@ -45,7 +45,7 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
                         'value' => json_decode($row['attribute_value']),
                     );
                 } elseif ($format == self::FORMAT_SAML) {
-                    $attributes[$row[$attributeFieldName]][] = json_decode($row['attribute_value']);
+                    $attributes[$row[$attributeFieldName]] = json_decode($row['attribute_value']);
                 }
             }
         }
