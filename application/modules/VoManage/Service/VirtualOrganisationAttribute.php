@@ -92,8 +92,16 @@ class VoManage_Service_VirtualOrganisationAttribute
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
     
-    public function delete($id)
+    public function delete($vo_id, $id)
     {
+        // create return object
+        $vo = new VoManage_Model_VirtualOrganisationAttribute();
+        // Delete
+        $statement = $this->dbConnection->prepare("DELETE FROM virtual_organisation_attribute WHERE id = ? AND vo_id = ?");
+        $statement->execute(array($id, $vo_id));            
+        if ($statement->errorCode() != '00000') 
+            $vo->errors = array('sql' => $statement->errorCode());
+        return $vo;
     }
 
 }

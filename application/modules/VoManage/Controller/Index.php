@@ -29,7 +29,7 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
      */
     public function indexAction($dispatch=TRUE)
     {
-        var_dump($this->_getRequest()->getPostParameters());
+        //var_dump($this->_getRequest()->getPostParameters());
         
         // VO selected?
         $this->getSelectedVO();
@@ -106,6 +106,28 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
         }
         // form data
         $this->spList = $this->getServiceProviders();        
+    }
+    
+    public function deleteAction() {
+        $formAction = html_entity_decode($this->_getRequest()->getPostParameter("formaction"));
+        $this->vo_id = $this->m_vo_id;
+        $service = new VoManage_Service_VirtualOrganisationAttribute();
+        $this->id = intval($this->_getRequest()->getPostParameter('id'));
+        
+        if ($formAction == '') {
+            $record = $service->fetch($this->m_vo_id, $this->id);
+            $spList = $this->getServiceProviders();
+            $record['sp_entity_id_display'] = (isset($spList[$record['sp_entity_id']]) ? $spList[$record['sp_entity_id']]['id_display'] : '- unknown -');
+            $this->data = $record;
+        } elseif ($formAction == 'delete') {
+            $data = $this->_getRequest()->getPostParameters();
+            $result = $service->delete($this->m_vo_id, $this->id);
+            $this->errors = $result->errors;
+            $this->data = $data;
+        } elseif ($formAction == 'cancel') {
+            // return to index, ignore dispatching
+            $this->handleAction('index', array(FALSE));
+        }
     }
     
     protected function dispatchAction($postVars) {
