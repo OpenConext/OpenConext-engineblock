@@ -150,7 +150,7 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
         if (strlen($this->m_vo_id) == 0) {
             $vo_id = trim(html_entity_decode($this->_getRequest()->getPostParameter("vo_id")));
             if (strlen($vo_id) == 0 ) {
-                $this->handleAction("selectVo");
+                $this->handleAction("SelectVo");
                 return;
             }
             $this->m_vo_id = $vo_id;
