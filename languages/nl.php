@@ -127,6 +127,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'vomanage_of'                       => 'van',
     'vomanage_yes'                      => '',
     'vomanage_no'                       => '',
+    'vomanage_novalues'                 => '- geen waarden -',
     // form errors
     'Field is obligatory, but no input given' => 'Verplicht veld',
     'xor_error'                         => 'Eén van deze velden moet een geldige waarde bevatten.',

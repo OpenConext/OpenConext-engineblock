@@ -128,6 +128,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'vomanage_of'                       => 'of',
     'vomanage_yes'                      => 'Yes',
     'vomanage_no'                       => 'No',
+    'vomanage_novalues'                 => '- no values -',
     // form errors
     'Field is obligatory, but no input given' => 'Obligatory field',
     'xor_error'                         => 'One of these fields must contain a valid value.',

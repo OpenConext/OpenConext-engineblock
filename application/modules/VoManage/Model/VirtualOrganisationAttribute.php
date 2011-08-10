@@ -68,7 +68,7 @@ class VoManage_Model_VirtualOrganisationAttribute
     {
         foreach ($row as $key=>$value) {
             if (property_exists($this, $key)) {
-                if ($key == 'attribute_value' && is_array($value)) {
+                if ($key == 'attribute_value') {
                     $this->$key = json_encode($value);
                 } else $this->$key = $value;
             }

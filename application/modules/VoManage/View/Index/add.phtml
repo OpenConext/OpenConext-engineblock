@@ -98,26 +98,32 @@ $layout->footerText = $this->t('footer');
                     <label for="attribute_value">Attribute value</label>
                 </td>
                 <td>
+                    <?php if (!is_array($data['attribute_value']) || count($data['attribute_value']) == 0) : ?>
+                    <p id="novaluesmessage">
+                        <?php echo $this->t('vomanage_novalues'); ?>
+                    </p>
+                    <?php endif; ?>
+                    <ul id="valuelist">
                     <?php if (is_array($data['attribute_value'])) : ?>
-                        <ul id="valuelist">
                         <?php foreach ($data['attribute_value'] as $i => $value) : ?>
                             <li id="attribute_value_<?php echo $i ?>"><?php echo $value; ?><input type="hidden" name="attribute_value[]" value="<?php echo $value; ?>"><a href="#" style="margin-left: 50px" onclick="$('#attribute_value_<?php echo $i ?>').remove();">[remove]</a></li>
                         <?php endforeach; ?>
-                        </ul>
-                        <script>
-                            var valuecount = <?php echo $i ?>;
-                            var addValue = function() {
-                                var newvalue = jQuery.trim($('#newvalue').val());
-                                if (newvalue != '') {
-                                    valuecount++;
-                                    $("#valuelist").append('<li id="attribute_value_'+valuecount+'">'+newvalue+'<input type="hidden" name="attribute_value[]" value="'+newvalue+'"><a href="#" style="margin-left: 50px" onclick="$(\'#attribute_value_'+valuecount+'\').remove();">[remove]</a></li>');
-                                }
-                                $('#newvalue').val('');
-                            }
-                        </script>
-                        <input type="text" name="newvalue" id="newvalue"><input type="button" value="<?php echo $this->t('vomanage_add_newvalue'); ?>" 
-                            onclick="addValue();"/>
                     <?php endif; ?>
+                    </ul>
+                    <script>
+                        var valuecount = <?php echo ($i > 0 ? $i : 0) ?>;
+                        var addValue = function() {
+                            var newvalue = jQuery.trim($('#newvalue').val());
+                            if (newvalue != '') {
+                                valuecount++;
+                                $("#valuelist").append('<li id="attribute_value_'+valuecount+'">'+newvalue+'<input type="hidden" name="attribute_value[]" value="'+newvalue+'"><a href="#" style="margin-left: 50px" onclick="$(\'#attribute_value_'+valuecount+'\').remove();">[remove]</a></li>');
+                                $("#novaluesmessage").hide();
+                            }
+                            $('#newvalue').val('');
+                        }
+                    </script>
+                    <input type="text" name="newvalue" id="newvalue"><input type="button" value="<?php echo $this->t('vomanage_add_newvalue'); ?>" 
+                        onclick="addValue();"/>
                     <?php if (isset($errors['attribute_value'])) : ?><font color="red"><?php echo $this->t($errors['attribute_value']); ?></font><?php endif; ?>                    
                 </td>
             </tr>
