@@ -13,7 +13,6 @@ $layout->subheader = $this->t('vomanage_sub_header');
 $layout->title = $layout->title . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
-$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/vomanage.js');
 ?>
 <div>
     <br/>
@@ -47,7 +46,13 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
                         <?php echo $row['attribute_name_opensocial']; ?>
                     </td>
                     <td>
-                        <?php echo $row['attribute_value']; ?>
+                    <?php if (is_array($row['attribute_value'])) : ?>
+                        <ul>
+                        <?php foreach ($row['attribute_value'] as $value) : ?>
+                            <li style="margin-left: -26px;"><?php echo $value; ?></li>
+                        <?php endforeach; ?>
+                        </ul>
+                    <?php else : echo $row['attribute_value']; endif; ?>
                     </td>
                     <td style="width: 36px"><a href="#" onclick="$('#action').val('edit'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/edit.png" alt="<?php echo $this->t('vomanage_index_edit'); ?>"/></a>&nbsp;<a href="#" onclick="$('#action').val('delete'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="https://static.ebdev.net/media/delete.png" alt="<?php echo $this->t('vomanage_index_delete'); ?>"/></a>
                     </td>

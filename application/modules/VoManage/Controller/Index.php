@@ -82,6 +82,9 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
         } elseif ($formAction == 'cancel') {
             // return to index, ignore dispatching
             $this->handleAction('index', array(FALSE));
+        } else {
+            // initial values
+            $this->data = array('user_id_pattern' => 'urn:collab:person:*');
         }
         // form data
         $this->spList = $this->getServiceProviders();

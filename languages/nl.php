@@ -110,6 +110,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'vomanage_selectvo_header'          => 'Beschikbare Virtuele Organisaties:',
     'vomanage_selectvo_submit'          => 'Selecteer',
     'vomanage_add_intro'                => 'Maak een nieuw gebruikersattribuut aan.',
+    'vomanage_add_newvalue'             => 'Toevoegen',
     'vomanage_add_save'                 => 'Opslaan',
     'vomanage_add_cancel'               => 'Annuleren',
     'vomanage_edit_intro'               => 'Bewerk een gebruikersattribuut.',

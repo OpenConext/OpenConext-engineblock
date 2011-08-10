@@ -55,6 +55,10 @@ class VoManage_Model_VirtualOrganisationAttribute
     {
         $ret = array();
         foreach ($this as $propertyName => $propertyValue) {
+            if ($propertyName == 'attribute_value') {
+                $decoded = json_decode($propertyValue);
+                $ret[$propertyName] = ($decoded != null ? $decoded : $propertyValue);
+            }
             $ret[$propertyName] = $propertyValue;
         }
         return $ret;
@@ -64,7 +68,9 @@ class VoManage_Model_VirtualOrganisationAttribute
     {
         foreach ($row as $key=>$value) {
             if (property_exists($this, $key)) {
-                $this->$key = $value;
+                if ($key == 'attribute_value' && is_array($value)) {
+                    $this->$key = json_encode($value);
+                } else $this->$key = $value;
             }
         }
         return $this;

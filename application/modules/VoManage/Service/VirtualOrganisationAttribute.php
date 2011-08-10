@@ -29,6 +29,10 @@ class VoManage_Service_VirtualOrganisationAttribute
         $statement->execute(array($searchParams['vo_id']));
         $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
         
+        foreach($rows as &$row) {
+            $row = $this->jsonDecodeColumn($row, 'attribute_value');
+        }
+        
         return new Surfnet_Search_Results($params, $rows, count($rows));
     }
 
@@ -37,7 +41,7 @@ class VoManage_Service_VirtualOrganisationAttribute
         $vo = new VoManage_Model_VirtualOrganisationAttribute();
         $vo->populate($data);
         $vo->errors = array();
-
+        
         $form = new VoManage_Form_VirtualOrganisationAttribute();
         if (!$form->isValid($vo->toArray())) {
             $formErrors = $form->getErrors();
@@ -89,7 +93,9 @@ class VoManage_Service_VirtualOrganisationAttribute
     public function fetch($vo_id, $id) {
         $statement = $this->dbConnection->prepare("SELECT voa.* FROM virtual_organisation_attribute voa WHERE voa.vo_id = ? AND voa.id = ?");
         $statement->execute(array($vo_id, intval($id)));
-        return $statement->fetch(PDO::FETCH_ASSOC);
+        $record = $statement->fetch(PDO::FETCH_ASSOC);
+        $record = $this->jsonDecodeColumn($record, 'attribute_value');
+        return $record;
     }
     
     public function delete($vo_id, $id)
@@ -102,6 +108,20 @@ class VoManage_Service_VirtualOrganisationAttribute
         if ($statement->errorCode() != '00000') 
             $vo->errors = array('sql' => $statement->errorCode());
         return $vo;
+    }
+    
+    /**
+     * try to decode a record column. If not decodeable, leave as is.
+     * 
+     * @param array $record
+     * @param string $column 
+     */
+    protected function jsonDecodeColumn($record, $column) {
+        if (is_array($record) && isset($record[$column])) {
+            $decoded = json_decode($record[$column]);
+            if ($decoded != null) $record[$column] = $decoded;
+        }
+        return $record;
     }
 
 }

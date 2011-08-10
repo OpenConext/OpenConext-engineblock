@@ -111,6 +111,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'vomanage_selectvo_header'          => 'Available Virtual Organisations:',
     'vomanage_selectvo_submit'          => 'Select',
     'vomanage_add_intro'                => 'Create a new user attribute.',
+    'vomanage_add_newvalue'             => 'Add',
     'vomanage_add_save'                 => 'Save',
     'vomanage_add_cancel'               => 'Cancel',
     'vomanage_edit_intro'               => 'Edit a user attribute.',
