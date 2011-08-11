@@ -108,7 +108,11 @@
     <changeSet id="1.8.7" author="peter.clijsters@everett.nl">
        <insert tableName="virtual_organisation">
            <column name="vo_id" value="surfmedia_dienstvo"/>
-           <column name="group_id" value="nl:surfnet:diensten:surfmedia_dienst" />
+           <column name="vo_type" value="GROUP" />
        </insert>
-   </changeSet>
+       <insert tableName="virtual_organisation_group">
+            <column name="vo_id" value="surfmedia_dienstvo" />
+            <column name="group_id" value="nl:surfnet:diensten:surfmedia_dienst" />
+       </insert>
+    </changeSet>
 </databaseChangeLog>
