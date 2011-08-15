@@ -84,7 +84,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getGroupsByStem($stem)
     {
-        $grouperGroups = $this->_grouperClient->getGroupsByStem($stem);
+        $grouperGroups = $this->_grouperClient->getGroups($stem);
 
         $groups = array();
         foreach ($grouperGroups as $group) {
@@ -119,7 +119,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function isMemberInStem()
     {
-        $groups = $this->_grouperClient->getGroupsByStem($this->_stem);
+        $groups = $this->_grouperClient->getGroups($this->_stem);
         return !empty($groups);
     }
 
