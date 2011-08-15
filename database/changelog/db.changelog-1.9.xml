@@ -33,4 +33,97 @@
         </createTable>
         <sql>ALTER TABLE virtual_organisation_attribute ADD UNIQUE (vo_id (200),sp_entity_id (200),user_id_pattern (200),attribute_name_saml (200),attribute_name_opensocial (200));</sql>
     </changeSet>
+<changeSet id="1313394977" author="stein.welberg@everett.nl">
+        <createTable tableName="group_provider">
+            <column name="group_provider_id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_provider_type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="adapter" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="class_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="endpoint" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="timeout" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="group_provider_decorator">
+            <column name="decorator_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_provider_id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="decorator_class_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="decorator_replace" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="decorator_search" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="group_provider_group_filter">
+            <column name="group_filter_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_provider_id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_filter_class_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_filter_property" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_filter_replace" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="group_filter_search" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="group_provider_group_member_filter">
+            <column name="group_member_filter_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_provider_id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_member_filter_class_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_member_filter_property" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_member_filter_replace" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="group_member_filter_search" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="group_provider_precondition">
+            <column name="precondition_id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="group_provider_id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="precondition_class_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="precondition_search" type="VARCHAR(255)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
