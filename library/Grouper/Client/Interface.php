@@ -44,14 +44,7 @@ interface Grouper_Client_Interface
      * @abstract
      * @return array
      */
-    public function getGroups();
-
-    /**
-     * @abstract
-     * @param $stem
-     * @return void
-     */
-    public function getGroupsByStem($stem);
+    public function getGroups($stem = '');
 
     /**
      * @abstract
