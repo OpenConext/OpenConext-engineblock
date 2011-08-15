@@ -40,9 +40,11 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
             $userIdRegex = $this->_convertPatternToRegex($row['user_id_pattern']);
             if (preg_match($userIdRegex, $subjectId)) {
                 if ($format == self::FORMAT_OPENSOCIAL) {
-                    $attributes[$this->_voId][] = array(
-                        'key' => $this->_voId.'_'.$row[$attributeFieldName],
-                        'value' => json_decode($row['attribute_value']),
+                    $attributes[$this->_voId][] = array('entry' =>
+                        array(
+                            'key' => $this->_voId.'_'.$row[$attributeFieldName],
+                            'value' => json_decode($row['attribute_value'])
+                        )
                     );
                 } elseif ($format == self::FORMAT_SAML) {
                     $attributes[$row[$attributeFieldName]] = json_decode($row['attribute_value']);
