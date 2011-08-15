@@ -28,10 +28,39 @@ class EngineBlock_Log_Writer_Mail extends Zend_Log_Writer_Mail
     public static function factory($config)
     {
         $options = self::_parseConfig($config);
+
+        $mailClient = self::_getMailClient($options);
+        $writer = new self($mailClient);
+
+        if (isset($options['filterValues'])) {
+            $writer->setFormatter(new EngineBlock_Log_Formatter_Mail($options['filterValues']));
+        }
+
+        $envName = ENGINEBLOCK_ENV;
+        $writer->setSubjectPrependText("[EngineBlock][$envName]");
+
+        if (isset($options['filterName'])) {
+            // has underscores
+            if (strpos($options['filterName'], '_') !== false) {
+                $className = 'Zend_Log_Filter_' . $options['filterName'];
+            }
+            else {
+                $className = $options['filterName'];
+            }
+
+            $filter = new $className($options['filterParams']);
+            $writer->addFilter($filter);
+        }
+
+        return $writer;
+    }
+
+    protected function _getMailClient($options)
+    {
         $mail = new Zend_Mail('UTF-8');
-        
+
         $mail->setFrom($options['from']['email'], $options['from']['name']);
-        
+
         foreach ($options['to'] as $to) {
             if (is_array($to)) {
                 $mail->addTo($to['email'], $to['name']);
@@ -62,25 +91,6 @@ class EngineBlock_Log_Writer_Mail extends Zend_Log_Writer_Mail
                 }
             }
         }
-
-        $writer = new self($mail);
-
-        $envName = ENGINEBLOCK_ENV;
-        $writer->setSubjectPrependText("[EngineBlock][$envName]");
-
-        if (isset($options['filterName'])) {
-            // has underscores
-            if (strpos($options['filterName'], '_') !== false) {
-                $className = 'Zend_Log_Filter_' . $options['filterName'];
-            }
-            else {
-                $className = $options['filterName'];
-            }
-
-            $filter = new $className($options['filterParams']);
-            $writer->addFilter($filter);
-        }
-
-        return $writer;
+        return $mail;
     }
 }
