@@ -75,16 +75,17 @@ class EngineBlock_SocialData
      */
     public function getGroupsForPerson($identifier, $groupId = null, $voId = null)
     {
-        $groupStem = '';
+        $engineBlockGroups = NULL;
+        $groupProvider = $this->_getGroupProvider($identifier);
         if ($voId) {
             $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
             $groupStem = $virtualOrganization->getStem();
+            $engineBlockGroups = $groupProvider->getGroupsByStem($groupStem);
+        }
+        else {
+            $engineBlockGroups = $groupProvider->getGroups($groupStem);
         }
 
-        $engineBlockGroups = NULL;
-        $groupProvider = $this->_getGroupProvider($identifier);
-        $engineBlockGroups = $groupProvider->getGroups($groupStem);
-        
         $openSocialGroups = array();
         foreach ($engineBlockGroups as $group) {
              $openSocialGroup = $this->_mapEngineBlockGroupToOpenSocialGroup($group);
