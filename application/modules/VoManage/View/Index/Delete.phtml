@@ -18,6 +18,9 @@ $layout->footerText = $this->t('footer');
     <br/>
         <h2><?php echo $this->t('vomanage_delete_intro'); ?></h2>
     <br/>
+    Virtual Organisation: <strong><?php echo $vo_id; ?></strong>
+    <br/>
+    <br/>
     
 <?php if ($data['formaction'] == 'delete') : ?>
 <div>
@@ -83,7 +86,18 @@ $layout->footerText = $this->t('footer');
                 <label for="attribute_value">Attribute value</label>
             </td>
             <td>
-                <?php echo $data['attribute_value']; ?>
+                <?php if (count($data['attribute_value']) > 1) : ?>
+                <ul>
+                    <?php foreach ($data['attribute_value'] as $value) : ?>
+                    <li><?php echo $value; ?></li>
+                    <?php endforeach; ?>
+                </ul>
+                <?php elseif (count($data['attribute_value']) == 1) : ?>
+                    <?php echo array_pop($data['attribute_value']); ?>
+                <?php else : ?>
+                    <?php echo $data['attribute_value']; ?>
+                <?php endif; ?>
+                
             </td>
         </tr>
     </table>
