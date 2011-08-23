@@ -292,7 +292,7 @@ Index: modules/janus/www/editentity.php
 -        $et->data['metadata_base_field_names'][$key] = $possible_metafield_key;
 +    $definition = $data->getDefinition();
 +
-+    if ($definition && $definition['supported']) {
++    if ($definition && array_key_exists('supported', $definition)) {
 +        $possible_idioms = convert_values_to_string($definition['supported']);
 +
 +        foreach ($key_splitted as $key_part) {
