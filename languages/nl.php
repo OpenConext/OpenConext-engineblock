@@ -198,7 +198,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     </p>',
     'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken..',
     'error_missing_required_fields_desc'=> '<p>
-        You can not use this application because your institution is not providing the needed information.
+        Je instelling geeft niet de benodigde informatie vrij, daarom kan je deze applicatie niet gebruiken.
     </p>
     <p>
         Neem alstublieft contact op met uw instelling. Geef hierbij de onderstaande informatie door.
