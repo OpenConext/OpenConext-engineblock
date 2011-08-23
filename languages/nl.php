@@ -196,7 +196,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeert u het alstublieft opnieuw.
     </p>',
-    'error_missing_required_fields'     => 'Error - Missing required fields..',
+    'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken..',
     'error_missing_required_fields_desc'=> '<p>
         You can not use this application because your institution is not providing the needed information.
     </p>
