@@ -13,6 +13,7 @@ return array(
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below once to proceed.',
     'go_back'               => '&lt;&lt; Go back',
     'authentication_urls'   => 'Authentication URLs',
+    'date'                  => 'Date',
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selection - %s',
@@ -197,4 +198,18 @@ If you have any questions about your privacy and the policy applied, please visi
     'error_generic_desc'                => '<p>
         It is not possible to sign in. Please try again.
     </p>',
+    'error_missing_required_fields'     => 'Error - Missing required fields..',
+    'error_missing_required_fields_desc'=> '<p>
+        You can not use this application because your institution is not providing the needed information.
+    </p>
+    <p>
+        Please contact your institution with the information stated below.
+    </p>
+    <p>
+        Login failed because the institution\'s identity provider did not provide SURFconext with the following required attribute(s):
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>'
 );

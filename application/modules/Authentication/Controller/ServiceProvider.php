@@ -47,6 +47,10 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getLog()->warn($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer');
         }
+        catch (EngineBlock_Exception_MissingRequiredFields $e) {
+            $application->getLog()->error($e->getMessage());
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
+        }
     }
 
     public function processConsentAction()

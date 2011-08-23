@@ -13,6 +13,7 @@ return array(
     'note_no_script'        => 'Uw browser ondersteunt geen javascript. U moet op de onderstaande knop drukken om door te gaan.',
     'go_back'               => '&lt;&lt; Ga terug',
     'authentication_urls'   => 'Authenticatie URLs',
+    'date'                  => 'Datum',
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selectie - %s',
@@ -195,4 +196,18 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeert u het alstublieft opnieuw.
     </p>',
+    'error_missing_required_fields'     => 'Error - Missing required fields..',
+    'error_missing_required_fields_desc'=> '<p>
+        You can not use this application because your institution is not providing the needed information.
+    </p>
+    <p>
+        Neem alstublieft contact op met uw instelling. Geef hierbij de onderstaande informatie door.
+    </p>
+    <p>
+        Omdat uw instelling niet de juiste attributen aan SURFconext doorgeeft is het inloggen mislukt. De volgende attributen zijn vereist om succesvol in te loggen op het SURFconext platform:
+        <ul>
+            <li>UID</li>
+            <li>schacHomeOrganization</li>
+        </ul>
+    </p>'
 );
