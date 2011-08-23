@@ -13,7 +13,7 @@ return array(
     'note_no_script'        => 'Uw browser ondersteunt geen javascript. U moet op de onderstaande knop drukken om door te gaan.',
     'go_back'               => '&lt;&lt; Ga terug',
     'authentication_urls'   => 'Authenticatie URLs',
-    'date'                  => 'Datum',
+    'timestamp'                  => 'Timestamp',
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selectie - %s',
