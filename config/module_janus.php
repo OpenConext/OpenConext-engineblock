@@ -293,6 +293,8 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'supported' => array('en', 'nl'),
+            'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
         'icon' => array(
             'type' => 'file',
@@ -715,7 +717,9 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => true,
-            'supported' => array('en', 'nl')
+            'supported' => array('en', 'nl'),
+            'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
         'icon' => array(
             'type' => 'file',
