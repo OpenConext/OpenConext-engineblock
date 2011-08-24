@@ -186,7 +186,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'error_unknown_issuer'          => 'Error - Unknown application..',
     'error_unknown_issuer_desc'     => '<p>
         This application is not available using SURFconext. Please notify the provider of this service and provide them with the following information:
-        <table width="400px" class="fixed-table">
+        <table class="error-table">
             <tbody>
             <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
             <tr><td width="100px"><strong>DestinationID</strong></td><td class="word-wrap"><i>%s</i></td></tr>

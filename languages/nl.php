@@ -185,7 +185,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_unknown_issuer'              => 'Error - Onbekende applicatie..',
     'error_unknown_issuer_desc'     => '<p>
         Deze applicatie is niet beschikbaar voor SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
-        <table width="400px" class="fixed-table">
+        <table class="error-table">
             <tbody>
             <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
             <tr><td width="100px"><strong>DestinationID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
