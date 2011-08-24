@@ -491,7 +491,9 @@ class EngineBlock_Corto_Adapter
             '__v'              => $subjectId
         );
 
-        $responseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
+        // Always return both OID's and URN's
+        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
+        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
     }
 
     protected function _addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata)
@@ -557,10 +559,6 @@ class EngineBlock_Corto_Adapter
 
     protected function _mapUrnsToOids(array $responseAttributes, array $spEntityMetadata)
     {
-        if (!isset($spEntityMetadata['ExpectsOids']) || !$spEntityMetadata['ExpectsOids']) {
-            return $responseAttributes;
-        }
-
         $mapper = new EngineBlock_AttributeMapper_Urn2Oid();
         return $mapper->map($responseAttributes);
     }
