@@ -23,8 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-
-
 class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
 {
     public function consumeAssertionAction()
@@ -47,9 +45,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         }
         catch (EngineBlock_Exception_UnknownIssuerException $e) {
             $application->getLog()->warn($e->getMessage());
-            $_SESSION['unknown_issuer_entity_id'] = $e->getEntityId();
-            $_SESSION['unknown_issuer_destination'] = $e->getDestination();
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer');
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
         catch (EngineBlock_Exception_MissingRequiredFields $e) {
             $application->getLog()->error($e->getMessage());

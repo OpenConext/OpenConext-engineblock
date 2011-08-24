@@ -23,14 +23,15 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-session_start();
-
 class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
 {
     public function vomembershiprequiredAction() {}
     public function unableToReceiveMessageAction() {}
     public function sessionLostAction() {}
     public function timeoutAction() {}
-    public function unknownIssuerAction() {}
+    public function unknownIssuerAction() {
+        $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
+        $this->__set('destination', htmlspecialchars($this->_getRequest()->getQueryParameter('destination')));
+    }
     public function missingRequiredFieldsAction() {}
 }

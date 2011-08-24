@@ -23,8 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-session_start();
-
 class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
     public function singleSignOnAction($argument = null)
@@ -59,10 +57,8 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Exception_UnknownIssuerException $e) {
-            $_SESSION['unknown_issuer_entity_id'] = $e->getEntityId();
-            $_SESSION['unknown_issuer_destination'] = $e->getDestination();
             $application->getLog()->warn($e->getMessage());
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer');
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
     }
 
