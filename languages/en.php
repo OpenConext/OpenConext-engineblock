@@ -183,12 +183,20 @@ If you have any questions about your privacy and the policy applied, please visi
     'error_message_timeout_desc'    => 'We received an out of date message. Please try again.',
     'error_no_message'              => 'Error - No message received..',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
-    'error_unknown_issuer'          => 'Error - Unknown issuer..',
+    'error_unknown_issuer'          => 'Error - Unknown application..',
     'error_unknown_issuer_desc'     => '<p>
-        We received a message from someone we don&#39;t know yet..
-        If you are a Service Provider and want to connect your service with SURFconext,
-        please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext team at <a href="mailto:info@surfconext.nl">info@surfconext.nl</a>.
+        This application is not available using SURFconext. Please notify the provider of this service and provide them with the following information:
+        <table width="400px" class="fixed-table">
+            <tbody>
+            <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
+            <tr><td width="100px"><strong>DestinationID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
+            <tr><td width="100px"><strong>Timestamp</strong></td><td>%s</td></tr>
+            </tr>
+            </tbody>
+        </table>
+        <br />
+        If this doesn\'t solve your problem, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
+        or contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br /><br />
     </p>',
     'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',

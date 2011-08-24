@@ -23,6 +23,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+session_start();
+
 class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
 {
     public function vomembershiprequiredAction() {}

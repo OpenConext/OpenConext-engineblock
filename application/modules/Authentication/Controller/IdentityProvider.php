@@ -23,6 +23,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+session_start();
+
 class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
     public function singleSignOnAction($argument = null)
@@ -31,13 +33,13 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         try {
-     
+
             $proxyServer = new EngineBlock_Corto_Adapter();
-      
+
             $idPEntityId = NULL;
-            
-            if (substr($argument, 0, 3)=="vo:") {
-                $proxyServer->setVirtualOrganisationContext(substr($argument,3));
+
+            if (substr($argument, 0, 3) == "vo:") {
+                $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
             } else {
                 $idPEntityId = $argument;
             }
@@ -56,7 +58,9 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getLog()->warn('Session was lost');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
-        catch (Corto_Module_Bindings_UnknownIssuerException $e) {
+        catch (EngineBlock_Exception_UnknownIssuerException $e) {
+            $_SESSION['unknown_issuer_entity_id'] = $e->getEntityId();
+            $_SESSION['unknown_issuer_destination'] = $e->getDestination();
             $application->getLog()->warn($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer');
         }
@@ -73,13 +77,13 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     public function metadataAction($argument = null)
     {
         $this->setNoRender();
-        
+
         $proxyServer = new EngineBlock_Corto_Adapter();
-        
-        if (substr($argument, 0, 3)=="vo:") {
-            $proxyServer->setVirtualOrganisationContext(substr($argument,3));
+
+        if (substr($argument, 0, 3) == "vo:") {
+            $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
         }
-        
+
         $proxyServer->idPMetadata();
     }
 
@@ -93,6 +97,6 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
     public function helpAction($argument = null)
     {
-       
+
     }
 }

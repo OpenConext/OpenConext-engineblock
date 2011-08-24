@@ -182,15 +182,24 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_message_timeout_desc'        => 'We hebben een bericht ontvangen dat niet meer geldig is. Probeer opnieuw in te loggen alstublieft.',
     'error_no_message'                  => 'Error - Geen bericht ontvangen..',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
-    'error_unknown_issuer'              => 'Error - Onbekende aanvrager..',
-    'error_unknown_issuer_desc'         => '<p>
-        We hebben een bericht ontvangen van iemand die we nog niet kennen..
-        Ga naar <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de support pagina</a> als je een ontwikkelaar bent en wil  je dienst wilt aansluiten op SURFconext.
-        Geef ons vervolgens je endpoint gegevens.
+    'error_unknown_issuer'              => 'Error - Onbekende applicatie..',
+    'error_unknown_issuer_desc'     => '<p>
+        Deze applicatie is niet beschikbaar voor SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
+        <table width="400px" class="fixed-table">
+            <tbody>
+            <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
+            <tr><td width="100px"><strong>DestinationID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
+            <tr><td width="100px"><strong>Timestamp</strong></td><td>%s</td></tr>
+            </tr>
+            </tbody>
+        </table>
+        <br />
+        Bezoek alstublieft <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
+        of neem contact op met het SURFconext team via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> als dit uw probleem niet oplost.
         <br /><br />
     </p>',
     'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
-    'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij je Identity Provider, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie. Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
+    'error_vo_membership_required_desc' => 'U bent succesvol ingelogd bij uw Identity Provider, maar om gebruik te kunnen maken van deze dienst moet u ook lid zijn van een Virtuele Organisatie. Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
         of neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> indien u meer informatie wenst.',
     'error_generic'                     => 'Error - Foutmelding..',
     'error_generic_desc'                => '<p>
@@ -198,7 +207,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     </p>',
     'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken..',
     'error_missing_required_fields_desc'=> '<p>
-        Je instelling geeft niet de benodigde informatie vrij, daarom kan je deze applicatie niet gebruiken.
+        Uw instelling geeft niet de benodigde informatie vrij, daarom kunt u deze applicatie niet gebruiken.
     </p>
     <p>
         Neem alstublieft contact op met uw instelling. Geef hierbij de onderstaande informatie door.

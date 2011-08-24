@@ -23,6 +23,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+
+
 class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
 {
     public function consumeAssertionAction()
@@ -31,20 +33,22 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $proxyServer = new EngineBlock_Corto_Adapter();
-        
+
         try {
             $proxyServer->consumeAssertion();
         }
-        catch(EngineBlock_Exception_UserNotMember $e) {
+        catch (EngineBlock_Exception_UserNotMember $e) {
             $application->getLog()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
-        catch(Corto_Module_Bindings_UnableToReceiveMessageException $e) {
+        catch (Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->getLog()->warn('Unable to receive message error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
-        catch (Corto_Module_Bindings_UnknownIssuerException $e) {
+        catch (EngineBlock_Exception_UnknownIssuerException $e) {
             $application->getLog()->warn($e->getMessage());
+            $_SESSION['unknown_issuer_entity_id'] = $e->getEntityId();
+            $_SESSION['unknown_issuer_destination'] = $e->getDestination();
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer');
         }
         catch (EngineBlock_Exception_MissingRequiredFields $e) {

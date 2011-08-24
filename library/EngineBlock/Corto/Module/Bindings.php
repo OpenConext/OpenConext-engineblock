@@ -23,22 +23,62 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+class EngineBlock_Exception_UnknownIssuerException extends Exception
+{
+    private $_entityId;
+    private $_destination;
+
+    function __construct($message, $entityId, $destination) {
+        parent::__construct($message);
+        $this->_entityId = $entityId;
+        $this->_destination = $destination;
+    }
+
+    public function getEntityId()
+    {
+        return $this->_entityId;
+    }
+
+    public function getDestination()
+    {
+        return $this->_destination;
+    }
+}
+
 class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
 {
     protected function _receiveMessage($key)
     {
         $message = parent::_receiveMessage($key);
-        
-        if ($key==Corto_Module_Bindings::KEY_REQUEST) {
-           // We're dealing with a request, on its way towards the idp. If there's a VO context, we need to store it in the request.
-           
+
+        if ($key == Corto_Module_Bindings::KEY_REQUEST) {
+            // We're dealing with a request, on its way towards the idp. If there's a VO context, we need to store it in the request.
+
             $voContext = $this->_server->getVirtualOrganisationContext();
-            if ($voContext!=NULL) {
+            if ($voContext != NULL) {
                 $message['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY] = $voContext;
             }
-                        
+
         }
-        
+
         return $message;
+    }
+
+    /**
+     * Verify if a message has an issuer that is known to us. If not, it
+     * throws a Corto_Module_Bindings_VerificationException.
+     * @param array $message
+     * @throws Corto_Module_Bindings_VerificationException
+     */
+    protected function _verifyKnownIssuer(array $message)
+    {
+        $messageIssuer = $message['saml:Issuer']['__v'];
+        $destination = $message['_Destination'];
+        try {
+            $remoteEntity = $this->_server->getRemoteEntity($messageIssuer);
+        } catch (Corto_ProxyServer_Exception $e) {
+            throw new EngineBlock_Exception_UnknownIssuerException("Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)", $messageIssuer, $destination);
+        }
+        return $remoteEntity;
     }
 }
