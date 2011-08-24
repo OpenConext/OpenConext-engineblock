@@ -619,12 +619,6 @@ $config = array(
             'default_allow' => false,
             'required' => false,
         ),
-        'coin:expects_oids' => array(
-            'type' => 'boolean',
-            'order' => 200,
-            'default' => false,
-            'required' => FALSE,
-        ),
         'coin:is_provision_sp' => array(
             'type' => 'boolean',
             'order' => 201,
@@ -778,6 +772,26 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'supported' => array(0)
+        ),
+
+        // User Contact Point fields
+        'coin:userContactPoint:url' => array(
+            'type' => 'text',
+            'order' => 460,
+            'default' => '',
+            'default_allow' => false,
+            'required' => false,
+            'validate' => 'isurl',
+            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)'
+        ),
+        'coin:userContactPoint:emailAddress' => array(
+            'type' => 'text',
+            'order' => 465,
+            'default' => '',
+            'default_allow' => false,
+            'validate' => 'isemail',
+            'validate_error' => 'The value must be a valid email address',
+            'required' => false
         ),
 
         // Organization fields
