@@ -83,9 +83,9 @@ class EngineBlock_VirtualOrganization_Validator
         $voIdps = $virtualOrganization->getIdps();
         foreach ($voIdps as $voIdp) {
             /**
-             * @var EngineBlock_VirtualOrganization_Idp $idp
+             * @var EngineBlock_VirtualOrganization_Idp $voIdp
              */
-            if ($voIdp === $idp) {
+            if ($voIdp->entityId === $idp) {
                 return true;
             }
         }
