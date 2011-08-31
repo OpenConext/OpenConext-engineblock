@@ -654,6 +654,13 @@ $config = array(
             'default_allow' => false,
             'required' => false,
         ),
+        'coin:eula' => array(
+            'type' => 'text',
+            'order' => 202,
+            'default' => 'description',
+            'default_allow' => false,
+            'required' => false,
+        ),
         // Certificate fields
         'certData' => array(
             'type' => 'text',
