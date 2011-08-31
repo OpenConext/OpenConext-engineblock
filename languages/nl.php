@@ -101,6 +101,10 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
 
+    //Profile MyApps
+    'profile_apps_connected_aps'        => 'Gebruikte Apps en Services',
+    'profile_apps_share'                => 'Je hebt je profiel en eventuele groepen informatie gedeeld met de volgende services',
+
     //VO Manage
     'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',
     'vomanage_sub_header'               => 'VO Gebruikersattributen',    

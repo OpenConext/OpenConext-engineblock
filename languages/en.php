@@ -102,6 +102,10 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more 3rd party application(s) with your institutional account. In addition, your group membership(s) may be shared with these applications. If you would like to quit using SURFconext and delete your SURFconext profile, please click the link below.',
     'profile_leave_surfconext_link'     => 'Delete my SURFconext profile!',
 
+    //Profile MyApps
+    'profile_apps_connected_aps'        => 'Connected Apps and Services',
+    'profile_apps_share'                => 'You have shared your profile and optionally group information with the following services',
+
     //Profile
     'vomanage_header'                   => 'SURFconext - VO User Attributes',
     'vomanage_sub_header'               => 'VO User Attributes',
