@@ -139,4 +139,18 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
 
         return $results;
     }
+
+    /**
+     * Get the details of a groupMember
+     * @abstract
+     * @return the Person
+     */
+    public function getGroupMemberDetails()
+    {
+        $this->_provider->setUserId($this->_userIdReplaced);
+        $results = $this->_provider->getGroupMemberDetails();
+        $this->_provider->setUserId($this->_userId);
+
+        return $results;
+    }
 }

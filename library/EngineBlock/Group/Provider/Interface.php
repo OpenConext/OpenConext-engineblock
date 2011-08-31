@@ -129,6 +129,21 @@ interface EngineBlock_Group_Provider_Interface
     public function getMembers($groupIdentifier);
 
     /**
+     * Get the details of a groupMember
+     * @abstract
+     * @return the Person
+     */
+    public function getGroupMemberDetails();
+
+    /**
+     * Is this GroupProvider able to return details for the given userId based on the configured memberFilter
+     * @abstract
+     * @param $userId the unique Person identifier
+     * @return boolean true is the userId is a partial matched with this GroupProviders urn
+     */
+    public function isGroupProviderForUser();
+
+    /**
      * Check whether the given user is a member of the given group.
      * @param String $groupIdentifier The group to check
      * @return boolean

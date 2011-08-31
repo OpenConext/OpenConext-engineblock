@@ -216,4 +216,55 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         }
         return false;
     }
+
+    /**
+     * Get the details of a groupMember
+     * @param $userId the unique groupMember identifier
+     * @return the Person
+     */
+    public function getGroupMemberDetails()
+    {
+        // Loop through all providers
+        foreach ($this->_providers as $provider) {
+            try {
+                // And when we find a provider that is able to retrieve the groupDetails
+                // we use this one
+                if ($provider->isGroupProviderForUser()) {
+                    return $provider->getGroupMemberDetails();
+                }
+            }
+            catch (Exception $e) {
+                $providerId = $provider->getId();
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
+            }
+        }
+        // If none of the known providers can handle this userId we return null
+        return NULL;
+    }
+
+     /**
+     * Is this GroupProvider able to return details for the given userId based on the configured memberFilter
+     * @abstract
+     * @param $userId the unique Person identifier
+     * @return boolean true is the userId is a partial matched with this GroupProviders urn
+     */
+    public function isGroupProviderForUser() {
+        foreach ($this->_providers as $provider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $provider
+             */
+            try {
+                if ($provider->isGroupProviderForUser()) {
+                    return true;
+                }
+            }
+            catch (Exception $e) {
+                $providerId = $provider->getId();
+                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
+            }
+        }
+        return false;
+    }
 }

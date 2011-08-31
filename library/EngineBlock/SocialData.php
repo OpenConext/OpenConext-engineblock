@@ -83,7 +83,7 @@ class EngineBlock_SocialData
             $engineBlockGroups = $groupProvider->getGroupsByStem($groupStem);
         }
         else {
-            $engineBlockGroups = $groupProvider->getGroups($groupStem);
+            $engineBlockGroups = $groupProvider->getGroups();
         }
 
         $openSocialGroups = array();
@@ -102,19 +102,18 @@ class EngineBlock_SocialData
     public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array(), $voId = null, $spEntityId = null)
     {
         $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId);
-
+        
         $people = array();
         /**
          * @var EngineBlock_Group_Model_GroupMember $groupMember
          */
         foreach ($groupMembers as $groupMember) {
             $person = $this->getPerson($groupMember->id, $socialAttributes, $voId, $spEntityId);
-
             if (!$person) {
-                continue;
+                $people[] = $groupMember;
+            } else {
+                $people[] = $person;
             }
-
-            $people[] = $person;
         }
         return $people;
     }
@@ -142,11 +141,18 @@ class EngineBlock_SocialData
             $person = $this->_enforceArp($person);
 
             return $person;
-        } else if (count($persons) > 1) {
-            throw new EngineBlock_Exception("More than 1 person found for identifier $identifier");
+        } else if (count($persons) === 0) {
+            // We need to see if the user might 'exists' in an ExternalGroup provider
+            $groupProvider = $this->_getGroupProvider($identifier);
+            if ($groupProvider->isGroupProviderForUser()) {
+                $groupProvider->getGroupMemberDetails();
+            } else {
+                return false;
+            }
         }
         else {
-            return false;
+            //not really posible
+            throw new EngineBlock_Exception("More than 1 person found for identifier $identifier");
         }
     }
 

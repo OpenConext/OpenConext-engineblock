@@ -152,6 +152,17 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
         return $valid;
     }
 
+    /**
+     * Is this GroupProvider able to return details for the given userId based on the configured memberFilter
+     * @abstract
+     * @return boolean true is the userId is a partial matched with this GroupProviders urn
+     */
+    public function isGroupProviderForUser()
+    {
+        return $this->validatePreconditions();
+    }
+
+
     public function configureGroupFilters(Zend_Config $config)
     {
         if (isset($config->groupFilters)) {

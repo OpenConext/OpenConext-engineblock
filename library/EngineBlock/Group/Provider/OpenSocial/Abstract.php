@@ -54,6 +54,22 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
     }
 
     /**
+     * Get the details of a groupMember
+     * @abstract
+     * @return the Person
+     */
+    public function getGroupMemberDetails()
+    {
+        $memberDetails = $this->_openSocialRestClient->get(
+            '/people/{uid}',
+            array(
+                'uid' => $this->_userId,
+            )
+        );
+        return $memberDetails;
+    }
+
+    /**
      * Retrieve the list of groups that the specified subject is a member of.
      * @param $stem The name of the stem where the groups belong to
      * @return array A list of groups

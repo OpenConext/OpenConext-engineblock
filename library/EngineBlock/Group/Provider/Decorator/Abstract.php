@@ -67,6 +67,26 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
     }
 
     /**
+     * Get the details of a groupMember
+     * @abstract
+     * @return the Person
+     */
+    public function getGroupMemberDetails()
+    {
+        return $this->_provider->getGroupMemberDetails();
+    }
+
+    /**
+     * Is this GroupProvider able to return details for the given userId based on the configured memberFilter
+     * @abstract
+     * @return boolean true is the userId is a partial matched with this GroupProviders urn
+     */
+    public function isGroupProviderForUser()
+    {
+        return $this->_provider->isGroupProviderForUser();
+    }
+
+    /**
      * Retrieve the list of groups that the specified subject is a member of.
      * @return array A list of groups
      */

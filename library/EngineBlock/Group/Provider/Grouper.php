@@ -148,4 +148,26 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
         return $engineBlockMember;
     }
+
+    /**
+     * Get the details of a groupMember
+     * @param $userId the unique groupMember identifier
+     * @return the Person
+     */
+    public function getGroupMemberDetails()
+    {
+        //this can never happen as we retrieve groups from Grouper and therefore MemberDetails are
+        //provided by the userDirectory (e.g. we always return false from isGroupProviderFor)
+        throw new EngineBlock_Exception("Grouper does not provide GroupMemberDetails");
+    }
+
+    /**
+     * Is this GroupProvider able to return details for the given userId based on the configured memberFilter
+     * @param $userId the unique Person identifier
+     * @return boolean true is the userId is a partial matched with this GroupProviders urn
+     */
+    public function isGroupProviderForUser()
+    {
+        return false;
+    }
 }
