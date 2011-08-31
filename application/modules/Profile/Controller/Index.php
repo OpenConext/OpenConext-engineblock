@@ -31,5 +31,6 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->aggregator = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor(
             $this->attributes['nameid'][0]
         );
+        $this->groupOauth = $this->user->getUserOauth();
     }
 }

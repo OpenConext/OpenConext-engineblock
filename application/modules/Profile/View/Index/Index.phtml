@@ -94,8 +94,8 @@ $layout->getView()->inlineScript()->appendScript("
     foreach ($aggregator->getProviders() as $groupProvider):?>
     <h3><a href="#"><?php echo $groupProvider->getDisplayName(); ?></a></h3>
     <div>
-        <?php if(stristr(get_class($groupProvider), 'oauth_threelegged')): ?>
-            <span class="revoke-gp-access"><a href="#"><?= $this->t('profile_revoke_access'); ?></a></span>
+        <?php if(count($groupOauth) && array_key_exists($groupProvider->getId(),$groupOauth )): ?>
+            <span class="revoke-gp-access"><a href="group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?= $this->t('profile_revoke_access'); ?></a></span>
         <?php endif; ?>
         <?php
                 $groups = array();

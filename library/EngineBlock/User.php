@@ -66,6 +66,27 @@ class EngineBlock_User
         $this->_deleteFromEnvironment();
     }
 
+    public function getUserOauth()
+    {
+        $factory = $this->_getDatabaseConnection();
+        $query = 'SELECT provider_id, user_id FROM group_provider_user_oauth
+                    WHERE user_id = ?';
+        $parameters = array(
+            $this->getUid()
+        );
+
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+        $resultSet = $statement->fetchAll();
+
+        $result = array();
+        foreach($resultSet as $value) {
+            $result[$value['provider_id']] = $value;
+        }
+
+        return $result;
+    }
+
     /**
      * Delete the user from the SURFconext LDAP.
      *
