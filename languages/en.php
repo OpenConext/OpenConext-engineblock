@@ -101,6 +101,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',
     'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more 3rd party application(s) with your institutional account. In addition, your group membership(s) may be shared with these applications. If you would like to quit using SURFconext and delete your SURFconext profile, please click the link below.',
     'profile_leave_surfconext_link'     => 'Delete my SURFconext profile!',
+    'profile_revoke_access'             => 'Revoke access',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Connected Apps and Services',

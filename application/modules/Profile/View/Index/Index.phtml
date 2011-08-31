@@ -42,6 +42,10 @@ $layout->title = $layout->title . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/profile.js');
+$layout->getView()->inlineScript()->appendScript("
+    var profile = new Profile();
+    profile.init();");
 ?>
 <div id="MyProfile">
     <h2><?php echo $this->t('profile_header_my_profile'); ?></h2>
@@ -83,13 +87,18 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
         <?php echo $this->t('profile_group_membership_desc'); ?>
     </p>
 
+    <div id="GroupProviders">
     <?php
 
     $invalidProviders = $aggregator->getInvalidProviders();
     foreach ($aggregator->getProviders() as $groupProvider):?>
-    <h3><?php echo $groupProvider->getDisplayName(); ?></h3>
-    <?php
-        $groups = array();
+    <h3><a href="#"><?php echo $groupProvider->getDisplayName(); ?></a></h3>
+    <div>
+        <?php if(stristr(get_class($groupProvider), 'oauth_threelegged')): ?>
+            <span class="revoke-gp-access"><a href="#"><?= $this->t('profile_revoke_access'); ?></a></span>
+        <?php endif; ?>
+        <?php
+                $groups = array();
         try{
             $groups = $groupProvider->getGroups();
         } catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
@@ -105,10 +114,11 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
         <li><?php echo $group->title; ?></li>
         <?php endforeach; ?>
     </ul>
+
     <?php else: ?>
         <p><?php echo $this->t('profile_no_groups'); ?></p>
     <?php endif; ?>
-    <br />
+    </div>
     <?php endforeach; ?>
 
     <?php
@@ -131,6 +141,7 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
             }
         }
     ?>
+    </div>
     <?php if (!empty($oauthGroupProviders)): ?>
     <h3><?php echo $this->t('profile_header_auth_needed'); ?></h3>
     <p><?php echo $this->t('profile_extra_groups_desc'); ?></p>

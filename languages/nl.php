@@ -100,6 +100,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_extra_groups_desc'         => 'Om uw instellingsgroepen te zien moet u het gebruik hiervoor binnen SURFconext autoriseren.',
     'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
+    'profile_revoke_access'             => 'Trek toegang in',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Gebruikte Apps en Services',
