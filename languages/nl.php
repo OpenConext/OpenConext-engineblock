@@ -87,8 +87,10 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     //Profile
     'profile_header'                    => 'SURFconext - Mijn Profiel',
-    'profile_sub_header'                => 'Mijn Profiel',
+    'profile_header_my_profile'         => 'Mijn Profiel',
     'profile_header_my_groups'          => 'Mijn Groepen',
+    'profile_header_my_apps'            => 'Mijn Applicaties',
+    'profile_header_exit'               => 'Uitgang',
     'profile_header_surfteams'          => 'SURFteams',
     'profile_header_auth_needed'        => 'Authenticatie vereist',
     'profile_header_leave_surfconext'   => 'Verlaat SURFconext',

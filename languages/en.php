@@ -87,10 +87,12 @@ If you have any questions about your privacy and the policy applied, please visi
     <p>If you have any questions about your request, please contact <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
     //Profile
-    'profile_header'                    => 'SURFconext - My Profile',
-    'profile_sub_header'                => 'My Profile',
+    'profile_header'                    => 'SURFconext',
+    'profile_header_my_profile'         => 'My Profile',
+    'profile_header_my_apps'            => 'My Apps',
     'profile_header_my_groups'          => 'My Groups',
     'profile_header_surfteams'          => 'SURFteams',
+    'profile_header_exit'               => 'Exit',
     'profile_header_auth_needed'        => 'Authentication required',
     'profile_header_leave_surfconext'   => 'Leave SURFconext',
     'profile_store_info'                => 'The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.',

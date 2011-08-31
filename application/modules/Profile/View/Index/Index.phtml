@@ -24,18 +24,27 @@ if (!isset($metadata)) {
  * @var Zend_Layout $layout
  */
 $layout = $this->layout();
+$layout->setLayout('1-column-blue-grey-tabs');
+
+// The tabs
+$layout->tabs = array(
+    'MyProfile' => $this->t('profile_header_my_profile'),
+    'MyGroups' => $this->t('profile_header_my_groups'),
+    'MyApps' => $this->t('profile_header_my_apps'),
+    'Exit' => $this->t('profile_header_exit'),
+);
 
 // The current language
 $lang = $this->language();
 
 $layout->header = $this->t('profile_header');
-$layout->subheader = $this->t('profile_sub_header');
 $layout->title = $layout->title . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
 ?>
-<div>
+<div id="MyProfile">
+    <h2><?php echo $this->t('profile_header_my_profile'); ?></h2>
     <p>
         <?php echo $this->t('profile_store_info'); ?>
     </p>
@@ -67,8 +76,8 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
         </tr>
     <? } ?>
     </table>
-
-    <hr />
+</div>
+<div id="MyGroups">
     <h2><?php echo $this->t('profile_header_my_groups'); ?></h2>
     <p>
         <?php echo $this->t('profile_group_membership_desc'); ?>
@@ -136,11 +145,14 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
     <?php endforeach;?>
     </ul>
     <?php endif; ?>
-
-    <hr />
+</div>
+<div id="MyApps">
+    <h2><?php echo $this->t('profile_header_my_apps'); ?></h2>
+</div>
+<div id="Exit">
     <h2><?php echo $this->t('profile_header_leave_surfconext'); ?></h2>
     <p>
         <?php echo $this->t('profile_leave_surfconext_desc'); ?><br />
         <a href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
-</p>
+    </p>
 </div>
