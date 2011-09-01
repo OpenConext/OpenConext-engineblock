@@ -43,11 +43,7 @@ class EngineBlock_Database_ConnectionFactory
             $mode = self::MODE_WRITE;
         }
 
-        $configuration = $this->_getConfiguration();
-        if (!isset($configuration->database)) {
-            throw new EngineBlock_Exception("No database settings?!");
-        }
-        $databaseSettings = $configuration->database;
+        $databaseSettings = $this->_getDatabaseSettings();
 
         if      ($mode === self::MODE_READ) {
             try {
@@ -115,4 +111,15 @@ class EngineBlock_Database_ConnectionFactory
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
     }
+
+    protected function _getDatabaseSettings()
+    {
+        $configuration = $this->_getConfiguration();
+        if (!isset($configuration->database)) {
+            throw new EngineBlock_Exception("No database settings?!");
+        }
+        return $configuration->database;
+    }
 }
+
+

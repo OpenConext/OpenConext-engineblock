@@ -32,5 +32,37 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
             $this->attributes['nameid'][0]
         );
         $this->groupOauth = $this->user->getUserOauth();
+
+        $serviceRegistryClient = new EngineBlock_ServiceRegistry_Client();
+        $this->spList = $serviceRegistryClient->getSpList();
+
+        $this->consent = $this->user->getConsent();
+        $this->spOauthList = $this->getSpOauthList($this->spList);
+
+
     }
+
+    /**
+     * @param $spList all service providers
+     * @return all service providers that have an entry in the oauth (consent can be revoked)
+     */
+    protected function getSpOauthList($spList)
+    {
+        $oauthList = $this->user->getThreeLeggedShindigOauth();
+        $results = array();
+        foreach ($spList as $spId => $sp) {
+            if (array_key_exists('coin:gadgetbaseurl',$sp)) {
+                $pattern = '#' . $sp['coin:gadgetbaseurl'] . '#';
+                foreach ($oauthList as $oauth) {
+                    if (preg_match($pattern,$oauth)) {
+                        $results[$spId] = $oauth;
+                    }
+                }
+            }
+        }
+        return $results;
+    }
+
+
+
 }

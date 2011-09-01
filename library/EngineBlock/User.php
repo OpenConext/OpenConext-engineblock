@@ -66,6 +66,26 @@ class EngineBlock_User
         $this->_deleteFromEnvironment();
     }
 
+    public function deleteConsent($spId) {
+        $factory = $this->_getDatabaseConnection();
+
+        $query = "DELETE FROM consent
+                    WHERE hashed_user_id = ? AND service_id = ?";
+        $parameters = array(sha1($this->getUid()), $spId);
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+    }
+
+    public function deleteOauthConsent($consumerKey)
+    {
+        $factory = $this->_getShindigDatabaseConnection();
+        $query = 'DELETE FROM oauth_entry WHERE consumer_key = ?
+                    AND user_id = ?';
+        $parameters = array($consumerKey, $this->getUid());
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+    }
+
     public function getUserOauth()
     {
         $factory = $this->_getDatabaseConnection();
@@ -82,6 +102,46 @@ class EngineBlock_User
         $result = array();
         foreach($resultSet as $value) {
             $result[$value['provider_id']] = $value;
+        }
+
+        return $result;
+    }
+
+    public function getThreeLeggedShindigOauth()
+    {
+        $factory = $this->_getShindigDatabaseConnection();
+        $query = 'SELECT consumer_key FROM oauth_entry
+                    WHERE user_id = ?';
+        $parameters = array(
+            $this->getUid()
+        );
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+        $resultSet = $statement->fetchAll();
+
+        $result = array();
+        foreach($resultSet as $value) {
+            $result[] = $value['consumer_key'];
+        }
+
+        return $result;
+    }
+
+    public function getConsent()
+    {
+        $factory = $this->_getDatabaseConnection();
+        $query = 'SELECT service_id FROM consent
+                    WHERE hashed_user_id = ?';
+        $parameters = array(
+            sha1($this->getUid())
+        );
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+        $resultSet = $statement->fetchAll();
+
+        $result = array();
+        foreach($resultSet as $value) {
+            $result[] = $value['service_id'];
         }
 
         return $result;
@@ -143,6 +203,12 @@ class EngineBlock_User
     protected function _getDatabaseConnection()
     {
         $factory = new EngineBlock_Database_ConnectionFactory();
+        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+    }
+
+    protected function _getShindigDatabaseConnection()
+    {
+        $factory = new EngineBlock_Database_ShindigConnectionFactory();
         return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
     }
 

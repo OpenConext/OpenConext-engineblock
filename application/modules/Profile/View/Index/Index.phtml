@@ -158,7 +158,55 @@ $layout->getView()->inlineScript()->appendScript("
     <?php endif; ?>
 </div>
 <div id="MyApps">
-    <h2><?php echo $this->t('profile_header_my_apps'); ?></h2>
+    <p><?php echo $this->t('profile_apps_connected_aps'); ?></p>
+    <p>
+        <?php echo $this->t('profile_apps_share',
+            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
+                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+            </a>",
+            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
+                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+            </a>"
+        ); ?>
+
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo $this->t('profile_apps_service_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_eula_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_helpdesk_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_email_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_consent_th'); ?></th>
+            </tr>
+        </thead>
+    <?php foreach ($spList as $spId => $sp) { ?>
+        <? if (in_array($spId,$consent)) { ?>
+            <tr>
+                <td>
+                    <?=$sp["displayName:en"]?>
+                </td>
+                <td>
+                    <?=$sp['coin:eula']?>
+                </td>
+                <td>
+                    <?=$sp['coin:userContactPoint:url']?>
+                </td>
+                <td>
+                    <?=$sp['coin:userContactPoint:emailAddress']?>
+                </td>
+                <td>
+                    <? if (array_key_exists($spId,$spOauthList)) { ?>
+                        <span class="revoke-consent"><a href="/profile/delete-oauth-consent?consumer_key=<?= urlencode($spOauthList[$spId]); ?>"><?= $this->t('profile_revoke_consent'); ?></a></span>
+                    <? } else { ?>
+                        <?= $this->t('profile_no_consent'); ?>
+                    <? } ?>
+                </td>
+            </tr>
+        <? } ?>
+    <? } ?>
+    </table>
+
 </div>
 <div id="Exit">
     <h2><?php echo $this->t('profile_header_leave_surfconext'); ?></h2>

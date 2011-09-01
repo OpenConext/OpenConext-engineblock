@@ -103,8 +103,15 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_revoke_access'             => 'Trek toegang in',
 
     //Profile MyApps
-    'profile_apps_connected_aps'        => 'Gebruikte Apps en Services',
-    'profile_apps_share'                => 'Je hebt je profiel en eventuele groepen informatie gedeeld met de volgende services',
+    'profile_apps_connected_aps'        => 'Beschikbare Apps en Services',
+    'profile_apps_share'                => 'Je kan je profiel%s en eventuele groepen informatie%s delen met de volgende services',
+    'profile_apps_service_th'           => 'Service/Applicatie',
+    'profile_apps_eula_th'              => 'EULA',
+    'profile_apps_helpdesk_th'          => 'helpdesk website',
+    'profile_apps_email_th'             => 'Helpdesk email',
+    'profile_apps_consent_th'           => 'Consent groep informatie',
+    'profile_revoke_consent'            => 'Consent intrekken',
+    'profile_no_consent'                => 'Niet uitgedeeld',
 
     //VO Manage
     'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',
