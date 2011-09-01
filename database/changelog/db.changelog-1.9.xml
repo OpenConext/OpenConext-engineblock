@@ -126,4 +126,126 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-0">
+        <dropTable tableName="group_provider"/>
+        <dropTable tableName="group_provider_decorator"/>
+        <dropTable tableName="group_provider_group_filter"/>
+        <dropTable tableName="group_provider_group_member_filter"/>
+        <dropTable tableName="group_provider_precondition"/>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-1">
+        <createTable tableName="group_provider">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="identifier" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="classname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-2">
+        <createTable tableName="group_provider_decorator">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="group_provider_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="classname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-3">
+        <createTable tableName="group_provider_decorator_option">
+            <column name="group_provider_decorator_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="group_provider_decorator_option" columnNames="group_provider_decorator_id, name"/>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-4">
+        <createTable tableName="group_provider_filter">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="group_provider_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="classname" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-5">
+        <createTable tableName="group_provider_filter_option">
+            <column name="group_provider_filter_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey tableName="group_provider_filter_option" columnNames="group_provider_filter_id, name"/>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-6">
+        <createTable tableName="group_provider_option">
+            <column name="group_provider_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-7">
+        <createTable tableName="group_provider_precondition">
+            <column autoIncrement="true" name="id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="group_provider_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="type" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-8">
+        <createTable tableName="group_provider_precondition_option">
+            <column name="group_provider_precondition_id" type="INT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column defaultValue="" name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValue="" name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="patrick@ibuildings.nl" id="1314627862829-9">
+        <addPrimaryKey columnNames="group_provider_id, name" tableName="group_provider_option"/>
+    </changeSet>
 </databaseChangeLog>
