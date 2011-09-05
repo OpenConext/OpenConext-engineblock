@@ -219,7 +219,7 @@ class EngineBlock_SocialData
     protected function _getGroupProvider($userId)
     {
         if (!isset($this->_groupProvider)) {
-            $this->_groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor($userId);
+            $this->_groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor($userId);
         }
         return $this->_groupProvider;
     }

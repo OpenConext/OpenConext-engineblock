@@ -42,6 +42,11 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
 
     protected $_isMemberInStemCache;
 
+    public static function createFromDatabaseFor($userId)
+    {
+        return new self(EngineBlock_Group_Provider_Aggregator::createFromDatabaseFor($userId));
+    }
+
     public static function createFromConfigFor($userId)
     {
         return new self(EngineBlock_Group_Provider_Aggregator::createFromConfigFor($userId));
