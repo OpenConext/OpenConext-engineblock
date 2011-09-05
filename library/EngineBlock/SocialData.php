@@ -145,7 +145,7 @@ class EngineBlock_SocialData
             // We need to see if the user might 'exists' in an ExternalGroup provider
             $groupProvider = $this->_getGroupProvider($identifier);
             if ($groupProvider->isGroupProviderForUser()) {
-                $groupProvider->getGroupMemberDetails();
+                return $groupProvider->getGroupMemberDetails();
             } else {
                 return false;
             }
