@@ -181,7 +181,7 @@ $layout->getView()->inlineScript()->appendScript("
             </tr>
         </thead>
     <?php foreach ($spList as $spId => $sp) { ?>
-        <? if (in_array($spId,$consent)) { ?>
+        <? if (in_array($spId,$consent) || array_key_exists($spId,$spOauthList)) { ?>
             <tr>
                 <td>
                     <?=$sp["displayName:en"]?>
