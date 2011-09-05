@@ -100,6 +100,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_extra_groups_desc'         => 'Om uw instellingsgroepen te zien moet u het gebruik hiervoor binnen SURFconext autoriseren.',
     'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
+    'profile_leave_surfconext_disclaim' => 'Belangrijk: Je kan group%s, document en content eigenaarschap overzetten naar een collega. Het gevaar bestaat anders dat lopende projecten schade ondervinden en/of content niet meer toegankelijk is. De deprovisioning en dataportability sectien%s beschrijft best practices op dit gebied',
+    'profile_leave_surfconext_link_add' => '(sluit je browser na deze actie om de deprovisioning procedure te voltooien)',
     'profile_revoke_access'             => 'Trek toegang in',
 
     //Profile MyApps
@@ -111,7 +113,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_apps_email_th'             => 'Helpdesk email',
     'profile_apps_consent_th'           => 'Consent groep informatie',
     'profile_revoke_consent'            => 'Consent intrekken',
-    'profile_no_consent'                => 'Niet uitgedeeld',
+    'profile_no_consent'                => 'Nog niet uitgedeeld',
 
     //VO Manage
     'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',
