@@ -53,12 +53,7 @@ class EngineBlock_ServiceRegistry_CacheProxy
             return $cache->call(array($client, $name), $arguments);
 
         } catch(Exception $e) { // Whoa, something went wrong, maybe the SR is down? Trying to use stale cache...
-            if (floatval(phpversion()) >= 5.3) {
-                $e = new EngineBlock_ServiceRegistry_CacheProxy_Exception("Service Registry problems?!?", 0, $e);
-            }
-            else {
-                $e = new EngineBlock_ServiceRegistry_CacheProxy_Exception("Service Registry problems?!?", 0);
-            }
+            $e = new EngineBlock_ServiceRegistry_CacheProxy_Exception("Service Registry problems?!?", 0, $e);
             EngineBlock_ApplicationSingleton::getInstance()->reportError($e);
 
             // Give any stale cache some more time
