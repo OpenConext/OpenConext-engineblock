@@ -48,7 +48,6 @@ $layout->getView()->inlineScript()->appendScript("
     profile.init();");
 ?>
 <div id="MyProfile">
-    <h2><?php echo $this->t('profile_header_my_profile'); ?></h2>
     <p>
         <?php echo $this->t('profile_store_info'); ?>
     </p>
@@ -82,7 +81,6 @@ $layout->getView()->inlineScript()->appendScript("
     </table>
 </div>
 <div id="MyGroups">
-    <h2><?php echo $this->t('profile_header_my_groups'); ?></h2>
     <p>
         <?php echo $this->t('profile_group_membership_desc'); ?>
     </p>
@@ -209,9 +207,20 @@ $layout->getView()->inlineScript()->appendScript("
 
 </div>
 <div id="Exit">
-    <h2><?php echo $this->t('profile_header_leave_surfconext'); ?></h2>
     <p>
         <?php echo $this->t('profile_leave_surfconext_desc'); ?><br />
-        <a href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
+
+        <div class="exit-disclaimer"/>
+        <?php echo $this->t('profile_leave_surfconext_disclaim',
+            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
+                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+            </a>",
+            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/SURFteams+Best+Practice\" target=\"_blank\">
+                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+            </a>"
+        ); ?><br />
+        </div>
+        <a class="delete" href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
+        <?php echo $this->t('profile_leave_surfconext_link_add'); ?><br />
     </p>
 </div>
