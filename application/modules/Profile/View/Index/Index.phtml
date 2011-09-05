@@ -222,5 +222,6 @@ $layout->getView()->inlineScript()->appendScript("
         </div>
         <a class="delete" href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
         <?php echo $this->t('profile_leave_surfconext_link_add'); ?><br />
+        <input id="delete-confirmation-text" type="hidden" value="<?php echo $this->t('profile_leave_surfconext_conf'); ?>"/>
     </p>
 </div>
