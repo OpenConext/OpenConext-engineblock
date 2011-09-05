@@ -248,4 +248,7 @@
     <changeSet author="patrick@ibuildings.nl" id="1314627862829-9">
         <addPrimaryKey columnNames="group_provider_id, name" tableName="group_provider_option"/>
     </changeSet>
+    <changeSet id="1315238399" author="boy@ibuildings.nl">
+        <renameColumn columnDataType="VARCHAR(255)" tableName="group_provider_precondition" oldColumnName="type" newColumnName="classname"/>
+    </changeSet>
 </databaseChangeLog>
