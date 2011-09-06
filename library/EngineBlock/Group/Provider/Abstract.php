@@ -145,6 +145,10 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
         $valid = true;
         foreach ($this->_preconditions as $precondition) {
             $className = $precondition['className'];
+            if (!class_exists($className, true)) {
+                ebLog()->warn("Classname '$className' not found for precondition! Skipping precondition!");
+                continue;
+            }
             $precondition = new $className($this, $precondition['options']);
             $preconditionValid = $precondition->validate();
             $valid = ($preconditionValid AND $valid);
@@ -168,6 +172,10 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
         if (isset($config->groupFilters)) {
             foreach ($config->groupFilters as $groupFilterConfig) {
                 $groupFilterClass = $groupFilterConfig->className;
+                if (!class_exists($groupFilterClass, true)) {
+                    ebLog()->warn("Classname '$groupFilterClass' not found for group filter! Skipping group filter!");
+                    continue;
+                }
                 $filter = new $groupFilterClass($groupFilterConfig);
                 $this->addGroupFilter($filter);
             }
@@ -191,6 +199,10 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
         if (isset($config->groupMemberFilters)) {
             foreach ($config->groupMemberFilters as $groupMemberFilterConfig) {
                 $groupMemberFilterClass = $groupMemberFilterConfig->className;
+                if (!class_exists($groupMemberFilterClass, true)) {
+                    ebLog()->warn("Classname '$groupMemberFilterClass' not found for group member filter! Skipping group member filter!");
+                    continue;
+                }
                 $filter = new $groupMemberFilterClass($groupMemberFilterConfig);
                 $this->addMemberFilter($filter);
             }
@@ -225,7 +237,8 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
         foreach ($config->decorators as $decoratorConfig) {
             $decoratorClassName = $decoratorConfig->className;
             if (!class_exists($decoratorClassName, true)) {
-                throw new EngineBlock_Group_Provider_Exception("Decorator $decoratorClassName does not exist");
+                ebLog()->warn("Classname '$decoratorClassName' not found for decorator! Skipping decorator!");
+                continue;
             }
 
             $decoratedProvider = $decoratorClassName::createFromConfigsWithProvider(
