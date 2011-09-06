@@ -149,7 +149,7 @@ $layout->getView()->inlineScript()->appendScript("
     <? foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
         <li>
             <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId();
-                ?>?return_url=/">
+                ?>?return_url=/#MyGroups">
                 <?php echo $oauthGroupProvider->getDisplayName(); ?>
             </a>
         </li>
