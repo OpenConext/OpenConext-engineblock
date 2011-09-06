@@ -102,6 +102,23 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
         $this->_redirectToUrl($_SESSION['return_url']);
     }
 
+    /**
+     *
+     * @example /profile/group-oauth/revoke?provider=providerId
+     *
+     * @return void
+     */
+    public function revokeAction()
+    {
+        $this->setNoRender();
+
+        $providerId = $this->_getRequest()->getQueryParameter('provider');
+
+        $this->user->deleteOauthGroupConsent($providerId);
+
+        $this->_redirectToUrl('/#MyGroups');
+    }
+
     protected function _getProviderConfiguration($providerId)
     {
         $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->$providerId->toArray();

@@ -91,9 +91,9 @@ $layout->getView()->inlineScript()->appendScript("
     $invalidProviders = $aggregator->getInvalidProviders();
     foreach ($aggregator->getProviders() as $groupProvider):?>
     <h3><a href="#"><?php echo $groupProvider->getDisplayName(); ?></a></h3>
-    <div>
+    <div id="<?= $groupProvider->getId(); ?>" class="group-providers">
         <?php if(count($groupOauth) && array_key_exists($groupProvider->getId(),$groupOauth )): ?>
-            <span class="revoke-gp-access"><a href="group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?= $this->t('profile_revoke_access'); ?></a></span>
+            <span class="revoke-gp-access"><a href="/profile/group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?= $this->t('profile_revoke_access'); ?></a></span>
         <?php endif; ?>
         <?php
                 $groups = array();
@@ -107,6 +107,7 @@ $layout->getView()->inlineScript()->appendScript("
         }
         if (!empty($groups)):
     ?>
+
     <ul>
         <?php foreach ($groups as $group): ?>
         <li><?php echo $group->title; ?></li>
