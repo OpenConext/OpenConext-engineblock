@@ -104,7 +104,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_leave_surfconext_link_add' => '(sluit je browser na deze actie om de deprovisioning procedure te voltooien)',
     'profile_revoke_access'             => 'Trek toegang in',
     'profile_leave_surfconext_conf'     => 'Weet je zeker dat je je profiel wilt verwijderen?',
-    
+    'profile_eula_link'                 => 'Gebruikersvoorwaarden',
+    'profile_support_link'              => 'Ondersteunings pagina\'s',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Beschikbare Apps en Services',

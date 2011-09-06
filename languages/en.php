@@ -105,6 +105,8 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_leave_surfconext_link_add' => '(close your browser after this action to finalize the deprovisioning procedure)',
     'profile_revoke_access'             => 'Revoke access',
     'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile?',
+    'profile_eula_link'                 => 'Terms of use',
+    'profile_support_link'              => 'Support Pages',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Connected Apps and Services',

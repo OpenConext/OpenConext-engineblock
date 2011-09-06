@@ -187,13 +187,13 @@ $layout->getView()->inlineScript()->appendScript("
                     <?=$sp["displayName:en"]?>
                 </td>
                 <td>
-                    <?=$sp['coin:eula']?>
+                    <a href="<?= $sp['coin:eula']; ?>"><?= $this->t('profile_eula_link');?></a>
                 </td>
                 <td>
-                    <?=$sp['coin:userContactPoint:url']?>
+                    <a href="<?= $sp['coin:userContactPoint:url']; ?>"><?= $this->t('profile_support_link'); ?></a>
                 </td>
                 <td>
-                    <?=$sp['coin:userContactPoint:emailAddress']?>
+                    <a href="mailto:<?= $sp['coin:userContactPoint:emailAddress']; ?>"><?= $sp['coin:userContactPoint:emailAddress']; ?></a>
                 </td>
                 <td>
                     <? if (array_key_exists($spId,$spOauthList)) { ?>
