@@ -42,6 +42,131 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
      */
     protected $_invalidProviders = array();
 
+    /**
+     * Create an aggregate of Group Providers from database configuration
+     *
+     * @static
+     * @param $userId
+     * @return void
+     */
+    public static function createFromDatabaseFor($userId)
+    {
+        $factory = new EngineBlock_Database_ConnectionFactory();
+        $db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
+        $groupProviderRows = $db->query(
+            'SELECT *
+            FROM group_provider'
+        )->fetchAll(PDO::FETCH_ASSOC);
+        $groupProviders = array();
+        foreach ($groupProviderRows as $groupProviderRow) {
+            $groupProvider = array(
+                'id'        => $groupProviderRow['identifier'],
+                'name'      => $groupProviderRow['name'],
+                'className' => $groupProviderRow['classname'],
+            );
+
+            // Retrieve options
+            $optionRows = $db->query(
+                "SELECT `name`, `value`
+                FROM group_provider_option
+                WHERE group_provider_id = {$groupProviderRow['id']}"
+            )->fetchAll(PDO::FETCH_ASSOC);
+            foreach ($optionRows as $optionRow) {
+                $groupProviderOptionPointer = &$groupProvider;
+                $optionNameParts = explode('.', $optionRow['name']);
+                $lastOptionNamePart = null;
+                while ($optionNamePart = array_shift($optionNameParts)) {
+                    if (!isset($groupProviderOptionPointer[$optionNamePart]) && !empty($optionNameParts)) {
+                        $groupProviderOptionPointer[$optionNamePart] = array();
+                    }
+                    $groupProviderOptionPointer = &$groupProviderOptionPointer[$optionNamePart];
+                }
+                $groupProviderOptionPointer = $optionRow['value'];
+            }
+
+            // decorators
+            $decoratorAndOptionsRows = $db->query(
+                "SELECT gpd.id        AS id,
+                        gpd.classname AS className,
+                        gpdo.name     AS option_name,
+                        gpdo.value    AS option_value
+                FROM group_provider_decorator gpd
+                LEFT JOIN group_provider_decorator_option gpdo ON gpd.id = gpdo.group_provider_decorator_id
+                WHERE gpd.group_provider_id = {$groupProviderRow['id']}"
+            );
+            if (!empty($decoratorAndOptionsRows)) {
+                $groupProvider['decorators'] = array();
+                foreach ($decoratorAndOptionsRows as $decoratorOptionsRow) {
+                    if (!isset($groupProvider['decorators'][$decoratorOptionsRow['id']])) {
+                        $groupProvider['decorators'][$decoratorOptionsRow['id']] = array();
+                    }
+                    $groupProvider['decorators'][$decoratorOptionsRow['id']]['className'] = $decoratorOptionsRow['className'];
+                    if (isset($decoratorOptionsRow['option_name']) && $decoratorOptionsRow['option_name']) {
+                        $groupProvider['decorators'][$decoratorOptionsRow['id']][$decoratorOptionsRow['option_name']] = $decoratorOptionsRow['option_value'];
+                    }
+                }
+            }
+
+            // filters
+            $filterAndOptionsRows = $db->query(
+                "SELECT gpf.id        AS id,
+                        gpf.type      AS type,
+                        gpf.classname AS className,
+                        gpfo.name     AS option_name,
+                        gpfo.value    AS option_value
+                FROM group_provider_filter gpf
+                LEFT JOIN group_provider_filter_option gpfo ON gpf.id = gpfo.group_provider_filter_id
+                WHERE gpf.group_provider_id = {$groupProviderRow['id']}"
+            );
+            foreach ($filterAndOptionsRows as $filterOptionsRow) {
+                if (!isset($groupProvider[$filterOptionsRow['type'] . 'Filters'])) {
+                    $groupProvider[$filterOptionsRow['type'] . 'Filters'] = array();
+                }
+                $filters = &$groupProvider[$filterOptionsRow['type'] . 'Filters'];
+                if (!isset($filters[$filterOptionsRow['id']])) {
+                    $filters[$filterOptionsRow['id']] = array();
+                }
+                $filters[$filterOptionsRow['id']]['className'] = $filterOptionsRow['className'];
+                if (isset($filterOptionsRow['option_name']) && $filterOptionsRow['option_name']) {
+                    $filters[$filterOptionsRow['id']][$filterOptionsRow['option_name']] = $filterOptionsRow['option_value'];
+                }
+            }
+
+            // preconditions
+            $preconditionAndOptionsRows = $db->query(
+                "SELECT gpp.id        AS id,
+                        gpp.classname AS className,
+                        gppo.name     AS option_name,
+                        gppo.value    AS option_value
+                FROM group_provider_precondition gpp
+                LEFT JOIN group_provider_precondition_option gppo ON gpp.id = gppo.group_provider_precondition_id
+                WHERE gpp.group_provider_id = {$groupProviderRow['id']}"
+            );
+            if (!empty($preconditionAndOptionsRows)) {
+                $groupProvider['preconditions'] = array();
+                foreach ($preconditionAndOptionsRows as $preconditionOptionsRow) {
+                    if (!isset($groupProvider['preconditions'][$preconditionOptionsRow['id']])) {
+                        $groupProvider['preconditions'][$preconditionOptionsRow['id']] = array();
+                    }
+                    $groupProvider['preconditions'][$preconditionOptionsRow['id']]['className'] = $preconditionOptionsRow['className'];
+                    if (isset($preconditionOptionsRow['option_name']) && $preconditionOptionsRow['option_name']) {
+                        $groupProvider['preconditions'][$preconditionOptionsRow['id']][$preconditionOptionsRow['option_name']] = $preconditionOptionsRow['option_value'];
+                    }
+                }
+            }
+
+            $groupProviders[] = $groupProvider;
+        }
+        return self::createFromConfigs(new Zend_Config($groupProviders), $userId);
+    }
+
+    /**
+     * Create an aggregate of group providers from the application configuration
+     *
+     * @static
+     * @param $userId
+     * @return EngineBlock_Group_Provider_Aggregator
+     */
     public static function createFromConfigFor($userId)
     {
         $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();

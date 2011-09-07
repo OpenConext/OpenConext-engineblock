@@ -39,8 +39,6 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->consent = $this->user->getConsent();
 
         $this->spOauthList = $this->getSpOauthList($this->spList);
-
-
     }
 
     /**
@@ -63,7 +61,4 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         }
         return $results;
     }
-
-
-
 }

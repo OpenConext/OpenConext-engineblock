@@ -101,7 +101,7 @@ class EngineBlock_VirtualOrganization_Validator
 
     protected function _getGroupProvider($subjectId)
     {
-        return EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor(
+        return EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor(
             $subjectId
         );
     }

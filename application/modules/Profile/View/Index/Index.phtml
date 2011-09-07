@@ -48,7 +48,6 @@ $layout->getView()->inlineScript()->appendScript("
     profile.init();");
 ?>
 <div id="MyProfile">
-    <h2><?php echo $this->t('profile_header_my_profile'); ?></h2>
     <p>
         <?php echo $this->t('profile_store_info'); ?>
     </p>
@@ -82,7 +81,6 @@ $layout->getView()->inlineScript()->appendScript("
     </table>
 </div>
 <div id="MyGroups">
-    <h2><?php echo $this->t('profile_header_my_groups'); ?></h2>
     <p>
         <?php echo $this->t('profile_group_membership_desc'); ?>
     </p>
@@ -93,9 +91,9 @@ $layout->getView()->inlineScript()->appendScript("
     $invalidProviders = $aggregator->getInvalidProviders();
     foreach ($aggregator->getProviders() as $groupProvider):?>
     <h3><a href="#"><?php echo $groupProvider->getDisplayName(); ?></a></h3>
-    <div>
+    <div id="<?= $groupProvider->getId(); ?>" class="group-providers">
         <?php if(count($groupOauth) && array_key_exists($groupProvider->getId(),$groupOauth )): ?>
-            <span class="revoke-gp-access"><a href="group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?= $this->t('profile_revoke_access'); ?></a></span>
+            <span class="revoke-gp-access"><a href="/profile/group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?= $this->t('profile_revoke_access'); ?></a></span>
         <?php endif; ?>
         <?php
                 $groups = array();
@@ -109,6 +107,7 @@ $layout->getView()->inlineScript()->appendScript("
         }
         if (!empty($groups)):
     ?>
+
     <ul>
         <?php foreach ($groups as $group): ?>
         <li><?php echo $group->title; ?></li>
@@ -143,13 +142,14 @@ $layout->getView()->inlineScript()->appendScript("
     ?>
     </div>
     <?php if (!empty($oauthGroupProviders)): ?>
+    <br /><br />
     <h3><?php echo $this->t('profile_header_auth_needed'); ?></h3>
     <p><?php echo $this->t('profile_extra_groups_desc'); ?></p>
     <ul>
     <? foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
         <li>
             <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId();
-                ?>?return_url=/">
+                ?>?return_url=/#MyGroups">
                 <?php echo $oauthGroupProvider->getDisplayName(); ?>
             </a>
         </li>
@@ -187,13 +187,13 @@ $layout->getView()->inlineScript()->appendScript("
                     <?=$sp["displayName:en"]?>
                 </td>
                 <td>
-                    <?=$sp['coin:eula']?>
+                    <a href="<?= $sp['coin:eula']; ?>"><?= $this->t('profile_eula_link');?></a>
                 </td>
                 <td>
-                    <?=$sp['coin:userContactPoint:url']?>
+                    <a href="<?= $sp['coin:userContactPoint:url']; ?>"><?= $this->t('profile_support_link'); ?></a>
                 </td>
                 <td>
-                    <?=$sp['coin:userContactPoint:emailAddress']?>
+                    <a href="mailto:<?= $sp['coin:userContactPoint:emailAddress']; ?>"><?= $sp['coin:userContactPoint:emailAddress']; ?></a>
                 </td>
                 <td>
                     <? if (array_key_exists($spId,$spOauthList)) { ?>
@@ -209,9 +209,21 @@ $layout->getView()->inlineScript()->appendScript("
 
 </div>
 <div id="Exit">
-    <h2><?php echo $this->t('profile_header_leave_surfconext'); ?></h2>
     <p>
         <?php echo $this->t('profile_leave_surfconext_desc'); ?><br />
-        <a href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
+
+        <div class="exit-disclaimer"/>
+        <?php echo $this->t('profile_leave_surfconext_disclaim',
+            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
+                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+            </a>",
+            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/SURFteams+Best+Practice\" target=\"_blank\">
+                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+            </a>"
+        ); ?><br />
+        </div>
+        <a class="delete" href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
+        <?php echo $this->t('profile_leave_surfconext_link_add'); ?><br />
+        <input id="delete-confirmation-text" type="hidden" value="<?php echo $this->t('profile_leave_surfconext_conf'); ?>"/>
     </p>
 </div>

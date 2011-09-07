@@ -99,9 +99,14 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_group_membership_desc'     => 'You are a member of the following groups.',
     'profile_no_groups'                 => 'No Groups',
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',
-    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more 3rd party application(s) with your institutional account. In addition, your group membership(s) may be shared with these applications. If you would like to quit using SURFconext and delete your SURFconext profile, please click the link below.',
-    'profile_leave_surfconext_link'     => 'Delete my SURFconext profile!',
+    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more 3rd party application(s) with your institutional account. In addition, your group membership(s) may be shared with these applications.</p>If you would like to quit using SURFconext and delete your SURFconext profile, please click the link below.',
+    'profile_leave_surfconext_link'     => 'Delete my SURFconext account!',
+    'profile_leave_surfconext_disclaim' => 'Please note: You may reassign group%s, document or content ownership to a collegue. Otherwise ongoing projects may be disrupted and/or content may become inaccessible! Consult the deprovisioning and dataportability good practice section%s for more information',
+    'profile_leave_surfconext_link_add' => '(close your browser after this action to finalize the deprovisioning procedure)',
     'profile_revoke_access'             => 'Revoke access',
+    'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile?',
+    'profile_eula_link'                 => 'Terms of use',
+    'profile_support_link'              => 'Support pages',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Connected Apps and Services',
@@ -112,7 +117,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_apps_email_th'             => 'Help desk email',
     'profile_apps_consent_th'           => 'Consent group information',
     'profile_revoke_consent'            => 'Revoke',
-    'profile_no_consent'                => 'Not granted',
+    'profile_no_consent'                => 'Not granted yet',
 
     //Profile
     'vomanage_header'                   => 'SURFconext - VO User Attributes',

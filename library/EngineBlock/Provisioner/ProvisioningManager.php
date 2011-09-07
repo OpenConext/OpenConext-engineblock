@@ -113,7 +113,7 @@ class EngineBlock_Provisioner_ProvisioningManager
 
     protected function _getGroups($userId)
     {
-        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor($userId);
+        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor($userId);
         return $groupProvider->getGroups();
     }
 

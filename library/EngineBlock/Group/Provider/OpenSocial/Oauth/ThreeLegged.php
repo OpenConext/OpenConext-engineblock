@@ -43,7 +43,26 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
             $userId
         );
 
-        $httpClient = new Zend_Oauth_Client($config->auth->toArray(), $config->url, $config);
+        $authConfig = $config->auth->toArray();
+        if (isset($authConfig['rsaPrivateKey'])) {
+            if (empty($authConfig['rsaPrivateKey'])) {
+                unset($authConfig['rsaPrivateKey']);
+            }
+            else {
+                $authConfig['rsaPrivateKey'] = new Zend_Crypt_Rsa_Key_Private($authConfig['rsaPrivateKey']);
+            }
+        }
+        
+        if (isset($authConfig['rsaPublicKey'])) {
+            if (empty($authConfig['rsaPublicKey'])) {
+                unset($authConfig['rsaPublicKey']);
+            }
+            else {
+                $authConfig['rsaPublicKey'] = new Zend_Crypt_Rsa_Key_Public($authConfig['rsaPublicKey']);
+            }
+        }
+
+        $httpClient = new Zend_Oauth_Client($authConfig, $config->url, $config);
 
         $accessToken = $accessTokenHelper->loadAccessToken();
         if ($accessToken) {

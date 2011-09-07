@@ -86,6 +86,16 @@ class EngineBlock_User
         $statement->execute($parameters);
     }
 
+    public function deleteOauthGroupConsent($providerId) {
+        $factory = $this->_getDatabaseConnection();
+
+        $query = "DELETE FROM group_provider_user_oauth
+                    WHERE user_id = ? AND provider_id = ?";
+        $parameters = array($this->getUid(), $providerId);
+        $statement = $factory->prepare($query);
+        $statement->execute($parameters);
+    }
+
     public function getUserOauth()
     {
         $factory = $this->_getDatabaseConnection();
