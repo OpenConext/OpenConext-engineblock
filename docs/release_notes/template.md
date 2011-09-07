@@ -1,4 +1,4 @@
-# SURFnet SURFconext $VERSION$ Release Notes #
+# SURFnet SURFconext EngineBlock v$VERSION$ Release Notes #
 
 * About this release, what is the main focus *
 
@@ -12,6 +12,11 @@ Pre-update actions
 ------------------
 
 * Vhost modifications? *
+
+Update notes
+------------
+
+* What to keep in mind doing the update? *
 
 Post-update actions
 -------------------
