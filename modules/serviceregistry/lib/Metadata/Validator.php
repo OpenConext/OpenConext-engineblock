@@ -25,7 +25,7 @@
  
 class Metadata_Validator {
 
-   /**
+    /**
      * @var sspmod_serviceregistry_EntityController
      */
     protected $_entityController;
