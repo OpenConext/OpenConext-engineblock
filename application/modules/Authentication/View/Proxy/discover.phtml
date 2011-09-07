@@ -43,6 +43,7 @@ $layout->footerText = $this->t('footer');
 
 // Set javascript
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.mousewheel.min.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.putCursorAtEnd.1.0.js');
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.jscrollpane.min.js');
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.tmpl.min.js');
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/keyboardNavigator.js');
