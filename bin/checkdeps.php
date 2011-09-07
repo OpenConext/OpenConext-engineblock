@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-test(strnatcmp(phpversion(), '5.2.10') >= 0, "PHP > 5.2.10");
+test(strnatcmp(phpversion(), '5.3') >= 0, "PHP > 5.3");
 test(ini_get('short_open_tag')      , "PHP.ini 'short_open_tag' should be on");
 test(extension_loaded('mysql')      , "Extension loaded: Mysql");
 test(extension_loaded('memcache')   , "Extension loaded: Memcache");
