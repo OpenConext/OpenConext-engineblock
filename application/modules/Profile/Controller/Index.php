@@ -28,7 +28,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
     public function indexAction()
     {
         $this->metadata = new EngineBlock_AttributeMetadata();
-        $this->aggregator = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromConfigFor(
+        $this->aggregator = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor(
             $this->attributes['nameid'][0]
         );
         $this->groupOauth = $this->user->getUserOauth();
