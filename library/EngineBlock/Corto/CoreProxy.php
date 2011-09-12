@@ -77,7 +77,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         return parent::_createBaseResponse($request);
     }
     
-    public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "")
+    public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "", $request = "")
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
             return parent::getHostedEntityUrl($entityCode, $serviceName, $remoteEntityId);
@@ -104,8 +104,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
              * from an internal binding, because if Corto would try to
              * get the request again from the binding module, it would fail.
              */
-            $request = $_REQUEST['SAMLRequest'] = $this->getBindingsModule()->receiveRequest();
-            if (!isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
+            if ($request && !isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
                 $isImplicitVo = true;
             }
         }
