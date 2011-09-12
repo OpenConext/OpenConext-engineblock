@@ -165,15 +165,11 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             $groupId = null;
         }
 
-        try {
-            return $this->_getSocialData()->getGroupsForPerson(
-                $userId->getUserId($token),
-                $groupId,
-                isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null
-            );
-        } catch(EngineBlock_Groups_Exception_UserDoesNotExist $e) {
-            return new EmptyResponseItem();
-        }
+        return $this->_getSocialData()->getGroupsForPerson(
+            $userId->getUserId($token),
+            $groupId,
+            isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null
+        );
     }
 
     public function getActivities($userIds, $groupId, $appId, $sortBy, $filterBy, $filterOp, $filterValue, $startIndex, $count, $fields, $activityIds, $token)
