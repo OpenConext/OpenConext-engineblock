@@ -537,6 +537,13 @@ $config = array(
             'validate_error' => 'The value must be a valid url (e.g. https://example.com/.*)',
             'required' => false,
         ),
+        'coin:default_vo_id' => array(
+            'type'=>'text',
+            'order' => 182,
+            'default' => '',
+            'default_allow' => false,
+            'required' => false,
+        ),
         'coin:oauth:secret' => array(
             'type' => 'text',
             'order' => 190,
