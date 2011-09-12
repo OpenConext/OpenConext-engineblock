@@ -118,6 +118,11 @@ class EngineBlock_Corto_Adapter
          */
         $request = $_REQUEST['SAMLRequest'] = $proxyServer->getBindingsModule()->receiveRequest();
         $spEntityId = $request['saml:Issuer']['__v'];
+
+        if (isset($entities[$spEntityId]['VoContext'])) {
+            $this->setVirtualOrganisationContext($entities[$spEntityId]['VoContext']);
+        }
+
         return $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
             $spEntityId
@@ -228,10 +233,6 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setSessionLogDefault($this->_getSessionLog());
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        
-        if ($this->_voContext!=null) {
-            $proxyServer->setVirtualOrganisationContext($this->_voContext);
-        }
 
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
@@ -295,6 +296,10 @@ class EngineBlock_Corto_Adapter
                     $proxyServer
                 )
             ));
+        }
+
+        if ($this->_voContext!=null) {
+            $proxyServer->setVirtualOrganisationContext($this->_voContext);
         }
     }
 

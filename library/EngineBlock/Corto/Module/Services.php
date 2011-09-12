@@ -25,6 +25,23 @@
 
 class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 {
+    protected function _cacheResponse($receivedRequest, $receivedResponse, $type)
+    {
+        $cachedResponse = &parent::_cacheResponse($receivedRequest, $receivedResponse, $type);
+        $cachedResponse['vo'] = $this->_server->getVirtualOrganisationContext();
+    }
+
+    protected function _pickCachedResponse($cachedResponses)
+    {
+        $cachedResponse = parent::_pickCachedResponse($cachedResponses, $request, $requestIssuerEntityId);
+        if (!$cachedResponse) {
+            return false;
+        }
+
+        $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
+        return $cachedResponse;
+    }
+
     public function idPsMetadataService()
     {
         $entitiesDescriptor = array(
@@ -189,10 +206,11 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $response['_Destination'] = $response['__']['Return'];
             $response['__']['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
 
-            return $this->_server->getBindingsModule()->send(
+            $this->_server->getBindingsModule()->send(
                 $response,
                 $this->_server->getRemoteEntity($serviceProviderEntityId)
             );
+            return;
         }
 
         $html = $this->_server->renderTemplate(

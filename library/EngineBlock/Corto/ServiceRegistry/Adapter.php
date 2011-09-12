@@ -118,17 +118,23 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
         // For SPs
         if (isset($serviceRegistryEntity['AssertionConsumerService'][0]['Location'])) {
+            $cortoEntity['WantsAssertionsSigned'] = true;
+
             $cortoEntity['AssertionConsumerService'] = array(
                 'Binding'  => $serviceRegistryEntity['AssertionConsumerService'][0]['Binding'],
                 'Location' => $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],
             );
-            $cortoEntity['WantsAssertionsSigned'] = true;
+
+            if (isset($serviceRegistryEntity['coin']['default_vo_id'])) {
+                $cortoEntity['VoContext'] = $serviceRegistryEntity['coin']['default_vo_id'];
+            }
 
             // Only for SPs
             if (isset($serviceRegistryEntity['coin']['expects_oids']) && $serviceRegistryEntity['coin']['expects_oids']) {
                 $cortoEntity['ExpectsOids'] = true;
             }
 
+            // External provisioning
             $cortoEntity['MustProvisionExternally'] = false;
             if (isset($serviceRegistryEntity['coin']['is_provision_sp']) && $serviceRegistryEntity['coin']['is_provision_sp']) {
                 $cortoEntity['MustProvisionExternally'] = true;

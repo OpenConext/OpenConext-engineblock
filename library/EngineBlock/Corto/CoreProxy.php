@@ -90,9 +90,31 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
 
         $host = $_SERVER['HTTP_HOST'];
 
-        $mappedUri = $this->_serviceToControllerMapping[$serviceName] .
-            ($this->_voContext!=null && $serviceName != "sPMetadataService" ? '/' . "vo:".$this->_voContext : '') .
-            ($remoteEntityId ? '/' . md5($remoteEntityId) : '');
+        $mappedUri = $this->_serviceToControllerMapping[$serviceName];
+
+        $isImplicitVo = false;
+        $remoteEntity = false;
+        if ($remoteEntityId) {
+            $remoteEntity = $this->getRemoteEntity($remoteEntityId);
+        }
+        if ($remoteEntity && isset($remoteEntity['VoContext'])) {
+            /**
+             * Use the binding module to get the request, then
+             * store it in _REQUEST so Corto will think it has received it
+             * from an internal binding, because if Corto would try to
+             * get the request again from the binding module, it would fail.
+             */
+            $request = $_REQUEST['SAMLRequest'] = $this->getBindingsModule()->receiveRequest();
+            if (!isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
+                $isImplicitVo = true;
+            }
+        }
+        if ($this->_voContext!=null && $serviceName != "sPMetadataService" && !$isImplicitVo) {
+            $mappedUri .= '/' . "vo:". $this->_voContext;
+        }
+        if ($serviceName !== 'idPMetadataService' && $remoteEntityId) {
+            $mappedUri .= '/' . md5($remoteEntityId);
+        }
                     
         return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : '') . $mappedUri;
     }
