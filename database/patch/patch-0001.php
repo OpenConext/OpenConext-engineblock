@@ -264,6 +264,8 @@ class moveGroupProvidersConfigToDatabase
 
     protected function _convertGroupProviderConfigToOptions($groupProviderId, $groupProviderConfig)
     {
+        $groupProviderConfig = $this->_flattenGroupProviderConfig($groupProviderConfig);
+
         foreach ($groupProviderConfig as $optionName => $optionValue) {
             $statement = $this->_database->prepare(
                "INSERT INTO group_provider_option (group_provider_id, name, value)
@@ -277,5 +279,19 @@ class moveGroupProvidersConfigToDatabase
                 )
             );
         }
+    }
+
+    protected function _flattenGroupProviderConfig($groupProviderConfig, $prefix = "")
+    {
+        $newConfig = array();
+        foreach ($groupProviderConfig as $optionName => $optionValue) {
+            if (!is_array($optionValue)) {
+                $newConfig[$prefix . $optionName] = $optionValue;
+                continue;
+            }
+
+            $newConfig = array_merge($newConfig, $this->_flattenGroupProviderConfig($optionValue, $prefix . $optionName . '.'));
+        }
+        return $newConfig;
     }
 }
