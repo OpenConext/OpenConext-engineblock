@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd">
+    <changeSet author="patrick@ibuildings.nl" id="1.8">
+        <createTable tableName="virtual_organisation">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id" tableName="virtual_organisation"/>
+        <createTable tableName="virtual_organisation_group">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="group_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id,group_id" tableName="virtual_organisation_group"/>
+    </changeSet>
+    <changeSet id="1.8.1" author="patrick@ibuildings.nl">
+        <createTable tableName="virtual_organisation_idp">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idp_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id,idp_id" tableName="virtual_organisation_idp"/>
+    </changeSet>
+    <changeSet id="1.8.2" author="boy@ibuildings.nl">
+        <createTable tableName="virtual_organisation_attribute">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="sp_entity_id" type="VARCHAR(1024)">
+                <constraints nullable="false" />
+            </column>
+            <column name="user_id_pattern" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="attribute_name" type="VARCHAR(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="attribute_value" type="VARCHAR(1024)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1.8.3" author="boy@ibuildings.nl">
+        <addPrimaryKey columnNames="vo_id,attribute_name" tableName="virtual_organisation_attribute" />
+    </changeSet>
+    <changeSet id="1.8.4" author="stein.welberg@everett.nl">
+        <createTable tableName="virtual_organisation_stem">
+            <column name="vo_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="stem_id" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addPrimaryKey columnNames="vo_id,stem_id" tableName="virtual_organisation_stem"/>
+    </changeSet>
+    <changeSet id="1.8.5" author="stein.welberg@everett.nl">
+        <addColumn tableName="virtual_organisation">
+            <column name="vo_type" type="ENUM('GROUP','STEM','IDP')">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+    <changeSet id="1.8.6" author="stein.welberg@everett.nl">
+        <insert tableName="virtual_organisation">
+            <column name="vo_id" value="managementvo"/>
+            <column name="vo_type" value="GROUP" />
+        </insert>
+        <insert tableName="virtual_organisation_group">
+            <column name="vo_id" value="managementvo" />
+            <column name="group_id" value="nl:surfnet:management:managementvotest" />
+        </insert>
+        <insert tableName="virtual_organisation">
+            <column name="vo_id" value="serviceregistryvo"/>
+            <column name="vo_type" value="GROUP" />
+        </insert>
+        <insert tableName="virtual_organisation_group">
+            <column name="vo_id" value="serviceregistryvo" />
+            <column name="group_id" value="nl:surfnet:management:managementvotest" />
+        </insert>
+        <insert tableName="virtual_organisation">
+            <column name="vo_id" value="votest1"/>
+            <column name="vo_type" value="GROUP" />
+        </insert>
+        <insert tableName="virtual_organisation_group">
+            <column name="vo_id" value="votest1" />
+            <column name="group_id" value="nl:votest1:votest1group" />
+        </insert>
+        <insert tableName="virtual_organisation">
+            <column name="vo_id" value="pci"/>
+            <column name="vo_type" value="GROUP" />
+        </insert>
+        <insert tableName="virtual_organisation_group">
+            <column name="vo_id" value="pci" />
+            <column name="group_id" value="nl:pci:pci_members" />
+        </insert>
+    </changeSet>
+    <changeSet id="1.8.7" author="peter.clijsters@everett.nl">
+       <insert tableName="virtual_organisation">
+           <column name="vo_id" value="surfmedia_dienstvo"/>
+           <column name="vo_type" value="GROUP" />
+       </insert>
+       <insert tableName="virtual_organisation_group">
+            <column name="vo_id" value="surfmedia_dienstvo" />
+            <column name="group_id" value="nl:surfnet:diensten:surfmedia_dienst" />
+       </insert>
+    </changeSet>
+</databaseChangeLog>
