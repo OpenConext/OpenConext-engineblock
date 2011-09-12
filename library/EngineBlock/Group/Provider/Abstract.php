@@ -23,10 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Group_Exception_UserDoesNotExist extends EngineBlock_Exception
-{
-}
-
 /**
  * Base class with default functionality for Group Providers.
  */
