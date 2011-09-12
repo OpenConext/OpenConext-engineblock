@@ -118,13 +118,13 @@ class EngineBlock_SocialData
         return $people;
     }
 
-    public function getPerson($identifier, $socialAttributes = array(), $voId = null, $spEntityId = null)
+    public function getPerson($identifier, $socialAttributes = array(), $voId = null, $spEntityId = null, $subjectId = null)
     {
         $fieldMapper = $this->_getFieldMapper();
 
         $ldapAttributes = $fieldMapper->socialToLdapAttributes($socialAttributes);
-
-        $persons = $this->_getUserDirectory()->findUsersByIdentifier($identifier, $ldapAttributes);
+        $searchId = (($subjectId) ? $subjectId : $identifier);
+        $persons = $this->_getUserDirectory()->findUsersByIdentifier($searchId, $ldapAttributes);
         if (count($persons) === 1) {
             $person = array_shift($persons);
             $person = $fieldMapper->ldapToSocialData($person, $socialAttributes);
@@ -145,7 +145,7 @@ class EngineBlock_SocialData
             // We need to see if the user might 'exists' in an ExternalGroup provider
             $groupProvider = $this->_getGroupProvider($identifier);
             if ($groupProvider->isGroupProviderForUser()) {
-                return $groupProvider->getGroupMemberDetails();
+                return $groupProvider->getGroupMemberDetails($subjectId);
             } else {
                 return false;
             }

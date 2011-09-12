@@ -133,7 +133,7 @@ interface EngineBlock_Group_Provider_Interface
      * @abstract
      * @return the Person
      */
-    public function getGroupMemberDetails();
+    public function getGroupMemberDetails($subjectId = null);
 
     /**
      * Is this GroupProvider able to return details for the given userId based on the configured memberFilter

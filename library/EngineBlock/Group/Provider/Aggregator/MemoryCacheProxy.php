@@ -284,9 +284,9 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
      * Get the details of a groupMember
      * @return the Person
      */
-    public function getGroupMemberDetails()
+    public function getGroupMemberDetails($subjectId = null)
     {
-        return $this->_provider->getGroupMemberDetails();
+        return $this->_provider->getGroupMemberDetails($subjectId);
     }
 
     /**

@@ -154,7 +154,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
      * @param $userId the unique groupMember identifier
      * @return the Person
      */
-    public function getGroupMemberDetails()
+    public function getGroupMemberDetails($subjectId = null)
     {
         //this can never happen as we retrieve groups from Grouper and therefore MemberDetails are
         //provided by the userDirectory (e.g. we always return false from isGroupProviderFor)

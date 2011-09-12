@@ -58,13 +58,16 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
      * @abstract
      * @return the Person
      */
-    public function getGroupMemberDetails()
+    public function getGroupMemberDetails($subjectId = null)
     {
+        if ($subjectId) {
+            $parameters =  array('uid' => $subjectId);
+        }
+        else {
+            $parameters =  array('uid' => $this->_userId);
+        }
         $memberDetails = $this->_openSocialRestClient->get(
-            '/people/{uid}',
-            array(
-                'uid' => $this->_userId,
-            )
+            '/people/{uid}', $parameters
         );
         return $memberDetails;
     }

@@ -243,7 +243,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
      * @param $userId the unique groupMember identifier
      * @return the Person
      */
-    public function getGroupMemberDetails()
+    public function getGroupMemberDetails($subjectId = null)
     {
         // Loop through all providers
         foreach ($this->_providers as $provider) {
@@ -251,7 +251,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 // And when we find a provider that is able to retrieve the groupDetails
                 // we use this one
                 if ($provider->isGroupProviderForUser()) {
-                    return $provider->getGroupMemberDetails();
+                    return $provider->getGroupMemberDetails($subjectId);
                 }
             }
             catch (Exception $e) {

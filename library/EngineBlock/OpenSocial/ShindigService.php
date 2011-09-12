@@ -77,7 +77,8 @@ class EngineBlock_OpenSocial_ShindigService implements ActivityService, PersonSe
             $identifier,
             array_values($fields),
             isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null,
-            isset($_REQUEST['sp-entity-id']) ? $_REQUEST['sp-entity-id'] : null
+            isset($_REQUEST['sp-entity-id']) ? $_REQUEST['sp-entity-id'] : null,
+            isset($_REQUEST['subject-id']) ? $_REQUEST['subject-id'] : null
         );
         if (empty($result)) {
             return new EmptyResponseItem();

@@ -71,9 +71,9 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
      * @abstract
      * @return the Person
      */
-    public function getGroupMemberDetails()
+    public function getGroupMemberDetails($subjectId = null)
     {
-        return $this->_provider->getGroupMemberDetails();
+        return $this->_provider->getGroupMemberDetails($subjectId);
     }
 
     /**

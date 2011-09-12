@@ -145,10 +145,14 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      * @abstract
      * @return the Person
      */
-    public function getGroupMemberDetails()
+    public function getGroupMemberDetails($subjectId = null)
     {
         $this->_provider->setUserId($this->_userIdReplaced);
-        $results = $this->_provider->getGroupMemberDetails();
+        $subjectIdReplaced = null;
+        if ($subjectId) {
+            $subjectIdReplaced = preg_replace($this->_search, $this->_replace, $subjectId);
+        }
+        $results = $this->_provider->getGroupMemberDetails($subjectIdReplaced);
         $this->_provider->setUserId($this->_userId);
 
         return $results;
