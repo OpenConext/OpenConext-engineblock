@@ -122,9 +122,6 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
     protected function _getProviderConfiguration($providerId)
     {
         $configReader = new EngineBlock_Group_Provider_ProviderConfig();
-        $zendConfig = $configReader->createFromDatabaseFor($providerId);
-        $config = $zendConfig->toArray();
-        $config['id'] = $providerId;
-        return new Zend_Config($config);
+        return $configReader->createFromDatabaseFor($providerId);
     }
 }
