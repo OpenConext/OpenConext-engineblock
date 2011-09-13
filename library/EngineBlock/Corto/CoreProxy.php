@@ -184,7 +184,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         return call_user_func_array('sprintf', $arguments);
     }
 
-	/**
+    /**
      * Return the language.
      *
      * @example <?php echo $this->language(); ?>
