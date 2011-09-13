@@ -317,4 +317,90 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 
         return $wayfIdps;
     }
+
+    protected function _storeConsent($serviceProviderEntityId, $response, $attributes)
+    {
+        $parentResponse = parent::_storeConsent($serviceProviderEntityId, $response, $attributes);
+
+        $this->_sendIntroductionMail($response, $attributes);
+
+        return $parentResponse;
+    }
+
+    protected function _sendIntroductionMail($response, $attributes)
+    {
+        //can't mail to nobody
+        if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
+            return;
+        }
+        $dbh = $this->_getConsentDatabaseConnection();
+        $hashedUserId = sha1($this->_getConsentUid($response, $attributes));
+        $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
+        $parameters = array($hashedUserId);
+        $statement = $dbh->prepare($query);
+        $statement->execute($parameters);
+        $resultSet = $statement->fetchAll();
+
+        //we only send a mail if an user provides consent the first time
+        if ($resultSet[0][0] == '1') {
+            $query = "SELECT email_text, email_from, email_subject, is_html FROM emails where email_type = ?";
+            $parameters = array('introduction_email');
+            $statement = $dbh->prepare($query);
+            $statement->execute($parameters);
+            $rows = $statement->fetchAll();
+            if (count($rows) !== 1) {
+                // No configured email content found
+                throw new Corto_Module_Services_Exception("Error sending introduction email. Please configure an email with email_type 'introduction_email'");
+            }
+            $emailText = str_ireplace('{user}', $this->_getUserName($attributes) , $rows[0]['email_text']);
+            $emailFrom = $rows[0]['email_from'];
+            $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
+            $emailSubject = $rows[0]['email_subject'];
+            $mail = new Zend_Mail('UTF-8');
+            if ($rows[0]['is_html']) {
+                $mail->setBodyHtml($emailText);
+            } else {
+                $mail->setBodyText($emailText);
+            }
+            $mail->setFrom($emailFrom);
+            $mail->addTo($emailAddress);
+            $mail->setSubject($emailSubject);
+            $mail->send();
+
+        }
+    }
+
+    protected function _getUserName($attributes) {
+        if (isset($attributes['urn:mace:dir:attribute-def:givenName']) && isset($attributes['urn:mace:dir:attribute-def:sn'])) {
+            return $attributes['urn:mace:dir:attribute-def:givenName'][0] . ' ' . $attributes['urn:mace:dir:attribute-def:sn'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:cn'])) {
+            return $attributes['urn:mace:dir:attribute-def:cn'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:displayName'])) {
+            return $attributes['urn:mace:dir:attribute-def:displayName'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:givenName'])) {
+            return $attributes['urn:mace:dir:attribute-def:givenName'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:sn'])) {
+            return $attributes['urn:mace:dir:attribute-def:sn'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:mail'])) {
+            return $attributes['urn:mace:dir:attribute-def:mail'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:uid'])) {
+            return $attributes['urn:mace:dir:attribute-def:uid'][0];
+        }
+
+        return "";
+
+    }
+
 }
