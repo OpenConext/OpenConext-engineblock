@@ -119,7 +119,7 @@ class EngineBlock_Corto_Adapter
         $request = $_REQUEST['SAMLRequest'] = $proxyServer->getBindingsModule()->receiveRequest();
         $spEntityId = $request['saml:Issuer']['__v'];
 
-        if (isset($entities[$spEntityId]['VoContext'])) {
+        if (isset($entities[$spEntityId]['VoContext']) && $entities[$spEntityId]['VoContext']) {
             $this->setVirtualOrganisationContext($entities[$spEntityId]['VoContext']);
         }
 
