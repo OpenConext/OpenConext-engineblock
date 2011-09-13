@@ -175,6 +175,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             $cortoEntity['certificates'] = array(
                 'public' => EngineBlock_X509Certificate::getPemFromCertData($serviceRegistryEntity['certData']),
             );
+            if (isset($serviceRegistryEntity['certData2']) && $serviceRegistryEntity['certData2']) {
+                $cortoEntity['certificates']['public-fallback'] = EngineBlock_X509Certificate::getPemFromCertData(
+                    $serviceRegistryEntity['certData2']
+                );
+            }
         }
         if (isset($serviceRegistryEntity['name'])) {
             $cortoEntity['Name'] = $serviceRegistryEntity['name'];
