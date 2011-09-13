@@ -92,7 +92,13 @@ if (isset($_GET['lang'])) {
         <script>
             $(document).ready(function() {
                 $('#Tabs').tabs();
-            })
+
+                $('ul.nav>li').live('click', function(e) {
+                    e.preventDefault();
+                    var href = $(this).find('a').attr('href');
+                    document.location = '/' + href + $('div#Tabs li.ui-tabs-selected>a').attr('href');
+                });
+            });
         </script>
         <?php echo $this->inlineScript() ?>
     </body>
