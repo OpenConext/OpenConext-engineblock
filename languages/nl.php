@@ -117,6 +117,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_apps_consent_th'           => 'Consent groep informatie',
     'profile_revoke_consent'            => 'Consent intrekken',
     'profile_no_consent'                => 'Nog niet uitgedeeld',
+    'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
 
     //VO Manage
     'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',

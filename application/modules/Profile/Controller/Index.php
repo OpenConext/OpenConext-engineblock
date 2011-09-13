@@ -37,28 +37,50 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->spList = $serviceRegistryClient->getSpList();
 
         $this->consent = $this->user->getConsent();
+        $this->spAttributesList = $this->_getSpAttributeList($this->spList);
 
-        $this->spOauthList = $this->getSpOauthList($this->spList);
+        $this->spOauthList = $this->_getSpOauthList($this->spList);
     }
 
     /**
      * @param $spList all service providers
      * @return all service providers that have an entry in the oauth (consent can be revoked)
      */
-    protected function getSpOauthList($spList)
+    protected function _getSpOauthList($spList)
     {
         $oauthList = $this->user->getThreeLeggedShindigOauth();
         $results = array();
         foreach ($spList as $spId => $sp) {
-            if (array_key_exists('coin:gadgetbaseurl',$sp)) {
+            if (array_key_exists('coin:gadgetbaseurl', $sp)) {
                 $pattern = '#' . $sp['coin:gadgetbaseurl'] . '#';
                 foreach ($oauthList as $oauth) {
-                    if (preg_match($pattern,$oauth)) {
+                    if (preg_match($pattern, $oauth)) {
                         $results[$spId] = $oauth;
                     }
                 }
             }
         }
+        return $results;
+    }
+
+    /**
+     * Returns an array with attributes that are released to each SP.
+     *
+     * For now we use the attributes that are released to the profile SP. Because we do not have an APR yet and therefore
+     * each SP receives the same set of attributes.
+     * TODO If the ARP is implemented change the code below to actually retrieve the set of attributes that is released to that specific SP
+     *
+     * @param $spList all service providers
+     * @return all service providers that have an entry in the oauth (consent can be revoked)
+     */
+    protected function _getSpAttributeList($spList)
+    {
+        $results = array();
+
+        foreach ($spList as $spId => $sp) {
+            $results[$spId] = $this->attributes;
+        }
+
         return $results;
     }
 }

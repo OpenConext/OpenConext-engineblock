@@ -118,6 +118,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_apps_consent_th'           => 'Consent group information',
     'profile_revoke_consent'            => 'Revoke',
     'profile_no_consent'                => 'Not granted yet',
+    'profile_attribute_release'         => 'The following attributes are released to this Service Provider:',
 
     //Profile
     'vomanage_header'                   => 'SURFconext - VO User Attributes',
