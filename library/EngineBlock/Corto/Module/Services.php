@@ -357,11 +357,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
             $emailSubject = $rows[0]['email_subject'];
             $mail = new Zend_Mail('UTF-8');
-            if ($rows[0]['is_html']) {
-                $mail->setBodyHtml($emailText);
-            } else {
-                $mail->setBodyText($emailText);
-            }
+            $mail->setBodyHtml($emailText, 'utf-8', 'utf-8');
             $mail->setFrom($emailFrom);
             $mail->addTo($emailAddress);
             $mail->setSubject($emailSubject);
