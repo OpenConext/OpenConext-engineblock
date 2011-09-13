@@ -31,7 +31,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $cachedResponse['vo'] = $this->_server->getVirtualOrganisationContext();
     }
 
-    protected function _pickCachedResponse($cachedResponses)
+    protected function _pickCachedResponse(array $cachedResponses, array $request, $requestIssuerEntityId)
     {
         $cachedResponse = parent::_pickCachedResponse($cachedResponses, $request, $requestIssuerEntityId);
         if (!$cachedResponse) {
