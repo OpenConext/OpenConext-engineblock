@@ -116,12 +116,13 @@ class EngineBlock_Corto_Adapter
          * from an internal binding, because if Corto would try to
          * get the request again from the binding module, it would fail.
          */
-        $request = $_REQUEST['SAMLRequest'] = $proxyServer->getBindingsModule()->receiveRequest();
+        $request = $proxyServer->getBindingsModule()->receiveRequest();
         $spEntityId = $request['saml:Issuer']['__v'];
 
         if (isset($entities[$spEntityId]['VoContext']) && $entities[$spEntityId]['VoContext']) {
-            $this->setVirtualOrganisationContext($entities[$spEntityId]['VoContext']);
+            $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['VoContextImplicit'] = $entities[$spEntityId]['VoContext'];
         }
+         $_REQUEST['SAMLRequest'] = $request;
 
         return $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
@@ -422,6 +423,11 @@ class EngineBlock_Corto_Adapter
         // In filter stage we need to take a look at the VO context
         if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
             $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
+            $this->setVirtualOrganisationContext($vo);
+        }
+
+        if (isset($request['__']['VoContextImplicit'])) {
+            $vo = $request['__']['VoContextImplicit'];
             $this->setVirtualOrganisationContext($vo);
         }
 
