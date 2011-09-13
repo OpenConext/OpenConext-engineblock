@@ -244,6 +244,14 @@ $config = array(
             'default_allow' => false,
             'required' => false,
         ),
+        // Certificate fields
+        'certData2' => array(
+            'type' => 'text',
+            'order' => 211,
+            'default' => '',
+            'default_allow' => false,
+            'required' => false,
+        ),
         'certFingerprint:#' => array(
             'type' => 'text',
             'order' => 220,
@@ -672,6 +680,14 @@ $config = array(
         'certData' => array(
             'type' => 'text',
             'order' => 210,
+            'default' => '',
+            'default_allow' => false,
+            'required' => false,
+        ),
+        // Certificate fields
+        'certData2' => array(
+            'type' => 'text',
+            'order' => 211,
             'default' => '',
             'default_allow' => false,
             'required' => false,
