@@ -98,12 +98,6 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
             $remoteEntity = $this->getRemoteEntity($remoteEntityId);
         }
         if ($remoteEntity && isset($remoteEntity['VoContext'])) {
-            /**
-             * Use the binding module to get the request, then
-             * store it in _REQUEST so Corto will think it has received it
-             * from an internal binding, because if Corto would try to
-             * get the request again from the binding module, it would fail.
-             */
             if ($request && !isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
                 $isImplicitVo = true;
             }

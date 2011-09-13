@@ -47,6 +47,11 @@ class EngineBlock_Exception_UnknownIssuerException extends Exception
 
 class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
 {
+    /**
+     * @var EngineBlock_Corto_CoreProxy
+     */
+    protected $_server;
+
     protected function _receiveMessage($key)
     {
         $message = parent::_receiveMessage($key);
@@ -77,7 +82,11 @@ class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
         try {
             $remoteEntity = $this->_server->getRemoteEntity($messageIssuer);
         } catch (Corto_ProxyServer_Exception $e) {
-            throw new EngineBlock_Exception_UnknownIssuerException("Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)", $messageIssuer, $destination);
+            throw new EngineBlock_Exception_UnknownIssuerException(
+                "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)",
+                $messageIssuer,
+                $destination
+            );
         }
         return $remoteEntity;
     }
