@@ -88,6 +88,7 @@ If you have any questions about your privacy and the policy applied, please visi
 
     //Profile
     'profile_header'                    => 'SURFconext',
+    'profile_subheader'                 => 'Profile Overview',
     'profile_header_my_profile'         => 'My Profile',
     'profile_header_my_apps'            => 'My Apps',
     'profile_header_my_groups'          => 'My Groups',

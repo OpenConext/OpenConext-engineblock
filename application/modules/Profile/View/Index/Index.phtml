@@ -37,7 +37,8 @@ $layout->tabs = array(
 // The current language
 $lang = $this->language();
 
-$layout->header = $this->t('profile_header');
+$layout->subheader = $this->t('profile_subheader');
+$layout->header = $this->t('profile_header') . ' - ' . $layout->subheader;
 $layout->title = $layout->title . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 

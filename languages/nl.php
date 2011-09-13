@@ -86,7 +86,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:info@surfconext.nl">info@surfconext.nl</a></p>',
 
     //Profile
-    'profile_header'                    => 'SURFconext - Mijn Profiel',
+    'profile_header'                    => 'SURFconext',
+    'profile_subheader'                 => 'Profiel Overzicht',
     'profile_header_my_profile'         => 'Mijn Profiel',
     'profile_header_my_groups'          => 'Mijn Groepen',
     'profile_header_my_apps'            => 'Mijn Applicaties',
