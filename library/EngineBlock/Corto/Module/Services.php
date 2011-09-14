@@ -58,10 +58,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $entityDescriptor = array(
                 '_validUntil' => $this->_server->timeStamp(
                     $this->_server->getCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400)),
-                '_entityID'   => $entityID,
+                '_entityID' => $entityID,
                 'md:IDPSSODescriptor' => array(
                     '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
-            ));
+                ));
 
             if (isset($entity['DisplayName'])) {
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
@@ -82,9 +82,9 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 }
                 $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Logo'] = array(
                     array(
-                        '_href'   => $entity['Logo']['Href'],
+                        '_href' => $entity['Logo']['Href'],
                         '_height' => $entity['Logo']['Height'],
-                        '_width'  => $entity['Logo']['Width'],
+                        '_width' => $entity['Logo']['Width'],
                         '__v' => $entity['Logo']['URL'],
                     ),
                 );
@@ -147,7 +147,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 '__v' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
             );
             $entityDescriptor['md:IDPSSODescriptor']['md:SingleSignOnService'] = array(
-                '_Binding'  => self::DEFAULT_REQUEST_BINDING,
+                '_Binding' => self::DEFAULT_REQUEST_BINDING,
                 '_Location' => $this->_server->getCurrentEntityUrl('singleSignOnService', $entityID),
             );
 
@@ -172,7 +172,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $dom = new DOMDocument();
             $dom->loadXML($xml);
             if (!$dom->schemaValidate($schemaUrl)) {
-                echo '<pre>'.htmlentities(Corto_XmlToArray::formatXml($xml)).'</pre>';
+                echo '<pre>' . htmlentities(Corto_XmlToArray::formatXml($xml)) . '</pre>';
                 throw new Exception('Metadata XML doesnt validate against XSD at Oasis-open.org?!');
             }
         }
@@ -194,7 +194,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $_SESSION['consent'][$response['_ID']]['response'] = $response;
 
         $attributes = Corto_XmlToArray::attributes2array(
-                $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
+            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
         );
         $serviceProviderEntityId = $attributes['ServiceProvider'][0];
         unset($attributes['ServiceProvider']);
@@ -214,13 +214,13 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         }
 
         $html = $this->_server->renderTemplate(
-                'consent',
-                array(
-                    'action'        => $this->_server->getCurrentEntityUrl('processConsentService'),
-                    'ID'            => $response['_ID'],
-                    'attributes'    => $attributes,
-                    'sp'            => $this->_server->getRemoteEntity($serviceProviderEntityId),
-        ));
+            'consent',
+            array(
+                 'action' => $this->_server->getCurrentEntityUrl('processConsentService'),
+                 'ID' => $response['_ID'],
+                 'attributes' => $attributes,
+                 'sp' => $this->_server->getRemoteEntity($serviceProviderEntityId),
+            ));
         $this->_server->sendOutput($html);
     }
 
@@ -274,9 +274,9 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             '__v' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
         );
         $entityDescriptor['md:SPSSODescriptor']['md:AssertionConsumerService'] = array(
-            '_Binding'  => self::DEFAULT_RESPONSE_BINDING,
+            '_Binding' => self::DEFAULT_RESPONSE_BINDING,
             '_Location' => $this->_server->getCurrentEntityUrl('assertionConsumerService', $spEntityId),
-            '_index'    => '1',
+            '_index' => '1',
         );
 
         return $entityDescriptor;
@@ -297,17 +297,20 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
     }
 
-    protected function _transformIdpsForWayf($idps) {
+    protected function _transformIdpsForWayf($idps)
+    {
         $wayfIdps = array();
-        foreach($idps as $idp) {
+        foreach ($idps as $idp) {
             $remoteEntities = $this->_server->getRemoteEntities();
             $metadata = ($remoteEntities[$idp]);
 
             $wayfIdp = array(
                 'Name_nl' => isset($metadata['Name']['nl']) ? $metadata['Name']['nl'] : 'Geen naam gevonden',
                 'Name_en' => isset($metadata['Name']['en']) ? $metadata['Name']['en'] : 'No Name found',
-                'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL'] : EngineBlock_View::staticUrl(). '/media/idp-logo-not-found.png' ,
-                'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en']) : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
+                'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL']
+                        : EngineBlock_View::staticUrl() . '/media/idp-logo-not-found.png',
+                'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en'])
+                        : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
                 'Access' => '1',
                 'ID' => md5($idp),
                 'EntityId' => $idp,
@@ -329,10 +332,6 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 
     protected function _sendIntroductionMail($response, $attributes)
     {
-        //can't mail to nobody
-        if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
-            return;
-        }
         $dbh = $this->_getConsentDatabaseConnection();
         $hashedUserId = sha1($this->_getConsentUid($response, $attributes));
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
@@ -343,60 +342,9 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 
         //we only send a mail if an user provides consent the first time
         if ($resultSet[0][0] == '1') {
-            $query = "SELECT email_text, email_from, email_subject, is_html FROM emails where email_type = ?";
-            $parameters = array('introduction_email');
-            $statement = $dbh->prepare($query);
-            $statement->execute($parameters);
-            $rows = $statement->fetchAll();
-            if (count($rows) !== 1) {
-                // No configured email content found
-                throw new Corto_Module_Services_Exception("Error sending introduction email. Please configure an email with email_type 'introduction_email'");
-            }
-            $emailText = str_ireplace('{user}', $this->_getUserName($attributes) , $rows[0]['email_text']);
-            $emailFrom = $rows[0]['email_from'];
-            $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
-            $emailSubject = $rows[0]['email_subject'];
-            $mail = new Zend_Mail('UTF-8');
-            $mail->setBodyHtml($emailText, 'utf-8', 'utf-8');
-            $mail->setFrom($emailFrom);
-            $mail->addTo($emailAddress);
-            $mail->setSubject($emailSubject);
-            $mail->send();
-
+            $mailer = new EngineBlock_Mail_Mailer();
+            $mailer->sendMail($attributes,'introduction_email', array());
         }
-    }
-
-    protected function _getUserName($attributes) {
-        if (isset($attributes['urn:mace:dir:attribute-def:givenName']) && isset($attributes['urn:mace:dir:attribute-def:sn'])) {
-            return $attributes['urn:mace:dir:attribute-def:givenName'][0] . ' ' . $attributes['urn:mace:dir:attribute-def:sn'][0];
-        }
-
-        if (isset($attributes['urn:mace:dir:attribute-def:cn'])) {
-            return $attributes['urn:mace:dir:attribute-def:cn'][0];
-        }
-
-        if (isset($attributes['urn:mace:dir:attribute-def:displayName'])) {
-            return $attributes['urn:mace:dir:attribute-def:displayName'][0];
-        }
-
-        if (isset($attributes['urn:mace:dir:attribute-def:givenName'])) {
-            return $attributes['urn:mace:dir:attribute-def:givenName'][0];
-        }
-
-        if (isset($attributes['urn:mace:dir:attribute-def:sn'])) {
-            return $attributes['urn:mace:dir:attribute-def:sn'][0];
-        }
-
-        if (isset($attributes['urn:mace:dir:attribute-def:mail'])) {
-            return $attributes['urn:mace:dir:attribute-def:mail'][0];
-        }
-
-        if (isset($attributes['urn:mace:dir:attribute-def:uid'])) {
-            return $attributes['urn:mace:dir:attribute-def:uid'][0];
-        }
-
-        return "";
-
     }
 
 }
