@@ -15,5 +15,5 @@ CREATE TABLE `emails` (
 
 INSERT INTO `emails` (`id`, `email_type`, `email_text`, `email_from`, `email_subject`, `is_html`)
 VALUES
-	(1, 'introduction_email', 'Dear {user},\n\nThis mail is a confirmation that we have created a profile for you on the SURFconext platform. Please visit https://profile.surfconext.nl to see and manage your profile. If you have any questions regarding this mail please contact help@surfconext.nl. \n\nBest regards,\nSurfconext\n', 'help@surfconext.nl', 'Welcome to SURFconext', 1);
+	(1, 'introduction_email', 'Dear {user},<br />\r\n<br />\r\nThis mail is a confirmation that we have created a profile for you on the SURFconext platform. Please visit https://profile.surfconext.nl to see and manage your profile. If you have any questions regarding this mail please contact help@surfconext.nl.<br />\r\n<br />\r\nBest regards, Surfconext ', 'help@surfconext.nl', 'Welcome to SURFconext', 1);
 
