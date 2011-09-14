@@ -27,6 +27,8 @@ class EngineBlock_Mail_Mailer
 {
 
     /**
+     * Send a mail based on the configuration in the emails table
+     *
      * @throws EngineBlock_Exception in case there is no EmailConfiguration in emails table
      * @param $samlAttributes all of the SAML attributes
      * @param $emailType the pointer to the emails configuration
@@ -50,7 +52,7 @@ class EngineBlock_Mail_Mailer
             throw new EngineBlock_Exception("Error sending introduction email. Please configure an email with email_type " . $emailType);
         }
         $emailText = $rows[0]['email_text'];
-        //we want a default replacement (can be overridden) of the username
+        //we want a default replacement (can be overridden with replacements) of the username
         $emailText = str_ireplace('{user}', $this->_getUserName($samlAttributes), $emailText);
         foreach ($replacements as $key => $value) {
             $emailText = str_ireplace($key, $value, $emailText);
