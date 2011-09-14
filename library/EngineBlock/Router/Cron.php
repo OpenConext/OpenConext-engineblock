@@ -23,9 +23,24 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class Grouper_Model_Subject
+/**
+ * Routes /cron/ urls
+ */
+class EngineBlock_Router_Cron extends EngineBlock_Router_Default
 {
-    public $id;
-    public $name;
-    public $privileges;
+    const DEFAULT_MODULE_NAME = 'Cron';
+
+    public function route($uri)
+    {
+        $urlParts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
+
+        // Only route /cron/ urls
+        if ($urlParts[0] !== 'cron') {
+            return false;
+        }
+
+        parent::route($uri);
+
+        return ($this->_moduleName === self::DEFAULT_MODULE_NAME);
+    }
 }

@@ -53,7 +53,8 @@ class EngineBlock_Mail_Mailer
         }
         $emailText = $rows[0]['email_text'];
         //we want a default replacement (can be overridden with replacements) of the username
-        $emailText = str_ireplace('{user}', $this->_getUserName($samlAttributes), $emailText);
+        $userName = array_key_exists('{user}', $replacements) ? $replacements['{user}'] : $this->_getUserName($samlAttributes);
+        $emailText = str_ireplace('{user}', $userName, $emailText);
         foreach ($replacements as $key => $value) {
             $emailText = str_ireplace($key, $value, $emailText);
         }

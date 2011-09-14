@@ -23,9 +23,12 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class Grouper_Model_Subject
+class Cron_Controller_Deprovision extends EngineBlock_Controller_Abstract
 {
-    public $id;
-    public $name;
-    public $privileges;
+    public function indexAction()
+    {
+        $this->setNoRender();
+        $deprovisionEngine = new EngineBlock_Deprovisioning();
+        $deprovisionEngine->deprovision();
+    }
 }

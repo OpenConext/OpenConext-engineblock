@@ -140,10 +140,10 @@ XML;
         return $groups;
     }
 
-    public function getMembers($groupName)
+    public function getMembers($groupName, $fetchMemberPrivileges = false)
     {
         $this->_requireSubjectId();
-        
+
         $subjectIdEncoded = htmlentities($this->_subjectId);
         $groupNameEncoded = htmlentities($groupName);
         $request = <<<XML
@@ -173,14 +173,53 @@ XML;
         $members = array();
         if (isset($result) and ($result !== FALSE) and (isset($result->results->WsGetMembersResult->wsSubjects->WsSubject))) {
             foreach ($result->results->WsGetMembersResult->wsSubjects->WsSubject as $member) {
-                $members[] = $this->_mapXmlToSubjectModel($member);
+                $memberObject = $this->_mapXmlToSubjectModel($member);
+                $members[$memberObject->id] = $memberObject;
             }
         }
         else {
             throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>'. var_export($result, true));
         }
 
+        // Fetch member details per member
+        if ($fetchMemberPrivileges) {
+            foreach ($members as &$member) {
+                $member->privileges = $this->getMemberPrivileges($member->id, $groupName);
+            }
+        }
         return $members;
+    }
+
+    public function getMemberPrivileges($subjectId, $groupName)
+    {
+        $groupNameEncoded = htmlentities($groupName);
+        $subjectIdEncoded = htmlentities($subjectId);
+        $request = <<<XML
+<WsRestGetGrouperPrivilegesLiteRequest>
+  <includeSubjectDetail>F</includeSubjectDetail>
+  <subjectId>$subjectIdEncoded</subjectId>
+  <groupName>$groupNameEncoded</groupName>
+</WsRestGetGrouperPrivilegesLiteRequest>
+XML;
+
+        try {
+            $result = $this->_doRest('grouperPrivileges', $request);
+        }
+        catch(Exception $e) {
+            throw $e;
+        }
+
+        $privileges = array();
+        if (isset($result) and ($result !== FALSE) and (isset($result->privilegeResults->WsGrouperPrivilegeResult))) {
+            foreach ($result->privilegeResults->WsGrouperPrivilegeResult as $privilege) {
+                $privileges[] = (string)$privilege->privilegeName;
+            }
+        }
+        else {
+            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>'. var_export($result, true));
+        }
+
+        return $privileges;
     }
 
     /**
