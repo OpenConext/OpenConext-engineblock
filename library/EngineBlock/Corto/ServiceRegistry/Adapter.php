@@ -202,11 +202,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             $cortoEntity['GeoLocation'] = $serviceRegistryEntity['geoLocation'];
         }
         if (isset($serviceRegistryEntity['redirect']['sign'])) {
-            $cortoEntity['WantsAuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect']['sign'];
+            $cortoEntity['AuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect']['sign'];
         }
         if (isset($serviceRegistryEntity['redirect']['validate'])) {
-            $cortoEntity['WantsAuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect']['validate'];
-            $cortoEntity['WantsResponsesSigned']     = (bool)$serviceRegistryEntity['redirect']['validate'];
+            $cortoEntity['AuthnRequestsSigned']  = (bool)$serviceRegistryEntity['redirect']['validate'];
+            $cortoEntity['WantsResponsesSigned'] = (bool)$serviceRegistryEntity['redirect']['validate'];
         }
         if (isset($serviceRegistryEntity['organization']['OrganizationName'])) {
             $cortoEntity['Organization']['Name'] = $serviceRegistryEntity['organization']['OrganizationName'];
