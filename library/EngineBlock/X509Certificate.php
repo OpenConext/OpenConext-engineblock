@@ -25,12 +25,22 @@
 
 class EngineBlock_X509Certificate 
 {
-    public static function getPemFromCertData($certData)
+    const PEM_PUBLIC_HEADER = '-----BEGIN CERTIFICATE-----';
+    const PEM_PUBLIC_FOOTER = '-----END CERTIFICATE-----';
+    const PEM_PRIVATE_HEADER = '-----BEGIN RSA PRIVATE KEY-----';
+    const PEM_PRIVATE_FOOTER = '-----END RSA PRIVATE KEY-----';
+
+    public static function getPublicPemCertFromCertData($certData)
     {
-        $publicKey = implode('', explode(" ", implode('', explode("\n", $certData))));
-        $publicKey = "-----BEGIN CERTIFICATE-----" . PHP_EOL .
-                chunk_split($publicKey, 64, PHP_EOL) .
-                "-----END CERTIFICATE-----" . PHP_EOL;
+        // Remove newlines and spaces
+        $certData = implode('', explode(' ', implode('', explode("\n", $certData))));
+
+        // Chunk it in 64 character bytes
+        $publicKey = self::PEM_PUBLIC_HEADER .
+            PHP_EOL .
+            chunk_split($certData, 64, PHP_EOL) .
+            self::PEM_PUBLIC_FOOTER .
+            PHP_EOL;
 
         $openSslPubKey = openssl_pkey_get_public($publicKey);
         if ($openSslPubKey === false){
@@ -38,5 +48,25 @@ class EngineBlock_X509Certificate
         }
 
         return $publicKey;
+    }
+
+    public static function getPrivatePemCertFromCertData($certData)
+    {
+        // Remove newlines and spaces
+        $certData = implode('', explode(' ', implode('', explode("\n", $certData))));
+
+        // Chunk it in 64 character bytes
+        $pemKey = self::PEM_PRIVATE_HEADER .
+            PHP_EOL .
+            chunk_split($certData, 64, PHP_EOL) .
+            self::PEM_PRIVATE_FOOTER .
+            PHP_EOL;
+
+        $openSslPrivateKey = openssl_pkey_get_private($pemKey);
+        if ($openSslPrivateKey === false){
+            throw new EngineBlock_Exception("Private key $pemKey is not a valid public key!");
+        }
+
+        return $pemKey;
     }
 }
