@@ -32,7 +32,19 @@ class EngineBlock_Deprovisioning
     const DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS = 'deprovisioning_warning_email_group_members';
     const DEPROVISION_EMAIL = 'deprovisioning_email';
 
+    /**
+     * @var EngineBlock_Database_ConnectionFactory
+     */
+    protected $_factory;
+
+    /**
+     * @var EngineBlock_UserDirectory
+     */
     protected $_userDirectory;
+
+    /**
+     * @var Grouper_Client_Rest
+     */
     protected $_grouperClient;
 
     public function deprovision()
@@ -41,15 +53,29 @@ class EngineBlock_Deprovisioning
         $secondWarningUsers = array_diff($this->_findUsersForSecondWarning(), $deprovisionUsers);
         $firstWarningUsers = array_diff($this->_findUsersForFirstWarning(), $secondWarningUsers, $deprovisionUsers);
 
-        $this->_sendWarning($firstWarningUsers, true);
-        $this->_sendWarning($secondWarningUsers);
-        $this->_sendTeamMemberWarning($secondWarningUsers);
+        $this->_sendFirstWarning($firstWarningUsers);
+        $this->_sendSecondWarning($secondWarningUsers);
+        $this->_sendFirstTeamMemberWarning($secondWarningUsers);
+        $this->_SendSecondTeamMemberWarning($secondWarningUsers);
+        $this->_deprovisionUsers($deprovisionUsers);
     }
 
-    protected function _sendWarning(array $users, $firstWarning = false)
+    protected function _sendFirstWarning(array $users)
     {
         $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $timeOffset = $firstWarning ? $deprovisionConfig->firstWarningTime : $deprovisionConfig->secondWarningTime;
+        $timeOffset = $deprovisionConfig->firstWarningTime;
+        $this->_sendWarning($users, $timeOffset);
+    }
+
+    protected function _sendSecondWarning(array $users)
+    {
+        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
+        $timeOffset = $deprovisionConfig->secondWarningTime;
+        $this->_sendWarning($users, $timeOffset);
+    }
+
+    protected function _sendWarning(array $users, $timeOffset)
+    {
         $deprovisionTime = date('d-m-Y', time() + $timeOffset);
         $mailer = new EngineBlock_Mail_Mailer();
 
@@ -68,14 +94,27 @@ class EngineBlock_Deprovisioning
 
     }
 
-    protected function _sendTeamMemberWarning(array $users, $firstWarning = false)
+    protected function _SendFirstTeamMemberWarning(array $users)
+    {
+        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
+        $timeOffset = $deprovisionConfig->firstWarningTime;
+        $this->_sendTeamMemberWarning($users, $timeOffset);
+    }
+
+    protected function _SendSecondTeamMemberWarning(array $users)
+    {
+        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
+        $timeOffset = $deprovisionConfig->SecondWarningTime;
+        $this->_sendTeamMemberWarning($users, $timeOffset);
+    }
+
+    protected function _sendTeamMemberWarning(array $users, $timeOffset)
     {
         $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
         if (!$deprovisionConfig->sendGroupMemberWarning) {
             return;
         }
 
-        $timeOffset = $firstWarning ? $deprovisionConfig->firstWarningTime : $deprovisionConfig->secondWarningTime;
         $deprovisionTime = date('d-m-Y', time() + $timeOffset);
 
         $mailer = new EngineBlock_Mail_Mailer();
@@ -101,6 +140,7 @@ class EngineBlock_Deprovisioning
                             '{team}' => $group->displayName,
                             '{deprovision_time}' => $deprovisionTime
                         );
+
                         $emailAddress = $user['emails'][0];
                         $mailer->sendMail($emailAddress, EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS, $replacements);
                     }
@@ -138,10 +178,26 @@ class EngineBlock_Deprovisioning
     protected function _deprovisionUsers(array $users)
     {
         foreach ($users as $userId) {
+            // Delete users' memberships
+            $this->_removeUserFromGroups($userId);
+
+            // Delete user (including consent, oauth, etc
             $user = new EngineBlock_User(array('nameid' => array(0 => $userId)));
             $user->delete();
         }
 
+    }
+
+    protected function _removeUserFromGroups($userId)
+    {
+        $grouperClient = $this->_getGrouperClient();
+        $grouperClient->setSubjectId($userId);
+        $groups = $grouperClient->getGroups();
+
+        foreach($groups as $group) {
+            /* @var $group Grouper_Model_Group */
+            $grouperClient->deleteMembership($userId, $group->name);
+        }
     }
 
     protected function _findUsersForFirstWarning()
@@ -234,8 +290,11 @@ class EngineBlock_Deprovisioning
      */
     protected function _getDatabaseConnection()
     {
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
+        if (!isset($this->_factory)) {
+            $factory = new EngineBlock_Database_ConnectionFactory();
+            $this->_factory = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
+        }
+        return $this->_factory;
     }
 
     protected function _getGrouperClient()
