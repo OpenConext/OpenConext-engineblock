@@ -24,6 +24,9 @@ $config = array(
 	// and Shibboleth 1.3 IdPs.
 	'default-sp' => array(
 		'saml:SP',
+                'sign.authnrequest' => true,
+                'redirect.sign' => TRUE,
+                'redirect.validate' => TRUE,
 
 		// The entity ID of this SP.
 		// Can be NULL/unset, in which case an entity ID is generated based on the metadata URL.
@@ -36,6 +39,8 @@ $config = array(
 		// The URL to the discovery service.
 		// Can be NULL/unset, in which case a builtin discovery service will be used.
 		'discoURL' => NULL,
+    'privatekey' => 'saml.pem',
+    'certificate' => 'saml.crt',
 
         'authproc' => array(
             20 => array(
