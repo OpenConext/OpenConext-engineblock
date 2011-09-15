@@ -101,8 +101,6 @@ class EngineBlock_Deprovisioning
                             '{team}' => $group->displayName,
                             '{deprovision_time}' => $deprovisionTime
                         );
-
-                        // We have to fake the samlattributes since this is what the sendmail function uses....
                         $emailAddress = $user['emails'][0];
                         $mailer->sendMail($emailAddress, EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS, $replacements);
                     }
