@@ -103,8 +103,8 @@ class EngineBlock_Deprovisioning
                         );
 
                         // We have to fake the samlattributes since this is what the sendmail function uses....
-                        $samlAttributes = array('urn:mace:dir:attribute-def:mail' => array($user['emails'][0]));
-                        $mailer->sendMail($samlAttributes, EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS, $replacements);
+                        $emailAddress = $user['emails'][0];
+                        $mailer->sendMail($emailAddress, EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS, $replacements);
                     }
                 }
                 // do nothing if user is not the admin or the only admin
