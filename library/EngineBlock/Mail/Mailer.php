@@ -30,17 +30,13 @@ class EngineBlock_Mail_Mailer
      * Send a mail based on the configuration in the emails table
      *
      * @throws EngineBlock_Exception in case there is no EmailConfiguration in emails table
-     * @param $samlAttributes all of the SAML attributes
+     * @param $emailAddress the email address of the recipient
      * @param $emailType the pointer to the emails configuration
      * @param $replacements array where the key is a variable (e.g. {user}) and the value the string where the variable should be replaced
      * @return void
      */
-    public function sendMail($samlAttributes, $emailType, $replacements)
+    public function sendMail($emailAddress, $emailType, $replacements)
     {
-        //can't mail to nobody
-        if (!isset($samlAttributes['urn:mace:dir:attribute-def:mail'])) {
-            return;
-        }
         $dbh = $this->_getDatabaseConnection();
         $query = "SELECT email_text, email_from, email_subject, is_html FROM emails where email_type = ?";
         $parameters = array($emailType);
@@ -52,14 +48,10 @@ class EngineBlock_Mail_Mailer
             throw new EngineBlock_Exception("Error sending introduction email. Please configure an email with email_type " . $emailType);
         }
         $emailText = $rows[0]['email_text'];
-        //we want a default replacement (can be overridden with replacements) of the username
-        $userName = array_key_exists('{user}', $replacements) ? $replacements['{user}'] : $this->_getUserName($samlAttributes);
-        $emailText = str_ireplace('{user}', $userName, $emailText);
         foreach ($replacements as $key => $value) {
             $emailText = str_ireplace($key, $value, $emailText);
         }
         $emailFrom = $rows[0]['email_from'];
-        $emailAddress = $samlAttributes['urn:mace:dir:attribute-def:mail'][0];
         $emailSubject = $rows[0]['email_subject'];
         $mail = new Zend_Mail('UTF-8');
         $mail->setBodyHtml($emailText, 'utf-8', 'utf-8');
@@ -67,43 +59,9 @@ class EngineBlock_Mail_Mailer
         $mail->addTo($emailAddress);
         $mail->setSubject($emailSubject);
         $mail->send();
-
-
     }
 
-    protected function _getUserName($samlAttributes)
-    {
-        if (isset($samlAttributes['urn:mace:dir:attribute-def:givenName']) && isset($samlAttributes['urn:mace:dir:attribute-def:sn'])) {
-            return $samlAttributes['urn:mace:dir:attribute-def:givenName'][0] . ' ' . $samlAttributes['urn:mace:dir:attribute-def:sn'][0];
-        }
 
-        if (isset($samlAttributes['urn:mace:dir:attribute-def:cn'])) {
-            return $samlAttributes['urn:mace:dir:attribute-def:cn'][0];
-        }
-
-        if (isset($samlAttributes['urn:mace:dir:attribute-def:displayName'])) {
-            return $samlAttributes['urn:mace:dir:attribute-def:displayName'][0];
-        }
-
-        if (isset($samlAttributes['urn:mace:dir:attribute-def:givenName'])) {
-            return $samlAttributes['urn:mace:dir:attribute-def:givenName'][0];
-        }
-
-        if (isset($samlAttributes['urn:mace:dir:attribute-def:sn'])) {
-            return $samlAttributes['urn:mace:dir:attribute-def:sn'][0];
-        }
-
-        if (isset($samlAttributes['urn:mace:dir:attribute-def:mail'])) {
-            return $samlAttributes['urn:mace:dir:attribute-def:mail'][0];
-        }
-
-        if (isset($samlAttributes['urn:mace:dir:attribute-def:uid'])) {
-            return $samlAttributes['urn:mace:dir:attribute-def:uid'][0];
-        }
-
-        return "";
-
-    }
 
     /**
      * @return PDO

@@ -25,6 +25,8 @@
 
 class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 {
+    const INTRODUCTION_EMAIL = 'introduction_email';
+
     protected function _cacheResponse($receivedRequest, $receivedResponse, $type)
     {
         $cachedResponse = &parent::_cacheResponse($receivedRequest, $receivedResponse, $type);
@@ -343,8 +345,45 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         //we only send a mail if an user provides consent the first time
         if ($resultSet[0][0] == '1') {
             $mailer = new EngineBlock_Mail_Mailer();
-            $mailer->sendMail($attributes,'introduction_email', array());
+            $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
+            $mailer->sendMail($emailAddress,
+                              EngineBlock_Corto_Module_Services::INTRODUCTION_EMAIL,
+                              array('{user}' => $this->_getUserName($attributes)));
         }
+    }
+
+    protected function _getUserName($attributes)
+    {
+        if (isset($attributes['urn:mace:dir:attribute-def:givenName']) && isset($attributes['urn:mace:dir:attribute-def:sn'])) {
+            return $attributes['urn:mace:dir:attribute-def:givenName'][0] . ' ' . $attributes['urn:mace:dir:attribute-def:sn'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:cn'])) {
+            return $attributes['urn:mace:dir:attribute-def:cn'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:displayName'])) {
+            return $attributes['urn:mace:dir:attribute-def:displayName'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:givenName'])) {
+            return $attributes['urn:mace:dir:attribute-def:givenName'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:sn'])) {
+            return $attributes['urn:mace:dir:attribute-def:sn'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:mail'])) {
+            return $attributes['urn:mace:dir:attribute-def:mail'][0];
+        }
+
+        if (isset($attributes['urn:mace:dir:attribute-def:uid'])) {
+            return $attributes['urn:mace:dir:attribute-def:uid'][0];
+        }
+
+        return "";
+
     }
 
 }
