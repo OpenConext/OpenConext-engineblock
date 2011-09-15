@@ -5,8 +5,6 @@
  * $Id: config.php 2725 2011-01-28 08:48:53Z olavmrk $
  */
 
-header('Strict-Transport-Security: max-age=15768000 ; includeSubDomains');
-
 $config = array (
 
 	/**
