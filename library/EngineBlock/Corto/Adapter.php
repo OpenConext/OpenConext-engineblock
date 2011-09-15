@@ -434,7 +434,7 @@ class EngineBlock_Corto_Adapter
 
         // If in VO context, validate the user's membership
         if (!is_null($vo)) {
-            if (false && !$this->_validateVOMembership($subjectId, $vo, $idpEntityId)) {
+            if (!$this->_validateVOMembership($subjectId, $vo, $idpEntityId)) {
                 throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");
             }
         }
