@@ -469,6 +469,10 @@ class EngineBlock_Corto_Adapter
         array $idpEntityMetadata
     )
     {
+        if ($this->_proxyServer->isInProcessingMode()) { 
+            return false; 
+        } 
+
         $subjectId = $_SESSION['subjectId'];
 
         // Attribute Aggregation

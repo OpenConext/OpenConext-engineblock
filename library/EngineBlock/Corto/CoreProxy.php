@@ -91,8 +91,8 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         $host = $_SERVER['HTTP_HOST'];
 
         $mappedUri = $this->_serviceToControllerMapping[$serviceName] .
-            ($this->_voContext!=null && $serviceName != "sPMetadataService" ? '/' . "vo:".$this->_voContext : '') .
-            ($remoteEntityId ? '/' . md5($remoteEntityId) : '');
+            (!$this->_processingMode && $this->_voContext!=null && $serviceName != "sPMetadataService" ? '/' . "vo:".$this->_voContext : '') .
+            (!$this->_processingMode && $remoteEntityId ? '/' . md5($remoteEntityId) : '');
                     
         return $scheme . '://' . $host . ($this->_hostedPath ? $this->_hostedPath : '') . $mappedUri;
     }
