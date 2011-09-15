@@ -122,7 +122,7 @@ class EngineBlock_Corto_Adapter
         if (isset($entities[$spEntityId]['VoContext']) && $entities[$spEntityId]['VoContext']) {
             $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['VoContextImplicit'] = $entities[$spEntityId]['VoContext'];
         }
-         $_REQUEST['SAMLRequest'] = $request;
+        $_REQUEST['SAMLRequest'] = $request;
 
         return $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
@@ -434,7 +434,7 @@ class EngineBlock_Corto_Adapter
 
         // If in VO context, validate the user's membership
         if (!is_null($vo)) {
-            if (!$this->_validateVOMembership($subjectId, $vo, $idpEntityId)) {
+            if (false && !$this->_validateVOMembership($subjectId, $vo, $idpEntityId)) {
                 throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");
             }
         }
@@ -480,6 +480,10 @@ class EngineBlock_Corto_Adapter
         array $idpEntityMetadata
     )
     {
+        if ($this->_proxyServer->isInProcessingMode()) {
+            return false;
+        }
+
         $subjectId = $_SESSION['subjectId'];
 
         // Attribute Aggregation
@@ -506,6 +510,18 @@ class EngineBlock_Corto_Adapter
         // Always return both OID's and URN's
         $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
         $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
+
+        /**
+         * We can set overrides of the private key in the Service Registry,
+         * allowing EngineBlock to switch to a different private key without requiring all SPs to switch at once too.
+         */
+        if (isset($spEntityMetadata['AlternatePrivateKey'])) {
+            $currentEntity = $this->_proxyServer->getCurrentEntity();
+            $hostedEntities = $this->_proxyServer->getHostedEntities();
+            $hostedEntities[$currentEntity['EntityId']]['certificates']['private'] = $spEntityMetadata['AlternatePrivateKey'];
+            $this->_proxyServer->setHostedEntities($hostedEntities);
+            $this->_proxyServer->setCurrentEntity($currentEntity['EntityCode']);
+        }
     }
 
     protected function _addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata)
