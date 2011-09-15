@@ -112,7 +112,7 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'en' => "EngineBlock Testing SP",
                     'nl' => "EngineBlock Testing SP",
                 ),
-                "WantsAuthnRequestsSigned" => true,
+                "AuthnRequestsSigned" => true,
                 'WantsResponsesSigned' => true,
             ),
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
@@ -148,7 +148,7 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'en' => "EngineBlock Testing IdP",
                     'nl' => "EngineBlock Testing IdP",
                 ),
-                "WantsAuthnRequestsSigned"  => true,
+                "AuthnRequestsSigned"  => true,
                 'WantsResponsesSigned'      => true,
             ),
         );

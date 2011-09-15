@@ -55,7 +55,7 @@ class Test_EngineBlock_Router_AssertionBuilder
 
     protected $_expectArguments = array();
 
-    public function create(PHPUnit_Framework_TestCase $test)
+    public static function create(PHPUnit_Framework_TestCase $test)
     {
         return new self($test);
     }
