@@ -2,6 +2,7 @@
 
 namespace OpenSamlPhp;
 
-interface IMessage
+class ServiceLocator
 {
+
 }

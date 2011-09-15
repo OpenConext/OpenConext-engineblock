@@ -8,6 +8,6 @@ interface IBinding
      * @param \OpenSamlPhp\Http\Request $request
      * @return \OpenSamlPhp\Message
      */
-    public function receive(\OpenSamlPhp\Http\Request $request);
+    public function receive(\OpenSamlPhp\Http\Request $httpRequest);
     public function send(\OpenSamlPhp\Message $message);
 }

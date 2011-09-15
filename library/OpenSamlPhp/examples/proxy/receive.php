@@ -8,7 +8,7 @@ $messageXml = $binding->getMessageXml();
 
 $authNRequest = Request\Authn::createFromXml($messageXml);
 
-$issuer = $authNRequest->getIssuer();
+$issuer = $authNRequest->getIssuerEntityId();
 
 if ($authNRequest->isSigned()) {
     try {
@@ -19,9 +19,4 @@ if ($authNRequest->isSigned()) {
     }
 }
 
-if (isset($authNRequest->scoping->idpList)) {
-    if (isset($authNRequest->scoping->idpList->getComplete)) {
-        $authNRequest->scoping->idpList->complete();
-    }
-}
 

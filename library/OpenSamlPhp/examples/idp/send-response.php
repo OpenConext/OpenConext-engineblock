@@ -2,6 +2,4 @@
 
 namespace OpenSamlPhp;
 
-interface IMessage
-{
-}
+$response = new Response\Authn;

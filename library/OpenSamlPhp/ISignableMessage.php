@@ -2,6 +2,6 @@
 
 namespace OpenSamlPhp;
 
-interface IMessage
+interface ISignableMessage
 {
 }

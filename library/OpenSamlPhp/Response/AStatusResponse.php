@@ -2,7 +2,6 @@
 
 namespace OpenSamlPhp\Response;
 
-class Authn extends AStatusResponse
+abstract class AStatusResponse
 {
-    
 }

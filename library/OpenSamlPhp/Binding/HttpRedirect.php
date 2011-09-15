@@ -3,7 +3,7 @@
 namespace OpenSamlPhp;
 namespace OpenSamlPhp\Binding;
 
-class HttpRedirect
+class HttpRedirect implements iBinding
 {
     const MESSAGE_KEY_REQUEST  = 'SAMLRequest';
     const MESSAGE_KEY_RESPONSE = 'SAMLReponse';
@@ -12,24 +12,23 @@ class HttpRedirect
     {
     }
 
+    /**
+     * @param \OpenSamlPhp\Http\Request $httpRequest
+     * @return \OpenSamlPhp\IMessage
+     */
+    public function receive(\OpenSamlPhp\Http\Request $httpRequest)
+    {
+    }
+
+    public function send(\OpenSamlPhp\IMessage $message)
+    {
+    }
+
     public function getRelayState()
     {
     }
 
-    public function getMessage()
-    {
-    }
-
-    /**
-     * @param \OpenSamlPhp\Http\Request $request
-     * @return \OpenSamlPhp\Message
-     */
-    public function receive(\OpenSamlPhp\Http\Request $request)
-    {
-
-    }
-
-    public function send(\OpenSamlPhp\Message $message)
+    public function getMessageXml()
     {
     }
 }
