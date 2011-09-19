@@ -101,6 +101,12 @@ class EngineBlock_Controller_Abstract
         return $this;
     }
 
+    protected function _redirectToController($controllerName)
+    {
+        $this->_controllerName = $controllerName;
+        return $this;
+    }
+
     // CONVENIENCE METHODS
 
     protected function _initAuthentication()

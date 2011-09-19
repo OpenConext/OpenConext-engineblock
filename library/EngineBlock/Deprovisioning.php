@@ -28,9 +28,8 @@ class EngineBlock_Deprovisioning
     const ADMIN_PRIVILEGE = 'admin';
     const MANAGER_PRIVILEGE = 'update';
 
-    const DEPROVISION_WARING_EMAIL = 'deprovisioning_warning_email';
+    const DEPROVISION_WARNING_EMAIL = 'deprovisioning_warning_email';
     const DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS = 'deprovisioning_warning_email_group_members';
-    const DEPROVISION_EMAIL = 'deprovisioning_email';
 
     /**
      * @var EngineBlock_Database_ConnectionFactory
@@ -47,36 +46,39 @@ class EngineBlock_Deprovisioning
      */
     protected $_grouperClient;
 
-    public function deprovision()
+    public function deprovision($previewOnly = false)
     {
-        $deprovisionUsers = $this->_findUsersForDeprovision();
-        $secondWarningUsers = array_diff($this->_findUsersForSecondWarning(), $deprovisionUsers);
-        $firstWarningUsers = array_diff($this->_findUsersForFirstWarning(), $secondWarningUsers, $deprovisionUsers);
+        $deprovisionConfig = $this->getDeprovisionConfig();
 
-        $this->_sendFirstWarning($firstWarningUsers);
-        $this->_sendSecondWarning($secondWarningUsers);
-        $this->_sendFirstTeamMemberWarning($secondWarningUsers);
-        $this->_SendSecondTeamMemberWarning($secondWarningUsers);
-        $this->_deprovisionUsers($deprovisionUsers);
+        $deprovisionTime = strtotime('-' . $deprovisionConfig->idleTime);
+        $deprovisionUsers = $this->_findUsersForWarning($deprovisionTime);
+        if (!$previewOnly) {
+            $this->_deprovisionUsers($deprovisionUsers);
+        }
+
+        $firstWarningTime = strtotime($deprovisionConfig->firstWarningTime, $deprovisionTime);
+        $secondWarningTime = strtotime($deprovisionConfig->secondWarningTime, $deprovisionTime);
+
+        $secondWarningUsers = array_diff($this->_findUsersForWarning($secondWarningTime), $deprovisionUsers);
+        $firstWarningUsers = array_diff($this->_findUsersForWarning($firstWarningTime), $secondWarningUsers, $deprovisionUsers);
+
+        if (!$previewOnly && $deprovisionConfig->sendDeprovisionWarning) {
+            $this->_sendWarning($firstWarningUsers, $firstWarningTime);
+            $this->_sendWarning($secondWarningUsers, $secondWarningTime);
+        }
+        if (!$previewOnly && $deprovisionConfig->sendGroupMemberWarning) {
+            $this->_sendTeamMemberWarning($firstWarningUsers, $firstWarningTime);
+            $this->_sendTeamMemberWarning($secondWarningUsers, $secondWarningTime);
+        }
+        return array("deprovisioned-users" => $deprovisionUsers,
+                     "first-warners" => $firstWarningUsers,
+                     "second-warners" => $secondWarningUsers);
     }
 
-    protected function _sendFirstWarning(array $users)
-    {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $timeOffset = $deprovisionConfig->firstWarningTime;
-        $this->_sendWarning($users, $timeOffset);
-    }
-
-    protected function _sendSecondWarning(array $users)
-    {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $timeOffset = $deprovisionConfig->secondWarningTime;
-        $this->_sendWarning($users, $timeOffset);
-    }
 
     protected function _sendWarning(array $users, $timeOffset)
     {
-        $deprovisionTime = date('d-m-Y', time() + $timeOffset);
+        $deprovisionTime = date('d-m-Y', $timeOffset);
         $mailer = new EngineBlock_Mail_Mailer();
 
         foreach ($users as $userId) {
@@ -88,34 +90,15 @@ class EngineBlock_Deprovisioning
 
             $emailAddress = $user['emails'][0];
             $mailer->sendMail($emailAddress,
-                              EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS,
+                              EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL,
                               $replacements);
         }
 
     }
 
-    protected function _SendFirstTeamMemberWarning(array $users)
-    {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $timeOffset = $deprovisionConfig->firstWarningTime;
-        $this->_sendTeamMemberWarning($users, $timeOffset);
-    }
-
-    protected function _SendSecondTeamMemberWarning(array $users)
-    {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $timeOffset = $deprovisionConfig->SecondWarningTime;
-        $this->_sendTeamMemberWarning($users, $timeOffset);
-    }
-
     protected function _sendTeamMemberWarning(array $users, $timeOffset)
     {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        if (!$deprovisionConfig->sendGroupMemberWarning) {
-            return;
-        }
-
-        $deprovisionTime = date('d-m-Y', time() + $timeOffset);
+        $deprovisionTime = date('d-m-Y', $timeOffset);
 
         $mailer = new EngineBlock_Mail_Mailer();
 
@@ -200,11 +183,8 @@ class EngineBlock_Deprovisioning
         }
     }
 
-    protected function _findUsersForFirstWarning()
+    protected function _findUsersForWarning($warningTime)
     {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $warningTime = time() - $deprovisionConfig->idleTime + $deprovisionConfig->firstWarningTime; // deprovisioning time + four weeks
-
         $factory = $this->_getDatabaseConnection();
 
         $query = "SELECT DISTINCT userid FROM log_logins
@@ -212,12 +192,15 @@ class EngineBlock_Deprovisioning
                     AND userid NOT IN (
                       SELECT DISTINCT userid FROM log_logins
                         WHERE loginstamp >= ?)";
+        $warningTimeDate = date("Y-m-d H:i:s", $warningTime);
+        //var_dump($warningTimeDate);exit;
         $parameters = array(
-            date("Y-m-d H:i:s", $warningTime),
-            date("Y-m-d H:i:s", $warningTime)
+            $warningTimeDate,
+            $warningTimeDate
         );
 
         $statement = $factory->prepare($query);
+
         $statement->execute($parameters);
         $results = $statement->fetchAll();
 
@@ -228,61 +211,9 @@ class EngineBlock_Deprovisioning
         return $users;
     }
 
-    protected function _findUsersForSecondWarning()
+    protected function getDeprovisionConfig()
     {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $warningTime = time() - $deprovisionConfig->idleTime + $deprovisionConfig->secondWarningTime; // deprovisioning time + two weeks
-
-        $factory = $this->_getDatabaseConnection();
-
-        $query = "SELECT DISTINCT userid FROM log_logins
-                    WHERE loginstamp <= ?
-                    AND userid NOT IN (
-                      SELECT DISTINCT userid FROM log_logins
-                        WHERE loginstamp >= ?)";
-        $parameters = array(
-            date("Y-m-d H:i:s", $warningTime),
-            date("Y-m-d H:i:s", $warningTime)
-        );
-
-        $statement = $factory->prepare($query);
-        $statement->execute($parameters);
-        $results = $statement->fetchAll();
-
-        $users = array();
-        foreach ($results as $result) {
-            $users[] = $result['userid'];
-        }
-        return $users;
-
-    }
-
-    protected function _findUsersForDeprovision()
-    {
-        $deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
-        $deprovisionTime = time() - $deprovisionConfig->idleTime;
-
-        $factory = $this->_getDatabaseConnection();
-
-        $query = "SELECT DISTINCT userid FROM log_logins
-                    WHERE loginstamp <= ?
-                    AND userid NOT IN (
-                      SELECT DISTINCT userid FROM log_logins
-                        WHERE loginstamp >= ?)";
-        $parameters = array(
-            date("Y-m-d H:i:s", $deprovisionTime),
-            date("Y-m-d H:i:s", $deprovisionTime)
-        );
-
-        $statement = $factory->prepare($query);
-        $statement->execute($parameters);
-        $results = $statement->fetchAll();
-
-        $users = array();
-        foreach ($results as $result) {
-            $users[] = $result['userid'];
-        }
-        return $users;
+        return EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
     }
 
     /**
@@ -321,4 +252,5 @@ class EngineBlock_Deprovisioning
         }
         return $this->_userDirectory;
     }
+
 }

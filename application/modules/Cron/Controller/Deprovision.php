@@ -27,8 +27,10 @@ class Cron_Controller_Deprovision extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
-        $this->setNoRender();
+        $this->previewOnly = (($this->_getRequest()->getQueryParameter('preview')) ? true : false);
         $deprovisionEngine = new EngineBlock_Deprovisioning();
-        $deprovisionEngine->deprovision();
+        $this->deprovisionPreview = $deprovisionEngine->deprovision($this->previewOnly);
+
+        $this->_redirectToController("Index");
     }
 }

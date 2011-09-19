@@ -35,23 +35,47 @@
         <h2>Cron URLs</h2>
         <ul>
             <li>
-                <a href="/cron/deprovision">
-                    /cron/deprovision
-                </a>
-                <br />
-                <p>Deprovision users based on the configuration values stored. The user is removed from the LDAP and removed from any group in Grouper<br />
-                This defaults to:
+                <p>Deprovision users based on the configuration values stored. The user is removed from the LDAP and removed from any group in Grouper.
+                The current configuration is:
                 </p>
                 <ul>
-                    <li>First warning 4 weeks before account deprovisioning to the user and to the group members of the groups for which the user is the only admin.</li>
-                    <li>Second warning 2 weeks before account deprovisioning to the user and to the group members of the groups for which the user is the only admin.</li>
-                    <li>Account deprovisioning</li>
+                    <li>The idle time before an inactive user is deleted is configured for <?=$deprovisionConfig->idleTime ?>
+                    <?php if ($deprovisionConfig->sendDeprovisionWarning) : ?>
+                        <li>First warning <?=$deprovisionConfig->firstWarningTime ?> before account deprovisioning to the user.</li>
+                        <li>Second warning <?=$deprovisionConfig->secondWarningTime ?> before account deprovisioning to the user.</li>
+                     <?php endif; ?>
+                    <?php if ($deprovisionConfig->sendGroupMemberWarning) : ?>
+                        <li>Account deprovisioning mails (first and second warnings) are send to all the group members of the groups for which the only admin is about to be deprovisioned</li>
+                    <?php endif; ?>
                 </ul>
                 <br />
-                <strong>Example:</strong>
-                <a href="/cron/deprovision">
-                    /cron/deprovision
-                </a>
+                To see the deprovisioning result without actually deprovisioning anyone please click this
+                <a href="/cron/deprovision?preview=true">link</a>
+                </br>
+                To run the actual deprovisioning click this
+                <a href="/cron/deprovision">link</a>
+                </br>
+                <?php if ($previewOnly) : ?>
+                    <p><strong>Preview:</strong></p>
+                    <p>Users that will be deprovisioned:</p>
+                    <ul>
+                    <? foreach ($deprovisionPreview['deprovisioned-users'] as $user): ?>
+                        <li><?=$user ?></li>
+                    <?php endforeach;?>
+                    </ul>
+                    <p>Users that will be first warned by email:</p>
+                    <ul>
+                    <? foreach ($deprovisionPreview['first-warners'] as $user): ?>
+                        <li><?=$user ?></li>
+                    <?php endforeach;?>
+                    </ul>
+                    <p>Users that will be second time warned by email:</p>
+                    <ul>
+                    <? foreach ($deprovisionPreview['second-warners'] as $user): ?>
+                        <li><?=$user ?></li>
+                    <?php endforeach;?>
+                    </ul>
+                <?php endif; ?>
             </li>
         </ul>
     </body>

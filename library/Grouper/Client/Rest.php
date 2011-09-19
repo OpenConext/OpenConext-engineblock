@@ -68,7 +68,7 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
          if (!isset($config->host) || $config->host=='') {
             throw new EngineBlock_Exception('No Grouper Host specified! Please set "grouper.host" in your application configuration.');
         }
-
+        
         $url = $config->protocol .
                 '://' .
                 $config->user .
