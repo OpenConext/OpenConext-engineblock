@@ -51,24 +51,26 @@ class EngineBlock_Deprovisioning
         $deprovisionConfig = $this->getDeprovisionConfig();
 
         $deprovisionTime = strtotime('-' . $deprovisionConfig->idleTime);
-        $deprovisionUsers = $this->_findUsersForWarning($deprovisionTime);
+        $deprovisionUsers = $this->_findUsers($deprovisionTime);
         if (!$previewOnly) {
             $this->_deprovisionUsers($deprovisionUsers);
         }
 
         $firstWarningTime = strtotime($deprovisionConfig->firstWarningTime, $deprovisionTime);
+        $firstWarningTimeOffset = strtotime($deprovisionConfig->firstWarningTime);
         $secondWarningTime = strtotime($deprovisionConfig->secondWarningTime, $deprovisionTime);
+        $secondWarningTimeOffset = strtotime($deprovisionConfig->secondWarningTime);
 
-        $secondWarningUsers = array_diff($this->_findUsersForWarning($secondWarningTime), $deprovisionUsers);
-        $firstWarningUsers = array_diff($this->_findUsersForWarning($firstWarningTime), $secondWarningUsers, $deprovisionUsers);
+        $secondWarningUsers = array_diff($this->_findUsers($secondWarningTime), $deprovisionUsers);
+        $firstWarningUsers = array_diff($this->_findUsers($firstWarningTime), $secondWarningUsers, $deprovisionUsers);
 
         if (!$previewOnly && $deprovisionConfig->sendDeprovisionWarning) {
-            $this->_sendWarning($firstWarningUsers, $firstWarningTime);
-            $this->_sendWarning($secondWarningUsers, $secondWarningTime);
+            $this->_sendWarning($firstWarningUsers, $firstWarningTimeOffset);
+            $this->_sendWarning($secondWarningUsers, $secondWarningTimeOffset);
         }
         if (!$previewOnly && $deprovisionConfig->sendGroupMemberWarning) {
-            $this->_sendTeamMemberWarning($firstWarningUsers, $firstWarningTime);
-            $this->_sendTeamMemberWarning($secondWarningUsers, $secondWarningTime);
+            $this->_sendTeamMemberWarning($firstWarningUsers, $firstWarningTimeOffset);
+            $this->_sendTeamMemberWarning($secondWarningUsers, $secondWarningTimeOffset);
         }
         return array("deprovisioned-users" => $deprovisionUsers,
                      "first-warners" => $firstWarningUsers,
@@ -117,7 +119,6 @@ class EngineBlock_Deprovisioning
                     foreach ($members as $member) {
                         /* @var $member Grouper_Model_Subject */
                         $user = $this->_fetchUser($member->id);
-                        var_dump($user);
                         $replacements = array(
                             '{user}' => $member->name,
                             '{team}' => $group->displayName,
@@ -183,7 +184,7 @@ class EngineBlock_Deprovisioning
         }
     }
 
-    protected function _findUsersForWarning($warningTime)
+    protected function _findUsers($warningTime)
     {
         $factory = $this->_getDatabaseConnection();
 
@@ -206,7 +207,9 @@ class EngineBlock_Deprovisioning
 
         $users = array();
         foreach ($results as $result) {
-            $users[] = $result['userid'];
+            if ($this->_fetchUser($result['userid'])) {
+                $users[] = $result['userid'];
+            }
         }
         return $users;
     }
