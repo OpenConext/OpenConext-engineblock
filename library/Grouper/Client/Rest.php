@@ -58,11 +58,6 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
      */
     protected $_subjectId;
 
-    /**
-     * @var string
-     */
-    protected $_superUser;
-
     public static function createFromConfig(Zend_Config $config)
     {
          if (!isset($config->host) || $config->host=='') {
@@ -82,7 +77,6 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
                 $config->version . '/';
 
         $grouper = new self($url, $config->toArray());
-        $grouper->_superUser = $config->user;
         return $grouper;
     }
 
@@ -281,9 +275,7 @@ XML;
 
     public function deleteMembership($subjectId, $groupName)
     {
-        $groupNameEncoded = htmlentities($groupName);
         $subjectIdEncoded = htmlentities($subjectId);
-        $superUser = 'GrouperSystem';
         $request = <<<XML
 <WsRestDeleteMemberRequest>
   <includeSubjectDetail>F</includeSubjectDetail>
@@ -292,34 +284,24 @@ XML;
       <subjectId>$subjectIdEncoded</subjectId>
     </WsSubjectLookup>
   </subjectLookups>
-  <WsGroupLookup>
-    <groupName>$groupNameEncoded</groupName>
-  </WsGroupLookup>
   <actAsSubjectLookup>
     <subjectId>$subjectIdEncoded</subjectId>
   </actAsSubjectLookup>
 </WsRestDeleteMemberRequest>
 XML;
 
+        $filter = urlencode($groupName);
         try {
-            $result = $this->_doRest('groups', $request);
+            $result = $this->_doRest("groups/$filter/members", $request);
+            if (isset($result) and ($result !== FALSE) and ($result->results->WsDeleteMemberResult->wsSubject->resultCode == 'SUCCESS')) {
+                return true;
+            }
         }
         catch(Exception $e) {
             throw $e;
         }
-
-        $privileges = array();
-        if (isset($result) and ($result !== FALSE) and (isset($result->privilegeResults->WsGrouperPrivilegeResult))) {
-            foreach ($result->privilegeResults->WsGrouperPrivilegeResult as $privilege) {
-                $privileges[] = (string)$privilege->privilegeName;
-            }
-        }
-        else {
-            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>'. var_export($result, true));
-        }
-
-        return $privileges;
-
+        // Something went wrong
+        return false;
     }
 
     /**

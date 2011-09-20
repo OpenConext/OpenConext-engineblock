@@ -54,9 +54,29 @@ interface Grouper_Client_Interface
     public function getMembers($groupName);
 
     /**
+     * Retrieve the member privileges for a specified subjectId and a specified group
+     *
+     * @abstract
+     * @param $subjectId
+     * @param $groupName
+     * @return array
+     */
+    public function getMemberPrivileges($subjectId, $groupName);
+
+    /**
      * @abstract
      * @param string $groupName
      * @return bool
      */
     public function hasMember($groupName);
+
+    /**
+     * Delete a group membership for a subject
+     *
+     * @abstract
+     * @param $subjectId
+     * @param $groupName
+     * @return bool
+     */
+    public function deleteMembership($subjectId, $groupName);
 }
