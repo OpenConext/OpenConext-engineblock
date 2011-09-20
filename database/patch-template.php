@@ -1,4 +1,5 @@
 <?php
+// Single line description of patch
 
 /**
  * DbPatch makes the following variables available to PHP patches:

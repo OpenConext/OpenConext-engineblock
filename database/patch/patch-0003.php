@@ -1,7 +1,5 @@
 <?php
-/**
- * Add metadata_valid_until and metadata_cache_until fields for metadata refreshing.
- */
+// Add metadata_valid_until and metadata_cache_until fields for metadata refreshing.
 
 /**
  * DbPatch makes the following variables available to PHP patches:
