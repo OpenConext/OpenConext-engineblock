@@ -49,7 +49,19 @@ class EngineBlock_Mail_Mailer
         }
         $emailText = $rows[0]['email_text'];
         foreach ($replacements as $key => $value) {
-            $emailText = str_ireplace($key, $value, $emailText);
+            // Single value replacement
+            if (!is_array($value)) {
+                $emailText = str_ireplace($key, $value, $emailText);
+            }
+            // Multi value replacement
+            else {
+                $replacement = '<ul>';
+                foreach ($value as $valElem) {
+                    $replacement .= '<li>' . $valElem . '</li>';
+                }
+                $replacement .= '</ul>';
+                $emailText = str_ireplace($key, $replacement, $emailText);
+            }
         }
         $emailFrom = $rows[0]['email_from'];
         $emailSubject = $rows[0]['email_subject'];
@@ -60,7 +72,6 @@ class EngineBlock_Mail_Mailer
         $mail->setSubject($emailSubject);
         $mail->send();
     }
-
 
 
     /**
