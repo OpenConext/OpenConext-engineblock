@@ -60,21 +60,21 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
 
     public static function createFromConfig(Zend_Config $config)
     {
-         if (!isset($config->host) || $config->host=='') {
+        if (!isset($config->host) || $config->host == '') {
             throw new EngineBlock_Exception('No Grouper Host specified! Please set "grouper.host" in your application configuration.');
         }
-        
+
         $url = $config->protocol .
-                '://' .
-                $config->user .
-                ':' .
-                $config->password .
-                '@' .
-                $config->host .
-                (isset($config->port)?':'.$config->port:'') .
-                $config->path .
-                '/' .
-                $config->version . '/';
+               '://' .
+               $config->user .
+               ':' .
+               $config->password .
+               '@' .
+               $config->host .
+               (isset($config->port) ? ':' . $config->port : '') .
+               $config->path .
+               '/' .
+               $config->version . '/';
 
         $grouper = new self($url, $config->toArray());
         return $grouper;
@@ -124,8 +124,8 @@ XML;
         try {
             $result = $this->_doRest('subjects', $request);
         }
-        catch(Exception $e) {
-            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
+        catch (Exception $e) {
+            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
                 throw new Grouper_Client_Exception_SubjectNotFound();
             }
             throw $e;
@@ -140,7 +140,7 @@ XML;
         return $groups;
     }
 
-    public function getMembers($groupName, $fetchMemberPrivileges = false)
+    public function getMembers($groupName)
     {
         $this->_requireSubjectId();
 
@@ -163,8 +163,8 @@ XML;
         try {
             $result = $this->_doRest('groups', $request);
         }
-        catch(Exception $e) {
-            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND")!==false) {
+        catch (Exception $e) {
+            if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
                 throw new Grouper_Client_Exception_SubjectNotFound();
             }
             throw $e;
@@ -178,14 +178,16 @@ XML;
             }
         }
         else {
-            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>'. var_export($result, true));
+            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>' . var_export($result, true));
         }
+        return $members;
+    }
 
-        // Fetch member details per member
-        if ($fetchMemberPrivileges) {
-            foreach ($members as &$member) {
-                $member->privileges = $this->getMemberPrivileges($member->id, $groupName);
-            }
+    public function getMembersWithPrivileges($groupName)
+    {
+        $members = $this->getMembers($groupName);
+        foreach ($members as &$member) {
+            $member->privileges = $this->getMemberPrivileges($member->id, $groupName);
         }
         return $members;
     }
@@ -205,7 +207,7 @@ XML;
         try {
             $result = $this->_doRest('grouperPrivileges', $request);
         }
-        catch(Exception $e) {
+        catch (Exception $e) {
             throw $e;
         }
 
@@ -216,7 +218,7 @@ XML;
             }
         }
         else {
-            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>'. var_export($result, true));
+            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>' . var_export($result, true));
         }
 
         return $privileges;
@@ -231,7 +233,7 @@ XML;
     public function hasMember($groupName)
     {
         $this->_requireSubjectId();
-        
+
         $subjectIdEncoded = htmlentities($this->_subjectId);
 
         $requestXml = <<<XML
@@ -250,7 +252,7 @@ XML;
         $filter = urlencode($groupName);
         try {
             $result = $this->_doRest("groups/$filter/members", $requestXml);
-            if ((String)$result->results->WsHasMemberResult->resultMetadata->resultCode==self::IS_MEMBER) {
+            if ((String)$result->results->WsHasMemberResult->resultMetadata->resultCode == self::IS_MEMBER) {
                 return true;
             }
         }
@@ -261,10 +263,10 @@ XML;
             // This means we've got to use a crude way to distinguish between actual exceptions (grouper down/unreachable) and the situation
             // where we're not a member.
             $msg = $e->getMessage();
-            if (strpos($msg, "GROUP_NOT_FOUND")!==false) {
+            if (strpos($msg, "GROUP_NOT_FOUND") !== false) {
                 // Most likely we're not a member.
                 return false;
-            }  else {
+            } else {
                 // Most likely a system failure. Rethrow.
                 throw $e;
             }
@@ -297,7 +299,7 @@ XML;
                 return true;
             }
         }
-        catch(Exception $e) {
+        catch (Exception $e) {
             throw $e;
         }
         // Something went wrong
@@ -323,8 +325,8 @@ XML;
         // Request to be sent
 
         curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            'Content-Type: text/xml; charset=UTF-8'
-        ));
+                                                  'Content-Type: text/xml; charset=UTF-8'
+                                             ));
 
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
 
@@ -343,11 +345,11 @@ XML;
         $responseFailed = false;
         $response = curl_exec($ch);
 
-        $info = array('http_code'=>'');
+        $info = array('http_code' => '');
         $error = "";
         if ($response !== FALSE) {
-            $error  = curl_error($ch);
-            $info   = curl_getinfo($ch);
+            $error = curl_error($ch);
+            $info = curl_getinfo($ch);
             if (($error != '') or ($info['http_code'] >= 300)) {
                 $responseFailed = true;
             }

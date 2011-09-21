@@ -54,6 +54,14 @@ interface Grouper_Client_Interface
     public function getMembers($groupName);
 
     /**
+     * Fetch the groupmembers including the privileges
+     *
+     * @abstract
+     * @param $groupName
+     * @return void
+     */
+    public function getMembersWithPrivileges($groupName);
+    /**
      * Retrieve the member privileges for a specified subjectId and a specified group
      *
      * @abstract
