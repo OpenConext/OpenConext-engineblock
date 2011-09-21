@@ -1,6 +1,5 @@
 <?php
 
-class DbPatch_Command_ConfigurationException extends Exception
+class DbPatch_Command_ConfigurationException extends RuntimeException
 {
-
 }

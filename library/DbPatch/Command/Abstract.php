@@ -264,7 +264,7 @@ abstract class DbPatch_Command_Abstract
     }
 
     /**
-     * @return string
+     * @return string|bool
      */
     public function getPatchDirectory()
     {
@@ -273,6 +273,7 @@ abstract class DbPatch_Command_Abstract
         } else {
             $dir = self::PATCH_DIRECTORY;
         }
+
         return $dir;
     }
 
@@ -313,7 +314,7 @@ abstract class DbPatch_Command_Abstract
     {
         $patchDirectory = $this->getPatchDirectory();
 
-        if (!file_exists($patchDirectory)) {
+        if (!is_dir($patchDirectory)) {
             $this->writer->error('path ' . $patchDirectory . ' doesn\'t exists');
             return array();
         }
@@ -365,6 +366,7 @@ abstract class DbPatch_Command_Abstract
                 $patches[$patchNumber] = $patch;
             }
         }
+        ksort($patches);
         return $patches;
     }
 
@@ -380,6 +382,12 @@ abstract class DbPatch_Command_Abstract
         $branches = array(self::DEFAULT_BRANCH);
 
         $patchDirectory = $this->getPatchDirectory();
+
+        if (!is_dir($patchDirectory)) {
+            $this->writer->error('path ' . $patchDirectory . ' doesn\'t exists');
+            return array();
+        }
+
         try {
             $iterator = new DirectoryIterator($patchDirectory);
         } catch (Exception $e) {
@@ -505,6 +513,43 @@ abstract class DbPatch_Command_Abstract
 
         $db->query($sql);
         $db->commit();
+    }
+
+    /**
+     * Dump database
+     *
+     * @param string $filename
+     * @return bool
+     */
+    protected function dumpDatabase($filename)
+    {
+        try {
+            $db = $this->getDb();
+            $db->dump($filename);
+        } catch (Exception $e) {
+            $this->writer->error($e->getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Create dump filename
+     * @return string
+     */
+    protected function getDumpFilename()
+    {
+        $filename = null;
+        $database = $this->config->db->params->dbname;
+        if ($this->console->issetOption('file')) {
+            $filename = $this->console->getOptionValue('file', null);
+        }
+
+        if (is_null($filename)) {
+            $filename = $database . '_' . date('Ymd_Hi') . '.sql';
+        }
+
+        return $filename;
     }
 
     /**
