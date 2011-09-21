@@ -59,19 +59,19 @@ $layout->subheader = 'Welcome to SURFnet Collaboration Infrastructure EngineBloc
             <p>Users that will be deprovisioned:</p>
             <ul>
             <? foreach ($deprovisionPreview['deprovisioned-users'] as $user): ?>
-                <li><?=$user ?></li>
+                <li><?=$user['id'] ?></li>
             <?php endforeach;?>
             </ul>
             <p>Users that will be first warned by email:</p>
             <ul>
             <? foreach ($deprovisionPreview['first-warners'] as $user): ?>
-                <li><?=$user ?></li>
+                <li><?=$user['id'] ?></li>
             <?php endforeach;?>
             </ul>
             <p>Users that will be second time warned by email:</p>
             <ul>
             <? foreach ($deprovisionPreview['second-warners'] as $user): ?>
-                <li><?=$user ?></li>
+                <li><?=$user['id'] ?></li>
             <?php endforeach;?>
             </ul>
         <?php endif; ?>

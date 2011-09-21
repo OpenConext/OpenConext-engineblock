@@ -46,6 +46,11 @@ class EngineBlock_Deprovisioning
      */
     protected $_grouperClient;
 
+    /**
+     * @var EngineBlock_Mail_Mailer
+     */
+    protected $_mailer;
+
     public function deprovision($previewOnly = false)
     {
         $deprovisionConfig = $this->getDeprovisionConfig();
@@ -56,17 +61,18 @@ class EngineBlock_Deprovisioning
             $this->_deprovisionUsers($deprovisionUsers);
         }
 
+        // Warning times
         $firstWarningTime = strtotime($deprovisionConfig->firstWarningTime, $deprovisionTime);
         $firstWarningTimeOffset = strtotime($deprovisionConfig->firstWarningTime);
         $secondWarningTime = strtotime($deprovisionConfig->secondWarningTime, $deprovisionTime);
         $secondWarningTimeOffset = strtotime($deprovisionConfig->secondWarningTime);
 
-        $secondWarningUsers = array_diff($this->_findUsers($secondWarningTime), $deprovisionUsers);
-        $firstWarningUsers = array_diff($this->_findUsers($firstWarningTime), $secondWarningUsers, $deprovisionUsers);
+        $secondWarningUsers = $this->_getUsersForSecondWarning($deprovisionUsers, $secondWarningTime);
+        $firstWarningUsers = $this->_getUsersForFirstWarning($secondWarningUsers, $firstWarningTime);
 
         if (!$previewOnly && $deprovisionConfig->sendDeprovisionWarning) {
-            $this->_sendWarning($firstWarningUsers, $firstWarningTimeOffset);
-            $this->_sendWarning($secondWarningUsers, $secondWarningTimeOffset);
+            $this->_sendFirstWarning($firstWarningUsers, $firstWarningTimeOffset);
+            $this->_sendSecondWarning($secondWarningUsers, $secondWarningTimeOffset);
         }
         if (!$previewOnly && $deprovisionConfig->sendGroupMemberWarning) {
             $this->_sendTeamMemberWarning($firstWarningUsers, $firstWarningTimeOffset);
@@ -77,25 +83,44 @@ class EngineBlock_Deprovisioning
                      "second-warners" => $secondWarningUsers);
     }
 
-
-    protected function _sendWarning(array $users, $timeOffset)
+    protected function _sendFirstWarning(array $users, $timeOffset)
     {
-        $deprovisionTime = date('d-m-Y', $timeOffset);
-        $mailer = new EngineBlock_Mail_Mailer();
-
-        foreach ($users as $userId) {
-            $user = $this->_fetchUser($userId);
-            $replacements = array(
-                '{user}' => $user['name']['formatted'],
-                '{deprovision_time}' => $deprovisionTime
-            );
-
-            $emailAddress = $user['emails'][0];
-            $mailer->sendMail($emailAddress,
-                              EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL,
-                              $replacements);
+        foreach ($users as $user) {
+            $this->_sendWarning($user, $timeOffset);
+            $userDirectory = $this->_getUserDirectory();
+            $userDirectory->setUserFirstWarningSent($user['id']);
         }
+    }
 
+    protected function _sendSecondWarning(array $users, $timeOffset)
+    {
+        foreach ($users as $user) {
+            $this->_sendWarning($user, $timeOffset);
+            $userDirectory = $this->_getUserDirectory();
+            $userDirectory->setUserSecondWarningSent($user['id']);
+        }
+    }
+
+    protected function _sendWarning(array $user, $timeOffset)
+    {
+        $userId = $user['id'];
+        $deprovisionTime = date('d-m-Y', $timeOffset);
+        $mailer = $this->_getMailer();
+
+        $groups = $this->_getGroups($userId);
+        $onlyAdminGroups = $this->_getGroupDisplayNameArray($this->_getOnlyAdminGroups($groups, $userId));
+        $groupDisplayNames = $this->_getGroupDisplayNameArray($groups);
+        $replacements = array(
+            '{user}' => $user['name']['formatted'],
+            '{deprovision_time}' => $deprovisionTime,
+            '{groups}' => $groupDisplayNames,
+            '{onlyAdminGroups}' => $onlyAdminGroups
+        );
+
+        $emailAddress = $user['emails'][0];
+        $mailer->sendMail($emailAddress,
+                          EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL,
+                          $replacements);
     }
 
     protected function _sendTeamMemberWarning(array $users, $timeOffset)
@@ -105,28 +130,29 @@ class EngineBlock_Deprovisioning
         $mailer = new EngineBlock_Mail_Mailer();
 
         $grouperClient = $this->_getGrouperClient();
-        foreach ($users as $userId) {
+        foreach ($users as $userId => $user) {
             $grouperClient->setSubjectId($userId);
             $groups = $grouperClient->getGroups();
 
             foreach ($groups as $group) {
                 /* @var $group Grouper_Model_Group */
-                $members = $grouperClient->getMembers($group->name, true);
-                $currentMember = $members[$userId];
-                unset($members[$userId]);
-                if ($this->_isUserOnlyAdmin($currentMember, $members)) {
+                $members = $grouperClient->getMembersWithPrivileges($group->name);
+                if ($this->_isUserOnlyAdmin($members, $userId)) {
                     // send the actual email to group members
                     foreach ($members as $member) {
-                        /* @var $member Grouper_Model_Subject */
-                        $user = $this->_fetchUser($member->id);
-                        $replacements = array(
-                            '{user}' => $member->name,
-                            '{team}' => $group->displayName,
-                            '{deprovision_time}' => $deprovisionTime
-                        );
+                        // Do not send the mail to the user that is to be deprovisioned
+                        if ($member->id != $userId) {
+                            /* @var $member Grouper_Model_Subject */
+                            $user = $this->_getLdapUser($member->id);
+                            $replacements = array(
+                                '{user}' => $member->name,
+                                '{team}' => $group->displayName,
+                                '{deprovision_time}' => $deprovisionTime
+                            );
 
-                        $emailAddress = $user['emails'][0];
-                        $mailer->sendMail($emailAddress, EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS, $replacements);
+                            $emailAddress = $user['emails'][0];
+                            $mailer->sendMail($emailAddress, EngineBlock_Deprovisioning::DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS, $replacements);
+                        }
                     }
                 }
                 // do nothing if user is not the admin or the only admin
@@ -134,22 +160,65 @@ class EngineBlock_Deprovisioning
         }
     }
 
-    protected function _fetchUser($userId)
+    protected function _getLdapUser($userId)
     {
         $mapper = new EngineBlock_SocialData_FieldMapper();
         $userDirectory = $this->_getUserDirectory();
         $users = $userDirectory->findUsersByIdentifier($userId);
         if (count($users) === 1) {
+            $firstWarningSent = (bool)$users[0]['collabpersonfirstwarningsent'];
+            $secondWarningSent = (bool)$users[0]['collabpersonsecondwarningsent'];
             $user = $mapper->ldapToSocialData(array_shift($users));
+
+            // add first and second warning fields
+            $user['firstWarningSent'] = $firstWarningSent;
+            $user['secondWarningSent'] = $secondWarningSent;
+
             return $user;
         }
         return null;
     }
 
-    protected function _isUserOnlyAdmin(Grouper_Model_Subject $currentMember, array $otherMembers)
+    protected function _getGroups($userId)
     {
+        $grouperClient = $this->_getGrouperClient();
+        $grouperClient->setSubjectId($userId);
+        return $grouperClient->getGroups();
+
+    }
+
+    protected function _getOnlyAdminGroups(array $groups, $userId)
+    {
+        $grouperClient = $this->_getGrouperClient();
+        $onlyAdminGroups = array();
+        foreach ($groups as $group) {
+            /* @var $group Grouper_Model_Group */
+            $members = $grouperClient->getMembersWithPrivileges($group->name);
+            if ($this->_isUserOnlyAdmin($members, $userId)) {
+                $onlyAdminGroups[$group->name] = $group;
+            }
+        }
+        return $onlyAdminGroups;
+    }
+
+    protected function _getGroupDisplayNameArray(array $groups)
+    {
+        $groupNames = array();
+        foreach ($groups as $group) {
+            /* @var $group Grouper_Model_Group */
+            $groupNames[] = $group->displayExtension;
+        }
+        return $groupNames;
+    }
+
+    protected function _isUserOnlyAdmin(array $members, $userId)
+    {
+        /* @var $currentMember Grouper_Model_Subject */
+        $currentMember = $members[$userId];
+        unset($members[$userId]);
+
         if (in_array(EngineBlock_Deprovisioning::ADMIN_PRIVILEGE, $currentMember->privileges)) {
-            foreach ($otherMembers as $memberId => $member) {
+            foreach ($members as $memberId => $member) {
                 if (in_array(EngineBlock_Deprovisioning::ADMIN_PRIVILEGE, $member->privileges)) {
                     return false;
                 }
@@ -178,13 +247,37 @@ class EngineBlock_Deprovisioning
         $grouperClient->setSubjectId($userId);
         $groups = $grouperClient->getGroups();
 
-        foreach($groups as $group) {
+        foreach ($groups as $group) {
             /* @var $group Grouper_Model_Group */
             $grouperClient->deleteMembership($userId, $group->name);
         }
     }
 
-    protected function _findUsers($warningTime)
+    protected function _getUsersForFirstWarning(array $intersectUsers, $firstWarningTime)
+    {
+        return $this->_getUsersForWarning($intersectUsers, 'firstWarningSent', $firstWarningTime);
+    }
+
+    protected function _getUsersForSecondWarning(array $intersectUsers, $secondWarningTime)
+    {
+        return $this->_getUsersForWarning($intersectUsers, 'secondWarningSent', $secondWarningTime);
+    }
+
+    protected function _getUsersForWarning(array $intersectUsers, $warningSentAttribute, $time)
+    {
+        $users = array_diff($this->_findUsers($time), $intersectUsers);
+
+        $result = array();
+        foreach ($users as $user) {
+            // Filter out any users that have been warned already
+            if (!$user[$warningSentAttribute]) {
+                $result[$user['id']] = $user;
+            }
+        }
+        return $result;
+    }
+
+    protected function _findUsers($time)
     {
         $factory = $this->_getDatabaseConnection();
 
@@ -193,11 +286,10 @@ class EngineBlock_Deprovisioning
                     AND userid NOT IN (
                       SELECT DISTINCT userid FROM log_logins
                         WHERE loginstamp >= ?)";
-        $warningTimeDate = date("Y-m-d H:i:s", $warningTime);
-        //var_dump($warningTimeDate);exit;
+        $dateTime = date('Y-m-d H:i:s', $time);
         $parameters = array(
-            $warningTimeDate,
-            $warningTimeDate
+            $dateTime,
+            $dateTime
         );
 
         $statement = $factory->prepare($query);
@@ -207,8 +299,9 @@ class EngineBlock_Deprovisioning
 
         $users = array();
         foreach ($results as $result) {
-            if ($this->_fetchUser($result['userid'])) {
-                $users[] = $result['userid'];
+            $user = $this->_getLdapUser($result['userid']);
+            if ($this->_getLdapUser($result['userid'])) {
+                $users[] = $user;
             }
         }
         return $users;
@@ -254,6 +347,17 @@ class EngineBlock_Deprovisioning
             $this->_userDirectory = new EngineBlock_UserDirectory($ldapConfig);
         }
         return $this->_userDirectory;
+    }
+
+    /*
+     * @return EngineBlock_Mail_Mailer
+     */
+    protected function _getMailer()
+    {
+        if (!isset($this->_mailer)) {
+            $this->_mailer = new EngineBlock_Mail_Mailer();
+        }
+        return $this->_mailer;
     }
 
 }
