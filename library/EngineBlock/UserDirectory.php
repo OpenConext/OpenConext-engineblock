@@ -32,14 +32,16 @@
  */
 class EngineBlock_UserDirectory
 {
-    const URN_COLLAB_PERSON_NAMESPACE           = 'urn:collab:person';
-    const LDAP_CLASS_COLLAB_PERSON              = 'collabPerson';
-    const LDAP_ATTR_COLLAB_PERSON_ID            = 'collabpersonid';
-    const LDAP_ATTR_COLLAB_PERSON_HASH          = 'collabpersonhash';
-    const LDAP_ATTR_COLLAB_PERSON_REGISTERED    = 'collabpersonregistered';
-    const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED = 'collabpersonlastAccessed';
-    const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED  = 'collabpersonlastupdated';
-    const LDAP_ATTR_COLLAB_PERSON_IS_GUEST      = 'collabpersonisguest';
+    const URN_COLLAB_PERSON_NAMESPACE               = 'urn:collab:person';
+    const LDAP_CLASS_COLLAB_PERSON                  = 'collabPerson';
+    const LDAP_ATTR_COLLAB_PERSON_ID                = 'collabpersonid';
+    const LDAP_ATTR_COLLAB_PERSON_HASH              = 'collabpersonhash';
+    const LDAP_ATTR_COLLAB_PERSON_REGISTERED        = 'collabpersonregistered';
+    const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED     = 'collabpersonlastAccessed';
+    const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED      = 'collabpersonlastupdated';
+    const LDAP_ATTR_COLLAB_PERSON_IS_GUEST          = 'collabpersonisguest';
+    const LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING     = 'collabpersonfirstwarningsent';
+    const LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING    = 'collabpersonsecondwarningsent';
 
     protected $LDAP_OBJECT_CLASSES = array(
         'collabPerson',
@@ -98,6 +100,38 @@ class EngineBlock_UserDirectory
             default:
                 $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
                 throw new EngineBlock_Exception($message);
+        }
+        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+    }
+
+    /**
+     * Set the first warning sent user attribute
+     *
+     * @param $uid
+     * @param $value
+     * @return
+     */
+    public function setUserFirstWarningSent($uid)
+    {
+        $users = $this->findUsersByIdentifier($uid);
+
+        // Only update a user
+        if (count($users) === 1) {
+            $newAttributes = array();
+            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING] = 'TRUE';
+            $user = $this->_updateUser($users[0], $newAttributes, array(), array());
+        }
+        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+    }
+    public function setUserSecondWarningSent($uid)
+    {
+        $users = $this->findUsersByIdentifier($uid);
+
+        // Only update a user
+        if (count($users) === 1) {
+            $newAttributes = array();
+            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING] = 'TRUE';
+            $user = $this->_updateUser($users[0], $newAttributes, array(), array());
         }
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
