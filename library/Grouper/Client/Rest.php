@@ -282,6 +282,14 @@ XML;
         return false;
     }
 
+    /**
+     * Delete a group membership for a subject
+     *
+     * @abstract
+     * @param $subjectId
+     * @param $groupName
+     * @return bool
+     */
     public function deleteMembership($subjectId, $groupName)
     {
         $subjectIdEncoded = htmlentities($subjectId);
