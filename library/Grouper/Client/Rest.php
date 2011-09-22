@@ -44,6 +44,11 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
     const IS_NOT_MEMBER = 'IS_NOT_MEMBER';
 
     /**
+     * The admin user to retrieve membership information for private teams
+     */
+    const GROUPER_ADMIN = 'GrouperSystem';
+
+    /**
      * @var string
      */
     protected $_endpointUrl;
@@ -196,11 +201,13 @@ XML;
     {
         $groupNameEncoded = htmlentities($groupName);
         $subjectIdEncoded = htmlentities($subjectId);
+        $superUser = self::GROUPER_ADMIN;
         $request = <<<XML
 <WsRestGetGrouperPrivilegesLiteRequest>
   <includeSubjectDetail>F</includeSubjectDetail>
   <subjectId>$subjectIdEncoded</subjectId>
   <groupName>$groupNameEncoded</groupName>
+  <actAsSubjectId>$superUser</actAsSubjectId>
 </WsRestGetGrouperPrivilegesLiteRequest>
 XML;
 
