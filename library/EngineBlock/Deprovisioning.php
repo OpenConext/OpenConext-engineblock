@@ -230,7 +230,8 @@ class EngineBlock_Deprovisioning
 
     protected function _deprovisionUsers(array $users)
     {
-        foreach ($users as $userId) {
+        foreach ($users as $userInstance) {
+            $userId = $userInstance['id'];
             // Delete users' memberships
             $this->_removeUserFromGroups($userId);
 
