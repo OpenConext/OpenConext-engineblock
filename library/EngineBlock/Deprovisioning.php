@@ -166,8 +166,8 @@ class EngineBlock_Deprovisioning
         $userDirectory = $this->_getUserDirectory();
         $users = $userDirectory->findUsersByIdentifier($userId);
         if (count($users) === 1) {
-            $firstWarningSent = (bool)$users[0]['collabpersonfirstwarningsent'];
-            $secondWarningSent = (bool)$users[0]['collabpersonsecondwarningsent'];
+            $firstWarningSent = $users[0]['collabpersonfirstwarningsent'][0] === 'TRUE' ? true : false;
+            $secondWarningSent = (bool)$users[0]['collabpersonsecondwarningsent'][0] === 'TRUE' ? true : false;
             $user = $mapper->ldapToSocialData(array_shift($users));
 
             // add first and second warning fields
@@ -230,8 +230,7 @@ class EngineBlock_Deprovisioning
 
     protected function _deprovisionUsers(array $users)
     {
-        foreach ($users as $userInstance) {
-            $userId = $userInstance['id'];
+        foreach ($users as $userId => $userInstance) {
             // Delete users' memberships
             $this->_removeUserFromGroups($userId);
 
@@ -269,10 +268,12 @@ class EngineBlock_Deprovisioning
         $users = array_diff($this->_findUsers($time), $intersectUsers);
 
         $result = array();
-        foreach ($users as $user) {
+        foreach ($users as $userId => $user) {
             // Filter out any users that have been warned already
+//            var_dump($userId);
+//            var_dump($user[$warningSentAttribute]);
             if (!$user[$warningSentAttribute]) {
-                $result[$user['id']] = $user;
+                $result[$userId] = $user;
             }
         }
         return $result;
@@ -302,7 +303,7 @@ class EngineBlock_Deprovisioning
         foreach ($results as $result) {
             $user = $this->_getLdapUser($result['userid']);
             if ($this->_getLdapUser($result['userid'])) {
-                $users[] = $user;
+                $users[$user['id']] = $user;
             }
         }
         return $users;
