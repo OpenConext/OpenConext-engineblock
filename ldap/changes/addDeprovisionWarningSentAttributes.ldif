@@ -1,0 +1,24 @@
+dn: cn={14}collab,cn=schema,cn=config
+changetype: modify
+add: olcAttributeTypes
+olcAttributeTypes:: ezZ9KCAxLjMuNi4xLjQuMS4xMDc2LjIwLjQwLjQwLjcgTkFNRSAnY29sbG
+ FiUGVyc29uRmlyc3RXYXJuaW5nU2VudCcgREVTQyAnSXMgdGhlIGZpcnN0IGRlcHJvdmlzaW9uaW5
+ nIHdhcm5pbmcgc2VudD8nIEVRVUFMSVRZIGJvb2xlYW5NYXRjaCBTWU5UQVggMS4zLjYuMS40LjEu
+ MTQ2Ni4xMTUuMTIxLjEuNyBTSU5HTEUtVkFMVUUgKSA=
+
+dn: cn={14}collab,cn=schema,cn=config
+changetype: modify
+add: olcAttributeTypes
+olcAttributeTypes:: ezd9KCAxLjMuNi4xLjQuMS4xMDc2LjIwLjQwLjQwLjggTkFNRSAnY29sbG
+ FiUGVyc29uU2Vjb25kV2FybmluZ1NlbnQnIERFU0MgJ0lzIHRoZSBzZWNvbmQgZGVwcm92aXNpb25
+ pbmcgd2FybmluZyBzZW50PycgRVFVQUxJVFkgYm9vbGVhbk1hdGNoIFNZTlRBWCAxLjMuNi4xLjQu
+ MS4xNDY2LjExNS4xMjEuMS43IFNJTkdMRS1WQUxVRSApIA==
+
+dn: cn={14}collab,cn=schema,cn=config
+changetype: modify
+replace: olcObjectClasses
+olcObjectClasses: {0}( 1.3.6.1.4.1.1076.20.40.20.40 NAME 'collabPerson' DESC '
+ collabPerson - SURFnet COIN attributen' SUP eduPerson AUXILIARY MUST collabPe
+ rsonId MAY ( collabPersonHash $ collabPersonRegistered $ collabPersonLastUpda
+ ted $ collabPersonLastAccessed $ collabPersonIsGuest $ collabPersonFirstWarni
+ ngSent $ collabPersonSecondWarningSent ) )
