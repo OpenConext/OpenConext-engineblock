@@ -23,9 +23,29 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+/**
+ * Injected variables;
+ * @var $this EngineBlock_Corto_CoreProxy
+ * @var $metaDataSP array
+ * @var $idpList array
+ * @var $action string
+ * @var $ID string
+ * @var $preselectedIdp string
+ */
+
 $lang = $this->language();
 $uri = $_SERVER['REQUEST_URI'];
 $displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
+
+$preselectedIdpData = array();
+if ($preselectedIdp) {
+    foreach ($idpList as $idp) {
+        if ($idp['EntityId'] === $preselectedIdp) {
+            $preselectedIdpData = $idp;
+            break;
+        }
+    }
+}
 
 /**
  * @var Zend_Layout $layout
@@ -68,6 +88,13 @@ $layout->getView()->inlineScript()->appendScript("
     <p><?php echo $this->t('idp_selection_desc', $displayName); ?></p>
     <?php if ($preselectedIdp) : ?>
     <div id="IdpSuggestion" class="suggestion">
+        <noscript>
+            <form method="post" action="<?= $action ?>">
+                <input type="hidden" name="ID" value="<?= $ID ?>">
+                <input type="hidden" name="idp" value="<?= $preselectedIdp ?>">
+                <input type="submit" value="<?= $preselectedIdpData['Name_en']; ?>">
+            </form>
+        </noscript>
     </div>
     <? endif; ?>
     <input class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
@@ -76,6 +103,15 @@ $layout->getView()->inlineScript()->appendScript("
         <div id="noResultsMessage" style="display:none">
             <p class="noresults"><?php echo $this->t('no_results'); ?></p>
         </div>
+        <noscript>
+        <?php foreach ($idpList as $idp) : ?>
+            <form method="post" action="<?= $action ?>">
+                <input type="hidden" name="ID" value="<?= $ID ?>">
+                <input type="hidden" name="idp" value="<?= $idp['EntityId'] ?>">
+                <input type="submit" value="<?= $idp['Name_en']; ?>">
+            </form>
+        <?php endforeach; ?>
+        </noscript>
 
         <div id="scrollViewport">
             <ul class="thumbs clearfix" id="organisationsContainer"></ul>
