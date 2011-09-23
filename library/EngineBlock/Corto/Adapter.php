@@ -191,10 +191,9 @@ class EngineBlock_Corto_Adapter
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
     {
-        $cortoUri = $this->_getCortoUri($serviceName, $idPProviderHash);
-
         $this->_initProxy();
 
+        $cortoUri = $this->_getCortoUri($serviceName, $idPProviderHash);
         $this->_proxyServer->serveRequest($cortoUri);
         $this->_processProxyServerResponse();
 
@@ -481,7 +480,7 @@ class EngineBlock_Corto_Adapter
     )
     {
         if ($this->_proxyServer->isInProcessingMode()) {
-            return false;
+            return;
         }
 
         $subjectId = $_SESSION['subjectId'];
