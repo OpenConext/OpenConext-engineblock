@@ -58,7 +58,10 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         }
         catch (EngineBlock_Exception_UnknownIssuerException $e) {
             $application->getLog()->warn($e->getMessage());
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
+            $application->getHttpResponse()->setRedirectUrl(
+                '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
+                '&destination=' . urlencode($e->getDestination())
+            );
         }
     }
 
