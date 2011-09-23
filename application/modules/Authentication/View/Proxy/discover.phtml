@@ -104,13 +104,15 @@ $layout->getView()->inlineScript()->appendScript("
             <p class="noresults"><?php echo $this->t('no_results'); ?></p>
         </div>
         <noscript>
-        <?php foreach ($idpList as $idp) : ?>
-            <form method="post" action="<?= $action ?>">
-                <input type="hidden" name="ID" value="<?= $ID ?>">
-                <input type="hidden" name="idp" value="<?= $idp['EntityId'] ?>">
-                <input type="submit" value="<?= $idp['Name_en']; ?>">
-            </form>
-        <?php endforeach; ?>
+            <div style="width: 451px; height: 250px; overflow: scroll">
+            <?php foreach ($idpList as $idp) : ?>
+                <form method="post" action="<?= $action ?>">
+                    <input type="hidden" name="ID" value="<?= $ID ?>">
+                    <input type="hidden" name="idp" value="<?= $idp['EntityId'] ?>">
+                    <input type="submit" value="<?= $idp['Name_en']; ?>">
+                </form>
+            <?php endforeach; ?>
+            </div>
         </noscript>
 
         <div id="scrollViewport">
