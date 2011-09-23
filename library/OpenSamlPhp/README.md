@@ -12,6 +12,8 @@ and to do so delivering the following (in this order):
 * Tolerance of input
 * Performance
 
+NOTE: this is unfinished POC code, largely meant to display how it COULD work
+
 Requirements
 ============
 PHP > 5.3.0

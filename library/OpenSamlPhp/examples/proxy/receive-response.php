@@ -1,0 +1,3 @@
+<?php
+
+// Send response

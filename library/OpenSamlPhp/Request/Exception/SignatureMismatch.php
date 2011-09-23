@@ -2,7 +2,7 @@
 
 namespace OpenSamlPhp\Request\Exception;
 
-class SignatureMismatch extends Exception
+class SignatureMismatch extends \RuntimeException
 {
 
 }
