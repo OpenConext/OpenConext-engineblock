@@ -70,7 +70,7 @@ $layout->title = $layout->title. ' - '. $this->t('post_data');
             </p>
         </noscript>
         <p><?php echo $this->t('processing'); ?></p>
-        <form id="ProcessForm" method="post" action=" <?= $action ?>">
+        <form id="ProcessForm" method="post" action="<?= $action ?>">
             <input type="hidden" name="<?= $name ?>" value="<?= $message ?>" />
 
             <?= $xtra ?>
