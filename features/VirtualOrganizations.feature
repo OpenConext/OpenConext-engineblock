@@ -37,13 +37,13 @@ Feature: Virtual Organizations
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
      And I log in as "test-jasha" with password "test-jasha"
-    Then I should see "Membership of a Virtual Organisation required"
+    Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
 
   Scenario: Ivo fails to log in at the Test Sp with explicit VO "scn-devs"
     When I go to the Test SP with the explicit VO "scn-devs"
      And I select from the WAYF "SURFguest"
      And I log in as "test-ivo" with password "test-ivo"
-    Then I should see "Membership of a Virtual Organisation required"
+    Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
 
   Scenario: Boy logs in at the Test SP with explicit VO "scn-devs"
     When I go to the Test SP with the explicit VO "scn-devs"
@@ -70,4 +70,4 @@ Feature: Virtual Organizations
     When I go to the Test SP with the explicit VO "rave-devs"
      And I select from the WAYF "SURFguest"
      And I log in as "test-boy" with password "test-boy"
-    Then I should see "Membership of a Virtual Organisation required"
+    Then EngineBlock gives me the error "Membership of a Virtual Organisation required"

@@ -36,7 +36,7 @@ class FeatureContext extends MinkContext
      */
     public function iGoToTheTestSp()
     {
-        $this->visit("https://testsp.test.surfconext.nl/");
+        $this->visit("https://testsp.test.surfconext.nl/Shibboleth.sso/Login");
     }
 
     /**
@@ -55,9 +55,7 @@ class FeatureContext extends MinkContext
      */
     public function iPassThroughEngineBlock()
     {
-        $this->printLastResponse();
         $this->pressButton('Submit'); // First one for EngineBlock
-        $this->printLastResponse();
         $this->pressButton('Submit'); // Second one for EngineBlock
     }
 
@@ -66,7 +64,16 @@ class FeatureContext extends MinkContext
      */
     public function iShouldBeOnTheTestSp()
     {
-        $this->assertPageAddress('https://testsp.test.surfconext.nl/testsp/home.shtml');
+        $this->assertPageAddress('https://testsp.test.surfconext.nl/testsp/');
+    }
+
+    /**
+     * @Then /^EngineBlock gives me the error "([^"]*)"$/
+     */
+    public function engineblockGivesMeTheError($errorMessage)
+    {
+        $this->pressButton('Submit');
+        $this->assertPageContainsText($errorMessage);
     }
 
     /**
