@@ -321,6 +321,42 @@ XML;
         return false;
     }
 
+
+    public function deleteAllPrivileges($subjectId, $groupName) {
+        foreach (array('optout', 'read', 'view' ,'update', 'admin') as $privilege) {
+            $this->deletePrivilege($subjectId,$groupName, $privilege);
+        }
+    }
+
+    protected function deletePrivilege($subjectId, $groupName, $privilege)
+    {
+        $subjectIdEncoded = htmlentities($subjectId);
+        $superUser = self::GROUPER_ADMIN;
+        $request = <<<XML
+<WsRestAssignGrouperPrivilegesLiteRequest>
+  <allowed>F</allowed>
+  <subjectId>$subjectIdEncoded</subjectId>
+  <groupName>$groupName</groupName>
+  <privilegeType>access</privilegeType>
+  <privilegeName>$privilege</privilegeName>
+  <actAsSubjectId>$superUser</actAsSubjectId>
+</WsRestAssignGrouperPrivilegesLiteRequest>
+XML;
+
+        try {
+            $result = $this->_doRest('grouperPrivileges', $request);
+            $expected = array('SUCCESS_NOT_ALLOWED', 'SUCCESS_NOT_ALLOWED_DIDNT_EXIST', 'SUCCESS_NOT_ALLOWED_EXISTS_EFFECTIVE');
+            if (isset($result) and ($result !== FALSE) and (!in_array($result->results->resultMetadata->resultCode, $expected))) {
+                return true;
+            }
+        }
+        catch (Exception $e) {
+            throw $e;
+        }
+        // Something went wrong
+        return false;
+    }
+
     /**
      * Implements REST calls to the Grouper Web Services API
      *

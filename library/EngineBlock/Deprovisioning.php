@@ -249,6 +249,7 @@ class EngineBlock_Deprovisioning
 
         foreach ($groups as $group) {
             /* @var $group Grouper_Model_Group */
+            $grouperClient->deleteAllPrivileges($userId, $group->name);
             $grouperClient->deleteMembership($userId, $group->name);
         }
     }
