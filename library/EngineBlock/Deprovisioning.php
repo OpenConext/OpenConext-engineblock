@@ -167,7 +167,7 @@ class EngineBlock_Deprovisioning
         $users = $userDirectory->findUsersByIdentifier($userId);
         if (count($users) === 1) {
             $firstWarningSent = $users[0]['collabpersonfirstwarningsent'][0] === 'TRUE' ? true : false;
-            $secondWarningSent = (bool)$users[0]['collabpersonsecondwarningsent'][0] === 'TRUE' ? true : false;
+            $secondWarningSent = $users[0]['collabpersonsecondwarningsent'][0] === 'TRUE' ? true : false;
             $user = $mapper->ldapToSocialData(array_shift($users));
 
             // add first and second warning fields
@@ -271,8 +271,6 @@ class EngineBlock_Deprovisioning
         $result = array();
         foreach ($users as $userId => $user) {
             // Filter out any users that have been warned already
-//            var_dump($userId);
-//            var_dump($user[$warningSentAttribute]);
             if (!$user[$warningSentAttribute]) {
                 $result[$userId] = $user;
             }
