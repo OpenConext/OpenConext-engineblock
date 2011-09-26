@@ -1,7 +1,6 @@
 <?php
 
 require_once 'mink/autoload.php';
-require_once 'File/Iterator.php';
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
