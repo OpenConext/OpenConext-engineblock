@@ -344,9 +344,12 @@ XML;
 XML;
 
         try {
+            $expected = array('SUCCESS',
+                              'SUCCESS_NOT_ALLOWED',
+                              'SUCCESS_NOT_ALLOWED_DIDNT_EXIST',
+                              'SUCCESS_NOT_ALLOWED_EXISTS_EFFECTIVE');
             $result = $this->_doRest('grouperPrivileges', $request);
-            $expected = array('SUCCESS_NOT_ALLOWED', 'SUCCESS_NOT_ALLOWED_DIDNT_EXIST', 'SUCCESS_NOT_ALLOWED_EXISTS_EFFECTIVE');
-            if (isset($result) and ($result !== FALSE) and (!in_array($result->results->resultMetadata->resultCode, $expected))) {
+            if (isset($result) and ($result !== FALSE)) {
                 return true;
             }
         }
