@@ -43,8 +43,14 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
     public function processedAssertionAction()
     {
         $this->setNoRender();
-
-        $proxyServer = new EngineBlock_Corto_Adapter();
-        $proxyServer->processedAssertionConsumer();
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        try {
+            $proxyServer = new EngineBlock_Corto_Adapter();
+            $proxyServer->processedAssertionConsumer();
+        }
+	catch (EngineBlock_Exception_UserNotMember $e) {
+            $application->getLog()->warn('User not a member error');
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
+        }
     }
 }

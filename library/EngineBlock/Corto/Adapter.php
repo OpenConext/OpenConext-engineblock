@@ -384,14 +384,6 @@ class EngineBlock_Corto_Adapter
             '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             '__v'              => $subjectId
         );
-
-        $this->_handleVirtualOrganizationResponse($request, $subjectId, $idpEntityMetadata["EntityId"]);
-
-        if ($this->getVirtualOrganisationContext()) {
-            $responseAttributes = $this->_addVoNameAttribute($responseAttributes, $this->getVirtualOrganisationContext());
-        }
-
-        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
     }
 
     public function validateSpIdpConnection($spEntityId, $idpEntityId)
@@ -425,8 +417,7 @@ class EngineBlock_Corto_Adapter
             $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
             $this->setVirtualOrganisationContext($vo);
         }
-
-        if (isset($request['__']['VoContextImplicit'])) {
+        else if (isset($request['__']['VoContextImplicit'])) {
             $vo = $request['__']['VoContextImplicit'];
             $this->setVirtualOrganisationContext($vo);
         }
@@ -484,6 +475,14 @@ class EngineBlock_Corto_Adapter
         }
 
         $subjectId = $_SESSION['subjectId'];
+
+        $this->_handleVirtualOrganizationResponse($request, $subjectId, $idpEntityMetadata["EntityId"]);
+
+        if ($this->getVirtualOrganisationContext()) {
+            $responseAttributes = $this->_addVoNameAttribute($responseAttributes, $this->getVirtualOrganisationContext());
+        }
+
+        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
 
         // Attribute Aggregation
         $responseAttributes = $this->_enrichAttributes(
