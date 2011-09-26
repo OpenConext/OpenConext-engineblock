@@ -109,7 +109,7 @@ $layout->getView()->inlineScript()->appendScript("
                 <form method="post" action="<?= $action ?>">
                     <input type="hidden" name="ID" value="<?= $ID ?>">
                     <input type="hidden" name="idp" value="<?= $idp['EntityId'] ?>">
-                    <input type="submit" value="<?= $idp['Name_en']; ?>">
+                    <input type="submit" id="<?= $idp['EntityId']; ?>" value="<?= $idp['Name_en']; ?>">
                 </form>
             <?php endforeach; ?>
             </div>
