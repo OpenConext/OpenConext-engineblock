@@ -324,7 +324,7 @@ XML;
 
     public function deleteAllPrivileges($subjectId, $groupName) {
         foreach (array('optout', 'read', 'update', 'admin') as $privilege) {
-            $this->deletePrivilege($subjectId,$groupName, $privilege);
+            $this->deletePrivilege($subjectId, $groupName, $privilege);
         }
     }
 
