@@ -348,7 +348,7 @@ XML;
                               'SUCCESS_NOT_ALLOWED',
                               'SUCCESS_NOT_ALLOWED_DIDNT_EXIST',
                               'SUCCESS_NOT_ALLOWED_EXISTS_EFFECTIVE');
-            $result = $this->_doRest('grouperPrivileges', $request);
+            $result = $this->_doRest('grouperPrivileges', $request, $expected);
             if (isset($result) and ($result !== FALSE)) {
                 return true;
             }
