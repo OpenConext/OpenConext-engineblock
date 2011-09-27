@@ -87,22 +87,28 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         $providers = array();
         $invalidProviders = array();
         foreach ($config as $providerConfig) {
-            $className = $providerConfig->className;
+            try {
+                $className = $providerConfig->className;
 
-            if (!$className) {
-                throw new EngineBlock_Exception("No classname specified in provider config");
-            }
-            if (!class_exists($className, true)) {
-                throw new EngineBlock_Exception("Classname from Provider config '$className' does not exist or cannot be autoloaded!");
-            }
-            $provider = $className::createFromConfigs($providerConfig, $userId);
+                if (!$className) {
+                    throw new EngineBlock_Exception("No classname specified in provider config");
+                }
+                if (!class_exists($className, true)) {
+                    throw new EngineBlock_Exception("Classname from Provider config '$className' does not exist or cannot be autoloaded!");
+                }
+                $provider = $className::createFromConfigs($providerConfig, $userId);
 
-            if (!$provider->validatePreconditions()) {
-                $invalidProviders[] = $provider;
-                continue;
-            }
+                if (!$provider->validatePreconditions()) {
+                    $invalidProviders[] = $provider;
+                    continue;
+                }
 
-            $providers[] = $provider;
+                $providers[] = $provider;
+            }
+            catch (Exception $e) {
+                ebLog()->error("Unable to use group provider '{$providerConfig->id}', received Exception with message: " . $e->getMessage());
+                ebLog()->debug($e->getTraceAsString());
+            }
         }
         $aggregator = new static($providers);
         $aggregator->_invalidProviders = $invalidProviders;
