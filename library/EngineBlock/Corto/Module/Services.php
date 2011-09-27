@@ -129,6 +129,8 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 }
             }
 
+            // Check if an alternative Public & Private key have been set for a SP
+            // If yes, use these in the metadata of Engineblock
             if (isset($spEntity)
                 && $spEntity['AlternatePrivateKey']
                 && $spEntity['AlternatePublicKey']

@@ -50,7 +50,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $this->_server->getSessionLog()->debug(
             "SSO: Candidate idps found in metadata: " . print_r($candidateIDPs, 1)
         );
-                
+
         // If we have scoping, filter out every non-scoped IdP
         if (count($scopedIdps) > 0) {
             $candidateIDPs = array_intersect($scopedIdps, $candidateIDPs);
@@ -248,7 +248,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
      * @return void
      */
     public function assertionConsumerService()
-    {        
+    {
         $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
 
         // Get the ID of the Corto Request message
@@ -476,6 +476,13 @@ class Corto_Module_Services extends Corto_Module_Abstract
      */
     public function idPMetadataService()
     {
+        // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
+        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
+        $spEntityId = $request->getQueryParameter('sp-entity-id');
+        if ($spEntityId) {
+            $spEntity = $this->_server->getRemoteEntity($spEntityId);
+        }
+
         $entityDescriptor = array(
             Corto_XmlToArray::TAG_NAME_KEY => 'md:EntityDescriptor',
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
@@ -489,8 +496,19 @@ class Corto_Module_Services extends Corto_Module_Abstract
             ),
         );
 
-        $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
-        if (isset($certificates['public'])) {
+        // Check if an alternative Public & Private key have been set for a SP
+        // If yes, use these in the metadata of Engineblock
+        if (isset($spEntity)
+            && $spEntity['AlternatePrivateKey']
+            && $spEntity['AlternatePublicKey']
+        ) {
+            $publicCertificate = $spEntity['AlternatePublicKey'];
+        } else {
+            $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
+            $publicCertificate = $certificates['public'];
+        }
+
+        if (isset($publicCertificate)) {
             $entityDescriptor['md:IDPSSODescriptor']['md:KeyDescriptor'] = array(
                 array(
                     '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
@@ -498,7 +516,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_server->getCertDataFromPem($certificates['public']),
+                                '__v' => $this->_server->getCertDataFromPem($publicCertificate),
                             ),
                         ),
                     ),
@@ -509,7 +527,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_server->getCertDataFromPem($certificates['public']),
+                                '__v' => $this->_server->getCertDataFromPem($publicCertificate),
                             ),
                         ),
                     ),
@@ -525,7 +543,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
             '_Location' => $this->_server->getCurrentEntityUrl('singleSignOnService'),
         );
 
-        $entityDescriptor = $this->_server->sign($entityDescriptor);
+        $entityDescriptor = $this->_server->sign($entityDescriptor, $spEntity['AlternatePublicKey'], $spEntity['AlternatePrivateKey']);
         $xml = Corto_XmlToArray::array2xml($entityDescriptor);
 
         $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd';
@@ -655,7 +673,6 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         $idpList = $this->_transformIdpsForWAYF($candidateIdPs);
 
-        //var_dump($remoteEntity);die();
         $output = $this->_server->renderTemplate(
             'discover',
             array(
