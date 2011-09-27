@@ -1,3 +1,4 @@
+@fea
 Feature: Virtual Organizations
   In order to protect access to a shared Service Provider
   As a member of a Virtual Organization
