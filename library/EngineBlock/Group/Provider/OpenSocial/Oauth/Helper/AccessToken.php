@@ -66,7 +66,6 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_Helper_AccessToken
         );
         $statement = $this->_connection->prepare($query);
         $statement->execute($params);
-        var_dump($statement->errorInfo());
         return true;
     }
 }

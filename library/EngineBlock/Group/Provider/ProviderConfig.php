@@ -48,6 +48,7 @@ class EngineBlock_Group_Provider_ProviderConfig {
         $statement = $db->prepare($sql);
         $statement->execute($parameters);
         $groupProviderRows = $statement->fetchAll(PDO::FETCH_ASSOC);
+
         $groupProviders = array();
         foreach ($groupProviderRows as $groupProviderRow) {
             $groupProvider = array(
@@ -63,6 +64,10 @@ class EngineBlock_Group_Provider_ProviderConfig {
                 WHERE group_provider_id = {$groupProviderRow['id']}"
             )->fetchAll(PDO::FETCH_ASSOC);
             foreach ($optionRows as $optionRow) {
+                if (!isset($optionRow['value']) || empty($optionRow['value'])) {
+                    continue;
+                }
+                
                 $groupProviderOptionPointer = &$groupProvider;
                 $optionNameParts = explode('.', $optionRow['name']);
                 $lastOptionNamePart = null;
