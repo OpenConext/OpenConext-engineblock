@@ -44,18 +44,12 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
      */
     public function getGroups()
     {
-        try {
         $openSocialGroups = $this->_openSocialRestClient->get(
             '/groups/{uid}',
             array(
                 'uid' => $this->_userId,
             )
         );
-        } catch(Exception $e) {
-            var_dump($e);exit;
-        }
-        var_dump($openSocialGroups);
-
         return $this->_mapOpenSocialGroupsToEngineBlockGroups($openSocialGroups);
     }
 
