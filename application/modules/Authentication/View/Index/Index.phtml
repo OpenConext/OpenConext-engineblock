@@ -43,21 +43,31 @@ $layout->footerText = $this->t('footer');
                 /authentication/idp/metadata
             </a>
             <br />
-            Metadata for Service Providers, to configure EngineBlock as your Identity Provider
+            Metadata for Service Providers, to configure EngineBlock as your Identity Provider.
+        </li>
+        <li>
+            <a href="/authentication/idp/metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume">
+                /authentication/idp/metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume
+            </a>
+            <br />
+            Metadata for Shibboleth Service Providers, to configure EngineBlock as your Identity Provider. If an
+            alternative Engineblock signing certificate is configured for a certain SP it will be shown in the metadata.
+            <strong>NB. This is only important for SP's that rely on the Engineblock metadata URL for refreshing metadata. For SP's
+            that configure metadata oob this is not relevant.</strong>
         </li>
         <li>
             <a href="/authentication/sp/metadata">
                 /authentication/sp/metadata
             </a>
             <br />
-            Metadata for Identity Providers, to add EngineBlock as registered Service Provider
+            Metadata for Identity Providers, to add EngineBlock as registered Service Provider.
         </li>
         <li>
             <a href="/authentication/proxy/idps-metadata">
                 /authentication/proxy/idps-metadata
             </a>
             <br />
-            Metadata with ALL known EngineBlock providers
+            Metadata with ALL known EngineBlock providers.
         </li>
         <li>
             <a href="/authentication/proxy/idps-metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume">
@@ -68,6 +78,8 @@ $layout->footerText = $this->t('footer');
             give the metadata for Service Provider with the endpoint:
             'https://mysp.com/assertionConsume'
             (Shibboleth expects to see it's self in the metadata document).
+            Also if an alternative signing certificate is configured in Engineblock the new public key will be shown
+            in the metadata.
         </li>
     </ul>
 </p>
