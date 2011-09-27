@@ -559,6 +559,13 @@ $config = array(
             'default_allow' => false,
             'required' => false,
         ),
+        'coin:alternate_public_key' => array(
+            'type'  =>'text',
+            'order' => 184,
+            'default' => '',
+            'default_allow' => false,
+            'required' => false,
+        ),
         'coin:oauth:secret' => array(
             'type' => 'text',
             'order' => 190,
