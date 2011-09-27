@@ -513,10 +513,11 @@ class EngineBlock_Corto_Adapter
          * We can set overrides of the private key in the Service Registry,
          * allowing EngineBlock to switch to a different private key without requiring all SPs to switch at once too.
          */
-        if (isset($spEntityMetadata['AlternatePrivateKey'])) {
+        if (isset($spEntityMetadata['AlternatePrivateKey']) && $spEntityMetadata['AlternatePublicKey']) {
             $currentEntity = $this->_proxyServer->getCurrentEntity();
             $hostedEntities = $this->_proxyServer->getHostedEntities();
             $hostedEntities[$currentEntity['EntityId']]['certificates']['private'] = $spEntityMetadata['AlternatePrivateKey'];
+            $hostedEntities[$currentEntity['EntityId']]['certificates']['public'] = $spEntityMetadata['AlternatePublicKey'];
             $this->_proxyServer->setHostedEntities($hostedEntities);
             $this->_proxyServer->setCurrentEntity($currentEntity['EntityCode']);
         }
