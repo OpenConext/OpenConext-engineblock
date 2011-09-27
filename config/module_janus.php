@@ -594,7 +594,7 @@ $config = array(
         'coin:oauth:key_type' => array(
             'type' => 'text',
             'order' => 193,
-            'default' => 'HMAC_SYMMETRIC',
+            'default' => 'HMAC_SHA1',
             'default_allow' => true,
             'required' => false,
         ),
