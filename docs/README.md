@@ -181,7 +181,9 @@ If you are using this pattern, an update can be done with the following:
 
 4. Change the symlink.
 
-5. Run new patches in database/.
+5. Run the database migrate script.
+    cd bin
+    ./migrate
 
 6. Enable the janus module:
 
