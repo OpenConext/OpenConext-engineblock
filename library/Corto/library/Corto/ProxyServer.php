@@ -875,9 +875,14 @@ class Corto_ProxyServer
      * @param  $element    Element to sign
      * @return array Signed element
      */
-    public function sign(array $element)
+    public function sign(array $element, $alternatePublicKey = null, $alternatePrivateKey = null)
     {
-        $certificates = $this->getCurrentEntitySetting('certificates', array());
+        if ($alternatePublicKey && $alternatePrivateKey) {
+            $certificates['public'] = $alternatePublicKey;
+            $certificates['private'] = $alternatePrivateKey;
+        } else {
+            $certificates = $this->getCurrentEntitySetting('certificates', array());
+        }
 
         $signature = array(
             '__t' => 'ds:Signature',

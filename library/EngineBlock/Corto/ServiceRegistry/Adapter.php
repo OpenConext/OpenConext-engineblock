@@ -137,6 +137,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                     $serviceRegistryEntity['coin']['alternate_private_key']
                 );
             }
+            if (isset($serviceRegistryEntity['coin']['alternate_public_key']) && $serviceRegistryEntity['coin']['alternate_public_key']) {
+                $cortoEntity['AlternatePublicKey'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
+                    $serviceRegistryEntity['coin']['alternate_public_key']
+                );
+            }
 
             // External provisioning
             $cortoEntity['MustProvisionExternally'] = false;

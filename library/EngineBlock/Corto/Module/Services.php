@@ -54,6 +54,18 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             'ds:Signature' => '__placeholder__',
             'md:EntityDescriptor' => array()
         );
+
+        // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
+        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
+        $spEntityId = $request->getQueryParameter('sp-entity-id');
+        if ($spEntityId) {
+            $spEntityDescriptor = $this->_getSpEntityDescriptor($spEntityId);
+            $spEntity = $this->_server->getRemoteEntity($spEntityId);
+            if ($spEntityDescriptor) {
+                $entitiesDescriptor['md:EntityDescriptor'][] = $spEntityDescriptor;
+            }
+        }
+
         foreach ($this->_server->getRemoteEntities() as $entityID => $entity) {
             if (!isset($entity['SingleSignOnService'])) continue;
 
@@ -117,8 +129,17 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 }
             }
 
-            $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
-            if (isset($certificates['public'])) {
+            if (isset($spEntity)
+                && $spEntity['AlternatePrivateKey']
+                && $spEntity['AlternatePublicKey']
+            ) {
+                $publicCertificate = $spEntity['AlternatePublicKey'];
+            } else {
+                $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
+                $publicCertificate = $certificates['public'];
+            }
+
+            if (isset($publicCertificate)) {
                 $entityDescriptor['md:IDPSSODescriptor']['md:KeyDescriptor'] = array(
                     array(
                         '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
@@ -126,7 +147,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => $this->_server->getCertDataFromPem($certificates['public']),
+                                    '__v' => $this->_server->getCertDataFromPem($publicCertificate),
                                 ),
                             ),
                         ),
@@ -137,7 +158,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                         'ds:KeyInfo' => array(
                             'ds:X509Data' => array(
                                 'ds:X509Certificate' => array(
-                                    '__v' => $this->_server->getCertDataFromPem($certificates['public']),
+                                    '__v' => $this->_server->getCertDataFromPem($publicCertificate),
                                 ),
                             ),
                         ),
@@ -156,16 +177,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $entitiesDescriptor['md:EntityDescriptor'][] = $entityDescriptor;
         }
 
-        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
-        $spEntityId = $request->getQueryParameter('sp-entity-id');
-        if ($spEntityId) {
-            $entityDescriptor = $this->_getSpEntityDescriptor($spEntityId);
-            if ($entityDescriptor) {
-                $entitiesDescriptor['md:EntityDescriptor'][] = $entityDescriptor;
-            }
-        }
-
-        $entitiesDescriptor = $this->_server->sign($entitiesDescriptor);
+        $entitiesDescriptor = $this->_server->sign($entitiesDescriptor, $spEntity['AlternatePublicKey'], $spEntity['AlternatePrivateKey']);
 
         $xml = Corto_XmlToArray::array2xml($entitiesDescriptor);
 
