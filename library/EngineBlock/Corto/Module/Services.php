@@ -357,12 +357,16 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $resultSet = $statement->fetchAll();
 
         //we only send a mail if an user provides consent the first time
-        if ($resultSet[0][0] == '1') {
+        if ($resultSet[0][0] == '1' && isset($attributes['urn:mace:dir:attribute-def:mail'])) {
             $mailer = new EngineBlock_Mail_Mailer();
             $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
-            $mailer->sendMail($emailAddress,
-                              EngineBlock_Corto_Module_Services::INTRODUCTION_EMAIL,
-                              array('{user}' => $this->_getUserName($attributes)));
+            $mailer->sendMail(
+                $emailAddress,
+                EngineBlock_Corto_Module_Services::INTRODUCTION_EMAIL,
+                array(
+                     '{user}' => $this->_getUserName($attributes)
+                )
+            );
         }
     }
 
