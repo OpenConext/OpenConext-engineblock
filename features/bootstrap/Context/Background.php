@@ -69,38 +69,53 @@ class Background extends BehatContext
     }
 
     /**
-      * @Given /^we are using EngineBlock on the "([^"]*)" environment$/
-      */
-     public function weAreUsingEngineblockOnTheEnvironment($argument1)
-     {
-     }
+     * @Given /^we are using EngineBlock on the "([^"]*)" environment$/
+     */
+    public function weAreUsingEngineblockOnTheEnvironment($argument1)
+    {
+    }
 
-     /**
-      * @Given /^we have several IDPs configured$/
-      */
-     public function weHaveSeveralIdpsConfigured()
-     {
-     }
+    /**
+     * @Given /^we have several IDPs configured$/
+     */
+    public function weHaveSeveralIdpsConfigured()
+    {
+    }
 
-     /**
-      * @Given /^we have a "([^"]*)" SP configured$/
-      */
-     public function weHaveASpConfigured($portalSp)
-     {
-     }
+    /**
+     * @Given /^we have a "([^"]*)" SP configured$/
+     */
+    public function weHaveASpConfigured($portalSp)
+    {
+    }
 
-     /**
-      * @Given /^we have a "([^"]*)" IP configured$/
-      */
-     public function weHaveAIpConfigured($argument1)
-     {
-     }
+    /**
+     * @Given /^we have a "([^"]*)" IP configured$/
+     */
+    public function weHaveAIpConfigured($argument1)
+    {
+    }
 
-     /**
-      * @Given /^the "([^"]*)" IP is configured to allow-none SPs$/
-      */
-     public function theIpIsConfiguredToAllowNoneSps($argument1)
-     {
-     }
+    /**
+     * @Given /^the "([^"]*)" IP is configured to allow-none SPs$/
+     */
+    public function theIpIsConfiguredToAllowNoneSps($argument1)
+    {
+    }
+
+    /**
+     * @Given /^the "([^"]*)" IP is configured not to allow "([^"]*)"$/
+     */
+    public function theIpIsConfiguredNotToAllow($argument1, $argument2)
+    {
+    }
+
+    /**
+     * @Given /^the "([^"]*)" IP is configured to allow "([^"]*)"$/
+     */
+    public function theIpIsConfiguredToAllow($argument1, $argument2)
+    {
+    }
+
 
 }

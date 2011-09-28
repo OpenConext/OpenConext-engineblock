@@ -44,4 +44,5 @@ class Login extends BehatContext
         $this->getMainContext()->pressButton('Submit');
         $this->getMainContext()->assertPageContainsText($errorMessage);
     }
+
 }
