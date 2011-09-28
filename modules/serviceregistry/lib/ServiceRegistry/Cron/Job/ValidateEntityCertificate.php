@@ -35,7 +35,7 @@ class ServiceRegistry_Cron_Job_ValidateEntityCertificate
 
                     $eid = $partialEntity['eid'];
                     if (!$entityController->setEntity($eid)) {
-                        $cronLogger->error("Failed import of entity. Wrong eid '$eid'.", $eid);
+                        $cronLogger->with($eid)->error("Failed import of entity. Wrong eid '$eid'.");
                         continue;
                     }
 
@@ -48,10 +48,10 @@ class ServiceRegistry_Cron_Job_ValidateEntityCertificate
                         }
                         catch (Exception $e) {
                             if ($entityType === 'saml20-sp') {
-                                $cronLogger->warn("Unable to create certificate object, certData missing?", $entityId);
+                                $cronLogger->with($entityId)->notice("SP does not have a certificate");
                             }
                             else if ($entityType=== 'saml20-idp') {
-                                $cronLogger->warn("Unable to create certificate object, certData missing?", $entityId);
+                                $cronLogger->with($entityId)->warn("Unable to create certificate object, certData missing?");
                             }
                             continue;
                         }
@@ -62,10 +62,10 @@ class ServiceRegistry_Cron_Job_ValidateEntityCertificate
                         $validatorWarnings = $validator->getWarnings();
                         $validatorErrors = $validator->getErrors();
                         foreach ($validatorWarnings as $warning) {
-                            $cronLogger->warn($warning, $entityId);
+                            $cronLogger->with($entityId)->warn($warning);
                         }
                         foreach ($validatorErrors as $error) {
-                            $cronLogger->error($error, $entityId);
+                            $cronLogger->with($entityId)->error($error);
                         }
 
                         OpenSsl_Certificate_Chain_Factory::loadRootCertificatesFromFile($rootCertificatesFile);
@@ -79,13 +79,13 @@ class ServiceRegistry_Cron_Job_ValidateEntityCertificate
                         $validatorWarnings = $validator->getWarnings();
                         $validatorErrors = $validator->getErrors();
                         foreach ($validatorWarnings as $warning) {
-                            $cronLogger->warn($warning, $entityId);
+                            $cronLogger->with($entityId)->warn($warning);
                         }
                         foreach ($validatorErrors as $error) {
-                            $cronLogger->error($error, $entityId);
+                            $cronLogger->with($entityId)->error($error);
                         }
                     } catch (Exception $e) {
-                        $cronLogger->error($e->getMessage(), $entityId);
+                        $cronLogger->with($entityId)->error($e->getMessage());
                     }
                 } catch (Exception $e) {
                     $cronLogger->error($e->getMessage() . $e->getTraceAsString());
@@ -96,20 +96,33 @@ class ServiceRegistry_Cron_Job_ValidateEntityCertificate
         }
         $summaryLines = $cronLogger->getSummaryLines();
         if ($cronLogger->hasErrors()) {
-            $this->_mailTechnicalContact($cronTag, $summaryLines);
+            $this->_mailTechnicalContact($cronTag, $cronLogger);
         }
         return $summaryLines;
     }
 
-    protected function _mailTechnicalContact($tag, $summary)
+    protected function _mailTechnicalContact($tag, ServiceRegistry_Cron_Logger $logger)
     {
+        $errorHtml   = $this->_getHtmlForMessages($logger->getNamespacedErrors(), 'errors');
+        $warningHtml = $this->_getHtmlForMessages($logger->getNamespacedWarnings(), 'warnings');
+        $noticeHtml  = $this->_getHtmlForMessages($logger->getNamespacedNotices(), 'notices');
+
         $config = SimpleSAML_Configuration::getInstance();
         $time = date(DATE_RFC822);
         $url = SimpleSAML_Utilities::selfURL();
-        $message = '<h1>Cron report</h1><p>Cron ran at ' . $time . '</p>' .
-            '<p>URL: <tt>' . $url . '</tt></p>' .
-            '<p>Tag: ' . $tag . "</p>\n\n" .
-            '<ul><li>' . join('</li><li>', $summary) . '</li></ul>';
+
+        $message = <<<MESSAGE
+<h1>Cron report</h1>
+<p>Cron ran at $time</p>
+<p>URL: <tt>$url</tt></p>
+<p>Tag: $tag</p>
+<h2>Errors</h2>
+$errorHtml
+<h2>Warnings</h2>
+$warningHtml
+<h2>Notices</h2>
+$noticeHtml
+MESSAGE;
 
         $toAddress = $config->getString('technicalcontact_email', 'na@example.org');
         if ($toAddress == 'na@example.org') {
@@ -119,6 +132,43 @@ class ServiceRegistry_Cron_Job_ValidateEntityCertificate
             $email->setBody($message);
             $email->send();
         }
+    }
+
+    protected function _getHtmlForMessages($messages, $type)
+    {
+        if (count($messages) > 0) {
+            $messageHtml = '<ul>';
+            foreach ($messages as $label => $message) {
+                $messageHtml .= '<li>';
+                if (is_array($message)) {
+                    $messageHtml .= $this->_getListForMessages($message, $label);
+                }
+                else {
+                    $messageHtml .= $message;
+                }
+                $messageHtml .= "</li>";
+            }
+            $messageHtml .= '</ul>';
+        }
+        else {
+            $messageHtml = "<p>No $type</p>";
+        }
+        return $messageHtml;
+    }
+
+    protected function _getListForMessages($messages, $label)
+    {
+        $html = "<dl><dt>$label</dt>";
+        foreach ($messages as $label => $message) {
+            if (is_array($message)) {
+                $html .= "<dd>" . $this->_getListForMessages($message, $label) . "</dd>";
+            }
+            else {
+                $html .= "<dd>$message</dd>";
+            }
+        }
+        $html .= "</dl>";
+        return $html;
     }
     
     protected function _isExecuteRequired($cronTag)

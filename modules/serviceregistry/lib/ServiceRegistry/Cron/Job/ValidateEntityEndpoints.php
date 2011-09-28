@@ -40,7 +40,7 @@ class ServiceRegistry_Cron_Job_ValidateEntityEndpoints
 
                 $eid = $partialEntity['eid'];
                 if(!$entityController->setEntity($eid)) {
-                    $cronLogger->error("Failed import of entity. Wrong eid '$eid'.", $eid);
+                    $cronLogger->with($eid)->error("Failed import of entity. Wrong eid '$eid'.");
                     continue;
                 }
 
@@ -57,7 +57,9 @@ class ServiceRegistry_Cron_Job_ValidateEntityEndpoints
                     foreach ($entityMetadata[$endPointMetaKey] as $index => $binding) {
                         $key = $endPointMetaKey . ':' .$index;
                         if (!isset($binding['Location']) || trim($binding['Location'])==="") {
-                            $cronLogger->error( "Binding has no Location?", $entityId, $key);
+                            $cronLogger->with($entityId)->with($key)->error(
+                                "Binding has no Location?"
+                            );
                             continue;
                         }
 
@@ -65,19 +67,25 @@ class ServiceRegistry_Cron_Job_ValidateEntityEndpoints
                             $sslUrl = new OpenSsl_Url($binding['Location']);
                         }
                         catch (Exception $e) {
-                            $cronLogger->error( "Endpoint is not a valid URL", $entityId, $key, $sslUrl->getUrl());
+                            $cronLogger->with($entityId)->with($key)->with($sslUrl->getUrl())->error(
+                                "Endpoint is not a valid URL"
+                            );
                             continue;
                         }
 
                         if (!$sslUrl->isHttps()) {
-                            $cronLogger->error( "Endpoint is not HTTPS", $entityId, $key, $sslUrl->getUrl());
+                            $cronLogger->with($entityId)->with($key)->with($sslUrl->getUrl())->error(
+                                "Endpoint is not HTTPS"
+                            );
                             continue;
                         }
 
 
                         $connectSuccess = $sslUrl->connect();
                         if (!$connectSuccess) {
-                            $cronLogger->error("Endpoint is unreachable", $entityId, $key, $sslUrl->getUrl());
+                            $cronLogger->with($entityId)->with($key)->with($sslUrl->getUrl())->error(
+                                "Endpoint is unreachable"
+                            );
                             continue;
                         }
 
@@ -85,7 +93,11 @@ class ServiceRegistry_Cron_Job_ValidateEntityEndpoints
                         if (!$sslUrl->isCertificateValidForUrlHostname()) {
                             $urlHostName = $sslUrl->getHostName();
                             $validHostNames = $sslUrl->getServerCertificate()->getValidHostNames();
-                            $cronLogger->error( "Certificate does not match the hostname '$urlHostName' (instead it matches " . implode(', ', $validHostNames) . ")", $entityId, $key, $sslUrl->getUrl());
+                            $cronLogger->with($entityId)->with($key)->with($sslUrl->getUrl())->error(
+                                "Certificate does not match the hostname '$urlHostName' (instead it matches " .
+                                implode(', ', $validHostNames) .
+                                ")"
+                            );
                         }
 
                         $urlChain = $sslUrl->getServerCertificateChain();
@@ -96,10 +108,10 @@ class ServiceRegistry_Cron_Job_ValidateEntityEndpoints
                         $validatorWarnings = $validator->getWarnings();
                         $validatorErrors = $validator->getErrors();
                         foreach ($validatorWarnings as $warning) {
-                            $cronLogger->warn($warning, $entityId, $key, $sslUrl->getUrl());
+                            $cronLogger->with($entityId)->with($key)->with($sslUrl->getUrl())->warn($warning);
                         }
                         foreach ($validatorErrors as $error) {
-                            $cronLogger->error($error, $entityId, $key, $sslUrl->getUrl());
+                            $cronLogger->with($entityId)->with($key)->with($sslUrl->getUrl())->error($error);
                         }
                     }
                 }

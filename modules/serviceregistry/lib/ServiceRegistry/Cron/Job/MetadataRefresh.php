@@ -35,7 +35,9 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
 
                 $eid = $partialEntity['eid'];
                 if(!$entityController->setEntity($eid)) {
-                    $cronLogger->error("Failed import of entity. Wrong eid '$eid'.", $eid);
+                    $cronLogger->with($eid)->error(
+                        "Failed import of entity. Wrong eid '$eid'."
+                    );
                     continue;
                 }
 
@@ -46,7 +48,9 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
                 $metadataCachingInfo = $entityController->getMetadataCaching();
 
                 if (empty($metadataUrl)) {
-                    $cronLogger->warn("No metadata url.", $entityId);
+                    $cronLogger->with($entityId)->warn(
+                        "No metadata url."
+                    );
                     continue;
                 }
 
@@ -66,13 +70,17 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
                 }
 
                 if ($metadataCachingInfo['validUntil'] > $nextRun && $metadataCachingInfo['cacheUntil'] > $nextRun) {
-                    $cronLogger->notice("Should not update, cache still valid.");
+                    $cronLogger->with($entityId)->notice(
+                        "Should not update, cache still valid."
+                    );
                     continue;
                 }
 
                 $xml = file_get_contents($metadataUrl);
                 if (!$xml) {
-                    $cronLogger->error("Failed import of entity. Bad URL '$metadataUrl'? ", $entityId);
+                    $cronLogger->with($entityId)->error(
+                        "Failed import of entity. Bad URL '$metadataUrl'? "
+                    );
                     continue;
                 }
 
@@ -81,23 +89,31 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
                 if($entity->getType() == 'saml20-sp') {
                     $statusCode = $entityController->importMetadata20SP($xml, $updated);
                     if ($statusCode !== 'status_metadata_parsed_ok') {
-                        $cronLogger->error("Entity not updated", $entityId);
+                        $cronLogger->with($entityId)->error(
+                            "Entity not updated"
+                        );
                     }
                 } else if($entity->getType() == 'saml20-idp') {
                     $statusCode = $entityController->importMetadata20IdP($xml, $updated);
                     if ($statusCode !== 'status_metadata_parsed_ok') {
-                        $cronLogger->error("Entity not updated", $entityId);
+                        $cronLogger->with($entityId)->error(
+                            "Entity not updated"
+                        );
                     }
                 }
                 else {
-                    $cronLogger->error("Failed import of entity. Wrong type", $entityId);
+                    $cronLogger->with($entityId)->error(
+                        "Failed import of entity. Wrong type"
+                    );
                 }
 
                 if ($updated) {
                     $entity->setParent($entity->getRevisionid());
                     $entityController->saveEntity();
 
-                    $cronLogger->notice("Entity updated", $entityId);
+                    $cronLogger->with($entityId)->notice(
+                        "Entity updated"
+                    );
 
                     $metadataCachingInfo = $this->_getMetaDataCachingInfo($xml, $entityId);
                     $entityController->setMetadataCaching(
@@ -106,7 +122,9 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
                     );
                 }
                 else {
-                    $cronLogger->notice("Entity not updated, no changes required", $entityId);
+                    $cronLogger->with($entityId)->notice(
+                        "Entity not updated, no changes required"
+                    );
 
                     // Update metadata caching info (validUntil )
                     $metadataCachingInfo = $this->_getMetaDataCachingInfo($xml, $entityId);

@@ -28,69 +28,130 @@
  */ 
 class ServiceRegistry_Cron_Logger
 {
-    protected $_hasWarnings = false;
-    protected $_hasErrors = false;
-    protected $_summary = array();
+    protected $_notices  = array();
+    protected $_warnings = array();
+    protected $_errors   = array();
+    protected $_namespaces = array();
 
     public function __construct()
     {
     }
 
-    public function notice($message, $entityId = null)
+    public function with($namespace)
     {
-        $arguments = func_get_args();
-        $message = array_shift($arguments);
-        array_unshift($arguments, 'Notice');
-        array_unshift($arguments, $message);
-        call_user_func_array(array($this, 'log'), $arguments);
+        $this->_namespaces[] = $namespace;
+        return $this;
     }
 
-    public function warn($message, $entityId = null)
+    public function notice($message)
     {
-        $this->_hasWarnings = true;
-        $arguments = func_get_args();
-        $message = array_shift($arguments);
-        array_unshift($arguments, 'Warning');
-        array_unshift($arguments, $message);
-        call_user_func_array(array($this, 'log'), $arguments);
+        $this->_notices[$message] = array(
+            'message' => $message,
+            'namespaces' => $this->_namespaces,
+        );
+        $this->_namespaces = array();
+        return $this;
+    }
+
+    public function warn($message)
+    {
+        $this->_warnings[] = array(
+            'message' => $message,
+            'namespaces' => $this->_namespaces,
+        );
+        $this->_namespaces = array();
+        return $this;
     }
 
     public function error($message, $entityId = null)
     {
-        $this->_hasErrors = true;
-        $arguments = func_get_args();
-        $message = array_shift($arguments);
-        array_unshift($arguments, 'Error');
-        array_unshift($arguments, $message);
-        call_user_func_array(array($this, 'log'), $arguments);
-    }
-
-    public function log($message, $namespace1 = null, $namespace2 = null)
-    {
-        $arguments = func_get_args();
-        $message = array_shift($arguments);
-
-        $prefix = "";
-        foreach ($arguments as $argument) {
-            if (!is_null($argument)) {
-                $prefix .= '[' . $argument . ']';
-            }
-        }
-        $this->_summary[] = $prefix . $message;
+        $this->_errors[] = array(
+            'message' => $message,
+            'namespaces' => $this->_namespaces,
+        );
+        $this->_namespaces = array();
+        return $this;
     }
 
     public function hasWarnings()
     {
-        return $this->_hasWarnings;
+        return !empty($this->_warnings);
     }
 
     public function hasErrors()
     {
-        return $this->_hasErrors;
+        return !empty($this->_errors);
+    }
+
+    public function getNotices()
+    {
+        return $this->_notices;
+    }
+
+    public function getNamespacedNotices()
+    {
+        return $this->_namespaceMessages($this->_notices);
+    }
+
+    public function getWarnings()
+    {
+        return $this->_warnings;
+    }
+
+    public function getNamespacedWarnings()
+    {
+        return $this->_namespaceMessages($this->_warnings);
+    }
+
+    public function getErrors()
+    {
+        return $this->_errors;
+    }
+
+    public function getNamespacedErrors()
+    {
+        return $this->_namespaceMessages($this->_errors);
+    }
+
+    protected function _namespaceMessages($messages)
+    {
+        $namespacedMessages = array();
+        foreach ($messages as $message) {
+            $pointer = &$namespacedMessages;
+            if (empty($message['namespaces'])) {
+                $pointer[] = $message['message'];
+                continue;
+            }
+
+            foreach ($message['namespaces'] as $namespace) {
+                if (!isset($pointer[$namespace])) {
+                    $pointer[$namespace] = array();
+                }
+                $pointer = &$pointer[$namespace];
+            }
+            $pointer[] = $message['message'];
+        }
+        return $namespacedMessages;
     }
 
     public function getSummaryLines()
     {
-        return $this->_summary;
+        $summaryLines = array();
+        $messagesCollection = array(
+            "Error"  => $this->_errors,
+            "Warning"=> $this->_warnings,
+            "Notice" => $this->_notices,
+        );
+        foreach ($messagesCollection as $label => $messages) {
+            foreach ($messages as $message) {
+                $summaryLine = "&lt;$label&gt;";
+                foreach ($message['namespaces'] as $namespace) {
+                    $summaryLine .= "&lt;$namespace&gt;";
+                }
+                $summaryLine .= ' ' . $message['message'];
+                $summaryLines[] = $summaryLine;
+            }
+        }
+        return $summaryLines;
     }
 }
