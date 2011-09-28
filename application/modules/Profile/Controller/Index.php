@@ -39,7 +39,13 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->consent = $this->user->getConsent();
         $this->spAttributesList = $this->_getSpAttributeList($this->spList);
 
-        $this->spOauthList = $this->_getSpOauthList($this->spList);
+        try {
+            $this->spOauthList = $this->_getSpOauthList($this->spList);
+        }
+        catch (Exception $e) {
+            eblog()->error($e->getMessage());
+            ebLog()->debug($e->getTraceAsString());
+        }
     }
 
     /**

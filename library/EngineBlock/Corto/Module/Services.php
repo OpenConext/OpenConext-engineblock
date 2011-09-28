@@ -348,6 +348,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 
     protected function _sendIntroductionMail($response, $attributes)
     {
+        if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
+            return;
+        }
+
         $dbh = $this->_getConsentDatabaseConnection();
         $hashedUserId = sha1($this->_getConsentUid($response, $attributes));
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
@@ -357,17 +361,19 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $resultSet = $statement->fetchAll();
 
         //we only send a mail if an user provides consent the first time
-        if ($resultSet[0][0] == '1' && isset($attributes['urn:mace:dir:attribute-def:mail'])) {
-            $mailer = new EngineBlock_Mail_Mailer();
-            $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
-            $mailer->sendMail(
-                $emailAddress,
-                EngineBlock_Corto_Module_Services::INTRODUCTION_EMAIL,
-                array(
-                     '{user}' => $this->_getUserName($attributes)
-                )
-            );
+        if ($resultSet[0][0] !== '1') {
+            return;
         }
+
+        $mailer = new EngineBlock_Mail_Mailer();
+        $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
+        $mailer->sendMail(
+            $emailAddress,
+            EngineBlock_Corto_Module_Services::INTRODUCTION_EMAIL,
+            array(
+                 '{user}' => $this->_getUserName($attributes)
+            )
+        );
     }
 
     protected function _getUserName($attributes)
@@ -401,7 +407,5 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         }
 
         return "";
-
     }
-
 }

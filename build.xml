@@ -1,5 +1,6 @@
 <project name="COIN EngineBlock" default="build">
     <target name="build" depends="clean,prepare,lint,phpunit" />
+    <target name="acceptance" depends="clean,prepare,behat" />
     <target name="report" depends="clean,prepare,parallel" />
 
     <target name="parallel">
@@ -18,6 +19,7 @@
  
     <target name="prepare">
         <mkdir dir="${basedir}/build/logs" />
+        <mkdir dir="${basedir}/build/logs/tests" />
         <mkdir dir="${basedir}/build/codebrowser" />
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/cpd" />
@@ -39,7 +41,22 @@
             </fileset>
         </apply>
     </target>
- 
+
+    <target name="behat" description="BDD Acceptance tests with Behat">
+        <exec dir="${basedir}" executable="behat" failonerror="true">
+            <arg line="-f junit --out ${basedir}/build/logs/tests/" />
+        </exec>
+    </target>
+
+    <target name="phpunit">
+        <exec dir="${basedir}/tests" executable="phpunit" failonerror="true">
+            <arg line="--log-junit ${basedir}/build/logs/tests/phpunit.xml
+                       --coverage-clover ${basedir}/build/logs/clover.xml
+                       --coverage-html ${basedir}/build/coverage
+                       ." />
+        </exec>
+    </target>
+    
     <target name="phpcs">
         <exec dir="${basedir}" executable="phpcs" failonerror="false" output="/dev/null">
             <arg line="--extensions=php --ignore=build,tests,library/Zend,library/shindig,library/Corto --standard=Zend --tab-width=4 --report=checkstyle --report-file=${basedir}/build/logs/checkstyle.xml ." />
@@ -77,15 +94,6 @@
     <target name="phpcb">
         <exec dir="${basedir}" executable="phpcb" failonerror="false">
             <arg line="--log ${basedir}/build/logs --source ${basedir} --output ${basedir}/build/codebrowser" />
-        </exec>
-    </target>
- 
-    <target name="phpunit">
-        <exec dir="${basedir}/tests" executable="phpunit" failonerror="true">
-            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
-                       --coverage-clover ${basedir}/build/logs/clover.xml
-                       --coverage-html ${basedir}/build/coverage
-                       ." />
         </exec>
     </target>
 </project>

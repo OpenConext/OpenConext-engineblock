@@ -21,6 +21,14 @@ if (!isset($metadata)) {
 }
 
 /**
+ * @var array $groupOauth
+ * @var array $consent
+ * @var array $spAttributesList
+ * @var array|null $spOauthList
+ * @var array $spList
+ */
+
+/**
  * @var Zend_Layout $layout
  */
 $layout = $this->layout();
@@ -81,6 +89,7 @@ $layout->getView()->inlineScript()->appendScript("
     <? } ?>
     </table>
 </div>
+
 <div id="MyGroups">
     <p>
         <?php echo $this->t('profile_group_membership_desc'); ?>
@@ -94,7 +103,11 @@ $layout->getView()->inlineScript()->appendScript("
     <h3><a href="#"><?php echo $groupProvider->getDisplayName(); ?></a></h3>
     <div id="<?= $groupProvider->getId(); ?>" class="group-providers">
         <?php if(count($groupOauth) && array_key_exists($groupProvider->getId(),$groupOauth )): ?>
-            <span class="revoke-gp-access"><a href="/profile/group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?= $this->t('profile_revoke_access'); ?></a></span>
+            <span class="revoke-gp-access">
+                <a href="/profile/group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?=
+                    $this->t('profile_revoke_access'); ?>
+                </a>
+            </span>
         <?php endif; ?>
         <?php
                 $groups = array();
@@ -122,6 +135,7 @@ $layout->getView()->inlineScript()->appendScript("
     <?php endforeach; ?>
 
     <?php
+        $oauthGroupProviders = array();
         foreach ($invalidProviders as $groupProvider) {
             /**
              * @var EngineBlock_Group_Provider_Interface $groupProvider
@@ -158,6 +172,7 @@ $layout->getView()->inlineScript()->appendScript("
     </ul>
     <?php endif; ?>
 </div>
+
 <div id="MyApps">
     <p><?php echo $this->t('profile_apps_connected_aps'); ?></p>
     <p>
@@ -183,10 +198,13 @@ $layout->getView()->inlineScript()->appendScript("
         </thead>
         <tbody class="apps">
         <?php foreach ($spList as $spId => $sp) : ?>
-            <? if (in_array($spId,$consent) || array_key_exists($spId,$spOauthList)) : ?>
+            <?php if (in_array($spId, $consent) || (isset($spOauthList) && array_key_exists($spId, $spOauthList))) : ?>
                 <tr>
                     <td>
-                        <span class="ui-icon ui-icon-triangle-1-e left"></span><a href="#" class="show-details"><?=$sp["displayName:en"]?></a>
+                        <a href="#" class="show-details">
+                            <span class="ui-icon ui-icon-triangle-1-e left"></span>
+                            <?=$sp["displayName:en"]?>
+                        </a>
                     </td>
                     <td>
                         <?php if ($sp['coin:eula']) : ?>
@@ -195,15 +213,23 @@ $layout->getView()->inlineScript()->appendScript("
                     </td>
                     <td>
                         <?php if ($sp['coin:eula']) : ?>
-                            <a href="<?= $sp['coin:userContactPoint:url']; ?>"><?= $this->t('profile_support_link'); ?></a>
+                            <a href="<?= $sp['coin:userContactPoint:url']; ?>"><?=
+                                $this->t('profile_support_link'); ?>
+                            </a>
                         <?php endif; ?>
                     </td>
                     <td>
-                        <a href="mailto:<?= $sp['coin:userContactPoint:emailAddress']; ?>"><?= $sp['coin:userContactPoint:emailAddress']; ?></a>
+                        <a href="mailto:<?= $sp['coin:userContactPoint:emailAddress']; ?>"><?=
+                            $sp['coin:userContactPoint:emailAddress']; ?>
+                        </a>
                     </td>
                     <td>
-                        <?php if (array_key_exists($spId,$spOauthList)) : ?>
-                            <span class="revoke-consent"><a href="/profile/delete-oauth-consent?consumer_key=<?= urlencode($spOauthList[$spId]); ?>"><?= $this->t('profile_revoke_consent'); ?></a></span>
+                        <?php if (isset($spOauthList) && array_key_exists($spId,$spOauthList)) : ?>
+                            <span class="revoke-consent">
+                                <a href="/profile/delete-oauth-consent?consumer_key=<?= urlencode($spOauthList[$spId]); ?>">
+                                    <?= $this->t('profile_revoke_consent'); ?>
+                                </a>
+                            </span>
                         <?php else : ?>
                             <?= $this->t('profile_no_consent'); ?>
                         <?php endif; ?>
