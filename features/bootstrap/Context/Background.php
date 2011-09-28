@@ -67,4 +67,40 @@ class Background extends BehatContext
     public function userIsNotAMemberOfAnyGroup($argument1)
     {
     }
+
+    /**
+      * @Given /^we are using EngineBlock on the "([^"]*)" environment$/
+      */
+     public function weAreUsingEngineblockOnTheEnvironment($argument1)
+     {
+     }
+
+     /**
+      * @Given /^we have several IDPs configured$/
+      */
+     public function weHaveSeveralIdpsConfigured()
+     {
+     }
+
+     /**
+      * @Given /^we have a "([^"]*)" SP configured$/
+      */
+     public function weHaveASpConfigured($portalSp)
+     {
+     }
+
+     /**
+      * @Given /^we have a "([^"]*)" IP configured$/
+      */
+     public function weHaveAIpConfigured($argument1)
+     {
+     }
+
+     /**
+      * @Given /^the "([^"]*)" IP is configured to allow-none SPs$/
+      */
+     public function theIpIsConfiguredToAllowNoneSps($argument1)
+     {
+     }
+
 }

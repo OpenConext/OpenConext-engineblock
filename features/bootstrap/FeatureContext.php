@@ -34,5 +34,6 @@ class FeatureContext extends MinkContext
         $this->useContext('background'  , new Context\Background($parameters));
         $this->useContext('login'       , new Context\Login($parameters));
         $this->useContext('testsp'      , new Context\TestSp($parameters));
+        $this->useContext('metadata'    , new Context\Metadata($parameters));
     }
 }
