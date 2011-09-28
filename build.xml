@@ -1,5 +1,16 @@
 <project name="COIN EngineBlock" default="build">
-    <target name="build" depends="clean,prepare,phpcpd,phpunit,phpcs,phpcb" />
+    <target name="build" depends="clean,prepare,lint,phpunit" />
+    <target name="report" depends="build, parallel" />
+
+    <target name="parallel">
+        <parallel>
+            <antcall target="phpcs" />
+            <antcall target="phpmd" />
+            <antcall target="phpcpd" />
+            <antcall target="pdepend" />
+            <antcall target="phpcb" />
+        </parallel>
+    </target>
 
     <target name="clean">
         <delete dir="${basedir}/build" />
@@ -11,6 +22,28 @@
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/cpd" />
         <mkdir dir="${basedir}/build/dependencies" />
+    </target>
+
+    <target name="lint" description="Run syntax check for all classes" >
+        <apply dir="${basedir}" executable="php" failonerror="true">
+            <arg value="-l" />
+            <fileset dir="${basedir}">
+                <include name="**/*.php"/>
+                <include name="**/*.phtml"/>
+                <exclude name=".svn/**"/>
+                <exclude name="lib/Zend/**"/>
+                <exclude name="modules/janus/lib/jsonwrapper/jsonwrapper_inner.php"/>
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="phpunit">
+        <exec dir="${basedir}/tests" executable="phpunit" failonerror="true">
+            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
+                       --coverage-clover ${basedir}/build/logs/clover.xml
+                       --coverage-html ${basedir}/build/coverage
+                       ." />
+        </exec>
     </target>
  
     <target name="phpcs">
@@ -52,23 +85,5 @@
         <exec dir="${basedir}" executable="phpcb" failonerror="false">
             <arg line="--log ${basedir}/build/logs --source ${basedir} --output ${basedir}/build/codebrowser" />
         </exec>
-    </target>
- 
-    <target name="phpunit">
-        <exec dir="${basedir}/tests" executable="phpunit" failonerror="true">
-            <arg line="--log-junit ${basedir}/build/logs/phpunit.xml
-                       --coverage-clover ${basedir}/build/logs/clover.xml
-                       --coverage-html ${basedir}/build/coverage
-                       ." />
-        </exec>
-    </target>
-
-    <target name="parallel">
-        <parallel>
-            <antcall target="phpcs" />
-            <antcall target="phpmd" />
-            <antcall target="phpcpd" />
-            <antcall target="pdepend" />
-        </parallel>
     </target>
 </project>
