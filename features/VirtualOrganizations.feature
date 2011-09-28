@@ -29,7 +29,7 @@ Feature: Virtual Organizations
   Scenario: Boy logs in at the Test SP with an implicit VO
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "test-boy" with password "test-boy"
+     And I log in as "test-boy" with password "test-bo"
      And I pass through EngineBlock
     Then I should be on the Test SP
 
