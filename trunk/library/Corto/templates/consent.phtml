@@ -1,0 +1,33 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Consent</title>
+    </head>
+    <body>
+        <form method="post" action="<?= $action ?>">
+            <input type="hidden" name="ID" value="<?= $ID ?>" />
+            <input type="hidden" name="consent" value="yes" />
+            Do you consent to the following information being sent to your Service Provider:
+            <?php foreach ($attributes as $uid => $attributeValues) { ?>
+            <dl style="margin-left: 60px;">
+                <dt style="font-weight: bold;">
+                    <?=$this->getAttributeName($uid, 'nl_NL')?>
+                </dt>
+                <dd>
+                    <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                      <?=$attributeValues[0];?>
+                    <? } /** Multiple attribute values */ else { ?>
+                    <ul>
+                    <?php foreach ($attributeValues as $value) { ?>
+                        <li><?=$value?></li>
+                    <?php } ?>
+                    </ul>
+                    <? } ?>
+                </dd>
+            </dl>
+            <? } ?>
+            <input type=submit value=Send>
+        </form>
+    </body>
+</html>

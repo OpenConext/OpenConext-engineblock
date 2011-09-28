@@ -1,0 +1,105 @@
+<?php
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+
+ if (!isset($action)) {
+    throw new EngineBlock_Exception('No Consent action given to consent screen');
+}
+if (!isset($ID)) {
+    throw new EngineBlock_Exception('No ID given to consent screen');
+}
+if (!isset($attributes)) {
+    throw new EngineBlock_Exception('No Attributes given to consent screen');
+}
+
+// The current language
+$lang = $this->language();
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set different layout
+$layout->setLayout('consent');
+
+// Set Layout variables
+$layout->header = $this->t('consent_header');
+$layout->title = $layout->title . ' - '. $layout->header;
+$layout->subheader = $this->t('consent_subheader', $sp['Name'][$lang]);
+$layout->footerText = $this->t('footer');
+
+// Set new window icon
+$newWindowIcon = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
+$layout->getView()->inlineScript()->appendScript("document.getElementById('accept_terms_button').focus();");
+?>
+<div>
+    <p>
+        <?php echo $this->t('consent_store_info'); ?>
+    </p>
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th><?php echo $this->t('attribute'); ?></th>
+                <th><?php echo $this->t('value'); ?></th>
+            </tr>
+        </thead>
+    <?php foreach ($attributes as $uid => $attributeValues) { ?>
+        <tr>
+            <td style="font-weight: bold;">
+                <?=$this->getAttributeName($uid, $lang)?>
+            </td>
+            <td>
+                <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?=$attributeValues[0];?>
+                <? } /** Multiple attribute values */ else { ?>
+                <ul>
+                <?php foreach ($attributeValues as $value) { ?>
+                    <li><?=$value?></li>
+                <?php } ?>
+                </ul>
+                <? } ?>
+            </td>
+        </tr>
+    <? } ?>
+    </table>
+    <br />
+    <p>
+        <?php echo $this->t('consent_terms_of_service', $newWindowIcon, $newWindowIcon); ?>
+    </p>
+    <br />
+
+    <form method="post" action="<?= $action ?>" style="float: left">
+        <input type=hidden name=ID value="<?= $ID ?>">
+        <input type="hidden" name="consent" value="yes" />
+        <input id="accept_terms_button" type="submit" value="<?php echo $this->t('consent_accept'); ?>" style="font-weight: bold;" />
+    </form>
+    &nbsp;&nbsp;
+    <form method="post" action="<?= $action ?>" style="float: left; margin-left: 2em">
+        <input type="hidden" name="ID" value="<?= $ID ?>" />
+        <input type="submit" value="<?php echo $this->t('consent_decline'); ?>" />
+    </form>
+</div>

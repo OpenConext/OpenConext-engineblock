@@ -1,0 +1,3 @@
+Patches for software that we've externalized using svn:externals. Should generally only 
+contain bugfixes that we have contributed, so that we can delete the patch when the 
+software has accepted the patch.

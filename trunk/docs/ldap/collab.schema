@@ -1,0 +1,54 @@
+attributetype ( 1.3.6.1.4.1.1076.20.40.40.1
+	NAME 'collabPersonId'
+	DESC 'Collab unique user identifier'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.1076.20.40.40.2
+	NAME 'collabPersonHash'
+	DESC 'attributes hash'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.1076.20.40.40.3
+	NAME 'collabPersonRegistered'
+	DESC 'Initial provisioned timestamp'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.1076.20.40.40.4
+	NAME 'collabPersonLastUpdated'
+	DESC 'Timestamp for last attributes update'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.1076.20.40.40.5
+	NAME 'collabPersonLastAccessed'
+	DESC 'Timestamp for last login'
+	EQUALITY caseIgnoreMatch
+	SUBSTR caseIgnoreSubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.15
+	SINGLE-VALUE )
+
+attributetype ( 1.3.6.1.4.1.1076.20.40.40.6
+	NAME 'collabPersonIsGuest'
+	DESC 'guest user'
+	EQUALITY booleanMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.7
+	SINGLE-VALUE )
+
+objectClass ( 1.3.6.1.4.1.1076.20.40.20.40
+    SUP eduPerson
+    NAME 'collabPerson'
+    DESC 'collabPerson - SURFnet COIN attributen'
+    AUXILIARY
+    MUST ( collabPersonId )
+    MAY ( collabPersonHash $ collabPersonRegistered $ collabPersonLastUpdated $ collabPersonLastAccessed $ collabPersonIsGuest ) )

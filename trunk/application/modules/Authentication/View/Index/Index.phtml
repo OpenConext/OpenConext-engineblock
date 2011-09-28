@@ -1,0 +1,85 @@
+<?php
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - SAML2 proxy';
+$layout->header = $layout->title;
+$layout->subheader = 'SAML2 proxy';
+$layout->footerText = $this->t('footer');
+
+?>
+<p>
+    <?= $this->t('authentication_urls'); ?>:
+    <ul>
+        <li>
+            <a href="/authentication/idp/metadata">
+                /authentication/idp/metadata
+            </a>
+            <br />
+            Metadata for Service Providers, to configure EngineBlock as your Identity Provider.
+        </li>
+        <li>
+            <a href="/authentication/idp/metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume">
+                /authentication/idp/metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume
+            </a>
+            <br />
+            Metadata for Shibboleth Service Providers, to configure EngineBlock as your Identity Provider. If an
+            alternative Engineblock signing certificate is configured for a certain SP it will be shown in the metadata.
+            <strong>NB. This is only important for SP's that rely on the Engineblock metadata URL for refreshing metadata. For SP's
+            that configure metadata oob this is not relevant.</strong>
+        </li>
+        <li>
+            <a href="/authentication/sp/metadata">
+                /authentication/sp/metadata
+            </a>
+            <br />
+            Metadata for Identity Providers, to add EngineBlock as registered Service Provider.
+        </li>
+        <li>
+            <a href="/authentication/proxy/idps-metadata">
+                /authentication/proxy/idps-metadata
+            </a>
+            <br />
+            Metadata with ALL known EngineBlock providers.
+        </li>
+        <li>
+            <a href="/authentication/proxy/idps-metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume">
+                /authentication/proxy/idps-metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume
+            </a>
+            <br />
+            For Shibboleth Service Providers, get ALL known EngineBlock providers AND (if known)
+            give the metadata for Service Provider with the endpoint:
+            'https://mysp.com/assertionConsume'
+            (Shibboleth expects to see it's self in the metadata document).
+            Also if an alternative signing certificate is configured in Engineblock the new public key will be shown
+            in the metadata.
+        </li>
+    </ul>
+</p>

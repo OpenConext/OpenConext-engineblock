@@ -1,0 +1,128 @@
+<?php
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+
+/**
+ * Injected variables;
+ * @var $this EngineBlock_Corto_CoreProxy
+ * @var $metaDataSP array
+ * @var $idpList array
+ * @var $action string
+ * @var $ID string
+ * @var $preselectedIdp string
+ */
+
+$lang = $this->language();
+$uri = $_SERVER['REQUEST_URI'];
+$displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
+
+$preselectedIdpData = array();
+if ($preselectedIdp) {
+    foreach ($idpList as $idp) {
+        if ($idp['EntityId'] === $preselectedIdp) {
+            $preselectedIdpData = $idp;
+            break;
+        }
+    }
+}
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set different layout
+$layout->setLayout('discover');
+
+// Set Layout variables
+$layout->header = $displayName;
+$layout->subheader = $this->t('idp_selection_subheader');
+$layout->title = $this->t('idp_selection_title', $displayName);
+$layout->footerText = $this->t('footer');
+
+// Set javascript
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.mousewheel.min.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.putCursorAtEnd.1.0.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.jscrollpane.min.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.tmpl.min.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/keyboardNavigator.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/typewatch.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/jquery.cookie.js');
+$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/discover.js');
+$preselectedIdpJson = isset($preselectedIdp) ? 'discoveryScreen.setSelectedEntityId('.json_encode($preselectedIdp).')' : '';
+$layout->getView()->inlineScript()->appendScript("
+    var discoveryScreen = new Discover();
+    discoveryScreen.setLanguage('". $lang ."');
+    discoveryScreen.setSearchText('". $this->t('search') ."');
+    discoveryScreen.setIdpList(". json_encode($idpList) .");
+    discoveryScreen.setUri('". $uri. "');
+    ". $preselectedIdpJson ."
+    discoveryScreen.show();");
+?>
+<div id="content">
+    <form id="IdpListForm" method="post" action="<?= $action ?>">
+        <input id="ID" type="hidden" name="ID" value="<?= $ID ?>">
+        <input id="Idp" type="hidden" name="idp" value="">
+    </form>
+    <p><?php echo $this->t('idp_selection_desc', $displayName); ?></p>
+    <?php if ($preselectedIdp) : ?>
+    <div id="IdpSuggestion" class="suggestion">
+        <noscript>
+            <form method="post" action="<?= $action ?>">
+                <input type="hidden" name="ID" value="<?= $ID ?>">
+                <input type="hidden" name="idp" value="<?= $preselectedIdp ?>">
+                <input type="submit" value="<?= $preselectedIdpData['Name_en']; ?>">
+            </form>
+        </noscript>
+    </div>
+    <? endif; ?>
+    <input class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
+
+    <div class="results">
+        <div id="noResultsMessage" style="display:none">
+            <p class="noresults"><?php echo $this->t('no_results'); ?></p>
+        </div>
+        <noscript>
+            <div style="width: 451px; height: 250px; overflow: scroll">
+            <?php foreach ($idpList as $idp) : ?>
+                <form method="post" action="<?= $action ?>">
+                    <input type="hidden" name="ID" value="<?= $ID ?>">
+                    <input type="hidden" name="idp" value="<?= $idp['EntityId'] ?>">
+                    <input type="submit" id="<?= $idp['EntityId']; ?>" value="<?= $idp['Name_en']; ?>">
+                </form>
+            <?php endforeach; ?>
+            </div>
+        </noscript>
+
+        <div id="scrollViewport">
+            <ul class="thumbs clearfix" id="organisationsContainer"></ul>
+        </div>
+        <ul id="resultTabs" class="tabs">
+            <li class="thumbs active" id="tabThumbs">Thumbnails</li>
+            <li class="list" id="tabList">List</li>
+        </ul>
+    </div>
+</div>
+<div id="help">
+</div>
