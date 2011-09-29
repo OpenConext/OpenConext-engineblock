@@ -6,7 +6,8 @@ $metadata = array();
 // If there is only one IdP (Like only this environments EngineBlock)
 require_once __DIR__ . "/../metadata/saml20-idp-remote.php";
 if (!empty($metadata) && count($metadata) === 1) {
-    $presetIdp = array_shift(array_keys($metadata));
+    $metadataIdps = array_keys($metadata);
+    $presetIdp = array_shift($metadataIdps);
 }
 
 $config = array(
