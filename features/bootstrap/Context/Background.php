@@ -20,6 +20,13 @@ class Background extends BehatContext
     }
 
     /**
+     * @Given /^we are using a non existent SP with "([^"]*)" as entity ID$/
+     */
+    public function weAreUsingANonExistentSpWithAsEntityId($argument1)
+    {
+    }
+
+    /**
      * @Given /^we have a Group VO with the id "([^"]*)" and group "([^"]*)"$/
      */
     public function weHaveAGroupVoWithTheIdAndGroup($argument1, $argument2)

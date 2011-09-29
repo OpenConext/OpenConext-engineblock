@@ -19,6 +19,16 @@ class TestSp extends BehatContext
     }
 
     /**
+     * @When /^I go the Test SP using "([^"]*)" as the entity ID$/
+     */
+    public function iGoTheTestSpUsingAsTheEntityId($entityId)
+    {
+        $url = "https://testsp.test.surfconext.nl/Shibboleth.sso/Login?entityID=" .
+               urlencode("$entityId");
+        $this->getMainContext()->visit($url);
+    }
+
+    /**
      * @Then /^I should be on the Test SP$/
      */
     public function iShouldBeOnTheTestSp()
@@ -32,7 +42,7 @@ class TestSp extends BehatContext
     public function iGoToTheTestSpWithTheExplicitVo($voId)
     {
         $url = "https://testsp.test.surfconext.nl/Shibboleth.sso/Login?entityID=" .
-            urlencode("https://engine.test.surfconext.nl/authentication/idp/metadata/vo:" . $voId);
+               urlencode("https://engine.test.surfconext.nl/authentication/idp/metadata/vo:" . $voId);
         $this->getMainContext()->visit($url);
     }
 
@@ -45,7 +55,7 @@ class TestSp extends BehatContext
         assertNull($button);
     }
 
-/**
+    /**
      * @Given /^I should be able to select "([^"]*)" from the WAYF$/
      */
     public function iShouldBeAbleToSelectFromTheWayf($guestIdp)
@@ -53,5 +63,4 @@ class TestSp extends BehatContext
         $button = $this->getMainContext()->getSession()->getPage()->findButton($guestIdp);
         assertNotNull($button);
     }
-
 }
