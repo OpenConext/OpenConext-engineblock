@@ -24,7 +24,7 @@ class ServiceRegistry_Cron_Job_MetadataRefresh extends ServiceRegistry_Cron_Job_
         if (!$this->_isExecuteRequired($cronTag)) {
             return array("Not doing metadata_refresh");
         }
-echo "Doing refresh";
+
         $cronLogger = new ServiceRegistry_Cron_Logger();
         try {
             $janusConfig = SimpleSAML_Configuration::getConfig('module_janus.php');
