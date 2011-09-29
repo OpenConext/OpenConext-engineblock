@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require 'Parser/FormatException.php';
+require_once 'Parser/FormatException.php';
 
 /**
  * Recursive Descent parser (LL(1)) for XML xs:duration format.
