@@ -3,13 +3,15 @@
  *
  */
 
+require __DIR__ . '/../../../Xml/Duration.php';
+
 define('SERVICEREGISTRY_DEFAULT_VALID_UNTIL', '+1 year');
 define('SERVICEREGISTRY_DEFAULT_CACHE_UNTIL', '+1 day');
 
 /**
  *
  */ 
-class ServiceRegistry_Cron_Job_MetadataRefresh
+class ServiceRegistry_Cron_Job_MetadataRefresh extends ServiceRegistry_Cron_Job_Abstract
 {
     const CONFIG_WITH_TAGS_TO_RUN_ON = 'metadata_refresh_cron_tags';
 
@@ -20,9 +22,9 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
     public function runForCronTag($cronTag)
     {
         if (!$this->_isExecuteRequired($cronTag)) {
-            return array();
+            return array("Not doing metadata_refresh");
         }
-
+echo "Doing refresh";
         $cronLogger = new ServiceRegistry_Cron_Logger();
         try {
             $janusConfig = SimpleSAML_Configuration::getConfig('module_janus.php');
@@ -76,10 +78,42 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
                     continue;
                 }
 
-                $xml = file_get_contents($metadataUrl);
+                $xml = @file_get_contents($metadataUrl);
                 if (!$xml) {
                     $cronLogger->with($entityId)->error(
                         "Failed import of entity. Bad URL '$metadataUrl'? "
+                    );
+                    continue;
+                }
+
+                $document = new DOMDocument();
+                if (!@$document->loadXML($xml)) {
+                    $cronLogger->with($entityId)->error(
+                        "Failed import of entity. Invalid XML at '$metadataUrl'?"
+                    );
+                    continue;
+                }
+
+                $query = new DOMXPath($document);
+                $nsFound = false;
+                foreach( $query->query('namespace::*') as $node ) {
+                    if ($node->nodeValue === "urn:oasis:names:tc:SAML:2.0:metadata") {
+                        $nsFound = true;
+                        break;
+                    }
+                }
+                if (!$nsFound) {
+                    $cronLogger->with($entityId)->error(
+                        "Failed import of entity. Metadata at '$metadataUrl' does not contain SAML2 Metadata namespace?"
+                    );
+                    continue;
+                }
+
+                $query->registerNamespace('md', "urn:oasis:names:tc:SAML:2.0:metadata");
+                $entityDescriptorDomElement = $query->query("//md:EntityDescriptor[@entityID=\"$entityId\"]");
+                if ($entityDescriptorDomElement->length === 0) {
+                    $cronLogger->with($entityId)->error(
+                        "Failed import of entity. Metadata at '$metadataUrl' does not contain an EntityDescriptor with entityId '$entityId'?"
                     );
                     continue;
                 }
@@ -139,11 +173,11 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
             $cronLogger->error($e->getMessage());
         }
 
-        $summaryLines = $cronLogger->getSummaryLines();
         if ($cronLogger->hasErrors()) {
-            $this->_mailTechnicalContact($cronTag, $summaryLines);
+            $this->_mailTechnicalContact($cronTag, $cronLogger);
         }
-        return $summaryLines;
+
+        return $cronLogger->getSummaryLines();
     }
 
     protected function _isExecuteRequired($cronTag)
@@ -158,26 +192,6 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
         return true;
     }
 
-    protected function _mailTechnicalContact($tag, $summary)
-    {
-        $config = SimpleSAML_Configuration::getInstance();
-        $time = date(DATE_RFC822);
-        $url = SimpleSAML_Utilities::selfURL();
-        $message = '<h1>Cron report</h1><p>Cron ran at ' . $time . '</p>' .
-            '<p>URL: <tt>' . $url . '</tt></p>' .
-            '<p>Tag: ' . $tag . "</p>\n\n" .
-            '<ul><li>' . join('</li><li>', $summary) . '</li></ul>';
-
-        $toAddress = $config->getString('technicalcontact_email', 'na@example.org');
-        if ($toAddress == 'na@example.org') {
-            SimpleSAML_Logger::error('Cron - Could not send email. [technicalcontact_email] not set in config.');
-        } else {
-            $email = new SimpleSAML_XHTML_EMail($toAddress, 'ServiceRegistry cron report', 'coin-beheer@surfnet.nl');
-            $email->setBody($message);
-            $email->send();
-        }
-    }
-
     protected function _getMetaDataCachingInfo($xml, $entityId)
     {
         $document = new DOMDocument();
@@ -188,43 +202,62 @@ class ServiceRegistry_Cron_Job_MetadataRefresh
 
         $entitiesCacheDuration  = $query->query('/md:EntitiesDescriptor/@cacheDuration');
         $entitiesValidUntil     = $query->query('/md:EntitiesDescriptor/@validUntil');
-        $entityCacheDuration    = $query->query("//md:EntityDescriptor[entityID=$entityId]/@cacheDuration");
-        $entityValidUntil       = $query->query("//md:EntityDescriptor[entityID=$entityId]/@validUntil");
-        $spCacheDuration        = $query->query("//md:EntityDescriptor[entityID=$entityId]/md:SPSSODescriptor/@cacheDuration");
-        $spValidUntil           = $query->query("//md:EntityDescriptor[entityID=$entityId]/md:SPSSODescriptor/@validUntil");
-        $idpCacheDuration       = $query->query("//md:EntityDescriptor[entityID=$entityId]/md:IDPSSODescriptor/@cacheDuration");
-        $idpValidUntil          = $query->query("//md:EntityDescriptor[entityID=$entityId]/md:IDPSSODescriptor/@validUntil");
+        $entityCacheDuration    = $query->query("//md:EntityDescriptor[@entityID=\"$entityId\"]/@cacheDuration");
+        $entityValidUntil       = $query->query("//md:EntityDescriptor[@entityID=\"$entityId\"]/@validUntil");
+        
+        $spCacheDuration        = $query->query("//md:EntityDescriptor[@entityID=\"$entityId\"]/md:SPSSODescriptor/@cacheDuration");
+        $spValidUntil           = $query->query("//md:EntityDescriptor[@entityID=\"$entityId\"]/md:SPSSODescriptor/@validUntil");
+        $idpCacheDuration       = $query->query("//md:EntityDescriptor[@entityID=\"$entityId\"]/md:IDPSSODescriptor/@cacheDuration");
+        $idpValidUntil          = $query->query("//md:EntityDescriptor[@entityID=\"$entityId\"]/md:IDPSSODescriptor/@validUntil");
 
         $defaultValidUntil = strtotime(SERVICEREGISTRY_DEFAULT_VALID_UNTIL);
-        $validUntil = $this->_getEarliestDateFromXml($defaultValidUntil, $entitiesValidUntil);
-        $validUntil = $this->_getEarliestDateFromXml($validUntil, $entityValidUntil);
-        $validUntil = $this->_getEarliestDateFromXml($validUntil, $spValidUntil);
-        $validUntil = $this->_getEarliestDateFromXml($validUntil, $idpValidUntil);
-
-        // @todo parse cacheDurations with lib/Xml/Duration.php first
+        $validUntil = $this->_getEarliestDateFromXmlDateTime($defaultValidUntil, $entitiesValidUntil);
+        $validUntil = $this->_getEarliestDateFromXmlDateTime($validUntil, $entityValidUntil);
+        $validUntil = $this->_getEarliestDateFromXmlDateTime($validUntil, $spValidUntil);
+        $validUntil = $this->_getEarliestDateFromXmlDateTime($validUntil, $idpValidUntil);
 
         $defaultCacheDuration = strtotime(SERVICEREGISTRY_DEFAULT_CACHE_UNTIL);
-        $cacheDuration = $this->_getEarliestDateFromXml($defaultCacheDuration, $entitiesCacheDuration);
-        $cacheDuration = $this->_getEarliestDateFromXml($cacheDuration, $entityCacheDuration);
-        $cacheDuration = $this->_getEarliestDateFromXml($cacheDuration, $spCacheDuration);
-        $cacheDuration = $this->_getEarliestDateFromXml($cacheDuration, $idpCacheDuration);
+        $cacheDuration = $this->_getEarliestDateFromXmlDuration($defaultCacheDuration, $entitiesCacheDuration);
+        $cacheDuration = $this->_getEarliestDateFromXmlDuration($cacheDuration, $entityCacheDuration);
+        $cacheDuration = $this->_getEarliestDateFromXmlDuration($cacheDuration, $spCacheDuration);
+        $cacheDuration = $this->_getEarliestDateFromXmlDuration($cacheDuration, $idpCacheDuration);
 
         return array(
-            'validUntil'    => $validUntil,
+            'validUntil' => $validUntil,
             'cacheUntil' => $cacheDuration,
         );
     }
 
-    protected function _getEarliestDateFromXml($validUntil, $xmlValidUntil)
+    protected function _getEarliestDateFromXmlDateTime($validUntil, $xmlValidUntil)
     {
         if (!$xmlValidUntil || $xmlValidUntil->length === 0) {
             return $validUntil;
         }
 
-        $xmlValidUntil = strtotime($xmlValidUntil->item(0)->nodeValue);
+        $xmlValidUntilValue = $xmlValidUntil->item(0)->nodeValue;
+        $xmlValidUntil = strtotime($xmlValidUntilValue);
+
         if ($xmlValidUntil < $validUntil) {
-            $validUntil = $xmlValidUntil;
+            return $xmlValidUntil;
         }
-        return $validUntil;
+        else {
+            return $validUntil;
+        }
+    }
+
+    protected function _getEarliestDateFromXmlDuration($timeStamp, $xmlDuration)
+    {
+        if (!$xmlDuration || $xmlDuration->length === 0) {
+            return $timeStamp;
+        }
+
+        $xmlTimeStamp = time() + Xml_Duration::createFromDuration($xmlDuration->item(0)->nodeValue)->getSeconds();
+
+        if ($xmlTimeStamp < $timeStamp) {
+            return $xmlTimeStamp;
+        }
+        else {
+            return $timeStamp;
+        }
     }
 }

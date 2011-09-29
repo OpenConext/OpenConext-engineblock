@@ -6,7 +6,7 @@
 /**
  *
  */ 
-class ServiceRegistry_Cron_Job_ValidateEntityEndpoints
+class ServiceRegistry_Cron_Job_ValidateEntityEndpoints extends ServiceRegistry_Cron_Job_Abstract
 {
     const CONFIG_WITH_TAGS_TO_RUN_ON = 'validate_entity_endpoints_cron_tags';
 
@@ -118,6 +118,10 @@ class ServiceRegistry_Cron_Job_ValidateEntityEndpoints
             }
         } catch (Exception $e) {
             $cronLogger->error($e->getMessage());
+        }
+
+        if ($cronLogger->hasErrors()) {
+            $this->_mailTechnicalContact($cronTag, $cronLogger);
         }
         return $cronLogger->getSummaryLines();
     }
