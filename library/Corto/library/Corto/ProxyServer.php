@@ -489,7 +489,7 @@ class Corto_ProxyServer
     {
         $response = $this->_createBaseResponse($request);
         $response[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIssuer'] = $sourceResponse['saml:Assertion']['saml:Issuer']['__v'];
-        if (!$this->_server->isInProcessingMode() && isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
+        if (isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
             $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) {
             $response['saml:Issuer']['__v'] = $sourceResponse['saml:Issuer']['__v'];
             $response['saml:Assertion']['saml:Issuer']['__v'] = $sourceResponse['saml:Assertion']['saml:Issuer']['__v'];
