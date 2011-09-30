@@ -26,6 +26,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
     {
         $request = $this->_server->getBindingsModule()->receiveRequest();
         $request['__']['Transparent'] = $this->_server->getCurrentEntitySetting('TransparentProxy', false);
+        $request['__']['OriginalIdp'] = $this->_server->getCurrentEntitySetting('Idp');
 
         // The request may specify it ONLY wants a response from specific IdPs
         // or we could have it configured that the SP may only be serviced by specific IdPs

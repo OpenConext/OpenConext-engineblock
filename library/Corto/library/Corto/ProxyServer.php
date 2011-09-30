@@ -489,10 +489,11 @@ class Corto_ProxyServer
     {
         $response = $this->_createBaseResponse($request);
         $response[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIssuer'] = $sourceResponse['saml:Assertion']['saml:Issuer']['__v'];
-        if (isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
-            $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) {
-            $response['saml:Issuer']['__v'] = $sourceResponse['saml:Issuer']['__v'];
-            $response['saml:Assertion']['saml:Issuer']['__v'] = $sourceResponse['saml:Assertion']['saml:Issuer']['__v'];
+        if (!$this->isInProcessingMode() && isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
+                $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent'] &&
+                isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIdp'])) {
+            $response['saml:Issuer']['__v'] = $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIdp'];
+            $response['saml:Assertion']['saml:Issuer']['__v'] = $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIdp'];
         }
 
         $response['samlp:Status']   = $sourceResponse['samlp:Status'];
