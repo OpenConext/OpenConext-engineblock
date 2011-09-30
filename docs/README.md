@@ -134,19 +134,11 @@ The *env.path* configuration will make EngineBlock autodetect which settings to 
 for a particulair path that EngineBlock is installed in.
 
 
-### Download & Install MySQL JDBC driver ###
-
-EngineBlock uses a Java tool called 'LiquiBase' for updating the database, however this tool requires the JDBC
-driver to talk to MySQL, and as this is GPL, it has to be downloaded separately.
-
-    cd database && ./install_jdbc_driver.sh && cd ..
-
-
 ### Install database schema ###
 
-To install the initial database, just call the 'update' script in *database/*, like so:
+To install the initial database, just call the 'migrate' script in *bin/*, like so:
 
-    cd database && ./update && cd ..
+    cd bin && ./migrate && cd ..
 
 **NOTE**
 EngineBlock requires database settings, without it the install script will not function
@@ -306,12 +298,7 @@ If you are using this pattern, an update can be done with the following:
 
 4. Install & Run the database migrations script.
 
-    EngineBlock uses a Java tool called 'LiquiBase' for updating the database, however this tool requires the JDBC
-    driver to talk to MySQL, and as this is GPL, it has to be downloaded separately.
-
-
-    cd database && ./install_jdbc_driver.sh && cd ..
-    cd database && ./update && cd ..
+    cd bin/ && ./migrate && cd ..
 
 5. Install new Static content for engineblock.
 
