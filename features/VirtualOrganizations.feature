@@ -2,13 +2,6 @@ Feature: Virtual Organizations
   In order to protect access to a shared Service Provider
   As a member of a Virtual Organization
   I want to a Service Provider to only be usable by members of my group.
-  Authentication using:
-    - An explicit VO (AuthnRequest is sent to /authentication/idp/single-sing-on/vo:explicitvo)
-    - An implicit VO (The SP has been forced to always use the 'implicitvo' VO in the Service Registry using the coin:default_vo_id metadata entry)
-    - An SP that uses a Group VO, with both a member and a non-member of that group
-    - An SP that uses a Stem VO, with both a member and a non-member of a group in the stem
-    TODO: - An SP that uses an IdP VO
-    TODO: Also using a VO, the SP MUST get the 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2' attribute with the proper id of the VO.
 
   Background:
     Given we are using the SP "Test SP" on the "test" environment
@@ -21,7 +14,7 @@ Feature: Virtual Organizations
       And we have a SURFguest user with the username "test-boy", name "Boy" and password "test-boy"
       And we have a SURFguest user with the username "test-jasha", name "Jasha" and password "test-jasha"
       And we have a SURFguest user with the username "test-ivo", name "Ivo" and password "test-ivo"
-      And we have a Twitter user with the username "test-idps", name "John Doe" and password "test-idps"
+      And we have a Twitter user with the username "test-idps", name "John" and password "test-idps"
       And user "test-boy" is a member of the Group "vo:scn-devs:eb-devs"
       And user "test-jasha" is a member of the Group "vo:scn-devs:rave-devs"
       And user "test-boy" is a member of the Group "nl:surfnet:management:testsp"
