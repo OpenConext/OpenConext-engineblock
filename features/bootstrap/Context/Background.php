@@ -124,5 +124,17 @@ class Background extends BehatContext
     {
     }
 
+    /**
+     * @Given /^we have a Twitter user with the username "([^"]*)", name "([^"]*)" and password "([^"]*)"$/
+     */
+    public function weHaveATwitterUserWithTheUsernameNameAndPassword($argument1, $argument2, $argument3)
+    {
+    }
 
+    /**
+     * @Given /^we have an Idp VO with the id "([^"]*)" and IdP "([^"]*)"$/
+     */
+    public function weHaveAnIdpVoWithTheIdAndIdp($id, $idpEntityId)
+    {
+    }
 }

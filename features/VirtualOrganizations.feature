@@ -16,15 +16,18 @@ Feature: Virtual Organizations
       And we have a Stem VO with the id "scn-devs" and stem "vo:scn-devs"
       And we have a Group VO with the id "rave-devs" and group "vo:scn-devs:rave-devs"
       And we have a Group VO with the id "eb-devs" and group "vo:scn-devs:eb-devs"
+      And we have an Idp VO with the id "test-idps" and IdP "SURFnetGuests"
       And the SP "Test SP" is implicitly coupled to the VO "testsp"
       And we have a SURFguest user with the username "test-boy", name "Boy" and password "test-boy"
       And we have a SURFguest user with the username "test-jasha", name "Jasha" and password "test-jasha"
       And we have a SURFguest user with the username "test-ivo", name "Ivo" and password "test-ivo"
+      And we have a Twitter user with the username "test-idps", name "John Doe" and password "test-idps"
       And user "test-boy" is a member of the Group "vo:scn-devs:eb-devs"
       And user "test-jasha" is a member of the Group "vo:scn-devs:rave-devs"
       And user "test-boy" is a member of the Group "nl:surfnet:management:testsp"
       But user "test-jasha" is not a member of the Group "nl:surfnet:management:testsp"
       But user "test-ivo" is not a member of any Group
+      But user "test_idps" is not a member of any Group
 
   Scenario: Boy logs in at the Test SP with an implicit VO
     When I go to the Test SP
@@ -70,4 +73,19 @@ Feature: Virtual Organizations
     When I go to the Test SP with the explicit VO "rave-devs"
      And I select from the WAYF "SURFguest"
      And I log in as "test-boy" with password "test-boy"
+    Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
+
+  Scenario: Boy logs in at the Test SP with explicit VO "test-idps"
+    When I go to the Test SP with the explicit VO "test-idps"
+     And I select from the WAYF "SURFguest"
+     And I log in as "test-boy" with password "test-boy"
+     And I pass through EngineBlock
+     Then I should be on the Test SP
+
+  Scenario: John fails to log in at the Test SP with explicit VO "test-idps"
+    When I go to the Test SP with the explicit VO "test-idps"
+     And I select from the WAYF "Invited Guests"
+     And at the Invited Guests IdP I select "Twitter"
+     And at Twitter I log in as "test_idps" with password "test-idps"
+     And I pass through the Invited Guests
     Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
