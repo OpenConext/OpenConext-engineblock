@@ -1,4 +1,4 @@
-Feature: AllowdConnections
+Feature: AllowedConnections
   In order to exclude and/ or include students from SP's
   As a Identity Provider
   I want to be able to blacklist certain SP's
