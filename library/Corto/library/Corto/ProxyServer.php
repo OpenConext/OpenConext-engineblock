@@ -488,7 +488,6 @@ class Corto_ProxyServer
     public function createEnhancedResponse($request, $sourceResponse)
     {
         $response = $this->_createBaseResponse($request);
-        $response[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIssuer'] = $sourceResponse['saml:Assertion']['saml:Issuer']['__v'];
         if (!$this->isInProcessingMode() && isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
                 $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent'] &&
                 isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIdp'])) {

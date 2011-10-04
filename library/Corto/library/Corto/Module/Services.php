@@ -272,6 +272,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
             $firstProcessingEntity = array_shift($processingEntities);
             $_SESSION['Processing'][$receivedResponse['_ID']]['RemainingEntities']   = $processingEntities;
             $_SESSION['Processing'][$receivedResponse['_ID']]['OriginalDestination'] = $receivedResponse['_Destination'];
+            $_SESSION['Processing'][$receivedResponse['_ID']]['OriginalIssuer']      = $receivedResponse['saml:Assertion']['saml:Issuer']['__v'];
             $_SESSION['Processing'][$receivedResponse['_ID']]['OriginalBinding']     = $receivedResponse['__']['ProtocolBinding'];
 
             $this->_server->setProcessingMode();
@@ -450,6 +451,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         else { // Done processing! Send off to SP
             $response['_Destination']          = $_SESSION['Processing'][$response['_ID']]['OriginalDestination'];
             $response['__']['ProtocolBinding'] = $_SESSION['Processing'][$response['_ID']]['OriginalBinding'];
+            $response['__']['OriginalIssuer'] = $_SESSION['Processing'][$response['_ID']]['OriginalIssuer'];
 
             $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
             $attributes = Corto_XmlToArray::attributes2array($responseAssertionAttributes);
