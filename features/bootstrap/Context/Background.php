@@ -144,4 +144,25 @@ class Background extends BehatContext
     public function theSpDoesNotAllowLoginsFromIdp($argument1, $argument2)
     {
     }
+
+    /**
+     * @Given /^we have a WrongCertIdP user with the username "([^"]*)", name "([^"]*)" and password "([^"]*)"$/
+     */
+    public function weHaveAWrongcertidpUserWithTheUsernameNameAndPassword($argument1, $argument2, $argument3)
+    {
+    }
+
+    /**
+     * @Given /^we have configured a "([^"]*)" SP that uses a wrong signing certificate$/
+     */
+    public function weHaveConfiguredASpThatUsesAWrongSigningCertificate($argument1)
+    {
+    }
+
+    /**
+     * @Given /^we have configured an "([^"]*)" IdP that uses a wrong signing certificate$/
+     */
+    public function weHaveConfiguredAnIdpThatUsesAWrongSigningCertificate($argument1)
+    {
+    }
 }

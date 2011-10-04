@@ -36,5 +36,6 @@ class FeatureContext extends MinkContext
         $this->useContext('testsp'      , new Context\TestSp($parameters));
         $this->useContext('portalsp'   , new Context\Portal($parameters));
         $this->useContext('metadata'    , new Context\Metadata($parameters));
+        $this->useContext('wrongcertsp', new Context\WrongCertSP($parameters));
     }
 }

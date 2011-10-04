@@ -54,6 +54,14 @@ class Login extends BehatContext
     }
 
     /**
+     * @Then /^EngineBlock directly gives me the error "([^"]*)"$/
+     */
+    public function engineblockDirectlyGivesMeTheError($errorMessage)
+    {
+        $this->getMainContext()->assertPageContainsText($errorMessage);
+    }
+
+    /**
      * @Given /^at the Invited Guests IdP I select "([^"]*)"$/
      */
     public function atTheInvitedGuestsIdpISelect($authSource)
@@ -78,5 +86,15 @@ class Login extends BehatContext
     public function iPassThroughTheInvitedGuests()
     {
         $this->getMainContext()->pressButton('Submit');
+    }
+
+    /**
+     * @Given /^I log in to WrongCertIdp as "([^"]*)" with password "([^"]*)"$/
+     */
+    public function iLogInToWrongcertidpAsWithPassword($username, $password)
+    {
+        $this->getMainContext()->fillField('username', $username);
+        $this->getMainContext()->fillField('password', $password);
+        $this->getMainContext()->pressButton('Login');
     }
 }
