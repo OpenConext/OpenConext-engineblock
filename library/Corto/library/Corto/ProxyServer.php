@@ -488,11 +488,20 @@ class Corto_ProxyServer
     public function createEnhancedResponse($request, $sourceResponse)
     {
         $response = $this->_createBaseResponse($request);
-        if (!$this->isInProcessingMode() && isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
-                $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent'] &&
-                isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIdp'])) {
-            $response['saml:Issuer']['__v'] = $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIdp'];
-            $response['saml:Assertion']['saml:Issuer']['__v'] = $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIdp'];
+
+        $inTransparentMode = isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
+                $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent'];
+
+        if (isset($sourceResponse['__']['OriginalIssuer'])) {
+            $response['__']['OriginalIssuer'] = $sourceResponse['__']['OriginalIssuer'];
+        }
+        else {
+            $response['__']['OriginalIssuer'] = $sourceResponse['saml:Issuer']['__v'];
+        }
+
+        if (!$this->isInProcessingMode() && $inTransparentMode) {
+            $response['saml:Issuer']['__v']                   = $response['__']['OriginalIssuer'];
+            $response['saml:Assertion']['saml:Issuer']['__v'] = $response['__']['OriginalIssuer'];
         }
 
         $response['samlp:Status']   = $sourceResponse['samlp:Status'];

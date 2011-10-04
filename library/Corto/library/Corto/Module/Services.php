@@ -26,7 +26,6 @@ class Corto_Module_Services extends Corto_Module_Abstract
     {
         $request = $this->_server->getBindingsModule()->receiveRequest();
         $request['__']['Transparent'] = $this->_server->getCurrentEntitySetting('TransparentProxy', false);
-        $request['__']['OriginalIdp'] = $this->_server->getCurrentEntitySetting('Idp');
 
         // The request may specify it ONLY wants a response from specific IdPs
         // or we could have it configured that the SP may only be serviced by specific IdPs
@@ -270,10 +269,10 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $processingEntities = $this->_getReceivedResponseProcessingEntities($receivedRequest, $receivedResponse);
         if (!empty($processingEntities)) {
             $firstProcessingEntity = array_shift($processingEntities);
-            $_SESSION['Processing'][$receivedResponse['_ID']]['RemainingEntities']   = $processingEntities;
-            $_SESSION['Processing'][$receivedResponse['_ID']]['OriginalDestination'] = $receivedResponse['_Destination'];
-            $_SESSION['Processing'][$receivedResponse['_ID']]['OriginalIssuer']      = $receivedResponse['saml:Assertion']['saml:Issuer']['__v'];
-            $_SESSION['Processing'][$receivedResponse['_ID']]['OriginalBinding']     = $receivedResponse['__']['ProtocolBinding'];
+            $_SESSION['Processing'][$receivedRequest['_ID']]['RemainingEntities']   = $processingEntities;
+            $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalDestination'] = $receivedResponse['_Destination'];
+            $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalIssuer']      = $receivedResponse['saml:Assertion']['saml:Issuer']['__v'];
+            $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalBinding']     = $receivedResponse['__']['ProtocolBinding'];
 
             $this->_server->setProcessingMode();
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
@@ -427,9 +426,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
     public function processedAssertionConsumerService()
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
-        $remainingProcessingEntities = &$_SESSION['Processing'][$response['_ID']]['RemainingEntities'];
-
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response['_InResponseTo']);
+
+        $remainingProcessingEntities = &$_SESSION['Processing'][$receivedRequest['_ID']]['RemainingEntities'];
 
         if (!empty($remainingProcessingEntities)) { // Moar processing!
             $nextProcessingEntity = array_shift($remainingProcessingEntities);
@@ -449,9 +448,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
             return;
         }
         else { // Done processing! Send off to SP
-            $response['_Destination']          = $_SESSION['Processing'][$response['_ID']]['OriginalDestination'];
-            $response['__']['ProtocolBinding'] = $_SESSION['Processing'][$response['_ID']]['OriginalBinding'];
-            $response['__']['OriginalIssuer'] = $_SESSION['Processing'][$response['_ID']]['OriginalIssuer'];
+            $response['_Destination']          = $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalDestination'];
+            $response['__']['ProtocolBinding'] = $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalBinding'];
+            $response['__']['OriginalIssuer']  = $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalIssuer'];
 
             $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
             $attributes = Corto_XmlToArray::attributes2array($responseAssertionAttributes);
