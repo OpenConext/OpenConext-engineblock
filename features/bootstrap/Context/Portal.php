@@ -11,9 +11,9 @@ use \Behat\Behat\Context\BehatContext;
 class Portal extends BehatContext
 {
     /**
-     * @When /^I go the Portal using "([^"]*)" as the entity ID$/
+     * @When /^I go the Portal with "([^"]*)" as the entity ID$/
      */
-    public function iGoThePortalUsingAsTheEntityId($entityId)
+    public function iGoThePortalWithAsTheEntityId($entityId)
     {
         $url = "https://portal.test.surfconext.nl/Shibboleth.sso/Login?target=" . urlencode("https://portal.test.surfconext.nl/coin/home.shtml") . "&entityID=".
                urlencode($entityId);
@@ -29,9 +29,9 @@ class Portal extends BehatContext
     }
 
     /**
-     * @Then /^Shibboleth gives me the error "([^"]*)"$/
+     * @Then /^I see the error "([^"]*)"$/
      */
-    public function shibbolethGivesMeTheError($errorMessage)
+    public function iSeeTheError($errorMessage)
     {
         $this->getMainContext()->assertPageContainsText($errorMessage);
     }

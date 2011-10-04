@@ -20,13 +20,6 @@ class Background extends BehatContext
     }
 
     /**
-     * @Given /^we are using a non existent SP with "([^"]*)" as entity ID$/
-     */
-    public function weAreUsingANonExistentSpWithAsEntityId($argument1)
-    {
-    }
-
-    /**
      * @Given /^we have a Group VO with the id "([^"]*)" and group "([^"]*)"$/
      */
     public function weHaveAGroupVoWithTheIdAndGroup($argument1, $argument2)
@@ -135,6 +128,20 @@ class Background extends BehatContext
      * @Given /^we have an Idp VO with the id "([^"]*)" and IdP "([^"]*)"$/
      */
     public function weHaveAnIdpVoWithTheIdAndIdp($id, $idpEntityId)
+    {
+    }
+
+    /**
+     * @Given /^the "([^"]*)" SP allows logins from "([^"]*)" IdP$/
+     */
+    public function theSpAllowsLoginsFromIdp($argument1, $argument2)
+    {
+    }
+
+    /**
+     * @Given /^the "([^"]*)" SP does NOT allow logins from "([^"]*)" IdP$/
+     */
+    public function theSpDoesNotAllowLoginsFromIdp($argument1, $argument2)
     {
     }
 }
