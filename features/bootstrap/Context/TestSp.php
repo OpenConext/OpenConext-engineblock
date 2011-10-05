@@ -19,13 +19,27 @@ class TestSp extends BehatContext
     }
 
     /**
-     * @When /^I go the Test SP using "([^"]*)" as the entity ID$/
+     * @Given /^I log out from the Test SP$/
      */
-    public function iGoTheTestSpUsingAsTheEntityId($entityId)
+    public function iLogOutFromTheTestSp()
     {
-        $url = "https://testsp.test.surfconext.nl/Shibboleth.sso/Login?entityID=" .
-               urlencode("$entityId");
-        $this->getMainContext()->visit($url);
+        $this->getMainContext()->visit("https://testsp.test.surfconext.nl/Shibboleth.sso/Logout");
+    }
+
+    /**
+     * @Given /^I go to the profile SP$/
+     */
+    public function iGoToTheProfileSp()
+    {
+        $this->getMainContext()->visit("https://profile.test.surfconext.nl/");
+    }
+
+    /**
+     * @Given /^I revoke my consent$/
+     */
+    public function iRevokeMyConsent()
+    {
+        $this->getMainContext()->visit("https://profile.test.surfconext.nl/");
     }
 
     /**

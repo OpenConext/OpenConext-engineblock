@@ -2,9 +2,6 @@
 
 require_once 'mink/autoload.php';
 
-require_once 'Context/Background.php';
-require_once 'Context/Login.php';
-require_once 'Context/TestSp.php';
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
@@ -36,6 +33,6 @@ class FeatureContext extends MinkContext
         $this->useContext('testsp'      , new Context\TestSp($parameters));
         $this->useContext('portalsp'   , new Context\Portal($parameters));
         $this->useContext('metadata'    , new Context\Metadata($parameters));
-        $this->useContext('wrongcertsp', new Context\WrongCertSP($parameters));
+        $this->useContext('caching'     , new Context\Caching($parameters));
     }
 }
