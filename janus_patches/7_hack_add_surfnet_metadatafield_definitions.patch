@@ -31,7 +31,7 @@ Index: modules/janus/dictionaries/metadatafields.definition.json
 +        "coin_gadgetbaseurl": {
 +            "en": "Used to lookup the OAuth parameters belonging to a gadget. Format is a regular expression matching the URL of the gadget's XML descriptor. Example: https://gadgets.store.com/.* Also used when Shindig acts as the provider in 2-legged OAuth"
 +        },
-+        "coin_oauth_secret": {
++        "coin_oauthcret": {
 +            "en": "When Shindig acts as the provider in 2- or 3-legged OAuth with keytype HMAC_SHA1, this is the secret. Not used when Shindig is the consumer."
 +        },
 +        "coin_oauth_consumer_key": {
