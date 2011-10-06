@@ -40,9 +40,7 @@ class Login extends BehatContext
      */
     public function iPassThroughEngineBlock()
     {
-        $this->getMainContext()->printLastResponse();
         $this->getMainContext()->pressButton('Submit'); // First one for EngineBlock
-        $this->getMainContext()->printLastResponse();
         $this->getMainContext()->pressButton('Submit'); // Second one for EngineBlock
     }
 

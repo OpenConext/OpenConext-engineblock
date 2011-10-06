@@ -19,7 +19,7 @@ Feature: Consent (Backlog-136)
      And I log in as "bddtest" with password "behattest"
      And I press "I Accept"
      And I pass through EngineBlock
-    Then print last response
+    Then I should be on the Test SP
 
   Scenario: User revokes consent.
     When I go to the Test SP
@@ -30,4 +30,4 @@ Feature: Consent (Backlog-136)
      And I pass through SURFguest
      And I press "I Accept"
      And I pass through EngineBlock
-    Then print last response
+     And I follow "Delete my SURFconext account!"
