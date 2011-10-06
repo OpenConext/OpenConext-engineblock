@@ -1,16 +1,13 @@
 Feature: Metadata
-  In order to build up a WAYF
+  In order to have end-users select their Identity Provider in my layout and colors
   As a Service Provider
-  I want to be able to retrieve all the IDP metadata
-  Verifying:
-    - All metadata
-    - The metadata for a specific SP excluding the allow-none IDP
+  I want to be able to retrieve all metadata for SURFconext Identity Providers
 
   Background:
     Given we are using EngineBlock on the "test" environment
       And we have a "https://testsp.test.surfconext.nl/shibboleth" SP configured
-      And we have a "Behat:test" IP configured
-      And the "Behat:test" IP is configured not to allow "https://testsp.test.surfconext.nl/shibboleth"
+      And we have a "Behat:test" IdP configured
+      And the "Behat:test" IdP is configured not to allow "https://testsp.test.surfconext.nl/shibboleth"
 
   Scenario: SP retrieves all metadata from Engineblock
     When I go to the metadata url of Engineblock
@@ -19,4 +16,4 @@ Feature: Metadata
   Scenario: SP retrieves the metadata of one SP from Engineblock
     When I go to the metadata url of Engineblock with the sp-entity-id attribute with value "https://testsp.test.surfconext.nl/shibboleth"
     Then I should not retrieve the metadata for IDP "Behat:test"
-    But I should retrieve the metadata for the SP "https://testsp.test.surfconext.nl/shibboleth"
+     But I should retrieve the metadata for the SP "https://testsp.test.surfconext.nl/shibboleth"

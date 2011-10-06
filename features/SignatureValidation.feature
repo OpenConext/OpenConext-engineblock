@@ -1,6 +1,6 @@
 Feature: Signature Validation
   In order to make sure that authentication is secure
-  as an end user
+  As an end user
   I want my messages to be signed and validated, the signature must be valid
 
   Background:
@@ -13,10 +13,10 @@ Feature: Signature Validation
 
   Scenario: Boy fails to log in at the Wrong Cert SP
     When I go to the Wrong Cert SP
-      And at the Wrong Cert SP I select "https://engine.test.surfconext.nl/authentication/idp/metadata"
+     And at the Wrong Cert SP I select "https://engine.test.surfconext.nl/authentication/idp/metadata"
     Then EngineBlock directly gives me the error "Error - An error occured.."
 
   Scenario: User Fails to log in on the Portal SP using the Wrong Cert IdP
     When I go the Portal with "https://wrongcertidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
-      And I log in to WrongCertIdp as "user" with password "password"
+     And I log in to WrongCertIdp as "user" with password "password"
     Then EngineBlock gives me the error "Error - An error occured.."

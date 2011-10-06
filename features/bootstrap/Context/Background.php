@@ -90,30 +90,30 @@ class Background extends BehatContext
     }
 
     /**
-     * @Given /^we have a "([^"]*)" IP configured$/
+     * @Given /^we have a "([^"]*)" IdP configured$/
      */
-    public function weHaveAIpConfigured($argument1)
+    public function weHaveAIdpConfigured($argument1)
     {
     }
 
     /**
-     * @Given /^the "([^"]*)" IP is configured to allow-none SPs$/
+     * @Given /^the "([^"]*)" IdP is configured to allow-none SPs$/
      */
-    public function theIpIsConfiguredToAllowNoneSps($argument1)
+    public function theIdpIsConfiguredToAllowNoneSps($argument1)
     {
     }
 
     /**
-     * @Given /^the "([^"]*)" IP is configured not to allow "([^"]*)"$/
+     * @Given /^the "([^"]*)" IdP is configured not to allow "([^"]*)"$/
      */
-    public function theIpIsConfiguredNotToAllow($argument1, $argument2)
+    public function theIdpIsConfiguredNotToAllow($argument1, $argument2)
     {
     }
 
     /**
-     * @Given /^the "([^"]*)" IP is configured to allow "([^"]*)"$/
+     * @Given /^the "([^"]*)" IdP is configured to allow "([^"]*)"$/
      */
-    public function theIpIsConfiguredToAllow($argument1, $argument2)
+    public function theIdpIsConfiguredToAllow($argument1, $argument2)
     {
     }
 
