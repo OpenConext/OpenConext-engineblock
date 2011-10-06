@@ -1,7 +1,7 @@
 Feature: Virtual Organizations
   In order to protect access to a shared Service Provider
-  As a member of a Virtual Organization
-  I want to a Service Provider to only be usable by members of my group.
+  As a member of a Virtual Organization (a collaboration group from one or more institutions)
+  I want to protect a Service Provider so that it's only be usable by members of my group.
 
   Background:
     Given we are using the SP "Test SP" on the "test" environment

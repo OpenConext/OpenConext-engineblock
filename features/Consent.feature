@@ -1,18 +1,20 @@
 Feature: Consent (Backlog-136)
-  In order to control
+  In order to offer end-users control of their personal data
+  As an end-user
+  I want to explicitly consent to the release of my data to a Service Provider
 
   Scenario: User logs into SP for the first time and has to give consent.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
      And I log in as "bddtest" with password "behattest"
-    Then I should see "Please provide consent for SURFconext TestSP | Test | SURFnet"
+    Then I should see "Please provide consent"
 
   Scenario: User logs into SP for the first time and does not give consent.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
      And I log in as "bddtest" with password "behattest"
      And I press "I Decline"
-    Then I should see "SURFconext - No consent given"
+    Then I should see "No consent given"
 
   Scenario: User logs into SP for the first time and gives consent.
     When I go to the Test SP
@@ -53,3 +55,9 @@ Feature: Consent (Backlog-136)
      And I press "I Accept"
      And I pass through EngineBlock
      And I follow "Delete my SURFconext account!"
+
+  Scenario: User logs into SP and has to give consent again.
+    When I go to the Test SP
+     And I select from the WAYF "SURFguest"
+     And I log in as "bddtest" with password "behattest"
+    Then I should see "Please provide consent"
