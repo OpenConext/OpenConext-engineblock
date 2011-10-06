@@ -6,7 +6,7 @@ Feature: Transparent Proxying
   Background:
     Given the "Portal" SP allows logins from "SURFguest" IdP
       But the "Portal" SP does NOT allow logins from "Feide OpenID" IdP
-      And we have a "SURFguest" user with the username "test-boy", name "Boy" and password "test-boy"
+      And we have a SURFguest user with the username "test-boy", name "Boy" and password "test-boy"
       And we have a "Feide OpenID" user with the username "mads", name "Mads" and password "mads"
 
   Scenario: Boy logs in at the Portal via a Transparent Proxy Request

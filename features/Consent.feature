@@ -27,4 +27,7 @@ Feature: Consent (Backlog-136)
      And I log in as "bddtest" with password "behattest"
      And I pass through EngineBlock
      And I go to the profile SP
+     And I pass through SURFguest
+     And I press "I Accept"
+     And I pass through EngineBlock
     Then print last response

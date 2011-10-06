@@ -118,6 +118,13 @@ class Background extends BehatContext
     }
 
     /**
+     * @Given /^we have a "([^"]*)" user with the username "([^"]*)", name "([^"]*)" and password "([^"]*)"$/
+     */
+    public function weHaveAUserWithTheUsernameNameAndPassword($argument1, $argument2, $argument3, $argument4)
+    {
+    }
+
+    /**
      * @Given /^we have a Twitter user with the username "([^"]*)", name "([^"]*)" and password "([^"]*)"$/
      */
     public function weHaveATwitterUserWithTheUsernameNameAndPassword($argument1, $argument2, $argument3)
