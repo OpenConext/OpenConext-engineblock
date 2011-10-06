@@ -16,5 +16,5 @@ Feature: Transparent Proxying
     Then I should be on the Portal
 
   Scenario: Mads fails to log in with the Feide OpenID Idp
-    When I go the Portal with "https://openid.feide.no" as the entity ID
+    When I go the Portal with "https://xxxx.openidp.feide.no" as the entity ID
     Then I see the error "Unknown or Unusable Identity Provider"
