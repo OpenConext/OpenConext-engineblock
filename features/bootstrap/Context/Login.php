@@ -105,4 +105,34 @@ class Login extends BehatContext
         $this->getMainContext()->fillField('password', $password);
         $this->getMainContext()->pressButton('Login');
     }
+
+    /**
+     * @Given /^I log in to PerfTestPersistentIdp as "([^"]*)" with password "([^"]*)"$/
+     */
+    public function iLogInToPerftestpersistentidpAsWithPassword($username, $password)
+    {
+        $this->iLogInToWrongcertidpAsWithPassword($username,$password);
+        $this->getMainContext()->pressButton('Submit');
+
+    }
+
+
+    /**
+     * @When /^I visit "([^"]*)"$/
+     */
+    public function iVisit($url)
+    {
+        $this->getMainContext()->visit($url);
+    }
+
+    /**
+     * @Then /^I should should be on the WAYF$/
+     */
+    public function iShouldShouldBeOnTheWayf()
+    {
+        $currentUrl = $this->getMainContext()->getSession()->getCurrentUrl();
+        preg_match("/^https:\/\/engine.test.surfconext.nl\/authentication\/idp\/single-sign-on/",$currentUrl);
+
+    }
+
 }

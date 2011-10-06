@@ -172,4 +172,34 @@ class Background extends BehatContext
     public function weHaveConfiguredAnIdpThatUsesAWrongSigningCertificate($argument1)
     {
     }
+
+    /**
+     * @Given /^the "([^"]*)" IP is configured not allow "([^"]*)"$/
+     */
+    public function theIpIsConfiguredNotAllow($argument1, $argument2)
+    {
+    }
+
+    /**
+     * @Given /^we have a "([^"]*)" IP configured$/
+     */
+    public function weHaveAIpConfigured($argument1)
+    {
+    }
+
+    /**
+     * @Given /^the "([^"]*)" IP is configured not to allow "([^"]*)"$/
+     */
+    public function theIpIsConfiguredNotToAllow($argument1, $argument2)
+    {
+    }
+
+    /**
+     * @Given /^the "([^"]*)" IP is configured to allow "([^"]*)"$/
+     */
+    public function theIpIsConfiguredToAllow($argument1, $argument2)
+    {
+    }
+
+
 }
