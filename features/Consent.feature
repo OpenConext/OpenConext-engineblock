@@ -49,15 +49,16 @@ Feature: Consent (Backlog-136)
     Then I should be on the Test SP
 
   Scenario: User revokes consent.
-    When I go to the Test SP
+    When I go to the profile SP
      And I select from the WAYF "SURFguest"
      And I log in as "bddtest" with password "behattest"
-     And I pass through EngineBlock
-     And I go to the profile SP
-     And I pass through SURFguest
      And I press "I Accept"
      And I pass through EngineBlock
      And I follow "Delete my SURFconext account!"
+
+     And I go to the Test SP
+     And I pass through SURFguest
+    Then I should see "Please provide consent"
 
   Scenario: User logs into SP and has to give consent again.
     When I go to the Test SP
