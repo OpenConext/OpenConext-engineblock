@@ -53,6 +53,16 @@ class Login extends BehatContext
     }
 
     /**
+     * @Given /^I log in at SURFguest as "([^"]*)" with password "([^"]*)"$/
+     */
+    public function iLogInAtSurfguestAsWithPassword($userName, $password)
+    {
+        $this->getMainContext()->fillField('username', $userName);
+        $this->getMainContext()->fillField('password', $password);
+        $this->getMainContext()->pressButton('Login');
+    }
+
+    /**
      * @Then /^EngineBlock gives me the error "([^"]*)"$/
      */
     public function engineblockGivesMeTheError($errorMessage)

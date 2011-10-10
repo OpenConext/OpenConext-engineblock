@@ -35,5 +35,6 @@ class FeatureContext extends MinkContext
         $this->useContext('metadata'    , new Context\Metadata($parameters));
         $this->useContext('caching'     , new Context\Caching($parameters));
         $this->useContext('wrongcertsp' , new Context\WrongCertSP($parameters));
+        $this->useContext('provisioning', new Context\Provisioning($parameters));
     }
 }
