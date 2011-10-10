@@ -35,7 +35,7 @@ Feature: Consent (Backlog-136)
     Then I should be on the Test SP
 
   Scenario: User logs into a second SP and has to give consent again
-    When I go the Portal with "SURFnetGuests" as the entity ID
+    When I go to the Portal with "SURFnetGuests" as the entity ID
      And I log in as "bddtest" with password "behattest"
      And I press "I Accept"
      And I pass through EngineBlock

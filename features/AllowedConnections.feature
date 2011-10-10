@@ -20,7 +20,7 @@ Feature: AllowedConnections
     And I should be able to select "SURFguest" from the WAYF
 
   Scenario: Performance tester logs in at the Portal SP
-    When I go the Portal with "https://perftestpersistentidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
+    When I go to the Portal with "https://perftestpersistentidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
     And I log in to PerfTestPersistentIdp as "performancetest1" with password "password"
     And I pass through EngineBlock
     And I should be on the Portal

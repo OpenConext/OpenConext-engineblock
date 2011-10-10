@@ -19,7 +19,7 @@ Feature: Single Sign On (Backlog-140)
      And I select from the WAYF "SURFguest"
      And I log in as "test-boy" with password "test-boy"
      And I pass through EngineBlock
-     And I go the Portal with "SURFnetGuests" as the entity ID
+     And I go to the Portal with "SURFnetGuests" as the entity ID
      And I press "Submit"
      And I pass through EngineBlock
     Then I should be on the Portal

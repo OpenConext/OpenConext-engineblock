@@ -10,7 +10,7 @@ Feature: Attribute Handling
       And we have a IdP that returns a transient non existing uid on each login
 
   Scenario: User fails to log in on the Portal SP using the Wrong Attr IdP
-    When I go the Portal with "https://wrongattridp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
+    When I go to the Portal with "https://wrongattridp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
     And I log in to WrongAttrIdp as "user" with password "password"
     Then EngineBlock gives me the error "Login failed because the institution's identity provider did not provide SURFconext with the following required attribute"
 

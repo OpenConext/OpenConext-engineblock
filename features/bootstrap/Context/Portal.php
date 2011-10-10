@@ -11,9 +11,9 @@ use \Behat\Behat\Context\BehatContext;
 class Portal extends BehatContext
 {
     /**
-     * @When /^I go the Portal with "([^"]*)" as the entity ID$/
+     * @When /^I go to the Portal with "([^"]*)" as the entity ID$/
      */
-    public function iGoThePortalWithAsTheEntityId($entityId)
+    public function iGoToThePortalWithAsTheEntityId($entityId)
     {
         $url = "https://portal.test.surfconext.nl/Shibboleth.sso/Login?target=" . urlencode("https://portal.test.surfconext.nl/coin/home.shtml") . "&entityID=".
                urlencode($entityId);
