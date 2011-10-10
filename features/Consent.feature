@@ -3,6 +3,9 @@ Feature: Consent (Backlog-136)
   As an end-user
   I want to explicitly consent to the release of my data to a Service Provider
 
+  Background:
+    Given we have a SURFguest user with the username "bddtest", name "Behavior" and password "behattest"
+
   Scenario: User logs into SP for the first time and has to give consent.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
@@ -61,3 +64,28 @@ Feature: Consent (Backlog-136)
      And I select from the WAYF "SURFguest"
      And I log in as "bddtest" with password "behattest"
     Then I should see "Please provide consent"
+
+  Scenario: User changes his surname and has to give consent again.
+    When I go to "https://test.surfguest.nl/user/edit"
+     And I log in at SURFguest as "bddtest" with password "behattest"
+     And I fill in "abcdef" for "last_name"
+     And I press "edit"
+     And I check for form errors
+
+     And I go to the Test SP
+     And I select from the WAYF "SURFguest"
+     And I log in as "bddtest" with password "behattest"
+    Then I should see "Please provide consent"
+
+  Scenario: User changes his surname back and still has to give consent.
+    When I go to "https://test.surfguest.nl/user/edit"
+     And I log in at SURFguest as "bddtest" with password "behattest"
+     And I fill in "Development" for "last_name"
+     And I press "edit"
+     And I check for form errors
+
+     And I go to the Test SP
+     And I select from the WAYF "SURFguest"
+     And I log in as "bddtest" with password "behattest"
+    Then I should see "Please provide consent"
+
