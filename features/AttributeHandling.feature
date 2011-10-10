@@ -15,11 +15,10 @@ Feature: Attribute Handling
     Then EngineBlock gives me the error "Login failed because the institution's identity provider did not provide SURFconext with the following required attribute"
 
   Scenario: New User logs in and is given an unique URN containing the schacHomeOrganization
-    When I visit "https://profile.test.surfconext.nl/"
+    When I go to the profile SP
     And I select from the WAYF "https://perftesttransientidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php"
     And I log in to PerfTestTransientIdp as "performancetest1" with password "password"
-    #Because each returned uid is new, we are provided with the consent screen
     And I press "I Accept"
     And I pass through EngineBlock
-#    Then I should see "urn:collab:person:perftestidppersistent.dev.surfconext.nl:"
-    Then print last response
+    Then I should see "urn:collab:person:perftestidppersistent.dev.surfconext.nl:"
+    And I follow "Delete my SURFconext account!"
