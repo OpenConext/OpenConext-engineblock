@@ -69,7 +69,7 @@ class Provisioning extends BehatContext
         $userData = current($resultData['entry']);
         $isUserFound = is_array($userData) && !array_key_exists('id', $userData);
         if(!$isUserFound) {
-            throw new \Exception('User ' . $userName . ' Could not be retrieved from LDAP');
+            throw new \Exception('User ' . $userName . ' Could not be retrieved from via Open Social Api');
         }
 
         return $userData;
