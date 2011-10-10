@@ -27,6 +27,25 @@ class Provisioning extends BehatContext
     }
 
     /**
+     * Verifies user data can not be retrieved via open social api
+     *
+     * @Then /^I should not be able to retrieve user "([^"]*)" via open social api$/
+     * @param string $userName
+     * @return void
+     * @throws \Exception if data is retrievable
+     */
+    public function iShouldNotBeAbleToRetrieveUserViaOpenSocialApi($userName)
+    {
+        try {
+            $userData = $this->_loadUserDataViaOpenSocialApi($userName);
+        } catch (\Exception $ex) {}
+
+        if(!empty($userData)) {
+            throw new \Exception('User data is (still) retrievable');
+        }
+    }
+
+    /**
      * Checks a given attribute against the value loaded via open social api
      *
      * @Then /^the open social attribute "([^"]*)" of user "([^"]*)" should be "([^"]*)"$/
