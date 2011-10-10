@@ -201,5 +201,26 @@ class Background extends BehatContext
     {
     }
 
+    /**
+     * @Given /^we have configured an "([^"]*)" IdP that does not provide the schacHomeOrganization$/
+     */
+    public function weHaveConfiguredAnIdpThatDoesNotProvideTheSchachomeorganization($argument1)
+    {
+    }
+
+    /**
+     * @Given /^we have a WrongAttrIdP user with the username "([^"]*)", name "([^"]*)" and password "([^"]*)"$/
+     */
+    public function weHaveAWrongattridpUserWithTheUsernameNameAndPassword($argument1, $argument2, $argument3)
+    {
+    }
+
+    /**
+     * @Given /^we have a IdP that returns a transient non existing uid on each login$/
+     */
+    public function weHaveAIdpThatReturnsATransientNonExistingUidOnEachLogin()
+    {
+    }
+
 
 }

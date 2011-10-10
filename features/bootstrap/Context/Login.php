@@ -117,6 +117,14 @@ class Login extends BehatContext
     }
 
     /**
+     * @Given /^I log in to WrongAttrIdp as "([^"]*)" with password "([^"]*)"$/
+     */
+    public function iLogInToWrongattridpAsWithPassword($username, $password)
+    {
+        $this->iLogInToWrongcertidpAsWithPassword($username,$password);
+    }
+
+    /**
      * @Given /^I log in to PerfTestPersistentIdp as "([^"]*)" with password "([^"]*)"$/
      */
     public function iLogInToPerftestpersistentidpAsWithPassword($username, $password)
@@ -125,6 +133,15 @@ class Login extends BehatContext
         $this->getMainContext()->pressButton('Submit');
 
     }
+
+    /**
+     * @Given /^I log in to PerfTestTransientIdp as "([^"]*)" with password "([^"]*)"$/
+     */
+    public function iLogInToPerftesttransientidpAsWithPassword($username, $password)
+    {
+        $this->iLogInToPerftestpersistentidpAsWithPassword($username, $password);
+    }
+
 
 
     /**
