@@ -85,12 +85,7 @@ Apply the JANUS patches
 
 ### Configure HTTP server ###
 
-Install 2 HTTPS virtual hosts, one that points to
-Make sure the ENGINEBLOCK_ENV is set.
-
 **EXAMPLE**
-
-    SetEnv ENGINEBLOCK_ENV !!ENV!!
 
 Make sure you have the following alias (or it's functional equivalent):
 
