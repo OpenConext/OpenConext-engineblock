@@ -67,7 +67,7 @@ class Provisioning extends BehatContext
         $userDataJson = $this->getMainContext()->getSession()->getPage()->getContent();
         $resultData = json_decode($userDataJson, true);
         $userData = current($resultData['entry']);
-        $isUserFound = is_array($userData) && !array_key_exists('id', $userData);
+        $isUserFound = is_array($userData) && array_key_exists('id', $userData);
         if(!$isUserFound) {
             throw new \Exception('User ' . $userName . ' Could not be retrieved from via Open Social Api');
         }
