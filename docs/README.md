@@ -52,7 +52,7 @@ So a normal setup would be something like this:
     | development   |   | staging    |  | production |
     | testing       |   |            |  |            |
 
-In this scenario, Server 2 would have an */etc/surfconext/application.ini* that starts with:
+In this scenario, Server 2 would have an */etc/surfconext/engineblock.ini* that starts with:
 
     [staging : base]
 
