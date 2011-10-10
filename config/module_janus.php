@@ -366,7 +366,7 @@ $config = array(
             'select_values' => array("technical", "support", "administrative", "billing", "other"),
             'default_allow' => true,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:givenName' => array(
             'type' => 'text',
@@ -374,7 +374,7 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:surName' => array(
             'type' => 'text',
@@ -382,7 +382,7 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:emailAddress' => array(
             'type' => 'text',
@@ -392,7 +392,7 @@ $config = array(
             'required' => true,
             'validate' => 'isemail',
             'validate_error' => 'The value must be a valid email address',
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:telephoneNumber' => array(
             'type' => 'text',
@@ -400,14 +400,14 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:company' => array(
             'type' => 'text',
             'order' => 450,
             'default' => '',
             'default_allow' => false,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         
         // Organization fields
@@ -774,7 +774,7 @@ $config = array(
             'select_values' => array("technical", "support", "administrative", "billing", "other"),
             'default_allow' => true,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:givenName' => array(
             'type' => 'text',
@@ -782,7 +782,7 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:surName' => array(
             'type' => 'text',
@@ -790,7 +790,7 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:emailAddress' => array(
             'type' => 'text',
@@ -800,7 +800,7 @@ $config = array(
             'validate' => 'isemail',
             'validate_error' => 'The value must be a valid email address',
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:telephoneNumber' => array(
             'type' => 'text',
@@ -808,14 +808,14 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'required' => true,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
         'contacts:#:company' => array(
             'type' => 'text',
             'order' => 450,
             'default' => '',
             'default_allow' => false,
-            'supported' => array(0)
+            'supported' => array(0,1,2)
         ),
 
         // User Contact Point fields
