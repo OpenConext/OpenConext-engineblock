@@ -66,15 +66,14 @@ janus execute the following command from the directory you checked out the servi
 
     touch modules/janus/enable
 
-### Run install script ###
+### Run install scripts ###
 
 Install the database schema for JANUS
 
-    mysql -h HOST -u USER -pPASSWORD serviceregistry < database/install.sql
-    mysql -h HOST -u USER -pPASSWORD serviceregistry < database/initial.sql
-    mysql -h HOST -u USER -pPASSWORD serviceregistry < database/patch*.sql
+    cd bin/
+    ./migrate
 
-Note that the initial.sql adds the 'admin' user AND an 'engine' user with the secret 'engineblock'.
+Note that the initial installation adds the 'admin' user AND an 'engine' user with the secret 'engineblock'.
 It is recommended that you change the password of the 'engine' user for production setups with the following SQL statement:
 
     UPDATE `janus`.`janus__user` SET `secret` = 'MYSECRET' WHERE `janus__user`.`userid` ='engine';
