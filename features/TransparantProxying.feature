@@ -11,7 +11,7 @@ Feature: Transparent Proxying
 
   Scenario: Boy logs in at the Portal via a Transparent Proxy Request
     When I go to the Portal with "SURFnetGuests" as the entity ID
-     And I log in as "test-boy" with password "test-boy"
+     And I log in at Surfguest IP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
     Then I should be on the Portal
 

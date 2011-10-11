@@ -9,20 +9,20 @@ Feature: Consent (Backlog-136)
   Scenario: User logs into SP for the first time and has to give consent.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
     Then I should see "Please provide consent"
 
   Scenario: User logs into SP for the first time and does not give consent.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
      And I press "I Decline"
     Then I should see "No consent given"
 
   Scenario: User logs into SP for the first time and gives consent.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
      And I press "I Accept"
      And I pass through EngineBlock
     Then I should be on the Test SP
@@ -30,13 +30,13 @@ Feature: Consent (Backlog-136)
   Scenario: User logs into SP for the second time and does not have to give consent
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
      And I pass through EngineBlock
     Then I should be on the Test SP
 
   Scenario: User logs into a second SP and has to give consent again
     When I go to the Portal with "SURFnetGuests" as the entity ID
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
      And I press "I Accept"
      And I pass through EngineBlock
     Then I should be on the Portal
@@ -44,14 +44,14 @@ Feature: Consent (Backlog-136)
   Scenario: User goes back to first SP and still doesn't have to give consent
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
      And I pass through EngineBlock
     Then I should be on the Test SP
 
   Scenario: User revokes consent.
     When I go to the profile SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
      And I press "I Accept"
      And I pass through EngineBlock
      And I follow "Delete my SURFconext account!"
@@ -63,7 +63,7 @@ Feature: Consent (Backlog-136)
   Scenario: User logs into SP and has to give consent again.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
     Then I should see "Please provide consent"
 
   Scenario: User changes his surname and has to give consent again.
@@ -75,7 +75,7 @@ Feature: Consent (Backlog-136)
 
      And I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
     Then I should see "Please provide consent"
 
   Scenario: User changes his surname back and still has to give consent.
@@ -87,6 +87,6 @@ Feature: Consent (Backlog-136)
 
      And I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in as "bddtest" with password "behattest"
+     And I log in at Surfguest IP as "bddtest" with password "behattest"
     Then I should see "Please provide consent"
 

@@ -25,14 +25,19 @@ class Login extends BehatContext
     }
 
     /**
-     * @Given /^I log in as "([^"]*)" with password "([^"]*)"$/
+     * Custom method to log in at Surf guest Identity Provider
+     *
+     * @Given /^I log in at Surfguest IP as "([^"]*)" with password "([^"]*)"$/
+     * @param string $userName
+     * @param string $password
+     * @return void
      */
-    public function iLogInAsWithPassword($userName, $password)
+    public function iLogAtSurfGuestIPAsWithPassword($userName, $password)
     {
         $this->getMainContext()->fillField('username', $userName);
         $this->getMainContext()->fillField('password', $password);
         $this->getMainContext()->pressButton('   Login   ');
-        $this->getMainContext()->pressButton('Submit'); // Once for SURFguest
+        $this->getMainContext()->pressButton('Submit'); // POST SAML to engineblock
     }
 
     /**
