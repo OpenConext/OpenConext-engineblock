@@ -10,11 +10,11 @@ Feature: Transparent Proxying
       And we have a "Feide OpenID" user with the username "mads", name "Mads" and password "mads"
 
   Scenario: Boy logs in at the Portal via a Transparent Proxy Request
-    When I go the Portal with "SURFnetGuests" as the entity ID
+    When I go to the Portal with "SURFnetGuests" as the entity ID
      And I log in as "test-boy" with password "test-boy"
      And I pass through EngineBlock
     Then I should be on the Portal
 
   Scenario: Mads fails to log in with the Feide OpenID Idp
-    When I go the Portal with "https://xxxx.openidp.feide.no" as the entity ID
+    When I go to the Portal with "https://xxxx.openidp.feide.no" as the entity ID
     Then I see the error "Unknown or Unusable Identity Provider"
