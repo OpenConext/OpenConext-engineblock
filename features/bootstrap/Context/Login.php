@@ -74,7 +74,12 @@ class Login extends BehatContext
     }
 
     /**
-     * @Given /^I log in at SURFguest as "([^"]*)" with password "([^"]*)"$/
+     * Login at Surfguest
+     *
+     * @Given /^I log in at Surfguest as "([^"]*)" with password "([^"]*)"$/
+     * @param string $userName
+     * @param string $password
+     * @return void
      */
     public function iLogInAtSurfguestAsWithPassword($userName, $password)
     {

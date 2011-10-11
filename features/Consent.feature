@@ -68,7 +68,7 @@ Feature: Consent (Backlog-136)
 
   Scenario: User changes his surname and has to give consent again.
     When I go to "https://test.surfguest.nl/user/edit"
-     And I log in at SURFguest as "bddtest" with password "behattest"
+     And I log in at Surfguest as "bddtest" with password "behattest"
      And I fill in "abcdef" for "last_name"
      And I press "edit"
      And I check for form errors
@@ -80,7 +80,7 @@ Feature: Consent (Backlog-136)
 
   Scenario: User changes his surname back and still has to give consent.
     When I go to "https://test.surfguest.nl/user/edit"
-     And I log in at SURFguest as "bddtest" with password "behattest"
+     And I log in at Surfguest as "bddtest" with password "behattest"
      And I fill in "Development" for "last_name"
      And I press "edit"
      And I check for form errors

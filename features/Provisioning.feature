@@ -17,7 +17,7 @@ Feature: Provisioning
 
     Scenario: Lucas changes his lastname to a dummy value, logs in again and the updated data is available
       When I go to "https://test.surfguest.nl/user/edit"
-       And I log in at SURFguest as "lucas-test2" with password "_welkom!"
+       And I log in at Surfguest as "lucas-test2" with password "_welkom!"
        And I fill in "abcdef" for "last_name"
        And I press "edit"
        And I check for form errors
@@ -32,7 +32,7 @@ Feature: Provisioning
 
     Scenario: Lucas changes his lastname back to his real lastname, logs in and his updated data is available
       When I go to "https://test.surfguest.nl/user/edit"
-       And I log in at SURFguest as "lucas-test2" with password "_welkom!"
+       And I log in at Surfguest as "lucas-test2" with password "_welkom!"
        And I fill in "van Lierop" for "last_name"
        And I press "edit"
        And I check for form errors
