@@ -11,7 +11,7 @@ use \Behat\Behat\Context\BehatContext;
 class Provisioning extends BehatContext
 {
     // @todo [improve] Get url/domain values from config?
-    const TEST_SP_URL = 'https://engine-internal.test.surfconext.nl/social/people/urn:collab:person:';
+    const TEST_OPEN_SOCIAL_API_URL = 'https://engine-internal.test.surfconext.nl/social/people/urn:collab:person:';
     const TEST_IDP_DOMAIN = 'test.surfguest.nl';
 
     /**
@@ -81,10 +81,10 @@ class Provisioning extends BehatContext
      */
     protected function _loadUserDataViaOpenSocialApi($userName)
     {
-        $url = self::TEST_SP_URL . self::TEST_IDP_DOMAIN . ':' . $userName . '?fields=all';
+        $url = self::TEST_OPEN_SOCIAL_API_URL . self::TEST_IDP_DOMAIN . ':' . $userName . '?fields=all';
         $this->getMainContext()->getSession()->visit($url);
 
-        $userDataJson = $this->getMainContext()->getSession()->getPage()->getContent(); 
+        $userDataJson = $this->getMainContext()->getSession()->getPage()->getContent();
         $statusCode =  $this->getMainContext()->getSession()->getStatusCode();
         if(200 != $statusCode) {
             throw new \Exception('Connection to Open Social API was denied');
