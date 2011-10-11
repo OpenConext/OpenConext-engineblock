@@ -11,13 +11,13 @@ Feature: Attribute Handling
 
   Scenario: User fails to log in on the Portal SP using the Wrong Attr IdP
     When I go to the Portal with "https://wrongattridp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
-    And I log in to WrongAttrIdp as "user" with password "password"
-    Then EngineBlock gives me the error "Login failed because the institution's identity provider did not provide SURFconext with the following required attribute"
+    And I log in at IP as "user" with password "password"
+    Then EngineBlock directly gives me the error "Login failed because the institution's identity provider did not provide SURFconext with the following required attribute"
 
   Scenario: New User logs in and is given an unique URN containing the schacHomeOrganization
     When I go to the profile SP
     And I select from the WAYF "https://perftesttransientidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php"
-    And I log in to PerfTestTransientIdp as "performancetest1" with password "password"
+    And I log in at IP as "performancetest1" with password "password"
     And I press "I Accept"
     And I pass through EngineBlock
     Then I should see "urn:collab:person:perftestidppersistent.dev.surfconext.nl:"

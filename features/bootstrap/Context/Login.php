@@ -25,6 +25,22 @@ class Login extends BehatContext
     }
 
     /**
+     * Generic method to login at an Identity Provider
+     *
+     * @Given /^I log in at IP as "([^"]*)" with password "([^"]*)"$/
+     * @param string $userName
+     * @param string $password
+     * @return void
+     */
+    public function iLogInAtIPAsWithPassword($userName, $password)
+    {
+        $this->getMainContext()->fillField('username', $userName);
+        $this->getMainContext()->fillField('password', $password);
+        $this->getMainContext()->pressButton('Login');
+        $this->getMainContext()->pressButton('Submit'); // POST SAML to engineblock
+    }
+
+    /**
      * Custom method to log in at Surf guest Identity Provider
      *
      * @Given /^I log in at Surfguest IP as "([^"]*)" with password "([^"]*)"$/
@@ -110,44 +126,6 @@ class Login extends BehatContext
     {
         $this->getMainContext()->pressButton('Submit');
     }
-
-    /**
-     * @Given /^I log in to WrongCertIdp as "([^"]*)" with password "([^"]*)"$/
-     */
-    public function iLogInToWrongcertidpAsWithPassword($username, $password)
-    {
-        $this->getMainContext()->fillField('username', $username);
-        $this->getMainContext()->fillField('password', $password);
-        $this->getMainContext()->pressButton('Login');
-    }
-
-    /**
-     * @Given /^I log in to WrongAttrIdp as "([^"]*)" with password "([^"]*)"$/
-     */
-    public function iLogInToWrongattridpAsWithPassword($username, $password)
-    {
-        $this->iLogInToWrongcertidpAsWithPassword($username,$password);
-    }
-
-    /**
-     * @Given /^I log in to PerfTestPersistentIdp as "([^"]*)" with password "([^"]*)"$/
-     */
-    public function iLogInToPerftestpersistentidpAsWithPassword($username, $password)
-    {
-        $this->iLogInToWrongcertidpAsWithPassword($username,$password);
-        $this->getMainContext()->pressButton('Submit');
-
-    }
-
-    /**
-     * @Given /^I log in to PerfTestTransientIdp as "([^"]*)" with password "([^"]*)"$/
-     */
-    public function iLogInToPerftesttransientidpAsWithPassword($username, $password)
-    {
-        $this->iLogInToPerftestpersistentidpAsWithPassword($username, $password);
-    }
-
-
 
     /**
      * @When /^I visit "([^"]*)"$/
