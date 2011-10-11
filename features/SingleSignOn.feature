@@ -1,9 +1,9 @@
 Feature: Single Sign On (Backlog-140)
-  In order to enable Single Sign On
+  In order to benefit from Single Sign On
   As an end-user
-  I only want to log in once to multiple SPs
+  I only want to log in once to use multiple SPs
 
-  Scenario: BDD Test user logs out from test SP and revisits the SP immediately afterwards.
+  Scenario: Boy logs out from test SP and revisits the SP immediately afterwards.
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
      And I log in at Surfguest IP as "test-boy" with password "test-boy"
