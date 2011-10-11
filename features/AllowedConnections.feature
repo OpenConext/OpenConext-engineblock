@@ -18,6 +18,10 @@ Feature: AllowedConnections
     When I go to the Test SP
     Then I should not be able to select "Behat:test" from the WAYF
     And I should be able to select "SURFguest" from the WAYF
+    And I select from the WAYF "SURFguest"
+    And I log in at Surfguest IP as "test-jasha" with password "test-jasha"
+    And I pass through EngineBlock
+    Then I should be on the Test SP
 
   Scenario: Performance tester logs in at the Portal SP
     When I go to the Portal with "https://perftestpersistentidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
