@@ -61,8 +61,8 @@ class Login extends BehatContext
      */
     public function iPassThroughEngineBlock()
     {
-        $this->getMainContext()->pressButton('Submit'); // First one for EngineBlock
-        $this->getMainContext()->pressButton('Submit'); // Second one for EngineBlock
+        $this->getMainContext()->pressButton('Submit'); // POST SAML to engineblock itself
+        $this->getMainContext()->pressButton('Submit'); // POST SAML back to Service Provider
     }
 
     /**
