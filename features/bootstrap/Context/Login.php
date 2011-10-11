@@ -50,9 +50,9 @@ class Login extends BehatContext
     }
 
     /**
-     * @Given /^I pass through SURFguest$/
+     * @Given /^I pass through Surfguest IP$/
      */
-    public function iPassThroughSURFguest()
+    public function iPassThroughSurfguestIP()
     {
         $this->getMainContext()->pressButton('Submit'); // Already logged into SURFguest, press submit to post SAML Response
     }

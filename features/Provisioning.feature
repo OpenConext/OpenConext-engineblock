@@ -51,7 +51,7 @@ Feature: Provisioning
        And I log in at Surfguest IP as "lucas-test2" with password "_welkom!"
        And I pass through EngineBlock
        And I go to the profile SP
-       And I pass through SURFguest
+       And I pass through Surfguest IP
        And I press "I Accept"
        And I pass through EngineBlock
        And I follow "Delete my SURFconext account!"

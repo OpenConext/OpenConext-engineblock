@@ -10,7 +10,7 @@ Feature: Single Sign On (Backlog-140)
      And I pass through EngineBlock
      And I log out from the Test SP
      And I go to the Test SP
-     And I press "Submit"
+     And I pass through Surfguest IP
      And I pass through EngineBlock
     Then I should be on the Test SP
 
@@ -20,6 +20,6 @@ Feature: Single Sign On (Backlog-140)
      And I log in at Surfguest IP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
      And I go to the Portal with "SURFnetGuests" as the entity ID
-     And I press "Submit"
+     And I pass through Surfguest IP
      And I pass through EngineBlock
     Then I should be on the Portal

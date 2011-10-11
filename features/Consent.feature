@@ -57,7 +57,7 @@ Feature: Consent (Backlog-136)
      And I follow "Delete my SURFconext account!"
 
      And I go to the Test SP
-     And I pass through SURFguest
+     And I pass through Surfguest IP
     Then I should see "Please provide consent"
 
   Scenario: User logs into SP and has to give consent again.
