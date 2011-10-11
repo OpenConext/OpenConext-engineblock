@@ -77,13 +77,19 @@ class Provisioning extends BehatContext
      * @throws Exception in case user cannot be retrieved
      * @todo [move] make this a generic and public available method so it can be used
      * for testing deprovisioning also
+     * @todo create a separate Curl method for loading data url's and checking status code
      */
     protected function _loadUserDataViaOpenSocialApi($userName)
     {
         $url = self::TEST_SP_URL . self::TEST_IDP_DOMAIN . ':' . $userName . '?fields=all';
         $this->getMainContext()->getSession()->visit($url);
 
-        $userDataJson = $this->getMainContext()->getSession()->getPage()->getContent();
+        $userDataJson = $this->getMainContext()->getSession()->getPage()->getContent(); 
+        $statusCode =  $this->getMainContext()->getSession()->getStatusCode();
+        if(200 != $statusCode) {
+            throw new \Exception('Connection to Open Social API was denied');
+        }
+
         $resultData = json_decode($userDataJson, true);
         $userData = current($resultData['entry']);
         $isUserFound = is_array($userData) && array_key_exists('id', $userData);
