@@ -76,6 +76,8 @@ class Provisioning extends BehatContext
         $this->getMainContext()->getSession()->visit($url);
 
         $userDataJson = $this->getMainContext()->getSession()->getPage()->getContent();
+        $statusCode =  $this->getMainContext()->getSession()->getStatusCode();
+        assertEquals($statusCode, 200, 'Connecting to Open Social API failed with status ' . $statusCode);
 
         $resultData = json_decode($userDataJson, true);
         $userData = current($resultData['entry']);
