@@ -29,10 +29,10 @@ Feature: Virtual Organizations
      And I pass through EngineBlock
     Then I should be on the Test SP
 
-  Scenario: Jasha fails to log in at the Test SP with an implicit VO
+  Scenario: Ivo fails to log in at the Test SP with an implicit VO
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
-     And I log in at Surfguest IP as "test-jasha" with password "test-jasha"
+     And I log in at Surfguest IP as "test-ivo" with password "test-ivo"
     Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
 
   Scenario: Ivo fails to log in at the Test Sp with explicit VO "scn-devs"
