@@ -1,6 +1,10 @@
 <?php
 namespace EngineBlock\Behat\Context;
 
+require_once 'mink/autoload.php';
+require_once 'PHPUnit/Autoload.php';
+require_once 'PHPUnit/Framework/Assert/Functions.php';
+
 use \Behat\Behat\Context\BehatContext;
 
 /**
@@ -10,7 +14,6 @@ use \Behat\Behat\Context\BehatContext;
  */
 class Provisioning extends BehatContext
 {
-    // @todo [improve] Get url/domain values from config?
     const TEST_OPEN_SOCIAL_API_URL = 'https://engine-internal.test.surfconext.nl/social/people/urn:collab:person:';
     const TEST_IDP_DOMAIN = 'test.surfguest.nl';
 
@@ -36,13 +39,8 @@ class Provisioning extends BehatContext
      */
     public function iShouldNotBeAbleToRetrieveUserViaOpenSocialApi($userName)
     {
-        try {
-            $userData = $this->_loadUserDataViaOpenSocialApi($userName);
-        } catch (\Exception $ex) {}
-
-        if(!empty($userData)) {
-            throw new \Exception('User data is (still) retrievable');
-        }
+        $userData = $this->_loadUserDataViaOpenSocialApi($userName);
+        assertEmpty($userData);
     }
 
     /**
@@ -60,13 +58,8 @@ class Provisioning extends BehatContext
 
         $loadedValue = self::getNestedValue($userData, $attribute);
 
-        if(null === $loadedValue) {
-            throw new \Exception('Attribute ' . $attribute . ' Does not exist');
-        }
-
-        if($value != $loadedValue) {
-            throw new \Exception('Attribute ' . $attribute . ' is not: "' . $value . '" but: "' . $loadedValue . '"');
-        }
+        assertNotNull($userData);
+        assertNotNull($loadedValue);
     }
 
     /**
@@ -75,9 +68,7 @@ class Provisioning extends BehatContext
      * @param string $userName
      * @return array $userData
      * @throws Exception in case user cannot be retrieved
-     * @todo [move] make this a generic and public available method so it can be used
      * for testing deprovisioning also
-     * @todo create a separate Curl method for loading data url's and checking status code
      */
     protected function _loadUserDataViaOpenSocialApi($userName)
     {
@@ -85,17 +76,11 @@ class Provisioning extends BehatContext
         $this->getMainContext()->getSession()->visit($url);
 
         $userDataJson = $this->getMainContext()->getSession()->getPage()->getContent();
-        $statusCode =  $this->getMainContext()->getSession()->getStatusCode();
-        if(200 != $statusCode) {
-            throw new \Exception('Connection to Open Social API was denied');
-        }
 
         $resultData = json_decode($userDataJson, true);
         $userData = current($resultData['entry']);
         $isUserFound = is_array($userData) && array_key_exists('id', $userData);
-        if(!$isUserFound) {
-            throw new \Exception('User ' . $userName . ' Could not be retrieved from via Open Social Api');
-        }
+        assertNotNull($isUserFound,'User ' . $userName . ' Could not be retrieved from via Open Social Api');
 
         return $userData;
     }
@@ -107,7 +92,6 @@ class Provisioning extends BehatContext
      * @param   string   $path       location split by separator
      * @param   string   $separator  separator used (defaults to dot)
      * @return  mixed    $haystack   (reduced)
-     * @todo [move] this to util class
      */
     public static function getNestedValue(array $haystack, $path, $separator = '.')
     {
@@ -128,7 +112,6 @@ class Provisioning extends BehatContext
      * Checks if form errors occured
      *
      * @Given /^I check for form errors$/
-     * @todo make name more specific?
      * @return void
      * @throws Exception if error occurs
      */

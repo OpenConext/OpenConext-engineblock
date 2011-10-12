@@ -1,45 +1,24 @@
 <?php
-/**
- * SURFconext EngineBlock
- *
- * LICENSE
- *
- * Copyright 2011 SURFnet bv, The Netherlands
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- *
- * @category  SURFconext EngineBlock
- * @package
- * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- */
 
-/**
- * Define application environment
- */
-defined('ENGINEBLOCK_ENV')
-    || define('ENGINEBLOCK_ENV',
-              (getenv('ENGINEBLOCK_ENV') ? getenv('ENGINEBLOCK_ENV')
-                                         : 'production'));
-
+ini_set('display_errors', true);
 require '../../library/EngineBlock/ApplicationSingleton.php';
+EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
 
-$application = EngineBlock_ApplicationSingleton::getInstance();
-$application->bootstrap(ENGINEBLOCK_ENV);
+//$application = EngineBlock_ApplicationSingleton::getInstance();
+//$application->bootstrap();
+//$config = $application->getConfiguration();
+//$grouperClient = Grouper_Client_Rest::createFromConfig($config);
+//echo $grouperClient;
 
-$dispatcher = new EngineBlock_Dispatcher();
-$dispatcher->setRouters(array(
-    new EngineBlock_Router_Default(),
-));
-$dispatcher->dispatch($_GET['uri']);
 
-$application->getHttpResponse()->send();
+$userId = 'urn:collab:person:test.surfguest.nl:oharsta';
+//echo sha1($userId);
+//echo date("Y-m-d H:i:s", strtotime("1 week")), "</br>";
+$deprovisionConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->cron->deprovision;
+$deprovisionTime = strtotime('-' . $deprovisionConfig->idleTime);
+$firstWarningTime = strtotime($deprovisionConfig->firstWarningTime, $deprovisionTime);
+$secondWarningTime = strtotime($deprovisionConfig->secondWarningTime, $deprovisionTime);
+echo 'deprovision: ' . date("Y-m-d H:i:s", $deprovisionTime), "</br>";
+echo 'second-warning: ' . date("Y-m-d H:i:s", $secondWarningTime ), "</br>";
+echo 'first-warning: ' . date("Y-m-d H:i:s", $firstWarningTime), "</br>";
+
