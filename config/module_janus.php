@@ -58,13 +58,13 @@ $config = array(
     'enable.shib13-idp' =>  false,
 
     /*
-     * Janus supports a blacklist (mark idps that are not allowed to connect to an sp) 
-     * and/or a whitelist (mark idps that are allowed to connect to an sp). 
+     * Janus supports a blacklist (mark idps that are not allowed to connect to an sp)
+     * and/or a whitelist (mark idps that are allowed to connect to an sp).
      * You can enable both to make this choice per entity.
      */
     'entity.useblacklist' => true,
     'entity.usewhitelist' => true,
-    
+
     /*
      * Enable self user creation
      */
@@ -84,42 +84,6 @@ $config = array(
                 'en' => 'All test should be performed in this state',
                 'da' => 'I denne tilstand skal al test foretages',
                 'es' => 'Desc 1 es',
-            ),
-        ),
-        'QApending' => array(
-            'name' => array(
-                'en' => 'Pending QA',
-                'da' => 'Afventer QA',
-                'es' => 'QApending - es',
-            ),
-            'description' => array(
-                'en' => 'Move the connection to QA. The operations team will check that all coonditions for entering QA is meet.',
-                'da' => 'Flyt forbindelsen til QA. Driften vil kontrollerer at forbindelsen overholder alle betingelser før forbindelsen flyttes til QA',
-                'es' => 'Desc 2 es',
-            ),
-        ),
-        'QAaccepted' => array(
-            'name' => array(
-                'en' => 'QA',
-                'da' => 'QA',
-                'es' => 'QAaccepted - es',
-            ),
-            'description' => array(
-                'en' => 'The connection is on the QA system.',
-                'da' => 'Forbindelsen er på QA systemet.',
-                'es' => 'Desc 3 es',
-            ),
-        ),
-        'prodpending' => array(
-            'name' => array(
-                'en' => 'Pending Production',
-                'da' => 'Afventer Produktion',
-                'es' => 'prodpending - es',
-            ),
-            'description' => array(
-                'en' => 'Move the connection to Production. The operations team will check that all coonditions for entering Production is meet.',
-                'da' => 'Flyt forbindelsen til Produktion. Driften vil kontrollerer at forbindelsen overholder alle betingelser før forbindelsen flyttes til Produktion',
-                'es' => 'Desc 4 es',
             ),
         ),
         'prodaccepted' => array(
@@ -235,8 +199,8 @@ $config = array(
             'default_allow' => true,
             'required' => true,
         ),
-        
-        // Certificate fields 
+
+        // Certificate fields
         'certData' => array(
             'type' => 'text',
             'order' => 210,
@@ -310,7 +274,7 @@ $config = array(
             'filetype' => '*.jpg', // *.jpg; *.gif; *.*
             'maxsize' => '100', // Valid units are B, KB, MB, and GB. The default unit is KB.
         ),
-        
+
         // MDUI stuff
         'logo:#:url'  => array(
             'type' => 'text',
@@ -357,7 +321,7 @@ $config = array(
             'required' => true,
             'supported'=>array('en','nl'),
         ),
-        
+
         // Contact person fields
         'contacts:#:contactType' => array(
             'type' => 'select',
@@ -409,7 +373,7 @@ $config = array(
             'default_allow' => false,
             'supported' => array(0,1,2)
         ),
-        
+
         // Organization fields
         'OrganizationName:#' => array(
             'type' => 'text',
@@ -434,7 +398,7 @@ $config = array(
             'validate' => 'isurl',
             'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
-        
+
         // Control fields
         'redirect.sign' => array(
             'type' => 'boolean',
@@ -619,7 +583,7 @@ $config = array(
             'default_allow' => false,
             'required' => false,
 
-        ),  
+        ),
         'coin:oauth:app_thumbnail' => array(
             'type' => 'text',
             'order' => 197,
@@ -862,7 +826,7 @@ $config = array(
             'validate' => 'isurl',
             'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
-        
+
         // Control fields
         'redirect.sign' => array(
             'type' => 'boolean',
@@ -963,7 +927,7 @@ $config = array(
                 'username' => 'jach',
                 'password' => 'xxx',
             ),
-        ),   
+        ),
     ),
 
     'export.entitiesDescriptorName' => 'Federation',
@@ -1306,8 +1270,8 @@ $config = array(
             'QApending' => array(
                 'role' => array(
                     'operations',
-                    'secretariat',               
-                ),                     
+                    'secretariat',
+                ),
             ),
         ),
     ),
