@@ -1,0 +1,14 @@
+#Create the user (note the password must equals the engineblock.ldap.userName in manage.ini)
+DN: cn=VERS Account,dc=surfconext,dc=nl
+changetype: add
+objectClass: pilotPerson
+cn: VERS Account
+sn: VERS
+description: VERS Account
+userPassword: {SHA}xxxxxxx
+
+#Change the query limit for the user
+dn: olcDatabase={1}bdb,cn=config
+changetype: modify
+add: olcLimits
+olcLimits: {0}dn.exact="cn=VERS Account,dc=surfconext,dc=nl" size=unlimited
