@@ -954,18 +954,12 @@ $config = array(
             'testaccepted' => array(
                 'role' => array(
                     'all',
-                ),
-            ),
-            'QAaccepted' => array(
-                'role' => array(
-                    'secretariat',
-                    'operations',
+                    'admin',
                 ),
             ),
             'prodaccepted' => array(
                 'role' => array(
-                    'secretariat',
-                    'operations',
+                    'all',
                 ),
             ),
         ),
@@ -976,12 +970,6 @@ $config = array(
             'testaccepted' => array(
                 'role' => array(
                     'all',
-                ),
-            ),
-            'QAaccepted' => array(
-                'role' => array(
-                    'technical',
-                    'secretariat',
                 ),
             ),
         ),
@@ -1084,11 +1072,6 @@ $config = array(
                     'all',
                 ),
             ),
-            'QAaccepted' => array(
-                'role' => array(
-                    'technical',
-                ),
-            ),
         ),
 
         /*
@@ -1188,57 +1171,10 @@ $config = array(
     ),
 
     'workflow_states' => array(
-
         'testaccepted' => array(
-            'QApending' => array(
-                'role' => array(
-                    'technical',
-                    'secretariat',
-                ),
-            ),
-        ),
-
-        'QApending' => array(
-            'QAaccepted' => array(
-                'role' => array(
-                    'secretariat',
-                ),
-            ),
-            'testaccepted' => array(
-                'role' => array(
-                    'operations',
-                    'technical',
-                    'secretariat',
-                ),
-            ),
-        ),
-
-        'QAaccepted' => array(
-            'testaccepted' => array(
-                'role' => array(
-                    'operations',
-                    'technical',
-                    'secretariat',
-                ),
-            ),
-            'prodpending' => array(
-                'role' => array(
-                    'operations',
-                ),
-            ),
-        ),
-
-        'prodpending' => array(
             'prodaccepted' => array(
                 'role' => array(
-                    'secretariat',
-                ),
-            ),
-            'testaccepted' => array(
-                'role' => array(
-                    'operations',
-                    'technical',
-                    'secretariat',
+                    'all',
                 ),
             ),
         ),
@@ -1246,15 +1182,7 @@ $config = array(
         'prodaccepted' => array(
             'testaccepted' => array(
                 'role' => array(
-                    'operations',
-                    'technical',
-                    'secretariat',
-                ),
-            ),
-            'QApending' => array(
-                'role' => array(
-                    'operations',
-                    'secretariat',
+                    'all',
                 ),
             ),
         ),
