@@ -49,6 +49,11 @@ class EngineBlock_ApplicationSingleton
     protected static $s_instance;
 
     /**
+     * @var bool
+     */
+    protected $_bootstrapped = false;
+
+    /**
      * @var string
      */
     protected $_applicationEnvironmentId;
@@ -167,6 +172,10 @@ class EngineBlock_ApplicationSingleton
      */
     public function bootstrap()
     {
+        if ($this->_bootstrapped) {
+            return $this;
+        }
+
         $this->_bootstrapAutoLoading();
 
         $this->_setEnvironmentIdByEnvironment();
@@ -184,6 +193,8 @@ class EngineBlock_ApplicationSingleton
 
         $this->_bootstrapLayout();
         $this->_bootstrapTranslations();
+
+        $this->_bootstrapped = true;
 
         return $this;
     }
