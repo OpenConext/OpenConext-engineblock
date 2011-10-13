@@ -153,7 +153,6 @@ $config = array(
             'default_allow' => false,
             'required' => true,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:Binding' => array(
@@ -179,7 +178,6 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:ResponseLocation' => array(
@@ -189,7 +187,6 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'coin:guest_qualifier' => array(
@@ -223,7 +220,6 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'leneq40',
-            'validate_error' => 'The value must be 40 characters long',
             'supported' => array(0),
         ),
         'certificate' => array(
@@ -266,7 +262,7 @@ $config = array(
             'default_allow' => false,
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
+
         ),
         'icon' => array(
             'type' => 'file',
@@ -355,7 +351,6 @@ $config = array(
             'default_allow' => false,
             'required' => true,
             'validate' => 'isemail',
-            'validate_error' => 'The value must be a valid email address',
             'supported' => array(0,1,2)
         ),
         'contacts:#:telephoneNumber' => array(
@@ -396,7 +391,6 @@ $config = array(
             'default_allow' => false,
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
 
         // Control fields
@@ -451,7 +445,6 @@ $config = array(
             'default_allow' => false,
             'required' => true,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'AssertionConsumerService:#:index' => array(
@@ -485,7 +478,6 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
         'SingleLogoutService:#:ResponseLocation' => array(
@@ -495,7 +487,6 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'supported' => array(0),
         ),
 
@@ -506,7 +497,6 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/.*)',
             'required' => false,
         ),
         'coin:default_vo_id' => array(
@@ -536,7 +526,7 @@ $config = array(
             'default' => 'see the silver surfer surf said sea softly',
             'default_allow' => true,
             'validate' => 'lengteq20',
-            'validate_error' => 'The value must be at least 20 characters long',
+
             'required' => false,
         ),
         'coin:oauth:consumer_key'=> array(
@@ -552,7 +542,7 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'validate' => 'lengteq20',
-            'validate_error' => 'The value must be at least 20 characters long',
+
             'required' => false,
         ),
         'coin:oauth:key_type' => array(
@@ -589,7 +579,6 @@ $config = array(
             'order' => 197,
             'default' => 'http://www.surfnet.nl/thumb.png',
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'default_allow' => false,
             'required' => false,
 
@@ -599,7 +588,7 @@ $config = array(
             'order' => 198,
             'default' => 'http://www.surfnet.nl/icon.gif',
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
+
             'default_allow' => false,
             'required' => false,
         ),
@@ -608,7 +597,6 @@ $config = array(
             'order' => 199,
             'default' => '',
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
             'default_allow' => false,
             'required' => false,
         ),
@@ -640,7 +628,7 @@ $config = array(
             'required' => false,
         ),
         'coin:provision_type' => array(
-            'type' => 'text',
+            'type' => 'select',
             'order' => 205,
             'select_values' => array("none", "google"),
             'default' => 'google',
@@ -677,7 +665,6 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'leneq40',
-            'validate_error' => 'The value must be 40 characters long',
             'supported' => array(0),
         ),
         'certificate' => array(
@@ -721,7 +708,7 @@ $config = array(
             'required' => true,
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
+
         ),
         'icon' => array(
             'type' => 'file',
@@ -762,7 +749,6 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'validate' => 'isemail',
-            'validate_error' => 'The value must be a valid email address',
             'required' => true,
             'supported' => array(0,1,2)
         ),
@@ -790,7 +776,7 @@ $config = array(
             'default_allow' => false,
             'required' => false,
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)'
+
         ),
         'coin:userContactPoint:emailAddress' => array(
             'type' => 'text',
@@ -798,7 +784,6 @@ $config = array(
             'default' => '',
             'default_allow' => false,
             'validate' => 'isemail',
-            'validate_error' => 'The value must be a valid email address',
             'required' => false
         ),
 
@@ -824,7 +809,6 @@ $config = array(
             'default_allow' => false,
             'supported' => array('en', 'nl'),
             'validate' => 'isurl',
-            'validate_error' => 'The value must be a valid url (e.g. https://example.com/hello.html)',
         ),
 
         // Control fields
@@ -1276,6 +1260,10 @@ $config = array(
         ),
     ),
 
+    'metadata_refresh_cron_tags'      => array('hourly'),
+    'validate_entity_certificate_cron_tags' => array('daily'),
+    'validate_entity_endpoints_cron_tags' => array('daily'),
+    'ca_bundle_file' => '/etc/pki/tls/certs/ca-bundle.crt',
 
     /**
      * Metalising configuration options
