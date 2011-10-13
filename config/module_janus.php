@@ -954,12 +954,11 @@ $config = array(
             'testaccepted' => array(
                 'role' => array(
                     'all',
-                    'admin',
                 ),
             ),
             'prodaccepted' => array(
                 'role' => array(
-                    'all',
+                    'admin',
                 ),
             ),
         ),
@@ -1174,7 +1173,7 @@ $config = array(
         'testaccepted' => array(
             'prodaccepted' => array(
                 'role' => array(
-                    'all',
+                    'admin',
                 ),
             ),
         ),
@@ -1182,7 +1181,7 @@ $config = array(
         'prodaccepted' => array(
             'testaccepted' => array(
                 'role' => array(
-                    'all',
+                    'admin',
                 ),
             ),
         ),
