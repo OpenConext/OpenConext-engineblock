@@ -97,14 +97,16 @@ class EngineBlock_Provisioner_ProvisioningManager
      */
     protected function _getData($userId, $attributes)
     {
+        
         $groups = $this->_getGroups($userId);
         $provisionData = array(
             'person' => array(
-                'id'        => $userId,
-                'uid'       => $attributes['urn:mace:dir:attribute-def:uid'][0],
-                'name'      => $attributes['urn:mace:dir:attribute-def:givenName'][0],
-                'surName'   => $attributes['urn:mace:dir:attribute-def:sn'][0],
-                'emails'    => $attributes['urn:mace:dir:attribute-def:mail'],
+                'id'            => $userId,
+                'uid'           => $attributes['urn:mace:dir:attribute-def:uid'][0],
+                'name'          => $attributes['urn:mace:dir:attribute-def:givenName'][0],
+                'surName'       => $attributes['urn:mace:dir:attribute-def:sn'][0],
+                'organization'  => $attributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'][0],
+                'emails'        => $attributes['urn:mace:dir:attribute-def:mail'],
             ),
             'groups' => $groups,
         );
