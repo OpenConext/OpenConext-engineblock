@@ -99,7 +99,37 @@ class EngineBlock_ServiceRegistry_Client
                                            ->get();
         return ((isset($response[0]) && $response[0]==true) || (isset($response["allowed"]) && $response["allowed"]=="yes"));
     }
-    
+
+    /**
+     * Retrieve the allowed IDPs for an SP. The SP is only
+     * allowed to make connections to the retrieved IDP's.
+     *
+     * @param string $spEntityId the URN of the SP entity.
+     * @return array containing the URN's of the IDP's that this SP is allowed to make a connection to.
+     */
+    public function getAllowedIdps($spEntityId)
+    {
+        $response = $this->_getRestClient()->getAllowedIdps()
+                                           ->spentityid($spEntityId)
+                                           ->get();
+        return $response;
+    }
+
+    /**
+     * Retrieve the allowed SP's for an IDP. The IDP is only
+     * allowed to make connections to the retrieved SP's.
+     *
+     * @param string $spEntityId the URN of the IDP entity.
+     * @return array containing the URN's of the SP's that this IDP is allowed to make a connection to.
+     */
+    public function getAllowedSps($idpEntityId)
+    {
+        $response = $this->_getRestClient()->getAllowedSps()
+                                           ->idpentityid($idpEntityId)
+                                           ->get();
+        return $response;
+    }
+
     /**
      * Retrieve the Attribute Release Policy for a certain Service Provider.
      * 

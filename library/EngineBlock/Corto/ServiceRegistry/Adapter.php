@@ -48,13 +48,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
      */
     public function filterEntitiesBySp(array $entities, $spEntityId)
     {
+        $allowedEntities = $this->_serviceRegistry->getAllowedIdps($spEntityId);
         foreach ($entities as $entityId => $entityData) {
             if (isset($entityData['SingleSignOnService'])) {
                 // entity is an idp
-                if (!$this->_serviceRegistry->isConnectionAllowed(
-                    $spEntityId,
-                    $entityId
-                )) {
+                if (!in_array($entityId, $allowedEntities)) {
                     unset($entities[$entityId]);
                 }
             }
