@@ -8,6 +8,9 @@ Feature: Attribute Handling
       And we have configured an "https://wrongcertidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" IdP that does not provide the schacHomeOrganization
       And we have a WrongAttrIdP user with the username "user", name "User" and password "password"
       And we have a IdP that returns a transient non existing uid on each login
+      And we have an attribute manipulation for "https___testsp.test.surfconext.nl_shibboleth" that transforms "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1" to superman
+      And we have mapped "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1" to "coin-user-status" in shibboleth "attribute-map.xml"
+      And we print the "coin-user-status" shibboleth header in the testsp application
 
   Scenario: User fails to log in on the Portal SP using the Wrong Attr IdP
     When I go to the Portal with "https://wrongattridp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
@@ -22,3 +25,10 @@ Feature: Attribute Handling
     And I pass through EngineBlock
     Then I should see "urn:collab:person:perftestidppersistent.dev.surfconext.nl:"
     And I follow "Delete my SURFconext account!"
+
+  Scenario: User logs in on the TestSP and its userStatus is manipulated
+     When I go to the Test SP
+     And I select from the WAYF "https://perftestpersistentidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php"
+     And I log in at IP as "bdd-user-attr" with password "password"
+     And I pass through EngineBlock
+     Then I should be on the Test SP with the user status "superman"

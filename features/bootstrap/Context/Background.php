@@ -222,5 +222,26 @@ class Background extends BehatContext
     {
     }
 
+    /**
+     * @Given /^we have an attribute manipulation for "([^"]*)" that transforms "([^"]*)" to superman$/
+     */
+    public function weHaveAnAttributeManipulationForThatTransformsToSuperman($argument1, $argument2)
+    {
+    }
+
+    /**
+     * @Given /^we have mapped "([^"]*)" to "([^"]*)" in shibboleth "([^"]*)"$/
+     */
+    public function weHaveMappedToInShibboleth($argument1, $argument2, $argument3)
+    {
+    }
+
+    /**
+     * @Given /^we print the "([^"]*)" shibboleth header in the testsp application$/
+     */
+    public function wePrintTheShibbolethHeaderInTheTestspApplication($argument1)
+    {
+    }
+
 
 }

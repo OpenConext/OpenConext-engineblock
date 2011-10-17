@@ -77,4 +77,13 @@ class TestSp extends BehatContext
         $button = $this->getMainContext()->getSession()->getPage()->findButton($guestIdp);
         assertNotNull($button);
     }
+
+/**
+     * @Then /^I should be on the Test SP with the user status "([^"]*)"$/
+     */
+    public function iShouldBeOnTheTestSpWithTheUserStatus($message)
+    {
+        $this->getMainContext()->assertPageContainsText($message);
+    }
+
 }
