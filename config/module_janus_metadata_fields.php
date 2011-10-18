@@ -10,7 +10,7 @@ $template = array(
         'displayName:#'             => array(                  'supported' => array('en', 'nl')),
         'description:#'             => array('required'=>TRUE, 'supported' => array('en', 'nl')),
 
-        'certData'                  => array('required'=>TRUE),
+        'certData'                  => array(),
         'certData2'                 => array(),
 
         'contacts:#:contactType'    => array(
@@ -55,6 +55,7 @@ $template = array(
             'required' => true,
         ),
         'SingleSignOnService:0:Location' => array('required' => true, 'validate' => 'isurl'),
+        'certData'                  => array('required'=>TRUE),
 
         'coin:guest_qualifier' => array('required' => true, 'default' => 'All'),
 
@@ -119,6 +120,8 @@ $fields = array(
     'metadatafields.saml20-sp'  => $fieldTemplates->getSpFields(),
 );
 
+var_dump($fields);exit;
+
 /**
  * Fill out some defaults and apply ordering
  */
@@ -155,7 +158,7 @@ class sspmod_janus_fieldsTemplates
             $field = $this->_applyDefaults($fieldTemplate);
             $entityFields[$fieldName] = $field;
         }
-        $fields = $fields + $entityFields;
+        $fields = static::_merge($fields, $entityFields);
 
         $fields = $this->_orderFields($fields);
         return $fields;
@@ -184,5 +187,19 @@ class sspmod_janus_fieldsTemplates
             $field['order'] = $order;
         }
         return $fields;
+    }
+
+    protected static function _merge($array1, $array2)
+    {
+        foreach($array2 as $key => $Value)
+        {
+            if (array_key_exists($key, $array1) && is_array($Value)) {
+              $array1[$key] = static::_merge($array1[$key], $array2[$key]);
+            }
+            else {
+              $array1[$key] = $Value;
+            }
+        }
+        return $array1;
     }
 }
