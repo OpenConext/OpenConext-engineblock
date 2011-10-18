@@ -45,9 +45,9 @@ $layout->tabs = array(
 // The current language
 $lang = $this->language();
 
-$layout->subheader = $this->t('profile_subheader');
-$layout->header = $this->t('profile_header') . ' - ' . $layout->subheader;
-$layout->title = $layout->title . ' - ' . $layout->subheader;
+$layout->title      = $layout->title . ' - ' . $layout->subheader;
+$layout->subheader  = $this->t('profile_subheader');
+$layout->header     = $this->t('profile_header') . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
@@ -56,19 +56,19 @@ $layout->getView()->inlineScript()->appendScript("
     var profile = new Profile();
     profile.init();");
 
-foreach ($spList as &$sp) {
+foreach ($spList as $spId => $sp) {
     foreach ($sp as $fieldName => $fieldValue) {
         $matches = array();
         if (!preg_match('|contacts:(\d+):contactType|', $fieldName, $matches)) {
             continue;
         }
-        
+        $contactNumber = $matches[1];
+
         if ($fieldValue !== 'support') {
             continue;
         }
-        $contactNumber = $matches[1];
-        
-        $sp['supportContact'] = array(
+
+        $spList[$spId]['supportContact'] = array(
             'givenName'         => $sp["contacts:$contactNumber:givenName"],
             'surName'           => $sp["contacts:$contactNumber:surName"],
             'emailAddress'      => $sp["contacts:$contactNumber:emailAddress"],
