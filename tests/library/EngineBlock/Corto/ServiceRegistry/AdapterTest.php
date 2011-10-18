@@ -46,7 +46,6 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 "name:en" => "EngineBlock Testing IdP",
                 "name:nl" => "EngineBlock Testing IdP",
                 "redirect.sign" => true,
-                "redirect.validate" => true,
                 "SingleSignOnService:0:Binding" => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
                 "SingleSignOnService:0:Location" => "https://idp.testing.dev.coin.surf.net/simplesaml/saml2/idp/SSOService.php",
                 "metadataUrl" => "https://ss.idp.ebdev.net/simplesaml/saml2/idp/metadata.php",
@@ -64,7 +63,6 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 "name:en"=> "EngineBlock Testing SP",
                 "name:nl"=> "EngineBlock Testing SP",
                 "redirect.sign"=> true,
-                "redirect.validate"=> true,
                 "metadataUrl"=> "https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp",
                 "entityID"=> "https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp"
             ),
@@ -113,7 +111,6 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'nl' => "EngineBlock Testing SP",
                 ),
                 "AuthnRequestsSigned" => true,
-                'WantsResponsesSigned' => true,
             ),
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
                 "SingleSignOnService" => array(
@@ -149,7 +146,6 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'nl' => "EngineBlock Testing IdP",
                 ),
                 "AuthnRequestsSigned"  => true,
-                'WantsResponsesSigned'      => true,
             ),
         );
         $this->assertEquals($expectedResult, $metadata, "Converting a simple result from Service Registry with 1 IdP and 1 SP to Cortos Metadata format");
