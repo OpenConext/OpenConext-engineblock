@@ -127,9 +127,6 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
 
             // Only for SPs
-            if (isset($serviceRegistryEntity['coin']['expects_oids']) && $serviceRegistryEntity['coin']['expects_oids']) {
-                $cortoEntity['ExpectsOids'] = true;
-            }
             if (isset($serviceRegistryEntity['coin']['alternate_private_key']) && $serviceRegistryEntity['coin']['alternate_private_key']) {
                 $cortoEntity['AlternatePrivateKey'] = EngineBlock_X509Certificate::getPrivatePemCertFromCertData(
                     $serviceRegistryEntity['coin']['alternate_private_key']
