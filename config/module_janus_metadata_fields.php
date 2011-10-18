@@ -7,8 +7,8 @@ define('JANUS_FIELDS_TYPE_SP'  , 'saml20-sp');
 $template = array(
     JANUS_FIELDS_TYPE_ALL => array(
         'name:#'                    => array('required'=>TRUE, 'supported' => array('en', 'nl')),
-        'displayName:#'             => array('required'=>TRUE, 'supported' => array('en', 'nl')),
-        'description:#'             => array('required'=>TRUE, 'supported' => array('en', 'nl')),
+        'displayName:#'             => array(                  'supported' => array('en', 'nl')),
+        'description:#'             => array(                  'supported' => array('en', 'nl')),
         'url:#'                     => array('validate'=>'isurl'),
 
         'certData'                  => array('required'=>TRUE),
@@ -19,12 +19,12 @@ $template = array(
             'supported' => array('en', 'nl'),
             'select_values' => array('technical', 'support', 'administrative', 'billing', 'other')
         ),
-        'contacts:#:contactType'    => array('required' => TRUE, 'supported' => array('en', 'nl')),
-        'contacts:#:givenName'      => array('required' => TRUE, 'supported' => array('en', 'nl')),
-        'contacts:#:surName'        => array('required' => TRUE, 'supported' => array('en', 'nl')),
-        'contacts:#:emailAddress'   => array('required' => TRUE, 'supported' => array('en', 'nl')),
-        'contacts:#:telephoneNumber'=> array('required' => TRUE, 'supported' => array('en', 'nl')),
-        'contacts:#:company'        => array('required' => TRUE, 'supported' => array('en', 'nl')),
+        'contacts:#:contactType'    => array('required' => TRUE, 'supported' => array(0,1,2)),
+        'contacts:#:givenName'      => array('required' => TRUE, 'supported' => array(0,1,2)),
+        'contacts:#:surName'        => array('required' => TRUE, 'supported' => array(0,1,2)),
+        'contacts:#:emailAddress'   => array('required' => TRUE, 'supported' => array(0,1,2)),
+        'contacts:#:telephoneNumber'=> array('required' => TRUE, 'supported' => array(0,1,2)),
+        'contacts:#:company'        => array('required' => TRUE, 'supported' => array(0,1,2)),
 
         'OrganizationName:#'        => array(                    'supported' => array('en', 'nl')),
         'OrganizationDisplayName:#' => array(                    'supported' => array('en', 'nl')),
@@ -97,7 +97,11 @@ $template = array(
         'coin:oauth:secret'             => array('validate' => 'lengteq20'),
         'coin:oauth:consumer_key'       => array(),
         'coin:oauth:consumer_secret'    => array('validate' => 'lengteq20'),
-        'coin:oauth:key_type'           => array('default' => 'HMAC_SHA1'),
+        'coin:oauth:key_type'           => array(
+            'type'=>'select',
+            'select_values'=>array('HMAC_SHA1', 'RSA_PRIVATE'),
+            'default' => 'HMAC_SHA1',
+        ),
         'coin:oauth:public_key'         => array(),
         'coin:oauth:app_title'          => array('default' => 'Application Title','default_allow' => false),
         'coin:oauth:app_description'    => array(),
