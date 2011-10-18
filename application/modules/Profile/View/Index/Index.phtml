@@ -55,6 +55,29 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
 $layout->getView()->inlineScript()->appendScript("
     var profile = new Profile();
     profile.init();");
+
+foreach ($spList as &$sp) {
+    foreach ($sp as $fieldName => $fieldValue) {
+        $matches = array();
+        if (!preg_match('|contacts:(\d+):contactType|', $fieldName, $matches)) {
+            continue;
+        }
+        
+        if ($fieldValue !== 'support') {
+            continue;
+        }
+        $contactNumber = $matches[1];
+        
+        $sp['supportContact'] = array(
+            'givenName'         => $sp["contacts:$contactNumber:givenName"],
+            'surName'           => $sp["contacts:$contactNumber:surName"],
+            'emailAddress'      => $sp["contacts:$contactNumber:emailAddress"],
+            'telephoneNumber'   => isset($sp["contacts:$contactNumber:telephoneNumber"]) ?
+                                        $sp["contacts:$contactNumber:telephoneNumber"] :
+                                        '',
+        );
+    }
+}
 ?>
 <div id="MyProfile">
     <p>
@@ -191,8 +214,9 @@ $layout->getView()->inlineScript()->appendScript("
             <tr>
                 <th><?php echo $this->t('profile_apps_service_th'); ?></th>
                 <th><?php echo $this->t('profile_apps_eula_th'); ?></th>
-                <th><?php echo $this->t('profile_apps_helpdesk_th'); ?></th>
-                <th><?php echo $this->t('profile_apps_email_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_support_name_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_support_email_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_support_phone_th'); ?></th>
                 <th><?php echo $this->t('profile_apps_consent_th'); ?></th>
             </tr>
         </thead>
@@ -212,16 +236,23 @@ $layout->getView()->inlineScript()->appendScript("
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php if ($sp['coin:eula']) : ?>
-                            <a href="<?= $sp['coin:userContactPoint:url']; ?>"><?=
-                                $this->t('profile_support_link'); ?>
+                        <?php if (isset($sp['supportContact'])) : ?>
+                            <?php echo $sp['supportContact']['givenName'] . ' ' .  $sp['supportContact']['surName']; ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if (isset($sp['supportContact'])) : ?>
+                            <a href="mailto:<?= $sp['supportContact']['emailAddress']; ?>"><?php
+                                echo $sp['supportContact']['emailAddress']; ?>
                             </a>
                         <?php endif; ?>
                     </td>
                     <td>
-                        <a href="mailto:<?= $sp['coin:userContactPoint:emailAddress']; ?>"><?=
-                            $sp['coin:userContactPoint:emailAddress']; ?>
-                        </a>
+                        <?php if (isset($sp['supportContact']['telephoneNumber'])) : ?>
+                            <a href="mailto:<?= $sp['supportContact']['telephoneNumber']; ?>"><?php
+                                echo $sp['supportContact']['telephoneNumber']; ?>
+                            </a>
+                        <?php endif; ?>
                     </td>
                     <td>
                         <?php if (isset($spOauthList) && array_key_exists($spId,$spOauthList)) : ?>
