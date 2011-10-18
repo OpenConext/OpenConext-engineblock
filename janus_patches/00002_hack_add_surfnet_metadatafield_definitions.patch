@@ -1,0 +1,261 @@
+Index: modules/janus/dictionaries/metadatafields.definition.json
+===================================================================
+--- modules/janus/dictionaries/metadatafields.definition.json	(revision 848)
++++ modules/janus/dictionaries/metadatafields.definition.json	(working copy)
+@@ -2,88 +2,172 @@
+     "AssertionConsumerService_Binding": {
+         "en": "Binding for the endpoint for connection that supports the Authentication Request protocol [SAMLProf]."
+     },
+-        "AssertionConsumerService_Location": {
+-            "en": "Endpoint for connection that supports the Authentication Request protocol [SAMLProf]."
+-        },
+-        "AssertionConsumerService_index": {
+-            "en": "Index for the endpoint for connection that supports the Authentication Request protocol [SAMLProf]."
+-        },
+-        "SingleLogoutService_Binding": {
+-            "en": "Binding for the single logout endpoint for connection that supports Single Logout profile [SAMLProf]."
+-        },
+-        "SingleLogoutService_Location": {
+-            "en": "Endpoint for connection that supports the Single Sign Logout profile [SAMLProf]."
+-        },
+-        "SingleLogoutService_ResponseLocation": {
+-            "en": "Optionally specifies a different location to which response messages sent as part of the protocol or profile should be sent. The allowable syntax of this URI depends on the protocol binding."
+-        },
+-        "SingleSignOnService_Binding": {
+-            "en": "Binding for the single sign on endpoint for connection that supports Single Sign On profile [SAMLProf]."
+-        },
+-        "SingleSignOnService_Location": {
+-            "en": "Endpoint for connection that supports the Single Sign On profile [SAMLProf]."
+-        },
+-        "certData": {
+-            "en": "Base 64 encoded certificate used for this connection."
+-        },
+-        "certFingerprint": {
+-            "en": "One or more fingerprint for the certificate userd for the connection."
+-        },
+-        "certificate": {
+-            "en": "File containing a certificate for the connection."
+-        },
+-        "name": {
+-            "en": "The name of this connection."
+-        },
+-        "description": {
+-            "en": "A description of this connection."
+-        },
+-        "url": {
+-            "en": "An URL pointing to more information about the connection."
+-        },
+-        "icon": {
+-            "en": "A file containing a logo which will be shown next to this IdP in the discovery service."
+-        },
+-        "contacts_contactType": {
+-            "en": "The type of the contact person."
+-        },
+-        "contacts_givenName": {
+-            "en": "The contact persons given name."
+-        },
+-        "contacts_surName": {
+-            "en": "The contact persons surname."
+-        },
+-        "contacts_emailAddress": {
+-            "en": "Email address of the contact person."
+-        },
+-        "contacts_telephoneNumber": {
+-            "en": "Phone number for the contact person."
+-        },
+-        "contacts_company": {
+-            "en": "The company that the contact person is associated with."
+-        },
+-        "OrganizationName": {
+-            "en": "Optional element identifying the organization responsible for the SAML entity described by the element."
+-        },
+-        "OrganizationDisplayName": {
+-            "en": "Optional element identifying the organization responsible for the SAML entity described by the element (Name for human consumption)."
+-        },
+-        "OrganizationURL": {
+-            "en": "URL that specify a location to which to direct a user for additional information."
+-        },
+-        "redirect.sign": {
+-            "en": "Demand signing of requests."
+-        },
+-        "redirect.validate": {
+-            "en": "Validate signature on requests and responses"
+-        },
+-        "base64attributes": {
+-            "en": "Base64 encode attributes"
+-        },
+-        "assertion.encryption": {
+-            "en": "Is assertions from this connection encrypted?"
+-        },
+-        "NameIDFormat": {
+-            "en": "NameID supported by this connection."
+-        }
++    "AssertionConsumerService_Location": {
++        "en": "Endpoint for connection that supports the Authentication Request protocol [SAMLProf]."
++    },
++    "AssertionConsumerService_index": {
++        "en": "Index for the endpoint for connection that supports the Authentication Request protocol [SAMLProf]."
++    },
++    "SingleLogoutService_Binding": {
++        "en": "Binding for the single logout endpoint for connection that supports Single Logout profile [SAMLProf]."
++    },
++    "SingleLogoutService_Location": {
++        "en": "Endpoint for connection that supports the Single Sign Logout profile [SAMLProf]."
++    },
++    "SingleLogoutService_ResponseLocation": {
++        "en": "Optionally specifies a different location to which response messages sent as part of the protocol or profile should be sent. The allowable syntax of this URI depends on the protocol binding."
++    },
++    "SingleSignOnService_Binding": {
++        "en": "Binding for the single sign on endpoint for connection that supports Single Sign On profile [SAMLProf]."
++    },
++    "SingleSignOnService_Location": {
++        "en": "Endpoint for connection that supports the Single Sign On profile [SAMLProf]."
++    },
++    "certData": {
++        "en": "Base 64 encoded certificate used for this connection."
++    },
++    "certData2": {
++        "en": "Fallback base 64 encoded certificate used for this connection. Most likely used when this entity migrates to a new signing certificate."
++    },
++    "certFingerprint": {
++        "en": "One or more fingerprint for the certificate userd for the connection."
++    },
++    "certificate": {
++        "en": "File containing a certificate for the connection."
++    },
++    "name": {
++        "en": "The name of this connection."
++    },
++    "description": {
++        "en": "A description of this connection."
++    },
++    "url": {
++        "en": "An URL pointing to more information about the connection."
++    },
++    "icon": {
++        "en": "A file containing a logo which will be shown next to this IdP in the discovery service."
++    },
++    "contacts_contactType": {
++        "en": "The type of the contact person."
++    },
++    "contacts_givenName": {
++        "en": "The contact persons given name."
++    },
++    "contacts_surName": {
++        "en": "The contact persons surname."
++    },
++    "contacts_emailAddress": {
++        "en": "Email address of the contact person."
++    },
++    "contacts_telephoneNumber": {
++        "en": "Phone number for the contact person."
++    },
++    "contacts_company": {
++        "en": "The company that the contact person is associated with."
++    },
++    "OrganizationName": {
++        "en": "Optional element identifying the organization responsible for the SAML entity described by the element."
++    },
++    "OrganizationDisplayName": {
++        "en": "Optional element identifying the organization responsible for the SAML entity described by the element (Name for human consumption)."
++    },
++    "OrganizationURL": {
++        "en": "URL that specify a location to which to direct a user for additional information."
++    },
++    "redirect.sign": {
++        "en": "Demand signing of requests."
++    },
++    "redirect.validate": {
++        "en": "Validate signature on requests and responses"
++    },
++    "base64attributes": {
++        "en": "Base64 encode attributes"
++    },
++    "assertion.encryption": {
++        "en": "Is assertions from this connection encrypted?"
++    },
++    "NameIDFormat": {
++        "en": "NameID supported by this connection."
++    },
++    "displayName": {
++        "en": "The display name for this connection"
++    },
++    "coin_gadgetbaseurl": {
++        "en": "Used to lookup the OAuth parameters belonging to a gadget. Format is a regular expression matching the URL of the gadget's XML descriptor. Example: https://gadgets.store.com/.* Also used when Shindig acts as the provider in 2-legged OAuth"
++    },
++    "coin_oauthsecret": {
++        "en": "When Shindig acts as the provider in 2- or 3-legged OAuth with keytype HMAC_SHA1, this is the secret. Not used when Shindig is the consumer."
++    },
++    "coin_oauth_consumer_key": {
++        "en": "When Shindig acts as the consumer in 3-legged OAuth with keytype HMAC_SHA1 or RSA_PRIVATE, this is the consumer key. When Shindig is the provider, this should be a URL matching the consumer (see coin_gadgetbaseurl)."
++    },
++    "coin_oauth_consumer_secret": {
++        "en": "When Shindig acts as the consumer in 3-legged OAuth with keytype HMAC_SHA1, this is the consumer secret. When using keytype RSA_PRIVATE, this entry is not necessary but needs to be filled anyway (use a dummy value). Leave blank when Shindig is the provider"
++    },
++    "coin_oauth_key_type": {
++        "en": "The OAuth key type."
++    },
++    "coin_oauth_public_key": {
++        "en": "When Shindig acts as the provider in 3-legged OAuth with keytype RSA_PRIVATE, this is the consumer's public key."
++    },
++    "coin_oauth_app_title": {
++        "en": "OAuth application title. Displayed to a user when he has to authorize the data request. Only used in 3-legged OAuth when Shindig is the data provider."
++    },
++    "coin_oauth_app_description": {
++        "en": "OAuth application description. Displayed to a user when he has to authorize the data request. Only used in 3-legged OAuth when Shindig is the data provider."
++    },
++    "coin_oauth_app_thumbnail": {
++        "en": "The URL of the OAuth application logo image. This URL must be accessible from the internet. Displayed to a user when he has to authorize the data request. Only used in 3-legged OAuth when Shindig is the data provider."
++    },
++    "coin_oauth_app_icon": {
++        "en": "The URL of the OAuth application icon image. This URL must be accessible from the internet. Displayed to a user when he has to authorize the data request. Only used in 3-legged OAuth when Shindig is the data provider."
++    },
++    "coin_oauth_callback_url": {
++        "en": "The OAuth callback URL"
++    },
++    "coin_is_provision_sp": {
++        "en": "Indicates if this Service Provider needs JIT provisioning. If it is absent or not checked then NOTHING will be provisioned"
++    },
++    "coin_provision_domain": {
++        "en": "The domain for which users and groups will be provisioned. It is optional but needed for the Google provisioning implementation"
++    },
++    "coin_provision_admin": {
++        "en": "The username of the 'power' user that can create users and groups"
++    },
++    "coin_provision_password": {
++        "en": "The password of the power user"
++    },
++    "coin_provision_type": {
++        "en": "The type of provisioning. Currently only Google is implemented"
++    },
++    "coin_userContactPoint_url": {
++        "en": "URL of the Service Provider help desk website for an end user"
++    },
++    "coin_userContactPoint_emailAddress": {
++        "en": "Service Provider help desk email address for an end user"
++    },
++    "coin_guest_qualifier": {
++        "en": "Can have the value None, Some or All. Indicates that no users from this IDP are marked as guest, some users are marked as guest or all users are marked as guest respectively"
++    },
++    "coin_alternate_private_key": {
++        "en": "Overrides the private signing key used by SURFconext for this Service Provider"
++    },
++    "coin_alternate_public_key": {
++        "en": "Overrides the public signing key used by SURFconext for this Service Provider"
++    },
++    "coin_eula": {
++        "en": "URL of the End User License Agreement for the service."
++    },
++    "logo_url": {
++        "en": "The URL of the IDPs logo image. This URL must be accessible from the public internet."
++    },
++    "logo_width": {
++        "en": "The width of the IDPs logo image. Cannot be wider then 108px for SURFconext. Required for MDUI export."
++    },
++    "logo_height": {
++        "en": "The height of the IDPs logo image. Cannot be higher then 48px for SURFconext. Required for MDUI export."
++    },
++    "keywords": {
++        "en": "Space separated list of keywords users can search on in the WAYF screen"
++    }
+ }
