@@ -120,8 +120,6 @@ $fields = array(
     'metadatafields.saml20-sp'  => $fieldTemplates->getSpFields(),
 );
 
-var_dump($fields);exit;
-
 /**
  * Fill out some defaults and apply ordering
  */
