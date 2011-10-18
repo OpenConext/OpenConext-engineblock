@@ -9,7 +9,6 @@ $template = array(
         'name:#'                    => array('required'=>TRUE, 'supported' => array('en', 'nl')),
         'displayName:#'             => array(                  'supported' => array('en', 'nl')),
         'description:#'             => array(                  'supported' => array('en', 'nl')),
-        'url:#'                     => array('validate'=>'isurl'),
 
         'certData'                  => array('required'=>TRUE),
         'certData2'                 => array(),
