@@ -26,7 +26,6 @@
 /**
  * Implementation of the Engine Block internal Service Registry interface.
  * 
- * @todo Add memcache caching so we don't hit the rest backend every time.
  * @author ivo
  */
 class EngineBlock_ServiceRegistry_Client
