@@ -27,12 +27,12 @@ class Login extends BehatContext
     /**
      * Generic method to login at an Identity Provider
      *
-     * @Given /^I log in at IP as "([^"]*)" with password "([^"]*)"$/
+     * @Given /^I log in at IdP as "([^"]*)" with password "([^"]*)"$/
      * @param string $userName
      * @param string $password
      * @return void
      */
-    public function iLogInAtIPAsWithPassword($userName, $password)
+    public function iLogInAtIdPAsWithPassword($userName, $password)
     {
         $this->getMainContext()->fillField('username', $userName);
         $this->getMainContext()->fillField('password', $password);
@@ -43,12 +43,12 @@ class Login extends BehatContext
     /**
      * Custom method to log in at Surf guest Identity Provider
      *
-     * @Given /^I log in at Surfguest IP as "([^"]*)" with password "([^"]*)"$/
+     * @Given /^I log in at Surfguest IdP as "([^"]*)" with password "([^"]*)"$/
      * @param string $userName
      * @param string $password
      * @return void
      */
-    public function iLogAtSurfGuestIPAsWithPassword($userName, $password)
+    public function iLogAtSurfGuestIdPAsWithPassword($userName, $password)
     {
         $this->getMainContext()->fillField('username', $userName);
         $this->getMainContext()->fillField('password', $password);
@@ -66,9 +66,9 @@ class Login extends BehatContext
     }
 
     /**
-     * @Given /^I pass through Surfguest IP$/
+     * @Given /^I pass through Surfguest IdP$/
      */
-    public function iPassThroughSurfguestIP()
+    public function iPassThroughSurfguestIdP()
     {
         $this->getMainContext()->pressButton('Submit'); // Already logged into SURFguest, press submit to post SAML Response
     }

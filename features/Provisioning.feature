@@ -9,7 +9,7 @@ Feature: Provisioning
     Scenario: Lucas logs in at the Portal and his data is then available at the OpenSocial endpoint
       When I go to the Test SP
        And I select from the WAYF "SURFguest (TEST)"
-       And I log in at Surfguest IP as "lucas-test2" with password "_welkom!"
+       And I log in at Surfguest IdP as "lucas-test2" with password "_welkom!"
        And I press "I Accept"
        And I pass through EngineBlock
        And I should be on the Test SP
@@ -24,7 +24,7 @@ Feature: Provisioning
 
        And I go to the Test SP
        And I select from the WAYF "SURFguest (TEST)"
-       And I log in at Surfguest IP as "lucas-test2" with password "_welkom!"
+       And I log in at Surfguest IdP as "lucas-test2" with password "_welkom!"
        And I press "I Accept"
        And I pass through EngineBlock
 
@@ -39,7 +39,7 @@ Feature: Provisioning
 
        And I go to the Test SP
        And I select from the WAYF "SURFguest (TEST)"
-       And I log in at Surfguest IP as "lucas-test2" with password "_welkom!"
+       And I log in at Surfguest IdP as "lucas-test2" with password "_welkom!"
        And I press "I Accept"
        And I pass through EngineBlock
 
@@ -48,10 +48,10 @@ Feature: Provisioning
     Scenario: Lucas revokes consent.
       When I go to the Test SP
        And I select from the WAYF "SURFguest (TEST)"
-       And I log in at Surfguest IP as "lucas-test2" with password "_welkom!"
+       And I log in at Surfguest IdP as "lucas-test2" with password "_welkom!"
        And I pass through EngineBlock
        And I go to the profile SP
-       And I pass through Surfguest IP
+       And I pass through Surfguest IdP
        And I press "I Accept"
        And I pass through EngineBlock
        And I follow "Delete my SURFconext account!"

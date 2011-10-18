@@ -18,5 +18,5 @@ Feature: Signature Validation
 
   Scenario: User Fails to log in on the Portal SP using the Wrong Cert IdP
     When I go to the Portal with "https://wrongcertidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
-     And I log in at IP as "user" with password "password"
+     And I log in at IdP as "user" with password "password"
     Then EngineBlock directly gives me the error "Error - An error occured.."
