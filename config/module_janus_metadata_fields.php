@@ -8,22 +8,20 @@ $template = array(
     JANUS_FIELDS_TYPE_ALL => array(
         'name:#'                    => array('required'=>TRUE, 'supported' => array('en', 'nl')),
         'displayName:#'             => array(                  'supported' => array('en', 'nl')),
-        'description:#'             => array(                  'supported' => array('en', 'nl')),
+        'description:#'             => array('required'=>TRUE, 'supported' => array('en', 'nl')),
 
         'certData'                  => array('required'=>TRUE),
         'certData2'                 => array(),
 
         'contacts:#:contactType'    => array(
             'required' => TRUE,
-            'supported' => array('en', 'nl'),
+            'supported' => array(0,1,2),
             'select_values' => array('technical', 'support', 'administrative', 'billing', 'other')
         ),
-        'contacts:#:contactType'    => array('required' => TRUE, 'supported' => array(0,1,2)),
         'contacts:#:givenName'      => array('required' => TRUE, 'supported' => array(0,1,2)),
         'contacts:#:surName'        => array('required' => TRUE, 'supported' => array(0,1,2)),
         'contacts:#:emailAddress'   => array('required' => TRUE, 'supported' => array(0,1,2)),
-        'contacts:#:telephoneNumber'=> array('required' => TRUE, 'supported' => array(0,1,2)),
-        'contacts:#:company'        => array('required' => TRUE, 'supported' => array(0,1,2)),
+        'contacts:#:telephoneNumber'=> array(                    'supported' => array(0,1,2)),
 
         'OrganizationName:#'        => array(                    'supported' => array('en', 'nl')),
         'OrganizationDisplayName:#' => array(                    'supported' => array('en', 'nl')),
@@ -31,10 +29,10 @@ $template = array(
 
         'NameIDFormat' => array(
             'type' => 'select',
+            'required'=>TRUE,
             'select_values' => array(
                 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                 'urn:oasis:names:tc:SAML:1.1:nameid-format:persistent',
-                'urn:oasis:names:tc:SAML:1.1:nameid-format:transient',
             ),
             'default' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
         ),
@@ -62,8 +60,8 @@ $template = array(
         // MDUI stuff
         'keywords:#'    => array('required' => true, 'supported'=>array('en','nl')),
         'logo:0:url'    => array('required' => true, 'default' => 'https://.png', 'default_allow' => false),
-        'logo:0:width'  => array('required' => true),
-        'logo:0:height' => array('required' => true),
+        'logo:0:width'  => array('required' => true, 'default' => '120'),
+        'logo:0:height' => array('required' => true, 'default' => '60'),
     ),
 
     JANUS_FIELDS_TYPE_SP => array(
@@ -72,27 +70,20 @@ $template = array(
             'select_values' => array(
                 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
                 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-                'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
-                'urn:oasis:names:tc:SAML:2.0:bindings:PAOS',
-                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact',
-                'urn:oasis:names:tc:SAML:2.0:bindings:URI'
             ),
             'default' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
             'required' => true,
         ),
         'AssertionConsumerService:0:Location' => array('required' => TRUE, 'validate' => 'isurl'),
-        'redirect.sign'                       => array('type' => 'boolean', 'default' => true),
+        'redirect.sign'                       => array('type' => 'boolean', 'required' => TRUE, 'default' => false),
 
-        'coin:eula'                     => array(),
-        'coin:userContactPoint:url'     => array('validate' => 'isurl'),
-        'coin:userContactPoint:emailAddress' => array('validate' => 'isemail'),
-        'coin:gadgetbaseurl'            => array('validate' => 'isurl'),
-        'coin:default_vo_id'            => array(),
+        'coin:eula'                     => array('validate' => 'isurl'),
 
         'coin:alternate_public_key'     => array(),
         'coin:alternate_private_key'    => array(),
 
         // OAuth
+        'coin:gadgetbaseurl'            => array('validate' => 'isurl'),
         'coin:oauth:secret'             => array('validate' => 'lengteq20'),
         'coin:oauth:consumer_key'       => array(),
         'coin:oauth:consumer_secret'    => array('validate' => 'lengteq20'),
@@ -104,8 +95,8 @@ $template = array(
         'coin:oauth:public_key'         => array(),
         'coin:oauth:app_title'          => array('default' => 'Application Title','default_allow' => false),
         'coin:oauth:app_description'    => array(),
-        'coin:oauth:app_thumbnail'      => array('validate' => 'isurl', 'default' => 'http://www.surfnet.nl/thumb.png', 'default_allow' => false),
-        'coin:oauth:app_icon'           => array('validate' => 'isurl', 'default' => 'http://www.surfnet.nl/icon.gif' ,'default_allow' => false),
+        'coin:oauth:app_thumbnail'      => array('validate' => 'isurl', 'default' => 'https://www.surfnet.nl/thumb.png', 'default_allow' => false),
+        'coin:oauth:app_icon'           => array('validate' => 'isurl', 'default' => 'https://www.surfnet.nl/icon.gif' ,'default_allow' => false),
         'coin:oauth:callback_url'       => array('validate' => 'isurl'),
 
         // Provisioning
