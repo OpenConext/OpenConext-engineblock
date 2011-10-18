@@ -70,7 +70,7 @@ Feature: Virtual Organizations
 
   Scenario: Boy logs in at the Test SP with explicit VO "test-idps"
     When I go to the Test SP with the explicit VO "test-idps"
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFnetGuests"
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
      Then I should be on the Test SP
