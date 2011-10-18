@@ -90,16 +90,28 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 }
             }
 
+            if (isset($entity['Description'])) {
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Description'] = array();
+                foreach ($entity['Description'] as $lang => $name) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Description'][] = array(
+                        '_xml:lang' => $lang,
+                        '__v' => $name,
+                    );
+                }
+            }
+
             if (isset($entity['Logo'])) {
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
                 }
                 $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Logo'] = array(
                     array(
-                        '_href' => $entity['Logo']['Href'],
                         '_height' => $entity['Logo']['Height'],
-                        '_width' => $entity['Logo']['Width'],
-                        '__v' => $entity['Logo']['URL'],
+                        '_width'  => $entity['Logo']['Width'],
+                        '__v'     => $entity['Logo']['URL'],
                     ),
                 );
             }
@@ -320,9 +332,31 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $remoteEntities = $this->_server->getRemoteEntities();
             $metadata = ($remoteEntities[$idp]);
 
+            if (isset($metadata['DisplayName']['nl'])) {
+                $nameNl = $metadata['DisplayName']['nl'];
+            }
+            else if (isset($metadata['Name']['nl'])) {
+                $nameNl = $metadata['Name']['nl'];
+            }
+            else {
+                $nameNl = 'Geen naam gevonden';
+                ebLog()->warn('No NL displayName and name found for idp: ' . $idp);
+            }
+
+            if (isset($metadata['DisplayName']['en'])) {
+                $nameEn = $metadata['DisplayName']['en'];
+            }
+            else if (isset($metadata['Name']['en'])) {
+                $nameEn = $metadata['Name']['en'];
+            }
+            else {
+                $nameEn = 'No name found';
+                ebLog()->warn('No EN displayName and name found for idp: ' . $idp);
+            }
+
             $wayfIdp = array(
-                'Name_nl' => isset($metadata['Name']['nl']) ? $metadata['Name']['nl'] : 'Geen naam gevonden',
-                'Name_en' => isset($metadata['Name']['en']) ? $metadata['Name']['en'] : 'No Name found',
+                'Name_nl' => $nameNl,
+                'Name_en' => $nameEn,
                 'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL']
                         : EngineBlock_View::staticUrl() . '/media/idp-logo-not-found.png',
                 'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en'])

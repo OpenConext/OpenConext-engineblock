@@ -197,12 +197,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['displayName'])) {
             $cortoEntity['DisplayName'] = $serviceRegistryEntity['displayName'];
         }
-        if (isset($serviceRegistryEntity['logo'][0]['href'])) {
+        if (isset($serviceRegistryEntity['logo'][0]['url'])) {
             $cortoEntity['Logo'] = array(
-                'Href' => $serviceRegistryEntity['logo'][0]['href'],
                 'Height' => $serviceRegistryEntity['logo'][0]['height'],
-                'Width' => $serviceRegistryEntity['logo'][0]['width'],
-                'URL' => $serviceRegistryEntity['logo'][0]['url'],
+                'Width'  => $serviceRegistryEntity['logo'][0]['width'],
+                'URL'    => $serviceRegistryEntity['logo'][0]['url'],
             );
         }
         if (isset($serviceRegistryEntity['geoLocation'])) {
@@ -210,10 +209,6 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         }
         if (isset($serviceRegistryEntity['redirect']['sign'])) {
             $cortoEntity['AuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect']['sign'];
-        }
-        if (isset($serviceRegistryEntity['redirect']['validate'])) {
-            $cortoEntity['AuthnRequestsSigned']  = (bool)$serviceRegistryEntity['redirect']['validate'];
-            $cortoEntity['WantsResponsesSigned'] = (bool)$serviceRegistryEntity['redirect']['validate'];
         }
         if (isset($serviceRegistryEntity['organization']['OrganizationName'])) {
             $cortoEntity['Organization']['Name'] = $serviceRegistryEntity['organization']['OrganizationName'];
