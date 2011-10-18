@@ -1,0 +1,193 @@
+<?php
+
+define('JANUS_FIELDS_TYPE_ALL' , '*');
+define('JANUS_FIELDS_TYPE_IDP' , 'saml20-idp');
+define('JANUS_FIELDS_TYPE_SP'  , 'saml20-sp');
+
+$template = array(
+    JANUS_FIELDS_TYPE_ALL => array(
+        'name:#'                    => array('required'=>TRUE, 'supported' => array('en', 'nl')),
+        'displayName:#'             => array('required'=>TRUE, 'supported' => array('en', 'nl')),
+        'description:#'             => array('required'=>TRUE, 'supported' => array('en', 'nl')),
+        'url:#'                     => array('validate'=>'isurl'),
+
+        'certData'                  => array('required'=>TRUE),
+        'certData2'                 => array(),
+
+        'contacts:#:contactType'    => array(
+            'required' => TRUE,
+            'supported' => array('en', 'nl'),
+            'select_values' => array('technical', 'support', 'administrative', 'billing', 'other')
+        ),
+        'contacts:#:contactType'    => array('required' => TRUE, 'supported' => array('en', 'nl')),
+        'contacts:#:givenName'      => array('required' => TRUE, 'supported' => array('en', 'nl')),
+        'contacts:#:surName'        => array('required' => TRUE, 'supported' => array('en', 'nl')),
+        'contacts:#:emailAddress'   => array('required' => TRUE, 'supported' => array('en', 'nl')),
+        'contacts:#:telephoneNumber'=> array('required' => TRUE, 'supported' => array('en', 'nl')),
+        'contacts:#:company'        => array('required' => TRUE, 'supported' => array('en', 'nl')),
+
+        'OrganizationName:#'        => array(                    'supported' => array('en', 'nl')),
+        'OrganizationDisplayName:#' => array(                    'supported' => array('en', 'nl')),
+        'OrganizationURL:#'         => array('validate' => 'isurl', 'supported' => array('en', 'nl')),
+
+        'NameIDFormat' => array(
+            'type' => 'select',
+            'select_values' => array(
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:persistent',
+                'urn:oasis:names:tc:SAML:1.1:nameid-format:transient',
+            ),
+            'default' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+        ),
+    ),
+
+    JANUS_FIELDS_TYPE_IDP => array(
+        // Endpoint fields
+        'SingleSignOnService:0:Binding' => array(
+            'type' => 'select',
+            'select_values' => array(
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                'urn:oasis:names:tc:SAML:2.0:bindings:PAOS',
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact',
+                'urn:oasis:names:tc:SAML:2.0:bindings:URI'
+            ),
+            'default' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            'required' => true,
+        ),
+        'SingleSignOnService:0:Location' => array('required' => true, 'validate' => 'isurl'),
+
+        'coin:guest_qualifier' => array('required' => true, 'default' => 'All'),
+
+        // MDUI stuff
+        'keywords:#'    => array('required' => true, 'supported'=>array('en','nl')),
+        'logo:0:url'    => array('required' => true, 'default' => 'https://.png', 'default_allow' => false),
+        'logo:0:width'  => array('required' => true),
+        'logo:0:height' => array('required' => true),
+    ),
+
+    JANUS_FIELDS_TYPE_SP => array(
+        'AssertionConsumerService:0:Binding' => array(
+            'type' => 'select',
+            'select_values' => array(
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+                'urn:oasis:names:tc:SAML:2.0:bindings:SOAP',
+                'urn:oasis:names:tc:SAML:2.0:bindings:PAOS',
+                'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact',
+                'urn:oasis:names:tc:SAML:2.0:bindings:URI'
+            ),
+            'default' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+            'required' => true,
+        ),
+        'AssertionConsumerService:0:Location' => array('required' => TRUE, 'validate' => 'isurl'),
+        'redirect.sign'                       => array('type' => 'boolean', 'default' => true),
+
+        'coin:eula'                     => array(),
+        'coin:userContactPoint:url'     => array('validate' => 'isurl'),
+        'coin:userContactPoint:emailAddress' => array('validate' => 'isemail'),
+        'coin:gadgetbaseurl'            => array('validate' => 'isurl'),
+        'coin:default_vo_id'            => array(),
+
+        'coin:alternate_public_key'     => array(),
+        'coin:alternate_private_key'    => array(),
+
+        // OAuth
+        'coin:oauth:secret'             => array('validate' => 'lengteq20'),
+        'coin:oauth:consumer_key'       => array(),
+        'coin:oauth:consumer_secret'    => array('validate' => 'lengteq20'),
+        'coin:oauth:key_type'           => array('default' => 'HMAC_SHA1'),
+        'coin:oauth:public_key'         => array(),
+        'coin:oauth:app_title'          => array('default' => 'Application Title','default_allow' => false),
+        'coin:oauth:app_description'    => array(),
+        'coin:oauth:app_thumbnail'      => array('validate' => 'isurl', 'default' => 'http://www.surfnet.nl/thumb.png', 'default_allow' => false),
+        'coin:oauth:app_icon'           => array('validate' => 'isurl', 'default' => 'http://www.surfnet.nl/icon.gif' ,'default_allow' => false),
+        'coin:oauth:callback_url'       => array('validate' => 'isurl'),
+
+        // Provisioning
+        'coin:is_provision_sp'          => array('type' => 'boolean'),
+        'coin:provision_domain'         => array(),
+        'coin:provision_admin'          => array(),
+        'coin:provision_password'       => array(),
+        'coin:provision_type'           => array(
+            'type' => 'select',
+            'select_values' => array("none", "google"),
+            'default' => 'google'
+        ),
+    ),
+);
+
+$fieldTemplates = new sspmod_janus_fieldsTemplates($template);
+$fields = array(
+    'metadatafields.saml20-idp' => $fieldTemplates->getIdpFields(),
+    'metadatafields.saml20-sp'  => $fieldTemplates->getSpFields(),
+);
+
+/**
+ * Fill out some defaults and apply ordering
+ */
+class sspmod_janus_fieldsTemplates
+{
+    protected $_templates;
+
+    public function __construct($templates)
+    {
+        $this->_templates = $templates;
+    }
+
+    public function getSpFields()
+    {
+        return $this->_getFields(JANUS_FIELDS_TYPE_SP);
+    }
+
+    public function getIdpFields()
+    {
+        return $this->_getFields(JANUS_FIELDS_TYPE_IDP);
+    }
+
+    protected function _getFields($entityType)
+    {
+        $fields = array();
+        foreach ($this->_templates[JANUS_FIELDS_TYPE_ALL] as $fieldName => $fieldTemplate) {
+            $field = $this->_applyDefaults($fieldTemplate);
+            $fields[$fieldName] = $field;
+        }
+
+        $templates = $this->_templates[$entityType];
+        $entityFields = array();
+        foreach ($templates as $fieldName => $fieldTemplate) {
+            $field = $this->_applyDefaults($fieldTemplate);
+            $entityFields[$fieldName] = $field;
+        }
+        $fields = $fields + $entityFields;
+
+        $fields = $this->_orderFields($fields);
+        return $fields;
+    }
+
+    protected function _applyDefaults($fieldTemplate)
+    {
+        $field = $fieldTemplate;
+        if (!isset($field['type'])) {
+            $field['type'] = 'text';
+        }
+        if (isset($field['default']) && !isset($field['default_allow'])) {
+            $field['default_allow'] = true;
+        }
+        if (!isset($field['required'])) {
+            $field['required'] = false;
+        }
+        return $field;
+    }
+
+    protected function _orderFields($fields)
+    {
+        $order = 0;
+        foreach ($fields as &$field) {
+            $order += 10;
+            $field['order'] = $order;
+        }
+        return $fields;
+    }
+}
