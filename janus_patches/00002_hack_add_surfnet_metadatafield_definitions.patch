@@ -178,7 +178,7 @@ Index: modules/janus/dictionaries/metadatafields.definition.json
 +        "en": "NameID supported by this connection."
 +    },
 +    "displayName": {
-+        "en": "The display name for this connection"
++        "en": "The display name for this connection, overrides the 'name' in WAYFs."
 +    },
 +    "coin_gadgetbaseurl": {
 +        "en": "Used to lookup the OAuth parameters belonging to a gadget. Format is a regular expression matching the URL of the gadget's XML descriptor. Example: https://gadgets.store.com/.* Also used when Shindig acts as the provider in 2-legged OAuth"
