@@ -14,6 +14,7 @@ $template = array(
         'certData2'                 => array(),
 
         'contacts:#:contactType'    => array(
+            'type' => 'select',
             'required' => TRUE,
             'supported' => array(0,1,2),
             'select_values' => array('technical', 'support', 'administrative', 'billing', 'other')
