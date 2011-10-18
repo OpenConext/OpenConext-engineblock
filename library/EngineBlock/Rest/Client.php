@@ -60,8 +60,13 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
         $data = array_slice($args, 1) + $this->_data;
 
         $response = $this->restGet($args[0], $data);
-        ebLog()->debug("REST Request: " . $this->getHttpClient()->getLastRequest());
-        ebLog()->debug("REST Response: " . $this->getHttpClient()->getLastResponse()->asString(PHP_EOL));
+
+        /**
+         * @var Zend_Http_Client $httpClient
+         */
+        $httpClient = $this->getHttpClient();
+        ebLog()->debug("REST Request: " . $httpClient->getLastRequest());
+        ebLog()->debug("REST Response: " . $httpClient->getLastResponse()->getBody());
 
         $this->_data = array();//Initializes for next Rest method.
 
