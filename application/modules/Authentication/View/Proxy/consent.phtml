@@ -50,6 +50,9 @@ $layout->title = $layout->title . ' - '. $layout->header;
 $layout->subheader = $this->t('consent_subheader', $sp['Name'][$lang]);
 $layout->footerText = $this->t('footer');
 
+// Set profile page Url
+$profileUrl = EngineBlock_View::profileUrl();
+
 // Set new window icon
 $newWindowIcon = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
@@ -57,9 +60,10 @@ $layout->getView()->inlineScript()->appendScript("document.getElementById('accep
 ?>
 <div>
     <p>
-        <?php echo $this->t('consent_store_info'); ?>
+        <?php echo $this->t('consent_user_info', $attributes['urn:mace:dir:attribute-def:cn'][0], $idp['Name'][$lang], $sp['Name'][$lang]); ?>
+        <br /><br />
+        <?php echo $this->t('consent_store_info', $sp['Name'][$lang], $idp['Name'][$lang], $sp['Name'][$lang]); ?>
     </p>
-    <br />
     <table>
         <thead>
             <tr>
@@ -88,7 +92,7 @@ $layout->getView()->inlineScript()->appendScript("document.getElementById('accep
     </table>
     <br />
     <p>
-        <?php echo $this->t('consent_terms_of_service', $newWindowIcon, $newWindowIcon); ?>
+        <?php echo $this->t('consent_terms_of_service', $newWindowIcon, $newWindowIcon, $profileUrl); ?>
     </p>
     <br />
 
@@ -102,4 +106,5 @@ $layout->getView()->inlineScript()->appendScript("document.getElementById('accep
         <input type="hidden" name="ID" value="<?= $ID ?>" />
         <input type="submit" value="<?php echo $this->t('consent_decline'); ?>" />
     </form>
+    <p><?php echo $this->t('consent_notice'); ?></p>
 </div>

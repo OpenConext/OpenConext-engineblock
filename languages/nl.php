@@ -166,19 +166,19 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
 
     //Consent
-    'consent_header'                    => 'Profiel Vrijgave',
+    'consent_header'                    => 'Nieuwe Applicatie',
     'consent_subheader'                 => 'Autoriseer vrijgave van uw profiel aan <i>%s</i>',
-    'consent_store_info'                => 'Van uw instelling hebben wij de volgende profielgegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan aanverwante diensten.',
-    'consent_terms_of_service'          => '<p>Ik ga akkoord met de vrijgave van mijn profielgegevens.</p>
-        Ik ga akkoord met de Gebruikersvoorwaarden van SURFnet voor het gebruik van SURFconext. Zie de gebruikersvoorwaarden in het
+    'consent_user_info'                 => 'U bent nu ingelogd als <i>%s</i> via <i>%s</i> en staks zal u worden teruggestuurd naar <i>%s</i>.',
+    'consent_store_info'                => 'De onderstaande informatie is nodig om toegang te krijgen tot de dienstverlening van <i>%s</i>. Bent u akkoord dat <i>%s</i> deze informatie doorgeeft aan <i>%s</i>?',
+    'consent_terms_of_service'          => 'Deze informatie zal ook worden opgeslagen in SURFconext en daarom zijn ook de gebruikersvoorwaarden van SURFnet van toepassing (
         <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">Engels</a>
         <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
         / in het <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Nederlands</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" /><br />
-        <br />
-        Het is mogelijk dat er additionele gebruikersvoorwaarden zijn voor diensten aangeboden door derden.',
-    'consent_accept'                    => 'Ik Accepteer',
-    'consent_decline'                   => 'Ik Wijs af',
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />)<br />
+        Op uw <a href="%s">profiel pagina</a> kunt u zien welke informatie er via SURFconext gedeeld wordt en welke extra voorwaarden van toepassing zijn op de diensten die u via SURFconext gebruikt.',
+    'consent_accept'                    => 'Ja, ik ga akkoord',
+    'consent_decline'                   => 'Nee, ik ga niet akkoord',
+    'consent_notice'                    => 'Deze melding verschijnt alleen als u voor de eerste keer inlogt op een nieuwe dienst of als de gegevens, die worden doorgegeven, wijzigen.',
 
     //Error screens
     'error_help_desc'                   => '<p>

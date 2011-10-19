@@ -165,19 +165,20 @@ If you have any questions about your privacy and the policy applied, please visi
     'deleteuser_success_desc'           => '<strong>Important!</strong> To finalize the exit procedure you need to close your browser.',
 
     //Consent
-    'consent_header'                    => 'Attribute Release',
+    'consent_header'                    => 'New Application',
     'consent_subheader'                 => 'Please provide consent for <i>%s</i>',
-    'consent_store_info'                => 'The following profile data have been provided by your institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.',
-    'consent_terms_of_service'          => '<p>I agree with the release of my profile data.</p>
-        I agree with the SURFnet Terms of Service for the use of SURFconext
-        in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">English</a>
+    'consent_user_info'                 => 'You are now logged in as <i>%s</i> at <i>%s</i> and you will be taken back to <i>%s</i>.',
+    'consent_store_info'                => 'The information below is required to access the services provided by <i>%s</i>. Do you agree that <i>%s</i> will pass on this information to <i>%s</i>?',
+    'consent_terms_of_service'          => 'This information will be stored in SURFconext and therefore the Terms of Service of SURFnet apply
+        (<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">English</a>
         <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
         / in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Dutch</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" /><br />
-        <br />
-        Please note that additional Terms of Services may apply to 3rd party services.',
-    'consent_accept'                    => 'I Accept',
-    'consent_decline'                   => 'I Decline',
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />). On your <a href="%s">profile page</a>
+        you can see what information is shared via SURFconext and what additional conditions may apply to 3rd party services.
+        <br />',
+    'consent_accept'                    => 'Yes, I agree',
+    'consent_decline'                   => 'No, I do not',
+    'consent_notice'                    => 'This message only appears when you log in at a new service or when the information, passed to the service, is changed.',
 
     //Error screens
     'error_help_desc'               => '<p>

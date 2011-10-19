@@ -131,6 +131,20 @@ class EngineBlock_View
     }
 
     /**
+     * Return the url of the Profile vhost
+     *
+     * @example <?php echo $this->profileUrl(); ?>
+     *
+     * @return string
+     */
+    public static function profileUrl()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $settings = $application->getConfiguration();
+        return $settings->profile->protocol . '://'. $settings->profile->host;
+    }
+
+    /**
      * Set the language on the query string and return the new query string
      *
      * @example <?php echo $this->setLanguage('en'); ?>

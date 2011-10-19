@@ -220,12 +220,15 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $_SESSION['consent'][$response['_ID']]['response'] = $response;
+//         echo '<pre>';var_dump($response, true);die();
 
         $attributes = Corto_XmlToArray::attributes2array(
             $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
         );
         $serviceProviderEntityId = $attributes['ServiceProvider'][0];
         unset($attributes['ServiceProvider']);
+
+        $identityProviderEntityId = $response['__']['OriginalIssuer'];
 
         $priorConsent = $this->_hasStoredConsent($serviceProviderEntityId, $response, $attributes);
         if ($priorConsent) {
@@ -248,6 +251,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                  'ID' => $response['_ID'],
                  'attributes' => $attributes,
                  'sp' => $this->_server->getRemoteEntity($serviceProviderEntityId),
+                 'idp' => $this->_server->getRemoteEntity($identityProviderEntityId),
             ));
         $this->_server->sendOutput($html);
     }
