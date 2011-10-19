@@ -580,7 +580,70 @@ class Corto_Module_Services extends Corto_Module_Abstract
             'ds:Signature' => '__placeholder__',
             'md:SPSSODescriptor' => array(
                 '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
-            ),
+                'md:AttributeConsumingService' => array(
+                    'md:RequestedAttribute' => array(
+                        // Mail (example: john@surfnet.nl)
+                        array(
+                            '_Name' => 'urn:mace:dir:attribute-def:mail'
+                        ),
+                        array(
+                            '_Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
+                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                            '_isRequired' => 'true'
+                        ),
+
+                        // DisplayName (example: John Doe)
+                        array(
+                            '_Name' => 'urn:mace:dir:attribute-def:displayName'
+                        ),
+                        array(
+                            '_Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
+                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                            '_isRequired' => 'true'
+                        ),
+
+                        // Surname (example: Doe)
+                        array(
+                            '_Name' => 'urn:mace:dir:attribute-def:sn'
+                        ),
+                        array(
+                            '_Name' => 'urn:oid:2.5.4.4',
+                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                            '_isRequired' => 'true'
+                        ),
+
+                        // Given name (example: John)
+                        array(
+                            '_Name' => 'urn:mace:dir:attribute-def:givenName'
+                        ),
+                        array(
+                            '_Name' => 'urn:oid:2.5.4.42',
+                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                            '_isRequired' => 'true'
+                        ),
+
+                        // SchachomeOrganization
+                        array(
+                            '_Name' => 'urn:mace:terena.org:schac:homeOrganization'
+                        ),
+                        array(
+                            '_Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
+                            ,'_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                            , '_isRequired' => 'true'
+                        ),
+
+                        // UID (example: john.doe)
+                        array(
+                            '_Name' => 'urn:mace:dir:attribute-def:uid'
+                        ),
+                        array(
+                            '_Name' => 'urn:oid:0.9.2342.19200300.100.1.1',
+                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                            '_isRequired' => 'true'
+                        )
+                    )
+                )
+            )
         );
 
         $certificates = $this->_server->getCurrentEntitySetting('certificates', array());

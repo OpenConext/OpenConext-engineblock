@@ -139,6 +139,7 @@ class Corto_XmlToArray
         'md:EntityDescriptor',
         'md:KeyDescriptor',
 #        'md:AssertionConsumerService',
+        'md:AttributeConsumingService',
     );
 
     public static function xml2array($xml)
