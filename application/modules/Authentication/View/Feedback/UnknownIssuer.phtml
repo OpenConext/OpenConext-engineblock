@@ -43,7 +43,7 @@ $layout->footerText = $this->t('footer');
         <?= $this->t('error_unknown_issuer_desc',
                      $this->_data['entity-id'],
                      $this->_data['destination'],
-                     new Zend_Date(Zend_Date::DATETIME, null, new Zend_Locale($this->language()))); ?>
+                     Zend_Date::now()->toString(Zend_Date::DATETIME, null, $this->language())); ?>
         <div class="button-row">
             <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
             <?= $this->t('go_back'); ?>
