@@ -21,7 +21,7 @@ $template = array(
         ),
         'contacts:#:givenName'      => array('required' => TRUE, 'supported' => array(0,1,2)),
         'contacts:#:surName'        => array('required' => TRUE, 'supported' => array(0,1,2)),
-        'contacts:#:emailAddress'   => array('required' => TRUE, 'supported' => array(0,1,2)),
+        'contacts:#:emailAddress'   => array('required' => TRUE, 'supported' => array(0,1,2), 'validate'=>'isemail'),
         'contacts:#:telephoneNumber'=> array(                    'supported' => array(0,1,2)),
 
         'OrganizationName:#'        => array(                    'supported' => array('en', 'nl')),
