@@ -43,10 +43,12 @@ if (isset($_POST['lang'])) {
         <title><?php echo $this->layout()->title;?></title>
 
         <link href="<?= EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="<?= EngineBlock_View::staticUrl(); ?>/css/responsive/screen.css" rel="stylesheet" type="text/css"/>
+        <link href="<?= EngineBlock_View::staticUrl(); ?>/css/responsive/screen.css" rel="stylesheet" type="text/css" media="screen"/>
+        <link href="<?= EngineBlock_View::staticUrl(); ?>/css/responsive/narrow.css" rel="stylesheet" type="text/css" media="only screen and (max-width: 1000px)"/>
         <!--[if lt IE 8 ]>
         <link href="<?= EngineBlock_View::staticUrl(); ?>/css/responsive/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
         <![endif]-->
+        <script src="<?= EngineBlock_View::staticUrl(); ?>/javascript/jquery.mediaqueries.js" type="text/javascript"></script>
 
         <?php echo $this->headStyle(); ?>
         <?php echo $this->headScript(); ?>
