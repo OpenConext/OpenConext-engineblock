@@ -171,6 +171,10 @@ class sspmod_janus_fieldsTemplates
         if (isset($field['default']) && !isset($field['default_allow'])) {
             $field['default_allow'] = true;
         }
+        if (!isset($field['default'])) {
+            $field['default'] = '';
+            $field['default_allow'] = false;
+        }
         if (!isset($field['required'])) {
             $field['required'] = false;
         }
