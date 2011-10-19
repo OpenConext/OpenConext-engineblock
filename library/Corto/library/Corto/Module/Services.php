@@ -581,6 +581,39 @@ class Corto_Module_Services extends Corto_Module_Abstract
             'md:SPSSODescriptor' => array(
                 '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
                 'md:AttributeConsumingService' => array(
+                    'md:ServiceName' => array(
+                        array(
+                            '_xml:lang' => 'en',
+                            '__v' => 'SURFconext UK'
+                        ),
+                        array(
+                            '_xml:lang' => 'nl',
+                            '__v' => 'SURFconext NL'
+                        )
+                     ),
+
+                    'md:DisplayName' => array(
+                        array(
+                            '_xml:lang' => 'en',
+                            '__v' => 'SURFconext UK DisplayName'
+                        ),
+                        array(
+                            '_xml:lang' => 'nl',
+                            '__v' => 'SURFconext NL DisplayName'
+                        )
+                     ),
+
+                    'md:ServiceDescription' => array(
+                        array(
+                            '_xml:lang' => 'en',
+                            '__v' => 'SURFconext is a collaboration infrastructure that creates new opportunities to collaborate online based on a combination of applications from different providers.'
+                        ),
+                        array(
+                            '_xml:lang' => 'nl',
+                            '__v' => 'SURFconext is een samenwerkingsinfrastructuur die nieuwe vormen van samenwerken mogelijk maakt door diensten van verschillende aanbieders te combineren.'
+                        )
+                     ),
+
                     'md:RequestedAttribute' => array(
                         // Mail (example: john@surfnet.nl)
                         array(

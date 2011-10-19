@@ -136,10 +136,13 @@ class Corto_XmlToArray
         'samlp:RequesterID',
         'ds:X509Certificate',
         'ds:Transform',
+        'md:DisplayName',
         'md:EntityDescriptor',
         'md:KeyDescriptor',
 #        'md:AssertionConsumerService',
         'md:AttributeConsumingService',
+        'md:ServiceDescription',
+        'md:ServiceName'
     );
 
     public static function xml2array($xml)
