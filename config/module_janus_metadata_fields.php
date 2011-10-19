@@ -58,6 +58,7 @@ $template = array(
         'certData'                  => array('required'=>TRUE),
 
         'coin:guest_qualifier' => array('required' => true, 'default' => 'All'),
+        'coin:default_vo_id'    => array(),
 
         // MDUI stuff
         'keywords:#'    => array('required' => true, 'supported'=>array('en','nl')),
