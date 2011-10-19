@@ -496,6 +496,22 @@ class Corto_Module_Services extends Corto_Module_Abstract
             'md:IDPSSODescriptor' => array(
                 '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
             ),
+
+            // @todo get the correct email adresses
+            'md:ContactPerson' => array(
+                array(
+                    '_contactType' => 'support',
+                    'md:EmailAddress' => array(
+                        '__v' => 'support@surfconext.nl'
+                    )
+                ),
+                array(
+                    '_contactType' => 'technical',
+                    'md:EmailAddress' => array(
+                        '__v' => 'technical@surfconext.nl'
+                    )
+                )
+            )
         );
 
         // Check if an alternative Public & Private key have been set for a SP
