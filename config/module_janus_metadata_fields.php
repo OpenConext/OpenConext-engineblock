@@ -58,7 +58,6 @@ $template = array(
         'certData'                  => array('required'=>TRUE),
 
         'coin:guest_qualifier' => array('required' => true, 'default' => 'All'),
-        'coin:default_vo_id'    => array(),
 
         // MDUI stuff
         'keywords:#'    => array('required' => true, 'supported'=>array('en','nl')),
@@ -81,6 +80,8 @@ $template = array(
         'redirect.sign'                       => array('type' => 'boolean', 'required' => TRUE, 'default' => false),
 
         'coin:eula'                     => array('validate' => 'isurl'),
+
+        'coin:default_vo_id'    => array(),
 
         'coin:alternate_public_key'     => array(),
         'coin:alternate_private_key'    => array(),
