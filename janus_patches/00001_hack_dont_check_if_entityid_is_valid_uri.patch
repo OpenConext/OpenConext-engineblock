@@ -1,11 +1,11 @@
 Index: modules/janus/www/editentity.php
 ===================================================================
---- modules/janus/www/editentity.php	(revision 865)
+--- modules/janus/www/editentity.php	(revision 867)
 +++ modules/janus/www/editentity.php	(working copy)
-@@ -137,7 +137,7 @@
+@@ -135,7 +135,7 @@
  
      // Change entityID
-     if(isset($_POST['entityid'])) {
+     if(isset($_POST['entityid']) && $guard->hasPermission('changeentityid', $entity->getWorkflow(), $user->getType())) {
 -        if(check_uri($_POST['entityid'])) {
 +        if(check_uri($_POST['entityid']) || true) { # HACK: For SURFnetGuests : https://espee-test.surfnet.nl/federate/metadata/saml20/SURFnetGuests
              $entityIdNeedsUpdating = $_POST['entityid'] != $entity->getEntityid();
