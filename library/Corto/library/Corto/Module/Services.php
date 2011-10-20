@@ -589,103 +589,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
             'ds:Signature' => '__placeholder__',
             'md:SPSSODescriptor' => array(
                 '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
-                'md:AttributeConsumingService' => array(
-                    'md:ServiceName' => array(
-                        array(
-                            '_xml:lang' => 'en',
-                            '__v' => 'SURFconext UK'
-                        ),
-                        array(
-                            '_xml:lang' => 'nl',
-                            '__v' => 'SURFconext NL'
-                        )
-                     ),
-
-                    'md:DisplayName' => array(
-                        array(
-                            '_xml:lang' => 'en',
-                            '__v' => 'SURFconext UK DisplayName'
-                        ),
-                        array(
-                            '_xml:lang' => 'nl',
-                            '__v' => 'SURFconext NL DisplayName'
-                        )
-                     ),
-
-                    'md:ServiceDescription' => array(
-                        array(
-                            '_xml:lang' => 'en',
-                            '__v' => 'SURFconext is a collaboration infrastructure that creates new opportunities to collaborate online based on a combination of applications from different providers.'
-                        ),
-                        array(
-                            '_xml:lang' => 'nl',
-                            '__v' => 'SURFconext is een samenwerkingsinfrastructuur die nieuwe vormen van samenwerken mogelijk maakt door diensten van verschillende aanbieders te combineren.'
-                        )
-                     ),
-
-                    'md:RequestedAttribute' => array(
-                        // Mail (example: john@surfnet.nl)
-                        array(
-                            '_Name' => 'urn:mace:dir:attribute-def:mail'
-                        ),
-                        array(
-                            '_Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
-                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                            '_isRequired' => 'true'
-                        ),
-
-                        // DisplayName (example: John Doe)
-                        array(
-                            '_Name' => 'urn:mace:dir:attribute-def:displayName'
-                        ),
-                        array(
-                            '_Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
-                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                            '_isRequired' => 'true'
-                        ),
-
-                        // Surname (example: Doe)
-                        array(
-                            '_Name' => 'urn:mace:dir:attribute-def:sn'
-                        ),
-                        array(
-                            '_Name' => 'urn:oid:2.5.4.4',
-                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                            '_isRequired' => 'true'
-                        ),
-
-                        // Given name (example: John)
-                        array(
-                            '_Name' => 'urn:mace:dir:attribute-def:givenName'
-                        ),
-                        array(
-                            '_Name' => 'urn:oid:2.5.4.42',
-                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                            '_isRequired' => 'true'
-                        ),
-
-                        // SchachomeOrganization
-                        array(
-                            '_Name' => 'urn:mace:terena.org:schac:homeOrganization'
-                        ),
-                        array(
-                            '_Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
-                            ,'_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-                            , '_isRequired' => 'true'
-                        ),
-
-                        // UID (example: john.doe)
-                        array(
-                            '_Name' => 'urn:mace:dir:attribute-def:uid'
-                        ),
-                        array(
-                            '_Name' => 'urn:oid:0.9.2342.19200300.100.1.1',
-                            '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                            '_isRequired' => 'true'
-                        )
-                    )
-                )
             ),
+
             // @todo get the correct email adresses
             'md:ContactPerson' => array(
                 array(
@@ -738,6 +643,94 @@ class Corto_Module_Services extends Corto_Module_Abstract
             '_Binding'  => self::DEFAULT_RESPONSE_BINDING,
             '_Location' => $this->_server->getCurrentEntityUrl('assertionConsumerService'),
             '_index' => '1',
+        );
+
+        $entityDescriptor['md:SPSSODescriptor']['md:AttributeConsumingService'] = array(
+            // @todo get correct value for index
+            '_index' => 1,
+            'md:ServiceName' => array(
+                array(
+                    '_xml:lang' => 'en',
+                    '__v' => 'SURFconext UK'
+                ),
+                array(
+                    '_xml:lang' => 'nl',
+                    '__v' => 'SURFconext NL'
+                )
+             ),
+
+            'md:ServiceDescription' => array(
+                array(
+                    '_xml:lang' => 'en',
+                    '__v' => 'SURFconext is a collaboration infrastructure that creates new opportunities to collaborate online based on a combination of applications from different providers.'
+                ),
+                array(
+                    '_xml:lang' => 'nl',
+                    '__v' => 'SURFconext is een samenwerkingsinfrastructuur die nieuwe vormen van samenwerken mogelijk maakt door diensten van verschillende aanbieders te combineren.'
+                )
+             ),
+
+            'md:RequestedAttribute' => array(
+                // Mail (example: john@surfnet.nl)
+                array(
+                    '_Name' => 'urn:mace:dir:attribute-def:mail'
+                ),
+                array(
+                    '_Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
+                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    '_isRequired' => 'true'
+                ),
+
+                // DisplayName (example: John Doe)
+                array(
+                    '_Name' => 'urn:mace:dir:attribute-def:displayName'
+                ),
+                array(
+                    '_Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
+                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    '_isRequired' => 'true'
+                ),
+
+                // Surname (example: Doe)
+                array(
+                    '_Name' => 'urn:mace:dir:attribute-def:sn'
+                ),
+                array(
+                    '_Name' => 'urn:oid:2.5.4.4',
+                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    '_isRequired' => 'true'
+                ),
+
+                // Given name (example: John)
+                array(
+                    '_Name' => 'urn:mace:dir:attribute-def:givenName'
+                ),
+                array(
+                    '_Name' => 'urn:oid:2.5.4.42',
+                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    '_isRequired' => 'true'
+                ),
+
+                // SchachomeOrganization
+                array(
+                    '_Name' => 'urn:mace:terena.org:schac:homeOrganization'
+                ),
+                array(
+                    '_Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
+                    ,'_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                    , '_isRequired' => 'true'
+                ),
+
+                // UID (example: john.doe)
+                array(
+                    '_Name' => 'urn:mace:dir:attribute-def:uid'
+                ),
+                array(
+                    '_Name' => 'urn:oid:0.9.2342.19200300.100.1.1',
+                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    '_isRequired' => 'true'
+                )
+            )
         );
 
         $entityDescriptor = $this->_server->sign($entityDescriptor);
