@@ -16,7 +16,7 @@ Feature: Consent (Backlog-136)
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-     And I press "I Decline"
+     And I press "No, I do not"
     Then I should see "No consent given"
 
   Scenario: User logs into SP for the first time and gives consent.
