@@ -778,9 +778,13 @@ class Corto_Module_Services extends Corto_Module_Abstract
             
             $dom = new DOMDocument();
             $dom->loadXML($xml);
-            if (!$dom->schemaValidateSource($schemaXml)) {
+            if (!@$dom->schemaValidateSource($schemaXml)) {
+                 $errorInfo = error_get_last();
+                 $errorMessage = $errorInfo['message'];
+                 // @todo improve parsing message by creating custom exceptions for which know that structure of messages
+                 $parsedErrorMessage = preg_replace('/\{[^}]*\}/', '', $errorMessage);
                 echo '<pre>'.htmlentities(Corto_XmlToArray::formatXml($xml)).'</pre>';
-                throw new Exception('Metadata XML doesnt validate against XSD at Oasis-open.org?!');
+                throw new Exception('Metadata XML doesnt validate against XSD at Oasis-open.org: ' . $parsedErrorMessage);
             }
         }
     }
