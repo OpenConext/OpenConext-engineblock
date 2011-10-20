@@ -692,6 +692,21 @@ class Corto_Module_Services extends Corto_Module_Abstract
                         )
                     )
                 )
+            ),
+            // @todo get the correct email adresses
+            'md:ContactPerson' => array(
+                array(
+                    '_contactType' => 'support',
+                    'md:EmailAddress' => array(
+                        '__v' => 'help@surfconext.nl'
+                    )
+                ),
+                array(
+                    '_contactType' => 'technical',
+                    'md:EmailAddress' => array(
+                        '__v' => 'surfconext-beheer@surfnet.nl'
+                    )
+                )
             )
         );
 
