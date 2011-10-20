@@ -23,7 +23,7 @@ Feature: Consent (Backlog-136)
     When I go to the Test SP
      And I select from the WAYF "SURFguest"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-     And I press "I Accept"
+     And I press "Yes, I agree"
      And I pass through EngineBlock
     Then I should be on the Test SP
 
@@ -37,7 +37,7 @@ Feature: Consent (Backlog-136)
   Scenario: User logs into a second SP and has to give consent again
     When I go to the Portal with "SURFnetGuests" as the entity ID
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-     And I press "I Accept"
+     And I press "Yes, I agree"
      And I pass through EngineBlock
     Then I should be on the Portal
 
@@ -52,7 +52,7 @@ Feature: Consent (Backlog-136)
     When I go to the profile SP
      And I select from the WAYF "SURFguest"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-     And I press "I Accept"
+     And I press "Yes, I agree"
      And I pass through EngineBlock
      And I follow "Delete my SURFconext account!"
 
