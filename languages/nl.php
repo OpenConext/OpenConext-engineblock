@@ -174,8 +174,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
         <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">Engels</a>
         <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
         / in het <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Nederlands</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />)<br />
-        Op uw <a href="%s">profiel pagina</a> kunt u zien welke informatie er via SURFconext gedeeld wordt en welke extra voorwaarden van toepassing zijn op de diensten die u via SURFconext gebruikt.',
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />). Op uw <a href="%s" target="_blank">profiel pagina</a> kunt u zien welke informatie er via SURFconext gedeeld wordt en welke extra voorwaarden van toepassing zijn op de diensten die u via SURFconext gebruikt.',
     'consent_accept'                    => 'Ja, ik ga akkoord',
     'consent_decline'                   => 'Nee, ik ga niet akkoord',
     'consent_notice'                    => 'Deze melding verschijnt alleen als u voor de eerste keer inlogt op een nieuwe dienst of als de gegevens, die worden doorgegeven, wijzigen.',

@@ -56,7 +56,6 @@ $profileUrl = EngineBlock_View::profileUrl();
 // Set new window icon
 $newWindowIcon = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
 $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
-$layout->getView()->inlineScript()->appendScript("document.getElementById('accept_terms_button').focus();");
 ?>
 <div>
     <p>
@@ -90,7 +89,6 @@ $layout->getView()->inlineScript()->appendScript("document.getElementById('accep
         </tr>
     <? } ?>
     </table>
-    <br />
     <p>
         <?php echo $this->t('consent_terms_of_service', $newWindowIcon, $newWindowIcon, $profileUrl); ?>
     </p>

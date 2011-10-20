@@ -173,11 +173,11 @@ If you have any questions about your privacy and the policy applied, please visi
         (<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">English</a>
         <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
         / in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Dutch</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />). On your <a href="%s">profile page</a>
+        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />). On your <a href="%s" target="_blank">profile page</a>
         you can see what information is shared via SURFconext and what additional conditions may apply to 3rd party services.
         <br />',
     'consent_accept'                    => 'Yes, I agree',
-    'consent_decline'                   => 'No, I do not',
+    'consent_decline'                   => 'No, I do not agree',
     'consent_notice'                    => 'This message only appears when you log in at a new service or when the information, passed to the service, is changed.',
 
     //Error screens
