@@ -564,15 +564,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $entityDescriptor = $this->_server->sign($entityDescriptor, $spEntity['AlternatePublicKey'], $spEntity['AlternatePrivateKey']);
         $xml = Corto_XmlToArray::array2xml($entityDescriptor);
 
-        $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd';
-        if ($this->_server->getConfig('debug', false)  && ini_get('allow_url_fopen') && file_exists($schemaUrl)) {
-            $dom = new DOMDocument();
-            $dom->loadXML($xml);
-            if (!$dom->schemaValidate($schemaUrl)) {
-                echo '<pre>'.htmlentities(Corto_XmlToArray::formatXml($xml)).'</pre>';
-                throw new Exception('Metadata XML doesnt validate against XSD at Oasis-open.org?!');
-            }
-        }
+        $this->_validateXml($xml);
+
         $this->_server->sendHeader('Content-Type', 'application/xml');
         //$this->_server->sendHeader('Content-Type', 'application/samlmetadata+xml');
         $this->_server->sendOutput($xml);
@@ -751,18 +744,69 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         $xml = Corto_XmlToArray::array2xml($entityDescriptor);
 
-        $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd';
-        if ($this->_server->getConfig('debug', false) && ini_get('allow_url_fopen') && file_exists($schemaUrl)) {
+        $this->_validateXml($xml);
+
+        $this->_server->sendHeader('Content-Type', 'application/xml');
+        //$this->_server->sendHeader('Content-Type', 'application/samlmetadata+xml');
+        $this->_server->sendOutput($xml);
+    }
+
+    
+    /**
+     * Validates xml against oasis SAML 2 spec
+     *
+     * @param string $xml
+     * @return void
+     * @throws Exception in case validating itself fails or if xml does not validate
+     */
+    protected function _validateXml($xml)
+    {
+        $inDebugModus = $this->_server->getConfig('debug', false);
+        if($inDebugModus) {
+            if(!ini_get('allow_url_fopen')) {
+                throw new Exception('Failed validating XML, url_fopen is not allowed');
+            }
+
+            // Load schema
+            $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd';
+            $schemaXml = @file_get_contents($schemaUrl);
+            if($schemaXml === false) {
+                throw new Exception('Failed validating XML, schema url could not be opened: "' . $schemaUrl . '"');
+            }
+
+            $schemaXml = $this->_absolutizeSchemaLocations($schemaXml, $schemaUrl);
+            
             $dom = new DOMDocument();
             $dom->loadXML($xml);
-            if (!$dom->schemaValidate($schemaUrl)) {
+            if (!$dom->schemaValidateSource($schemaXml)) {
                 echo '<pre>'.htmlentities(Corto_XmlToArray::formatXml($xml)).'</pre>';
                 throw new Exception('Metadata XML doesnt validate against XSD at Oasis-open.org?!');
             }
         }
-        $this->_server->sendHeader('Content-Type', 'application/xml');
-        //$this->_server->sendHeader('Content-Type', 'application/samlmetadata+xml');
-        $this->_server->sendOutput($xml);
+    }
+
+    /**
+     * Converts relative schema locations to absolute since php dom validator 
+     * does not seem to understand relative links
+     *
+     * @param   string  $schemaXml
+     * @param   string  $schemaUrl
+     * @return  string  $absoluteSchemaXml
+     */
+    protected function _absolutizeSchemaLocations($schemaXml, $schemaUrl) {
+        $allSchemaLocationsRegex = '/schemaLocation="(.*)"/';
+        preg_match_all($allSchemaLocationsRegex, $schemaXml, $matches);
+
+        $schemaDir = dirname($schemaUrl) . '/';
+        $absoluteSchemaXml =$schemaXml;
+        foreach($matches[1] as $schemaLocation) {
+            $isRelativeLocation = substr($schemaLocation, 0, 4) != 'http';
+            if($isRelativeLocation) {
+                $absoluteSchemaXml = str_replace('"' . $schemaLocation . '"', '"' . $schemaDir . $schemaLocation . '"', $schemaXml);
+            }
+        }
+
+        return $absoluteSchemaXml;
     }
 
     public function artifactResolutionService()
