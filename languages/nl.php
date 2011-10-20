@@ -167,7 +167,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     //Consent
     'consent_header'                    => 'Nieuwe Applicatie',
-    'consent_subheader'                 => 'Autoriseer vrijgave van uw profiel aan <i>%s</i>',
+    'consent_subheader'                 => 'Autoriseer profiel vrijgave aan <i>%s</i>',
     'consent_user_info'                 => 'U bent nu ingelogd als <i>%s</i> via <i>%s</i> en staks zal u worden teruggestuurd naar <i>%s</i>.',
     'consent_store_info'                => 'De onderstaande informatie is nodig om toegang te krijgen tot de dienstverlening van <i>%s</i>. Bent u akkoord dat <i>%s</i> deze informatie doorgeeft aan <i>%s</i>?',
     'consent_terms_of_service'          => 'Deze informatie zal ook worden opgeslagen in SURFconext en daarom zijn ook de gebruikersvoorwaarden van SURFnet van toepassing (
