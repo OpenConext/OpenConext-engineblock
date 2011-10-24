@@ -446,8 +446,8 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
     /**
      * Decrypt an xml fragment.
-     * @param String $privateKey The private key to use to decrypt the 
-     *                           elements.
+     *
+     * @param resource $privateKey OpenSSL private key for Corto to get the symmetric key.
      * @param array $element Array representation of an xml fragment
      * @param Bool $returnAsXML If true, the method returns an xml string.
      *                          If false (default), it returns an array 
@@ -457,10 +457,19 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
      */
     protected function _decryptElement($privateKey, $element, $returnAsXML = false)
     {
-        $encryptedKey  = base64_decode($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey']['xenc:CipherData']['xenc:CipherValue']['__v']);
-        $encryptedData = base64_decode($element['xenc:EncryptedData']['xenc:CipherData']['xenc:CipherValue']['__v']);
+        if (!isset($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v'])) {
+            throw new Corto_Module_Bindings_Exception("XML Encryption: No encrypted key found?");
+        }
+        if (!isset($element['xenc:EncryptedData']['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v'])) {
+            throw new Corto_Module_Bindings_Exception("XML Encryption: No encrypted data found?");
+        }
+        $encryptedKey  = base64_decode($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v']);
+        $encryptedData = base64_decode($element['xenc:EncryptedData']['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v']);
 
-        openssl_private_decrypt($encryptedKey, $sessionKey, $privateKey, OPENSSL_PKCS1_PADDING);
+        $sessionKey = null;
+        if (!openssl_private_decrypt($encryptedKey, $sessionKey, $privateKey, OPENSSL_PKCS1_PADDING)) {
+            throw new Corto_Module_Bindings_Exception("XML Encryption: Unable to decrypt symmetric key using private key");
+        }
         openssl_free_key($privateKey);
 
         $cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
@@ -470,13 +479,23 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         mcrypt_generic_init($cipher, $sessionKey, $iv);
 
         $decryptedData = mdecrypt_generic($cipher, substr($encryptedData, $ivSize));
+
+        // Remove the CBC block padding
+        $dataLen = strlen($decryptedData);
+        $paddingLength = substr($decryptedData, $dataLen - 1, 1);
+        $decryptedData = substr($decryptedData, 0, $dataLen - ord($paddingLength));
+
         mcrypt_generic_deinit($cipher);
         mcrypt_module_close($cipher);
 
         if ($returnAsXML) {
             return $decryptedData;
         }
-        return Corto_XmlToArray::xml2array($decryptedData);
+        else {
+            $newElement = Corto_XmlToArray::xml2array($decryptedData);
+            $newElement['__']['Raw'] = $decryptedData;
+            return $newElement;
+        }
     }
 
     protected function _verifyResponse(array &$response)
@@ -525,13 +544,13 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
         $assertionVerified = $this->_verifySignatureXMLElement(
             $publicKey,
-            $message['__']['Raw'],
+            isset($message['saml:Assertion']['__']['Raw']) ? $message['saml:Assertion']['__']['Raw'] : $message['__']['Raw'],
             $message['saml:Assertion']
         );
         if (!$assertionVerified && $publicKeyFallback) {
             $assertionVerified = $this->_verifySignatureXMLElement(
                 $publicKeyFallback,
-                $message['__']['Raw'],
+                isset($message['saml:Assertion']['__']['Raw']) ? $message['saml:Assertion']['__']['Raw'] : $message['__']['Raw'],
                 $message['saml:Assertion']
             );
         }
@@ -580,6 +599,12 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
     protected function _verifySignatureXMLElement($publicKey, $xml, $element)
     {
+        if (!isset($element['ds:Signature']['ds:SignatureValue']['__v'])) {
+            throw new Corto_Module_Bindings_Exception("No sigurature found on element? " . var_export($element, true));
+        }
+        if (!isset($element['ds:Signature']['ds:SignedInfo']['ds:Reference'][0]['ds:DigestValue']['__v'])) {
+            throw new Corto_Module_Bindings_Exception("No digest found on element?" . var_export($element, true));
+        }
         $signatureValue = base64_decode($element['ds:Signature']['ds:SignatureValue']['__v']);
         $digestValue    = base64_decode($element['ds:Signature']['ds:SignedInfo']['ds:Reference'][0]['ds:DigestValue']['__v']);
 

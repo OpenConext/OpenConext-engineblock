@@ -158,7 +158,7 @@ class Corto_XmlToArray
         }
 
         xml_parser_free($parser);
-          self::$_singulars = array_fill_keys(self::$_singulars, 1);
+        self::$_singulars = array_fill_keys(self::$_singulars, 1);
         $return = self::_xml2array($values);
         return $return[0];
     }
@@ -172,7 +172,7 @@ class Corto_XmlToArray
      * @param array $namespaceMapping
      * @return array
      */
-     
+
     protected static $c = 0;
      
     protected static function _xml2array(&$elements, $level = 1, $namespaceMapping = array())
@@ -240,6 +240,8 @@ class Corto_XmlToArray
             }
             $newElement[] = $complete;
         }
+        self::$c = 0;
+        self::$_singulars = array_keys(self::$_singulars);
         return $newElement;
     }
 
