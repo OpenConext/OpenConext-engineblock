@@ -69,4 +69,55 @@ class EngineBlock_X509Certificate
 
         return $pemKey;
     }
+
+    /**
+     * Loads SSL certificate for a given url
+     *
+     * @param   string  $url
+     * @return  resource $certificateResource
+     * @throws  Exception if loading fails
+     */
+    public function loadFromUrl($url) {
+        $context = stream_context_create (array(
+            "ssl" => array(
+                "capture_peer_cert" => true
+            )
+        ));
+
+        $sslUrl = str_replace('https://', '', $url);
+        $sslUrl = 'ssl://' . $sslUrl;
+
+        $timeoutSeconds = 30;
+        $streamResource = @stream_socket_client(
+            $sslUrl,
+            $errorNr,
+            $errorMessage,
+            $timeoutSeconds,
+            STREAM_CLIENT_CONNECT,
+            $context);
+        if(!is_resource($streamResource)) {
+            throw new Exception('Failed loading SSL certificate: "' . $errorMessage . '"');
+        }
+
+        $contextParams = stream_context_get_params($streamResource);
+        $certificateResource = $contextParams["options"]["ssl"]["peer_certificate"];
+
+        return $certificateResource;
+    }
+
+    /**
+     * Exports key of a given SSL certificate
+     *
+     * @param string    $url without protocol
+     * @return string   $certificateContent
+     */
+    public function exportPemFromUrl($url) {
+        $certificateResource = $this->loadFromUrl($url);
+        openssl_x509_export($certificateResource, $certificateContent);
+
+        $certificateContent = str_replace('-----BEGIN CERTIFICATE-----' ,'', $certificateContent);
+        $certificateContent = str_replace('-----END CERTIFICATE-----' ,'', $certificateContent);
+
+        return $certificateContent;
+    }
 }

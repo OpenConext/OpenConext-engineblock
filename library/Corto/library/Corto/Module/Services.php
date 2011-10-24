@@ -550,6 +550,16 @@ class Corto_Module_Services extends Corto_Module_Abstract
                         ),
                     ),
                 ),
+                array(
+                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    'ds:KeyInfo' => array(
+                        'ds:X509Data' => array(
+                            'ds:X509Certificate' => array(
+                                '__v' => $this->_loadHostSslKey(),
+                            ),
+                        ),
+                    ),
+                ),
             );
         }
 
@@ -629,6 +639,16 @@ class Corto_Module_Services extends Corto_Module_Abstract
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
                                 '__v' => $this->_server->getCertDataFromPem($certificates['public']),
+                            ),
+                        ),
+                    ),
+                ),
+                array(
+                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    'ds:KeyInfo' => array(
+                        'ds:X509Data' => array(
+                            'ds:X509Certificate' => array(
+                                '__v' => $this->_loadHostSslKey(),
                             ),
                         ),
                     ),
@@ -744,7 +764,17 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $this->_server->sendOutput($xml);
     }
 
-    
+    /**
+     * Loads SSL key for current host
+     *
+     * @return string pem key
+     */
+    protected function _loadHostSslKey() {
+        $url = $_SERVER['HTTP_HOST'] . ':443';
+        $certificate = new EngineBlock_X509Certificate();
+        return $certificate->exportPemFromUrl($url);
+    }
+
     /**
      * Validates xml against oasis SAML 2 spec
      *
