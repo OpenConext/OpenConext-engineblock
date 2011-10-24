@@ -8,6 +8,6 @@ class IdpEntry
 
     public function __construct($providerId)
     {
-
+        $this->_providerId = $providerId;
     }
 }

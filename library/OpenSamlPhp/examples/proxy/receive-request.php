@@ -2,27 +2,18 @@
 
 namespace OpenSamlPhp;
 
-require 'settings.inc.php';
+$entities = Metadata\EntitiesDescriptor::createFromFile('entities.xml');
 
 $request = Http\Request::createFromEnvironment();
 
-$hostedEntity = $hostedEntities->getEntityByAcsUrl($request->getUrl());
+$hostedEntity = $entities->getEntityByAcsUrl($request->getUrl());
 
 $binding = Binding\Factory::createFromHttpRequest($request);
 $messageXml = $binding->getMessageXml();
 
 $authNRequest = Request\Authn::createFromXml($messageXml);
 
-session_start();
-$_SESSION['SAMLRequest']['Origin'] = array(
-    'Binding' => $binding,
-    'Xml' => $messageXml,
-    'Request' => $authNRequest,
-    'HostedEntity' => $hostedEntity,
-);
-
-$sessionManager = new Proxy\SessionManager();
-$state = $sessionManager->start($authNRequest->ID);
+$state = Proxy\SessionManager::create();
 $state->Binding = $binding;
 $state->Xml     = $messageXml;
 $state->Request = $authNRequest;
@@ -31,7 +22,7 @@ $state->HostedEntity = $hostedEntity;
 $issuer = $authNRequest->getIssuerEntityId();
 $remoteSp = $remoteSps->getEntityById($issuer);
 
-if ($hostedEntity->AuthnRequestSigned || $remoteSp->AuthnRequestSigned) {
+if ($hostedEntity->SPSSODescriptor->AuthnRequestSigned || $remoteSp->AuthnRequestSigned) {
     if (!$authNRequest->isSigned()) {
         throw new Proxy\Exception\UnexpectedUnsignedRequest;
     }
