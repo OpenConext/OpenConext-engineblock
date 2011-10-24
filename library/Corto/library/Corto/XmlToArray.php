@@ -333,13 +333,13 @@ class Corto_XmlToArray
         foreach((array)$attributes as $name => $attribute) {
             $newAttribute = array(
                 '_Name' => $name,
-                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic',
+                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
             );
             foreach ((array)$attribute as $value) {
+                // Value must be a uri
+                // Uri checking is hard, so at least check for a scheme.
+                assert('preg_match("|(\w+):.+|", $value)');
                 $newAttribute['saml:AttributeValue'][] = array (
-                   '_xmlns:xsi'     => 'http://www.w3.org/2001/XMLSchema-instance',
-                   '_xmlns:xs'      => 'http://www.w3.org/2001/XMLSchema',
-                   '_xsi:type'      => 'xs:string',
                    self::VALUE_KEY  => $value,
                 );
             }
