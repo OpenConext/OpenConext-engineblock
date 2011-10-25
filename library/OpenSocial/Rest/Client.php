@@ -180,15 +180,15 @@ class OpenSocial_Rest_Client
             );
         }
         
-        $mapperClass = 'OpenSocial_Model_' . $this->_getModelTypeForService($serviceType);
-        if (!class_exists($mapperClass, true)) {
-            throw new OpenSocial_Rest_Exception("Model class $mapperClass not found for service $serviceType!");
+        $modelClass = 'OpenSocial_Model_' . $this->_getModelTypeForService($serviceType);
+        if (!class_exists($modelClass, true)) {
+            throw new OpenSocial_Rest_Exception("Model class $modelClass not found for service $serviceType!");
         }
 
         /**
          * @var OpenSocial_Rest_Mapper_Interface $mapper
          */
-        $mapper = new OpenSocial_Rest_Mapper_Json('');
+        $mapper = new OpenSocial_Rest_Mapper_Json($modelClass);
         return $mapper->map($response->getBody());
     }
 
