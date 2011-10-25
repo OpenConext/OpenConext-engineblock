@@ -174,21 +174,21 @@ class OpenSocial_Rest_Client
      */
     protected function _mapResponseToModels($serviceType, Zend_Http_Response $response)
     {
-        if (substr($response->getHeader('Content-Type'), 0, 16)  !== 'application/json') {
+        if (strpos($response->getHeader('Content-Type'), 'application/json') !== 0) {
             throw new OpenSocial_Rest_Exception(
                 "Unknown Content-Type for response: " . var_export($response, true)
             );
         }
         
-        $mapperClass = 'OpenSocial_Rest_Mapper_Json';
+        $mapperClass = 'OpenSocial_Model_' . $serviceType;
         if (!class_exists($mapperClass, true)) {
-            throw new OpenSocial_Rest_Exception("Mapper class $mapperClass not found!");
+            throw new OpenSocial_Rest_Exception("Model class $mapperClass not found for service $serviceType!");
         }
 
         /**
          * @var OpenSocial_Rest_Mapper_Interface $mapper
          */
-        $mapper = new $mapperClass();
+        $mapper = new OpenSocial_Rest_Mapper_Json('');
         return $mapper->map($response->getBody());
     }
 }
