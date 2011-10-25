@@ -35,13 +35,13 @@ require_once 'RestClientMock.php';
 /**
  * EngineBlock_ServiceRegistry test case.
  */
-class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase 
+class ServiceRegistryTest extends PHPUnit_Framework_TestCase
 {
     
     /**
-     * @var EngineBlock_ServiceRegistry_Client
+     * @var ServiceRegistry_Client
      */
-    private $EngineBlock_ServiceRegistry;
+    private $ServiceRegistry;
     
     /**
      * Prepares the environment before running a test.
@@ -53,8 +53,8 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
         // TODO Auto-generated ServiceRegistryTest::setUp()
         
 
-        $this->EngineBlock_ServiceRegistry = new EngineBlock_ServiceRegistry_Client(/* parameters */);
-        $this->EngineBlock_ServiceRegistry->setRestClient(new RestClientMock());
+        $this->ServiceRegistry = new ServiceRegistry_Client(/* parameters */);
+        $this->ServiceRegistry->setRestClient(new RestClientMock());
     }
     
     /**
@@ -65,7 +65,7 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
         // TODO Auto-generated ServiceRegistryTest::tearDown()
         
 
-        $this->EngineBlock_ServiceRegistry = null;
+        $this->ServiceRegistry = null;
         
         parent::tearDown ();
     }
@@ -84,7 +84,7 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
     public function testGetMetadata() 
     {
         
-       $result = $this->EngineBlock_ServiceRegistry->getMetadata("http://ivotestsp.local");
+       $result = $this->ServiceRegistry->getMetadata("http://ivotestsp.local");
        $this->assertTrue(is_array($result));
        $this->assertEquals("A description", $result["description:en"]);
     }
@@ -92,14 +92,14 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
     public function testGetMetaDataForKey() 
     {
         
-        $result = $this->EngineBlock_ServiceRegistry->getMetaDataForKey("http://ivotestsp.local", "certData");
+        $result = $this->ServiceRegistry->getMetaDataForKey("http://ivotestsp.local", "certData");
         $this->assertTrue(is_string($result));    
         $this->assertEquals("aaaaabbbbb", $result);    
     }
     
     public function testGetMetaDataForKeys() 
     {
-        $result = $this->EngineBlock_ServiceRegistry->getMetaDataForKeys("http://ivotestsp.local", array("name:en", "description:en"));
+        $result = $this->ServiceRegistry->getMetaDataForKeys("http://ivotestsp.local", array("name:en", "description:en"));
         $this->assertEquals(2, count($result));
         $this->assertEquals("Ivo's SP", $result["name:en"]);
         $this->assertEquals("A description", $result["description:en"]);
@@ -107,16 +107,16 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
     
     public function testIsConnectionAllowed() 
     {
-        $result = $this->EngineBlock_ServiceRegistry->isConnectionAllowed("http://ivotestsp.local", "http://doesntexist.local");
+        $result = $this->ServiceRegistry->isConnectionAllowed("http://ivotestsp.local", "http://doesntexist.local");
         $this->assertFalse($result);
         
-        $result = $this->EngineBlock_ServiceRegistry->isConnectionAllowed("http://ivotestsp.local", "http://ivoidp");
+        $result = $this->ServiceRegistry->isConnectionAllowed("http://ivotestsp.local", "http://ivoidp");
         $this->assertTrue($result);
     }
     
     public function testGetArp()
     {
-        $result = $this->EngineBlock_ServiceRegistry->getArp("http://ivotestsp.local");
+        $result = $this->ServiceRegistry->getArp("http://ivotestsp.local");
         $this->assertEquals(3, count($result));
         $this->assertEquals("someArp", $result["name"]);
         $this->assertEquals(4, count($result["attributes"]));
@@ -126,7 +126,7 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
     
     public function testFindIdentifiersByMetadata()
     {
-        $result = $this->EngineBlock_ServiceRegistry->findIdentifiersByMetadata("url:en", "www.google.com");
+        $result = $this->ServiceRegistry->findIdentifiersByMetadata("url:en", "www.google.com");
         $this->assertEquals(1, count($result));
         $this->assertEquals("http://ivotestsp.local", $result[0]);
       
@@ -134,15 +134,15 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
     
     public function testGetIdpList()
     {
-        $result = $this->EngineBlock_ServiceRegistry->getIdpList();
+        $result = $this->ServiceRegistry->getIdpList();
         
         $this->assertEquals(2, count($result));
         $this->assertEquals("Ivo's IDP", $result["http://ivotestidp.local"]["name:en"]);
         
-        $result = $this->EngineBlock_ServiceRegistry->getIdpList(array(), "someSP");
+        $result = $this->ServiceRegistry->getIdpList(array(), "someSP");
         $this->assertEquals(1, count($result), "Idplist not correctly filtered by SP");
 
-        $result = $this->EngineBlock_ServiceRegistry->getIdpList(array(), NULL);
+        $result = $this->ServiceRegistry->getIdpList(array(), NULL);
         $this->assertEquals(2, count($result), "Idplist not correctly ignoring NULL sp");
         
         
@@ -150,7 +150,7 @@ class EngineBlock_ServiceRegistryTest extends PHPUnit_Framework_TestCase
     
     public function testGetSpList()
     {
-        $result = $this->EngineBlock_ServiceRegistry->getSpList();
+        $result = $this->ServiceRegistry->getSpList();
         $this->assertEquals(2, count($result));
         $this->assertEquals("Ivo's SP", $result["http://ivotestsp.local"]["name:en"]);
     }

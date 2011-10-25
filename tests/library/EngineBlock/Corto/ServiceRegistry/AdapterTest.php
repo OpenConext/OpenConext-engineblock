@@ -36,7 +36,7 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
 
     public function setUp()
     {
-        $serviceRegistry = new EngineBlock_ServiceRegistryMock();
+        $serviceRegistry = new ServiceRegistryMock();
         $serviceRegistry->setIdPList(array(
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
                 "base64attributes" => true,

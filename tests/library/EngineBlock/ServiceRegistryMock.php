@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_ServiceRegistryMock 
+class ServiceRegistryMock
 {
     protected $_idpList;
     protected $_spList;
