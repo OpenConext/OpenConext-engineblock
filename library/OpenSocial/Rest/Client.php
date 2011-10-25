@@ -180,7 +180,7 @@ class OpenSocial_Rest_Client
             );
         }
         
-        $mapperClass = 'OpenSocial_Model_' . $serviceType;
+        $mapperClass = 'OpenSocial_Model_' . $this->_getModelTypeForService($serviceType);
         if (!class_exists($mapperClass, true)) {
             throw new OpenSocial_Rest_Exception("Model class $mapperClass not found for service $serviceType!");
         }
@@ -190,5 +190,17 @@ class OpenSocial_Rest_Client
          */
         $mapper = new OpenSocial_Rest_Mapper_Json('');
         return $mapper->map($response->getBody());
+    }
+
+    protected function _getModelTypeForService($serviceType)
+    {
+        switch ($serviceType) {
+            case 'Groups':
+                return 'Group';
+            case 'Person':
+                return 'People';
+            default:
+                throw new OpenSocial_Rest_Exception("Unknown serviceType $serviceType, cant find a model for it!");
+        }
     }
 }
