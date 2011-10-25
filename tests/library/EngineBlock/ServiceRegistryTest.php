@@ -33,7 +33,7 @@ require_once 'RestClientMock.php';
 // actual content in Ivo's janus db.
 
 /**
- * EngineBlock_ServiceRegistry test case.
+ * ServiceRegistry test case.
  */
 class ServiceRegistryTest extends PHPUnit_Framework_TestCase
 {
@@ -79,7 +79,7 @@ class ServiceRegistryTest extends PHPUnit_Framework_TestCase
     }
     
     /**
-     * Tests EngineBlock_ServiceRegistry->getMetadata()
+     * Tests ServiceRegistry->getMetadata()
      */
     public function testGetMetadata() 
     {

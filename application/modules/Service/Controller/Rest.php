@@ -119,6 +119,6 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
      */
     protected function _getRegistry()
     {
-        return new EngineBlock_ServiceRegistry_CacheProxy();
+        return new ServiceRegistry_CacheProxy();
     }   
 }
