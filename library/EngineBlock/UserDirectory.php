@@ -73,7 +73,7 @@ class EngineBlock_UserDirectory
             $ldapAttributes
         );
 
-        // Convert the result fron a Zend_Ldap object to a plain multi-dimensional array
+        // Convert the result from a Zend_Ldap object to a plain multi-dimensional array
         $result = array();
         if (($collection !== NULL) and ($collection !== FALSE)) {
             foreach ($collection as $item) {
@@ -116,11 +116,15 @@ class EngineBlock_UserDirectory
         $users = $this->findUsersByIdentifier($uid);
 
         // Only update a user
-        if (count($users) === 1) {
-            $newAttributes = array();
-            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING] = 'TRUE';
-            $user = $this->_updateUser($users[0], $newAttributes, array(), array());
+        if (count($users) > 1) {
+            throw new EngineBlock_Exception("Multiple users found for UID: $uid?!");
         }
+
+        $newAttributes = array();
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING] = 'TRUE';
+
+        $user = $this->_updateUser($users[0], $newAttributes, array(), array());
+
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
     public function setUserSecondWarningSent($uid)
@@ -128,11 +132,16 @@ class EngineBlock_UserDirectory
         $users = $this->findUsersByIdentifier($uid);
 
         // Only update a user
-        if (count($users) === 1) {
-            $newAttributes = array();
-            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING] = 'TRUE';
-            $user = $this->_updateUser($users[0], $newAttributes, array(), array());
+        // Only update a user
+        if (count($users) > 1) {
+            throw new EngineBlock_Exception("Multiple users found for UID: $uid?!");
         }
+
+        $newAttributes = array();
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING] = 'TRUE';
+
+        $user = $this->_updateUser($users[0], $newAttributes, array(), array());
+
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
 
