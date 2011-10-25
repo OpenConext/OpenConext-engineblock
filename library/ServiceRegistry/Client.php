@@ -226,7 +226,7 @@ class ServiceRegistry_Client
             if (!$secret) {
                 throw new EngineBlock_Exception('No Service Registry user secret provided! Please set "serviceRegistry.user_secret" in your application configuration.');
             }
-            $this->_restClient = new EngineBlock_ServiceRegistry_Janus_Client($location, $user, $secret);
+            $this->_restClient = new ServiceRegistry_Janus_Client($location, $user, $secret);
         }
         return $this->_restClient;
     }
