@@ -23,6 +23,9 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+/**
+ * A simple OpenSocial Group object with public fields.
+ */
 class OpenSocial_Model_Group
     implements OpenSocial_Model_Interface
 {
