@@ -38,7 +38,7 @@ class EngineBlock_SocialData
     protected $_groupProvider = null;
 
     /**
-     * @var EngineBlock_ServiceRegistry_Client
+     * @var ServiceRegistry_Client
      */
     protected $_serviceRegistry = NULL;
 
@@ -237,12 +237,12 @@ class EngineBlock_SocialData
     }
     
     /**
-     * @return EngineBlock_ServiceRegistry_Client
+     * @return ServiceRegistry_Client
      */
     protected function _getServiceRegistry()
     {
         if ($this->_serviceRegistry == NULL) {
-            $this->_serviceRegistry = new EngineBlock_ServiceRegistry_CacheProxy();
+            $this->_serviceRegistry = new ServiceRegistry_CacheProxy();
         }
         return $this->_serviceRegistry;
     }

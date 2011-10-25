@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_ServiceRegistry_Janus_Client extends EngineBlock_Rest_Client
+class ServiceRegistry_Janus_Client extends EngineBlock_Rest_Client
 {
     /**
      * The service registry can only be accessed with a proper userid.

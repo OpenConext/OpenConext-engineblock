@@ -43,6 +43,15 @@ class EngineBlock_ApplicationSingleton
     const CONFIG_FILE_DEFAULT = 'configs/application.ini';
     const CONFIG_FILE_ENVIORNMENT = '/etc/surfconext/engineblock.ini';
 
+    private static $AUTOLOADED_LIBRARIES = array(
+        'Grouper',
+        'EngineBlock',
+        'OpenSocial',
+        'ServiceRegistry',
+        'Surfnet',
+        'Zend',
+    );
+
     /**
      * @var EngineBlock_ApplicationSingleton
      */
@@ -132,7 +141,7 @@ class EngineBlock_ApplicationSingleton
         $classNameParts = explode('_', $className);
 
         // Known libraries (like Zend and EngineBlock)
-        if (in_array($classNameParts[0], array('Grouper', 'EngineBlock', 'OpenSocial', 'Zend', 'Surfnet'))) {
+        if (in_array($classNameParts[0], self::$AUTOLOADED_LIBRARIES)) {
             $fileName = implode('/', explode('_', $className)).'.php';
             $filePath = ENGINEBLOCK_FOLDER_LIBRARY . $fileName;
 

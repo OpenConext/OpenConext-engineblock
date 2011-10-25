@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_ServiceRegistry_CacheProxy_Exception extends EngineBlock_Exception
+class ServiceRegistry_CacheProxy_Exception extends EngineBlock_Exception
 {
 }
 
@@ -32,7 +32,7 @@ class EngineBlock_ServiceRegistry_CacheProxy_Exception extends EngineBlock_Excep
  *
  * Can even detect Sercvice Registry problems and chug along on the (stale) cache. 
  */
-class EngineBlock_ServiceRegistry_CacheProxy
+class ServiceRegistry_CacheProxy
 {
     const DEFAULT_LIFETIME = 5;
 
@@ -53,7 +53,7 @@ class EngineBlock_ServiceRegistry_CacheProxy
             return $cache->call(array($client, $name), $arguments);
 
         } catch(Exception $e) { // Whoa, something went wrong, maybe the SR is down? Trying to use stale cache...
-            $e = new EngineBlock_ServiceRegistry_CacheProxy_Exception("Service Registry problems?!?", 0, $e);
+            $e = new ServiceRegistry_CacheProxy_Exception("Service Registry problems?!?", 0, $e);
             EngineBlock_ApplicationSingleton::getInstance()->reportError($e);
 
             // Give any stale cache some more time
@@ -100,6 +100,6 @@ class EngineBlock_ServiceRegistry_CacheProxy
 
     protected function _getClient()
     {
-        return new EngineBlock_ServiceRegistry_Client();
+        return new ServiceRegistry_Client();
     }
 }

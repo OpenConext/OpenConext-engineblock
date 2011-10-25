@@ -600,7 +600,7 @@ class EngineBlock_Corto_Adapter
     protected function _getServiceRegistryAdapter()
     {
         return new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new EngineBlock_ServiceRegistry_CacheProxy()
+            new ServiceRegistry_CacheProxy()
         );
     }
 

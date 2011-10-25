@@ -25,10 +25,8 @@
 
 /**
  * Implementation of the Engine Block internal Service Registry interface.
- * 
- * @author ivo
  */
-class EngineBlock_ServiceRegistry_Client
+class ServiceRegistry_Client
 {
     /**
      * The REST client used to communicate to the Janus service registry.
