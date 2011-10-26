@@ -129,11 +129,6 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             return $message;
         }
 
-        $message = $this->_receiveMessageFromArtifact($key);
-        if (!empty($message)) {
-            return $message;
-        }
-
         $message = $this->_receiveMessageFromHttpPost($key);
         if (!empty($message)) {
             return $message;
@@ -155,87 +150,6 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         
         $message = $_REQUEST[$key];
         $message[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Binding'] = "INTERNAL";
-        return $message;
-    }
-
-    /**
-     * Retrieve a message via artifact binding.
-     * @param String $key The key to look for.
-     * @return mixed False if there was no suitable message in this binding
-     *               String the message if it was found
-     *               An exception if something went wrong.
-     */
-    protected function _receiveMessageFromArtifact($key)
-    {
-        if (!isset($_REQUEST[self::KEY_ARTIFACT])) {
-            return false;
-        }
-
-        $artifacts = base64_decode($_REQUEST[self::KEY_ARTIFACT]);
-        $artifacts = unpack(self::ARTIFACT_BINARY_FORMAT, $artifacts);
-
-        switch ($key) {
-            case self::KEY_REQUEST:
-                // Trying to get an artifact from an SP, identify ourselves as an idp
-                $issuer = $this->_server->getCurrentEntityUrl('idPMetadataService');
-                break;
-            case self::KEY_RESPONSE:
-                // Trying to get an artifact from an IdP, identify ourselves as a sp
-                $issuer = $this->_server->getCurrentEntityUrl('sPMetadataService');
-                break;
-            default:
-                throw new Corto_Module_Bindings_Exception("Unknown message type '$key'");
-        }
-
-        $artifactResolveMessage = array(
-            'samlp:ArtifactResolve' => array(
-                '_xmlns:samlp' => 'urn:oasis:names:tc:SAML:2.0:protocol',
-                '_xmlns:saml' => 'urn:oasis:names:tc:SAML:2.0:assertion',
-                '_ID'           => $this->_server->getNewId(),
-                '_Version'      => '2.0',
-                '_IssueInstant' => $this->_server->timeStamp(),
-
-                'saml:Artifact' => array('__v' => $_REQUEST['SAMLArt']),
-                'saml:Issuer'   => array('__v' => $issuer),
-            ),
-        );
-
-        if (!isset($artifacts['sourceid'])) {
-            throw new Corto_Module_Bindings_Exception("No Source ID found in SAML2 Artifact?!");
-        }
-
-        $sourceEntity = $this->_server->getRemoteEntity($artifacts['sourceid']);
-        if (!isset($sourceEntity['ArtifactResolutionServiceLocation'])) {
-            throw new Corto_Module_Bindings_Exception("Entity {$artifacts['sourceid']} mentioned in SAML2 Artifact found, but no Artifact Resolution Service is registered");
-        }
-
-        $artifactResponse = $this->_soapRequest(
-            $sourceEntity['ArtifactResolutionServiceLocation'],
-            $artifactResolveMessage
-        );
-
-        if ($key === self::KEY_REQUEST) {
-            if (isset($artifactResponse['samlp:ArtifactResponse']['samlp:AuthnRequest'])) {
-                $message = $artifactResponse['samlp:ArtifactResponse']['samlp:AuthnRequest'];
-                $message[Corto_XmlToArray::TAG_NAME_KEY] = 'samlp:AuthnRequest';
-            }
-            else {
-                return false;
-            }
-        }
-        else if ($key === self::KEY_RESPONSE) {
-            if (isset($artifactResponse['samlp:ArtifactResponse']['samlp:AuthnRequest'])) {
-                $message = $artifactResponse['samlp:ArtifactResponse']['samlp:AuthnRequest'];
-                $message[Corto_XmlToArray::TAG_NAME_KEY] = 'samlp:Response';
-            }
-            else {
-                return false;
-            }
-        }
-
-        $relayState = $_REQUEST['RelayState'];
-        $message[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['RelayState'] = $relayState;
-
         return $message;
     }
 
