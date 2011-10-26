@@ -1,6 +1,4 @@
---
 -- Table structure for table `emails`
---
 
 CREATE TABLE `emails` (
   `id` bigint(20) NOT NULL auto_increment,
