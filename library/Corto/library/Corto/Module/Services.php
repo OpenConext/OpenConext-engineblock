@@ -488,6 +488,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $entityDescriptor = array(
             Corto_XmlToArray::TAG_NAME_KEY => 'md:EntityDescriptor',
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
+            '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
             '_validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
                                                            'idpMetadataValidUntilSeconds', 86400)),
             '_entityID' => $this->_server->getCurrentEntityUrl('idPMetadataService'),
@@ -501,6 +502,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $entityDetails = $this->_server->getRemoteEntity($entityDescriptor['_entityID']);
 
         $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
+
+        $this->_addDisplayNamesToEntityDescriptor($entityDescriptor['md:IDPSSODescriptor'], $entityDetails);
 
         // Check if an alternative Public & Private key have been set for a SP
         // If yes, use these in the metadata of Engineblock
@@ -580,6 +583,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $entityDescriptor = array(
             Corto_XmlToArray::TAG_NAME_KEY => 'md:EntityDescriptor',
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
+            '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
             '_validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
                                                            'idpMetadataValidUntilSeconds', 86400)),
             '_entityID' => $this->_server->getCurrentEntityUrl('sPMetadataService'),
@@ -593,6 +597,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $entityDetails = $this->_server->getRemoteEntity($entityDescriptor['_entityID']);
 
         $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
+
+        $this->_addDisplayNamesToEntityDescriptor($entityDescriptor['md:SPSSODescriptor'], $entityDetails);
 
         $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
         if (isset($certificates['public'])) {
@@ -771,6 +777,26 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
                 $entityDescriptor['md:ContactPerson'][] = $mdContactPerson;
             }
+        }
+    }
+
+    /**
+     * Adds DisplayName (if present) to entity Descriptor
+     *
+     * @param array $entitySSODescriptor
+     * @param array $entityDetails
+     * @return void
+     */
+    protected function _addDisplayNamesToEntityDescriptor(array &$entitySSODescriptor, array $entityDetails) {
+        foreach($entityDetails['DisplayName'] as $displayLanguageCode => $displayName) {
+            if(empty($displayName)) {
+                continue;
+            }
+
+            $entitySSODescriptor['md:Extensions']['mdui:DisplayName'][] = array(
+                '_xml:lang' => $displayLanguageCode,
+                '__v' => $displayName
+            );
         }
     }
 
