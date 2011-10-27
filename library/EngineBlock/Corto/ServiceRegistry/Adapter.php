@@ -220,6 +220,16 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['keywords'])) {
             $cortoEntity['Keywords'] = $serviceRegistryEntity['keywords'];
         }
+
+        // Map contacts
+        if(array_key_exists('contacts', $serviceRegistryEntity)) {
+            foreach($serviceRegistryEntity['contacts'] as $contactIndex => $contact) {
+                foreach($contact as $contactDetailCode => $contactDetail) {
+                    $cortoEntity['ContactPersons'][$contactIndex][ucfirst($contactDetailCode)] = $contactDetail;
+                }
+            }
+        }
+
         return $cortoEntity;
     }
 

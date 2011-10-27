@@ -496,23 +496,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
             'md:IDPSSODescriptor' => array(
                 '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
             ),
-
-            // @todo get the correct email adresses
-            'md:ContactPerson' => array(
-                array(
-                    '_contactType' => 'support',
-                    'md:EmailAddress' => array(
-                        '__v' => 'support@surfconext.nl'
-                    )
-                ),
-                array(
-                    '_contactType' => 'technical',
-                    'md:EmailAddress' => array(
-                        '__v' => 'technical@surfconext.nl'
-                    )
-                )
-            )
         );
+
+        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor['_entityID']);
+
+        $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
 
         // Check if an alternative Public & Private key have been set for a SP
         // If yes, use these in the metadata of Engineblock
@@ -600,23 +588,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
             'md:SPSSODescriptor' => array(
                 '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
             ),
-
-            // @todo get the correct email adresses
-            'md:ContactPerson' => array(
-                array(
-                    '_contactType' => 'support',
-                    'md:EmailAddress' => array(
-                        '__v' => 'help@surfconext.nl'
-                    )
-                ),
-                array(
-                    '_contactType' => 'technical',
-                    'md:EmailAddress' => array(
-                        '__v' => 'surfconext-beheer@surfnet.nl'
-                    )
-                )
-            )
         );
+
+        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor['_entityID']);
+
+        $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
 
         $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
         if (isset($certificates['public'])) {
@@ -774,6 +750,30 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $certificate = new EngineBlock_X509Certificate();
         return $certificate->exportPemFromUrl($url);
     }
+
+    /**
+     * Adds contact persons (if present) to entity Descriptor
+     *
+     * @param array $entityDescriptor
+     * @param array $entityDetails
+     * @return void
+     */
+    protected function _addContactPersonsToEntityDescriptor(array &$entityDescriptor, array $entityDetails) {
+        if(array_key_exists('ContactPersons', $entityDetails)) {
+             foreach($entityDetails['ContactPersons'] as $contactPerson) {
+                if(empty($contactPerson['EmailAddress'])) {
+                    continue;
+                }
+
+                $mdContactPerson = array();
+                $mdContactPerson['_contactType'] = $contactPerson['ContactType'];
+                $mdContactPerson['md:EmailAddress'][]['__v'] = $contactPerson['EmailAddress'];
+
+                $entityDescriptor['md:ContactPerson'][] = $mdContactPerson;
+            }
+        }
+    }
+
 
     /**
      * Validates xml against oasis SAML 2 spec
