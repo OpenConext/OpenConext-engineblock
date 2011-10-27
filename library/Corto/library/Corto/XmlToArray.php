@@ -21,6 +21,7 @@ class Corto_XmlToArray_Exception extends Corto_ProxyServer_Exception {}
 class Corto_XmlToArray
 {
     const PRIVATE_KEY_PREFIX    = '__';
+    const COMMENT_KEY           = '__c';
     const TAG_NAME_KEY          = '__t';
     const VALUE_KEY             = '__v';
     const PLACEHOLDER_VALUE     = '__placeholder__';
@@ -283,6 +284,10 @@ class Corto_XmlToArray
 
     protected static function _array2xml($hash, $elementName, XMLWriter $writer, $level = 0)
     {
+        if (is_array($hash) && array_key_exists(self::COMMENT_KEY, $hash)) {
+            $writer->writeComment($hash[self::COMMENT_KEY]);    
+        }
+
         if ($level > self::MAX_RECURSION_LEVEL) {
             throw new Exception('Recursion threshold exceed on element: '.$elementName . ' for hashvalue: ' . var_export($hash, true));
         }

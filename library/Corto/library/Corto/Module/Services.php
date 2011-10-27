@@ -18,6 +18,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
     const RESPONSE_CACHE_TYPE_IN  = 'in';
     const RESPONSE_CACHE_TYPE_OUT = 'out';
 
+    // @todo move this to translations?
+    const META_TOU_COMMENT = 'Use of this metadata is subject to the Terms of Use at http://www.edugain.org/policy/metadata-tou_1_0.txt';
+
     /**
      * Handle a Single Sign On request (Authentication Request)
      * @return void
@@ -487,6 +490,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         $entityDescriptor = array(
             Corto_XmlToArray::TAG_NAME_KEY => 'md:EntityDescriptor',
+            Corto_XmlToArray::COMMENT_KEY => self::META_TOU_COMMENT,
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
             '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
             '_validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
@@ -582,6 +586,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
     {
         $entityDescriptor = array(
             Corto_XmlToArray::TAG_NAME_KEY => 'md:EntityDescriptor',
+            Corto_XmlToArray::COMMENT_KEY => self::META_TOU_COMMENT,
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
             '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
             '_validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
