@@ -120,7 +120,7 @@ class EngineBlock_Corto_Adapter
         $spEntityId = $request['saml:Issuer']['__v'];
 
         if (isset($entities[$spEntityId]['VoContext']) && $entities[$spEntityId]['VoContext']) {
-            $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['VoContextImplicit'] = $entities[$spEntityId]['VoContext'];
+            $request[Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $entities[$spEntityId]['VoContext'];
         }
         $_REQUEST['SAMLRequest'] = $request;
 
@@ -413,8 +413,8 @@ class EngineBlock_Corto_Adapter
         $vo = NULL;
 
         // In filter stage we need to take a look at the VO context
-        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
-            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
+        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
+            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
             $this->setVirtualOrganisationContext($vo);
         }
         else if (isset($request['__']['VoContextImplicit'])) {

@@ -20,12 +20,12 @@ class Corto_XmlToArray_Exception extends Corto_ProxyServer_Exception {}
 
 class Corto_XmlToArray
 {
-    const PRIVATE_KEY_PREFIX    = '__';
-    const COMMENT_KEY           = '__c';
-    const TAG_NAME_KEY          = '__t';
-    const VALUE_KEY             = '__v';
+    const PRIVATE_PFX           = '__';
+    const COMMENT_PFX           = '__c';
+    const TAG_NAME_PFX          = '__t';
+    const VALUE_PFX             = '__v';
     const PLACEHOLDER_VALUE     = '__placeholder__';
-    const ATTRIBUTE_KEY_PREFIX  = '_';
+    const ATTRIBUTE_PFX         = '_';
     const MAX_RECURSION_LEVEL   = 50;
 
     /**
@@ -203,7 +203,7 @@ class Corto_XmlToArray
                     } elseif (preg_match("/^xmlns$/", $attributeKey)) {
                         $defaultNs = self::$_namespaces[$attributeValue];
                     } else {
-                        $hashedAttributes[self::ATTRIBUTE_KEY_PREFIX . $attributeKey] = $attributeValue;
+                        $hashedAttributes[self::ATTRIBUTE_PFX . $attributeKey] = $attributeValue;
                     }
                 }
             }
@@ -213,25 +213,25 @@ class Corto_XmlToArray
             } else {
                 $tagName = $defaultNs . ":" . $tagName;
             }
-            $complete[self::TAG_NAME_KEY] = $tagName;
+            $complete[self::TAG_NAME_PFX] = $tagName;
             if ($hashedAttributes) {
                 $complete = array_merge($complete, $hashedAttributes);
             }
             if (isset($value['value']) && $attributeValue = trim($value['value'])) {
-                $complete[self::VALUE_KEY] = $attributeValue;
+                $complete[self::VALUE_PFX] = $attributeValue;
             }
             if ($value['type'] == 'open') {
                 $cs = self::_xml2array($elements, $level + 1, $namespaceMapping);
                 foreach($cs as $c) {
-                    $tagName = $c[self::TAG_NAME_KEY];
-                    unset($c[self::TAG_NAME_KEY]);
+                    $tagName = $c[self::TAG_NAME_PFX];
+                    unset($c[self::TAG_NAME_PFX]);
 #                   if (in_array($tagName, self::$_multipleValues)) {
 #                    if (!in_array($tagName, self::$_singulars)) {
                     if (!self::$_singulars[$tagName]) {
                         $complete[$tagName][] = $c;
                     } else {
                         $complete[$tagName] = $c;
-                        unset($complete[$tagName][self::TAG_NAME_KEY]);
+                        unset($complete[$tagName][self::TAG_NAME_PFX]);
                     }
                 }
             } elseif ($value['type'] == 'complete') {
@@ -269,8 +269,8 @@ class Corto_XmlToArray
         $writer->setIndentString("    ");
 
         if (!$elementName) {
-            if (isset($hash[self::TAG_NAME_KEY])) {
-                $elementName = $hash[self::TAG_NAME_KEY];
+            if (isset($hash[self::TAG_NAME_PFX])) {
+                $elementName = $hash[self::TAG_NAME_PFX];
             }
             else {
                 throw new Exception("No top level tag provided or defined in hash!");
@@ -285,8 +285,8 @@ class Corto_XmlToArray
 
     protected static function _array2xml($hash, $elementName, XMLWriter $writer, $level = 0)
     {
-        if (is_array($hash) && array_key_exists(self::COMMENT_KEY, $hash)) {
-            $writer->writeComment($hash[self::COMMENT_KEY]);    
+        if (is_array($hash) && array_key_exists(self::COMMENT_PFX, $hash)) {
+            $writer->writeComment($hash[self::COMMENT_PFX]);
         }
 
         if ($level > self::MAX_RECURSION_LEVEL) {
@@ -305,13 +305,13 @@ class Corto_XmlToArray
                 // Normal numeric index, value is probably a hash structure, recurse...
                 self::_array2xml($value, $elementName, $writer, $level + 1);
 
-            } elseif ($key === self::VALUE_KEY) {
+            } elseif ($key === self::VALUE_PFX) {
                 $writer->text($value);
 
-            } elseif (strpos($key, self::PRIVATE_KEY_PREFIX) === 0) {
+            } elseif (strpos($key, self::PRIVATE_PFX) === 0) {
                 # [__][<x>] is used for private attributes for internal consumption
 
-            } elseif (strpos($key, self::ATTRIBUTE_KEY_PREFIX) === 0) {
+            } elseif (strpos($key, self::ATTRIBUTE_PFX) === 0) {
                 $writer->writeAttribute(substr($key, 1), $value);
 
             } else {
@@ -329,7 +329,7 @@ class Corto_XmlToArray
         $res = array();
         foreach((array)$attributes as $attribute) {
             foreach ($attribute['saml:AttributeValue'] as $value) {
-                $res[$attribute['_Name']][] = $value[self::VALUE_KEY];
+                $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
             }
         }
         return $res;
@@ -348,7 +348,7 @@ class Corto_XmlToArray
             );
             foreach ((array)$attribute as $value) {
                 $newAttribute['saml:AttributeValue'][] = array (
-                   self::VALUE_KEY  => $value,
+                   self::VALUE_PFX  => $value,
                 );
             }
             $res[] = $newAttribute;

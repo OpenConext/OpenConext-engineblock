@@ -30,7 +30,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
 
     protected $_voContext = null;
     
-    const VO_CONTEXT_KEY          = 'voContext';
+    const VO_CONTEXT_PFX          = 'voContext';
     
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'       => 'authentication/idp/single-sign-on',
@@ -69,8 +69,8 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
 
     protected function _createBaseResponse($request)
     {
-        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
-            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY];
+        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
+            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
             $this->setVirtualOrganisationContext($vo);
         }
         
@@ -98,7 +98,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
             $remoteEntity = $this->getRemoteEntity($remoteEntityId);
         }
         if ($remoteEntity && isset($remoteEntity['VoContext'])) {
-            if ($request && !isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_KEY])) {
+            if ($request && !isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
                 $isImplicitVo = true;
             }
         }

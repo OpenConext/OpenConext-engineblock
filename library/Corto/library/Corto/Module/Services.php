@@ -28,7 +28,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
     public function singleSignOnService()
     {
         $request = $this->_server->getBindingsModule()->receiveRequest();
-        $request['__']['Transparent'] = $this->_server->getCurrentEntitySetting('TransparentProxy', false);
+        $request[Corto_XmlToArray::PRIVATE_PFX]['Transparent'] = $this->_server->getCurrentEntitySetting('TransparentProxy', false);
 
         // The request may specify it ONLY wants a response from specific IdPs
         // or we could have it configured that the SP may only be serviced by specific IdPs
@@ -40,7 +40,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         }
 
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
-        if (isset($request['samlp:Scoping']['_ProxyCount']) && $request['samlp:Scoping']['_ProxyCount'] == 0) {
+        if (isset($request['samlp:Scoping'][Corto_XmlToArray::ATTRIBUTE_PFX . 'ProxyCount']) && $request['samlp:Scoping'][Corto_XmlToArray::ATTRIBUTE_PFX . 'ProxyCount'] == 0) {
             $this->_server->getSessionLog()->debug("SSO: Proxy count exceeded!");
             $response = $this->_server->createErrorResponse($request, 'ProxyCountExceeded');
             $this->_server->sendResponseToRequestIssuer($request, $response);
@@ -90,7 +90,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         // Multiple IdPs found...
         else {
             // > 1 IdPs found, but isPassive attribute given, unable to show WAYF
-            if (isset($request['_IsPassive']) && $request['_IsPassive'] === 'true') {
+            if (isset($request[Corto_XmlToArray::ATTRIBUTE_PFX . 'IsPassive']) && $request[Corto_XmlToArray::ATTRIBUTE_PFX . 'IsPassive'] === 'true') {
                 $this->_server->getSessionLog()->debug("SSO: IsPassive with multiple IdPs!");
                 $response = $this->_server->createErrorResponse($request, 'NoPassive');
                 $this->_server->sendResponseToRequestIssuer($request, $response);
@@ -98,7 +98,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
             else {
                 // Store the request in the session
-                $id = $request['_ID'];
+                $id = $request[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'];
                 $_SESSION[$id]['SAMLRequest'] = $request;
 
                 // Show WAYF
@@ -111,7 +111,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
     protected function _sendCachedResponse($request, $scopedIdps)
     {
-        if (isset($request['_ForceAuthn']) && $request['_ForceAuthn']) {
+        if (isset($request[Corto_XmlToArray::ATTRIBUTE_PFX . 'ForceAuthn']) && $request[Corto_XmlToArray::ATTRIBUTE_PFX . 'ForceAuthn']) {
             return false;
         }
 
@@ -121,7 +121,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         $cachedResponses = $_SESSION['CachedResponses'];
 
-        $requestIssuerEntityId  = $request['saml:Issuer']['__v'];
+        $requestIssuerEntityId  = $request['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
 
         // First, if there is scoping, we reject responses from idps not in the list
         if (count($scopedIdps) > 0) {
@@ -201,7 +201,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
         if (isset($request['samlp:Scoping']['samlp:IDPList']['samlp:IDPEntry'])) {
             foreach ($request['samlp:Scoping']['samlp:IDPList']['samlp:IDPEntry'] as $IDPEntry) {
-                $scopedIdPs[] = $IDPEntry['_ProviderID'];
+                $scopedIdPs[] = $IDPEntry[Corto_XmlToArray::ATTRIBUTE_PFX . 'ProviderID'];
             }
             $this->_server->getSessionLog()->debug("SSO: Request contains scoped idps: " . print_r($scopedIdPs, 1));
         }
@@ -255,12 +255,12 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
 
         // Get the ID of the Corto Request message
-        if (!$receivedResponse['_InResponseTo']) {
+        if (!$receivedResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']) {
             $message = "Unsollicited assertion (no InResponseTo in message) not supported!";
             throw new Corto_Module_Services_Exception($message);
         }
 
-        $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse['_InResponseTo']);
+        $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']);
 
         // Cache the response
         if ($this->_server->getCurrentEntitySetting('keepsession', false)) {
@@ -272,24 +272,24 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $processingEntities = $this->_getReceivedResponseProcessingEntities($receivedRequest, $receivedResponse);
         if (!empty($processingEntities)) {
             $firstProcessingEntity = array_shift($processingEntities);
-            $_SESSION['Processing'][$receivedRequest['_ID']]['RemainingEntities']   = $processingEntities;
-            $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalDestination'] = $receivedResponse['_Destination'];
-            $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalIssuer']      = $receivedResponse['saml:Assertion']['saml:Issuer']['__v'];
-            $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalBinding']     = $receivedResponse['__']['ProtocolBinding'];
+            $_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['RemainingEntities']   = $processingEntities;
+            $_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['OriginalDestination'] = $receivedResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination'];
+            $_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['OriginalIssuer']      = $receivedResponse['saml:Assertion']['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
+            $_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['OriginalBinding']     = $receivedResponse[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'];
 
             $this->_server->setProcessingMode();
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
 
             // Change the destiny of the received response
-            $newResponse['_InResponseTo']          = $receivedResponse['_InResponseTo'];
-            $newResponse['_Destination']           = $firstProcessingEntity['Location'];
-            $newResponse['__']['ProtocolBinding']  = $firstProcessingEntity['Binding'];
-            $newResponse['__']['Return']           = $this->_server->getCurrentEntityUrl('processedAssertionConsumerService');
-            $newResponse['__']['paramname']        = 'SAMLResponse';
+            $newResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']          = $receivedResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo'];
+            $newResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination']           = $firstProcessingEntity['Location'];
+            $newResponse[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding']  = $firstProcessingEntity['Binding'];
+            $newResponse[Corto_XmlToArray::PRIVATE_PFX]['Return']           = $this->_server->getCurrentEntityUrl('processedAssertionConsumerService');
+            $newResponse[Corto_XmlToArray::PRIVATE_PFX]['paramname']        = 'SAMLResponse';
 
             $responseAssertionAttributes = &$newResponse['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
             $attributes = Corto_XmlToArray::attributes2array($responseAssertionAttributes);
-            $attributes['ServiceProvider'] = array($receivedRequest['saml:Issuer']['__v']);
+            $attributes['ServiceProvider'] = array($receivedRequest['saml:Issuer'][Corto_XmlToArray::VALUE_PFX]);
             $responseAssertionAttributes = Corto_XmlToArray::array2attributes($attributes);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
@@ -307,8 +307,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
     protected function _cacheResponse(array $receivedRequest, array $receivedResponse, $type)
     {
-        $requestIssuerEntityId  = $receivedRequest['saml:Issuer']['__v'];
-        $responseIssuerEntityId = $receivedResponse['saml:Issuer']['__v'];
+        $requestIssuerEntityId  = $receivedRequest['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
+        $responseIssuerEntityId = $receivedResponse['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
         if (!isset($_SESSION['CachedResponses'])) {
             $_SESSION['CachedResponses'] = array();
         }
@@ -325,7 +325,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
     {
         $currentEntityProcessing = $this->_server->getCurrentEntitySetting('Processing', array());
 
-        $remoteEntity = $this->_server->getRemoteEntity($receivedRequest['saml:Issuer']['__v']);
+        $remoteEntity = $this->_server->getRemoteEntity($receivedRequest['saml:Issuer'][Corto_XmlToArray::VALUE_PFX]);
 
         $processing = $currentEntityProcessing;
         if (isset($remoteEntity['Processing'])) {
@@ -345,7 +345,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
     public function provideConsentService()
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
-        $_SESSION['consent'][$response['_ID']]['response'] = $response;
+        $_SESSION['consent'][$response[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['response'] = $response;
 
         $attributes = Corto_XmlToArray::attributes2array(
                 $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
@@ -355,10 +355,10 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         $priorConsent = $this->_hasStoredConsent($serviceProviderEntityId, $response, $attributes);
         if ($priorConsent) {
-            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
+            $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
 
-            $response['_Destination'] = $response['__']['Return'];
-            $response['__']['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
+            $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination'] = $response[Corto_XmlToArray::PRIVATE_PFX]['Return'];
+            $response[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
 
             $this->_server->getBindingsModule()->send(
                 $response,
@@ -370,7 +370,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
                 'consent',
                 array(
                     'action'        => $this->_server->getCurrentEntityUrl('processConsentService'),
-                    'ID'            => $response['_ID'],
+                    'ID'            => $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'],
                     'attributes'    => $attributes,
         ));
         $this->_server->sendOutput($html);
@@ -412,9 +412,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         $this->_storeConsent($serviceProviderEntityId, $response, $attributes);
 
-        $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:obtained';
-        $response['_Destination'] = $response['__']['Return'];
-        $response['__']['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
+        $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:obtained';
+        $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination'] = $response[Corto_XmlToArray::PRIVATE_PFX]['Return'];
+        $response[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
 
         $this->_server->getBindingsModule()->send(
             $response,
@@ -429,9 +429,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
     public function processedAssertionConsumerService()
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
-        $receivedRequest = $this->_server->getReceivedRequestFromResponse($response['_InResponseTo']);
+        $receivedRequest = $this->_server->getReceivedRequestFromResponse($response[Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']);
 
-        $remainingProcessingEntities = &$_SESSION['Processing'][$receivedRequest['_ID']]['RemainingEntities'];
+        $remainingProcessingEntities = &$_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['RemainingEntities'];
 
         if (!empty($remainingProcessingEntities)) { // Moar processing!
             $nextProcessingEntity = array_shift($remainingProcessingEntities);
@@ -441,19 +441,19 @@ class Corto_Module_Services extends Corto_Module_Abstract
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);
 
             // Change the destiny of the received response
-            $newResponse['_ID']                    = $response['_ID'];
-            $newResponse['_Destination']           = $nextProcessingEntity['Location'];
-            $newResponse['__']['ProtocolBinding']  = $nextProcessingEntity['Binding'];
-            $newResponse['__']['Return']           = $this->_server->getCurrentEntityUrl('processedAssertionConsumerService');
-            $newResponse['__']['paramname']        = 'SAMLResponse';
+            $newResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']                    = $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'];
+            $newResponse[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination']           = $nextProcessingEntity['Location'];
+            $newResponse[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding']  = $nextProcessingEntity['Binding'];
+            $newResponse[Corto_XmlToArray::PRIVATE_PFX]['Return']           = $this->_server->getCurrentEntityUrl('processedAssertionConsumerService');
+            $newResponse[Corto_XmlToArray::PRIVATE_PFX]['paramname']        = 'SAMLResponse';
 
             $this->_server->getBindingsModule()->send($newResponse, $nextProcessingEntity);
             return;
         }
         else { // Done processing! Send off to SP
-            $response['_Destination']          = $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalDestination'];
-            $response['__']['ProtocolBinding'] = $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalBinding'];
-            $response['__']['OriginalIssuer']  = $_SESSION['Processing'][$receivedRequest['_ID']]['OriginalIssuer'];
+            $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination']          = $_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['OriginalDestination'];
+            $response[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = $_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['OriginalBinding'];
+            $response[Corto_XmlToArray::PRIVATE_PFX]['OriginalIssuer']  = $_SESSION['Processing'][$receivedRequest[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['OriginalIssuer'];
 
             $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
             $attributes = Corto_XmlToArray::attributes2array($responseAssertionAttributes);
@@ -489,21 +489,21 @@ class Corto_Module_Services extends Corto_Module_Abstract
         }
 
         $entityDescriptor = array(
-            Corto_XmlToArray::TAG_NAME_KEY => 'md:EntityDescriptor',
-            Corto_XmlToArray::COMMENT_KEY => self::META_TOU_COMMENT,
-            '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
-            '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
-            '_validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
+            Corto_XmlToArray::TAG_NAME_PFX => 'md:EntityDescriptor',
+            Corto_XmlToArray::COMMENT_PFX => self::META_TOU_COMMENT,
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
                                                            'idpMetadataValidUntilSeconds', 86400)),
-            '_entityID' => $this->_server->getCurrentEntityUrl('idPMetadataService'),
-            '_ID' => $this->_server->getNewId(),
-            'ds:Signature' => '__placeholder__',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID' => $this->_server->getCurrentEntityUrl('idPMetadataService'),
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'ID' => $this->_server->getNewId(),
+            'ds:Signature' => Corto_XmlToArray::PLACEHOLDER_VALUE,
             'md:IDPSSODescriptor' => array(
-                '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
             ),
         );
 
-        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor['_entityID']);
+        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor[Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID']);
 
         $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
 
@@ -524,23 +524,23 @@ class Corto_Module_Services extends Corto_Module_Abstract
         if (isset($publicCertificate)) {
             $entityDescriptor['md:IDPSSODescriptor']['md:KeyDescriptor'] = array(
                 array(
-                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                    '_use' => 'signing',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'use' => 'signing',
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_server->getCertDataFromPem($publicCertificate),
+                                Corto_XmlToArray::VALUE_PFX => $this->_server->getCertDataFromPem($publicCertificate),
                             ),
                         ),
                     ),
                 ),
                 array(
-                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                    '_use' => 'encryption',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'use' => 'encryption',
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_server->getCertDataFromPem($publicCertificate),
+                                Corto_XmlToArray::VALUE_PFX => $this->_server->getCertDataFromPem($publicCertificate),
                             ),
                         ),
                     ),
@@ -551,11 +551,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
                     ),
                 ),
                 array(
-                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_loadHostSslKey(),
+                                Corto_XmlToArray::VALUE_PFX => $this->_loadHostSslKey(),
                             ),
                         ),
                     ),
@@ -563,11 +563,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
             );
         }
         $entityDescriptor['md:IDPSSODescriptor']['md:NameIDFormat'] = array(
-            '__v' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+            Corto_XmlToArray::VALUE_PFX => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
         );
         $entityDescriptor['md:IDPSSODescriptor']['md:SingleSignOnService'] = array(
-            '_Binding'  => self::DEFAULT_REQUEST_BINDING,
-            '_Location' => $this->_server->getCurrentEntityUrl('singleSignOnService'),
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding'  => self::DEFAULT_REQUEST_BINDING,
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $this->_server->getCurrentEntityUrl('singleSignOnService'),
         );
 
         $entityDescriptor = $this->_server->sign($entityDescriptor, $spEntity['AlternatePublicKey'], $spEntity['AlternatePrivateKey']);
@@ -589,21 +589,21 @@ class Corto_Module_Services extends Corto_Module_Abstract
     public function sPMetadataService()
     {
         $entityDescriptor = array(
-            Corto_XmlToArray::TAG_NAME_KEY => 'md:EntityDescriptor',
-            Corto_XmlToArray::COMMENT_KEY => self::META_TOU_COMMENT,
-            '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
-            '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
-            '_validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
+            Corto_XmlToArray::TAG_NAME_PFX => 'md:EntityDescriptor',
+            Corto_XmlToArray::COMMENT_PFX => self::META_TOU_COMMENT,
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
                                                            'idpMetadataValidUntilSeconds', 86400)),
-            '_entityID' => $this->_server->getCurrentEntityUrl('sPMetadataService'),
-            '_ID' => $this->_server->getNewId(),
-            'ds:Signature' => '__placeholder__',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID' => $this->_server->getCurrentEntityUrl('sPMetadataService'),
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'ID' => $this->_server->getNewId(),
+            'ds:Signature' => Corto_XmlToArray::PLACEHOLDER_VALUE,
             'md:SPSSODescriptor' => array(
-                '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
             ),
         );
 
-        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor['_entityID']);
+        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor[Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID']);
 
         $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
 
@@ -613,33 +613,33 @@ class Corto_Module_Services extends Corto_Module_Abstract
         if (isset($certificates['public'])) {
             $entityDescriptor['md:SPSSODescriptor']['md:KeyDescriptor'] = array(
                 array(
-                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                    '_use' => 'signing',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'use' => 'signing',
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_server->getCertDataFromPem($certificates['public']),
+                                Corto_XmlToArray::VALUE_PFX => $this->_server->getCertDataFromPem($certificates['public']),
                             ),
                         ),
                     ),
                 ),
                 array(
-                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                    '_use' => 'encryption',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'use' => 'encryption',
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_server->getCertDataFromPem($certificates['public']),
+                                Corto_XmlToArray::VALUE_PFX => $this->_server->getCertDataFromPem($certificates['public']),
                             ),
                         ),
                     ),
                 ),
                 array(
-                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
                     'ds:KeyInfo' => array(
                         'ds:X509Data' => array(
                             'ds:X509Certificate' => array(
-                                '__v' => $this->_loadHostSslKey(),
+                                Corto_XmlToArray::VALUE_PFX => $this->_loadHostSslKey(),
                             ),
                         ),
                     ),
@@ -648,17 +648,17 @@ class Corto_Module_Services extends Corto_Module_Abstract
         }
 
         $entityDescriptor['md:SPSSODescriptor']['md:NameIDFormat'] = array(
-            '__v' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
+            Corto_XmlToArray::VALUE_PFX => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
         );
         $entityDescriptor['md:SPSSODescriptor']['md:AssertionConsumerService'] = array(
-            '_Binding'  => self::DEFAULT_RESPONSE_BINDING,
-            '_Location' => $this->_server->getCurrentEntityUrl('assertionConsumerService'),
-            '_index' => '1',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding'  => self::DEFAULT_RESPONSE_BINDING,
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $this->_server->getCurrentEntityUrl('assertionConsumerService'),
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'index' => '1',
         );
 
         $entityDescriptor['md:SPSSODescriptor']['md:AttributeConsumingService'] = array(
             // @todo get correct value for index
-            '_index' => 1,
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'index' => 1,
          );
 
         $this->_addServiceNamesToAttributeConsumingService(
@@ -670,62 +670,62 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $entityDescriptor['md:SPSSODescriptor']['md:AttributeConsumingService']['md:RequestedAttribute'] = array(
             // Mail (example: john@surfnet.nl)
             array(
-                '_Name' => 'urn:mace:dir:attribute-def:mail'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:dir:attribute-def:mail'
             ),
             array(
-                '_Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
-                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                '_isRequired' => 'true'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired' => 'true'
             ),
 
             // DisplayName (example: John Doe)
             array(
-                '_Name' => 'urn:mace:dir:attribute-def:displayName'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:dir:attribute-def:displayName'
             ),
             array(
-                '_Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
-                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                '_isRequired' => 'true'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired' => 'true'
             ),
 
             // Surname (example: Doe)
             array(
-                '_Name' => 'urn:mace:dir:attribute-def:sn'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:dir:attribute-def:sn'
             ),
             array(
-                '_Name' => 'urn:oid:2.5.4.4',
-                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                '_isRequired' => 'true'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:oid:2.5.4.4',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired' => 'true'
             ),
 
             // Given name (example: John)
             array(
-                '_Name' => 'urn:mace:dir:attribute-def:givenName'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:dir:attribute-def:givenName'
             ),
             array(
-                '_Name' => 'urn:oid:2.5.4.42',
-                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                '_isRequired' => 'true'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:oid:2.5.4.42',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired' => 'true'
             ),
 
             // SchachomeOrganization
             array(
-                '_Name' => 'urn:mace:terena.org:schac:homeOrganization'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:terena.org:schac:homeOrganization'
             ),
             array(
-                '_Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
-                ,'_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-                , '_isRequired' => 'true'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
+                ,Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                , Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired' => 'true'
             ),
 
             // UID (example: john.doe)
             array(
-                '_Name' => 'urn:mace:dir:attribute-def:uid'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:dir:attribute-def:uid'
             ),
             array(
-                '_Name' => 'urn:oid:0.9.2342.19200300.100.1.1',
-                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                '_isRequired' => 'true'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:oid:0.9.2342.19200300.100.1.1',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired' => 'true'
             )
         );
 
@@ -766,8 +766,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
                 }
 
                 $mdContactPerson = array();
-                $mdContactPerson['_contactType'] = $contactPerson['ContactType'];
-                $mdContactPerson['md:EmailAddress'][]['__v'] = $contactPerson['EmailAddress'];
+                $mdContactPerson[Corto_XmlToArray::ATTRIBUTE_PFX . 'contactType'] = $contactPerson['ContactType'];
+                $mdContactPerson['md:EmailAddress'][][Corto_XmlToArray::VALUE_PFX] = $contactPerson['EmailAddress'];
 
                 $entityDescriptor['md:ContactPerson'][] = $mdContactPerson;
             }
@@ -788,8 +788,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
 
             $entitySSODescriptor['md:Extensions']['mdui:DisplayName'][] = array(
-                '_xml:lang' => $displayLanguageCode,
-                '__v' => $displayName
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $displayLanguageCode,
+                Corto_XmlToArray::VALUE_PFX => $displayName
             );
         }
     }
@@ -808,8 +808,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
 
             $attributeConsumingService['md:ServiceName'][] = array(
-                '_xml:lang' => $descriptionLanguageCode,
-                '__v' => $descriptionName
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $descriptionLanguageCode,
+                Corto_XmlToArray::VALUE_PFX => $descriptionName
             );
         }
     }
@@ -828,8 +828,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
 
             $attributeConsumingService['md:ServiceDescription'][] = array(
-                '_xml:lang' => $descriptionLanguageCode,
-                '__v' => $descriptionName
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $descriptionLanguageCode,
+                Corto_XmlToArray::VALUE_PFX => $descriptionName
             );
         }
     }
@@ -898,13 +898,13 @@ class Corto_Module_Services extends Corto_Module_Abstract
     public function artifactResolutionService()
     {
         $postData = Corto_XmlToArray::xml2array(file_get_contents("php://input"));
-        $artifact = $postData['SOAP-ENV:Body']['samlp:ArtifactResolve']['saml:Artifact']['__v'];
+        $artifact = $postData['SOAP-ENV:Body']['samlp:ArtifactResolve']['saml:Artifact'][Corto_XmlToArray::VALUE_PFX];
 
         $this->_server->restartSession(sha1($artifact), 'artifact');
         $message = $_SESSION['message'];
         session_destroy();
 
-        $element = $message['__t'];
+        $element = $message[Corto_XmlToArray::TAG_NAME_PFX];
         $artifactResponse = array(
             'samlp:ArtifactResponse' => array(
                 'xmlns:samlp'   => 'urn:oasis:names:tc:SAML:2.0:protocol',
@@ -912,9 +912,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
                 'ID'            => $this->_server->getNewId(),
                 'Version'       => '2.0',
                 'IssueInstant'  => $this->_server->timeStamp(),
-                'InResponseTo'  => $postData['SOAP-ENV:Body']['samlp:ArtifactResolve']['_ID'],
+                'InResponseTo'  => $postData['SOAP-ENV:Body']['samlp:ArtifactResolve'][Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'],
 
-                'saml:Issuer' => array('__v' => $this->_server->getCurrentEntityUrl()),
+                'saml:Issuer' => array(Corto_XmlToArray::VALUE_PFX => $this->_server->getCurrentEntityUrl()),
                 $element => $message,
             ),
         );
@@ -926,7 +926,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         // Post to the 'continueToIdp' service
         $action = $this->_server->getCurrentEntityUrl('continueToIdP');
 
-        $requestIssuer = $request['saml:Issuer']['__v'];
+        $requestIssuer = $request['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
 
         $remoteEntity = $this->_server->getRemoteEntity($requestIssuer);
 
@@ -937,7 +937,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
             array(
                 'preselectedIdp'    => $this->_server->getCookie('selectedIdp'),
                 'action'            => $action,
-                'ID'                => $request['_ID'],
+                'ID'                => $request[Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'],
                 'idpList'           => $idpList,
                 'metaDataSP'        => $remoteEntity,
             ));

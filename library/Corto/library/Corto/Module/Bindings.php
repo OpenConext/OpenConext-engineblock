@@ -101,8 +101,8 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
     {
         $response = $this->_receiveMessage(self::KEY_RESPONSE);
         $this->_server->getSessionLog()->debug("Received response: " . var_export($response, true));
-        if (isset($response[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Binding']) &&
-            $response[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Binding'] === "INTERNAL") {
+        if (isset($response[Corto_XmlToArray::PRIVATE_PFX]['Binding']) &&
+            $response[Corto_XmlToArray::PRIVATE_PFX]['Binding'] === "INTERNAL") {
             return $response;
         }
 
@@ -149,7 +149,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         }
         
         $message = $_REQUEST[$key];
-        $message[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Binding'] = "INTERNAL";
+        $message[Corto_XmlToArray::PRIVATE_PFX]['Binding'] = "INTERNAL";
         return $message;
     }
 
@@ -170,11 +170,11 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         $messageArray   = $this->_getArrayFromReceivedMessage($message);
         
         $relayState     = $_POST['RelayState'];
-        $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['RelayState']   = $relayState;
-        $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Raw']          = $message;
-        $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['paramname']    = $key;
+        $messageArray[Corto_XmlToArray::PRIVATE_PFX]['RelayState']   = $relayState;
+        $messageArray[Corto_XmlToArray::PRIVATE_PFX]['Raw']          = $message;
+        $messageArray[Corto_XmlToArray::PRIVATE_PFX]['paramname']    = $key;
         if (isset($_POST['return'])) {
-            $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Return'] = $_POST['return']; 
+            $messageArray[Corto_XmlToArray::PRIVATE_PFX]['Return'] = $_POST['return'];
         }
         
         return $messageArray;
@@ -207,16 +207,16 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
         if (isset($_GET['RelayState'])) {
             $relayState         = $_GET['RelayState'];
-            $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['RelayState'] = $relayState;
+            $messageArray[Corto_XmlToArray::PRIVATE_PFX]['RelayState'] = $relayState;
         }
 
         if (isset($_GET['Signature'])) {
-            $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Signature']        = $_GET['Signature'];
-            $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['SigningAlgorithm'] = $_GET['SigAlg'];
+            $messageArray[Corto_XmlToArray::PRIVATE_PFX]['Signature']        = $_GET['Signature'];
+            $messageArray[Corto_XmlToArray::PRIVATE_PFX]['SigningAlgorithm'] = $_GET['SigAlg'];
         }
 
-        $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Raw'] = $message;
-        $messageArray[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['paramname'] = $key;
+        $messageArray[Corto_XmlToArray::PRIVATE_PFX]['Raw'] = $message;
+        $messageArray[Corto_XmlToArray::PRIVATE_PFX]['paramname'] = $key;
 
         return $messageArray;
     }
@@ -924,12 +924,12 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
     protected static function _usortAssertion($a, $b)
     {
-        $result = self::_usortByPrefix(Corto_XmlToArray::PRIVATE_KEY_PREFIX, $a, $b);
+        $result = self::_usortByPrefix(Corto_XmlToArray::PRIVATE_PFX, $a, $b);
         if ($result !== false) {
             return $result;
         }
 
-        $result = self::_usortByPrefix(Corto_XmlToArray::TAG_NAME_KEY, $a, $b);
+        $result = self::_usortByPrefix(Corto_XmlToArray::TAG_NAME_PFX, $a, $b);
         if ($result !== false) {
             return $result;
         }
@@ -939,7 +939,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             return $result;
         }
 
-        $result = self::_usortByPrefix(Corto_XmlToArray::ATTRIBUTE_KEY_PREFIX, $a, $b);
+        $result = self::_usortByPrefix(Corto_XmlToArray::ATTRIBUTE_PFX, $a, $b);
         if ($result !== false) {
             return $result;
         }

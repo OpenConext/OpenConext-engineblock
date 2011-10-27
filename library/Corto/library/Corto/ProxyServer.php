@@ -404,8 +404,8 @@ class Corto_ProxyServer
     {
         $remoteMetaData = $this->getRemoteEntity($idp);
         $request = array(
-            Corto_XmlToArray::TAG_NAME_KEY       => 'samlp:AuthnRequest',
-            Corto_XmlToArray::PRIVATE_KEY_PREFIX => array(
+            Corto_XmlToArray::TAG_NAME_PFX       => 'samlp:AuthnRequest',
+            Corto_XmlToArray::PRIVATE_PFX => array(
                 'paramname'         => 'SAMLRequest',
                 'destinationid'     => $idp,
                 'ProtocolBinding'   => $remoteMetaData['SingleSignOnService']['Binding'],
@@ -491,8 +491,8 @@ class Corto_ProxyServer
     {
         $response = $this->_createBaseResponse($request);
 
-        $inTransparentMode = isset($request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent']) &&
-                $request[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Transparent'];
+        $inTransparentMode = isset($request[Corto_XmlToArray::PRIVATE_PFX]['Transparent']) &&
+                $request[Corto_XmlToArray::PRIVATE_PFX]['Transparent'];
 
         if (isset($sourceResponse['__']['OriginalIssuer'])) {
             $response['__']['OriginalIssuer'] = $sourceResponse['__']['OriginalIssuer'];
@@ -621,8 +621,8 @@ class Corto_ProxyServer
         $destinationID = $request['saml:Issuer']['__v'];
 
         $response = array(
-            Corto_XmlToArray::TAG_NAME_KEY => 'samlp:Response',
-            Corto_XmlToArray::PRIVATE_KEY_PREFIX => array(
+            Corto_XmlToArray::TAG_NAME_PFX => 'samlp:Response',
+            Corto_XmlToArray::PRIVATE_PFX => array(
                 'paramname' => 'SAMLResponse',
                 'RelayState'=> $request['__']['RelayState'],
                 'destinationid' => $destinationID,
@@ -729,7 +729,7 @@ class Corto_ProxyServer
     public function filterOutputAssertionAttributes(&$response, $request)
     {
         $hostedMetaData = $this->_entities['current'];
-        $responseIssuer = $response[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['OriginalIssuer'];
+        $responseIssuer = $response[Corto_XmlToArray::PRIVATE_PFX]['OriginalIssuer'];
         $idpEntityMetadata = $this->getRemoteEntity($responseIssuer);
 
         $requestIssuer = $request['saml:Issuer']['__v'];
@@ -963,7 +963,7 @@ class Corto_ProxyServer
         $signature['ds:SignatureValue']['__v'] = base64_encode($signatureValue);
 
         $element['ds:Signature'] = $signature;
-        $element[Corto_XmlToArray::PRIVATE_KEY_PREFIX]['Signed'] = true;
+        $element[Corto_XmlToArray::PRIVATE_PFX]['Signed'] = true;
 
         return $element;
     }

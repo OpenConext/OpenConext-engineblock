@@ -47,7 +47,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
     public function idPsMetadataService()
     {
         $entitiesDescriptor = array(
-            Corto_XmlToArray::TAG_NAME_KEY => 'md:EntitiesDescriptor',
+            Corto_XmlToArray::TAG_NAME_PFX => 'md:EntitiesDescriptor',
             '_xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
             '_xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
             '_ID' => $this->_server->getNewId(),
