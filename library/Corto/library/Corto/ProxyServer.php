@@ -424,8 +424,6 @@ class Corto_ProxyServer
             '_AssertionConsumerServiceURL'      => $this->getCurrentEntityUrl('assertionConsumerService'),
             '_ProtocolBinding'                  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
 
-            '_AttributeConsumingServiceIndex'   => $originalRequest['_AttributeConsumingServiceIndex'],
-
             'saml:Issuer' => array('__v' => $this->getCurrentEntityUrl('sPMetadataService')),
             'ds:Signature' => '__placeholder__',
             'samlp:NameIDPolicy' => array(
@@ -433,6 +431,10 @@ class Corto_ProxyServer
                 '_AllowCreate' => 'true',
             ),
         );
+
+        if (isset($originalRequest['_AttributeConsumingServiceIndex'])) {
+            $request['_AttributeConsumingServiceIndex'] = $originalRequest['_AttributeConsumingServiceIndex'];
+        }
 
         if ($scoping) {
             $scoping = (array) $scoping;
