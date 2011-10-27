@@ -504,9 +504,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
         );
 
         $voContext = $this->_server->getVirtualOrganisationContext();
-        $this->_server->setVirtualOrganizationContext(null);
+        $this->_server->setVirtualOrganisationContext(null);
         $canonicalIdpEntityId = $this->_server->getCurrentEntityUrl('idPMetadataService');
-        $this->_server->setVirtualOrganizationContext($voContext);
+        $this->_server->setVirtualOrganisationContext($voContext);
 
         $entityDetails = $this->_server->getRemoteEntity($canonicalIdpEntityId);
 
@@ -616,9 +616,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
         );
 
         $voContext = $this->_server->getVirtualOrganisationContext();
-        $this->_server->setVirtualOrganizationContext(null);
+        $this->_server->setVirtualOrganisationContext(null);
         $canonicalSpEntityId = $this->_server->getCurrentEntityUrl('sPMetadataService');
-        $this->_server->setVirtualOrganizationContext($voContext);
+        $this->_server->setVirtualOrganisationContext($voContext);
 
         $entityDetails = $this->_server->getRemoteEntity($canonicalSpEntityId);
 
