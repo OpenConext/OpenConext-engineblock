@@ -647,22 +647,22 @@ class Corto_Module_Services extends Corto_Module_Abstract
             'md:ServiceName' => array(
                 array(
                     '_xml:lang' => 'en',
-                    '__v' => 'SURFconext UK'
+                    '__v' => $entityDetails['Name']['en']
                 ),
                 array(
                     '_xml:lang' => 'nl',
-                    '__v' => 'SURFconext NL'
+                    '__v' => $entityDetails['Name']['nl']
                 )
              ),
 
             'md:ServiceDescription' => array(
                 array(
                     '_xml:lang' => 'en',
-                    '__v' => 'SURFconext is a collaboration infrastructure that creates new opportunities to collaborate online based on a combination of applications from different providers.'
+                    '__v' => $entityDetails['Description']['en']
                 ),
                 array(
                     '_xml:lang' => 'nl',
-                    '__v' => 'SURFconext is een samenwerkingsinfrastructuur die nieuwe vormen van samenwerken mogelijk maakt door diensten van verschillende aanbieders te combineren.'
+                    '__v' => $entityDetails['Description']['nl']
                 )
              ),
 
@@ -773,7 +773,6 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
         }
     }
-
 
     /**
      * Validates xml against oasis SAML 2 spec
