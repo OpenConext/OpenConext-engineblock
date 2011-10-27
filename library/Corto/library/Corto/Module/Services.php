@@ -650,88 +650,73 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $entityDescriptor['md:SPSSODescriptor']['md:AttributeConsumingService'] = array(
             // @todo get correct value for index
             '_index' => 1,
-            'md:ServiceName' => array(
-                array(
-                    '_xml:lang' => 'en',
-                    '__v' => $entityDetails['Name']['en']
-                ),
-                array(
-                    '_xml:lang' => 'nl',
-                    '__v' => $entityDetails['Name']['nl']
-                )
-             ),
+         );
 
-            'md:ServiceDescription' => array(
-                array(
-                    '_xml:lang' => 'en',
-                    '__v' => $entityDetails['Description']['en']
-                ),
-                array(
-                    '_xml:lang' => 'nl',
-                    '__v' => $entityDetails['Description']['nl']
-                )
-             ),
+        $this->_addServiceNamesToAttributeConsumingService(
+            $entityDescriptor['md:SPSSODescriptor']['md:AttributeConsumingService'], $entityDetails);
 
-            'md:RequestedAttribute' => array(
-                // Mail (example: john@surfnet.nl)
-                array(
-                    '_Name' => 'urn:mace:dir:attribute-def:mail'
-                ),
-                array(
-                    '_Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
-                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                    '_isRequired' => 'true'
-                ),
+        $this->_addServiceDescriptionsToAttributeConsumingService(
+            $entityDescriptor['md:SPSSODescriptor']['md:AttributeConsumingService'], $entityDetails);
 
-                // DisplayName (example: John Doe)
-                array(
-                    '_Name' => 'urn:mace:dir:attribute-def:displayName'
-                ),
-                array(
-                    '_Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
-                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                    '_isRequired' => 'true'
-                ),
+        $entityDescriptor['md:SPSSODescriptor']['md:AttributeConsumingService']['md:RequestedAttribute'] = array(
+            // Mail (example: john@surfnet.nl)
+            array(
+                '_Name' => 'urn:mace:dir:attribute-def:mail'
+            ),
+            array(
+                '_Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
+                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                '_isRequired' => 'true'
+            ),
 
-                // Surname (example: Doe)
-                array(
-                    '_Name' => 'urn:mace:dir:attribute-def:sn'
-                ),
-                array(
-                    '_Name' => 'urn:oid:2.5.4.4',
-                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                    '_isRequired' => 'true'
-                ),
+            // DisplayName (example: John Doe)
+            array(
+                '_Name' => 'urn:mace:dir:attribute-def:displayName'
+            ),
+            array(
+                '_Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
+                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                '_isRequired' => 'true'
+            ),
 
-                // Given name (example: John)
-                array(
-                    '_Name' => 'urn:mace:dir:attribute-def:givenName'
-                ),
-                array(
-                    '_Name' => 'urn:oid:2.5.4.42',
-                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                    '_isRequired' => 'true'
-                ),
+            // Surname (example: Doe)
+            array(
+                '_Name' => 'urn:mace:dir:attribute-def:sn'
+            ),
+            array(
+                '_Name' => 'urn:oid:2.5.4.4',
+                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                '_isRequired' => 'true'
+            ),
 
-                // SchachomeOrganization
-                array(
-                    '_Name' => 'urn:mace:terena.org:schac:homeOrganization'
-                ),
-                array(
-                    '_Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
-                    ,'_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-                    , '_isRequired' => 'true'
-                ),
+            // Given name (example: John)
+            array(
+                '_Name' => 'urn:mace:dir:attribute-def:givenName'
+            ),
+            array(
+                '_Name' => 'urn:oid:2.5.4.42',
+                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                '_isRequired' => 'true'
+            ),
 
-                // UID (example: john.doe)
-                array(
-                    '_Name' => 'urn:mace:dir:attribute-def:uid'
-                ),
-                array(
-                    '_Name' => 'urn:oid:0.9.2342.19200300.100.1.1',
-                    '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                    '_isRequired' => 'true'
-                )
+            // SchachomeOrganization
+            array(
+                '_Name' => 'urn:mace:terena.org:schac:homeOrganization'
+            ),
+            array(
+                '_Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
+                ,'_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                , '_isRequired' => 'true'
+            ),
+
+            // UID (example: john.doe)
+            array(
+                '_Name' => 'urn:mace:dir:attribute-def:uid'
+            ),
+            array(
+                '_Name' => 'urn:oid:0.9.2342.19200300.100.1.1',
+                '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                '_isRequired' => 'true'
             )
         );
 
@@ -796,6 +781,46 @@ class Corto_Module_Services extends Corto_Module_Abstract
             $entitySSODescriptor['md:Extensions']['mdui:DisplayName'][] = array(
                 '_xml:lang' => $displayLanguageCode,
                 '__v' => $displayName
+            );
+        }
+    }
+
+    /**
+     * Adds ServiceName (if present) to AttributeConsumingService
+     *
+     * @param array $attributeConsumingService
+     * @param array $entityDetails
+     * @return void
+     */
+    protected function _addServiceNamesToAttributeConsumingService(array &$attributeConsumingService, array $entityDetails) {
+        foreach($entityDetails['Name'] as $descriptionLanguageCode => $descriptionName) {
+            if(empty($descriptionName)) {
+                continue;
+            }
+
+            $attributeConsumingService['md:ServiceName'][] = array(
+                '_xml:lang' => $descriptionLanguageCode,
+                '__v' => $descriptionName
+            );
+        }
+    }
+
+    /**
+     * Adds ServiceDescription (if present) to AttributeConsumingService
+     *
+     * @param array $attributeConsumingService
+     * @param array $entityDetails
+     * @return void
+     */
+    protected function _addServiceDescriptionsToAttributeConsumingService(array &$attributeConsumingService, array $entityDetails) {
+        foreach($entityDetails['Description'] as $descriptionLanguageCode => $descriptionName) {
+            if(empty($descriptionName)) {
+                continue;
+            }
+
+            $attributeConsumingService['md:ServiceDescription'][] = array(
+                '_xml:lang' => $descriptionLanguageCode,
+                '__v' => $descriptionName
             );
         }
     }
