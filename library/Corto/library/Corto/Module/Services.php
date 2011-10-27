@@ -503,7 +503,12 @@ class Corto_Module_Services extends Corto_Module_Abstract
             ),
         );
 
-        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor[Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID']);
+        $voContext = $this->_server->getVirtualOrganisationContext();
+        $this->_server->setVirtualOrganizationContext(null);
+        $canonicalIdpEntityId = $this->_server->getCurrentEntityUrl('idPMetadataService');
+        $this->_server->setVirtualOrganizationContext($voContext);
+
+        $entityDetails = $this->_server->getRemoteEntity($canonicalIdpEntityId);
 
         $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
 
@@ -570,7 +575,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
             Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $this->_server->getCurrentEntityUrl('singleSignOnService'),
         );
 
-        $entityDescriptor = $this->_server->sign($entityDescriptor, $spEntity['AlternatePublicKey'], $spEntity['AlternatePrivateKey']);
+        $entityDescriptor = $this->_server->sign(
+            $entityDescriptor,
+            (isset($spEntity['AlternatePublicKey'])  ? $spEntity['AlternatePublicKey']  : null),
+            (isset($spEntity['AlternatePrivateKey']) ? $spEntity['AlternatePrivateKey'] : null)
+        );
         $xml = Corto_XmlToArray::array2xml($entityDescriptor);
 
         $this->_validateXml($xml);
@@ -588,14 +597,17 @@ class Corto_Module_Services extends Corto_Module_Abstract
      */
     public function sPMetadataService()
     {
+        $spEntityId = $this->_server->getCurrentEntityUrl('sPMetadataService');
+
         $entityDescriptor = array(
             Corto_XmlToArray::TAG_NAME_PFX => 'md:EntityDescriptor',
             Corto_XmlToArray::COMMENT_PFX => self::META_TOU_COMMENT,
             Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
             Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
-            Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
-                                                           'idpMetadataValidUntilSeconds', 86400)),
-            Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID' => $this->_server->getCurrentEntityUrl('sPMetadataService'),
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil' => $this->_server->timeStamp(
+                $this->_server->getCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400)
+            ),
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID' => $spEntityId,
             Corto_XmlToArray::ATTRIBUTE_PFX . 'ID' => $this->_server->getNewId(),
             'ds:Signature' => Corto_XmlToArray::PLACEHOLDER_VALUE,
             'md:SPSSODescriptor' => array(
@@ -603,7 +615,12 @@ class Corto_Module_Services extends Corto_Module_Abstract
             ),
         );
 
-        $entityDetails = $this->_server->getRemoteEntity($entityDescriptor[Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID']);
+        $voContext = $this->_server->getVirtualOrganisationContext();
+        $this->_server->setVirtualOrganizationContext(null);
+        $canonicalSpEntityId = $this->_server->getCurrentEntityUrl('sPMetadataService');
+        $this->_server->setVirtualOrganizationContext($voContext);
+
+        $entityDetails = $this->_server->getRemoteEntity($canonicalSpEntityId);
 
         $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
 
