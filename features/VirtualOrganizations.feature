@@ -24,53 +24,53 @@ Feature: Virtual Organizations
 
   Scenario: Boy logs in at the Test SP with an implicit VO
     When I go to the Test SP
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
     Then I should be on the Test SP
 
   Scenario: Ivo fails to log in at the Test SP with an implicit VO
     When I go to the Test SP
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-ivo" with password "test-ivo"
     Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
 
   Scenario: Ivo fails to log in at the Test Sp with explicit VO "scn-devs"
     When I go to the Test SP with the explicit VO "scn-devs"
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-ivo" with password "test-ivo"
     Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
 
   Scenario: Boy logs in at the Test SP with explicit VO "scn-devs"
     When I go to the Test SP with the explicit VO "scn-devs"
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
      Then I should be on the Test SP
 
   Scenario: Jasha logs in at the Test SP with explicit VO "scn-devs"
     When I go to the Test SP with the explicit VO "scn-devs"
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-jasha" with password "test-jasha"
      And I pass through EngineBlock
     Then I should be on the Test SP
 
   Scenario: Jasha logs in at the Test SP with explicit VO "rave-devs"
     When I go to the Test SP with the explicit VO "rave-devs"
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-jasha" with password "test-jasha"
      And I pass through EngineBlock
     Then I should be on the Test SP
 
   Scenario: Boy fails to log in at the Test SP with explicit VO "rave-devs"
     When I go to the Test SP with the explicit VO "rave-devs"
-     And I select from the WAYF "SURFguest"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
     Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
 
   Scenario: Boy logs in at the Test SP with explicit VO "test-idps"
     When I go to the Test SP with the explicit VO "test-idps"
-     And I select from the WAYF "SURFnetGuests"
+     And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
      Then I should be on the Test SP

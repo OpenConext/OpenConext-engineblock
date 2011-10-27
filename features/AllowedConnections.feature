@@ -17,8 +17,8 @@ Feature: AllowedConnections
   Scenario: Jasha logs in at the Test SP
     When I go to the Test SP
     Then I should not be able to select "Behat:test" from the WAYF
-    And I should be able to select "SURFguest" from the WAYF
-    And I select from the WAYF "SURFguest"
+    And I should be able to select "SURFguest (TEST)" from the WAYF
+    And I select from the WAYF "SURFguest (TEST)"
     And I log in at Surfguest IdP as "test-jasha" with password "test-jasha"
     And I pass through EngineBlock
     Then I should be on the Test SP
