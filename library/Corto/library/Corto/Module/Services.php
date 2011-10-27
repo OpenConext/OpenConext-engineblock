@@ -745,7 +745,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
      *
      * @return string pem key
      */
-    protected function _loadHostSslKey() {
+    protected function _loadHostSslKey() 
+    {
         $url = $_SERVER['HTTP_HOST'] . ':443';
         $certificate = new EngineBlock_X509Certificate();
         return $certificate->exportPemFromUrl($url);
@@ -758,7 +759,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
      * @param array $entityDetails
      * @return void
      */
-    protected function _addContactPersonsToEntityDescriptor(array &$entityDescriptor, array $entityDetails) {
+    protected function _addContactPersonsToEntityDescriptor(array &$entityDescriptor, array $entityDetails) 
+    {
         if(array_key_exists('ContactPersons', $entityDetails)) {
              foreach($entityDetails['ContactPersons'] as $contactPerson) {
                 if(empty($contactPerson['EmailAddress'])) {
@@ -781,7 +783,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
      * @param array $entityDetails
      * @return void
      */
-    protected function _addDisplayNamesToEntityDescriptor(array &$entitySSODescriptor, array $entityDetails) {
+    protected function _addDisplayNamesToEntityDescriptor(array &$entitySSODescriptor, array $entityDetails) 
+    {
+        if (!isset($entityDetails['DisplayName'])) {
+            return;
+        }
         foreach($entityDetails['DisplayName'] as $displayLanguageCode => $displayName) {
             if(empty($displayName)) {
                 continue;
@@ -801,7 +807,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
      * @param array $entityDetails
      * @return void
      */
-    protected function _addServiceNamesToAttributeConsumingService(array &$attributeConsumingService, array $entityDetails) {
+    protected function _addServiceNamesToAttributeConsumingService(array &$attributeConsumingService, array $entityDetails) 
+    {
         foreach($entityDetails['Name'] as $descriptionLanguageCode => $descriptionName) {
             if(empty($descriptionName)) {
                 continue;
@@ -821,7 +828,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
      * @param array $entityDetails
      * @return void
      */
-    protected function _addServiceDescriptionsToAttributeConsumingService(array &$attributeConsumingService, array $entityDetails) {
+    protected function _addServiceDescriptionsToAttributeConsumingService(array &$attributeConsumingService, array $entityDetails) 
+    {
         foreach($entityDetails['Description'] as $descriptionLanguageCode => $descriptionName) {
             if(empty($descriptionName)) {
                 continue;
@@ -879,7 +887,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
      * @param   string  $schemaUrl
      * @return  string  $absoluteSchemaXml
      */
-    protected function _absolutizeSchemaLocations($schemaXml, $schemaUrl) {
+    protected function _absolutizeSchemaLocations($schemaXml, $schemaUrl) 
+    {
         $allSchemaLocationsRegex = '/schemaLocation="(.*)"/';
         preg_match_all($allSchemaLocationsRegex, $schemaXml, $matches);
 
