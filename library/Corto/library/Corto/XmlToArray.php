@@ -137,11 +137,12 @@ class Corto_XmlToArray
         'samlp:RequesterID',
         'ds:X509Certificate',
         'ds:Transform',
-        'md:DisplayName',
-        'md:EntityDescriptor',
-        'md:KeyDescriptor',
 #        'md:AssertionConsumerService',
         'md:AttributeConsumingService',
+        'md:DisplayName',
+        'md:EntityDescriptor',
+        'md:EncryptionMethod',
+        'md:KeyDescriptor',
         'md:ServiceDescription',
         'md:ServiceName'
     );

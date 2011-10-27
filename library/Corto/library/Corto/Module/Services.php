@@ -544,6 +544,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
                             ),
                         ),
                     ),
+                    'md:EncryptionMethod' => array(
+                        array(
+                            '__v' => 'http://www.w3.org/2001/04/xmlenc#rsa-1_5',
+                        ),
+                    ),
                 ),
                 array(
                     '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
@@ -557,7 +562,6 @@ class Corto_Module_Services extends Corto_Module_Abstract
                 ),
             );
         }
-
         $entityDescriptor['md:IDPSSODescriptor']['md:NameIDFormat'] = array(
             '__v' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
         );
