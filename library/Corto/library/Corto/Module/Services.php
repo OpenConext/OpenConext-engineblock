@@ -778,18 +778,20 @@ class Corto_Module_Services extends Corto_Module_Abstract
      */
     protected function _addContactPersonsToEntityDescriptor(array &$entityDescriptor, array $entityDetails) 
     {
-        if(array_key_exists('ContactPersons', $entityDetails)) {
-             foreach($entityDetails['ContactPersons'] as $contactPerson) {
-                if(empty($contactPerson['EmailAddress'])) {
-                    continue;
-                }
+        if(!array_key_exists('ContactPersons', $entityDetails)) {
+            return;
+        }
 
-                $mdContactPerson = array();
-                $mdContactPerson[Corto_XmlToArray::ATTRIBUTE_PFX . 'contactType'] = $contactPerson['ContactType'];
-                $mdContactPerson['md:EmailAddress'][][Corto_XmlToArray::VALUE_PFX] = $contactPerson['EmailAddress'];
-
-                $entityDescriptor['md:ContactPerson'][] = $mdContactPerson;
+        foreach($entityDetails['ContactPersons'] as $contactPerson) {
+            if(empty($contactPerson['EmailAddress'])) {
+                continue;
             }
+
+            $mdContactPerson = array();
+            $mdContactPerson[Corto_XmlToArray::ATTRIBUTE_PFX . 'contactType'] = $contactPerson['ContactType'];
+            $mdContactPerson['md:EmailAddress'][][Corto_XmlToArray::VALUE_PFX] = $contactPerson['EmailAddress'];
+
+            $entityDescriptor['md:ContactPerson'][] = $mdContactPerson;
         }
     }
 
