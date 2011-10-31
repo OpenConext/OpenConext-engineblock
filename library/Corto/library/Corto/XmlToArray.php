@@ -314,8 +314,13 @@ class Corto_XmlToArray
             } elseif (strpos($key, self::ATTRIBUTE_PFX) === 0) {
                 $writer->writeAttribute(substr($key, 1), $value);
 
-            } else {
+            } elseif (is_array($value) || $value === self::PLACEHOLDER_VALUE) {
                 self::_array2xml($value, $key, $writer, $level + 1);
+            }
+            else {
+                throw new Corto_XmlToArray_Exception(
+                    "Value for key '$key' unrecognized (key naming error?)! Value" . print_r($value, true)
+                );
             }
         }
 
