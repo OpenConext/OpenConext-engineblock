@@ -54,6 +54,10 @@ class OpenSocial_Rest_Mapper_Json implements OpenSocial_Rest_Mapper_Interface
     {
         $data = json_decode($responseBody);
 
+        // Support for OpenSocial 1.0 wrapped entries
+        if (!isset($data->entry) && isset($data->result)) {
+            $data = $data->result;
+        }
         if (!isset($data->entry)) {
             throw new OpenSocial_Rest_Exception("No entry / entries found in response?");
         }
