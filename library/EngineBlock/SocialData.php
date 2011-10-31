@@ -99,6 +99,14 @@ class EngineBlock_SocialData
         return $openSocialGroups;
     }
 
+    /**
+     * @param $groupMemberUid
+     * @param $groupId
+     * @param array $socialAttributes
+     * @param null $voId
+     * @param null $spEntityId
+     * @return array
+     */
     public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array(), $voId = null, $spEntityId = null)
     {
         $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId);
@@ -118,6 +126,15 @@ class EngineBlock_SocialData
         return $people;
     }
 
+    /**
+     * @throws EngineBlock_Exception
+     * @param $identifier
+     * @param array $socialAttributes
+     * @param string|null $voId
+     * @param string|null $spEntityId
+     * @param string|null $subjectId
+     * @return array|bool|mixed|the
+     */
     public function getPerson($identifier, $socialAttributes = array(), $voId = null, $spEntityId = null, $subjectId = null)
     {
         $fieldMapper = $this->_getFieldMapper();
@@ -151,11 +168,15 @@ class EngineBlock_SocialData
             }
         }
         else {
-            //not really posible
+            // Not really possible
             throw new EngineBlock_Exception("More than 1 person found for identifier $identifier");
         }
     }
 
+    /**
+     * @param EngineBlock_Group_Model_Group $group
+     * @return array
+     */
     protected function _mapEngineBlockGroupToOpenSocialGroup(EngineBlock_Group_Model_Group $group)
     {
         return array(
@@ -165,32 +186,17 @@ class EngineBlock_SocialData
         );
     }
 
-    protected function _enforceArp($record)
+    /**
+     * Enforce Attribute Release Policy
+     *
+     * @todo not implemented
+     *
+     * @param $record
+     * @return array
+     */
+    protected function _enforceArp(array $record)
     {
-        // @todo not implemented
         return $record;
-
-        // @todo: the below is a pseudocode implementation of an arp enforcer. Not tested.
-
-        // Find out the SP Identifier based on the app id.
-        // E.g. if the appid = 'weather.gadget.google.com' and in Janus there is a field
-        // called coin:gadgetbaseurl which is set to .*\.gadget\.google\.com, then
-        // the SP identifier of that entry will be returned by findIdentifiersBymetadata.
-        $result = $this->_getServiceRegistry()->
-                         findIdentifiersByMetadata(ENGINEBLOCK_SERVICEREGISTRY_GADGETBASEURL_FIELD,
-                                                   $this->_appId);
-
-        if (count($result)) {
-            $spIdentifier = $result[0];
-            $arp = $this->_getServiceRegistry()->getArp($spIdentifier);
-
-            // @todo filter attributes based on arp.
-
-            return $record;
-
-        }
-
-        return array(); // something went wrong, as a precaution we don't give back any data
     }
 
     /**
@@ -207,6 +213,9 @@ class EngineBlock_SocialData
         return $this->_userDirectory;
     }
 
+    /**
+     * @param $userDirectory
+     */
     public function setUserDirectory($userDirectory)
     {
         $this->_userDirectory = $userDirectory;
@@ -224,6 +233,11 @@ class EngineBlock_SocialData
         return $this->_groupProvider;
     }
 
+    /**
+     * @param $voId
+     * @param $spEntityId
+     * @return EngineBlock_AttributeAggregator
+     */
     protected function _getAttributeAggregator($voId, $spEntityId)
     {
         if (!isset($this->_attributeAggregator)) {
@@ -247,6 +261,9 @@ class EngineBlock_SocialData
         return $this->_serviceRegistry;
     }
 
+    /**
+     * @param $serviceRegistry
+     */
     public function setServiceRegistry($serviceRegistry)
     {
         $this->_serviceRegistry = $serviceRegistry;
@@ -263,6 +280,9 @@ class EngineBlock_SocialData
         return $this->_fieldMapper;
     }
 
+    /**
+     * @param $mapper
+     */
     public function setFieldMapper($mapper)
     {
         $this->_fieldMapper = $mapper;

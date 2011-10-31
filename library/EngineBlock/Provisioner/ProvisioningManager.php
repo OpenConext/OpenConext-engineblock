@@ -44,7 +44,7 @@ class EngineBlock_Provisioner_ProvisioningManager
     public function provisionUser($userId, $attributes, $spMetadata, $idpMetadata)
     {
         if (!$spMetadata['MustProvisionExternally']) {
-            return false;
+            return;
         }
 
         // https://os.XXX.surfconext.nl/provisioning-manager/provisioning/jit.shtml?
