@@ -65,18 +65,10 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
     protected $_bindings = array(
             'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect'        => '_sendHTTPRedirect',
             'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST'            => '_sendHTTPPost',
-            //'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact'        => 'sendHTTPArtifact',
-            //'urn:oasis:names:tc:SAML:2.0:bindings:URI'                  => 'sendURI',
-            //'urn:oasis:names:tc:SAML:2.0:bindings:SOAP'                 => 'sendSOAP',
             'INTERNAL'                                                  => 'sendInternal',
             'JSON-Redirect'                                             => '_sendHTTPRedirect',
             'JSON-POST'                                                 => '_sendHTTPPost',
-            null                                                        => '_sendHTTPRedirect',
-
-            //'urn:oasis:names:tc:SAML:1.0:profiles:browser-post'         => 'sendbrowserpost',
-            //'urn:oasis:names:tc:SAML:1.0:profiles:browser-artifact-01'  => 'sendbrowserartifact01',
-            //'urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding'         => 'xxxx',
-            //'urn:mace:shibboleth:1.0:profiles:AuthnRequest'             => 'sendShibAuthnRequest',
+            null                                                        => '_sendHTTPRedirect'
     );
 
     /**
@@ -595,45 +587,6 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             throw new Corto_Module_Bindings_TimingException($message);
         }
         return true;
-    }
-
-    protected function _soapRequest($soapServiceUrl, array $body)
-    {
-        $soapEnvelope = array(
-            '__t' => 'SOAP-ENV:Envelope',
-            '_xmlns:SOAP-ENV' => "http://schemas.xmlsoap.org/soap/envelope/",
-            'SOAP-ENV:Body' => $body,
-        );
-
-        $curlOptions = array(
-            CURLOPT_URL             => $soapServiceUrl,
-            CURLOPT_HTTPHEADER      => array('SOAPAction: ""'),
-            CURLOPT_RETURNTRANSFER  => 1,
-            CURLOPT_SSL_VERIFYPEER  => FALSE,
-            CURLOPT_POSTFIELDS      => Corto_XmlToArray::array2xml($soapEnvelope),
-            CURLOPT_HEADER          => 0,
-        );
-
-        $curlHandler = curl_init();
-        curl_setopt_array($curlHandler, $curlOptions);
-        $curlResult = curl_exec($curlHandler);
-
-        $soapResponse = Corto_XmlToArray::xml2array($curlResult);
-
-        return $soapResponse['SOAP-ENV:Body'];
-    }
-
-    public function soapResponse(array $body)
-    {
-        $soapResponse = array(
-            '__t'               => 'SOAP-ENV:Envelope',
-            'xmlns:SOAP-ENV'    => "http://schemas.xmlsoap.org/soap/envelope/",
-            'SOAP-ENV:Body'     => $body,
-        );
-        $xml = Corto_XmlToArray::array2xml($soapResponse);
-
-        $this->_server->sendHeader('Content-Type', 'application/xml');
-        $this->_server->sendOutput($xml);
     }
 
     public function send(array $message, array $remoteEntity)
