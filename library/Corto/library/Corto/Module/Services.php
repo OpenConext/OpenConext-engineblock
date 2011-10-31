@@ -551,7 +551,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
                     ),
                     'md:EncryptionMethod' => array(
                         array(
-                            '__v' => 'http://www.w3.org/2001/04/xmlenc#rsa-1_5',
+                            '_Algorithm' => 'http://www.w3.org/2001/04/xmlenc#rsa-1_5',
                         ),
                     ),
                 ),
@@ -648,6 +648,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
                             'ds:X509Certificate' => array(
                                 Corto_XmlToArray::VALUE_PFX => $this->_server->getCertDataFromPem($certificates['public']),
                             ),
+                        ),
+                    ),
+                    'md:EncryptionMethod' => array(
+                        array(
+                            '_Algorithm' => 'http://www.w3.org/2001/04/xmlenc#rsa-1_5',
                         ),
                     ),
                 ),
