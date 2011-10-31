@@ -176,7 +176,12 @@ class OpenSocial_Rest_Client
     {
         if (strpos($response->getHeader('Content-Type'), 'application/json') !== 0) {
             throw new OpenSocial_Rest_Exception(
-                "Unknown Content-Type for response: " . var_export($response, true)
+                "Unknown Content-Type for response:<br /> " . 
+                var_export($response, true) .
+                ' with body: ' .
+                var_export($response->getBody(), true) .
+                ' for request: ' .
+                $this->_httpClient->getLastRequest()
             );
         }
         
