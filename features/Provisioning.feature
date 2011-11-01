@@ -10,7 +10,7 @@ Feature: Provisioning
       When I go to the Test SP
        And I select from the WAYF "SURFguest (TEST)"
        And I log in at Surfguest IdP as "lucas-test2" with password "_welkom!"
-       And I press "Yes, I agree"
+       And I give my consent
        And I pass through EngineBlock
        And I should be on the Test SP
       Then I should be able to retrieve user "lucas-test2" via open social api
@@ -25,7 +25,7 @@ Feature: Provisioning
        And I go to the Test SP
        And I select from the WAYF "SURFguest (TEST)"
        And I log in at Surfguest IdP as "lucas-test2" with password "_welkom!"
-       And I press "Yes, I agree"
+       And I give my consent
        And I pass through EngineBlock
 
       Then the open social attribute "name.familyName" of user "lucas-test2" should be "abcdef"
@@ -40,7 +40,7 @@ Feature: Provisioning
        And I go to the Test SP
        And I select from the WAYF "SURFguest (TEST)"
        And I log in at Surfguest IdP as "lucas-test2" with password "_welkom!"
-       And I press "Yes, I agree"
+       And I give my consent
        And I pass through EngineBlock
 
       Then the open social attribute "name.familyName" of user "lucas-test2" should be "van Lierop"
@@ -52,7 +52,7 @@ Feature: Provisioning
        And I pass through EngineBlock
        And I go to the profile SP
        And I pass through Surfguest IdP
-       And I press "Yes, I agree"
+       And I give my consent
        And I pass through EngineBlock
        And I follow "Delete my SURFconext account!"
       Then I should not be able to retrieve user "lucas-test2" via open social api

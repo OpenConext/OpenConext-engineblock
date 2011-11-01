@@ -21,7 +21,7 @@ Feature: Attribute Handling
     When I go to the profile SP
     And I select from the WAYF "https://perftesttransientidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php"
     And I log in at IdP as "performancetest1" with password "password"
-    And I press "Yes, I agree"
+    And I give my consent
     And I pass through EngineBlock
     Then I should see "urn:collab:person:perftestidppersistent.dev.surfconext.nl:"
     And I follow "Delete my SURFconext account!"

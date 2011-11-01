@@ -35,6 +35,14 @@ class TestSp extends BehatContext
     }
 
     /**
+     * @Given /^I give my consent$/
+     */
+    public function iGiveMyConsent()
+    {
+        $this->getMainContext()->pressButton("Yes, I agree");
+    }
+
+    /**
      * @Given /^I revoke my consent$/
      */
     public function iRevokeMyConsent()
