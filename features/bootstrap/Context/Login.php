@@ -41,6 +41,14 @@ class Login extends BehatContext
     }
 
     /**
+     * @Given /^I give my consent$/
+     */
+    public function iGiveMyConsent()
+    {
+        $this->getMainContext()->pressButton("Yes, I agree");
+    }
+
+    /**
      * Custom method to log in at Surf guest Identity Provider
      *
      * @Given /^I log in at Surfguest IdP as "([^"]*)" with password "([^"]*)"$/
