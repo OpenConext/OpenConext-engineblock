@@ -25,6 +25,8 @@
 
 class EngineBlock_VirtualOrganization_Validator
 {
+    const STEM_VO_MEMBERS_GROUP = 'members';
+
     public function isMember($voId, $subjectId, $idp)
     {
         $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
@@ -96,7 +98,7 @@ class EngineBlock_VirtualOrganization_Validator
     {
         return $this->_getGroupProvider($subjectId)
                 ->setGroupStem($virtualOrganization->getStem())
-                ->isMemberInStem();
+                ->isMember(self::STEM_VO_MEMBERS_GROUP);
     }
 
     protected function _getGroupProvider($subjectId)
