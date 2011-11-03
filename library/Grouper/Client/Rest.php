@@ -145,6 +145,16 @@ XML;
         return $groups;
     }
 
+    public function getGroupsWithPrivileges($stem = null)
+    {
+        $groups = $this->getGroups($stem);
+        /** @var $group Grouper_Model_Group */
+        foreach ($groups as &$group) {
+            $group->privileges = $this->getMemberPrivileges($group->name, $this->_subjectId);
+        }
+        return $groups;
+    }
+
     public function getMembers($groupName)
     {
         $this->_requireSubjectId();

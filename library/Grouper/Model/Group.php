@@ -31,4 +31,5 @@ class Grouper_Model_Group
     public $description;
     public $extension;
     public $displayExtension;
+    public $privileges;
 }
