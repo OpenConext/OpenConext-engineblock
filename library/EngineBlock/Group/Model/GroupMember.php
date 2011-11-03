@@ -27,5 +27,8 @@ class EngineBlock_Group_Model_GroupMember implements EngineBlock_Group_Model_Int
 {
     public $id;
     public $displayName;
-    public $vootMembershipRole;
+
+    public $forGroup;
+    public $forUser;
+    public $userRole;
 }

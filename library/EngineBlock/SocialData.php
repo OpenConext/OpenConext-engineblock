@@ -183,6 +183,7 @@ class EngineBlock_SocialData
             'id'            => $group->id,
             'description'   => $group->description,
             'title'         => $group->title,
+            'voot_membership_role' => $group->userRole,
         );
     }
 

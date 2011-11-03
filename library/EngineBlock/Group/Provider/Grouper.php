@@ -95,13 +95,12 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getMembers($groupIdentifier)
     {
-        $subjects = $this->_grouperClient->getMembersWithPrivileges(
-            $this->_getStemmedGroupId($groupIdentifier)
-        );
+        $stemmedGroupIdentifier = $this->_getStemmedGroupId($groupIdentifier);
+        $subjects = $this->_grouperClient->getMembersWithPrivileges($stemmedGroupIdentifier);
 
         $members = array();
         foreach ($subjects as $subject) {
-            $members[] = $this->_mapGrouperSubjectToEngineBlockGroupMember($subject);
+            $members[] = $this->_mapGrouperSubjectToEngineBlockGroupMember($subject, $stemmedGroupIdentifier);
         }
         return $members;
     }
@@ -128,7 +127,8 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         $engineBlockGroup->id           = $grouperGroup->name;
         $engineBlockGroup->title        = $grouperGroup->displayExtension;
         $engineBlockGroup->description  = $grouperGroup->description;
-        $engineBlockGroup->vootMembershipRole  = $this->_determineVootMembershipRoleByPrivileges($grouperGroup->privileges);
+        $engineBlockGroup->forUserId    = $this->_userId;
+        $engineBlockGroup->userRole     = $this->_determineVootMembershipRoleByPrivileges($grouperGroup->privileges);
 
         foreach ($this->_groupFilters as $groupFilter) {
             $engineBlockGroup = $groupFilter->filter($engineBlockGroup);
@@ -137,12 +137,14 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         return $engineBlockGroup;
     }
 
-    protected function _mapGrouperSubjectToEngineBlockGroupMember(Grouper_Model_Subject $grouperSubject)
+    protected function _mapGrouperSubjectToEngineBlockGroupMember(Grouper_Model_Subject $grouperSubject, $groupId)
     {
         $engineBlockMember = new EngineBlock_Group_Model_GroupMember();
-        $engineBlockMember->id                  = $grouperSubject->id;
-        $engineBlockMember->displayName         = $grouperSubject->name;
-        $engineBlockMember->vootMembershipRole  = $this->_determineVootMembershipRoleByPrivileges($grouperSubject->privileges);
+        $engineBlockMember->id          = $grouperSubject->id;
+        $engineBlockMember->displayName = $grouperSubject->name;
+        $engineBlockMember->forGroup    = $groupId;
+        $engineBlockMember->forUser     = $this->_userId;
+        $engineBlockMember->userRole    = $this->_determineVootMembershipRoleByPrivileges($grouperSubject->privileges);
 
         foreach ($this->_memberFilters as $memberFilter) {
             $engineBlockMember = $memberFilter->filter($engineBlockMember);
