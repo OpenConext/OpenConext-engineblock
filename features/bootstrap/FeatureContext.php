@@ -36,5 +36,6 @@ class FeatureContext extends MinkContext
         $this->useContext('caching'     , new Context\Caching($parameters));
         $this->useContext('wrongcertsp' , new Context\WrongCertSP($parameters));
         $this->useContext('provisioning', new Context\Provisioning($parameters));
+        $this->useContext('opensocial'  , new Context\OpenSocial($parameters));
     }
 }
