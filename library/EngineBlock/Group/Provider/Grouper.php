@@ -28,7 +28,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
     protected $_name;
 
     /**
-     * @var Grouper_Client_Interface
+     * @var Grouper_Client_Rest
      */
     protected $_grouperClient;
 
@@ -73,7 +73,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getGroups()
     {
-        $grouperGroups = $this->_grouperClient->getGroups();
+        $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges();
 
         $groups = array();
         foreach ($grouperGroups as $group) {
@@ -84,7 +84,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getGroupsByStem($stem)
     {
-        $grouperGroups = $this->_grouperClient->getGroups($stem);
+        $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges($stem);
 
         $groups = array();
         foreach ($grouperGroups as $group) {
@@ -95,7 +95,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getMembers($groupIdentifier)
     {
-        $subjects = $this->_grouperClient->getMembers(
+        $subjects = $this->_grouperClient->getMembersWithPrivileges(
             $this->_getStemmedGroupId($groupIdentifier)
         );
 
@@ -108,7 +108,6 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     /**
      * Check whether the given user is a member of the given group.
-     * @param String $userIdentifier The user id to check
      * @param String $groupIdentifier The group to check
      * @return boolean
      */
@@ -129,6 +128,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         $engineBlockGroup->id           = $grouperGroup->name;
         $engineBlockGroup->title        = $grouperGroup->displayExtension;
         $engineBlockGroup->description  = $grouperGroup->description;
+        $engineBlockGroup->vootMembershipRole  = $this->_determineVootMembershipRoleByPrivileges($grouperGroup->privileges);
 
         foreach ($this->_groupFilters as $groupFilter) {
             $engineBlockGroup = $groupFilter->filter($engineBlockGroup);
@@ -140,13 +140,30 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
     protected function _mapGrouperSubjectToEngineBlockGroupMember(Grouper_Model_Subject $grouperSubject)
     {
         $engineBlockMember = new EngineBlock_Group_Model_GroupMember();
-        $engineBlockMember->id = $grouperSubject->id;
+        $engineBlockMember->id                  = $grouperSubject->id;
+        $engineBlockMember->displayName         = $grouperSubject->name;
+        $engineBlockMember->vootMembershipRole  = $this->_determineVootMembershipRoleByPrivileges($grouperSubject->privileges);
 
         foreach ($this->_memberFilters as $memberFilter) {
             $engineBlockMember = $memberFilter->filter($engineBlockMember);
         }
 
         return $engineBlockMember;
+    }
+
+    protected function _determineVootMembershipRoleByPrivileges(array $privileges)
+    {
+        if (in_array('admin', $privileges)) {
+            return 'admin';
+        }
+        if (in_array('update', $privileges)) {
+            return 'manager';
+        }
+        if (in_array('read', $privileges)) {
+            return 'member';
+        }
+
+        throw new EngineBlock_Group_Provider_Exception("Unable to determine member role in group by looking at the privileges");
     }
 
     /**
