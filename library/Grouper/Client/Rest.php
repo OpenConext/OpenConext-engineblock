@@ -150,7 +150,7 @@ XML;
         $groups = $this->getGroups($stem);
         /** @var $group Grouper_Model_Group */
         foreach ($groups as &$group) {
-            $group->privileges = $this->getMemberPrivileges($group->name, $this->_subjectId);
+            $group->privileges = $this->getMemberPrivileges($this->_subjectId, $group->name);
         }
         return $groups;
     }
