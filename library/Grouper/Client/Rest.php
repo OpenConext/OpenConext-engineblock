@@ -201,30 +201,26 @@ XML;
     public function getMembersWithPrivileges($groupName)
     {
         $members = $this->getMembers($groupName);
-        for ($i = 0; $i < count($members); $i++) {
-            if (!isset($members[$i])) {
-                continue;
-            }
-            
+        $membersWithPrivileges = array();
+        foreach ($members as $member) {
             try {
-                $members[$i]->privileges = $this->getMemberPrivileges($members[$i]->id, $groupName);
+                $member->privileges = $this->getMemberPrivileges($member->id, $groupName);
+                $membersWithPrivileges[] = $member;
             }
             catch (Exception $e) {
                 ebLog()->warn(
-                    "Something wrong with user: " . var_export($members[$i], true) .
+                    "Something wrong with user: " . var_export($member, true) .
                     'Received Exception: ' . var_export($e, true)
                 );
-                unset($members[$i]);
             }
-
         }
-        return $members;
+        return $membersWithPrivileges;
     }
 
     public function getMemberPrivileges($subjectId, $groupName)
     {
-        $groupNameEncoded = htmlentities($groupName);
         $subjectIdEncoded = htmlentities($subjectId);
+        $groupNameEncoded = htmlentities($groupName);
         $superUser = self::GROUPER_ADMIN;
         $request = <<<XML
 <WsRestGetGrouperPrivilegesLiteRequest>
