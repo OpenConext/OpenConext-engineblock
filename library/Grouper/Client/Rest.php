@@ -201,8 +201,22 @@ XML;
     public function getMembersWithPrivileges($groupName)
     {
         $members = $this->getMembers($groupName);
-        foreach ($members as &$member) {
-            $member->privileges = $this->getMemberPrivileges($member->id, $groupName);
+        for ($i = 0; $i < count($members); $i++) {
+            if (!isset($members[$i])) {
+                continue;
+            }
+            
+            try {
+                $members[$i]->privileges = $this->getMemberPrivileges($members[$i]->id, $groupName);
+            }
+            catch (Exception $e) {
+                ebLog()->warn(
+                    "Something wrong with user: " . var_export($members[$i], true) .
+                    'Received Exception: ' . var_export($e, true)
+                );
+                unset($members[$i]);
+            }
+
         }
         return $members;
     }
