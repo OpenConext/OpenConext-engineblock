@@ -44,6 +44,7 @@ class EngineBlock_ApplicationSingleton
     const CONFIG_FILE_ENVIORNMENT = '/etc/surfconext/engineblock.ini';
 
     private static $AUTOLOADED_LIBRARIES = array(
+        'Corto',
         'Grouper',
         'EngineBlock',
         'OpenSocial',

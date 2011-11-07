@@ -26,8 +26,6 @@
 define('ENGINEBLOCK_FOLDER_LIBRARY_CORTO', ENGINEBLOCK_FOLDER_LIBRARY . 'Corto/library/');
 require ENGINEBLOCK_FOLDER_LIBRARY_CORTO . 'Corto/ProxyServer.php';
 
-spl_autoload_register(array('EngineBlock_Corto_Adapter', 'cortoAutoLoad'));
-
 class EngineBlock_Exception_UserNotMember extends EngineBlock_Exception
 {
 }
@@ -79,27 +77,6 @@ class EngineBlock_Corto_Adapter
         }
 
         $this->_hostedEntity = $hostedEntity;
-    }
-
-    /**
-     * Simple autoloader for Corto, tries to autoload all classes with Corto_ from the Corto/library folder.
-     *
-     * @static
-     * @param string $className Class name to autoload
-     * @return bool Whether autoloading succeeded
-     */
-    public static function cortoAutoLoad($className)
-    {
-        if (strpos($className, 'Corto_') !== 0) {
-            return false;
-        }
-
-        $classParts = explode('_', $className);
-        $filePath = implode('/', $classParts) . '.php';
-
-        include ENGINEBLOCK_FOLDER_LIBRARY_CORTO . $filePath;
-
-        return true;
     }
 
     public function singleSignOn($idPProviderHash)
