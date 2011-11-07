@@ -74,11 +74,3 @@ Feature: Virtual Organizations
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
      Then I should be on the Test SP
-
-  Scenario: John fails to log in at the Test SP with explicit VO "test-idps"
-    When I go to the Test SP with the explicit VO "test-idps"
-     And I select from the WAYF "Invited Guests"
-     And at the Invited Guests IdP I select "Twitter"
-     And at Twitter I log in as "test_idps" with password "test-idps"
-     And I pass through the Invited Guests
-    Then EngineBlock gives me the error "Membership of a Virtual Organisation required"

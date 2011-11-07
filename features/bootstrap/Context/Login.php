@@ -122,17 +122,6 @@ class Login extends BehatContext
     }
 
     /**
-     * @Given /^at Twitter I log in as "([^"]*)" with password "([^"]*)"$/
-     */
-    public function atTwitterILogInAsWithPassword($username, $password)
-    {
-        $this->getMainContext()->fillField('username_or_email', $username);
-        $this->getMainContext()->fillField('password', $password);
-        $this->getMainContext()->pressButton('Inloggen');
-        $this->getMainContext()->clickLink('klik hier om door te gaan');
-    }
-
-    /**
      * @Given /^I pass through the Invited Guests$/
      */
     public function iPassThroughTheInvitedGuests()
