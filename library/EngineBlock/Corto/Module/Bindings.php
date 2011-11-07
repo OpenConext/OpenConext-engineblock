@@ -23,28 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Exception_UnknownIssuerException extends Exception
-{
-    private $_entityId;
-    private $_destination;
-
-    function __construct($message, $entityId, $destination) {
-        parent::__construct($message);
-        $this->_entityId = $entityId;
-        $this->_destination = $destination;
-    }
-
-    public function getEntityId()
-    {
-        return $this->_entityId;
-    }
-
-    public function getDestination()
-    {
-        return $this->_destination;
-    }
-}
-
 class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
 {
     /**
@@ -82,7 +60,7 @@ class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
         try {
             $remoteEntity = $this->_server->getRemoteEntity($messageIssuer);
         } catch (Corto_ProxyServer_Exception $e) {
-            throw new EngineBlock_Exception_UnknownIssuerException(
+            throw new EngineBlock_Corto_Exception_UnknownIssuerException(
                 "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)",
                 $messageIssuer,
                 $destination

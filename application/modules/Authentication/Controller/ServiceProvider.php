@@ -35,7 +35,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         try {
             $proxyServer->consumeAssertion();
         }
-        catch (EngineBlock_Exception_UserNotMember $e) {
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
             $application->getLog()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
@@ -43,11 +43,11 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getLog()->warn('Unable to receive message error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
-        catch (EngineBlock_Exception_UnknownIssuerException $e) {
+        catch (EngineBlock_Corto_Exception_UnknownIssuerException $e) {
             $application->getLog()->warn($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
-        catch (EngineBlock_Exception_MissingRequiredFields $e) {
+        catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
             $application->getLog()->error($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
         }

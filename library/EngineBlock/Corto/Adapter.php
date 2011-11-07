@@ -23,23 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-define('ENGINEBLOCK_FOLDER_LIBRARY_CORTO', ENGINEBLOCK_FOLDER_LIBRARY . 'Corto/library/');
-require ENGINEBLOCK_FOLDER_LIBRARY_CORTO . 'Corto/ProxyServer.php';
-
-class EngineBlock_Exception_UserNotMember extends EngineBlock_Exception
-{
-}
-
-class EngineBlock_Exception_InvalidConnection extends EngineBlock_Exception
-{
-
-}
-
-class EngineBlock_Exception_ReceivedErrorStatusCode extends EngineBlock_Exception
-{
-
-}
-
 class EngineBlock_Corto_Adapter 
 {
     const DEFAULT_HOSTED_ENTITY = 'main';

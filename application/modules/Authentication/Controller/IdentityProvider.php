@@ -48,7 +48,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getLog()->warn('Unable to receive message');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
-        catch (EngineBlock_Exception_UserNotMember $e) {
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
             $application->getLog()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
@@ -56,7 +56,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getLog()->warn('Session was lost');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
-        catch (EngineBlock_Exception_UnknownIssuerException $e) {
+        catch (EngineBlock_Corto_Exception_UnknownIssuerException $e) {
             $application->getLog()->warn($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl(
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
