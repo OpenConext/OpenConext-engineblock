@@ -39,7 +39,7 @@ class ServiceRegistryTest extends PHPUnit_Framework_TestCase
 {
     
     /**
-     * @var ServiceRegistry_Client
+     * @var Janus_Client
      */
     private $ServiceRegistry;
     
@@ -53,7 +53,7 @@ class ServiceRegistryTest extends PHPUnit_Framework_TestCase
         // TODO Auto-generated ServiceRegistryTest::setUp()
         
 
-        $this->ServiceRegistry = new ServiceRegistry_Client(/* parameters */);
+        $this->ServiceRegistry = new Janus_Client(/* parameters */);
         $this->ServiceRegistry->setRestClient(new RestClientMock());
     }
     

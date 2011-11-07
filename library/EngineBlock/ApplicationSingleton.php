@@ -46,6 +46,7 @@ class EngineBlock_ApplicationSingleton
     private static $AUTOLOADED_LIBRARIES = array(
         'Corto',
         'Grouper',
+        'Janus',
         'EngineBlock',
         'OpenSocial',
         'ServiceRegistry',

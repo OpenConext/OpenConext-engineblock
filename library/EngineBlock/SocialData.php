@@ -38,7 +38,7 @@ class EngineBlock_SocialData
     protected $_groupProvider = null;
 
     /**
-     * @var ServiceRegistry_Client
+     * @var Janus_Client
      */
     protected $_serviceRegistry = NULL;
 
@@ -253,12 +253,12 @@ class EngineBlock_SocialData
     }
     
     /**
-     * @return ServiceRegistry_Client
+     * @return Janus_Client
      */
     protected function _getServiceRegistry()
     {
         if ($this->_serviceRegistry == NULL) {
-            $this->_serviceRegistry = new ServiceRegistry_CacheProxy();
+            $this->_serviceRegistry = new Janus_Client_CacheProxy();
         }
         return $this->_serviceRegistry;
     }

@@ -26,7 +26,7 @@
 class EngineBlock_Corto_ServiceRegistry_Adapter 
 {
     /**
-     * @var ServiceRegistry_Client
+     * @var Janus_Client
      */
     protected $_serviceRegistry;
 
