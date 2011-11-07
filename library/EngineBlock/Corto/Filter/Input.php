@@ -105,7 +105,7 @@ class EngineBlock_Corto_Filter_Input
         }
     }
 
-    protected function _requireValidSchacHomeOrganization()
+    protected function _requireValidSchacHomeOrganization($responseAttributes)
     {
         if (!isset($responseAttributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'])) {
             return "urn:mace:terena.org:attribute-def:schacHomeOrganization missing in attributes!";
@@ -123,7 +123,7 @@ class EngineBlock_Corto_Filter_Input
 
         $schacHomeOrganization = $schacHomeOrganizationValues[0];
 
-        $uri = new Zend_Uri_Http('http');
+        $uri = Zend_Uri_Http::fromString('http://' . $schacHomeOrganization);
         $validHostName = $uri->validateHost($schacHomeOrganization);
         if (!$validHostName) {
             return "urn:mace:terena.org:attribute-def:schacHomeOrganization is not a valid hostname!";
@@ -131,7 +131,7 @@ class EngineBlock_Corto_Filter_Input
         return false;
     }
 
-    protected function _requireValidUid()
+    protected function _requireValidUid($responseAttributes)
     {
         if (!isset($responseAttributes['urn:mace:dir:attribute-def:uid'])) {
             return "urn:mace:dir:attribute-def:uid missing in attributes!";
@@ -141,7 +141,7 @@ class EngineBlock_Corto_Filter_Input
             return "urn:mace:dir:attribute-def:uid has no values";
         }
 
-        if (count($responseAttributes['urn:mace:dir:attribute-def:uid'] > 1)) {
+        if (count($responseAttributes['urn:mace:dir:attribute-def:uid']) > 1) {
             return "urn:mace:dir:attribute-def:uid has more than one value";
         }
 
@@ -254,15 +254,7 @@ class EngineBlock_Corto_Filter_Input
 
     protected function _provisionUser($attributes, $spEntityMetadata, $idpEntityMetadata)
     {
-        $user = $this->_getUserFromAttributes($attributes);
-        return $this->_getProvisioning()->provisionUser($user, $spEntityMetadata, $idpEntityMetadata);
-    }
-
-    protected function _getUserFromAttributes($attributes)
-    {
-        $user = new SurfConext_User();
-        $mapper = new EngineBlock_Corto_Mapper_User();
-        return $mapper->mapAttributesToUser($attributes, $user);
+        return $this->_getProvisioning()->provisionUser($attributes, $spEntityMetadata, $idpEntityMetadata);
     }
 
     protected function _getProvisioning()
