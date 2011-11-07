@@ -59,7 +59,7 @@ class EngineBlock_Shindig_DataService implements ActivityService, PersonService,
      * @param SecurityToken $token
      * @return array|EmptyResponseItem
      */
-    function getPerson(UserId $userId, GroupId $groupId, array $fields, SecurityToken $token)
+    function getPerson($userId, $groupId, $fields, SecurityToken $token)
     {
         if (isset($fields["all"])) {
             $fields = array(); // clear the default fields
@@ -96,13 +96,7 @@ class EngineBlock_Shindig_DataService implements ActivityService, PersonService,
      * @param SecurityToken     $token      OAuth Security Token
      * @return EmptyResponseItem|RestfulCollection
      */
-    function getPeople(
-        array $userId,
-        GroupId $groupId,
-        CollectionOptions $options,
-        array $fields,
-        SecurityToken $token
-    )
+    function getPeople($userId, $groupId, CollectionOptions $options, $fields, SecurityToken $token)
     {
         if (isset($fields["all"])) {
             $fields = array(); // clear the default fields
