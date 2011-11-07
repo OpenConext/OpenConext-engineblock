@@ -120,6 +120,7 @@ class EngineBlock_SocialData
             if (!$person) {
                 $people[] = $groupMember;
             } else {
+                $person['voot_membership_role'] = $groupMember->userRole;
                 $people[] = $person;
             }
         }
