@@ -41,9 +41,9 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
         global $shindigConfig;
         $shindigConfig = array();
         @Config::setConfig(array('allow_plaintext_token'=>true,
-                                 'person_service'       => 'EngineBlock_OpenSocial_ShindigService',
-                                 'activity_service'     => 'EngineBlock_OpenSocial_ShindigService',
-                                 'group_service'        => 'EngineBlock_OpenSocial_ShindigService',
+                                 'person_service'       => 'EngineBlock_Shindig_DataService',
+                                 'activity_service'     => 'EngineBlock_Shindig_DataService',
+                                 'group_service'        => 'EngineBlock_Shindig_DataService',
         ));
 
         spl_autoload_register(array(get_class($this), 'shindigAutoLoad'));
