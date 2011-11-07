@@ -29,8 +29,6 @@ class EngineBlock_Corto_Adapter
 
     const IDENTIFYING_MACE_ATTRIBUTE = 'urn:mace:dir:attribute-def:uid';
 
-    const VO_NAME_ATTRIBUTE = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
-
     protected $_collaborationAttributes = array();
 
     /**
@@ -53,8 +51,8 @@ class EngineBlock_Corto_Adapter
      */
     protected $_remoteEntitiesFilter = NULL;
     
-    public function __construct($hostedEntity = NULL) {
-        
+    public function __construct($hostedEntity = NULL)
+    {
         if ($hostedEntity == NULL) {
             $hostedEntity = self::DEFAULT_HOSTED_ENTITY;
         }
@@ -66,41 +64,6 @@ class EngineBlock_Corto_Adapter
     {
         $this->_setRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
-    }
-
-    protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
-    {
-        /**
-         * Use the binding module to get the request, then
-         * store it in _REQUEST so Corto will think it has received it
-         * from an internal binding, because if Corto would try to
-         * get the request again from the binding module, it would fail.
-         */
-        $request = $proxyServer->getBindingsModule()->receiveRequest();
-        $spEntityId = $request['saml:Issuer']['__v'];
-
-        if (isset($entities[$spEntityId]['VoContext']) && $entities[$spEntityId]['VoContext']) {
-            $request[Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $entities[$spEntityId]['VoContext'];
-        }
-        $_REQUEST['SAMLRequest'] = $request;
-
-        return $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
-            $entities,
-            $spEntityId
-        );
-    }
-
-    protected function _filterRemoteEntitiesBySpQueryParam(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
-    {
-        $claimedSpEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
-        if (!$claimedSpEntityId) {
-            return $entities;
-        }
-
-        return $this->_getServiceRegistryAdapter()->filterEntitiesBySp(
-            $entities,
-            $claimedSpEntityId
-        );
     }
 
     public function idPMetadata()
@@ -143,10 +106,45 @@ class EngineBlock_Corto_Adapter
     {
         return $this->_voContext;
     }
-    
+
     public function setVirtualOrganisationContext($virtualOrganisation)
     {
         $this->_voContext = $virtualOrganisation;
+    }
+
+    protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    {
+        /**
+         * Use the binding module to get the request, then
+         * store it in _REQUEST so Corto will think it has received it
+         * from an internal binding, because if Corto would try to
+         * get the request again from the binding module, it would fail.
+         */
+        $request = $proxyServer->getBindingsModule()->receiveRequest();
+        $spEntityId = $request['saml:Issuer']['__v'];
+
+        if (isset($entities[$spEntityId]['VoContext']) && $entities[$spEntityId]['VoContext']) {
+            $request[Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $entities[$spEntityId]['VoContext'];
+        }
+        $_REQUEST['SAMLRequest'] = $request;
+
+        return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
+            $entities,
+            $spEntityId
+        );
+    }
+
+    protected function _filterRemoteEntitiesBySpQueryParam(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    {
+        $claimedSpEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+        if (!$claimedSpEntityId) {
+            return $entities;
+        }
+
+        return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
+            $entities,
+            $claimedSpEntityId
+        );
     }
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
@@ -182,11 +180,6 @@ class EngineBlock_Corto_Adapter
         $this->_proxyServer = $proxyServer;
     }
 
-    protected function _getCoreProxy()
-    {
-        return new EngineBlock_Corto_CoreProxy();
-    }
-
     protected function _configureProxyServer(EngineBlock_Corto_CoreProxy $proxyServer)
     {
         $proxyServer->setSystemLog($this->_getSystemLog());
@@ -213,8 +206,8 @@ class EngineBlock_Corto_Adapter
                 ),
                 // Note that we use an input filter because consent requires a presistent NameID
                 // and we only get that after provisioning
-                'infilter'  => array($this, 'filterInputAttributes'),
-                'outfilter' => array($this, 'filterOutputAttributes'),
+                'infilter'  => array(new EngineBlock_Corto_Filter_Input($this), 'filter'),
+                'outfilter' => array(new EngineBlock_Corto_Filter_Output($this), 'filter'),
                 'Processing' => array(
                     'Consent' => array(
                         'Binding'  => 'INTERNAL',
@@ -294,273 +287,22 @@ class EngineBlock_Corto_Adapter
         return $configuration->authentication->consent->$name;
     }
 
-    /**
-     * Called by Corto whenever it receives an Assertion with attributes from an Identity Provider.
-     *
-     * Note we have to do everything that relies on the actual idpEntityMetadata here, because in the
-     * filterOutputAttributes the idp metadata points to us (Corto / EngineBlock) not the actual idp we received
-     * the response from.
-     * 
-     * @throws EngineBlock_Exception_ReceivedErrorStatusCode
-     * @param array $response
-     * @param array $responseAttributes
-     * @param array $request
-     * @param array $spEntityMetadata
-     * @param array $idpEntityMetadata
-     * @return void
-     */
-    public function filterInputAttributes(array &$response,
-        array &$responseAttributes,
-        array $request,
-        array $spEntityMetadata,
-        array $idpEntityMetadata
-    )
-    {
-        if ($response['samlp:Status']['samlp:StatusCode']['_Value']!=='urn:oasis:names:tc:SAML:2.0:status:Success') {
-            // Idp returned an error
-            throw new EngineBlock_Exception_ReceivedErrorStatusCode(
-                'Response received with Status: ' .
-                $response['samlp:Status']['samlp:StatusCode']['_Value'] .
-                ' - ' .
-                $response['samlp:Status']['samlp:StatusMessage']['__v']
-            );
-        }
-
-        // validate if the IDP sending this response is allowed to connect to the SP that made the request.
-        $this->validateSpIdpConnection($spEntityMetadata["EntityId"], $idpEntityMetadata["EntityId"]);
-
-        // map oids to URNs
-        $responseAttributes = $this->_mapOidsToUrns($responseAttributes, $idpEntityMetadata);
-
-        // Is a guest user?
-        $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
-
-        // Provisioning of the user account
-        $subjectId = $this->_provisionUser($responseAttributes, $spEntityMetadata, $idpEntityMetadata);
-        $_SESSION['subjectId'] = $subjectId;
-
-        // Adjust the NameID in the OLD response (for consent), set the collab:person uid
-        $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
-            '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-            '__v'              => $subjectId
-        );
-    }
-
-    public function validateSpIdpConnection($spEntityId, $idpEntityId)
-    {
-        $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
-        if (!$serviceRegistryAdapter->isConnectionAllowed($spEntityId, $idpEntityId)) {
-            throw new EngineBlock_Exception_InvalidConnection(
-                "Received a response from an IDP that is not allowed to connect to the requesting SP"
-            );
-        }
-    }
-
-    protected function _mapOidsToUrns(array $responseAttributes, array $idpEntityMetadata)
-    {
-        $mapper = new EngineBlock_AttributeMapper_Oid2Urn();
-        return $mapper->map($responseAttributes);
-    }
-
-    protected function _provisionUser($attributes, $spEntityMetadata, $idpEntityMetadata)
-    {
-        return $this->_getProvisioning()->provisionUser($attributes, $spEntityMetadata, $idpEntityMetadata);
-    }
-
-    protected function _handleVirtualOrganizationResponse($request, $subjectId, $idpEntityId)
-    {
-        // Determine a Virtual Organization context
-        $vo = NULL;
-
-        // In filter stage we need to take a look at the VO context
-        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
-            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
-            $this->setVirtualOrganisationContext($vo);
-        }
-        else if (isset($request['__']['VoContextImplicit'])) {
-            $vo = $request['__']['VoContextImplicit'];
-            $this->setVirtualOrganisationContext($vo);
-        }
-
-        // If in VO context, validate the user's membership
-        if (!is_null($vo)) {
-            if (!$this->_validateVOMembership($subjectId, $vo, $idpEntityId)) {
-                throw new EngineBlock_Exception_UserNotMember("User not a member of VO $vo");
-            }
-        }
-    }
-
-    protected function _trackLogin($spEntityId, $idpEntityId, $subjectId)
-    {
-        $tracker = new EngineBlock_Tracker();
-        $tracker->trackLogin($spEntityId, $idpEntityId, $subjectId);
-    }
-
-    /**
-     * @todo this is pure happy flow
-     *
-     * @param  $subjectIdentifier
-     * @param  $voIdentifier
-     * @return boolean
-     */
-    protected function _validateVOMembership($subjectIdentifier, $voIdentifier, $idpEntityId)
-    {
-        $validator = new EngineBlock_VirtualOrganization_Validator();
-        return $validator->isMember($voIdentifier, $subjectIdentifier, $idpEntityId);
-    }
-
-    /**
-     * Called by Corto just as it prepares to send the response to the SP
-     *
-     * Note that we HAVE to do response fiddling here because the filterInputAttributes only operates on the 'original'
-     * response we got from the Idp, after that a NEW response gets created.
-     * The filterOutputAttributes actually operates on this NEW response, destined for the SP.
-     *
-     * @param array $response
-     * @param array $responseAttributes
-     * @param array $request
-     * @param array $spEntityMetadata
-     * @param array $idpEntityMetadata
-     * @return void
-     */
-    public function filterOutputAttributes(array &$response,
-        array &$responseAttributes,
-        array $request,
-        array $spEntityMetadata,
-        array $idpEntityMetadata
-    )
-    {
-        if ($this->_proxyServer->isInProcessingMode()) {
-            return;
-        }
-
-        $subjectId = $_SESSION['subjectId'];
-
-        $this->_handleVirtualOrganizationResponse($request, $subjectId, $idpEntityMetadata["EntityId"]);
-
-        if ($this->getVirtualOrganisationContext()) {
-            $responseAttributes = $this->_addVoNameAttribute($responseAttributes, $this->getVirtualOrganisationContext());
-        }
-
-        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
-
-        // Attribute Aggregation
-        $responseAttributes = $this->_enrichAttributes(
-            $idpEntityMetadata["EntityId"],
-            $spEntityMetadata["EntityId"],
-            $subjectId,
-            $responseAttributes
-        );
-
-        // Attribute / NameId / Response manipulation / mangling
-        $this->_manipulateAttributes(
-            $subjectId,
-            $responseAttributes,
-            $response
-        );
-
-        // Adjust the NameID in the NEW response, set the collab:person uid
-        $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
-            '_Format'          => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-            '__v'              => $subjectId
-        );
-
-        // Always return both OID's and URN's
-        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
-        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
-
-        /**
-         * We can set overrides of the private key in the Service Registry,
-         * allowing EngineBlock to switch to a different private key without requiring all SPs to switch at once too.
-         */
-        if (isset($spEntityMetadata['AlternatePrivateKey']) && $spEntityMetadata['AlternatePublicKey']) {
-            $currentEntity = $this->_proxyServer->getCurrentEntity();
-            $hostedEntities = $this->_proxyServer->getHostedEntities();
-            $hostedEntities[$currentEntity['EntityId']]['certificates']['private'] = $spEntityMetadata['AlternatePrivateKey'];
-            $hostedEntities[$currentEntity['EntityId']]['certificates']['public'] = $spEntityMetadata['AlternatePublicKey'];
-            $this->_proxyServer->setHostedEntities($hostedEntities);
-            $this->_proxyServer->setCurrentEntity($currentEntity['EntityCode']);
-        }
-    }
-
-    protected function _addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata)
-    {
-        // Determine guest status
-        if (!isset($idpEntityMetadata['GuestQualifier'])) {
-            throw new EngineBlock_Exception('No GuestQualifier for IdP? ' . var_export($idpEntityMetadata, true));
-        }
-
-        switch ($idpEntityMetadata['GuestQualifier']) {
-            case 'None':
-                $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
-                    0 => 'member',
-                );
-                break;
-
-            case 'Some':
-                if (!isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'][0])) {
-                    ebLog()->warn("Idp guestQualifier is set to 'Some' however, the surfPersonAffiliation attribute was not provided, setting it to 'guest' and continuing". var_export($idpEntityMetadata, true) . var_export($responseAttributes, true));
-                    $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
-                        0 => 'guest',
-                    );
-                }
-                break;
-
-            default:
-            case 'All':
-                $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'] = array(
-                    0 => 'guest',
-                );
-                break;
-        }
-        return $responseAttributes;
-    }
-
-    /**
-     * Enrich the current set of attributes with attributes from other sources.
-     *
-     * @param string $idpEntityId
-     * @param string $spEntityId
-     * @param string $subjectId
-     * @param array $attributes
-     * @return array
-     */
-    protected function _enrichAttributes($idpEntityId, $spEntityId, $subjectId, array $attributes)
-    {
-        $aggregator = $this->_getAttributeAggregator(
-            $this->_getAttributeProviders($spEntityId, isset($attributes[self::VO_NAME_ATTRIBUTE]) ? $attributes[self::VO_NAME_ATTRIBUTE][0] : null)
-        );
-        return $aggregator->aggregateFor(
-            $attributes,
-            $subjectId
-        );
-    }
-
-    protected function _manipulateAttributes(&$subjectId, array &$attributes, array &$response)
-    {
-        $manipulators = $this->_getAttributeManipulators();
-        foreach ($manipulators as $manipulator) {
-            $manipulator->manipulate($subjectId, $attributes, $response);
-        }
-    }
-
-    protected function _mapUrnsToOids(array $responseAttributes, array $spEntityMetadata)
-    {
-        $mapper = new EngineBlock_AttributeMapper_Urn2Oid();
-        return $mapper->map($responseAttributes);
-    }
-
     protected function _getRemoteEntities()
     {
-        $serviceRegistry = $this->_getServiceRegistryAdapter();
+        $serviceRegistry = $this->getServiceRegistryAdapter();
         $metadata = $serviceRegistry->getRemoteMetaData();
         return $metadata;
     }
 
-    protected function _getServiceRegistryAdapter()
+    public function getProxyServer()
+    {
+        return $this->_proxyServer;
+    }
+
+    public function getServiceRegistryAdapter()
     {
         return new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new ServiceRegistry_CacheProxy()
+            new Janus_Client_CacheProxy()
         );
     }
 
@@ -590,32 +332,6 @@ class EngineBlock_Corto_Adapter
         $proxyOutput = $this->_proxyServer->getOutput();
         $response->setBody($proxyOutput);
     }
-
-    protected function _getAttributeProviders($spEntityId, $voContext = null)
-    {
-        $providers = array();
-        if ($voContext) {
-            $providers[] = new EngineBlock_AttributeProvider_VoManage($voContext, $spEntityId);
-        }
-        return $providers;
-    }
-
-    protected function _getAttributeManipulators()
-    {
-        return array(
-            new EngineBlock_AttributeManipulator_File()
-        );
-    }
-
-    protected function _getAttributeAggregator($providers)
-    {
-        return new EngineBlock_AttributeAggregator($providers);
-    }
-
-    protected function _getProvisioning()
-    {
-        return new EngineBlock_Provisioning();
-    }
     
     protected function _getHostedEntity()
     {
@@ -628,10 +344,8 @@ class EngineBlock_Corto_Adapter
         return $this;
     }
 
-    protected function _addVoNameAttribute($responseAttributes, $voContext)
+    protected function _getCoreProxy()
     {
-        $responseAttributes[self::VO_NAME_ATTRIBUTE] = $voContext;
-
-        return $responseAttributes;
+        return new EngineBlock_Corto_CoreProxy();
     }
 }
