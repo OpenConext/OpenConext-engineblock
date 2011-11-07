@@ -118,7 +118,7 @@ class EngineBlock_SocialData
         foreach ($groupMembers as $groupMember) {
             $person = $this->getPerson($groupMember->id, $socialAttributes, $voId, $spEntityId);
             if (!$person) {
-                $people[] = $groupMember;
+                $people[] = $this->_mapEngineBlockGroupMemberToOpenSocialGroupMember($groupMember);
             } else {
                 $person['voot_membership_role'] = $groupMember->userRole;
                 $people[] = $person;
@@ -157,7 +157,7 @@ class EngineBlock_SocialData
 
             // Make sure we only include attributes that we are allowed to share
             $person = $this->_enforceArp($person);
-
+            
             return $person;
         } else if (count($persons) === 0) {
             // We need to see if the user might 'exists' in an ExternalGroup provider
@@ -185,6 +185,15 @@ class EngineBlock_SocialData
             'description'   => $group->description,
             'title'         => $group->title,
             'voot_membership_role' => $group->userRole,
+        );
+    }
+
+    protected function _mapEngineBlockGroupMemberToOpenSocialGroupMember(EngineBlock_Group_Model_GroupMember $member)
+    {
+        return array(
+            'id'                    => $member->id,
+            'displayName'           => $member->displayName,
+            'voot_membership_role'  => $member->userRole
         );
     }
 
