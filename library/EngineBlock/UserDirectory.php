@@ -107,9 +107,8 @@ class EngineBlock_UserDirectory
     /**
      * Set the first warning sent user attribute
      *
-     * @param $uid
-     * @param $value
-     * @return
+     * @param string $uid
+     * @return string
      */
     public function setUserFirstWarningSent($uid)
     {
@@ -127,11 +126,18 @@ class EngineBlock_UserDirectory
 
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
+
+    /**
+     * 
+     *
+     * @throws EngineBlock_Exception
+     * @param string $uid
+     * @return string
+     */
     public function setUserSecondWarningSent($uid)
     {
         $users = $this->findUsersByIdentifier($uid);
 
-        // Only update a user
         // Only update a user
         if (count($users) > 1) {
             throw new EngineBlock_Exception("Multiple users found for UID: $uid?!");
@@ -175,31 +181,6 @@ class EngineBlock_UserDirectory
         return null;
     }
 
-    /**
-     * Make sure an organization exists in the directory
-     *
-     * @param  $organization
-     * @return bool
-     */
-    public function addOrganization($organization)
-    {
-        $info = array(
-            'o' => $organization ,
-            'objectclass' => array(
-                'organization' ,
-                'top'
-            )
-        );
-        $dn = 'o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
-        if (!$this->_getLdapClient()->exists($dn)) {
-            $result = $this->_getLdapClient()->add($dn, $info);
-            $result = ($result instanceof Zend_Ldap);
-        } else {
-            $result = TRUE;
-        }
-        return $result;
-    }
-
     protected function _enrichLdapAttributes($ldapAttributes)
     {
         if (!isset($ldapAttributes['cn'])) {
@@ -230,12 +211,37 @@ class EngineBlock_UserDirectory
         
         $newAttributes['objectClass'] = $this->LDAP_OBJECT_CLASSES;
 
-        $this->addOrganization($newAttributes['o']);
+        $this->_addOrganization($newAttributes['o']);
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
         $this->_getLdapClient()->add($dn, $newAttributes);
         
         return $newAttributes;
+    }
+
+    /**
+     * Make sure an organization exists in the directory
+     *
+     * @param  $organization
+     * @return bool
+     */
+    protected function _addOrganization($organization)
+    {
+        $info = array(
+            'o' => $organization ,
+            'objectclass' => array(
+                'organization' ,
+                'top'
+            )
+        );
+        $dn = 'o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
+        if (!$this->_getLdapClient()->exists($dn)) {
+            $result = $this->_getLdapClient()->add($dn, $info);
+            $result = ($result instanceof Zend_Ldap);
+        } else {
+            $result = TRUE;
+        }
+        return $result;
     }
 
     protected function _updateUser($user, $newAttributes, $saml2attributes, $idpEntityMetadata)
