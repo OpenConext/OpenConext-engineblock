@@ -51,6 +51,7 @@ class EngineBlock_ApplicationSingleton
         'OpenSocial',
         'ServiceRegistry',
         'Surfnet',
+        'SurfConext',
         'Zend',
     );
 
@@ -96,9 +97,6 @@ class EngineBlock_ApplicationSingleton
 
     protected $_layout;
 
-    /**
-     * @return void
-     */
     protected function __construct()
     {
     }
