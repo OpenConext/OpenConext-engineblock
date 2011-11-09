@@ -38,7 +38,7 @@ class EngineBlock_UserDirectory
     const LDAP_ATTR_COLLAB_PERSON_UUID              = 'collabpersonuuid';
     const LDAP_ATTR_COLLAB_PERSON_HASH              = 'collabpersonhash';
     const LDAP_ATTR_COLLAB_PERSON_REGISTERED        = 'collabpersonregistered';
-    const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED     = 'collabpersonlastAccessed';
+    const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED     = 'collabpersonlastaccessed';
     const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED      = 'collabpersonlastupdated';
     const LDAP_ATTR_COLLAB_PERSON_IS_GUEST          = 'collabpersonisguest';
     const LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING     = 'collabpersonfirstwarningsent';
