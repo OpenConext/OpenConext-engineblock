@@ -66,7 +66,8 @@ class EngineBlock_User
         $this->_deleteFromEnvironment();
     }
 
-    public function deleteConsent($spId) {
+    public function deleteConsent($spId)
+    {
         $factory = $this->_getDatabaseConnection();
 
         $query = "DELETE FROM consent
