@@ -39,11 +39,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
      * Given a list of (SAML2) entities, filter out the idps that are not allowed
      * for the given Service Provider.
      *
-     * @todo makes a call for EVERY idp to the service registry,
-     *       the SR should just implement 1 call for all allowed IdPs
-     *
-     * @param  $entities
-     * @param  $spEntityId
+     * @param array $entities
+     * @param string $spEntityId
      * @return array Filtered entities
      */
     public function filterEntitiesBySp(array $entities, $spEntityId)
@@ -236,6 +233,14 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         return $cortoEntity;
     }
 
+    /**
+     * Convert an array that has been formatted like this:
+     * array('ns1:ns2:key' => 'val') to array('ns1'=>array('ns2'=>array('key'=>'val')))
+     *
+     * @static
+     * @param $entity
+     * @return array
+     */
     public static function convertServiceRegistryEntityToMultiDimensionalArray($entity)
     {
         $newEntity = array();
