@@ -10,7 +10,7 @@ use \Behat\Behat\Context\BehatContext;
 
 class OpenSocial extends BehatContext
 {
-        /**
+    /**
      * @return \Behat\Mink\Behat\Context\MinkContext
      */
     public function getMainContext()
@@ -77,7 +77,8 @@ class OpenSocial extends BehatContext
 
     }
 
-    protected function fillFieldAndSubmit($fieldId, $urn) {
+    protected function fillFieldAndSubmit($fieldId, $urn)
+    {
         $this->getMainContext()->fillField($fieldId, $urn);
         $this->getMainContext()->pressButton('Retrieve Open Social information');
     }

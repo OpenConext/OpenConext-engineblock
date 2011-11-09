@@ -11,6 +11,14 @@ use \Behat\Behat\Context\BehatContext;
 class TestSp extends BehatContext
 {
     /**
+     * @return \Behat\Mink\Behat\Context\MinkContext
+     */
+    public function getMainContext()
+    {
+        return parent::getMainContext();
+    }
+
+    /**
      * @When /^I go to the Test SP$/
      */
     public function iGoToTheTestSp()
@@ -85,5 +93,13 @@ class TestSp extends BehatContext
     {
         $this->getMainContext()->assertPageContainsText($message);
     }
+    /**
+        * @Then /^I should see not "([^"]*)"$/
+        */
+       public function iShouldSeeNot($string)
+       {
+           $this->getMainContext()->assertPageNotContainsText($string);
+       }
+
 
 }
