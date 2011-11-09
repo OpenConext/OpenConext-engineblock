@@ -35,21 +35,21 @@
 class SurfConext_Identity
 {
     /**
-     * Display name to use in the interface for this user.
-     * 
-     * @var String
-     */
-    public $displayName;
-
-    /**
      * Unique identifier for this identity
      *
-     * @var mixed
+     * @var string
      */
     public $id;
 
     /**
-     * @param mixed $id Unique Identifier
+     * Display name to use in the interface for this user.
+     * 
+     * @var string
+     */
+    public $displayName;
+
+    /**
+     * @param string $id Unique Identifier
      */
     public function __construct($id)
     {
