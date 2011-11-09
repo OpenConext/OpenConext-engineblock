@@ -133,6 +133,7 @@ class EngineBlock_Shindig_DataService implements ActivityService, PersonService,
             }
 
             $groupMemberUid = array_shift($userId);
+            /** @var $groupMemberUid UserId */
             $groupMemberUid = $groupMemberUid->getUserId($token);
 
             $groupId = $groupId->getGroupId();
