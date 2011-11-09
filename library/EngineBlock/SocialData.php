@@ -75,6 +75,11 @@ class EngineBlock_SocialData
      */
     public function getGroupsForPerson($identifier, $groupId = null, $voId = null)
     {
+        $identifier = $this->_getCollabPersonIdForPersistentId($identifier);
+        if (!$identifier) {
+            return false;
+        }
+
         $engineBlockGroups = NULL;
         $groupProvider = $this->_getGroupProvider($identifier);
         if ($voId) {
@@ -109,6 +114,11 @@ class EngineBlock_SocialData
      */
     public function getGroupMembers($groupMemberUid, $groupId, $socialAttributes = array(), $voId = null, $spEntityId = null)
     {
+        $groupMemberUid = $this->_getCollabPersonIdForPersistentId($groupMemberUid);
+        if (!$groupMemberUid) {
+            return false;
+        }
+
         $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId);
         
         $people = array();
@@ -138,11 +148,17 @@ class EngineBlock_SocialData
      */
     public function getPerson($identifier, $socialAttributes = array(), $voId = null, $spEntityId = null, $subjectId = null)
     {
-        $fieldMapper = $this->_getFieldMapper();
+        $identifier = $this->_getCollabPersonIdForPersistentId($identifier);
+        if (!$identifier) {
+            return false;
+        }
 
+        $fieldMapper = $this->_getFieldMapper();
         $ldapAttributes = $fieldMapper->socialToLdapAttributes($socialAttributes);
+
         $searchId = (($subjectId) ? $subjectId : $identifier);
         $persons = $this->_getUserDirectory()->findUsersByIdentifier($searchId, $ldapAttributes);
+        
         if (count($persons) === 1) {
             $person = array_shift($persons);
             $person = $fieldMapper->ldapToSocialData($person, $socialAttributes);
@@ -172,6 +188,43 @@ class EngineBlock_SocialData
             // Not really possible
             throw new EngineBlock_Exception("More than 1 person found for identifier $identifier");
         }
+    }
+
+    protected function _getCollabPersonIdForPersistentId($persistentId)
+    {
+        // Already in collabPersonId format
+        if (strpos($persistentId, 'urn:collab:person:') === 0) {
+            return $persistentId;
+        }
+
+        // Valid SHA-1 hash?
+        if (!$this->_isSha1String($persistentId)) {
+            throw new EngineBlock_Exception("Received id that is neither a collabPersonId nor a valid SHA-1?");
+        }
+
+        $db = $this->_getReadDatabase();
+        $statement = $db->prepare('SELECT user_uuid FROM saml_persistent_id WHERE persistent_id = ?');
+        $statement->execute(array($persistentId));
+        $rows = $statement->fetchAll();
+        if (count($rows) === 1) {
+            $collabPersonUuid = $rows[0]['user_uuid'];
+            
+            $userDirectory = $this->_getUserDirectory();
+            $user = $userDirectory->findUserByCollabPersonUuid($collabPersonUuid);
+
+            return $user[0]['collabpersonid'];
+        }
+        else if (count($rows) === 0) {
+            return false;
+        }
+        else {
+            throw new EngineBlock_Exception("Multiple rows found for persistent identifier '$persistentId'?!?");
+        }
+    }
+
+    protected function _isSha1String($string)
+    {
+        return (strlen($string) === 40 && preg_match('|[\da-fA-F]|', $string));
     }
 
     /**
@@ -297,5 +350,11 @@ class EngineBlock_SocialData
     public function setFieldMapper($mapper)
     {
         $this->_fieldMapper = $mapper;
+    }
+
+    protected function _getReadDatabase()
+    {
+        $factory = new EngineBlock_Database_ConnectionFactory();
+        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
     }
 }

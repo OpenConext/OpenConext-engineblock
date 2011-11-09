@@ -65,18 +65,47 @@ class EngineBlock_UserDirectory
     {
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
+        return $this->_fetchResultsForFilter($filter);
+    }
 
+    public function findUserByCollabPersonId($collabPersonId)
+    {
+        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $collabPersonId . '))';
+        return $this->_fetchResultsForFilter($filter);
+    }
+
+    public function findUserByCollabPersonUuid($collabPersonUuid)
+    {
+        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_UUID . '=' . $collabPersonUuid . '))';
+        return $this->_fetchResultsForFilter($filter);
+    }
+
+    public function fetchAll()
+    {
+        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+        return $this->_fetchResultsForFilter($filter);
+    }
+
+    protected function _fetchResultsForFilter($filter, $fields = array())
+    {
         $collection = $this->_getLdapClient()->search(
             $filter,
             null,
             Zend_Ldap::SEARCH_SCOPE_SUB,
-            $ldapAttributes
+            $fields
         );
 
         // Convert the result from a Zend_Ldap object to a plain multi-dimensional array
         $result = array();
         if (($collection !== NULL) and ($collection !== FALSE)) {
             foreach ($collection as $item) {
+                foreach ($item as $key => $value) {
+                    if (is_array($value) && count($value) === 1) {
+                        $item[$key] = $value[0];
+                    }
+                }
                 $result[] = $item;
             }
         }
