@@ -32,7 +32,7 @@
  *
  * @author marc
  */
-class Surfnet_Identity
+class SurfConext_Identity
 {
     /**
      * Display name to use in the interface for this user.
