@@ -111,7 +111,10 @@ class EngineBlock_Controller_Abstract
 
     protected function _initAuthentication()
     {
-       return EngineBlock_Authenticator::authenticate();
+        $helper = new Surfnet_Zend_Auth_Adapter_Saml();
+        $result = $helper->authenticate();
+
+        return new EngineBlock_User($result->getIdentity());
     }
 
     protected function _redirectToUrl($url)
