@@ -33,7 +33,9 @@
 class EngineBlock_UserDirectory
 {
     const URN_COLLAB_PERSON_NAMESPACE               = 'urn:collab:person';
+    
     const LDAP_CLASS_COLLAB_PERSON                  = 'collabPerson';
+
     const LDAP_ATTR_COLLAB_PERSON_ID                = 'collabpersonid';
     const LDAP_ATTR_COLLAB_PERSON_UUID              = 'collabpersonuuid';
     const LDAP_ATTR_COLLAB_PERSON_HASH              = 'collabpersonhash';
@@ -284,7 +286,7 @@ class EngineBlock_UserDirectory
             }
         }
 
-        if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH]===$this->_getCollabPersonHash($newAttributes)) {
+        if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH] === $this->_getCollabPersonHash($newAttributes)) {
             $now = date(DATE_RFC822);
             $newAttributes = $user + $newAttributes;
             $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
