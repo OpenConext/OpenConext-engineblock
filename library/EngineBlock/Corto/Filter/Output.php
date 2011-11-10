@@ -3,6 +3,7 @@
 class EngineBlock_Corto_Filter_Output
 {
     const VO_NAME_ATTRIBUTE = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
+    const URN_OID_COLLAB_PERSON_ID = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
 
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
@@ -50,7 +51,7 @@ class EngineBlock_Corto_Filter_Output
         }
 
         $collabPersonId = $_SESSION['subjectId'];
-        $responseAttributes['urn:nl:surfnet:collab:person:id'] = array($collabPersonId);
+        $responseAttributes[self::URN_OID_COLLAB_PERSON_ID] = array($collabPersonId);
 
         $this->_handleVirtualOrganizationResponse($request, $collabPersonId, $idpEntityMetadata["EntityId"]);
 
