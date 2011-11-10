@@ -2,9 +2,11 @@
 
 class EngineBlock_Corto_Filter_Input
 {
-    const SAML2_STATUS_CODE_SUCCESS = 'urn:oasis:names:tc:SAML:2.0:status:Success';
-    const SAML2_NAMEID_FORMAT_PERSISTENT = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
-    const SURF_PERSON_AFFILIATION_OID = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
+    const SAML2_STATUS_CODE_SUCCESS         = 'urn:oasis:names:tc:SAML:2.0:status:Success';
+    const SAML2_NAMEID_FORMAT_PERSISTENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
+    const SURF_PERSON_AFFILIATION_OID       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
+    const IS_MEMBER_OF_OID                  = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const SURF_MEMBER_URN                   = 'urn:collab:org:surf.nl';
 
     private $_adapter;
 
@@ -177,7 +179,7 @@ class EngineBlock_Corto_Filter_Input
             );
         }
         // Is a guest user?
-        $responseAttributes = $this->_addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata);
+        $responseAttributes = $this->_addIsMemberOfSurfNlAttribute($responseAttributes, $idpEntityMetadata);
 
         return $responseAttributes;
     }
@@ -209,7 +211,15 @@ class EngineBlock_Corto_Filter_Input
         return $responseAttributes['urn:mace:dir:attribute-def:uid'][0];
     }
 
-    protected function _addSurfPersonAffiliationAttribute($responseAttributes, $idpEntityMetadata)
+    /**
+     * Add the 'urn:collab:org:surf.nl' value to the isMemberOf attribute in case a user
+     * is considered a 'full member' of the SURFfederation.
+     *
+     * @param array $responseAttributes
+     * @param array $idpEntityMetadata
+     * @return array Resonse Attributes
+     */
+    protected function _addIsMemberOfSurfNlAttribute(array $responseAttributes, array $idpEntityMetadata)
     {
         // Determine guest status
         if (!isset($idpEntityMetadata['GuestQualifier'])) {
@@ -220,34 +230,36 @@ class EngineBlock_Corto_Filter_Input
             $idpEntityMetadata['GuestQualifier'] = 'All';
         }
 
-        switch ($idpEntityMetadata['GuestQualifier']) {
-            case 'None':
-                $responseAttributes[static::SURF_PERSON_AFFILIATION_OID] = array(
-                    0 => 'member',
-                );
-                break;
-
-            case 'Some':
-                if (!isset($responseAttributes[static::SURF_PERSON_AFFILIATION_OID][0])) {
-                    ebLog()->warn(
-                        "Idp guestQualifier is set to 'Some' however, ".
-                        "the surfPersonAffiliation attribute was not provided, ".
-                        "setting it to 'guest' and continuing" .
-                        var_export($idpEntityMetadata, true) .
-                        var_export($responseAttributes, true)
-                    );
-                    $responseAttributes[static::SURF_PERSON_AFFILIATION_OID] = array(
-                        0 => 'guest',
+        if ($idpEntityMetadata['GuestQualifier'] === 'None') {
+                if (!isset($responseAttributes[static::IS_MEMBER_OF_OID])) {
+                    $responseAttributes[static::IS_MEMBER_OF_OID] = array();
+                }
+                $responseAttributes[static::IS_MEMBER_OF_OID][] = self::SURF_MEMBER_URN;
+        }
+        else if ($idpEntityMetadata['GuestQualifier'] === 'Some') {
+            if (isset($responseAttributes[static::SURF_PERSON_AFFILIATION_OID][0])) {
+                if ($responseAttributes[static::SURF_PERSON_AFFILIATION_OID][0] === 'member') {
+                    if (!isset($responseAttributes[static::IS_MEMBER_OF_OID])) {
+                        $responseAttributes[static::IS_MEMBER_OF_OID] = array();
+                    }
+                    $responseAttributes[static::IS_MEMBER_OF_OID][] = self::SURF_MEMBER_URN;
+                }
+                else {
+                    ebLog()->notice(
+                        "Idp guestQualifier is set to 'Some', surfPersonAffiliation attribute does not contain " .
+                                'the value "member", so not adding isMemberOf for surf.nl'
                     );
                 }
-                break;
-
-            case 'All':
-            default:
-                $responseAttributes[static::SURF_PERSON_AFFILIATION_OID] = array(
-                    0 => 'guest',
+            }
+            else {
+                ebLog()->warn(
+                    "Idp guestQualifier is set to 'Some' however, ".
+                    "the surfPersonAffiliation attribute was not provided, " .
+                    "not adding the isMemberOf for surf.nl" .
+                    var_export($idpEntityMetadata, true) .
+                    var_export($responseAttributes, true)
                 );
-                break;
+            }
         }
         return $responseAttributes;
     }
