@@ -132,9 +132,9 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
 
             // External provisioning
-            $cortoEntity['MustProvisionExternally'] = false;
+            $cortoEntity['MustProvisionExternally'] = FALSE;
             if (isset($serviceRegistryEntity['coin']['is_provision_sp']) && $serviceRegistryEntity['coin']['is_provision_sp']) {
-                $cortoEntity['MustProvisionExternally'] = true;
+                $cortoEntity['MustProvisionExternally'] = TRUE;
 
                 if (isset($serviceRegistryEntity['coin']['provision_type'])) {
                     $cortoEntity['ExternalProvisionType'] = $serviceRegistryEntity['coin']['provision_type'];
