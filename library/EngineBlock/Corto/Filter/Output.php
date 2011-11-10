@@ -6,10 +6,14 @@ class EngineBlock_Corto_Filter_Output
 
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
+    const SAML2_NAME_ID_FORMAT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified';
+    const SAML2_NAME_ID_FORMAT_TRANSIENT   = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
+    const SAML2_NAME_ID_FORMAT_PERSISTENT  = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
+
     private $SUPPORTED_NAMEID_FORMATS = array(
-        'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
-        'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-        'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+        self::SAML2_NAME_ID_FORMAT_UNSPECIFIED,
+        self::SAML2_NAME_ID_FORMAT_TRANSIENT,
+        self::SAML2_NAME_ID_FORMAT_PERSISTENT,
     );
 
     private $_adapter;
@@ -45,9 +49,10 @@ class EngineBlock_Corto_Filter_Output
             return;
         }
 
-        $subjectId = $_SESSION['subjectId'];
+        $collabPersonId = $_SESSION['subjectId'];
+        $responseAttributes['urn:nl:surfnet:collab:person:id'] = array($collabPersonId);
 
-        $this->_handleVirtualOrganizationResponse($request, $subjectId, $idpEntityMetadata["EntityId"]);
+        $this->_handleVirtualOrganizationResponse($request, $collabPersonId, $idpEntityMetadata["EntityId"]);
 
         if ($this->_adapter->getVirtualOrganisationContext()) {
             $responseAttributes = $this->_addVoNameAttribute(
@@ -56,32 +61,24 @@ class EngineBlock_Corto_Filter_Output
             );
         }
 
-        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId);
+        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $collabPersonId);
 
         // Attribute Aggregation
         $responseAttributes = $this->_enrichAttributes(
             $idpEntityMetadata["EntityId"],
             $spEntityMetadata["EntityId"],
-            $subjectId,
+            $collabPersonId,
             $responseAttributes
         );
 
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
-            $subjectId,
+            $collabPersonId,
             $responseAttributes,
             $response
         );
 
-        $persistentId = $this->_getPersistentNameId($subjectId, $spEntityMetadata['EntityId']);
-        $responseAttributes['urn:collab:person:id'] = array($subjectId);
-        $responseAttributes['urn:surfnet:SAML:2.0:name-id:persistent'] = array($persistentId);
-
-        // Adjust the NameID in the NEW response, set the collab:person uid
-        $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
-            '_Format'          => $this->_getNameIdFormat($request, $spEntityMetadata),
-            '__v'              => $persistentId,
-        );
+        $response = $this->_setNameId($request, $response, $spEntityMetadata, $collabPersonId);
 
         // Always return both OID's and URN's
         $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
@@ -99,34 +96,6 @@ class EngineBlock_Corto_Filter_Output
             $this->_adapter->getProxyServer()->setHostedEntities($hostedEntities);
             $this->_adapter->getProxyServer()->setCurrentEntity($currentEntity['EntityCode']);
         }
-    }
-
-    protected function _getNameIdFormat($request, $spEntityMetadata)
-    {
-        // Persistent is our default
-        $defaultNameIdFormat = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
-
-        // If the SP requests a specific NameIDFormat in their AuthnRequest
-        if (isset($request['samlp:NameIDPolicy']['_Format'])) {
-            $requestedNameIdFormat = $request['samlp:NameIDPolicy']['_Format'];
-            if (in_array($requestedNameIdFormat, $this->SUPPORTED_NAMEID_FORMATS)) {
-                return $request['samlp:NameIDPolicy']['_Format'];
-            }
-            else {
-                ebLog()->warn(
-                    "Whoa, SP '{$spEntityMetadata['EntityID']}' requested '{$requestedNameIdFormat}' " .
-                            "however we don't support that format, opting to try '$defaultNameIdFormat' " .
-                            "instead of sending an error. SP might not be happy with that..."
-                );
-                return $defaultNameIdFormat;
-            }
-        }
-        // Otherwise look at the supported NameIDFormat for this SP
-        else if (isset($spEntityMetadata['NameIDFormat'])) {
-            return $spEntityMetadata['NameIDFormat'];
-        }
-
-        return $defaultNameIdFormat;
     }
 
     protected function _handleVirtualOrganizationResponse($request, $subjectId, $idpEntityId)
@@ -202,6 +171,54 @@ class EngineBlock_Corto_Filter_Output
         foreach ($manipulators as $manipulator) {
             $manipulator->manipulate($subjectId, $attributes, $response);
         }
+    }
+
+    protected function _setNameId($request, $response, $spEntityMetadata, $collabPersonId)
+    {
+        $persistentId = $this->_getPersistentNameId($collabPersonId, $spEntityMetadata['EntityId']);
+        $nameIdFormat = $this->_getNameIdFormat($request, $spEntityMetadata);
+
+        if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_UNSPECIFIED) {
+            $nameId = $collabPersonId;
+        }
+        else {
+            $nameId = $persistentId;
+        }
+
+        // Adjust the NameID in the NEW response, set the collab:person uid
+        $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
+            '_Format'          => $nameIdFormat,
+            '__v'              => $nameId,
+        );
+        return $response;
+    }
+
+    protected function _getNameIdFormat($request, $spEntityMetadata)
+    {
+        // Persistent is our default
+        $defaultNameIdFormat = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
+
+        // If the SP requests a specific NameIDFormat in their AuthnRequest
+        if (isset($request['samlp:NameIDPolicy']['_Format'])) {
+            $requestedNameIdFormat = $request['samlp:NameIDPolicy']['_Format'];
+            if (in_array($requestedNameIdFormat, $this->SUPPORTED_NAMEID_FORMATS)) {
+                return $request['samlp:NameIDPolicy']['_Format'];
+            }
+            else {
+                ebLog()->warn(
+                    "Whoa, SP '{$spEntityMetadata['EntityID']}' requested '{$requestedNameIdFormat}' " .
+                            "however we don't support that format, opting to try '$defaultNameIdFormat' " .
+                            "instead of sending an error. SP might not be happy with that..."
+                );
+                return $defaultNameIdFormat;
+            }
+        }
+        // Otherwise look at the supported NameIDFormat for this SP
+        else if (isset($spEntityMetadata['NameIDFormat'])) {
+            return $spEntityMetadata['NameIDFormat'];
+        }
+
+        return $defaultNameIdFormat;
     }
 
     protected function _getPersistentNameId($collabPersonId, $spEntityId)
