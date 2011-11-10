@@ -94,7 +94,7 @@ foreach ($spList as $spId => $sp) {
         </thead>
     <?php foreach ($attributes as $attributeId => $attributeValues) { ?>
         <tr>
-            <td style="font-weight: bold;">
+            <td style="font-weight: bold;" title="<?php echo $attributeId?>">
                 <?=$metadata->getName($attributeId, $lang)?>
             </td>
             <td>
