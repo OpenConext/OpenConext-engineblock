@@ -352,9 +352,14 @@ class Corto_XmlToArray
                 '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
             );
             foreach ((array)$attribute as $value) {
-                $newAttribute['saml:AttributeValue'][] = array (
-                   self::VALUE_PFX  => $value,
-                );
+                if (is_array($value)) {
+                    $newAttribute['saml:AttributeValue'][] = $value;
+                }
+                else {
+                    $newAttribute['saml:AttributeValue'][] = array (
+                       self::VALUE_PFX  => $value,
+                    );
+                }
             }
             $res[] = $newAttribute;
         }
