@@ -64,8 +64,8 @@ class EngineBlock_LicenseEngine_ValidationManager
             $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
 
                     ->setParameterGet('userId', urlencode($userId))
-                    ->setParameterGet('spEntityId', urlencode($spMetadata['EntityId']))
-                    ->setParameterGet('idpEntityId', urlencode($idpMetadata['EntityId']))
+                    ->setParameterGet('serviceProviderEntityId', urlencode($spMetadata['EntityId']))
+                    ->setParameterGet('identityProviderEntityId', urlencode($idpMetadata['EntityId']))
                     ->request('GET');
 
             $body = $client->getLastResponse()->getBody();
