@@ -26,12 +26,17 @@
 class EngineBlock_Http_Request 
 {
     protected $_method;
+
     protected $_protocol;
     protected $_hostName;
     protected $_uri;
+
     protected $_queryParameters = array();
     protected $_queryString;
+
     protected $_postParameters;
+
+    protected $_headers;
 
     public static function createFromEnvironment()
     {
@@ -50,6 +55,17 @@ class EngineBlock_Http_Request
         }
         $request->setQueryString($_SERVER['QUERY_STRING']);
         $request->_setPostParameters($_POST);
+
+        $headers = array();
+        foreach ($_SERVER as $name => $value) {
+           if (substr($name, 0, 5) !== 'HTTP_') {
+               continue;
+           }
+
+           $headerName = str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))));
+           $headers[$headerName] = $value;
+        }
+        $request->setHeaders($headers);
         return $request;
     }
 
@@ -185,4 +201,25 @@ class EngineBlock_Http_Request
         return $this->_hostName;
     }
 
+    public function setHeaders($headers)
+    {
+        $this->_headers = $headers;
+        return $this;
+    }
+
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+
+    public function getHeader($name)
+    {
+        return $this->_headers[$name];
+    }
+
+    public function setHeader($name, $value)
+    {
+        $this->_headers[$name] = $value;
+        return $this;
+    }
 }

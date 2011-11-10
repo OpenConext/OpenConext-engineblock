@@ -31,20 +31,22 @@ class EngineBlock_Tracker
     
     public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId)
     {
+        $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
         $db = $this->_getDbConnection();
         
         $stmt = $db->prepare("
-            INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname)
-            VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname)"
+            INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent)
+            VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent)"
         );
 
         $spEntityName  = (isset($spEntityMetadata['Name']['en'])?$spEntityMetadata['Name']['en']:$spEntityMetadata['EntityId']);
         $idpEntityName = (isset($idpEntityMetadata['Name']['en'])?$idpEntityMetadata['Name']['en']:$idpEntityMetadata['EntityId']);
-        $stmt->bindParam("userid"       , $subjectId);
-        $stmt->bindParam("spentityid"   , $spEntityMetadata['EntityId']);
-        $stmt->bindParam("spentityname" , $spEntityName);
-        $stmt->bindParam("idpentityid"  , $idpEntityMetadata['EntityId']);
-        $stmt->bindParam("idpentityname", $idpEntityName);
+        $stmt->bindParam('userid'       , $subjectId);
+        $stmt->bindParam('spentityid'   , $spEntityMetadata['EntityId']);
+        $stmt->bindParam('spentityname' , $spEntityName);
+        $stmt->bindParam('idpentityid'  , $idpEntityMetadata['EntityId']);
+        $stmt->bindParam('idpentityname', $idpEntityName);
+        $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
         
         $stmt->execute();
     }
