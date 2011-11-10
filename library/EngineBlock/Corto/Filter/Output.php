@@ -80,7 +80,7 @@ class EngineBlock_Corto_Filter_Output
             $response
         );
 
-        $response = $this->_setNameId($request, $response, $spEntityMetadata, $collabPersonId);
+        $response = $this->_setNameId($request, $response, $responseAttributes, $spEntityMetadata, $collabPersonId);
 
         // Always return both OID's and URN's
         $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
@@ -174,7 +174,7 @@ class EngineBlock_Corto_Filter_Output
         }
     }
 
-    protected function _setNameId($request, $response, $spEntityMetadata, $collabPersonId)
+    protected function _setNameId($request, $response, &$responseAttributes, $spEntityMetadata, $collabPersonId)
     {
         $persistentId = $this->_getPersistentNameId($collabPersonId, $spEntityMetadata['EntityId']);
         $nameIdFormat = $this->_getNameIdFormat($request, $spEntityMetadata);
@@ -191,6 +191,14 @@ class EngineBlock_Corto_Filter_Output
             '_Format' => $nameIdFormat,
             '__v' => $nameId,
         );
+
+        // Add the eduPersonTargetedId
+        $responseAttributes['urn:oid:1.3.6.1.4.1.5923.1.1.1.10'] = array(
+            array(
+                "saml:NameID" => $response['saml:Assertion']['saml:Subject']['saml:NameID'],
+            )
+        );
+
         return $response;
     }
 
