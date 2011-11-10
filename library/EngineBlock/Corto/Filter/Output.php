@@ -143,8 +143,6 @@ class EngineBlock_Corto_Filter_Output
         return $validator->isMember($voIdentifier, $subjectIdentifier, $idpEntityId);
     }
 
-
-
     /**
      * Enrich the current set of attributes with attributes from other sources.
      *
