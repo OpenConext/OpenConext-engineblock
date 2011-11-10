@@ -227,8 +227,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         );
         $serviceProviderEntityId = $attributes['ServiceProvider'][0];
         unset($attributes['ServiceProvider']);
+        $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
 
         $identityProviderEntityId = $response['__']['OriginalIssuer'];
+        $idpEntityMetadata = $this->_server->getRemoteEntity($identityProviderEntityId);
 
         $priorConsent = $this->_hasStoredConsent($serviceProviderEntityId, $response, $attributes);
         if ($priorConsent) {
@@ -239,7 +241,20 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 
             $this->_server->getBindingsModule()->send(
                 $response,
-                $this->_server->getRemoteEntity($serviceProviderEntityId)
+                $spEntityMetadata
+            );
+            return;
+        }
+
+        if (isset($spEntityMetadata['NoConsentRequired']) && $spEntityMetadata['NoConsentRequired']) {
+            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
+
+            $response['_Destination'] = $response['__']['Return'];
+            $response['__']['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
+
+            $this->_server->getBindingsModule()->send(
+                $response,
+                $spEntityMetadata
             );
             return;
         }
@@ -250,8 +265,8 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                  'action' => $this->_server->getCurrentEntityUrl('processConsentService'),
                  'ID' => $response['_ID'],
                  'attributes' => $attributes,
-                 'sp' => $this->_server->getRemoteEntity($serviceProviderEntityId),
-                 'idp' => $this->_server->getRemoteEntity($identityProviderEntityId),
+                 'sp'  => $spEntityMetadata,
+                 'idp' => $idpEntityMetadata,
             ));
         $this->_server->sendOutput($html);
     }

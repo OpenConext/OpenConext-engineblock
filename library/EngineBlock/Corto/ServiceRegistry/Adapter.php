@@ -149,6 +149,10 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                     $cortoEntity['ExternalProvisionPassword'] = $serviceRegistryEntity['coin']['provision_password'];
                 }
             }
+            
+            if (isset($serviceRegistryEntity['coin']['no_consent_required'])) {
+                $cortoEntity['NoConsentRequired'] = TRUE;
+            }
         }
 
         // For Idps
