@@ -213,10 +213,10 @@ class EngineBlock_Corto_Filter_Output
         $userUuid               = $this->_getUserUuid($collabPersonId);
 
         $statement = $db->prepare(
-            "SELECT * FROM saml_persistent_id WHERE service_provider_uuid = ? AND user_uuid = ?"
+            "SELECT persistent_id FROM saml_persistent_id WHERE service_provider_uuid = ? AND user_uuid = ?"
         );
         $statement->execute(array($serviceProviderUuid, $userUuid));
-        $rows = $statement->fetch();
+        $rows = $statement->fetchAll();
 
         if (empty($rows)) {
             $persistentId = sha1(self::PERSISTENT_NAMEID_SALT . $userUuid . $serviceProviderUuid);
