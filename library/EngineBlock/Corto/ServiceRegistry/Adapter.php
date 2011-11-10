@@ -119,10 +119,6 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 'Location' => $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],
             );
 
-            if (isset($serviceRegistryEntity['coin']['default_vo_id'])) {
-                $cortoEntity['VoContext'] = $serviceRegistryEntity['coin']['default_vo_id'];
-            }
-
             // Only for SPs
             if (isset($serviceRegistryEntity['coin']['alternate_private_key']) && $serviceRegistryEntity['coin']['alternate_private_key']) {
                 $cortoEntity['AlternatePrivateKey'] = EngineBlock_X509Certificate::getPrivatePemCertFromCertData(

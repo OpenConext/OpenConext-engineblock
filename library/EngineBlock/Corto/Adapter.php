@@ -121,11 +121,9 @@ class EngineBlock_Corto_Adapter
          * get the request again from the binding module, it would fail.
          */
         $request = $proxyServer->getBindingsModule()->receiveRequest();
+
         $spEntityId = $request['saml:Issuer']['__v'];
 
-        if (isset($entities[$spEntityId]['VoContext']) && $entities[$spEntityId]['VoContext']) {
-            $request[Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $entities[$spEntityId]['VoContext'];
-        }
         $_REQUEST['SAMLRequest'] = $request;
 
         return $this->getServiceRegistryAdapter()->filterEntitiesBySp(

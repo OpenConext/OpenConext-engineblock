@@ -139,10 +139,6 @@ class EngineBlock_Corto_Filter_Output
             $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
             $this->_adapter->setVirtualOrganisationContext($vo);
         }
-        else if (isset($request['__']['VoContextImplicit'])) {
-            $vo = $request['__']['VoContextImplicit'];
-            $this->_adapter->setVirtualOrganisationContext($vo);
-        }
 
         // If in VO context, validate the user's membership
         if (!is_null($vo)) {
