@@ -7,8 +7,8 @@ class EngineBlock_Corto_Filter_Output
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
     const SAML2_NAME_ID_FORMAT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified';
-    const SAML2_NAME_ID_FORMAT_TRANSIENT   = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
-    const SAML2_NAME_ID_FORMAT_PERSISTENT  = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
+    const SAML2_NAME_ID_FORMAT_TRANSIENT = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
+    const SAML2_NAME_ID_FORMAT_PERSISTENT = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
 
     private $SUPPORTED_NAMEID_FORMATS = array(
         self::SAML2_NAME_ID_FORMAT_UNSPECIFIED,
@@ -62,6 +62,8 @@ class EngineBlock_Corto_Filter_Output
         }
 
         $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $collabPersonId);
+
+        $responseAttributes = $this->_validateLicense($responseAttributes, $spEntityMetadata, $idpEntityMetadata, $collabPersonId);
 
         // Attribute Aggregation
         $responseAttributes = $this->_enrichAttributes(
@@ -155,7 +157,8 @@ class EngineBlock_Corto_Filter_Output
     protected function _enrichAttributes($idpEntityId, $spEntityId, $subjectId, array $attributes)
     {
         $aggregator = $this->_getAttributeAggregator(
-            $this->_getAttributeProviders($spEntityId, isset($attributes[self::VO_NAME_ATTRIBUTE]) ? $attributes[self::VO_NAME_ATTRIBUTE][0] : null)
+            $this->_getAttributeProviders($spEntityId, isset($attributes[self::VO_NAME_ATTRIBUTE])
+                                                             ? $attributes[self::VO_NAME_ATTRIBUTE][0] : null)
         );
         return $aggregator->aggregateFor(
             $attributes,
@@ -185,8 +188,8 @@ class EngineBlock_Corto_Filter_Output
 
         // Adjust the NameID in the NEW response, set the collab:person uid
         $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
-            '_Format'          => $nameIdFormat,
-            '__v'              => $nameId,
+            '_Format' => $nameIdFormat,
+            '__v' => $nameId,
         );
         return $response;
     }
@@ -205,13 +208,13 @@ class EngineBlock_Corto_Filter_Output
             else {
                 ebLog()->warn(
                     "Whoa, SP '{$spEntityMetadata['EntityID']}' requested '{$requestedNameIdFormat}' " .
-                            "however we don't support that format, opting to try '$defaultNameIdFormat' " .
-                            "instead of sending an error. SP might not be happy with that..."
+                    "however we don't support that format, opting to try '$defaultNameIdFormat' " .
+                    "instead of sending an error. SP might not be happy with that..."
                 );
                 return $defaultNameIdFormat;
             }
         }
-        // Otherwise look at the supported NameIDFormat for this SP
+            // Otherwise look at the supported NameIDFormat for this SP
         else if (isset($spEntityMetadata['NameIDFormat'])) {
             return $spEntityMetadata['NameIDFormat'];
         }
@@ -224,8 +227,8 @@ class EngineBlock_Corto_Filter_Output
         $factory = new EngineBlock_Database_ConnectionFactory();
         $db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
 
-        $serviceProviderUuid    = $this->_getServiceProviderUuid($spEntityId, $db);
-        $userUuid               = $this->_getUserUuid($collabPersonId);
+        $serviceProviderUuid = $this->_getServiceProviderUuid($spEntityId, $db);
+        $userUuid = $this->_getUserUuid($collabPersonId);
 
         $statement = $db->prepare(
             "SELECT persistent_id FROM saml_persistent_id WHERE service_provider_uuid = ? AND user_uuid = ?"
@@ -268,8 +271,8 @@ class EngineBlock_Corto_Filter_Output
             $statement = $db->prepare("INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)");
             $statement->execute(
                 array(
-                    $uuid,
-                    $spEntityId,
+                     $uuid,
+                     $spEntityId,
                 )
             );
         }
@@ -321,5 +324,14 @@ class EngineBlock_Corto_Filter_Output
     protected function _getAttributeAggregator($providers)
     {
         return new EngineBlock_AttributeAggregator($providers);
+    }
+
+    protected function _validateLicense($responseAttributes, $spEntityMetadata, $idpEntityMetadata, $userId)
+    {
+        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        $licenseEngine = new EngineBlock_LicenseEngine_ValidationManager($config);
+        $responseAttributes[EngineBlock_LicenseEngine_ValidationManager::LICENSE_SAML_ATTRIBUTE] =
+                $licenseEngine->validate($userId, $spEntityMetadata, $idpEntityMetadata);
+        return $responseAttributes;
     }
 }
