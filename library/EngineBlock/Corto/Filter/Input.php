@@ -7,6 +7,7 @@ class EngineBlock_Corto_Filter_Input
     const SURF_PERSON_AFFILIATION_OID       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
     const IS_MEMBER_OF_OID                  = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
     const SURF_MEMBER_URN                   = 'urn:collab:org:surf.nl';
+    const URN_MACE_TERENA_SCHACHOMEORG      = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
 
     private $_adapter;
 
@@ -54,7 +55,7 @@ class EngineBlock_Corto_Filter_Input
         // map oids to URNs
         $responseAttributes = $this->_mapOidsToUrns($responseAttributes, $idpEntityMetadata);
 
-        $this->_validateAttributes($responseAttributes);
+        $responseAttributes = $this->_validateAttributes($responseAttributes, $idpEntityMetadata);
 
         $responseAttributes = $this->_supplementAttributes($responseAttributes, $idpEntityMetadata);
 
@@ -85,13 +86,21 @@ class EngineBlock_Corto_Filter_Input
         return $mapper->map($responseAttributes);
     }
 
-    protected function _validateAttributes(array $responseAttributes)
+    protected function _validateAttributes(array $responseAttributes, $idpEntityMetadata)
     {
         $errors = array();
 
-        $error = $this->_requireValidSchacHomeOrganization($responseAttributes);
-        if ($error) {
-            $errors[] = $error;
+        if (isset($idpEntityMetadata['SchacHomeOrganization'])) {
+            // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
+            $responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
+                $idpEntityMetadata['SchacHomeOrganization']
+            );
+        }
+        else {
+            $error = $this->_requireValidSchacHomeOrganization($responseAttributes);
+            if ($error) {
+                $errors[] = $error;
+            }
         }
 
         $error = $this->_requireValidUid($responseAttributes);
@@ -105,32 +114,63 @@ class EngineBlock_Corto_Filter_Input
                         ' attributes: ' . print_r($responseAttributes, true)
             );
         }
+        return $responseAttributes;
     }
 
     protected function _requireValidSchacHomeOrganization($responseAttributes)
     {
-        if (!isset($responseAttributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'])) {
-            return "urn:mace:terena.org:attribute-def:schacHomeOrganization missing in attributes!";
+        if (!isset($responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG])) {
+            return self::URN_MACE_TERENA_SCHACHOMEORG . " missing in attributes!";
         }
 
-        $schacHomeOrganizationValues = $responseAttributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'];
+        $schacHomeOrganizationValues = $responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG];
 
         if (count($schacHomeOrganizationValues) === 0) {
-            return "urn:mace:terena.org:attribute-def:schacHomeOrganization has no values";
+            return self::URN_MACE_TERENA_SCHACHOMEORG . " has no values";
         }
 
         if (count($schacHomeOrganizationValues) > 1) {
-            return  "urn:mace:terena.org:attribute-def:schacHomeOrganization has too many values";
+            return  self::URN_MACE_TERENA_SCHACHOMEORG . " has too many values";
         }
 
         $schacHomeOrganization = $schacHomeOrganizationValues[0];
 
+        $reservedSchacHomeOrganization = $this->_isReservedSchacHomeOrganization($schacHomeOrganization);
+        if ($reservedSchacHomeOrganization === TRUE) {
+            return self::URN_MACE_TERENA_SCHACHOMEORG . " is reserved for another IdP!";
+        }
+
         $uri = Zend_Uri_Http::fromString('http://' . $schacHomeOrganization);
         $validHostName = $uri->validateHost($schacHomeOrganization);
         if (!$validHostName) {
-            return "urn:mace:terena.org:attribute-def:schacHomeOrganization is not a valid hostname!";
+            return self::URN_MACE_TERENA_SCHACHOMEORG . " is not a valid hostname!";
         }
+
+        // Passed all the checks, valid SHO!
         return false;
+    }
+
+    /**
+     * @param string $schacHomeOrganization
+     * @param array $idpEntityMetadata
+     * @return bool
+     */
+    protected function _isReservedSchacHomeOrganization($schacHomeOrganization)
+    {
+        $reservedSchacHomeOrganizations = $this->_getReservedSchacHomeOrganizations();
+        return in_array($schacHomeOrganization, $reservedSchacHomeOrganizations);
+    }
+
+    protected function _getReservedSchacHomeOrganizations()
+    {
+        $schacHomeOrganizations = array();
+        $remoteEntities = $this->_adapter->getProxyServer()->getRemoteEntities();
+        foreach ($remoteEntities as $remoteEntity) {
+            if (isset($remoteEntity['SchacHomeOrganization'])) {
+                $schacHomeOrganizations[] = $remoteEntity['SchacHomeOrganization'];
+            }
+        }
+        return $schacHomeOrganizations;
     }
 
     protected function _requireValidUid($responseAttributes)

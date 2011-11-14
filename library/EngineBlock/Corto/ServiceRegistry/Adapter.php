@@ -169,6 +169,10 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                     $cortoEntity['GuestQualifier'] = $serviceRegistryEntity['coin']['guest_qualifier'];
                 }
             }
+
+            if (isset($serviceRegistryEntity['coin']['schachomeorganization'])) {
+                $cortoEntity['SchacHomeOrganization'] = $serviceRegistryEntity['coin']['schachomeorganization'];
+            }
         }
 
         // In general
