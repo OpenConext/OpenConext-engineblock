@@ -56,7 +56,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getLog()->warn('Session was lost');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
-        catch (EngineBlock_Corto_Exception_UnknownIssuerException $e) {
+        catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
             $application->getLog()->warn($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl(
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .

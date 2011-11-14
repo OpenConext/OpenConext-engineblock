@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Corto_Exception_UnknownIssuerException extends Exception
+class EngineBlock_Corto_Exception_UnknownIssuer extends Exception
 {
     private $_entityId;
     private $_destination;

@@ -60,7 +60,7 @@ class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
         try {
             $remoteEntity = $this->_server->getRemoteEntity($messageIssuer);
         } catch (Corto_ProxyServer_Exception $e) {
-            throw new EngineBlock_Corto_Exception_UnknownIssuerException(
+            throw new EngineBlock_Corto_Exception_UnknownIssuer(
                 "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)",
                 $messageIssuer,
                 $destination

@@ -43,7 +43,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getLog()->warn('Unable to receive message error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
-        catch (EngineBlock_Corto_Exception_UnknownIssuerException $e) {
+        catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
             $application->getLog()->warn($e->getMessage());
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
