@@ -140,8 +140,11 @@ class EngineBlock_Corto_Filter_Input
             return self::URN_MACE_TERENA_SCHACHOMEORG . " is reserved for another IdP!";
         }
 
-        $uri = Zend_Uri_Http::fromString('http://' . $schacHomeOrganization);
-        $validHostName = $uri->validateHost($schacHomeOrganization);
+        $validHostName = false;
+        try {
+            $uri = Zend_Uri_Http::fromString('http://' . $schacHomeOrganization);
+            $validHostName = $uri->validateHost($schacHomeOrganization);
+        } catch(Zend_Validate_Exception $e) {}
         if (!$validHostName) {
             return self::URN_MACE_TERENA_SCHACHOMEORG . " is not a valid hostname!";
         }
