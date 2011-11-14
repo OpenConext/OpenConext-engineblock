@@ -232,6 +232,7 @@ class EngineBlock_UserDirectory
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
 
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonId($newAttributes);
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_UUID]          = $this->_getCollabPersonUuid($newAttributes);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
             $newAttributes, $saml2attributes, $idpEntityMetadata
         )? 'TRUE' : 'FALSE');
@@ -317,6 +318,11 @@ class EngineBlock_UserDirectory
     {
         $uid = str_replace('@', '_', $attributes['uid']);
         return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+    }
+
+    protected function _getCollabPersonUuid($attributes)
+    {
+        return (string)Surfnet_Zend_Uuid::generate();
     }
 
     protected function _getCollabPersonHash($attributes)
