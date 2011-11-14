@@ -10,7 +10,6 @@ Feature: Virtual Organizations
       And we have a Group VO with the id "rave-devs" and group "vo:scn-devs:rave-devs"
       And we have a Group VO with the id "eb-devs" and group "vo:scn-devs:eb-devs"
       And we have an Idp VO with the id "test-idps" and IdP "SURFnetGuests"
-      And the SP "Test SP" is implicitly coupled to the VO "testsp"
       And we have a SURFguest user with the username "test-boy", name "Boy" and password "test-boy"
       And we have a SURFguest user with the username "test-jasha", name "Jasha" and password "test-jasha"
       And we have a SURFguest user with the username "test-ivo", name "Ivo" and password "test-ivo"
@@ -21,19 +20,6 @@ Feature: Virtual Organizations
       But user "test-jasha" is not a member of the Group "nl:surfnet:management:testsp"
       But user "test-ivo" is not a member of any Group
       But user "test_idps" is not a member of any Group
-
-  Scenario: Boy logs in at the Test SP with an implicit VO
-    When I go to the Test SP
-     And I select from the WAYF "SURFguest (TEST)"
-     And I log in at Surfguest IdP as "test-boy" with password "test-boy"
-     And I pass through EngineBlock
-    Then I should be on the Test SP
-
-  Scenario: Ivo fails to log in at the Test SP with an implicit VO
-    When I go to the Test SP
-     And I select from the WAYF "SURFguest (TEST)"
-     And I log in at Surfguest IdP as "test-ivo" with password "test-ivo"
-    Then EngineBlock gives me the error "Membership of a Virtual Organisation required"
 
   Scenario: Ivo fails to log in at the Test Sp with explicit VO "scn-devs"
     When I go to the Test SP with the explicit VO "scn-devs"
