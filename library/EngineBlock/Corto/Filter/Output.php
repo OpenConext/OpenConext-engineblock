@@ -64,6 +64,10 @@ class EngineBlock_Corto_Filter_Output
 
         $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $collabPersonId);
 
+        /*
+         * Here we call the external ValidationManager to check what the license information is. An extra SAML response
+         * attribute is added to inform the SP what the license status is.
+         */
         $responseAttributes = $this->_validateLicense($responseAttributes, $spEntityMetadata, $idpEntityMetadata, $collabPersonId);
 
         // Attribute Aggregation
