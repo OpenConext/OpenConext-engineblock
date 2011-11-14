@@ -381,4 +381,14 @@ $attributes = array(
             'en' => 'License information for the current service',
         ),
     ),
+    'urn:oid:1.3.6.1.4.1.5923.1.5.1.1' => array(
+        'Name' => array(
+            'nl' => 'Lidmaatschap',
+            'en' => 'Membership',
+        ),
+        'Description' => array(
+            'nl' => 'Lidmaatschap van virtuele organisaties en de SURFfederatie',
+            'en' => 'Membership of Virtual Organizations and the SURFfederation.',
+        ),
+    ),
 );
