@@ -212,8 +212,12 @@ class EngineBlock_Corto_Filter_Output
         // Persistent is our default
         $defaultNameIdFormat = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
 
+        // If a NameIDFormat was explicitly set in the ServiceRegistry, use that...
+        if (isset($spEntityMetadata['NameIDFormat'])) {
+            return $spEntityMetadata['NameIDFormat'];
+        }
         // If the SP requests a specific NameIDFormat in their AuthnRequest
-        if (isset($request['samlp:NameIDPolicy']['_Format'])) {
+        else if (isset($request['samlp:NameIDPolicy']['_Format'])) {
             $requestedNameIdFormat = $request['samlp:NameIDPolicy']['_Format'];
             if (in_array($requestedNameIdFormat, $this->SUPPORTED_NAMEID_FORMATS)) {
                 return $request['samlp:NameIDPolicy']['_Format'];
@@ -227,11 +231,6 @@ class EngineBlock_Corto_Filter_Output
                 return $defaultNameIdFormat;
             }
         }
-            // Otherwise look at the supported NameIDFormat for this SP
-        else if (isset($spEntityMetadata['NameIDFormat'])) {
-            return $spEntityMetadata['NameIDFormat'];
-        }
-
         return $defaultNameIdFormat;
     }
 
