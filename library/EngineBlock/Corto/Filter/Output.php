@@ -78,18 +78,18 @@ class EngineBlock_Corto_Filter_Output
             $responseAttributes
         );
 
+        $response = $this->_setNameId($request, $response, $responseAttributes, $spEntityMetadata, $collabPersonId);
+
+        // Always return both OID's and URN's
+        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
+        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
+
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
             $collabPersonId,
             $responseAttributes,
             $response
         );
-
-        $response = $this->_setNameId($request, $response, $responseAttributes, $spEntityMetadata, $collabPersonId);
-
-        // Always return both OID's and URN's
-        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
-        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
 
         /**
          * We can set overrides of the private key in the Service Registry,
