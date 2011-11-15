@@ -13,13 +13,11 @@ Feature: Virtual Organizations
       And we have a SURFguest user with the username "test-boy", name "Boy" and password "test-boy"
       And we have a SURFguest user with the username "test-jasha", name "Jasha" and password "test-jasha"
       And we have a SURFguest user with the username "test-ivo", name "Ivo" and password "test-ivo"
-      And we have a Twitter user with the username "test-idps", name "John" and password "test-idps"
       And user "test-boy" is a member of the Group "vo:scn-devs:eb-devs"
       And user "test-jasha" is a member of the Group "vo:scn-devs:rave-devs"
       And user "test-boy" is a member of the Group "nl:surfnet:management:testsp"
       But user "test-jasha" is not a member of the Group "nl:surfnet:management:testsp"
       But user "test-ivo" is not a member of any Group
-      But user "test_idps" is not a member of any Group
 
   Scenario: Ivo fails to log in at the Test Sp with explicit VO "scn-devs"
     When I go to the Test SP with the explicit VO "scn-devs"
