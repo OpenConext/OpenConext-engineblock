@@ -4,9 +4,9 @@ class EngineBlock_Corto_Filter_Input
 {
     const SAML2_STATUS_CODE_SUCCESS         = 'urn:oasis:names:tc:SAML:2.0:status:Success';
     const SAML2_NAMEID_FORMAT_PERSISTENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
-    const SURF_PERSON_AFFILIATION_OID       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
-    const IS_MEMBER_OF_OID                  = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
-    const SURF_MEMBER_URN                   = 'urn:collab:org:surf.nl';
+    const URN_SURF_PERSON_AFFILIATION       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
+    const URN_IS_MEMBER_OF                  = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_COLLAB_ORG_SURF               = 'urn:collab:org:surf.nl';
     const URN_MACE_TERENA_SCHACHOMEORG      = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
 
     private $_adapter;
@@ -274,18 +274,18 @@ class EngineBlock_Corto_Filter_Input
         }
 
         if ($idpEntityMetadata['GuestQualifier'] === 'None') {
-                if (!isset($responseAttributes[static::IS_MEMBER_OF_OID])) {
-                    $responseAttributes[static::IS_MEMBER_OF_OID] = array();
+                if (!isset($responseAttributes[static::URN_IS_MEMBER_OF])) {
+                    $responseAttributes[static::URN_IS_MEMBER_OF] = array();
                 }
-                $responseAttributes[static::IS_MEMBER_OF_OID][] = self::SURF_MEMBER_URN;
+                $responseAttributes[static::URN_IS_MEMBER_OF][] = self::URN_COLLAB_ORG_SURF;
         }
         else if ($idpEntityMetadata['GuestQualifier'] === 'Some') {
-            if (isset($responseAttributes[static::SURF_PERSON_AFFILIATION_OID][0])) {
-                if ($responseAttributes[static::SURF_PERSON_AFFILIATION_OID][0] === 'member') {
-                    if (!isset($responseAttributes[static::IS_MEMBER_OF_OID])) {
-                        $responseAttributes[static::IS_MEMBER_OF_OID] = array();
+            if (isset($responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0])) {
+                if ($responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0] === 'member') {
+                    if (!isset($responseAttributes[static::URN_IS_MEMBER_OF])) {
+                        $responseAttributes[static::URN_IS_MEMBER_OF] = array();
                     }
-                    $responseAttributes[static::IS_MEMBER_OF_OID][] = self::SURF_MEMBER_URN;
+                    $responseAttributes[static::URN_IS_MEMBER_OF][] = self::URN_COLLAB_ORG_SURF;
                 }
                 else {
                     ebLog()->notice(
