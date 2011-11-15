@@ -33,6 +33,8 @@
 class EngineBlock_UserDirectory
 {
     const URN_COLLAB_PERSON_NAMESPACE               = 'urn:collab:person';
+    const URN_IS_MEMBER_OF                          = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_COLLAB_ORG_SURF                       = 'urn:collab:org:surf.nl';
     
     const LDAP_CLASS_COLLAB_PERSON                  = 'collabPerson';
 
@@ -349,7 +351,7 @@ class EngineBlock_UserDirectory
      */
     protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
     {
-        return ($saml2attributes['urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1'][0]!=='member');
+        return in_array(self::URN_COLLAB_ORG_SURF, $saml2attributes[self::URN_IS_MEMBER_OF]);
     }
 
     protected function _getDnForLdapAttributes($attributes)
