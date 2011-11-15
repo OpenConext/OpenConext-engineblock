@@ -293,6 +293,9 @@ class EngineBlock_UserDirectory
             $now = date(DATE_RFC822);
             $newAttributes = $user + $newAttributes;
             $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
+            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
+                $newAttributes, $saml2attributes, $idpEntityMetadata
+            )? 'TRUE' : 'FALSE');
 
             $dn = $this->_getDnForLdapAttributes($newAttributes);
             $this->_getLdapClient()->update($dn, $newAttributes);
@@ -351,7 +354,7 @@ class EngineBlock_UserDirectory
      */
     protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
     {
-        return in_array(self::URN_COLLAB_ORG_SURF, $saml2attributes[self::URN_IS_MEMBER_OF]);
+        return !in_array(self::URN_COLLAB_ORG_SURF, $saml2attributes[self::URN_IS_MEMBER_OF]);
     }
 
     protected function _getDnForLdapAttributes($attributes)
