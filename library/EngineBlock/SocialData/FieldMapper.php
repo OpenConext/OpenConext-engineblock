@@ -226,7 +226,7 @@ class EngineBlock_SocialData_FieldMapper
 
     public function convertLdapCollabPersonIsGuest($result, $collabPersonIsGuest)
     {
-        if ($collabPersonIsGuest[0] === "FALSE") {
+        if ($collabPersonIsGuest === "FALSE") {
             $result['tags'][] = 'member';
         }
         else {
