@@ -150,7 +150,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 }
             }
             
-            if (isset($serviceRegistryEntity['coin']['no_consent_required'])) {
+            if (isset($serviceRegistryEntity['coin']['no_consent_required']) && $serviceRegistryEntity['coin']['no_consent_required']) {
                 $cortoEntity['NoConsentRequired'] = TRUE;
             }
         }
