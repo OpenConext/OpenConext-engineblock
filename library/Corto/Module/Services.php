@@ -568,7 +568,9 @@ class Corto_Module_Services extends Corto_Module_Abstract
             );
         }
         $entityDescriptor['md:IDPSSODescriptor']['md:NameIDFormat'] = array(
-            Corto_XmlToArray::VALUE_PFX => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+            array(Corto_XmlToArray::VALUE_PFX => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent'),
+            array(Corto_XmlToArray::VALUE_PFX => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'),
+            array(Corto_XmlToArray::VALUE_PFX => 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified'),
         );
         $entityDescriptor['md:IDPSSODescriptor']['md:SingleSignOnService'] = array(
             Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding'  => self::DEFAULT_REQUEST_BINDING,

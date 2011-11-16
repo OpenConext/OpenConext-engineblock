@@ -143,6 +143,7 @@ class Corto_XmlToArray
         'md:EntityDescriptor',
         'md:EncryptionMethod',
         'md:KeyDescriptor',
+        'md:NameIDFormat',
         'md:ServiceDescription',
         'md:ServiceName'
     );
