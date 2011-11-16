@@ -941,12 +941,30 @@ class Corto_ProxyServer
             ),
         );
 
-        $canonicalXml = DOMDocument::loadXML(Corto_XmlToArray::array2xml($element))->firstChild->C14N(true, false);
+        // Convert the XMl object to actual XML and get a reference to what we're about to sign
+        $canonicalXmlDom = new DOMDocument();
+        $canonicalXmlDom->loadXML(Corto_XmlToArray::array2xml($element));
 
+        // Note that the current element may not be the first or last, because we might include comments, so look for
+        // the actual XML element
+        $xpath = new DOMXPath($canonicalXmlDom);
+        $nodes = $xpath->query('/*[@ID="' . $element['_ID'] . '"]');
+        if ($nodes->length < 1) {
+            throw new Corto_ProxyServer_Exception("Unable to sign message can't find element with id to sign?");
+        }
+        $canonicalXmlDom = $nodes->item(0);
+        // Now do 'exclusive no-comments' XML cannonicalization
+        $canonicalXml = $canonicalXmlDom->C14N(true, false);
+
+        // Hash it, encode it in Base64 and include that as the 'Reference'
         $signature['ds:SignedInfo']['ds:Reference'][0]['ds:DigestValue']['__v'] = base64_encode(sha1($canonicalXml, TRUE));
         $signature['ds:SignedInfo']['ds:Reference'][0]['_URI'] = "#" . $element['_ID'];
 
-        $canonicalXml2 = DOMDocument::loadXML(Corto_XmlToArray::array2xml($signature['ds:SignedInfo']))->firstChild->C14N(true, false);
+        // Now we start the actual signing, instead of signing the entire (possibly large) document,
+        // we only sign the 'SignedInfo' which includes the 'Reference' hash
+        $canonicalXml2Dom = new DOMDocument();
+        $canonicalXml2Dom->loadXML(Corto_XmlToArray::array2xml($signature['ds:SignedInfo']));
+        $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
         if (!isset($certificates['private'])) {
             throw new Corto_ProxyServer_Exception('Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!');
