@@ -354,7 +354,7 @@ class EngineBlock_UserDirectory
      */
     protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
     {
-        return !in_array(self::URN_COLLAB_ORG_SURF, $saml2attributes[self::URN_IS_MEMBER_OF]);
+        return !isset($saml2attributes[self::URN_IS_MEMBER_OF]) || !in_array(self::URN_COLLAB_ORG_SURF, $saml2attributes[self::URN_IS_MEMBER_OF]);
     }
 
     protected function _getDnForLdapAttributes($attributes)
