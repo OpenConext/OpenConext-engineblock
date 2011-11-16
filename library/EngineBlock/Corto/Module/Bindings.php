@@ -41,9 +41,7 @@ class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
             if ($voContext != NULL) {
                 $message['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX] = $voContext;
             }
-
         }
-
         return $message;
     }
 
