@@ -87,6 +87,7 @@ class EngineBlock_Corto_Filter_Output
         $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
 
         $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
+        exit;
 
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
