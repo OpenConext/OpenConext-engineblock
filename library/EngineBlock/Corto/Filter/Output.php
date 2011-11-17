@@ -2,8 +2,10 @@
 
 class EngineBlock_Corto_Filter_Output
 {
-    const VO_NAME_ATTRIBUTE = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
+    const VO_NAME_ATTRIBUTE        = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
     const URN_OID_COLLAB_PERSON_ID = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
+    const URN_IS_MEMBER_OF         = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_VO_PREFIX            = 'urn:collab:org:';
 
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
@@ -84,6 +86,8 @@ class EngineBlock_Corto_Filter_Output
         $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
         $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
 
+        $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
+
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
             $collabPersonId,
@@ -102,6 +106,40 @@ class EngineBlock_Corto_Filter_Output
             $hostedEntities[$currentEntity['EntityId']]['certificates']['public'] = $spEntityMetadata['AlternatePublicKey'];
             $this->_adapter->getProxyServer()->setHostedEntities($hostedEntities);
             $this->_adapter->getProxyServer()->setCurrentEntity($currentEntity['EntityCode']);
+        }
+    }
+
+    /**
+     * Adds group the current user is a member of
+     *
+     * @param array $responseAttributes Response attributes by reference
+     * @param array $idpEntityMetadata  IDP entity metadata
+     * @return void
+     */
+    protected function _addIsMemberOf(array &$responseAttributes, array $idpEntityMetadata)
+    {
+        if (!isset($responseAttributes[self::URN_IS_MEMBER_OF])) {
+            $responseAttributes[self::URN_IS_MEMBER_OF] = array();
+        }
+
+        // Remove any IDP set urn:collab:org:... only SURFconext is allowed to set these.
+        // @todo Throw an exception maybe?
+        $groups = &$responseAttributes[self::URN_IS_MEMBER_OF];
+        for ($i = 0; $i < count($groups); $i++) {
+            if (strpos($groups[$i], self::URN_VO_PREFIX) === 0) {
+                unset($groups[$i]);
+            }
+        }
+
+        // Load all VO's and check membership for current user
+        $voCollection = new EngineBlock_VirtualOrganization_Collection();
+        $voValidator = new EngineBlock_VirtualOrganization_Validator();
+        $collabPersonId = reset($responseAttributes[self::URN_OID_COLLAB_PERSON_ID]);
+        foreach($voCollection->load() as $vo) {
+            $isMember = $voValidator->isMember($vo->getId(), $collabPersonId, $idpEntityMetadata["EntityId"]);
+            if (!$isMember) {
+                $groups[] = self::URN_VO_PREFIX . $vo->getId();
+            }
         }
     }
 

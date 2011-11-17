@@ -37,12 +37,17 @@ class EngineBlock_VirtualOrganization
     }
 
     public function setId($id)
+        {
+            $this->_id  = $id;
+            return $id;
+        }
+
+    public function getId()
     {
-        $this->_id  = $id;
-        return $id;
+        return $this->_id;
     }
 
-    public function getType()
+            public function getType()
     {
         $this->_load();
         
