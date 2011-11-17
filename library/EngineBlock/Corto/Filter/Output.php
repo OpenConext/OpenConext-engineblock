@@ -87,7 +87,6 @@ class EngineBlock_Corto_Filter_Output
         $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
 
         $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
-        exit;
 
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
@@ -138,7 +137,7 @@ class EngineBlock_Corto_Filter_Output
         $collabPersonId = reset($responseAttributes[self::URN_OID_COLLAB_PERSON_ID]);
         foreach($voCollection->load() as $vo) {
             $isMember = $voValidator->isMember($vo->getId(), $collabPersonId, $idpEntityMetadata["EntityId"]);
-            if (!$isMember) {
+            if ($isMember) {
                 $groups[] = self::URN_VO_PREFIX . $vo->getId();
             }
         }
