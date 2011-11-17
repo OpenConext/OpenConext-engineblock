@@ -59,7 +59,7 @@ class EngineBlock_LicenseEngine_ValidationManager
         }
 
         $client = new Zend_Http_Client($this->_url);
-        $client->setConfig(array('timeout' => 5));
+        $client->setConfig(array('timeout' => 15));
         try {
             $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
 
@@ -67,23 +67,21 @@ class EngineBlock_LicenseEngine_ValidationManager
                     ->setParameterGet('serviceProviderEntityId', urlencode($spMetadata['EntityId']))
                     ->setParameterGet('identityProviderEntityId', urlencode($idpMetadata['EntityId']))
                     ->request('GET');
-
             $body = $client->getLastResponse()->getBody();
             $response = json_decode($body, true);
+            $status = $response['status'];
         } catch (Exception $exception) {
             ebLog()->error("Could not connect to License Manager" . $exception);
             return EngineBlock_LicenseEngine_ValidationManager::LICENSE_UNKNOWN;
         }
-
-
-        if ($response['returnUrl']) {
+        if ($status['returnUrl']) {
             $currentResponse = EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse();
-            $currentResponse->setRedirectUrl($response['returnUrl']);
+            $currentResponse->setRedirectUrl($status['returnUrl']);
             $currentResponse->send();
             exit;
 
-        } else if ($response['licenseStatus']) {
-            return $response['licenseStatus'];
+        } else if ($status['licenseStatus']) {
+            return $status['licenseStatus'];
         }
         else {
             return EngineBlock_LicenseEngine_ValidationManager::LICENSE_UNKNOWN;
