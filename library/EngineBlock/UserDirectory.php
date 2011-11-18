@@ -205,14 +205,12 @@ class EngineBlock_UserDirectory
      */
     protected function _buildUserDn($uid)
     {
-        $uidParts = explode(':', $uid);
-
-        if (count($uidParts) >=4) {
-            // Only use the third and fourth part, other parts contain person namespace
-            return 'uid='. $uidParts[4] .',o='. $uidParts[3] .','. $this->_ldapConfig->baseDn;
+        $users = $this->findUserByCollabPersonId($uid);
+        if (count($users) !== 1) {
+            throw new EngineBlock_Exception("Multiple or no users found for uid $uid?");
         }
-
-        return null;
+        $user = $users[0];
+        return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
     }
 
     protected function _enrichLdapAttributes($ldapAttributes)
