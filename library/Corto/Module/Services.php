@@ -734,7 +734,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
             // SchachomeOrganization
             array(
-                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:terena.org:schac:homeOrganization'
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganization'
             ),
             array(
                 Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => 'urn:oid:1.3.6.1.4.1.25178.1.2.9'
