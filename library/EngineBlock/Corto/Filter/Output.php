@@ -122,15 +122,6 @@ class EngineBlock_Corto_Filter_Output
             $responseAttributes[self::URN_IS_MEMBER_OF] = array();
         }
 
-        // Remove any IDP set urn:collab:org:... only SURFconext is allowed to set these.
-        // @todo Throw an exception maybe?
-        $groups = &$responseAttributes[self::URN_IS_MEMBER_OF];
-        for ($i = 0; $i < count($groups); $i++) {
-            if (strpos($groups[$i], self::URN_VO_PREFIX) === 0) {
-                unset($groups[$i]);
-            }
-        }
-
         // Load all VO's and check membership for current user
         $voCollection = new EngineBlock_VirtualOrganization_Collection();
         $voValidator = new EngineBlock_VirtualOrganization_Validator();

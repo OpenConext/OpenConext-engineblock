@@ -6,6 +6,7 @@ class EngineBlock_Corto_Filter_Input
     const SAML2_NAMEID_FORMAT_PERSISTENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
     const URN_SURF_PERSON_AFFILIATION       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
     const URN_IS_MEMBER_OF                  = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_VO_PREFIX                     = 'urn:collab:org:';
     const URN_COLLAB_ORG_SURF               = 'urn:collab:org:surf.nl';
     const URN_MACE_TERENA_SCHACHOMEORG      = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
 
@@ -51,6 +52,8 @@ class EngineBlock_Corto_Filter_Input
 
         // validate if the IDP sending this response is allowed to connect to the SP that made the request.
         $this->validateSpIdpConnection($spEntityMetadata["EntityId"], $idpEntityMetadata["EntityId"]);
+
+        $responseAttributes = $this->_stripDisallowedGroups($responseAttributes);
 
         // map oids to URNs
         $responseAttributes = $this->_mapOidsToUrns($responseAttributes, $idpEntityMetadata);
@@ -315,5 +318,29 @@ class EngineBlock_Corto_Filter_Input
     protected function _getProvisioning()
     {
         return new EngineBlock_Provisioning();
+    }
+
+    /**
+     * Removes all groups that an entity is now allowed to set
+     *
+     * @param   array $responseAttributes
+     * @return  array $responseAttributes
+     */
+    protected function _stripDisallowedGroups(array $responseAttributes) {
+        if(!array_key_exists(self::URN_IS_MEMBER_OF, $responseAttributes)) {
+            return $responseAttributes;
+        }
+
+        // Remove any IDP set urn:collab:org:... only SURFconext is allowed to set these.
+        $groups = &$responseAttributes[self::URN_IS_MEMBER_OF];
+
+        for ($i = 0; $i < count($groups); $i++) {
+            $hasVoPrefix = strpos($groups[$i], self::URN_VO_PREFIX) === 0;
+            if ($hasVoPrefix) {
+                unset($groups[$i]);
+            }
+        }
+
+        return $responseAttributes;
     }
 }
