@@ -86,7 +86,9 @@ class EngineBlock_Corto_Filter_Output
         $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
         $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
 
-        $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
+        if($spEntityMetadata['ProvideIsMemberOf']) {
+            $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
+        }
 
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
