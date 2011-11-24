@@ -83,6 +83,7 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 ),
                 'WantsAssertionsSigned' => true,
                 'MustProvisionExternally' => false,
+                'ProvideIsMemberOf' => false,
                 "certificates" => array(
                     'public' => "-----BEGIN CERTIFICATE-----
 MIICgTCCAeoCCQCbOlrWDdX7FTANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMC
