@@ -35,8 +35,8 @@ class EngineBlock_Tracker
         $db = $this->_getDbConnection();
         
         $stmt = $db->prepare("
-            INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent)
-            VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent)"
+            INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname)
+            VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname)"
         );
 
         $spEntityName  = (isset($spEntityMetadata['Name']['en'])?$spEntityMetadata['Name']['en']:$spEntityMetadata['EntityId']);
@@ -47,9 +47,7 @@ class EngineBlock_Tracker
         $stmt->bindParam('idpentityid'  , $idpEntityMetadata['EntityId']);
         $stmt->bindParam('idpentityname', $idpEntityName);
         $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
-        if (!is_null($voContext)) {
-            $stmt->bindParam('voname'   , $voContext);
-        }
+        $stmt->bindParam('voname'       , $voContext);
         $stmt->execute();
     }
     
