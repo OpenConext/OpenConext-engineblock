@@ -27,7 +27,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 {
     const INTRODUCTION_EMAIL = 'introduction_email';
 
-    protected function _cacheResponse($receivedRequest, $receivedResponse, $type)
+    protected function _cacheResponse(array $receivedRequest, array $receivedResponse, $type)
     {
         $cachedResponse = &parent::_cacheResponse($receivedRequest, $receivedResponse, $type);
         $cachedResponse['vo'] = $this->_server->getVirtualOrganisationContext();
