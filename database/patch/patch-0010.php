@@ -27,25 +27,29 @@ $ldapClient->bind();
 
 $writer->info("Retrieving all collabPerson entries from LDAP");
 
-$filter = '(&(objectclass=collabPerson))';
+//$filter = '(&(objectclass=collabPerson))';
+$filter = '(&(objectclass=collabPerson)(!(collabPersonUUID=*)))';
+
 $users = $ldapClient->search($filter);
-
-$writer->info("Retrieved " . count($users) . " users from LDAP");
-
-foreach ($users as $user) {
-    foreach ($user as $userKey => $userValue) {
-        if (is_array($userValue) && count($userValue) === 1) {
-            $user[$userKey] = $userValue[0];
+while (count($users) > 0) {
+    $writer->info("Retrieved " . count($users) . " users from LDAP");
+    foreach ($users as $user) {
+        foreach ($user as $userKey => $userValue) {
+            if (is_array($userValue) && count($userValue) === 1) {
+                $user[$userKey] = $userValue[0];
+            }
         }
+
+        $user['collabpersonuuid'] = (string)Surfnet_Zend_Uuid::generate();
+
+        $now = date(DATE_RFC822);
+        $user['collabpersonlastupdated'] = $now;
+
+        $dn = 'uid=' . $user['uid'] . ',o=' . $user['o'] . ',' . $ldapClient->getBaseDn();
+        $ldapClient->update($dn, $user);
+
+        $writer->info("Set UUID '{$user['collabpersonuuid']}' for DN: '$dn'");
     }
-
-    $user['collabpersonuuid'] = (string)Surfnet_Zend_Uuid::generate();
-
-    $now = date(DATE_RFC822);
-    $user['collabpersonlastupdated'] = $now;
-
-    $dn = 'uid=' . $user['uid'] . ',o=' . $user['o'] . ',' . $ldapClient->getBaseDn();
-    $ldapClient->update($dn, $user);
-
-    $writer->info("Set UUID '{$user['collabpersonuuid']}' for DN: '$dn'");
+    $users = $ldapClient->search($filter);
 }
+
