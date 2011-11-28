@@ -29,7 +29,7 @@ class EngineBlock_Tracker
     {
     }
     
-    public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId)
+    public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext)
     {
         $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
         $db = $this->_getDbConnection();
@@ -47,7 +47,9 @@ class EngineBlock_Tracker
         $stmt->bindParam('idpentityid'  , $idpEntityMetadata['EntityId']);
         $stmt->bindParam('idpentityname', $idpEntityName);
         $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
-        
+        if (!is_null($voContext)) {
+            $stmt->bindParam('voname'   , $voContext);
+        }
         $stmt->execute();
     }
     

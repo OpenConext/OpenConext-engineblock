@@ -55,16 +55,16 @@ class EngineBlock_Corto_Filter_Output
         $collabPersonId = $_SESSION['subjectId'];
         $responseAttributes[self::URN_OID_COLLAB_PERSON_ID] = array($collabPersonId);
 
-        $this->_handleVirtualOrganizationResponse($request, $collabPersonId, $idpEntityMetadata["EntityId"]);
+        $voContext = $this->_handleVirtualOrganizationResponse($request, $collabPersonId, $idpEntityMetadata["EntityId"]);
 
-        if ($this->_adapter->getVirtualOrganisationContext()) {
+        if (!is_null($voContext)) {
             $responseAttributes = $this->_addVoNameAttribute(
                 $responseAttributes,
                 $this->_adapter->getVirtualOrganisationContext()
             );
         }
 
-        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $collabPersonId);
+        $this->_trackLogin($spEntityMetadata, $idpEntityMetadata, $collabPersonId, $voContext);
 
         /*
          * Here we call the external ValidationManager to check what the license information is. An extra SAML response
@@ -153,6 +153,8 @@ class EngineBlock_Corto_Filter_Output
                 throw new EngineBlock_Corto_Exception_UserNotMember("User not a member of VO $vo");
             }
         }
+
+        return $vo;
     }
 
     protected function _addVoNameAttribute($responseAttributes, $voContext)
@@ -162,10 +164,10 @@ class EngineBlock_Corto_Filter_Output
         return $responseAttributes;
     }
 
-    protected function _trackLogin($spEntityId, $idpEntityId, $subjectId)
+    protected function _trackLogin($spEntityId, $idpEntityId, $subjectId, $voContext)
     {
         $tracker = new EngineBlock_Tracker();
-        $tracker->trackLogin($spEntityId, $idpEntityId, $subjectId);
+        $tracker->trackLogin($spEntityId, $idpEntityId, $subjectId, $voContext);
     }
 
     /**
