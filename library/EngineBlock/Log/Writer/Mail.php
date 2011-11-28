@@ -55,7 +55,7 @@ class EngineBlock_Log_Writer_Mail extends Zend_Log_Writer_Mail
         return $writer;
     }
 
-    protected function _getMailClient($options)
+    protected static function _getMailClient($options)
     {
         $mail = new Zend_Mail('UTF-8');
 
