@@ -53,7 +53,7 @@ $layout->footerText = $this->t('footer');
     </div>
 </div>
 
-<?php if ($exception) { ?>
+<?php if (isset($exception)) { ?>
 <pre>
     <?php var_dump($exception); ?>
 </pre>
