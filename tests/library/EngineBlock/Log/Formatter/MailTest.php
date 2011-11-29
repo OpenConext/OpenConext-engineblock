@@ -46,7 +46,8 @@ class EngineBlock_Log_Formatter_MailTest extends PHPUnit_Framework_TestCase
         $formatter = new EngineBlock_Log_Formatter_Mail(array(
             'singlePart'
         ));
-        $output = $formatter->format($this->_testEvent);
+        $view = $formatter->format($this->_testEvent);
+        $output = $view->message;
         $this->assertNotContains('SINGLEVALUESECRET', $output, 'Filtering for config key "singlePart"');
     }
 
@@ -56,7 +57,8 @@ class EngineBlock_Log_Formatter_MailTest extends PHPUnit_Framework_TestCase
         $formatter = new EngineBlock_Log_Formatter_Mail(array(
             'protect.me.from.badguys'
         ));
-        $output = $formatter->format($this->_testEvent);
+        $view = $formatter->format($this->_testEvent);
+        $output = $view->message;
         $this->assertNotContains('MULTIVALUESECRET', $output, 'Filtering for config key "protect.me.from.badguys"');
     }
 
@@ -66,7 +68,8 @@ class EngineBlock_Log_Formatter_MailTest extends PHPUnit_Framework_TestCase
             'non.existing.key',
             'nonExistingKey',
         ));
-        $output = $formatter->format($this->_testEvent);
+        $view = $formatter->format($this->_testEvent);
+        $output = $view->message;
         $this->assertContains($this->_testEvent['message'], $output, "Testing that non-existing keys do nothing");
     }
 
@@ -75,7 +78,8 @@ class EngineBlock_Log_Formatter_MailTest extends PHPUnit_Framework_TestCase
         $formatter = new EngineBlock_Log_Formatter_Mail(array(
             'array.value.secret',
         ));
-        $output = $formatter->format($this->_testEvent);
+        $view = $formatter->format($this->_testEvent);
+        $output = $view->message;
         $this->assertNotContains('ARRAYVALUESECRET2', $output, "Testing filtering out of keys like: key.secrets[]");
     }
 
@@ -84,7 +88,8 @@ class EngineBlock_Log_Formatter_MailTest extends PHPUnit_Framework_TestCase
         $formatter = new EngineBlock_Log_Formatter_Mail(
             array('array.value.secretEmpty')
         );
-        $output = $formatter->format($this->_testEvent);
+        $view = $formatter->format($this->_testEvent);
+        $output = $view->message;
         $this->assertContains($this->_testEvent['message'], $output, "Testing that a key with an empty value does nothing");
     }
 
