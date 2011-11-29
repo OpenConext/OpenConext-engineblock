@@ -131,7 +131,7 @@ XML;
         }
         catch (Exception $e) {
             if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
-                throw new Grouper_Client_Exception_SubjectNotFound();
+                throw new Grouper_Client_Exception_SubjectNotFound($e->getMessage());
             }
             throw $e;
         }
@@ -180,7 +180,7 @@ XML;
         }
         catch (Exception $e) {
             if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
-                throw new Grouper_Client_Exception_SubjectNotFound();
+                throw new Grouper_Client_Exception_SubjectNotFound($e->getMessage());
             }
             throw $e;
         }
