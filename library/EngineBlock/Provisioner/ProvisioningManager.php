@@ -66,10 +66,22 @@ class EngineBlock_Provisioner_ProvisioningManager
         $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
             $userId, $idpMetadata['EntityId'], $spMetadata['EntityId'], null
         );
-        ebLog()->debug("PROVISIONING: Sent HTTP request to provision user using " . __CLASS__, $additionalInfo);
-        ebLog()->debug("PROVISIONING: URI: " . $client->getUri(true), $additionalInfo);
-        ebLog()->debug("PROVISIONING: REQUEST: " . $client->getLastRequest(), $additionalInfo);
-        ebLog()->debug("PROVISIONING: RESPONSE: " . $client->getLastResponse(), $additionalInfo);
+        EngineBlock_ApplicationSingleton::getLog()->debug(
+            "PROVISIONING: Sent HTTP request to provision user using " . __CLASS__,
+            $additionalInfo
+        );
+        EngineBlock_ApplicationSingleton::getLog()->debug(
+            "PROVISIONING: URI: " . $client->getUri(true),
+            $additionalInfo
+        );
+        EngineBlock_ApplicationSingleton::getLog()->debug(
+            "PROVISIONING: REQUEST: " . $client->getLastRequest(),
+            $additionalInfo
+        );
+        EngineBlock_ApplicationSingleton::getLog()->debug(
+            "PROVISIONING: RESPONSE: " . $client->getLastResponse(),
+            $additionalInfo
+        );
     }
 
     /**

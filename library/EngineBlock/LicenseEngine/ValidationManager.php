@@ -74,7 +74,7 @@ class EngineBlock_LicenseEngine_ValidationManager
             $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
                 $userId, $idpMetadata['EntityId'], $spMetadata['EntityId'], $exception->getTraceAsString()
             );
-            ebLog()->error("Could not connect to License Manager" . $exception->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->error("Could not connect to License Manager" . $exception->getMessage(), $additionalInfo);
             return EngineBlock_LicenseEngine_ValidationManager::LICENSE_UNKNOWN;
         }
         if ($status['returnUrl']) {

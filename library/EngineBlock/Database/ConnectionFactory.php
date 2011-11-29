@@ -53,7 +53,7 @@ class EngineBlock_Database_ConnectionFactory
                 $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
                     null, null, null, $e->getTraceAsString()
                 );
-                ebLog()->err(
+                EngineBlock_ApplicationSingleton::getLog()->err(
                     "Unable to create a Read connection, trying to create a write connection, exception: " . print_r($e, true),
                     $additionalInfo
                 );

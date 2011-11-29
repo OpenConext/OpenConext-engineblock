@@ -41,29 +41,35 @@ class EngineBlock_Corto_Log_Adapter implements Corto_Log_Interface
 
     /**
      * The dummy logger ignores any call to debug()
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo Some extra information
+     * that can be supplied with the log message
      * @param String $message
      */
-    public function debug($message)
+    public function debug($message, EngineBlock_Log_Message_AdditionalInfo $additionalInfo = null)
     {
-        ebLog()->debug($this->_getPrefix() . $message);
+        EngineBlock_ApplicationSingleton::getLog()->debug($this->_getPrefix() . $message, $additionalInfo);
     }
 
     /**
      * The dummy logger ignores any call to err()
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo Some extra information
+     * that can be supplied with the log message
      * @param String $message
      */
-    public function err($message)
+    public function err($message, EngineBlock_Log_Message_AdditionalInfo $additionalInfo = null)
     {
-        ebLog()->err($this->_getPrefix() . $message);
+        EngineBlock_ApplicationSingleton::getLog()->err($this->_getPrefix() . $message, $additionalInfo);
     }
 
     /**
      * The dummy logger ignores any call to warn()
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo Some extra information
+     * that can be supplied with the log message
      * @param String $message
      */
-    public function warn($message)
+    public function warn($message, EngineBlock_Log_Message_AdditionalInfo $additionalInfo = null)
     {
-        ebLog()->warn($this->_getPrefix() . $message);
+        EngineBlock_ApplicationSingleton::getLog()->warn($this->_getPrefix() . $message, $additionalInfo);
     }
 
     protected function _getPrefix()

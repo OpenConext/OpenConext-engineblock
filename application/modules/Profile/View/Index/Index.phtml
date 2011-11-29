@@ -146,7 +146,7 @@ foreach ($spList as $spId => $sp) {
                 null,
                 $e->getTraceAsString()
             );
-            ebLog()->err($e->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->err($e->getMessage(), $additionalInfo);
         }
         if (!empty($groups)):
     ?>

@@ -36,25 +36,25 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $proxyServer->consumeAssertion();
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLog()->warn('User not a member error');
+            $application->getLogInstance()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
         catch (Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->getLog()->warn('Unable to receive message error');
+            $application->getLogInstance()->warn('Unable to receive message error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
             $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
                 null, $e->getDestination(), $e->getEntityId(), $e->getTraceAsString()
             );
-            $application->getLog()->err($e->getMessage(), $additionalInfo);
+            $application->getLogInstance()->err($e->getMessage(), $additionalInfo);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
         catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
             $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
                 null, $e->getDestination(), $e->getEntityId(), $e->getTraceAsString()
             );
-            $application->getLog()->error($e->getMessage(), $additionalInfo);
+            $application->getLogInstance()->error($e->getMessage(), $additionalInfo);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
         }
     }
@@ -70,7 +70,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $proxyServer->processConsent();
         }
         catch (Corto_Module_Services_SessionLostException $e) {
-            $application->getLog()->warn('Session lost error');
+            $application->getLogInstance()->warn('Session lost error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
     }

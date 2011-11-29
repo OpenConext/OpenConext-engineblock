@@ -269,7 +269,7 @@ class EngineBlock_Corto_Filter_Input
     {
         // Determine guest status
         if (!isset($idpEntityMetadata['GuestQualifier'])) {
-            ebLog()->warn(
+            EngineBlock_ApplicationSingleton::getLog()->warn(
                 'No GuestQualifier for IdP: ' . var_export($idpEntityMetadata, true) .
                         'Setting it to "All" and continuing.'
             );
@@ -291,14 +291,14 @@ class EngineBlock_Corto_Filter_Input
                     $responseAttributes[static::URN_IS_MEMBER_OF][] = self::URN_COLLAB_ORG_SURF;
                 }
                 else {
-                    ebLog()->notice(
+                    EngineBlock_ApplicationSingleton::getLog()->notice(
                         "Idp guestQualifier is set to 'Some', surfPersonAffiliation attribute does not contain " .
                                 'the value "member", so not adding isMemberOf for surf.nl'
                     );
                 }
             }
             else {
-                ebLog()->warn(
+                EngineBlock_ApplicationSingleton::getLog()->warn(
                     "Idp guestQualifier is set to 'Some' however, ".
                     "the surfPersonAffiliation attribute was not provided, " .
                     "not adding the isMemberOf for surf.nl" .

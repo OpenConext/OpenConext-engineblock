@@ -118,6 +118,17 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
+     * Get THE Log instance.
+     *
+     * @static
+     * @return EngineBlock_Log
+     */
+    public static function getLog()
+    {
+        return self::getInstance()->getLogInstance();
+    }
+
+    /**
      * Try to auto-load a class.
      *
      * Detects all modules and autoloads any class that begin with 'ModuleName_' and autoloads all EngineBlock_ classes.
@@ -476,7 +487,7 @@ class EngineBlock_ApplicationSingleton
 
     public function reportError(Exception $exception)
     {
-        $log = ebLog();
+        $log = $this->getLogInstance();
         if (!$log) {
             return false;
         }
@@ -553,16 +564,8 @@ class EngineBlock_ApplicationSingleton
     /**
      * @return EngineBlock_Log
      */
-    public function getLog()
+    public function getLogInstance()
     {
         return $this->_log;
     }
-}
-
-/**
- * @return EngineBlock_Log
- */
-function ebLog()
-{
-    return EngineBlock_ApplicationSingleton::getInstance()->getLog();
 }

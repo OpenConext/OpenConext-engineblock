@@ -78,7 +78,7 @@ class EngineBlock_VirtualOrganization_Validator
             $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
                 $subjectId, null, null, $virtualOrganization
             );
-            ebLog()->warn($e->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->warn($e->getMessage(), $additionalInfo);
         }
         return false;
     }

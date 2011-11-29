@@ -101,7 +101,9 @@ class EngineBlock_Saml2Attributes_FieldMapper
             // Map it to an LDAP attribute
             if (isset($this->_s2lMap[$saml2Name])) {
                 if (count($values)>1) {
-                    ebLog()->notice("Ignoring everything but first value of $saml2Name: ". var_export($values, true));
+                    EngineBlock_ApplicationSingleton::getLog()->notice(
+                        "Ignoring everything but first value of $saml2Name: ". var_export($values, true)
+                    );
                 }
                 
                 $ldapAttributes[$this->_s2lMap[$saml2Name]] = $values[0];

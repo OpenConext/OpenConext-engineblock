@@ -119,7 +119,10 @@ class EngineBlock_AttributeManipulator_File
         if (substr($location, 0, 1) !== '/') {
             $realLocation = realpath(ENGINEBLOCK_FOLDER_ROOT . $location);
             if ($realLocation === FALSE) {
-                ebLog()->warn("Location '$location' does not exist, relative from the EngineBlock root: " . ENGINEBLOCK_FOLDER_ROOT);
+                EngineBlock_ApplicationSingleton::getLog()->warn(
+                    "Location '$location' does not exist, ".
+                    "relative from the EngineBlock root: " . ENGINEBLOCK_FOLDER_ROOT
+                );
                 return false;
             }
             $location = $realLocation;

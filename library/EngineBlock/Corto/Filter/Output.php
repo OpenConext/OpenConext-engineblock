@@ -256,7 +256,7 @@ class EngineBlock_Corto_Filter_Output
                 return $request['samlp:NameIDPolicy']['_Format'];
             }
             else {
-                ebLog()->warn(
+                EngineBlock_ApplicationSingleton::getLog()->warn(
                     "Whoa, SP '{$spEntityMetadata['EntityID']}' requested '{$requestedNameIdFormat}' " .
                     "however we don't support that format, opting to try '$defaultNameIdFormat' " .
                     "instead of sending an error. SP might not be happy with that..."

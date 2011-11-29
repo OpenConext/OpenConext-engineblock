@@ -300,10 +300,10 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
             null, null, null, $e->getTraceAsString()
         );
-        ebLog()->err(
+        EngineBlock_ApplicationSingleton::getLog()->err(
             "Unable to use provider $providerId, received Exception: " . $e->getMessage(),
             $additionalInfo
         );
-        ebLog()->debug($e->getTraceAsString());
+        EngineBlock_ApplicationSingleton::getLog()->debug($e->getTraceAsString());
     }
 }

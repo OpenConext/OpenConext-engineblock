@@ -49,7 +49,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             $proxyServer->processedAssertionConsumer();
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLog()->warn('User not a member error');
+            $application->getLogInstance()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
     }

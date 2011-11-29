@@ -362,7 +362,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             }
             else {
                 $nameNl = 'Geen naam gevonden';
-                ebLog()->warn('No NL displayName and name found for idp: ' . $idp, $additionalInfo);
+                EngineBlock_ApplicationSingleton::getLog()->warn('No NL displayName and name found for idp: ' . $idp, $additionalInfo);
             }
 
             if (isset($metadata['DisplayName']['en'])) {
@@ -373,7 +373,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             }
             else {
                 $nameEn = 'No name found';
-                ebLog()->warn('No EN displayName and name found for idp: ' . $idp, $additionalInfo);
+                EngineBlock_ApplicationSingleton::getLog()->warn('No EN displayName and name found for idp: ' . $idp, $additionalInfo);
             }
 
             $wayfIdp = array(
