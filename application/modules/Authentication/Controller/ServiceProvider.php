@@ -52,7 +52,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         }
         catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
             $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                null, $e->getDestination(), $e->getEntityId(), $e->getTraceAsString()
+                null, null, null, $e->getTraceAsString()
             );
             $application->getLogInstance()->error($e->getMessage(), $additionalInfo);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
