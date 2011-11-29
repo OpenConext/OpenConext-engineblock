@@ -83,11 +83,13 @@ if (isset($_GET['lang'])) {
         </script>
         <script id="idpListSuggestionTemplate" type="text/x-jquery-tmpl">
             <p>
-                <a alt="${Alt}" class="${NoAccessClass}" href="#">
-                    ${Suggestion}
+                <p>${Suggestion}</p>
+                <div class="suggestion-box">
+                  <a id="SuggestionLink" alt="${Alt}" class="${NoAccessClass}" href="#">
                     <img class="logo" src="${Logo}" />
-                    <span>${Name} ${NoAccess}</span>
-                </a>
+                    <span class="title">${Name} ${NoAccess}</span>
+                  </a>
+                </div>
             </p>
         </script>
         <script type="text/javascript" src="<?= EngineBlock_View::staticUrl(); ?>/javascript/jquery-1.5.1.min.js"></script>
