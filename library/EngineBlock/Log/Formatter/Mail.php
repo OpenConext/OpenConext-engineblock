@@ -47,14 +47,14 @@ class EngineBlock_Log_Formatter_Mail
             if (is_array($configValue)) {
                 foreach ($configValue as $configValueElement) {
                     $event['message'] = str_replace($configValueElement, self::REPLACE_WITH, $event['message']);
-                    if ($event['details']) {
+                    if (array_key_exists('details', $event)) {
                         $event['details'] = str_replace($configValueElement, self::REPLACE_WITH, $event['details']);
                     }
                 }
             }
             else {
                 $event['message'] = str_replace($configValue, self::REPLACE_WITH, $event['message']);
-                if ($event['details']) {
+                if (array_key_exists('details', $event)) {
                     $event['details'] = str_replace($configValue, self::REPLACE_WITH, $event['details']);
                 }
             }
