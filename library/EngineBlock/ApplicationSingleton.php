@@ -481,7 +481,10 @@ class EngineBlock_ApplicationSingleton
             return false;
         }
 
-        $log->err($exception->getMessage());
+        $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+            null, null, null, $exception->getTraceAsString()
+        );
+        $log->err($exception->getMessage(), $additionalInfo);
         $log->debug($exception->getTraceAsString());
     }
 

@@ -50,7 +50,13 @@ class EngineBlock_Database_ConnectionFactory
                 return $this->_createReadConnection($databaseSettings);
             }
             catch (Exception $e) {
-                ebLog()->warn("Unable to create a Read connection, trying to create a write connection, exception: " . print_r($e, true));
+                $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                    null, null, null, $e->getTraceAsString()
+                );
+                ebLog()->err(
+                    "Unable to create a Read connection, trying to create a write connection, exception: " . print_r($e, true),
+                    $additionalInfo
+                );
                 return $this->_createWriteConnection($databaseSettings);
             }
         }

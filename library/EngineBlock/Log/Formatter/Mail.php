@@ -23,24 +23,21 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Log_Formatter_Mail implements Zend_Log_Formatter_Interface
+class EngineBlock_Log_Formatter_Mail
 {
     const REPLACE_WITH = '**SECRET**';
 
-    protected $_simpleFormatter;
     protected $_filterValues = array();
     protected $_applicationConfiguration;
 
     public function __construct($filterValues)
     {
-        $this->_simpleFormatter = new Zend_Log_Formatter_Simple();
-        $this->_filterValues = $filterValues;
+        $this->_filterValues = isset($filterValues) ? $filterValues : array();
         $this->_applicationConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
     }
 
     public function format($event)
     {
-        $output = $this->_simpleFormatter->format($event);
         foreach ($this->_filterValues as $configName) {
             $configValue = $this->_getConfigValue($this->_applicationConfiguration, $configName);
             if (is_null($configValue)) {
@@ -49,14 +46,22 @@ class EngineBlock_Log_Formatter_Mail implements Zend_Log_Formatter_Interface
 
             if (is_array($configValue)) {
                 foreach ($configValue as $configValueElement) {
-                    $output = str_replace($configValueElement, self::REPLACE_WITH, $output);
+                    $event['message'] = str_replace($configValueElement, self::REPLACE_WITH, $event['message']);
+                    $event['details'] = str_replace($configValueElement, self::REPLACE_WITH, $event['details']);
                 }
             }
             else {
-                $output = str_replace($configValue, self::REPLACE_WITH, $output);
+                $event['message'] = str_replace($configValue, self::REPLACE_WITH, $event['message']);
+                $event['details'] = str_replace($configValue, self::REPLACE_WITH, $event['details']);
             }
         }
-        return $output;
+
+        $view = new Zend_View();
+        foreach ($event as $key => $val) {
+            $view->__set($key, $val);
+        }
+
+        return $view;
     }
 
     protected function _getConfigValue($config, $configName)

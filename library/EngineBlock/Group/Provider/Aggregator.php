@@ -106,8 +106,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 $providers[] = $provider;
             }
             catch (Exception $e) {
-                ebLog()->error("Unable to use group provider '{$providerConfig->id}', received Exception with message: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                self::_logErrorMessage($providerConfig->id, $e);
             }
         }
         $aggregator = new static($providers);
@@ -155,14 +154,15 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         $groups = array();
         foreach ($this->_providers as $provider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $provider
+             */
             try {
                 $providerGroups = $provider->getGroups();
                 $groups = array_merge($groups, $providerGroups);
             }
             catch (Exception $e) {
-                $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                self::_logErrorMessage($provider->getId(), $e);
             }
         }
         return $groups;
@@ -172,14 +172,15 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         $groups = array();
         foreach ($this->_providers as $provider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $provider
+             */
             try {
                 $providerGroups = $provider->getGroupsByStem($stem);
                 $groups = array_merge($groups, $providerGroups);
             }
             catch (Exception $e) {
-                $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                self::_logErrorMessage($provider->getId(), $e);
             }
         }
         return $groups;
@@ -189,14 +190,15 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         $members = array();
         foreach ($this->_providers as $provider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $provider
+             */
             try {
                 $providerMembers = $provider->getMembers($groupIdentifier);
                 $members = array_merge($members, $providerMembers);
             }
             catch (Exception $e) {
-                $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                self::logErrorMessage($provider->getId(), $e);
             }
         }
         return $members;
@@ -206,6 +208,9 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         // Loop through all providers
         foreach ($this->_providers as $provider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $provider
+             */
             try {
                 // And when we find a provider that knows the groupIdentifier and has the current user
                 // as a member of this group, we return true
@@ -214,9 +219,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 }
             }
             catch (Exception $e) {
-                $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                self::_logErrorMessage($provider->getId(), $e);
             }
         }
         // If none of the known providers knows the groupIdentifier or has the current user as a member
@@ -236,9 +239,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 }
             }
             catch (Exception $e) {
-                $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                self::_logErrorMessage($provider->getId(), $e);
             }
         }
         return false;
@@ -253,6 +254,9 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
     {
         // Loop through all providers
         foreach ($this->_providers as $provider) {
+            /**
+             * @var EngineBlock_Group_Provider_Interface $provider
+             */
             try {
                 // And when we find a provider that is able to retrieve the groupDetails
                 // we use this one
@@ -261,9 +265,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 }
             }
             catch (Exception $e) {
-                $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                self::_logErrorMessage($provider->getId(), $e);
             }
         }
         // If none of the known providers can handle this userId we return null
@@ -287,11 +289,21 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 }
             }
             catch (Exception $e) {
-                $providerId = $provider->getId();
-                ebLog()->err("Unable to use provider $providerId, received Exception: " . $e->getMessage());
-                ebLog()->debug($e->getTraceAsString());
+                $this->_logErrorMessage($provider, $e);
             }
         }
         return false;
+    }
+
+    protected static function _logErrorMessage($providerId, Exception $e)
+    {
+        $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+            null, null, null, $e->getTraceAsString()
+        );
+        ebLog()->err(
+            "Unable to use provider $providerId, received Exception: " . $e->getMessage(),
+            $additionalInfo
+        );
+        ebLog()->debug($e->getTraceAsString());
     }
 }

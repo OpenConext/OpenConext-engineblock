@@ -208,9 +208,13 @@ XML;
                 $membersWithPrivileges[] = $member;
             }
             catch (Exception $e) {
+                $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                    $member->id,null, null, $e->getTraceAsString()
+                );
                 ebLog()->warn(
                     "Something wrong with user: " . var_export($member, true) .
-                    'Received Exception: ' . var_export($e, true)
+                    'Received Exception: ' . var_export($e, true),
+                    $additionalInfo
                 );
             }
         }

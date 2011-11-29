@@ -44,11 +44,17 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $application->getLog()->warn($e->getMessage());
+            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                null, $e->getDestination(), $e->getEntityId(), $e->getTraceAsString()
+            );
+            $application->getLog()->err($e->getMessage(), $additionalInfo);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
         catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
-            $application->getLog()->error($e->getMessage());
+            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                null, $e->getDestination(), $e->getEntityId(), $e->getTraceAsString()
+            );
+            $application->getLog()->error($e->getMessage(), $additionalInfo);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
         }
     }

@@ -75,7 +75,10 @@ class EngineBlock_VirtualOrganization_Validator
                 }
             }
         } catch (EngineBlock_VirtualOrganization_VoIdentifierNotFoundException $e) {
-            ebLog()->warn($e->getMessage());
+            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                $subjectId, null, null, $virtualOrganization
+            );
+            ebLog()->warn($e->getMessage(), $additionalInfo);
         }
         return false;
     }

@@ -29,7 +29,9 @@ class EngineBlock_Log extends Zend_Log
      * Factory to construct the logger and one or more writers
      * based on the configuration array
      *
-     * @param  array|Zend_Config Array or instance of Zend_Config
+     * @param array $config
+     *
+     * @internal param array|\Zend_Config $Array or instance of Zend_Config
      * @return Zend_Log
      */
     static public function factory($config = array())
@@ -49,7 +51,7 @@ class EngineBlock_Log extends Zend_Log
         if (!is_array(current($config))) {
             $log->addWriter(current($config));
         } else {
-            foreach($config as $writer) {
+            foreach ($config as $writer) {
                 $log->addWriter($writer);
             }
         }
@@ -61,10 +63,12 @@ class EngineBlock_Log extends Zend_Log
      * Prio 0: Emergency: system is unusable
      *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function emerg($msg)
+    public function emerg($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::emerg($msg);
     }
 
@@ -72,10 +76,12 @@ class EngineBlock_Log extends Zend_Log
      * Prio 1: Alert: action must be taken immediately
      *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function alert($msg)
+    public function alert($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::alert($msg);
     }
 
@@ -83,80 +89,104 @@ class EngineBlock_Log extends Zend_Log
      * Prio 2: Critical: critical conditions
      *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function critical($msg)
+    public function critical($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::crit($msg);
     }
 
     /**
      * Prio 3: Error: error conditions
-     * 
+     *
      * Alias for err
      *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function error($msg)
+    public function error($msg, $additionalInfo = null)
     {
-        $this->err($msg);
+        $this->_setAdditionalEventItems($additionalInfo);
+        $this->err($msg, $additionalInfo);
     }
 
     /**
      * Prio 3: Error: error conditions
-     * 
+     *
      * Has an alias called 'error'
      *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function err($msg)
+    public function err($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::err($msg);
     }
-    
+
     /**
      * Prio 4: Warning: warning conditions
      *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function warn($msg)
+    public function warn($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::warn($msg);
     }
-    
+
     /**
      * Prio 5: Notice: normal but significant condition
-     * 
+     *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function notice($msg)
+    public function notice($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::notice($msg);
     }
-    
+
     /**
      * Prio 6: Informational: informational messages
-     * 
+     *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function info($msg)
+    public function info($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::info($msg);
     }
-    
+
     /**
      * Prio 7: Debug: debug messages
-     * 
+     *
      * @param string $msg
+     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
      * @return void
      */
-    public function debug($msg)
+    public function debug($msg, $additionalInfo = null)
     {
+        $this->_setAdditionalEventItems($additionalInfo);
         parent::debug($msg);
+    }
+
+    protected function _setAdditionalEventItems(EngineBlock_Log_Message_AdditionalInfo $additionalInfo = null)
+    {
+        if ($additionalInfo) {
+            $additionalEvents = $additionalInfo->toArray();
+            foreach ($additionalEvents as $key => $value) {
+                $this->setEventItem($key, $value);
+            }
+        }
     }
 }

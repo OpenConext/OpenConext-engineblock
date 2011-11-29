@@ -42,9 +42,15 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         try {
             $this->spOauthList = $this->_getSpOauthList($this->spList);
         }
+
         catch (Exception $e) {
-            eblog()->error($e->getMessage());
-            ebLog()->debug($e->getTraceAsString());
+            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                        $this->user->getUid(),
+                        null,
+                        null,
+                        $e->getTraceAsString());
+
+            eblog()->critical($e->getMessage(), $additionalInfo);
         }
     }
 

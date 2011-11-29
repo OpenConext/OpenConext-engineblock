@@ -140,7 +140,13 @@ foreach ($spList as $spId => $sp) {
             $invalidProviders[] = $groupProvider;
         }
         catch(Exception $e) {
-            ebLog()->err($e->getMessage());
+            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                $user->getUid(),
+                null,
+                null,
+                $e->getTraceAsString()
+            );
+            ebLog()->err($e->getMessage(), $additionalInfo);
         }
         if (!empty($groups)):
     ?>

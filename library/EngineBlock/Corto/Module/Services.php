@@ -350,6 +350,9 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         foreach ($idps as $idp) {
             $remoteEntities = $this->_server->getRemoteEntities();
             $metadata = ($remoteEntities[$idp]);
+            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                null, $idp, null, null
+            );
 
             if (isset($metadata['DisplayName']['nl'])) {
                 $nameNl = $metadata['DisplayName']['nl'];
@@ -359,7 +362,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             }
             else {
                 $nameNl = 'Geen naam gevonden';
-                ebLog()->warn('No NL displayName and name found for idp: ' . $idp);
+                ebLog()->warn('No NL displayName and name found for idp: ' . $idp, $additionalInfo);
             }
 
             if (isset($metadata['DisplayName']['en'])) {
@@ -370,7 +373,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             }
             else {
                 $nameEn = 'No name found';
-                ebLog()->warn('No EN displayName and name found for idp: ' . $idp);
+                ebLog()->warn('No EN displayName and name found for idp: ' . $idp, $additionalInfo);
             }
 
             $wayfIdp = array(

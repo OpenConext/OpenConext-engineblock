@@ -71,7 +71,10 @@ class EngineBlock_LicenseEngine_ValidationManager
             $response = json_decode($body, true);
             $status = $response['status'];
         } catch (Exception $exception) {
-            ebLog()->error("Could not connect to License Manager" . $exception);
+            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
+                $userId, $idpMetadata['EntityId'], $spMetadata['EntityId'], $exception->getTraceAsString()
+            );
+            ebLog()->error("Could not connect to License Manager" . $exception->getMessage(), $additionalInfo);
             return EngineBlock_LicenseEngine_ValidationManager::LICENSE_UNKNOWN;
         }
         if ($status['returnUrl']) {
