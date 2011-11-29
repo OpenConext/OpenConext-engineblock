@@ -496,7 +496,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         }
         
         if (!$verified) {
-            throw new Corto_Module_Bindings_VerificationException("Invalid signature for message");
+            throw new Corto_Module_Bindings_VerificationException("Invalid signature on message");
         }
 
         return ($verified === 1);
