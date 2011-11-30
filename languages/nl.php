@@ -242,7 +242,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     </p>',
     'error_group_oauth'            =>  'Error - Group autorisatie is mislukt..',
     'error_group_oauth_desc'       => '<p>
-        De extere groep provider <i>%s</i> retourneerde een fout.<br />
+        De extere groep provider <b>%s</b> retourneerde een fout.<br />
         Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br />
     </p>'

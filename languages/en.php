@@ -245,7 +245,7 @@ If you have any questions about your privacy and the policy applied, please visi
     </p>',
     'error_group_oauth'            =>  'Error - Group authorization failed..',
     'error_group_oauth_desc'       => '<p>
-        The external group provider <i>%s</i>reported an error. </p>
+        The external group provider <b>%s</b> reported an error. </p>
         <p>Please contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
        </p>'
 
