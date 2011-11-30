@@ -242,5 +242,12 @@ If you have any questions about your privacy and the policy applied, please visi
             <li>UID</li>
             <li>schacHomeOrganization</li>
         </ul>
+    </p>',
+    'error_group_oauth'            =>  'Error - Group authorization failed..',
+    'error_group_oauth_desc'       => '<p>
+        The external group provider reported an error. <br />
+        Please contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        <br />
     </p>'
+
 );

@@ -239,5 +239,12 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
             <li>UID</li>
             <li>schacHomeOrganization</li>
         </ul>
+    </p>',
+    'error_group_oauth'            =>  'Error - Group autorisatie is mislukt..',
+    'error_group_oauth_desc'       => '<p>
+        De extere groep provider retourneerde een fout.<br />
+        Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        <br />
     </p>'
+
 );
