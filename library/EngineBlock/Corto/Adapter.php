@@ -63,7 +63,7 @@ class EngineBlock_Corto_Adapter
     public function singleSignOn($idPProviderHash)
     {
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
+        //$this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
 
@@ -85,7 +85,7 @@ class EngineBlock_Corto_Adapter
     public function idPsMetadata()
     {
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
+        //$this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
         $this->_callCortoServiceUri('idPsMetaDataService');
     }
 
