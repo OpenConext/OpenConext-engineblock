@@ -83,32 +83,38 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
             $queryParameters,
             $requestToken
         );
-
+        $userId = $this->attributes['nameid'][0];
         $provider = EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged::createFromConfigs(
             $providerConfig,
-            $this->attributes['nameid'][0]
+            $userId
         );
         $provider->setAccessToken($token);
 
         if (!$provider->validatePreconditions()) {
 
-            EngineBlock_ApplicationSingleton::getLog()->err("Unable to test OpenSocial 3-legged Oauth provider because not all preconditions have been matched?");
-            $this->_redirectToUrl('/profile/group-oauth/error');
-             // $this->renderAction("error");
-//            throw new EngineBlock_Group_Provider_Exception(
-//                "Unable to test OpenSocial 3-legged Oauth provider because not all preconditions have been matched?"
-//            );
+            EngineBlock_ApplicationSingleton::getLog()->err(
+                "Unable to test OpenSocial 3-legged Oauth provider because not all preconditions have been matched?",
+                new EngineBlock_Log_Message_AdditionalInfo($userId, null, null, null)
+            );
+            $this->providerId = $providerId;
+            $this->renderAction("error"); //_redirectToUrl('/profile/group-oauth/error');
         } else {
+            // Now that we have an Access Token, we can discard the Request Token
+            $_SESSION['request_token'][$providerId] = null;
 
-        // Now that we have an Access Token, we can discard the Request Token
-        $_SESSION['request_token'][$providerId] = null;
-
-        $this->_redirectToUrl($_SESSION['return_url']);
+            $this->_redirectToUrl($_SESSION['return_url']);
         }
 
     }
 
-    public function errorAction() {}
+    /**
+     * Simply renders the Error.phtml
+     *
+     * @return void
+     */
+    public function errorAction()
+    {
+    }
 
     /**
      *
