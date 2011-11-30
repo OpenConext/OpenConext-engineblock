@@ -253,7 +253,9 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
         }
 
-        $cortoEntity['WorkflowState'] = $serviceRegistryEntity['workflowState'];
+        if (isset($serviceRegistryEntity['workflowState'])) {
+            $cortoEntity['WorkflowState'] = $serviceRegistryEntity['workflowState'];
+        }
 
         return $cortoEntity;
     }
