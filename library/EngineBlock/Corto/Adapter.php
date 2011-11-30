@@ -133,18 +133,15 @@ class EngineBlock_Corto_Adapter
 
     protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
-        $request = $this->_getRequestInstance();
-        $spEntityId = $request['saml:Issuer']['__v'];
-
         return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
-            $spEntityId
+            $this->_getIssuerSpEntityId()
         );
     }
 
     protected function _filterRemoteEntitiesBySpQueryParam(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
-        $claimedSpEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+        $claimedSpEntityId = $this->_getClaimedSpEntityId();
         if (!$claimedSpEntityId) {
             return $entities;
         }
@@ -164,15 +161,40 @@ class EngineBlock_Corto_Adapter
      */
     protected function _filterRemoteEntitiesByIssuerWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
-        $request = $this->_getRequestInstance();
-        $spEntityId = $request['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
-        $entityData = $proxyServer->getRemoteEntity($spEntityId);
-
-        $workflowState = $entityData['WorkflowState'];
+        $spEntityId = $this->_getIssuerSpEntityId();
         return $this->getServiceRegistryAdapter()->filterEntitiesByWorkflowState(
             $entities,
-            $workflowState
+            $this->_getEntityWorkFlowState($spEntityId)
         );
+    }
+
+    /**
+     * @return string $issuerSpEntityId
+     */
+    protected function _getIssuerSpEntityId() {
+        $request = $this->_getRequestInstance();
+        $issuerSpEntityId = $request['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
+        return $issuerSpEntityId;
+    }
+
+    /**
+     * @return $claimedSpEntityId
+     */
+    protected function _getClaimedSpEntityId() {
+        $claimedSpEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+        return $claimedSpEntityId;
+    }
+
+    /**
+     * Gets workflow state for given entity id
+     *
+     * @param string $entityId
+     * @return string $workflowState
+     */
+    protected function _getEntityWorkFlowState($entityId) {
+        $entityData = $this->_proxyServer->getRemoteEntity($entityId);
+        $workflowState = $entityData['WorkflowState'];
+        return $workflowState;
     }
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
