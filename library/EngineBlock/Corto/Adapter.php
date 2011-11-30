@@ -49,7 +49,7 @@ class EngineBlock_Corto_Adapter
     /**
      * @var mixed Callback called on Proxy server after configuration
      */
-    protected $_remoteEntitiesFilter = NULL;
+    protected $_remoteEntitiesFilter = array();
     
     public function __construct($hostedEntity = NULL)
     {
@@ -62,7 +62,7 @@ class EngineBlock_Corto_Adapter
 
     public function singleSignOn($idPProviderHash)
     {
-        $this->_setRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
 
@@ -83,7 +83,7 @@ class EngineBlock_Corto_Adapter
 
     public function idPsMetadata()
     {
-        $this->_setRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
         $this->_callCortoServiceUri('idPsMetaDataService');
     }
 
@@ -112,19 +112,28 @@ class EngineBlock_Corto_Adapter
         $this->_voContext = $virtualOrganisation;
     }
 
-    protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    /**
+     * Use the binding module to get the request, then
+     * store it in _REQUEST so Corto will think it has received it
+     * from an internal binding, because if Corto would try to
+     * get the request again from the binding module, it would fail.
+     *
+     * @return array $request
+     */
+    protected function _getRequestInstance() {
+        static $request;
+        if(empty($request)) {
+
+            $request = $this->_proxyServer->getBindingsModule()->receiveRequest();
+            $_REQUEST['SAMLRequest'] = $request;
+        }
+        return $request;
+    }
+
+    protected function _filteRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
-        /**
-         * Use the binding module to get the request, then
-         * store it in _REQUEST so Corto will think it has received it
-         * from an internal binding, because if Corto would try to
-         * get the request again from the binding module, it would fail.
-         */
-        $request = $proxyServer->getBindingsModule()->receiveRequest();
-
+        $request = $this->_getRequestInstance();
         $spEntityId = $request['saml:Issuer']['__v'];
-
-        $_REQUEST['SAMLRequest'] = $request;
 
         return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
@@ -172,10 +181,12 @@ class EngineBlock_Corto_Adapter
         }
 
         $proxyServer = $this->_getCoreProxy();
-
+        
         $this->_configureProxyServer($proxyServer);
 
         $this->_proxyServer = $proxyServer;
+
+        $this->_applyRemoteEntitiesFilters($this->_proxyServer);
     }
 
     protected function _configureProxyServer(EngineBlock_Corto_CoreProxy $proxyServer)
@@ -240,19 +251,32 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
 
-        if ($this->_remoteEntitiesFilter) {
-            $proxyServer->setRemoteEntities(call_user_func_array(
-                $this->_remoteEntitiesFilter,
-                array(
-                    $proxyServer->getRemoteEntities(),
-                    $proxyServer
-                )
-            ));
-        }
-
         if ($this->_voContext!=null) {
             $proxyServer->setVirtualOrganisationContext($this->_voContext);
         }
+    }
+
+    /**
+     * Applies remote entities filters and passes result to proxy server
+     *
+     * @return void
+     */
+    protected function _applyRemoteEntitiesFilters(EngineBlock_Corto_CoreProxy $proxyServer) {
+        if (empty($this->_remoteEntitiesFilter)) {
+            return;
+        }
+
+        $remoteEntities = $proxyServer->getRemoteEntities();
+        foreach($this->_remoteEntitiesFilter as $remoteEntityFilter) {
+            $remoteEntities = call_user_func_array(
+                $remoteEntityFilter,
+                array(
+                    $remoteEntities,
+                    $proxyServer
+                )
+            );
+        }
+        $proxyServer->setRemoteEntities($remoteEntities);
     }
 
     protected function _getSystemLog()
@@ -336,9 +360,9 @@ class EngineBlock_Corto_Adapter
         return $this->_hostedEntity;
     }
 
-    protected function _setRemoteEntitiesFilter($callback)
+    protected function _addRemoteEntitiesFilter($callback)
     {
-        $this->_remoteEntitiesFilter = $callback;
+        $this->_remoteEntitiesFilter[] = $callback;
         return $this;
     }
 
