@@ -57,6 +57,23 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         return $entities;
     }
 
+    /**
+     * Given a list of (SAML2) entities, filter out the entities that do not have the requested workflow state
+     *
+     * @param array $entities
+     * @param string $workflowState
+     * @return array Filtered entities
+     */
+    public function filterEntitiesByWorkflowState(array $entities, $workflowState) {
+        foreach ($entities as $entityId => $entityData) {
+            if (($entityData['WorkflowState'] != $workflowState)) {
+                unset($entities[$entityId]);
+            }
+        }
+
+        return $entities;
+    }
+
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
         return $this->_serviceRegistry->isConnectionAllowed($spEntityId, $idpEntityId);
@@ -235,6 +252,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 }
             }
         }
+
+        $cortoEntity['WorkflowState'] = $serviceRegistryEntity['workflowState'];
 
         return $cortoEntity;
     }

@@ -63,6 +63,7 @@ class EngineBlock_Corto_Adapter
     public function singleSignOn($idPProviderHash)
     {
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByIssuerWorkflowState'));
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
 
@@ -151,6 +152,26 @@ class EngineBlock_Corto_Adapter
         return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
             $claimedSpEntityId
+        );
+    }
+
+    /**
+     * Given a list of Idp's, filters out all that do not have the same state as the requesting SP
+     *
+     * @param array $entities
+     * @param EngineBlock_Corto_CoreProxy $proxyServer
+     * @return array Filtered entities
+     */
+    protected function _filterRemoteEntitiesByIssuerWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    {
+        $request = $this->_getRequestInstance();
+        $spEntityId = $request['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
+        $entityData = $proxyServer->getRemoteEntity($spEntityId);
+
+        $workflowState = $entityData['WorkflowState'];
+        return $this->getServiceRegistryAdapter()->filterEntitiesByWorkflowState(
+            $entities,
+            $workflowState
         );
     }
 
