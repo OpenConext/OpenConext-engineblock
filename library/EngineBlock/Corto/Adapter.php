@@ -130,7 +130,7 @@ class EngineBlock_Corto_Adapter
         return $request;
     }
 
-    protected function _filteRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
         $request = $this->_getRequestInstance();
         $spEntityId = $request['saml:Issuer']['__v'];
