@@ -63,7 +63,7 @@ class EngineBlock_Corto_Adapter
     public function singleSignOn($idPProviderHash)
     {
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByIssuerWorkflowState'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
 
@@ -85,6 +85,7 @@ class EngineBlock_Corto_Adapter
     public function idPsMetadata()
     {
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
         $this->_callCortoServiceUri('idPsMetaDataService');
     }
 
@@ -159,12 +160,32 @@ class EngineBlock_Corto_Adapter
      * @param EngineBlock_Corto_CoreProxy $proxyServer
      * @return array Filtered entities
      */
-    protected function _filterRemoteEntitiesByIssuerWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    protected function _filterRemoteEntitiesByRequestSpWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
         $spEntityId = $this->_getIssuerSpEntityId();
         return $this->getServiceRegistryAdapter()->filterEntitiesByWorkflowState(
             $entities,
             $this->_getEntityWorkFlowState($spEntityId)
+        );
+    }
+
+    /**
+     * Given a list of Idp's, filters out all that do not have the same state as the claimed SP
+     *
+     * @param array $entities
+     * @param EngineBlock_Corto_CoreProxy $proxyServer
+     * @return array Filtered entities
+     */
+    protected function _filterRemoteEntitiesByClaimedSpWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    {
+        $claimedSpEntityId = $this->_getClaimedSpEntityId();
+        if (!$claimedSpEntityId) {
+            return $entities;
+        }
+
+        return $this->getServiceRegistryAdapter()->filterEntitiesByWorkflowState(
+            $entities,
+            $this->_getEntityWorkFlowState($claimedSpEntityId)
         );
     }
 
