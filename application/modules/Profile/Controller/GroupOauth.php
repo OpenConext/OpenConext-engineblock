@@ -62,6 +62,7 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
      */
     public function consumeAction($providerId)
     {
+        $this->setNoRender();
 
         $providerConfig = $this->_getProviderConfiguration($providerId);
         $consumer = new Zend_Oauth_Consumer($providerConfig->auth);
@@ -91,13 +92,13 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
 
         if (!$provider->validatePreconditions()) {
             EngineBlock_ApplicationSingleton::getInstance()->getLog()->error("Unable to test OpenSocial 3-legged Oauth provider because not all preconditions have been matched?");
-            $this->_setView("error");
+            $this->_redirectToUrl('/profile/group-oauth/error');
              // $this->renderAction("error");
 //            throw new EngineBlock_Group_Provider_Exception(
 //                "Unable to test OpenSocial 3-legged Oauth provider because not all preconditions have been matched?"
 //            );
         } else {
-            $this->setNoRender();
+
         // Now that we have an Access Token, we can discard the Request Token
         $_SESSION['request_token'][$providerId] = null;
 
@@ -105,6 +106,8 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
         }
 
     }
+
+    public function errorAction() {}
 
     /**
      *
