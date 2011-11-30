@@ -97,7 +97,7 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
                 new EngineBlock_Log_Message_AdditionalInfo($userId, null, null, null)
             );
             $this->providerId = $providerId;
-            $this->renderAction("Error"); //_redirectToUrl('/profile/group-oauth/error');
+            $this->renderAction("Error"); 
         } else {
             // Now that we have an Access Token, we can discard the Request Token
             $_SESSION['request_token'][$providerId] = null;
