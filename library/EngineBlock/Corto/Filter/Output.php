@@ -81,7 +81,7 @@ class EngineBlock_Corto_Filter_Output
         );
 
         //just in case the attribute manipulations change the $collabPersonId
-        $collabPersonIdShallowCopy = $collabPersonId;
+        $orginalCollabPersonId = $collabPersonId;
 
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
@@ -91,7 +91,7 @@ class EngineBlock_Corto_Filter_Output
         );
 
         $response = $this->_setNameId($request, $response, $responseAttributes,
-                                      $spEntityMetadata, $collabPersonIdShallowCopy);
+                                      $spEntityMetadata, $collabPersonId, $orginalCollabPersonId);
 
         // Always return both OID's and URN's
         $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
@@ -226,7 +226,8 @@ class EngineBlock_Corto_Filter_Output
         }
     }
 
-    protected function _setNameId($request, $response, &$responseAttributes, $spEntityMetadata, $collabPersonId)
+    protected function _setNameId($request, $response, &$responseAttributes, $spEntityMetadata,
+        $collabPersonId, $orginalCollabPersonId)
     {
         $nameIdFormat = $this->_getNameIdFormat($request, $spEntityMetadata);
 
@@ -234,7 +235,7 @@ class EngineBlock_Corto_Filter_Output
             $nameId = $collabPersonId;
         }
         else {
-            $nameId = $this->_getPersistentNameId($collabPersonId, $spEntityMetadata['EntityId']);
+            $nameId = $this->_getPersistentNameId($orginalCollabPersonId, $spEntityMetadata['EntityId']);
         }
 
         // Adjust the NameID in the NEW response, set the collab:person uid
@@ -280,13 +281,13 @@ class EngineBlock_Corto_Filter_Output
         return $defaultNameIdFormat;
     }
 
-    protected function _getPersistentNameId($collabPersonId, $spEntityId)
+    protected function _getPersistentNameId($originalCollabPersonId, $spEntityId)
     {
         $factory = new EngineBlock_Database_ConnectionFactory();
         $db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
 
         $serviceProviderUuid = $this->_getServiceProviderUuid($spEntityId, $db);
-        $userUuid = $this->_getUserUuid($collabPersonId);
+        $userUuid = $this->_getUserUuid($originalCollabPersonId);
 
         $statement = $db->prepare(
             "SELECT persistent_id FROM saml_persistent_id WHERE service_provider_uuid = ? AND user_uuid = ?"
