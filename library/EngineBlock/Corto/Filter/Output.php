@@ -2,10 +2,10 @@
 
 class EngineBlock_Corto_Filter_Output
 {
-    const VO_NAME_ATTRIBUTE        = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
+    const VO_NAME_ATTRIBUTE = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
     const URN_OID_COLLAB_PERSON_ID = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
-    const URN_IS_MEMBER_OF         = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
-    const URN_VO_PREFIX            = 'urn:collab:org:';
+    const URN_IS_MEMBER_OF = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_VO_PREFIX = 'urn:collab:org:';
 
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
@@ -80,15 +80,8 @@ class EngineBlock_Corto_Filter_Output
             $responseAttributes
         );
 
-        $response = $this->_setNameId($request, $response, $responseAttributes, $spEntityMetadata, $collabPersonId);
-
-        // Always return both OID's and URN's
-        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
-        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
-
-        if($spEntityMetadata['ProvideIsMemberOf']) {
-            $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
-        }
+        //just in case the attribute manipulations change the $collabPersonId
+        $collabPersonIdShallowCopy = $collabPersonId;
 
         // Attribute / NameId / Response manipulation / mangling
         $this->_manipulateAttributes(
@@ -96,6 +89,18 @@ class EngineBlock_Corto_Filter_Output
             $responseAttributes,
             $response
         );
+
+        $response = $this->_setNameId($request, $response, $responseAttributes,
+                                      $spEntityMetadata, $collabPersonIdShallowCopy);
+
+        // Always return both OID's and URN's
+        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
+        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
+
+        if ($spEntityMetadata['ProvideIsMemberOf']) {
+            $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
+        }
+
 
         /**
          * We can set overrides of the private key in the Service Registry,
@@ -124,11 +129,20 @@ class EngineBlock_Corto_Filter_Output
             $responseAttributes[self::URN_IS_MEMBER_OF] = array();
         }
 
+        // Remove any IDP set urn:collab:org:... only SURFconext is allowed to set these.
+        // @todo Throw an exception maybe?
+        $groups = &$responseAttributes[self::URN_IS_MEMBER_OF];
+        for ($i = 0; $i < count($groups); $i++) {
+            if (strpos($groups[$i], self::URN_VO_PREFIX) === 0) {
+                //unset($groups[$i]);
+            }
+        }
+
         // Load all VO's and check membership for current user
         $voCollection = new EngineBlock_VirtualOrganization_Collection();
         $voValidator = new EngineBlock_VirtualOrganization_Validator();
         $collabPersonId = reset($responseAttributes[self::URN_OID_COLLAB_PERSON_ID]);
-        foreach($voCollection->load() as $vo) {
+        foreach ($voCollection->load() as $vo) {
             $isMember = $voValidator->isMember($vo->getId(), $collabPersonId, $idpEntityMetadata["EntityId"]);
             if ($isMember) {
                 $groups[] = self::URN_VO_PREFIX . $vo->getId();
@@ -214,14 +228,13 @@ class EngineBlock_Corto_Filter_Output
 
     protected function _setNameId($request, $response, &$responseAttributes, $spEntityMetadata, $collabPersonId)
     {
-        $persistentId = $this->_getPersistentNameId($collabPersonId, $spEntityMetadata['EntityId']);
         $nameIdFormat = $this->_getNameIdFormat($request, $spEntityMetadata);
 
         if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_UNSPECIFIED) {
             $nameId = $collabPersonId;
         }
         else {
-            $nameId = $persistentId;
+            $nameId = $this->_getPersistentNameId($collabPersonId, $spEntityMetadata['EntityId']);
         }
 
         // Adjust the NameID in the NEW response, set the collab:person uid
@@ -249,7 +262,7 @@ class EngineBlock_Corto_Filter_Output
         if (isset($spEntityMetadata['NameIDFormat'])) {
             return $spEntityMetadata['NameIDFormat'];
         }
-        // If the SP requests a specific NameIDFormat in their AuthnRequest
+            // If the SP requests a specific NameIDFormat in their AuthnRequest
         else if (isset($request['samlp:NameIDPolicy']['_Format'])) {
             $requestedNameIdFormat = $request['samlp:NameIDPolicy']['_Format'];
             if (in_array($requestedNameIdFormat, $this->SUPPORTED_NAMEID_FORMATS)) {
@@ -337,7 +350,7 @@ class EngineBlock_Corto_Filter_Output
             throw new EngineBlock_Exception('Multiple users found for collabPersonId: ' . $collabPersonId);
         }
 
-        if (count($users) < 0) {
+        if (count($users) < 1) {
             throw new EngineBlock_Exception('No users found for collabPersonId: ' . $collabPersonId);
         }
 
