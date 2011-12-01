@@ -1,4 +1,4 @@
-Feature: Consent (Backlog-136)
+Feature: Consent
   In order to offer end-users control of their personal data
   As an end-user
   I want to explicitly consent to the release of my data to a Service Provider

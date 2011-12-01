@@ -1,4 +1,4 @@
-Feature: Single Sign On (Backlog-140)
+Feature: Single Sign On
   In order to benefit from Single Sign On
   As an end-user
   I only want to log in once to use multiple SPs

@@ -1,4 +1,4 @@
-Feature: Support for multiple languages.
+Feature: Support for multiple languages
   In order to pick an Identity Provider
   As an end-user
   I want to see the WAYF in my language
