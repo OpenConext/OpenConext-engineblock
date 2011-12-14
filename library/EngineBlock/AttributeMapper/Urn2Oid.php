@@ -40,6 +40,7 @@ class EngineBlock_AttributeMapper_Urn2Oid extends EngineBlock_AttributeMapper_Ab
         'urn:mace:dir:attribute-def:displayName'                        => 'urn:oid:2.16.840.1.113730.3.1.241', // displayName
         'urn:mace:dir:attribute-def:mail'                               => 'urn:oid:0.9.2342.19200300.100.1.3', //mail
         'urn:mace:terena.org:attribute-def:schacHomeOrganization'       => 'urn:oid:1.3.6.1.4.1.1466.115.121.1.15', //Domain name of the home organization
+        'urn:mace:dir:attribute-def:isMemberOf'                         => 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1', //Guest status and VO memberships
     );
 
     public function __construct()
