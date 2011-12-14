@@ -5,7 +5,7 @@ class EngineBlock_Corto_Filter_Input
     const SAML2_STATUS_CODE_SUCCESS         = 'urn:oasis:names:tc:SAML:2.0:status:Success';
     const SAML2_NAMEID_FORMAT_PERSISTENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
     const URN_SURF_PERSON_AFFILIATION       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
-    const URN_IS_MEMBER_OF                  = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_IS_MEMBER_OF                  = 'urn:mace:dir:attribute-def:isMemberOf';
     const URN_VO_PREFIX                     = 'urn:collab:org:';
     const URN_COLLAB_ORG_SURF               = 'urn:collab:org:surf.nl';
     const URN_MACE_TERENA_SCHACHOMEORG      = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';

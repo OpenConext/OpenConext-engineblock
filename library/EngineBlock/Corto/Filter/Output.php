@@ -4,7 +4,7 @@ class EngineBlock_Corto_Filter_Output
 {
     const VO_NAME_ATTRIBUTE = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
     const URN_OID_COLLAB_PERSON_ID = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
-    const URN_IS_MEMBER_OF = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_IS_MEMBER_OF = 'urn:mace:dir:attribute-def:isMemberOf';
     const URN_VO_PREFIX = 'urn:collab:org:';
 
     const PERSISTENT_NAMEID_SALT = 'COIN:';
@@ -93,14 +93,12 @@ class EngineBlock_Corto_Filter_Output
         $response = $this->_setNameId($request, $response, $responseAttributes,
                                       $spEntityMetadata, $collabPersonId, $orginalCollabPersonId);
 
-        // Always return both OID's and URN's
-        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
-        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
-
         if ($spEntityMetadata['ProvideIsMemberOf']) {
             $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
         }
-
+        // Always return both OID's and URN's
+        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
+        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
 
         /**
          * We can set overrides of the private key in the Service Registry,
