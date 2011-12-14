@@ -128,7 +128,7 @@ class EngineBlock_Corto_Filter_Output
         if (!isset($responseAttributes[self::URN_IS_MEMBER_OF])) {
             $responseAttributes[self::URN_IS_MEMBER_OF] = array();
         }
-
+        $groups = &$responseAttributes[self::URN_IS_MEMBER_OF];
         // Load all VO's and check membership for current user
         $voCollection = new EngineBlock_VirtualOrganization_Collection();
         $voValidator = new EngineBlock_VirtualOrganization_Validator();
