@@ -24,16 +24,13 @@
  */
 
 /**
- *
- * @todo This is too tightly coupled to LDAP, we should be able to switch to a simple database
- *
- * @throws EngineBlock_Exception
+ * Access to the LDAP directory where all users are provisioned
  *
  */
 class EngineBlock_UserDirectory
 {
     const URN_COLLAB_PERSON_NAMESPACE               = 'urn:collab:person';
-    const URN_IS_MEMBER_OF                          = 'urn:oid:1.3.6.1.4.1.5923.1.5.1.1';
+    const URN_IS_MEMBER_OF                          = 'urn:mace:dir:attribute-def:isMemberOf';
     const URN_COLLAB_ORG_SURF                       = 'urn:collab:org:surf.nl';
     
     const LDAP_CLASS_COLLAB_PERSON                  = 'collabPerson';

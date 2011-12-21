@@ -80,6 +80,13 @@ class EngineBlock_Corto_Filter_Output
             $responseAttributes
         );
 
+        if ($spEntityMetadata['ProvideIsMemberOf']) {
+            $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
+        }
+        // Always return both OID's and URN's
+        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
+        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
+
         //just in case the attribute manipulations change the $collabPersonId
         $orginalCollabPersonId = $collabPersonId;
 
@@ -93,12 +100,6 @@ class EngineBlock_Corto_Filter_Output
         $response = $this->_setNameId($request, $response, $responseAttributes,
                                       $spEntityMetadata, $collabPersonId, $orginalCollabPersonId);
 
-        if ($spEntityMetadata['ProvideIsMemberOf']) {
-            $this->_addIsMemberOf($responseAttributes, $idpEntityMetadata);
-        }
-        // Always return both OID's and URN's
-        $oidResponseAttributes = $this->_mapUrnsToOids($responseAttributes, $spEntityMetadata);
-        $responseAttributes = array_merge($responseAttributes, $oidResponseAttributes);
 
         /**
          * We can set overrides of the private key in the Service Registry,

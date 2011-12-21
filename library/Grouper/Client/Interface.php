@@ -24,7 +24,7 @@
  */
 
 /**
- * Todo this only supports basic functionality, for more see:
+ * This implementation only supports basic functionality, for more see:
  * @url https://spaces.internet2.edu/display/Grouper/Grouper+Web+Services#GrouperWebServices-Operations
  */
 interface Grouper_Client_Interface
