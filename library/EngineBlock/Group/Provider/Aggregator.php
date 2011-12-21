@@ -198,7 +198,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
                 $members = array_merge($members, $providerMembers);
             }
             catch (Exception $e) {
-                self::logErrorMessage($provider->getId(), $e);
+                self::_logErrorMessage($provider->getId(), $e);
             }
         }
         return $members;
