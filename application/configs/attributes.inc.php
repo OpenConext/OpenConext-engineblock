@@ -327,6 +327,18 @@ $attributes = array(
             'en' => 'Status of this account in the SURFfederation',
         ),
     ),
+    'urn:oid:1.3.6.1.4.1.5923.1.1.1.1' => array( // surfPersonAffiliation
+        'Name' =>
+        array(
+            'nl' => 'Accountstatus',
+            'en' => 'Accountstatus',
+        ),
+        'Description' =>
+        array(
+            'nl' => 'Status van deze account in de SURFfederatie',
+            'en' => 'Status of this account in the SURFfederation',
+        ),
+    ),
     'nameid' => array( // federative identifier
         'Name' =>
         array(
