@@ -330,8 +330,8 @@ $attributes = array(
     'nameid' => array( // federative identifier
         'Name' =>
         array(
-            'nl' => 'Federatieve Identifier',
-            'en' => 'Federative Identifier',
+            'nl' => 'Identifier',
+            'en' => 'Identifier',
         ),
         'Description' =>
         array(
@@ -353,8 +353,8 @@ $attributes = array(
     ),
     'urn:oid:1.3.6.1.4.1.1076.20.40.40.1' => array(
         'Name' => array(
-            'nl' => 'Federatieve Identifier',
-            'en' => 'Federative Identifier',
+            'nl' => 'Identifier',
+            'en' => 'Identifier',
         ),
         'Description' => array(
             'nl' => 'Status van deze account in de SURFfederatie',
@@ -363,8 +363,8 @@ $attributes = array(
     ),
     'urn:oid:1.3.6.1.4.1.5923.1.1.1.10' => array(
         'Name' => array(
-            'nl' => 'Federatieve Identifier',
-            'en' => 'Federative Identifier',
+            'nl' => 'Identifier',
+            'en' => 'Identifier',
         ),
         'Description' => array(
             'nl' => 'Status van deze account in de SURFfederatie',
