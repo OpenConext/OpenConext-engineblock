@@ -95,13 +95,13 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
     <br />
 
     <form method="post" action="<?= $action ?>" style="float: left">
-        <input type=hidden name=ID value="<?= $ID ?>">
+        <input type=hidden name=ID value="<?php echo htmlspecialchars($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
         <input id="accept_terms_button" type="submit" value="<?php echo $this->t('consent_accept'); ?>" style="font-weight: bold;" />
     </form>
     &nbsp;&nbsp;
     <form method="post" action="<?= $action ?>" style="float: left; margin-left: 2em">
-        <input type="hidden" name="ID" value="<?= $ID ?>" />
+        <input type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>" />
         <input type="submit" value="<?php echo $this->t('consent_decline'); ?>" />
     </form>
     <p><?php echo $this->t('consent_notice'); ?></p>
