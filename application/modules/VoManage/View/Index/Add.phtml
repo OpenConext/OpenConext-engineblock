@@ -118,6 +118,7 @@ $layout->footerText = $this->t('footer');
                         var addValue = function() {
                             var newvalue = jQuery.trim($('#newvalue').val());
                             if (newvalue != '') {
+                                newvalue = encodeURIComponent(newvalue);
                                 valuecount++;
                                 $("#valuelist").append('<li id="attribute_value_'+valuecount+'">'+newvalue+'<input type="hidden" name="attribute_value[]" value="'+newvalue+'"><a href="#" style="margin-left: 50px" onclick="$(\'#attribute_value_'+valuecount+'\').remove();">[remove]</a></li>');
                                 $("#novaluesmessage").hide();
