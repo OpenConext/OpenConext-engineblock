@@ -51,7 +51,7 @@ $layout->footerText = $this->t('footer');
 <?php if ($data['formaction'] != 'save' || count($errors) > 0) : ?>
 <div>
     <form id="editform" method="POST">
-        <input type="hidden" name="id" id="id" value="<?php echo $data['id'] ?>">
+        <input type="hidden" name="id" id="id" value="<?php echo htmlentities($data['id']) ?>">
         <table class="formtable">
             <tr>
                 <td style="font-weight: bold;">
@@ -61,9 +61,9 @@ $layout->footerText = $this->t('footer');
                     <select name="sp_entity_id">
                         <?php foreach ($spList as $id => $details) : ?>
                         <option value="<?php echo $id ?>" <?php if ($data['sp_entity_id'] == $id) echo 'selected="selected"' ?>>
-                            <?php if (isset($details['displayName:'.$lang])) : ?><?php echo $details['displayName:'.$lang]; ?>
-                            <?php elseif (isset($details['name:'.$lang])) : ?><?php echo $details['name:'.$lang]; ?>
-                            <?php elseif (isset($details['description:'.$lang])) : ?><?php echo $details['description:'.$lang]; ?>
+                            <?php if (isset($details['displayName:'.$lang])) : ?><?php echo htmlentities($details['displayName:'.$lang]); ?>
+                            <?php elseif (isset($details['name:'.$lang])) : ?><?php echo htmlentities($details['name:'.$lang]); ?>
+                            <?php elseif (isset($details['description:'.$lang])) : ?><?php echo htmlentities($details['description:'.$lang]); ?>
                             <?php else : ?><?php echo $id; ?>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -75,7 +75,7 @@ $layout->footerText = $this->t('footer');
                     <label for="user_id_pattern">User id pattern</label>
                 </td>
                 <td>
-                    <input type="text" name="user_id_pattern" value="<?php echo $data['user_id_pattern']; ?>">
+                    <input type="text" name="user_id_pattern" value="<?php echo htmlentities($data['user_id_pattern']); ?>">
                     <?php if (isset($errors['user_id_pattern'])) : ?><font color="red"><?php echo $this->t($errors['user_id_pattern']); ?></font><?php endif; ?>                    
                 </td>
             </tr>
@@ -84,7 +84,7 @@ $layout->footerText = $this->t('footer');
                     <label for="attribute_name_saml">Attribute name (SAML)</label>
                 </td>
                 <td>
-                    <input type="text" name="attribute_name_saml" value="<?php echo $data['attribute_name_saml']; ?>">
+                    <input type="text" name="attribute_name_saml" value="<?php echo htmlentities($data['attribute_name_saml']); ?>">
                     <?php if (isset($errors['attribute_name_saml'])) : ?><font color="red"><?php echo $this->t($errors['attribute_name_saml']); ?></font><?php endif; ?>                    
                 </td>
             </tr>
@@ -93,7 +93,7 @@ $layout->footerText = $this->t('footer');
                     <label for="attribute_name_opensocial">Attribute name (OpenSocial)</label>
                 </td>
                 <td>
-                    <input type="text" name="attribute_name_opensocial" value="<?php echo $data['attribute_name_opensocial']; ?>">
+                    <input type="text" name="attribute_name_opensocial" value="<?php echo htmlentities($data['attribute_name_opensocial']); ?>">
                     <?php if (isset($errors['attribute_name_opensocial'])) : ?><font color="red"><?php echo $this->t($errors['attribute_name_opensocial']); ?></font><?php endif; ?>                    
                 </td>
             </tr>
@@ -110,7 +110,7 @@ $layout->footerText = $this->t('footer');
                     <ul id="valuelist">
                     <?php if (is_array($data['attribute_value'])) : ?>
                         <?php foreach ($data['attribute_value'] as $i => $value) : ?>
-                            <li id="attribute_value_<?php echo $i ?>"><?php echo $value; ?><input type="hidden" name="attribute_value[]" value="<?php echo $value; ?>"><a href="#" style="margin-left: 50px" onclick="$('#attribute_value_<?php echo $i ?>').remove();">[remove]</a></li>
+                            <li id="attribute_value_<?php echo $i ?>"><?php echo htmlentities($value); ?><input type="hidden" name="attribute_value[]" value="<?php echo htmlentities($value); ?>"><a href="#" style="margin-left: 50px" onclick="$('#attribute_value_<?php echo $i ?>').remove();">[remove]</a></li>
                         <?php endforeach; ?>
                     <?php endif; ?>
                     </ul>
@@ -133,7 +133,7 @@ $layout->footerText = $this->t('footer');
             </tr>
         </table>
         <br/>
-        <input type="hidden" name="vo_id" value="<?php echo $vo_id; ?>"/>
+        <input type="hidden" name="vo_id" value="<?php echo htmlentities($vo_id); ?>"/>
         <input type="hidden" id="action" name="action" value="Edit"/>
         <input type="hidden" id="formaction" name="formaction" value=""/>
         <input type="button" name="save" value="<?php echo $this->t('vomanage_edit_save'); ?>" 

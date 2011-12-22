@@ -74,7 +74,7 @@ $layout->footerText = $this->t('footer');
                     <label for="user_id_pattern">User id pattern</label>
                 </td>
                 <td>
-                    <input type="text" name="user_id_pattern" value="<?php echo $data['user_id_pattern']; ?>">
+                    <input type="text" name="user_id_pattern" value="<?php echo htmlentities($data['user_id_pattern']); ?>">
                     <?php if (isset($errors['user_id_pattern'])) : ?><font color="red"><?php echo $this->t($errors['user_id_pattern']); ?></font><?php endif; ?>                    
                 </td>
             </tr>
