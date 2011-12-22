@@ -82,7 +82,7 @@ $layout->getView()->inlineScript()->appendScript("
 ?>
 <div id="content">
     <form id="IdpListForm" method="post" action="<?= $action ?>">
-        <input id="ID" type="hidden" name="ID" value="<?= $ID ?>">
+        <input id="ID" type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
         <input id="Idp" type="hidden" name="idp" value="">
     </form>
     <p><?php echo $this->t('idp_selection_desc', $displayName); ?></p>
@@ -90,8 +90,8 @@ $layout->getView()->inlineScript()->appendScript("
     <div id="IdpSuggestion" class="suggestion">
         <noscript>
             <form method="post" action="<?= $action ?>">
-                <input type="hidden" name="ID" value="<?= $ID ?>">
-                <input type="hidden" name="idp" value="<?= $preselectedIdp ?>">
+                <input type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
+                <input type="hidden" name="idp" value="<?php echo htmlspecialchars($preselectedIdp); ?>">
                 <input type="submit" value="<?= $preselectedIdpData['Name_en']; ?>">
             </form>
         </noscript>
@@ -107,9 +107,9 @@ $layout->getView()->inlineScript()->appendScript("
             <div style="width: 451px; height: 250px; overflow: scroll">
             <?php foreach ($idpList as $idp) : ?>
                 <form method="post" action="<?= $action ?>">
-                    <input type="hidden" name="ID" value="<?= $ID ?>">
-                    <input type="hidden" name="idp" value="<?= $idp['EntityId'] ?>">
-                    <input type="submit" id="<?= $idp['EntityId']; ?>" value="<?= $idp['Name_en']; ?>">
+                    <input type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
+                    <input type="hidden" name="idp" value="<?php echo htmlspecialchars($idp['EntityId']); ?>">
+                    <input type="submit" id="<?php echo htmlspecialchars($idp['EntityId']); ?>" value="<?= $idp['Name_en']; ?>">
                 </form>
             <?php endforeach; ?>
             </div>

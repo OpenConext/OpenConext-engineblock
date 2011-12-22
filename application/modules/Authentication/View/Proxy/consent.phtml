@@ -95,7 +95,7 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
     <br />
 
     <form method="post" action="<?= $action ?>" style="float: left">
-        <input type=hidden name=ID value="<?php echo htmlspecialchars($ID); ?>">
+        <input type=hidden name="ID" value="<?php echo htmlspecialchars($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
         <input id="accept_terms_button" type="submit" value="<?php echo $this->t('consent_accept'); ?>" style="font-weight: bold;" />
     </form>
