@@ -76,7 +76,7 @@ $layout->getView()->inlineScript()->appendScript("
     discoveryScreen.setLanguage('". $lang ."');
     discoveryScreen.setSearchText('". $this->t('search') ."');
     discoveryScreen.setIdpList(". json_encode($idpList) .");
-    discoveryScreen.setUri('". $uri. "');
+    discoveryScreen.setUri('". json_encode($uri). "');
     ". $preselectedIdpJson ."
     discoveryScreen.show();");
 ?>
