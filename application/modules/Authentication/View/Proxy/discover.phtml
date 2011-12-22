@@ -81,7 +81,7 @@ $layout->getView()->inlineScript()->appendScript("
     discoveryScreen.show();");
 ?>
 <div id="content">
-    <form id="IdpListForm" method="post" action="<?= $action ?>">
+    <form id="IdpListForm" method="post" action="<?php echo htmlspecialchars($action); ?>">
         <input id="ID" type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
         <input id="Idp" type="hidden" name="idp" value="">
     </form>
@@ -89,10 +89,10 @@ $layout->getView()->inlineScript()->appendScript("
     <?php if ($preselectedIdp) : ?>
     <div id="IdpSuggestion" class="suggestion">
         <noscript>
-            <form method="post" action="<?= $action ?>">
+            <form method="post" action="<?php echo htmlspecialchars($action); ?>">
                 <input type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
                 <input type="hidden" name="idp" value="<?php echo htmlspecialchars($preselectedIdp); ?>">
-                <input type="submit" value="<?= $preselectedIdpData['Name_en']; ?>">
+                <input type="submit" value="<?php echo htmlspecialchars($preselectedIdpData['Name_en']); ?>">
             </form>
         </noscript>
     </div>
@@ -109,7 +109,7 @@ $layout->getView()->inlineScript()->appendScript("
                 <form method="post" action="<?= $action ?>">
                     <input type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
                     <input type="hidden" name="idp" value="<?php echo htmlspecialchars($idp['EntityId']); ?>">
-                    <input type="submit" id="<?php echo htmlspecialchars($idp['EntityId']); ?>" value="<?= $idp['Name_en']; ?>">
+                    <input type="submit" id="<?php echo htmlspecialchars($idp['EntityId']); ?>" value="<?php echo htmlspecialchars($idp['Name_en']); ?>">
                 </form>
             <?php endforeach; ?>
             </div>
