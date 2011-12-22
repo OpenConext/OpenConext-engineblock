@@ -37,27 +37,27 @@ $layout->footerText = $this->t('footer');
             <?php foreach ($resultSet as $i => $row) { ?>
                 <tr>
                     <td>
-                        <?php echo $row['sp_entity_id_display']; ?>
+                        <?php echo htmlentities($row['sp_entity_id_display']); ?>
                     </td>
                     <td>
-                        <?php echo $row['user_id_pattern']; ?>
+                        <?php echo htmlentities($row['user_id_pattern']); ?>
                     </td>
                     <td>
-                        <?php echo $row['attribute_name_saml']; ?>
+                        <?php echo htmlentities($row['attribute_name_saml']); ?>
                     </td>
                     <td>
-                        <?php echo $row['attribute_name_opensocial']; ?>
+                        <?php echo htmlentities($row['attribute_name_opensocial']); ?>
                     </td>
                     <td>
                     <?php if (is_array($row['attribute_value'])) : ?>
                         <?php if (count($row['attribute_value']) > 1) : ?>
                             <ul>
                             <?php foreach ($row['attribute_value'] as $value) : ?>
-                                <li style="margin-left: -26px;"><?php echo $value; ?></li>
+                                <li style="margin-left: -26px;"><?php echo htmlentities($value); ?></li>
                             <?php endforeach; ?>
                             </ul>
-                        <?php else : echo $row['attribute_value'][0]; endif; ?>
-                    <?php else : echo $row['attribute_value']; endif; ?>
+                        <?php else : echo htmlentities($row['attribute_value'][0]); endif; ?>
+                    <?php else : echo htmlentities($row['attribute_value']); endif; ?>
                     </td>
                     <td style="width: 36px"><a href="#" onclick="$('#action').val('Edit'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="<?= EngineBlock_View::staticUrl(); ?>/media/edit.png" alt="<?php echo $this->t('vomanage_index_edit'); ?>"/></a>&nbsp;<a href="#" onclick="$('#action').val('Delete'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="<?= EngineBlock_View::staticUrl(); ?>/media/delete.png" alt="<?php echo $this->t('vomanage_index_delete'); ?>"/></a>
                     </td>
