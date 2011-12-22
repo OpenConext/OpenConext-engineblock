@@ -37,7 +37,7 @@ $layout->footerText = $this->t('footer');
     <?php endif; ?>
     <br />
     <form id="actionform" method="POST">
-        <input type="hidden" id="vo_id" name="vo_id" value="<?php echo $vo_id; ?>"/>
+        <input type="hidden" id="vo_id" name="vo_id" value="<?php echo htmlentities($vo_id); ?>"/>
         <input type="hidden" id="action" name="action" value="Index"/>
         <input type="submit" name="backtoindex" value="<?php echo $this->t('vomanage_delete_back'); ?>"/>
     </form>
@@ -54,7 +54,7 @@ $layout->footerText = $this->t('footer');
                 <label for="sp_entity_id">SP entity id</label>
             </td>
             <td>
-                <?php echo $data['sp_entity_id_display']; ?>
+                <?php echo htmlentities($data['sp_entity_id_display']); ?>
             </td>
         </tr>
         <tr>
@@ -62,7 +62,7 @@ $layout->footerText = $this->t('footer');
                 <label for="user_id_pattern">User id pattern</label>
             </td>
             <td>
-                <?php echo $data['user_id_pattern']; ?>
+                <?php echo htmlentities($data['user_id_pattern']); ?>
             </td>
         </tr>
         <tr>
@@ -70,7 +70,7 @@ $layout->footerText = $this->t('footer');
                 <label for="attribute_name_saml">Attribute name (SAML)</label>
             </td>
             <td>
-                <?php echo $data['attribute_name_saml']; ?>
+                <?php echo htmlentities($data['attribute_name_saml']); ?>
             </td>
         </tr>
         <tr>
@@ -78,7 +78,7 @@ $layout->footerText = $this->t('footer');
                 <label for="attribute_name_opensocial">Attribute name (OpenSocial)</label>
             </td>
             <td>
-                <?php echo $data['attribute_name_opensocial']; ?>
+                <?php echo htmlentities($data['attribute_name_opensocial']); ?>
             </td>
         </tr>
         <tr>
@@ -89,13 +89,13 @@ $layout->footerText = $this->t('footer');
                 <?php if (count($data['attribute_value']) > 1) : ?>
                 <ul>
                     <?php foreach ($data['attribute_value'] as $value) : ?>
-                    <li><?php echo $value; ?></li>
+                    <li><?php echo htmlentities($value); ?></li>
                     <?php endforeach; ?>
                 </ul>
                 <?php elseif (count($data['attribute_value']) == 1) : ?>
                     <?php echo array_pop($data['attribute_value']); ?>
                 <?php else : ?>
-                    <?php echo $data['attribute_value']; ?>
+                    <?php echo htmlentities($data['attribute_value']); ?>
                 <?php endif; ?>
                 
             </td>

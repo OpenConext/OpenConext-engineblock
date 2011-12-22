@@ -72,7 +72,7 @@ $layout->footerText = $this->t('footer');
         <?php endif; ?>
         <p>
             <input type="hidden" id="id" name="id" value=""/>
-            <input type="hidden" id="vo_id" name="vo_id" value="<?php echo $vo_id; ?>"/>
+            <input type="hidden" id="vo_id" name="vo_id" value="<?php echo htmlentities($vo_id); ?>"/>
             <input type="hidden" id="action" name="action" value=""/>
             <input type="button" name="add" value="<?php echo $this->t('vomanage_index_add'); ?>" 
                    onclick="$('#action').val('Add'); $('#actionform').submit();"/>

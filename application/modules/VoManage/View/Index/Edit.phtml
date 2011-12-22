@@ -39,7 +39,7 @@ $layout->footerText = $this->t('footer');
         <br />
 
         <form id="actionform" method="POST">
-            <input type="hidden" id="vo_id" name="vo_id" value="<?php echo $vo_id; ?>"/>
+            <input type="hidden" id="vo_id" name="vo_id" value="<?php echo htmlentities($vo_id); ?>"/>
             <input type="hidden" id="action" name="action" value="Index"/>
             <input type="submit" name="backtoindex" value="<?php echo $this->t('vomanage_save_back'); ?>"/>
         </form>
