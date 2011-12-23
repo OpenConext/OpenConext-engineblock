@@ -81,18 +81,18 @@ $layout->getView()->inlineScript()->appendScript("
     discoveryScreen.show();");
 ?>
 <div id="content">
-    <form id="IdpListForm" method="post" action="<?php echo htmlspecialchars($action); ?>">
-        <input id="ID" type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
+    <form id="IdpListForm" method="post" action="<?php echo htmlentities($action); ?>">
+        <input id="ID" type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>">
         <input id="Idp" type="hidden" name="idp" value="">
     </form>
     <p><?php echo $this->t('idp_selection_desc', $displayName); ?></p>
     <?php if ($preselectedIdp) : ?>
     <div id="IdpSuggestion" class="suggestion">
         <noscript>
-            <form method="post" action="<?php echo htmlspecialchars($action); ?>">
-                <input type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
-                <input type="hidden" name="idp" value="<?php echo htmlspecialchars($preselectedIdp); ?>">
-                <input type="submit" value="<?php echo htmlspecialchars($preselectedIdpData['Name_en']); ?>">
+            <form method="post" action="<?php echo htmlentities($action); ?>">
+                <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>">
+                <input type="hidden" name="idp" value="<?php echo htmlentities($preselectedIdp); ?>">
+                <input type="submit" value="<?php echo htmlentities($preselectedIdpData['Name_en']); ?>">
             </form>
         </noscript>
     </div>
@@ -107,9 +107,9 @@ $layout->getView()->inlineScript()->appendScript("
             <div style="width: 451px; height: 250px; overflow: scroll">
             <?php foreach ($idpList as $idp) : ?>
                 <form method="post" action="<?= $action ?>">
-                    <input type="hidden" name="ID" value="<?php echo htmlspecialchars($ID); ?>">
-                    <input type="hidden" name="idp" value="<?php echo htmlspecialchars($idp['EntityId']); ?>">
-                    <input type="submit" id="<?php echo htmlspecialchars($idp['EntityId']); ?>" value="<?php echo htmlspecialchars($idp['Name_en']); ?>">
+                    <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>">
+                    <input type="hidden" name="idp" value="<?php echo htmlentities($idp['EntityId']); ?>">
+                    <input type="submit" id="<?php echo htmlentities($idp['EntityId']); ?>" value="<?php echo htmlentities($idp['Name_en']); ?>">
                 </form>
             <?php endforeach; ?>
             </div>
