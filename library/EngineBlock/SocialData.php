@@ -56,7 +56,7 @@ class EngineBlock_SocialData
      * @var String
      */
     protected $_appId = NULL;
-    
+
     /**
      * Construct an EngineBlock_SocialData instance for retrieving social data within
      * Engineblock
@@ -93,13 +93,13 @@ class EngineBlock_SocialData
 
         $openSocialGroups = array();
         foreach ($engineBlockGroups as $group) {
-             $openSocialGroup = $this->_mapEngineBlockGroupToOpenSocialGroup($group);
+            $openSocialGroup = $this->_mapEngineBlockGroupToOpenSocialGroup($group);
 
-             if ($groupId && $openSocialGroup['id'] !== $groupId) {
+            if ($groupId && $openSocialGroup['id'] !== $groupId) {
                 continue;
-             }
+            }
 
-             $openSocialGroups[] = $openSocialGroup;
+            $openSocialGroups[] = $openSocialGroup;
         }
         return $openSocialGroups;
     }
@@ -120,18 +120,23 @@ class EngineBlock_SocialData
         }
 
         $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId);
-        
+
         $people = array();
         /**
          * @var EngineBlock_Group_Model_GroupMember $groupMember
          */
+        $externalGroup = $this->_isExternalGroup($groupId);
         foreach ($groupMembers as $groupMember) {
-            $person = $this->getPerson($groupMember->id, $socialAttributes, $voId, $spEntityId);
-            if (!$person) {
+            if ($externalGroup) {
                 $people[] = $this->_mapEngineBlockGroupMemberToOpenSocialGroupMember($groupMember);
             } else {
-                $person['voot_membership_role'] = $groupMember->userRole;
-                $people[] = $person;
+                $person = $this->getPerson($groupMember->id, $socialAttributes, $voId, $spEntityId);
+                if (!$person) {
+                    $people[] = $this->_mapEngineBlockGroupMemberToOpenSocialGroupMember($groupMember);
+                } else {
+                    $person['voot_membership_role'] = $groupMember->userRole;
+                    $people[] = $person;
+                }
             }
         }
         return $people;
@@ -158,7 +163,7 @@ class EngineBlock_SocialData
 
         $searchId = (($subjectId) ? $subjectId : $identifier);
         $persons = $this->_getUserDirectory()->findUsersByIdentifier($searchId, $ldapAttributes);
-        
+
         if (count($persons) === 1) {
             $person = array_shift($persons);
             $person = $fieldMapper->ldapToSocialData($person, $socialAttributes);
@@ -173,7 +178,7 @@ class EngineBlock_SocialData
 
             // Make sure we only include attributes that we are allowed to share
             $person = $this->_enforceArp($person);
-            
+
             return $person;
         } else if (count($persons) === 0) {
             // We need to see if the user might 'exists' in an ExternalGroup provider
@@ -208,7 +213,7 @@ class EngineBlock_SocialData
         $rows = $statement->fetchAll();
         if (count($rows) === 1) {
             $collabPersonUuid = $rows[0]['user_uuid'];
-            
+
             $userDirectory = $this->_getUserDirectory();
             $user = $userDirectory->findUserByCollabPersonUuid($collabPersonUuid);
 
@@ -227,6 +232,10 @@ class EngineBlock_SocialData
         return (strlen($string) === 40 && preg_match('|[\da-fA-F]|', $string));
     }
 
+    protected function _isExternalGroup($groupId) {
+       return preg_match('/^urn:collab:group:\w*\.?surfteams\.nl:/', $groupId) === 0;
+    }
+
     /**
      * @param EngineBlock_Group_Model_Group $group
      * @return array
@@ -234,9 +243,9 @@ class EngineBlock_SocialData
     protected function _mapEngineBlockGroupToOpenSocialGroup(EngineBlock_Group_Model_Group $group)
     {
         return array(
-            'id'            => $group->id,
-            'description'   => $group->description,
-            'title'         => $group->title,
+            'id' => $group->id,
+            'description' => $group->description,
+            'title' => $group->title,
             'voot_membership_role' => $group->userRole,
         );
     }
@@ -244,9 +253,9 @@ class EngineBlock_SocialData
     protected function _mapEngineBlockGroupMemberToOpenSocialGroupMember(EngineBlock_Group_Model_GroupMember $member)
     {
         return array(
-            'id'                    => $member->id,
-            'displayName'           => $member->displayName,
-            'voot_membership_role'  => $member->userRole
+            'id' => $member->id,
+            'displayName' => $member->displayName,
+            'voot_membership_role' => $member->userRole
         );
     }
 
@@ -270,8 +279,8 @@ class EngineBlock_SocialData
     {
         if ($this->_userDirectory == NULL) {
             $ldapConfig = EngineBlock_ApplicationSingleton::getInstance()
-                                                          ->getConfiguration()
-                                                          ->ldap;
+                    ->getConfiguration()
+            ->ldap;
             $this->_userDirectory = new EngineBlock_UserDirectory($ldapConfig);
         }
         return $this->_userDirectory;
@@ -307,13 +316,13 @@ class EngineBlock_SocialData
         if (!isset($this->_attributeAggregator)) {
             $this->_attributeAggregator = new EngineBlock_AttributeAggregator(
                 array(
-                    new EngineBlock_AttributeProvider_VoManage($voId, $spEntityId),
+                     new EngineBlock_AttributeProvider_VoManage($voId, $spEntityId),
                 )
             );
         }
         return $this->_attributeAggregator;
     }
-    
+
     /**
      * @return Janus_Client
      */
@@ -332,7 +341,7 @@ class EngineBlock_SocialData
     {
         $this->_serviceRegistry = $serviceRegistry;
     }
-    
+
     /**
      * @return EngineBlock_SocialData_FieldMapper mapper
      */
