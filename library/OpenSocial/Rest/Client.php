@@ -203,7 +203,9 @@ class OpenSocial_Rest_Client
             case 'Groups':
                 return 'Group';
             case 'Person':
-                return 'People';
+                return 'Person';
+            case 'People    ':
+                return 'Person';
             default:
                 throw new OpenSocial_Rest_Exception("Unknown serviceType $serviceType, cant find a model for it!");
         }
