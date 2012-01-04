@@ -207,7 +207,7 @@ class OpenSocial_Rest_Client
             case 'People':
                 return 'Person';
             default:
-                throw new OpenSocial_Rest_Exception("Unknown serviceType $serviceType, cant find a model for it!");
+                throw new OpenSocial_Rest_Exception("Unknown serviceType $serviceType, can not find a model for it!");
         }
     }
 }
