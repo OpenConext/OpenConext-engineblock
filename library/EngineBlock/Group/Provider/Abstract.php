@@ -252,4 +252,16 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
         }
         return $decoratedProvider;
     }
+
+    /**
+     * Verify if the given $groupId is from an external group
+     *
+     * @static
+     * @param $groupId the group identifier
+     * @return bool true id the group is external
+     */
+    public static function isExternalGroup($groupId) {
+       return preg_match('/^urn:collab:group:\w*\.?surfteams\.nl:/', $groupId) === 0;
+    }
+
 }

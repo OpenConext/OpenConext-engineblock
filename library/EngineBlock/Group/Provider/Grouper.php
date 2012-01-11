@@ -95,12 +95,14 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getMembers($groupIdentifier)
     {
-        $stemmedGroupIdentifier = $this->_getStemmedGroupId($groupIdentifier);
-        $subjects = $this->_grouperClient->getMembersWithPrivileges($stemmedGroupIdentifier);
-
         $members = array();
-        foreach ($subjects as $subject) {
-            $members[] = $this->_mapGrouperSubjectToEngineBlockGroupMember($subject, $stemmedGroupIdentifier);
+        if (!EngineBlock_Group_Provider_Abstract::isExternalGroup($groupIdentifier)) {
+            $stemmedGroupIdentifier = $this->_getStemmedGroupId($groupIdentifier);
+            $subjects = $this->_grouperClient->getMembersWithPrivileges($stemmedGroupIdentifier);
+
+            foreach ($subjects as $subject) {
+                $members[] = $this->_mapGrouperSubjectToEngineBlockGroupMember($subject, $stemmedGroupIdentifier);
+            }
         }
         return $members;
     }

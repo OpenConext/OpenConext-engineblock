@@ -125,7 +125,7 @@ class EngineBlock_SocialData
         /**
          * @var EngineBlock_Group_Model_GroupMember $groupMember
          */
-        $externalGroup = $this->_isExternalGroup($groupId);
+        $externalGroup = EngineBlock_Group_Provider_Abstract::isExternalGroup($groupId);
         foreach ($groupMembers as $groupMember) {
             if ($externalGroup) {
                 $people[] = $this->_mapEngineBlockGroupMemberToOpenSocialGroupMember($groupMember);
@@ -230,10 +230,6 @@ class EngineBlock_SocialData
     protected function _isSha1String($string)
     {
         return (strlen($string) === 40 && preg_match('|[\da-fA-F]|', $string));
-    }
-
-    protected function _isExternalGroup($groupId) {
-       return preg_match('/^urn:collab:group:\w*\.?surfteams\.nl:/', $groupId) === 0;
     }
 
     /**
