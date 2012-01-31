@@ -49,7 +49,7 @@ class EngineBlock_Provisioner_ProvisioningManager
 
         // https://os.XXX.surfconext.nl/provisioning-manager/provisioning/jit.shtml?
         // provisionDomain=apps.surfnet.nl&provisionAdmin=admin%40apps.surfnet.nl&
-        // provisionPassword=xxxxx&provisionType=GOOGLE
+        // provisionPassword=xxxxx&provisionType=GOOGLE&provisionGroups=true
         
         $client = new Zend_Http_Client($this->_url);
         $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
@@ -58,6 +58,7 @@ class EngineBlock_Provisioner_ProvisioningManager
             ->setParameterGet('provisionDomain'     , $spMetadata['ExternalProvisionDomain'])
             ->setParameterGet('provisionAdmin'      , $spMetadata['ExternalProvisionAdmin'])
             ->setParameterGet('provisionPassword'   , $spMetadata['ExternalProvisionPassword'])
+            ->setParameterGet('provisionGroups'     , $spMetadata['ExternalProvisionGroups'])
 
             ->setRawData(json_encode($this->_getData($userId, $attributes)))
 

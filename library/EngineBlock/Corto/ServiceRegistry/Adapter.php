@@ -165,6 +165,13 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 if (isset($serviceRegistryEntity['coin']['provision_password'])) {
                     $cortoEntity['ExternalProvisionPassword'] = $serviceRegistryEntity['coin']['provision_password'];
                 }
+                if (isset($serviceRegistryEntity['coin']['is_provision_sp_groups'])) {
+                    $cortoEntity['ExternalProvisionGroups'] = $serviceRegistryEntity['coin']['is_provision_sp_groups'];
+                } else {
+                    //default we will provision groups
+                    $cortoEntity['ExternalProvisionGroups'] = true;
+                }
+
             }
             
             if (isset($serviceRegistryEntity['coin']['no_consent_required']) && $serviceRegistryEntity['coin']['no_consent_required']) {
