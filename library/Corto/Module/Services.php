@@ -555,16 +555,6 @@ class Corto_Module_Services extends Corto_Module_Abstract
                         ),
                     ),
                 ),
-                array(
-                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                    'ds:KeyInfo' => array(
-                        'ds:X509Data' => array(
-                            'ds:X509Certificate' => array(
-                                Corto_XmlToArray::VALUE_PFX => $this->_loadHostSslKey(),
-                            ),
-                        ),
-                    ),
-                ),
             );
         }
         $entityDescriptor['md:IDPSSODescriptor']['md:NameIDFormat'] = array(
@@ -655,16 +645,6 @@ class Corto_Module_Services extends Corto_Module_Abstract
                     'md:EncryptionMethod' => array(
                         array(
                             '_Algorithm' => 'http://www.w3.org/2001/04/xmlenc#rsa-1_5',
-                        ),
-                    ),
-                ),
-                array(
-                    Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                    'ds:KeyInfo' => array(
-                        'ds:X509Data' => array(
-                            'ds:X509Certificate' => array(
-                                Corto_XmlToArray::VALUE_PFX => $this->_loadHostSslKey(),
-                            ),
                         ),
                     ),
                 ),
@@ -762,18 +742,6 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $this->_server->sendHeader('Content-Type', 'application/xml');
         //$this->_server->sendHeader('Content-Type', 'application/samlmetadata+xml');
         $this->_server->sendOutput($xml);
-    }
-
-    /**
-     * Loads SSL key for current host
-     *
-     * @return string pem key
-     */
-    protected function _loadHostSslKey() 
-    {
-        $url = $_SERVER['HTTP_HOST'] . ':443';
-        $certificate = new EngineBlock_X509Certificate();
-        return $certificate->exportPemFromUrl($url);
     }
 
     /**
