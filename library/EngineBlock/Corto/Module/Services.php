@@ -418,10 +418,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $parameters = array($hashedUserId);
         $statement = $dbh->prepare($query);
         $statement->execute($parameters);
-        $resultSet = $statement->fetchAll();
+        $timesUserGaveConsent = (int)$statement->fetchColumn();
 
         //we only send a mail if an user provides consent the first time
-        if ($resultSet[0][0] !== '1') {
+        if ($timesUserGaveConsent > 1) {
             return;
         }
 
