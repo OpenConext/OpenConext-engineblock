@@ -47,6 +47,13 @@ class EngineBlock_Log_Writer_Mail extends Zend_Log_Writer_Abstract
     public static function factory($config)
     {
         $options = self::_parseConfig($config);
+        if (!isset($options['to'])) {
+            // Note that the logging is configured wrongly... but we can't log that because, well...
+            // the logging is configured wrongly... so we could crash and burn, but in this case that would be overkill,
+            // so we silently ignore it...
+            // Which may cause someone some headache down the road, but c'est la vie...
+            return new Zend_Log_Writer_Null();
+        }
 
         $formatter = new EngineBlock_Log_Formatter_Mail($options['filterValues']);
 
