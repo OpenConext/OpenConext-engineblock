@@ -70,7 +70,9 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         $providerConfigs = array();
         foreach ($providers as $providerConfigKey) {
             if (!isset($config->$providerConfigKey)) {
-                eblog()->error("Group Provider '$providerConfigKey' mentioned, but no config found.");
+                EngineBlock_ApplicationSingleton::getLog()->error(
+                    "Group Provider '$providerConfigKey' mentioned, but no config found."
+                );
                 continue;
             }
 

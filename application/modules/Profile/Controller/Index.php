@@ -50,7 +50,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
                         null,
                         $e->getTraceAsString());
 
-            eblog()->critical($e->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->critical($e->getMessage(), $additionalInfo);
         }
     }
 

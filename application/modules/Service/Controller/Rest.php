@@ -46,7 +46,7 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
         if ($gadgetUrl && !$entityId) {
             $identifiers = $this->_getRegistry()->findIdentifiersByMetadata('coin:gadgetbaseurl', $gadgetUrl);
             if (count($identifiers) > 1) {
-                eblog()->warn(
+                EngineBlock_ApplicationSingleton::getLog()->warn(
                     "Multiple identifiers found for gadgetbaseurl: '$gadgetUrl'"
                 );
                 throw new EngineBlock_Exception('Multiple identifiers found for gadgetbaseurl');
