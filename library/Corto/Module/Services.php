@@ -358,7 +358,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
             $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
 
             $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination'] = $response[Corto_XmlToArray::PRIVATE_PFX]['Return'];
-            $response[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
+            $response[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = 'INTERNAL';
 
             $this->_server->getBindingsModule()->send(
                 $response,
@@ -414,7 +414,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:obtained';
         $response[Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination'] = $response[Corto_XmlToArray::PRIVATE_PFX]['Return'];
-        $response[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
+        $response[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = 'INTERNAL';
 
         $this->_server->getBindingsModule()->send(
             $response,

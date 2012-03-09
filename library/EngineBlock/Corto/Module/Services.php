@@ -237,7 +237,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
 
             $response['_Destination'] = $response['__']['Return'];
-            $response['__']['ProtocolBinding'] = self::DEFAULT_RESPONSE_BINDING;
+            $response['__']['ProtocolBinding'] = 'INTERNAL';
 
             $this->_server->getBindingsModule()->send(
                 $response,
