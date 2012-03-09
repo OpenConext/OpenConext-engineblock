@@ -47,25 +47,6 @@ class EngineBlock_User
         return $this->_attributes;
     }
 
-        /**
-     * Completely remove a user from the SURFconext platform. Currently this consists of removing the user from the:
-     * - LDAP
-     *
-     * @param string $uid
-     * @return void
-     */
-    public function delete()
-    {
-        $this->_deleteLdapUser();
-
-        $this->_deleteUserConsent();
-
-        $this->_deleteOauthTokens();
-
-        // Delete the cookies and session
-        $this->_deleteFromEnvironment();
-    }
-
     public function deleteConsent($spId)
     {
         $factory = $this->_getDatabaseConnection();
@@ -159,9 +140,25 @@ class EngineBlock_User
     }
 
     /**
+     * Completely remove a user from the SURFconext platform.
+     *
+     * @return void
+     */
+    public function delete()
+    {
+        $this->_deleteLdapUser();
+
+        $this->_deleteUserConsent();
+
+        $this->_deleteOauthTokens();
+
+        // Delete the cookies and session
+        $this->_deleteFromEnvironment();
+    }
+
+    /**
      * Delete the user from the SURFconext LDAP.
      *
-     * @param  $uid
      * @return void
      */
     protected function _deleteLdapUser()
@@ -177,7 +174,6 @@ class EngineBlock_User
     /**
      * Delete the user consent form the database
      *
-     * @param  $uid
      * @return void
      */
     protected function _deleteUserConsent()
