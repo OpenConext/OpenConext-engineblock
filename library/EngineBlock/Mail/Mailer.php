@@ -46,6 +46,7 @@ class EngineBlock_Mail_Mailer
             EngineBlock_ApplicationSingleton::getLog()->err(
                 "Unable to send mail because of missing email configuration: " . $emailType
             );
+            return;
         }
 
         $emailText = $rows[0]['email_text'];
