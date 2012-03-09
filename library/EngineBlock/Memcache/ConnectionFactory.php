@@ -58,7 +58,7 @@ class EngineBlock_Memcache_ConnectionFactory {
                 $serverConfiguration = $configuration->memcache->$serverName;
             }
             $serverArguments = $this->_getServerArgumentsForConfiguration($serverName, $serverConfiguration);
-            call_user_method_array('addServer', $memcache, $serverArguments);
+            call_user_func_array(array($memcache, 'addServer'), $serverArguments);
         }
         $this->_memcache = $memcache;
         return $this->_memcache;
