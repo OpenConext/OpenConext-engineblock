@@ -375,7 +375,11 @@ class Corto_ProxyServer
 
     public function sendAuthenticationRequest(array $request, $idpEntityId, $scope = null)
     {
-        $this->setCookie('selectedIdp', $idpEntityId);
+        $cookieExpiresStamp = null;
+        if (isset($this->_configs['rememberIdp'])) {
+            $cookieExpiresStamp = strtotime($this->_configs['rememberIdp']);
+        }
+        $this->setCookie('selectedIdp', $idpEntityId, $cookieExpiresStamp);
 
         $originalId = $request['_ID'];
 

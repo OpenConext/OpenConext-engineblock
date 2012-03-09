@@ -265,6 +265,7 @@ class EngineBlock_Corto_Adapter
             'trace' => $application->getConfigurationValue('debug', false),
             'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true),
             'NoSupportedIDPError' => 'user',
+            'rememberIdp' => '+3 months',
         ));
 
         $attributes = array();
