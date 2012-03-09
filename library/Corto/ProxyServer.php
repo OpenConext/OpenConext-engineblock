@@ -427,8 +427,8 @@ class Corto_ProxyServer
             'saml:Issuer' => array('__v' => $this->getCurrentEntityUrl('sPMetadataService')),
             'ds:Signature' => '__placeholder__',
             'samlp:NameIDPolicy' => array(
-                '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-                '_AllowCreate' => 'true',
+                '_Format'       => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                '_AllowCreate'  => 'true',
             ),
         );
 
