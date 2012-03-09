@@ -31,7 +31,6 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         try {
-
             $proxyServer = new EngineBlock_Corto_Adapter();
 
             $idPEntityId = NULL;
