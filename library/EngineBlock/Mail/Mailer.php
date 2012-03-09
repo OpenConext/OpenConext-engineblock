@@ -25,7 +25,6 @@
 
 class EngineBlock_Mail_Mailer
 {
-
     /**
      * Send a mail based on the configuration in the emails table
      *
@@ -43,37 +42,37 @@ class EngineBlock_Mail_Mailer
         $statement = $dbh->prepare($query);
         $statement->execute($parameters);
         $rows = $statement->fetchAll();
-        if (count($rows) === 1) {
-            $emailText = $rows[0]['email_text'];
-            foreach ($replacements as $key => $value) {
-                // Single value replacement
-                if (!is_array($value)) {
-                    $emailText = str_ireplace($key, $value, $emailText);
-                }
-                // Multi value replacement
-                else {
-                    $replacement = '<ul>';
-                    foreach ($value as $valElem) {
-                        $replacement .= '<li>' . $valElem . '</li>';
-                    }
-                    $replacement .= '</ul>';
-                    $emailText = str_ireplace($key, $replacement, $emailText);
-                }
-            }
-            $emailFrom = $rows[0]['email_from'];
-            $emailSubject = $rows[0]['email_subject'];
-            $mail = new Zend_Mail('UTF-8');
-            $mail->setBodyHtml($emailText, 'utf-8', 'utf-8');
-            $mail->setFrom($emailFrom, "SURFconext Support");
-            $mail->addTo($emailAddress);
-            $mail->setSubject($emailSubject);
-            $mail->send();
-        } else {
+        if (count($rows) !== 1) {
             EngineBlock_ApplicationSingleton::getLog()->err(
-                "Unable to send mail because of missing email configuration: " . $emailType);
+                "Unable to send mail because of missing email configuration: " . $emailType
+            );
         }
-    }
 
+        $emailText = $rows[0]['email_text'];
+        foreach ($replacements as $key => $value) {
+            // Single value replacement
+            if (!is_array($value)) {
+                $emailText = str_ireplace($key, $value, $emailText);
+            }
+            // Multi value replacement
+            else {
+                $replacement = '<ul>';
+                foreach ($value as $valElem) {
+                    $replacement .= '<li>' . $valElem . '</li>';
+                }
+                $replacement .= '</ul>';
+                $emailText = str_ireplace($key, $replacement, $emailText);
+            }
+        }
+        $emailFrom = $rows[0]['email_from'];
+        $emailSubject = $rows[0]['email_subject'];
+        $mail = new Zend_Mail('UTF-8');
+        $mail->setBodyHtml($emailText, 'utf-8', 'utf-8');
+        $mail->setFrom($emailFrom, "SURFconext Support");
+        $mail->addTo($emailAddress);
+        $mail->setSubject($emailSubject);
+        $mail->send();
+    }
 
     /**
      * @return PDO

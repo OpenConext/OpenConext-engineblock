@@ -407,8 +407,8 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
             return;
         }
-        $emailConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->email;
-        if (!(isset($emailConfig) && $emailConfig->sendWelcomeMail)) {
+        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        if (!isset($config->email->sendWelcomeMail) || !$config->email->sendWelcomeMail) {
             return;
         }
 
