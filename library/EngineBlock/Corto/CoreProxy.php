@@ -59,7 +59,11 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         foreach ($this->_serviceToControllerMapping as $serviceName => $controllerUri) {
             if (strstr($urlPath, $controllerUri)) {
                 $urlPath = str_replace($controllerUri, $serviceName, $urlPath);
-                list($parameters['ServiceName'], $parameters['RemoteIdPMd5Hash']) = explode('/', $urlPath);
+                $urlParts = explode('/', $urlPath);
+                $parameters['ServiceName'] = array_shift($urlParts);
+                if (isset($urlParts[0])) {
+                    $parameters['RemoteIdPMd5Hash'] = array_shift($urlParts);
+                }
                 return $parameters;
             }
         }

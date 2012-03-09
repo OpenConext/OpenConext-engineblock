@@ -54,7 +54,10 @@ class EngineBlock_Corto_Module_Bindings extends Corto_Module_Bindings
     protected function _verifyKnownIssuer(array $message)
     {
         $messageIssuer = $message['saml:Issuer']['__v'];
-        $destination = $message['_Destination'];
+        $destination = "";
+        if (isset($message['_Destination'])) {
+            $destination = $message['_Destination'];
+        }
         try {
             $remoteEntity = $this->_server->getRemoteEntity($messageIssuer);
         } catch (Corto_ProxyServer_Exception $e) {

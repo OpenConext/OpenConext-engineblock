@@ -163,6 +163,7 @@ class Corto_XmlToArray
         xml_parser_free($parser);
         self::$_singulars = array_fill_keys(self::$_singulars, 1);
         $return = self::_xml2array($values);
+        self::$_singulars = array_keys(self::$_singulars);
         return $return[0];
     }
 
@@ -176,13 +177,17 @@ class Corto_XmlToArray
      * @return array
      */
 
-    protected static $c = 0;
+    protected static $counter = 0;
      
     protected static function _xml2array(&$elements, $level = 1, $namespaceMapping = array())
     {
         static $defaultNs;
         $newElement = array();
-        while($value = $elements[self::$c++]) {
+
+        while(isset($elements[self::$counter])) {
+            $value = $elements[self::$counter];
+            self::$counter++;
+
             if ($value['type'] == 'close') {
                 return $newElement;
             } elseif ($value['type'] == 'cdata') {
@@ -226,25 +231,18 @@ class Corto_XmlToArray
                 foreach($cs as $c) {
                     $tagName = $c[self::TAG_NAME_PFX];
                     unset($c[self::TAG_NAME_PFX]);
-#                   if (in_array($tagName, self::$_multipleValues)) {
-#                    if (!in_array($tagName, self::$_singulars)) {
-                    if (!self::$_singulars[$tagName]) {
+
+                    if (!isset(self::$_singulars[$tagName])) {
                         $complete[$tagName][] = $c;
                     } else {
                         $complete[$tagName] = $c;
                         unset($complete[$tagName][self::TAG_NAME_PFX]);
                     }
                 }
-            } elseif ($value['type'] == 'complete') {
-            }
-            if ($level == 2) {
-#                print_r($complete);
-#                print time() . "\n";    
             }
             $newElement[] = $complete;
         }
-        self::$c = 0;
-        self::$_singulars = array_keys(self::$_singulars);
+        self::$counter = 0;
         return $newElement;
     }
 

@@ -66,7 +66,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
      */
     public function filterEntitiesByWorkflowState(array $entities, $workflowState) {
         foreach ($entities as $entityId => $entityData) {
-            if (($entityData['WorkflowState'] != $workflowState)) {
+            if (!isset($entityData['WorkflowState']) || $entityData['WorkflowState'] !== $workflowState) {
                 unset($entities[$entityId]);
             }
         }
@@ -173,7 +173,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 }
 
             }
-            
+
             if (isset($serviceRegistryEntity['coin']['no_consent_required']) && $serviceRegistryEntity['coin']['no_consent_required']) {
                 $cortoEntity['NoConsentRequired'] = TRUE;
             }

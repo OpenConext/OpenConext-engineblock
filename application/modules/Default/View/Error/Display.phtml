@@ -50,11 +50,11 @@ $layout->footerText = $this->t('footer');
     </div>
 </div>
 
-<?php if ($exception) { ?>
+<?php if (isset($exception)) { ?>
 <strong><?php echo $exception->getMessage();?></strong>
 <pre>
     <?php var_dump($exception); ?>
 </pre>
 
-<?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
+<?php if (isset($exception->xdebug_message)) { echo $exception->xdebug_message; } ?>
 <? } ?>

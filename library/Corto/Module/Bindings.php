@@ -160,8 +160,11 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
         $message        = base64_decode($_POST[$key]);
         $messageArray   = $this->_getArrayFromReceivedMessage($message);
-        
-        $relayState     = $_POST['RelayState'];
+
+        $relayState = "";
+        if (isset($_POST['RelayState'])) {
+            $relayState     = $_POST['RelayState'];
+        }
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['RelayState']   = $relayState;
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['Raw']          = $message;
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['paramname']    = $key;
@@ -794,7 +797,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
         $destinationLocation = $message['_Destination'];
         $parameters = $this->_server->getParametersFromUrl($destinationLocation);
-        $this->_server->setCurrentEntity($parameters['EntityCode'], $parameters['RemoteIdPMd5']);
+        $this->_server->setCurrentEntity($parameters['EntityCode'], isset($parameters['RemoteIdPMd5']) ? $parameters['RemoteIdPMd5'] : "");
 
         $this->_server->getSessionLog()->debug("Using internal binding for destination: $destinationLocation, resulting in parameters: " . var_export($parameters, true));
 

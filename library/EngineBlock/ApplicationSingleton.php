@@ -489,7 +489,7 @@ class EngineBlock_ApplicationSingleton
     {
         $log = $this->getLogInstance();
         if (!$log) {
-            return false;
+            return FALSE;
         }
 
         $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
@@ -497,6 +497,8 @@ class EngineBlock_ApplicationSingleton
         );
         $log->err($exception->getMessage(), $additionalInfo);
         $log->debug($exception->getTraceAsString());
+
+        return TRUE;
     }
 
     //////////// CONFIGURATION
