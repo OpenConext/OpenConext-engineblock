@@ -73,6 +73,10 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getLogInstance()->warn('Session lost error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
+            $application->getLogInstance()->warn('User not a member error');
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
+        }
     }
 
     /**
