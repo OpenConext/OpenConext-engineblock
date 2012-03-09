@@ -461,7 +461,11 @@ class EngineBlock_ApplicationSingleton
             return false;
         }
 
-        $this->reportError(new Exception($errorMesage . " [$errorFile:$errorLine]", $errorNumber));
+        try {
+            $this->reportError(new Exception($errorMesage . " [$errorFile:$errorLine]", $errorNumber));
+        }
+        catch (Exception $e) {
+        }
 
         // Execute PHP internal error handler
         return false;
