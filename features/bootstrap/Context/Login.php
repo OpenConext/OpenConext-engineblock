@@ -69,7 +69,6 @@ class Login extends BehatContext
      */
     public function iPassThroughEngineBlock()
     {
-        $this->getMainContext()->pressButton('Submit'); // POST SAML to engineblock itself
         $this->getMainContext()->pressButton('Submit'); // POST SAML back to Service Provider
     }
 
@@ -101,7 +100,7 @@ class Login extends BehatContext
      */
     public function engineblockGivesMeTheError($errorMessage)
     {
-        $this->getMainContext()->pressButton('Submit');
+        //$this->getMainContext()->pressButton('Submit');
         $this->getMainContext()->assertPageContainsText($errorMessage);
     }
 
