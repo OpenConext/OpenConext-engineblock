@@ -52,7 +52,9 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
             $this->_idpMetadata
         );
 
-        $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID] = array($subjectId);
+        $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID] = array(
+            0 => $subjectId
+        );
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
         $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(

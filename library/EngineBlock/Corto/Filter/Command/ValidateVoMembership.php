@@ -56,7 +56,7 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
         $validator = new EngineBlock_VirtualOrganization_Validator();
         $isMember = $validator->isMember(
             $vo,
-            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID],
+            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0],
             $this->_idpMetadata['EntityId']
         );
         if (!$isMember) {

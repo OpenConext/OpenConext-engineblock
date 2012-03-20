@@ -53,7 +53,7 @@ class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_C
         );
         $this->_responseAttributes = $aggregator->aggregateFor(
             $this->_responseAttributes,
-            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID]
+            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0]
         );
     }
 

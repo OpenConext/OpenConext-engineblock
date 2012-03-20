@@ -46,7 +46,7 @@ class EngineBlock_Corto_Filter_Command_ValidateLicense extends EngineBlock_Corto
         $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
         $licenseEngine = new EngineBlock_LicenseEngine_ValidationManager($config);
         $licenseCode = $licenseEngine->validate(
-            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID],
+            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0],
             $this->_spMetadata,
             $this->_idpMetadata
         );

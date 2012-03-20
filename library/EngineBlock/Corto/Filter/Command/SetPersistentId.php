@@ -63,7 +63,7 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
         }
         else {
             $nameId = $this->_getPersistentNameId(
-                $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID],
+                $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0],
                 $this->_spMetadata['EntityId']
             );
         }

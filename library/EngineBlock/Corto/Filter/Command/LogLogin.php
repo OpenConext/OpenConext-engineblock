@@ -39,7 +39,7 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
         $tracker->trackLogin(
             $this->_spMetadata,
             $this->_idpMetadata,
-            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID],
+            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0],
             $voContext
         );
     }
