@@ -47,7 +47,7 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
 
     public function execute()
     {
-        $this->_response['__']['IntendedNameId'] = $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID];
+        $this->_response['__']['IntendedNameId'] = $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0];
 
         $manipulator = new EngineBlock_AttributeManipulator_File();
         $manipulator->manipulate(
