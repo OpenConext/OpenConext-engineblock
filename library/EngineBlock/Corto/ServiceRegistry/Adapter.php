@@ -84,6 +84,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         return $this->_getRemoteSPsMetaData() + $this->_getRemoteIdPsMetadata();
     }
 
+    public function getArp($spEntityId)
+    {
+        return $this->_serviceRegistry->getArp($spEntityId);
+    }
+
     protected function _getRemoteIdPsMetadata()
     {
         $metadata = array();
