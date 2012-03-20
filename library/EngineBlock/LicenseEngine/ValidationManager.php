@@ -47,10 +47,10 @@ class EngineBlock_LicenseEngine_ValidationManager
     /**
      * Validate the license information
      *
-     * @param  $userId
-     * @param  $spMetadata
-     * @param  $idpMetadata
-     * @return void
+     * @param string $userId
+     * @param array $spMetadata
+     * @param array $idpMetadata
+     * @return string
      */
     public function validate($userId, array $spMetadata, array $idpMetadata)
     {
