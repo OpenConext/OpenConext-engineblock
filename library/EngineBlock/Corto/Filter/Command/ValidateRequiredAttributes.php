@@ -33,7 +33,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
 
         if (isset($idpEntityMetadata['SchacHomeOrganization'])) {
             // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
-            $responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
+            $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
                 $idpEntityMetadata['SchacHomeOrganization']
             );
         }
@@ -52,7 +52,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
         if (!empty($errors)) {
             throw new EngineBlock_Corto_Exception_MissingRequiredFields(
                 "Errors validating attributes, errors: " . print_r($errors, true) .
-                    ' attributes: ' . print_r($responseAttributes, true)
+                    ' attributes: ' . print_r($this->_responseAttributes, true)
             );
         }
     }

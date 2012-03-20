@@ -55,7 +55,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
         $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID] = array($subjectId);
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
-        $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
+        $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
             '_Format' => self::SAML2_NAMEID_FORMAT_PERSISTENT,
             '__v'     => $subjectId
         );

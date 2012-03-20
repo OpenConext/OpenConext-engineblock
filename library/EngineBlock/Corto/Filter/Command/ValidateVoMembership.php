@@ -63,6 +63,6 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
             throw new EngineBlock_Corto_Exception_UserNotMember("User not a member of VO $vo");
         }
 
-        $responseAttributes[self::VO_NAME_ATTRIBUTE] = $vo;
+        $this->_responseAttributes[self::VO_NAME_ATTRIBUTE] = $vo;
     }
 }
