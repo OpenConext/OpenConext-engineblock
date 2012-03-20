@@ -140,7 +140,7 @@ class Janus_Client
     public function getArp($spEntityId)
     {
         $response = $this->_getRestClient()->arp()
-                                          ->spentityid($spEntityId)
+                                          ->entityid($spEntityId)
                                           ->get();
         return $response;
     }
