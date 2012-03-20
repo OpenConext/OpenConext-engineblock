@@ -31,10 +31,10 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     {
         $errors = array();
 
-        if (isset($idpEntityMetadata['SchacHomeOrganization'])) {
+        if (isset($this->_idpMetadata['SchacHomeOrganization'])) {
             // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
             $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
-                $idpEntityMetadata['SchacHomeOrganization']
+                $this->_idpMetadata['SchacHomeOrganization']
             );
         }
         else {
@@ -95,7 +95,6 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
 
     /**
      * @param string $schacHomeOrganization
-     * @param array $idpEntityMetadata
      * @return bool
      */
     protected function _isReservedSchacHomeOrganization($schacHomeOrganization)

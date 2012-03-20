@@ -31,14 +31,14 @@ class EngineBlock_Corto_Filter_Command_SetAlternateKeys extends EngineBlock_Cort
 {
     public function execute()
     {
-        if (isset($spEntityMetadata['AlternatePrivateKey']) && $spEntityMetadata['AlternatePublicKey']) {
+        if (isset($this->_spMetadata['AlternatePrivateKey']) && $this->_spMetadata['AlternatePublicKey']) {
             return;
         }
 
         $currentEntity  = $this->_adapter->getProxyServer()->getCurrentEntity();
         $hostedEntities = $this->_adapter->getProxyServer()->getHostedEntities();
-        $hostedEntities[$currentEntity['EntityId']]['certificates']['private']  = $spEntityMetadata['AlternatePrivateKey'];
-        $hostedEntities[$currentEntity['EntityId']]['certificates']['public']   = $spEntityMetadata['AlternatePublicKey'];
+        $hostedEntities[$currentEntity['EntityId']]['certificates']['private']  = $this->_spMetadata['AlternatePrivateKey'];
+        $hostedEntities[$currentEntity['EntityId']]['certificates']['public']   = $this->_spMetadata['AlternatePublicKey'];
         $this->_adapter->getProxyServer()->setHostedEntities($hostedEntities);
         $this->_adapter->getProxyServer()->setCurrentEntity($currentEntity['EntityCode']);
     }
