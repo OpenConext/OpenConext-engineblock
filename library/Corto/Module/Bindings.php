@@ -250,8 +250,6 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             $this->_verifySignature($request, self::KEY_REQUEST);
             $request['__']['WasSigned'] = true;
         }
-        
-        $this->_verifyMessageDestinedForUs($request);
     }
 
     /**
@@ -416,7 +414,6 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             $this->_verifySignature($response, self::KEY_RESPONSE);
             $request['__']['WasSigned'] = true;
         }
-        $this->_verifyMessageDestinedForUs($response);
         $this->_verifyTimings($response);
     }
 
@@ -536,16 +533,6 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             return false;
         }
         return (openssl_verify($signedInfo, $signatureValue, $publicKey) == 1);
-    }
-
-    protected function _verifyMessageDestinedForUs(array $message)
-    {
-        $destinationId = $message['_Destination'];
-        if ($destinationId && $this->_verifyDestination) { // Destination is optional
-            if ($this->_server->selfDestination() != $destinationId) {
-                throw new Corto_Module_Bindings_VerificationException("Destination: '$destinationId' is not here; message not destined for us");
-            }
-        }
     }
 
     protected function _verifyTimings(array $message)
