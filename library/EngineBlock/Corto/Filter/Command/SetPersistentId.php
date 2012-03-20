@@ -69,15 +69,15 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
         }
 
         // Adjust the NameID in the NEW response, set the collab:person uid
-        $response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
+        $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
             '_Format' => $nameIdFormat,
-            '__v' => $nameId,
+            '__v'     => $nameId,
         );
 
         // Add the eduPersonTargetedId
-        $responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
+        $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
             array(
-                "saml:NameID" => $response['saml:Assertion']['saml:Subject']['saml:NameID'],
+                "saml:NameID" => $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'],
             )
         );
     }
