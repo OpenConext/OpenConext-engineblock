@@ -165,6 +165,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         if (isset($_POST['RelayState'])) {
             $relayState     = $_POST['RelayState'];
         }
+        $messageArray[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['RelayState']   = $relayState;
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['Raw']          = $message;
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['paramname']    = $key;
@@ -210,6 +211,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             $messageArray[Corto_XmlToArray::PRIVATE_PFX]['SigningAlgorithm'] = $_GET['SigAlg'];
         }
 
+        $messageArray[Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['Raw'] = $message;
         $messageArray[Corto_XmlToArray::PRIVATE_PFX]['paramname'] = $key;
 
