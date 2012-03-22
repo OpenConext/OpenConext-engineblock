@@ -28,7 +28,6 @@
  */
 class EngineBlock_Corto_Filter_Command_AddVoMemberships extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const URN_OID_COLLAB_PERSON_ID  = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
     const URN_IS_MEMBER_OF          = 'urn:mace:dir:attribute-def:isMemberOf';
     const URN_VO_PREFIX             = 'urn:collab:org:';
 
@@ -44,6 +43,12 @@ class EngineBlock_Corto_Filter_Command_AddVoMemberships extends EngineBlock_Cort
 
     public function execute()
     {
+        if (!$this->_collabPersonId) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing collabPersonId'
+            );
+        }
+
         if (!$this->_spMetadata['ProvideIsMemberOf']) {
             return;
         }
@@ -52,11 +57,10 @@ class EngineBlock_Corto_Filter_Command_AddVoMemberships extends EngineBlock_Cort
             $this->_responseAttributes[self::URN_IS_MEMBER_OF] = array();
         }
         $groups = &$this->_responseAttributes[self::URN_IS_MEMBER_OF];
-        $collabPersonId = $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0];
         $voValidator  = new EngineBlock_VirtualOrganization_Validator();
         $voCollection = new EngineBlock_VirtualOrganization_Collection();
         foreach ($voCollection->load() as $vo) {
-            $isMember = $voValidator->isMember($vo->getId(), $collabPersonId, $this->_idpMetadata["EntityId"]);
+            $isMember = $voValidator->isMember($vo->getId(), $this->_collabPersonId, $this->_idpMetadata["EntityId"]);
             if ($isMember) {
                 $groups[] = self::URN_VO_PREFIX . $vo->getId();
             }

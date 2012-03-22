@@ -25,11 +25,16 @@
 
 class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const URN_OID_COLLAB_PERSON_ID  = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
     const VO_NAME_ATTRIBUTE         = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
 
     public function execute()
     {
+        if (!$this->_collabPersonId) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing collabPersonId'
+            );
+        }
+
         $voContext = null;
         if (isset($this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0])) {
             $voContext = $this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0];
@@ -39,7 +44,7 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
         $tracker->trackLogin(
             $this->_spMetadata,
             $this->_idpMetadata,
-            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0],
+            $this->_collabPersonId,
             $voContext
         );
     }

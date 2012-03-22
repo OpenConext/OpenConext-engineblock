@@ -90,6 +90,18 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
             return $this->_responseAttributes['urn:mace:dir:attribute-def:givenName'][0];
         }
 
+        if (!isset($this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0])) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing UID attribute'
+            );
+        }
+
+        if (!isset($this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0])) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing UID attribute'
+            );
+        }
+
         return $this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0];
     }
 
@@ -97,13 +109,10 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
      * Add the 'urn:collab:org:surf.nl' value to the isMemberOf attribute in case a user
      * is considered a 'full member' of the SURFfederation.
      *
-     * @param array $this->_responseAttributes
-     * @param array $this->_idpMetadata
-     * @return array Resonse Attributes
+     * @return array Response Attributes
      */
     protected function _addIsMemberOfSurfNlAttribute()
     {
-        // Determine guest status
         if (!isset($this->_idpMetadata['GuestQualifier'])) {
             EngineBlock_ApplicationSingleton::getLog()->warn(
                 'No GuestQualifier for IdP: ' . var_export($this->_idpMetadata, true) .
@@ -113,18 +122,12 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
         }
 
         if ($this->_idpMetadata['GuestQualifier'] === 'None') {
-            if (!isset($this->_responseAttributes[static::URN_IS_MEMBER_OF])) {
-                $this->_responseAttributes[static::URN_IS_MEMBER_OF] = array();
-            }
-            $this->_responseAttributes[static::URN_IS_MEMBER_OF][] = self::URN_COLLAB_ORG_SURF;
+            $this->_setIsMember();
         }
         else if ($this->_idpMetadata['GuestQualifier'] === 'Some') {
             if (isset($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0])) {
                 if ($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0] === 'member') {
-                    if (!isset($this->_responseAttributes[static::URN_IS_MEMBER_OF])) {
-                        $this->_responseAttributes[static::URN_IS_MEMBER_OF] = array();
-                    }
-                    $this->_responseAttributes[static::URN_IS_MEMBER_OF][] = self::URN_COLLAB_ORG_SURF;
+                    $this->_setIsMember();
                 }
                 else {
                     EngineBlock_ApplicationSingleton::getLog()->notice(
@@ -143,6 +146,24 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
                 );
             }
         }
-        return $this->_responseAttributes;
+        else if ($this->_idpMetadata['GuestQualifier'] === 'All') {
+            // All users from this IdP are guests, so no need to add the isMemberOf
+        }
+        else {
+            // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
+            EngineBlock_ApplicationSingleton::getLog()->warn(
+                "Idp guestQualifier is set to unknown value '{$this->_idpMetadata['GuestQualifier']}, idp metadata: " .
+                    var_export($this->_idpMetadata, true) .
+                    var_export($this->_responseAttributes, true)
+            );
+        }
+    }
+
+    protected function _setIsMember()
+    {
+        if (!isset($this->_responseAttributes[static::URN_IS_MEMBER_OF])) {
+            $this->_responseAttributes[static::URN_IS_MEMBER_OF] = array();
+        }
+        $this->_responseAttributes[static::URN_IS_MEMBER_OF][] = self::URN_COLLAB_ORG_SURF;
     }
 }

@@ -26,21 +26,25 @@
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
 {
     const SAML2_NAMEID_FORMAT_PERSISTENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
-    const URN_OID_COLLAB_PERSON_ID  = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
 
     /**
-     * This command may modify the response attributes
+     * This command modifies the response
      *
      * @return array
      */
-    public function getResponseAttributes()
-    {
-        return $this->_responseAttributes;
-    }
-
     public function getResponse()
     {
         return $this->_response;
+    }
+
+    /**
+     * This command modifies the collabPersonId
+     *
+     * @return string
+     */
+    public function getCollabPersonId()
+    {
+        return $this->_collabPersonId;
     }
 
     public function execute()
@@ -52,9 +56,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
             $this->_idpMetadata
         );
 
-        $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID] = array(
-            0 => $subjectId
-        );
+        $this->setCollabPersonId($subjectId);
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
         $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(

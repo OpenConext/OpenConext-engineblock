@@ -25,7 +25,6 @@
 
 class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const URN_OID_COLLAB_PERSON_ID  = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
     const VO_NAME_ATTRIBUTE         = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
 
     /**
@@ -40,6 +39,12 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
 
     public function execute()
     {
+        if (!$this->_collabPersonId) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing collabPersonId'
+            );
+        }
+
         // In filter stage we need to take a look at the VO context
         if (!isset($this->_request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
             return;
@@ -56,7 +61,7 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
         $validator = new EngineBlock_VirtualOrganization_Validator();
         $isMember = $validator->isMember(
             $vo,
-            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0],
+            $this->_collabPersonId,
             $this->_idpMetadata['EntityId']
         );
         if (!$isMember) {

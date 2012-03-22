@@ -24,13 +24,14 @@
  */
 
 /**
- * Here we call the external ValidationManager to check what the license information is. An extra SAML response
- * attribute is added to inform the SP what the license status is.
+ * Adds group the current user is a member of
  */
-class EngineBlock_Corto_Filter_Command_ValidateLicense extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    const URN_OID_COLLAB_PERSON_ID  = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
+
     /**
-     * This command may modify the response attributes
+     * This command modifies the response attributes
      *
      * @return array
      */
@@ -41,22 +42,8 @@ class EngineBlock_Corto_Filter_Command_ValidateLicense extends EngineBlock_Corto
 
     public function execute()
     {
-        if (!$this->_collabPersonId) {
-            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
-                'Missing collabPersonId'
-            );
-        }
-
-        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-        $licenseEngine = new EngineBlock_LicenseEngine_ValidationManager($config);
-        $licenseCode = $licenseEngine->validate(
-            $this->_collabPersonId,
-            $this->_spMetadata,
-            $this->_idpMetadata
-        );
-
-        $this->_responseAttributes[EngineBlock_LicenseEngine_ValidationManager::LICENSE_SAML_ATTRIBUTE] = array(
-            $licenseCode
+        $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID] = array(
+            0 => $this->_collabPersonId
         );
     }
 }

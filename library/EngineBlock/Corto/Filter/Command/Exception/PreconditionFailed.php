@@ -23,35 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-/**
- * Attribute / NameId / Response manipulation / mangling
- */
-class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed extends RuntimeException
 {
-    public function getResponse()
-    {
-        return $this->_response;
-    }
-
-    /**
-     * This command may modify the response attributes
-     *
-     * @return array
-     */
-    public function getResponseAttributes()
-    {
-        return $this->_responseAttributes;
-    }
-
-    public function execute()
-    {
-        $this->_response['__']['IntendedNameId'] = $this->_collabPersonId;
-
-        $manipulator = new EngineBlock_AttributeManipulator_File();
-        $manipulator->manipulate(
-            $this->_response['__']['IntendedNameId'],
-            $this->_responseAttributes,
-            $this->_response
-        );
-    }
 }

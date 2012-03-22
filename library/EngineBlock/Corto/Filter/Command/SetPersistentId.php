@@ -25,8 +25,6 @@
 
 class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const URN_OID_COLLAB_PERSON_ID  = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
-
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
     const SAML2_NAME_ID_FORMAT_UNSPECIFIED  = 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified';
@@ -63,7 +61,7 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
         }
         else {
             $nameId = $this->_getPersistentNameId(
-                $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0],
+                $this->_collabPersonId,
                 $this->_spMetadata['EntityId']
             );
         }

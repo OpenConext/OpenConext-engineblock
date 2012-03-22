@@ -56,6 +56,15 @@ abstract class EngineBlock_Corto_Filter_Abstract
         array $idpEntityMetadata
     )
     {
+        // Note that IDs are only unique per SP... we hope...
+        $sessionKey = $spEntityMetadata['EntityId'] . '>' . $request['_ID'];
+        if (isset($_SESSION[$sessionKey]['collabPersonId'])) {
+            $collabPersonId = $_SESSION[$sessionKey]['collabPersonId'];
+        }
+        else {
+            $collabPersonId = null;
+        }
+
         $commands = $this->_getCommands();
 
         /** @var EngineBlock_Corto_Filter_Command_Abstract $command */
@@ -67,6 +76,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
             $command->setRequest($request);
             $command->setResponse($response);
             $command->setResponseAttributes($responseAttributes);
+            $command->setCollabPersonId($collabPersonId);
 
             // Execute the command
             $command->execute();
@@ -77,11 +87,16 @@ abstract class EngineBlock_Corto_Filter_Abstract
             if (method_exists($command, 'getResponseAttributes')) {
                 $responseAttributes = $command->getResponseAttributes();
             }
+            if (method_exists($command, 'getCollabPersonId')) {
+                $collabPersonId = $command->getCollabPersonId();
+            }
 
             // Give the command a chance to stop filtering
             if (!$command->mustContinueFiltering()) {
                 break;
             }
         }
+
+        $_SESSION[$sessionKey]['collabPersonId'] = $collabPersonId;
     }
 }

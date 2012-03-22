@@ -28,7 +28,6 @@
  */
 class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const URN_OID_COLLAB_PERSON_ID  = 'urn:oid:1.3.6.1.4.1.1076.20.40.40.1';
     const VO_NAME_ATTRIBUTE         = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
 
     /**
@@ -43,6 +42,12 @@ class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_C
 
     public function execute()
     {
+        if (!$this->_collabPersonId) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing collabPersonId'
+            );
+        }
+
         $voContext = null;
         if (isset($attributes[self::VO_NAME_ATTRIBUTE])) {
             $voContext = $this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0];
@@ -53,7 +58,7 @@ class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_C
         );
         $this->_responseAttributes = $aggregator->aggregateFor(
             $this->_responseAttributes,
-            $this->_responseAttributes[self::URN_OID_COLLAB_PERSON_ID][0]
+            $this->_collabPersonId
         );
     }
 
