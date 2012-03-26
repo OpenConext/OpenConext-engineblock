@@ -92,7 +92,7 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
     public function getGroups($serviceProviderGroupAcls)
     {
         $this->_provider->setUserId($this->_userIdReplaced);
-        $results = $this->_provider->getGroups();
+        $results = $this->_provider->getGroups($serviceProviderGroupAcls);
         $this->_provider->setUserId($this->_userId);
 
         return $results;
@@ -106,7 +106,7 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
     public function getGroupsByStem($stem, $serviceProviderGroupAcls)
     {
         $this->_provider->setUserId($this->_userIdReplaced);
-        $results = $this->_provider->getGroupsByStem($stem);
+        $results = $this->_provider->getGroupsByStem($stem, $serviceProviderGroupAcls);
         $this->_provider->setUserId($this->_userId);
 
         return $results;
@@ -120,7 +120,7 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
     public function getMembers($groupIdentifier, $serviceProviderGroupAcls)
     {
         $this->_provider->setUserId($this->_userIdReplaced);
-        $results = $this->_provider->getMembers($groupIdentifier);
+        $results = $this->_provider->getMembers($groupIdentifier, $serviceProviderGroupAcls);
         $this->_provider->setUserId($this->_userId);
 
         return $results;
