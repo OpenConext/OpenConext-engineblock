@@ -58,11 +58,11 @@ class EngineBlock_Group_Provider_Decorator_GroupIdReplace
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
      */
-    public function getMembers($groupIdentifier)
+    public function getMembers($groupIdentifier,$serviceProviderGroupAcls )
     {
         $groupIdentifier = preg_replace($this->_search, $this->_replace, $groupIdentifier);
 
-        return parent::getMembers($groupIdentifier);
+        return parent::getMembers($groupIdentifier, $serviceProviderGroupAcls);
     }
 
     /**

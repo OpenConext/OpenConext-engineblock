@@ -42,7 +42,7 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
      * Retrieve the list of groups that the specified subject is a member of.
      * @return array A list of groups
      */
-    public function getGroups()
+    public function getGroups($serviceProviderGroupAcl)
     {
         $openSocialGroups = $this->_openSocialRestClient->get(
             '/groups/{uid}',
@@ -77,7 +77,7 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
      * @param $stem The name of the stem where the groups belong to
      * @return array A list of groups
      */
-    public function getGroupsByStem($stem)
+    public function getGroupsByStem($stem, $serviceProviderGroupAcl)
     {
         $openSocialGroups = $this->_openSocialRestClient->get(
             '/groups/{uid}?vo=' + $stem,
@@ -114,7 +114,7 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
      */
-    public function getMembers($groupIdentifier)
+    public function getMembers($groupIdentifier, $serviceProviderGroupAcl)
     {
         $openSocialPeople = $this->_openSocialRestClient->get(
             '/people/{uid}/{gid}',

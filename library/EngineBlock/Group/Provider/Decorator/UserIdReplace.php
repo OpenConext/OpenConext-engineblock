@@ -89,7 +89,7 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      * Retrieve the list of groups that the specified subject is a member of.
      * @return array A list of groups
      */
-    public function getGroups()
+    public function getGroups($serviceProviderGroupAcls)
     {
         $this->_provider->setUserId($this->_userIdReplaced);
         $results = $this->_provider->getGroups();
@@ -103,7 +103,7 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      * @param string $stem
      * @return array A list of groups
      */
-    public function getGroupsByStem($stem)
+    public function getGroupsByStem($stem, $serviceProviderGroupAcls)
     {
         $this->_provider->setUserId($this->_userIdReplaced);
         $results = $this->_provider->getGroupsByStem($stem);
@@ -117,7 +117,7 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
      */
-    public function getMembers($groupIdentifier)
+    public function getMembers($groupIdentifier, $serviceProviderGroupAcls)
     {
         $this->_provider->setUserId($this->_userIdReplaced);
         $results = $this->_provider->getMembers($groupIdentifier);

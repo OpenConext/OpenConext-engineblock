@@ -152,7 +152,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         return $this;
     }
 
-    public function getGroups()
+    public function getGroups($serviceProviderGroupAcls)
     {
         $groups = array();
         foreach ($this->_providers as $provider) {
@@ -160,8 +160,11 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
              * @var EngineBlock_Group_Provider_Interface $provider
              */
             try {
-                $providerGroups = $provider->getGroups();
-                $groups = array_merge($groups, $providerGroups);
+                $acl = $serviceProviderGroupAcls[$provider->getId()];
+                if ($acl && $acl['allow_groups']) {
+                    $providerGroups = $provider->getGroups($serviceProviderGroupAcls);
+                    $groups = array_merge($groups, $providerGroups);
+                }
             }
             catch (Exception $e) {
                 self::_logErrorMessage($provider->getId(), $e);
@@ -170,7 +173,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         return $groups;
     }
 
-    public function getGroupsByStem($stem)
+    public function getGroupsByStem($stem, $serviceProviderGroupAcls)
     {
         $groups = array();
         foreach ($this->_providers as $provider) {
@@ -178,8 +181,11 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
              * @var EngineBlock_Group_Provider_Interface $provider
              */
             try {
-                $providerGroups = $provider->getGroupsByStem($stem);
-                $groups = array_merge($groups, $providerGroups);
+                $acl = $serviceProviderGroupAcls[$provider->getId()];
+                if ($acl && $acl['allow_groups']) {
+                    $providerGroups = $provider->getGroupsByStem($stem, $serviceProviderGroupAcls);
+                    $groups = array_merge($groups, $providerGroups);
+                }
             }
             catch (Exception $e) {
                 self::_logErrorMessage($provider->getId(), $e);
@@ -188,7 +194,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         return $groups;
     }
 
-    public function getMembers($groupIdentifier)
+    public function getMembers($groupIdentifier, $serviceProviderGroupAcls)
     {
         $members = array();
         foreach ($this->_providers as $provider) {
@@ -196,8 +202,11 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
              * @var EngineBlock_Group_Provider_Interface $provider
              */
             try {
-                $providerMembers = $provider->getMembers($groupIdentifier);
-                $members = array_merge($members, $providerMembers);
+                $acl = $serviceProviderGroupAcls[$provider->getId()];
+                if ($acl && $acl['allow_members']) {
+                    $providerMembers = $provider->getMembers($groupIdentifier, $serviceProviderGroupAcls);
+                    $members = array_merge($members, $providerMembers);
+                }
             }
             catch (Exception $e) {
                 self::_logErrorMessage($provider->getId(), $e);

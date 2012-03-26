@@ -61,9 +61,9 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
      * Retrieve the list of groups that the specified subject is a member of.
      * @return array A list of groups
      */
-    public function getGroups()
+    public function getGroups($serviceProviderGroupAcls)
     {
-        return $this->_provider->getGroups();
+        return $this->_provider->getGroups($serviceProviderGroupAcls);
     }
 
     /**
@@ -90,18 +90,18 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
      * Retrieve the list of groups that the specified subject is a member of.
      * @return array A list of groups
      */
-    public function getGroupsByStem($stem)
+    public function getGroupsByStem($stem, $serviceProviderGroupAcls)
     {
-        return $this->_provider->getGroupsByStem($stem);
+        return $this->_provider->getGroupsByStem($stem, $serviceProviderGroupAcls);
     }
     /**
      * Get the members of a given group
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
      */
-    public function getMembers($groupIdentifier)
+    public function getMembers($groupIdentifier, $serviceProviderGroupAcls)
     {
-        return $this->_provider->getMembers($groupIdentifier);
+        return $this->_provider->getMembers($groupIdentifier, $serviceProviderGroupAcls);
     }
 
     /**

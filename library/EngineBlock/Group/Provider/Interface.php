@@ -110,23 +110,26 @@ interface EngineBlock_Group_Provider_Interface
 
     /**
      * Retrieve the list of groups that the specified subject is a member of.
+     * @param $serviceProviderGroupAcls the permissions of the ServiceProvider that initiated this call
      * @return array A list of groups
      */
-    public function getGroups();
+    public function getGroups($serviceProviderGroupAcl);
 
     /**
      * Retrieve the list of groups that the specified subject is a member of.
      * @param $stem The name of the stem where the groups belong to
+     * @param $serviceProviderGroupAcls the permissions of the ServiceProvider that initiated this call
      * @return array A list of groups
      */
-    public function getGroupsByStem($stem);
+    public function getGroupsByStem($stem, $serviceProviderGroupAcl);
 
     /**
      * Get the members of a given group
      * @param String $groupIdentifier The name of the group to retrieve members of
+     * @param $serviceProviderGroupAcls the permissions of the ServiceProvider that initiated this call
      * @return array A list of members
      */
-    public function getMembers($groupIdentifier);
+    public function getMembers($groupIdentifier, $serviceProviderGroupAcls);
 
     /**
      * Get the details of a groupMember

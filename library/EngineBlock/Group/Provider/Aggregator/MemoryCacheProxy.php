@@ -201,13 +201,13 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
      * Retrieve the list of groups that the specified subject is a member of.
      * @return array A list of groups
      */
-    public function getGroups()
+    public function getGroups($serviceProviderGroupAcl)
     {
         if (!empty($this->_groupCache)) {
             return $this->_groupCache;
         }
 
-        $this->_groupCache = $this->_provider->getGroups();
+        $this->_groupCache = $this->_provider->getGroups($serviceProviderGroupAcl);
         return $this->_groupCache;
     }
 
@@ -216,13 +216,13 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
      * @param $stem The name of the stem where the groups belong to
      * @return array A list of groups
      */
-    public function getGroupsByStem($stem)
+    public function getGroupsByStem($stem, $serviceProviderGroupAcl)
     {
         if (!empty($this->_groupCache)) {
             return $this->_groupCache;
         }
 
-        $this->_groupCache = $this->_provider->getGroupsByStem($stem);
+        $this->_groupCache = $this->_provider->getGroupsByStem($stem, $serviceProviderGroupAcl);
         return $this->_groupCache;
     }
 
@@ -231,12 +231,12 @@ class EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy implements EngineBl
      * @param String $groupIdentifier The name of the group to retrieve members of
      * @return array A list of members
      */
-    public function getMembers($groupIdentifier)
+    public function getMembers($groupIdentifier, $serviceProviderGroupAcl)
     {
         if (isset($this->_memberCache[$groupIdentifier]) && !empty($this->_memberCache[$groupIdentifier])) {
             return $this->_memberCache[$groupIdentifier];
         }
-        $this->_memberCache[$groupIdentifier] = $this->_provider->getMembers($groupIdentifier);
+        $this->_memberCache[$groupIdentifier] = $this->_provider->getMembers($groupIdentifier, $serviceProviderGroupAcl);
         return $this->_memberCache[$groupIdentifier];
     }
 

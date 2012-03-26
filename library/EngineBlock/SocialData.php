@@ -58,6 +58,11 @@ class EngineBlock_SocialData
     protected $_appId = NULL;
 
     /**
+     * @var EngineBlock_Database_ConnectionFactory
+     */
+    protected $_factory = NULL;
+
+    /**
      * Construct an EngineBlock_SocialData instance for retrieving social data within
      * Engineblock
      * @param String $appId The id of the app on behalf of which we are retrieving data
@@ -73,10 +78,20 @@ class EngineBlock_SocialData
      * @param null|string $voId
      * @return array OpenSocial groups
      */
-    public function getGroupsForPerson($identifier, $groupId = null, $voId = null)
+    public function getGroupsForPerson($identifier, $groupId = null, $voId = null, $spEntityId = null)
     {
         $identifier = $this->_getCollabPersonIdForPersistentId($identifier);
         if (!$identifier) {
+            return false;
+        }
+
+        if (!$spEntityId) {
+            //without spEntityId we can't check if we are allowed to return Groups
+            return false;
+        }
+        $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
+        if (!$spGroupAcls) {
+            //no GroupAcl means by defintion that there are no positive permissions
             return false;
         }
 
@@ -85,10 +100,10 @@ class EngineBlock_SocialData
         if ($voId) {
             $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
             $groupStem = $virtualOrganization->getStem();
-            $engineBlockGroups = $groupProvider->getGroupsByStem($groupStem);
+            $engineBlockGroups = $groupProvider->getGroupsByStem($groupStem,$spGroupAcls);
         }
         else {
-            $engineBlockGroups = $groupProvider->getGroups();
+            $engineBlockGroups = $groupProvider->getGroups($spGroupAcls);
         }
 
         $openSocialGroups = array();
@@ -118,8 +133,16 @@ class EngineBlock_SocialData
         if (!$groupMemberUid) {
             return false;
         }
-
-        $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId);
+        if (!$spEntityId) {
+            //without spEntityId we can't check if we are allowed to return Groups
+            return false;
+        }
+        $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
+        if (!$spGroupAcls) {
+            //no GroupAcl means by defintion that there are no positive permissions
+            return false;
+        }
+        $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId,$spGroupAcls );
 
         $people = array();
         /**
@@ -225,6 +248,26 @@ class EngineBlock_SocialData
         else {
             throw new EngineBlock_Exception("Multiple rows found for persistent identifier '$persistentId'?!?");
         }
+    }
+    /**
+     * Get all ServiceProviderGroupAcls (array where the key is the identifier
+     * with as value an array of permissions
+     *
+     * @param $spEntityId the identifier of the Service Provider
+     */
+    protected function _getSpGroupAcls($spEntityId) {
+        $db = $this->_getReadDatabase();
+        $statement = $db->prepare('SELECT gp.identifier, spga.allow_groups, spga.allow_members FROM service_provider_group_acl spga, group_provider gp WHERE spga.group_provider_id = gp.id and spga.spentityid = ?');
+        $statement->execute(array($spEntityId));
+        $rows = $statement->fetchAll();
+        $spGroupAcls = array();
+        foreach ($rows as $row) {
+            $spGroupAcls[$row['identifier']] = array(
+                        'allow_groups'        => $row['allow_groups'],
+                        'allow_members'       => $row['allow_members'],
+            );
+        }
+        return $spGroupAcls;
     }
 
     protected function _isSha1String($string)
@@ -359,7 +402,9 @@ class EngineBlock_SocialData
 
     protected function _getReadDatabase()
     {
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
+        if ($this->_factory == NULL) {
+            $this->_factory = new EngineBlock_Database_ConnectionFactory();
+        }
+        return $this->_factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
     }
 }

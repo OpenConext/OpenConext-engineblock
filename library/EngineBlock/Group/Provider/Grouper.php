@@ -71,7 +71,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         return $this;
     }
 
-    public function getGroups()
+    public function getGroups($serviceProviderGroupAcls)
     {
         $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges();
 
@@ -82,7 +82,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         return $groups;
     }
 
-    public function getGroupsByStem($stem)
+    public function getGroupsByStem($stem, $serviceProviderGroupAcls)
     {
         $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges($stem);
 
@@ -93,7 +93,7 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
         return $groups;
     }
 
-    public function getMembers($groupIdentifier)
+    public function getMembers($groupIdentifier, $serviceProviderGroupAcls)
     {
         $members = array();
         $stemmedGroupIdentifier = $this->_getStemmedGroupId($groupIdentifier);
