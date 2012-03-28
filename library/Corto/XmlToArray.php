@@ -43,6 +43,7 @@ class Corto_XmlToArray
         'http://schemas.xmlsoap.org/soap/envelope/'     => 'SOAP-ENV',
         'http://www.w3.org/2000/09/xmldsig#'            => 'ds',
         'http://www.w3.org/2001/04/xmlenc#'             => 'xenc',
+        'http://www.w3.org/2001/10/xml-exc-c14n#'       => 'ec',
      );
 
     /**
@@ -126,6 +127,7 @@ class Corto_XmlToArray
 #        'ds:SPKIData',
         'ds:Transforms',
 #        'ds:X509Data',
+        'ec:InclusiveNamespaces',
 );
 
     protected static $_multipleValues = array(
