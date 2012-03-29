@@ -33,6 +33,17 @@ class EngineBlock_VirtualOrganization_Validator
         $voType = $virtualOrganization->getType();
 
         switch ($voType) {
+            case 'MIXED':
+                if ($this->_isMemberOfIdps($virtualOrganization, $idp)) {
+                    return true;
+                }
+                else if ($this->_isMemberOfGroups($virtualOrganization, $subjectId)) {
+                    return true;
+                }
+                else {
+                    return false;
+                }
+
             case 'GROUP':
                 if ($this->_isMemberOfGroups($virtualOrganization, $subjectId)) {
                     return true;
