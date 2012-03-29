@@ -232,6 +232,16 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $identityProviderEntityId = $response['__']['OriginalIssuer'];
         $idpEntityMetadata = $this->_server->getRemoteEntity($identityProviderEntityId);
 
+        $commonName = $attributes['urn:mace:dir:attribute-def:cn'][0];
+
+        // Apply ARP
+        $arpFilter = new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy();
+        $arpFilter->setIdpMetadata($idpEntityMetadata);
+        $arpFilter->setSpMetadata($spEntityMetadata);
+        $arpFilter->setResponseAttributes($attributes);
+        $arpFilter->execute();
+        $attributes = $arpFilter->getResponseAttributes();
+
         $priorConsent = $this->_hasStoredConsent($serviceProviderEntityId, $response, $attributes);
         if ($priorConsent) {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
@@ -262,11 +272,12 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         $html = $this->_server->renderTemplate(
             'consent',
             array(
-                 'action' => $this->_server->getCurrentEntityUrl('processConsentService'),
-                 'ID' => $response['_ID'],
-                 'attributes' => $attributes,
-                 'sp'  => $spEntityMetadata,
-                 'idp' => $idpEntityMetadata,
+                'action'    => $this->_server->getCurrentEntityUrl('processConsentService'),
+                'ID'        => $response['_ID'],
+                'attributes'=> $attributes,
+                'sp'        => $spEntityMetadata,
+                'idp'       => $idpEntityMetadata,
+                'commonName'=> $commonName,
             ));
         $this->_server->sendOutput($html);
     }
@@ -395,7 +406,14 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
 
     protected function _storeConsent($serviceProviderEntityId, $response, $attributes)
     {
-        $parentResponse = parent::_storeConsent($serviceProviderEntityId, $response, $attributes);
+        // Apply ARP
+        $arpFilter = new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy();
+        $arpFilter->setSpMetadata($this->_server->getRemoteEntity($serviceProviderEntityId));
+        $arpFilter->setResponseAttributes($attributes);
+        $arpFilter->execute();
+        $filteredAttributes = $arpFilter->getResponseAttributes();
+
+        $parentResponse = parent::_storeConsent($serviceProviderEntityId, $response, $filteredAttributes);
 
         $this->_sendIntroductionMail($response, $attributes);
 

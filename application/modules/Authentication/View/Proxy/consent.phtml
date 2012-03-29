@@ -32,6 +32,9 @@ if (!isset($ID)) {
 if (!isset($attributes)) {
     throw new EngineBlock_Exception('No Attributes given to consent screen');
 }
+if (!isset($commonName)) {
+    throw new EngineBlock_Exception('No common name given to consent screen');
+}
 
 // The current language
 $lang = $this->language();
@@ -59,7 +62,7 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
 ?>
 <div>
     <p>
-        <?php echo $this->t('consent_user_info', $attributes['urn:mace:dir:attribute-def:cn'][0], $idp['Name'][$lang], $sp['Name'][$lang]); ?>
+        <?php echo $this->t('consent_user_info', $commonName, $idp['Name'][$lang], $sp['Name'][$lang]); ?>
         <br /><br />
         <?php echo $this->t('consent_store_info', $sp['Name'][$lang], $idp['Name'][$lang], $sp['Name'][$lang]); ?>
     </p>

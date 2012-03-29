@@ -61,9 +61,6 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
 
             // Provision the User to LDAP and figure out the collabPersonId
             new EngineBlock_Corto_Filter_Command_ProvisionUser(),
-
-            // Apply ARP (strip attributes that are not allowed for the SP)
-            new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
         );
     }
 }

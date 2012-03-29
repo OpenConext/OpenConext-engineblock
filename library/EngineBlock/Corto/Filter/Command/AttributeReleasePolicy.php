@@ -39,7 +39,7 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
     {
         $spEntityId = $this->_spMetadata['EntityId'];
 
-        $serviceRegistryAdapter = $this->_adapter->getServiceRegistryAdapter();
+        $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
         $arp = $serviceRegistryAdapter->getArp($spEntityId);
         if ($arp) {
             EngineBlock_ApplicationSingleton::getLog()->info(
@@ -73,5 +73,12 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
             }
             $this->_responseAttributes = $newAttributes;
         }
+    }
+
+    protected function _getServiceRegistryAdapter()
+    {
+        return new EngineBlock_Corto_ServiceRegistry_Adapter(
+            new Janus_Client_CacheProxy()
+        );
     }
 }
