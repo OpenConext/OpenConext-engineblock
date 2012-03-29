@@ -33,7 +33,7 @@ class EngineBlock_SocialData
     protected $_userDirectory = NULL;
 
     /**
-     * @var EngineBlock_Groups_Provider_Abstract
+     * @var EngineBlock_Group_Provider_Abstract
      */
     protected $_groupProvider = null;
 
