@@ -225,7 +225,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
     'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation. Please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
         or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> if you have any questions.',
-    'error_generic'                     => 'Error - An error occured..',
+    'error_generic'                     => 'Error - An error occurred.',
     'error_generic_desc'                => '<p>
         It is not possible to sign in. Please try again.
     </p>',
