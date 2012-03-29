@@ -154,7 +154,7 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
      */
     public function isMember($groupIdentifier)
     {
-        $members = $this->getMembers($groupIdentifier);
+        $members = $this->getMembers($groupIdentifier, null);
 
         foreach ($members as $member) {
             if ($member->id === $this->_userId) {
