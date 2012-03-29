@@ -73,7 +73,11 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
         $this->_data = array();//Initializes for next Rest method.
 
         if ($response->getStatus() !== 200) {
-            throw new EngineBlock_Exception("Response status !== 200: " . var_export($response, true));
+            throw new EngineBlock_Exception(
+                "Response status !== 200: " .
+                    var_export($httpClient->getLastRequest(), true) .
+                    var_export($response, true)
+            );
         }
 
         if (strpos($response->getHeader("Content-Type"), "application/json")!==false) {
