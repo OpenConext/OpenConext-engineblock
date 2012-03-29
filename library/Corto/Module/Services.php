@@ -492,7 +492,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
             Corto_XmlToArray::TAG_NAME_PFX => 'md:EntityDescriptor',
             Corto_XmlToArray::COMMENT_PFX => self::META_TOU_COMMENT,
             Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
-            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui' => 'urn:oasis:names:tc:SAML:metadata:ui',
             Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil' => $this->_server->timeStamp($this->_server->getCurrentEntitySetting(
                                                            'idpMetadataValidUntilSeconds', 86400)),
             Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID' => $this->_server->getCurrentEntityUrl('idPMetadataService'),
@@ -595,7 +595,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
             Corto_XmlToArray::TAG_NAME_PFX => 'md:EntityDescriptor',
             Corto_XmlToArray::COMMENT_PFX => self::META_TOU_COMMENT,
             Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md' => 'urn:oasis:names:tc:SAML:2.0:metadata',
-            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui' => 'urn:oasis:names:tc:SAML:2.0:metadata:ui',
+            Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui' => 'urn:oasis:names:tc:SAML:metadata:ui',
             Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil' => $this->_server->timeStamp(
                 $this->_server->getCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400)
             ),
