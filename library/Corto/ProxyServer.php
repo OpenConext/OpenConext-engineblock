@@ -614,7 +614,13 @@ class Corto_ProxyServer
             $attributeStatement['AttributeConsumingServiceIndex'] = '-no AttributeConsumingServiceIndex given-';
         }
 
-        $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'] = Corto_XmlToArray::array2attributes($attributeStatement);
+        $attributes = Corto_XmlToArray::array2attributes($attributeStatement);
+        if (!empty($attributes)) {
+            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'] = $attributes;
+        }
+        else {
+            unset($response['saml:Assertion']['saml:AttributeStatement']);
+        }
 
         return $response;
     }
@@ -762,6 +768,9 @@ class Corto_ProxyServer
         call_user_func_array($callback, array(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata));
         // Put em back where they belong
         $responseAssertionAttributes = Corto_XmlToArray::array2attributes($responseAttributes);
+        if (empty($responseAssertionAttributes)) {
+            unset($response['saml:Assertion']['saml:AttributeStatement']);
+        }
     }
 
 ////////  TEMPLATE RENDERING /////////
