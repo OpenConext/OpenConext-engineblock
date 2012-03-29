@@ -135,7 +135,7 @@ foreach ($spList as $spId => $sp) {
         <?php
                 $groups = array();
         try{
-            $groups = $groupProvider->getGroups();
+            $groups = $groupProvider->getGroups(null);
         } catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
             $invalidProviders[] = $groupProvider;
         }
