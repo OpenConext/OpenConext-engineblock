@@ -220,11 +220,11 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $_SESSION['consent'][$response['_ID']]['response'] = $response;
-//         echo '<pre>';var_dump($response, true);die();
 
         $attributes = Corto_XmlToArray::attributes2array(
             $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
         );
+
         $serviceProviderEntityId = $attributes['ServiceProvider'][0];
         unset($attributes['ServiceProvider']);
         $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
