@@ -1057,7 +1057,7 @@ class Corto_ProxyServer
 
     public function startSession()
     {
-        session_set_cookie_params(0, $this->getConfig('cookie_path', '/'), '', $this->getConfig('use_secure_cookies', true));
+        session_set_cookie_params(0, $this->getConfig('cookie_path', '/'), '', $this->getConfig('use_secure_cookies', true), true);
         session_name($this->_entities['current']['EntityCode']);
         session_start();
     }
