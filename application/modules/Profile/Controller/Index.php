@@ -45,10 +45,11 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
 
         catch (Exception $e) {
             $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                        $this->user->getUid(),
-                        null,
-                        null,
-                        $e->getTraceAsString());
+                $this->user->getUid(),
+                null,
+                null,
+                $e->getTraceAsString()
+            );
 
             EngineBlock_ApplicationSingleton::getLog()->critical($e->getMessage(), $additionalInfo);
         }
