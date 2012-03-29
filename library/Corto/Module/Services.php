@@ -787,7 +787,13 @@ class Corto_Module_Services extends Corto_Module_Abstract
                 continue;
             }
 
-            $entitySSODescriptor['md:Extensions']['mdui:DisplayName'][] = array(
+            if (!isset($entitySSODescriptor['md:Extensions'])) {
+                $entitySSODescriptor['md:Extensions'] = array();
+            }
+            if (!isset($entitySSODescriptor['md:Extensions']['mdui:UIInfo'])) {
+                $entitySSODescriptor['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+            }
+            $entitySSODescriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'][] = array(
                 Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $displayLanguageCode,
                 Corto_XmlToArray::VALUE_PFX => $displayName
             );

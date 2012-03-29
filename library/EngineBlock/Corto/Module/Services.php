@@ -81,9 +81,12 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
                 }
-                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DisplayName'] = array();
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'] = array();
                 foreach ($entity['DisplayName'] as $lang => $name) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DisplayName'][] = array(
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'][] = array(
                         '_xml:lang' => $lang,
                         '__v' => $name,
                     );
@@ -94,9 +97,12 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
                 }
-                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Description'] = array();
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'] = array();
                 foreach ($entity['Description'] as $lang => $name) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Description'][] = array(
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'][] = array(
                         '_xml:lang' => $lang,
                         '__v' => $name,
                     );
@@ -107,7 +113,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
                 }
-                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Logo'] = array(
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:Logo'] = array(
                     array(
                         '_height' => $entity['Logo']['Height'],
                         '_width'  => $entity['Logo']['Width'],
@@ -120,7 +129,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
                 }
-                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:GeolocationHint'] = array(
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+                }
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:GeolocationHint'] = array(
                     array(
                         '__v' => $entity['GeoLocation'],
                     ),
@@ -131,8 +143,12 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
                 }
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+                }
+                $uiInfo = &$entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0];
                 foreach ($entity['Keywords'] as $lang => $name) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:Keywords'][] = array(
+                    $uiInfo['mdui:Keywords'][] = array(
                         array(
                             '_xml:lang' => $lang,
                             '__v' => $name,
@@ -191,7 +207,9 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             $entitiesDescriptor['md:EntityDescriptor'][] = $entityDescriptor;
         }
 
-        $entitiesDescriptor = $this->_server->sign($entitiesDescriptor, $spEntity['AlternatePublicKey'], $spEntity['AlternatePrivateKey']);
+        $alternatePublicKey  = isset($spEntity['AlternatePublicKey']) ? $spEntity['AlternatePublicKey'] : null;
+        $alternatePrivateKey = isset($spEntity['AlternatePublicKey']) ? $spEntity['AlternatePublicKey'] : null;
+        $entitiesDescriptor = $this->_server->sign($entitiesDescriptor, $alternatePublicKey, $alternatePrivateKey);
 
         $xml = Corto_XmlToArray::array2xml($entitiesDescriptor);
 
