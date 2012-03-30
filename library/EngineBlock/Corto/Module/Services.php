@@ -407,11 +407,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
         if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
             return;
         }
-
-		$config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-		i	f (!isset($config->email->sendWelcomeMail) || !$config->email->sendWelcomeMail) {
-		  	return;
-		}
+	$config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        if (!isset($config->email->sendWelcomeMail) || !$config->email->sendWelcomeMail) {
+            return;
+        }
         $dbh = $this->_getConsentDatabaseConnection();
         $hashedUserId = sha1($this->_getConsentUid($response, $attributes));
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
