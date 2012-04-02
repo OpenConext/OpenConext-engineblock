@@ -35,7 +35,14 @@
 
 $lang = $this->language();
 $uri = $_SERVER['REQUEST_URI'];
-$displayName = $metaDataSP['Name'][$lang] ? $metaDataSP['Name'][$lang] : $metaDataSP['DisplayName'][$lang] ? $metaDataSP['DisplayName'][$lang] : '';
+
+$displayName = '';
+if (isset($metaDataSP['Name'][$lang])) {
+    $displayName = $metaDataSP['Name'][$lang];
+}
+else if (isset($metaDataSP['DisplayName'][$lang])) {
+    $displayName = $metaDataSP['DisplayName'][$lang];
+}
 
 $preselectedIdpData = array();
 if ($preselectedIdp) {
