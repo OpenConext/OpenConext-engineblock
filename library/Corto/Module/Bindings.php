@@ -245,8 +245,15 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
     protected function _verifyRequest(array &$request)
     {
         $remoteEntity = $this->_verifyKnownIssuer($request);
-        if ((isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned']) ||
-            ($this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned', false))) {
+        // Determine if we should sign the message
+        $wantRequestsSigned = (
+            // If the destination wants the AuthnRequests signed
+            (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned'])
+                ||
+                // Or we currently demand that all AuthnRequests are sent signed
+                $this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned')
+        );
+        if ($wantRequestsSigned) {
             $this->_verifySignature($request, self::KEY_REQUEST);
             $request['__']['WasSigned'] = true;
         }
@@ -685,8 +692,13 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         $messageType = $message['__']['paramname'];
 
         // Determine if we should sign the message
-        $wantRequestsSigned = ($remoteEntity['AuthnRequestsSigned'] ||
-                                $this->_server->getCurrentEntitySetting('AuthnRequestsSigned'));
+        $wantRequestsSigned = (
+            // If the destination wants the AuthnRequests signed
+            (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned'])
+                ||
+            // Or we currently demand that all AuthnRequests are sent signed
+            $this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned')
+        );
         $mustSign = ($messageType===self::KEY_REQUEST && $wantRequestsSigned);
         if ($mustSign) {
             $this->_server->getSessionLog()->debug("HTTP-Redirect: Removing signature");
@@ -711,7 +723,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         else {
             $queryString = "$messageType=" . $encodedMessage;
         }
-        $queryString .= $message['__']['RelayState'] ? '&RelayState=' . urlencode($message['__']['RelayState']) : "";
+        $queryString .= isset($message['__']['RelayState']) ? '&RelayState=' . urlencode($message['__']['RelayState']) : "";
 
         // Sign the message
         if (isset($remoteEntity['SharedKey'])) {
@@ -730,7 +742,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         }
 
         // Build the full URL
-        $location = $message['_Destination'] . $message['_Recipient']; # shib remember ...
+        $location = $message['_Destination'] . (isset($message['_Recipient'])?$message['_Recipient']:''); # shib remember ...
         $location .= "?" . $queryString;
 
         // Redirect
@@ -809,7 +821,15 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             $extra .= '<input type="hidden" name="Signature" value="' . $signatureHTMLValue . '">';
 
         } else {
-            if ($name == 'SAMLRequest' && ($remoteEntity['WantsAuthnRequestsSigned'] || $this->_server->getCurrentEntitySetting('AuthnRequestsSigned'))) {
+            // Determine if we should sign the message
+            $wantRequestsSigned = (
+                // If the destination wants the AuthnRequests signed
+                (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned'])
+                    ||
+                    // Or we currently demand that all AuthnRequests are sent signed
+                    $this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned')
+            );
+            if ($name == 'SAMLRequest' && $wantRequestsSigned) {
                 $this->_server->getSessionLog()->debug("HTTP-Redirect: (Re-)Signing");
                 $message = $this->_server->sign($message);
             }
