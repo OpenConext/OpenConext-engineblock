@@ -25,9 +25,11 @@ use Engineblock\Behat\Context;
  */
 class FeatureContext extends MinkContext
 {
-    public function __construct(array $parameters)
+    public function __construct(array $parameters = array())
     {
-        parent::__construct($parameters);
+        if (method_exists(get_parent_class($this), '__construct')) {
+            parent::__construct($parameters);
+        }
         $this->useContext('background'  , new Context\Background($parameters));
         $this->useContext('login'       , new Context\Login($parameters));
         $this->useContext('testsp'      , new Context\TestSp($parameters));
