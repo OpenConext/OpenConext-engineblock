@@ -36,8 +36,11 @@ $layout->setLayout('empty');
         <title>Corto Debugging - Redirecting to...</title>
     </head>
     <body>
-   	<p><a href="<?=$location?>">GO</a>
         <p>
-        <pre><?= print_r($message, 1) ?></pre>
+           <a href="<?=$location?>">GO</a>
+        <p>
+        <pre>
+            <?php print_r($message, 1) ?>
+        </pre>
     </body>
 </html>

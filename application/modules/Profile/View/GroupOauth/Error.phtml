@@ -39,10 +39,10 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?= $this->t('error_group_oauth_desc',$providerId); ?>
+        <?php echo $this->t('error_group_oauth_desc',$providerId); ?>
         <div class="button-row">
             <a href="/profile#MyGroups">
-            <?= $this->t('go_back'); ?>
+            <?php echo $this->t('go_back'); ?>
             <span class="btn-wrap-right">&nbsp;</span>
             </a>
         </div>
@@ -55,4 +55,4 @@ $layout->footerText = $this->t('footer');
 </pre>
 
 <?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-<? } ?>
+<?php } ?>

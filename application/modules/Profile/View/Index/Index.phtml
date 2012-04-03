@@ -98,18 +98,18 @@ foreach ($spList as $spId => $sp) {
                 <?=$metadata->getName($attributeId, $lang)?>
             </td>
             <td>
-                <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
                 <?=$attributeValues[0];?>
-                <? } /** Multiple attribute values */ else { ?>
+                <?php } /** Multiple attribute values */ else { ?>
                 <ul>
                 <?php foreach ($attributeValues as $value) { ?>
                     <li><?=$value?></li>
                 <?php } ?>
                 </ul>
-                <? } ?>
+                <?php } ?>
             </td>
         </tr>
-    <? } ?>
+    <?php } ?>
     </table>
 </div>
 
@@ -124,10 +124,10 @@ foreach ($spList as $spId => $sp) {
     $invalidProviders = $aggregator->getInvalidProviders();
     foreach ($aggregator->getProviders() as $groupProvider):?>
     <h3><a href="#"><?php echo $groupProvider->getDisplayName(); ?></a></h3>
-    <div id="<?= $groupProvider->getId(); ?>" class="group-providers">
+    <div id="<?php echo $groupProvider->getId(); ?>" class="group-providers">
         <?php if(count($groupOauth) && array_key_exists($groupProvider->getId(),$groupOauth )): ?>
             <span class="revoke-gp-access">
-                <a href="/profile/group-oauth/revoke?provider=<?= urlencode($groupProvider->getId()); ?>"><?=
+                <a href="/profile/group-oauth/revoke?provider=<?php echo urlencode($groupProvider->getId()); ?>"><?=
                     $this->t('profile_revoke_access'); ?>
                 </a>
             </span>
@@ -190,7 +190,7 @@ foreach ($spList as $spId => $sp) {
     <h3><?php echo $this->t('profile_header_auth_needed'); ?></h3>
     <p><?php echo $this->t('profile_extra_groups_desc'); ?></p>
     <ul>
-    <? foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
+    <?php foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
         <li>
             <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId();
                 ?>?return_url=/#MyGroups">
@@ -238,7 +238,7 @@ foreach ($spList as $spId => $sp) {
                     </td>
                     <td>
                         <?php if ($sp['coin:eula']) : ?>
-                            <a href="<?= $sp['coin:eula']; ?>"><?= $this->t('profile_eula_link');?></a>
+                            <a href="<?php echo $sp['coin:eula']; ?>"><?php echo $this->t('profile_eula_link');?></a>
                         <?php endif; ?>
                     </td>
                     <td>
@@ -248,14 +248,14 @@ foreach ($spList as $spId => $sp) {
                     </td>
                     <td>
                         <?php if (isset($sp['supportContact'])) : ?>
-                            <a href="mailto:<?= $sp['supportContact']['emailAddress']; ?>"><?php
+                            <a href="mailto:<?php echo $sp['supportContact']['emailAddress']; ?>"><?php
                                 echo $sp['supportContact']['emailAddress']; ?>
                             </a>
                         <?php endif; ?>
                     </td>
                     <td>
                         <?php if (isset($sp['supportContact']['telephoneNumber'])) : ?>
-                            <a href="mailto:<?= $sp['supportContact']['telephoneNumber']; ?>"><?php
+                            <a href="mailto:<?php echo $sp['supportContact']['telephoneNumber']; ?>"><?php
                                 echo $sp['supportContact']['telephoneNumber']; ?>
                             </a>
                         <?php endif; ?>
@@ -263,12 +263,12 @@ foreach ($spList as $spId => $sp) {
                     <td>
                         <?php if (isset($spOauthList) && array_key_exists($spId,$spOauthList)) : ?>
                             <span class="revoke-consent">
-                                <a href="/profile/delete-oauth-consent?consumer_key=<?= urlencode($spOauthList[$spId]); ?>">
-                                    <?= $this->t('profile_revoke_consent'); ?>
+                                <a href="/profile/delete-oauth-consent?consumer_key=<?php echo urlencode($spOauthList[$spId]); ?>">
+                                    <?php echo $this->t('profile_revoke_consent'); ?>
                                 </a>
                             </span>
                         <?php else : ?>
-                            <?= $this->t('profile_no_consent'); ?>
+                            <?php echo $this->t('profile_no_consent'); ?>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -276,7 +276,7 @@ foreach ($spList as $spId => $sp) {
                     <tr class="detail-row hide">
                         <td colspan="5">
                             <div class="attribute-table-wrapper" style="display: none;">
-                                <?= $this->t('profile_attribute_release'); ?>
+                                <?php echo $this->t('profile_attribute_release'); ?>
                                 <table class="attribute-table">
                                     <thead>
                                         <tr>
@@ -290,25 +290,25 @@ foreach ($spList as $spId => $sp) {
                                             <?=$metadata->getName($attributeId, $lang)?>
                                         </td>
                                         <td>
-                                            <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                                            <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
                                             <?=$attributeValues[0];?>
-                                            <? } /** Multiple attribute values */ else { ?>
+                                            <?php } /** Multiple attribute values */ else { ?>
                                             <ul>
                                             <?php foreach ($attributeValues as $value) { ?>
                                                 <li><?=$value?></li>
                                             <?php } ?>
                                             </ul>
-                                            <? } ?>
+                                            <?php } ?>
                                         </td>
                                     </tr>
-                                <? } ?>
+                                <?php } ?>
                                 </table>
                             </div>
                         </td>
                     </tr>
                 <?php endif; ?>
-            <? endif; ?>
-        <? endforeach; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
         </tbody>
     </table>
 

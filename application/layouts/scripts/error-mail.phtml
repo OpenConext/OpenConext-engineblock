@@ -30,15 +30,15 @@
   <tbody>
   <tr>
     <th>Date</th>
-    <td><?= date("d-m-Y", time()); ?></td>
+    <td><?php echo date("d-m-Y", time()); ?></td>
   </tr>
   <tr>
     <th>Time</th>
-    <td><?= date('H:i:s', time()); ?></td>
+    <td><?php echo date('H:i:s', time()); ?></td>
   </tr>
   <tr>
     <th>Server</th>
-    <td><?= gethostname(); ?></td>
+    <td><?php echo gethostname(); ?></td>
   </tr>
   <tr>
     <th>Component</th>
@@ -46,27 +46,27 @@
   </tr>
   <tr>
     <th>Userid</th>
-    <td><?= isset($this->userId) ? $this->userId : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->userId) ? $this->userId : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>IDP</th>
-    <td><?= isset($this->idp) ? $this->idp : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->idp) ? $this->idp : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>SP</th>
-    <td><?= isset($this->sp) ? $this->sp : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->sp) ? $this->sp : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>Message</th>
-    <td><?= isset($this->message) ? $this->message : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->message) ? $this->message : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>Location</th>
-    <td><?= $_SERVER['SCRIPT_FILENAME']; ?></td>
+    <td><?php echo $_SERVER['SCRIPT_FILENAME']; ?></td>
   </tr>
   <tr>
     <th>Details</th>
-    <td><?= isset($this->details) ? $this->details : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->details) ? $this->details : "UNKNOWN"; ?></td>
   </tr>
   </tbody>
 </body>

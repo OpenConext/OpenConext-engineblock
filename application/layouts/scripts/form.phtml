@@ -43,10 +43,10 @@ if (isset($_POST['lang'])) {
 
         <title><?php echo $this->layout()->title;?></title>
 
-        <link href="<?= EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="<?= EngineBlock_View::staticUrl(); ?>/css/wide/screen.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/wide/screen.css" rel="stylesheet" type="text/css" />
         <!--[if lt IE 8 ]>
-        <link href="<?= EngineBlock_View::staticUrl(); ?>/css/wide/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/wide/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
         <![endif]-->
 
         <?php echo $this->headStyle(); ?>
@@ -57,7 +57,7 @@ if (isset($_POST['lang'])) {
             <div class="header" style="font-weight: bold; font-size: large">
                 <?php echo $this->layout()->header; ?>
                 <span class="logo">
-                    <img src="<?= EngineBlock_View::staticUrl(); ?>/media/surfconext.png" alt="SURFconext">
+                    <img src="<?php echo EngineBlock_View::staticUrl(); ?>/media/surfconext.png" alt="SURFconext">
                 </span>
             </div>
 
@@ -68,10 +68,10 @@ if (isset($_POST['lang'])) {
                     <input type="hidden" name="consent" value="<?=$consent; ?>" />
                     <input type="hidden" name="lang" id="LangVar" />
                     <ul class="nav">
-                        <li class="<?php if ($lang==='en'): ?>active<? endif; ?>">
+                        <li class="<?php if ($lang==='en'): ?>active<?php endif; ?>">
                             <a id="SubmitEnForm" href="#">en</a>
                         </li>
-                        <li class="<?php if ($lang==='nl'): ?>active<? endif; ?>">
+                        <li class="<?php if ($lang==='nl'): ?>active<?php endif; ?>">
                             <a id="SubmitNlForm" href="#">nl</a>
                         </li>
                     </ul>
@@ -90,7 +90,7 @@ if (isset($_POST['lang'])) {
             </div>
         </div>
 
-        <script type="text/javascript" src="<?= EngineBlock_View::staticUrl(); ?>/javascript/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="<?php echo EngineBlock_View::staticUrl(); ?>/javascript/jquery-1.5.1.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#SubmitEnForm').click(function(e) {

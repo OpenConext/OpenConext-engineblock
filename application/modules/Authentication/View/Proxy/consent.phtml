@@ -79,18 +79,18 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
                 <?=$this->getAttributeName($uid, $lang)?>
             </td>
             <td>
-                <? /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
                 <?=$attributeValues[0];?>
-                <? } /** Multiple attribute values */ else { ?>
+                <?php } /** Multiple attribute values */ else { ?>
                 <ul>
                 <?php foreach ($attributeValues as $value) { ?>
                     <li><?=$value?></li>
                 <?php } ?>
                 </ul>
-                <? } ?>
+                <?php } ?>
             </td>
         </tr>
-    <? } ?>
+    <?php } ?>
     </table>
     <p>
         <?php echo $this->t('consent_terms_of_service', $newWindowIcon, $newWindowIcon, $profileUrl); ?>

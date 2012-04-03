@@ -47,7 +47,7 @@ $layout->title = $layout->title. ' - '. $this->t('post_data');
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex, nofollow"/>
-        <title><?= $layout->title; ?></title>
+        <title><?php echo $layout->title; ?></title>
         <style type="text/css">
         body {
             color:#333;
@@ -62,7 +62,7 @@ $layout->title = $layout->title. ' - '. $this->t('post_data');
         }
         </style>
     </head>
-    <body <? if (!$trace): ?>onload="document.forms[0].submit()"<? endif; ?>>
+    <body <?php if (!$trace): ?>onload="document.forms[0].submit()"<?php endif; ?>>
         <noscript>
             <p>
                 <strong><?php echo $this->t('note'); ?>:</strong>
@@ -70,22 +70,22 @@ $layout->title = $layout->title. ' - '. $this->t('post_data');
             </p>
         </noscript>
         <p><?php echo $this->t('processing'); ?></p>
-        <form id="ProcessForm" method="post" action="<?= $action ?>">
-            <input type="hidden" name="<?= $name ?>" value="<?= $message ?>" />
+        <form id="ProcessForm" method="post" action="<?php echo $action ?>">
+            <input type="hidden" name="<?php echo $name ?>" value="<?php echo $message ?>" />
 
-            <?= $xtra ?>
+            <?php echo $xtra ?>
 
             <noscript><input type="submit" value="Submit" /></noscript>
 
-            <? if ($trace): ?>
+            <?php if ($trace): ?>
             <input id="submitbutton" type="submit" value="Submit" />
             <pre>
-                <?= $trace ?>
+                <?php echo $trace ?>
             </pre>
             <script type="text/javascript">
                 document.getElementById('submitbutton').focus();
             </script>
-            <? endif; ?>
+            <?php endif; ?>
 
         </form>
     </body>

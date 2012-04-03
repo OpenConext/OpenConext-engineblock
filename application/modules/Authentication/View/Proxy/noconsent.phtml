@@ -39,7 +39,7 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="stop-icon"></div>
     <div class="stop-text">
-        <?= $this->t('error_no_consent_desc'); ?>
+        <?php echo $this->t('error_no_consent_desc'); ?>
         <br /><br />
     </div>
 </div>
@@ -50,4 +50,4 @@ $layout->footerText = $this->t('footer');
 </pre>
 
 <?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-<? } ?>
+<?php } ?>
