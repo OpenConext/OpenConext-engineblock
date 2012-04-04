@@ -59,6 +59,9 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // If the SP requires knowledge of the VO memberships, add it to the isMemberOf attribute.
             new EngineBlock_Corto_Filter_Command_AddVoMemberships(),
 
+            // Apply ARP before we add the OID variants
+            new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
+
             // Convert all attributes to their OID format (if known) and add these.
             new EngineBlock_Corto_Filter_Command_AddOidAttributes(),
 
@@ -68,7 +71,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Set the persistent Identifier for this user on this SP
             new EngineBlock_Corto_Filter_Command_SetPersistentId(),
 
-            // Apply ARP to custom added attributes (like the VO or license attribute)
+            // Apply ARP to custom added attributes one last time for the eduPersonTargetedId
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
             // Log the login
