@@ -129,10 +129,10 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
                 if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
                     $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
                 }
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DiscoHints'])) {
+                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DiscoHints'] = array(0=>array());
                 }
-                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:GeolocationHint'] = array(
+                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DiscoHints'][0]['mdui:GeolocationHint'] = array(
                     array(
                         '__v' => $entity['GeoLocation'],
                     ),
