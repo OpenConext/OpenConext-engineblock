@@ -14,9 +14,9 @@ Feature: Signature Validation
   Scenario: Boy fails to log in at the Wrong Cert SP
     When I go to the Wrong Cert SP
      And at the Wrong Cert SP I select "https://engine.test.surfconext.nl/authentication/idp/metadata"
-    Then EngineBlock directly gives me the error "Error - An error occured.."
+    Then EngineBlock directly gives me the error "Error - An error occurred."
 
   Scenario: User Fails to log in on the Portal SP using the Wrong Cert IdP
     When I go to the Portal with "https://wrongcertidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" as the entity ID
      And I log in at IdP as "user" with password "password"
-    Then EngineBlock directly gives me the error "Error - An error occured.."
+    Then EngineBlock directly gives me the error "Error - An error occurred."
