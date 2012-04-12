@@ -123,11 +123,11 @@ class EngineBlock_View
      * 
      * @return string
      */
-    public static function staticUrl()
+    public static function staticUrl($path = "")
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $settings = $application->getConfiguration();
-        return $settings->static->protocol . '://'. $settings->static->host;
+        return $settings->static->protocol . '://'. $settings->static->host . $path;
     }
 
     /**
@@ -137,11 +137,11 @@ class EngineBlock_View
      *
      * @return string
      */
-    public static function profileUrl()
+    public static function profileUrl($path = "")
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $settings = $application->getConfiguration();
-        return $settings->profile->protocol . '://'. $settings->profile->host;
+        return $settings->profile->protocol . '://'. $settings->profile->host . $path;
     }
 
     /**
