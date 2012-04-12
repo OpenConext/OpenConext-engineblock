@@ -52,10 +52,13 @@ if (isset($_GET['lang'])) {
 
         <?php echo $this->headStyle(); ?>
         <?php echo $this->headScript(); ?>
+
     </head>
     <body class="index">
         <div id="wrapper">
-            <div id="header"><b><font size="4"><?php echo $this->layout()->header; ?></font></b></div>
+            <div id="header">
+                <h3><?php echo $this->layout()->header; ?></h3>
+            </div>
             <div id="main">
                 <!-- Language selection -->
                 <ul class="nav">
