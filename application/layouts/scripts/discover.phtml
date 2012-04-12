@@ -61,10 +61,10 @@ if (isset($_GET['lang'])) {
                 <ul class="nav">
                     <li id="help_nav"><a href="#">HELP</a></li>
                     <li class="<?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
+                        <a href="<?php echo htmlspecialchars(EngineBlock_View::setLanguage('en')); ?>">EN</a>
                     </li>
                     <li class="<?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
+                        <a href="<?php echo htmlspecialchars(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
                     </li>
                 </ul>
                 <h1><?php echo $this->layout()->subheader; ?></h1>
