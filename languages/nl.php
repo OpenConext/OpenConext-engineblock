@@ -166,17 +166,16 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
 
     //Consent
-    'consent_header'                    => 'Nieuwe Applicatie',
-    'consent_subheader'                 => 'Autoriseer profiel vrijgave aan <i>%s</i>',
-    'consent_user_info'                 => 'U bent nu ingelogd als <i>%s</i> via <i>%s</i> en staks zal u worden teruggestuurd naar <i>%s</i>.',
-    'consent_store_info'                => 'De onderstaande informatie is nodig om toegang te krijgen tot de dienstverlening van <i>%s</i>. Bent u akkoord dat <i>%s</i> deze informatie doorgeeft aan <i>%s</i>?',
-    'consent_terms_of_service'          => 'Deze informatie zal ook worden opgeslagen in SURFconext en daarom zijn ook de gebruikersvoorwaarden van SURFnet van toepassing (
-        <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">Engels</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
-        / in het <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Nederlands</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />). Op uw <a href="%s" target="_blank">profiel pagina</a> kunt u zien welke informatie er via SURFconext gedeeld wordt en welke extra voorwaarden van toepassing zijn op de diensten die u via SURFconext gebruikt.',
-    'consent_accept'                    => 'Ja, ik ga akkoord',
-    'consent_decline'                   => 'Nee, ik ga niet akkoord',
+    'external_link'                     => 'opent in een nieuw venster',
+    'consent_header'                    => '%s verzoekt uw informatie',
+    'consent_subheader'                 => '%s verzoekt uw informatie',
+    'consent_intro'                     => '%s verzoekt deze informatie die %s opgeslagen heeft voor u:',
+    'consent_idp_provides'              => 'wilt de volgende informatie vrijgeven:',
+    'consent_sp_is_provided'            => 'aan',
+    'consent_terms_of_service'          => 'Deze informatie zal ook worden opgeslagen in SURFconext en doorgegeven aan %s. Gebruiksvoorwaarde van %s en %s zijn van toepassing.',
+
+    'consent_accept'                    => 'Ja, deel deze informatie',
+    'consent_decline'                   => 'Nee, deel geen informatie',
     'consent_notice'                    => 'Deze melding verschijnt alleen als u voor de eerste keer inlogt op een nieuwe dienst of als de gegevens, die worden doorgegeven, wijzigen.',
 
     //Error screens

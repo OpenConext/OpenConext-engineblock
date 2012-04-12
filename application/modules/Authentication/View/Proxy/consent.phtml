@@ -35,9 +35,27 @@ if (!isset($attributes)) {
 if (!isset($commonName)) {
     throw new EngineBlock_Exception('No common name given to consent screen');
 }
+if (!isset($sp)) {
+    throw new EngineBlock_Exception('No SP information given to consent screen');
+}
+if (!isset($idp)) {
+    throw new EngineBlock_Exception('No IdP information given to consent screen');
+}
 
 // The current language
 $lang = $this->language();
+
+// Set new window icon
+$newWindowIconUrl = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
+$newWindowHtml = '<img src="' . $newWindowIconUrl . '" alt="(' . $this->t('external_link') . ')" style="border: 0pt none; float: none;" />';
+$termsOfServiceUrl = 'https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+(' . strtoupper($lang) . ')';
+$surfConextTosLinkHtml = '<a href="' . $termsOfServiceUrl . '" target="_blank">SURFconext</a>' . $newWindowHtml;
+
+$spName         = isset($sp['Name'][$lang])  ? $sp['Name'][$lang]                                   : array_shift($sp['Name']);
+$idpName        = isset($idp['Name'][$lang]) ? $idp['Name'][$lang]                                  : array_shift($idp['Name']);
+$spLogo         = isset($sp['Logo']['URL'])  ? $sp['Logo']['URL']                                   : false;
+$idpLogo        = isset($idp['Logo']['URL']) ? $idp['Logo']['URL']                                  : false;
+$spEulaLinkHtml = isset($sp['Eula']) ? '<a href="' . $sp['Eula'] . '">' . $spName . '</a>' . $newWindowHtml  : $spName;
 
 /**
  * @var Zend_Layout $layout
@@ -48,24 +66,71 @@ $layout = $this->layout();
 $layout->setLayout('consent');
 
 // Set Layout variables
-$layout->header = $this->t('consent_header');
-$layout->title = $layout->title . ' - '. $layout->header;
-$layout->subheader = $this->t('consent_subheader', $sp['Name'][$lang]);
+$layout->use_header = false;
+$layout->title      = $layout->title . ' - '. $this->t('consent_header', htmlentities($spName));
+$layout->subheader  = $this->t('consent_subheader', $spName);
 $layout->footerText = $this->t('footer');
 
 // Set profile page Url
 $profileUrl = EngineBlock_View::profileUrl();
 
-// Set new window icon
-$newWindowIcon = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
-$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
+/** @var $view Zend_View */
+$view = $layout->getView();
+/** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
+$inlineScriptHelper = $view->getHelper('InlineScript');
+// Set javascript
+$staticHost = EngineBlock_View::staticUrl();
+$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.mousewheel.min.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.putCursorAtEnd.1.0.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.jscrollpane.min.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.tmpl.min.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/keyboardNavigator.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/typewatch.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.cookie.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/discover.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/screen.js');
+$inlineScriptHelper->appendFile($staticHost . '/javascript/discover.js');
+
+$inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
+$inlineScriptHelper->appendScript('(function() { var d = new Discover(); d.linkHelp(); })();');
+$inlineScriptHelper->appendScript('
+//Create scrollbar
+$("#scrollViewport").jScrollPane({
+    maintainPosition: false,
+    enableKeyboardNavigation: true,
+    showArrows: true
+});');
 ?>
-<div>
-    <p>
-        <?php echo $this->t('consent_user_info', $commonName, $idp['Name'][$lang], $sp['Name'][$lang]); ?>
-        <br /><br />
-        <?php echo $this->t('consent_store_info', $sp['Name'][$lang], $idp['Name'][$lang], $sp['Name'][$lang]); ?>
-    </p>
+<style>
+    img.logo, img.arrow {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table {
+        width: 100%;
+    }
+</style>
+<p style="font-weight: bold;">
+    <?php echo $this->t('consent_intro', $spName, $idpName); ?>
+</p>
+
+<?php if ($idpLogo) : ?>
+<img class="logo"
+     alt="<?php echo htmlentities($idpName); ?>"
+     title="<?php echo htmlentities($idpName); ?>"
+     src="<?php echo htmlentities($idpLogo); ?>" />
+<?php else: ?>
+<h4><?php echo htmlentities($idpName); ?></h4>
+<?php endif; ?>
+
+<img class="arrow"
+     alt="<?php echo $this->t('consent_idp_provides'); ?>"
+     src="<?php echo $staticHost . '/media/arrow.png'; ?>" />
+
+<div class="results">
+    <div id="scrollViewport" class="jspScrollable">
     <table>
         <thead>
             <tr>
@@ -80,11 +145,11 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
             </td>
             <td>
                 <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                <?=$attributeValues[0];?>
+                <?php echo htmlentities($attributeValues[0]);?>
                 <?php } /** Multiple attribute values */ else { ?>
                 <ul>
                 <?php foreach ($attributeValues as $value) { ?>
-                    <li><?=$value?></li>
+                    <li><?php echo htmlentities($value); ?></li>
                 <?php } ?>
                 </ul>
                 <?php } ?>
@@ -92,20 +157,50 @@ $layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/
         </tr>
     <?php } ?>
     </table>
-    <p>
-        <?php echo $this->t('consent_terms_of_service', $newWindowIcon, $newWindowIcon, $profileUrl); ?>
-    </p>
-    <br />
-
-    <form method="post" action="<?php echo htmlentities($action); ?>" style="float: left">
-        <input type=hidden name="ID" value="<?php echo htmlentities($ID); ?>">
-        <input type="hidden" name="consent" value="yes" />
-        <input id="accept_terms_button" type="submit" value="<?php echo $this->t('consent_accept'); ?>" style="font-weight: bold;" />
-    </form>
-    &nbsp;&nbsp;
-    <form method="post" action="<?php echo htmlentities($action); ?>" style="float: left; margin-left: 2em">
-        <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
-        <input type="submit" value="<?php echo $this->t('consent_decline'); ?>" />
-    </form>
-    <p><?php echo $this->t('consent_notice'); ?></p>
+    </div>
 </div>
+
+<img class="arrow"
+     alt="<?php echo $this->t('consent_sp_is_provided'); ?>"
+     src="<?php echo $staticHost . '/media/arrow.png'; ?>" />
+
+<?php if ($spLogo) : ?>
+<img class="logo"
+     alt="<?php echo htmlentities($spName); ?>"
+     title="<?php echo htmlentities($spName); ?>"
+     src="<?php echo htmlentities($spLogo); ?>" />
+<?php else: ?>
+<h4 style="text-align: center"><?php echo htmlentities($spName); ?></h4>
+<?php endif; ?>
+
+<p>
+    <?php echo $this->t('consent_terms_of_service', $spName, $surfConextTosLinkHtml, $spEulaLinkHtml); ?>
+</p>
+
+<style>
+    input.submit {
+        height: 3em;
+    }
+</style>
+
+<!-- YES -->
+<form method="post" action="<?php echo htmlentities($action); ?>" style="float: left; margin-left: 2em">
+    <p>
+        <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
+        <input type="hidden" name="consent" value="yes" />
+
+        <input id="accept_terms_button" class="submit bigbutton" type="submit" value="<?php echo $this->t('consent_accept'); ?>" style="font-weight: bold;" />
+    </p>
+</form>
+
+<!-- NO -->
+<form method="post" action="<?php echo htmlentities($action); ?>" style="margin-left: 19em">
+    <p>
+        <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
+        <input type="hidden" name="consent" value="no" />
+
+        <input id="decline_terms_button" class="submit bigbutton" type="submit" value="<?php echo $this->t('consent_decline'); ?>" style="font-weight: bold;" />
+    </p>
+</form>
+
+<p><?php echo $this->t('consent_notice'); ?></p>

@@ -165,19 +165,16 @@ If you have any questions about your privacy and the policy applied, please visi
     'deleteuser_success_desc'           => '<strong>Important!</strong> To finalize the exit procedure you need to close your browser.',
 
     //Consent
-    'consent_header'                    => 'New Application',
-    'consent_subheader'                 => 'Please provide consent for <i>%s</i>',
-    'consent_user_info'                 => 'You are now logged in as <i>%s</i> at <i>%s</i> and you will be taken back to <i>%s</i>.',
-    'consent_store_info'                => 'The information below is required to access the services provided by <i>%s</i>. Do you agree that <i>%s</i> will pass on this information to <i>%s</i>?',
-    'consent_terms_of_service'          => 'This information will be stored in SURFconext and therefore the Terms of Service of SURFnet apply
-        (<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29" target="_blank">English</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />
-        / in <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29" target="_blank">Dutch</a>
-        <img src="%s" alt="opens in a new window" style="border: 0pt none; float: none;" />). On your <a href="%s" target="_blank">profile page</a>
-        you can see what information is shared via SURFconext and what additional conditions may apply to 3rd party services.
-        <br />',
-    'consent_accept'                    => 'Yes, I agree',
-    'consent_decline'                   => 'No, I do not agree',
+    'external_link'                     => 'opens in a new window',
+    'consent_header'                    => '%s requests your information',
+    'consent_subheader'                 => '%s requests your information',
+    'consent_intro'                     => '%s requests this information that %s has stored for you:',
+    'consent_idp_provides'              => 'wants to provide the following information:',
+    'consent_sp_is_provided'            => 'to',
+    'consent_terms_of_service'          => 'This information will be stored in SURFconext and passed on to %s. Terms of service of %s and %s apply.',
+
+    'consent_accept'                    => 'Yes, share this information',
+    'consent_decline'                   => 'No, share no information',
     'consent_notice'                    => 'This message only appears when you log in at a new service or when the information, passed to the service, is changed.',
 
     //Error screens
@@ -250,3 +247,20 @@ If you have any questions about your privacy and the policy applied, please visi
        </p>'
 
 );
+
+function constant()
+{
+    $firstDigit = $this->digit();
+
+    while ($digit = $this->digit()) {
+
+    }
+}
+
+function digit()
+{
+    $token = $this->lookAhead();
+    if (in_array($token, array('0','1','2','3','4','5','6','7','8','9'))) {
+
+    }
+}
