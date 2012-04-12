@@ -247,20 +247,3 @@ If you have any questions about your privacy and the policy applied, please visi
        </p>'
 
 );
-
-function constant()
-{
-    $firstDigit = $this->digit();
-
-    while ($digit = $this->digit()) {
-
-    }
-}
-
-function digit()
-{
-    $token = $this->lookAhead();
-    if (in_array($token, array('0','1','2','3','4','5','6','7','8','9'))) {
-
-    }
-}
