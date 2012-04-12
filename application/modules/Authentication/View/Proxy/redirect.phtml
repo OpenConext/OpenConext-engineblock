@@ -33,11 +33,11 @@ $layout->setLayout('empty');
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
     <head>
-        <title>Corto Debugging - Redirecting to...</title>
+        <title>EngineBLock Debugging - Redirecting to...</title>
     </head>
     <body>
         <p>
-           <a href="<?=$location?>">GO</a>
+           <a href="<?php echo htmlspecialchars($location); ?>">GO</a>
         <p>
         <pre>
             <?php print_r($message, 1) ?>
