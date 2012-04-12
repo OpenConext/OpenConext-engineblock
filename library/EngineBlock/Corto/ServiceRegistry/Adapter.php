@@ -176,11 +176,14 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                     //default we will provision groups
                     $cortoEntity['ExternalProvisionGroups'] = true;
                 }
-
             }
 
             if (isset($serviceRegistryEntity['coin']['no_consent_required']) && $serviceRegistryEntity['coin']['no_consent_required']) {
                 $cortoEntity['NoConsentRequired'] = TRUE;
+            }
+
+            if (isset($serviceRegistryEntity['coin']['eula']) && $serviceRegistryEntity['coin']['eula']) {
+                $cortoEntity['Eula'] = $serviceRegistryEntity['coin']['eula'];
             }
 
             $cortoEntity['ProvideIsMemberOf'] = !empty($serviceRegistryEntity['coin']['provide_is_member_of']);
