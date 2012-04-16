@@ -27,7 +27,7 @@
 $lang = 'en';
 if (isset($_GET['lang'])) {
     $lang = $_GET['lang'];
-} elseif ($_COOKIE['lang']) {
+} elseif (isset($_COOKIE['lang'])) {
     $lang = $_COOKIE['lang'];
 }
 
@@ -40,10 +40,10 @@ if (isset($_GET['lang'])) {
 
         <title><?php echo $this->layout()->title;?></title>
 
-        <link href="<?php EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="<?php EngineBlock_View::staticUrl(); ?>/css/wide/screen.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/wide/screen.css" rel="stylesheet" type="text/css" />
         <!--[if lt IE 8 ]>
-        <link href="<?php EngineBlock_View::staticUrl(); ?>/css/wide/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/wide/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
         <![endif]-->
 
         <?php echo $this->headStyle(); ?>
@@ -54,7 +54,7 @@ if (isset($_GET['lang'])) {
             <div class="header" style="font-weight: bold; font-size: large">
                 <?php echo $this->layout()->header; ?>
                 <span class="logo">
-                    <img src="<?php EngineBlock_View::staticUrl(); ?>/media/surfconext.png" alt="SURFconext">
+                    <img src="<?php echo EngineBlock_View::staticUrl(); ?>/media/surfconext.png" alt="SURFconext">
                 </span>
             </div>
 
@@ -62,10 +62,10 @@ if (isset($_GET['lang'])) {
                 <!-- Language selection -->
                 <ul class="nav">
                     <li class="<?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?php EngineBlock_View::setLanguage('en'); ?>">EN</a>
+                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
                     </li>
                     <li class="<?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?php EngineBlock_View::setLanguage('nl'); ?>">NL</a>
+                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
                     </li>
                 </ul>
 
@@ -82,7 +82,7 @@ if (isset($_GET['lang'])) {
             </div>
         </div>
 
-        <script type="text/javascript" src="<?php EngineBlock_View::staticUrl(); ?>/javascript/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="<?php echo EngineBlock_View::staticUrl(); ?>/javascript/jquery-1.5.1.min.js"></script>
         <?php echo $this->inlineScript() ?>
     </body>
 </html>
