@@ -76,14 +76,27 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
             throw new EngineBlock_Exception(
                 "Response status !== 200: " .
                     var_export($httpClient->getLastRequest(), true) .
-                    var_export($response, true)
+                    var_export($response, true) .
+                    var_export($response->getBody(), true)
             );
         }
 
         if (strpos($response->getHeader("Content-Type"), "application/json")!==false) {
             return json_decode($response->getBody(), true);
         } else {
-            return new Zend_Rest_Client_Result($response->getBody());
+            try {
+                return new Zend_Rest_Client_Result($response->getBody());
+            }
+            catch (Zend_Rest_Client_Result_Exception $e) {
+                throw new EngineBlock_Exception(
+                    'Error parsing response' .
+                        var_export($httpClient->getLastRequest(), true) .
+                        var_export($response, true) .
+                        var_export($response->getBody(), true),
+                    null,
+                    $e
+                );
+            }
         }
     }
 }
