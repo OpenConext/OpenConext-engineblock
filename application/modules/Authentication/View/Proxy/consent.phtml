@@ -55,7 +55,7 @@ $spName         = isset($sp['Name'][$lang])  ? $sp['Name'][$lang]               
 $idpName        = isset($idp['Name'][$lang]) ? $idp['Name'][$lang]                                  : array_shift($idp['Name']);
 $spLogo         = isset($sp['Logo']['URL'])  ? $sp['Logo']['URL']                                   : false;
 $idpLogo        = isset($idp['Logo']['URL']) ? $idp['Logo']['URL']                                  : false;
-$spEulaLinkHtml = isset($sp['Eula']) ? '<a href="' . $sp['Eula'] . '">' . $spName . '</a>' . $newWindowHtml  : $spName;
+$spEulaLinkHtml = isset($sp['Eula']) ? '<a href="' . $sp['Eula'] . '" target="_blank">' . $spName . '</a>' . $newWindowHtml  : $spName;
 
 /**
  * @var Zend_Layout $layout
@@ -189,7 +189,11 @@ $("#scrollViewport").jScrollPane({
         <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
 
-        <input id="accept_terms_button" class="submit bigbutton" type="submit" value="<?php echo $this->t('consent_accept'); ?>" style="font-weight: bold;" />
+        <input id="accept_terms_button"
+               class="submit bigbutton"
+               type="submit"
+               value="<?php echo $this->t('consent_accept'); ?>"
+               style="font-weight: bold;" />
     </p>
 </form>
 
@@ -199,7 +203,10 @@ $("#scrollViewport").jScrollPane({
         <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
         <input type="hidden" name="consent" value="no" />
 
-        <input id="decline_terms_button" class="submit bigbutton" type="submit" value="<?php echo $this->t('consent_decline'); ?>" style="font-weight: bold;" />
+        <input id="decline_terms_button"
+               class="submit bigbutton"
+               type="submit"
+               value="<?php echo $this->t('consent_decline'); ?>" />
     </p>
 </form>
 
