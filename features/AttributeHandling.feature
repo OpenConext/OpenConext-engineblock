@@ -19,7 +19,7 @@ Feature: Attribute Handling
 
   Scenario: New User logs in and is given an unique URN containing the schacHomeOrganization
     When I go to the profile SP
-    And I select from the WAYF "https://perftesttransientidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php"
+    And I select from the WAYF "Performance Test IdP (Transient)"
     And I log in at IdP as "performancetest1" with password "password"
     And I give my consent
     And I pass through EngineBlock
@@ -28,7 +28,7 @@ Feature: Attribute Handling
 
   Scenario: User logs in on the TestSP and its userStatus is manipulated
      When I go to the Test SP
-     And I select from the WAYF "https://perftestpersistentidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php"
+     And I select from the WAYF "Performance Test IdP (Persistent)"
      And I log in at IdP as "bdd-user-attr" with password "password"
      And I pass through EngineBlock
      Then I should be on the Test SP with the user status "superman"

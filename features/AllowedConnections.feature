@@ -31,4 +31,4 @@ Feature: AllowedConnections
     #Trying to transparantly login
     Then I visit "https://profile.test.surfconext.nl/"
     And I should should be on the WAYF
-    And I should not be able to select "https://perftestpersistentidp.dev.surfconext.nl/simplesaml/saml2/idp/metadata.php" from the WAYF
+    And I should not be able to select "Performance Test IdP (Persistent)" from the WAYF

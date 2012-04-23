@@ -45,7 +45,7 @@ class Login extends BehatContext
      */
     public function iGiveMyConsent()
     {
-        $this->getMainContext()->pressButton("Yes, I agree");
+        $this->getMainContext()->pressButton("Yes, share this information");
     }
 
     /**

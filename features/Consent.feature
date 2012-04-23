@@ -10,13 +10,13 @@ Feature: Consent
     When I go to the Test SP
      And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-    Then I should see "Please provide consent"
+    Then I should see "This message only appears when you log in at a new service or when the information, passed to the service, is changed."
 
   Scenario: User logs into SP for the first time and does not give consent.
     When I go to the Test SP
      And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-     And I press "No, I do not agree"
+     And I press "No, share no information"
     Then I should see "No consent given"
 
   Scenario: User logs into SP for the first time and gives consent.
@@ -58,13 +58,13 @@ Feature: Consent
 
      And I go to the Test SP
      And I pass through Surfguest IdP
-    Then I should see "Please provide consent"
+    Then I should see "This message only appears when you log in at a new service or when the information, passed to the service, is changed."
 
   Scenario: User logs into SP and has to give consent again.
     When I go to the Test SP
      And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-    Then I should see "Please provide consent"
+    Then I should see "This message only appears when you log in at a new service or when the information, passed to the service, is changed."
 
   Scenario: User changes his surname and has to give consent again.
     When I go to "https://test.surfguest.nl/user/edit"
@@ -76,7 +76,7 @@ Feature: Consent
      And I go to the Test SP
      And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-    Then I should see "Please provide consent"
+    Then I should see "This message only appears when you log in at a new service or when the information, passed to the service, is changed."
 
   Scenario: User changes his surname back and still has to give consent.
     When I go to "https://test.surfguest.nl/user/edit"
@@ -88,5 +88,5 @@ Feature: Consent
      And I go to the Test SP
      And I select from the WAYF "SURFguest (TEST)"
      And I log in at Surfguest IdP as "bddtest" with password "behattest"
-    Then I should see "Please provide consent"
+    Then I should see "This message only appears when you log in at a new service or when the information, passed to the service, is changed."
 
