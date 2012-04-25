@@ -183,8 +183,9 @@ $("#scrollViewport").jScrollPane({
     }
 </style>
 
+<div id="approve">
 <!-- YES -->
-<form method="post" action="<?php echo htmlentities($action); ?>" style="float: left; margin-left: 2em">
+<form id="accept" method="post" action="<?php echo htmlentities($action); ?>">
     <p>
         <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
@@ -198,7 +199,7 @@ $("#scrollViewport").jScrollPane({
 </form>
 
 <!-- NO -->
-<form method="post" action="<?php echo htmlentities($action); ?>" style="margin-left: 19em">
+<form id="reject" method="post" action="<?php echo htmlentities($action); ?>">
     <p>
         <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
         <input type="hidden" name="consent" value="no" />
@@ -209,5 +210,6 @@ $("#scrollViewport").jScrollPane({
                value="<?php echo $this->t('consent_decline'); ?>" />
     </p>
 </form>
+</div>
 
 <p><?php echo $this->t('consent_notice'); ?></p>
