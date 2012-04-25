@@ -1,45 +1,7 @@
 <?php
-/**
- * SURFconext EngineBlock
- *
- * LICENSE
- *
- * Copyright 2011 SURFnet bv, The Netherlands
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- *
- * @category  SURFconext EngineBlock
- * @package
- * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- */
-
-// Language stuff
-$lang = 'en';
-if (isset($_GET['lang'])) {
-    $lang = $_GET['lang'];
-} elseif (isset($_COOKIE['lang'])) {
-    $lang = $_COOKIE['lang'];
-}
-
+define('PARTIAL_DIR', __DIR__ . '/partials/');
+require PARTIAL_DIR . 'header-start.php';
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <meta name="robots" content="noindex, nofollow"/>
-
-        <title><?php echo $this->layout()->title;?></title>
-
         <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/ext/jqueryui/1.8.16/custom-theme/jquery-ui-1.8.16.custom.css" rel="stylesheet" type="text/css" />
         <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/wide/screen.css" rel="stylesheet" type="text/css" />
@@ -65,16 +27,8 @@ if (isset($_GET['lang'])) {
                     <li><a href="#<?php echo $id; ?>"><?php echo $tab; ?></a></li>
                 <?php } ?>
                 </ul>
-                <!-- Language selection -->
-                <ul class="nav">
-                    <li class="<?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
-                    </li>
-                    <li class="<?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
-                    </li>
-                </ul>
-<!--                <h1>--><?php //echo $this->layout()->subheader; ?><!--</h1>-->
+
+                <?php require PARTIAL_DIR . 'nav.php'; ?>
 
                 <?php echo $this->layout()->content; ?>
 
