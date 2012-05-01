@@ -27,6 +27,7 @@ class Default_Controller_Error extends EngineBlock_Controller_Abstract
 {
     public function displayAction($exception)
     {
+        header('HTTP/1.1 500 Internal Server Error', true, 500);
         $application = EngineBlock_ApplicationSingleton::getInstance();
         if ($application->getConfigurationValue('debug', false)) {
             $this->exception = $exception;
