@@ -19,25 +19,25 @@ if (count($rows) !== 1) {
 }
 $groupProviderId = $rows[0]['id'];
 
-// Determine the id of the Grouper GroupReplace Decorator
+// Determine the id of the Grouper GroupReplace Filter
 $rows = $db->fetchAll(
-    'SELECT id FROM group_provider_decorator WHERE group_provider_id = ? AND classname=?',
-    array($groupProviderId, 'EngineBlock_Group_Provider_Decorator_GroupIdReplace')
+    'SELECT id FROM group_provider_filter WHERE group_provider_id = ? AND type="group"',
+    array($groupProviderId)
 );
 if (count($rows) !== 1) {
     echo "The Group IDs are not modified?!?" . PHP_EOL;
     var_dump($rows);
     exit(1);
 }
-$groupProviderDecoratorId = $rows[0]['id'];
+$groupProviderFilterId = $rows[0]['id'];
 
 // Determine the search and replace options for the Grouper group provider ids
 $rows = $db->fetchAll(
-    'SELECT `name`, `value` FROM group_provider_decorator_option WHERE group_provider_decorator_id = ? AND name IN (?,?)',
-    array($groupProviderDecoratorId, 'search', 'replace')
+    'SELECT `name`, `value` FROM group_provider_filter_option WHERE group_provider_filter_id = ? AND name IN (?,?)',
+    array($groupProviderFilterId, 'search', 'replace')
 );
 if (count($rows) !== 2) {
-    echo "Wrong number of Grouper Group Decorator Options?!?" . PHP_EOL;
+    echo "Wrong number of Grouper Group Filter Options?!?" . PHP_EOL;
     var_dump($rows);
     exit(1);
 }
