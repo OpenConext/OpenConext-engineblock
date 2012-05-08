@@ -91,6 +91,12 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      */
     public function getGroups($serviceProviderGroupAcls)
     {
+        // If the conversion didn't do anything, it's probably not a user for this group provider
+        // so just return an empty array
+        if ($this->_search && $this->_userId === $this->_userIdReplaced) {
+            return array();
+        }
+
         $this->_provider->setUserId($this->_userIdReplaced);
         $results = $this->_provider->getGroups($serviceProviderGroupAcls);
         $this->_provider->setUserId($this->_userId);
@@ -105,6 +111,12 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      */
     public function getGroupsByStem($stem, $serviceProviderGroupAcls)
     {
+        // If the conversion didn't do anything, it's probably not a user for this group provider
+        // so just return an empty array
+        if ($this->_search && $this->_userId === $this->_userIdReplaced) {
+            return array();
+        }
+
         $this->_provider->setUserId($this->_userIdReplaced);
         $results = $this->_provider->getGroupsByStem($stem, $serviceProviderGroupAcls);
         $this->_provider->setUserId($this->_userId);
@@ -119,6 +131,12 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      */
     public function getMembers($groupIdentifier, $serviceProviderGroupAcls)
     {
+        // If the conversion didn't do anything, it's probably not a user for this group provider
+        // so just return an empty array
+        if ($this->_search && $this->_userId === $this->_userIdReplaced) {
+            return array();
+        }
+
         $this->_provider->setUserId($this->_userIdReplaced);
         $results = $this->_provider->getMembers($groupIdentifier, $serviceProviderGroupAcls);
         $this->_provider->setUserId($this->_userId);
@@ -133,6 +151,12 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
      */
     public function isMember($groupIdentifier)
     {
+        // If the conversion didn't do anything, it's probably not a user for this group provider
+        // so just return an empty array
+        if ($this->_search && $this->_userId === $this->_userIdReplaced) {
+            return false;
+        }
+
         $this->_provider->setUserId($this->_userIdReplaced);
         $results = $this->_provider->isMember($groupIdentifier);
         $this->_provider->setUserId($this->_userId);
@@ -142,11 +166,17 @@ class EngineBlock_Group_Provider_Decorator_UserIdReplace
 
     /**
      * Get the details of a groupMember
-     * @abstract
-     * @return the Person
+     * @param string $subjectId User to get the data for
+     * @return array Group member data
      */
     public function getGroupMemberDetails($subjectId = null)
     {
+        // If the conversion didn't do anything, it's probably not a user for this group provider
+        // so just return an empty array
+        if ($this->_search && $this->_userId === $this->_userIdReplaced) {
+            return array();
+        }
+
         $this->_provider->setUserId($this->_userIdReplaced);
         $subjectIdReplaced = null;
         if ($subjectId) {

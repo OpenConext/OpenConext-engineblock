@@ -60,6 +60,11 @@ class EngineBlock_Group_Provider_Decorator_GroupIdReplace
      */
     public function getMembers($groupIdentifier,$serviceProviderGroupAcls )
     {
+        // If the group is not a decorated group, don't even bother looking up the members, can't be ours
+        if ($this->_search && !preg_match($this->_search, $groupIdentifier)) {
+            return array();
+        }
+
         $groupIdentifier = preg_replace($this->_search, $this->_replace, $groupIdentifier);
 
         return parent::getMembers($groupIdentifier, $serviceProviderGroupAcls);
@@ -72,6 +77,11 @@ class EngineBlock_Group_Provider_Decorator_GroupIdReplace
      */
     public function isMember($groupIdentifier)
     {
+        // If the group is not a decorated group, don't even bother looking up the members, can't be ours
+        if ($this->_search && !preg_match($this->_search, $groupIdentifier)) {
+            return false;
+        }
+
         $groupIdentifier = preg_replace($this->_search, $this->_replace, $groupIdentifier);
 
         return parent::isMember($groupIdentifier);
