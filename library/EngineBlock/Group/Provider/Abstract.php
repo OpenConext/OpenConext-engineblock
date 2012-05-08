@@ -237,6 +237,7 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
 
         $decoratedProvider = $this;
         foreach ($config->decorators as $decoratorConfig) {
+            /** @var $decoratorClassName EngineBlock_Group_Provider_Decorator_Abstract */
             $decoratorClassName = $decoratorConfig->className;
             if (!class_exists($decoratorClassName, true)) {
                 EngineBlock_ApplicationSingleton::getLog()->warn(
@@ -257,7 +258,7 @@ abstract class EngineBlock_Group_Provider_Abstract implements EngineBlock_Group_
      * Verify if the given $groupId is from an external group
      *
      * @static
-     * @param $groupId the group identifier
+     * @param string $groupId Group identifier
      * @return bool true id the group is external
      */
     public static function isExternalGroup($groupId) {

@@ -91,7 +91,7 @@ class EngineBlock_SocialData
         }
         $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
         if (!$spGroupAcls) {
-            //no GroupAcl means by defintion that there are no positive permissions
+            //no GroupAcl means by definition that there are no positive permissions
             return false;
         }
 
@@ -134,12 +134,12 @@ class EngineBlock_SocialData
             return false;
         }
         if (!$spEntityId) {
-            //without spEntityId we can't check if we are allowed to return Groups
+            // Without spEntityId we can't check if we are allowed to return Groups
             return false;
         }
         $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
         if (!$spGroupAcls) {
-            //no GroupAcl means by defintion that there are no positive permissions
+            //no GroupAcl means by definition that there are no positive permissions
             return false;
         }
         $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId,$spGroupAcls );

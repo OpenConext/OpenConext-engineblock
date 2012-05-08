@@ -56,7 +56,7 @@ abstract class EngineBlock_Group_Provider_OpenSocial_Abstract
     /**
      * Get the details of a groupMember
      * @abstract
-     * @return the Person
+     * @return array Group member data
      */
     public function getGroupMemberDetails($subjectId = null)
     {
