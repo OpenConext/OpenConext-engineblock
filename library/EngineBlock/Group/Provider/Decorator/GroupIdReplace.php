@@ -78,7 +78,8 @@ class EngineBlock_Group_Provider_Decorator_GroupIdReplace
     public function isMember($groupIdentifier)
     {
         // If the group is not a decorated group, don't even bother looking up the members, can't be ours
-        if ($this->_search && !preg_match($this->_search, $groupIdentifier)) {
+        // except the members group for stem VOs
+        if ($groupIdentifier !== 'members' && $this->_search && !preg_match($this->_search, $groupIdentifier)) {
             return false;
         }
 
