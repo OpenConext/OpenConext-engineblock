@@ -56,6 +56,9 @@ $voGroups = $db->fetchAll("SELECT vo_id,group_id FROM virtual_organisation_group
 foreach ($voGroups as $voGroup) {
     $newVoGroup = $voGroup;
     $newVoGroup['group_id'] = preg_replace($options['search'], $options['replace'], $newVoGroup['group_id']);
-    $db->update('virtual_organisation_group', $newVoGroup, $voGroup);
+    $db->query(
+        'UPDATE virtual_organisation_group SET group_id=? WHERE vo_id=? AND group_id=?',
+        array($newVoGroup['group_id'], $voGroup['vo_id'], $voGroup['group_id'])
+    );
     echo "{$voGroup['vo_id']}: {$voGroup['group_id']} => {$newVoGroup['group_id']}" . PHP_EOL;
 }
