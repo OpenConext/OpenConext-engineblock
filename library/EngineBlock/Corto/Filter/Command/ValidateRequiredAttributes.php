@@ -27,6 +27,16 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
 {
     const URN_MACE_TERENA_SCHACHOMEORG = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
 
+    /**
+     * This command may modify the response attributes
+     *
+     * @return array
+     */
+    public function getResponseAttributes()
+    {
+     	return $this->_responseAttributes;
+    }
+
     public function execute()
     {
         $errors = array();
