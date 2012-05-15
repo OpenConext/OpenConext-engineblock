@@ -42,7 +42,7 @@ Feature: OpenSocial Security
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
      And I go to "https://testsp.test.surfconext.nl/testsp/openSocialQueries.shtml"
-     And I retrieve the member info for "nl:surfnet:diensten:testsp"
+     And I retrieve the member info for "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:testsp"
     Then I should see "urn:collab:person:perftestidppersistent.dev.surfconext.nl:bdd-user-attr"
 
   Scenario: Boy logs in at the Test SP and tries to retrieve members from a team where he is not a member
@@ -51,7 +51,7 @@ Feature: OpenSocial Security
      And I log in at Surfguest IdP as "test-boy" with password "test-boy"
      And I pass through EngineBlock
      And I go to "https://testsp.test.surfconext.nl/testsp/openSocialQueries.shtml"
-     And I retrieve the member info for "nl:votest1:votest1group"
+     And I retrieve the member info for "urn:collab:group:test.surfteams.nl:nl:votest1:votest1group"
     Then I should see "Something went wrong"
 
   Scenario: Boy logs in at the Test SP and retrieves his groups
@@ -61,7 +61,7 @@ Feature: OpenSocial Security
      And I pass through EngineBlock
      And I go to "https://testsp.test.surfconext.nl/testsp/openSocialQueries.shtml"
      And I retrieve the groups info for "urn:collab:person:test.surfguest.nl:test-boy"
-    Then I should see "nl:surfnet:diensten:testsp"
+    Then I should see "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:testsp"
 
   Scenario: Boy logs in at the Test SP and tries to retrieve groups for a different person
     When I go to the Test SP
