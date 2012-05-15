@@ -132,6 +132,15 @@ class EngineBlock_Corto_Adapter
         return $request;
     }
 
+    /**
+     * Filter out IdPs that are not allowed to connect to the given SP.
+     *
+     * Determines SP based on Authn Request (required).
+     *
+     * @param array                         $entities
+     * @param EngineBlock_Corto_CoreProxy   $proxyServer
+     * @return array Remaining entities
+     */
     protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
         return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
@@ -140,6 +149,15 @@ class EngineBlock_Corto_Adapter
         );
     }
 
+    /**
+     * Filter out IdPs that are not allowed to connect to the given SP.
+     *
+     * Determines SP based on URL query param (easily spoofable, thus 'claimed').
+     *
+     * @param array                         $entities
+     * @param EngineBlock_Corto_CoreProxy   $proxyServer
+     * @return array Remaining entities
+     */
     protected function _filterRemoteEntitiesBySpQueryParam(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
     {
         $claimedSpEntityId = $this->_getClaimedSpEntityId();
@@ -154,10 +172,12 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * Given a list of Idp's, filters out all that do not have the same state as the requesting SP
+     * Given a list of Idps, filters out all that do not have the same state as the requesting SP.
      *
-     * @param array $entities
-     * @param EngineBlock_Corto_CoreProxy $proxyServer
+     * Determines SP based on Authn Request.
+     *
+     * @param array                         $entities
+     * @param EngineBlock_Corto_CoreProxy   $proxyServer
      * @return array Filtered entities
      */
     protected function _filterRemoteEntitiesByRequestSpWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
@@ -170,7 +190,9 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * Given a list of Idp's, filters out all that do not have the same state as the claimed SP
+     * Given a list of Idps, filters out all that do not have the same state as the claimed SP.
+     *
+     * Determines SP based on URL query param (easily spoofable, thus 'claimed').
      *
      * @param array $entities
      * @param EngineBlock_Corto_CoreProxy $proxyServer
