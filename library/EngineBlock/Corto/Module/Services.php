@@ -40,7 +40,9 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             return false;
         }
 
-        $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
+        if (isset($cachedResponse['vo'])) {
+            $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
+        }
         return $cachedResponse;
     }
 
