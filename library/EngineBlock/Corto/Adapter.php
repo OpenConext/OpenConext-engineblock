@@ -62,6 +62,7 @@ class EngineBlock_Corto_Adapter
 
     public function singleSignOn($idPProviderHash)
     {
+        $this->_addRemoteEntitiesFilter(array($this, '_annotateRequestWithImplicitVo'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
@@ -115,21 +116,53 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * Use the binding module to get the request, then
-     * store it in _REQUEST so Corto will think it has received it
-     * from an internal binding, because if Corto would try to
-     * get the request again from the binding module, it would fail.
+     * Get the SAML2 Authn Request
      *
      * @return array $request
      */
     protected function _getRequestInstance() {
-        static $request;
-        if(empty($request)) {
-
-            $request = $this->_proxyServer->getBindingsModule()->receiveRequest();
-            $_REQUEST['SAMLRequest'] = $request;
-        }
+        // Use the binding module to get the request
+        $bindingModule = $this->_proxyServer->getBindingsModule();
+        $request = $bindingModule->receiveRequest();
+        // then store it back so Corto will think it has received it
+        // from an internal binding, because if Corto would try to
+        // get the request again from the binding module, it would fail.
+        $bindingModule->registerInternalBindingMessage('SAMLRequest', $request);
         return $request;
+    }
+
+    /**
+     * Detect Implicit VOs and annotate the Authn Request if they are detected
+     *
+     * Heinous abuse of the filter functionality.
+     *
+     * @param array $entities
+     * @throws EngineBlock_Exception
+     */
+    protected function _annotateRequestWithImplicitVo(array $entities)
+    {
+        $request = $this->_getRequestInstance();
+        $spEntityId = $request['saml:Issuer']['__v'];
+        if (!isset($entities[$spEntityId]['VoContext']) || !$entities[$spEntityId]['VoContext']) {
+            return $entities;
+        }
+
+        $implicitVo = $entities[$spEntityId]['VoContext'];
+
+        // If we ALSO have an explicit VO
+        if (isset($request[Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
+            $explicitVo = $request[Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
+
+            // Check if they are unequal (no explicit VO or the same VO is okay)
+            if (!$implicitVo!== $explicitVo) {
+                throw new EngineBlock_Exception('Explicit VO does not match implicit VO!');
+            }
+        }
+
+        // Annotate and store the request
+        $request[Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $implicitVo;
+        $this->_proxyServer->getBindingsModule()->registerInternalBindingMessage('SAMLRequest', $request);
+        return $entities;
     }
 
     /**
@@ -137,11 +170,10 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on Authn Request (required).
      *
-     * @param array                         $entities
-     * @param EngineBlock_Corto_CoreProxy   $proxyServer
+     * @param array $entities
      * @return array Remaining entities
      */
-    protected function _filterRemoteEntitiesByRequestSp(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    protected function _filterRemoteEntitiesByRequestSp(array $entities)
     {
         return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
@@ -154,11 +186,10 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on URL query param (easily spoofable, thus 'claimed').
      *
-     * @param array                         $entities
-     * @param EngineBlock_Corto_CoreProxy   $proxyServer
+     * @param array $entities
      * @return array Remaining entities
      */
-    protected function _filterRemoteEntitiesBySpQueryParam(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    protected function _filterRemoteEntitiesBySpQueryParam(array $entities)
     {
         $claimedSpEntityId = $this->_getClaimedSpEntityId();
         if (!$claimedSpEntityId) {
@@ -176,11 +207,10 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on Authn Request.
      *
-     * @param array                         $entities
-     * @param EngineBlock_Corto_CoreProxy   $proxyServer
+     * @param array $entities
      * @return array Filtered entities
      */
-    protected function _filterRemoteEntitiesByRequestSpWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    protected function _filterRemoteEntitiesByRequestSpWorkflowState(array $entities)
     {
         $spEntityId = $this->_getIssuerSpEntityId();
         return $this->getServiceRegistryAdapter()->filterEntitiesByWorkflowState(
@@ -195,10 +225,9 @@ class EngineBlock_Corto_Adapter
      * Determines SP based on URL query param (easily spoofable, thus 'claimed').
      *
      * @param array $entities
-     * @param EngineBlock_Corto_CoreProxy $proxyServer
      * @return array Filtered entities
      */
-    protected function _filterRemoteEntitiesByClaimedSpWorkflowState(array $entities, EngineBlock_Corto_CoreProxy $proxyServer)
+    protected function _filterRemoteEntitiesByClaimedSpWorkflowState(array $entities)
     {
         $claimedSpEntityId = $this->_getClaimedSpEntityId();
         if (!$claimedSpEntityId) {
@@ -300,7 +329,7 @@ class EngineBlock_Corto_Adapter
                     'public'    => $application->getConfiguration()->encryption->key->public,
                     'private'   => $application->getConfiguration()->encryption->key->private,
                 ),
-                // Note that we use an input filter because consent requires a presistent NameID
+                // Note that we use an input filter because consent requires a persistent NameID
                 // and we only get that after provisioning
                 'infilter'  => array(new EngineBlock_Corto_Filter_Input($this), 'filter'),
                 'outfilter' => array(new EngineBlock_Corto_Filter_Output($this), 'filter'),

@@ -136,6 +136,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['AssertionConsumerService'][0]['Location'])) {
             $cortoEntity['WantsAssertionsSigned'] = true;
 
+            // implicit vo
+            if (isset($serviceRegistryEntity['coin']['implicit_vo_id'])) {
+                $cortoEntity['VoContext'] = $serviceRegistryEntity['coin']['implicit_vo_id'];
+            }
+
             $cortoEntity['AssertionConsumerService'] = array(
                 'Binding'  => $serviceRegistryEntity['AssertionConsumerService'][0]['Binding'],
                 'Location' => $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],

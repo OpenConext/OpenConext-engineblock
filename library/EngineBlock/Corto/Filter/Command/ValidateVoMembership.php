@@ -46,11 +46,14 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
         }
 
         // In filter stage we need to take a look at the VO context
-        if (!isset($this->_request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
-            return;
+        $vo = false;
+        if (isset($this->_request['__']['VoContextImplicit'])) {
+            $vo = $this->_request['__']['VoContextImplicit'];
+        }
+        else if(isset($this->_request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
+            $vo = $this->_request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
         }
 
-        $vo = $this->_request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
         if (!$vo) {
             return;
         }

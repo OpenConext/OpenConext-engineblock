@@ -101,6 +101,11 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
         if ($remoteEntityId) {
             $remoteEntity = $this->getRemoteEntity($remoteEntityId);
         }
+        if ($remoteEntity && isset($remoteEntity['VoContext'])) {
+            if ($request && !isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
+                $isImplicitVo = true;
+            }
+        }
         if (!$this->_processingMode && $this->_voContext !== null && $serviceName != "sPMetadataService" && !$isImplicitVo) {
             $mappedUri .= '/' . "vo:" . $this->_voContext;
         }

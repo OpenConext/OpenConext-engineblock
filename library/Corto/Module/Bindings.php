@@ -71,6 +71,8 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             null                                                        => '_sendHTTPRedirect'
     );
 
+    protected $_internalBindingMessages = array();
+
     /**
      * Process an incoming SAML request message. The data is retrieved automatically 
      * depending on the binding used.
@@ -136,11 +138,11 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
 
     protected function _receiveMessageFromInternalBinding($key)
     {
-        if (!isset($_REQUEST[$key]) || !is_array($_REQUEST[$key])) {
+        if (!isset($this->_internalBindingMessages[$key]) || !is_array($this->_internalBindingMessages[$key])) {
             return false;
         }
         
-        $message = $_REQUEST[$key];
+        $message = $this->_internalBindingMessages[$key];
         $message[Corto_XmlToArray::PRIVATE_PFX]['Binding'] = "INTERNAL";
         return $message;
     }
@@ -889,7 +891,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
     {
         // Store the message
         $name            = $message['__']['paramname'];
-        $_REQUEST[$name] = $message;
+        $this->_internalBindingMessages[$name] = $message;
 
         $destinationLocation = $message['_Destination'];
         $parameters = $this->_server->getParametersFromUrl($destinationLocation);
@@ -902,6 +904,12 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         $this->_server->getSessionLog()->debug("Calling service '$serviceName'");
         $this->_server->getServicesModule()->$serviceName();
         $this->_server->getSessionLog()->debug("Done calling service '$serviceName'");
+    }
+
+    public function registerInternalBindingMessage($key, $message)
+    {
+        $this->_internalBindingMessages[$key] = $message;
+        return $this;
     }
     
     protected function _sign($key, $element)
