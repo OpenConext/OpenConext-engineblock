@@ -510,6 +510,10 @@ class Corto_ProxyServer
             $response['saml:Assertion']['saml:Issuer']['__v'] = $response['__']['OriginalIssuer'];
         }
 
+        if (isset($sourceResponse['_Consent'])) {
+            $response['_Consent'] = $sourceResponse['_Consent'];
+        }
+
         $response['samlp:Status']   = $sourceResponse['samlp:Status'];
         $response['saml:Assertion'] = $sourceResponse['saml:Assertion'];
 
