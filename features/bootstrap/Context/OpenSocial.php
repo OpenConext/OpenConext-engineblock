@@ -36,7 +36,6 @@ class OpenSocial extends BehatContext
         $this->getMainContext()->pressButton('Login');
         $this->getMainContext()->pressButton('Submit');
         $this->getMainContext()->pressButton('Submit');
-        $this->getMainContext()->pressButton('Submit');
         $this->getMainContext()->pressButton('Login');
         $this->getMainContext()->pressButton('Grant Access');
     }
