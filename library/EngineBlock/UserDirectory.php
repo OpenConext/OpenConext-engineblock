@@ -121,16 +121,29 @@ class EngineBlock_UserDirectory
 
         $uid = $this->_getCollabPersonId($ldapAttributes);
         $users = $this->findUsersByIdentifier($uid);
-        switch (count($users)) {
-            case 1:
-                $user = $this->_updateUser($users[0], $ldapAttributes, $saml2attributes, $idpEntityMetadata);
-                break;
-            case 0:
-                $user = $this->_addUser($ldapAttributes, $saml2attributes, $idpEntityMetadata);
-                break;
-            default:
-                $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
-                throw new EngineBlock_Exception($message);
+        try {
+            switch (count($users)) {
+                case 1:
+                    $user = $this->_updateUser($users[0], $ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                    break;
+                case 0:
+                    $user = $this->_addUser($ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                    break;
+                default:
+                    $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
+                    throw new EngineBlock_Exception($message);
+            }
+        } catch (Zend_Ldap_Exception $e) {
+            // Note that during high volumes of logins (like during a performance test) we may see a find
+            // not returning a user, then another process registering the user, then the current process failing to
+            // add the user because it was already added...
+            // So if a user has already been added we simply try again
+            if ($e->getCode() === Zend_Ldap_Exception::LDAP_ALREADY_EXISTS) {
+                return $this->registerUser($saml2attributes, $idpEntityMetadata);
+            }
+            else {
+                throw $e;
+            }
         }
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
