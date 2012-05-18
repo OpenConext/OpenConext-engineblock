@@ -130,7 +130,8 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
             if (!$result) {
                 throw new EngineBlock_Exception(
                     'Unable to store new persistent id for SP UUID: ' . $serviceProviderUuid .
-                        ' and user uuid: ' . $userUuid
+                        ' and user uuid: ' . $userUuid .
+                        ' error info: ' . var_export($statement->errorInfo(), true)
                 );
             }
             return $persistentId;
