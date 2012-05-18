@@ -33,7 +33,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         );
         $this->groupOauth = $this->user->getUserOauth();
 
-        $serviceRegistryClient = new Janus_Client();
+        $serviceRegistryClient = new Janus_Client_CacheProxy();
         $this->spList = $serviceRegistryClient->getSpList();
 
         $this->consent = $this->user->getConsent();
