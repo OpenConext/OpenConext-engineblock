@@ -154,8 +154,8 @@ class EngineBlock_Corto_Adapter
             $explicitVo = $request[Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
 
             // Check if they are unequal (no explicit VO or the same VO is okay)
-            if (!$implicitVo!== $explicitVo) {
-                throw new EngineBlock_Exception('Explicit VO does not match implicit VO!');
+            if ($implicitVo !== $explicitVo) {
+                throw new EngineBlock_Exception("Explicit VO '$explicitVo' does not match implicit VO '$implicitVo'!");
             }
         }
 
