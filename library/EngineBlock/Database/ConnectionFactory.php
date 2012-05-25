@@ -108,7 +108,12 @@ class EngineBlock_Database_ConnectionFactory
         $dbh = new PDO(
             $randomServerSettings->dsn,
             $randomServerSettings->user,
-            $randomServerSettings->password
+            $randomServerSettings->password,
+            array(
+                PDO::ATTR_PERSISTENT => isset($randomServerSettings->use_persistent) ?
+                    (bool)$randomServerSettings->use_persistent :
+                    true
+            )
         );
         return $dbh;
     }
