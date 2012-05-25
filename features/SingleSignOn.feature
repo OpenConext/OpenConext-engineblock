@@ -10,7 +10,6 @@ Feature: Single Sign On
      And I pass through EngineBlock
      And I log out from the Test SP
      And I go to the Test SP
-     And I pass through Surfguest IdP
      And I pass through EngineBlock
     Then I should be on the Test SP
 
