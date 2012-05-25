@@ -45,11 +45,13 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 "description:nl" => "EngineBlock Testing IdP",
                 "name:en" => "EngineBlock Testing IdP",
                 "name:nl" => "EngineBlock Testing IdP",
+                'keywords:en' => 'test,english',
+                'keywords:nl' => 'test, nederlands',
                 "redirect.sign" => true,
                 "SingleSignOnService:0:Binding" => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
                 "SingleSignOnService:0:Location" => "https://idp.testing.dev.coin.surf.net/simplesaml/saml2/idp/SSOService.php",
                 "metadataUrl" => "https://ss.idp.ebdev.net/simplesaml/saml2/idp/metadata.php",
-                "entityID" => "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp"
+                "entityID" => "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp",
             ),
         ));
         $serviceRegistry->setSPList(array(
@@ -64,7 +66,16 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 "name:nl"=> "EngineBlock Testing SP",
                 "redirect.sign"=> true,
                 "metadataUrl"=> "https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp",
-                "entityID"=> "https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp"
+                "entityID"=> "https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp",
+                'coin:implicit_vo_id'    => 'rave-devs',
+                'contacts:1:contactType' => 'support',
+                'contacts:1:emailAddress'=> 'boy@ibuildings.nl',
+                'contacts:1:givenName'   => 'Boy',
+                'contacts:1:surName'     => 'Baukema',
+                'organization:OrganizationName:nl' => 'SURFnet',
+                'organization:OrganizationName:en' => 'SURFnet',
+                'organization:OrganizationURL:en' => 'https://www.surfnet.nl/en/',
+                'organization:OrganizationURL:nl' => 'https://www.surfnet.nl',
             ),
         ));
 
@@ -112,6 +123,25 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'nl' => "EngineBlock Testing SP",
                 ),
                 "AuthnRequestsSigned" => true,
+                'VoContext' => 'rave-devs',
+                'ContactPersons' => array(
+                    1 => array(
+                        'ContactType' => 'support',
+                        'EmailAddress'=> 'boy@ibuildings.nl',
+                        'GivenName'   => 'Boy',
+                        'SurName'     => 'Baukema',
+                    ),
+                ),
+                'Organization'=> array(
+                    'Name' => array(
+                        'nl' => 'SURFnet',
+                        'en' => 'SURFnet',
+                    ),
+                    'URL' => array(
+                        'en' => 'https://www.surfnet.nl/en/',
+                        'nl' => 'https://www.surfnet.nl',
+                    ),
+                ),
             ),
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
                 "SingleSignOnService" => array(
@@ -146,44 +176,13 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'en' => "EngineBlock Testing IdP",
                     'nl' => "EngineBlock Testing IdP",
                 ),
+                'Keywords' => array(
+                    'en' => 'test,english',
+                    'nl' => 'test, nederlands',
+                ),
                 "AuthnRequestsSigned"  => true,
             ),
         );
         $this->assertEquals($expectedResult, $metadata, "Converting a simple result from Service Registry with 1 IdP and 1 SP to Cortos Metadata format");
-    }
-
-    public function testServiceRegistryEntityToMultiDimensionalArray()
-    {
-        $serviceRegistryEntity = array(
-            'Aa:b1:0:tekno'     => 'darkon',
-            'Aa:c1:c2:1:if'     => 'not',
-            'something.else'    => 'sacrifice',
-            'minimal_testcase'  => 'real'
-        );
-
-        $expectedResult = array(
-            'Aa'=> array(
-                'b1' => array(
-                    0 => array(
-                        'tekno' => 'darkon',
-                    )
-                ),
-                'c1' => array(
-                    'c2' => array(
-                        1 => array(
-                            'if' => 'not',
-                        ),
-                    )
-                ),
-            ),
-            'something' => array(
-                'else' => 'sacrifice',
-            ),
-            'minimal_testcase' => 'real',
-        );
-
-        $convertedEntity = EngineBlock_Corto_ServiceRegistry_Adapter::convertServiceRegistryEntityToMultiDimensionalArray($serviceRegistryEntity);
-
-        $this->assertEquals($expectedResult, $convertedEntity, "Converting a service registry entity to a multi-dimensional array");
     }
 }

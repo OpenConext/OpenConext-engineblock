@@ -129,88 +129,87 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
     protected static function convertServiceRegistryEntityToCortoEntity($serviceRegistryEntity)
     {
-        $serviceRegistryEntity = self::convertServiceRegistryEntityToMultiDimensionalArray($serviceRegistryEntity);
         $cortoEntity = array();
 
         // For SPs
-        if (isset($serviceRegistryEntity['AssertionConsumerService'][0]['Location'])) {
+        if (isset($serviceRegistryEntity['AssertionConsumerService:0:Location'])) {
             $cortoEntity['WantsAssertionsSigned'] = true;
 
             // implicit vo
-            if (isset($serviceRegistryEntity['coin']['implicit_vo_id'])) {
-                $cortoEntity['VoContext'] = $serviceRegistryEntity['coin']['implicit_vo_id'];
+            if (isset($serviceRegistryEntity['coin:implicit_vo_id'])) {
+                $cortoEntity['VoContext'] = $serviceRegistryEntity['coin:implicit_vo_id'];
             }
 
             $cortoEntity['AssertionConsumerService'] = array(
-                'Binding'  => $serviceRegistryEntity['AssertionConsumerService'][0]['Binding'],
-                'Location' => $serviceRegistryEntity['AssertionConsumerService'][0]['Location'],
+                'Binding'  => $serviceRegistryEntity['AssertionConsumerService:0:Binding'],
+                'Location' => $serviceRegistryEntity['AssertionConsumerService:0:Location'],
             );
 
             // Only for SPs
-            if (isset($serviceRegistryEntity['coin']['alternate_private_key']) && $serviceRegistryEntity['coin']['alternate_private_key']) {
+            if (isset($serviceRegistryEntity['coin:alternate_private_key']) && $serviceRegistryEntity['coin:alternate_private_key']) {
                 $cortoEntity['AlternatePrivateKey'] = EngineBlock_X509Certificate::getPrivatePemCertFromCertData(
-                    $serviceRegistryEntity['coin']['alternate_private_key']
+                    $serviceRegistryEntity['coin:alternate_private_key']
                 );
             }
-            if (isset($serviceRegistryEntity['coin']['alternate_public_key']) && $serviceRegistryEntity['coin']['alternate_public_key']) {
+            if (isset($serviceRegistryEntity['coin:alternate_public_key']) && $serviceRegistryEntity['coin:alternate_public_key']) {
                 $cortoEntity['AlternatePublicKey'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
-                    $serviceRegistryEntity['coin']['alternate_public_key']
+                    $serviceRegistryEntity['coin:alternate_public_key']
                 );
             }
 
             // External provisioning
             $cortoEntity['MustProvisionExternally'] = FALSE;
-            if (isset($serviceRegistryEntity['coin']['is_provision_sp']) && $serviceRegistryEntity['coin']['is_provision_sp']) {
+            if (isset($serviceRegistryEntity['coin:is_provision_sp']) && $serviceRegistryEntity['coin:is_provision_sp']) {
                 $cortoEntity['MustProvisionExternally'] = TRUE;
 
-                if (isset($serviceRegistryEntity['coin']['provision_type'])) {
-                    $cortoEntity['ExternalProvisionType'] = $serviceRegistryEntity['coin']['provision_type'];
+                if (isset($serviceRegistryEntity['coin:provision_type'])) {
+                    $cortoEntity['ExternalProvisionType'] = $serviceRegistryEntity['coin:provision_type'];
                 }
-                if (isset($serviceRegistryEntity['coin']['provision_domain'])) {
-                    $cortoEntity['ExternalProvisionDomain'] = $serviceRegistryEntity['coin']['provision_domain'];
+                if (isset($serviceRegistryEntity['coin:provision_domain'])) {
+                    $cortoEntity['ExternalProvisionDomain'] = $serviceRegistryEntity['coin:provision_domain'];
                 }
-                if (isset($serviceRegistryEntity['coin']['provision_admin'])) {
-                    $cortoEntity['ExternalProvisionAdmin'] = $serviceRegistryEntity['coin']['provision_admin'];
+                if (isset($serviceRegistryEntity['coin:provision_admin'])) {
+                    $cortoEntity['ExternalProvisionAdmin'] = $serviceRegistryEntity['coin:provision_admin'];
                 }
-                if (isset($serviceRegistryEntity['coin']['provision_password'])) {
-                    $cortoEntity['ExternalProvisionPassword'] = $serviceRegistryEntity['coin']['provision_password'];
+                if (isset($serviceRegistryEntity['coin:provision_password'])) {
+                    $cortoEntity['ExternalProvisionPassword'] = $serviceRegistryEntity['coin:provision_password'];
                 }
-                if (isset($serviceRegistryEntity['coin']['is_provision_sp_groups'])) {
-                    $cortoEntity['ExternalProvisionGroups'] = $serviceRegistryEntity['coin']['is_provision_sp_groups'];
+                if (isset($serviceRegistryEntity['coin:is_provision_sp_groups'])) {
+                    $cortoEntity['ExternalProvisionGroups'] = $serviceRegistryEntity['coin:is_provision_sp_groups'];
                 } else {
                     //default we will provision groups
                     $cortoEntity['ExternalProvisionGroups'] = true;
                 }
             }
 
-            if (isset($serviceRegistryEntity['coin']['no_consent_required']) && $serviceRegistryEntity['coin']['no_consent_required']) {
+            if (isset($serviceRegistryEntity['coin:no_consent_required']) && $serviceRegistryEntity['coin:no_consent_required']) {
                 $cortoEntity['NoConsentRequired'] = TRUE;
             }
 
-            if (isset($serviceRegistryEntity['coin']['eula']) && $serviceRegistryEntity['coin']['eula']) {
-                $cortoEntity['Eula'] = $serviceRegistryEntity['coin']['eula'];
+            if (isset($serviceRegistryEntity['coin:eula']) && $serviceRegistryEntity['coin:eula']) {
+                $cortoEntity['Eula'] = $serviceRegistryEntity['coin:eula'];
             }
 
-            $cortoEntity['ProvideIsMemberOf'] = !empty($serviceRegistryEntity['coin']['provide_is_member_of']);
+            $cortoEntity['ProvideIsMemberOf'] = !empty($serviceRegistryEntity['coin:provide_is_member_of']);
         }
 
         // For Idps
-        if (isset($serviceRegistryEntity['SingleSignOnService'][0]['Location'])) {
+        if (isset($serviceRegistryEntity['SingleSignOnService:0:Location'])) {
             $cortoEntity['SingleSignOnService'] = array(
-                'Binding'   => $serviceRegistryEntity['SingleSignOnService'][0]['Binding'],
-                'Location'  => $serviceRegistryEntity['SingleSignOnService'][0]['Location'],
+                'Binding'   => $serviceRegistryEntity['SingleSignOnService:0:Binding'],
+                'Location'  => $serviceRegistryEntity['SingleSignOnService:0:Location'],
             );
 
             // Only for IdPs
             $cortoEntity['GuestQualifier'] = 'All';
-            if (isset($serviceRegistryEntity['coin']['guest_qualifier'])) {
-                if (in_array($serviceRegistryEntity['coin']['guest_qualifier'], array('All', 'Some', 'None'))) {
-                    $cortoEntity['GuestQualifier'] = $serviceRegistryEntity['coin']['guest_qualifier'];
+            if (isset($serviceRegistryEntity['coin:guest_qualifier'])) {
+                if (in_array($serviceRegistryEntity['coin:guest_qualifier'], array('All', 'Some', 'None'))) {
+                    $cortoEntity['GuestQualifier'] = $serviceRegistryEntity['coin:guest_qualifier'];
                 }
             }
 
-            if (isset($serviceRegistryEntity['coin']['schachomeorganization'])) {
-                $cortoEntity['SchacHomeOrganization'] = $serviceRegistryEntity['coin']['schachomeorganization'];
+            if (isset($serviceRegistryEntity['coin:schachomeorganization'])) {
+                $cortoEntity['SchacHomeOrganization'] = $serviceRegistryEntity['coin:schachomeorganization'];
             }
         }
 
@@ -225,52 +224,60 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 );
             }
         }
-        if (isset($serviceRegistryEntity['name'])) {
-            $cortoEntity['Name'] = $serviceRegistryEntity['name'];
-        }
-        if (isset($serviceRegistryEntity['description'])) {
-            $cortoEntity['Description'] = $serviceRegistryEntity['description'];
-        }
-        if (isset($serviceRegistryEntity['displayName'])) {
-            $cortoEntity['DisplayName'] = $serviceRegistryEntity['displayName'];
-        }
-        if (isset($serviceRegistryEntity['logo'][0]['url'])) {
+
+        self::_multiLang($cortoEntity, $serviceRegistryEntity, array(
+            'name'          => 'Name',
+            'description'   => 'Description',
+            'displayName'   => 'DisplayName',
+        ));
+
+
+        if (isset($serviceRegistryEntity['logo:0:url'])) {
             $cortoEntity['Logo'] = array(
-                'Height' => $serviceRegistryEntity['logo'][0]['height'],
-                'Width'  => $serviceRegistryEntity['logo'][0]['width'],
-                'URL'    => $serviceRegistryEntity['logo'][0]['url'],
+                'Height' => $serviceRegistryEntity['logo:0:height'],
+                'Width'  => $serviceRegistryEntity['logo:0:width'],
+                'URL'    => $serviceRegistryEntity['logo:0:url'],
             );
         }
-        if (isset($serviceRegistryEntity['geoLocation'])) {
-            $cortoEntity['GeoLocation'] = $serviceRegistryEntity['geoLocation'];
+        if (isset($serviceRegistryEntity['redirect.sign'])) {
+            $cortoEntity['AuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect.sign'];
         }
-        if (isset($serviceRegistryEntity['redirect']['sign'])) {
-            $cortoEntity['AuthnRequestsSigned'] = (bool)$serviceRegistryEntity['redirect']['sign'];
+
+        // Organization info
+        $cortoEntity['Organization'] = array();
+        self::_multiLang($cortoEntity['Organization'], $serviceRegistryEntity, array(
+            'organization:OrganizationName'         => 'Name',
+            'organization:OrganizationDisplayName'  => 'DisplayName',
+            'organization:OrganizationURL'          => 'URL',
+        ));
+        if (empty($cortoEntity['Organization'])) {
+            unset($cortoEntity['Organization']);
         }
-        if (isset($serviceRegistryEntity['organization']['OrganizationName'])) {
-            $cortoEntity['Organization']['Name'] = $serviceRegistryEntity['organization']['OrganizationName'];
-        }
-        if (isset($serviceRegistryEntity['organization']['OrganizationDisplayName'])) {
-            $cortoEntity['Organization']['DisplayName'] = $serviceRegistryEntity['organization']['OrganizationDisplayName'];
-        }
-        if (isset($serviceRegistryEntity['organization']['OrganizationURL'])) {
-            $cortoEntity['Organization']['URL'] = $serviceRegistryEntity['organization']['OrganizationURL'];
-        }
-        // The Keywords for the WAYF
-        if (isset($serviceRegistryEntity['keywords'])) {
-            $cortoEntity['Keywords'] = $serviceRegistryEntity['keywords'];
-        }
+
+        // Keywords for searching in the WAYF
+        self::_multiLang($cortoEntity, $serviceRegistryEntity, array(
+            'keywords'                              => 'Keywords',
+        ));
+
         if (isset($serviceRegistryEntity['NameIDFormat'])) {
             $cortoEntity['NameIDFormat'] = $serviceRegistryEntity['NameIDFormat'];
         }
 
-        // Map contacts
-        if(array_key_exists('contacts', $serviceRegistryEntity)) {
-            foreach($serviceRegistryEntity['contacts'] as $contactIndex => $contact) {
-                foreach($contact as $contactDetailCode => $contactDetail) {
-                    $cortoEntity['ContactPersons'][$contactIndex][ucfirst($contactDetailCode)] = $contactDetail;
-                }
+        // Contacts
+        $cortoEntity['ContactPersons'] = array();
+        for ($i = 0; $i < 3; $i++) {
+            if (isset($serviceRegistryEntity["contacts:$i:contactType"])) {
+                $contactPerson = array(
+                    'ContactType'   => $serviceRegistryEntity["contacts:$i:contactType"],
+                    'EmailAddress'  => isset($serviceRegistryEntity["contacts:$i:emailAddress"])? $serviceRegistryEntity["contacts:$i:emailAddress"] : '',
+                    'GivenName'     => isset($serviceRegistryEntity["contacts:$i:givenName"])   ? $serviceRegistryEntity["contacts:$i:givenName"] : '',
+                    'SurName'       => isset($serviceRegistryEntity["contacts:$i:surName"])     ? $serviceRegistryEntity["contacts:$i:surName"] : '',
+                );
+                $cortoEntity['ContactPersons'][$i] = $contactPerson;
             }
+        }
+        if (empty($cortoEntity['ContactPersons'])) {
+            unset($cortoEntity['ContactPersons']);
         }
 
         if (isset($serviceRegistryEntity['workflowState'])) {
@@ -280,48 +287,20 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         return $cortoEntity;
     }
 
-    /**
-     * Convert an array that has been formatted like this:
-     * array('ns1:ns2:key' => 'val') to array('ns1'=>array('ns2'=>array('key'=>'val')))
-     *
-     * @static
-     * @param $entity
-     * @return array
-     */
-    public static function convertServiceRegistryEntityToMultiDimensionalArray($entity)
+    protected static function _multiLang(&$cortoEntity, $serviceRegistryEntity, $mapping)
     {
-        $newEntity = array();
-        foreach ($entity as $name => $value) {
-            $colonSeparatedParts = explode(':', $name);
-            if (count($colonSeparatedParts) > 1) {
-                $arrayPointer = &$newEntity;
-                foreach ($colonSeparatedParts as $subId) {
-                    if (!isset($arrayPointer[$subId])) {
-                        $arrayPointer[$subId] = array();
-                    }
-                    $arrayPointer = &$arrayPointer[$subId];
+        foreach ($mapping as $from => $to) {
+            $hasEnglish = isset($serviceRegistryEntity[$from . ':en']);
+            $hasDutch   = isset($serviceRegistryEntity[$from . ':nl']);
+            if ($hasDutch || $hasEnglish) {
+                $cortoEntity[$to] = array();
+                if ($hasDutch) {
+                    $cortoEntity[$to]['nl'] = $serviceRegistryEntity[$from . ':nl'];
                 }
-                $arrayPointer = $value;
-                unset($arrayPointer);
-                continue;
-            }
-
-            $dotSeparatedParts = explode('.', $name);
-            if (count($dotSeparatedParts) > 1) {
-                $arrayPointer = &$newEntity;
-                foreach ($dotSeparatedParts as $subId) {
-                    if (!isset($arrayPointer[$subId])) {
-                        $arrayPointer[$subId] = array();
-                    }
-                    $arrayPointer = &$arrayPointer[$subId];
+                if ($hasEnglish) {
+                    $cortoEntity[$to]['en'] = $serviceRegistryEntity[$from . ':en'];
                 }
-                $arrayPointer = $value;
-                unset($arrayPointer);
-                continue;
             }
-
-            $newEntity[$name] = $value;
         }
-        return $newEntity;
     }
 }
