@@ -48,7 +48,9 @@ class EngineBlock_AttributeManipulator_File
             return;
         }
 
-        $this->_verifyPhpSyntax($file);
+        if ($this->_getConfiguration()->lint) {
+            $this->_verifyPhpSyntax($file);
+        }
 
         $this->_include($file, $subjectId, $attributes, $response);
     }
