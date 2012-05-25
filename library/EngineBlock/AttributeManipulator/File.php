@@ -65,8 +65,10 @@ class EngineBlock_AttributeManipulator_File
         if (!$this->_fileExists($file)) {
             return;
         }
-        
-        $this->_verifyPhpSyntax($file);
+
+        if ($this->_getConfiguration()->lint) {
+            $this->_verifyPhpSyntax($file);
+        }
 
         $this->_include($file, $subjectId, $attributes, $response);
     }
@@ -115,7 +117,7 @@ class EngineBlock_AttributeManipulator_File
     
     protected function _setFileLocation()
     {
-        $location = $this->_getFileLocationFromConfiguration();
+        $location = $this->_getConfiguration()->location;
         if (substr($location, 0, 1) !== '/') {
             $realLocation = realpath(ENGINEBLOCK_FOLDER_ROOT . $location);
             if ($realLocation === FALSE) {
@@ -131,8 +133,11 @@ class EngineBlock_AttributeManipulator_File
         return $this;
     }
 
-    protected function _getFileLocationFromConfiguration()
+    /**
+     * @return Zend_Config
+     */
+    protected function _getConfiguration()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->attributeManipulator->file->location;
+        return EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->attributeManipulator->file;
     }
 }
