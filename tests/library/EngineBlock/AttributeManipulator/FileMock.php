@@ -42,4 +42,12 @@ class EngineBlock_AttributeManipulator_FileMock extends EngineBlock_AttributeMan
         $this->_fileLocation = self::$_mockFileLocation;
         return $this;
     }
+
+    /**
+     * @return Zend_Config
+     */
+    protected function _getConfiguration()
+    {
+        return new Zend_Config(array('verify' => true));
+    }
 }
