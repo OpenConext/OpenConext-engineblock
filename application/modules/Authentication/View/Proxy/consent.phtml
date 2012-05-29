@@ -92,7 +92,12 @@ $inlineScriptHelper->appendFile($staticHost . '/javascript/screen.js');
 $inlineScriptHelper->appendFile($staticHost . '/javascript/discover.js');
 
 $inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
-$inlineScriptHelper->appendScript('(function() { var d = new Discover(); d.linkHelp(); })();');
+$inlineScriptHelper->appendScript('
+(function() {
+    var d = new Discover();
+    d.linkHelp();
+' . (isset($_POST['show-help']) && $_POST['show-help'] === 'yes' ? 'd.showHelp(0)' : '') .
+' })();');
 $inlineScriptHelper->appendScript('
 //Create scrollbar
 $("#scrollViewport").jScrollPane({
