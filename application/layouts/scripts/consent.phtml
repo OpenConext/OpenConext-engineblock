@@ -46,6 +46,7 @@ require PARTIAL_DIR . 'header-start.php';
                     <div>
                         <input type="hidden" name="SAMLResponse" value="<?=$SAMLResponse; ?>" />
                         <input type="hidden" name="lang" id="LangVar" />
+                        <input type="hidden" name="show-help" id="showHelp" />
                     </div>
                     <ul class="nav">
                         <li id="help_nav">
@@ -88,12 +89,14 @@ require PARTIAL_DIR . 'header-start.php';
             $(document).ready(function() {
                 $('#SubmitEnForm').click(function(e) {
                     e.preventDefault();
+                    $('#showHelp').attr('value', $('#help').is(':visible') ? 'yes' : 'no');
                     $('#LangVar').attr('value', 'en');
                     $('#LangForm').submit();
                 });
 
                 $('#SubmitNlForm').click(function(e) {
                     e.preventDefault();
+                    $('#showHelp').attr('value', $('#help').is(':visible') ? 'yes' : 'no');
                     $('#LangVar').attr('value', 'nl');
                     $('#LangForm').submit();
                 });
