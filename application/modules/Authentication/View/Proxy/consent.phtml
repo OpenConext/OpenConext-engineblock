@@ -43,7 +43,7 @@ if (!isset($idp)) {
 }
 
 // The current language
-$lang = $this->language();
+$lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
 
 // Set new window icon
 $newWindowIconUrl = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
