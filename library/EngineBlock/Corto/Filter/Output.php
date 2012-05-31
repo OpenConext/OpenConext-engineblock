@@ -62,9 +62,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Apply ARP before we add the OID variants
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
-            // Convert all attributes to their OID format (if known) and add these.
-            new EngineBlock_Corto_Filter_Command_AddOidAttributes(),
-
             // Run custom attribute manipulations
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(),
 
@@ -73,6 +70,9 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
 
             // Apply ARP to custom added attributes one last time for the eduPersonTargetedId
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
+
+            // Convert all attributes to their OID format (if known) and add these.
+            new EngineBlock_Corto_Filter_Command_AddOidAttributes(),
 
             // Log the login
             new EngineBlock_Corto_Filter_Command_LogLogin(),
