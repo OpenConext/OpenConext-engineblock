@@ -91,10 +91,16 @@ if ($preselectedIdp) {
                 <ul class="nav">
                     <li id="help_nav"><a href="#">HELP</a></li>
                     <li class="<?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
+                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>"
+                            onclick="$('#help').is(':visible') ?
+                                        window.location.href = $(this).attr('href') + '&show-help=yes' :
+                                        window.location.href = $(this).attr('href')">EN</a>
                     </li>
                     <li class="<?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
+                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>"
+                           onclick="$('#help').is(':visible') ?
+                                        window.location.href = $(this).attr('href') + '&show-help=yes' :
+                                        window.location.href = $(this).attr('href')">NL</a>
                     </li>
                 </ul>
     
@@ -213,7 +219,8 @@ if ($preselectedIdp) {
             discoveryScreen.setIdpList(". json_encode($idpList) .");
             discoveryScreen.setUri('". json_encode($uri). "');
             ". $preselectedIdpJson ."
-            discoveryScreen.show();";
+            discoveryScreen.show();
+            " . (isset($_POST['show-help']) && $_POST['show-help'] === 'yes' ? 'discoveryScreen.showHelp(0);' : '');
         ?>
         </script>
     </body>
