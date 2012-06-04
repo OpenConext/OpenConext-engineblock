@@ -7,7 +7,7 @@ if (PHP_SAPI !== 'cli') {
 if (!isset($argv[1])) {
     die("Please supply a method to call, like so: php janus_client.php getMetadata https://example.edu" . PHP_EOL);
 }
-
+try {
 require './../library/EngineBlock/ApplicationSingleton.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
@@ -26,3 +26,6 @@ var_dump($restClient->getHttpClient()->getLastRequest());
 var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
 var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
 var_dump($result);
+} catch(Exception $e) {
+  var_dump($e);
+}
