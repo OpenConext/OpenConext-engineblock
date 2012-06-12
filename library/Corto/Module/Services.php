@@ -49,6 +49,10 @@ class Corto_Module_Services extends Corto_Module_Abstract
 
         // Get all registered Single Sign On Services
         $candidateIDPs = $this->_server->getIdpEntityIds();
+        $posOfOwnIdp = array_search($this->_server->getCurrentEntityUrl('idPMetadataService'), $candidateIDPs);
+        if ($posOfOwnIdp !== false) {
+            unset($candidateIDPs[$posOfOwnIdp]);
+        }
 
         $this->_server->getSessionLog()->debug(
             "SSO: Candidate idps found in metadata: " . print_r($candidateIDPs, 1)
