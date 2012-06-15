@@ -15,7 +15,7 @@ class EngineBlock_DbPatch_Core_Application extends DbPatch_Core_Application
 
         $ebConfig = $engineBlock->getConfiguration();
         $masterDbConfigName = $ebConfig->database->masters->get(0);
-        $dbConfig = $ebConfig->database->get($masterDbConfigName);
+        $dbConfig           = $ebConfig->database->get($masterDbConfigName);
         $dsnParsed = parse_url($dbConfig->dsn);
         $dsnPathParts = explode(';', $dsnParsed['path']);
         $dsnProperties = array();
@@ -37,7 +37,7 @@ class EngineBlock_DbPatch_Core_Application extends DbPatch_Core_Application
             'patch_directory' => realpath(__DIR__ . '/../../../../database/patch'),
             'color' => true,
         );
-        return new Zend_Config($config);
+        return new Zend_Config($config, true);
     }
 
     private function _convertPdoDriverToZendDbAdapter($pdoDriver)
