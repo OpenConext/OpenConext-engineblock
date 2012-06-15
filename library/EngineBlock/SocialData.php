@@ -63,6 +63,11 @@ class EngineBlock_SocialData
     protected $_factory = NULL;
 
     /**
+     * @var The groupProviderAcls for a given SP
+     */
+    protected $_groupProviderAcl = NULL;
+
+    /**
      * Construct an EngineBlock_SocialData instance for retrieving social data within
      * Engineblock
      * @param String $appId The id of the app on behalf of which we are retrieving data
@@ -256,18 +261,11 @@ class EngineBlock_SocialData
      * @param $spEntityId the identifier of the Service Provider
      */
     protected function _getSpGroupAcls($spEntityId) {
-        $db = $this->_getReadDatabase();
-        $statement = $db->prepare('SELECT gp.identifier, spga.allow_groups, spga.allow_members FROM service_provider_group_acl spga, group_provider gp WHERE spga.group_provider_id = gp.id and spga.spentityid = ?');
-        $statement->execute(array($spEntityId));
-        $rows = $statement->fetchAll();
-        $spGroupAcls = array();
-        foreach ($rows as $row) {
-            $spGroupAcls[$row['identifier']] = array(
-                        'allow_groups'        => $row['allow_groups'],
-                        'allow_members'       => $row['allow_members'],
-            );
+        if ($this->_groupProviderAcl == NULL) {
+            $aclProvider = new EngineBlock_Group_Acl_GroupProviderAcl();
+            $this->_groupProviderAcl = $aclProvider->getSpGroupAcls($spEntityId);
         }
-        return $spGroupAcls;
+        return $this->_groupProviderAcl;
     }
 
     protected function _isSha1String($string)
