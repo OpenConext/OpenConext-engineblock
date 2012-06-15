@@ -60,7 +60,7 @@ class EngineBlock_Provisioner_ProvisioningManager
             ->setParameterGet('provisionPassword'   , $spMetadata['ExternalProvisionPassword'])
             ->setParameterGet('provisionGroups'     , $spMetadata['ExternalProvisionGroups'])
 
-            ->setRawData(json_encode($this->_getData($userId, $attributes)))
+            ->setRawData(json_encode($this->_getData($userId, $attributes, $spMetadata)))
 
             ->request('POST');
 
@@ -111,10 +111,10 @@ class EngineBlock_Provisioner_ProvisioningManager
      * @param  $attributes
      * @return array
      */
-    protected function _getData($userId, $attributes)
+    protected function _getData($userId, $attributes, $spMetadata)
     {
         
-        $groups = $this->_getGroups($userId);
+        $groups = $this->_getGroups($userId, $spMetadata['EntityId']);
         $provisionData = array(
             'person' => array(
                 'id'            => $userId,
@@ -129,10 +129,12 @@ class EngineBlock_Provisioner_ProvisioningManager
         return $provisionData;
     }
 
-    protected function _getGroups($userId)
+    protected function _getGroups($userId, $spEntityId)
     {
         $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor($userId);
-        return $groupProvider->getGroups();
+        $aclProvider = new EngineBlock_Group_Acl_GroupProviderAcl();
+        $serviceProviderGroupAcl = $aclProvider->getSpGroupAcls($spEntityId);
+        return $groupProvider->getGroups($serviceProviderGroupAcl);
     }
 
 }
