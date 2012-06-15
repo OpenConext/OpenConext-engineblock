@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Command_Create extends DbPatch_Command_Abstract
@@ -65,7 +65,7 @@ class DbPatch_Command_Create extends DbPatch_Command_Abstract
     /**
      * Create empty patch file
      *
-     * @throws exception
+     * @throws DbPatch_Exception
      * @return void
      */
     public function execute()
@@ -74,7 +74,7 @@ class DbPatch_Command_Create extends DbPatch_Command_Abstract
         $patchNumber = $this->console->getOptionValue('number', null);
 
         if (is_null($type) || !in_array(strtolower($type), array('php', 'sql'))) {
-            throw new exception ('Invalid patch type!');
+            throw new DbPatch_Exception('Invalid patch type!');
         }
 
         $patch = DbPatch_Command_Patch::factory($type);
@@ -103,9 +103,9 @@ class DbPatch_Command_Create extends DbPatch_Command_Abstract
     /**
      * @return void
      */
-    public function showHelp()
+    public function showHelp($command = 'create')
     {
-        parent::showHelp('create');
+        parent::showHelp($command);
         $writer = $this->getWriter();
         $writer->indent(2)->line('--type=<type>      create patch of the type `php` or `sql`')
                 ->indent(2)->line('--number=<int>     Patchnumber to create')

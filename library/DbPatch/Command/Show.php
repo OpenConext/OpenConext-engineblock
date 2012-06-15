@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,15 +53,25 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Command_Show extends DbPatch_Command_Abstract
 {
+
+    /**
+     * Override init function, don't check for changelog
+     * @return DbPatch_Command_Show
+     */
+    public function init()
+    {
+        return $this;
+    }
+
     /**
      * @return void
      */
@@ -103,9 +113,9 @@ class DbPatch_Command_Show extends DbPatch_Command_Abstract
     /**
      * @return void
      */
-    public function showHelp()
+    public function showHelp($command = 'show')
     {
-        parent::showHelp('show');
+        parent::showHelp($command);
 
         $writer = $this->getWriter();
         $writer->indent(2)->line('--patch=<int>      Patchnumber to show')

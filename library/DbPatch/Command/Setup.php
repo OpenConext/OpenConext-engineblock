@@ -44,11 +44,13 @@
  * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link http://www.github.com/dbpatch/DbPatch
- * @since File available since Release 1.0.0
+ * @since File available since Release 1.1.0
  */
 
 /**
- * Patch factory
+ * Setup command
+ * 
+ * The only thing this command does is simply copying the right config file from the docs dir to the current dir
  *
  * @package DbPatch
  * @subpackage Command
@@ -60,16 +62,42 @@
  * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
-class DbPatch_Command_Patch
+class DbPatch_Command_Setup extends DbPatch_Command_Abstract
 {
-    /**
-     * @static
-     * @param string $type (PHP or SQL)
-     * @return DbPatch_Command_Patch_Abstract
-     */
-    static public function factory($type)
+    public function execute()
     {
-        $class = 'DbPatch_Command_Patch_' . strtoupper($type);
-        return new $class;
+        $type = $this->console->getOptionValue('type', 'ini');
+
+        if (!in_array(strtolower($type), array('ini', 'php', 'xml'))) {
+            throw new DbPatch_Exception('Invalid configuration type!');
+        }
+        
+        $skelConfig = realpath(dirname(__FILE__) . '/../../../') . '/docs/dbpatch.' . $type;
+        $newConfig = 'dbpatch.'.$type;
+
+        if (!file_exists($skelConfig)) {
+            throw new DbPatch_Exception('Invalid configuration skeleton file: '. $skelConfig);
+        }
+
+        if (file_exists($newConfig)) {
+        	throw new DbPatch_Exception($newConfig .' already exists.');
+        }
+
+        if (!copy($skelConfig, $newConfig)) {
+        	throw new DbPatch_Exception('failed to copy '. $newConfig);	
+        }
+
+        $this->getWriter()->line($newConfig. ' in place.')->line('Use \'vi '. $newConfig.'\' to finalize your dbpatch configuration.');
+    }
+
+    /**
+     * @return void
+     */
+    public function showHelp($command = 'setup')
+    {
+        parent::showHelp($command);
+        $writer = $this->getWriter();
+        $writer->indent(2)->line('--type=<type>      create a configuration file of the following types `ini`, `php` or `xml`')
+                ->line();
     }
 }

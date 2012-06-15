@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Command_Remove extends DbPatch_Command_Abstract
@@ -88,24 +88,24 @@ class DbPatch_Command_Remove extends DbPatch_Command_Abstract
 
     /**
      * Remove patch from the changelog table
-     * 
+     *
      * @param int $patchNumber
      * @param string $branchName
      * @return void
      */
     protected function removePatch($patchNumber, $branchName)
     {
-        $db = $this->getDb();
+        $db = $this->getDb()->getAdapter();
         $branchSQL = "";
 
         if (!empty($branchName)) {
-            $branchSQL = sprintf("AND `branch` = '%s'",
+            $branchSQL = sprintf("AND branch = '%s'",
                                  $branchName);
         }
 
         $query = sprintf("SELECT branch
-                              FROM `%s`
-                              WHERE `patch_number` = %d {$branchSQL}",
+                              FROM %s
+                              WHERE patch_number = %d {$branchSQL}",
                          self::TABLE,
                          $patchNumber);
 
@@ -130,13 +130,12 @@ class DbPatch_Command_Remove extends DbPatch_Command_Abstract
         else {
             $branchMsg = (empty($branchName) ? ""
                     : "from branch '$branchName' ");
-            $query = sprintf("DELETE FROM `%s`
-                                  WHERE `patch_number` = %d {$branchSQL}",
+            $query = sprintf("DELETE FROM %s
+                                  WHERE patch_number = %d {$branchSQL}",
                              self::TABLE,
                              $patchNumber);
 
             $db->query($query);
-            $db->commit();
             $this->getWriter()->line("Removed patch $patchNumber {$branchMsg}in the `" . self::TABLE . "` table");
         }
     }
@@ -144,9 +143,9 @@ class DbPatch_Command_Remove extends DbPatch_Command_Abstract
     /**
      * @return void
      */
-    public function showHelp()
+    public function showHelp($command = 'remove')
     {
-        parent::showHelp('remove');
+        parent::showHelp($command);
 
         $writer = $this->getWriter();
         $writer->indent(2)->line('--patch=<int>      One or more patchnumbers seperated by a comma to remove')

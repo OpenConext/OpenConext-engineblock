@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Command_Runner
@@ -76,6 +76,7 @@ class DbPatch_Command_Runner
         return array(
             'help', 'create', 'remove', 'show',
             'status', 'sync', 'update', 'dump',
+            'info', 'setup'
         );
 
     }
@@ -94,7 +95,7 @@ class DbPatch_Command_Runner
                         break;
             case 'cr' : $cmd = 'create';
                         break;
-            case 're' : $cmd = 'remove';
+            case 'rm' : $cmd = 'remove';
                         break;
             case 'sh' : $cmd = 'show';
                         break;
@@ -105,6 +106,8 @@ class DbPatch_Command_Runner
             case 'up' : $cmd = 'update';
                         break;
             case 'du' : $cmd = 'dump';
+                        break;
+            case 'in' : $cmd = 'info';
                         break;
         }
 
@@ -164,7 +167,6 @@ class DbPatch_Command_Runner
     public function showHelp()
     {
         $writer = $this->getWriter();
-        $writer->line()->version();
         $writer->line('usage: dbpatch [--version] [--help] [--config=<file>] [--color] <command> [<args>]')
                 ->line()
                 ->line('The commands are:')
@@ -175,6 +177,8 @@ class DbPatch_Command_Runner
                 ->indent(2)->line('show       show the contents of a patch file')
                 ->indent(2)->line('status     show latest applied patches')
                 ->indent(2)->line('dump       dump database')
+                ->indent(2)->line('info       show configuration')
+                ->indent(2)->line('setup      setup a new dbpatch config file')
                 ->line()
                 ->line('see \'dbpatch help <command>\' for more information on a specific command');
     }

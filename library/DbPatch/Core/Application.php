@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Core
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -54,15 +54,20 @@
  * @package DbPatch
  * @subpackage Core
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Core_Application
 {
+    /**
+     * @var Zend_Config $config
+     */
+    protected $config = null;
+
     /**
      * Initialize the dbpatch application
      * Typically called from bin/dbpatch.php
@@ -77,29 +82,56 @@ class DbPatch_Core_Application
         $useColor = $console->getOptionValue('color', false);
 
         // Show dbpatch version
+        $writer->version();
         if ($console->issetOption('version')) {
-            $writer->version();
             return;
+        }
+
+        // Setup command
+        if ($console->getCommand() == 'setup') {
+
+            try {
+                return $runner->getCommand('setup', $console)
+                    ->execute();
+
+            } catch (Exception $e) {
+                $writer->error($e->getMessage())->line();
+                $runner->showHelp();
+                exit(1);
+            }
         }
 
         // Load the right config file
         try {
-            $config = $this->getConfig($configFile);
-            if ($useColor || $config->color) {
+            if ($this->config === null) {
+                $config = $this->getConfig($configFile);
+            } else {
+                $config = $this->config;
+            }
+
+            if ($useColor || (isset($config->color) && $config->color)) {
                 $writer->setColor($this->getWriterColor());
+            }
+            if(isset($config->debug) && $config->debug) {
+                $writer->setDebug($config->debug);
             }
 
         } catch (Exception $e) {
             $writer->error($e->getMessage())->line();
             $runner->showHelp();
-            exit;
+            exit(1);
         }
-
-        $db = $this->getDb($config);
 
         // Finally execute the right command
         try {
+            $db = $this->getDb($config);
             $command = $console->getCommand();
+
+            if($command == '') {
+                $runner->showHelp();
+                exit(0);
+            }
+
             $runner->getCommand($command, $console)
                     ->setConfig($config)
                     ->setDb($db)
@@ -109,9 +141,9 @@ class DbPatch_Core_Application
         } catch (Exception $e) {
             $writer->error($e->getMessage())->line();
             $runner->showHelp();
-            exit;
+            exit(1);
         }
-        return;
+        exit(0);
     }
 
     /**
@@ -133,14 +165,19 @@ class DbPatch_Core_Application
         return $config->getConfig();
     }
 
+    public function setConfig(Zend_Config $config)
+    {
+        $this->config = $config;
+    }
+
     /**
      * @param \Zend_Config|\Zend_Config_Ini|\Zend_Config_Xml $config
-     * @return null|Zend_Db_Adapter_Abstract
+     * @return null|DbPatch_Core_Db
      */
     protected function getDb($config)
     {
         $db = new DbPatch_Core_Db($config);
-        return $db->getDb();
+        return $db;
     }
 
     /**

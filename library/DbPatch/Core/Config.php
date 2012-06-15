@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Core
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Core
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Core_Config
@@ -77,26 +77,75 @@ class DbPatch_Core_Config
         }
 
         if (is_null($filename)) {
-            throw new Exception('No config file found');
+            throw new DbPatch_Exception('No config file found');
         }
 
         $type = $this->detectConfigType($filename);
 
         switch ($type) {
             case 'php' :
-                $dbPatchConfig = array();
-                require_once $filename;
-                $this->config = new Zend_Config($dbPatchConfig);
+                $this->config = $this->loadPhpConfig($filename, 'dbpatch', false);
                 break;
             case 'ini' :
-                $this->config = new Zend_Config_Ini($filename, 'dbpatch');
+                $this->config = $this->loadIniConfig($filename, 'dbpatch', true);
                 break;
             case 'xml' :
-                $this->config = new Zend_Config_Xml($filename, 'dbpatch');
+                $this->config = $this->loadXmlConfig($filename, 'dbpatch', true);
                 break;
             default:
-                throw new Exception('Not a valid config file');
+                throw new DbPatch_Exception('Not a valid config file');
         }
+    }
+
+    /**
+     * Load a PHP config file
+     *
+     * @param string $filename Path to config file to load
+     * @param bool $allowOverride
+     */
+    protected function loadPhpConfig($filename, $allowOverride)
+    {
+        $returnedConfig = require_once $filename;
+
+        if (isset($dbPatchConfig)) {
+            return new Zend_Config($dbPatchConfig, $allowOverride);
+        }
+
+        if ($returnedConfig instanceof Zend_Config) {
+            return $returnedConfig;
+        }
+
+        if (is_array($returnedConfig)) {
+            return new Zend_Config($returnedConfig, $allowOverride);
+        }
+
+        throw new DbPatch_Exception(
+            'Could not determine database configuration'
+        );
+    }
+
+    /**
+     * Load a Ini config file
+     *
+     * @param string $filename Path to config file to load
+     * @param string $section Config section to load from file
+     * @param bool $allowOverride
+     */
+    protected function loadIniConfig($filename, $section, $allowOverride)
+    {
+        return new Zend_Config_Ini($filename, $section, $allowOverride);
+    }
+
+    /**
+     * Load a XML config file
+     *
+     * @param string $filename Path to config file to load
+     * @param string $section Config section to load from file
+     * @param bool $allowOverride
+     */
+    protected function loadXmlConfig($filename, $section, $allowOverride)
+    {
+        return new Zend_Config_Xml($filename, $section, $allowOverride);
     }
 
     /**
@@ -120,13 +169,13 @@ class DbPatch_Core_Config
 
     /**
      * Detect config type based on file extension
-     * 
+     *
      * @param string $filename
      * @return string
      */
     protected function detectConfigType($filename)
     {
-        return strtolower(end(explode('.', $filename)));
+        return strtolower(pathinfo($filename, PATHINFO_EXTENSION));
     }
 
     /**

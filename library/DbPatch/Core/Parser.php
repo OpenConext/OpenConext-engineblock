@@ -37,7 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package DbPatch
- * @subpackage Command
+ * @subpackage Core
  * @author Sandy Pleyte
  * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
@@ -48,28 +48,46 @@
  */
 
 /**
- * Patch factory
+ * DbPatch Command Parser
+ * used to parse the import commanc and dump command
  *
  * @package DbPatch
- * @subpackage Command
+ * @subpackage Core
  * @author Sandy Pleyte
  * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
  * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link http://www.github.com/dbpatch/DbPatch
- * @since File available since Release 1.0.0
  */
-class DbPatch_Command_Patch
+class DbPatch_Core_Parser
 {
-    /**
-     * @static
-     * @param string $type (PHP or SQL)
-     * @return DbPatch_Command_Patch_Abstract
-     */
-    static public function factory($type)
+    static public function parse($command, $params)
     {
-        $class = 'DbPatch_Command_Patch_' . strtoupper($type);
-        return new $class;
+        if (!is_array($params)) {
+            throw new DbPatch_Exception('params array expected');
+        }
+
+        $orgKeys = array_keys($params);
+        $keys    = array_map(array('DbPatch_Core_Parser', 'mapKeyParam'), $orgKeys);
+        $values  = array_values($params);
+
+        // remove empty tags first
+        preg_match_all('/({%([0-9A-Za-z_-]+)%})(.*?)({%\\2%})/', $command, $matches);
+        foreach($matches[2] as $index => $key) {
+            if (in_array($key, $orgKeys) && !empty($params[$key])) {
+                $command  = str_replace($matches[1][$index], '', $command);
+                continue;
+            }
+            $command  = str_replace($matches[0][$index], '', $command);
+        }
+
+        $output  = str_replace($keys, $values, $command);
+        return $output;
+    }
+
+    static public function mapKeyParam($key)
+    {
+        return '{'.$key.'}';
     }
 }

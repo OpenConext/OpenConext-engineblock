@@ -48,8 +48,8 @@
  */
 
 /**
- * Show help of a given command
- * 
+ * Show patch command
+ *
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
@@ -60,32 +60,12 @@
  * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
-class DbPatch_Command_Help extends DbPatch_Command_Abstract
+class DbPatch_Command_Info extends DbPatch_Command_Abstract
 {
-    /**
-     * @throws DbPatch_Exception
-     * @return void
-     */
-    public function execute()
-    {
-        $options = $this->console->getOptions();
-        $commands = DbPatch_Command_Runner::getValidCommands();
-        foreach ($commands as $command) {
-            if ($command != 'help' && array_key_exists($command, $options)) {
-                $class = 'DbPatch_Command_' . ucfirst(strtolower($command));
-
-                $commandObj = new $class;
-                $commandObj->setWriter($this->getWriter());
-                $commandObj->showHelp();
-                return;
-            }
-        }
-        throw new DbPatch_Exception('Please provide a valid command');
-    }
 
     /**
      * Override init function, don't check for changelog
-     * @return DbPatch_Command_Help
+     * @return DbPatch_Command_Show
      */
     public function init()
     {
@@ -95,8 +75,77 @@ class DbPatch_Command_Help extends DbPatch_Command_Abstract
     /**
      * @return void
      */
-    public function showHelp($command = 'help')
+    public function execute()
+    {
+        $this->writer->line('Global settings')
+            ->separate()
+            ->line('Default branch: ' . $this->config->default_branch)
+            ->line('Patch directory: ' . $this->config->patch_directory)
+            ->line('Patchfile prefix: ' . $this->config->patch_prefix)
+            ->line('Use color: ' . ($this->config->color ? 'yes' : 'no'))
+            ->line('Dump database before update: ' . ($this->config->dump_before_update ? 'yes' : 'no'))
+            ->line('Dump directory: ' . $this->config->dump_directory)
+            ->line('Debug mode: ' . ($this->config->debug ? 'on' : 'off'))
+            ->line()
+            ->line('Database settings')
+            ->separate()
+            ->line('Database adapter: ' . get_class($this->getDb()->getAdapter()));
+
+            $this->dumpArray($this->getDb()->getAdapter()->getConfig());
+
+        if (isset($this->config->db->params->bin_dir)) {
+            $this->writer->line('Bin directory: ' . $this->config->db->params->bin_dir);
+        }
+        if (isset($this->config->cli_cmd_import)) {
+            $this->writer->line('Argument template CLI client: ' . $this->config->cli_cmd_import);
+        }
+        if (isset($this->config->cli_cmd_dump)) {
+            $this->writer->line('Argument template CLI dump: ' . $this->config->cli_cmd_dump);
+        }
+
+        $this->writer->line();
+        return;
+    }
+
+    /**
+     * Writes array like ['foo' => 'bar'] as "Foo: bar"
+     *
+     * @param array $data
+     * @param int $indent
+     */
+    public function dumpArray(array $data, $indent = 0)
+    {
+        foreach ($data as $key => $value) {
+            if (empty($value)) {
+                continue;
+            }
+
+            if ($key == 'password') {
+                $value = '[hidden]';
+            }
+
+            $this->writer->indent($indent);
+
+            if (is_array($value)) {
+                $this->writer->line(
+                    ucfirst($key) . ':'
+                );
+
+                $this->dumpArray($value, $indent+1);
+            } else {
+                $this->writer->line(
+                    ucfirst($key) . ': ' . $value
+                );
+            }
+        }
+
+        return $this;
+    }
+
+    public function showHelp($command = 'info')
     {
         parent::showHelp($command);
     }
+
+
 }

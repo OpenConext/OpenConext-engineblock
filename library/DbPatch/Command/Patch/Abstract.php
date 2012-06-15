@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,25 +39,25 @@
  * @package DbPatch
  * @subpackage Command_Patch
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
 /**
  * Abstract Patch file
- * 
+ *
  * @package DbPatch
  * @subpackage Command_Patch
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 abstract class DbPatch_Command_Patch_Abstract
@@ -85,7 +85,7 @@ abstract class DbPatch_Command_Patch_Abstract
 
     /**
      * Creates a new value object
-     * 
+     *
      * @param array $values the values to fill the value object with.
      * If left empty we're creating an empty value object.
      * @return void
@@ -112,7 +112,7 @@ abstract class DbPatch_Command_Patch_Abstract
     /**
      * Load the values from an array provided.
      *
-     * @throws Exception
+     * @throws DbPatch_Exception
      * @param array $values the values we're using to set the values in the
      * value object
      * @return void
@@ -126,7 +126,7 @@ abstract class DbPatch_Command_Patch_Abstract
         }
 
         if (!is_array($values)) {
-            throw new Exception('Initial data must be an array or object');
+            throw new DbPatch_Exception('Initial data must be an array or object');
         }
 
         foreach ($values as $key => $value) {
@@ -139,7 +139,7 @@ abstract class DbPatch_Command_Patch_Abstract
      *
      * @param string $name name of the property
      * @param mixed $value the value
-     * @throws Exception
+     * @throws DbPatch_Exception
      */
     public function __set($name, $value)
     {
@@ -158,7 +158,7 @@ abstract class DbPatch_Command_Patch_Abstract
             return;
         }
 
-        throw new Exception('[SET] Property ' . $name . ' is not implemented for class ' . get_class($this));
+        throw new DbPatch_Exception('[SET] Property ' . $name . ' is not implemented for class ' . get_class($this));
     }
 
     /**
@@ -195,7 +195,7 @@ abstract class DbPatch_Command_Patch_Abstract
     /**
      * Returns the value requested.
      *
-     * @throws Exception
+     * @throws DbPatch_Exception
      * @param string $name the name of the property
      * @return mixed the value
      */
@@ -214,13 +214,13 @@ abstract class DbPatch_Command_Patch_Abstract
             return $this->data[$key];
         }
 
-        throw new Exception('[GET] Property ' . $name . '/' . $key . ' is not implemented for class ' . get_class($this));
+        throw new DbPatch_Exception('[GET] Property ' . $name . '/' . $key . ' is not implemented for class ' . get_class($this));
     }
 
     /**
      * Check if a value isset
-     * 
-     * @throws Exception
+     *
+     * @throws DbPatch_Exception
      * @param string $name Name of the property
      * @return bool
      */
@@ -241,7 +241,7 @@ abstract class DbPatch_Command_Patch_Abstract
             return isset($this->data[$key]);
         }
 
-        throw new Exception('[ISSET] Property ' . $name . ' is not implemented for class ' . get_class($this));
+        throw new DbPatch_Exception('[ISSET] Property ' . $name . ' is not implemented for class ' . get_class($this));
     }
 
     /**
@@ -265,17 +265,17 @@ abstract class DbPatch_Command_Patch_Abstract
     }
 
     /**
-     * @param \Zend_Db_Adapter_Abstract $db
+     * @param \DbPatch_Core_Db $db
      * @return DbPatch_Command_Patch_Abstract
      */
-    public function setDb($db)
+    public function setDb(DbPatch_Core_Db $db)
     {
         $this->db = $db;
         return $this;
     }
 
     /**
-     * @return null|\Zend_Db_Adapter_Abstract
+     * @return null|\DbPatch_Core_Db
      */
     public function getDb()
     {
@@ -327,7 +327,22 @@ abstract class DbPatch_Command_Patch_Abstract
      */
     protected function getComment($lineNumber)
     {
-        $lines = file($this->filename);
+        // Read first line(s)
+        $lines = array();
+        $fp = @fopen($this->filename, "r");
+        if ($fp) {
+            $counter = 0;
+            while (!feof($fp) && $counter <= $lineNumber) {
+                $lines[] = fgets($fp, 4096);
+                $counter++;
+            }
+            fclose($fp);
+        }
+
+        if (count($lines) == 0) {
+            return '';
+        }
+
         $line = $lines[$lineNumber];
         $comment = '';
 
@@ -353,12 +368,21 @@ abstract class DbPatch_Command_Patch_Abstract
 
     /**
      * Echo contents of the patch
-     * 
+     *
      * @return void
      */
     public function show()
     {
-        echo "\n" . file_get_contents($this->filename) . "\n";
+        $fp = @fopen($this->filename, "r");
+        if ($fp) {
+            echo PHP_EOL;
+            while (!feof($fp)) {
+                $line = fgets($fp, 4096);
+                echo $line . PHP_EOL;
+            }
+            fclose($fp);
+            echo PHP_EOL;
+        }
     }
 
     /**

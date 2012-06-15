@@ -37,39 +37,110 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package DbPatch
- * @subpackage Command
+ * @subpackage Patch
  * @author Sandy Pleyte
  * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
  * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link http://www.github.com/dbpatch/DbPatch
- * @since File available since Release 1.0.0
+ * @since File available since Release 1.1.0
  */
 
 /**
- * Patch factory
+ * Dedicated Environment to run the PHP patch files
  *
  * @package DbPatch
- * @subpackage Command
+ * @subpackage Patch
  * @author Sandy Pleyte
  * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
  * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
  * @link http://www.github.com/dbpatch/DbPatch
- * @since File available since Release 1.0.0
+ * @since File available since Release 1.1.0
  */
-class DbPatch_Command_Patch
+class DbPatch_Command_Patch_PHP_Environment
 {
     /**
-     * @static
-     * @param string $type (PHP or SQL)
+     * @var null|\Zend_Db_Adapter_Abstract
+     */
+    protected $db = null;
+
+    /**
+     * @var null|DbPatch_Core_Writer
+     */
+    protected $writer = null;
+
+    /**
+     * @var null|DbPatch_Core_Config
+     */
+    protected $config = null;
+
+    /**
+     * Install the php patch
+     */
+    public function install($filename)
+    {
+        $db = $this->getDb();
+        $config = $this->getConfig();
+        $writer = $this->getWriter();
+        
+        include($filename);
+    }
+
+    /**
+     * @param \Zend_Db_Adapter_Abstract $db
      * @return DbPatch_Command_Patch_Abstract
      */
-    static public function factory($type)
+    public function setDb(Zend_Db_Adapter_Abstract $db)
     {
-        $class = 'DbPatch_Command_Patch_' . strtoupper($type);
-        return new $class;
+        $this->db = $db;
+        return $this;
+    }
+
+    /**
+     * @return null|\Zend_Db_Adapter_Abstract
+     */
+    public function getDb()
+    {
+        return $this->db;
+
+    }
+
+    /**
+     * @param DbPatch_Core_Writer $writer
+     * @return DbPatch_Command_Patch_Abstract
+     */
+    public function setWriter($writer)
+    {
+        $this->writer = $writer;
+        return $this;
+    }
+
+    /**
+     * @return DbPatch_Core_Writer|null
+     */
+    public function getWriter()
+    {
+        return $this->writer;
+    }
+
+    /**
+     * @param DbPatch_Core_Config $config
+     * @return DbPatch_Command_Patch_Abstract
+     */
+    public function setConfig($config)
+    {
+        $this->config = $config;
+        return $this;
+    }
+
+    /**
+     * @return DbPatch_Core_Config|null
+     */
+    public function getConfig()
+    {
+        return $this->config;
     }
 }

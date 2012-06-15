@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Command_Dump extends DbPatch_Command_Abstract
@@ -67,24 +67,34 @@ class DbPatch_Command_Dump extends DbPatch_Command_Abstract
      */
     public function execute()
     {
-        $filename = $this->getDumpFilename();
-        $database = $this->config->db->params->dbname;
- 
+        $filename = $this->getDumpFilename($this->config);
+        $config   = $this->getDb()->getAdapter()->getConfig();
+        $database = $config['dbname'];
+
         $this->writer->line('Dumping database ' . $database . ' to file ' . $filename);
         $this->dumpDatabase($filename);
+
         return;
     }
 
+    /**
+     * Prevent db_changelog creation
+     * @return DbPatch_Command_Dump
+     */
+    public function init()
+    {
+        return $this;
+    }
 
     /**
      * @return void
      */
-    public function showHelp()
+    public function showHelp($command = 'dump')
     {
-        parent::showHelp('dump');
+        parent::showHelp($command);
 
         $writer = $this->getWriter();
         $writer->indent(2)->line('--file=<string>    Filename')
-                ->line();
+            ->line();
     }
 }

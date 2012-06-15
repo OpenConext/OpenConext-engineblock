@@ -37,7 +37,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  *
  * @package DbPatch
- * @subpackage Command
+ * @subpackage Core
  * @author Sandy Pleyte
  * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
@@ -48,10 +48,10 @@
  */
 
 /**
- * Patch factory
+ * Dbpatch Exception
  *
  * @package DbPatch
- * @subpackage Command
+ * @subpackage Core
  * @author Sandy Pleyte
  * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
@@ -60,16 +60,5 @@
  * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
-class DbPatch_Command_Patch
-{
-    /**
-     * @static
-     * @param string $type (PHP or SQL)
-     * @return DbPatch_Command_Patch_Abstract
-     */
-    static public function factory($type)
-    {
-        $class = 'DbPatch_Command_Patch_' . strtoupper($type);
-        return new $class;
-    }
-}
+class DbPatch_Exception extends Exception {}
+

@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Command
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Command_Update extends DbPatch_Command_Abstract
@@ -73,11 +73,14 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
 
         $latestPatchNumber = $this->getLastPatchNumber($branch);
 
+        if ($branch != self::DEFAULT_BRANCH) {
+            $this->writer->line('Branch: ' . $branch);
+        }
         $this->writer->line('last patch number applied: ' . $latestPatchNumber);
         $patchFiles = $this->getPatches($branch);
 
         if (count($patchFiles) == 0) {
-            $this->writer->success("no update needed");
+            $this->writer->success("no update needed " . ($branch != self::DEFAULT_BRANCH ? 'for branch ' . $branch : ''));
             return;
         }
 
@@ -87,8 +90,10 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
                             ));
 
         if ($createDump) {
-            $database = $this->config->db->params->dbname;
+            $config = $this->getDb()->getAdapter()->getConfig();
+            $database = $config['dbname'];
             $filename = $this->getDumpFilename();
+
             $this->writer->line('Dumping database ' . $database . ' to file ' . $filename);
             $this->dumpDatabase($filename);
         }
@@ -112,9 +117,8 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
                 return;
             }
 
-
             if (in_array($patchNr, $patchNumbersToSkip)) {
-                $this->writer->line('manually skiped patch ' . $patchFile->basename);
+                $this->writer->line('manually skipped patch ' . $patchFile->basename);
                 $this->addToChangelog($patchFile, 'manually skipped');
                 $latestPatchNumber = $patchFile->patch_number;
                 continue;
@@ -130,8 +134,6 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
             }
 
             $this->addToChangelog($patchFile);
-
-
             $latestPatchNumber = $patchFile->patch_number;
 
         }
@@ -163,7 +165,7 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
      */
     protected function getAppliedPatches($limit, $branch = '')
     {
-        $db = $this->getDb();
+        $db = $this->getDb()->getAdapter();
 
         $where = '';
         if ($branch != '') {
@@ -172,14 +174,14 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
 
         $sql = sprintf("
             SELECT
-                `patch_number`,
-                `completed`,
-                `filename`,
-                `description`,
-                IF(`branch`=%s,0,1) as `branch_order`
+                patch_number,
+                completed,
+                filename,
+                description,
+                CASE WHEN branch=%s THEN 0 ELSE 1 END as branch_order
             FROM %s
             %s
-            ORDER BY `completed` DESC, `branch_order` ASC, `patch_number` DESC
+            ORDER BY completed DESC, branch_order ASC, patch_number DESC
             LIMIT %d",
                        $db->quote(self::DEFAULT_BRANCH),
                        $db->quoteIdentifier(self::TABLE),
@@ -188,6 +190,7 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
         );
 
         return $db->fetchAll($sql);
+
     }
 
 
@@ -220,11 +223,12 @@ class DbPatch_Command_Update extends DbPatch_Command_Abstract
     }
 
     /**
+     * @param string $command Command name
      * @return void
      */
-    public function showHelp($command = '')
+    public function showHelp($command = 'update')
     {
-        parent::showHelp('update');
+        parent::showHelp($command);
         $writer = $this->getWriter();
         $writer
                 ->indent(2)->line('--skip=<int>       One or more patchnumbers seperated by a comma to skip')

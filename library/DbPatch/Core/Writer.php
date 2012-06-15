@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Core
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Core
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Core_Writer
@@ -66,6 +66,11 @@ class DbPatch_Core_Writer
      * @var DbPatch_Core_Color
      */
     protected $_color = null;
+
+    /**
+     * @var bool
+     */
+    protected $_debug = false;
 
     /**
      * Writer uses ANSI coloring when color object provided
@@ -78,6 +83,11 @@ class DbPatch_Core_Writer
         $this->_color = $color;
 
         return $this;
+    }
+
+    public function setDebug($debug)
+    {
+        $this->_debug = $debug;
     }
 
     /**
@@ -117,12 +127,11 @@ class DbPatch_Core_Writer
      */
     public function info($message)
     {
-        $this->_message($message, 'info');
-        return $this;
+        return $this->_message($message, 'info');
     }
 
     /**
-     * Write an error messages
+     * Write a error message
      *
      * @param  string $message
      * @return DbPatch_Core_Writer
@@ -133,7 +142,7 @@ class DbPatch_Core_Writer
     }
 
     /**
-     * Write an success messages
+     * Write a success message
      *
      * @param  string $message
      * @return DbPatch_Core_Writer
@@ -141,6 +150,20 @@ class DbPatch_Core_Writer
     public function success($message)
     {
         return $this->_message('SUCCESS: ' . $message, 'success');
+    }
+
+    /**
+     * Write a debug message
+     *
+     * @param string $message
+     * @return DbPatch_Core_Writer
+     */
+    public function debug($message)
+    {
+        if ($this->_debug) {
+            return $this->_message('DEBUG: ' . $message, 'debug');
+        }
+        return $this;
     }
 
     /**
@@ -161,8 +184,7 @@ class DbPatch_Core_Writer
      */
     public function separate()
     {
-        $this->line('----------------------------------');
-        return $this;
+        return $this->line('----------------------------------');
     }
 
     /**
@@ -172,8 +194,7 @@ class DbPatch_Core_Writer
      */
     public function version()
     {
-        $this->line('DbPatch version ' . DbPatch_Core_Version::VERSION);
-        return $this;
+        return $this->line('DbPatch version ' . DbPatch_Core_Version::VERSION)->line();
     }
 
     /**
@@ -184,8 +205,7 @@ class DbPatch_Core_Writer
      */
     public function indent($spaces = 4)
     {
-        $this->output(str_repeat(' ', $spaces));
-        return $this;
+        return $this->output(str_repeat(' ', $spaces));
     }
 
 
@@ -209,8 +229,6 @@ class DbPatch_Core_Writer
         if ($pallet != 'info') {
             $stream = STDERR;
         }
-        $this->output($message, $stream);
-
-        return $this;
+        return $this->output($message, $stream);
     }
 }

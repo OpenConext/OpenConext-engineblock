@@ -3,7 +3,7 @@
  * DbPatch
  *
  * Copyright (c) 2011, Sandy Pleyte.
- * Copyright (c) 2010-2011, Martijn de Letter.
+ * Copyright (c) 2010-2011, Martijn De Letter.
  *
  * All rights reserved.
  *
@@ -39,11 +39,11 @@
  * @package DbPatch
  * @subpackage Command_Patch
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 
@@ -53,11 +53,11 @@
  * @package DbPatch
  * @subpackage Command_Patch
  * @author Sandy Pleyte
- * @author Martijn de Letter
+ * @author Martijn De Letter
  * @copyright 2011 Sandy Pleyte
- * @copyright 2010-2011 Martijn de Letter
+ * @copyright 2010-2011 Martijn De Letter
  * @license http://www.opensource.org/licenses/bsd-license.php BSD License
- * @link http://www.github.com/sndpl/DbPatch
+ * @link http://www.github.com/dbpatch/DbPatch
  * @since File available since Release 1.0.0
  */
 class DbPatch_Command_Patch_PHP extends DbPatch_Command_Patch_Abstract
@@ -92,9 +92,13 @@ class DbPatch_Command_Patch_PHP extends DbPatch_Command_Patch_Abstract
         }
 
         try {
-            // retrieve db object for use in php patch file
-            $db = $this->getDb();
-            include($phpFile);
+            
+            $env = new DbPatch_Command_Patch_PHP_Environment();
+            $env->setDb($this->getDb()->getAdapter())
+                ->setWriter($this->getWriter())
+                ->setConfig($this->getConfig())
+                ->install($phpFile);
+                
         } catch (Exception $e) {
             $this->getWriter()->line(sprintf('error php patch: %s', $e->getMessage()));
             return false;
@@ -134,8 +138,7 @@ class DbPatch_Command_Patch_PHP extends DbPatch_Command_Patch_Abstract
         $patchNumberSize = $this->getPatchNumberSize($patchDirectory);
         $filename = $this->getPatchFilename($patchPrefix, strtolower($this->getType()), $patchNumberSize);
         $content = '<?php' . PHP_EOL . '// ' . $description . PHP_EOL;
-        $this->writeFile($patchDirectory . $filename, $content);
+        $this->writeFile($patchDirectory . '/' . $filename, $content);
     }
-
 }
  
