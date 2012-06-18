@@ -28,10 +28,11 @@ class EngineBlock_DbPatch_Core_Application extends DbPatch_Core_Application
             'db' => array(
                 'adapter'   => $this->_convertPdoDriverToZendDbAdapter($dsnParsed['scheme']),
                 'params' => array(
-                    'host'      => $dsnProperties['host'],
-                    'username'  => $dbConfig->user,
-                    'password'  => $dbConfig->password,
-                    'dbname'    => $dsnProperties['dbname'],
+                    'host'      => isset($dsnProperties['host'])    ? $dsnProperties['host']    : 'localhost',
+                    'username'  => isset($dbConfig->user)           ? $dbConfig->user           : 'root',
+                    'password'  => isset($dbConfig->password)       ? $dbConfig->password       : '',
+                    'dbname'    => isset($dsnProperties['dbname'])  ? $dsnProperties['dbname']  : 'engineblock',
+                    'charset'   => isset($dsnProperties['charset']) ? $dsnProperties['charset'] : 'utf8',
                 ),
             ),
             'patch_directory' => realpath(__DIR__ . '/../../../../database/patch'),
