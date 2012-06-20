@@ -35,9 +35,18 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
     {
         $this->setNoRender();
 
-        // @todo Give the metaData for all known IdPs, where the SSO locations all go through EB
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+
+        $queryString = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryString();
         $proxyServer = new EngineBlock_Corto_Adapter();
-        $proxyServer->idPsMetadata(EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryString());
+        try {
+            $proxyServer->idPsMetadata($queryString);
+        } catch(Corto_ProxyServer_UnknownRemoteEntityException $e) {
+            $application->getLogInstance()->warn('Unknown SP entity id used in idpsMetadata: ' . $queryString);
+            $application->getHttpResponse()->setRedirectUrl(
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId())
+            );
+        }
     }
 
     public function processedAssertionAction()

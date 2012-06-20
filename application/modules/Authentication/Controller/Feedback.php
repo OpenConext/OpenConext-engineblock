@@ -25,13 +25,28 @@
 
 class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
 {
-    public function vomembershiprequiredAction() {}
-    public function unableToReceiveMessageAction() {}
-    public function sessionLostAction() {}
-    public function timeoutAction() {}
+    public function vomembershiprequiredAction() {
+        header('HTTP/1.1 403 Forbidden');
+    }
+    public function unableToReceiveMessageAction() {
+        header('HTTP/1.1 400 Bad Request');
+    }
+    public function sessionLostAction() {
+        header('HTTP/1.1 400 Bad Request');
+    }
+    public function timeoutAction() {
+        header('HTTP/1.1 408 Request Timeout');
+    }
     public function unknownIssuerAction() {
+        header('HTTP/1.1 404 Not Found');
         $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
         $this->__set('destination', htmlspecialchars($this->_getRequest()->getQueryParameter('destination')));
     }
-    public function missingRequiredFieldsAction() {}
+    public function unknownServiceProviderAction() {
+        header('HTTP/1.1 404 Not Found');
+        $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
+    }
+    public function missingRequiredFieldsAction() {
+        header('HTTP/1.1 400 Bad Request');
+    }
 }

@@ -6,10 +6,6 @@
 require 'XmlToArray.php';
 require 'Log/Dummy.php';
 
-class Corto_ProxyServer_Exception extends Exception
-{
-}
-
 class Corto_ProxyServer
 {
     const ID_PREFIX = 'CORTO';
@@ -247,7 +243,7 @@ class Corto_ProxyServer
     public function getRemoteEntity($entityId)
     {
         if (!isset($this->_entities['remote'][$entityId])) {
-            throw new Corto_ProxyServer_Exception("Unknown remote entity '$entityId'");
+            throw new Corto_ProxyServer_UnknownRemoteEntityException($entityId);
         }
         $entity = $this->_entities['remote'][$entityId];
         $entity['EntityId'] = $entityId;

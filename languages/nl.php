@@ -202,6 +202,23 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_message_timeout_desc'        => 'We hebben een bericht ontvangen dat niet meer geldig is. Probeer opnieuw in te loggen alstublieft.',
     'error_no_message'                  => 'Error - Geen bericht ontvangen..',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
+
+    'error_unknown_service_provider'              => 'Error - Onbekende Service Provider..',
+    'error_unknown_service_provider_desc'     => '<p>
+        Deze applicatie is niet beschikbaar voor SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
+        <table class="error-table">
+            <tbody>
+            <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
+            <tr><td width="100px"><strong>Timestamp</strong></td><td>%s</td></tr>
+            </tr>
+            </tbody>
+        </table>
+        <br />
+        Bezoek alstublieft <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
+        of neem contact op met het SURFconext team via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> als dit uw probleem niet oplost.
+        <br /><br />
+    </p>',
+
     'error_unknown_issuer'              => 'Error - Onbekende applicatie..',
     'error_unknown_issuer_desc'     => '<p>
         Deze applicatie is niet beschikbaar voor SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
