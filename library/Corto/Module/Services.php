@@ -511,12 +511,13 @@ class Corto_Module_Services extends Corto_Module_Abstract
         $this->_server->setVirtualOrganisationContext(null);
         $canonicalIdpEntityId = $this->_server->getCurrentEntityUrl('idPMetadataService');
         $this->_server->setVirtualOrganisationContext($voContext);
-
         $entityDetails = $this->_server->getRemoteEntity($canonicalIdpEntityId);
 
         $this->_addContactPersonsToEntityDescriptor($entityDescriptor, $entityDetails);
 
         $this->_addDisplayNamesToEntityDescriptor($entityDescriptor['md:IDPSSODescriptor'], $entityDetails);
+
+        $this->_addDescriptionToEntityDescriptor($entityDescriptor['md:IDPSSODescriptor'], $entityDetails);
 
         // Check if an alternative Public & Private key have been set for a SP
         // If yes, use these in the metadata of Engineblock
@@ -800,6 +801,36 @@ class Corto_Module_Services extends Corto_Module_Abstract
             $entitySSODescriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'][] = array(
                 Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $displayLanguageCode,
                 Corto_XmlToArray::VALUE_PFX => $displayName
+            );
+        }
+    }
+
+    /**
+     * Adds DisplayName (if present) to entity Descriptor
+     *
+     * @param array $entitySSODescriptor
+     * @param array $entityDetails
+     * @return void
+     */
+    protected function _addDescriptionToEntityDescriptor(array &$entitySSODescriptor, array $entityDetails)
+    {
+        if (!isset($entityDetails['Description'])) {
+            return;
+        }
+        foreach($entityDetails['Description'] as $displayLanguageCode => $description) {
+            if(empty($description)) {
+                continue;
+            }
+
+            if (!isset($entitySSODescriptor['md:Extensions'])) {
+                $entitySSODescriptor['md:Extensions'] = array();
+            }
+            if (!isset($entitySSODescriptor['md:Extensions']['mdui:UIInfo'])) {
+                $entitySSODescriptor['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+            }
+            $entitySSODescriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'][] = array(
+                Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $displayLanguageCode,
+                Corto_XmlToArray::VALUE_PFX => $description
             );
         }
     }
