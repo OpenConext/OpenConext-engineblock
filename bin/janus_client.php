@@ -1,3 +1,4 @@
+#!/usr/bin/php
 <?php
 
 if (PHP_SAPI !== 'cli') {
@@ -5,10 +6,13 @@ if (PHP_SAPI !== 'cli') {
 }
 
 if (!isset($argv[1])) {
-    die("Please supply a method to call, like so: php janus_client.php getMetadata https://example.edu" . PHP_EOL);
+    die(
+        'Please supply a method to call, format: ./bin/janus_client.php {method name}[ {querystring}]' . PHP_EOL .
+        'Example: ./bin/janus_client.php getMetadata "entityid=https://example.edu&keys=certData"' . PHP_EOL
+    );
 }
 try {
-require './../library/EngineBlock/ApplicationSingleton.php';
+require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
 $application->bootstrap();
@@ -16,11 +20,18 @@ $application->bootstrap();
 $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
 $restClient = new Janus_Rest_Client($config->location, $config->user, $config->user_secret);
 
-$client = new Janus_Client();
-$client->setRestClient($restClient);
 $methodName = $argv[1];
-$arguments = array_slice($argv, 2);
-$result = call_user_func_array(array($client, $methodName), $arguments);
+$restClient->$methodName();
+
+if (isset($argv[2])) {
+    $arguments = array();
+    parse_str($argv[2], $arguments);
+    foreach ($arguments as $argumentName => $argumentValue) {
+        $restClient->$argumentName($argumentValue);
+    }
+}
+
+$result = $restClient->get();
 
 var_dump($restClient->getHttpClient()->getLastRequest());
 var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
@@ -29,3 +40,4 @@ var_dump($result);
 } catch(Exception $e) {
   var_dump($e);
 }
+
