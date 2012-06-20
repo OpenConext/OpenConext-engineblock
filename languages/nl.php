@@ -172,7 +172,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_intro'                     => '%s verzoekt deze informatie die %s opgeslagen heeft voor u:',
     'consent_idp_provides'              => 'wilt de volgende informatie vrijgeven:',
     'consent_sp_is_provided'            => 'aan',
-    'consent_terms_of_service'          => 'Deze informatie zal ook worden opgeslagen in SURFconext en doorgegeven aan %s. Gebruiksvoorwaarde van %s en %s zijn van toepassing.',
+    'consent_terms_of_service'          => 'Deze informatie zal worden opgeslagen in SURFconext en doorgegeven aan %s. Gebruiksvoorwaarden van %s en %s zijn van toepassing.',
 
     'consent_accept'                    => 'Ja, deel deze informatie',
     'consent_decline'                   => 'Nee, deel geen informatie',
