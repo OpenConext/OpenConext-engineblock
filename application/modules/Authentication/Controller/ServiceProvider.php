@@ -91,4 +91,12 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->sPMetadata();
     }
+
+    public function certificateAction()
+    {
+        $this->setNoRender();
+
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->idpCertificate();
+    }
 }

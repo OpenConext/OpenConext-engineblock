@@ -125,4 +125,12 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     {
 
     }
+
+    public function certificateAction()
+    {
+        $this->setNoRender();
+
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->idpCertificate();
+    }
 }

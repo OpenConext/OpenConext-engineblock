@@ -39,6 +39,13 @@ $layout->footerText = $this->t('footer');
     <?php echo $this->t('authentication_urls'); ?>:
     <ul>
         <li>
+            <a href="/authentication/idp/certificate">
+                /authentication/idp/certificate
+            </a>
+            <br />
+            EngineBlock Public certificate.
+        </li>
+        <li>
             <a href="/authentication/idp/metadata">
                 /authentication/idp/metadata
             </a>
@@ -54,6 +61,13 @@ $layout->footerText = $this->t('footer');
             alternative Engineblock signing certificate is configured for a certain SP it will be shown in the metadata.
             <strong>NB. This is only important for SP's that rely on the Engineblock metadata URL for refreshing metadata. For SP's
             that configure metadata oob this is not relevant.</strong>
+        </li>
+        <li>
+            <a href="/authentication/sp/certificate">
+                /authentication/sp/certificate
+            </a>
+            <br />
+            EngineBlock Public certificate.
         </li>
         <li>
             <a href="/authentication/sp/metadata">

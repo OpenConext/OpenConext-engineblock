@@ -73,9 +73,19 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('idPMetadataService');
     }
 
+    public function idpCertificate()
+    {
+        $this->_callCortoServiceUri('idpCertificateService');
+    }
+
     public function sPMetadata()
     {
         $this->_callCortoServiceUri('sPMetadataService');
+    }
+
+    public function spCertificate()
+    {
+        $this->_callCortoServiceUri('idpCertificateService');
     }
 
     public function consumeAssertion()
