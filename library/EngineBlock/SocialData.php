@@ -254,6 +254,7 @@ class EngineBlock_SocialData
             throw new EngineBlock_Exception("Multiple rows found for persistent identifier '$persistentId'?!?");
         }
     }
+
     /**
      * Get all ServiceProviderGroupAcls (array where the key is the identifier
      * with as value an array of permissions
