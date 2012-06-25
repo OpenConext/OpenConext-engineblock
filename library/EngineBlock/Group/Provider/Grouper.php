@@ -73,7 +73,14 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getGroups($serviceProviderGroupAcls)
     {
-        $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges();
+        try {
+            $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges();
+        }
+        catch (Grouper_Client_Exception_SubjectNotFound $e) {
+            // Ignore Subject not found exceptions
+            EngineBlock_ApplicationSingleton::getLog()->warn("User '{$this->_userId}' does not exist in Grouper Group Provider '{$this->_id}'");
+            return array();
+        }
 
         $groups = array();
         foreach ($grouperGroups as $group) {
@@ -84,7 +91,14 @@ class EngineBlock_Group_Provider_Grouper extends EngineBlock_Group_Provider_Abst
 
     public function getGroupsByStem($stem, $serviceProviderGroupAcls)
     {
-        $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges($stem);
+        try {
+            $grouperGroups = $this->_grouperClient->getGroupsWithPrivileges($stem);
+        }
+        catch (Grouper_Client_Exception_SubjectNotFound $e) {
+            // Ignore Subject not found exceptions
+            EngineBlock_ApplicationSingleton::getLog()->warn("User '{$this->_userId}' does not exist in Grouper Group Provider '{$this->_id}'");
+            return array();
+        }
 
         $groups = array();
         foreach ($grouperGroups as $group) {
