@@ -86,7 +86,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         }
         // Exactly 1 candidate found, send authentication request to the first one
         else if (count($candidateIDPs) === 1) {
-            $idp = $candidateIDPs[0];
+            $idp = array_shift($candidateIDPs);
             $this->_server->getSessionLog()->debug("SSO: Only 1 candidate IdP: $idp");
             $this->_server->sendAuthenticationRequest($request, $idp);
             return;
