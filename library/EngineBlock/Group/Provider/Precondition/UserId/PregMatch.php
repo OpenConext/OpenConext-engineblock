@@ -39,6 +39,6 @@ class EngineBlock_Group_Provider_Precondition_UserId_PregMatch implements Engine
 
     public function validate()
     {
-        return preg_match($this->_search, $this->_provider->getUserId());
+        return @preg_match($this->_search, $this->_provider->getUserId());
     }
 }
