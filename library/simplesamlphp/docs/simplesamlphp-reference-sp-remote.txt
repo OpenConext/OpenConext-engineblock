@@ -123,7 +123,7 @@ The following SAML 2.0 options are available:
 
 :   The value of this option is specified in one of several [endpoint formats](./simplesamlphp-metadata-endpoints).
 
-`AttributeNameFormat`
+`attributes.NameFormat`
 :   What value will be set in the Format field of attribute
     statements. This parameter can be configured multiple places, and
     the actual value used is fetched from metadata by the following
@@ -153,6 +153,8 @@ The following SAML 2.0 options are available:
     entry in the SP-remote metadata overrides the option in the
     IdP-hosted metadata.
 
+:   (This option was previously named `AttributeNameFormat`.)
+
 `ForceAuthn`
 :   Set this `TRUE` to force the user to reauthenticate when the IdP
     receives authentication requests from this SP. The default is
@@ -173,6 +175,14 @@ The following SAML 2.0 options are available:
     specified in the `simplesaml.nameidattribute`-option as the value
     of the ID.
 
+`nameid.encryption`
+:   Whether NameIDs sent to this SP should be encrypted. The default
+    value is `FALSE`.
+
+:   Note that this option also exists in the IdP-hosted metadata. This
+    entry in the SP-remote metadata overrides the option in the
+    [IdP-hosted metadata](./simplesamlphp-reference-idp-hosted).
+
 `SingleLogoutService`
 :   The URL of the SingleLogoutService endpoint for this SP.
     This option is required if you want to implement single logout for
@@ -190,6 +200,9 @@ The following SAML 2.0 options are available:
 :   SP NameQualifier for this SP. If not set, the IdP will set the
     SPNameQualifier to be the SP entity ID.
 
+`certData`
+:   The base64 encoded certificate for this SP. This is an alternative to storing the certificate in a file on disk and specifying the filename in the `certificate`-option.
+
 `certificate`
 :   Name of certificate file for this SP. The certificate is used to
     verify the signature of messages received from the SP (if
@@ -198,14 +211,14 @@ The following SAML 2.0 options are available:
     unset.)
 
 `saml20.sign.response`
-:   Whether `<samlp:Response> messages should be signed.
+:   Whether `<samlp:Response>` messages should be signed.
     Defaults to `TRUE`.
 
 :   Note that this option also exists in the IdP-hosted metadata.
     The value in the SP-remote metadata overrides the value in the IdP-hosted metadata.
 
 `saml20.sign.assertion`
-:   Whether `<saml:Assertion> elements should be signed.
+:   Whether `<saml:Assertion>` elements should be signed.
     Defaults to `TRUE`.
 
 :   Note that this option also exists in the IdP-hosted metadata.
@@ -214,7 +227,11 @@ The following SAML 2.0 options are available:
 `simplesaml.nameidattribute`
 :   When the value of the `NameIDFormat`-option is set to either
     `email` or `persistent`, this is the name of the attribute which
-    should be used as the value of the `NameID`.
+    should be used as the value of the `NameID`. The attribute must
+    be in the set of attributes exported to the SP (that is, be in
+    the `attributes` array). For more advanced control over `NameID`,
+    including the ability to specify any attribute regardless of
+    the set sent to the SP, see the [NameID processing filters](./saml:nameid).
 
 :   Typical values can be `mail` for when using the `email` format,
     and `eduPersonTargetedID` when using the `persistent` format.

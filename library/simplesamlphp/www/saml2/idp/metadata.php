@@ -19,9 +19,12 @@ try {
 	$idpentityid = isset($_GET['idpentityid']) ? $_GET['idpentityid'] : $metadata->getMetaDataCurrentEntityID('saml20-idp-hosted');
 	$idpmeta = $metadata->getMetaDataConfig($idpentityid, 'saml20-idp-hosted');
 
+	$availableCerts = array();
+
 	$keys = array();
 	$certInfo = SimpleSAML_Utilities::loadPublicKey($idpmeta, FALSE, 'new_');
 	if ($certInfo !== NULL) {
+		$availableCerts['new_idp.crt'] = $certInfo;
 		$keys[] = array(
 			'type' => 'X509Certificate',
 			'signing' => TRUE,
@@ -34,6 +37,7 @@ try {
 	}
 
 	$certInfo = SimpleSAML_Utilities::loadPublicKey($idpmeta, TRUE);
+	$availableCerts['idp.crt'] = $certInfo;
 	$keys[] = array(
 		'type' => 'X509Certificate',
 		'signing' => TRUE,
@@ -44,6 +48,7 @@ try {
 	if ($idpmeta->hasValue('https.certificate')) {
 		$httpsCert = SimpleSAML_Utilities::loadPublicKey($idpmeta, TRUE, 'https.');
 		assert('isset($httpsCert["certData"])');
+		$availableCerts['https.crt'] = $httpsCert;
 		$keys[] = array(
 			'type' => 'X509Certificate',
 			'signing' => TRUE,
@@ -55,7 +60,9 @@ try {
 	$metaArray = array(
 		'metadata-set' => 'saml20-idp-remote',
 		'entityid' => $idpentityid,
-		'SingleSignOnService' => $metadata->getGenerated('SingleSignOnService', 'saml20-idp-hosted'),
+		'SingleSignOnService' => array(0 => array(
+					'Binding' => SAML2_Const::BINDING_HTTP_REDIRECT,
+					'Location' => $metadata->getGenerated('SingleSignOnService', 'saml20-idp-hosted'))),
 		'SingleLogoutService' => $metadata->getGenerated('SingleLogoutService', 'saml20-idp-hosted'),
 	);
 
@@ -74,6 +81,14 @@ try {
 		);
 	}
 
+	if ($idpmeta->getBoolean('saml20.hok.assertion', FALSE)) {
+		/* Prepend HoK SSO Service endpoint. */
+		array_unshift($metaArray['SingleSignOnService'], array(
+			'hoksso:ProtocolBinding' => SAML2_Const::BINDING_HTTP_REDIRECT,
+			'Binding' => SAML2_Const::BINDING_HOK_SSO,
+			'Location' => SimpleSAML_Utilities::getBaseURL() . 'saml2/idp/SSOService.php'));
+	}
+
 	$metaArray['NameIDFormat'] = $idpmeta->getString('NameIDFormat', 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient');
 
 	if ($idpmeta->hasValue('OrganizationName')) {
@@ -88,6 +103,18 @@ try {
 
 	if ($idpmeta->hasValue('scope')) {
 		$metaArray['scope'] = $idpmeta->getArray('scope');
+	}
+
+	if ($idpmeta->hasValue('EntityAttributes')) {
+		$metaArray['EntityAttributes'] = $idpmeta->getArray('EntityAttributes');
+	}
+
+	if ($idpmeta->hasValue('UIInfo')) {
+		$metaArray['UIInfo'] = $idpmeta->getArray('UIInfo');
+	}
+
+	if ($idpmeta->hasValue('DiscoHints')) {
+		$metaArray['DiscoHints'] = $idpmeta->getArray('DiscoHints');
 	}
 
 	$metaflat = '$metadata[' . var_export($idpentityid, TRUE) . '] = ' . var_export($metaArray, TRUE) . ';';
@@ -112,7 +139,7 @@ try {
 
 		$t = new SimpleSAML_XHTML_Template($config, 'metadata.php', 'admin');
 
-
+		$t->data['available_certs'] = $availableCerts;
 		$t->data['header'] = 'saml20-idp';
 		$t->data['metaurl'] = SimpleSAML_Utilities::selfURLNoQuery();
 		$t->data['metadata'] = htmlspecialchars($metaxml);

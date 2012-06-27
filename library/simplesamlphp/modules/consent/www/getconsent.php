@@ -32,7 +32,15 @@ if (!array_key_exists('StateId', $_REQUEST)) {
 
 $id = $_REQUEST['StateId'];
 $state = SimpleSAML_Auth_State::loadState($id, 'consent:request');
-$spentityid = $state['core:SP'];
+
+if (array_key_exists('core:SP', $state)) {
+    $spentityid = $state['core:SP'];
+} else if (array_key_exists('saml:sp:State', $state)) {
+    $spentityid = $state['saml:sp:State']['core:SP'];
+} else {
+    $spentityid = 'UNKNOWN';
+}
+
 
 // The user has pressed the yes-button
 if (array_key_exists('yes', $_REQUEST)) {
@@ -41,6 +49,14 @@ if (array_key_exists('yes', $_REQUEST)) {
     } else {
         SimpleSAML_Logger::stats('consentResponse rememberNot');
     }
+
+    $statsInfo = array(
+        'remember' => array_key_exists('saveconsent', $_REQUEST),
+    );
+    if (isset($state['Destination']['entityid'])) {
+        $statsInfo['spEntityID'] = $state['Destination']['entityid'];
+    }
+    SimpleSAML_Stats::log('consent:accept', $statsInfo);
 
     if (   array_key_exists('consent:store', $state) 
         && array_key_exists('saveconsent', $_REQUEST)
@@ -56,7 +72,11 @@ if (array_key_exists('yes', $_REQUEST)) {
             'Consent - saveConsent() : [' . $userId . '|' .
             $targetedId . '|' .  $attributeSet . ']'
         );	
-        $store->saveConsent($userId, $targetedId, $attributeSet);
+        try {
+            $store->saveConsent($userId, $targetedId, $attributeSet);
+        } catch (Exception $e) {
+            SimpleSAML_Logger::error('Consent: Error writing to storage: ' . $e->getMessage());
+        }
     }
 
     SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);

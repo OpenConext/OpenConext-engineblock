@@ -58,6 +58,10 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 		$this->entityId = $this->metadata->getString('entityID');
 		$this->idp = $this->metadata->getString('idp', NULL);
 		$this->discoURL = $this->metadata->getString('discoURL', NULL);
+		
+		if (empty($this->discoURL) && SimpleSAML_Module::isModuleEnabled('discojuice')) {
+			$this->discoURL = SimpleSAML_Module::getModuleURL('discojuice/central.php');
+		}
 	}
 
 
@@ -244,6 +248,10 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 		
 		$ar->setRequesterID($requesterID);
 		
+		if (isset($state['saml:Extensions'])) {
+			$ar->setExtensions($state['saml:Extensions']);
+		}
+
 		$id = SimpleSAML_Auth_State::saveState($state, 'saml:sp:sso', TRUE);
 		$ar->setId($id);
 
@@ -435,8 +443,6 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 
 		$authProcState = array(
 			'saml:sp:IdP' => $idp,
-			'saml:sp:NameID' => $state['saml:sp:NameID'],
-			'saml:sp:SessionIndex' => $state['saml:sp:SessionIndex'],
 			'saml:sp:State' => $state,
 			'ReturnCall' => array('sspmod_saml_Auth_Source_SP', 'onProcessingCompleted'),
 
@@ -444,6 +450,13 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 			'Destination' => $spMetadataArray,
 			'Source' => $idpMetadataArray,
 		);
+
+		if (isset($state['saml:sp:NameID'])) {
+			$authProcState['saml:sp:NameID'] = $state['saml:sp:NameID'];
+		}
+		if (isset($state['saml:sp:SessionIndex'])) {
+			$authProcState['saml:sp:SessionIndex'] = $state['saml:sp:SessionIndex'];
+		}
 
 		$pc = new SimpleSAML_Auth_ProcessingChain($idpMetadataArray, $spMetadataArray, 'sp');
 		$pc->processState($authProcState);
@@ -489,13 +502,13 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 
 		$state['Attributes'] = $authProcState['Attributes'];
 
-		if (isset($state['saml:sp:isUnsoliced']) && (bool)$state['saml:sp:isUnsoliced']) {
+		if (isset($state['saml:sp:isUnsolicited']) && (bool)$state['saml:sp:isUnsolicited']) {
 			if (!empty($state['saml:sp:RelayState'])) {
 				$redirectTo = $state['saml:sp:RelayState'];
 			} else {
 				$redirectTo = $source->getMetadata()->getString('RelayState', '/');
 			}
-			SimpleSAML_Auth_Default::handleUnsolicedAuth($sourceId, $state, $redirectTo);
+			SimpleSAML_Auth_Default::handleUnsolicitedAuth($sourceId, $state, $redirectTo);
 		}
 
 		SimpleSAML_Auth_Source::completeAuth($state);

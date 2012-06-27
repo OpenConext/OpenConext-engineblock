@@ -17,7 +17,7 @@ class sspmod_saml_Message {
 	 * @param SimpleSAML_Configuration $dstMetadata  The metadata of the recipient.
 	 * @param SAML2_Message $element  The element we should add the data to.
 	 */
-	public static function addSign(SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata, SAML2_SignedElement $element) {
+	public static function addSign(SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata = NULL, SAML2_SignedElement $element) {
 
 		$keyArray = SimpleSAML_Utilities::loadPrivateKey($srcMetadata, TRUE);
 		$certArray = SimpleSAML_Utilities::loadPublicKey($srcMetadata, FALSE);
@@ -160,28 +160,9 @@ class sspmod_saml_Message {
 			$pemCert = self::findCertificate($certFingerprint, $certificates);
 			$pemKeys = array($pemCert);
 		} else {
-			/* Attempt CA validation. */
-			$caFile = $srcMetadata->getString('caFile', NULL);
-			if ($caFile === NULL) {
-				throw new SimpleSAML_Error_Exception(
-					'Missing certificate in metadata for ' .
-					var_export($srcMetadata->getString('entityid'), TRUE));
-			}
-			$caFile = SimpleSAML_Utilities::resolveCert($caFile);
-
-			if (count($certificates) === 0) {
-				/* We need the full certificate in order to check it against the CA file. */
-				SimpleSAML_Logger::debug('No certificate in message when validating with CA.');
-				return FALSE;
-			}
-
-			/* We assume that it is the first certificate that was used to sign the message. */
-			$pemCert = "-----BEGIN CERTIFICATE-----\n" .
-				chunk_split($certificates[0], 64) .
-				"-----END CERTIFICATE-----\n";
-
-			SimpleSAML_Utilities::validateCA($pemCert, $caFile);
-			$pemKeys = array($pemCert);
+			throw new SimpleSAML_Error_Exception(
+				'Missing certificate in metadata for ' .
+				var_export($srcMetadata->getString('entityid'), TRUE));
 		}
 
 		SimpleSAML_Logger::debug('Has ' . count($pemKeys) . ' candidate keys for validation.');
@@ -392,23 +373,29 @@ class sspmod_saml_Message {
 			));
 		}
 
-		$dst = $idpMetadata->getDefaultEndpoint('SingleSignOnService', array(SAML2_Const::BINDING_HTTP_REDIRECT));
-		$dst = $dst['Location'];
-
-		$ar->setIssuer($spMetadata->getString('entityid'));
-		$ar->setDestination($dst);
-
 		$ar->setForceAuthn($spMetadata->getBoolean('ForceAuthn', FALSE));
 		$ar->setIsPassive($spMetadata->getBoolean('IsPassive', FALSE));
 
 		$protbind = $spMetadata->getValueValidate('ProtocolBinding', array(
 				SAML2_Const::BINDING_HTTP_POST,
+				SAML2_Const::BINDING_HOK_SSO,
 				SAML2_Const::BINDING_HTTP_ARTIFACT,
 				SAML2_Const::BINDING_HTTP_REDIRECT,
 			), SAML2_Const::BINDING_HTTP_POST);
 
 		/* Shoaib - setting the appropriate binding based on parameter in sp-metadata defaults to HTTP_POST */
 		$ar->setProtocolBinding($protbind);
+
+		/* Select appropriate SSO endpoint */
+		if ($protbind === SAML2_Const::BINDING_HOK_SSO) {
+		    $dst = $idpMetadata->getDefaultEndpoint('SingleSignOnService', array(SAML2_Const::BINDING_HOK_SSO));
+		} else {
+		    $dst = $idpMetadata->getDefaultEndpoint('SingleSignOnService', array(SAML2_Const::BINDING_HTTP_REDIRECT));
+		}
+		$dst = $dst['Location'];
+
+		$ar->setIssuer($spMetadata->getString('entityid'));
+		$ar->setDestination($dst);
 
 		if ($spMetadata->hasValue('AuthnContextClassRef')) {
 			$accr = $spMetadata->getArrayizeString('AuthnContextClassRef');
@@ -578,11 +565,84 @@ class sspmod_saml_Message {
 		$found = FALSE;
 		$lastError = 'No SubjectConfirmation element in Subject.';
 		foreach ($assertion->getSubjectConfirmation() as $sc) {
-			if ($sc->Method !== SAML2_Const::CM_BEARER) {
+			if ($sc->Method !== SAML2_Const::CM_BEARER && $sc->Method !== SAML2_Const::CM_HOK) {
 				$lastError = 'Invalid Method on SubjectConfirmation: ' . var_export($sc->Method, TRUE);
 				continue;
 			}
+
+			/* Is SSO with HoK enabled? IdP remote metadata overwrites SP metadata configuration. */
+			$hok = $idpMetadata->getBoolean('saml20.hok.assertion', NULL);
+			if ($hok === NULL) {
+			    $protocolBinding = $spMetadata->getString('ProtocolBinding', SAML2_Const::BINDING_HTTP_POST);
+			    if ($protocolBinding === SAML2_Const::BINDING_HOK_SSO) {
+				$hok = TRUE;
+			    } else {
+				$hok = FALSE;
+			    }
+			}
+			if ($sc->Method === SAML2_Const::CM_BEARER && $hok) {
+				$lastError = 'Bearer SubjectConfirmation received, but Holder-of-Key SubjectConfirmation needed';
+				continue;
+			}
+
 			$scd = $sc->SubjectConfirmationData;
+			if ($sc->Method === SAML2_Const::CM_HOK) {
+				/* Check HoK Assertion */
+				if (SimpleSAML_Utilities::isHTTPS() === FALSE) {
+				    $lastError = 'No HTTPS connection, but required for Holder-of-Key SSO';
+				    continue;
+				}
+				if (isset($_SERVER['SSL_CLIENT_CERT']) && empty($_SERVER['SSL_CLIENT_CERT'])) {
+				    $lastError = 'No client certificate provided during TLS Handshake with SP';
+				    continue;
+				}
+				/* Extract certificate data (if this is a certificate). */
+				$clientCert = $_SERVER['SSL_CLIENT_CERT'];
+				$pattern = '/^-----BEGIN CERTIFICATE-----([^-]*)^-----END CERTIFICATE-----/m';
+				if (preg_match($pattern, $clientCert, $matches) === FALSE) {
+				    $lastError = 'No valid client certificate provided during TLS Handshake with SP';
+				    continue;
+				}
+				/* We have a valid client certificate from the browser. */
+				$clientCert = str_replace(array("\r", "\n", " "), '', $matches[1]);
+
+				foreach ($scd->info as $thing) {
+				    if($thing instanceof SAML2_XML_ds_KeyInfo) {
+					$keyInfo[]=$thing;
+				    }
+				}
+				if (count($keyInfo)!=1) {
+				    $lastError = 'Error validating Holder-of-Key assertion: Only one <ds:KeyInfo> element in <SubjectConfirmationData> allowed';
+				    continue;
+				}
+
+				foreach ($keyInfo[0]->info as $thing) {
+				    if($thing instanceof SAML2_XML_ds_X509Data) {
+					$x509data[]=$thing;
+				    }
+				}
+				if (count($x509data)!=1) {
+				    $lastError = 'Error validating Holder-of-Key assertion: Only one <ds:X509Data> element in <ds:KeyInfo> within <SubjectConfirmationData> allowed';
+				    continue;
+				}
+
+				foreach ($x509data[0]->data as $thing) {
+				    if($thing instanceof SAML2_XML_ds_X509Certificate) {
+					$x509cert[]=$thing;
+				    }
+				}
+				if (count($x509cert)!=1) {
+				    $lastError = 'Error validating Holder-of-Key assertion: Only one <ds:X509Certificate> element in <ds:X509Data> within <SubjectConfirmationData> allowed';
+				    continue;
+				}
+
+				$HoKCertificate = $x509cert[0]->certificate;
+				if ($HoKCertificate !== $clientCert) {
+					$lastError = 'Provided client certificate does not match the certificate bound to the Holder-of-Key assertion';
+					continue;
+				}
+			}
+
 			if ($scd->NotBefore && $scd->NotBefore > time() + 60) {
 				$lastError = 'NotBefore in SubjectConfirmationData is in the future: ' . $scd->NotBefore;
 				continue;

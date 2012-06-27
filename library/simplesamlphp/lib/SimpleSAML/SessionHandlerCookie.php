@@ -11,14 +11,17 @@
  * @author Olav Morken, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
  * @abstract
- * @version $Id: SessionHandlerCookie.php 2494 2010-08-09 08:51:38Z olavmrk $
+ * @version $Id: SessionHandlerCookie.php 3025 2012-01-30 07:35:49Z olavmrk $
  */
 abstract class SimpleSAML_SessionHandlerCookie
 extends SimpleSAML_SessionHandler {
 
 	/* This variable contains the current session id. */
-	protected $session_id = NULL;
+	private $session_id = NULL;
 
+
+	/* This variable contains the session cookie name. */
+	protected $cookie_name;
 
 
 	/* This constructor initializes the session id based on what
@@ -31,27 +34,8 @@ extends SimpleSAML_SessionHandler {
 		 */
 		parent::__construct();
 
-		/* Attempt to retrieve the session id from the cookie. */
-		if(array_key_exists('SimpleSAMLSessionID', $_COOKIE)) {
-			$this->session_id = $_COOKIE['SimpleSAMLSessionID'];
-		}
-
-		/* We need to create a new session. */
-
-		if (headers_sent()) {
-			throw new SimpleSAML_Error_Exception('Cannot create new session - headers already sent.');
-		}
-
-		/* Check if we have a valid session id. */
-		if(self::isValidSessionID($this->session_id)) {
-			/* We are done now if it was valid. */
-			return;
-		}
-
-		/* We don't have a valid session. Create a new session id. */
-		$this->session_id = self::createSessionID();
-
-		$this->setCookie('SimpleSAMLSessionID', $this->session_id);
+		$config = SimpleSAML_Configuration::getInstance();
+		$this->cookie_name = $config->getString('session.cookie.name', 'SimpleSAMLSessionID');
 	}
 
 
@@ -61,6 +45,21 @@ extends SimpleSAML_SessionHandler {
 	 * @return string  The session id saved in the cookie.
 	 */
 	public function getCookieSessionId() {
+		if ($this->session_id === NULL) {
+			if(self::hasSessionCookie()) {
+				/* Attempt to retrieve the session id from the cookie. */
+				$this->session_id = $_COOKIE[$this->cookie_name];
+			}
+
+			/* Check if we have a valid session id. */
+			if(!self::isValidSessionID($this->session_id)) {
+				/* We don't have a valid session. Create a new session id. */
+				$this->session_id = self::createSessionID();
+				SimpleSAML_Session::createSession($this->session_id);
+				$this->setCookie($this->cookie_name, $this->session_id);
+			}
+		}
+
 		return $this->session_id;
 	}
 
@@ -112,7 +111,7 @@ extends SimpleSAML_SessionHandler {
 	 */
 	public function hasSessionCookie() {
 
-		return array_key_exists('SimpleSAMLSessionID', $_COOKIE);
+		return array_key_exists($this->cookie_name, $_COOKIE);
 	}
 
 }

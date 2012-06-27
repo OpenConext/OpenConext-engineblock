@@ -10,7 +10,7 @@
  *
  * @author Olav Morken, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: SessionHandler.php 2497 2010-08-09 08:52:00Z olavmrk $
+ * @version $Id: SessionHandler.php 3060 2012-03-29 09:02:39Z olavmrk $
  */
 abstract class SimpleSAML_SessionHandler {
 
@@ -136,6 +136,12 @@ abstract class SimpleSAML_SessionHandler {
 
 		$params = $this->getCookieParams();
 
+		// Do not set secure cookie if not on HTTPS
+		if ($params['secure'] && !SimpleSAML_Utilities::isHTTPS()) {
+			SimpleSAML_Logger::warning('Setting secure cookie on http not allowed.');
+			return;
+		}
+
 		if ($value === NULL) {
 			$expire = time() - 365*24*60*60;
 		} elseif ($params['lifetime'] === 0) {
@@ -144,11 +150,8 @@ abstract class SimpleSAML_SessionHandler {
 			$expire = time() + $params['lifetime'];;
 		}
 
-		$version = explode('.', PHP_VERSION);
-		if ((int)$version[0] === 5 && (int)$version[1] < 2) {
-			setcookie($name, $value, $expire, $params['path'], $params['domain'], $params['secure']);
-		} else {
-			setcookie($name, $value, $expire, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+		if (!setcookie($name, $value, $expire, $params['path'], $params['domain'], $params['secure'], $params['httponly'])) {
+			throw new SimpleSAML_Error_Exception('Error setting cookie - headers already sent.');
 		}
 	}
 

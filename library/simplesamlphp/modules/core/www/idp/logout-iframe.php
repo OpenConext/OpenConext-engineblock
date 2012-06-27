@@ -14,14 +14,9 @@ if (isset($_REQUEST['type'])) {
 	$type = 'init';
 }
 
-if (isset($_REQUEST['timeout'])) {
-	$timeout = (int)$_REQUEST['timeout'];
-} else {
-	$timeout = time() + 5;
-}
-
 if ($type !== 'embed' && $type !== 'async') {
 	SimpleSAML_Logger::stats('slo-iframe ' . $type);
+	SimpleSAML_Stats::log('core:idp:logout-iframe:page', array('type' => $type));
 }
 
 $state = SimpleSAML_Auth_State::loadState($id, 'core:Logout-IFrame');
@@ -49,6 +44,13 @@ if ($type !== 'init') {
 			}
 		}
 
+		/* Check for timeout. */
+		if (isset($sp['core:Logout-IFrame:Timeout']) && $sp['core:Logout-IFrame:Timeout'] < time()) {
+			if ($sp['core:Logout-IFrame:State'] === 'inprogress') {
+				$sp['core:Logout-IFrame:State'] = 'failed';
+			}
+		}
+
 		/* In case we are refreshing a page. */
 		if (!isset($associations[$assocId])) {
 			$sp['core:Logout-IFrame:State'] = 'completed';
@@ -57,6 +59,16 @@ if ($type !== 'init') {
 		/* Update the IdP. */
 		if ($sp['core:Logout-IFrame:State'] === 'completed') {
 			$idp->terminateAssociation($assocId);
+		}
+
+		if (!isset($sp['core:Logout-IFrame:Timeout'])) {
+			if (method_exists($sp['Handler'], 'getAssociationConfig')) {
+				$assocIdP = SimpleSAML_IdP::getByState($sp);
+				$assocConfig = call_user_func(array($sp['Handler'], 'getAssociationConfig'), $assocIdP, $sp);
+				$sp['core:Logout-IFrame:Timeout'] = $assocConfig->getInteger('core:logout-timeout', 5) + time();
+			} else {
+				$sp['core:Logout-IFrame:Timeout'] = time() + 5;
+			}
 		}
 	}
 }
@@ -87,7 +99,6 @@ if ($type === 'nojs') {
 	$t = new SimpleSAML_XHTML_Template($globalConfig, 'core:logout-iframe-wrapper.php');
 	$t->data['id'] = $id;
 	$t->data['SPs'] = $state['core:Logout-IFrame:Associations'];
-	$t->data['timeout'] = $timeout;
 	$t->show();
 	exit(0);
 }
@@ -97,6 +108,5 @@ $t->data['id'] = $id;
 $t->data['type'] = $type;
 $t->data['from'] = $state['core:Logout-IFrame:From'];
 $t->data['SPs'] = $state['core:Logout-IFrame:Associations'];
-$t->data['timeout'] = $timeout;
 $t->show();
 exit(0);

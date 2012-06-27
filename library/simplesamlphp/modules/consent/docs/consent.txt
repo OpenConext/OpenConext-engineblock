@@ -98,6 +98,9 @@ The `consent:Database` backend storage has the following options
 :   Name of the table used for storing the consents. This option is optional
 and defaults to `consent`.
 
+`timeout`
+:   The number of seconds to wait for a connection to the database server. This option is optional. If unset, it uses the default from the database-driver.
+
 Example config using PostgreSQL database:
 
 	90 => array(
@@ -184,20 +187,49 @@ The following options can/ be set in other places in simpleSAMLphp
 Disabling consent
 -----------------
 
-It is possible to disable consent for a given service. You can add an option
-in the matadata on the IdP, that will disable consent for det given service.
-Add 'consent.disable' array option and enter the entityids of the services,
-that you do not want consent for.
+Consent can be disabled either in the IdP metadata or in the SP metadata.
+To disable consent for one or more SPs for a given IdP, add the
+`consent.disable`-option to the IdP metadata. To disable consent for one or
+more IdPs for a given SP, add the `consent.disable`-option to the SP metadata.
 
-Example:
+### Examples ###
 
-    'consent.disable' => array(
-        'sp.example.com',
-        'sp2.example.com',
-        ...
+Disable consent for a given IdP:
+
+    $metadata['https://idp.example.org/'] = array(
+        [...],
+        'consent.disable' => TRUE,
+    );
+
+Disable consent for some SPs connected to a given IdP:
+
+    $metadata['https://idp.example.org/'] = array(
+        [...],
+        'consent.disable' => array(
+            'https://sp1.example.org/',
+            'https://sp2.example.org/',
+        ),
+    );
+
+
+Disable consent for a given SP:
+
+    $metadata['https://sp.example.org'] = array(
+        [...]
+        'consent.disable' => TRUE,
     ),
 
-   
+Disable consent for some IdPs for a given SP:
+
+    $metadata['https://sp.example.org'] = array(
+        [...]
+        'consent.disable' => array(
+            'https://idp1.example.org/',
+            'https://idp2.example.org/',
+        ),
+    ),
+
+
 Attribute presentation
 ----------------------
  

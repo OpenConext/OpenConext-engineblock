@@ -7,7 +7,7 @@ simpleSAMLphp Installation and Configuration
 	http://daringfireball.net/projects/markdown/syntax
 -->
 
-  * Version: `$Id: simplesamlphp-install.txt 2319 2010-05-20 13:19:22Z olavmrk $`
+  * Version: `$Id: simplesamlphp-install.txt 3075 2012-04-24 05:41:03Z olavmrk $`
 
 
 <!-- {{TOC}} -->
@@ -125,6 +125,8 @@ file, `config.php`, right away:
 -  Set a administrator password. This is needed to access some of the pages in your simpleSAMLphp installation web interface.
 
 		'auth.adminpassword'        => 'setnewpasswordhere',
+
+   Hashed passwords can also be used here. See the [`authcrypt`](./authcrypt:authcrypt) documentation for more information.
 
 -  Set a secret salt. This should be a random string. Some parts of the simpleSAMLphp needs this salt to generate cryptographically secure hashes. SimpleSAMLphp will give an error if the salt is not changed from the default value. The command below can help you to generated a random string on (some) unix systems:
 

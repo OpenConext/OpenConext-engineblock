@@ -97,6 +97,8 @@ class SimpleSAML_Metadata_SAMLParser {
 	private $entityAttributes;
 	private $attributes;
 	private $tags;
+	private $uiInfo;
+	private $discoHints;
 
 
 	/**
@@ -342,11 +344,8 @@ class SimpleSAML_Metadata_SAMLParser {
 	/**
 	 * Determine how long a given element can be cached.
 	 *
-	 * This function looks for the 'cacheDuration' and 'validUntil' attributes to determine
-	 * how long a given XML-element is valid. It returns this as na unix timestamp.
-	 *
-	 * If both the 'cacheDuration' and 'validUntil' attributes are present, the shorter of them
-	 * will be returned.
+	 * This function looks for the 'validUntil' attribute to determine
+	 * how long a given XML-element is valid. It returns this as a unix timestamp.
 	 *
 	 * @param mixed $element  The element we should determine the expiry time of.
 	 * @param int|NULL $maxExpireTime  The maximum expiration time.
@@ -354,20 +353,11 @@ class SimpleSAML_Metadata_SAMLParser {
 	 *              limit is set for the element.
 	 */
 	private static function getExpireTime($element, $maxExpireTime) {
+		/* validUntil may be NULL */
+		$expire = $element->validUntil;
 
-		if ($element->cacheDuration !== NULL) {
-			$expire = SimpleSAML_Utilities::parseDuration($element->cacheDuration, time());
-			if ($maxExpireTime !== NULL && $maxExpireTime < $expire) {
-				$expire = $maxExpireTime;
-			}
-		} else {
+		if ( $maxExpireTime !== NULL && ($expire === NULL || $maxExpireTime < $expire) ) {
 			$expire = $maxExpireTime;
-		}
-
-		if ($element->validUntil !== NULL) {
-			if ($expire === NULL || $expire > $element->validUntil) {
-				$expire = $element->validUntil;
-			}
 		}
 
 		return $expire;
@@ -439,7 +429,14 @@ class SimpleSAML_Metadata_SAMLParser {
 		if (!empty($this->entityAttributes)) {
 			$metadata['EntityAttributes'] = $this->entityAttributes;
 		}
-		
+
+		if (!empty($roleDescriptor['UIInfo'])) {
+			$metadata['UIInfo'] = $roleDescriptor['UIInfo'];
+		}
+
+		if (!empty($roleDescriptor['DiscoHints'])) {
+			$metadata['DiscoHints'] = $roleDescriptor['DiscoHints'];
+		}
 	}
 
 
@@ -751,6 +748,8 @@ class SimpleSAML_Metadata_SAMLParser {
 		$ret['scope'] = $ext['scope'];
 		$ret['tags'] = $ext['tags'];
 		$ret['EntityAttributes'] = $ext['EntityAttributes'];
+		$ret['UIInfo'] = $ext['UIInfo'];
+		$ret['DiscoHints'] = $ext['DiscoHints'];
 
 		return $ret;
 	}
@@ -873,6 +872,8 @@ class SimpleSAML_Metadata_SAMLParser {
 			'scope' => array(),
 			'tags' => array(),
 			'EntityAttributes' => array(),
+			'UIInfo' => array(),
+			'DiscoHints' => array(),
 		);
 
 		foreach ($element->Extensions as $e) {
@@ -881,7 +882,7 @@ class SimpleSAML_Metadata_SAMLParser {
 				$ret['scope'][] = $e->scope;
 				continue;
 			}
-			
+
 			// Entity Attributes are only allowed at entity level extensions
 			// and not at RoleDescriptor level
 			if ($element instanceof SAML2_XML_md_EntityDescriptor) {
@@ -913,7 +914,52 @@ class SimpleSAML_Metadata_SAMLParser {
 					}
 				}				
 			}
-			
+
+			// UIInfo elements are only allowed at RoleDescriptor level extensions
+			if ($element instanceof SAML2_XML_md_RoleDescriptor) {
+
+				if ($e instanceof SAML2_XML_mdui_UIInfo) {
+
+					$ret['UIInfo']['DisplayName']         = $e->DisplayName;
+					$ret['UIInfo']['Description']         = $e->Description;
+					$ret['UIInfo']['InformationURL']      = $e->InformationURL;
+					$ret['UIInfo']['PrivacyStatementURL'] = $e->PrivacyStatementURL;
+
+					foreach($e->Keywords as $uiItem) {
+						if (!($uiItem instanceof SAML2_XML_mdui_Keywords)
+						 || empty($uiItem->Keywords)
+						 || empty($uiItem->lang))
+							continue;
+						$ret['UIInfo']['Keywords'][$uiItem->lang] = $uiItem->Keywords;
+					}
+					foreach($e->Logo as $uiItem) {
+						if (!($uiItem instanceof SAML2_XML_mdui_Logo)
+						 || empty($uiItem->url)
+						 || empty($uiItem->height)
+						 || empty($uiItem->width))
+							continue;
+						$logo = array(
+							'url'    => $uiItem->url,
+							'height' => $uiItem->height,
+							'width'  => $uiItem->width,
+						);
+						if (!empty($uiItem->Lang)) {
+							$logo['lang'] = $uiItem->lang;
+						}
+						$ret['UIInfo']['Logo'][] = $logo;
+					}
+				}
+			}
+
+			// DiscoHints elements are only allowed at IDPSSODescriptor level extensions
+			if ($element instanceof SAML2_XML_md_IDPSSODescriptor) {
+
+				if ($e instanceof SAML2_XML_mdui_DiscoHints) {
+					$ret['DiscoHints']['IPHint']          = $e->IPHint;
+					$ret['DiscoHints']['DomainHint']      = $e->DomainHint;
+					$ret['DiscoHints']['GeolocationHint'] = $e->GeolocationHint;
+				}
+			}
 
 
 			if (!($e instanceof SAML2_XML_Chunk)) {

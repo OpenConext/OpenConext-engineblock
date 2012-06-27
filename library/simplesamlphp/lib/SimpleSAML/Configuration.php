@@ -5,7 +5,7 @@
  *
  * @author Andreas Aakre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: Configuration.php 2771 2011-03-10 08:03:57Z olavmrk $
+ * @version $Id: Configuration.php 3120 2012-06-13 06:38:44Z olavmrk $
  */
 class SimpleSAML_Configuration {
 
@@ -109,7 +109,7 @@ class SimpleSAML_Configuration {
 		}
 
 		if (array_key_exists('override.host', $config)) {
-			$host = SimpleSAML_Utilities::getSelfHost();
+			$host = $_SERVER['HTTP_HOST'];
 			if (array_key_exists($host, $config['override.host'])) {
 				$ofs = $config['override.host'][$host];
 				foreach (SimpleSAML_Utilities::arrayize($ofs) AS $of) {
@@ -295,7 +295,7 @@ class SimpleSAML_Configuration {
 	 * @return string
 	 */
 	public function getVersion() {
-		return '1.8.x';
+		return '1.9.0';
 	}
 
 
@@ -337,14 +337,39 @@ class SimpleSAML_Configuration {
 		return FALSE;
 	}
 
-	
-	
+	/**
+	 * Retrieve the absolute path of the simpleSAMLphp installation,
+	 * relative to the root of the website.
+	 *
+	 * For example: simplesaml/
+	 *
+	 * The path will always end with a '/' and never have a leading slash.
+	 *
+	 * @return string  The absolute path relative to the root of the website.
+	 */
 	public function getBaseURL() {
-		if (preg_match('/^\*(.*)$/D', $this->getString('baseurlpath', 'simplesaml/'), $matches)) {
+		$baseURL = $this->getString('baseurlpath', 'simplesaml/');
+		
+		if (preg_match('/^\*(.*)$/D', $baseURL, $matches)) {
+			/* deprecated behaviour, will be removed in the future */
 			return SimpleSAML_Utilities::getFirstPathElement(false) . $matches[1];
 		}
 
-		return $this->getString('baseurlpath', 'simplesaml/');
+		if (preg_match('#^https?://[^/]*/(.*)$#', $baseURL, $matches)) {
+			/* we have a full url, we need to strip the path */
+			return $matches[1];
+		} elseif ($baseURL === '' || $baseURL === '/') {
+			/* Root directory of site. */
+			return '';
+		} elseif (preg_match('#^/?([^/]?.*/)#D', $baseURL, $matches)) {
+			/* local path only */
+			return $matches[1];
+		} else {
+			/* invalid format */
+			throw new SimpleSAML_Error_Exception('Incorrect format for option \'baseurlpath\'. Value is: "'.
+				$this->getString('baseurlpath', 'simplesaml/') . '". Valid format is in the form'.
+				' [(http|https)://(hostname|fqdn)[:port]]/[path/to/simplesaml/].');
+		}
 	}
 
 
@@ -403,6 +428,10 @@ class SimpleSAML_Configuration {
 			$path = $default;
 		} else {
 			$path = $this->configuration[$name];
+		}
+
+		if ($path === NULL) {
+			return NULL;
 		}
 
 		return $this->resolvePath($path) . '/';
@@ -546,7 +575,7 @@ class SimpleSAML_Configuration {
 
 		if(!is_int($ret)) {
 			throw new Exception($this->location . ': The option ' . var_export($name, TRUE) .
-				' is not a valid string value.');
+				' is not a valid integer value.');
 		}
 
 		return $ret;

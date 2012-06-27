@@ -6,10 +6,10 @@
  *
  * @author Andreas Åkre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: SSOService.php 2125 2010-01-22 09:13:52Z olavmrk $
+ * @version $Id: SSOService.php 2817 2011-04-14 06:40:04Z olavmrk $
  */
 
-require_once('../../../www/_include.php');
+require_once('../../_include.php');
 
 SimpleSAML_Logger::info('Shib1.3 - IdP.SSOService: Accessing Shibboleth 1.3 IdP endpoint SSOService');
 

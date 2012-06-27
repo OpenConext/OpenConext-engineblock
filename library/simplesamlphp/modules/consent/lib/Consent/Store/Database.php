@@ -40,6 +40,13 @@ class sspmod_consent_Consent_Store_Database extends sspmod_consent_Store
     private $_table;
 
     /**
+     * The timeout of the database connection.
+     *
+     * @var int|NULL
+     */
+    private $_timeout = NULL;
+
+    /**
      * Database handle.
      *
      * This variable can't be serialized.
@@ -86,8 +93,14 @@ class sspmod_consent_Consent_Store_Database extends sspmod_consent_Store
             $this->_table = 'consent';
         }
 
-        // @TODO Should be removed
-        $db = $this->_getDB();
+        if (isset($config['timeout'])) {
+            if (!is_int($config['timeout'])) {
+                throw new Exception(
+                    'consent:Database - \'timeout\' is supposed to be an integer.'
+                );
+            }
+            $this->_timeout = $config['timeout'];
+        }
     }
 
     /**
@@ -102,6 +115,7 @@ class sspmod_consent_Consent_Store_Database extends sspmod_consent_Store
             '_username',
             '_password',
             '_table',
+            '_timeout',
         );
     }
 
@@ -447,9 +461,14 @@ class sspmod_consent_Consent_Store_Database extends sspmod_consent_Store
             return $this->_db;
         }
 
+        $driver_options = array();
+        if (isset($this->_timeout)) {
+            $driver_options[PDO::ATTR_TIMEOUT] = $this->_timeout;
+        }
+
         // @TODO Cleanup this section
         //try {
-        $this->_db = new PDO($this->_dsn, $this->_username, $this->_password);
+        $this->_db = new PDO($this->_dsn, $this->_username, $this->_password, $driver_options);
         // 		} catch (PDOException $e) {
         // 			SimpleSAML_Logger::error('consent:Database - Failed to connect to \'' .
         // 				$this->_dsn . '\': '. $e->getMessage());

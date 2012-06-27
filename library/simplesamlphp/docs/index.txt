@@ -2,6 +2,7 @@ SimpleSAMLphp Documentation
 ===========================
 
  * [Installing simpleSAMLphp](simplesamlphp-install)
+    * [Upgrade notes for version 1.9](simplesamlphp-upgrade-notes-1.9)
     * [Upgrade notes for version 1.8](simplesamlphp-upgrade-notes-1.8)
     * [Upgrade notes for version 1.7](simplesamlphp-upgrade-notes-1.7)
     * [Upgrade notes for version 1.6](simplesamlphp-upgrade-notes-1.6)
@@ -15,12 +16,14 @@ SimpleSAMLphp Documentation
   * [Upgrading - migration to use the SAML authentication source](simplesamlphp-sp-migration)
   * [Configuring HTTP-Artifact](./simplesamlphp-artifact-sp)
   * [Using scoping](./simplesamlphp-scoping)
+  * [Holder-of-Key profile](simplesamlphp-hok-sp)
  * [Identity Provider QuickStart](simplesamlphp-idp)
   * [IdP hosted reference](simplesamlphp-reference-idp-hosted)
   * [SP remote reference](simplesamlphp-reference-sp-remote)
   * [Use case: Setting up an IdP for Google Apps](simplesamlphp-googleapps)
   * [Configuring HTTP-Artifact](./simplesamlphp-artifact-idp)
   * [Identity Provider Advanced Topics](simplesamlphp-idp-more)
+  * [Holder-of-Key profile](simplesamlphp-hok-idp)
  * [Automated Metadata Management](simplesamlphp-automated_metadata)
  * [Maintenance and configuration](simplesamlphp-maintenance) - covers session handling, php configuration etc.
  * [Authentication Processing Filters](simplesamlphp-authproc) - attribute filtering, attribute mapping, consent, group generation etc.
@@ -30,6 +33,8 @@ SimpleSAMLphp Documentation
  * [simpleSAMLphp Modules](simplesamlphp-modules) - how to create own customized modules
  * [Installing third party modules with the pack.php tool](pack)
  * [Key rollover](./saml:keyrollover)
+ * [Creating authentication sources](./simplesamlphp-authsource)
+  * [Implementing custom username/password authentication](./simplesamlphp-customauth)
 
 Documentation on specific simpleSAMLphp modules:
  

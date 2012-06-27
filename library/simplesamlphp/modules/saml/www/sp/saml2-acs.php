@@ -18,6 +18,36 @@ if (!($response instanceof SAML2_Response)) {
 	throw new SimpleSAML_Error_BadRequest('Invalid message received to AssertionConsumerService endpoint.');
 }
 
+$idp = $response->getIssuer();
+if ($idp === NULL) {
+	/* No Issuer in the response. Look for an unencrypted assertion with an issuer. */
+	foreach ($response->getAssertions() as $a) {
+		if ($a instanceof SAML2_Assertion) {
+			/* We found an unencrypted assertion - there should be an issuer here. */
+			$idp = $a->getIssuer();
+			break;
+		}
+	}
+	if ($idp === NULL) {
+		/* No issuer found in the assertions. */
+		throw new Exception('Missing <saml:Issuer> in message delivered to AssertionConsumerService.');
+	}
+}
+
+$session = SimpleSAML_Session::getInstance();
+$prevAuth = $session->getAuthData($sourceId, 'saml:sp:prevAuth');
+if ($prevAuth !== NULL && $prevAuth['id'] === $response->getId() && $prevAuth['issuer'] === $idp) {
+	/* OK, it looks like this message has the same issuer
+	 * and ID as the SP session we already have active. We
+	 * therefore assume that the user has somehow triggered
+	 * a resend of the message.
+	 * In that case we may as well just redo the previous redirect
+	 * instead of displaying a confusing error message.
+	 */
+	SimpleSAML_Logger::info('Duplicate SAML 2 response detected - ignoring the response and redirecting the user to the correct page.');
+	SimpleSAML_Utilities::redirect($prevAuth['redirect']);
+}
+
 $stateId = $response->getInResponseTo();
 if (!empty($stateId)) {
 	/* This is a response to a request we sent earlier. */
@@ -29,17 +59,12 @@ if (!empty($stateId)) {
 		throw new SimpleSAML_Error_Exception('The authentication source id in the URL does not match the authentication source which sent the request.');
 	}
 } else {
-	/* This is an unsoliced response. */
+	/* This is an unsolicited response. */
 	$state = array(
-		'saml:sp:isUnsoliced' => TRUE,
+		'saml:sp:isUnsolicited' => TRUE,
 		'saml:sp:AuthId' => $sourceId,
 		'saml:sp:RelayState' => $response->getRelayState(),
 	);
-}
-
-$idp = $response->getIssuer();
-if ($idp === NULL) {
-	throw new Exception('Missing <saml:Issuer> in message delivered to AssertionConsumerService.');
 }
 
 SimpleSAML_Logger::debug('Received SAML2 Response from ' . var_export($idp, TRUE) . '.');
@@ -109,13 +134,15 @@ if (!$foundAuthnStatement) {
 	SimpleSAML_Auth_State::throwException($state, $e);
 }
 
-if ($expire === NULL) {
+if ($expire !== NULL) {
+	$logoutExpire = $expire;
+} else {
 	/* Just expire the logout associtaion 24 hours into the future. */
-	$expire = time() + 24*60*60;
+	$logoutExpire = time() + 24*60*60;
 }
 
 /* Register this session in the logout store. */
-sspmod_saml_SP_LogoutStore::addSession($sourceId, $nameId, $sessionIndex, $expire);
+sspmod_saml_SP_LogoutStore::addSession($sourceId, $nameId, $sessionIndex, $logoutExpire);
 
 /* We need to save the NameID and SessionIndex for logout. */
 $logoutState = array(
@@ -135,7 +162,24 @@ $state['saml:sp:NameID'] = $nameId;
 $state['PersistentAuthData'][] = 'saml:sp:NameID';
 $state['saml:sp:SessionIndex'] = $sessionIndex;
 $state['PersistentAuthData'][] = 'saml:sp:SessionIndex';
+$state['saml:sp:AuthnContext'] = $assertion->getAuthnContext();
+$state['PersistentAuthData'][] = 'saml:sp:AuthnContext';
 
+if ($expire !== NULL) {
+	$state['Expire'] = $expire;
+}
+
+if (isset($state['SimpleSAML_Auth_Default.ReturnURL'])) {
+	/* Just note some information about the authentication, in case we receive the
+	 * same response again.
+	 */
+	$state['saml:sp:prevAuth'] = array(
+		'id' => $response->getId(),
+		'issuer' => $idp,
+		'redirect' => $state['SimpleSAML_Auth_Default.ReturnURL'],
+	);
+	$state['PersistentAuthData'][] = 'saml:sp:prevAuth';
+}
 
 $source->handleResponse($state, $idp, $attributes);
 assert('FALSE');

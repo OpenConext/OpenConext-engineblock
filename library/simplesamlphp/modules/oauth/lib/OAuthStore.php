@@ -10,13 +10,13 @@ require_once(dirname(dirname(__FILE__)) . '/libextinc/OAuth.php');
  * @author Andreas Åkre Solberg, <andreas.solberg@uninett.no>, UNINETT AS.
  * @author Mark Dobrinic, <mdobrinic@cozmanova.com>, Cozmanova bv
  * @package simpleSAMLphp
- * @version $Id: OAuthStore.php 2730 2011-02-02 11:52:28Z andreassolberg $
+ * @version $Id: OAuthStore.php 2843 2011-05-20 14:34:26Z comel.ah $
  */
 class sspmod_oauth_OAuthStore extends OAuthDataStore {
 
 	private $store;
 	private $config;
-	private $defaultversion;
+	private $defaultversion = '1.0';
 
 	protected $_store_tables = array(
 					'consumers' => 'consumer = array with consumer attributes', 
@@ -30,13 +30,11 @@ class sspmod_oauth_OAuthStore extends OAuthDataStore {
     function __construct() {
 		$this->store = new sspmod_core_Storage_SQLPermanentStorage('oauth');
 		$this->config = SimpleSAML_Configuration::getOptionalConfig('module_oauth.php');
-		
-		$this->defaultversion = $this->config->getValue('defaultversion', '1.0');
     }
 	
     
     /**
-     * Attach the data to the token, and establish the Callback URL (and verifier for 1.0a protocol handling)
+     * Attach the data to the token, and establish the Callback URL and verifier
      * @param $requestTokenKey RequestToken that was authorized
      * @param $data Data that is authorized and to be attached to the requestToken
      * @return array(string:url, string:verifier) ; empty verifier for 1.0-response
@@ -65,10 +63,8 @@ class sspmod_oauth_OAuthStore extends OAuthDataStore {
 		
 		if ($oConsumer && ($oConsumer->callback_url)) $url = $oConsumer->callback_url;
 		
-		if ($version == '1.0a') {
-			$verifier = SimpleSAML_Utilities::generateID();
-			$url = SimpleSAML_Utilities::addURLparameter($url, array("oauth_verifier"=>$verifier));
-		}
+		$verifier = SimpleSAML_Utilities::generateID();
+		$url = SimpleSAML_Utilities::addURLparameter($url, array("oauth_verifier"=>$verifier));
 		
 		$this->store->set('authorized', $requestTokenKey, $verifier, $data, $this->config->getValue('requestTokenDuration', 60*30) );
 		

@@ -8,9 +8,9 @@
  * information about all the currently logged in SPs. This is used when the user initiate a 
  * Single-Log-Out.
  *
- * @author Andreas �kre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
+ * @author Andreas Åkre Solberg, UNINETT AS. <andreas.solberg@uninett.no>
  * @package simpleSAMLphp
- * @version $Id: Session.php 2636 2010-11-16 14:30:23Z olavmrk $
+ * @version $Id: Session.php 3113 2012-05-31 08:36:04Z olavmrk $
  */
 class SimpleSAML_Session {
 
@@ -43,6 +43,14 @@ class SimpleSAML_Session {
 	 * @var string|NULL
 	 */
 	private $sessionId;
+
+
+	/**
+	 * Transient session flag.
+	 *
+	 * @var boolean|FALSE
+	 */
+	private $transient = FALSE;
 
 
 	/**
@@ -150,6 +158,7 @@ class SimpleSAML_Session {
 
 		if ($transient) {
 			$this->trackid = 'XXXXXXXXXX';
+			$this->transient = TRUE;
 			return;
 		}
 
@@ -249,14 +258,21 @@ class SimpleSAML_Session {
 		try {
 			self::$instance = self::getSession();
 		} catch (Exception $e) {
+			/* For some reason, we were unable to initialize this session. Use a transient session instead. */
+			self::useTransientSession();
+
+			$globalConfig = SimpleSAML_Configuration::getInstance();
+			if ($globalConfig->getBoolean('session.disable_fallback', FALSE) === TRUE) {
+				throw $e;
+			}
+
 			if ($e instanceof SimpleSAML_Error_Exception) {
 				SimpleSAML_Logger::error('Error loading session:');
 				$e->logError();
 			} else {
 				SimpleSAML_Logger::error('Error loading session: ' . $e->getMessage());
 			}
-			/* For some reason, we were unable to initialize this session. Use a transient session instead. */
-			self::useTransientSession();
+
 			return self::$instance;
 		}
 
@@ -296,6 +312,16 @@ class SimpleSAML_Session {
 	public function getSessionId() {
 
 		return $this->sessionId;
+	}
+
+
+	/**
+	 * Retrieve if session is transient.
+	 *
+	 * @return boolean  The session transient flag.
+	 */
+	public function isTransient() {
+		return $this->transient;
 	}
 
 
@@ -485,12 +511,15 @@ class SimpleSAML_Session {
 			$data = array();
 		}
 
+		$globalConfig = SimpleSAML_Configuration::getInstance();
 		if (!isset($data['AuthnInstant'])) {
 			$data['AuthnInstant'] = time();
 		}
-		if (!isset($data['Expire'])) {
-			$globalConfig = SimpleSAML_Configuration::getInstance();
-			$data['Expire'] = time() + $globalConfig->getInteger('session.duration', 8*60*60);
+
+		$maxSessionExpire = time() + $globalConfig->getInteger('session.duration', 8*60*60);
+		if (!isset($data['Expire']) || $data['Expire'] > $maxSessionExpire) {
+			/* Unset, or beyond our session lifetime. Clamp it to our maximum session lifetime. */
+			$data['Expire'] = $maxSessionExpire;
 		}
 
 		$this->authData[$authority] = $data;
@@ -835,8 +864,8 @@ class SimpleSAML_Session {
 	 *                  and the default is 4 hours.
 	 */
 	public function setData($type, $id, $data, $timeout = NULL) {
-		assert(is_string($type));
-		assert(is_string($id));
+		assert('is_string($type)');
+		assert('is_string($id)');
 		assert('is_int($timeout) || is_null($timeout) || $timeout === self::DATA_TIMEOUT_LOGOUT');
 
 		/* Clean out old data. */
@@ -956,6 +985,15 @@ class SimpleSAML_Session {
 		return $ret;
 	}
 
+	/**
+	 * Create a new session and cache it.
+	 *
+	 * @param string $sessionId  The new session we should create.
+	 */
+	public static function createSession($sessionId) {
+		assert('is_string($sessionId)');
+		self::$sessions[$sessionId] = NULL;
+	}
 
 	/**
 	 * Load a session from the session handler.
@@ -975,7 +1013,7 @@ class SimpleSAML_Session {
 			$checkToken = FALSE;
 		}
 
-		if (isset(self::$sessions[$sessionId])) {
+		if (array_key_exists($sessionId, self::$sessions)) {
 			return self::$sessions[$sessionId];
 		}
 

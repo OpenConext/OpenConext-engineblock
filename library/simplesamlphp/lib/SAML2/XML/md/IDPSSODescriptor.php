@@ -89,10 +89,10 @@ class SAML2_XML_md_IDPSSODescriptor extends SAML2_XML_md_SSODescriptorType {
 		}
 
 		foreach (SAML2_Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
-			$this->AssertionIDRequestService[] = new SAML2_XML_md_EndpointType($airs);
+			$this->AssertionIDRequestService[] = new SAML2_XML_md_EndpointType($ep);
 		}
 
-		$this->AttributeProfile = SAML2_Utils::extractStrings($xml, './saml_metadata:AttributeProfile');
+		$this->AttributeProfile = SAML2_Utils::extractStrings($xml, SAML2_Const::NS_MD, 'AttributeProfile');
 
 		foreach (SAML2_Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
 			$this->Attribute[] = new SAML2_XML_saml_Attribute($a);

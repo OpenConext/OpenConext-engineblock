@@ -128,6 +128,21 @@ class sspmod_consent_Auth_Process_Consent extends SimpleSAML_Auth_ProcessingFilt
     }
 
     /**
+     * Helper function to check whether consent is disabled.
+     *
+     * @param mixed $option  The consent.disable option. Either an array or a boolean.
+     * @param string $entityIdD  The entityID of the SP/IdP.
+     * @return boolean  TRUE if disabled, FALSE if not.
+     */
+    private static function checkDisable($option, $entityId) {
+        if (is_array($option)) {
+            return in_array($entityId, $option, TRUE);
+        } else {
+            return (boolean)$option;
+        }
+    }
+
+    /**
      * Process a authentication response
      *
      * This function saves the state, and redirects the user to the page where
@@ -149,7 +164,9 @@ class sspmod_consent_Auth_Process_Consent extends SimpleSAML_Auth_ProcessingFilt
         assert('array_key_exists("entityid", $state["Source"])');
         assert('array_key_exists("metadata-set", $state["Source"])');
 
-        $session  = SimpleSAML_Session::getInstance(); 
+        $spEntityId = $state['Destination']['entityid'];
+        $idpEntityId = $state['Source']['entityid'];
+
         $metadata = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
 
         /**
@@ -159,26 +176,29 @@ class sspmod_consent_Auth_Process_Consent extends SimpleSAML_Auth_ProcessingFilt
          * done.
          */
         if (isset($state['saml:sp:IdP'])) {
-            $idpmeta         = $metadata->getMetaData($state['saml:sp:IdP'], 'saml20-idp-remote');
-            $state['Source'] = $idpmeta;
-        } elseif ($session->getIdP() !== null) {
-            // For backwards compatibility. TODO: Remove in version 1.8
-            $idpmeta         = $metadata->getMetaData($session->getIdP(), 'saml20-idp-remote');
+            $idpEntityId = $state['saml:sp:IdP'];
+            $idpmeta         = $metadata->getMetaData($idpEntityId, 'saml20-idp-remote');
             $state['Source'] = $idpmeta;
         }
 
-        if ($this->_store !== null) {
-            // Do not use consent if disabled on source entity 
-            if ( isset($state['Source']['consent.disable']) && in_array($state['Destination']['entityid'], $state['Source']['consent.disable'])) {
-                SimpleSAML_Logger::debug(
-                    'Consent: Consent disabled for entity ' .
-                    $state['Destination']['entityid']
-                );
-                return;
-            }
+        $statsData = array('spEntityID' => $spEntityId);
 
-            $source      = $state['Source']['metadata-set'] . '|' . $state['Source']['entityid'];
-            $destination = $state['Destination']['metadata-set'] . '|' . $state['Destination']['entityid'];
+        // Do not use consent if disabled
+        if (isset($state['Source']['consent.disable']) && self::checkDisable($state['Source']['consent.disable'], $spEntityId)) {
+            SimpleSAML_Logger::debug('Consent: Consent disabled for entity ' . $spEntityId . ' with IdP ' . $idpEntityId);
+            SimpleSAML_Stats::log('consent:disabled', $statsData);
+            return;
+        }
+        if (isset($state['Destination']['consent.disable']) && self::checkDisable($state['Destination']['consent.disable'], $idpEntityId)) {
+            SimpleSAML_Logger::debug('Consent: Consent disabled for entity ' . $spEntityId . ' with IdP ' . $idpEntityId);
+            SimpleSAML_Stats::log('consent:disabled', $statsData);
+            return;
+        }
+
+        if ($this->_store !== null) {
+
+            $source      = $state['Source']['metadata-set'] . '|' . $idpEntityId;
+            $destination = $state['Destination']['metadata-set'] . '|' . $spEntityId;
             $attributes  = $state['Attributes'];
 
             // Remove attributes that do not require consent
@@ -200,21 +220,30 @@ class sspmod_consent_Auth_Process_Consent extends SimpleSAML_Auth_ProcessingFilt
                 'Consent: hasConsent() [' . $userId . '|' . $targetedId . '|' .
                 $attributeSet . ']'
             );
-            
-            if ($this->_store->hasConsent($userId, $targetedId, $attributeSet)) {
-                // Consent already given
-                SimpleSAML_Logger::stats('Consent: Consent found');
-                return;
+
+            try {
+                if ($this->_store->hasConsent($userId, $targetedId, $attributeSet)) {
+                    // Consent already given
+                    SimpleSAML_Logger::stats('Consent: Consent found');
+                    SimpleSAML_Stats::log('consent:found', $statsData);
+                    return;
+                }
+
+                SimpleSAML_Logger::stats('Consent: Consent notfound');
+                SimpleSAML_Stats::log('consent:notfound', $statsData);
+
+                $state['consent:store']              = $this->_store;
+                $state['consent:store.userId']       = $userId;
+                $state['consent:store.destination']  = $targetedId;
+                $state['consent:store.attributeSet'] = $attributeSet;
+            } catch (Exception $e) {
+                SimpleSAML_Logger::error('Consent: Error reading from storage: ' . $e->getMessage());
+                SimpleSAML_Logger::stats('Consent: Failed');
+                SimpleSAML_Stats::log('consent:failed', $statsData);
             }
-
-            SimpleSAML_Logger::stats('Consent: Consent notfound');
-
-            $state['consent:store']              = $this->_store;
-            $state['consent:store.userId']       = $userId;
-            $state['consent:store.destination']  = $targetedId;
-            $state['consent:store.attributeSet'] = $attributeSet;
         } else {
             SimpleSAML_Logger::stats('Consent: No storage');
+            SimpleSAML_Stats::log('consent:nostorage', $statsData);
         }
 
         $state['consent:focus']               = $this->_focus;
@@ -224,6 +253,7 @@ class sspmod_consent_Auth_Process_Consent extends SimpleSAML_Auth_ProcessingFilt
 
         // User interaction nessesary. Throw exception on isPassive request	
         if (isset($state['isPassive']) && $state['isPassive'] == true) {
+            SimpleSAML_Stats::log('consent:nopassive', $statsData);
             throw new SimpleSAML_Error_NoPassive(
                 'Unable to give consent on passive request.'
             );

@@ -17,19 +17,27 @@ $reportId = (string)$_REQUEST['reportId'];
 $email = (string)$_REQUEST['email'];
 $text = htmlspecialchars((string)$_REQUEST['text']);
 
-$session = SimpleSAML_Session::getInstance();
-$data = $session->getData('core:errorreport', $reportId);
+try {
+	$session = SimpleSAML_Session::getInstance();
+	$data = $session->getData('core:errorreport', $reportId);
+} catch (Exception $e) {
+	SimpleSAML_Logger::error('Error loading error report data: ' . var_export($e->getMessage(), TRUE));
+}
 
 if ($data === NULL) {
 	$data = array(
 		'exceptionMsg' => 'not set',
 		'exceptionTrace' => 'not set',
 		'reportId' => $reportId,
-		'trackId' => $session->getTrackId(),
+		'trackId' => 'not set',
 		'url' => 'not set',
 		'version' => $config->getVersion(),
 		'referer' => 'not set',
 	);
+
+	if (isset($session)) {
+		$data['trackId'] = $session->getTrackId();
+	}
 }
 
 foreach ($data as $k => $v) {
@@ -48,6 +56,9 @@ $message = '<h1>SimpleSAMLphp Error Report</h1>
 
 <p>URL:</p>
 <pre><a href="' . $data['url'] . '">' . $data['url'] . '</a></pre>
+
+<p>Host:</p>
+<pre>' . htmlspecialchars(php_uname('n')) . '</pre>
 
 <p>Directory:</p>
 <pre>' . dirname(dirname(__FILE__)) . '</pre>
