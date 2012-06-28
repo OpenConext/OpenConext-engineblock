@@ -113,6 +113,7 @@ class EngineBlock_Controller_Abstract
     {
         $helper = new Surfnet_Zend_Auth_Adapter_Saml();
         $result = $helper->authenticate();
+        $this->_viewData['entityId'] = $helper->getEntityId();
 
         return new EngineBlock_User($result->getIdentity());
     }

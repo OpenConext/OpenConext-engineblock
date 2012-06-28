@@ -21,6 +21,8 @@ if (!isset($metadata)) {
 }
 
 /**
+ * @var EngineBlock_View $this
+ * @var string $entityId
  * @var array $groupOauth
  * @var array $consent
  * @var array $spAttributesList
@@ -135,7 +137,9 @@ foreach ($spList as $spId => $sp) {
         <?php
                 $groups = array();
         try{
-            $groups = $groupProvider->getGroups(null);
+            $aclProvider = new EngineBlock_Group_Acl_GroupProviderAcl();
+            $groupProviderAcl = $aclProvider->getSpGroupAcls($entityId);
+            $groups = $groupProvider->getGroups($groupProviderAcl);
         } catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
             $invalidProviders[] = $groupProvider;
         }
