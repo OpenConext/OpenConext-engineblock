@@ -37,6 +37,7 @@ class EngineBlock_Group_Provider_OpenSocial_HttpBasic
         $openSocialRestClient = new OpenSocial_Rest_Client($httpClient);
         $provider = new self($config->id, $config->name, $openSocialRestClient);
 
+        $provider->setUserId($userId);
         $provider->configurePreconditions($config);
         $provider->configureGroupFilters($config);
         $provider->configureGroupMemberFilters($config);
