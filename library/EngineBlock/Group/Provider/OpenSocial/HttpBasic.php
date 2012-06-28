@@ -28,10 +28,10 @@ class EngineBlock_Group_Provider_OpenSocial_HttpBasic
 {
     public static function createFromConfigs(Zend_Config $config, $userId)
     {
-        $httpClient = new Zend_Http_Client();
+        $httpClient = new Zend_Http_Client($config->url);
         $httpClient->setAuth(
-            $config->auth->user,
-            $config->auth->password
+            $config->user,
+            $config->password
         );
 
         $openSocialRestClient = new OpenSocial_Rest_Client($httpClient);
