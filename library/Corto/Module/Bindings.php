@@ -526,78 +526,85 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         $xp = new DomXPath($document);
         $xp->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
 
-        foreach ($element['ds:Signature']['ds:SignedInfo']['ds:Reference'] as $reference) {
-            $referencedUri = $reference['_URI'];
+        if (count($element['ds:Signature']['ds:SignedInfo']['ds:Reference']) > 1) {
+            throw new Corto_Module_Bindings_Exception(
+                "Unsupported use of multiple Reference in a single Signature: " . $xml
+            );
+        }
 
-            if (strpos($referencedUri, '#') !== 0) {
-                throw new Corto_Module_Bindings_Exception(
-                    "Unsupported use of URI Reference, I only know XPointers: " . $xml
-                );
-            }
-            $referencedId = substr($referencedUri, 1);
+        if (!in_array($element['ds:Signature']['ds:SignedInfo']['ds:Reference'][0]['_URI'], array("", "#" . $element['_ID']))) {
+            throw new Corto_Module_Bindings_Exception(
+                "Unsupported use of URI Reference, should be empty or be XPointer to Signature parent id: " . $xml
+            );
+        }
 
-            $xpathResults = $xp->query("//*[@ID = '$referencedId']");
-            if ($xpathResults->length === 0) {
-                throw new Corto_Module_Bindings_Exception(
-                    "URI Reference, not found? " . $xml
-                );
-            }
-            if ($xpathResults->length > 1) {
-                throw new Corto_Module_Bindings_Exception(
-                    "Multiple nodes found for URI Reference? " . $xml
-                );
-            }
-            $referencedElement = $xpathResults->item(0);
-            $referencedDocument  = new DomDocument();
-            $importedNode = $referencedDocument->importNode($referencedElement->cloneNode(true), true);
-            $referencedDocument->appendChild($importedNode);
-            $referencedDocumentXml = $referencedDocument->saveXML();
+        if (!isset($element['_ID']) || !$element['_ID']) {
+            throw new Corto_Module_Bindings_Exception(
+                "Trying to verify signature on an element without an ID is not supported: " . var_export($element, true)
+            );
+        }
 
-            // First process any transforms
-            if (isset($reference['ds:Transforms']['ds:Transform'])) {
-                foreach ($reference['ds:Transforms']['ds:Transform'] as $transform) {
-                    switch ($transform['_Algorithm']) {
-                        case 'http://www.w3.org/2000/09/xmldsig#enveloped-signature':
-                            $transformDocument = new DOMDocument();
-                            $transformDocument->loadXML($referencedDocumentXml);
-                            $transformXpath = new DomXPath($transformDocument);
-                            $transformXpath->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
-                            $signature = $transformXpath->query(".//ds:Signature", $transformDocument)->item(0);
-                            $signature->parentNode->removeChild($signature);
-                            $referencedDocumentXml = $transformDocument->saveXML();
-                            break;
-                        case 'http://www.w3.org/2001/10/xml-exc-c14n#':
-                            $nsPrefixes = array();
-                            if (isset($transform['ec:InclusiveNamespaces']['_PrefixList'])) {
-                                $nsPrefixes = explode(' ', $transform['ec:InclusiveNamespaces']['_PrefixList']);
-                            }
-                            $transformDocument = new DOMDocument();
-                            $transformDocument->loadXML($referencedDocumentXml);
-                            $referencedDocumentXml = $transformDocument->C14N(true, false, null, $nsPrefixes);
-                            break;
-                        default:
-                            throw new Corto_Module_Bindings_Exception(
-                                "Unsupported transform " . $transform['_Algorithm'] . ' on XML: ' . $xml
-                            );
-                    }
+        $xpathResults = $xp->query("//*[@ID = '{$element['_ID']}']");
+        if ($xpathResults->length === 0) {
+            throw new Corto_Module_Bindings_Exception(
+                "URI Reference, not found? " . $xml
+            );
+        }
+        if ($xpathResults->length > 1) {
+            throw new Corto_Module_Bindings_Exception(
+                "Multiple nodes found for URI Reference ID? " . $xml
+            );
+        }
+        $referencedElement = $xpathResults->item(0);
+        $referencedDocument  = new DomDocument();
+        $importedNode = $referencedDocument->importNode($referencedElement->cloneNode(true), true);
+        $referencedDocument->appendChild($importedNode);
+
+        $referencedDocumentXml = $referencedDocument->saveXML();
+
+        // First process any transforms
+        if (isset($reference['ds:Transforms']['ds:Transform'])) {
+            foreach ($reference['ds:Transforms']['ds:Transform'] as $transform) {
+                switch ($transform['_Algorithm']) {
+                    case 'http://www.w3.org/2000/09/xmldsig#enveloped-signature':
+                        $transformDocument = new DOMDocument();
+                        $transformDocument->loadXML($referencedDocumentXml);
+                        $transformXpath = new DomXPath($transformDocument);
+                        $transformXpath->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
+                        $signature = $transformXpath->query(".//ds:Signature", $transformDocument)->item(0);
+                        $signature->parentNode->removeChild($signature);
+                        $referencedDocumentXml = $transformDocument->saveXML();
+                        break;
+                    case 'http://www.w3.org/2001/10/xml-exc-c14n#':
+                        $nsPrefixes = array();
+                        if (isset($transform['ec:InclusiveNamespaces']['_PrefixList'])) {
+                            $nsPrefixes = explode(' ', $transform['ec:InclusiveNamespaces']['_PrefixList']);
+                        }
+                        $transformDocument = new DOMDocument();
+                        $transformDocument->loadXML($referencedDocumentXml);
+                        $referencedDocumentXml = $transformDocument->C14N(true, false, null, $nsPrefixes);
+                        break;
+                    default:
+                        throw new Corto_Module_Bindings_Exception(
+                            "Unsupported transform " . $transform['_Algorithm'] . ' on XML: ' . $xml
+                        );
                 }
-            }
-
-            // Verify the digest over the (transformed) element
-            if ($reference['ds:DigestMethod']['_Algorithm'] !== 'http://www.w3.org/2000/09/xmldsig#sha1') {
-                throw new Corto_Module_Bindings_Exception(
-                    "Unsupported DigestMethod " . $reference['ds:DigestMethod']['_Algorithm'] . ' on XML: ' . $xml
-                );
-            }
-            $ourDigest = sha1($referencedDocumentXml, TRUE);
-            $theirDigest = base64_decode($reference['ds:DigestValue']['__v']);
-            if ($ourDigest !== $theirDigest) {
-                throw new Corto_Module_Bindings_Exception(
-                    "Digests do not match! on XML: " . $xml
-                );
             }
         }
 
+        // Verify the digest over the (transformed) element
+        if ($reference['ds:DigestMethod']['_Algorithm'] !== 'http://www.w3.org/2000/09/xmldsig#sha1') {
+            throw new Corto_Module_Bindings_Exception(
+                "Unsupported DigestMethod " . $reference['ds:DigestMethod']['_Algorithm'] . ' on XML: ' . $xml
+            );
+        }
+        $ourDigest = sha1($referencedDocumentXml, TRUE);
+        $theirDigest = base64_decode($reference['ds:DigestValue']['__v']);
+        if ($ourDigest !== $theirDigest) {
+            throw new Corto_Module_Bindings_Exception(
+                "Digests do not match! on XML: " . $xml
+            );
+        }
         // Verify the signature over the SignedInfo (not over the entire document, only over the digest)
 
         $c14Algorithm = $element['ds:Signature']['ds:SignedInfo']['ds:CanonicalizationMethod']['_Algorithm'];
@@ -620,9 +627,13 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         }
 
         // Find the signed element (like an assertion) in the global document (like a response)
-        $id = $element['_ID'];
-        $signedElement  = $xp->query("//*[@ID = '$id']")->item(0);
-        $signedInfoNode = $xp->query(".//ds:SignedInfo", $signedElement)->item(0);
+        $signedInfoNodes = $xp->query(".//ds:SignedInfo", $referencedElement);
+        if ($signedInfoNodes->length !== 1) {
+            throw new Corto_Module_Bindings_Exception(
+                "No SignatureInfo found or multiple found? On XML: $xml"
+            );
+        }
+        $signedInfoNode = $signedInfoNodes->item(0);
         $signedInfoXml = $signedInfoNode->C14N(true, false);
 
         $signatureValue = $element['ds:Signature']['ds:SignatureValue']['__v'];
