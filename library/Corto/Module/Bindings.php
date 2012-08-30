@@ -532,7 +532,8 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
             );
         }
 
-        if (!in_array($element['ds:Signature']['ds:SignedInfo']['ds:Reference'][0]['_URI'], array("", "#" . $element['_ID']))) {
+        $reference = $element['ds:Signature']['ds:SignedInfo']['ds:Reference'][0];
+        if (!in_array($reference['_URI'], array("", "#" . $element['_ID']))) {
             throw new Corto_Module_Bindings_Exception(
                 "Unsupported use of URI Reference, should be empty or be XPointer to Signature parent id: " . $xml
             );
@@ -627,10 +628,15 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         }
 
         // Find the signed element (like an assertion) in the global document (like a response)
-        $signedInfoNodes = $xp->query(".//ds:SignedInfo", $referencedElement);
-        if ($signedInfoNodes->length !== 1) {
+        $signedInfoNodes = $xp->query("./ds:Signature/ds:SignedInfo", $referencedElement);
+        if ((int)$signedInfoNodes->length === 0) {
             throw new Corto_Module_Bindings_Exception(
-                "No SignatureInfo found or multiple found? On XML: $xml"
+                "No SignatureInfo found? On XML: $xml"
+            );
+        }
+        if ($signedInfoNodes->length > 1) {
+            throw new Corto_Module_Bindings_Exception(
+                "Multiple SignatureInfo nodes found? On XML: $xml"
             );
         }
         $signedInfoNode = $signedInfoNodes->item(0);
