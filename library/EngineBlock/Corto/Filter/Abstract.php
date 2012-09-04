@@ -61,8 +61,14 @@ abstract class EngineBlock_Corto_Filter_Abstract
         if (isset($_SESSION[$sessionKey]['collabPersonId'])) {
             $collabPersonId = $_SESSION[$sessionKey]['collabPersonId'];
         }
+        else if (isset($response['__']['collabPersonId'])) {
+            $collabPersonId = $response['__']['collabPersonId'];
+        }
         else if (isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0])) {
             $collabPersonId = $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0];
+        }
+        else if (isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'])) {
+            $collabPersonId = $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
         }
         else {
             $collabPersonId = null;
