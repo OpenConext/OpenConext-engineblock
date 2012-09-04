@@ -326,7 +326,7 @@ class EngineBlock_Corto_Module_Services extends Corto_Module_Services
             return false;
         }
 
-        if (!isset($entity['AssertionConsumerService'])) {
+        if (!isset($entity['AssertionConsumerServices'])) {
             return false;
         }
 

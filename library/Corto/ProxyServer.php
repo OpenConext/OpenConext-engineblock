@@ -215,9 +215,9 @@ class Corto_ProxyServer
         }
         return $default;
     }
-    
+
     public function selfUrl($entityid = null)
-    { 
+    {
         return  'http' . ($_SERVER['HTTPS'] ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $this->selfPath($entityid);
     }
 
@@ -229,7 +229,7 @@ class Corto_ProxyServer
 	public function selfDestination() {
 		return self::selfUrl() . $_SERVER['PATH_INFO'];
 	}
-	
+
     public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "")
     {
         $entityPart = $entityCode;
@@ -858,7 +858,7 @@ class Corto_ProxyServer
     public function redirect($location, $message)
     {
         $this->getSessionLog()->debug("Redirecting to $location");
-        
+
         if ($this->getConfig('debug', true)) {
             $output = $this->renderTemplate('redirect', array('location'=>$location, 'message' => $message));
             $this->sendOutput($output);
@@ -875,7 +875,7 @@ class Corto_ProxyServer
 
     public function sendOutput($rawOutput)
     {
-        return print $rawOutput; 
+        return print $rawOutput;
     }
 
     public function setCookie($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
