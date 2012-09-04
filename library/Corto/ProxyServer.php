@@ -675,7 +675,22 @@ class Corto_ProxyServer
             $acs['Binding']  = $request['_ProtocolBinding'];
         } else {
             $remoteEntity = $this->getRemoteEntity($request['saml:Issuer']['__v']);
-            $acs = $remoteEntity['AssertionConsumerService'];
+            $index = 0;
+            if (isset($request['_AssertionConsumerServiceIndex'])) {
+                $index = (int)$request['_AssertionConsumerServiceIndex'];
+                if (isset($remoteEntity['AssertionConsumerServices'][$index])) {
+                    return $remoteEntity['AssertionConsumerServices'][$index];
+                }
+                else {
+                    $index = 0;
+                    $this->_server->getSessionLog()->warn(
+                        "AssertionConsumerServiceIndex was mentioned in request, but we don't know any ACS by ".
+                            "index '$index'? Maybe the metadata was updated and we don't have that endpoint yet? " .
+                            "Trying the default endpoint.."
+                    );
+                }
+            }
+            $acs = $remoteEntity['AssertionConsumerServices'][$index];
         }
         return $acs;
     }

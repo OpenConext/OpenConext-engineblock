@@ -140,10 +140,16 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 $cortoEntity['VoContext'] = $serviceRegistryEntity['coin:implicit_vo_id'];
             }
 
-            $cortoEntity['AssertionConsumerService'] = array(
-                'Binding'  => $serviceRegistryEntity['AssertionConsumerService:0:Binding'],
-                'Location' => $serviceRegistryEntity['AssertionConsumerService:0:Location'],
-            );
+            $cortoEntity['AssertionConsumerServices'] = array();
+            for ($i = 0; $i < 10; $i++) {
+                if (isset($serviceRegistryEntity["AssertionConsumerService:$i:Binding"]) &&
+                    isset($serviceRegistryEntity["AssertionConsumerService:$i:Location"])) {
+                    $cortoEntity['AssertionConsumerServices'][$i] = array(
+                        'Binding'  => $serviceRegistryEntity["AssertionConsumerService:$i:Binding"],
+                        'Location' => $serviceRegistryEntity["AssertionConsumerService:$i:Location"]
+                    );
+                }
+            }
 
             // Only for SPs
             if (isset($serviceRegistryEntity['coin:alternate_private_key']) && $serviceRegistryEntity['coin:alternate_private_key']) {
