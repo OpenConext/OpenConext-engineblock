@@ -54,31 +54,38 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
 
     public function execute()
     {
-        $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
+        if (isset($this->_response['__']['CustomNameID'])) {
+            $nameId = $this->_response['__']['CustomNameID'];
+        }
+        else {
+            $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
 
-        if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_UNSPECIFIED) {
-            $nameId = $this->_response['__']['IntendedNameId'];
-        } else if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_TRANSIENT) {
-            $nameId = $this->_getTransientNameId(
-                $this->_spMetadata['EntityId'], $this->_idpMetadata['EntityId']
-            );
-        } else {
-            $nameId = $this->_getPersistentNameId(
-                $this->_collabPersonId,
-                $this->_spMetadata['EntityId']
+            if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_UNSPECIFIED) {
+                $nameIdValue = $this->_response['__']['IntendedNameId'];
+            } else if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_TRANSIENT) {
+                $nameIdValue = $this->_getTransientNameId(
+                    $this->_spMetadata['EntityId'], $this->_idpMetadata['EntityId']
+                );
+            } else {
+                $nameIdValue = $this->_getPersistentNameId(
+                    $this->_collabPersonId,
+                    $this->_spMetadata['EntityId']
+                );
+
+            }
+            $nameId = array(
+                '_Format' => $nameIdFormat,
+                '__v'     => $nameIdValue,
             );
         }
 
         // Adjust the NameID in the NEW response, set the collab:person uid
-        $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
-            '_Format' => $nameIdFormat,
-            '__v'     => $nameId,
-        );
+        $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = $nameId;
 
         // Add the eduPersonTargetedId
         $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
             array(
-                "saml:NameID" => $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'],
+                "saml:NameID" => $nameId,
             )
         );
     }

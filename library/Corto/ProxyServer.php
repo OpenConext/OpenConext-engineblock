@@ -490,6 +490,7 @@ class Corto_ProxyServer
     public function createEnhancedResponse($request, $sourceResponse)
     {
         $response = $this->_createBaseResponse($request);
+        $response['__']['OriginalResponse'] = $sourceResponse;
 
         $inTransparentMode = isset($request[Corto_XmlToArray::PRIVATE_PFX]['Transparent']) &&
                 $request[Corto_XmlToArray::PRIVATE_PFX]['Transparent'];
