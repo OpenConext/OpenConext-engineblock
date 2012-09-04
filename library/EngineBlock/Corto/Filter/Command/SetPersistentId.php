@@ -58,8 +58,11 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
 
         if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_UNSPECIFIED) {
             $nameId = $this->_response['__']['IntendedNameId'];
-        }
-        else {
+        } else if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_TRANSIENT) {
+            $nameId = $this->_getTransientNameId(
+                $this->_spMetadata['EntityId'], $this->_idpMetadata['EntityId']
+            );
+        } else {
             $nameId = $this->_getPersistentNameId(
                 $this->_collabPersonId,
                 $this->_spMetadata['EntityId']
@@ -78,6 +81,27 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
                 "saml:NameID" => $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'],
             )
         );
+    }
+
+    /**
+     * Load transient Name ID from session or generate a new one
+     *
+     * @param type $spId
+     * @param type $idpId
+     * @return type
+     */
+    protected function _getTransientNameId($spId, $idpId)
+    {
+        if (!empty($_SESSION[$spId][$idpId])) {
+            return $_SESSION[$spId][$idpId];
+        }
+
+        $nameId = sha1((string)mt_rand(0, mt_getrandmax()));
+
+        // store to session
+        $_SESSION[$spId][$idpId] = $nameId;
+
+        return $nameId;
     }
 
     protected function _getNameIdFormat($request, $spEntityMetadata)
