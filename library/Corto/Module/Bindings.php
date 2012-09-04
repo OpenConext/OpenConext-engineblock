@@ -256,7 +256,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
                 $this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned')
         );
         if ($wantRequestsSigned) {
-            $this->_verifySignature($request, self::KEY_REQUEST);
+            $this->_verifySignature($request, self::KEY_REQUEST, true);
             $request['__']['WasSigned'] = true;
         }
     }
@@ -426,7 +426,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         $this->_verifyTimings($response);
     }
 
-    protected function _verifySignature(array $message, $key)
+    protected function _verifySignature(array $message, $key, $requireMessageSigning = false)
     {
         if (isset($message['__']['Signature'])) { // We got a Signature in the URL (HTTP Redirect)
             return $this->_verifySignatureMessage($message, $key);
@@ -437,7 +437,7 @@ class Corto_Module_Bindings extends Corto_Module_Abstract
         $publicKey = $this->_getRemoteEntityPublicKey($messageIssuer);
         $publicKeyFallback = $this->_getRemoteEntityFallbackPublicKey($messageIssuer);
 
-        if (isset($message['ds:Signature'])) {
+        if ($requireMessageSigning || isset($message['ds:Signature'])) {
             $messageVerified = $this->_verifySignatureXMLElement(
                 $publicKey,
                 $message['__']['Raw'],
