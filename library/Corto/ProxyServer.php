@@ -490,7 +490,14 @@ class Corto_ProxyServer
     public function createEnhancedResponse($request, $sourceResponse)
     {
         $response = $this->_createBaseResponse($request);
-        $response['__']['OriginalResponse'] = $sourceResponse;
+
+        // Store the Origin response (from the IdP)
+        if (isset($sourceResponse['__']['OriginalResponse'])) {
+            $response['__']['OriginalResponse'] = $sourceResponse['__']['OriginalResponse'];
+        }
+        else {
+            $response['__']['OriginalResponse'] = $sourceResponse;
+        }
 
         $inTransparentMode = isset($request[Corto_XmlToArray::PRIVATE_PFX]['Transparent']) &&
                 $request[Corto_XmlToArray::PRIVATE_PFX]['Transparent'];

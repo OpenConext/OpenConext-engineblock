@@ -54,8 +54,8 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
 
     public function execute()
     {
-        if (isset($this->_response['__']['CustomNameID'])) {
-            $nameId = $this->_response['__']['CustomNameID'];
+        if (isset($this->_response['__']['CustomNameId'])) {
+            $nameId = $this->_response['__']['CustomNameId'];
         }
         else {
             $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
