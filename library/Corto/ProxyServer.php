@@ -536,7 +536,15 @@ class Corto_ProxyServer
         $response['saml:Assertion']['_IssueInstant'] = $this->timeStamp();
         $response['saml:Assertion']['saml:Conditions']['_NotBefore']    = $this->timeStamp();
         $response['saml:Assertion']['saml:Conditions']['_NotOnOrAfter'] = $this->timeStamp($this->getConfig('NotOnOrAfter', 300));
-        $response['saml:Assertion']['saml:Issuer'] = array('__v' => $response['saml:Issuer']['__v']);
+
+        $entity = $this->getRemoteEntity(
+            $request['saml:Issuer']['__v']
+        );
+
+        if (empty($entity['TransparantIssuer'])) {
+            $response['saml:Assertion']['saml:Issuer'] = array('__v' => $response['saml:Issuer']['__v']);
+        }
+
         $response['saml:Assertion']['saml:Conditions']['saml:AudienceRestriction']['saml:Audience']['__v'] = $request['saml:Issuer']['__v'];
 
         return $response;

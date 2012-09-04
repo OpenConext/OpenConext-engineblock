@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Corto_ServiceRegistry_Adapter 
+class EngineBlock_Corto_ServiceRegistry_Adapter
 {
     /**
      * @var Janus_Client
@@ -134,6 +134,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         // For SPs
         if (isset($serviceRegistryEntity['AssertionConsumerService:0:Location'])) {
             $cortoEntity['WantsAssertionsSigned'] = true;
+
+            // Transparant issuer
+            if (isset($serviceRegistryEntity['coin:transparant_issuer'])) {
+                $cortoEntity['TransparantIssuer'] = $serviceRegistryEntity['coin:transparant_issuer'];
+            }
 
             // implicit vo
             if (isset($serviceRegistryEntity['coin:implicit_vo_id'])) {
