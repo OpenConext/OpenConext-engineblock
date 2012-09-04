@@ -29,71 +29,86 @@ $layout = $this->layout();
 $layout->setLayout('1-column-blue-grey');
 
 // Set Layout properties
-$layout->title = $layout->title. ' - SAML2 proxy';
+$layout->title = $layout->title. ' - Metadata & Cerfiticates';
 $layout->header = $layout->title;
-$layout->subheader = 'SAML2 proxy';
+$layout->subheader = 'IdP Certificate and Metadata';
 $layout->footerText = $this->t('footer');
+$layout->getView()->inlineScript('script', <<<JS
+  $(function(){
+    // hack to remove i18n nav
+    $('ul.nav').remove();
+
+    // set absolute URLs of anchors as display text
+    $('dl.metadata-certificates-list a').each(function(){
+      $(this).text(
+        window.location.protocol + '//' + window.location.hostname + $(this).attr('href')
+      );
+    });
+  });
+JS
+);
 
 ?>
-<p>
-    <?php echo $this->t('authentication_urls'); ?>:
-    <ul>
-        <li>
-            <a href="/authentication/idp/certificate">
-                /authentication/idp/certificate
-            </a>
-            <br />
-            EngineBlock Public certificate.
-        </li>
-        <li>
-            <a href="/authentication/idp/metadata">
-                /authentication/idp/metadata
-            </a>
-            <br />
-            Metadata for Service Providers, to configure EngineBlock as your Identity Provider.
-        </li>
-        <li>
-            <a href="/authentication/idp/metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume">
-                /authentication/idp/metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume
-            </a>
-            <br />
-            Metadata for Shibboleth Service Providers, to configure EngineBlock as your Identity Provider. If an
-            alternative Engineblock signing certificate is configured for a certain SP it will be shown in the metadata.
-            <strong>NB. This is only important for SP's that rely on the Engineblock metadata URL for refreshing metadata. For SP's
-            that configure metadata oob this is not relevant.</strong>
-        </li>
-        <li>
-            <a href="/authentication/sp/certificate">
-                /authentication/sp/certificate
-            </a>
-            <br />
-            EngineBlock Public certificate.
-        </li>
-        <li>
-            <a href="/authentication/sp/metadata">
-                /authentication/sp/metadata
-            </a>
-            <br />
-            Metadata for Identity Providers, to add EngineBlock as registered Service Provider.
-        </li>
-        <li>
-            <a href="/authentication/proxy/idps-metadata">
-                /authentication/proxy/idps-metadata
-            </a>
-            <br />
-            Metadata with ALL known EngineBlock providers.
-        </li>
-        <li>
-            <a href="/authentication/proxy/idps-metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume">
-                /authentication/proxy/idps-metadata?sp-entity-id=https%3A%2F%2Fmysp.com%2FassertionConsume
-            </a>
-            <br />
-            For Shibboleth Service Providers, get ALL known EngineBlock providers AND (if known)
-            give the metadata for Service Provider with the endpoint:
-            'https://mysp.com/assertionConsume'
-            (Shibboleth expects to see it's self in the metadata document).
-            Also if an alternative signing certificate is configured in Engineblock the new public key will be shown
-            in the metadata.
-        </li>
-    </ul>
-</p>
+    <dl class="metadata-certificates-list">
+        <dt>
+            The Public SAML Signing certificate of the SURFconext IdP
+        </dt>
+        <dd>
+            <a href="/authentication/idp/certificate">&raquo; open link</a>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy
+        </dt>
+        <dd>
+            <a href="/authentication/idp/metadata">&raquo; open link</a>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entities descriptor) for all the SURFconext IdPs
+        </dt>
+        <dd>
+            <a href="/authentication/idps-metadata">&raquo; open link</a>
+        </dd>
+        <dt>
+            <strong>Metadata below is only relevant for Shibboleth SPs or in
+                case you want a custom WAYF for your SP</strong>
+        </dt>
+        <dt>
+            The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy for SP
+            with entityID "urn:example.org". Please replace "urn:example.org" with the entityID
+            of your own SP before testing this metadata request. The resulting metadata will
+            include the SURFconext IdP proxy metadata as well as the SP metadata, if configured
+            for SURFconext.
+        </dt>
+        <dd>
+            <a href="/authentication/idp/metadata?sp-entity-id=urn:example.org">&raquo; open link</a>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entities descriptor) of the SURFconext IdPs which allow
+            access to SP with entityID "urn:example.org". Please replace "urn:example.org" with
+            the entityID of your own SP before testing. The resulting metadata will include all
+            SURFconext IdPs that allow access to the service, as well as the SP metadata, if
+            configured for SURFconext. Please note this information is generated dynamically, so
+            the number of available IdPs may change over time.
+        </dt>
+        <dd>
+            <a href="/authentication/idps-metadata?sp-entity-id=urn:example.org">&raquo; open link</a>
+        </dt>
+    </dl>
+    <div class="bottom"></div>
+</div>
+<div class="main">
+    <h1>SP Certificate and Metadata</h1>
+    <dl class="metadata-certificates-list">
+        <dt>
+            The Public SAML Signing certificate of the SURFconext SP
+        </dt>
+        <dd>
+            <a href="/authentication/sp/certificate">&raquo; open link</a>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entity descriuptor) of the SURFconext SP Proxy
+        </dt>
+        <dd>
+            <a href="/authentication/sp/metadata">&raquo; open link</a>
+        </dd>
+    </dl>
