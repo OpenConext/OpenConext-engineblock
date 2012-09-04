@@ -676,6 +676,7 @@ class Corto_ProxyServer
     {
         $acs = array();
         if (isset($request['_AssertionConsumerServiceURL']) &&
+            isset($request['_ProtocolBinding']) &&
             isset($request['__']['WasSigned']) &&
             $request['__']['WasSigned']===true) {
 
