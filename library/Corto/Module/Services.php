@@ -404,13 +404,7 @@ class Corto_Module_Services extends Corto_Module_Abstract
         unset($attributes['ServiceProvider']);
 
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
-            // No consent given
-            print $this->_server->renderTemplate(
-                'noconsent',
-                array(
-                    'attributes' => $attributes,
-                )
-            );
+            $this->_server->redirect('/authentication/feedback/no-consent', 'No consent given...');
             return;
         }
 

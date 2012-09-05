@@ -49,4 +49,6 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
     public function missingRequiredFieldsAction() {
         header('HTTP/1.1 400 Bad Request');
     }
+    public function noConsentAction() {
+    }
 }

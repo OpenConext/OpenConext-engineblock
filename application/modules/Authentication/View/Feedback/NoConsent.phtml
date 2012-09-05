@@ -31,13 +31,12 @@ $layout->setLayout('1-column-blue-grey-narrow');
 
 // Set Layout properties
 $layout->title = $layout->title. ' - ' .$this->t('error_no_consent');
-$layout->header = $layout->title;   
+$layout->header = $layout->title;
 $layout->subheader = $this->t('error_no_consent');
 $layout->footerText = $this->t('footer');
 
 ?>
 <div class="error-wrapper">
-    <div class="stop-icon"></div>
     <div class="stop-text">
         <?php echo $this->t('error_no_consent_desc'); ?>
         <br /><br />
