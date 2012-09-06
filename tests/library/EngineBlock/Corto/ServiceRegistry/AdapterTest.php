@@ -88,9 +88,11 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
 
         $expectedResult = array(
             "https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp"=> array(
-                "AssertionConsumerService"=> array(
-                    'Binding'  => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
-                    'Location' => "https://sp.testing.dev.coin.surf.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp"
+                "AssertionConsumerServices"=> array(
+                    0 => array(
+                        'Binding'  => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
+                        'Location' => "https://sp.testing.dev.coin.surf.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp"
+                    ),
                 ),
                 'WantsAssertionsSigned' => true,
                 'MustProvisionExternally' => false,
