@@ -30,6 +30,15 @@ abstract class EngineBlock_Router_Abstract implements EngineBlock_Router_Interfa
     protected $_actionName;
     protected $_actionArguments = array();
 
+    /**
+     * @static
+     * @return EngineBlock_Router_Abstract
+     */
+    public static function create()
+    {
+        return new static();
+    }
+
     public function getControllerName()
     {
         return $this->_controllerName;

@@ -29,12 +29,8 @@ $application = EngineBlock_ApplicationSingleton::getInstance();
 $application->bootstrap();
 
 $dispatcher = new EngineBlock_Dispatcher();
-
-$profileRouter = new EngineBlock_Router_Default();
-$profileRouter->requireModule('VoManage');
 $dispatcher->setRouters(array(
-    $profileRouter,
-    new EngineBlock_Router_CatchAll('VoManage', 'Index', 'Index'),
+    EngineBlock_Router_Default::create()->setDefaultModuleName('VoManage')->requireModule('VoManage'),
 ));
 $dispatcher->dispatch();
 

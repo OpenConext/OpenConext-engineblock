@@ -32,7 +32,7 @@ $dispatcher->setRouters(array(
     new EngineBlock_Router_OpenSocial(),
     new EngineBlock_Router_Service(),
     new EngineBlock_Router_Cron(),
-    new EngineBlock_Router_CatchAll('Default', 'Index', 'Internal'),
+    EngineBlock_Router_Default::create()->setDefaultModuleName('Social')->requireModule('Social'),
 ));
 $dispatcher->setUseErrorHandling(false);
 $dispatcher->dispatch();

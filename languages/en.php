@@ -178,6 +178,8 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_notice'                    => 'This message only appears when you log in at a new service or when the information, passed to the service, is changed.',
 
     //Error screens
+    'error_404'                         => '404 Page not found',
+    'error_404_desc'                    => 'This page has not been found.',
     'error_help_desc'               => '<p>
         If this does not solve your problem, please visit
         <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>

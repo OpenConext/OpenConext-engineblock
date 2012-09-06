@@ -41,6 +41,6 @@ class EngineBlock_Router_Cron extends EngineBlock_Router_Default
 
         parent::route($uri);
 
-        return ($this->_moduleName === self::DEFAULT_MODULE_NAME);
+        return ($this->_moduleName === $this->_defaultModuleName);
     }
 }

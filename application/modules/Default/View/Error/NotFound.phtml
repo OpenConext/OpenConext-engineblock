@@ -23,29 +23,29 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class Default_Controller_Error extends EngineBlock_Controller_Abstract
-{
-    public function displayAction($exception)
-    {
-        header('HTTP/1.1 500 Internal Server Error', true, 500);
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        if ($application->getConfigurationValue('debug', false)) {
-            $this->exception = $exception;
-        }
-    }
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey-narrow');
 
-    public function notFoundAction()
-    {
-        header("HTTP/1.0 404 Not Found", true, 404);
-    }
+// Set Layout properties
+$layout->title = $layout->title. ' - ' .$this->t('error_404');
+$layout->header = $layout->title;
+$layout->subheader = $this->t('error_404');
+$layout->footerText = $this->t('footer');
 
-    public function testExceptionAction()
-    {
-        throw new Exception('Test exception');
-    }
-
-    public function testErrorAction()
-    {
-        $var();
-    }
-}
+?>
+<div class="error-wrapper">
+    <div class="error-icon"></div>
+    <div class="error-text">
+        <?php echo $this->t('error_404_desc'); ?>
+        <br /><br />
+        <div class="button-row">
+            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
+                <?php echo $this->t('go_back'); ?>
+                <span class="btn-wrap-right">&nbsp;</span>
+            </a>
+        </div>
+    </div>
+</div>

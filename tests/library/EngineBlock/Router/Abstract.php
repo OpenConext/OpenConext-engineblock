@@ -43,17 +43,18 @@ abstract class Test_EngineBlock_Router_Abstract extends PHPUnit_Framework_TestCa
      */
     protected function _testRoute($routerClass, $uri, $routable=true, $module = null, $controller = null, $action = null, $arguments = array())
     {
+        /** @var $router EngineBlock_Router_Default */
+        $router = new $routerClass();
         if (is_null($module)) {
-            $module     = $routerClass::DEFAULT_MODULE_NAME;
+            $module     = $router->getDefaultModuleName();
         }
         if (is_null($controller)) {
-            $controller = $routerClass::DEFAULT_CONTROLLER_NAME;
+            $controller = $router->getDefaultControllerName();
         }
         if (is_null($action)) {
-            $action     = $routerClass::DEFAULT_ACTION_NAME;
+            $action     = $router->getDefaultActionName();
         }
 
-        $router = new $routerClass();
         if ($routable) {
             $this->assertTrue($router->route($uri), "$routerClass router should be able to route '$uri'");
         }

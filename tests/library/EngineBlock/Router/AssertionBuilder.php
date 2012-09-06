@@ -135,14 +135,15 @@ class Test_EngineBlock_Router_AssertionBuilder
     public function test()
     {
         $routerClass = $this->_routerClass;
+        $routerInstance = new $routerClass();
         if (!isset($this->_expectModule)) {
-            $this->_expectModule    = $routerClass::DEFAULT_MODULE_NAME;
+            $this->_expectModule    = $routerInstance->getDefaultModuleName();
         }
         if (!isset($this->_expectController)) {
-            $this->_expectController = $routerClass::DEFAULT_CONTROLLER_NAME;
+            $this->_expectController = $routerInstance->getDefaultControllerName();
         }
         if (!isset($this->_expectAction)) {
-            $this->_expectAction    = $routerClass::DEFAULT_ACTION_NAME;
+            $this->_expectAction    = $routerInstance->getDefaultActionName();
         }
 
         $postfix = "";

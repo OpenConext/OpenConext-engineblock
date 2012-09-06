@@ -26,11 +26,13 @@
 /**
  * Route all /social/ URLs to the Social module with the Rest controller
  */
-class EngineBlock_Router_OpenSocial extends EngineBlock_Router_Abstract
+class EngineBlock_Router_OpenSocial extends EngineBlock_Router_Default
 {
-    const DEFAULT_MODULE_NAME     = "Social";
-    const DEFAULT_CONTROLLER_NAME = "Rest";
-    const DEFAULT_ACTION_NAME     = "Index";
+    public function __construct()
+    {
+        $this->_defaultModuleName = "Social";
+        $this->_defaultControllerName = "Rest";
+    }
 
     public function route($uri)
     {

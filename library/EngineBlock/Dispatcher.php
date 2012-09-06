@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Dispatcher 
+class EngineBlock_Dispatcher
 {
     protected $_routers = array();
     protected $_useErrorHandling = true;
@@ -58,8 +58,15 @@ class EngineBlock_Dispatcher
     public function dispatch($uri = "")
     {
         try {
-            $this->_dispatch($uri);
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            if (!$uri) {
+                $uri = $application->getHttpRequest()->getUri();
+            }
 
+            if (!$this->_dispatch($uri)) {
+                EngineBlock_ApplicationSingleton::getLog()->warn("[404]Unroutable URI: '$uri'");
+                $this->_getControllerInstance('default', 'error')->handleAction('notFound');
+            }
         } catch(Exception $e) {
             $this->_handleDispatchException($e);
         }
@@ -67,11 +74,6 @@ class EngineBlock_Dispatcher
 
     protected function _dispatch($uri)
     {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        if (!$uri) {
-            $uri = $application->getHttpRequest()->getUri();
-        }
-
         $router = $this->_getFirstRoutableRouterFor($uri);
 
         $module             = $router->getModuleName();
@@ -81,11 +83,12 @@ class EngineBlock_Dispatcher
 
         $controllerInstance = $this->_getControllerInstance($module, $controllerName);
 
-        if (!$controllerInstance->hasAction($action)) {
-            throw new EngineBlock_Exception("Unable to load action '$action' for uri '$uri'");
+        if (!$controllerInstance || !$controllerInstance->hasAction($action)) {
+            return false;
         }
 
         $controllerInstance->handleAction($action, $attributeArguments);
+        return true;
     }
 
     protected function _handleDispatchException(Exception $e)
@@ -108,17 +111,25 @@ class EngineBlock_Dispatcher
         }
     }
 
+    /**
+     * @param $module
+     * @param $controllerName
+     * @return EngineBlock_Controller_Abstract|bool
+     * @throws EngineBlock_Exception
+     */
     protected function _getControllerInstance($module, $controllerName)
     {
         $className = $this->_getControllerClassName($module, $controllerName);
         if (!class_exists($className)) {
-            throw new EngineBlock_Exception("Unable to load controller '$className'");
+            return false;
         }
 
         $controllerInstance = new $className($module, $controllerName);
 
         if (!($controllerInstance instanceof EngineBlock_Controller_Abstract)) {
-            throw new EngineBlock_Exception("Controller $className is not an EngineBlock controller (does not extend EngineBlock_Controller_Abstract)!");
+            throw new EngineBlock_Exception(
+                "Controller $className is not an EngineBlock controller (does not extend EngineBlock_Controller_Abstract)!"
+            );
         }
 
         return $controllerInstance;

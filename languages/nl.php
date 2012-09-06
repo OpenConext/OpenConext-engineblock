@@ -179,6 +179,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_notice'                    => 'Deze melding verschijnt alleen als u voor de eerste keer inlogt op een nieuwe dienst of als de gegevens, die worden doorgegeven, wijzigen.',
 
     //Error screens
+    'error_404'                         => '404 Pagina niet gevonden',
+    'error_404_desc'                    => 'De pagina is niet gevonden.',
     'error_help_desc'                   => '<p>
         Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de support pagina</a> als dit uw probleem niet oplost.
         Op deze pagina vindt u meer informatie over de mogelijke oorzaken en hoe u contact kan opnemen met het support team.

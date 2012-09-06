@@ -28,9 +28,9 @@
  */
 class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
 {
-    const DEFAULT_MODULE_NAME     = "Default";
-    const DEFAULT_CONTROLLER_NAME = "Index";
-    const DEFAULT_ACTION_NAME     = "Index";
+    protected $_defaultModuleName     = "Default";
+    protected $_defaultControllerName = "Index";
+    protected $_defaultActionName     = "Index";
     
     protected $_requiredModule;
     protected $_requiredController;
@@ -47,26 +47,10 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
         $urlParts = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
         $urlPartsCount = count($urlParts);
 
-        if (!isset($this->_requiredModule)) {
-            $module     = static::DEFAULT_MODULE_NAME;
-        }
-        else {
-            $module = null;
-        }
+        $module     = $this->_defaultModuleName;
+        $controller = $this->_defaultControllerName;
+        $action     = $this->_defaultActionName;
 
-        if (!isset($this->_requiredController)) {
-            $controller = static::DEFAULT_CONTROLLER_NAME;
-        }
-        else {
-            $controller = null;
-        }
-
-        if (!isset($this->_requiredAction)) {
-            $action     = static::DEFAULT_ACTION_NAME;
-        }
-        else {
-            $action = null;
-        }
         $arguments  = array();
 
         // Note how we actually use the fall-through
@@ -139,5 +123,47 @@ class EngineBlock_Router_Default extends EngineBlock_Router_Abstract
     {
         $this->_requiredAction = $actionName;
         return $this;
+    }
+
+    /**
+     * @static
+     * @return EngineBlock_Router_Default
+     */
+    public static function create()
+    {
+        return new static();
+    }
+
+    public function setDefaultActionName($defaultActionName)
+    {
+        $this->_defaultActionName = $defaultActionName;
+        return $this;
+    }
+
+    public function setDefaultControllerName($defaultControllerName)
+    {
+        $this->_defaultControllerName = $defaultControllerName;
+        return $this;
+    }
+
+    public function setDefaultModuleName($defaultModuleName)
+    {
+        $this->_defaultModuleName = $defaultModuleName;
+        return $this;
+    }
+
+    public function getDefaultActionName()
+    {
+        return $this->_defaultActionName;
+    }
+
+    public function getDefaultControllerName()
+    {
+        return $this->_defaultControllerName;
+    }
+
+    public function getDefaultModuleName()
+    {
+        return $this->_defaultModuleName;
     }
 }

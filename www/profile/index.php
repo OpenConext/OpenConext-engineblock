@@ -30,11 +30,8 @@ $application->bootstrap();
 
 $dispatcher = new EngineBlock_Dispatcher();
 
-$profileRouter = new EngineBlock_Router_Default();
-$profileRouter->requireModule('Profile');
 $dispatcher->setRouters(array(
-    $profileRouter,
-    new EngineBlock_Router_CatchAll('Profile', 'Index', 'Index'),
+    EngineBlock_Router_Default::create()->setDefaultModuleName('Profile')->requireModule('Profile'),
 ));
 $dispatcher->dispatch();
 
