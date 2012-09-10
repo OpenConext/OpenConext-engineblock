@@ -1213,7 +1213,77 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         return sha1($hashBase);
     }
 
+    /**
+     * Edugain metadata service
+     */
+    public function edugainMetadataService()
+    {
+        $metadataParams = $this->_getEntitiesMetadataParams();
+        $entitiesDescriptor = $metadataParams['entities_descriptor'];
+
+        foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
+            if (empty($entity['PublishInEdugain'])) continue;
+
+            $entityDescriptor = $this->_getEntitiesMetadataRemoteEntityDescriptor(
+                $entityId, $entity, $metadataParams['sp_entity']
+            );
+
+            if (isset($entity['AssertionConsumerServices'])) { // SP
+                $entityDescriptorKey = 'md:SPSSODescriptor';
+            } else if (isset($entity['SingleSignOnService'])) { // IDP
+                $entityDescriptorKey = 'md:IDPSSODescriptor';
+            } else {
+                // can not determine type (IDP or SP)
+                continue;
+            }
+
+            $entitiesDescriptor['md:EntityDescriptor'][] = array(
+                '_validUntil' => $this->_server->timeStamp(
+                    $this->_server->getCurrentEntitySetting('edugainMetadataValidUntilSeconds', 86400)
+                ),
+                '_entityID' => $entityId,
+                $entityDescriptorKey => $entityDescriptor,
+            );
+        }
+
+        $this->_signAndSendEntitiesMetadata($metadataParams['sp_entity'], $entitiesDescriptor);
+    }
+
+    /**
+     * IDP metadata service
+     */
     public function idPsMetadataService()
+    {
+        $metadataParams = $this->_getEntitiesMetadataParams();
+        $entitiesDescriptor = $metadataParams['entities_descriptor'];
+
+        foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
+            if (!isset($entity['SingleSignOnService'])) continue;
+
+            $entityDescriptor = $this->_getEntitiesMetadataRemoteEntityDescriptor(
+                $entityId, $entity, $metadataParams['sp_entity']
+            );
+
+            $entitiesDescriptor['md:EntityDescriptor'][] = array(
+                '_validUntil' => $this->_server->timeStamp(
+                    $this->_server->getCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400)
+                ),
+                '_entityID' => $entityId,
+                'md:IDPSSODescriptor' => $entityDescriptor,
+            );
+        }
+
+        $this->_signAndSendEntitiesMetadata($metadataParams['sp_entity'], $entitiesDescriptor);
+    }
+
+    /**
+     * Get base entities descriptor and optional SP entity for
+     * edugain and idps metadata service
+     *
+     * @return array keys sp_entity and entities_descriptor
+     * @throws Exception
+     */
+    protected function _getEntitiesMetadataParams()
     {
         $entitiesDescriptor = array(
             EngineBlock_Corto_XmlToArray::TAG_NAME_PFX => 'md:EntitiesDescriptor',
@@ -1235,164 +1305,193 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
             }
         }
 
-        foreach ($this->_server->getRemoteEntities() as $entityID => $entity) {
-            if (!isset($entity['SingleSignOnService'])) continue;
+        return array(
+            'sp_entity' => $spEntity,
+            'entities_descriptor' => $entitiesDescriptor
+        );
+    }
 
-            $entityDescriptor = array(
-                '_validUntil' => $this->_server->timeStamp(
-                    $this->_server->getCurrentEntitySetting('idpMetadataValidUntilSeconds', 86400)),
-                '_entityID' => $entityID,
-                'md:IDPSSODescriptor' => array(
-                    '_protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
-                ));
+    /**
+     *
+     * @param string $entityId
+     * @param array $entity
+     * @param array $spEntity
+     * @return array the entity descriptor
+     */
+    protected function _getEntitiesMetadataRemoteEntityDescriptor($entityId, $entity, $spEntity)
+    {
+        $descriptor = array();
+        $descriptor['_protocolSupportEnumeration'] = "urn:oasis:names:tc:SAML:2.0:protocol";
 
-            if (isset($entity['DisplayName'])) {
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
-                }
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
-                }
-                foreach ($entity['DisplayName'] as $lang => $name) {
-                    if (trim($name)==='') {
-                        continue;
-                    }
-                    if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'])) {
-                        $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'] = array();
-                    }
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'][] = array(
-                        '_xml:lang' => $lang,
-                        '__v' => $name,
-                    );
-                }
+        if (isset($entity['DisplayName'])) {
+            if (!isset($descriptor['md:Extensions'])) {
+                $descriptor['md:Extensions'] = array();
             }
-
-            if (isset($entity['Description'])) {
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
-                }
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
-                }
-                foreach ($entity['Description'] as $lang => $name) {
-                    if (trim($name)==='') {
-                        continue;
-                    }
-                    if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'])) {
-                        $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'] = array();
-                    }
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'][] = array(
-                        '_xml:lang' => $lang,
-                        '__v' => $name,
-                    );
-                }
+            if (!isset($descriptor['md:Extensions']['mdui:UIInfo'])) {
+                $descriptor['md:Extensions']['mdui:UIInfo'] = array(0=>array());
             }
-
-            $hasLogoHeight = (isset($entity['Logo']['Height']) && $entity['Logo']['Height']);
-            $hasLogoWidth  = (isset($entity['Logo']['Width'])  && $entity['Logo']['Width']);
-            if (isset($entity['Logo']) && $hasLogoHeight && $hasLogoWidth) {
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
+            foreach ($entity['DisplayName'] as $lang => $name) {
+                if (trim($name)==='') {
+                    continue;
                 }
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+                if (!isset($descriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'])) {
+                    $descriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'] = array();
                 }
-                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0]['mdui:Logo'] = array(
-                    array(
-                        '_height' => $entity['Logo']['Height'],
-                        '_width'  => $entity['Logo']['Width'],
-                        '__v'     => $entity['Logo']['URL'],
-                    ),
+                $descriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:DisplayName'][] = array(
+                    '_xml:lang' => $lang,
+                    '__v' => $name,
                 );
             }
-
-            if (isset($entity['GeoLocation']) && !empty($entity['GeoLocation'])) {
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
-                }
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DiscoHints'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DiscoHints'] = array(0=>array());
-                }
-                $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:DiscoHints'][0]['mdui:GeolocationHint'] = array(
-                    array(
-                        '__v' => $entity['GeoLocation'],
-                    ),
-                );
-            }
-
-            if (isset($entity['Keywords'])) {
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions'] = array();
-                }
-                if (!isset($entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'])) {
-                    $entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'] = array(0=>array());
-                }
-                $uiInfo = &$entityDescriptor['md:IDPSSODescriptor']['md:Extensions']['mdui:UIInfo'][0];
-                foreach ($entity['Keywords'] as $lang => $name) {
-                    if (trim($name)==='') {
-                        continue;
-                    }
-                    if (!isset($uiInfo['mdui:Keywords'])) {
-                        $uiInfo['mdui:Keywords'] = array();
-                    }
-                    $uiInfo['mdui:Keywords'][] = array(
-                        array(
-                            '_xml:lang' => $lang,
-                            '__v' => $name,
-                        ),
-                    );
-                }
-            }
-
-            // Check if an alternative Public & Private key have been set for a SP
-            // If yes, use these in the metadata of Engineblock
-            if (isset($spEntity)
-                && $spEntity['AlternatePrivateKey']
-                && $spEntity['AlternatePublicKey']
-            ) {
-                $publicCertificate = $spEntity['AlternatePublicKey'];
-            } else {
-                $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
-                $publicCertificate = $certificates['public'];
-            }
-
-            if (isset($publicCertificate)) {
-                $entityDescriptor['md:IDPSSODescriptor']['md:KeyDescriptor'] = array(
-                    array(
-                        '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                        '_use' => 'signing',
-                        'ds:KeyInfo' => array(
-                            'ds:X509Data' => array(
-                                'ds:X509Certificate' => array(
-                                    '__v' => $this->_server->getCertDataFromPem($publicCertificate),
-                                ),
-                            ),
-                        ),
-                    ),
-                    array(
-                        '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
-                        '_use' => 'encryption',
-                        'ds:KeyInfo' => array(
-                            'ds:X509Data' => array(
-                                'ds:X509Certificate' => array(
-                                    '__v' => $this->_server->getCertDataFromPem($publicCertificate),
-                                ),
-                            ),
-                        ),
-                    ),
-                );
-            }
-
-            $entityDescriptor['md:IDPSSODescriptor']['md:NameIDFormat'] = array(
-                '__v' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
-            );
-            $entityDescriptor['md:IDPSSODescriptor']['md:SingleSignOnService'] = array(
-                '_Binding' => self::DEFAULT_REQUEST_BINDING,
-                '_Location' => $this->_server->getCurrentEntityUrl('singleSignOnService', $entityID),
-            );
-
-            $entitiesDescriptor['md:EntityDescriptor'][] = $entityDescriptor;
         }
+
+        if (isset($entity['Description'])) {
+            if (!isset($descriptor['md:Extensions'])) {
+                $descriptor['md:Extensions'] = array();
+            }
+            if (!isset($descriptor['md:Extensions']['mdui:UIInfo'])) {
+                $descriptor['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+            }
+            foreach ($entity['Description'] as $lang => $name) {
+                if (trim($name)==='') {
+                    continue;
+                }
+                if (!isset($descriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'])) {
+                    $descriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'] = array();
+                }
+                $descriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:Description'][] = array(
+                    '_xml:lang' => $lang,
+                    '__v' => $name,
+                );
+            }
+        }
+
+        $hasLogoHeight = (isset($entity['Logo']['Height']) && $entity['Logo']['Height']);
+        $hasLogoWidth  = (isset($entity['Logo']['Width'])  && $entity['Logo']['Width']);
+        if (isset($entity['Logo']) && $hasLogoHeight && $hasLogoWidth) {
+            if (!isset($descriptor['md:Extensions'])) {
+                $descriptor['md:Extensions'] = array();
+            }
+            if (!isset($descriptor['md:Extensions']['mdui:UIInfo'])) {
+                $descriptor['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+            }
+            $descriptor['md:Extensions']['mdui:UIInfo'][0]['mdui:Logo'] = array(
+                array(
+                    '_height' => $entity['Logo']['Height'],
+                    '_width'  => $entity['Logo']['Width'],
+                    '__v'     => $entity['Logo']['URL'],
+                ),
+            );
+        }
+
+        if (isset($entity['GeoLocation']) && !empty($entity['GeoLocation'])) {
+            if (!isset($descriptor['md:Extensions'])) {
+                $descriptor['md:Extensions'] = array();
+            }
+            if (!isset($descriptor['md:Extensions']['mdui:DiscoHints'])) {
+                $descriptor['md:Extensions']['mdui:DiscoHints'] = array(0=>array());
+            }
+            $descriptor['md:Extensions']['mdui:DiscoHints'][0]['mdui:GeolocationHint'] = array(
+                array(
+                    '__v' => $entity['GeoLocation'],
+                ),
+            );
+        }
+
+        if (isset($entity['Keywords'])) {
+            if (!isset($descriptor['md:Extensions'])) {
+                $descriptor['md:Extensions'] = array();
+            }
+            if (!isset($descriptor['md:Extensions']['mdui:UIInfo'])) {
+                $descriptor['md:Extensions']['mdui:UIInfo'] = array(0=>array());
+            }
+            $uiInfo = &$descriptor['md:Extensions']['mdui:UIInfo'][0];
+            foreach ($entity['Keywords'] as $lang => $name) {
+                if (trim($name)==='') {
+                    continue;
+                }
+                if (!isset($uiInfo['mdui:Keywords'])) {
+                    $uiInfo['mdui:Keywords'] = array();
+                }
+                $uiInfo['mdui:Keywords'][] = array(
+                    array(
+                        '_xml:lang' => $lang,
+                        '__v' => $name,
+                    ),
+                );
+            }
+        }
+
+        // Check if an alternative Public & Private key have been set for a SP
+        // If yes, use these in the metadata of Engineblock
+        if (isset($spEntity)
+            && $spEntity['AlternatePrivateKey']
+            && $spEntity['AlternatePublicKey']
+        ) {
+            $publicCertificate = $spEntity['AlternatePublicKey'];
+        } else {
+            $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
+            $publicCertificate = $certificates['public'];
+        }
+
+        if (isset($publicCertificate)) {
+            $descriptor['md:KeyDescriptor'] = array(
+                array(
+                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    '_use' => 'signing',
+                    'ds:KeyInfo' => array(
+                        'ds:X509Data' => array(
+                            'ds:X509Certificate' => array(
+                                '__v' => $this->_server->getCertDataFromPem($publicCertificate),
+                            ),
+                        ),
+                    ),
+                ),
+                array(
+                    '_xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
+                    '_use' => 'encryption',
+                    'ds:KeyInfo' => array(
+                        'ds:X509Data' => array(
+                            'ds:X509Certificate' => array(
+                                '__v' => $this->_server->getCertDataFromPem($publicCertificate),
+                            ),
+                        ),
+                    ),
+                ),
+            );
+        }
+
+        $descriptor['md:NameIDFormat'] = array(
+            '__v' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'
+        );
+
+        // Set SSO on IDP
+        if (isset($entity['SingleSignOnService'])) {
+            $descriptor['md:SingleSignOnService'] = array(
+                '_Binding' => self::DEFAULT_REQUEST_BINDING,
+                '_Location' => $this->_server->getCurrentEntityUrl('singleSignOnService', $entityId),
+            );
+        }
+
+        // Set consumer service on SP
+        if (isset($entity['AssertionConsumerServices'])) {
+            $descriptor['md:AssertionConsumerService'] = array(
+                '_Binding'  => self::DEFAULT_RESPONSE_BINDING,
+                '_Location' => $this->_server->getCurrentEntityUrl('assertionConsumerService', $entityId),
+                '_index' => '1',
+            );
+        }
+
+        return $descriptor;
+    }
+
+    /**
+     *
+     * @param array $spEntity
+     * @param array $entitiesDescriptor
+     * @throws Exception
+     */
+    protected function _signAndSendEntitiesMetadata($spEntity, $entitiesDescriptor)
+    {
         $alternatePublicKey  = isset($spEntity['AlternatePublicKey']) ? $spEntity['AlternatePublicKey'] : null;
         $alternatePrivateKey = isset($spEntity['AlternatePublicKey']) ? $spEntity['AlternatePublicKey'] : null;
         $entitiesDescriptor = $this->_server->sign($entitiesDescriptor, $alternatePublicKey, $alternatePrivateKey);
@@ -1400,7 +1499,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         $xml = EngineBlock_Corto_XmlToArray::array2xml($entitiesDescriptor);
 
         $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-metadata-2.0.xsd';
-        if ($this->_server->getConfig('debug', false) && ini_get('allow_url_fopen') && file_exists($schemaUrl)) {
+        if ($this->_server->getConfig('debug', false) && ini_get('allow_url_fopen')) {
             $dom = new DOMDocument();
             $dom->loadXML($xml);
             if (!$dom->schemaValidate($schemaUrl)) {

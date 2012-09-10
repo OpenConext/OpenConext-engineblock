@@ -131,6 +131,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
     {
         $cortoEntity = array();
 
+        // Publish in edugain
+        if (isset($serviceRegistryEntity['coin:publish_in_edugain'])) {
+            $cortoEntity['PublishInEdugain'] = $serviceRegistryEntity['coin:publish_in_edugain'];
+        }
+        
         // For SPs
         if (isset($serviceRegistryEntity['AssertionConsumerService:0:Location'])) {
             $cortoEntity['WantsAssertionsSigned'] = true;
