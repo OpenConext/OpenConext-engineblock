@@ -46,27 +46,27 @@
   </tr>
   <tr>
     <th>Userid</th>
-    <td><?php echo isset($this->userId) ? $this->userId : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->userId) ? htmlentities($this->userId) : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>IDP</th>
-    <td><?php echo isset($this->idp) ? $this->idp : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->idp) ? htmlentities($this->idp) : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>SP</th>
-    <td><?php echo isset($this->sp) ? $this->sp : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->sp) ? htmlentities($this->sp) : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>Message</th>
-    <td><?php echo isset($this->message) ? $this->message : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->message) ? htmlentities($this->message) : "UNKNOWN"; ?></td>
   </tr>
   <tr>
     <th>Location</th>
-    <td><?php echo $_SERVER['SCRIPT_FILENAME']; ?></td>
+    <td><?php echo isset($this->file) ? htmlentities($this->file) : htmlentities($_SERVER['SCRIPT_FILENAME']); ?></td>
   </tr>
   <tr>
     <th>Details</th>
-    <td><?php echo isset($this->details) ? $this->details : "UNKNOWN"; ?></td>
+    <td><?php echo isset($this->details) ? htmlentities($this->details) : "UNKNOWN"; ?></td>
   </tr>
   </tbody>
 </body>
