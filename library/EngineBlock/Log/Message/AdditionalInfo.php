@@ -81,10 +81,10 @@ class EngineBlock_Log_Message_AdditionalInfo
     public function toArray()
     {
         $array = array();
-        $array['userId'] = $this->_userId;
-        $array['idp'] = $this->_idp;
-        $array['sp'] = $this->_sp;
-        $array['details'] = $this->_details;
+        $array['userId']    = $this->_userId;
+        $array['idp']       = $this->_idp;
+        $array['sp']        = $this->_sp;
+        $array['details']   = $this->_details;
         return $array;
     }
 }

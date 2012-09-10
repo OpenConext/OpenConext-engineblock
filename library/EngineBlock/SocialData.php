@@ -219,7 +219,10 @@ class EngineBlock_SocialData
         }
         else {
             // Not really possible
-            throw new EngineBlock_Exception("More than 1 person found for identifier $identifier");
+            throw new EngineBlock_Exception(
+                "More than 1 person found for identifier $identifier",
+                EngineBlock_Exception::CODE_ERROR
+            );
         }
     }
 

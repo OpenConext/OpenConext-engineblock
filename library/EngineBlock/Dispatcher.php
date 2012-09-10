@@ -64,7 +64,7 @@ class EngineBlock_Dispatcher
             }
 
             if (!$this->_dispatch($uri)) {
-                EngineBlock_ApplicationSingleton::getLog()->warn("[404]Unroutable URI: '$uri'");
+                EngineBlock_ApplicationSingleton::getLog()->notice("[404]Unroutable URI: '$uri'");
                 $this->_getControllerInstance('default', 'error')->handleAction('notFound');
             }
         } catch(Exception $e) {
@@ -128,7 +128,8 @@ class EngineBlock_Dispatcher
 
         if (!($controllerInstance instanceof EngineBlock_Controller_Abstract)) {
             throw new EngineBlock_Exception(
-                "Controller $className is not an EngineBlock controller (does not extend EngineBlock_Controller_Abstract)!"
+                "Controller $className is not an EngineBlock controller (does not extend EngineBlock_Controller_Abstract)!",
+                EngineBlock_Exception::CODE_CRITICAL
             );
         }
 

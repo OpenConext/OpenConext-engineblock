@@ -34,10 +34,83 @@ set_include_path(ENGINEBLOCK_FOLDER_LIBRARY . PATH_SEPARATOR . get_include_path(
 
 class EngineBlock_Exception extends Exception
 {
+    /**
+     * Emergency; system is unstable
+     *
+     * A "panic" condition usually affecting multiple apps/servers/sites.
+     * At this level it would usually notify all tech staff on call.
+     *
+     * Examples: Can't reach database / critical third party system.
+     */
+    const CODE_EMERGENCY = 0;
+
+    /**
+     * Alert: action must be taken immediately.
+     *
+     * Should be corrected immediately, therefore notify staff who can fix the problem.
+     * An example would be the loss of a primary ISP connection.
+     */
+    const CODE_ALERT = 1;
+
+    /**
+     * Critical: critical conditions
+     *
+     * Should be corrected immediately, but indicates failure in a primary system,
+     * an example is a loss of a backup ISP connection.
+     *
+     * Examples: can't contact external group provider
+     */
+    const CODE_CRITICAL = 2;
+
+    /**
+     * Error: error conditions
+     *
+     * Non-urgent failures, these should be relayed to developers or admins;
+     * each item must be resolved within a given time.
+     *
+     * Examples: configuration failure
+     */
+    const CODE_ERROR = 3;
+
+    /**
+     * Warning: warning conditions
+     *
+     * Warning messages, not an error, but indication that an error will occur if action is not taken,
+     * e.g. file system 85% full - each item must be resolved within a given time.
+     *
+     * Examples: misconfiguration of entities
+     */
+    const CODE_WARNING = 4;
+
+    /**
+     * Notice: normal but significant condition
+     *
+     * Events that are unusual but not error conditions - might be summarized in an email to developers or admins
+     * to spot potential problems - no immediate action required.
+     *
+     * Examples: 404s, wrongly configured entities
+     */
+    const CODE_NOTICE = 5;
+
+    public $sessionId;
+    public $userId;
+    public $spEntityId;
+    public $idpEntityId;
+    public $description;
+
+    public function __construct($message, $code = self::CODE_ERROR, Exception $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
 }
 
-class EngineBlock_ApplicationSingleton_BootstrapException extends Exception
+class EngineBlock_ApplicationSingleton_BootstrapException extends EngineBlock_Exception
 {
+    public function __construct($message, Exception $previous = null)
+    {
+        parent::__construct($message, self::CODE_ALERT, $previous);
+    }
+
 }
 
 class EngineBlock_ApplicationSingleton
@@ -224,7 +297,10 @@ class EngineBlock_ApplicationSingleton
     protected function _bootstrapAutoLoading()
     {
         if(!function_exists('spl_autoload_register')) {
-            throw new EngineBlock_Exception('SPL Autoload not available! Please use PHP > v5.1.2');
+            throw new EngineBlock_Exception(
+                'SPL Autoload not available! Please use PHP > v5.1.2',
+                EngineBlock_Exception::CODE_ALERT
+            );
         }
         spl_autoload_register(array($this, 'autoLoad'));
     }
@@ -310,7 +386,9 @@ class EngineBlock_ApplicationSingleton
             }
         }
 
-        throw new EngineBlock_ApplicationSingleton_BootstrapException('Unable to detect an environment!');
+        throw new EngineBlock_ApplicationSingleton_BootstrapException(
+            'Unable to detect an environment!'
+        );
     }
 
     protected function _bootstrapEnvironmentConfiguration()
@@ -325,7 +403,10 @@ class EngineBlock_ApplicationSingleton
     protected function _bootstrapLogging()
     {
         if (!isset($this->_configuration->logs)) {
-            throw new EngineBlock_Exception("No logs defined! Logging is required, please set logs. in your application.ini");
+            throw new EngineBlock_Exception(
+                "No logs defined! Logging is required, please set logs. in your application.ini",
+                EngineBlock_Exception::CODE_ALERT
+            );
         }
         
         $this->_log = EngineBlock_Log::factory($this->_configuration->logs);
@@ -443,7 +524,15 @@ class EngineBlock_ApplicationSingleton
 
     public function handleException(Exception $e)
     {
-        $this->reportError($e);
+        if ($e instanceof EngineBlock_Exception) {
+            $this->reportError($e);
+        }
+        else {
+            $this->reportError(
+                new EngineBlock_Exception($e->getMessage(), EngineBlock_Exception::CODE_ERROR, $e)
+            );
+        }
+
 
         $message = 'A exceptional condition occurred, it has been logged and sent to the administrator.';
         if ($this->getConfiguration()->debug) {
@@ -453,7 +542,7 @@ class EngineBlock_ApplicationSingleton
         die($message);
     }
 
-    public function handleError($errorNumber, $errorMesage, $errorFile, $errorLine)
+    public function handleError($errorNumber, $errorMessage, $errorFile, $errorLine)
     {
         if (!(error_reporting() & $errorNumber)) {
             // This error code is not included in error_reporting
@@ -462,7 +551,10 @@ class EngineBlock_ApplicationSingleton
         }
 
         try {
-            $this->reportError(new Exception($errorMesage . " [$errorFile:$errorLine]", $errorNumber));
+            $errorMessage = $errorMessage . " [$errorFile:$errorLine]";
+            $this->reportError(
+                new EngineBlock_Exception($errorMessage, EngineBlock_Exception::CODE_ERROR)
+            );
         }
         catch (Exception $e) {
         }
@@ -475,11 +567,13 @@ class EngineBlock_ApplicationSingleton
     {
         $lastError = error_get_last();
         if($lastError['type'] !== E_ERROR && $lastError['type'] !== E_USER_ERROR) {
-            // Not a fatal error, probably a shutdown
+            // Not a fatal error, probably a normal shutdown
             return false;
         }
 
-        $this->reportError(new Exception('Fatal error: ' . var_export($lastError, true)));
+        $this->reportError(
+            new EngineBlock_Exception('PHP Fatal error', EngineBlock_Exception::CODE_ERROR)
+        );
 
         $message = 'A error occurred, it has been logged and sent to the administrator.';
         if ($this->getConfiguration()->debug) {
@@ -489,7 +583,7 @@ class EngineBlock_ApplicationSingleton
         die($message);
     }
 
-    public function reportError(Exception $exception)
+    public function reportError(EngineBlock_Exception $exception)
     {
         $log = $this->getLogInstance();
         if (!$log) {

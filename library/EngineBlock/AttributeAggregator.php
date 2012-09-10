@@ -51,7 +51,9 @@ class EngineBlock_AttributeAggregator
      *
      * @param array  $attributes Existing attributes to enhance
      * @param string $uid        URN for user (example: urn:collab:person:example.edu:john.doe)
+     * @param string $format     Format of the attributes to get.
      * @return array             Enhanced attributes
+     * @throws EngineBlock_Exception
      */
     public function aggregateFor(array $attributes, $uid, $format = self::FORMAT_SAML)
     {
@@ -71,7 +73,12 @@ class EngineBlock_AttributeAggregator
                     break;
 
                 default:
-                    throw new EngineBlock_Exception("Unknown attribute strategy for provider: " . get_class($provider));
+                    $providerClassName = get_class($provider);
+                    throw new EngineBlock_Exception(
+                        "We have an attribute provider of type '{$providerClassName}', "
+                        . "but no idea how to integrate attribute we get from this provider: " . get_class($provider),
+                        EngineBlock_Exception::CODE_CRITICAL
+                    );
             }
         }
         return $attributes;

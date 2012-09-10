@@ -41,9 +41,10 @@ class EngineBlock_Log extends Zend_Log
         }
 
         if (!is_array($config) || empty($config)) {
-            /** @see Zend_Log_Exception */
-            require_once 'Zend/Log/Exception.php';
-            throw new Zend_Log_Exception('Configuration must be an array or instance of Zend_Config');
+            throw new EngineBlock_Exception(
+                'Configuration must be an array or instance of Zend_Config',
+                EngineBlock_Exception::CODE_ALERT
+            );
         }
 
         $log = new EngineBlock_Log();
