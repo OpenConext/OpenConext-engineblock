@@ -4,7 +4,7 @@
  * Generic interface for Corto logging 
  * @author Boy
  */
-interface Corto_Log_Interface 
+interface EngineBlock_Corto_Log_Interface
 {
     /**
      * Set a unique id to separate log entries. Can be used to create separate

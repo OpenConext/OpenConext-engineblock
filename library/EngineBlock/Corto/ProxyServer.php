@@ -6,7 +6,7 @@
 require 'XmlToArray.php';
 require 'Log/Dummy.php';
 
-class Corto_ProxyServer
+class EngineBlock_Corto_ProxyServer
 {
     const ID_PREFIX = 'CORTO';
 
@@ -65,7 +65,7 @@ class Corto_ProxyServer
     }
 
     /**
-     * @return Corto_Module_Bindings
+     * @return EngineBlock_Corto_Module_Bindings
      */
     public function getBindingsModule()
     {
@@ -73,16 +73,16 @@ class Corto_ProxyServer
     }
 
     /**
-     * @param Corto_Module_Bindings $bindingsInstance
-     * @return Corto_ProxyServer
+     * @param EngineBlock_Corto_Module_Bindings $bindingsInstance
+     * @return EngineBlock_Corto_ProxyServer
      */
-    public function setBindingsModule(Corto_Module_Bindings $bindingsInstance)
+    public function setBindingsModule(EngineBlock_Corto_Module_Bindings $bindingsInstance)
     {
         return $this->_setModule(self::MODULE_BINDINGS, $bindingsInstance);
     }
 
     /**
-     * @return Corto_Module_Services
+     * @return EngineBlock_Corto_Module_Services
      */
     public function getServicesModule()
     {
@@ -90,17 +90,17 @@ class Corto_ProxyServer
     }
 
     /**
-     * @param Corto_Module_Services $servicesInstance
-     * @return Corto_ProxyServer
+     * @param EngineBlock_Corto_Module_Services $servicesInstance
+     * @return EngineBlock_Corto_ProxyServer
      */
-    public function setServicesModule(Corto_Module_Services $servicesInstance)
+    public function setServicesModule(EngineBlock_Corto_Module_Services $servicesInstance)
     {
         return $this->_setModule(self::MODULE_SERVICES, $servicesInstance);
     }
 
     /**
      * @param string $name
-     * @return Corto_Module_Abstract
+     * @return EngineBlock_Corto_Module_Abstract
      */
     protected function _getModule($name)
     {
@@ -110,9 +110,9 @@ class Corto_ProxyServer
     /**
      * @param  $name
      * @param  $moduleInstance
-     * @return Corto_ProxyServer
+     * @return EngineBlock_Corto_ProxyServer
      */
-    protected function _setModule($name, Corto_Module_Abstract $moduleInstance)
+    protected function _setModule($name, EngineBlock_Corto_Module_Abstract $moduleInstance)
     {
         $this->_modules[$name] = $moduleInstance;
         return $this;
@@ -243,7 +243,7 @@ class Corto_ProxyServer
     public function getRemoteEntity($entityId)
     {
         if (!isset($this->_entities['remote'][$entityId])) {
-            throw new Corto_ProxyServer_UnknownRemoteEntityException($entityId);
+            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
         }
         $entity = $this->_entities['remote'][$entityId];
         $entity['EntityId'] = $entityId;
@@ -297,7 +297,7 @@ class Corto_ProxyServer
 
         $serviceName = $parameters['ServiceName'];
         $this->getSessionLog()->debug("Calling service '$serviceName'");
-        $this->getServicesModule()->$serviceName();
+        $this->getServicesModule()->serve($serviceName);
         $this->getSessionLog()->debug("Done calling service '$serviceName'");
     }
 
@@ -404,8 +404,8 @@ class Corto_ProxyServer
     {
         $remoteMetaData = $this->getRemoteEntity($idp);
         $request = array(
-            Corto_XmlToArray::TAG_NAME_PFX       => 'samlp:AuthnRequest',
-            Corto_XmlToArray::PRIVATE_PFX => array(
+            EngineBlock_Corto_XmlToArray::TAG_NAME_PFX       => 'samlp:AuthnRequest',
+            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
                 'paramname'         => 'SAMLRequest',
                 'destinationid'     => $idp,
                 'ProtocolBinding'   => $remoteMetaData['SingleSignOnService']['Binding'],
@@ -499,8 +499,8 @@ class Corto_ProxyServer
             $response['__']['OriginalResponse'] = $sourceResponse;
         }
 
-        $inTransparentMode = isset($request[Corto_XmlToArray::PRIVATE_PFX]['Transparent']) &&
-                $request[Corto_XmlToArray::PRIVATE_PFX]['Transparent'];
+        $inTransparentMode = isset($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent']) &&
+                $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent'];
 
         if (isset($sourceResponse['__']['OriginalIssuer'])) {
             $response['__']['OriginalIssuer'] = $sourceResponse['__']['OriginalIssuer'];
@@ -630,7 +630,7 @@ class Corto_ProxyServer
             $attributeStatement['AttributeConsumingServiceIndex'] = '-no AttributeConsumingServiceIndex given-';
         }
 
-        $attributes = Corto_XmlToArray::array2attributes($attributeStatement);
+        $attributes = EngineBlock_Corto_XmlToArray::array2attributes($attributeStatement);
         if (!empty($attributes)) {
             $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'] = $attributes;
         }
@@ -647,8 +647,8 @@ class Corto_ProxyServer
         $destinationID = $request['saml:Issuer']['__v'];
 
         $response = array(
-            Corto_XmlToArray::TAG_NAME_PFX => 'samlp:Response',
-            Corto_XmlToArray::PRIVATE_PFX => array(
+            EngineBlock_Corto_XmlToArray::TAG_NAME_PFX => 'samlp:Response',
+            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
                 'paramname' => 'SAMLResponse',
                 'RelayState'=> $request['__']['RelayState'],
                 'destinationid' => $destinationID,
@@ -674,7 +674,7 @@ class Corto_ProxyServer
         $response['__']['ProtocolBinding']  = $acs['Binding'];
 
         if (!$response['_Destination']) {
-            throw new Corto_ProxyServer_Exception("No Destination in request or metadata for: $destinationID");
+            throw new EngineBlock_Corto_ProxyServer_Exception("No Destination in request or metadata for: $destinationID");
         }
 
         return $response;
@@ -732,18 +732,18 @@ class Corto_ProxyServer
     public function getReceivedRequestFromResponse($id)
     {
         if (!$id || !isset($_SESSION[$id])) {
-            throw new Corto_ProxyServer_Exception("Unknown id ($id) in InResponseTo attribute?!?");
+            throw new EngineBlock_Corto_ProxyServer_Exception("Unknown id ($id) in InResponseTo attribute?!?");
         }
 
         // Get the ID of the original request (from the SP)
         if (!isset($_SESSION[$id]['_InResponseTo'])) {
             $this->_server->getSessionLog()->debug(print_r($_SESSION, true));
-            throw new Corto_ProxyServer_Exception("ID `$id` does not have a _InResponseTo?!?");
+            throw new EngineBlock_Corto_ProxyServer_Exception("ID `$id` does not have a _InResponseTo?!?");
         }
         $originalRequestId = $_SESSION[$id]['_InResponseTo'];
 
         if (!isset($_SESSION[$originalRequestId]['SAMLRequest'])) {
-            throw new Corto_ProxyServer_Exception('Response has no known Request');
+            throw new EngineBlock_Corto_ProxyServer_Exception('Response has no known Request');
         }
         return $_SESSION[$originalRequestId]['SAMLRequest'];
     }
@@ -771,7 +771,7 @@ class Corto_ProxyServer
     public function filterOutputAssertionAttributes(&$response, $request)
     {
         $hostedMetaData = $this->_entities['current'];
-        $responseIssuer = $response[Corto_XmlToArray::PRIVATE_PFX]['OriginalIssuer'];
+        $responseIssuer = $response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['OriginalIssuer'];
         $idpEntityMetadata = $this->getRemoteEntity($responseIssuer);
 
         $requestIssuer = $request['saml:Issuer']['__v'];
@@ -789,17 +789,17 @@ class Corto_ProxyServer
     {
         if (!$callback || !is_callable($callback)) {
             // @todo Non existing callbacks shouldn't give an exception, just a warning...
-            throw new Corto_ProxyServer_Exception('callback: ' . var_export($callback, true) . ' isn\'t callable');
+            throw new EngineBlock_Corto_ProxyServer_Exception('callback: ' . var_export($callback, true) . ' isn\'t callable');
         }
 
         $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
 
         // Take the attributes out
-        $responseAttributes = Corto_XmlToArray::attributes2array($responseAssertionAttributes);
+        $responseAttributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
         // Pass em along
         call_user_func_array($callback, array(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata));
         // Put em back where they belong
-        $responseAssertionAttributes = Corto_XmlToArray::array2attributes($responseAttributes);
+        $responseAssertionAttributes = EngineBlock_Corto_XmlToArray::array2attributes($responseAttributes);
         if (empty($responseAssertionAttributes)) {
             unset($response['saml:Assertion']['saml:AttributeStatement']);
         }
@@ -843,7 +843,7 @@ class Corto_ProxyServer
         {
             case self::TEMPLATE_SOURCE_MEMORY:
                 if (!isset($source['arguments'][$templateFileName])) {
-                    throw new Corto_ProxyServer_Exception("Unable to load template '$templateFileName' from memory!");
+                    throw new EngineBlock_Corto_ProxyServer_Exception("Unable to load template '$templateFileName' from memory!");
                 }
 
                 eval('?>' . $source['arguments'][$templateFileName] . '<?');
@@ -851,18 +851,18 @@ class Corto_ProxyServer
 
             case self::TEMPLATE_SOURCE_FILESYSTEM;
                 if (!isset($source['arguments']['FilePath'])) {
-                    throw new Corto_ProxyServer_Exception('Template path not set, unable to render templates from filesystem!');
+                    throw new EngineBlock_Corto_ProxyServer_Exception('Template path not set, unable to render templates from filesystem!');
                 }
 
                 $filePath = $source['arguments']['FilePath'] . $templateFileName;
                 if (!file_exists($filePath)) {
-                    throw new Corto_ProxyServer_Exception('Template file does not exist: ' . $filePath);
+                    throw new EngineBlock_Corto_ProxyServer_Exception('Template file does not exist: ' . $filePath);
                 }
 
                 include($filePath);
                 break;
             default:
-                throw new Corto_ProxyServer_Exception('No template source set! Please configure a template source with Corto_ProxyServer->setTemplateSource()');
+                throw new EngineBlock_Corto_ProxyServer_Exception('No template source set! Please configure a template source with Corto_ProxyServer->setTemplateSource()');
         }
     }
 
@@ -988,14 +988,14 @@ class Corto_ProxyServer
 
         // Convert the XMl object to actual XML and get a reference to what we're about to sign
         $canonicalXmlDom = new DOMDocument();
-        $canonicalXmlDom->loadXML(Corto_XmlToArray::array2xml($element));
+        $canonicalXmlDom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($element));
 
         // Note that the current element may not be the first or last, because we might include comments, so look for
         // the actual XML element
         $xpath = new DOMXPath($canonicalXmlDom);
         $nodes = $xpath->query('/*[@ID="' . $element['_ID'] . '"]');
         if ($nodes->length < 1) {
-            throw new Corto_ProxyServer_Exception("Unable to sign message can't find element with id to sign?");
+            throw new EngineBlock_Corto_ProxyServer_Exception("Unable to sign message can't find element with id to sign?");
         }
         $canonicalXmlDom = $nodes->item(0);
         // Now do 'exclusive no-comments' XML cannonicalization
@@ -1008,15 +1008,15 @@ class Corto_ProxyServer
         // Now we start the actual signing, instead of signing the entire (possibly large) document,
         // we only sign the 'SignedInfo' which includes the 'Reference' hash
         $canonicalXml2Dom = new DOMDocument();
-        $canonicalXml2Dom->loadXML(Corto_XmlToArray::array2xml($signature['ds:SignedInfo']));
+        $canonicalXml2Dom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo']));
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
         if (!isset($certificates['private'])) {
-            throw new Corto_ProxyServer_Exception('Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!');
+            throw new EngineBlock_Corto_ProxyServer_Exception('Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!');
         }
         $privateKey = openssl_pkey_get_private($certificates['private']);
         if ($privateKey === false) {
-            throw new Corto_ProxyServer_Exception("Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? Value: " . $certificates['private']);
+            throw new EngineBlock_Corto_ProxyServer_Exception("Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? Value: " . $certificates['private']);
         }
 
         $signatureValue = null;
@@ -1026,7 +1026,7 @@ class Corto_ProxyServer
         $signature['ds:SignatureValue']['__v'] = base64_encode($signatureValue);
 
         $element['ds:Signature'] = $signature;
-        $element[Corto_XmlToArray::PRIVATE_PFX]['Signed'] = true;
+        $element[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Signed'] = true;
 
         return $element;
     }
@@ -1062,7 +1062,7 @@ class Corto_ProxyServer
 
         if (strpos($urlPath, $currentPath) !== 0) {
             $message = "Unable to get Parameters from URL: '$url' for Corto installation at path: '$currentPath'";
-            throw new Corto_ProxyServer_Exception($message);
+            throw new EngineBlock_Corto_ProxyServer_Exception($message);
         }
 
         $uri = substr($currentPath, strlen($currentPath));
@@ -1104,12 +1104,12 @@ class Corto_ProxyServer
     }
 
     /**
-     * @return Corto_Log_Interface
+     * @return EngineBlock_Corto_Log_Interface
      */
     public function getSystemLog()
     {
         if (!isset($this->_systemLog)) {
-            $this->_systemLog = new Corto_Log_Dummy();
+            $this->_systemLog = new EngineBlock_Corto_Log_Dummy();
         }
 
         return $this->_systemLog;
@@ -1122,7 +1122,7 @@ class Corto_ProxyServer
         }
 
         if (!isset($this->_sessionLogDefault)) {
-            $this->_sessionLogDefault = new Corto_Log_Dummy();
+            $this->_sessionLogDefault = new EngineBlock_Corto_Log_Dummy();
         }
 
         $sessionLog = $this->_sessionLogDefault;
@@ -1131,7 +1131,7 @@ class Corto_ProxyServer
         return $this->_sessionLog;
     }
 
-    public function setSystemLog(Corto_Log_Interface $log)
+    public function setSystemLog(EngineBlock_Corto_Log_Interface $log)
     {
         $this->_systemLog = $log;
     }

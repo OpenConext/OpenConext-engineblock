@@ -1,6 +1,6 @@
 <?php
 
-class Corto_ProxyServer_UnknownRemoteEntityException extends Corto_ProxyServer_Exception
+class EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException extends EngineBlock_Corto_ProxyServer_Exception
 {
     protected $_entityId;
 

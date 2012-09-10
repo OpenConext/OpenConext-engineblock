@@ -6,7 +6,7 @@ if (!class_exists('XMLWriter')) {
 
 require_once 'ProxyServer/Exception.php';
 
-class Corto_XmlToArray_Exception extends Corto_ProxyServer_Exception {}
+class EngineBlock_Corto_XmlToArray_Exception extends EngineBlock_Corto_ProxyServer_Exception {}
 
 /**
  *
@@ -20,7 +20,7 @@ class Corto_XmlToArray_Exception extends Corto_ProxyServer_Exception {}
  * @version    $Id:$
  */
 
-class Corto_XmlToArray
+class EngineBlock_Corto_XmlToArray
 {
     const PRIVATE_PFX           = '__';
     const COMMENT_PFX           = '__c';
@@ -158,7 +158,7 @@ class Corto_XmlToArray
         xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         $parserResultStatus = xml_parse_into_struct($parser, $xml, $values);
         if ($parserResultStatus !== 1) {
-            throw new Corto_XmlToArray_Exception(
+            throw new EngineBlock_Corto_XmlToArray_Exception(
                 'Error parsing incoming XML. ' . PHP_EOL .
                 'Error code: '.xml_error_string(xml_get_error_code($parser)) . PHP_EOL .
                 'XML: ' . $xml);
@@ -321,7 +321,7 @@ class Corto_XmlToArray
                 self::_array2xml($value, $key, $writer, $level + 1);
             }
             else {
-                throw new Corto_XmlToArray_Exception(
+                throw new EngineBlock_Corto_XmlToArray_Exception(
                     "Value for key '$key' unrecognized (key naming error?)! Value" . print_r($value, true)
                 );
             }

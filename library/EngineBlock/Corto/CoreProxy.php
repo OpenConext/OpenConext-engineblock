@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
+class EngineBlock_Corto_CoreProxy extends EngineBlock_Corto_ProxyServer
 {
     protected $_headers = array();
     protected $_output;
@@ -68,7 +68,7 @@ class EngineBlock_Corto_CoreProxy extends Corto_ProxyServer
             }
         }
 
-        throw new Corto_ProxyServer_Exception("Unable to map URL '$url' to EngineBlock URL");
+        throw new EngineBlock_Corto_ProxyServer_Exception("Unable to map URL '$url' to EngineBlock URL");
     }
 
     protected function _createBaseResponse($request)

@@ -160,8 +160,8 @@ class EngineBlock_Corto_Adapter
         $implicitVo = $entities[$spEntityId]['VoContext'];
 
         // If we ALSO have an explicit VO
-        if (isset($request[Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
-            $explicitVo = $request[Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
+        if (isset($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
+            $explicitVo = $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
 
             // Check if they are unequal (no explicit VO or the same VO is okay)
             if ($implicitVo !== $explicitVo) {
@@ -170,7 +170,7 @@ class EngineBlock_Corto_Adapter
         }
 
         // Annotate and store the request
-        $request[Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $implicitVo;
+        $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $implicitVo;
         $this->_proxyServer->getBindingsModule()->registerInternalBindingMessage('SAMLRequest', $request);
         return $entities;
     }
@@ -255,7 +255,7 @@ class EngineBlock_Corto_Adapter
      */
     protected function _getIssuerSpEntityId() {
         $request = $this->_getRequestInstance();
-        $issuerSpEntityId = $request['saml:Issuer'][Corto_XmlToArray::VALUE_PFX];
+        $issuerSpEntityId = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
         return $issuerSpEntityId;
     }
 
@@ -370,7 +370,7 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setRemoteEntities($remoteEntities + $engineBlockEntities);
 
         $proxyServer->setTemplateSource(
-            Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
+            EngineBlock_Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
             array('FilePath'=>ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/')
         );
         

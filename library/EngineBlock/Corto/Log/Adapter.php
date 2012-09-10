@@ -26,7 +26,7 @@
 /**
  * Adapter to make Corto use EngineBlock Logging
  */
-class EngineBlock_Corto_Log_Adapter implements Corto_Log_Interface
+class EngineBlock_Corto_Log_Adapter implements EngineBlock_Corto_Log_Interface
 {
     protected $_id = "";
 
