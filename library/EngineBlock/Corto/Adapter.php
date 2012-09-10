@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Corto_Adapter 
+class EngineBlock_Corto_Adapter
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
 
@@ -35,12 +35,12 @@ class EngineBlock_Corto_Adapter
      * @var EngineBlock_Corto_CoreProxy
      */
     protected $_proxyServer;
-    
+
     /**
      * @var String The name of the currently hosted Corto hosted entity.
      */
     protected $_hostedEntity;
-    
+
     /**
      * @var String the name of the Virtual Organisation context (if any)
      */
@@ -50,7 +50,7 @@ class EngineBlock_Corto_Adapter
      * @var mixed Callback called on Proxy server after configuration
      */
     protected $_remoteEntitiesFilter = array();
-    
+
     public function __construct($hostedEntity = NULL)
     {
         if ($hostedEntity == NULL) {
@@ -91,6 +91,13 @@ class EngineBlock_Corto_Adapter
     public function consumeAssertion()
     {
         $this->_callCortoServiceUri('assertionConsumerService');
+    }
+
+    public function edugainMetadata()
+    {
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
+        $this->_callCortoServiceUri('edugainMetaDataService');
     }
 
     public function idPsMetadata()
@@ -295,7 +302,7 @@ class EngineBlock_Corto_Adapter
         $cortoHostedEntity  = $this->_getHostedEntity();
         $cortoIdPHash       = $idPProviderHash;
         $result =  '/' . $cortoHostedEntity . ($cortoIdPHash ? '_' . $cortoIdPHash : '') . '/' . $cortoServiceName;
-        
+
         return $result;
     }
 
@@ -306,7 +313,7 @@ class EngineBlock_Corto_Adapter
         }
 
         $proxyServer = $this->_getCoreProxy();
-        
+
         $this->_configureProxyServer($proxyServer);
 
         $this->_proxyServer = $proxyServer;
@@ -351,6 +358,7 @@ class EngineBlock_Corto_Adapter
                 ),
                 'keepsession' => true,
                 'idpMetadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
+                'edugainMetadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
                 'WantsAssertionsSigned' => true,
             ),
         ));
@@ -373,7 +381,7 @@ class EngineBlock_Corto_Adapter
             Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
             array('FilePath'=>ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/')
         );
-        
+
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
 
@@ -480,7 +488,7 @@ class EngineBlock_Corto_Adapter
         $proxyOutput = $this->_proxyServer->getOutput();
         $response->setBody($proxyOutput);
     }
-    
+
     protected function _getHostedEntity()
     {
         return $this->_hostedEntity;
