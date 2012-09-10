@@ -39,7 +39,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getLogInstance()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
-        catch (Corto_Module_Bindings_UnableToReceiveMessageException $e) {
+        catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->getLogInstance()->warn('Unable to receive message error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
@@ -69,7 +69,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         try {
             $proxyServer->processConsent();
         }
-        catch (Corto_Module_Services_SessionLostException $e) {
+        catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->warn('Session lost error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }

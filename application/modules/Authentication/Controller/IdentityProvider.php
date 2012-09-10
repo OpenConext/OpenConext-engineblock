@@ -43,7 +43,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
             $proxyServer->singleSignOn($idPEntityId);
         }
-        catch (Corto_Module_Bindings_UnableToReceiveMessageException $e) {
+        catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->getLogInstance()->warn('Unable to receive message');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
@@ -51,7 +51,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getLogInstance()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
-        catch (Corto_Module_Services_SessionLostException $e) {
+        catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->warn('Session was lost');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
@@ -97,7 +97,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer = new EngineBlock_Corto_Adapter();
             $proxyServer->processConsent();
         }
-        catch (Corto_Module_Bindings_UnableToReceiveMessageException $e) {
+        catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->getLogInstance()->warn('Unable to receive message');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
@@ -105,7 +105,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getLogInstance()->warn('User not a member error');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
-        catch (Corto_Module_Services_SessionLostException $e) {
+        catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->warn('Session was lost');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
