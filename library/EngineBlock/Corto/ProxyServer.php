@@ -19,6 +19,13 @@ class EngineBlock_Corto_ProxyServer
     const MESSAGE_TYPE_REQUEST  = 'SAMLRequest';
     const MESSAGE_TYPE_RESPONSE = 'SAMLResponse';
 
+    const VO_CONTEXT_PFX          = 'voContext';
+
+    protected $_headers = array();
+    protected $_output;
+
+    protected $_voContext = null;
+
     protected $_requestArray;
     protected $_responseArray;
 
@@ -46,6 +53,37 @@ class EngineBlock_Corto_ProxyServer
     }
 
 //////// GETTERS / SETTERS /////////
+
+
+    public function setVirtualOrganisationContext($voContext)
+    {
+        $this->_voContext = $voContext;
+    }
+
+    public function getVirtualOrganisationContext()
+    {
+        return $this->_voContext;
+    }
+
+    public function getOutput()
+    {
+        return $this->_output;
+    }
+
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+
+    public function sendOutput($rawOutput)
+    {
+        $this->_output = $rawOutput;
+    }
+
+    public function sendHeader($name, $value)
+    {
+        $this->_headers[$name] = $value;
+    }
 
     public function setProcessingMode()
     {
@@ -643,6 +681,11 @@ class EngineBlock_Corto_ProxyServer
 
     protected function _createBaseResponse($request)
     {
+        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
+            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
+            $this->setVirtualOrganisationContext($vo);
+        }
+
         $now = $this->timeStamp();
         $destinationID = $request['saml:Issuer']['__v'];
 
@@ -831,7 +874,10 @@ class EngineBlock_Corto_ProxyServer
                 )
             );
         }
-        return $content;
+
+        $layout = $this->layout();
+        $layout->content = $content;
+        return $layout->render();
     }
 
     protected function _renderTemplate($templateFileName, $vars)
@@ -898,16 +944,6 @@ class EngineBlock_Corto_ProxyServer
             $this->sendHeader('Location', $location);
         }
 
-    }
-
-    public function sendHeader($name, $value)
-    {
-        return header("$name: $value");
-    }
-
-    public function sendOutput($rawOutput)
-    {
-        return print $rawOutput;
     }
 
     public function setCookie($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
@@ -1139,5 +1175,61 @@ class EngineBlock_Corto_ProxyServer
     public function setSessionLogDefault($logDefault)
     {
         $this->_sessionLogDefault = $logDefault;
+    }
+
+
+    /**
+     * Translate a string.
+     *
+     * Alias for 'translate'
+     *
+     * @example <?php echo $this->t('logged_in_as', $this->user->getDisplayName()); ?>
+     *
+     * @param string $from Identifier for string
+     * @param string $arg1 Argument to parse in with sprintf
+     * @return string
+     */
+    public function t($from, $arg1 = null)
+    {
+        return call_user_func_array(array($this, 'translate'), func_get_args());
+    }
+
+    /**
+     * Translate a string.
+     *
+     * Has an alias called 't'.
+     *
+     * @example <?php echo $this->translate('logged_in_as', $this->user->getDisplayName()); ?>
+     *
+     * @param string $from Identifier for string
+     * @param string $arg1 Argument to parse in with sprintf
+     * @return string
+     */
+    public function translate($from, $arg1 = null)
+    {
+        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
+
+        $arguments = func_get_args();
+        $arguments[0] = $translator->translate($from);
+        return call_user_func_array('sprintf', $arguments);
+    }
+
+    /**
+     * Return the language.
+     *
+     * @example <?php echo $this->language(); ?>
+     *
+     * @return string
+     */
+    public function language()
+    {
+        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
+
+        return $translator->getLocale();
+    }
+
+    public function layout()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getLayout();
     }
 }
