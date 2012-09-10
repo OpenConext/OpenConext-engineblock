@@ -31,7 +31,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
      * @param string $encodedIdPEntityId
      * @return void
      */
-    public function idPsMetaDataAction()
+    public function idPsMetaDataAction($argument = "")
     {
         $this->setNoRender();
 
@@ -40,6 +40,12 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         $queryString = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryString();
         $proxyServer = new EngineBlock_Corto_Adapter();
         try {
+            if (substr($argument, 0, 3) == "vo:") {
+                $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
+            } else if (!empty($argument)) {
+                throw new EngineBlock_Exception("Unknown argument");
+            }
+
             $proxyServer->idPsMetadata($queryString);
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
             $application->getLogInstance()->warn('Unknown SP entity id used in idpsMetadata: ' . $queryString);
