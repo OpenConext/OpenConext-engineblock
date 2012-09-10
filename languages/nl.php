@@ -123,7 +123,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     //VO Manage
     'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',
-    'vomanage_sub_header'               => 'VO Gebruikersattributen',    
+    'vomanage_sub_header'               => 'VO Gebruikersattributen',
     'vomanage_index_intro'              => 'Beheer de gebruikersattributen van een Virtuele Organisatie.',
     'vomanage_index_add'                => 'Toevoegen',
     'vomanage_index_edit'               => 'Bewerken',
@@ -156,9 +156,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'xor_error'                         => 'Eén van deze velden moet een geldige waarde bevatten.',
     // SQL errors
     '23000'                             => 'Fout: Deze combinatie bestaat al.',
-    
-    
-    
+
+
+
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'U bent bijna klaar..',
@@ -205,9 +205,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_no_message'                  => 'Error - Geen bericht ontvangen..',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
 
-    'error_unknown_service_provider'              => 'Error - Onbekende Service Provider..',
+    'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        Deze applicatie is niet beschikbaar voor SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
+        Er kon geen Service Provider worden gevonden met het opgegeven EntityID. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <table class="error-table">
             <tbody>
             <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
@@ -215,10 +215,6 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
             </tr>
             </tbody>
         </table>
-        <br />
-        Bezoek alstublieft <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
-        of neem contact op met het SURFconext team via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> als dit uw probleem niet oplost.
-        <br /><br />
     </p>',
 
     'error_unknown_issuer'              => 'Error - Onbekende applicatie..',

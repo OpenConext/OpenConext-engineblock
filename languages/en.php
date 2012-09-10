@@ -157,8 +157,8 @@ If you have any questions about your privacy and the policy applied, please visi
     'xor_error'                         => 'One of these fields must contain a valid value.',
     // SQL errors
     '23000'                             => 'Error: This combination already exists.',
-    
-    
+
+
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'You are almost done..',
@@ -205,10 +205,9 @@ If you have any questions about your privacy and the policy applied, please visi
     'error_message_timeout_desc'    => 'We received an out of date message. Please try again.',
     'error_no_message'              => 'Error - No message received..',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
-
-    'error_unknown_service_provider'          => 'Error - Unknown Service Provider..',
+    'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        This application is not available using SURFconext. Please notify the provider of this service and provide them with the following information:
+        A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <table class="error-table">
             <tbody>
             <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
@@ -216,10 +215,6 @@ If you have any questions about your privacy and the policy applied, please visi
             </tr>
             </tbody>
         </table>
-        <br />
-        If this doesn\'t solve your problem, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-        <br /><br />
     </p>',
 
     'error_unknown_issuer'          => 'Error - Unknown application..',
