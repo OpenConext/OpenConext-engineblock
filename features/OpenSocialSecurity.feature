@@ -71,4 +71,5 @@ Feature: OpenSocial Security
      And I go to "https://testsp.test.surfconext.nl/testsp/openSocialQueries.shtml"
      And I retrieve the groups info for "urn:collab:person:test.surfguest.nl:test-jasha"
     Then I should see "Something went wrong"
-    And I clean up my access tokens
+     And I go to the Test SP
+     And I clean up my access tokens
