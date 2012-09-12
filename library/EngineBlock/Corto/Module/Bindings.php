@@ -30,9 +30,6 @@
  */
 class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstract
 {
-    const ARTIFACT_BINARY_FORMAT = 'ntypecode/nendpointindex/H40sourceid/H40messagehandle';
-
-    const KEY_ARTIFACT = 'SAMLArt';
     const KEY_REQUEST  = 'SAMLRequest';
     const KEY_RESPONSE = 'SAMLResponse';
 
