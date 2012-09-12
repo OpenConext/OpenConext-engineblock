@@ -24,34 +24,6 @@
  */
 
 /**
- * Class for binding module specific exceptions.
- * @author Boy
- */
-class EngineBlock_Corto_Module_Bindings_Exception extends EngineBlock_Corto_ProxyServer_Exception
-{
-}
-
-/**
- * Class for binding module verification exceptions.
- * @author Boy
- */
-class EngineBlock_Corto_Module_Bindings_VerificationException extends EngineBlock_Corto_Module_Bindings_Exception
-{
-}
-
-class EngineBlock_Corto_Module_Bindings_UnknownIssuerException extends EngineBlock_Corto_Module_Bindings_VerificationException
-{
-}
-
-class EngineBlock_Corto_Module_Bindings_TimingException extends EngineBlock_Corto_Module_Bindings_VerificationException
-{
-}
-
-class EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException extends EngineBlock_Corto_Module_Bindings_Exception
-{
-}
-
-/**
  * The bindings module for Corto, which implements support for various data
  * bindings.
  * @author Boy

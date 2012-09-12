@@ -1,0 +1,5 @@
+<?php
+
+class EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException extends EngineBlock_Corto_Module_Bindings_Exception
+{
+}
