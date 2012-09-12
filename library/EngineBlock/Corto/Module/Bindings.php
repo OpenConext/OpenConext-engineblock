@@ -933,7 +933,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $serviceName = $parameters['ServiceName'];
 
         $this->_server->getSessionLog()->debug("Calling service '$serviceName'");
-        $this->_server->getServicesModule()->$serviceName();
+        $this->_server->getServicesModule()->serve($serviceName);
         $this->_server->getSessionLog()->debug("Done calling service '$serviceName'");
     }
 

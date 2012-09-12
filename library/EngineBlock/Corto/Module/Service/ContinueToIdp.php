@@ -9,7 +9,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
      * @throws EngineBlock_Corto_Module_Services_SessionLostException
      * @return void
      */
-    public function serve()
+    public function serve($serviceName)
     {
         $selectedIdp = urldecode($_REQUEST['idp']);
         if (!$selectedIdp) {

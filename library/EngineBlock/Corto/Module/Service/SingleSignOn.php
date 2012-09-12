@@ -5,10 +5,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     const RESPONSE_CACHE_TYPE_IN  = 'in';
     const RESPONSE_CACHE_TYPE_OUT = 'out';
 
-    public function serve()
+    public function serve($serviceName)
     {
         $request = $this->_server->getBindingsModule()->receiveRequest();
-        $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent'] = $this->_server->getCurrentEntitySetting('TransparentProxy', false);
+        $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent'] = $this->_server->getConfig('TransparentProxy', false);
 
         // The request may specify it ONLY wants a response from specific IdPs
         // or we could have it configured that the SP may only be serviced by specific IdPs
@@ -29,7 +29,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Get all registered Single Sign On Services
         $candidateIDPs = $this->_server->getIdpEntityIds();
-        $posOfOwnIdp = array_search($this->_server->getCurrentEntityUrl('idPMetadataService'), $candidateIDPs);
+        $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
             unset($candidateIDPs[$posOfOwnIdp]);
         }
@@ -104,8 +104,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $this->_server->getSessionLog()->debug("SSO: Request contains scoped idps: " . print_r($scopedIdPs, 1));
         }
 
-        $presetIdPs = $this->_server->getCurrentEntitySetting('IDPList');
-        $presetIdP  = $this->_server->getCurrentEntitySetting('Idp');
+        $presetIdPs = $this->_server->getConfig('IDPList');
+        $presetIdP  = $this->_server->getConfig('Idp');
 
         // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
         if ($presetIdP) {
@@ -216,12 +216,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     protected function _showWayf($request, $candidateIdPs)
     {
         // Post to the 'continueToIdp' service
-        $action = $this->_server->getCurrentEntityUrl('continueToIdP');
+        $action = $this->_server->getUrl('continueToIdP');
 
         $requestIssuer = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
 
         $remoteEntity = $this->_server->getRemoteEntity($requestIssuer);
-
         $idpList = $this->_transformIdpsForWAYF($candidateIdPs);
 
         $output = $this->_server->renderTemplate(
@@ -239,11 +238,16 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     protected function _transformIdpsForWayf($idps)
     {
         $wayfIdps = array();
-        foreach ($idps as $idp) {
+        foreach ($idps as $idpEntityId) {
+            if ($idpEntityId === $this->_server->getUrl('idpMetadataService')) {
+                // Skip ourselves as a valid Idp
+                continue;
+            }
+
             $remoteEntities = $this->_server->getRemoteEntities();
-            $metadata = ($remoteEntities[$idp]);
+            $metadata = ($remoteEntities[$idpEntityId]);
             $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                null, $idp, null, null
+                null, $idpEntityId, null, null
             );
 
             if (isset($metadata['DisplayName']['nl'])) {
@@ -254,7 +258,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             }
             else {
                 $nameNl = 'Geen naam gevonden';
-                EngineBlock_ApplicationSingleton::getLog()->warn('No NL displayName and name found for idp: ' . $idp, $additionalInfo);
+                EngineBlock_ApplicationSingleton::getLog()->warn('No NL displayName and name found for idp: ' . $idpEntityId, $additionalInfo);
             }
 
             if (isset($metadata['DisplayName']['en'])) {
@@ -265,7 +269,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             }
             else {
                 $nameEn = 'No name found';
-                EngineBlock_ApplicationSingleton::getLog()->warn('No EN displayName and name found for idp: ' . $idp, $additionalInfo);
+                EngineBlock_ApplicationSingleton::getLog()->warn('No EN displayName and name found for idp: ' . $idpEntityId, $additionalInfo);
             }
 
             $wayfIdp = array(
@@ -276,8 +280,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en'])
                     : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
                 'Access' => '1',
-                'ID' => md5($idp),
-                'EntityId' => $idp,
+                'ID' => md5($idpEntityId),
+                'EntityId' => $idpEntityId,
             );
             $wayfIdps[] = $wayfIdp;
         }

@@ -2,7 +2,7 @@
 
 class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
 {
-    public function serve()
+    public function serve($serviceName)
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']);
@@ -20,7 +20,7 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
             $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']                    = $response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'];
             $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination']           = $nextProcessingEntity['Location'];
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding']  = $nextProcessingEntity['Binding'];
-            $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Return']           = $this->_server->getCurrentEntityUrl('processedAssertionConsumerService');
+            $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Return']           = $this->_server->getUrl('processedAssertionConsumerService');
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['paramname']        = 'SAMLResponse';
 
             $this->_server->getBindingsModule()->send($newResponse, $nextProcessingEntity);
@@ -39,8 +39,13 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
             $this->_server->unsetProcessingMode();
 
             // Cache the response
-            if ($this->_server->getCurrentEntitySetting('keepsession', false)) {
-                $this->_cacheResponse($receivedRequest, $response, self::RESPONSE_CACHE_TYPE_OUT);
+            if ($this->_server->getConfig('keepsession', false)) {
+                EngineBlock_Corto_Model_Response_Cache::cacheResponse(
+                    $receivedRequest,
+                    $response,
+                    EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
+                    $this->_server->getVirtualOrganisationContext()
+                );
             }
 
             $sentResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);

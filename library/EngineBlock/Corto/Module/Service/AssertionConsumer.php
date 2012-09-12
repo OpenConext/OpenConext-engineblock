@@ -2,10 +2,7 @@
 
 class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
 {
-    const RESPONSE_CACHE_TYPE_IN  = 'in';
-    const RESPONSE_CACHE_TYPE_OUT = 'out';
-
-    public function serve()
+    public function serve($serviceName)
     {
         $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
 
@@ -18,8 +15,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']);
 
         // Cache the response
-        if ($this->_server->getCurrentEntitySetting('keepsession', false)) {
-            $this->_cacheResponse($receivedRequest, $receivedResponse, self::RESPONSE_CACHE_TYPE_IN);
+        if ($this->_server->getConfig('keepsession', false)) {
+            EngineBlock_Corto_Model_Response_Cache::cacheResponse(
+                $receivedRequest,
+                $receivedResponse,
+                EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN,
+                $this->_server->getVirtualOrganisationContext()
+            );
         }
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
@@ -39,7 +41,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']          = $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo'];
             $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination']           = $firstProcessingEntity['Location'];
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding']  = $firstProcessingEntity['Binding'];
-            $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Return']           = $this->_server->getCurrentEntityUrl('processedAssertionConsumerService');
+            $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Return']           = $this->_server->getUrl('processedAssertionConsumerService');
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['paramname']        = 'SAMLResponse';
 
             $responseAssertionAttributes = &$newResponse['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
@@ -51,8 +53,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         }
         else {
             // Cache the response
-            if ($this->_server->getCurrentEntitySetting('keepsession', false)) {
-                $this->_cacheResponse($receivedRequest, $receivedResponse, self::RESPONSE_CACHE_TYPE_OUT);
+            if ($this->_server->getConfig('keepsession', false)) {
+                EngineBlock_Corto_Model_Response_Cache::cacheResponse(
+                    $receivedRequest,
+                    $receivedResponse,
+                    EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
+                    $this->_server->getVirtualOrganisationContext()
+                );
             }
 
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
@@ -60,26 +67,9 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         }
     }
 
-    protected function _cacheResponse(array $receivedRequest, array $receivedResponse, $type)
-    {
-        $requestIssuerEntityId  = $receivedRequest['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-        $responseIssuerEntityId = $receivedResponse['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-        if (!isset($_SESSION['CachedResponses'])) {
-            $_SESSION['CachedResponses'] = array();
-        }
-        $_SESSION['CachedResponses'][] = array(
-            'sp'            => $requestIssuerEntityId,
-            'idp'           => $responseIssuerEntityId,
-            'type'          => $type,
-            'response'      => $receivedResponse,
-            'vo'            => $this->_server->getVirtualOrganisationContext()
-        );
-        return $_SESSION['CachedResponses'][count($_SESSION['CachedResponses']) - 1];
-    }
-
     protected function _getReceivedResponseProcessingEntities(array $receivedRequest, array $receivedResponse)
     {
-        $currentEntityProcessing = $this->_server->getCurrentEntitySetting('Processing', array());
+        $currentEntityProcessing = $this->_server->getConfig('Processing', array());
 
         $remoteEntity = $this->_server->getRemoteEntity($receivedRequest['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX]);
 
