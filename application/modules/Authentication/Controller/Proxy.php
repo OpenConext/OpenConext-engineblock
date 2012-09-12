@@ -46,7 +46,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
                 throw new EngineBlock_Exception("Unknown argument");
             }
 
-            $proxyServer->idPsMetadata($queryString);
+            $proxyServer->idPsMetadata();
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
             $application->getLogInstance()->warn('Unknown SP entity id used in idpsMetadata: ' . $queryString);
             $application->getHttpResponse()->setRedirectUrl(
