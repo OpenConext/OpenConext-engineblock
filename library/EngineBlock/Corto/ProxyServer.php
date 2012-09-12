@@ -1069,19 +1069,8 @@ class EngineBlock_Corto_ProxyServer
 
     public function getCertDataFromPem($pemKey)
     {
-        $lines = explode("\n", $pemKey);
-        $data = '';
-        foreach ($lines as $line) {
-            $line = rtrim($line);
-            if ($line === '-----BEGIN CERTIFICATE-----') {
-                $data = '';
-            } elseif ($line === '-----END CERTIFICATE-----') {
-                break;
-            } else {
-                $data .= $line . PHP_EOL;
-            }
-        }
-        return $data;
+        $mapper = new EngineBlock_Corto_Mapper_CertData_Pem($pemKey);
+        return $mapper->map();
     }
 
     /**
