@@ -35,11 +35,9 @@ class EngineBlock_Corto_Filter_Command_SetAlternateKeys extends EngineBlock_Cort
             return;
         }
 
-        $currentEntity  = $this->_adapter->getProxyServer()->getCurrentEntity();
-        $hostedEntities = $this->_adapter->getProxyServer()->getHostedEntities();
-        $hostedEntities[$currentEntity['EntityId']]['certificates']['private']  = $this->_spMetadata['AlternatePrivateKey'];
-        $hostedEntities[$currentEntity['EntityId']]['certificates']['public']   = $this->_spMetadata['AlternatePublicKey'];
-        $this->_adapter->getProxyServer()->setHostedEntities($hostedEntities);
-        $this->_adapter->getProxyServer()->setCurrentEntity($currentEntity['EntityCode']);
+        $this->_adapter->getProxyServer()->setConfig('certificates', array(
+            'private' => $this->_spMetadata['AlternatePrivateKey'],
+            'public'  => $this->_spMetadata['AlternatePublicKey'],
+        ));
     }
 }

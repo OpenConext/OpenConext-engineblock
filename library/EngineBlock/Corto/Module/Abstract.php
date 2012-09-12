@@ -8,7 +8,7 @@ abstract class EngineBlock_Corto_Module_Abstract
 {
     /**
      * A reference to the Corto_ProxyServer to which this module belongs.
-     * @var EngineBlock_Corto_CoreProxy
+     * @var EngineBlock_Corto_ProxyServer
      */
     protected $_server;
 

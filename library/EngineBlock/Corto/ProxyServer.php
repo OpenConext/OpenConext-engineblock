@@ -15,6 +15,18 @@ class EngineBlock_Corto_ProxyServer
 
     const VO_CONTEXT_PFX          = 'voContext';
 
+    protected $_serviceToControllerMapping = array(
+        'singleSignOnService'       => '/authentication/idp/single-sign-on',
+        'continueToIdP'             => '/authentication/idp/process-wayf',
+        'assertionConsumerService'  => '/authentication/sp/consume-assertion',
+        'continueToSP'              => '/authentication/sp/process-consent',
+        'idpMetadataService'        => '/authentication/idp/metadata',
+        'spMetadataService'         => '/authentication/sp/metadata',
+        'provideConsentService'     => '/authentication/idp/provide-consent',
+        'processConsentService'     => '/authentication/idp/process-consent',
+        'processedAssertionConsumerService' => '/authentication/proxy/processed-assertion'
+    );
+
     protected $_headers = array();
     protected $_output;
 
@@ -27,8 +39,6 @@ class EngineBlock_Corto_ProxyServer
     protected $_systemLog;
     protected $_sessionLog;
     protected $_sessionLogDefault;
-
-    protected $_hostedPath = "/";
 
     protected $_configs;
     protected $_entities = array(
@@ -163,6 +173,12 @@ class EngineBlock_Corto_ProxyServer
         return $this->_configs;
     }
 
+    public function setConfig($name, $value)
+    {
+        $this->_configs[$name] = $value;
+        return $this;
+    }
+
     public function setConfigs($configs)
     {
         $this->_configs = $configs;
@@ -202,74 +218,39 @@ class EngineBlock_Corto_ProxyServer
         return $name;
     }
 
-    public function getCurrentEntity()
+    public function getUrl($serviceName = "", $remoteEntityId = "", $request = "")
     {
-        return $this->_entities['current'];
-    }
-
-    public function setHostedEntities($entities)
-    {
-        $this->_entities['hosted'] = $entities;
-    }
-
-    public function setHostedPath($path)
-    {
-        $this->_hostedPath = $path;
-    }
-
-    public function getHostedEntities()
-    {
-        return $this->_entities['hosted'];
-    }
-
-    public function getHostedEntity($entityId)
-    {
-        if (isset($this->_entities['hosted'][$entityId])) {
-            return $entityId;
+        if (!isset($this->_serviceToControllerMapping[$serviceName])) {
+            throw new EngineBlock_Corto_ProxyServer_Exception("Unable to map service '$serviceName' to a controller!");
         }
-        return false;
-    }
 
-    public function getCurrentEntityUrl($serviceName = "", $remoteEntityId = "", $request = "")
-    {
-        return $this->getHostedEntityUrl(
-            $this->_entities['current']['EntityCode'],
-            $serviceName,
-            $remoteEntityId,
-            $request
-        );
-    }
-
-    public function getCurrentEntitySetting($name, $default = null)
-    {
-        if (isset($this->_entities['current'][$name])) {
-            return $this->_entities['current'][$name];
+        $scheme = 'http';
+        if (isset($_SERVER['HTTPS'])) {
+            $scheme = 'https';
         }
-        return $default;
-    }
 
-    public function selfUrl($entityid = null)
-    {
-        return  'http' . ($_SERVER['HTTPS'] ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . $this->selfPath($entityid);
-    }
+        $host = $_SERVER['HTTP_HOST'];
 
-	public function selfPath($entityid = null)
-	{
-		return $_SERVER['SCRIPT_NAME'] . ($entityid ? '/' . $entityid : '');
-	}
+        $mappedUri = $this->_serviceToControllerMapping[$serviceName];
 
-	public function selfDestination() {
-		return self::selfUrl() . $_SERVER['PATH_INFO'];
-	}
-
-    public function getHostedEntityUrl($entityCode, $serviceName = "", $remoteEntityId = "")
-    {
-        $entityPart = $entityCode;
+        $isImplicitVo = false;
+        $remoteEntity = false;
         if ($remoteEntityId) {
-            $entityPart .= '_' . md5($remoteEntityId);
+            $remoteEntity = $this->getRemoteEntity($remoteEntityId);
         }
-        return 'http' . ($_SERVER['HTTPS'] ? 's' : '') . '://' . $_SERVER['HTTP_HOST']
-            . $_SERVER['SCRIPT_NAME'] . '/' . $entityPart  . ($serviceName ? '/': '') . $serviceName;
+        if ($remoteEntity && isset($remoteEntity['VoContext'])) {
+            if ($request && !isset($request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX])) {
+                $isImplicitVo = true;
+            }
+        }
+        if (!$this->_processingMode && $this->_voContext !== null && $serviceName != "spMetadataService" && !$isImplicitVo) {
+            $mappedUri .= '/' . "vo:" . $this->_voContext;
+        }
+        if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $remoteEntityId) {
+            $mappedUri .= '/' . md5($remoteEntityId);
+        }
+
+        return $scheme . '://' . $host . $mappedUri;
     }
 
     public function getRemoteEntity($entityId)
@@ -319,83 +300,33 @@ class EngineBlock_Corto_ProxyServer
 
 //////// MAIN /////////
 
-    public function serveRequest($uri)
+    public function serve($serviceName, $remoteIdpMd5 = "")
     {
-        $parameters = $this->_getParametersFromUri($uri);
-        $this->setCurrentEntity($parameters['EntityCode'], $parameters['RemoteIdPMd5']);
+        $this->setRemoteIdpMd5($remoteIdpMd5);
 
         $this->startSession();
-        $this->getSessionLog()->debug("Started request with $uri, resulting in parameters: ". var_export($parameters, true));
+        $this->getSessionLog()->debug("Started request with parameters: ". var_export(func_get_args(), true));
 
-        $serviceName = $parameters['ServiceName'];
         $this->getSessionLog()->debug("Calling service '$serviceName'");
         $this->getServicesModule()->serve($serviceName);
         $this->getSessionLog()->debug("Done calling service '$serviceName'");
     }
 
-    protected function _getParametersFromUri($uri)
+    public function setRemoteIdpMd5($remoteIdPMd5)
     {
-        $parameters = array(
-            'EntityCode'    => '',
-            'ServiceName'   => '',
-            'RemoteIdPMd5'  => '',
-        );
-
-        if ($uri) {
-            // From /hostedEntity/requestedService get the hosted entity code and the requested service
-            $entityCodeAndService = preg_split('/\//', $uri, 0, PREG_SPLIT_NO_EMPTY);
-            if (isset($entityCodeAndService[0])) {
-                // From the hosted entity name like entity name_myidp, get a hosted IDP identifier (myIdp in the example).
-                $entityComponents = preg_split('/_/', $entityCodeAndService[0], 0, PREG_SPLIT_NO_EMPTY);
-
-                $parameters['EntityCode'] = $entityComponents[0];
-                if (isset($entityComponents[1])) {
-                    $parameters['RemoteIdPMd5'] = $entityComponents[1];
-                }
-            }
-            if (isset($entityCodeAndService[1])) {
-                $parameters['ServiceName'] = $entityCodeAndService[1];
+        $remoteEntityIds = array_keys($this->_entities['remote']);
+        foreach ($remoteEntityIds as $remoteEntityId) {
+            if (md5($remoteEntityId) === $remoteIdPMd5) {
+                $this->_configs['Idp'] = $remoteEntityId;
+                $this->_configs['TransparentProxy'] = true;
+                $this->getSessionLog()->debug("Detected pre-selection of $remoteEntityId as IdP, switching to transparant mode");
+                break;
             }
         }
-
-        // Defaults
-        if (!$parameters['EntityCode']) {
-            $parameters['EntityCode'] = 'main';
-        }
-        if (!$parameters['ServiceName']) {
-            $parameters['ServiceName'] = 'demoApp';
+        if (!isset($this->_configs['Idp'])) {
+            $this->getSessionLog()->warn("Unable to map $remoteIdPMd5 to a remote entity!");
         }
 
-        return $parameters;
-    }
-
-    public function setCurrentEntity($entityCode, $remoteIdPMd5 = "")
-    {
-        $entityId = $this->getHostedEntityUrl($entityCode);
-        $hostedEntity = array();
-        if (isset($this->_entities['hosted'][$entityId])) {
-            $hostedEntity = $this->_entities['hosted'][$entityId];
-        }
-
-        $hostedEntity['EntityId']   = $entityId;
-        $hostedEntity['EntityCode'] = $entityCode;
-
-        if ($remoteIdPMd5) {
-            $remoteEntityIds = array_keys($this->_entities['remote']);
-            foreach ($remoteEntityIds as $remoteEntityId) {
-                if (md5($remoteEntityId) === $remoteIdPMd5) {
-                    $hostedEntity['Idp'] = $remoteEntityId;
-                    $hostedEntity['TransparentProxy'] = true;
-                    $this->getSessionLog()->debug("Detected pre-selection of $remoteEntityId as IdP, switching to transparant mode");
-                    break;
-                }
-            }
-            if (!isset($hostedEntity['Idp'])) {
-                $this->getSessionLog()->warn("Unable to map $remoteIdPMd5 to a remote entity!");
-            }
-        }
-
-        $this->_entities['current'] = $hostedEntity;
         return $this;
     }
 
@@ -453,10 +384,10 @@ class EngineBlock_Corto_ProxyServer
             '_IsPassive'                        => ($originalRequest['_IsPassive']) ? 'true' : 'false',
 
             // Send the response to us.
-            '_AssertionConsumerServiceURL'      => $this->getCurrentEntityUrl('assertionConsumerService'),
+            '_AssertionConsumerServiceURL'      => $this->getUrl('assertionConsumerService'),
             '_ProtocolBinding'                  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
 
-            'saml:Issuer' => array('__v' => $this->getCurrentEntityUrl('sPMetadataService')),
+            'saml:Issuer' => array('__v' => $this->getUrl('spMetadataService')),
             'ds:Signature' => '__placeholder__',
             'samlp:NameIDPolicy' => array(
                 '_Format'       => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
@@ -557,11 +488,11 @@ class EngineBlock_Corto_ProxyServer
         // as the assertion passes through multiple times ???
         $authenticatingAuthorities = &$response['saml:Assertion']['saml:AuthnStatement']['saml:AuthnContext']['saml:AuthenticatingAuthority'];
         foreach ((array) $authenticatingAuthorities as $key => $authenticatingAuthority) {
-            if ($authenticatingAuthority['__v'] === $this->getCurrentEntity()) {
+            if ($authenticatingAuthority['__v'] === $this->getUrl('idpMetadataService')) {
                 unset($authenticatingAuthorities[$key]);
             }
         }
-        if ($this->getCurrentEntityUrl('idPMetadataService') !== $sourceResponse['saml:Issuer']['__v']) {
+        if ($this->getUrl('idpMetadataService') !== $sourceResponse['saml:Issuer']['__v']) {
             $authenticatingAuthorities[] = array('__v' => $sourceResponse['saml:Issuer']['__v']);
         }
 
@@ -611,7 +542,7 @@ class EngineBlock_Corto_ProxyServer
             'ds:Signature' => '__placeholder__',
             'saml:Subject' => array(
                 'saml:NameID' => array(
-                    '_SPNameQualifier'  => $this->getCurrentEntityUrl(),
+                    '_SPNameQualifier'  => $this->getUrl('idpMetadataService'),
                     '_Format'           => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
                     '__v'               => $this->getNewId(),
                 ),
@@ -675,8 +606,8 @@ class EngineBlock_Corto_ProxyServer
 
     protected function _createBaseResponse($request)
     {
-        if (isset($request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX])) {
-            $vo = $request['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX];
+        if (isset($request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX])) {
+            $vo = $request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX];
             $this->setVirtualOrganisationContext($vo);
         }
 
@@ -698,7 +629,7 @@ class EngineBlock_Corto_ProxyServer
             '_IssueInstant' => $now,
             '_InResponseTo' => $request['_ID'],
 
-            'saml:Issuer' => array('__v' => $this->getCurrentEntityUrl('idPMetadataService', $destinationID, $request)),
+            'saml:Issuer' => array('__v' => $this->getUrl('idpMetadataService', $destinationID, $request)),
             'samlp:Status' => array(
                 'samlp:StatusCode' => array(
                     '_Value' => 'urn:oasis:names:tc:SAML:2.0:status:Success',
@@ -789,8 +720,6 @@ class EngineBlock_Corto_ProxyServer
 
     public function filterInputAssertionAttributes(&$response, $request)
     {
-        $hostedEntityMetaData = $this->_entities['current'];
-
         $responseIssuer = $response['saml:Issuer']['__v'];
         $idpEntityMetadata = $this->getRemoteEntity($responseIssuer);
 
@@ -800,8 +729,8 @@ class EngineBlock_Corto_ProxyServer
         if (isset($idpEntityMetadata['filter'])) {
             $this->callAttributeFilter($idpEntityMetadata['filter'], $response, $request, $spEntityMetadata, $idpEntityMetadata);
         }
-        if (isset($hostedEntityMetaData['infilter'])) {
-            $this->callAttributeFilter($hostedEntityMetaData['infilter'], $response, $request, $spEntityMetadata, $idpEntityMetadata);
+        if (isset($this->_configs['infilter'])) {
+            $this->callAttributeFilter($this->_configs['infilter'], $response, $request, $spEntityMetadata, $idpEntityMetadata);
         }
     }
 
@@ -967,7 +896,7 @@ class EngineBlock_Corto_ProxyServer
             $certificates['public'] = $alternatePublicKey;
             $certificates['private'] = $alternatePrivateKey;
         } else {
-            $certificates = $this->getCurrentEntitySetting('certificates', array());
+            $certificates = $this->getConfig('certificates', array());
         }
 
         $signature = array(
@@ -1073,19 +1002,31 @@ class EngineBlock_Corto_ProxyServer
      * Gets the PATH_INFO from a URL like: http://host/path/corto.php/path/info
      *
      * @param string $url
+     * @return array Parameters: EntityCode, ServiceName and RemoteIdPMd5Hash
+     * @throws EngineBlock_Corto_ProxyServer_Exception
      */
     public function getParametersFromUrl($url)
     {
-        $urlPath = parse_url($url, PHP_URL_PATH); // /path/corto.php/EntityCode_remoteIdPMd5Hash/ServiceName
-        $currentPath = $_SERVER['SCRIPT_NAME']; // /path/corto.php
+        $parameters = array(
+            'EntityCode'        => 'main',
+            'ServiceName'       => '',
+            'RemoteIdPMd5Hash'  => '',
+        );
+        $urlPath = parse_url($url, PHP_URL_PATH); // /authentication/x/ServiceName[/remoteIdPMd5Hash]
 
-        if (strpos($urlPath, $currentPath) !== 0) {
-            $message = "Unable to get Parameters from URL: '$url' for Corto installation at path: '$currentPath'";
-            throw new EngineBlock_Corto_ProxyServer_Exception($message);
+        foreach ($this->_serviceToControllerMapping as $serviceName => $controllerUri) {
+            if (strstr($urlPath, $controllerUri)) {
+                $urlPath = str_replace($controllerUri, $serviceName, $urlPath);
+                $urlParts = explode('/', $urlPath);
+                $parameters['ServiceName'] = array_shift($urlParts);
+                if (isset($urlParts[0])) {
+                    $parameters['RemoteIdPMd5Hash'] = array_shift($urlParts);
+                }
+                return $parameters;
+            }
         }
 
-        $uri = substr($currentPath, strlen($currentPath));
-        return $this->_getParametersFromUri($uri);
+        throw new EngineBlock_Corto_ProxyServer_Exception("Unable to map URL '$url' to EngineBlock URL");
     }
 
     /**
@@ -1109,7 +1050,7 @@ class EngineBlock_Corto_ProxyServer
     public function startSession()
     {
         session_set_cookie_params(0, $this->getConfig('cookie_path', '/'), '', $this->getConfig('use_secure_cookies', true), true);
-        session_name($this->_entities['current']['EntityCode']);
+        session_name('main');
         session_start();
     }
 
@@ -1144,6 +1085,7 @@ class EngineBlock_Corto_ProxyServer
             $this->_sessionLogDefault = new EngineBlock_Corto_Log_Dummy();
         }
 
+        /** @var $sessionLog EngineBlock_Corto_Log_Interface */
         $sessionLog = $this->_sessionLogDefault;
         $sessionLog->setId(session_id());
         $this->_sessionLog =$sessionLog;

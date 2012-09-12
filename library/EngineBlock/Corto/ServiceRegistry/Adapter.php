@@ -95,7 +95,9 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         $idPs = $this->_serviceRegistry->getIdpList();
         foreach ($idPs as $idPEntityId => $idP) {
             try {
-                $metadata[$idPEntityId] = self::convertServiceRegistryEntityToCortoEntity($idP);
+                $idP = self::convertServiceRegistryEntityToCortoEntity($idP);
+                $idP['EntityID'] = $idPEntityId;
+                $metadata[$idPEntityId] = $idP;
             } catch (Exception $e) {
                 // Whoa, something went wrong trying to convert the SR entity to a Corto entity
                 // We can't use this entity, but we can continue after we've reported
@@ -112,9 +114,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
     {
         $metadata = array();
         $sPs = $this->_serviceRegistry->getSPList();
-        foreach ($sPs as $sPEntityId => $sP) {
+        foreach ($sPs as $spEntityId => $sp) {
             try {
-                $metadata[$sPEntityId] = self::convertServiceRegistryEntityToCortoEntity($sP);
+                $sp = self::convertServiceRegistryEntityToCortoEntity($sp);
+                $sp['EntityID'] = $spEntityId;
+                $metadata[$spEntityId] = $sp;
             } catch (Exception $e) {
                 // Whoa, something went wrong trying to convert the SR entity to a Corto entity
                 // We can't use this entity, but we can continue after we've reported

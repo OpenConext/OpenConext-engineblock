@@ -61,7 +61,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     protected $_internalBindingMessages = array();
 
     /**
-     * @var EngineBlock_Corto_CoreProxy
+     * @var EngineBlock_Corto_ProxyServer
      */
     protected $_server;
 
@@ -137,7 +137,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             $voContext = $this->_server->getVirtualOrganisationContext();
             if ($voContext != NULL) {
-                $message['__'][EngineBlock_Corto_CoreProxy::VO_CONTEXT_PFX] = $voContext;
+                $message['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $voContext;
             }
         }
         return $message;
@@ -260,7 +260,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned'])
                 ||
                 // Or we currently demand that all AuthnRequests are sent signed
-                $this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned')
+                $this->_server->getConfig('WantsAuthnRequestsSigned')
         );
         if ($wantRequestsSigned) {
             $this->_verifySignature($request, self::KEY_REQUEST, true);
@@ -307,8 +307,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * Encrypt an element using a particular public key.
      * @param String $publicKey The public key used for encryption.
-     * @param array $element An array representation of an xml fragment
-     * @param unknown_type $tag ???
+     * @param array  $element An array representation of an xml fragment
+     * @param string $tag Element name for the root element
      * @return array The encrypted version of the element.
      */
     protected function _encryptElement($publicKey, $element, $tag = null)
@@ -738,7 +738,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned'])
                 ||
                 // Or we currently demand that all AuthnRequests are sent signed
-                $this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned')
+                $this->_server->getConfig('WantsAuthnRequestsSigned')
         );
         $mustSign = ($messageType===self::KEY_REQUEST && $wantRequestsSigned);
         if ($mustSign) {
@@ -792,7 +792,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     protected function _getCurrentEntityPrivateKey()
     {
-        $certificates = $this->_server->getCurrentEntitySetting('certificates', array());
+        $certificates = $this->_server->getConfig('certificates', array());
         if (!isset($certificates['private'])) {
             throw new EngineBlock_Corto_Module_Bindings_Exception('Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!');
         }
@@ -868,7 +868,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned'])
                     ||
                     // Or we currently demand that all AuthnRequests are sent signed
-                    $this->_server->getCurrentEntitySetting('WantsAuthnRequestsSigned')
+                    $this->_server->getConfig('WantsAuthnRequestsSigned')
             );
             if ($name == 'SAMLRequest' && $wantRequestsSigned) {
                 $this->_server->getSessionLog()->debug("HTTP-Redirect: (Re-)Signing");
@@ -934,9 +934,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         $destinationLocation = $message['_Destination'];
         $parameters = $this->_server->getParametersFromUrl($destinationLocation);
-        $this->_server->setCurrentEntity($parameters['EntityCode'], isset($parameters['RemoteIdPMd5']) ? $parameters['RemoteIdPMd5'] : "");
+        if (isset($parameters['RemoteIdPMd5'])) {
+            $this->_server->setRemoteIdpMd5($parameters['RemoteIdPMd5']);
+        }
 
-        $this->_server->getSessionLog()->debug("Using internal binding for destination: $destinationLocation, resulting in parameters: " . var_export($parameters, true));
+        $this->_server->getSessionLog()->debug(
+            "Using internal binding for destination: $destinationLocation, resulting in parameters: " . var_export($parameters, true)
+        );
 
         $serviceName = $parameters['ServiceName'];
 
