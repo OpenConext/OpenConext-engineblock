@@ -25,7 +25,7 @@
 
 class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
-    public function singleSignOnAction($argument = null)
+    public function singleSignOnAction()
     {
         $this->setNoRender();
         $application = EngineBlock_ApplicationSingleton::getInstance();
@@ -35,10 +35,15 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
             $idPEntityId = NULL;
 
-            if (substr($argument, 0, 3) == "vo:") {
-                $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
-            } else {
-                $idPEntityId = $argument;
+            // Optionally allow /single-sign-on/vo:myVoId/remoteIdPHash or
+            // /single-sign-on/remoteIdPHash/vo:myVoId
+            $arguments = func_get_args();
+            foreach ($arguments as $argument) {
+                if (substr($argument, 0, 3) == "vo:") {
+                    $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
+                } else {
+                    $idPEntityId = $argument;
+                }
             }
 
             $proxyServer->singleSignOn($idPEntityId);
@@ -110,10 +115,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                null, $e->getDestination(), $e->getEntityId(), $e->getTraceAsString()
-            );
-            $application->getLogInstance()->err($e->getMessage(), $additionalInfo);
+            $application->getLogInstance()->err($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl(
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
                 '&destination=' . urlencode($e->getDestination())
