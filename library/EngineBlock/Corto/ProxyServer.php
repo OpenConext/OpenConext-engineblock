@@ -1,11 +1,5 @@
 <?php
 
-/**
- *
- */
-require 'XmlToArray.php';
-require 'Log/Dummy.php';
-
 class EngineBlock_Corto_ProxyServer
 {
     const ID_PREFIX = 'CORTO';
