@@ -94,8 +94,14 @@ class EngineBlock_Dispatcher
     protected function _handleDispatchException(Exception $e)
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
-
-        $application->reportError($e);
+        if ($e instanceof EngineBlock_Exception) {
+            $application->reportError($e);
+        }
+        else {
+            $application->reportError(
+                new EngineBlock_Exception($e->getMessage(), EngineBlock_Exception::CODE_ERROR, $e)
+            );
+        }
 
         if (!$this->_useErrorHandling) {
             throw $e;

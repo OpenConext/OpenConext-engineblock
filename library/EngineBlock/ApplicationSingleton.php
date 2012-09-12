@@ -590,9 +590,7 @@ class EngineBlock_ApplicationSingleton
             return FALSE;
         }
 
-        $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-            null, null, null, $exception->getTraceAsString()
-        );
+        $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
         $log->err($exception->getMessage(), $additionalInfo);
         $log->debug($exception->getTraceAsString());
 

@@ -30,12 +30,18 @@ class EngineBlock_Log_Message_AdditionalInfo
     protected $_sp;
     protected $_details;
 
-    public function __construct($userId, $idp, $sp, $details)
+    public static function createFromException(EngineBlock_Exception $e)
     {
-        $this->_userId = $userId;
-        $this->_idp = $idp;
-        $this->_sp = $sp;
-        $this->_details = $details;
+        $info = new static();
+        $info->_userId  = $e->userId;
+        $info->_idp     = $e->idpEntityId;
+        $info->_sp      = $e->spEntityId;
+        $info->_details = $e->getTraceAsString();
+        return $info;
+    }
+
+    public function __construct()
+    {
     }
 
     public function setDetails($details)

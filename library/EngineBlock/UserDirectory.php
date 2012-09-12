@@ -131,7 +131,9 @@ class EngineBlock_UserDirectory
                     break;
                 default:
                     $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
-                    throw new EngineBlock_Exception($message);
+                    $e = new EngineBlock_Exception($message);
+                    $e->userId = $uid;
+                    throw $e;
             }
         } catch (Zend_Ldap_Exception $e) {
             // Note that during high volumes of logins (like during a performance test) we may see a find
@@ -160,7 +162,9 @@ class EngineBlock_UserDirectory
 
         // Only update a user
         if (count($users) > 1) {
-            throw new EngineBlock_Exception("Multiple users found for UID: $uid?!");
+            $e = new EngineBlock_Exception("Multiple users found for UID: '$uid''?!");
+            $e->userId = $uid;
+            throw $e;
         }
 
         $newAttributes = array();
@@ -184,7 +188,9 @@ class EngineBlock_UserDirectory
 
         // Only update a user
         if (count($users) > 1) {
-            throw new EngineBlock_Exception("Multiple users found for UID: $uid?!");
+            $e = new EngineBlock_Exception("Multiple users found for UID: $uid?!");
+            $e->userId = $uid;
+            throw $e;
         }
 
         $newAttributes = array();
@@ -217,7 +223,9 @@ class EngineBlock_UserDirectory
     {
         $users = $this->findUserByCollabPersonId($uid);
         if (count($users) !== 1) {
-            throw new EngineBlock_Exception("Multiple or no users found for uid $uid?");
+            $e = new EngineBlock_Exception("Multiple or no users found for uid $uid?");
+            $e->userId = $uid;
+            throw $e;
         }
         $user = $users[0];
         return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
