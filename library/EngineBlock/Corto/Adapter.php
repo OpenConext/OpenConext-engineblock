@@ -158,7 +158,9 @@ class EngineBlock_Corto_Adapter
 
             // Check if they are unequal (no explicit VO or the same VO is okay)
             if ($implicitVo !== $explicitVo) {
-                throw new EngineBlock_Exception("Explicit VO '$explicitVo' does not match implicit VO '$implicitVo'!");
+                throw new EngineBlock_Corto_Exception_VoMismatch(
+                    "Explicit VO '$explicitVo' does not match implicit VO '$implicitVo'!"
+                );
             }
         }
 

@@ -221,7 +221,9 @@ class EngineBlock_Corto_ProxyServer
     public function getUrl($serviceName = "", $remoteEntityId = "", $request = "")
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception("Unable to map service '$serviceName' to a controller!");
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Unable to map service '$serviceName' to a controller!"
+            );
         }
 
         $scheme = 'http';
@@ -642,7 +644,9 @@ class EngineBlock_Corto_ProxyServer
         $response['__']['ProtocolBinding']  = $acs['Binding'];
 
         if (!$response['_Destination']) {
-            throw new EngineBlock_Corto_ProxyServer_Exception("No Destination in request or metadata for: $destinationID");
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "No Destination in request or metadata for: $destinationID"
+            );
         }
 
         return $response;

@@ -274,7 +274,7 @@ class EngineBlock_Corto_XmlToArray
                 $elementName = $hash[self::TAG_NAME_PFX];
             }
             else {
-                throw new Exception("No top level tag provided or defined in hash!");
+                throw new EngineBlock_Corto_XmlToArray_Exception("No top level tag provided or defined in hash!");
             }
         }
 
@@ -291,7 +291,9 @@ class EngineBlock_Corto_XmlToArray
         }
 
         if ($level > self::MAX_RECURSION_LEVEL) {
-            throw new Exception('Recursion threshold exceed on element: '.$elementName . ' for hashvalue: ' . var_export($hash, true));
+            throw new EngineBlock_Corto_XmlToArray_Exception(
+                'Recursion threshold exceed on element: '.$elementName . ' for hashvalue: ' . var_export($hash, true)
+            );
         }
         if ($hash == self::PLACEHOLDER_VALUE) {
             // Ignore placeholders
