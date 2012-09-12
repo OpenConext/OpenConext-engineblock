@@ -432,12 +432,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     protected function _verifyResponse(array &$response)
     {
-        $this->_verifyKnownIssuer($response);
-        if ($this->_server->getCurrentEntitySetting('WantsAssertionsSigned', false)) {
-            $this->_verifySignature($response, self::KEY_RESPONSE);
-            $request['__']['WasSigned'] = true;
+        try {
+            $this->_verifyKnownIssuer($response);
+
+            if ($this->_server->getConfig('WantsAssertionsSigned', false)) {
+                $this->_verifySignature($response, self::KEY_RESPONSE);
+                $request['__']['WasSigned'] = true;
+            }
+            $this->_verifyTimings($response);
+        } catch (EngineBlock_Exception $e) {
+            $request = $this->_server->getReceivedRequestFromResponse($response['_ID']);
+            $e->spEntityId = $request['saml:Issuer']['__v'];
+            $e->idpEntityId = $response['saml:Issuer']['__v'];
+            throw $e;
         }
-        $this->_verifyTimings($response);
     }
 
     protected function _verifySignature(array $message, $key, $requireMessageSigning = false)
