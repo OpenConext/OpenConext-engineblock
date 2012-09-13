@@ -40,21 +40,15 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->getLogInstance()->notice('SingleSignOn: Unable to receive message error');
+            $application->getLogInstance()->notice('SingleSignOn: Unable to receive SAMLResponse');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                null, $e->getDestination(), $e->getEntityId(), $e->getTraceAsString()
-            );
-            $application->getLogInstance()->notice($e->getMessage(), $additionalInfo);
+            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
         catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                null, null, null, $e->getTraceAsString()
-            );
-            $application->getLogInstance()->error($e->getMessage(), $additionalInfo);
+            $application->getLogInstance()->error($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
         }
     }

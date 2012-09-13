@@ -246,9 +246,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
             $remoteEntities = $this->_server->getRemoteEntities();
             $metadata = ($remoteEntities[$idpEntityId]);
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                null, $idpEntityId, null, null
-            );
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setIdp($idpEntityId);
 
             if (isset($metadata['DisplayName']['nl'])) {
                 $nameNl = $metadata['DisplayName']['nl'];

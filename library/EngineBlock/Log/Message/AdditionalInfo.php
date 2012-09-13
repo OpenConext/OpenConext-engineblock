@@ -61,7 +61,12 @@ class EngineBlock_Log_Message_AdditionalInfo
         return $info;
     }
 
-    public function __construct()
+    public static function create()
+    {
+        return new static();
+    }
+
+    protected function __construct()
     {
     }
 
@@ -88,6 +93,7 @@ class EngineBlock_Log_Message_AdditionalInfo
     public function setDetails($details)
     {
         $this->_details = $details;
+        return $this;
     }
 
     public function getDetails()
@@ -98,6 +104,7 @@ class EngineBlock_Log_Message_AdditionalInfo
     public function setIdp($idp)
     {
         $this->_idp = $idp;
+        return $this;
     }
 
     public function getIdp()
@@ -108,6 +115,7 @@ class EngineBlock_Log_Message_AdditionalInfo
     public function setSp($sp)
     {
         $this->_sp = $sp;
+        return $this;
     }
 
     public function getSp()
@@ -118,6 +126,7 @@ class EngineBlock_Log_Message_AdditionalInfo
     public function setUserId($userId)
     {
         $this->_userId = $userId;
+        return $this;
     }
 
     public function getUserId()

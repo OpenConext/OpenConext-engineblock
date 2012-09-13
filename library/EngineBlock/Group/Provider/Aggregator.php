@@ -308,9 +308,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
 
     protected static function _logErrorMessage($providerId, Exception $e)
     {
-        $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-            null, null, null, $e->getTraceAsString()
-        );
+        $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setDetails($e->getTraceAsString());
         EngineBlock_ApplicationSingleton::getLog()->err(
             "Unable to use provider $providerId, received Exception: " . $e->getMessage(),
             $additionalInfo

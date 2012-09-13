@@ -86,9 +86,9 @@ class EngineBlock_VirtualOrganization_Validator
                 }
             }
         } catch (EngineBlock_VirtualOrganization_VoIdentifierNotFoundException $e) {
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                $subjectId, null, null, $virtualOrganization
-            );
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+                ->setUserId($subjectId)
+                ->setDetails($virtualOrganization);
             EngineBlock_ApplicationSingleton::getLog()->warn($e->getMessage(), $additionalInfo);
         }
         return false;

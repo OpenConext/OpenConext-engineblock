@@ -44,12 +44,9 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         }
 
         catch (Exception $e) {
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                $this->user->getUid(),
-                null,
-                null,
-                $e->getTraceAsString()
-            );
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+                ->setUserId($this->user->getUid())
+                ->setDetails($e->getTraceAsString());
 
             EngineBlock_ApplicationSingleton::getLog()->critical($e->getMessage(), $additionalInfo);
         }
@@ -61,7 +58,9 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
      */
     protected function _getSpOauthList($spList)
     {
-        $oauthList = $this->user->getThreeLeggedShindigOauth();
+        /** @var $user EngineBlock_User */
+        $user = $this->user;
+        $oauthList = $user->getThreeLeggedShindigOauth();
         $results = array();
         foreach ($spList as $spId => $sp) {
             if (array_key_exists('coin:gadgetbaseurl', $sp)) {

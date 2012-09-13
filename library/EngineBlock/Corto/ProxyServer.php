@@ -965,8 +965,7 @@ class EngineBlock_Corto_ProxyServer
         $nodes = $xpath->query('/*[@ID="' . $element['_ID'] . '"]');
         if ($nodes->length < 1) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Unable to sign message can't find element with id to sign?",
-                EngineBlock_Exception::CODE_NOTICE
+                "Unable to sign message can't find element with id to sign?"
             );
         }
         $canonicalXmlDom = $nodes->item(0);

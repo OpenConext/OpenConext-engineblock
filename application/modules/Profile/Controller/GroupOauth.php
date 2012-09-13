@@ -98,9 +98,9 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
 
         if (!$provider->validatePreconditions()) {
 
-            EngineBlock_ApplicationSingleton::getLog()->err(
+            EngineBlock_ApplicationSingleton::getLog()->notice(
                 "Unable to test OpenSocial 3-legged Oauth provider because not all preconditions have been matched?",
-                new EngineBlock_Log_Message_AdditionalInfo($userId, null, null, null)
+                EngineBlock_Log_Message_AdditionalInfo::create()->setUserId($userId)
             );
             $this->providerId = $providerId;
             $this->renderAction("Error"); 

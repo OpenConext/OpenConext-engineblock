@@ -211,9 +211,9 @@ XML;
                 $membersWithPrivileges[] = $member;
             }
             catch (Exception $e) {
-                $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                    $member->id,null, null, $e->getTraceAsString()
-                );
+                $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+                    ->setUserId($member->id)
+                    ->setDetails($e->getTraceAsString());
                 EngineBlock_ApplicationSingleton::getLog()->warn(
                     "Something wrong with user: " . var_export($member, true) .
                     'Received Exception: ' . var_export($e, true),

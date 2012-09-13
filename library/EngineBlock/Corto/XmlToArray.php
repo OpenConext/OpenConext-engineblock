@@ -294,7 +294,7 @@ class EngineBlock_Corto_XmlToArray
 
         if ($level > self::MAX_RECURSION_LEVEL) {
             throw new EngineBlock_Corto_XmlToArray_Exception(
-                'Recursion threshold exceed on element: '.$elementName . ' for hashvalue: ' . var_export($hash, true)
+                'Recursion threshold exceed on element: ' . $elementName . ' for hashvalue: ' . var_export($hash, true)
             );
         }
         if ($hash == self::PLACEHOLDER_VALUE) {

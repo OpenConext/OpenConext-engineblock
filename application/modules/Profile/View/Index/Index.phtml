@@ -144,12 +144,10 @@ foreach ($spList as $spId => $sp) {
             $invalidProviders[] = $groupProvider;
         }
         catch(Exception $e) {
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                $user->getUid(),
-                null,
-                null,
-                $e->getTraceAsString()
-            );
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+                ->setUserId($user->getUid())
+                ->setDetails($e->getTraceAsString());
+
             EngineBlock_ApplicationSingleton::getLog()->err($e->getMessage(), $additionalInfo);
         }
         if (!empty($groups)):

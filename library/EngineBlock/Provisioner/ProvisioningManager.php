@@ -64,9 +64,10 @@ class EngineBlock_Provisioner_ProvisioningManager
 
             ->request('POST');
 
-        $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-            $userId, $idpMetadata['EntityId'], $spMetadata['EntityId'], null
-        );
+        $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+            ->setUserId($userId)
+            ->setIdp($idpMetadata['EntityId'])
+            ->setSp($spMetadata['EntityId']);
         EngineBlock_ApplicationSingleton::getLog()->debug(
             "PROVISIONING: Sent HTTP request to provision user using " . __CLASS__,
             $additionalInfo

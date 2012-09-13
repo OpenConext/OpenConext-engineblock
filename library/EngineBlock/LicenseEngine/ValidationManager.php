@@ -71,9 +71,11 @@ class EngineBlock_LicenseEngine_ValidationManager
             $response = json_decode($body, true);
             $status = $response['status'];
         } catch (Exception $exception) {
-            $additionalInfo = new EngineBlock_Log_Message_AdditionalInfo(
-                $userId, $idpMetadata['EntityId'], $spMetadata['EntityId'], $exception->getTraceAsString()
-            );
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+                ->setUserId($userId)
+                ->setIdp($idpMetadata['EntityId'])
+                ->setSp($spMetadata['EntityId'])
+                ->setDetails($exception->getTraceAsString());
             EngineBlock_ApplicationSingleton::getLog()->error("Could not connect to License Manager" . $exception->getMessage(), $additionalInfo);
             return EngineBlock_LicenseEngine_ValidationManager::LICENSE_UNKNOWN;
         }
