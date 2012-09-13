@@ -4,18 +4,6 @@ if (!class_exists('XMLWriter')) {
     die('XMLWriter class does not exist! Please install libxml extension for php.');
 }
 
-/**
- *
- *
- * @package    Corto
- * @module     Library
- * @author     Mads Freek Petersen, <freek@ruc.dk>
- * @author     Boy Baukema, <boy@ibuildings.com>
- * @licence    MIT License, see http://www.opensource.org/licenses/mit-license.php
- * @copyright  2009-2010 WAYF.dk
- * @version    $Id:$
- */
-
 class EngineBlock_Corto_XmlToArray
 {
     const PRIVATE_PFX           = '__';
@@ -151,14 +139,21 @@ class EngineBlock_Corto_XmlToArray
     public static function xml2array($xml)
     {
         $parser = xml_parser_create();
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
+        if (!$foldingOptionSet) {
+            throw new EngineBlock_Corto_XmlToArray_Exception(
+                "Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: " . xml_error_string(xml_get_error_code($parser)),
+                EngineBlock_Corto_XmlToArray_Exception::CODE_ERROR
+            );
+        }
+
+        $values = array();
         $parserResultStatus = xml_parse_into_struct($parser, $xml, $values);
         if ($parserResultStatus !== 1) {
             throw new EngineBlock_Corto_XmlToArray_Exception(
                 'Error parsing incoming XML. ' . PHP_EOL .
-                'Error code: '.xml_error_string(xml_get_error_code($parser)) . PHP_EOL .
-                'XML: ' . $xml,
-                EngineBlock_Exception::CODE_NOTICE
+                'Error code: ' . xml_error_string(xml_get_error_code($parser)) . PHP_EOL .
+                'XML: ' . $xml
             );
         }
 
@@ -388,6 +383,7 @@ class EngineBlock_Corto_XmlToArray
         $result = ''; // holds formatted version as it is built
         $pad = 0; // initial indent
         $matches = array(); // returns from preg_matches()
+        $indent = 0;
 
         // scan each line and adjust indent based on opening/closing tags
         while ($token !== false) :
