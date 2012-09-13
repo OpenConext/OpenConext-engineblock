@@ -60,6 +60,12 @@ class EngineBlock_Log extends Zend_Log
         return $log;
     }
 
+    public function log($message, $priority, $additionalInfo = null)
+    {
+        $this->_setAdditionalEventItems($additionalInfo);
+        parent::log($message, $priority);
+    }
+
     /**
      * Prio 0: Emergency: system is unusable
      *

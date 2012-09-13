@@ -7,8 +7,17 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         // Get the configuration for EngineBlock in it's IdP / SP role.
         $entityDetails = $this->_getCurrentEntity($serviceName);
 
-        // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
-        $alternateKeys = $this->_getAlternateKeys();
+        try {
+            // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
+            $alternateKeys = $this->_getAlternateKeys();
+        } catch (EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
+            $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+            $this->_server->redirect(
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId),
+                "Unknown SP!");
+            return;
+        }
+
         if ($alternateKeys) {
             $entityDetails['certificates'] = $alternateKeys;
         }
@@ -88,18 +97,22 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
         $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
         $spEntityId = $request->getQueryParameter('sp-entity-id');
-        if ($spEntityId) {
-            $spEntity = $this->_server->getRemoteEntity($spEntityId);
-
-            // Check if an alternative Public key has been set for the requesting SP
-            // If yes, use these in the metadata of EngineBlock
-            if (isset($spEntity['AlternatePublicKey']) && isset($spEntity['AlternatePrivateKey'])) {
-                return array(
-                    'public' => $spEntity['AlternatePublicKey'],
-                    'private' => $spEntity['AlternatePrivateKey'],
-                );
-            }
+        if (!$spEntityId) {
+            return false;
         }
-        return false;
+
+        $spEntity = $this->_server->getRemoteEntity($spEntityId);
+
+        // Check if an alternative Public key has been set for the requesting SP
+        // If yes, use these in the metadata of EngineBlock
+        if (isset($spEntity['AlternatePublicKey']) && isset($spEntity['AlternatePrivateKey'])) {
+            return array(
+                'public' => $spEntity['AlternatePublicKey'],
+                'private' => $spEntity['AlternatePrivateKey'],
+            );
+        }
+        else {
+            return false;
+        }
     }
 }

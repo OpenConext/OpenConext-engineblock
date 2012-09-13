@@ -25,6 +25,8 @@
 
 class EngineBlock_Log_Message_AdditionalInfo
 {
+    protected $_severity;
+    protected $_location;
     protected $_userId;
     protected $_idp;
     protected $_sp;
@@ -36,12 +38,51 @@ class EngineBlock_Log_Message_AdditionalInfo
         $info->_userId  = $e->userId;
         $info->_idp     = $e->idpEntityId;
         $info->_sp      = $e->spEntityId;
-        $info->_details = $e->getTraceAsString();
+
+        $traces = array($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+        $prev = $e;
+        while ($prev = $prev->getPrevious()) {
+            $traces[] = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+        }
+        $info->_details = implode(PHP_EOL . PHP_EOL, $traces);
+
+        $info->_location= $e->getFile() . ':' . $e->getLine();
+        switch ($e->getCode()) {
+            case LOG_EMERG:     $info->_severity = 'EMERG'; break;
+            case LOG_ALERT:     $info->_severity = 'ALERT'; break;
+            case LOG_CRIT:      $info->_severity = 'CRITICAL'; break;
+            case LOG_ERR:       $info->_severity = 'ERROR'; break;
+            case LOG_WARNING:   $info->_severity = 'WARNING'; break;
+            case LOG_NOTICE:    $info->_severity = 'NOTICE'; break;
+            case LOG_INFO:      $info->_severity = 'INFO'; break;
+            case LOG_DEBUG:     $info->_severity = 'DEBUG'; break;
+            default:            $info->_severity = 'UNKNOWN';
+        }
         return $info;
     }
 
     public function __construct()
     {
+    }
+
+    public function setSeverity($severity)
+    {
+        $this->_severity = $severity;
+    }
+
+    public function getSeverity()
+    {
+        return $this->_severity;
+    }
+
+    public function setLocation($line)
+    {
+        $this->_location = $line;
+    }
+
+    public function getLocation()
+    {
+        return $this->_location;
     }
 
     public function setDetails($details)
@@ -87,6 +128,8 @@ class EngineBlock_Log_Message_AdditionalInfo
     public function toArray()
     {
         $array = array();
+        $array['severity']  = $this->_severity;
+        $array['location']  = $this->_location;
         $array['userId']    = $this->_userId;
         $array['idp']       = $this->_idp;
         $array['sp']        = $this->_sp;

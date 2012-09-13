@@ -24,13 +24,13 @@
  */
 
  if (!isset($action)) {
-    throw new EngineBlock_Exception('No action given to HTTP Post screen');
+    throw new EngineBlock_View_Exception('No action given to HTTP Post screen');
 }
 if (!isset($name)) {
-    throw new EngineBlock_Exception('No message type (SAMLRequest or SAMLResponse) given to HTTP Post screen');
+    throw new EngineBlock_View_Exception('No message type (SAMLRequest or SAMLResponse) given to HTTP Post screen');
 }
 if (!isset($message)) {
-    throw new EngineBlock_Exception('No message given to HTTP Post screen');
+    throw new EngineBlock_View_Exception('No message given to HTTP Post screen');
 }
 
 /**

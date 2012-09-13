@@ -704,7 +704,10 @@ class EngineBlock_Corto_ProxyServer
     public function getReceivedRequestFromResponse($id)
     {
         if (!$id || !isset($_SESSION[$id])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception("Unknown id ($id) in InResponseTo attribute?!?");
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Trying to match a Response ID to a Request, but the Response with id '$id' is not known in this session? ".
+                "This could be an unsolicited Response (which we do not support) but more likely the user lost their session"
+            );
         }
 
         // Get the ID of the original request (from the SP)
@@ -758,8 +761,9 @@ class EngineBlock_Corto_ProxyServer
     protected function callAttributeFilter($callback, array &$response, array $request, array $spEntityMetadata, array $idpEntityMetadata)
     {
         if (!$callback || !is_callable($callback)) {
-            // @todo Non existing callbacks shouldn't give an exception, just a warning...
-            throw new EngineBlock_Corto_ProxyServer_Exception('callback: ' . var_export($callback, true) . ' isn\'t callable');
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                'callback: ' . var_export($callback, true) . ' isn\'t callable'
+            );
         }
 
         $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
@@ -835,7 +839,9 @@ class EngineBlock_Corto_ProxyServer
                 include($filePath);
                 break;
             default:
-                throw new EngineBlock_Corto_ProxyServer_Exception('No template source set! Please configure a template source with Corto_ProxyServer->setTemplateSource()');
+                throw new EngineBlock_Corto_ProxyServer_Exception(
+                    'No template source set! Please configure a template source with Corto_ProxyServer->setTemplateSource()'
+                );
         }
     }
 
@@ -958,7 +964,10 @@ class EngineBlock_Corto_ProxyServer
         $xpath = new DOMXPath($canonicalXmlDom);
         $nodes = $xpath->query('/*[@ID="' . $element['_ID'] . '"]');
         if ($nodes->length < 1) {
-            throw new EngineBlock_Corto_ProxyServer_Exception("Unable to sign message can't find element with id to sign?");
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Unable to sign message can't find element with id to sign?",
+                EngineBlock_Exception::CODE_NOTICE
+            );
         }
         $canonicalXmlDom = $nodes->item(0);
         // Now do 'exclusive no-comments' XML cannonicalization
@@ -975,11 +984,16 @@ class EngineBlock_Corto_ProxyServer
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
         if (!isset($certificates['private'])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception('Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!');
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                'Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!',
+                EngineBlock_Exception::CODE_WARNING
+            );
         }
         $privateKey = openssl_pkey_get_private($certificates['private']);
         if ($privateKey === false) {
-            throw new EngineBlock_Corto_ProxyServer_Exception("Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? Value: " . $certificates['private']);
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? Value: " . $certificates['private']
+            );
         }
 
         $signatureValue = null;

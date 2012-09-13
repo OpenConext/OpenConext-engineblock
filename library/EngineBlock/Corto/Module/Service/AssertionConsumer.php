@@ -12,7 +12,9 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             throw new EngineBlock_Corto_Module_Services_Exception($message);
         }
 
-        $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']);
+        $receivedRequest = $this->_server->getReceivedRequestFromResponse(
+            $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']
+        );
 
         // Cache the response
         if ($this->_server->getConfig('keepsession', false)) {

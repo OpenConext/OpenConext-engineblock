@@ -25,4 +25,8 @@
 
 class Grouper_Client_Exception_SubjectNotFound extends Grouper_Client_Exception
 {
+    public function __construct($message, $severity = self::CODE_NOTICE, Exception $previous = null)
+    {
+        parent::__construct($message, $severity, $previous);
+    }
 }

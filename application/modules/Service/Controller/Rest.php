@@ -49,7 +49,10 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
                 EngineBlock_ApplicationSingleton::getLog()->warn(
                     "Multiple identifiers found for gadgetbaseurl: '$gadgetUrl'"
                 );
-                throw new EngineBlock_Exception('Multiple identifiers found for gadgetbaseurl');
+                throw new EngineBlock_Exception(
+                    'Multiple identifiers found for gadgetbaseurl',
+                    EngineBlock_Exception::CODE_WARNING
+                );
             }
 
             if (count($identifiers)===0) {
@@ -65,7 +68,10 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
         }
 
         if (!$entityId) {
-            throw new EngineBlock_Exception('No entity id provided to get metadata for?!');
+            throw new EngineBlock_Exception(
+                'No entity id provided to get metadata for?!',
+                EngineBlock_Exception::CODE_NOTICE
+            );
         }
 
         if (isset($_REQUEST["keys"])) {

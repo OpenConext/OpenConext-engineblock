@@ -88,7 +88,13 @@ abstract class EngineBlock_Corto_Filter_Abstract
             $command->setCollabPersonId($collabPersonId);
 
             // Execute the command
-            $command->execute();
+            try {
+                $command->execute();
+            } catch (EngineBlock_Exception $e) {
+                $e->idpEntityId = $idpEntityMetadata['EntityID'];
+                $e->spEntityId  = $spEntityMetadata['EntityID'];
+                $e->userId      = $collabPersonId;
+            }
 
             if (method_exists($command, 'getResponse')) {
                 $response = $command->getResponse();

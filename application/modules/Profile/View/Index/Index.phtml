@@ -3,21 +3,21 @@
  * @var array $attributes
  */
 if (!isset($attributes)) {
-    throw new EngineBlock_Exception("Missing required parameter for view /profile/index: attributes");
+    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: attributes");
 }
 
 /**
  * @var EngineBlock_Group_Provider_Aggregator $aggregator
  */
 if (!isset($aggregator)) {
-    throw new EngineBlock_Exception("Missing required parameter for view /profile/index: aggregator");
+    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: aggregator");
 }
 
 /**
  * @var EngineBlock_AttributeMetadata $metadata
  */
 if (!isset($metadata)) {
-    throw new EngineBlock_Exception("Missing required parameter for view /profile/index: metadata");
+    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: metadata");
 }
 
 /**

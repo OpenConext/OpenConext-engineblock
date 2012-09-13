@@ -49,7 +49,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->singleSignOn($idPEntityId);
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->getLogInstance()->warn('Unable to receive message');
+            $application->getLogInstance()->notice('SingleSignOn: Unable to receive message');
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {

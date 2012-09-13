@@ -43,7 +43,7 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         $this->__set('destination', htmlspecialchars($this->_getRequest()->getQueryParameter('destination')));
     }
     public function unknownServiceProviderAction() {
-        header('HTTP/1.1 404 Not Found');
+        header('HTTP/1.1 400 Bad Request');
         $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
     }
     public function missingRequiredFieldsAction() {

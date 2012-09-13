@@ -30,7 +30,7 @@ class EngineBlock_Database_ShindigConnectionFactory extends EngineBlock_Database
     {
         $configuration = $this->_getConfiguration();
         if (!isset($configuration->databaseShindig)) {
-            throw new EngineBlock_Exception("No shindig database settings?!");
+            throw new EngineBlock_Database_Exception("No shindig database settings?!");
         }
         return $configuration->databaseShindig;
     }

@@ -29,9 +29,9 @@ class EngineBlock_Mail_Mailer
      * Send a mail based on the configuration in the emails table
      *
      * @throws EngineBlock_Exception in case there is no EmailConfiguration in emails table
-     * @param $emailAddress the email address of the recipient
-     * @param $emailType the pointer to the emails configuration
-     * @param $replacements array where the key is a variable (e.g. {user}) and the value the string where the variable should be replaced
+     * @param string $emailAddress the email address of the recipient
+     * @param string $emailType the pointer to the emails configuration
+     * @param array $replacements array where the key is a variable (e.g. {user}) and the value the string where the variable should be replaced
      * @return void
      */
     public function sendMail($emailAddress, $emailType, $replacements)

@@ -159,7 +159,9 @@ class EngineBlock_Corto_XmlToArray
             throw new EngineBlock_Corto_XmlToArray_Exception(
                 'Error parsing incoming XML. ' . PHP_EOL .
                 'Error code: '.xml_error_string(xml_get_error_code($parser)) . PHP_EOL .
-                'XML: ' . $xml);
+                'XML: ' . $xml,
+                EngineBlock_Exception::CODE_NOTICE
+            );
         }
 
         xml_parser_free($parser);

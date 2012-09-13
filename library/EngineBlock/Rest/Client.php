@@ -77,7 +77,8 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
                 "Response status !== 200: " .
                     var_export($httpClient->getLastRequest(), true) .
                     var_export($response, true) .
-                    var_export($response->getBody(), true)
+                    var_export($response->getBody(), true),
+                EngineBlock_Exception::CODE_WARNING
             );
         }
 

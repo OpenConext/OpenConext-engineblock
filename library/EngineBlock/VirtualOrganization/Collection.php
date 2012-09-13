@@ -23,7 +23,7 @@ class EngineBlock_VirtualOrganization_Collection
         }
 
         if (empty($voList)) {
-            throw new Exception(
+            throw new EngineBlock_Exception(
                 "No Virtual Organizations found"
             );
         }

@@ -144,7 +144,7 @@ class EngineBlock_UserDirectory
                 return $this->registerUser($saml2attributes, $idpEntityMetadata);
             }
             else {
-                throw $e;
+                throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
             }
         }
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];

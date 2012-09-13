@@ -131,9 +131,10 @@ class EngineBlock_Provisioner_ProvisioningManager
 
     protected function _getGroups($userId, $spEntityId)
     {
-        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor($userId);
         $aclProvider = new EngineBlock_Group_Acl_GroupProviderAcl();
         $serviceProviderGroupAcl = $aclProvider->getSpGroupAcls($spEntityId);
+
+        $groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor($userId);
         return $groupProvider->getGroups($serviceProviderGroupAcl);
     }
 

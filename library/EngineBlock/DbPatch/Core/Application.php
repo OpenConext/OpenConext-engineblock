@@ -52,7 +52,7 @@ class EngineBlock_DbPatch_Core_Application extends DbPatch_Core_Application
             case 'mysql':
                 return 'Mysqli';
             default:
-                throw new EngineBlock_Exception("Unsupported PDO driver '$pdoDriver'");
+                throw new EngineBlock_Database_Exception("Unsupported PDO driver '$pdoDriver'");
         }
     }
 }

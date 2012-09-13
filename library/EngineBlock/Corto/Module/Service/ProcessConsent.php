@@ -10,7 +10,9 @@ class EngineBlock_Corto_Module_Service_ProcessConsent extends EngineBlock_Corto_
             throw new EngineBlock_Corto_Module_Services_SessionLostException('Session lost after consent');
         }
         if (!isset($_SESSION['consent'][$_POST['ID']]['response'])) {
-            throw new EngineBlock_Corto_Module_Services_Exception("Stored response for ResponseID '{$_POST['ID']}' not found");
+            throw new EngineBlock_Corto_Module_Services_SessionLostException(
+                "Stored response for ResponseID '{$_POST['ID']}' not found"
+            );
         }
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 

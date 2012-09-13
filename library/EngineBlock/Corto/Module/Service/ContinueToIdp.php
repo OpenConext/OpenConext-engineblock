@@ -14,8 +14,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         $selectedIdp = urldecode($_REQUEST['idp']);
         if (!$selectedIdp) {
             throw new EngineBlock_Corto_Module_Services_Exception(
-                'No IdP selected after WAYF',
-                EngineBlock_Exception::CODE_NOTICE
+                'No IdP selected after WAYF'
             );
         }
 
@@ -23,8 +22,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         $id      = $_POST['ID'];
         if (!isset($_SESSION[$id]['SAMLRequest'])) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
-                'Session lost after WAYF',
-                EngineBlock_Exception::CODE_NOTICE
+                'Session lost after WAYF'
             );
         }
         $request = $_SESSION[$id]['SAMLRequest'];

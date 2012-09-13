@@ -721,7 +721,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $bindingUrn = $message['__']['ProtocolBinding'];
 
         if (!isset($this->_bindings[$bindingUrn])) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception('Unknown binding: '. $bindingUrn);
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Unknown binding: '. $bindingUrn,
+                EngineBlock_Exception::CODE_ERROR
+            );
         }
         $function = $this->_bindings[$bindingUrn];
 
@@ -794,11 +797,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $certificates = $this->_server->getConfig('certificates', array());
         if (!isset($certificates['private'])) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception('Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!');
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!',
+                EngineBlock_Exception::CODE_WARNING
+            );
         }
         $key = openssl_pkey_get_private($certificates['private']);
         if ($key === false) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception("Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? Value: " . $certificates['private']);
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                "Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? Value: " . $certificates['private'],
+                EngineBlock_Exception::CODE_WARNING
+            );
         }
         return $key;
     }
@@ -815,7 +824,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if ($publicKey === false) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 "Public key for $entityId is NOT a valid PEM SSL public key?!?! Value: " .
-                    $remoteEntity['certificates']['public']
+                    $remoteEntity['certificates']['public'],
+                EngineBlock_Exception::CODE_WARNING
             );
         }
 
@@ -841,7 +851,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if ($publicKey === false) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 "Public key for $entityId is NOT a valid PEM SSL public key?!?! Value: " .
-                    $remoteEntity['certificates']['public']
+                    $remoteEntity['certificates']['public'],
+                EngineBlock_Exception::CODE_WARNING
             );
         }
 

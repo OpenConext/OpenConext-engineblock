@@ -45,6 +45,19 @@
     <td>EngineBlock</td>
   </tr>
   <tr>
+      <th>Severity</th>
+      <td><?php
+          echo isset($this->severity) ?
+              htmlentities($this->severity) :
+              isset($this->priorityName) ?
+                  htmlentities($this->priorityName) :
+                  "UNKNOWN"; ?></td>
+  </tr>
+  <tr>
+      <th>SessionID</th>
+      <td><?php echo isset($this->sessionid) ? htmlentities($this->sessionid) : htmlentities(session_id()); ?></td>
+  </tr>
+  <tr>
     <th>Userid</th>
     <td><?php echo isset($this->userId) ? htmlentities($this->userId) : "UNKNOWN"; ?></td>
   </tr>
@@ -62,11 +75,11 @@
   </tr>
   <tr>
     <th>Location</th>
-    <td><?php echo isset($this->file) ? htmlentities($this->file) : htmlentities($_SERVER['SCRIPT_FILENAME']); ?></td>
+    <td><?php echo isset($this->location) ? htmlentities($this->location) : htmlentities($_SERVER['SCRIPT_FILENAME']); ?></td>
   </tr>
   <tr>
     <th>Details</th>
-    <td><?php echo isset($this->details) ? htmlentities($this->details) : "UNKNOWN"; ?></td>
+    <td><pre><?php echo isset($this->details) ? htmlentities($this->details) : "UNKNOWN"; ?></pre></td>
   </tr>
   </tbody>
 </body>

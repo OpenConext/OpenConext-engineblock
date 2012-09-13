@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class Grouper_Client_Exception extends Exception
+class Grouper_Client_Exception extends EngineBlock_Exception
 {
 
 }

@@ -43,7 +43,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             if (substr($argument, 0, 3) == "vo:") {
                 $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
             } else if (!empty($argument)) {
-                throw new EngineBlock_Exception("Unknown argument");
+                throw new EngineBlock_Exception("Unknown argument", EngineBlock_Exception::CODE_NOTICE);
             }
 
             $proxyServer->idPsMetadata();

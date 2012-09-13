@@ -77,7 +77,8 @@ class EngineBlock_X509Certificate
      * @return  resource $certificateResource
      * @throws  Exception if loading fails
      */
-    public function loadFromUrl($url) {
+    public function loadFromUrl($url)
+    {
         $context = stream_context_create (array(
             "ssl" => array(
                 "capture_peer_cert" => true
@@ -94,7 +95,8 @@ class EngineBlock_X509Certificate
             $errorMessage,
             $timeoutSeconds,
             STREAM_CLIENT_CONNECT,
-            $context);
+            $context
+        );
         if(!is_resource($streamResource)) {
             throw new Exception('Failed loading SSL certificate: "' . $errorMessage . '"');
         }

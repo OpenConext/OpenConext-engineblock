@@ -49,7 +49,11 @@ class Janus_Client_CacheProxy
             return $cache->call(array($client, $name), $arguments);
 
         } catch(Exception $e) { // Whoa, something went wrong, maybe the SR is down? Trying to use stale cache...
-            $e = new Janus_Client_CacheProxy_Exception("Service Registry problems?!?", 0, $e);
+            $e = new Janus_Client_CacheProxy_Exception(
+                "Unable to access JANUS?!? Using stale cache",
+                EngineBlock_Exception::CODE_WARNING,
+                $e
+            );
             EngineBlock_ApplicationSingleton::getInstance()->reportError($e);
 
             // Give any stale cache some more time
@@ -59,10 +63,24 @@ class Janus_Client_CacheProxy
             $data = $cacheBackend->load($cacheId, TRUE);
             if ($data !== false) {
                 $cacheBackend->save($data, $cacheId, array(), self::DEFAULT_LIFETIME);
+
+                try {
+                    // And try to use that cache.
+                    return $cache->call($callback, $arguments);
+                } catch (Exception $e) {
+                    throw new Janus_Client_CacheProxy_Exception(
+                        "Unable to contact JANUS and unable to reuse stale cache!",
+                        EngineBlock_Exception::CODE_ALERT,
+                        $e
+                    );
+                }
             }
 
-            // And try to use that cache.
-            return $cache->call($callback, $arguments);
+            throw new Janus_Client_CacheProxy_Exception(
+                "Unable to contact JANUS and no stale cache found for possible reuse!",
+                EngineBlock_Exception::CODE_ALERT,
+                $e
+            );
         }
     }
 

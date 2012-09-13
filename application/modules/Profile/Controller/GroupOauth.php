@@ -70,11 +70,17 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
         $queryParameters = $this->_getRequest()->getQueryParameters();
 
         if (empty($queryParameters)) {
-            throw new EngineBlock_Exception('Unable to consume access token, no query parameters given');
+            throw new EngineBlock_Exception(
+                'Unable to consume access token, no query parameters given',
+                EngineBlock_Exception::CODE_NOTICE
+            );
         }
 
         if (!isset($_SESSION['request_token'][$providerId])) {
-            throw new EngineBlock_Exception("Unable to consume access token, no request token (session lost?)");
+            throw new EngineBlock_Exception(
+                "Unable to consume access token, no request token (session lost?)",
+                EngineBlock_Exception::CODE_NOTICE
+            );
         }
 
         $requestToken = unserialize($_SESSION['request_token'][$providerId]);

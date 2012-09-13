@@ -116,7 +116,10 @@ class EngineBlock_Saml2Attributes_FieldMapper
             }
         }
         if (!empty($required)) {
-            throw new EngineBlock_Exception_MissingRequiredFields("Missing required SAML2 fields: " . var_export($required, true) . ' in attributes: ' . var_export($attributes, true));
+            throw new EngineBlock_Exception_MissingRequiredFields(
+                "Missing required SAML2 fields: " . var_export($required, true) .
+                    ' in attributes: ' . var_export($attributes, true)
+            );
         }
         return $ldapAttributes;
     }

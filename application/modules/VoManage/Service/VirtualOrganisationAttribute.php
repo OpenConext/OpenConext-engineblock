@@ -22,7 +22,9 @@ class VoManage_Service_VirtualOrganisationAttribute
     protected function _searchWhere(Surfnet_Search_Parameters $params)
     {
         $searchParams = $params->getSearchParams();
-        if (!isset($searchParams['vo_id'])) throw new EngineBlock_Exception("Invalid VO id!");
+        if (!isset($searchParams['vo_id'])) {
+            throw new EngineBlock_Exception("Invalid VO id!", EngineBlock_Exception::CODE_NOTICE);
+        }
         
         // select VO Attribute record(s)
         $statement = $this->dbConnection->prepare("SELECT voa.* FROM virtual_organisation_attribute voa WHERE voa.vo_id = ?");

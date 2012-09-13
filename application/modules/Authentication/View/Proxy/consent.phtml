@@ -24,22 +24,22 @@
  */
 
  if (!isset($action)) {
-    throw new EngineBlock_Exception('No Consent action given to consent screen');
+    throw new EngineBlock_View_Exception('No Consent action given to consent screen');
 }
 if (!isset($ID)) {
-    throw new EngineBlock_Exception('No ID given to consent screen');
+    throw new EngineBlock_View_Exception('No ID given to consent screen');
 }
 if (!isset($attributes)) {
-    throw new EngineBlock_Exception('No Attributes given to consent screen');
+    throw new EngineBlock_View_Exception('No Attributes given to consent screen');
 }
 if (!isset($commonName)) {
-    throw new EngineBlock_Exception('No common name given to consent screen');
+    throw new EngineBlock_View_Exception('No common name given to consent screen');
 }
 if (!isset($sp)) {
-    throw new EngineBlock_Exception('No SP information given to consent screen');
+    throw new EngineBlock_View_Exception('No SP information given to consent screen');
 }
 if (!isset($idp)) {
-    throw new EngineBlock_Exception('No IdP information given to consent screen');
+    throw new EngineBlock_View_Exception('No IdP information given to consent screen');
 }
 
 // The current language

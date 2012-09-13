@@ -64,7 +64,7 @@ class EngineBlock_Database_ConnectionFactory
             return $this->_createWriteConnection($databaseSettings);
         }
         else {
-            throw new EngineBlock_Exception("Requested database connection with unknown mode '$mode'");
+            throw new EngineBlock_Database_Exception("Requested database connection with unknown mode '$mode'");
         }
     }
 
@@ -74,7 +74,7 @@ class EngineBlock_Database_ConnectionFactory
     protected function _createWriteConnection($databaseSettings)
     {
         if (!isset($databaseSettings->masters)) {
-            throw new EngineBlock_Exception('Unable to find any settings for a database we can write to (masters)');
+            throw new EngineBlock_Database_Exception('Unable to find any settings for a database we can write to (masters)');
         }
 
         return $this->_createServerConnection($databaseSettings->masters->toArray(), $databaseSettings);
@@ -86,7 +86,7 @@ class EngineBlock_Database_ConnectionFactory
     protected function _createReadConnection($databaseSettings)
     {
         if (!isset($databaseSettings->slaves)) {
-            throw new EngineBlock_Exception('Unable to find any settings for a database we can read from (slaves)');
+            throw new EngineBlock_Database_Exception('Unable to find any settings for a database we can read from (slaves)');
         }
 
         return $this->_createServerConnection($databaseSettings->slaves->toArray(), $databaseSettings);
@@ -97,12 +97,12 @@ class EngineBlock_Database_ConnectionFactory
         $randomServerKey = array_rand($servers);
         $randomServerName = $servers[$randomServerKey];
         if (!isset($databaseSettings->$randomServerName)) {
-            throw new EngineBlock_Exception("Unable to use database.$randomServerName for connection?!");
+            throw new EngineBlock_Database_Exception("Unable to use database.$randomServerName for connection?!");
         }
         $randomServerSettings = $databaseSettings->$randomServerName;
 
         if (!isset($randomServerSettings->dsn) || !isset($randomServerSettings->user) || !isset($randomServerSettings->password)) {
-            throw new EngineBlock_Exception('Database settings missing a Dsn, User or Password setting!');
+            throw new EngineBlock_Database_Exception('Database settings missing a Dsn, User or Password setting!');
         }
 
         $dbh = new PDO(
@@ -127,7 +127,7 @@ class EngineBlock_Database_ConnectionFactory
     {
         $configuration = $this->_getConfiguration();
         if (!isset($configuration->database)) {
-            throw new EngineBlock_Exception("No database settings?!");
+            throw new EngineBlock_Database_Exception("No database settings?!");
         }
         return $configuration->database;
     }

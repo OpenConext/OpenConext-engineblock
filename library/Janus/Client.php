@@ -214,17 +214,23 @@ class Janus_Client
             $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
             $location = $config->location;
             if (!$location) {
-                throw new EngineBlock_Exception('No Service Registry location provided! Please set "serviceRegistry.location" in your application configuration.');
+                throw new Janus_Client_Exception(
+                    'No Service Registry location provided! Please set "serviceRegistry.location" in your application configuration.'
+                );
             }
             
             $user = $config->user;
             if (!$user) {
-                throw new EngineBlock_Exception('No Service Registry user provided! Please set "serviceRegistry.user" in your application configuration.');
+                throw new Janus_Client_Exception(
+                    'No Service Registry user provided! Please set "serviceRegistry.user" in your application configuration.'
+                );
             }
             
             $secret = $config->user_secret;
             if (!$secret) {
-                throw new EngineBlock_Exception('No Service Registry user secret provided! Please set "serviceRegistry.user_secret" in your application configuration.');
+                throw new Janus_Client_Exception(
+                    'No Service Registry user secret provided! Please set "serviceRegistry.user_secret" in your application configuration.'
+                );
             }
             $this->_restClient = new Janus_Rest_Client($location, $user, $secret);
         }

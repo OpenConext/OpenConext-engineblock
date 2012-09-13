@@ -19,7 +19,9 @@ class EngineBlock_Xml_Validator
     public function validate($xml)
     {
         if (!ini_get('allow_url_fopen')) {
-            throw new EngineBlock_Exception('Failed validating XML, url_fopen is not allowed');
+            throw new EngineBlock_Exception(
+                'Failed validating XML, url_fopen is not allowed'
+            );
         }
 
         // Load schema

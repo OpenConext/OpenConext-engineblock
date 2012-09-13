@@ -88,9 +88,11 @@ class EngineBlock_Exception extends Exception
      * Events that are unusual but not error conditions - might be summarized in an email to developers or admins
      * to spot potential problems - no immediate action required.
      *
-     * Examples: 404s, wrongly configured entities
+     * Examples: 404s, user or IdP / SP input that is incorrect
      */
     const CODE_NOTICE = 5;
+
+    protected $_severity;
 
     public $sessionId;
     public $userId;
@@ -98,9 +100,21 @@ class EngineBlock_Exception extends Exception
     public $idpEntityId;
     public $description;
 
-    public function __construct($message, $code = self::CODE_ERROR, Exception $previous = null)
+    public function __construct($message, $severity = self::CODE_ERROR, Exception $previous = null)
     {
-        parent::__construct($message, $code, $previous);
+        parent::__construct($message, 0, $previous);
+        $this->_severity = $severity;
+    }
+
+    public function getSeverity()
+    {
+        return $this->_severity;
+    }
+
+    public function setSeverity($severity)
+    {
+        $this->_severity = $severity;
+        return $this;
     }
 }
 
@@ -591,7 +605,7 @@ class EngineBlock_ApplicationSingleton
         }
 
         $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
-        $log->err($exception->getMessage(), $additionalInfo);
+        $log->log($exception->getMessage(), $exception->getSeverity(), $additionalInfo);
         $log->debug($exception->getTraceAsString());
 
         return TRUE;

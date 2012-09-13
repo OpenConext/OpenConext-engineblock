@@ -23,6 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class OpenSocial_Rest_Exception extends Exception
+class OpenSocial_Rest_Exception extends EngineBlock_Exception
 {
 }

@@ -5,7 +5,16 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
     public function serve($serviceName)
     {
         // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
-        $alternateKeys = $this->_getAlternateKeys();
+        try {
+            // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
+            $alternateKeys = $this->_getAlternateKeys();
+        } catch (EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
+            $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+            $this->_server->redirect(
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId),
+                "Unknown SP!");
+            return;
+        }
         if ($alternateKeys) {
             $entityDetails['certificates'] = $alternateKeys;
         }

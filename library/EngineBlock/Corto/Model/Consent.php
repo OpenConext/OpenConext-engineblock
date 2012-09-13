@@ -61,7 +61,10 @@ class EngineBlock_Corto_Model_Consent
 
             return true;
         } catch (PDOException $e) {
-            throw new EngineBlock_Corto_ProxyServer_Exception("Consent retrieval failed! Error: " . $e->getMessage());
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Consent retrieval failed! Error: " . $e->getMessage(),
+                EngineBlock_Exception::CODE_ALERT
+            );
         }
     }
 
@@ -90,12 +93,18 @@ class EngineBlock_Corto_Model_Consent
 
         $statement = $dbh->prepare($query);
         if (!$statement) {
-            throw new EngineBlock_Exception("Unable to create a prepared statement to insert consent?!");
+            throw new EngineBlock_Exception(
+                "Unable to create a prepared statement to insert consent?!",
+                EngineBlock_Exception::CODE_CRITICAL
+            );
         }
 
         /** @var $statement PDOStatement */
         if (!$statement->execute($parameters)) {
-            throw new EngineBlock_Corto_Module_Services_Exception("Error storing consent: " . var_export($statement->errorInfo(), true));
+            throw new EngineBlock_Corto_Module_Services_Exception(
+                "Error storing consent: " . var_export($statement->errorInfo(), true),
+                EngineBlock_Exception::CODE_CRITICAL
+            );
         }
 
         return true;
@@ -109,7 +118,9 @@ class EngineBlock_Corto_Model_Consent
         $parameters = array($hashedUserId);
         $statement = $dbh->prepare($query);
         if (!$statement) {
-            throw new EngineBlock_Exception("Unable to create a prepared statement to count consent?!");
+            throw new EngineBlock_Exception(
+                "Unable to create a prepared statement to count consent?!", EngineBlock_Exception::CODE_ALERT
+            );
         }
         /** @var $statement PDOStatement */
         $statement->execute($parameters);

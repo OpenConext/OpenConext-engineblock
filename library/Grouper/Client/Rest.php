@@ -66,7 +66,10 @@ class Grouper_Client_Rest implements Grouper_Client_Interface
     public static function createFromConfig(Zend_Config $config)
     {
         if (!isset($config->host) || $config->host == '') {
-            throw new EngineBlock_Exception('No Grouper Host specified! Please set "grouper.host" in your application configuration.');
+            throw new EngineBlock_Exception(
+                'No Grouper Host specified! Please set "grouper.host" in your application configuration.',
+                EngineBlock_Exception::CODE_ALERT
+            );
         }
 
         $url = $config->protocol .
@@ -133,7 +136,7 @@ XML;
             if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
                 throw new Grouper_Client_Exception_SubjectNotFound($e->getMessage());
             }
-            throw $e;
+            throw new Grouper_Client_Exception('Problem retrieving subjects', Grouper_Client_Exception::CODE_ERROR, $e);
         }
 
         $groups = array();
@@ -182,7 +185,7 @@ XML;
             if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
                 throw new Grouper_Client_Exception_SubjectNotFound($e->getMessage());
             }
-            throw $e;
+            throw new Grouper_Client_Exception('Problem retrieving groups', Grouper_Client_Exception::CODE_ERROR, $e);
         }
 
         $members = array();
@@ -193,7 +196,7 @@ XML;
             }
         }
         else {
-            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>' . var_export($result, true));
+            throw new Grouper_Client_Exception(__METHOD__ . ' Bad result: <pre>' . var_export($result, true));
         }
         return $members;
     }
@@ -239,7 +242,7 @@ XML;
             $result = $this->_doRest('grouperPrivileges', $request);
         }
         catch (Exception $e) {
-            throw $e;
+            throw new Grouper_Client_Exception('Problem retrieving grouper privileges', Grouper_Client_Exception::CODE_ERROR, $e);
         }
 
         $privileges = array();
@@ -249,7 +252,7 @@ XML;
             }
         }
         else {
-            throw new EngineBlock_Exception(__METHOD__ . ' Bad result: <pre>' . var_export($result, true));
+            throw new Grouper_Client_Exception(__METHOD__ . ' Bad result: <pre>' . var_export($result, true));
         }
 
         return $privileges;
@@ -299,7 +302,7 @@ XML;
                 return false;
             } else {
                 // Most likely a system failure. Rethrow.
-                throw $e;
+                throw new Grouper_Client_Exception('Problem retrieving group members', Grouper_Client_Exception::CODE_ERROR, $e);
             }
         }
 
@@ -339,7 +342,7 @@ XML;
             }
         }
         catch (Exception $e) {
-            throw $e;
+            throw new Grouper_Client_Exception('Problem retrieving group members', Grouper_Client_Exception::CODE_ERROR, $e);
         }
         // Something went wrong
         return false;
@@ -378,7 +381,7 @@ XML;
             }
         }
         catch (Exception $e) {
-            throw $e;
+            throw new Grouper_Client_Exception('Problem removing privileges', Grouper_Client_Exception::CODE_ERROR, $e);
         }
         // Something went wrong
         return false;
@@ -441,7 +444,8 @@ XML;
                 ' [url: ' . $url . ']' .
                 ' [error: ' . $error . ']' .
                 ' [http code: ' . $info['http_code'] . ']' .
-                ' [response: ' . $response . ']'
+                ' [response: ' . $response . ']',
+                Grouper_Client_Exception::CODE_ALERT
             );
         }
 
@@ -496,7 +500,9 @@ XML;
     protected function _requireSubjectId()
     {
         if (!isset($this->_subjectId)) {
-            throw new Grouper_Client_Exception("No subjectId set! Please use ->setSubjectId to set a subject on which behalf to make requests");
+            throw new Grouper_Client_Exception(
+                "No subjectId set! Please use ->setSubjectId to set a subject on which behalf to make requests"
+            );
         }
     }
 }
