@@ -113,6 +113,7 @@ class EngineBlock_Database_ConnectionFactory
                     true
             )
         );
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $dbh;
     }
 
