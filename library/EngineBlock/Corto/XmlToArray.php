@@ -4,8 +4,6 @@ if (!class_exists('XMLWriter')) {
     die('XMLWriter class does not exist! Please install libxml extension for php.');
 }
 
-class EngineBlock_Corto_XmlToArray_Exception extends EngineBlock_Corto_ProxyServer_Exception {}
-
 /**
  *
  *
