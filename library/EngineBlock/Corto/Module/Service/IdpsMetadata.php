@@ -34,6 +34,9 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
                 continue;
             }
 
+            // Use EngineBlock certificates
+            $entity['certificates'] = $entityDetails['certificates'];
+
             // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
             // NameIDs, so advertise that.
             unset($entity['NameIDFormat']);
