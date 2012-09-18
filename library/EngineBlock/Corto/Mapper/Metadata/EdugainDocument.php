@@ -21,20 +21,22 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md'] = 'urn:oasis:names:tc:SAML:2.0:metadata';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil'] = $this->_validUntil;
-        $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'] = $this->_id;
 
         if (isset($this->_entities)) {
+            $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'] = $this->_id;
             $rootElement['ds:Signature'] = EngineBlock_Corto_XmlToArray::PLACEHOLDER_VALUE;
-            return $this->_mapEntities($rootElement);
+            $rootElement = $this->_mapEntities($rootElement);
         }
         else if (isset($this->_entity)) {
             $rootElement['_entityID'] = EngineBlock_Corto_XmlToArray::PLACEHOLDER_VALUE;
+            $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'] = $this->_id;
             $rootElement['ds:Signature'] = EngineBlock_Corto_XmlToArray::PLACEHOLDER_VALUE;
-            return $this->_mapEntity($rootElement);
+            $rootElement = $this->_mapEntity($rootElement);
         }
         else {
             throw new EngineBlock_Exception("Nothing to map! Provide entities or an entity");
         }
+        return $rootElement;
     }
 
     protected function _mapEntities($rootElement)
