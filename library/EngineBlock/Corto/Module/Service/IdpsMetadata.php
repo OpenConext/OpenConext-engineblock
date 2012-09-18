@@ -7,6 +7,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
         $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
         $spEntityId = $request->getQueryParameter('sp-entity-id');
+        $alternateKeys = false;
         if ($spEntityId) {
             // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
             try {
@@ -26,6 +27,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
                     'public' => $spEntity['AlternatePublicKey'],
                     'private' => $spEntity['AlternatePrivateKey'],
                 );
+                $alternateKeys = $entityDetails['certificates'];
             }
         }
 
