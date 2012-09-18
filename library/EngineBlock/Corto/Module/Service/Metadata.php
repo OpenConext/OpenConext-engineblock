@@ -7,6 +7,10 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         // Get the configuration for EngineBlock in it's IdP / SP role.
         $entityDetails = $this->_getCurrentEntity($serviceName);
 
+        // Override the EntityID and SSO location to optionally append VO id
+        $entityDetails['EntityID'] = $this->_server->getUrl('idpMetadataService');
+        $entityDetails['SingleSignOnService']['Location'] = $this->_server->getUrl('singleSignOnService');
+
         try {
             // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
             $alternateKeys = $this->_getAlternateKeys();
