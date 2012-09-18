@@ -4,25 +4,40 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 {
     public function serve($serviceName)
     {
-        // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
-        try {
+        // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
+        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
+        $spEntityId = $request->getQueryParameter('sp-entity-id');
+        if ($spEntityId) {
             // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
-            $alternateKeys = $this->_getAlternateKeys();
-        } catch (EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
-            $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
-            $this->_server->redirect(
-                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId),
-                "Unknown SP!");
-            return;
-        }
-        if ($alternateKeys) {
-            $entityDetails['certificates'] = $alternateKeys;
+            try {
+                $spEntity = $this->_server->getRemoteEntity($spEntityId);
+            } catch (EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
+                $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+                $this->_server->redirect(
+                    '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId),
+                    "Unknown SP!");
+                return;
+            }
+
+            // Check if an alternative Public key has been set for the requesting SP
+            // If yes, use these in the metadata of EngineBlock
+            if (isset($spEntity['AlternatePublicKey']) && isset($spEntity['AlternatePrivateKey'])) {
+                $entityDetails['certificates'] = array(
+                    'public' => $spEntity['AlternatePublicKey'],
+                    'private' => $spEntity['AlternatePrivateKey'],
+                );
+            }
         }
 
         // Get the configuration for EngineBlock in it's IdP role.
         $entityDetails = $this->_getCurrentEntity('idpMetadataService');
 
         $idpEntities = array();
+        // Note that Shibboleth likes to see it's self in the metadata, so if an sp-entity-id was passed along
+        // we make sure the first thing is the Service Provider
+        if (isset($spEntity)) {
+            $idpEntities[] = $spEntity;
+        }
         foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
             // Don't add ourselves
             if ($entity['EntityID'] === $entityDetails['EntityID']) {
@@ -115,31 +130,5 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $callbackFn();
 
         $this->_server->setVirtualOrganisationContext($voContext);
-    }
-
-    /**
-     * Look if a Service Provider EntityId was passed allong (with sp-entity-id) and this entity requires use of
-     * different keys (key rollover).
-     *
-     * @return array|bool
-     */
-    protected function _getAlternateKeys()
-    {
-        // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
-        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
-        $spEntityId = $request->getQueryParameter('sp-entity-id');
-        if ($spEntityId) {
-            $spEntity = $this->_server->getRemoteEntity($spEntityId);
-
-            // Check if an alternative Public key has been set for the requesting SP
-            // If yes, use these in the metadata of EngineBlock
-            if (isset($spEntity['AlternatePublicKey']) && isset($spEntity['AlternatePrivateKey'])) {
-                return array(
-                    'public' => $spEntity['AlternatePublicKey'],
-                    'private' => $spEntity['AlternatePrivateKey'],
-                );
-            }
-        }
-        return false;
     }
 }
