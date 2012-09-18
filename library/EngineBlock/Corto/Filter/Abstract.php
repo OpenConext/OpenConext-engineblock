@@ -94,6 +94,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
                 $e->idpEntityId = $idpEntityMetadata['EntityID'];
                 $e->spEntityId  = $spEntityMetadata['EntityID'];
                 $e->userId      = $collabPersonId;
+                throw $e;
             }
 
             if (method_exists($command, 'getResponse')) {
