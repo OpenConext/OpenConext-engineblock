@@ -743,7 +743,7 @@ class EngineBlock_Corto_ProxyServer
 
     public function filterOutputAssertionAttributes(&$response, $request)
     {
-        $hostedMetaData = $this->_entities['current'];
+        $hostedMetaData = $this->_configs;
         $responseIssuer = $response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['OriginalIssuer'];
         $idpEntityMetadata = $this->getRemoteEntity($responseIssuer);
 
