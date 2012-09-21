@@ -25,8 +25,4 @@
 
 class Grouper_Client_Exception_UnexpectedResultCode extends Grouper_Client_Exception
 {
-    public function __construct($message, $severity = self::CODE_ALERT, Exception $previous = null)
-    {
-        parent::__construct($message, $severity, $previous);
-    }
 }

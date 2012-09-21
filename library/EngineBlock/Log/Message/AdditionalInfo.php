@@ -30,7 +30,7 @@ class EngineBlock_Log_Message_AdditionalInfo
     protected $_userId;
     protected $_idp;
     protected $_sp;
-    protected $_details;
+    protected $_details = "";
 
     public static function createFromException(EngineBlock_Exception $e)
     {
@@ -39,12 +39,16 @@ class EngineBlock_Log_Message_AdditionalInfo
         $info->_idp     = $e->idpEntityId;
         $info->_sp      = $e->spEntityId;
 
+        if (!empty($e->description)) {
+            $info->_details = $e->description . PHP_EOL;
+        }
+
         $traces = array($e->getMessage() . PHP_EOL . $e->getTraceAsString());
         $prev = $e;
         while ($prev = $prev->getPrevious()) {
-            $traces[] = $e->getMessage() . PHP_EOL . $e->getTraceAsString();
+            $traces[] = $prev->getMessage() . PHP_EOL . $prev->getTraceAsString();
         }
-        $info->_details = implode(PHP_EOL . PHP_EOL, $traces);
+        $info->_details .= implode(PHP_EOL . PHP_EOL, $traces);
 
         $info->_location= $e->getFile() . ':' . $e->getLine();
         switch ($e->getCode()) {

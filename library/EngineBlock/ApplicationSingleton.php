@@ -607,6 +607,10 @@ class EngineBlock_ApplicationSingleton
         $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
         $log->log($exception->getMessage(), $exception->getSeverity(), $additionalInfo);
         $log->debug($exception->getTraceAsString());
+        while ($exception = $exception->getPrevious()) {
+            $log->debug($exception->getMessage());
+            $log->debug($exception->getTraceAsString());
+        }
 
         return TRUE;
     }

@@ -135,20 +135,28 @@ foreach ($spList as $spId => $sp) {
             </span>
         <?php endif; ?>
         <?php
-                $groups = array();
+        $groups = array();
         try{
             $aclProvider = new EngineBlock_Group_Acl_GroupProviderAcl();
             $groupProviderAcl = $aclProvider->getSpGroupAcls($entityId);
             $groups = $groupProvider->getGroups($groupProviderAcl);
-        } catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
+        }
+        catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
             $invalidProviders[] = $groupProvider;
         }
+        catch(EngineBlock_Exception $e) {
+            $e->userId = $user->getUid();
+            EngineBlock_ApplicationSingleton::getInstance()->reportError($e);
+        }
+        catch(Zend_Http_Client_Exception $e) {
+            EngineBlock_ApplicationSingleton::getInstance()->reportError(
+                new EngineBlock_Exception($e->getMessage(), EngineBlock_Exception::CODE_WARNING, $e)
+            );
+        }
         catch(Exception $e) {
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
-                ->setUserId($user->getUid())
-                ->setDetails($e->getTraceAsString());
-
-            EngineBlock_ApplicationSingleton::getLog()->err($e->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getInstance()->reportError(
+                new EngineBlock_Exception($e->getMessage(), EngineBlock_Exception::CODE_ERROR, $e)
+            );
         }
         if (!empty($groups)):
     ?>

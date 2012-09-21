@@ -136,7 +136,7 @@ XML;
             if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
                 throw new Grouper_Client_Exception_SubjectNotFound($e->getMessage());
             }
-            throw new Grouper_Client_Exception('Problem retrieving subjects', Grouper_Client_Exception::CODE_ERROR, $e);
+            throw $e;
         }
 
         $groups = array();
@@ -185,7 +185,7 @@ XML;
             if (strpos($e->getMessage(), "Problem with actAsSubject, SUBJECT_NOT_FOUND") !== false) {
                 throw new Grouper_Client_Exception_SubjectNotFound($e->getMessage());
             }
-            throw new Grouper_Client_Exception('Problem retrieving groups', Grouper_Client_Exception::CODE_ERROR, $e);
+            throw $e;
         }
 
         $members = array();
@@ -238,12 +238,7 @@ XML;
 </WsRestGetGrouperPrivilegesLiteRequest>
 XML;
 
-        try {
-            $result = $this->_doRest('grouperPrivileges', $request);
-        }
-        catch (Exception $e) {
-            throw new Grouper_Client_Exception('Problem retrieving grouper privileges', Grouper_Client_Exception::CODE_ERROR, $e);
-        }
+        $result = $this->_doRest('grouperPrivileges', $request);
 
         $privileges = array();
         if (isset($result) and ($result !== FALSE) and (isset($result->privilegeResults->WsGrouperPrivilegeResult))) {
@@ -302,7 +297,7 @@ XML;
                 return false;
             } else {
                 // Most likely a system failure. Rethrow.
-                throw new Grouper_Client_Exception('Problem retrieving group members', Grouper_Client_Exception::CODE_ERROR, $e);
+                throw $e;
             }
         }
 
@@ -370,18 +365,13 @@ XML;
 </WsRestAssignGrouperPrivilegesLiteRequest>
 XML;
 
-        try {
-            $expected = array('SUCCESS',
-                              'SUCCESS_NOT_ALLOWED',
-                              'SUCCESS_NOT_ALLOWED_DIDNT_EXIST',
-                              'SUCCESS_NOT_ALLOWED_EXISTS_EFFECTIVE');
-            $result = $this->_doRest('grouperPrivileges', $request, $expected);
-            if (isset($result) and ($result !== FALSE)) {
-                return true;
-            }
-        }
-        catch (Exception $e) {
-            throw new Grouper_Client_Exception('Problem removing privileges', Grouper_Client_Exception::CODE_ERROR, $e);
+        $expected = array('SUCCESS',
+                          'SUCCESS_NOT_ALLOWED',
+                          'SUCCESS_NOT_ALLOWED_DIDNT_EXIST',
+                          'SUCCESS_NOT_ALLOWED_EXISTS_EFFECTIVE');
+        $result = $this->_doRest('grouperPrivileges', $request, $expected);
+        if (isset($result) and ($result !== FALSE)) {
+            return true;
         }
         // Something went wrong
         return false;
@@ -404,15 +394,10 @@ XML;
         curl_setopt($ch, CURLOPT_VERBOSE, 0);
 
         // Request to be sent
-
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                                                  'Content-Type: text/xml; charset=UTF-8'
-                                             ));
-
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml; charset=UTF-8'));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
 
         // Response handling
-
         curl_setopt($ch, CURLOPT_HEADER, 0);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
@@ -423,40 +408,41 @@ XML;
             }
         }
 
-        $responseFailed = false;
         $response = curl_exec($ch);
-
-        $info = array('http_code' => '');
-        $error = "";
-        if ($response !== FALSE) {
-            $error = curl_error($ch);
-            $info = curl_getinfo($ch);
-            if (($error != '') or ($info['http_code'] >= 300)) {
-                $responseFailed = true;
-            }
-        }
-
+        $error = curl_error($ch);
+        $info = curl_getinfo($ch);
         curl_close($ch);
 
-        if ($response === FALSE || $responseFailed === true) {
-            throw new Grouper_Client_Exception(
-                'Could not execute grouper webservice request:' .
-                ' [url: ' . $url . ']' .
-                ' [error: ' . $error . ']' .
-                ' [http code: ' . $info['http_code'] . ']' .
-                ' [response: ' . $response . ']',
+        if ($response === false || $error || $info['http_code'] >= 300) {
+            $e = new Grouper_Client_Exception(
+                'Could not execute grouper REST request' .
+                    ' [url: ' . $url . ']' .
+                    ' [error: ' . $error . ']' .
+                    ' [http code: ' . $info['http_code'] . ']' .
+                    ' [response: "' . $response . '"]',
                 Grouper_Client_Exception::CODE_ALERT
             );
+            $e->description = implode(PHP_EOL, array(
+                'URL: ' . $url,
+                'Error: ' . $error,
+                'Info: ' . print_r($info, true),
+                'Response: ' . $response
+            ));
+            throw $e;
         }
 
         $result = simplexml_load_string($response);
         if ($result === FALSE) {
-            throw new Grouper_Client_Exception("Unable to parse response '$response' as XML");
+            throw new Grouper_Client_Exception(
+                "Unable to parse response '$response' as XML",
+                Grouper_Client_Exception::CODE_ALERT
+            );
         }
         if (!in_array($result->resultMetadata->resultCode, $expect)) {
             throw new Grouper_Client_Exception_UnexpectedResultCode(
                 "Unexpected result code: '{$result->resultMetadata->resultCode}'" .
-                " expecting one of: " . implode(', ', $expect)
+                " expecting one of: " . implode(', ', $expect),
+                Grouper_Client_Exception::CODE_ALERT
             );
         }
         return $result;
