@@ -16,8 +16,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
             $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
         );
 
-        $serviceProviderEntityId = $attributes['ServiceProvider'][0];
-        unset($attributes['ServiceProvider']);
+        $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
+        unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
         $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
 
         $identityProviderEntityId = $response['__']['OriginalIssuer'];

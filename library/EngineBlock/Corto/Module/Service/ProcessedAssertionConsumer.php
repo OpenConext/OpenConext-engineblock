@@ -33,7 +33,7 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
 
             $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
             $attributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
-            unset($attributes['ServiceProvider']);
+            unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
             $responseAssertionAttributes = EngineBlock_Corto_XmlToArray::array2attributes($attributes);
 
             $this->_server->unsetProcessingMode();

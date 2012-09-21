@@ -19,8 +19,8 @@ class EngineBlock_Corto_Module_Service_ProcessConsent extends EngineBlock_Corto_
         $attributes = EngineBlock_Corto_XmlToArray::attributes2array(
             $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
         );
-        $serviceProviderEntityId = $attributes['ServiceProvider'][0];
-        unset($attributes['ServiceProvider']);
+        $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
+        unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
 
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
             $this->_server->redirect('/authentication/feedback/no-consent', 'No consent given...');
