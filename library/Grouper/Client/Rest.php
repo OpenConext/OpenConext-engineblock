@@ -387,51 +387,42 @@ XML;
     protected function _doRest($operation, $request, $expect = array('SUCCESS'))
     {
         $url = $this->_endpointUrl . $operation;
-
-        $ch = curl_init($url);
-
-        // General
-        curl_setopt($ch, CURLOPT_VERBOSE, 0);
-
-        // Request to be sent
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: text/xml; charset=UTF-8'));
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
-
-        // Response handling
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
+        $config = array(
+            'adapter' => 'Curl'
+        );
         foreach ($this->_options as $key => $value) {
             $constantName = 'CURLOPT_' . strtoupper($key);
             if (defined($constantName)) {
-                curl_setopt($ch, constant($constantName), $value);
+                $config['curloptions'][constant($constantName)] = $value;
             }
         }
 
-        $response = curl_exec($ch);
-        $error = curl_error($ch);
-        $info = curl_getinfo($ch);
-        curl_close($ch);
+        $client = new Zend_Http_Client($url);
+        $client->setHeaders('User-Agent', 'EngineBlock Grouper Client');
+        $client->setHeaders('Content-Type', 'text/xml; charset=UTF-8');
+        $client->setRawData($request);
+        $response = $client->request();
 
-        if ($response === false || $error || $info['http_code'] >= 300) {
+        $this->_getLog()->debug('[GROUPER] Request: ' . $client->getLastRequest());
+        $this->_getLog()->debug('[GROUPER] Response: ' .
+            $response->getHeadersAsString() .
+                PHP_EOL . PHP_EOL .
+                $response->getBody()
+        );
+
+        if (!$response->isSuccessful()) {
             $e = new Grouper_Client_Exception(
-                'Could not execute grouper REST request' .
-                    ' [url: ' . $url . ']' .
-                    ' [error: ' . $error . ']' .
-                    ' [http code: ' . $info['http_code'] . ']' .
-                    ' [response: "' . $response . '"]',
+                'Could not execute grouper REST request]',
                 Grouper_Client_Exception::CODE_ALERT
             );
             $e->description = implode(PHP_EOL, array(
                 'URL: ' . $url,
-                'Error: ' . $error,
-                'Info: ' . print_r($info, true),
-                'Response: ' . $response
+                'Response: ' . $response->getHeadersAsString() . PHP_EOL . PHP_EOL . $response->getBody(),
             ));
             throw $e;
         }
 
-        $result = simplexml_load_string($response);
+        $result = simplexml_load_string($response->getBody());
         if ($result === FALSE) {
             throw new Grouper_Client_Exception(
                 "Unable to parse response '$response' as XML",
@@ -490,5 +481,13 @@ XML;
                 "No subjectId set! Please use ->setSubjectId to set a subject on which behalf to make requests"
             );
         }
+    }
+
+    /**
+     * @return EngineBlock_Log
+     */
+    protected function _getLog()
+    {
+        return EngineBlock_ApplicationSingleton::getLog();
     }
 }
