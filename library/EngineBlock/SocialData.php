@@ -63,7 +63,7 @@ class EngineBlock_SocialData
     protected $_factory = NULL;
 
     /**
-     * @var The groupProviderAcls for a given SP
+     * @var array GroupProviderAcls for a given SP
      */
     protected $_groupProviderAcl = NULL;
 
@@ -87,16 +87,27 @@ class EngineBlock_SocialData
     {
         $identifier = $this->_getCollabPersonIdForPersistentId($identifier);
         if (!$identifier) {
+            $this->_getLog()->notice(
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                    ", personId: $identifier cannot be resolved to a collabPersonId?"
+            );
             return false;
         }
 
         if (!$spEntityId) {
             //without spEntityId we can't check if we are allowed to return Groups
+            $this->_getLog()->notice(
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                    ", no SP entity ID, required to return groups"
+            );
             return false;
         }
         $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
         if (!$spGroupAcls) {
-            //no GroupAcl means by definition that there are no positive permissions
+            $this->_getLog()->notice(
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                    ", no GroupAcl (set in Manage) means by definition that there are no positive permissions"
+            );
             return false;
         }
 
@@ -136,15 +147,36 @@ class EngineBlock_SocialData
     {
         $groupMemberUid = $this->_getCollabPersonIdForPersistentId($groupMemberUid);
         if (!$groupMemberUid) {
+            $this->_getLog()->notice(
+                "[OpenSocial] getGroupMembers(
+                    '$groupMemberUid', '$groupId', " .
+                    var_export($socialAttributes, true) .
+                    ", '$voId', '$spEntityId') " .
+                    "groupMemberUid '$groupMemberUid' cannot be resolved to collabPersonId!"
+            );
             return false;
         }
         if (!$spEntityId) {
             // Without spEntityId we can't check if we are allowed to return Groups
+            $this->_getLog()->notice(
+                "[OpenSocial] getGroupMembers(
+                    '$groupMemberUid', '$groupId', " .
+                    var_export($socialAttributes, true) .
+                    ", '$voId', '$spEntityId') " .
+                    "spEntityId '$spEntityId' not present, can't check if we are allowed to return groups"
+            );
             return false;
         }
         $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
         if (!$spGroupAcls) {
             //no GroupAcl means by definition that there are no positive permissions
+            $this->_getLog()->notice(
+                "[OpenSocial] getGroupMembers(
+                    '$groupMemberUid', '$groupId', " .
+                    var_export($socialAttributes, true) .
+                    ", '$voId', '$spEntityId') " .
+                    "spEntityId '$spEntityId' has no group ACL (set via Manage) may not return groups"
+            );
             return false;
         }
         $groupMembers = $this->_getGroupProvider($groupMemberUid)->getMembers($groupId,$spGroupAcls );
@@ -183,6 +215,12 @@ class EngineBlock_SocialData
     {
         $identifier = $this->_getCollabPersonIdForPersistentId($identifier);
         if (!$identifier) {
+            $this->_getLog()->notice(
+                "[OpenSocial] getPerson('$identifier', " .
+                    var_export($socialAttributes, true) .
+                    ", '$voId', '$spEntityId', '$subjectId') " .
+                    "Person ID '$identifier' cannot be resolved to a collabPersonId"
+            );
             return false;
         }
 
@@ -410,5 +448,10 @@ class EngineBlock_SocialData
             $this->_factory = new EngineBlock_Database_ConnectionFactory();
         }
         return $this->_factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
+    }
+
+    protected function _getLog()
+    {
+        return EngineBlock_ApplicationSingleton::getLog();
     }
 }
