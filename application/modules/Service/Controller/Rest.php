@@ -56,7 +56,7 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
             }
 
             if (count($identifiers)===0) {
-                EngineBlock_ApplicationSingleton::getInstance()->getLog()->warn(
+                EngineBlock_ApplicationSingleton::getInstance()->getLog()->notice(
                     "No Entity Id found for gadgetbaseurl '$gadgetUrl'"
                 );
                 $this->_getResponse()->setHeader('Content-Type', 'application/json');

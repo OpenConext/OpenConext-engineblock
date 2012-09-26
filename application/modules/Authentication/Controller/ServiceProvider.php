@@ -48,7 +48,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
         catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
-            $application->getLogInstance()->error($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
+            $application->getLog()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
         }
     }
@@ -64,11 +64,11 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $proxyServer->processConsent();
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
-            $application->getLogInstance()->warn('Session lost error');
+            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLogInstance()->warn('User not a member error');
+            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
     }
