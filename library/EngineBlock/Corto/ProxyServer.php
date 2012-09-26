@@ -654,34 +654,75 @@ class EngineBlock_Corto_ProxyServer
 
     protected function _getRequestAssertionConsumer(array $request)
     {
-        $acs = array();
-        if (isset($request['_AssertionConsumerServiceURL']) &&
-            isset($request['_ProtocolBinding']) &&
-            isset($request['__']['WasSigned']) &&
-            $request['__']['WasSigned']===true) {
+        $requestWasSigned    = (isset($request['__']['WasSigned']) && $request['__']['WasSigned']===true);
+        $requestHasCustomAcs = (isset($request['_AssertionConsumerServiceURL']) && isset($request['_ProtocolBinding']));
+        $requestHasAcsIndex  = (isset($request['_AssertionConsumerServiceIndex']));
+        $remoteEntity = $this->getRemoteEntity($request['saml:Issuer']['__v']);
 
-            $acs['Location'] = $request['_AssertionConsumerServiceURL'];
-            $acs['Binding']  = $request['_ProtocolBinding'];
-        } else {
-            $remoteEntity = $this->getRemoteEntity($request['saml:Issuer']['__v']);
-            $index = 0;
-            if (isset($request['_AssertionConsumerServiceIndex'])) {
-                $index = (int)$request['_AssertionConsumerServiceIndex'];
-                if (isset($remoteEntity['AssertionConsumerServices'][$index])) {
-                    return $remoteEntity['AssertionConsumerServices'][$index];
+        // Custom ACS Location & ProtocolBinding goes first
+        if ($requestHasCustomAcs) {
+            if ($requestWasSigned) {
+                $this->_server->getSessionLog()->warn(
+                    "Using AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
+                        "and ProtocolBinding '{$request['_ProtocolBinding']}' from signed request. "
+                );
+                return array(
+                    'Location' => $request['_AssertionConsumerServiceURL'],
+                    'Binding'  => $request['_ProtocolBinding'],
+                );
+            }
+            else {
+                $requestAcsIsRegisteredInMetadata = false;
+                foreach ($remoteEntity['AssertionConsumerServices'] as $entityAcs) {
+                    $requestAcsIsRegisteredInMetadata = (
+                        $entityAcs['Location'] === $request['_AssertionConsumerServiceURL'] &&
+                        $entityAcs['Binding']  === $request['_ProtocolBinding']
+                    );
+                    if ($requestAcsIsRegisteredInMetadata) {
+                        break;
+                    }
+                }
+                if ($requestAcsIsRegisteredInMetadata) {
+                    $this->_server->getSessionLog()->warn(
+                        "Using AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
+                            "and ProtocolBinding '{$request['_ProtocolBinding']}' from unsigned request, " .
+                            "it's okay though, the ACSLocation and Binding were registered in the metadata"
+                    );
+                    return array(
+                        'Location' => $request['_AssertionConsumerServiceURL'],
+                        'Binding'  => $request['_ProtocolBinding'],
+                    );
                 }
                 else {
-                    $index = 0;
                     $this->_server->getSessionLog()->warn(
-                        "AssertionConsumerServiceIndex was mentioned in request, but we don't know any ACS by ".
-                            "index '$index'? Maybe the metadata was updated and we don't have that endpoint yet? " .
+                        "AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
+                            "and ProtocolBinding '{$request['_ProtocolBinding']}' were mentioned in request, " .
+                            "but the AuthnRequest was not signed, and the ACSLocation and Binding were not found in " .
+                            "the metadata for the SP, so I am disallowed from acting upon it." .
                             "Trying the default endpoint.."
                     );
                 }
             }
-            $acs = $remoteEntity['AssertionConsumerServices'][$index];
         }
-        return $acs;
+
+        if ($requestHasAcsIndex) {
+            $index = (int)$request['_AssertionConsumerServiceIndex'];
+            if (isset($remoteEntity['AssertionConsumerServices'][$index])) {
+                $this->_server->getSessionLog()->warn(
+                    "Using AssertionConsumerServiceIndex '$index' from request"
+                );
+                return $remoteEntity['AssertionConsumerServices'][$index];
+            }
+            else {
+                $this->_server->getSessionLog()->warn(
+                    "AssertionConsumerServiceIndex was mentioned in request, but we don't know any ACS by ".
+                        "index '$index'? Maybe the metadata was updated and we don't have that endpoint yet? " .
+                        "Trying the default endpoint.."
+                );
+            }
+        }
+
+        return $remoteEntity['AssertionConsumerServices'][0];
     }
 
     function sendResponseToRequestIssuer($request, $response)
