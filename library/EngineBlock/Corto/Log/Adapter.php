@@ -69,7 +69,7 @@ class EngineBlock_Corto_Log_Adapter implements EngineBlock_Corto_Log_Interface
      */
     public function warn($message, EngineBlock_Log_Message_AdditionalInfo $additionalInfo = null)
     {
-        EngineBlock_ApplicationSingleton::getLog()->warn($this->_getPrefix() . $message, $additionalInfo);
+        EngineBlock_ApplicationSingleton::getLog()->notice($this->_getPrefix() . $message, $additionalInfo);
     }
 
     protected function _getPrefix()
