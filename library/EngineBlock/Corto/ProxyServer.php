@@ -304,7 +304,9 @@ class EngineBlock_Corto_ProxyServer
 
     public function serve($serviceName, $remoteIdpMd5 = "")
     {
-        $this->setRemoteIdpMd5($remoteIdpMd5);
+        if (!empty($remoteIdpMd5)) {
+            $this->setRemoteIdpMd5($remoteIdpMd5);
+        }
 
         $this->startSession();
         $this->getSessionLog()->debug("Started request with parameters: ". var_export(func_get_args(), true));
@@ -326,7 +328,7 @@ class EngineBlock_Corto_ProxyServer
             }
         }
         if (!isset($this->_configs['Idp'])) {
-            $this->getSessionLog()->warn("Unable to map $remoteIdPMd5 to a remote entity!");
+            $this->getSessionLog()->warn("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
         }
 
         return $this;
