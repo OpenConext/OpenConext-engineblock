@@ -65,7 +65,7 @@ class EngineBlock_Dispatcher
 
             if (!$this->_dispatch($uri)) {
                 EngineBlock_ApplicationSingleton::getLog()->notice("[404]Unroutable URI: '$uri'");
-                $this->_getControllerInstance('default', 'error')->handleAction('notFound');
+                $this->_getControllerInstance('default', 'error')->handleAction('NotFound');
             }
         } catch(Exception $e) {
             $this->_handleDispatchException($e);
