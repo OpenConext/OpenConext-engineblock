@@ -747,19 +747,26 @@ class EngineBlock_Corto_ProxyServer
         if (!$id || !isset($_SESSION[$id])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 "Trying to match a Response ID to a Request, but the Response with id '$id' is not known in this session? ".
-                "This could be an unsolicited Response (which we do not support) but more likely the user lost their session"
+                "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
+                EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
             );
         }
 
         // Get the ID of the original request (from the SP)
         if (!isset($_SESSION[$id]['_InResponseTo'])) {
             $this->_server->getSessionLog()->debug(print_r($_SESSION, true));
-            throw new EngineBlock_Corto_ProxyServer_Exception("ID `$id` does not have a _InResponseTo?!?");
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "ID `$id` does not have a _InResponseTo?!?",
+                EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
+            );
         }
         $originalRequestId = $_SESSION[$id]['_InResponseTo'];
 
         if (!isset($_SESSION[$originalRequestId]['SAMLRequest'])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception('Response has no known Request');
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                'Response has no known Request',
+                EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
+            );
         }
         return $_SESSION[$originalRequestId]['SAMLRequest'];
     }
@@ -1006,7 +1013,8 @@ class EngineBlock_Corto_ProxyServer
         $nodes = $xpath->query('/*[@ID="' . $element['_ID'] . '"]');
         if ($nodes->length < 1) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Unable to sign message can't find element with id to sign?"
+                "Unable to sign message can't find element with id to sign?",
+                EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
             );
         }
         $canonicalXmlDom = $nodes->item(0);
