@@ -69,15 +69,15 @@ JS
             <a href="/authentication/proxy/idps-metadata">&raquo; open link</a>
         </dd>
         <dt>
-            <strong>Metadata below is only relevant for Shibboleth SPs or in
+            <strong>Metadata below is only relevant for key rollover or in
                 case you want a custom WAYF for your SP</strong>
         </dt>
         <dt>
             The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy for SP
             with entityID "urn:example.org". Please replace "urn:example.org" with the entityID
-            of your own SP before testing this metadata request. The resulting metadata will
-            include the SURFconext IdP proxy metadata as well as the SP metadata, if configured
-            for SURFconext.
+            of your own SP before testing this metadata request. The resulting metadata will include
+            the public key specific to your Service Provider, which, in the case of key rollover,
+            MAY be different from the regular public key.
         </dt>
         <dd>
             <a href="/authentication/idp/metadata?sp-entity-id=urn:example.org">&raquo; open link</a>
