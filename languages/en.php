@@ -185,8 +185,13 @@ If you have any questions about your privacy and the policy applied, please visi
         <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
         or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
-    'error_no_consent'              => 'No consent given',
-    'error_no_consent_desc'         => 'No consent given to release your data to the service, unable to proceed.<br /><br /> In order to proceed you need to restart your browser, login again, and provide consent.',
+    'error_no_consent'              => 'Unable to continue to service',
+    'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
+
+If you want to use this application you have to:<br />
+<ul><li>restart your browser</li>
+<li>login again</li>
+<li>share your information</li></ul>',
     'error_no_idps'                 => 'Error - No Identity Providers found',
     'error_no_idps_desc'            => '<p>
         The application you came from (your &lsquo;Service Provider&rsquo;) is not allowed to connect with any IdP.

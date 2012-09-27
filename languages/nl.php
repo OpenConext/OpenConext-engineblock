@@ -185,8 +185,13 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
         Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de support pagina</a> als dit uw probleem niet oplost.
         Op deze pagina vindt u meer informatie over de mogelijke oorzaken en hoe u contact kan opnemen met het support team.
     </p>',
-    'error_no_consent'                  => 'Geen autorisatie gegeven',
-    'error_no_consent_desc'             => 'U hebt geen autorisatie gegeven om uw profielgegevens vrij te geven aan de service. Zonder deze autorisatie kunt u niet verder.<br /><br /> Om toch door te gaan dient u uw browser opnieuw te starten, nogmaals in te loggen en vervolgens uw profielgegevens vrij te geven aan de dienst.',
+    'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
+    'error_no_consent_desc'             => 'Deze applicatie kan enkel worden gebruikt wanneer de vermelde informatie wordt gedeeld.<br /><br />
+
+Als u deze applicatie wilt gebruiken moet u:<br />
+<ul><li>de browser herstarten</li>
+<li>opnieuw inloggen</li>
+<li>uw informatie delen</li></ul>',
     'error_no_idps'                     => 'Error - Geen Identity Providers gevonden',
     'error_no_idps_desc'                => '<p>
         De application die u probeert te benaderen (uw &lsquo;Service Provider&rsquo;) is niet toegankelijk via de SURFconext infrastructuur.
