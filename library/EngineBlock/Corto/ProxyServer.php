@@ -255,6 +255,11 @@ class EngineBlock_Corto_ProxyServer
         return $scheme . '://' . $host . $mappedUri;
     }
 
+    public function hasRemoteEntity($entityId)
+    {
+        return isset($this->_entities['remote'][$entityId]);
+    }
+
     public function getRemoteEntity($entityId)
     {
         if (!isset($this->_entities['remote'][$entityId])) {

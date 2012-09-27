@@ -51,6 +51,8 @@ class EngineBlock_Corto_Adapter
         $this->_addRemoteEntitiesFilter(array($this, '_annotateRequestWithImplicitVo'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestScopingRequesterId'));
+
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
 
@@ -186,6 +188,23 @@ class EngineBlock_Corto_Adapter
         );
     }
 
+    protected function _filterRemoteEntitiesByRequestScopingRequesterId(array $entities)
+    {
+        $requesterIds = $this->_getRequestScopingRequesterIds();
+        $serviceRegistry = $this->getServiceRegistryAdapter();
+        foreach ($requesterIds as $requesterId) {
+            if ($this->_proxyServer->hasRemoteEntity($requesterId)) {
+                $entities = $serviceRegistry->filterEntitiesBySp($entities, $requesterId);
+            }
+            else {
+                $this->_getSessionLog()->warn(
+                    "Unable to apply RequesterID '$requesterId' to sub-scope the available IdPs as we don't know this SP!"
+                );
+            }
+        }
+        return $entities;
+    }
+
     /**
      * Filter out IdPs that are not allowed to connect to the given SP.
      *
@@ -243,6 +262,23 @@ class EngineBlock_Corto_Adapter
             $entities,
             $this->_getEntityWorkFlowState($claimedSpEntityId)
         );
+    }
+
+    /**
+     * @return array RequesterIDs in Request Scoping (if any, otherwise empty)
+     */
+    protected function _getRequestScopingRequesterIds() {
+        $request = $this->_getRequestInstance();
+        $requesterIds = array();
+        if (!empty($request['samlp:Scoping']['samlp:RequesterID'])) {
+            foreach ($request['samlp:Scoping']['samlp:RequesterID'] as $requesterIdElement) {
+                $requesterIds[] = $requesterIdElement['__v'];
+            }
+            return $requesterIds;
+        }
+        else {
+            return $requesterIds;
+        }
     }
 
     /**
