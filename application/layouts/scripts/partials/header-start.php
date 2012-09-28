@@ -32,4 +32,4 @@ require __DIR__ . '/lang.php';
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="robots" content="noindex, nofollow"/>
 
-    <title><?php echo $this->layout()->title; ?></title>
+    <title><?php echo htmlentities($this->layout()->title, 0, 'UTF-8'); ?></title>

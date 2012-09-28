@@ -184,6 +184,9 @@ class EngineBlock_ApplicationSingleton
      */
     protected $_translator;
 
+    /**
+     * @var Zend_Layout
+     */
     protected $_layout;
 
     protected function __construct()
@@ -478,6 +481,9 @@ class EngineBlock_ApplicationSingleton
         $this->_layout = $layout;
     }
 
+    /**
+     * @return Zend_Layout
+     */
     public function getLayout()
     {
         return $this->_layout;
@@ -601,7 +607,7 @@ class EngineBlock_ApplicationSingleton
     {
         $log = $this->getLogInstance();
         if (!$log) {
-            return FALSE;
+            return false;
         }
 
         $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
@@ -612,7 +618,7 @@ class EngineBlock_ApplicationSingleton
             $log->debug($exception->getTraceAsString());
         }
 
-        return TRUE;
+        return true;
     }
 
     //////////// CONFIGURATION

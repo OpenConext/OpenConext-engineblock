@@ -63,7 +63,13 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
             // Run custom attribute manipulations
+            // LEGACY support for manipulations not in sp/
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(),
+
+            // Run custom attribute manipulations
+            new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
+                EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
+            ),
 
             // Set the persistent Identifier for this user on this SP
             new EngineBlock_Corto_Filter_Command_SetPersistentId(),

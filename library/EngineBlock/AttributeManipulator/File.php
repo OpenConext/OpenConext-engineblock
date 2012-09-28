@@ -29,21 +29,28 @@ class EngineBlock_AttributeManipulator_File
 
     const ALLOWED_CHARACTERS_REGEX = '|[0-9a-zA-Z.-]|';
 
-    protected $_fileLocation;
+    protected $_rootLocation;
+    protected $_directory;
 
-    public function manipulate(&$subjectId, array &$attributes, array &$response)
+    function __construct($directory)
     {
-        if (!$this->_setFileLocation()) {
+        $this->_directory = $directory;
+    }
+
+    public function manipulate($entityId, &$subjectId, array &$attributes, array &$response)
+    {
+        if (!$this->_setRootLocation($this->_directory)) {
             // If there is a problem with the file location, then we skip manipulation
             return;
         }
+
         $this->_doGeneralManipulation($subjectId, $attributes, $response);
-        $this->_doSpSpecificManipulation($subjectId, $attributes, $response);
+        $this->_doSpSpecificManipulation($entityId, $subjectId, $attributes, $response);
     }
 
     protected function _doGeneralManipulation(&$subjectId, &$attributes, &$response)
     {
-        $file = $this->_fileLocation . DIRECTORY_SEPARATOR . self::FILE_NAME;
+        $file = $this->_rootLocation . DIRECTORY_SEPARATOR . self::FILE_NAME;
         if (!$this->_fileExists($file)) {
             return;
         }
@@ -55,15 +62,20 @@ class EngineBlock_AttributeManipulator_File
         $this->_include($file, $subjectId, $attributes, $response);
     }
 
-    protected function _doSpSpecificManipulation(&$subjectId, &$attributes, &$response)
+    protected function _doSpSpecificManipulation($entityId, &$subjectId, &$attributes, &$response)
     {
-        $spEntityId = $this->_getSpEntityIdFromResponse($response);
-        $file = $this->_fileLocation .
+        if (empty($entityId)) {
+            die("WHAT NO ENTITY ID MADAFAKKA!");
+            EngineBlock_ApplicationSingleton::getLog()->warn(
+                "Unable to get a SP EntityID from the response? Unable to execute Attribute Manipulations"
+            );
+            return;
+        }
+        $file = $this->_rootLocation .
                 DIRECTORY_SEPARATOR .
-                $this->_getDirectoryNameForEntityId($spEntityId) .
+                $this->_getDirectoryNameForEntityId($entityId) .
                 DIRECTORY_SEPARATOR .
                 self::FILE_NAME;
-        
         if (!$this->_fileExists($file)) {
             return;
         }
@@ -73,11 +85,6 @@ class EngineBlock_AttributeManipulator_File
         }
 
         $this->_include($file, $subjectId, $attributes, $response);
-    }
-
-    protected function _getSpEntityIdFromResponse($response)
-    {
-        return $response['__']['destinationid'];
     }
 
     protected function _fileExists($file)
@@ -100,6 +107,7 @@ class EngineBlock_AttributeManipulator_File
 
     protected function _include($filePath, &$subjectId, &$attributes, &$response)
     {
+        EngineBlock_ApplicationSingleton::getLog()->info('Running Attribute Manipulation ' . $filePath);
         include $filePath;
     }
 
@@ -117,21 +125,27 @@ class EngineBlock_AttributeManipulator_File
         return $newEntityId;
     }
     
-    protected function _setFileLocation()
+    protected function _setRootLocation($directory = "")
     {
         $location = $this->_getConfiguration()->location;
+        if (!empty($directory)) {
+            $location .= DIRECTORY_SEPARATOR . $directory;
+        }
+
+        // Resolve path to files relative to EB root
         if (substr($location, 0, 1) !== '/') {
             $realLocation = realpath(ENGINEBLOCK_FOLDER_ROOT . $location);
-            if ($realLocation === FALSE) {
+            if ($realLocation === false) {
                 EngineBlock_ApplicationSingleton::getLog()->warn(
                     "Location '$location' does not exist, ".
-                    "relative from the EngineBlock root: " . ENGINEBLOCK_FOLDER_ROOT
+                    "relative from the EngineBlock root: " . realpath(ENGINEBLOCK_FOLDER_ROOT)
                 );
                 return false;
             }
             $location = $realLocation;
         }
-        $this->_fileLocation = $location;
+
+        $this->_rootLocation = $location;
         return $this;
     }
 

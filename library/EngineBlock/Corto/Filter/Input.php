@@ -43,15 +43,20 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Show an error if we get responses that do not have the Success status code
             new EngineBlock_Corto_Filter_Command_ValidateSuccessfulResponse(),
 
+            // Convert all OID attributes to URN and remove the OID variant
+            new EngineBlock_Corto_Filter_Command_ConvertOidToUrn(),
+
             // The IdP is not allowed to set the isMemberOf attribute with VO groups
             // so we make sure to remove them
             new EngineBlock_Corto_Filter_Command_RemoveVoGroups(),
 
+            // Run custom attribute manipulations
+            new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
+                EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_IDP
+            ),
+
             // Check whether this IdP is allowed to send a response to the destination SP
             new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(),
-
-            // Convert all OID attributes to URN and remove the URN variant
-            new EngineBlock_Corto_Filter_Command_ConvertOidToUrn(),
 
             // Require valid UID and SchacHomeOrganization
             new EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes(),

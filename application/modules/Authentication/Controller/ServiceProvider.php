@@ -51,6 +51,12 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getLog()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
         }
+        catch (EngineBlock_AttributeManipulator_CustomException $e) {
+            $application->reportError($e);
+
+            $_SESSION['feedback_custom'] = $e->getFeedback();
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/custom');
+        }
     }
 
     public function processConsentAction()
@@ -70,6 +76,12 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
             $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
+        }
+        catch (EngineBlock_AttributeManipulator_CustomException $e) {
+            $application->reportError($e);
+
+            $_SESSION['feedback_custom'] = $e->getFeedback();
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/custom');
         }
     }
 

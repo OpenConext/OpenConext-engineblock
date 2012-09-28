@@ -37,9 +37,9 @@ class EngineBlock_AttributeManipulator_FileMock extends EngineBlock_AttributeMan
         self::$_mockFileLocation = $filePath;
     }
 
-    public function _setFileLocation()
+    public function _setRootLocation()
     {
-        $this->_fileLocation = self::$_mockFileLocation;
+        $this->_rootLocation = self::$_mockFileLocation;
         return $this;
     }
 

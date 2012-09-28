@@ -28,6 +28,17 @@
  */
 class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    const TYPE_SP  = 'sp';
+    const TYPE_IDP = 'idp';
+
+    private $_type;
+
+    function __construct($type = '')
+    {
+        assert('in_array($type, array(self::TYPE_SP, self::TYPE_IDP, ""))');
+        $this->_type = $type;
+    }
+
     public function getResponse()
     {
         return $this->_response;
@@ -47,8 +58,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     {
         $this->_response['__']['IntendedNameId'] = $this->_collabPersonId;
 
-        $manipulator = new EngineBlock_AttributeManipulator_File();
+        $manipulator = new EngineBlock_AttributeManipulator_File($this->_type);
         $manipulator->manipulate(
+            $this->_type === self::TYPE_IDP ? $this->_response['saml:Issuer']['__v'] : $this->_request['saml:Issuer']['__v'],
             $this->_response['__']['IntendedNameId'],
             $this->_responseAttributes,
             $this->_response

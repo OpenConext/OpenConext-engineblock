@@ -118,6 +118,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 '&destination=' . urlencode($e->getDestination())
             );
         }
+        catch (EngineBlock_AttributeManipulator_CustomException $e) {
+            $application->reportError($e);
+            $_SESSION['feedback_custom'] = $e->getFeedback();
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/custom');
+        }
     }
 
     public function helpAction($argument = null)

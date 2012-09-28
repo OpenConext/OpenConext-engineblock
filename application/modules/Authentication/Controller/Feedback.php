@@ -51,4 +51,8 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
     }
     public function noConsentAction() {
     }
+    public function customAction() {
+        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->startSession();
+    }
 }
