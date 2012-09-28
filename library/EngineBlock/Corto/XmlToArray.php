@@ -260,7 +260,7 @@ class EngineBlock_Corto_XmlToArray
     {
         $writer = new XMLWriter();
         $writer->openMemory();
-        $writer->startDocument('1.0');
+        $writer->startDocument('1.0', 'UTF-8');
         $writer->setIndent($useIndentation);
         $writer->setIndentString("    ");
 
