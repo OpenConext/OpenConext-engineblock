@@ -76,7 +76,7 @@ class EngineBlock_LicenseEngine_ValidationManager
                 ->setIdp($idpMetadata['EntityId'])
                 ->setSp($spMetadata['EntityId'])
                 ->setDetails($exception->getTraceAsString());
-            EngineBlock_ApplicationSingleton::getLog()->error("Could not connect to License Manager" . $exception->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->err("Could not connect to License Manager" . $exception->getMessage(), $additionalInfo);
             return EngineBlock_LicenseEngine_ValidationManager::LICENSE_UNKNOWN;
         }
         if ($status['returnUrl']) {

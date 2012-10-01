@@ -48,7 +48,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
                 ->setUserId($this->user->getUid())
                 ->setDetails($e->getTraceAsString());
 
-            EngineBlock_ApplicationSingleton::getLog()->critical($e->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->crit($e->getMessage(), $additionalInfo);
         }
     }
 

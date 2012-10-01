@@ -425,13 +425,19 @@ class EngineBlock_ApplicationSingleton
                 EngineBlock_Exception::CODE_ALERT
             );
         }
-        
+
         $this->_log = EngineBlock_Log::factory($this->_configuration->logs);
     }
 
     protected function _bootstrapHttpCommunication()
     {
         $this->_httpRequest = EngineBlock_Http_Request::createFromEnvironment();
+
+        $this->getLogInstance()->info(sprintf(
+            'Handling incoming request: %s %s',
+            $this->_httpRequest->getMethod(),
+            $this->_httpRequest->getUri()
+        ));
 
         $response = new EngineBlock_Http_Response();
         $response->setHeader('Strict-Transport-Security', 'max-age=15768000; includeSubDomains');
@@ -553,7 +559,6 @@ class EngineBlock_ApplicationSingleton
             );
         }
 
-
         $message = 'A exceptional condition occurred, it has been logged and sent to the administrator.';
         if ($this->getConfiguration()->debug) {
             $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
@@ -591,6 +596,10 @@ class EngineBlock_ApplicationSingleton
             return false;
         }
 
+        // dump PHP error to log
+        $log = $this->getLogInstance();
+        $log->attach($lastError);
+
         $this->reportError(
             new EngineBlock_Exception('PHP Fatal error', EngineBlock_Exception::CODE_ERROR)
         );
@@ -611,8 +620,12 @@ class EngineBlock_ApplicationSingleton
         }
 
         $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
-        $log->log($exception->getMessage(), $exception->getSeverity(), $additionalInfo);
-        $log->debug($exception->getTraceAsString());
+        $log->attach($exception->getTraceAsString())
+            ->log($exception->getMessage(), $exception->getSeverity(), $additionalInfo);
+        
+        // flush all messages in queue, something went wrong!
+        $log->getQueueWriter()->flush('error caught');
+
         while ($exception = $exception->getPrevious()) {
             $log->debug($exception->getMessage());
             $log->debug($exception->getTraceAsString());

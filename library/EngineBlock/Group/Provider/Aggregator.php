@@ -25,7 +25,7 @@
 
 /**
  * Aggregate groups from multiple providers
- */ 
+ */
 class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_Abstract
 {
     /**
@@ -37,7 +37,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
 
     /**
      * Known but unusable group providers (based on preconditions)
-     * 
+     *
      * @var array
      */
     protected $_invalidProviders = array();
@@ -70,7 +70,7 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
         $providerConfigs = array();
         foreach ($providers as $providerConfigKey) {
             if (!isset($config->$providerConfigKey)) {
-                EngineBlock_ApplicationSingleton::getLog()->error(
+                EngineBlock_ApplicationSingleton::getLog()->err(
                     "Group Provider '$providerConfigKey' mentioned, but no config found."
                 );
                 continue;
@@ -313,6 +313,6 @@ class EngineBlock_Group_Provider_Aggregator extends EngineBlock_Group_Provider_A
             "Unable to use provider $providerId, received Exception: " . $e->getMessage(),
             $additionalInfo
         );
-        EngineBlock_ApplicationSingleton::getLog()->debug($e->getTraceAsString());
+        EngineBlock_ApplicationSingleton::getLog()->info($e->getTraceAsString());
     }
 }

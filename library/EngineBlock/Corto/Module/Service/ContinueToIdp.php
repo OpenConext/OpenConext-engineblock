@@ -27,6 +27,19 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         }
         $request = $_SESSION[$id]['SAMLRequest'];
 
+
+        $remoteEntity = $this->_server->getRemoteEntity($selectedIdp);
+        if (!empty($remoteEntity['AdditionalLogging'])) {
+            $queue = EngineBlock_ApplicationSingleton::getInstance()
+                ->getLogInstance()
+                ->getQueueWriter();
+
+            $queue->getSessionStorage()
+                  ->setForceFlush(true);
+
+            $queue->flush();
+        }
+
         $this->_server->sendAuthenticationRequest($request, $selectedIdp);
     }
 }

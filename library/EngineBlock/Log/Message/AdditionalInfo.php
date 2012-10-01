@@ -31,6 +31,7 @@ class EngineBlock_Log_Message_AdditionalInfo
     protected $_idp;
     protected $_sp;
     protected $_details = "";
+    protected $_messagePrefix;
 
     public static function createFromException(EngineBlock_Exception $e)
     {
@@ -138,15 +139,36 @@ class EngineBlock_Log_Message_AdditionalInfo
         return $this->_userId;
     }
 
+    /**
+     * @param string $prefix
+     * @return \EngineBlock_Log_Message_AdditionalInfo
+     */
+    public function setMessagePrefix($prefix)
+    {
+        $this->_messagePrefix = (string)$prefix;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMessagePrefix()
+    {
+        return $this->_messagePrefix;
+    }
+
+
     public function toArray()
     {
         $array = array();
-        $array['severity']  = $this->_severity;
-        $array['location']  = $this->_location;
-        $array['userId']    = $this->_userId;
-        $array['idp']       = $this->_idp;
-        $array['sp']        = $this->_sp;
-        $array['details']   = $this->_details;
+        $array['severity']       = $this->_severity;
+        $array['location']       = $this->_location;
+        $array['userId']         = $this->_userId;
+        $array['idp']            = $this->_idp;
+        $array['sp']             = $this->_sp;
+        $array['details']        = $this->_details;
+        $array['message_prefix'] = $this->_messagePrefix;
         return $array;
     }
 }

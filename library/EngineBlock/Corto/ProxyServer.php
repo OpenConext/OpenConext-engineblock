@@ -314,11 +314,11 @@ class EngineBlock_Corto_ProxyServer
         }
 
         $this->startSession();
-        $this->getSessionLog()->debug("Started request with parameters: ". var_export(func_get_args(), true));
+        $this->getSessionLog()->info("Started request with parameters: ". var_export(func_get_args(), true));
 
-        $this->getSessionLog()->debug("Calling service '$serviceName'");
+        $this->getSessionLog()->info("Calling service '$serviceName'");
         $this->getServicesModule()->serve($serviceName);
-        $this->getSessionLog()->debug("Done calling service '$serviceName'");
+        $this->getSessionLog()->info("Done calling service '$serviceName'");
     }
 
     public function setRemoteIdpMd5($remoteIdPMd5)
@@ -328,7 +328,7 @@ class EngineBlock_Corto_ProxyServer
             if (md5($remoteEntityId) === $remoteIdPMd5) {
                 $this->_configs['Idp'] = $remoteEntityId;
                 $this->_configs['TransparentProxy'] = true;
-                $this->getSessionLog()->debug("Detected pre-selection of $remoteEntityId as IdP, switching to transparant mode");
+                $this->getSessionLog()->info("Detected pre-selection of $remoteEntityId as IdP, switching to transparant mode");
                 break;
             }
         }
@@ -761,7 +761,9 @@ class EngineBlock_Corto_ProxyServer
 
         // Get the ID of the original request (from the SP)
         if (!isset($_SESSION[$id]['_InResponseTo'])) {
-            $this->_server->getSessionLog()->debug(print_r($_SESSION, true));
+            $log = $this->_server->getSessionLog();
+            $log->attach($_SESSION);
+
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 "ID `$id` does not have a _InResponseTo?!?",
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
@@ -838,7 +840,7 @@ class EngineBlock_Corto_ProxyServer
 
     public function renderTemplate($templateName, $vars = array(), $parentTemplates = array())
     {
-        $this->getSessionLog()->debug("Rendering template '$templateName'");
+        $this->getSessionLog()->info("Rendering template '$templateName'");
         if (!is_array($vars)) {
             $vars = array('content' => $vars);
         }
@@ -923,7 +925,7 @@ class EngineBlock_Corto_ProxyServer
 
     public function redirect($location, $message)
     {
-        $this->getSessionLog()->debug("Redirecting to $location");
+        $this->getSessionLog()->info("Redirecting to $location");
 
         if ($this->getConfig('debug', true)) {
             $output = $this->renderTemplate('redirect', array('location'=>$location, 'message' => $message));
@@ -1137,12 +1139,12 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @return EngineBlock_Corto_Log_Interface
+     * @return EngineBlock_Log
      */
     public function getSystemLog()
     {
         if (!isset($this->_systemLog)) {
-            $this->_systemLog = new EngineBlock_Corto_Log_Dummy();
+            $this->_systemLog = EngineBlock_ApplicationSingleton::getLog();
         }
 
         return $this->_systemLog;
@@ -1155,17 +1157,15 @@ class EngineBlock_Corto_ProxyServer
         }
 
         if (!isset($this->_sessionLogDefault)) {
-            $this->_sessionLogDefault = new EngineBlock_Corto_Log_Dummy();
+            $this->_sessionLogDefault = EngineBlock_ApplicationSingleton::getLog();
         }
 
-        /** @var $sessionLog EngineBlock_Corto_Log_Interface */
-        $sessionLog = $this->_sessionLogDefault;
-        $sessionLog->setId(session_id());
-        $this->_sessionLog =$sessionLog;
+        $this->_sessionLog = $this->_sessionLogDefault;
+
         return $this->_sessionLog;
     }
 
-    public function setSystemLog(EngineBlock_Corto_Log_Interface $log)
+    public function setSystemLog(EngineBlock_Log $log)
     {
         $this->_systemLog = $log;
     }

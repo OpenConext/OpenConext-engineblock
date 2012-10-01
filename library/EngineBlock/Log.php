@@ -26,6 +26,16 @@
 class EngineBlock_Log extends Zend_Log
 {
     /**
+     * Remember unique request ID
+     */
+    protected $_requestId = null;
+
+    /**
+     * Objects to dump
+     */
+    protected $_attachments = array();
+
+    /**
      * Factory to construct the logger and one or more writers
      * based on the configuration array
      *
@@ -60,133 +70,130 @@ class EngineBlock_Log extends Zend_Log
         return $log;
     }
 
+    /**
+     * Log a message at a priority, overrides Zend_Log to prepend
+     * session and request ID to message
+     *
+     * @param  mixed    $message   Message to log
+     * @param  integer  $priority  Priority of message
+     * @param  mixed    $additionalInfo    Extra information to log in event
+     * @return void
+     * @throws Zend_Log_Exception
+     */
     public function log($message, $priority, $additionalInfo = null)
     {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::log($message, $priority);
+        // see if we need to set event items, used by Mail writer
+        if ($additionalInfo instanceof EngineBlock_Log_Message_AdditionalInfo) {
+            $this->_setAdditionalEventItems($additionalInfo);
+        }
+
+        // add identifier to help recognize all log messages written
+        // during one request
+        $requestId = $this->getRequestId();
+
+        // add session identifier
+        $sessionId = session_id() ?: 'no session';
+
+        // dump count
+        $count = count($this->_attachments);
+        if ($count > 0) {
+            $message .= sprintf(
+                ' [dumping %d object%s]', $count, ($count) ? 's' : ''
+            );
+        }
+
+        // format message prefix
+        $prefix = sprintf('EB[%s][%s]', $sessionId, $requestId);
+
+        // log message
+        parent::log(
+            $prefix . ' ' . $message, $priority, $additionalInfo
+        );
+
+        // dump objects
+        while ($data = array_shift($this->_attachments)) {
+            parent::log(
+                $prefix . '[DUMP] ' . $data, $priority, $additionalInfo
+            );
+        }
+
+        return $this;
     }
 
     /**
-     * Prio 0: Emergency: system is unusable
+     * Add data to append serialized after next log message
+     *  - if log() is not called after attach(), data is discarded
      *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
+     * @param mixed $data
+     * @return EngineBlock_Log
      */
-    public function emerg($msg, $additionalInfo = null)
+    public function attach($data)
     {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::emerg($msg);
+        if (!is_string($data)) {
+            $data = var_export($data, true);
+        }
+
+        $this->_attachments[] = $data;
+
+        return $this;
     }
 
     /**
-     * Prio 1: Alert: action must be taken immediately
+     * Write an event structure to each writer, used by Queue writer
+     * to collect internal events and send them to log object later
      *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
+     * @param array $event
+     * @return \EngineBlock_Log
      */
-    public function alert($msg, $additionalInfo = null)
+    public function writeEvent(array $event)
     {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::alert($msg);
+        // send to each writer
+        foreach ($this->_writers as $writer) {
+            $writer->write($event);
+        }
+
+        return $this;
     }
 
     /**
-     * Prio 2: Critical: critical conditions
+     * Returns the first queue-ing writer found
      *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
+     * @return \EngineBlock_Log_Writer_Queue
+     * @throws EngineBlock_Exception
      */
-    public function critical($msg, $additionalInfo = null)
+    public function getQueueWriter()
     {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::crit($msg);
+        foreach ($this->_writers as $writer) {
+            if (!$writer instanceof EngineBlock_Log_Writer_Queue) {
+                continue;
+            }
+
+            return $writer;
+        }
+
+        // No queueing log writer registered
+        return new EngineBlock_Log_Writer_Queue(
+            new ArrayObject(), new EngineBlock_Log()
+        );
     }
 
     /**
-     * Prio 3: Error: error conditions
+     * Returns unique ID pre request
      *
-     * Alias for err
-     *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
+     * @return string
      */
-    public function error($msg, $additionalInfo = null)
+    public function getRequestId()
     {
-        $this->_setAdditionalEventItems($additionalInfo);
-        $this->err($msg, $additionalInfo);
+        if ($this->_requestId === null) {
+            $this->_requestId = uniqid();
+        }
+
+        return $this->_requestId;
     }
 
     /**
-     * Prio 3: Error: error conditions
-     *
-     * Has an alias called 'error'
-     *
-     * @param string $msg
      * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
      */
-    public function err($msg, $additionalInfo = null)
-    {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::err($msg);
-    }
-
-    /**
-     * Prio 4: Warning: warning conditions
-     *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
-     */
-    public function warn($msg, $additionalInfo = null)
-    {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::warn($msg);
-    }
-
-    /**
-     * Prio 5: Notice: normal but significant condition
-     *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
-     */
-    public function notice($msg, $additionalInfo = null)
-    {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::notice($msg);
-    }
-
-    /**
-     * Prio 6: Informational: informational messages
-     *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
-     */
-    public function info($msg, $additionalInfo = null)
-    {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::info($msg);
-    }
-
-    /**
-     * Prio 7: Debug: debug messages
-     *
-     * @param string $msg
-     * @param EngineBlock_Log_Message_AdditionalInfo $additionalInfo
-     * @return void
-     */
-    public function debug($msg, $additionalInfo = null)
-    {
-        $this->_setAdditionalEventItems($additionalInfo);
-        parent::debug($msg);
-    }
-
     protected function _setAdditionalEventItems(EngineBlock_Log_Message_AdditionalInfo $additionalInfo = null)
     {
         if ($additionalInfo) {

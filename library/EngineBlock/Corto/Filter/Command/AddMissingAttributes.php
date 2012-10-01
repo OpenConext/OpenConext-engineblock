@@ -113,11 +113,12 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
      */
     protected function _addIsMemberOfSurfNlAttribute()
     {
+        $log = EngineBlock_ApplicationSingleton::getLog();
+
         if (!isset($this->_idpMetadata['GuestQualifier'])) {
-            EngineBlock_ApplicationSingleton::getLog()->warn(
-                'No GuestQualifier for IdP: ' . var_export($this->_idpMetadata, true) .
-                    'Setting it to "All" and continuing.'
-            );
+            $log->attach($this->_idpMetadata)
+                ->warn('No GuestQualifier for IdP, setting it to "All" and continuing');
+
             $this->_idpMetadata['GuestQualifier'] = 'All';
         }
 
@@ -130,20 +131,20 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
                     $this->_setIsMember();
                 }
                 else {
-                    EngineBlock_ApplicationSingleton::getLog()->notice(
+                    $log->notice(
                         "Idp guestQualifier is set to 'Some', surfPersonAffiliation attribute does not contain " .
                             'the value "member", so not adding isMemberOf for surf.nl'
                     );
                 }
             }
             else {
-                EngineBlock_ApplicationSingleton::getLog()->warn(
-                    "Idp guestQualifier is set to 'Some' however, ".
+                $log->attach($this->_idpMetadata)
+                    ->attach($this->_responseAttributes)
+                    ->warn(
+                        "Idp guestQualifier is set to 'Some' however, ".
                         "the surfPersonAffiliation attribute was not provided, " .
-                        "not adding the isMemberOf for surf.nl" .
-                        var_export($this->_idpMetadata, true) .
-                        var_export($this->_responseAttributes, true)
-                );
+                        "not adding the isMemberOf for surf.nl"
+                    );
             }
         }
         else if ($this->_idpMetadata['GuestQualifier'] === 'All') {
@@ -151,11 +152,11 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
         }
         else {
             // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
-            EngineBlock_ApplicationSingleton::getLog()->warn(
-                "Idp guestQualifier is set to unknown value '{$this->_idpMetadata['GuestQualifier']}, idp metadata: " .
-                    var_export($this->_idpMetadata, true) .
-                    var_export($this->_responseAttributes, true)
-            );
+            $log->attach($this->_idpMetadata)
+                ->attach($this->_responseAttributes)
+                ->warn(
+                    "Idp guestQualifier is set to unknown value '{$this->_idpMetadata['GuestQualifier']}, idp metadata: "
+                );
         }
     }
 

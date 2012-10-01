@@ -88,7 +88,7 @@ class EngineBlock_Saml2Attributes_FieldMapper
         # example: 52734
         # See also:
         # http://www.ib-groep.nl/zakelijk/HO/CROHO/Raadplegen_of_downloaden_CROHO.asp
-        
+
         'urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer'    => 'nlStudielinkNummer',
         'urn:mace:surffederatie.nl:attribute-def:nlEduPerson'           => 'nlEduPerson',
     );
@@ -101,11 +101,14 @@ class EngineBlock_Saml2Attributes_FieldMapper
             // Map it to an LDAP attribute
             if (isset($this->_s2lMap[$saml2Name])) {
                 if (count($values)>1) {
+                    $log = $this->getLogInstance();
+                    $log->attach($values);
+
                     EngineBlock_ApplicationSingleton::getLog()->notice(
-                        "Ignoring everything but first value of $saml2Name: ". var_export($values, true)
+                        "Ignoring everything but first value of $saml2Name:"
                     );
                 }
-                
+
                 $ldapAttributes[$this->_s2lMap[$saml2Name]] = $values[0];
             }
 
@@ -116,9 +119,12 @@ class EngineBlock_Saml2Attributes_FieldMapper
             }
         }
         if (!empty($required)) {
+            $log = $this->getLogInstance();
+            $log->attach($required)
+                ->attach($attributes);
+
             throw new EngineBlock_Exception_MissingRequiredFields(
-                "Missing required SAML2 fields: " . var_export($required, true) .
-                    ' in attributes: ' . var_export($attributes, true)
+                'Missing required SAML2 fields in attributes'
             );
         }
         return $ldapAttributes;

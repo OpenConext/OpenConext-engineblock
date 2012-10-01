@@ -72,7 +72,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     public function receiveRequest()
     {
         $request = $this->_receiveMessage(self::KEY_REQUEST);
-        $this->_server->getSessionLog()->debug("Received request: " . var_export($request, true));
+
+        $log = $this->_server->getSessionLog();
+        $log->attach($request)
+            ->info('Received request');
 
         $this->_verifyRequest($request);
         $this->_c14nRequest($request);
@@ -86,7 +89,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     public function receiveResponse()
     {
         $response = $this->_receiveMessage(self::KEY_RESPONSE);
-        $this->_server->getSessionLog()->debug("Received response: " . var_export($response, true));
+
+        $log = $this->_server->getSessionLog();
+        $log->attach($response)
+            ->info('Received response');
+
         if (isset($response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Binding']) &&
             $response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Binding'] === "INTERNAL") {
             return $response;
@@ -562,8 +569,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         if (!isset($element['_ID']) || !$element['_ID']) {
+            $log = $this->_server->getSessionLog();
+            $log->attach($element);
+
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Trying to verify signature on an element without an ID is not supported: " . var_export($element, true)
+                'Trying to verify signature on an element without an ID is not supported'
             );
         }
 
@@ -637,8 +647,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         if (!isset($element['ds:Signature']['ds:SignatureValue']['__v'])) {
+            $log = $this->getLogInstance();
+            $log->attach($element);
+
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "No sigurature value found on element? " . var_export($element, true)
+                'No sigurature value found on element?'
             );
         }
 
@@ -745,7 +758,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         );
         $mustSign = ($messageType===self::KEY_REQUEST && $wantRequestsSigned);
         if ($mustSign) {
-            $this->_server->getSessionLog()->debug("HTTP-Redirect: Removing signature");
+            $this->_server->getSessionLog()->info("HTTP-Redirect: Removing signature");
             unset($message['ds:Signature']);
         }
 
@@ -773,7 +786,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if (isset($remoteEntity['SharedKey'])) {
             $queryString .= "&Signature=" . urlencode(base64_encode(sha1($remoteEntity['SharedKey'] . sha1($queryString))));
         } elseif ($mustSign) {
-            $this->_server->getSessionLog()->debug("HTTP-Redirect: (Re-)Signing");
+            $this->_server->getSessionLog()->info("HTTP-Redirect: (Re-)Signing");
             $queryString .= '&SigAlg=' . urlencode($this->_server->getConfig('SigningAlgorithm'));
 
             $key = $this->_getCurrentEntityPrivateKey();
@@ -882,11 +895,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     $this->_server->getConfig('WantsAuthnRequestsSigned')
             );
             if ($name == 'SAMLRequest' && $wantRequestsSigned) {
-                $this->_server->getSessionLog()->debug("HTTP-Redirect: (Re-)Signing");
+                $this->_server->getSessionLog()->info("HTTP-Redirect: (Re-)Signing");
                 $message = $this->_server->sign($message);
             }
             else if ($name == 'SAMLResponse' && isset($remoteEntity['WantsAssertionsSigned']) && $remoteEntity['WantsAssertionsSigned']) {
-                $this->_server->getSessionLog()->debug("HTTP-Redirect: (Re-)Signing Assertion");
+                $this->_server->getSessionLog()->info("HTTP-Redirect: (Re-)Signing Assertion");
 
                 $message['saml:Assertion']['__t'] = 'saml:Assertion';
                 $message['saml:Assertion']['_xmlns:saml'] = "urn:oasis:names:tc:SAML:2.0:assertion";
@@ -899,7 +912,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             }
             else if ($name == 'SAMLResponse' && isset($remoteEntity['WantsResponsesSigned']) && $remoteEntity['WantsResponsesSigned']) {
-                $this->_server->getSessionLog()->debug("HTTP-Redirect: (Re-)Signing");
+                $this->_server->getSessionLog()->info("HTTP-Redirect: (Re-)Signing");
 
                 uksort($message['saml:Assertion'], array(__CLASS__, '_usortAssertion'));
 
@@ -924,7 +937,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $encodedMessage = htmlspecialchars(base64_encode($encodedMessage));
 
         $action = $message['_Destination'] . (isset($message['_Recipient'])?$message['_Recipient']:'');
-        $this->_server->getSessionLog()->debug("HTTP-Post: Sending Message: " . var_export($message, true));
+
+        $log = $this->_server->getSessionLog();
+        $log->attach($message)
+            ->info('HTTP-Post: Sending Message');
+
         $output = $this->_server->renderTemplate(
             'form',
             array(
@@ -949,15 +966,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $this->_server->setRemoteIdpMd5($parameters['RemoteIdPMd5']);
         }
 
-        $this->_server->getSessionLog()->debug(
-            "Using internal binding for destination: $destinationLocation, resulting in parameters: " . var_export($parameters, true)
-        );
+        $log = $this->_server->getSessionLog();
+        $log->attach($parameters)
+            ->info("Using internal binding for destination: $destinationLocation, resulting in parameters:");
 
         $serviceName = $parameters['ServiceName'];
 
-        $this->_server->getSessionLog()->debug("Calling service '$serviceName'");
+        $log->info("Calling service '$serviceName'");
         $this->_server->getServicesModule()->serve($serviceName);
-        $this->_server->getSessionLog()->debug("Done calling service '$serviceName'");
+        $log->info("Done calling service '$serviceName'");
     }
 
     public function registerInternalBindingMessage($key, $message)

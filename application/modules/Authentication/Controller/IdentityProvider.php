@@ -49,19 +49,19 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->singleSignOn($idPEntityId);
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->getLogInstance()->notice('SingleSignOn: Unable to receive SAMLRequest');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLogInstance()->notice('User not a member error');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
-            $application->getLogInstance()->notice('Session was lost');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl(
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
                 '&destination=' . urlencode($e->getDestination())
@@ -100,19 +100,19 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->processConsent();
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->getLogInstance()->notice('Unable to receive message');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLogInstance()->notice('User not a member error');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
-            $application->getLogInstance()->notice('Session was lost');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl(
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
                 '&destination=' . urlencode($e->getDestination())

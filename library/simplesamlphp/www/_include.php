@@ -41,6 +41,7 @@ function SimpleSAML_exception_handler(Exception $exception) {
 set_exception_handler('SimpleSAML_exception_handler');
 
 /* Log full backtrace on errors and warnings. */
+/* @todo add Queue log writer flush */
 function SimpleSAML_error_handler($errno, $errstr, $errfile = NULL, $errline = 0, $errcontext = NULL) {
 
 	if (!class_exists('SimpleSAML_Logger')) {

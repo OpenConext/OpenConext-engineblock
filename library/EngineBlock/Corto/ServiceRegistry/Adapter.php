@@ -139,7 +139,12 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['coin:publish_in_edugain'])) {
             $cortoEntity['PublishInEdugain'] = $serviceRegistryEntity['coin:publish_in_edugain'];
         }
-        
+
+        // Enable additional logging
+        if (isset($serviceRegistryEntity['coin:additional_logging'])) {
+            $cortoEntity['AdditionalLogging'] = $serviceRegistryEntity['coin:additional_logging'];
+        }
+
         // For SPs
         if (isset($serviceRegistryEntity['AssertionConsumerService:0:Location'])) {
             $cortoEntity['WantsAssertionsSigned'] = true;

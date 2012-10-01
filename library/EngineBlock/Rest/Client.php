@@ -24,25 +24,25 @@
  */
 
 require_once("Zend/Rest/Client.php");
-   
+
 /**
  * This extends Zend_Rest_Client with an improved way of retrieving
  * results.
- *  
- * Zend_Rest_Client uses Zend_Rest_Response which only handles 
+ *
+ * Zend_Rest_Client uses Zend_Rest_Response which only handles
  * XML requests. EngineBlock_Rest_Client first checks the Content-Type
  * header of the result. If it's application/json we simply
  * json_decode the result, if it's anything else, the original
  * Zend_Rest_Client behaviour is used (which is to invoke an xml
  * parser).
- * 
+ *
  * Note: the issue that Zend_Rest_Client is json unfriendly has been
  * logged as:
  * http://framework.zend.com/issues/browse/ZF-10272
- * 
+ *
  * Keep an eye on this ticket; if it gets fixed, this override
  * may no longer be necessary.
- * 
+ *
  * @author ivo
  *
  */
@@ -65,20 +65,32 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
          * @var Zend_Http_Client $httpClient
          */
         $httpClient = $this->getHttpClient();
-        EngineBlock_ApplicationSingleton::getLog()->debug("REST Request: " . $httpClient->getLastRequest());
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "REST Response: " . $httpClient->getLastResponse()->getBody()
-        );
+        $log = EngineBlock_ApplicationSingleton::getLog();
+
+        $log->attach($httpClient->getLastRequest())
+             ->info('REST Request');
+
+        $body = $httpClient->getLastResponse()->getBody();
+        $decoded = json_decode($body);
+
+        // do not decode invalid jason, show original response
+        if ($decoded === null) {
+            $decoded = $body;
+            $logType = 'original response below';
+        } else {
+            $logType = 'decoded JSON body below';
+        }
+
+        $log->attach($decoded)
+            ->info("REST Response ($logType)");
 
         $this->_data = array();//Initializes for next Rest method.
 
         if ($response->getStatus() !== 200) {
+            $log->attach($response);
+
             throw new EngineBlock_Exception(
-                "Response status !== 200: " .
-                    var_export($httpClient->getLastRequest(), true) .
-                    var_export($response, true) .
-                    var_export($response->getBody(), true),
-                EngineBlock_Exception::CODE_WARNING
+                'Response status !== 200', EngineBlock_Exception::CODE_WARNING
             );
         }
 
@@ -89,13 +101,10 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
                 return new Zend_Rest_Client_Result($response->getBody());
             }
             catch (Zend_Rest_Client_Result_Exception $e) {
+                $log->attach($response);
+
                 throw new EngineBlock_Exception(
-                    'Error parsing response' .
-                        var_export($httpClient->getLastRequest(), true) .
-                        var_export($response, true) .
-                        var_export($response->getBody(), true),
-                    null,
-                    $e
+                    'Error parsing response', null, $e
                 );
             }
         }

@@ -33,7 +33,7 @@ class EngineBlock_Provisioner_ProvisioningManager
     }
 
     /**
-     * 
+     *
      *
      * @param  $userId
      * @param  $attributes
@@ -50,7 +50,7 @@ class EngineBlock_Provisioner_ProvisioningManager
         // https://os.XXX.surfconext.nl/provisioning-manager/provisioning/jit.shtml?
         // provisionDomain=apps.surfnet.nl&provisionAdmin=admin%40apps.surfnet.nl&
         // provisionPassword=xxxxx&provisionType=GOOGLE&provisionGroups=true
-        
+
         $client = new Zend_Http_Client($this->_url);
         $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
 
@@ -68,20 +68,21 @@ class EngineBlock_Provisioner_ProvisioningManager
             ->setUserId($userId)
             ->setIdp($idpMetadata['EntityId'])
             ->setSp($spMetadata['EntityId']);
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "PROVISIONING: Sent HTTP request to provision user using " . __CLASS__,
-            $additionalInfo
+
+        $log = EngineBlock_ApplicationSingleton::getLog();
+        $log->attach($additionalInfo)->info(
+            "PROVISIONING: Sent HTTP request to provision user using " . __CLASS__
         );
-        EngineBlock_ApplicationSingleton::getLog()->debug(
+        $log->info(
             "PROVISIONING: URI: " . $client->getUri(true),
             $additionalInfo
         );
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "PROVISIONING: REQUEST: " . $client->getLastRequest(),
+        $log->attach($client->getLastRequest())->info(
+            "PROVISIONING: REQUEST",
             $additionalInfo
         );
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "PROVISIONING: RESPONSE: " . $client->getLastResponse(),
+        $log->attach($client->getLastResponse())->info(
+            "PROVISIONING: RESPONSE",
             $additionalInfo
         );
     }
@@ -107,14 +108,14 @@ class EngineBlock_Provisioner_ProvisioningManager
      *       "title":"ProvTest3"}
      *     ]
      *  }
-     * 
+     *
      * @param  $userId
      * @param  $attributes
      * @return array
      */
     protected function _getData($userId, $attributes, $spMetadata)
     {
-        
+
         $groups = $this->_getGroups($userId, $spMetadata['EntityId']);
         $provisionData = array(
             'person' => array(

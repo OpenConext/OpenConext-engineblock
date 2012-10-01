@@ -507,19 +507,20 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setRemoteEntities($remoteEntities);
     }
 
+    /**
+     * @return EngineBlock_Log
+     */
     protected function _getSystemLog()
     {
-        return $this->_getLog();
+        return EngineBlock_ApplicationSingleton::getLog();
     }
 
+    /**
+     * @return EngineBlock_Log
+     */
     protected function _getSessionLog()
     {
-        return $this->_getLog();
-    }
-
-    protected function _getLog()
-    {
-        return new EngineBlock_Corto_Log_Adapter();
+        return EngineBlock_ApplicationSingleton::getLog();
     }
 
     protected function _getConsentConfigurationValue($name, $default = null)

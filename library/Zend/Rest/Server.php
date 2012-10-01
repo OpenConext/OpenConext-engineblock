@@ -439,6 +439,7 @@ class Zend_Rest_Server implements Zend_Server_Interface
      * @param string|Exception $fault Message
      * @param int $code Error Code
      * @return DOMDocument
+     * @todo add Queue log writer flush
      */
     public function fault($exception = null, $code = null)
     {
