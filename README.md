@@ -1,4 +1,4 @@
-# SURFnet SURFconext EngineBlock #
+# OpenConext EngineBlock #
 
 The SURFnet SURFconext EngineBlock is a multi-purpose software component
 that has as it's goal the following:
@@ -16,15 +16,14 @@ that has as it's goal the following:
     - memcache
     - ldap
     - libxml
-* Java > 1.5
 * MySQL > 5.x with settings:
     - default-storage-engine=InnoDB (recommended)
     - default-collation=utf8_unicode_ci (recommended)
-* Memcached
 * LDAP
 * Internet2 Grouper
 * Service Registry
 * wget
+* Memcached (optional)
 
 **NOTE**
 While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,
