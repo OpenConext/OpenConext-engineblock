@@ -120,9 +120,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 ->info('SSO: Request contains scoped idps');
         }
 
-        $presetIdP  = $this->_server->getConfig('Idp');
-
         // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
+        $presetIdP  = $this->_server->getConfig('Idp');
         if ($presetIdP) {
             $scopedIdPs = array($presetIdP);
             $log->attach($scopedIdPs[0])
