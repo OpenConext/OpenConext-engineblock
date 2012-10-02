@@ -6,12 +6,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
     {
         $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
 
-        // Get the ID of the Corto Request message
-        if (!$receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']) {
-            $message = "Unsollicited assertion (no InResponseTo in message) not supported!";
-            throw new EngineBlock_Corto_Module_Services_Exception($message);
-        }
-
         $receivedRequest = $this->_server->getReceivedRequestFromResponse(
             $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']
         );

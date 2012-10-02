@@ -446,6 +446,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $request['__']['WasSigned'] = true;
 
             $this->_verifyTimings($response);
+
+            $this->_verifyInResponseTo($response);
         } catch (EngineBlock_Exception $e) {
             $request = $this->_server->getReceivedRequestFromResponse($response['_ID']);
             $e->spEntityId = $request['saml:Issuer']['__v'];
@@ -726,6 +728,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             throw new EngineBlock_Corto_Module_Bindings_TimingException($message);
         }
         return true;
+    }
+
+    protected function _verifyInResponseTo($response)
+    {
+        if (!$response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']) {
+            $message = "Unsollicited assertion (no InResponseTo in message) not supported!";
+            throw new EngineBlock_Corto_Module_Bindings_Exception($message);
+        }
     }
 
     public function send(array $message, array $remoteEntity)
