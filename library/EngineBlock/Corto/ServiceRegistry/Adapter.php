@@ -147,8 +147,6 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
         // For SPs
         if (isset($serviceRegistryEntity['AssertionConsumerService:0:Location'])) {
-            $cortoEntity['WantsAssertionsSigned'] = true;
-
             // Transparant issuer
             if (isset($serviceRegistryEntity['coin:transparant_issuer'])) {
                 $cortoEntity['TransparantIssuer'] = $serviceRegistryEntity['coin:transparant_issuer'];

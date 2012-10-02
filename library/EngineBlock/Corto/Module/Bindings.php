@@ -442,10 +442,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         try {
             $this->_verifyKnownIssuer($response);
 
-            if ($this->_server->getConfig('WantsAssertionsSigned', false)) {
-                $this->_verifySignature($response, self::KEY_RESPONSE);
-                $request['__']['WasSigned'] = true;
-            }
+            $this->_verifySignature($response, self::KEY_RESPONSE);
+            $request['__']['WasSigned'] = true;
+
             $this->_verifyTimings($response);
         } catch (EngineBlock_Exception $e) {
             $request = $this->_server->getReceivedRequestFromResponse($response['_ID']);
@@ -898,7 +897,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 $this->_server->getSessionLog()->info("HTTP-Redirect: (Re-)Signing");
                 $message = $this->_server->sign($message);
             }
-            else if ($name == 'SAMLResponse' && isset($remoteEntity['WantsAssertionsSigned']) && $remoteEntity['WantsAssertionsSigned']) {
+            else if ($name == 'SAMLResponse') {
                 $this->_server->getSessionLog()->info("HTTP-Redirect: (Re-)Signing Assertion");
 
                 $message['saml:Assertion']['__t'] = 'saml:Assertion';
