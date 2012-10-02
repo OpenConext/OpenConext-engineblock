@@ -93,9 +93,9 @@ class EngineBlock_Corto_Filter_Command_SetPersistentId extends EngineBlock_Corto
     /**
      * Load transient Name ID from session or generate a new one
      *
-     * @param type $spId
-     * @param type $idpId
-     * @return type
+     * @param string $spId
+     * @param string $idpId
+     * @return string
      */
     protected function _getTransientNameId($spId, $idpId)
     {
