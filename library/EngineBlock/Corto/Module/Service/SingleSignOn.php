@@ -120,7 +120,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 ->info('SSO: Request contains scoped idps');
         }
 
-        $presetIdPs = $this->_server->getConfig('IDPList');
         $presetIdP  = $this->_server->getConfig('Idp');
 
         // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
@@ -128,12 +127,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $scopedIdPs = array($presetIdP);
             $log->attach($scopedIdPs[0])
                 ->info('SSO: Scoped idp found in metadata');
-        }
-        // If we configured an IDPList it overrides the one in the request
-        else if ($presetIdPs) {
-            $scopedIdPs = $presetIdPs;
-            $log->attach($scopedIdPs)
-                ->info('SSO: Scoped idps found in metadata');
         }
         return $scopedIdPs;
     }
