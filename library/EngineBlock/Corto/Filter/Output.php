@@ -72,13 +72,13 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             ),
 
             // Set the persistent Identifier for this user on this SP
-            new EngineBlock_Corto_Filter_Command_SetPersistentId(),
+            new EngineBlock_Corto_Filter_Command_SetNameId(),
 
             // Apply ARP to custom added attributes one last time for the eduPersonTargetedId
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
             // Convert all attributes to their OID format (if known) and add these.
-            new EngineBlock_Corto_Filter_Command_AddOidAttributes(),
+            new EngineBlock_Corto_Filter_Command_MirrorToOid(),
 
             // Log the login
             new EngineBlock_Corto_Filter_Command_LogLogin(),

@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Corto_Filter_Command_AddOidAttributes extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_MirrorToOid extends EngineBlock_Corto_Filter_Command_Abstract
 {
     /**
      * This command may modify the response attributes
