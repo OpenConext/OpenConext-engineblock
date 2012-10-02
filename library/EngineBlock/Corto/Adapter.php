@@ -364,7 +364,6 @@ class EngineBlock_Corto_Adapter
                     'Location' => $proxyServer->getUrl('provideConsentService'),
                 ),
             ),
-            'keepsession' => true,
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
         ));
 

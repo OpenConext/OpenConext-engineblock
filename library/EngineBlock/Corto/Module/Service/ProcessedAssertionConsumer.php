@@ -39,14 +39,12 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
             $this->_server->unsetProcessingMode();
 
             // Cache the response
-            if ($this->_server->getConfig('keepsession', false)) {
-                EngineBlock_Corto_Model_Response_Cache::cacheResponse(
-                    $receivedRequest,
-                    $response,
-                    EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
-                    $this->_server->getVirtualOrganisationContext()
-                );
-            }
+            EngineBlock_Corto_Model_Response_Cache::cacheResponse(
+                $receivedRequest,
+                $response,
+                EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
+                $this->_server->getVirtualOrganisationContext()
+            );
 
             $sentResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);
             $this->_server->sendResponseToRequestIssuer($receivedRequest, $sentResponse);

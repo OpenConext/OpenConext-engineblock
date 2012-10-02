@@ -17,14 +17,12 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         );
 
         // Cache the response
-        if ($this->_server->getConfig('keepsession', false)) {
-            EngineBlock_Corto_Model_Response_Cache::cacheResponse(
-                $receivedRequest,
-                $receivedResponse,
-                EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN,
-                $this->_server->getVirtualOrganisationContext()
-            );
-        }
+        EngineBlock_Corto_Model_Response_Cache::cacheResponse(
+            $receivedRequest,
+            $receivedResponse,
+            EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN,
+            $this->_server->getVirtualOrganisationContext()
+        );
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
@@ -55,14 +53,12 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         }
         else {
             // Cache the response
-            if ($this->_server->getConfig('keepsession', false)) {
-                EngineBlock_Corto_Model_Response_Cache::cacheResponse(
-                    $receivedRequest,
-                    $receivedResponse,
-                    EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
-                    $this->_server->getVirtualOrganisationContext()
-                );
-            }
+            EngineBlock_Corto_Model_Response_Cache::cacheResponse(
+                $receivedRequest,
+                $receivedResponse,
+                EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
+                $this->_server->getVirtualOrganisationContext()
+            );
 
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
             $this->_server->sendResponseToRequestIssuer($receivedRequest, $newResponse);
