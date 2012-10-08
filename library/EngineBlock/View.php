@@ -120,7 +120,7 @@ class EngineBlock_View
      * Return the url of the Static vhost containing media, script and css files
      *
      * @example <?php echo $this->staticUrl(); ?>
-     * 
+     *
      * @return string
      */
     public static function staticUrl($path = "")
@@ -155,16 +155,54 @@ class EngineBlock_View
     public static function setLanguage($lang)
     {
         $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
-        $queryString = '';
-        $queryParameters = $request->getQueryParameters();
+        $params = array(
+            'lang' => $lang
+        );
 
-        $queryParameters['lang'] = $lang;
-
-        foreach ($queryParameters as $key => $value) {
-            $queryString .= (strlen($queryString) == 0) ? '?' : '&' ;
-            $queryString .= $key. '=' .urlencode($value);
+        if ($request->getMethod() === 'POST') {
+            // re-create URL from POST parameters
+            $params = array_merge(
+                $params, self::_getQueryParametersFromPost($request)
+            );
+        } else {
+            // re-create URL from GET parameters
+            $params = array_merge(
+                $params, $request->getQueryParameters()
+            );
         }
 
-        return strlen($queryString) > 0 ? $queryString : '';
+        $query = '';
+        foreach ($params as $key => $value) {
+            $query .= (strlen($query) == 0) ? '?' : '&' ;
+            $query .= $key. '=' .urlencode($value);
+        }
+
+        return $query;
+    }
+
+    /**
+     * This method takes the POST parameters of a request and returns
+     * the GET parameters that can be used to reload the page. The
+     * following transformations are done on the SAMLRequest value:
+     *
+     *  - base64 decode
+     *  - gzip message
+     *  - base64 encode
+     *
+     * This allows the SSO service to use 'receiveMessageFromHttpRedirect' to
+     * parse the message, while initially 'receiveMessageFromHttpPost' was used.
+     *
+     * @param EngineBlock_Http_Request $request
+     * @return array $params
+     */
+    protected static function _getQueryParametersFromPost(EngineBlock_Http_Request $request)
+    {
+        $params = $request->getPostParameters();
+        if (!empty($params['SAMLRequest'])) {
+            $message = base64_decode($params['SAMLRequest']);
+            $params['SAMLRequest'] = base64_encode(gzdeflate($message));
+        }
+
+        return $params;
     }
 }
