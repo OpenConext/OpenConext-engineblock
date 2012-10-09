@@ -729,7 +729,17 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        return $remoteEntity['AssertionConsumerServices'][0];
+        // find first ACS URL that has a binding supported by EB
+        foreach ($remoteEntity['AssertionConsumerServices'] as $acs) {
+            if ($this->getBindingsModule()->isSupportedBinding($acs['Binding'])) {
+                return $acs;
+            }
+        }
+
+        $this->getSystemLog()
+            ->attach($remoteEntity['AssertionConsumerServices']);
+
+        throw new EngineBlock_Corto_ProxyServer_Exception('No supported binding found for ACS');
     }
 
     function sendResponseToRequestIssuer($request, $response)

@@ -449,9 +449,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             $this->_verifyInResponseTo($response);
         } catch (EngineBlock_Exception $e) {
-            $request = $this->_server->getReceivedRequestFromResponse($response['_ID']);
-            $e->spEntityId = $request['saml:Issuer']['__v'];
+            try {
+                if (isset($response['_InResponseTo'])) {
+                    $request = $this->_server->getReceivedRequestFromResponse($response['_InResponseTo']);
+                } else if (isset($response['_ID'])) {
+                    $request = $this->_server->getReceivedRequestFromResponse($response['_ID']);
+                }
+
+                $e->spEntityId = $request['saml:Issuer']['__v'];
+            } catch (Exception $x) {
+                // not throwing a new exception
+            }
+
             $e->idpEntityId = $response['saml:Issuer']['__v'];
+
             throw $e;
         }
     }
@@ -742,7 +753,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $bindingUrn = $message['__']['ProtocolBinding'];
 
-        if (!isset($this->_bindings[$bindingUrn])) {
+        if (!$this->isSupportedBinding($bindingUrn)) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Unknown binding: '. $bindingUrn,
                 EngineBlock_Exception::CODE_ERROR
@@ -751,6 +762,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $function = $this->_bindings[$bindingUrn];
 
         $this->$function($message, $remoteEntity);
+    }
+
+    /**
+     * See if the given binding is supported by EngineBlock
+     *
+     * @param string $binding
+     * @return bool
+     */
+    public function isSupportedBinding($binding)
+    {
+        return (isset($this->_bindings[$binding]));
     }
 
     protected function _sendHTTPRedirect(array $message, $remoteEntity)
