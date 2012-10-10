@@ -162,12 +162,12 @@ class EngineBlock_View
         if ($request->getMethod() === 'POST') {
             // re-create URL from POST parameters
             $params = array_merge(
-                $params, self::_getQueryParametersFromPost($request)
+                self::_getQueryParametersFromPost($request), $params
             );
         } else {
             // re-create URL from GET parameters
             $params = array_merge(
-                $params, $request->getQueryParameters()
+                $request->getQueryParameters(), $params
             );
         }
 
