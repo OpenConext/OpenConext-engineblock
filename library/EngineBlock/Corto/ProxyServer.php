@@ -669,7 +669,7 @@ class EngineBlock_Corto_ProxyServer
         // Custom ACS Location & ProtocolBinding goes first
         if ($requestHasCustomAcs) {
             if ($requestWasSigned) {
-                $this->_server->getSessionLog()->warn(
+                $this->_server->getSessionLog()->info(
                     "Using AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
                         "and ProtocolBinding '{$request['_ProtocolBinding']}' from signed request. "
                 );
@@ -690,7 +690,7 @@ class EngineBlock_Corto_ProxyServer
                     }
                 }
                 if ($requestAcsIsRegisteredInMetadata) {
-                    $this->_server->getSessionLog()->warn(
+                    $this->_server->getSessionLog()->info(
                         "Using AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
                             "and ProtocolBinding '{$request['_ProtocolBinding']}' from unsigned request, " .
                             "it's okay though, the ACSLocation and Binding were registered in the metadata"
@@ -701,7 +701,7 @@ class EngineBlock_Corto_ProxyServer
                     );
                 }
                 else {
-                    $this->_server->getSessionLog()->warn(
+                    $this->_server->getSessionLog()->notice(
                         "AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
                             "and ProtocolBinding '{$request['_ProtocolBinding']}' were mentioned in request, " .
                             "but the AuthnRequest was not signed, and the ACSLocation and Binding were not found in " .
@@ -715,13 +715,13 @@ class EngineBlock_Corto_ProxyServer
         if ($requestHasAcsIndex) {
             $index = (int)$request['_AssertionConsumerServiceIndex'];
             if (isset($remoteEntity['AssertionConsumerServices'][$index])) {
-                $this->_server->getSessionLog()->warn(
+                $this->_server->getSessionLog()->info(
                     "Using AssertionConsumerServiceIndex '$index' from request"
                 );
                 return $remoteEntity['AssertionConsumerServices'][$index];
             }
             else {
-                $this->_server->getSessionLog()->warn(
+                $this->_server->getSessionLog()->notice(
                     "AssertionConsumerServiceIndex was mentioned in request, but we don't know any ACS by ".
                         "index '$index'? Maybe the metadata was updated and we don't have that endpoint yet? " .
                         "Trying the default endpoint.."
