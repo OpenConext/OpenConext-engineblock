@@ -81,6 +81,12 @@
     <th>Details</th>
     <td><pre><?php echo isset($this->details) ? htmlentities($this->details) : "UNKNOWN"; ?></pre></td>
   </tr>
+  <?php foreach ($this->attachments as $key => $attachment): ?>
+    <tr>
+        <th>Attachment <?php echo is_numeric($key) ? $key+1 : htmlentities($key) ?></th>
+        <td><pre><?php echo htmlentities($attachment) ?></pre></td>
+    </tr>
+  <?php endforeach ?>
   </tbody>
 </body>
 </html>

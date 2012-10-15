@@ -52,6 +52,7 @@ class EngineBlock_Log_Writer_Syslog extends Zend_Log_Writer_Syslog
      */
     protected function _write($event)
     {
+
         $parsed = $this->_parseMessage($event);
 
         $chunks = $this->_splitLogMessage(
@@ -122,6 +123,8 @@ class EngineBlock_Log_Writer_Syslog extends Zend_Log_Writer_Syslog
                     // for presentation
                     $messages[] = $prefix . '!CHUNK>' . $chunk;
                 }
+            } else {
+                $messages = (array)($prefix . $chunk);
             }
         }
 

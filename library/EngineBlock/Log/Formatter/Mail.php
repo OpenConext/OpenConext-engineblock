@@ -65,6 +65,13 @@ class EngineBlock_Log_Formatter_Mail
             $view->__set($key, $val);
         }
 
+        // render attached files
+        if (!empty($event['attachments'])) {
+            $view->attachments = $event['attachments'];
+        } else {
+            $view->attachments = array();
+        }
+
         return $view;
     }
 

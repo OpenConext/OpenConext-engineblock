@@ -82,11 +82,99 @@ class EngineBlock_Log extends Zend_Log
      */
     public function log($message, $priority, $additionalInfo = null)
     {
+        // sanity checks
+        if (empty($this->_writers)) {
+            /** @see Zend_Log_Exception */
+            require_once 'Zend/Log/Exception.php';
+            throw new Zend_Log_Exception('No writers were added');
+        }
+
+        if (! isset($this->_priorities[$priority])) {
+            /** @see Zend_Log_Exception */
+            require_once 'Zend/Log/Exception.php';
+            throw new Zend_Log_Exception('Bad log priority');
+        }
+
         // see if we need to set event items, used by Mail writer
         if ($additionalInfo instanceof EngineBlock_Log_Message_AdditionalInfo) {
             $this->_setAdditionalEventItems($additionalInfo);
         }
 
+        // pack into event required by filters and writers
+        $event = array_merge(array('timestamp'    => date('c'),
+                                   'message'      => $message,
+                                   'priority'     => $priority,
+                                   'priorityName' => $this->_priorities[$priority]));
+
+        // Pass additional info
+        $event['info'] = $additionalInfo;
+
+        // abort if rejected by the global filters
+        foreach ($this->_filters as $filter) {
+            if (!$filter->accept($event)) {
+                return;
+            }
+        }
+
+        // send to each writer
+        foreach ($this->_writers as $writer) {
+            // handle logging of attached files differently per writer
+            if ($writer instanceof EngineBlock_Log_Writer_Mail) {
+                // get message array, no prefix on attachments
+                $messages = $this->_getMessagePayload($message);
+
+                // concatenate all messages for Mail writer
+                $writerEvent = $event;
+                $writerEvent['message']     = $this->getPrefix()
+                                            . reset($messages)
+                                            . $this->getSuffix();
+
+                $writerEvent['attachments'] = array_slice($messages, 1);
+
+                $writer->write($writerEvent);
+            } else {
+                // get message array
+                $messages = $this->_getMessagePayload($message);
+
+                $writerEvent = $event;
+                $writerEvent['message']     = $this->getPrefix()
+                                                . reset($messages)
+                                                . $this->getSuffix();
+
+                // log line for each file/message
+                $writer->write($writerEvent);
+
+                foreach (array_slice($messages, 1) as $attachment) {
+                    $writerEvent['message']     = $this->getAttachmentPrefix()
+                                                . $attachment;
+
+                    // log line for each file/message
+                    $writer->write($writerEvent);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Formats all messages (message + attachments) in an array
+     * so we can send them seperately or concat all values depending
+     * on what writer is used
+     *
+     * @param string $message
+     * @return array
+     */
+    protected function _getMessagePayload($message)
+    {
+        return array_merge((array)$message, $this->_attachments);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrefix()
+    {
         // add identifier to help recognize all log messages written
         // during one request
         $requestId = $this->getRequestId();
@@ -94,30 +182,32 @@ class EngineBlock_Log extends Zend_Log
         // add session identifier
         $sessionId = session_id() ?: 'no session';
 
+        return sprintf('EB[%s][%s] ', $sessionId, $requestId);
+    }
+
+    /**
+     * @return string
+     */
+    public function getSuffix()
+    {
         // dump count
         $count = count($this->_attachments);
         if ($count > 0) {
-            $message .= sprintf(
+            return sprintf(
                 ' [dumping %d object%s]', $count, ($count) ? 's' : ''
             );
         }
 
-        // format message prefix
-        $prefix = sprintf('EB[%s][%s]', $sessionId, $requestId);
+        return '';
 
-        // log message
-        parent::log(
-            $prefix . ' ' . $message, $priority, $additionalInfo
-        );
+    }
 
-        // dump objects
-        while ($data = array_shift($this->_attachments)) {
-            parent::log(
-                $prefix . '[DUMP] ' . $data, $priority, $additionalInfo
-            );
-        }
-
-        return $this;
+    /**
+     * @return string
+     */
+    public function getAttachmentPrefix()
+    {
+        return trim($this->getPrefix()) . '[DUMP] ';
     }
 
     /**
