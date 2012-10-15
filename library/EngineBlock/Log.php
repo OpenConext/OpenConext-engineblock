@@ -173,7 +173,7 @@ class EngineBlock_Log extends Zend_Log
 
         // No queueing log writer registered
         return new EngineBlock_Log_Writer_Queue(
-            new ArrayObject(), new EngineBlock_Log()
+            new EngineBlock_Log()
         );
     }
 
