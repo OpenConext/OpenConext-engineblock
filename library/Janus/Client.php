@@ -33,6 +33,13 @@ class Janus_Client
      * @var $_restClient EngineBlock_Rest_Client
      */
     protected $_restClient = NULL;
+
+    public function getEntity($entityId)
+    {
+        return $this->_getRestClient()->getEntity()
+                                        ->entityid($entityId)
+                                        ->get();
+    }
     
     /**
      * Retrieve all known metadata about an (SP or IDP) entity.

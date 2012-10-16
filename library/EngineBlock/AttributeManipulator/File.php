@@ -32,52 +32,39 @@ class EngineBlock_AttributeManipulator_File
     protected $_rootLocation;
     protected $_directory;
 
-    function __construct($directory)
+    function __construct($directory = '')
     {
         $this->_directory = $directory;
     }
 
+    /**
+     * Manipulate for a given entity
+     *
+     * @param string $entityId
+     * @param string $subjectId
+     * @param array $attributes
+     * @param array $response
+     * @return bool
+     */
     public function manipulate($entityId, &$subjectId, array &$attributes, array &$response)
     {
-        if (!$this->_setRootLocation($this->_directory)) {
+        if (!$this->_setRootLocation()) {
             // If there is a problem with the file location, then we skip manipulation
-            return;
+            return false;
         }
 
-        $this->_doGeneralManipulation($subjectId, $attributes, $response);
-        $this->_doSpSpecificManipulation($entityId, $subjectId, $attributes, $response);
-    }
-
-    protected function _doGeneralManipulation(&$subjectId, &$attributes, &$response)
-    {
-        $file = $this->_rootLocation . DIRECTORY_SEPARATOR . self::FILE_NAME;
-        if (!$this->_fileExists($file)) {
-            return;
-        }
-
-        if ($this->_getConfiguration()->lint) {
-            $this->_verifyPhpSyntax($file);
-        }
-
-        $this->_include($file, $subjectId, $attributes, $response);
-    }
-
-    protected function _doSpSpecificManipulation($entityId, &$subjectId, &$attributes, &$response)
-    {
         if (empty($entityId)) {
-            die("WHAT NO ENTITY ID MADAFAKKA!");
             EngineBlock_ApplicationSingleton::getLog()->warn(
                 "Unable to get a SP EntityID from the response? Unable to execute Attribute Manipulations"
             );
-            return;
+            return false;
         }
         $file = $this->_rootLocation .
                 DIRECTORY_SEPARATOR .
-                $this->_getDirectoryNameForEntityId($entityId) .
-                DIRECTORY_SEPARATOR .
+                (!empty($entityId) ? $this->_getDirectoryNameForEntityId($entityId) . DIRECTORY_SEPARATOR : '') .
                 self::FILE_NAME;
         if (!$this->_fileExists($file)) {
-            return;
+            return false;
         }
 
         if ($this->_getConfiguration()->lint) {
@@ -85,6 +72,7 @@ class EngineBlock_AttributeManipulator_File
         }
 
         $this->_include($file, $subjectId, $attributes, $response);
+        return true;
     }
 
     protected function _fileExists($file)
@@ -125,11 +113,11 @@ class EngineBlock_AttributeManipulator_File
         return $newEntityId;
     }
     
-    protected function _setRootLocation($directory = "")
+    protected function _setRootLocation()
     {
         $location = $this->_getConfiguration()->location;
-        if (!empty($directory)) {
-            $location .= DIRECTORY_SEPARATOR . $directory;
+        if (!empty($this->_directory)) {
+            $location .= DIRECTORY_SEPARATOR . $this->_directory;
         }
 
         // Resolve path to files relative to EB root

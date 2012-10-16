@@ -58,12 +58,62 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     {
         $this->_response['__']['IntendedNameId'] = $this->_collabPersonId;
 
-        $manipulator = new EngineBlock_AttributeManipulator_File($this->_type);
-        $manipulator->manipulate(
-            $this->_type === self::TYPE_IDP ? $this->_response['saml:Issuer']['__v'] : $this->_request['saml:Issuer']['__v'],
+        $entityId = $this->_type === self::TYPE_IDP ? $this->_response['saml:Issuer']['__v'] : $this->_request['saml:Issuer']['__v'];
+
+        // Try entity specific file based manipulation from Service Registry
+        $manipulator = new EngineBlock_AttributeManipulator_ServiceRegistry($this->_type);
+        $manipulated = $manipulator->manipulate(
+            $entityId,
             $this->_response['__']['IntendedNameId'],
             $this->_responseAttributes,
             $this->_response
         );
+        if ($manipulated) {
+            return true;
+        }
+
+        // Legacy: Try file-based general manipulation for all entities of this type
+        $manipulator = new EngineBlock_AttributeManipulator_File($this->_type);
+        $manipulator->manipulate(
+            '',
+            $this->_response['__']['IntendedNameId'],
+            $this->_responseAttributes,
+            $this->_response
+        );
+
+        // Legacy: Try entity specific file based manipulation
+        $manipulator = new EngineBlock_AttributeManipulator_File($this->_type);
+        $manipulated = $manipulator->manipulate(
+            $entityId,
+            $this->_response['__']['IntendedNameId'],
+            $this->_responseAttributes,
+            $this->_response
+        );
+        if ($manipulated) {
+            return true;
+        }
+
+        if ($this->_type !== self::TYPE_SP) {
+            return false;
+        }
+        // Legacy legacy: We can have attribute manipulations which were not prefixed with 'sp/'
+
+        $manipulator = new EngineBlock_AttributeManipulator_File();
+        $manipulator->manipulate(
+            '',
+            $this->_response['__']['IntendedNameId'],
+            $this->_responseAttributes,
+            $this->_response
+        );
+
+        // Legacy: Try entity specific file based manipulation
+        $manipulator = new EngineBlock_AttributeManipulator_File();
+        $manipulated = $manipulator->manipulate(
+            $entityId,
+            $this->_response['__']['IntendedNameId'],
+            $this->_responseAttributes,
+            $this->_response
+        );
+        return (bool)$manipulated;
     }
 }
