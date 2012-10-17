@@ -43,6 +43,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         'idpCertificateService' => 'Certificate',
         'spMetadataService' => 'Metadata',
         'idpMetadataService' => 'Metadata',
+        'unsolicitedSingleSignOnService' => 'singleSignOn',
+        'idpMetadataService' => 'Metadata',
     );
 
     const DEFAULT_REQUEST_BINDING  = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';

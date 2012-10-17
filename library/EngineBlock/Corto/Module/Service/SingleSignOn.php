@@ -7,8 +7,18 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     public function serve($serviceName)
     {
-        $request = $this->_server->getBindingsModule()->receiveRequest();
-        $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent'] = $this->_server->getConfig('TransparentProxy', false);
+        if ($serviceName !== 'unsolicitedSingleSignOnService') {
+            // parse SAML request
+            $request = $this->_server->getBindingsModule()->receiveRequest();
+
+            // set transparant proxy mode
+            $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent']
+                = $this->_server->getConfig('TransparentProxy', false);
+        } else {
+            // create unsolicited request object
+            $request = $this->_createUnsolicitedRequest();
+        }
+
 
         $requestIssuer = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
         $remoteEntity = $this->_server->getRemoteEntity($requestIssuer);
@@ -23,6 +33,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $queue->flush();
         }
 
+        // validate custom acs-location
+        if (!$this->_verifyAcsLocation($request, $remoteEntity)) {
+            throw new EngineBlock_Corto_Exception_InvalidAcsLocation(
+                'Unknown or invalid ACS location requested'
+            );
+        }
 
         // The request may specify it ONLY wants a response from specific IdPs
         // or we could have it configured that the SP may only be serviced by specific IdPs
@@ -104,6 +120,83 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 return;
             }
         }
+    }
+
+    /**
+     * @param array $request
+     * @param array $remoteEntity
+     * @return bool
+     */
+    protected function _verifyAcsLocation(array $request, array $remoteEntity)
+    {
+        // show error when acl is given without binding or vice versa
+        if (
+            (empty($request['_AssertionConsumerServiceURL'])) xor
+            (empty($request['_ProtocolBinding']))
+        ) {
+            $this->_server->getSessionLog()->err(
+                "Incomplete ACS location found in request (missing URL or binding)"
+            );
+
+            return false;
+        }
+
+        // if none specified, all is ok
+        if (
+            (!$this->_server->hasCustomAssertionConsumer($request)) &&
+            (!$this->_server->hasCustomAssertionConsumerIndex($request))
+        ) {
+            return true;
+        }
+
+        $acs = $this->_server->getCustomAssertionConsumer($request, $remoteEntity);
+
+        // acs is only returned on valid and known ACS
+        return is_array($acs);
+    }
+
+    /**
+     * Process unsolicited requests
+     */
+    protected function _createUnsolicitedRequest()
+    {
+        // Entity ID as requeted in GET parameters
+        $entityId = !empty($_GET['sp-entity-id']) ? $_GET['sp-entity-id'] : null;
+
+        // Request optional  acs-* parameters
+        $acsLocation = !empty($_GET['acs-location']) ? $_GET['acs-location'] : null;
+        $acsIndex    = !empty($_GET['acs-index']) ? $_GET['acs-index'] : null;
+        $binding     = !empty($_GET['acs-binding']) ? $_GET['acs-binding'] : null;
+
+        // Requested relay state
+        $relayState = !empty($_GET['RelayState']) ? $_GET['RelayState'] : null;
+
+        // Create 'fake' request object
+        $request = array(
+            '_ID'         => $this->_server->getNewId(),
+            'saml:Issuer' => array(
+                EngineBlock_Corto_XmlToArray::VALUE_PFX => $entityId,
+            ),
+            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
+                'Unsolicited' => true,
+                'RelayState' => $relayState,
+            )
+        );
+
+        if ($acsLocation) {
+            $request['_AssertionConsumerServiceURL'] = $acsLocation;
+            $request['_ProtocolBinding'] = $binding;
+        }
+
+        if ($acsIndex) {
+            $request['_AssertionConsumerServiceIndex'] = $acsIndex;
+        }
+
+        $log = $this->_server->getSessionLog();
+        $log->attach($request)
+            ->info('Received unsolicited request');
+
+        return $request;
     }
 
     protected function _getScopedIdPs($request = null)

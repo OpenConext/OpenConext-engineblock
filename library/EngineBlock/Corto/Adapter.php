@@ -56,6 +56,14 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
 
+    public function unsolicitedSingleSignOn($idPProviderHash)
+    {
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSp'));
+        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
+
+        $this->_callCortoServiceUri('unsolicitedSingleSignOnService', $idPProviderHash);
+    }
+
     public function idPMetadata()
     {
         $this->_callCortoServiceUri('idpMetadataService');
@@ -185,6 +193,22 @@ class EngineBlock_Corto_Adapter
         return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
             $entities,
             $this->_getIssuerSpEntityId()
+        );
+    }
+
+    /**
+     * Filter out IdPs that are not allowed to connect to the given SP.
+     *
+     * Determines SP based on Authn Request (required).
+     *
+     * @param array $entities
+     * @return array Remaining entities
+     */
+    protected function _filterRemoteEntitiesByClaimedSp(array $entities)
+    {
+        return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
+            $entities,
+            $this->_getClaimedSpEntityId()
         );
     }
 

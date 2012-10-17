@@ -107,6 +107,17 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
+     * Does the request have an "unsolicited" flag
+     *
+     * @param array $request
+     * @return type
+     */
+    public function isUnsolicitedRequest(array $request)
+    {
+        return !empty($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Unsolicited']);
+    }
+
+    /**
      * @return EngineBlock_Corto_Module_Bindings
      */
     public function getBindingsModule()
@@ -505,11 +516,16 @@ class EngineBlock_Corto_ProxyServer
             $authenticatingAuthorities[] = array('__v' => $sourceResponse['saml:Issuer']['__v']);
         }
 
-        $acs = $this->_getRequestAssertionConsumer($request);
+        $acs = $this->getRequestAssertionConsumer($request);
 
         $subjectConfirmation = &$response['saml:Assertion']['saml:Subject']['saml:SubjectConfirmation']['saml:SubjectConfirmationData'];
         $subjectConfirmation['_Recipient']    = $acs['Location'];
-        $subjectConfirmation['_InResponseTo'] = $request['_ID'];
+
+        // only set InResponseTo attribute when request was solicited
+        if (!$this->isUnsolicitedRequest($request)) {
+            $subjectConfirmation['_InResponseTo'] = $request['_ID'];
+        }
+
         $subjectConfirmation['_NotOnOrAfter'] = $this->timeStamp($this->getConfig('NotOnOrAfter', 300));
 
         $response['saml:Assertion']['_ID'] = $this->getNewId();
@@ -646,7 +662,12 @@ class EngineBlock_Corto_ProxyServer
             ),
         );
 
-        $acs = $this->_getRequestAssertionConsumer($request);
+        // the original request was unsolicited, remove InResponseTo attribute
+        if ($this->isUnsolicitedRequest($request)) {
+            unset($response['_InResponseTo']);
+        }
+
+        $acs = $this->getRequestAssertionConsumer($request);
         $response['_Destination']           = $acs['Location'];
         $response['__']['ProtocolBinding']  = $acs['Binding'];
 
@@ -659,12 +680,60 @@ class EngineBlock_Corto_ProxyServer
         return $response;
     }
 
-    protected function _getRequestAssertionConsumer(array $request)
+    /**
+     * Returns the a custom ACS location when provided in the request
+     * or the default ACS location when omitted.
+     *
+     * @param array $request
+     */
+    public function getRequestAssertionConsumer(array $request)
+    {
+        $remoteEntity = $this->getRemoteEntity($request['saml:Issuer']['__v']);
+
+        // parse and validate custom ACS location
+        $custom = $this->getCustomAssertionConsumer($request, $remoteEntity);
+        if (is_array($custom)) {
+            return $custom;
+        }
+
+        // return default ACS or fail
+        return $this->getDefaultAssertionConsumer($remoteEntity);
+    }
+
+    /**
+     * Returns the default ACS location for given entity
+     *
+     * @param array $remoteEntity
+     * @return array
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     */
+    public function getDefaultAssertionConsumer($remoteEntity)
+    {
+        // find first ACS URL that has a binding supported by EB
+        foreach ($remoteEntity['AssertionConsumerServices'] as $acs) {
+            if ($this->getBindingsModule()->isSupportedBinding($acs['Binding'])) {
+                return $acs;
+            }
+        }
+
+        $this->getSystemLog()
+            ->attach($remoteEntity['AssertionConsumerServices']);
+
+        throw new EngineBlock_Corto_ProxyServer_Exception('No supported binding found for ACS');
+    }
+
+    /**
+     * Returns a custom ACS location from request or false when
+     * none is specified
+     *
+     * @param array $request
+     * @param array $remoteEntity
+     */
+    public function getCustomAssertionConsumer(array $request, array $remoteEntity)
     {
         $requestWasSigned    = (isset($request['__']['WasSigned']) && $request['__']['WasSigned']===true);
-        $requestHasCustomAcs = (isset($request['_AssertionConsumerServiceURL']) && isset($request['_ProtocolBinding']));
-        $requestHasAcsIndex  = (isset($request['_AssertionConsumerServiceIndex']));
-        $remoteEntity = $this->getRemoteEntity($request['saml:Issuer']['__v']);
+        $requestHasCustomAcs = $this->hasCustomAssertionConsumer($request);
+        $requestHasAcsIndex  = $this->hasCustomAssertionConsumerIndex($request);
 
         // Custom ACS Location & ProtocolBinding goes first
         if ($requestHasCustomAcs) {
@@ -728,21 +797,32 @@ class EngineBlock_Corto_ProxyServer
                 );
             }
         }
-
-        // find first ACS URL that has a binding supported by EB
-        foreach ($remoteEntity['AssertionConsumerServices'] as $acs) {
-            if ($this->getBindingsModule()->isSupportedBinding($acs['Binding'])) {
-                return $acs;
-            }
-        }
-
-        $this->getSystemLog()
-            ->attach($remoteEntity['AssertionConsumerServices']);
-
-        throw new EngineBlock_Corto_ProxyServer_Exception('No supported binding found for ACS');
     }
 
-    function sendResponseToRequestIssuer($request, $response)
+    /**
+     * See if request specifies a custom ACS location
+     *
+     * @param array $request
+     * @return bool
+     */
+    public function hasCustomAssertionConsumer(array $request)
+    {
+        return (isset($request['_ProtocolBinding']) &&
+            isset($request['_AssertionConsumerServiceURL']));
+    }
+
+    /**
+     * See if request specifies a custom ACS index
+     *
+     * @param array $request
+     * @return bool
+     */
+    public function hasCustomAssertionConsumerIndex(array $request)
+    {
+        return isset($request['_AssertionConsumerServiceIndex']);
+    }
+
+    public function sendResponseToRequestIssuer($request, $response)
     {
         $requestIssuer = $request['saml:Issuer']['__v'];
         $sp = $this->getRemoteEntity($requestIssuer);

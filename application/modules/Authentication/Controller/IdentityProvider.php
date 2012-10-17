@@ -28,6 +28,29 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     public function singleSignOnAction()
     {
         $this->setNoRender();
+
+        $this->_singleSignOn(
+            'singleSignOn', func_get_args()
+        );
+    }
+
+    public function unsolicitedSingleSignOnAction()
+    {
+        $this->setNoRender();
+
+        $this->_singleSignOn(
+            'unsolicitedSingleSignOn', func_get_args()
+        );
+    }
+
+    /**
+     * Method handling signleSignOn and unsolicitedSingleSignOn
+     *
+     * @param string $service
+     * @param array $arguments
+     */
+    protected function _singleSignOn($service = 'singleSignOn', array $arguments = array())
+    {
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         try {
@@ -37,7 +60,6 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
             // Optionally allow /single-sign-on/vo:myVoId/remoteIdPHash or
             // /single-sign-on/remoteIdPHash/vo:myVoId
-            $arguments = func_get_args();
             foreach ($arguments as $argument) {
                 if (substr($argument, 0, 3) == "vo:") {
                     $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
@@ -46,7 +68,16 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 }
             }
 
-            $proxyServer->singleSignOn($idPEntityId);
+            // should be 'singleSignOn' or 'unsolicitedSingleSignOn'
+            if (!is_callable(array($proxyServer, $service))) {
+                throw new EngineBlock_Exception(
+                    'Invalid service name in IdentityProvider controller',
+                    EngineBlock_Exception::CODE_ALERT
+                );
+            }
+
+            // call service
+            $proxyServer->$service($idPEntityId);
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->reportError($e);

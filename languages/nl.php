@@ -209,6 +209,7 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_message_timeout_desc'        => 'We hebben een bericht ontvangen dat niet meer geldig is. Probeer opnieuw in te loggen alstublieft.',
     'error_no_message'                  => 'Error - Geen bericht ontvangen..',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
+    'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
 
     'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
