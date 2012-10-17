@@ -35,7 +35,7 @@ class EngineBlock_AttributeManipulator_ServiceRegistry
     public function manipulate($entityId, &$subjectId, array &$attributes, array &$response)
     {
         $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
-        if (!empty($entity['manipulation'])) {
+        if (empty($entity['manipulation'])) {
             return false;
         }
 
