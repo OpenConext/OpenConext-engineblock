@@ -1,1 +1,534 @@
-{"urn:mace:dir:attribute-def:uid":{"Name":{"nl":"UID","en":"UID"},"Description":{"nl":"jouw unieke gebruikersnaam binnen jouw instelling","en":"your unique username within your organization"}},"urn:mace:dir:attribute-def:sn":{"Name":{"nl":"Achternaam","en":"Surname"},"Description":{"nl":"jouw achternaam","en":"your surname"}},"urn:mace:dir:attribute-def:givenName":{"Name":{"nl":"Voornaam","en":"Name"},"Description":{"nl":"voornaam\/roepnaam","en":"your name"}},"urn:mace:dir:attribute-def:cn":{"Name":{"nl":"Volledige persoonsnaam","en":"Full Name"},"Description":{"nl":"volledige persoonsnaam","en":"your full name"}},"urn:mace:dir:attribute-def:displayName":{"Name":{"nl":"Weergavenaam","en":"Display Name"},"Description":{"nl":"weergave naam zoals getoond in applicaties","en":"display name as shown in applications"}},"urn:mace:dir:attribute-def:mail":{"Name":{"nl":"E-mailadres","en":"E-mailaddress"},"Description":{"nl":"jouw e-mailadres zoals bekend binnen jouw instelling","en":"your e-mailaddress as known within your organization"}},"urn:mace:dir:attribute-def:eduPersonAffiliation":{"Name":{"nl":"Relatie","en":"Relation"},"Description":{"nl":"geeft de relatie aan tussen jou en jouw instelling","en":"relation between your and your organization"}},"urn:mace:dir:attribute-def:eduPersonEntitlement":{"Name":{"nl":"Rechtaanduiding","en":"Entitlement"},"Description":{"nl":"rechtaanduiding; URI (URL of URN) dat een recht op iets aangeeft; wordt bepaald door een contract tussen dienstaanbieder en instelling","en":"entitlement which decides upon your authorization within the application"}},"urn:mace:dir:attribute-def:eduPersonPrincipalName":{"Name":{"nl":"Net-ID","en":"Net-ID"},"Description":{"nl":"jouw unieke gebruikersnaam binnen jouw instelling aangevuld met \"@instellingsnaam.nl\"","en":"your unique username within your organization augmented with \"@organizationname.nl\""}},"urn:mace:dir:attribute-def:preferredLanguage":{"Name":{"nl":"Voorkeurstaal","en":"Preferred Language"},"Description":{"nl":"een tweeletterige afkorting van de voorkeurstaal volgens de ISO 639 taalafkortings codetabel; geen subcodes","en":"a two letter abbreviation according to ISO 639; no subcodes"}},"urn:mace:terena.org:attribute-def:schacHomeOrganization":{"Name":{"nl":"Organisatie","en":"Organization"},"Description":{"nl":"aanduiding voor de organisatie van een persoon gebruikmakend van de domeinnaam van de organisatie; syntax conform RFC 1035","en":"name for the organization, making use of the domain name of the  organization conform RFC 1035"}},"urn:mace:terena.org:attribute-def:schacHomeOrganizationType":{"Name":{"nl":"Type Organisatie","en":"Type of Organization"},"Description":{"nl":"aanduiding voor het type organisatie waartoe een persoon behoort, gebruikmakend van de waarden zoals geregisteerd door Terena op: http:\/\/www.terena.org\/registry\/terena.org\/schac\/homeOrganizationType","en":"type of organization to which the user belongs"}},"urn:mace:surffederatie.nl:attribute-def:nlEduPersonHomeOrganization":{"Name":{"nl":"Weergavenaam van de Instelling","en":"Display name of Organization"},"Description":{"nl":"weergavenaam van de instelling","en":"display name of the organization"}},"urn:mace:surffederatie.nl:attribute-def:nlEduPersonOrgUnit":{"Name":{"nl":"Afdelingsnaam","en":"Unitname"},"Description":{"nl":" naam van de afdeling","en":"unit name"}},"urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch":{"Name":{"nl":"Opleiding","en":"Study Branch"},"Description":{"nl":"opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft","en":"study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown"}},"urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer":{"Name":{"nl":"Studielinknummer","en":"Studielinknummer"},"Description":{"nl":"studielinknummer van student zoals geregistreerd bij www.studielink.nl","en":"studielinknummer of the student as registered at www.studielink.nl"}},"urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier":{"Name":{"nl":"DAI","en":"DAI"},"Description":{"nl":"Digital Author Identifier (DAI) zoals beschreven op: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480","en":"Digital Author Identifier (DAI) as described at: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480"}},"urn:mace:surffederatie_nl:attribute-def:nlEduPersonHomeOrganization":{"Name":{"nl":"Weergavenaam van de Instelling","en":"Display name of Organization"},"Description":{"nl":"weergavenaam van de instelling","en":"display name of the organization"}},"urn:mace:surffederatie_nl:attribute-def:nlEduPersonOrgUnit":{"Name":{"nl":"Afdelingsnaam","en":"Unitname"},"Description":{"nl":" naam van de afdeling","en":"unit name"}},"urn:mace:surffederatie_nl:attribute-def:nlEduPersonStudyBranch":{"Name":{"nl":"Opleiding","en":"Study Branch"},"Description":{"nl":"opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft","en":"study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown"}},"urn:mace:surffederatie_nl:attribute-def:nlStudielinkNummer":{"Name":{"nl":"Studielinknummer","en":"Studielinknummer"},"Description":{"nl":"studielinknummer van student zoals geregistreerd bij www.studielink.nl","en":"studielinknummer of the student as registered at www.studielink.nl"}},"urn:mace:surffederatie_nl:attribute-def:nlDigitalAuthorIdentifier":{"Name":{"nl":"DAI","en":"DAI"},"Description":{"nl":"Digital Author Identifier (DAI) zoals beschreven op: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480","en":"Digital Author Identifier (DAI) as described at: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480"}},"urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1":{"Name":{"nl":"Accountstatus","en":"Accountstatus"},"Description":{"nl":"Status van deze account in de SURFfederatie","en":"Status of this account in the SURFfederation"}},"urn:oid:1.3.6.1.4.1.5923.1.1.1.1":{"Name":{"nl":"Accountstatus","en":"Accountstatus"},"Description":{"nl":"Status van deze account in de SURFfederatie","en":"Status of this account in the SURFfederation"}},"nameid":{"Name":{"nl":"Identifier","en":"Identifier"},"Description":{"nl":"Status van deze account in de SURFfederatie","en":"Status of this account in the SURFfederation"}},"urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2":{"Name":{"nl":"Naam Virtuele Organisatie","en":"Virtual Organisation Name"},"Description":{"nl":"De naam van de Virtuele Organisatie waarvoor je bent ingelogd.","en":"The name of the Virtual Urganisation for which you have authenticated"}},"urn:oid:1.3.6.1.4.1.1076.20.40.40.1":{"Name":{"nl":"Identifier","en":"Identifier"},"Description":{"nl":"Status van deze account in de SURFfederatie","en":"Status of this account in the SURFfederation"}},"urn:oid:1.3.6.1.4.1.5923.1.1.1.10":{"Name":{"nl":"Identifier","en":"Identifier"},"Description":{"nl":"Status van deze account in de SURFfederatie","en":"Status of this account in the SURFfederation"}},"urn:nl.surfconext.licenseInfo":{"Name":{"nl":"Licentieinformatie","en":"License information"},"Description":{"nl":"Licentie informatie voor de huidige dienst","en":"License information for the current service"}},"urn:oid:1.3.6.1.4.1.5923.1.5.1.1":{"Name":{"nl":"Lidmaatschap","en":"Membership"},"Description":{"nl":"Lidmaatschap van virtuele organisaties en de SURFfederatie","en":"Membership of Virtual Organizations and the SURFfederation."}}}
+{
+    "urn:oid:2.5.4.3": "urn:mace:dir:attribute-def:cn",
+    "urn:mace:dir:attribute-def:cn": {
+        "Description": {
+            "en": "your full name",
+            "nl": "volledige persoonsnaam"
+        },
+        "Name": {
+            "en": "Full Name",
+            "nl": "Volledige persoonsnaam"
+        }
+    },
+    "urn:oid:2.16.840.1.113730.3.1.241": "urn:mace:dir:attribute-def:displayName",
+    "urn:mace:dir:attribute-def:displayName": {
+        "Description": {
+            "en": "display name as shown in applications",
+            "nl": "weergave naam zoals getoond in applicaties"
+        },
+        "Name": {
+            "en": "Display Name",
+            "nl": "Weergavenaam"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.1": {
+        "Description": {
+            "en": "Status of this account in the SURFfederation",
+            "nl": "Status van deze account in de SURFfederatie"
+        },
+        "Name": {
+            "en": "Accountstatus",
+            "nl": "Accountstatus"
+        },
+        "Constraints": {
+            "caseInsensitive": true,
+            "warning": {
+                "allowed": [
+                    "affiliate",
+                    "alum",
+                    "employee",
+                    "student",
+                    "staff"
+                ]
+            }
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonAffiliation": "urn:mace:dir:attribute-def:userSMIMECertificate",
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.7": "urn:mace:dir:attribute-def:eduPersonEntitlement",
+    "urn:mace:dir:attribute-def:eduPersonEntitlement": {
+        "Description": {
+            "en": "entitlement which decides upon your authorization within the application",
+            "nl": "rechtaanduiding; URI (URL of URN) dat een recht op iets aangeeft; wordt bepaald door een contract tussen dienstaanbieder en instelling"
+        },
+        "Name": {
+            "en": "Entitlement",
+            "nl": "Rechtaanduiding"
+        },
+        "Constraints": {
+            "warning": {
+                "validate": "URI"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.6": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+    "urn:mace:dir:attribute-def:eduPersonPrincipalName": {
+        "Description": {
+            "en": "your unique username within your organization augmented with \"@organizationname.nl\"",
+            "nl": "jouw unieke gebruikersnaam binnen jouw instelling aangevuld met \"@instellingsnaam.nl\""
+        },
+        "Name": {
+            "en": "Net-ID",
+            "nl": "Net-ID"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1",
+                "validateRegex": "\/[\\S]+@[\\S]+\/"
+            },
+            "caseInsensitive": true
+        }
+    },
+    "urn:oid:2.5.4.42": "urn:mace:dir:attribute-def:givenName",
+    "urn:mace:dir:attribute-def:givenName": {
+        "Description": {
+            "en": "your name",
+            "nl": "voornaam\/roepnaam"
+        },
+        "Name": {
+            "en": "Name",
+            "nl": "Voornaam"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:0.9.2342.19200300.100.1.3": "urn:mace:dir:attribute-def:mail",
+    "urn:mace:dir:attribute-def:mail": {
+        "_Comment": "Values SHOULD match RFC2821",
+        "Description": {
+            "en": "your e-mailaddress as known within your organization",
+            "nl": "jouw e-mailadres zoals bekend binnen jouw instelling"
+        },
+        "Name": {
+            "en": "E-mailaddress",
+            "nl": "E-mailadres"
+        },
+        "Constraints": {
+            "warning": {
+                "validate": "EmailAddress"
+            }
+        }
+    },
+    "urn:oid:2.16.840.1.113730.3.1.39": "urn:mace:dir:attribute-def:preferredLanguage",
+    "urn:mace:dir:attribute-def:preferredLanguage": {
+        "Description": {
+            "en": "a two letter abbreviation according to ISO 639; no subcodes",
+            "nl": "een tweeletterige afkorting van de voorkeurstaal volgens de ISO 639 taalafkortings codetabel; geen subcodes"
+        },
+        "Name": {
+            "en": "Preferred Language",
+            "nl": "Voorkeurstaal"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:2.5.4.4": "urn:mace:dir:attribute-def:sn",
+    "urn:mace:dir:attribute-def:sn": {
+        "Description": {
+            "en": "your surname",
+            "nl": "jouw achternaam"
+        },
+        "Name": {
+            "en": "Surname",
+            "nl": "Achternaam"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:0.9.2342.19200300.100.1.1": "urn:mace:dir:attribute-def:uid",
+    "urn:mace:dir:attribute-def:uid": {
+        "Description": {
+            "en": "your unique username within your organization",
+            "nl": "jouw unieke gebruikersnaam binnen jouw instelling"
+        },
+        "Name": {
+            "en": "UID",
+            "nl": "UID"
+        },
+        "Constraints": {
+            "error": {
+                "min": "1",
+                "max": "1",
+                "maxLength": "256"
+            }
+        }
+    },
+    "urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier": {
+        "Description": {
+            "en": "Digital Author Identifier (DAI) as described at: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480",
+            "nl": "Digital Author Identifier (DAI) zoals beschreven op: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480"
+        },
+        "Name": {
+            "en": "DAI",
+            "nl": "DAI"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:mace:surffederatie.nl:attribute-def:nlEduPersonHomeOrganization": {
+        "Description": {
+            "en": "display name of the organization",
+            "nl": "weergavenaam van de instelling"
+        },
+        "Name": {
+            "en": "Display name of Organization",
+            "nl": "Weergavenaam van de Instelling"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:mace:surffederatie.nl:attribute-def:nlEduPersonOrgUnit": {
+        "Description": {
+            "en": "unit name",
+            "nl": " naam van de afdeling"
+        },
+        "Name": {
+            "en": "Unitname",
+            "nl": "Afdelingsnaam"
+        }
+    },
+    "urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch": {
+        "_Comment": "CROHO code",
+        "Description": {
+            "en": "study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown",
+            "nl": "opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft"
+        },
+        "Name": {
+            "en": "Study Branch",
+            "nl": "Opleiding"
+        }
+    },
+    "urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer": {
+        "_Comment": "Studielink code",
+        "Description": {
+            "en": "studielinknummer of the student as registered at www.studielink.nl",
+            "nl": "studielinknummer van student zoals geregistreerd bij www.studielink.nl"
+        },
+        "Name": {
+            "en": "Studielinknummer",
+            "nl": "Studielinknummer"
+        },
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:mace:surffederatie_nl:attribute-def:nlDigitalAuthorIdentifier": {
+        "_Comment": "DAI code?",
+        "Description": {
+            "en": "Digital Author Identifier (DAI) as described at: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480",
+            "nl": "Digital Author Identifier (DAI) zoals beschreven op: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480"
+        },
+        "Name": {
+            "en": "DAI",
+            "nl": "DAI"
+        }
+    },
+    "urn:mace:surffederatie_nl:attribute-def:nlEduPersonHomeOrganization": {
+        "Description": {
+            "en": "display name of the organization",
+            "nl": "weergavenaam van de instelling"
+        },
+        "Name": {
+            "en": "Display name of Organization",
+            "nl": "Weergavenaam van de Instelling"
+        }
+    },
+    "urn:mace:surffederatie_nl:attribute-def:nlEduPersonOrgUnit": {
+        "Description": {
+            "en": "unit name",
+            "nl": " naam van de afdeling"
+        },
+        "Name": {
+            "en": "Unitname",
+            "nl": "Afdelingsnaam"
+        }
+    },
+    "urn:mace:surffederatie_nl:attribute-def:nlEduPersonStudyBranch": {
+        "Description": {
+            "en": "study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown",
+            "nl": "opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft"
+        },
+        "Name": {
+            "en": "Study Branch",
+            "nl": "Opleiding"
+        }
+    },
+    "urn:mace:surffederatie_nl:attribute-def:nlStudielinkNummer": {
+        "Description": {
+            "en": "studielinknummer of the student as registered at www.studielink.nl",
+            "nl": "studielinknummer van student zoals geregistreerd bij www.studielink.nl"
+        },
+        "Name": {
+            "en": "Studielinknummer",
+            "nl": "Studielinknummer"
+        }
+    },
+    "urn:mace:terena.org:attribute-def:schacHomeOrganization": {
+        "Description": {
+            "en": "name for the organization, making use of the domain name of the  organization conform RFC 1035",
+            "nl": "aanduiding voor de organisatie van een persoon gebruikmakend van de domeinnaam van de organisatie; syntax conform RFC 1035"
+        },
+        "Name": {
+            "en": "Organization",
+            "nl": "Organisatie"
+        },
+        "Constraints": {
+            "error": {
+                "min": "1",
+                "max": "1",
+                "validate": "HostName"
+            }
+        }
+    },
+    "urn:mace:terena.org:attribute-def:schacHomeOrganizationType": {
+        "Description": {
+            "en": "type of organization to which the user belongs",
+            "nl": "aanduiding voor het type organisatie waartoe een persoon behoort, gebruikmakend van de waarden zoals geregisteerd door Terena op: http:\/\/www.terena.org\/registry\/terena.org\/schac\/homeOrganizationType"
+        },
+        "Name": {
+            "en": "Type of Organization",
+            "nl": "Type Organisatie"
+        },
+        "Constraints": {
+            "warning": {
+                "allowed": [
+                    "urn:mace:terena.org:schac:homeOrganizationType:eu:higherEducationInstitution",
+                    "urn:mace:terena.org:schac:homeOrganizationType:eu:educationInstitution",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:NREN",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:universityHospital",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:NRENAffiliate",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:other"
+                ],
+                "max": "1"
+            }
+        }
+    },
+    "urn:nl.surfconext.licenseInfo": {
+        "Description": {
+            "en": "License information for the current service",
+            "nl": "Licentie informatie voor de huidige dienst"
+        },
+        "Name": {
+            "en": "License information",
+            "nl": "Licentieinformatie"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1": {
+        "Description": {
+            "en": "Status of this account in the SURFfederation",
+            "nl": "Status van deze account in de SURFfederatie"
+        },
+        "Name": {
+            "en": "Accountstatus",
+            "nl": "Accountstatus"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2": {
+        "Description": {
+            "en": "The name of the Virtual Urganisation for which you have authenticated",
+            "nl": "De naam van de Virtuele Organisatie waarvoor je bent ingelogd."
+        },
+        "Name": {
+            "en": "Virtual Organisation Name",
+            "nl": "Naam Virtuele Organisatie"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.40.40.1": {
+        "Description": {
+            "en": "Status of this account in the SURFfederation",
+            "nl": "Status van deze account in de SURFfederatie"
+        },
+        "Name": {
+            "en": "Identifier",
+            "nl": "Identifier"
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonTargetedID": "urn:oid:1.3.6.1.4.1.5923.1.1.1.10",
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.10": {
+        "Description": {
+            "en": "Status of this account in the SURFfederation",
+            "nl": "Status van deze account in de SURFfederatie"
+        },
+        "Name": {
+            "en": "Identifier",
+            "nl": "Identifier"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.5.1.1": {
+        "Description": {
+            "en": "Membership of Virtual Organizations and the SURFfederation.",
+            "nl": "Lidmaatschap van virtuele organisaties en de SURFfederatie"
+        },
+        "Name": {
+            "en": "Membership",
+            "nl": "Lidmaatschap"
+        }
+    },
+    "nameid": {
+        "Description": {
+            "en": "Status of this account in the SURFfederation",
+            "nl": "Status van deze account in de SURFfederatie"
+        },
+        "Name": {
+            "en": "Identifier",
+            "nl": "Identifier"
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonNickname": {
+        "Constraints": {
+            "caseInsensitive": true
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonOrgDN": {
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonOrgUnitDN": {
+
+    },
+    "urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation": {
+        "Constraints": {
+            "warning": {
+                "max": "1",
+                "allowed": [
+                    "affiliate",
+                    "alum",
+                    "employee",
+                    "student",
+                    "staff"
+                ]
+            },
+            "caseInsensitive": true
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN": {
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonScopedAffiliation": {
+        "Constraints": {
+            "caseInsensitive": true
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonAssurance": {
+        "Constraints": {
+            "warning": {
+                "validate": "URI"
+            }
+        }
+    },
+    "urn:mace:dir:attribute-def:audio": {
+
+    },
+    "urn:mace:dir:attribute-def:description": {
+
+    },
+    "urn:mace:dir:attribute-def:facsimileTelephoneNumber": {
+
+    },
+    "urn:mace:dir:attribute-def:homePhone": {
+
+    },
+    "urn:mace:dir:attribute-def:homePostalAddress": {
+        "Constraints": {
+            "warning": {
+                "max": "6",
+                "maxLength": "30"
+            }
+        }
+    },
+    "urn:mace:dir:attribute-def:initials": {
+
+    },
+    "urn:mace:dir:attribute-def:jpegPhoto": {
+
+    },
+    "urn:mace:dir:attribute-def:l": {
+
+    },
+    "urn:mace:dir:attribute-def:labeledURI": {
+
+    },
+    "urn:mace:dir:attribute-def:manager": {
+
+    },
+    "urn:mace:dir:attribute-def:mobile": {
+
+    },
+    "urn:mace:dir:attribute-def:o": {
+
+    },
+    "urn:mace:dir:attribute-def:ou": {
+
+    },
+    "urn:mace:dir:attribute-def:pager": {
+
+    },
+    "urn:mace:dir:attribute-def:postalAddress": {
+
+    },
+    "urn:mace:dir:attribute-def:postalCode": {
+
+    },
+    "urn:mace:dir:attribute-def:postOfficeBox": {
+
+    },
+    "urn:mace:dir:attribute-def:seeAlso": {
+
+    },
+    "urn:mace:dir:attribute-def:st": {
+
+    },
+    "urn:mace:dir:attribute-def:street": {
+
+    },
+    "urn:mace:dir:attribute-def:telephoneNumber": {
+
+    },
+    "urn:mace:dir:attribute-def:title": {
+
+    },
+    "urn:mace:dir:attribute-def:uniqueIdentifier": {
+        "Constraints": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:mace:dir:attribute-def:userCertificate": {
+
+    },
+    "urn:mace:dir:attribute-def:userPassword": {
+
+    },
+    "urn:mace:dir:attribute-def:userSMIMECertificate": {
+
+    }
+}
