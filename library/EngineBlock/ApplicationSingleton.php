@@ -621,7 +621,7 @@ class EngineBlock_ApplicationSingleton
 
         $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
         $log->attach($exception->getTraceAsString())
-            ->log($exception->getMessage(), $exception->getSeverity(), $additionalInfo);
+            ->log($exception->getMessage(), $exception->getSeverity() ?:EngineBlock_Log::ERR, $additionalInfo);
         
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
