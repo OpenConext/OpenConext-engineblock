@@ -95,16 +95,17 @@ class EngineBlock_Saml2Attributes_FieldMapper
 
     public function saml2AttributesToLdapAttributes($attributes)
     {
+        $log = EngineBlock_ApplicationSingleton::getLog();
+
         $required = $this->_saml2Required;
         $ldapAttributes = array();
         foreach ($attributes as $saml2Name => $values) {
             // Map it to an LDAP attribute
             if (isset($this->_s2lMap[$saml2Name])) {
                 if (count($values)>1) {
-                    $log = $this->getLogInstance();
                     $log->attach($values);
 
-                    EngineBlock_ApplicationSingleton::getLog()->notice(
+                    $log->notice(
                         "Ignoring everything but first value of $saml2Name:"
                     );
                 }
@@ -119,7 +120,6 @@ class EngineBlock_Saml2Attributes_FieldMapper
             }
         }
         if (!empty($required)) {
-            $log = $this->getLogInstance();
             $log->attach($required)
                 ->attach($attributes);
 

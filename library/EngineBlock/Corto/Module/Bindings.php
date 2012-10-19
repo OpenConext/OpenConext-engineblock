@@ -659,8 +659,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         if (!isset($element['ds:Signature']['ds:SignatureValue']['__v'])) {
-            $log = $this->getLogInstance();
-            $log->attach($element);
+            $this->_server->getSessionLog()->attach($element);
 
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'No sigurature value found on element?'
