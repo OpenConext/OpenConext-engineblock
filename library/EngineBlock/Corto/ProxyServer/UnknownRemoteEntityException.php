@@ -7,7 +7,8 @@ class EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException extends EngineB
     public function __construct($entityId)
     {
         $this->_entityId = $entityId;
-        $this->message = "Unknown remote entity with entityid '$entityId'";
+        $message = "Unknown remote entity with entityid '$entityId'";
+        parent::__construct($message, self::CODE_NOTICE);
     }
 
     public function setEntityId($entityId)

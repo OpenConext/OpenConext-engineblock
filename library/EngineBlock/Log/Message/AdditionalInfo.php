@@ -61,7 +61,7 @@ class EngineBlock_Log_Message_AdditionalInfo
             case LOG_NOTICE:    $info->_severity = 'NOTICE'; break;
             case LOG_INFO:      $info->_severity = 'INFO'; break;
             case LOG_DEBUG:     $info->_severity = 'DEBUG'; break;
-            default:            $info->_severity = 'UNKNOWN';
+            default:            $info->_severity = 'ERROR';
         }
         return $info;
     }
