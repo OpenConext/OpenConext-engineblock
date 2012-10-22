@@ -72,7 +72,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             if (!is_callable(array($proxyServer, $service))) {
                 throw new EngineBlock_Exception(
                     'Invalid service name in IdentityProvider controller',
-                    EngineBlock_Exception::CODE_ALERT
+                    EngineBlock_Exception::CODE_ERROR
                 );
             }
 
