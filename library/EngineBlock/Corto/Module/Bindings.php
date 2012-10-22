@@ -451,13 +451,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         } catch (EngineBlock_Exception $e) {
             try {
                 if (isset($response['_InResponseTo'])) {
-                    $messageId = $response['_InResponseTo'];
-                } else if (isset($response['_ID'])) {
-                    $messageId = $response['_ID'];
-                }
-
-                if (isset($messageId)) {
-                    $request = $this->_server->getReceivedRequestFromResponse($messageId);
+                    $request = $this->_server->getReceivedRequestFromResponse(
+                        $response['_InResponseTo']
+                    );
                     $e->spEntityId = $request['saml:Issuer']['__v'];
                 }
             } catch (Exception $x) {
