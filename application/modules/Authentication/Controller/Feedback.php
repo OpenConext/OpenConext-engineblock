@@ -23,49 +23,59 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract {
-
-    public function vomembershiprequiredAction() {
+class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
+{
+    public function vomembershiprequiredAction()
+    {
         header('HTTP/1.1 403 Forbidden');
     }
 
-    public function unableToReceiveMessageAction() {
+    public function unableToReceiveMessageAction()
+    {
         header('HTTP/1.1 400 Bad Request');
     }
 
-    public function sessionLostAction() {
+    public function sessionLostAction()
+    {
         header('HTTP/1.1 400 Bad Request');
     }
 
-    public function timeoutAction() {
+    public function timeoutAction()
+    {
         header('HTTP/1.1 408 Request Timeout');
     }
 
-    public function unknownIssuerAction() {
+    public function unknownIssuerAction()
+    {
         header('HTTP/1.1 404 Not Found');
         $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
         $this->__set('destination', htmlspecialchars($this->_getRequest()->getQueryParameter('destination')));
     }
 
-    public function unknownServiceProviderAction() {
+    public function unknownServiceProviderAction()
+    {
         header('HTTP/1.1 400 Bad Request');
         $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
     }
 
-    public function missingRequiredFieldsAction() {
+    public function missingRequiredFieldsAction()
+    {
         header('HTTP/1.1 400 Bad Request');
     }
 
-    public function noConsentAction() {
+    public function noConsentAction()
+    {
 
     }
 
-    public function customAction() {
+    public function customAction()
+    {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
         $proxyServer->startSession();
     }
 
-    public function invalidAcsLocation() {
+    public function invalidAcsLocation()
+    {
         header('HTTP/1.1 400 Bad Request');
     }
 
