@@ -550,14 +550,7 @@ class EngineBlock_ApplicationSingleton
 
     public function handleException(Exception $e)
     {
-        if ($e instanceof EngineBlock_Exception) {
-            $this->reportError($e);
-        }
-        else {
-            $this->reportError(
-                new EngineBlock_Exception($e->getMessage(), EngineBlock_Exception::CODE_ERROR, $e)
-            );
-        }
+        $this->reportError($e);
 
         $message = 'A exceptional condition occurred, it has been logged and sent to the administrator.';
         if ($this->getConfiguration()->debug) {
@@ -612,17 +605,22 @@ class EngineBlock_ApplicationSingleton
         die($message);
     }
 
-    public function reportError(EngineBlock_Exception $exception)
+    public function reportError(Exception $exception)
     {
         $log = $this->getLogInstance();
         if (!$log) {
             return false;
         }
 
-        $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
+        if ($exception instanceof EngineBlock_Exception) {
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
+        } else {
+            $additionalInfo = null;
+        }
+
         $log->attach($exception->getTraceAsString())
             ->log($exception->getMessage(), $exception->getSeverity() ?:EngineBlock_Log::ERR, $additionalInfo);
-        
+
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
 

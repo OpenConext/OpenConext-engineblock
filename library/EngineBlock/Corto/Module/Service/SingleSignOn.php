@@ -7,7 +7,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     public function serve($serviceName)
     {
-        if ($serviceName !== 'unsolicitedSingleSignOnService') {
+        $isUnsolicited = ($serviceName === 'unsolicitedSingleSignOnService');
+
+        if (!$isUnsolicited) {
             // parse SAML request
             $request = $this->_server->getBindingsModule()->receiveRequest();
 
@@ -33,8 +35,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $queue->flush();
         }
 
-        // validate custom acs-location
-        if (!$this->_verifyAcsLocation($request, $remoteEntity)) {
+        // validate custom acs-location (only for unsolicited, normal logins
+        //  fall back to default ACS location instead of showing error page)
+        if ($isUnsolicited && !$this->_verifyAcsLocation($request, $remoteEntity)) {
             throw new EngineBlock_Corto_Exception_InvalidAcsLocation(
                 'Unknown or invalid ACS location requested'
             );
