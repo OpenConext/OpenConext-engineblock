@@ -74,7 +74,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
             // Convert all attributes to their OID format (if known) and add these.
-            new EngineBlock_Corto_Filter_Command_MirrorToOid(),
+            new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
 
             // Log the login
             new EngineBlock_Corto_Filter_Command_LogLogin(),
