@@ -13,7 +13,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             // parse SAML request
             $request = $this->_server->getBindingsModule()->receiveRequest();
 
-            // set transparant proxy mode
+            // set transparent proxy mode
             $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent']
                 = $this->_server->getConfig('TransparentProxy', false);
         } else {
