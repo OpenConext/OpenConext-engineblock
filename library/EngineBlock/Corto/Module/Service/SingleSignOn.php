@@ -10,15 +10,47 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $isUnsolicited = ($serviceName === 'unsolicitedSingleSignOnService');
 
         if (!$isUnsolicited) {
+            // create unsolicited request object
+            $request = $this->_createUnsolicitedRequest();
+
+        }
+        else if ($serviceName === 'debugSingleSignOnService') {
+            if (isset($_SESSION['debugIdpResponse']) && !isset($_POST['clear'])) {
+                $response = $_SESSION['debugIdpResponse'];
+                $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'][7]['saml:AttributeValue'][] = array(
+                    '__v' => 'dark side of the force',
+                );
+
+                if (isset($_POST['mail'])) {
+                    $this->_sendDebugMail($response);
+                }
+
+                $this->_server->sendOutput($this->_server->renderTemplate(
+                    'debugidpresponse',
+                    array(
+                        'idp'       => $this->_server->getRemoteEntity($response['saml:Issuer']['__v']),
+                        'response'  => $response,
+                        'attributes'=> EngineBlock_Corto_XmlToArray::attributes2array(
+                            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
+                        ),
+                    )
+                ));
+                return;
+            }
+            else {
+                unset($_SESSION['debugIdpResponse']);
+                $request = $this->_createDebugRequest();
+            }
+
+        } else {
             // parse SAML request
             $request = $this->_server->getBindingsModule()->receiveRequest();
 
-            // set transparent proxy mode
-            $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent']
-                = $this->_server->getConfig('TransparentProxy', false);
-        } else {
-            // create unsolicited request object
-            $request = $this->_createUnsolicitedRequest();
+            // set transparant proxy mode
+            $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent'] = $this->_server->getConfig(
+                'TransparentProxy',
+                false
+            );
         }
 
 
@@ -198,6 +230,29 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $log = $this->_server->getSessionLog();
         $log->attach($request)
             ->info('Received unsolicited request');
+
+        return $request;
+    }
+
+    /**
+     * Process unsolicited requests
+     */
+    protected function _createDebugRequest()
+    {
+        // Create 'fake' request object
+        $request = array(
+            '_ID'         => $this->_server->getNewId(),
+            'saml:Issuer' => array(
+                EngineBlock_Corto_XmlToArray::VALUE_PFX => $this->_server->getUrl('spMetadataService'),
+            ),
+            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
+                'Debug' => true,
+            )
+        );
+
+        $log = $this->_server->getSessionLog();
+        $log->attach($request)
+            ->info('Received debug request');
 
         return $request;
     }
@@ -391,5 +446,38 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         return $wayfIdps;
+    }
+
+    protected function _sendDebugMail($response)
+    {
+        $layout = $this->_server->layout();
+        $oldLayout = $layout->getLayout();
+        $layout->setLayout('empty');
+
+        {
+            $wasEnabled = $layout->isEnabled();
+            if ($wasEnabled) {
+                $layout->disableLayout();
+            }
+
+            $idp = $this->_server->getRemoteEntity($response['saml:Issuer']['__v']);
+            $attributes = EngineBlock_Corto_XmlToArray::attributes2array(
+                $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
+            );
+            $output = $this->_server->renderTemplate('debugidpmail', array(
+                    'idp'       => $idp,
+                    'response'  => $response,
+                    'attributes'=> $attributes,
+            ));
+
+            $emailConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->idpDebugging;
+            $mailer = new Zend_Mail('UTF-8');
+            $mailer->setFrom($emailConfiguration->from->address, $emailConfiguration->from->name);
+            $mailer->addTo($emailConfiguration->to->address, $emailConfiguration->to->name);
+            $mailer->setSubject(sprintf($emailConfiguration->subject, $idp['Name']['en']));
+            $mailer->setBodyText($output);
+            $mailer->send();
+        }
+        $layout->setLayout($oldLayout);
     }
 }
