@@ -23,20 +23,10 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_AttributeMapper_Abstract
+interface EngineBlock_Attributes_Validator_Interface
 {
-    protected $_mapping = array(
-    );
-
-    public function map(array $responseAttributes)
-    {
-        foreach ($responseAttributes as $name => $values) {
-            if (!isset($this->_mapping[$name])) {
-                continue;
-            }
-            $responseAttributes[$this->_mapping[$name]] = $values;
-            unset($responseAttributes[$name]);
-        }
-        return $responseAttributes;
-    }
+    public function __construct($attributeName, $options);
+    public function validate(array $attributes);
+    public function setAttributeAlias($alias);
+    public function getMessages();
 }

@@ -265,6 +265,30 @@ Als u deze applicatie wilt gebruiken moet u:<br />
         De extere groep provider <b>%s</b> retourneerde een fout.<br />
         Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br />
-    </p>'
+    </p>',
+    /**
+     * %1 AttributeName
+     * %2 Options
+     * %3 (optional) Value
+     * @url http://nl3.php.net/sprintf
+     */
+    'error_attribute_validator_type_uri'            => '\'%3$s\' is geen geldige URI',
+    'error_attribute_validator_type_hostname'       => '\'%3$s\' is geen geldige hostname',
+    'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is geen geldig emailadres',
+    'error_attribute_validator_minlength'           => '\'%3$s\' is niet lang genoeg (minimaal %2$d karakters)',
+    'error_attribute_validator_maxlength'           => '\'%3$s\' is te lang (maximaal %2$d karakters)',
+    'error_attribute_validator_min'                 => '%1$s heeft minimaal %2$d waardes nodig (%3$d gegeven)',
+    'error_attribute_validator_max'                 => '%1$s heeft maximaal %2$d waardes (%3$d gegeven)',
+    'error_attribute_validator_regex'               => '\'%3$s\' voldoet niet aan de voorwaarden voor waardes van dit attribuut (%2$s)',
 
+    'attributes_validation_succeeded' => 'Authenticatie geslaagd',
+    'attributes_validation_failed'    => 'Sommige attributen falen validatie',
+    'idp_debugging_title'             => 'Toon verkregen Response van Identity Provider',
+
+    'attributes' => 'Attributen',
+    'validation' => 'Validatie',
+    'idp_debugging_mail_explain' => 'Indien gevraagd door SURFconext beheer,
+                                        gebruik de "Mail naar surfconext-beheer" knop hieronder
+                                        om de informatie op dit scherm naar SURFconext beheer te e-mailen.',
+    'idp_debugging_mail_button' => 'Mail naar surfconext-beheer',
 );

@@ -88,13 +88,13 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
 
         $expectedResult = array(
             "https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp"=> array(
+                'VoContext' => 'rave-devs',
                 "AssertionConsumerServices"=> array(
                     0 => array(
                         'Binding'  => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST",
                         'Location' => "https://sp.testing.dev.coin.surf.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp"
                     ),
                 ),
-                'WantsAssertionsSigned' => true,
                 'MustProvisionExternally' => false,
                 'ProvideIsMemberOf' => false,
                 "certificates" => array(
@@ -117,15 +117,24 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
 ",
                 ),
                 "Name"=> array(
-                    'en' => "EngineBlock Testing SP",
                     'nl' => "EngineBlock Testing SP",
+                    'en' => "EngineBlock Testing SP",
                 ) ,
                 "Description"=> array(
-                    'en' => "EngineBlock Testing SP",
                     'nl' => "EngineBlock Testing SP",
+                    'en' => "EngineBlock Testing SP",
                 ),
                 "AuthnRequestsSigned" => true,
-                'VoContext' => 'rave-devs',
+                'Organization'=> array(
+                    'Name' => array(
+                        'nl' => 'SURFnet',
+                        'en' => 'SURFnet',
+                    ),
+                    'URL' => array(
+                        'nl' => 'https://www.surfnet.nl',
+                        'en' => 'https://www.surfnet.nl/en/',
+                    ),
+                ),
                 'ContactPersons' => array(
                     1 => array(
                         'ContactType' => 'support',
@@ -134,16 +143,7 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                         'SurName'     => 'Baukema',
                     ),
                 ),
-                'Organization'=> array(
-                    'Name' => array(
-                        'nl' => 'SURFnet',
-                        'en' => 'SURFnet',
-                    ),
-                    'URL' => array(
-                        'en' => 'https://www.surfnet.nl/en/',
-                        'nl' => 'https://www.surfnet.nl',
-                    ),
-                ),
+                'EntityID' => 'https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp',
             ),
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
                 "SingleSignOnService" => array(
@@ -171,18 +171,20 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
 ",
                 ),
                 "Name"=> array(
-                    'en' => "EngineBlock Testing IdP",
                     'nl' => "EngineBlock Testing IdP",
+                    'en' => "EngineBlock Testing IdP",
                 ) ,
                 "Description"=> array(
-                    'en' => "EngineBlock Testing IdP",
                     'nl' => "EngineBlock Testing IdP",
+                    'en' => "EngineBlock Testing IdP",
                 ),
+                'AuthnRequestsSigned' => true,
                 'Keywords' => array(
-                    'en' => 'test,english',
                     'nl' => 'test, nederlands',
+                    'en' => 'test,english',
                 ),
-                "AuthnRequestsSigned"  => true,
+                "AuthnRequestsSigned" => true,
+                'EntityID' => 'https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp',
             ),
         );
         $this->assertEquals($expectedResult, $metadata, "Converting a simple result from Service Registry with 1 IdP and 1 SP to Cortos Metadata format");

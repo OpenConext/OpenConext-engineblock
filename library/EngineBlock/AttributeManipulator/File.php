@@ -53,12 +53,6 @@ class EngineBlock_AttributeManipulator_File
             return false;
         }
 
-        if (empty($entityId)) {
-            EngineBlock_ApplicationSingleton::getLog()->warn(
-                "Unable to get a SP EntityID from the response? Unable to execute Attribute Manipulations"
-            );
-            return false;
-        }
         $file = $this->_rootLocation .
                 DIRECTORY_SEPARATOR .
                 (!empty($entityId) ? $this->_getDirectoryNameForEntityId($entityId) . DIRECTORY_SEPARATOR : '') .

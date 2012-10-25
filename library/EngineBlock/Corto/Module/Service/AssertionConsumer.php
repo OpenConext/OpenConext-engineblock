@@ -10,6 +10,14 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']
         );
 
+        $isDebugRequest = (isset($receivedRequest[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']) &&
+            $receivedRequest[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']);
+        if ($isDebugRequest) {
+            $_SESSION['debugIdpResponse'] = $receivedResponse;
+            $this->_server->redirect($this->_server->getUrl('debugSingleSignOnService'), 'Show original Response from IDP');
+            return;
+        }
+
         // Cache the response
         EngineBlock_Corto_Model_Response_Cache::cacheResponse(
             $receivedRequest,

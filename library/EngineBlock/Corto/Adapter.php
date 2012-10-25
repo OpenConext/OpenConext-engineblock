@@ -64,6 +64,11 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('unsolicitedSingleSignOnService', $idPProviderHash);
     }
 
+    public function debugSingleSignOn()
+    {
+        $this->_callCortoServiceUri('debugSingleSignOnService');
+    }
+
     public function idPMetadata()
     {
         $this->_callCortoServiceUri('idpMetadataService');
@@ -390,10 +395,6 @@ class EngineBlock_Corto_Adapter
             ),
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
         ));
-
-        $attributes = array();
-        require ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.inc.php';
-        $proxyServer->setAttributeMetadata($attributes);
 
         $remoteEntities = $this->_getRemoteEntities();
 

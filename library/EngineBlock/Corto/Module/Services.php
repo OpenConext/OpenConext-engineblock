@@ -39,12 +39,12 @@ class EngineBlock_Corto_Module_Services_SessionLostException extends EngineBlock
 class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstract
 {
     protected $_aliases = array(
-        'spCertificateService' => 'Certificate',
-        'idpCertificateService' => 'Certificate',
-        'spMetadataService' => 'Metadata',
-        'idpMetadataService' => 'Metadata',
-        'unsolicitedSingleSignOnService' => 'singleSignOn',
-        'idpMetadataService' => 'Metadata',
+        'spCertificateService'          => 'Certificate',
+        'idpCertificateService'         => 'Certificate',
+        'spMetadataService'             => 'Metadata',
+        'idpMetadataService'            => 'Metadata',
+        'unsolicitedSingleSignOnService'=> 'singleSignOn',
+        'debugSingleSignOnService'      => 'singleSignOn',
     );
 
     const DEFAULT_REQUEST_BINDING  = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';

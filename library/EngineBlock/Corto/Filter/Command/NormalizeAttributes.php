@@ -23,11 +23,21 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-ini_set('date.timezone', 'Europe/Amsterdam');
+class EngineBlock_Corto_Filter_Command_NormalizeAttributes extends EngineBlock_Corto_Filter_Command_Abstract
+{
+    /**
+     * This command may modify the response attributes
+     *
+     * @return array
+     */
+    public function getResponseAttributes()
+    {
+        return $this->_responseAttributes;
+    }
 
-require dirname(__FILE__).'/../library/EngineBlock/ApplicationSingleton.php';
-
-$application = EngineBlock_ApplicationSingleton::getInstance();
-
-spl_autoload_register(array($application, 'autoLoad'));
-$application->setLogInstance(new Zend_Log())->addWriter(new Zend_Log_Writer_Null());
+    public function execute()
+    {
+        $normalizer = new EngineBlock_Attributes_Normalizer($this->_responseAttributes);
+        $this->_responseAttributes = $normalizer->normalize();
+    }
+}

@@ -23,21 +23,27 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_Corto_Filter_Command_ConvertOidToUrn extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Attributes_Validator_MinLength extends EngineBlock_Attributes_Validator_Abstract
 {
-    /**
-     * This command may modify the response attributes
-     *
-     * @return array
-     */
-    public function getResponseAttributes()
-    {
-        return $this->_responseAttributes;
-    }
+    const ERROR_ATTRIBUTE_VALIDATOR_MINLENGTH = 'error_attribute_validator_minlength';
 
-    public function execute()
+    public function validate(array $attributes)
     {
-        $mapper = new EngineBlock_AttributeMapper_Oid2Urn();
-        $this->_responseAttributes = $mapper->map($this->_responseAttributes);
+        if (empty($attributes[$this->_attributeName])) {
+            return true;
+        }
+
+        foreach ($attributes[$this->_attributeName] as $attributeValue) {
+            if (strlen($attributeValue) < $this->_options) {
+                $this->_messages[] = array(
+                    self::ERROR_ATTRIBUTE_VALIDATOR_MINLENGTH,
+                    $this->_attributeName,
+                    $this->_options,
+                    $attributeValue
+                );
+                return false;
+            }
+        }
+        return true;
     }
 }

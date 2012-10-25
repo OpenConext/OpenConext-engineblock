@@ -16,15 +16,18 @@ class EngineBlock_Corto_ProxyServer
     const VO_CONTEXT_PFX          = 'voContext';
 
     protected $_serviceToControllerMapping = array(
-        'singleSignOnService'       => '/authentication/idp/single-sign-on',
-        'continueToIdP'             => '/authentication/idp/process-wayf',
-        'assertionConsumerService'  => '/authentication/sp/consume-assertion',
-        'continueToSP'              => '/authentication/sp/process-consent',
-        'idpMetadataService'        => '/authentication/idp/metadata',
-        'spMetadataService'         => '/authentication/sp/metadata',
-        'provideConsentService'     => '/authentication/idp/provide-consent',
-        'processConsentService'     => '/authentication/idp/process-consent',
-        'processedAssertionConsumerService' => '/authentication/proxy/processed-assertion'
+        'singleSignOnService'               => '/authentication/idp/single-sign-on',
+        'debugSingleSignOnService'          => '/authentication/sp/debug',
+        'continueToIdP'                     => '/authentication/idp/process-wayf',
+
+        'assertionConsumerService'          => '/authentication/sp/consume-assertion',
+        'continueToSP'                      => '/authentication/sp/process-consent',
+        'provideConsentService'             => '/authentication/idp/provide-consent',
+        'processConsentService'             => '/authentication/idp/process-consent',
+        'processedAssertionConsumerService' => '/authentication/proxy/processed-assertion',
+
+        'idpMetadataService'                => '/authentication/idp/metadata',
+        'spMetadataService'                 => '/authentication/sp/metadata',
     );
 
     protected $_headers = array();
@@ -46,7 +49,6 @@ class EngineBlock_Corto_ProxyServer
         'hosted'=>array(),
         'remote'=>array(),
     );
-    protected $_attributes = array();
     protected $_modules = array();
     protected $_templateSource;
     protected $_processingMode = false;
@@ -196,37 +198,30 @@ class EngineBlock_Corto_ProxyServer
         return $this;
     }
 
-    public function setAttributeMetadata(array $attributes)
+    public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
     {
-        $this->_attributes = $attributes;
-        return $this;
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->getName($attributeId, $ietfLanguageTag, $fallbackToId);
     }
 
-    public function getAttributeName($uid, $ietfLanguageTag = 'en_US')
+    public function getAttributeDescription($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
     {
-        $name = $this->_getAttributeDataType('Name', $uid, $ietfLanguageTag);
-        if (!$name) {
-            $name = $uid;
-        }
-        return $name;
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->getDescription($attributeId, $ietfLanguageTag);
     }
 
-    public function getAttributeDescription($uid, $ietfLanguageTag = 'en_US')
+    /**
+     * Return the url of the Static vhost containing media, script and css files
+     *
+     * @example <?php echo $this->staticUrl(); ?>
+     *
+     * @return string
+     */
+    public static function staticUrl($path = "")
     {
-        $description = $this->_getAttributeDataType('Description', $uid, $ietfLanguageTag);
-        if (!$description) {
-            $description = '';
-        }
-        return $description;
-    }
-
-    protected function _getAttributeDataType($type, $name, $ietfLanguageTag = 'en_US')
-    {
-        if (isset($this->_attributes[$name][$type][$ietfLanguageTag])) {
-            return $this->_attributes[$name][$type][$ietfLanguageTag];
-        }
-        // @todo warn the system! requested a unkown UID or langauge...
-        return $name;
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $settings = $application->getConfiguration();
+        return $settings->static->protocol . '://'. $settings->static->host . $path;
     }
 
     public function getUrl($serviceName = "", $remoteEntityId = "", $request = "")
@@ -841,9 +836,11 @@ class EngineBlock_Corto_ProxyServer
 
     public function getReceivedRequestFromResponse($id)
     {
+        // Check the session for a AuthnRequest with the given ID
+        // Expect to get back an AuthnRequest issued by EngineBlock and destined for the IdP
         if (!$id || !isset($_SESSION[$id])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Trying to match a Response ID to a Request, but the Response with id '$id' is not known in this session? ".
+                "Trying to find a AuthnRequest (we made and sent) with id '$id' but it is not known in this session? ".
                 "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
             );
@@ -1121,7 +1118,7 @@ class EngineBlock_Corto_ProxyServer
         $canonicalXml = $canonicalXmlDom->C14N(true, false);
 
         // Hash it, encode it in Base64 and include that as the 'Reference'
-        $signature['ds:SignedInfo']['ds:Reference'][0]['ds:DigestValue']['__v'] = base64_encode(sha1($canonicalXml, TRUE));
+        $signature['ds:SignedInfo']['ds:Reference'][0]['ds:DigestValue']['__v'] = base64_encode(sha1($canonicalXml, true));
         $signature['ds:SignedInfo']['ds:Reference'][0]['_URI'] = "#" . $element['_ID'];
 
         // Now we start the actual signing, instead of signing the entire (possibly large) document,

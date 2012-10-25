@@ -1,0 +1,245 @@
+<?php
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+
+class EngineBlock_Attributes_Validator
+{
+    protected $_attributes;
+    protected $_definitions;
+
+    protected $_validAttributes = array();
+    protected $_warnings = array();
+    protected $_errors   = array();
+
+    public function __construct(array $attributes)
+    {
+        $this->_attributes = $attributes;
+    }
+
+    public function validate()
+    {
+        $this->_loadAttributeDefinitions();
+        $this->_denormalizeDefinitions();
+
+        $validAttributeSet = true;
+        foreach ($this->_definitions as $attributeName => $definition) {
+            $validAttribute = $this->_validateAttribute($attributeName, $definition);
+            if ($validAttribute) {
+                $this->_validAttributes[] = $attributeName;
+            }
+            else {
+                $validAttributeSet = false;
+            }
+        }
+        return $validAttributeSet;
+    }
+
+    protected function _validateAttribute($attributeName, $definition)
+    {
+        if (empty($definition['Conditions'])) {
+            return true;
+        }
+
+        $validAttribute = true;
+        if (!empty($definition['Conditions']['warning'])) {
+            foreach ($definition['Conditions']['warning'] as $validatorName => $validatorOptions) {
+                $validator = $this->_getValidator($validatorName, $attributeName, $validatorOptions, true);
+                if (!$validator) {
+                    continue;
+                }
+
+                if (isset($definition['__original__'])) {
+                    $validator->setAttributeAlias($definition['__original__']);
+                }
+
+                $validationResult = $validator->validate($this->_attributes);
+
+                if (!$validationResult) {
+                    $validAttribute = false;
+                    $this->_warnings[$attributeName] = $validator->getMessages();
+                }
+            }
+        }
+
+        if (!empty($definition['Conditions']['error'])) {
+            foreach ($definition['Conditions']['error'] as $validatorName => $validatorOptions) {
+                $validator = $this->_getValidator($validatorName, $attributeName, $validatorOptions);
+                if (!$validator) {
+                    continue;
+                }
+
+                if (isset($definition['__original__'])) {
+                    $validator->setAttributeAlias($definition['__original__']);
+                }
+
+                $validationResult = $validator->validate($this->_attributes);
+
+                if (!$validationResult) {
+                    $validAttribute    = false;
+                    $this->_errors[$attributeName] = $validator->getMessages();
+                }
+            }
+        }
+        return $validAttribute;
+    }
+
+    public function isValid($attributeName)
+    {
+        return in_array($attributeName, $this->_validAttributes);
+    }
+
+    public function getWarnings($attributeName = null)
+    {
+        if (is_null($attributeName)) {
+            return $this->_warnings;
+        }
+
+        if (empty($this->_warnings[$attributeName])) {
+            return array();
+        }
+
+        return $this->_warnings[$attributeName];
+    }
+
+    public function getWarningsForMissingAttributes()
+    {
+        $warnings = array();
+        $attributesInWarning = array_keys($this->_warnings);
+        foreach ($attributesInWarning as $attributeInWarning) {
+            if (!isset($this->_attributes[$attributeInWarning])) {
+                $warnings = array_merge($warnings, $this->_warnings[$attributeInWarning]);
+            }
+        }
+        return $warnings;
+    }
+
+    public function getErrors($attributeName = null)
+    {
+        if (is_null($attributeName)) {
+            return $this->_errors;
+        }
+        if (empty($this->_errors[$attributeName])) {
+            return array();
+        }
+        return $this->_errors[$attributeName];
+    }
+
+    public function getErrorsForMissingAttributes()
+    {
+        $errors = array();
+        $attributesInError = array_keys($this->_errors);
+        foreach ($attributesInError as $attributeInError) {
+            // Skip aliases for missing attributes
+            if (!empty($this->_definitions[$attributeInError]['__original__'])) {
+                continue;
+            }
+
+            if (!isset($this->_attributes[$attributeInError])) {
+                $errors = array_merge($errors, $this->_errors[$attributeInError]);
+            }
+        }
+        return $errors;
+    }
+
+    public function setDefinitions(array $definitions)
+    {
+        $this->_definitions = $definitions;
+        return $this;
+    }
+
+    protected function _loadAttributeDefinitions()
+    {
+        if (isset($this->_definitions)) {
+            return $this->_definitions;
+        }
+
+        $this->_definitions = json_decode(
+            file_get_contents(
+                EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
+                    'attributeDefinitionFile',
+                    ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
+                )
+            ),
+            true
+        );
+
+        return $this->_definitions;
+    }
+
+    protected function _denormalizeDefinitions()
+    {
+        foreach ($this->_definitions as $attributeName => $definition) {
+            if (is_array($definition)) {
+                continue;
+            }
+
+            $aliases = array($attributeName);
+            while (!is_array($definition)) {
+                $attributeName = $this->_definitions[$attributeName];
+
+                if (empty($this->_definitions[$attributeName])) {
+                    // @todo log
+                    break;
+                }
+                $definition = $this->_definitions[$attributeName];
+                $aliases[] = $attributeName;
+            }
+
+            foreach ($aliases as $alias) {
+                $this->_definitions[$alias] = $definition;
+                if ($attributeName !== $alias) {
+                    $this->_definitions[$alias]['__original__'] = $attributeName;
+                }
+            }
+        }
+        return true;
+    }
+
+    protected function _getValidator($validatorName, $attributeName, $validatorOptions, $continueOnError = false)
+    {
+        $className = 'EngineBlock_Attributes_Validator_' . ucfirst($validatorName);
+        if (!class_exists($className)) {
+            if ($continueOnError) {
+                // @todo log
+                return false;
+            }
+            else {
+                throw new EngineBlock_Exception("Unable to find $className");
+            }
+        }
+
+        $validator = new $className($attributeName, $validatorOptions);
+
+        if (!($validator instanceof EngineBlock_Attributes_Validator_Interface)) {
+            if ($continueOnError) {
+                // @todo log
+                return false;
+            }
+            else {
+                throw new EngineBlock_Exception("Validator $className does not match interface!");
+            }
+        }
+        return $validator;
+    }
+}

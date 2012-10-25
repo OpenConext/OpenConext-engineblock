@@ -116,7 +116,7 @@ class EngineBlock_AttributeAggregator
      * @param array $providerAttributes Attributes from provider
      * @return array New attributes to use
      */
-    protected function _mergeAttributes(EngineBlock_Attributes $ebAttributes, array $providerAttributes)
+    protected function _mergeAttributes(array $ebAttributes, array $providerAttributes)
     {
         return array_merge_recursive($ebAttributes, $providerAttributes);
     }

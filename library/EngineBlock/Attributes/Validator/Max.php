@@ -23,11 +23,27 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-ini_set('date.timezone', 'Europe/Amsterdam');
+class EngineBlock_Attributes_Validator_Max extends EngineBlock_Attributes_Validator_Abstract
+{
+    const ERROR_ATTRIBUTE_VALIDATOR_MAX = 'error_attribute_validator_max';
 
-require dirname(__FILE__).'/../library/EngineBlock/ApplicationSingleton.php';
+    public function validate(array $attributes)
+    {
+        if (empty($attributes[$this->_attributeName])) {
+            return true;
+        }
 
-$application = EngineBlock_ApplicationSingleton::getInstance();
+        $valueCount = count($attributes[$this->_attributeName]);
+        if ($valueCount <= $this->_options) {
+            return true;
+        }
 
-spl_autoload_register(array($application, 'autoLoad'));
-$application->setLogInstance(new Zend_Log())->addWriter(new Zend_Log_Writer_Null());
+        $this->_messages[] = array(
+            self::ERROR_ATTRIBUTE_VALIDATOR_MAX,
+            $this->_attributeName,
+            $this->_options,
+            $valueCount
+        );
+        return false;
+    }
+}

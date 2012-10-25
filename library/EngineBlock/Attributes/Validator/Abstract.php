@@ -23,11 +23,27 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-ini_set('date.timezone', 'Europe/Amsterdam');
+abstract class EngineBlock_Attributes_Validator_Abstract implements EngineBlock_Attributes_Validator_Interface
+{
+    protected $_attributeName;
+    protected $_attributeAlias;
+    protected $_options;
+    protected $_messages = array();
 
-require dirname(__FILE__).'/../library/EngineBlock/ApplicationSingleton.php';
+    public function __construct($attributeName, $options)
+    {
+        $this->_attributeName = $attributeName;
+        $this->_options = $options;
+    }
 
-$application = EngineBlock_ApplicationSingleton::getInstance();
+    public function setAttributeAlias($aliasName)
+    {
+        $this->_attributeAlias = $aliasName;
+        return $this;
+    }
 
-spl_autoload_register(array($application, 'autoLoad'));
-$application->setLogInstance(new Zend_Log())->addWriter(new Zend_Log_Writer_Null());
+    public function getMessages()
+    {
+        return $this->_messages;
+    }
+}

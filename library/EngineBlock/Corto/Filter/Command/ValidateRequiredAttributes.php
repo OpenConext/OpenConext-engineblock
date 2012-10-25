@@ -37,6 +37,10 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
      	return $this->_responseAttributes;
     }
 
+    /**
+     * @throws EngineBlock_Corto_Exception_MissingRequiredFields
+     * @todo refactor this to use EngineBlock_Attributes_Validator
+     */
     public function execute()
     {
         $errors = array();
@@ -87,7 +91,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
         $schacHomeOrganization = $schacHomeOrganizationValues[0];
 
         $reservedSchacHomeOrganization = $this->_isReservedSchacHomeOrganization($schacHomeOrganization);
-        if ($reservedSchacHomeOrganization === TRUE) {
+        if ($reservedSchacHomeOrganization === true) {
             return self::URN_MACE_TERENA_SCHACHOMEORG . " is reserved for another IdP!";
         }
 

@@ -105,4 +105,26 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->idpCertificate();
     }
+
+    public function debugAction()
+    {
+        $this->setNoRender();
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+
+        try {
+            $proxyServer = new EngineBlock_Corto_Adapter();
+            $proxyServer->debugSingleSignOn();
+        }
+        catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
+            $application->reportError($e);
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
+        }
+        catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
+            $application->reportError($e);
+            $application->getHttpResponse()->setRedirectUrl(
+                '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
+                    '&destination=' . urlencode($e->getDestination())
+            );
+        }
+    }
 }

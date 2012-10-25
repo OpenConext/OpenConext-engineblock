@@ -29,7 +29,7 @@ require_once 'FileMock.php';
 
 class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCase
 {
-    public function test_getDirectoryForEntityId()
+    public function tesGetDirectoryForEntityId()
     {
         $result = EngineBlock_AttributeManipulator_FileMock::_getDirectoryNameForEntityId(
             'https://s1304.pixsoftware.de'
@@ -45,7 +45,7 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
         $this->assertEquals('SURFnet_20BV', $result, "Convert % (from a URL encoding) to an _");
     }
 
-    public function test_manipulation()
+    public function testManipulation()
     {
         EngineBlock_AttributeManipulator_FileMock::setMockFileLocation(dirname(__FILE__) . '/fixtures/attribute-manipulations/');
         $fileManipulator = new EngineBlock_AttributeManipulator_FileMock();
@@ -55,12 +55,13 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
         $attributes = array('test'=>'1');
 
         $fileManipulator->manipulate(
+            $response['__']['destinationid'],
             $subjectId,
             $attributes,
             $response
         );
         $this->assertEquals(
-            array('test'=>'1', 'example.com'=>'test', 'general'=>'test'),
+            array('test'=>'1', 'example.com'=>'test'),
             $attributes,
             'Test basic manipulation'
         );
@@ -68,6 +69,7 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
         $response['__'] = array('destinationid'=>"https://example.com/test/response");
         $attributes = array_merge($attributes, array('urn:mace:dir:attribute-def:mail'=>'test@example.com'));
         $fileManipulator->manipulate(
+            $response['__']['destinationid'],
             $subjectId,
             $attributes,
             $response
@@ -75,12 +77,10 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
         $this->assertEquals(
             array(
                 'test' => '1',
-                'general' => 'test',
                 'email'=>'test@example.com',
                 'example.com' => 'test',
                 'uid'=>$subjectId,
                 'sp'=>$response['__']['destinationid'],
-                'general'=>'test',
             ),
             $attributes,
             "Testing attribute renaming and using the subjectId and response"

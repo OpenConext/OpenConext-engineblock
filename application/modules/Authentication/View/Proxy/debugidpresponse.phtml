@@ -1,0 +1,193 @@
+<?php
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+
+/**
+ * Injected:
+ * @var array $response
+ * @var array $idp
+ * @var array $attributes
+ * @var EngineBlock_Corto_ProxyServer $this
+ *
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey-narrow');
+
+// Set Layout properties
+$layout->title      = $layout->title . ' - ' . $this->t('idp_debugging_title');
+$layout->header     = $layout->title;
+$layout->subheader  = $this->t('idp_debugging_title');
+$layout->footerText = $this->t('footer');
+
+$validator = new EngineBlock_Attributes_Validator($attributes);
+$attributesValidated = $validator->validate();
+?>
+
+<?php if ($attributesValidated) : ?>
+<img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/tick.png') ?>" alt="" />
+<?php echo $this->t('attributes_validation_succeeded'); ?>
+<? else: ?>
+    <?php if (count($validator->getErrors()) > 0): ?>
+<img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/exclamation.png') ?>" alt="" style="vertical-align: bottom" />
+    <?php else: ?>
+<img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/error.png') ?>" alt="" style="vertical-align: bottom" />
+    <?php endif; ?>
+
+<?php echo $this->t('attributes_validation_failed'); ?>
+<? endif; ?>
+
+<form method="post" style="float: right">
+    <input type="hidden" name="clear" value="true" />
+    <input type="submit" value="Retry" />
+</form>
+<hr style="clear: both" />
+<!--<pre>--><?php //var_dump($idp); ?><!--</pre>-->
+<h2>Identity Provider</h2>
+<table>
+    <tr>
+        <th>
+            Logo
+        </th>
+        <td>
+            <img src="<?php echo $idp['Logo']['URL'] ?>" />
+        </td>
+    </tr>
+    <tr>
+        <th>
+            <?php echo $this->t('name'); ?>
+        </th>
+        <td>
+            <?php echo htmlentities($idp['Name']['en'], ENT_COMPAT, 'UTF-8') ?>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Entity ID
+        </th>
+        <td>
+            <?php echo htmlentities($idp['EntityID'], ENT_COMPAT, 'UTF-8') ?>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Workflow Status
+        </th>
+        <td <?php if ($idp['WorkflowState']==='production') { echo 'style="color: green"';} ?>>
+            <?php echo htmlentities($idp['WorkflowState'], ENT_COMPAT, 'UTF-8') ?>
+        </td>
+    </tr>
+</table>
+<hr />
+<h2>SAML2 Subject</h2>
+<table>
+    <tr>
+        <th>NameID</th>
+
+        <td>
+            <?php echo htmlentities($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'], ENT_COMPAT, 'UTF-8'); ?>
+        </td>
+    </tr>
+</table>
+<hr />
+<h2><?php echo $this->t('attributes') ?></h2>
+<?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
+    <p class="error">
+        <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/exclamation.png'); ?>" alt="[error]" style="vertical-align: bottom" /> <?php
+    echo htmlentities(call_user_func_array(array($this, 'translate'), $error), ENT_COMPAT, 'UTF-8');
+    ?></p>
+<?php endforeach; ?>
+<?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
+    <p class="warning">
+        <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/error.png'); ?>" alt="[error]" style="vertical-align: bottom" /> <?php
+    echo htmlentities(call_user_func_array(array($this, 'translate'), $warning), ENT_COMPAT, 'UTF-8');
+    ?></p>
+<?php endforeach; ?>
+<table>
+    <thead>
+        <tr>
+            <th>
+                SURFconext Display Name
+            </th>
+            <th>
+                <?php echo $this->t('name'); ?>
+            </th>
+            <th>
+                <?php echo $this->t('value'); ?>
+            </th>
+            <th>
+                <?php echo $this->t('validation'); ?>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
+        <tr>
+            <td>
+                <?= $this->getAttributeName($attributeName, 'en', false) ?>
+            </td>
+            <td>
+                <?php echo htmlentities($attributeName, ENT_COMPAT, 'UTF-8'); ?>
+            </td>
+            <td>
+                <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?php echo htmlentities($attributeValues[0], ENT_COMPAT, 'UTF-8');?>
+                <?php } /** Multiple attribute values */ else { ?>
+                <ul>
+                    <?php foreach ($attributeValues as $value) { ?>
+                    <li><?php echo htmlentities($value, ENT_COMPAT, 'UTF-8'); ?></li>
+                    <?php } ?>
+                </ul>
+                <?php } ?>
+            </td>
+            <td>
+                <?php if ($validator->isValid($attributeName)): ?>
+                <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/tick.png') ?>" alt="valid" />
+                <?php else:
+                    foreach ($validator->getErrors($attributeName) as $error) {
+                        echo '<p class="error">' .
+                                '<img src="' . $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/exclamation.png') . '" alt="[error]" style="vertical-align: bottom" /> ' .
+                                htmlentities(call_user_func_array(array($this, 'translate'), $error), ENT_COMPAT, 'UTF-8') .
+                            '</p>';
+                    }
+                    foreach ($validator->getWarnings($attributeName) as $warning) {
+                        echo '<p class="warning">'.
+                                '<img src="' . $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/error.png') . '" alt="[error]" style="vertical-align: bottom" /> ' .
+                                htmlentities(call_user_func_array(array($this, 'translate'), $warning), ENT_COMPAT, 'UTF-8') .
+                            '</p>';
+                    }
+                endif; ?>
+            </td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<hr />
+<p>
+    <?php echo htmlentities($this->t('idp_debugging_mail_explain', ENT_COMPAT, 'UTF-8')); ?>
+</p>
+<form method="post">
+    <input type="hidden" name="mail" value="true" />
+    <input type="submit" value="<?php echo htmlentities($this->t('idp_debugging_mail_button', ENT_COMPAT, 'UTF-8')); ?>" />
+</form>
