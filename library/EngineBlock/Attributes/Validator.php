@@ -55,9 +55,29 @@ class EngineBlock_Attributes_Validator
         return $validAttributeSet;
     }
 
+
+    /**
+     *
+     * Example: we know of an attribute 'dog' with an alias 'canine'.
+     * Situation 1: Neither are in the set, so we only validate 'dog'.
+     * Situation 2: 'dog' is in the set, so we validate that.
+     * Situation 3: 'canine' is in the set, so we validate that.
+     * Situation 4: Both are in the set, we validate both.
+     *
+     * @param $attributeName
+     * @param $definition
+     * @return bool
+     */
     protected function _validateAttribute($attributeName, $definition)
     {
         if (empty($definition['Conditions'])) {
+            return true;
+        }
+
+        // Excludes for Situation 1, 2 and 3 (see example in docBlock)
+        $isInAttributeSet = !empty($this->_attributes[$attributeName]);
+        $isAnAlias = !empty($definition['__original__']);
+        if (!$isInAttributeSet && $isAnAlias) {
             return true;
         }
 
