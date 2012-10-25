@@ -9,17 +9,13 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     {
         $isUnsolicited = ($serviceName === 'unsolicitedSingleSignOnService');
 
-        if (!$isUnsolicited) {
+        if ($isUnsolicited) {
             // create unsolicited request object
             $request = $this->_createUnsolicitedRequest();
-
         }
         else if ($serviceName === 'debugSingleSignOnService') {
             if (isset($_SESSION['debugIdpResponse']) && !isset($_POST['clear'])) {
                 $response = $_SESSION['debugIdpResponse'];
-                $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'][7]['saml:AttributeValue'][] = array(
-                    '__v' => 'dark side of the force',
-                );
 
                 if (isset($_POST['mail'])) {
                     $this->_sendDebugMail($response);
@@ -41,7 +37,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 unset($_SESSION['debugIdpResponse']);
                 $request = $this->_createDebugRequest();
             }
-
         } else {
             // parse SAML request
             $request = $this->_server->getBindingsModule()->receiveRequest();
@@ -52,7 +47,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 false
             );
         }
-
 
         $requestIssuer = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
         $remoteEntity = $this->_server->getRemoteEntity($requestIssuer);
