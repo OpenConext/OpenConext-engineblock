@@ -701,4 +701,10 @@ class EngineBlock_ApplicationSingleton
     {
         return $this->_log;
     }
+
+    public function setLogInstance(Zend_Log $log)
+    {
+        $this->_log = $log;
+        return $log;
+    }
 }
