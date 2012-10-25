@@ -60,34 +60,12 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
         $data = array_slice($args, 1) + $this->_data;
 
         $response = $this->restGet($args[0], $data);
-
-        /**
-         * @var Zend_Http_Client $httpClient
-         */
-        $httpClient = $this->getHttpClient();
-        $log = EngineBlock_ApplicationSingleton::getLog();
-
-        $log->attach($httpClient->getLastRequest())
-             ->info('REST Request');
-
-        $body = $httpClient->getLastResponse()->getBody();
-        $decoded = json_decode($body);
-
-        // do not decode invalid jason, show original response
-        if ($decoded === null) {
-            $decoded = $body;
-            $logType = 'original response below';
-        } else {
-            $logType = 'decoded JSON body below';
-        }
-
-        $log->attach($decoded)
-            ->info("REST Response ($logType)");
+        $this->_logRequest();
 
         $this->_data = array();//Initializes for next Rest method.
 
         if ($response->getStatus() !== 200) {
-            $log->attach($response);
+            EngineBlock_ApplicationSingleton::getLog()->attach($response);
 
             throw new EngineBlock_Exception(
                 'Response status !== 200', EngineBlock_Exception::CODE_WARNING
@@ -101,12 +79,42 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
                 return new Zend_Rest_Client_Result($response->getBody());
             }
             catch (Zend_Rest_Client_Result_Exception $e) {
-                $log->attach($response);
+                EngineBlock_ApplicationSingleton::getLog()->attach($response);
 
                 throw new EngineBlock_Exception(
                     'Error parsing response', null, $e
                 );
             }
         }
+    }
+
+    protected function _logRequest()
+    {
+        /**
+         * @var Zend_Http_Client $httpClient
+         */
+        $httpClient = $this->getHttpClient();
+        $log = EngineBlock_ApplicationSingleton::getLog();
+
+        $log->attach($httpClient->getLastRequest())
+            ->info('REST Request');
+
+        $originalBody = $httpClient->getLastResponse()->getBody();
+        $body = substr($originalBody, 0, 1024);
+        if ($body !== $originalBody) {
+            $body .= '...';
+        }
+
+        // If able to decode as JSON, show parsed result
+        $decoded = json_decode($body);
+        if ($decoded) {
+            $body = $decoded;
+            $logType = 'original response below';
+        } else {
+            $logType = 'decoded JSON body below';
+        }
+
+        $log->attach($body)
+            ->info("REST Response ($logType)");
     }
 }
