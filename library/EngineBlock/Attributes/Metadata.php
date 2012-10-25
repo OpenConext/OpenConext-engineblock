@@ -87,7 +87,37 @@ class EngineBlock_Attributes_Metadata
             true
         );
         $this->_definitions = $s_defaultDefinitions;
+        $this->_denormalizeDefinitions();
         return $this->_definitions;
+    }
+
+    protected function _denormalizeDefinitions()
+    {
+        foreach ($this->_definitions as $attributeName => $definition) {
+            if (is_array($definition)) {
+                continue;
+            }
+
+            $aliases = array($attributeName);
+            while (!is_array($definition)) {
+                $attributeName = $this->_definitions[$attributeName];
+
+                if (empty($this->_definitions[$attributeName])) {
+                    // @todo log
+                    break;
+                }
+                $definition = $this->_definitions[$attributeName];
+                $aliases[] = $attributeName;
+            }
+
+            foreach ($aliases as $alias) {
+                $this->_definitions[$alias] = $definition;
+                if ($attributeName !== $alias) {
+                    $this->_definitions[$alias]['__original__'] = $attributeName;
+                }
+            }
+        }
+        return true;
     }
 
     public function setDefinition($definitions)
