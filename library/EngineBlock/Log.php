@@ -107,6 +107,7 @@ class EngineBlock_Log extends Zend_Log
         $event['info'] = $additionalInfo;
 
         // abort if rejected by the global filters
+        /** @var $filter Zend_Log_Filter_Interface */
         foreach ($this->_filters as $filter) {
             if (!$filter->accept($event)) {
                 return;
@@ -114,57 +115,37 @@ class EngineBlock_Log extends Zend_Log
         }
 
         // send to each writer
+        /** @var $writer Zend_Log_Writer_Abstract */
         foreach ($this->_writers as $writer) {
-            // handle logging of attached files differently per writer
-            if ($writer instanceof EngineBlock_Log_Writer_Mail) {
-                // get message array, no prefix on attachments
-                $messages = $this->_getMessagePayload($message);
-
-                // concatenate all messages for Mail writer
+            // get message array
             $writerEvent = $event;
-                $writerEvent['message']     = $this->getPrefix()
-                                            . reset($messages)
-                                            . $this->getSuffix();
+            $writerEvent['message'] = $this->getPrefix() . $message . $this->getSuffix();
 
-                $writerEvent['attachments'] = array_slice($messages, 1);
+            // Inline attachments for Mail writer
+            if ($writer instanceof EngineBlock_Log_Writer_Mail) {
+                $writerEvent['attachments'] = $this->_attachments;
 
                 $writer->write($writerEvent);
-            } else {
-                // get message array
-                $messages = $this->_getMessagePayload($message);
 
-                $writerEvent = $event;
-                $writerEvent['message']     = $this->getPrefix()
-                                                . reset($messages)
-                                                . $this->getSuffix();
+            } else {
+                $attachmentTotal = count($this->_attachments);
+                for ($i = $attachmentTotal - 1; $i >= 0; $i--) {
+                    $attachment = $this->_attachments[$i];
+                    $attachmentEvent = $event;
+                    $attachmentEvent['message'] = $this->getAttachmentPrefix(
+                        $attachment['name'],
+                        $i + 1,
+                        $attachmentTotal
+                    ) . $attachment['message'];
 
                     // log line for each file/message
-                $writer->write($writerEvent);
-
-                foreach (array_slice($messages, 1) as $attachment) {
-                    $writerEvent['message']     = $this->getAttachmentPrefix()
-                                                . $attachment;
+                    $writer->write($attachmentEvent);
+                }
 
                 // log line for each file/message
                 $writer->write($writerEvent);
             }
         }
-    }
-
-        return $this;
-    }
-
-    /**
-     * Formats all messages (message + attachments) in an array
-     * so we can send them seperately or concat all values depending
-     * on what writer is used
-     *
-     * @param string $message
-     * @return array
-     */
-    protected function _getMessagePayload($message)
-    {
-        return array_merge((array)$message, $this->_attachments);
     }
 
     /**
@@ -191,20 +172,23 @@ class EngineBlock_Log extends Zend_Log
         $count = count($this->_attachments);
         if ($count > 0) {
             return sprintf(
-                ' [dumping %d object%s]', $count, ($count) ? 's' : ''
+                ' [dumped %d object%s]', $count, ($count) ? 's' : ''
             );
         }
-
+        else {
             return '';
-
+        }
     }
 
     /**
+     * @param $name
+     * @param $item
+     * @param $total
      * @return string
      */
-    public function getAttachmentPrefix()
+    public function getAttachmentPrefix($name, $item, $total)
     {
-        return trim($this->getPrefix()) . '[DUMP] ';
+        return trim($this->getPrefix()) . sprintf("[DUMP '%s' (%d/%d)] ", $name, $item, $total);
     }
 
     /**
