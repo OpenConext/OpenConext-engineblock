@@ -34,8 +34,7 @@ class EngineBlock_Log_Writer_Queue_SessionStorage
      * Load ArrayObject from session or creates new one
      * with reference to session
      *
-     * @param array $session will use superglobal when omitted
-     * @return \ArrayObject
+     * @param null|array $session will use superglobal when omitted
      */
     public function __construct($session = null)
     {
@@ -58,7 +57,7 @@ class EngineBlock_Log_Writer_Queue_SessionStorage
     }
 
     /**
-     * Get ArrayObject sueue
+     * @return ArrayObject
      */
     public function getQueue()
     {
@@ -71,7 +70,7 @@ class EngineBlock_Log_Writer_Queue_SessionStorage
      * will be logged immediately
      *
      * @param bool $enabled OPTIONAL defaults to true
-     * @return EngineBlock_Log_Writer_SessionStorage
+     * @return EngineBlock_Log_Writer_Queue_SessionStorage
      */
     public function setForceFlush($enabled = true)
     {
@@ -93,7 +92,7 @@ class EngineBlock_Log_Writer_Queue_SessionStorage
     /**
      * Try to start session if not already started
      *
-     * @return EngineBlock_Log_Writer_SessionStorage
+     * @return EngineBlock_Log_Writer_Queue_SessionStorage
      */
     protected function _startSession()
     {

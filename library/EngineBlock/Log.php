@@ -42,7 +42,8 @@ class EngineBlock_Log extends Zend_Log
      * @param array $config
      *
      * @internal param array|\Zend_Config $Array or instance of Zend_Config
-     * @return Zend_Log
+     * @return EngineBlock_Log
+     * @throws EngineBlock_Exception
      */
     static public function factory($config = array())
     {
@@ -84,14 +85,10 @@ class EngineBlock_Log extends Zend_Log
     {
         // sanity checks
         if (empty($this->_writers)) {
-            /** @see Zend_Log_Exception */
-            require_once 'Zend/Log/Exception.php';
             throw new Zend_Log_Exception('No writers were added');
         }
 
         if (! isset($this->_priorities[$priority])) {
-            /** @see Zend_Log_Exception */
-            require_once 'Zend/Log/Exception.php';
             throw new Zend_Log_Exception('Bad log priority');
         }
 
@@ -124,7 +121,7 @@ class EngineBlock_Log extends Zend_Log
                 $messages = $this->_getMessagePayload($message);
 
                 // concatenate all messages for Mail writer
-                $writerEvent = $event;
+            $writerEvent = $event;
                 $writerEvent['message']     = $this->getPrefix()
                                             . reset($messages)
                                             . $this->getSuffix();
@@ -141,18 +138,18 @@ class EngineBlock_Log extends Zend_Log
                                                 . reset($messages)
                                                 . $this->getSuffix();
 
-                // log line for each file/message
+                    // log line for each file/message
                 $writer->write($writerEvent);
 
                 foreach (array_slice($messages, 1) as $attachment) {
                     $writerEvent['message']     = $this->getAttachmentPrefix()
                                                 . $attachment;
 
-                    // log line for each file/message
-                    $writer->write($writerEvent);
-                }
+                // log line for each file/message
+                $writer->write($writerEvent);
             }
         }
+    }
 
         return $this;
     }
@@ -198,7 +195,7 @@ class EngineBlock_Log extends Zend_Log
             );
         }
 
-        return '';
+            return '';
 
     }
 
@@ -241,7 +238,7 @@ class EngineBlock_Log extends Zend_Log
      */
     public function writeEvent(array $event)
     {
-        // send to each writer
+        /** @var Zend_Log_Writer_Abstract $writer */
         foreach ($this->_writers as $writer) {
             $writer->write($event);
         }
@@ -290,11 +287,18 @@ class EngineBlock_Log extends Zend_Log
      */
     protected function _setAdditionalEventItems(EngineBlock_Log_Message_AdditionalInfo $additionalInfo = null)
     {
-        if ($additionalInfo) {
-            $additionalEvents = $additionalInfo->toArray();
-            foreach ($additionalEvents as $key => $value) {
-                $this->setEventItem($key, $value);
-            }
+        if (!$additionalInfo) {
+            return;
         }
+
+        $additionalEvents = $additionalInfo->toArray();
+        foreach ($additionalEvents as $key => $value) {
+            $this->setEventItem($key, $value);
+        }
+    }
+
+    public function __destruct()
+    {
+        parent::__destruct();
     }
 }

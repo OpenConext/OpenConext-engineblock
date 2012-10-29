@@ -28,7 +28,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
     /**
      * Log message queue storage
      *
-     * @var EngineBlock_Log_Writer_sessionStorage_SessionStorage $_sessionStorage
+     * @var EngineBlock_Log_Writer_Queue_SessionStorage
      */
     protected $_sessionStorage = null;
 
@@ -38,8 +38,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
     protected $_target = null;
 
     /**
-     * @param SplQueue $queue
-     * @param Zend_Log $target
+     * @param EngineBlock_Log $target
      */
     public function __construct(EngineBlock_Log $target)
     {
@@ -49,7 +48,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
     /**
      * Lazy-load queue object
      *
-     * @return ArrayObject
+     * @return EngineBlock_Log_Writer_Queue_SessionStorage
      */
     public function getSessionStorage()
     {
@@ -90,7 +89,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
      * Flush queue to target log
      *
      * @param string $message OPTIONAL reason of flush (will be prepended to queue)
-     * @return EngineBlock_Log_Writer_SessionStorage
+     * @return EngineBlock_Log_Writer_Queue
      */
     public function flush($message = null)
     {
@@ -125,7 +124,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
     /**
      * Clear the queue
      *
-     * @return EngineBlock_Log_Writer_sessionStorage
+     * @return EngineBlock_Log_Writer_Queue
      */
     public function clear()
     {
@@ -133,7 +132,6 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
         foreach ($queue as $key => $event) {
             $queue->offsetUnset($key);
         }
-
         return $this;
     }
 
@@ -158,7 +156,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
      * Add a message to the queue
      *
      * @param array $event
-     * @return EngineBlock_Log_Writer_sessionStorage
+     * @return EngineBlock_Log_Writer_Queue
      */
     protected function _write($event)
     {
@@ -172,5 +170,4 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
 
         return $this;
     }
-
 }
