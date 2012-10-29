@@ -58,6 +58,10 @@
       <td><?php echo isset($this->sessionid) ? htmlentities($this->sessionid) : htmlentities(session_id()); ?></td>
   </tr>
   <tr>
+      <th>RequestID</th>
+      <td><?php echo isset($this->requestid) ? htmlentities($this->requestid) : htmlentities(uniqid('404')); ?></td>
+  </tr>
+  <tr>
     <th>Userid</th>
     <td><?php echo isset($this->userId) ? htmlentities($this->userId) : "UNKNOWN"; ?></td>
   </tr>

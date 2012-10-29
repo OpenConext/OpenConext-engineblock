@@ -98,13 +98,14 @@ class EngineBlock_Log extends Zend_Log
         }
 
         // pack into event required by filters and writers
-        $event = array_merge(array('timestamp'    => date('c'),
-                                   'message'      => $message,
-                                   'priority'     => $priority,
-                                   'priorityName' => $this->_priorities[$priority]));
-
-        // Pass additional info
-        $event['info'] = $additionalInfo;
+        $event = array(
+            'timestamp'     => date('c'),
+            'message'       => $message,
+            'priority'      => $priority,
+            'priorityName'  => $this->_priorities[$priority],
+            'info'          => $additionalInfo,
+            'requestid'     => $this->getRequestId(),
+        );
 
         // abort if rejected by the global filters
         /** @var $filter Zend_Log_Filter_Interface */
@@ -119,7 +120,6 @@ class EngineBlock_Log extends Zend_Log
         foreach ($this->_writers as $writer) {
             // get message array
             $writerEvent = $event;
-            $writerEvent['message'] = $this->getPrefix() . $message . $this->getSuffix();
 
             // Inline attachments for Mail writer
             if ($writer instanceof EngineBlock_Log_Writer_Mail) {
@@ -128,20 +128,24 @@ class EngineBlock_Log extends Zend_Log
                 $writer->write($writerEvent);
 
             } else {
+                // Number the attachments and write them separately
                 $attachmentTotal = count($this->_attachments);
                 for ($i = $attachmentTotal - 1; $i >= 0; $i--) {
                     $attachment = $this->_attachments[$i];
                     $attachmentEvent = $event;
-                    $attachmentEvent['message'] = $this->getAttachmentPrefix(
+                    $attachmentMessagePrefix = $this->getAttachmentPrefix(
                         $attachment['name'],
                         $i + 1,
                         $attachmentTotal
-                    ) . $attachment['message'];
+                    );
+                    $attachmentEvent['message'] = $attachmentMessagePrefix . $attachment['message'];
 
                     // log line for each file/message
                     $writer->write($attachmentEvent);
                 }
 
+                // Annotate the message
+                $writerEvent['message'] = $this->getPrefix() . $message . $this->getSuffix();
                 // log line for each file/message
                 $writer->write($writerEvent);
             }

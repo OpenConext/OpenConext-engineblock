@@ -109,8 +109,7 @@ class EngineBlock_Log_Writer_Mail extends Zend_Log_Writer_Abstract
 
             if ($this->_subjectPrependText !== null) {
                 // line and set it on the Zend_Mail object.
-                $mail->setSubject(
-                    "{$this->_subjectPrependText} {$this->_getShortenedMessage($view)}");
+                $mail->setSubject("{$this->_subjectPrependText} {$this->_getShortenedMessage($view)}");
             }
             // Always provide events to mail as plaintext.
             $mail->setBodyText($view->message);
