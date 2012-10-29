@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_AttributeManipulator_FileMock extends EngineBlock_AttributeManipulator_File
+class EngineBlock_AttributesManipulator_FileMock extends EngineBlock_Attributes_Manipulator_File
 {
     protected static $_mockFileLocation;
 

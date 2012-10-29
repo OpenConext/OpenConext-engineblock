@@ -23,8 +23,11 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_AttributeManipulator_ServiceRegistry
+class EngineBlock_Attributes_Manipulator_ServiceRegistry
 {
+    const TYPE_SP  = 'sp';
+    const TYPE_IDP = 'idp';
+
     protected $_entityType;
 
     function __construct($entityType)
@@ -45,7 +48,36 @@ class EngineBlock_AttributeManipulator_ServiceRegistry
 
     protected function _doManipulation($manipulationCode, &$entityId, &$subjectId, &$attributes, &$response)
     {
-        eval($manipulationCode);
+        $entityType = $this->_entityType;
+
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $application->getErrorHandler()->withExitHandler(
+            // Try
+            function() use ($manipulationCode, &$entityId, &$subjectId, &$attributes, &$response) {
+                eval($manipulationCode);
+            },
+            // Should an error occur, log the input, if nothing happens, then don't
+            function(EngineBlock_Exception $exception) use ($entityType, $manipulationCode, $entityId, $subjectId, $attributes, $response) {
+                EngineBlock_ApplicationSingleton::getLog()->attach(
+                    array(
+                        'EntityID'          => $entityId,
+                        'Manipulation code' => $manipulationCode,
+                        'Subject NameID'    => $subjectId,
+                        'Attributes'        => $attributes,
+                        'Response'          => $response,
+                    ),
+                    'manipulation data'
+                );
+                if ($entityType === 'sp') {
+                    $exception->spEntityId = $entityId;
+                }
+                else if ($entityType === 'idp') {
+                    $exception->idpEntityId = $entityId;
+                }
+                $exception->userId = $subjectId;
+                $exception->description = $entityType;
+            }
+        );
     }
 
     protected function _getServiceRegistryAdapter()

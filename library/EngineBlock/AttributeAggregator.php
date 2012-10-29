@@ -58,17 +58,17 @@ class EngineBlock_AttributeAggregator
     public function aggregateFor(array $attributes, $uid, $format = self::FORMAT_SAML)
     {
         /**
-         * @var EngineBlock_AttributeProvider_Interface $provider
+         * @var EngineBlock_Attributes_Provider_Interface $provider
          */
         foreach ($this->_providers as $provider) {
             $providerAttributes = $provider->getAttributes($uid, $format);
 
             switch ($provider->getStrategy()) {
-                case EngineBlock_AttributeProvider_Interface::STRATEGY_ADD:
+                case EngineBlock_Attributes_Provider_Interface::STRATEGY_ADD:
                     $attributes = $this->_addAttributes($attributes, $providerAttributes);
                     break;
 
-                case EngineBlock_AttributeProvider_Interface::STRATEGY_MERGE:
+                case EngineBlock_Attributes_Provider_Interface::STRATEGY_MERGE:
                     $attributes = $this->_mergeAttributes($attributes, $providerAttributes);
                     break;
 

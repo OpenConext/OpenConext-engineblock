@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributeProvider_Interface
+class EngineBlock_Attributes_Provider_VoManage implements EngineBlock_Attributes_Provider_Interface
 {
     protected $_voId;
     protected $_spEntityId;
@@ -13,7 +13,7 @@ class EngineBlock_AttributeProvider_VoManage implements EngineBlock_AttributePro
 
     public function getStrategy()
     {
-        return EngineBlock_AttributeProvider_Interface::STRATEGY_ADD;
+        return EngineBlock_Attributes_Provider_Interface::STRATEGY_ADD;
     }
 
     public function getAttributes($subjectId, $format = self::FORMAT_SAML)

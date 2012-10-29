@@ -31,24 +31,24 @@ class EngineBlock_AttributeManipulator_FileTest extends PHPUnit_Framework_TestCa
 {
     public function tesGetDirectoryForEntityId()
     {
-        $result = EngineBlock_AttributeManipulator_FileMock::_getDirectoryNameForEntityId(
+        $result = EngineBlock_AttributesManipulator_FileMock::_getDirectoryNameForEntityId(
             'https://s1304.pixsoftware.de'
         );
         $this->assertEquals('https___s1304.pixsoftware.de', $result, 'Allowed: numbers and dots');
 
-        $result = EngineBlock_AttributeManipulator_FileMock::_getDirectoryNameForEntityId(
+        $result = EngineBlock_AttributesManipulator_FileMock::_getDirectoryNameForEntityId(
             'https://'
         );
         $this->assertEquals('https___', $result, "Convert https:// to https___");
 
-        $result = EngineBlock_AttributeManipulator_FileMock::_getDirectoryNameForEntityId('SURFnet%20BV');
+        $result = EngineBlock_AttributesManipulator_FileMock::_getDirectoryNameForEntityId('SURFnet%20BV');
         $this->assertEquals('SURFnet_20BV', $result, "Convert % (from a URL encoding) to an _");
     }
 
     public function testManipulation()
     {
-        EngineBlock_AttributeManipulator_FileMock::setMockFileLocation(dirname(__FILE__) . '/fixtures/attribute-manipulations/');
-        $fileManipulator = new EngineBlock_AttributeManipulator_FileMock();
+        EngineBlock_AttributesManipulator_FileMock::setMockFileLocation(dirname(__FILE__) . '/fixtures/attribute-manipulations/');
+        $fileManipulator = new EngineBlock_AttributesManipulator_FileMock();
 
         $subjectId = 'urn:collab:person:example.com:testuser';
         $response = array('__'=>array('destinationid'=>'https://example.com'));

@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_AttributeProvider_Dummy implements EngineBlock_AttributeProvider_Interface
+class EngineBlock_Attributes_Provider_Dummy implements EngineBlock_Attributes_Provider_Interface
 {
     public function getAttributes($uid, $format = self::FORMAT_SAML)
     {
@@ -32,6 +32,6 @@ class EngineBlock_AttributeProvider_Dummy implements EngineBlock_AttributeProvid
 
     public function getStrategy()
     {
-        return EngineBlock_AttributeProvider_Interface::STRATEGY_MERGE;
+        return EngineBlock_Attributes_Provider_Interface::STRATEGY_MERGE;
     }
 }

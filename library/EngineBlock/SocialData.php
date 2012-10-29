@@ -397,7 +397,7 @@ class EngineBlock_SocialData
         if (!isset($this->_attributeAggregator)) {
             $this->_attributeAggregator = new EngineBlock_AttributeAggregator(
                 array(
-                     new EngineBlock_AttributeProvider_VoManage($voId, $spEntityId),
+                     new EngineBlock_Attributes_Provider_VoManage($voId, $spEntityId),
                 )
             );
         }

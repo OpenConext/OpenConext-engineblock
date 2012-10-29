@@ -71,7 +71,7 @@ class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_C
     {
         $providers = array();
         if ($voContext) {
-            $providers[] = new EngineBlock_AttributeProvider_VoManage($voContext, $spEntityId);
+            $providers[] = new EngineBlock_Attributes_Provider_VoManage($voContext, $spEntityId);
         }
         return $providers;
     }

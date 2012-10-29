@@ -23,7 +23,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-interface EngineBlock_AttributeProvider_Interface
+interface EngineBlock_Attributes_Provider_Interface
 {
     const STRATEGY_MERGE = 'merge';
     const STRATEGY_ADD   = 'add';
@@ -32,7 +32,7 @@ interface EngineBlock_AttributeProvider_Interface
     const FORMAT_SAML       = 'saml';
 
     /**
-     * Retrieve all attributes that the AttributeProvider provides for the
+     * Retrieve all attributes that the Attributes Provider provides for the
      * given user.
      * @param String $uid The URN of a user, for example
      *                    urn:collab:surfnet.nl:niels
@@ -44,7 +44,7 @@ interface EngineBlock_AttributeProvider_Interface
      *               - value: the value of the attribute
      *               - source (optional): the URN of the provider of the
      *                 attribute. If source is not present, the current
-     *                 AttributeProvider is the source (@see getIdentifier()).
+     *                 AttributesProvider is the source (@see getIdentifier()).
      */
     public function getAttributes($uid, $format = self::FORMAT_SAML);
 
