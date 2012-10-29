@@ -55,7 +55,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 ->getLogInstance()
                 ->getQueueWriter();
 
-            $queue->getSessionStorage()
+            $queue->getStorage()
                   ->setForceFlush(true);
 
             $queue->flush();

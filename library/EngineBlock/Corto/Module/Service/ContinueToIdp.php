@@ -34,7 +34,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
                 ->getLogInstance()
                 ->getQueueWriter();
 
-            $queue->getSessionStorage()
+            $queue->getStorage()
                   ->setForceFlush(true);
 
             $queue->flush();

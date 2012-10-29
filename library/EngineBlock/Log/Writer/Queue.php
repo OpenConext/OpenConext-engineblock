@@ -28,7 +28,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
     /**
      * Log message queue storage
      *
-     * @var EngineBlock_Log_Writer_Queue_SessionStorage
+     * @var EngineBlock_Log_Writer_Queue_Storage_Session
      */
     protected $_sessionStorage = null;
 
@@ -48,13 +48,18 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
     /**
      * Lazy-load queue object
      *
-     * @return EngineBlock_Log_Writer_Queue_SessionStorage
+     * @return EngineBlock_Log_Writer_Queue_Storage_Interface
      */
-    public function getSessionStorage()
+    public function getStorage()
     {
         if ($this->_sessionStorage === null) {
-            // try to resume queue from session
-            $this->_sessionStorage = new EngineBlock_Log_Writer_Queue_SessionStorage();
+            if (php_sapi_name() === 'cli') {
+                $this->_sessionStorage = new EngineBlock_Log_Writer_Queue_Storage_Process();
+            }
+            else {
+                // try to resume queue from session
+                $this->_sessionStorage = new EngineBlock_Log_Writer_Queue_Storage_Session();
+            }
         }
 
         return $this->_sessionStorage;
@@ -93,13 +98,13 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
      */
     public function flush($message = null)
     {
-        $queue = $this->getSessionStorage()->getQueue();
+        $queue = $this->getStorage()->getQueue();
 
         if ($queue->count() === 0) {
             return $this; // nothing to flush
         }
 
-        if (!$message && $this->getSessionStorage()->getForceFlush()) {
+        if (!$message && $this->getStorage()->getForceFlush()) {
             $message = 'additional debugging enabled';
         }
 
@@ -129,7 +134,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
      */
     public function clear()
     {
-        $queue = $this->getSessionStorage()->getQueue();
+        $queue = $this->getStorage()->getQueue();
         foreach ($queue as $key => $event) {
             $queue->offsetUnset($key);
         }
@@ -161,7 +166,7 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
      */
     protected function _write($event)
     {
-        $storage = $this->getSessionStorage();
+        $storage = $this->getStorage();
 
         if ($storage->getForceFlush()) {
             $this->_target->writeEvent($event);

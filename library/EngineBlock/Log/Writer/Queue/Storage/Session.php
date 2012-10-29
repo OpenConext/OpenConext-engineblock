@@ -23,7 +23,7 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-class EngineBlock_Log_Writer_Queue_SessionStorage
+class EngineBlock_Log_Writer_Queue_Storage_Session implements EngineBlock_Log_Writer_Queue_Storage_Interface
 {
     /**
      * @var array $_session references superglobal
@@ -70,7 +70,7 @@ class EngineBlock_Log_Writer_Queue_SessionStorage
      * will be logged immediately
      *
      * @param bool $enabled OPTIONAL defaults to true
-     * @return EngineBlock_Log_Writer_Queue_SessionStorage
+     * @return EngineBlock_Log_Writer_Queue_Storage_Session
      */
     public function setForceFlush($enabled = true)
     {
@@ -92,7 +92,7 @@ class EngineBlock_Log_Writer_Queue_SessionStorage
     /**
      * Try to start session if not already started
      *
-     * @return EngineBlock_Log_Writer_Queue_SessionStorage
+     * @return EngineBlock_Log_Writer_Queue_Storage_Session
      */
     protected function _startSession()
     {
