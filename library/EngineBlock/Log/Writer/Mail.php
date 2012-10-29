@@ -147,7 +147,7 @@ class EngineBlock_Log_Writer_Mail extends Zend_Log_Writer_Abstract
                     E_USER_WARNING);
             }
         }
-
+        $this->_eventsToMail = array();
     }
 
     protected function _getMailClient($options)
