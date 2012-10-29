@@ -108,11 +108,12 @@ class EngineBlock_Log_Writer_Queue extends Zend_Log_Writer_Abstract
             $queue->count(), $message ?: 'reason unknown'
         ));
 
-        foreach ($queue as $key => $event) {
+        while ($event = end($queue)) {
             $this->_target->writeEvent(
                 $this->_enrichLogEvent($event)
             );
 
+            $key = key($queue);
             $queue->offsetUnset($key);
         }
 
