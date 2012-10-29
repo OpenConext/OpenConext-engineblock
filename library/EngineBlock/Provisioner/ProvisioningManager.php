@@ -69,22 +69,15 @@ class EngineBlock_Provisioner_ProvisioningManager
             ->setIdp($idpMetadata['EntityId'])
             ->setSp($spMetadata['EntityId']);
 
-        $log = EngineBlock_ApplicationSingleton::getLog();
-        $log->attach($additionalInfo)->info(
-            "PROVISIONING: Sent HTTP request to provision user using " . __CLASS__
-        );
-        $log->info(
-            "PROVISIONING: URI: " . $client->getUri(true),
-            $additionalInfo
-        );
-        $log->attach($client->getLastRequest())->info(
-            "PROVISIONING: REQUEST",
-            $additionalInfo
-        );
-        $log->attach($client->getLastResponse())->info(
-            "PROVISIONING: RESPONSE",
-            $additionalInfo
-        );
+        EngineBlock_ApplicationSingleton::getLog()
+            ->attach($additionalInfo, 'Provisioning data')
+            ->attach($client->getLastRequest(), 'Provisioning Request')
+            ->attach($client->getLastResponse(), 'Provisioning Response')
+            ->log(
+                "PROVISIONING: URI: " . $client->getUri(true),
+                Zend_Log::INFO,
+                $additionalInfo
+            );
     }
 
     /**

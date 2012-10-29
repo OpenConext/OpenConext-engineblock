@@ -116,7 +116,7 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
         $log = EngineBlock_ApplicationSingleton::getLog();
 
         if (!isset($this->_idpMetadata['GuestQualifier'])) {
-            $log->attach($this->_idpMetadata)
+            $log->attach($this->_idpMetadata, 'IDP')
                 ->warn('No GuestQualifier for IdP, setting it to "All" and continuing');
 
             $this->_idpMetadata['GuestQualifier'] = 'All';
@@ -138,8 +138,8 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
                 }
             }
             else {
-                $log->attach($this->_idpMetadata)
-                    ->attach($this->_responseAttributes)
+                $log->attach($this->_idpMetadata, 'IDP')
+                    ->attach($this->_responseAttributes, 'Attributes')
                     ->warn(
                         "Idp guestQualifier is set to 'Some' however, ".
                         "the surfPersonAffiliation attribute was not provided, " .
@@ -152,8 +152,8 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
         }
         else {
             // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
-            $log->attach($this->_idpMetadata)
-                ->attach($this->_responseAttributes)
+            $log->attach($this->_idpMetadata, 'IDP')
+                ->attach($this->_responseAttributes, 'Attributes')
                 ->warn(
                     "Idp guestQualifier is set to unknown value '{$this->_idpMetadata['GuestQualifier']}, idp metadata: "
                 );

@@ -74,7 +74,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $request = $this->_receiveMessage(self::KEY_REQUEST);
 
         $log = $this->_server->getSessionLog();
-        $log->attach($request)
+        $log->attach($request, 'Request')
             ->info('Received request');
 
         $this->_verifyRequest($request);
@@ -91,7 +91,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $response = $this->_receiveMessage(self::KEY_RESPONSE);
 
         $log = $this->_server->getSessionLog();
-        $log->attach($response)
+        $log->attach($response, 'Response')
             ->info('Received response');
 
         if (isset($response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Binding']) &&
@@ -581,7 +581,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         if (!isset($element['_ID']) || !$element['_ID']) {
             $log = $this->_server->getSessionLog();
-            $log->attach($element);
+            $log->attach($element, 'Signed element');
 
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Trying to verify signature on an element without an ID is not supported'
@@ -658,7 +658,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         if (!isset($element['ds:Signature']['ds:SignatureValue']['__v'])) {
-            $this->_server->getSessionLog()->attach($element);
+            $this->_server->getSessionLog()->attach($element, 'Signed element');
 
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'No sigurature value found on element?'
@@ -968,7 +968,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $action = $message['_Destination'] . (isset($message['_Recipient'])?$message['_Recipient']:'');
 
         $log = $this->_server->getSessionLog();
-        $log->attach($message)
+        $log->attach($message, 'SAML message')
             ->info('HTTP-Post: Sending Message');
 
         $output = $this->_server->renderTemplate(
@@ -996,7 +996,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         $log = $this->_server->getSessionLog();
-        $log->attach($parameters)
+        $log->attach($parameters, 'URL Params')
             ->info("Using internal binding for destination: $destinationLocation, resulting in parameters:");
 
         $serviceName = $parameters['ServiceName'];

@@ -45,16 +45,16 @@ class LogTest extends PHPUnit_Framework_TestCase
 
     public function testCanAttachObjectsOfAnyType()
     {
-        $log = EngineBlock_Log::factory($this->config);
-        $log->attach(array());
-        $log->attach('string');
-        $log->attach((object)array());
+        EngineBlock_Log::factory($this->config)
+            ->attach(array(), 'empty')
+            ->attach('string', 'string')
+            ->attach((object)array(), 'object');
     }
 
 
     public function testAttachedObjectsAreLoggedAfterLogCall()
     {
-        $log = EngineBlock_Log::factory($this->config);
-        $log->attach(array('arrayelement'));
+        EngineBlock_Log::factory($this->config)
+            ->attach(array('arrayelement'), 'object');
     }
 }

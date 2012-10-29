@@ -103,11 +103,11 @@ class EngineBlock_Saml2Attributes_FieldMapper
             // Map it to an LDAP attribute
             if (isset($this->_s2lMap[$saml2Name])) {
                 if (count($values)>1) {
-                    $log->attach($values);
-
-                    $log->notice(
-                        "Ignoring everything but first value of $saml2Name:"
-                    );
+                    $log->attach($values, "Values for $saml2Name")
+                        ->log(
+                            "Ignoring everything but first value of $saml2Name",
+                            Zend_Log::NOTICE
+                        );
                 }
 
                 $ldapAttributes[$this->_s2lMap[$saml2Name]] = $values[0];
@@ -120,8 +120,8 @@ class EngineBlock_Saml2Attributes_FieldMapper
             }
         }
         if (!empty($required)) {
-            $log->attach($required)
-                ->attach($attributes);
+            $log->attach($required, 'Required fields')
+                ->attach($attributes, 'Attributes');
 
             throw new EngineBlock_Exception_MissingRequiredFields(
                 'Missing required SAML2 fields in attributes'

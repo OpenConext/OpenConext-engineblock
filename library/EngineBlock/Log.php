@@ -215,15 +215,19 @@ class EngineBlock_Log extends Zend_Log
      *  - if log() is not called after attach(), data is discarded
      *
      * @param mixed $data
+     * @param string $name
      * @return EngineBlock_Log
      */
-    public function attach($data)
+    public function attach($data, $name)
     {
         if (!is_string($data)) {
-            $data = var_export($data, true);
+            $data = print_r($data, true);
         }
 
-        $this->_attachments[] = $data;
+        $this->_attachments[] = array(
+            'name' => $name,
+            'message' => $data,
+        );
 
         return $this;
     }

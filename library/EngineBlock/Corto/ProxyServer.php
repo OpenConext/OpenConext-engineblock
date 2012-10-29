@@ -712,7 +712,7 @@ class EngineBlock_Corto_ProxyServer
         }
 
         $this->getSystemLog()
-            ->attach($remoteEntity['AssertionConsumerServices']);
+            ->attach($remoteEntity['AssertionConsumerServices'], 'AssertionConsumerServices');
 
         throw new EngineBlock_Corto_ProxyServer_Exception('No supported binding found for ACS');
     }
@@ -849,7 +849,7 @@ class EngineBlock_Corto_ProxyServer
         // Get the ID of the original request (from the SP)
         if (!isset($_SESSION[$id]['_InResponseTo'])) {
             $log = $this->_server->getSessionLog();
-            $log->attach($_SESSION);
+            $log->attach($_SESSION, 'SESSION');
 
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 "ID `$id` does not have a _InResponseTo?!?",

@@ -94,16 +94,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         $log = $this->_server->getSessionLog();
-        $log->attach(array_values($candidateIDPs))
-             ->info('SSO: Candidate idps found in metadata');
+        $log->attach(array_values($candidateIDPs), 'Candidate IDPs');
 
         // If we have scoping, filter out every non-scoped IdP
         if (count($scopedIdps) > 0) {
             $candidateIDPs = array_intersect($scopedIdps, $candidateIDPs);
         }
 
-        $log->attach(array_values($candidateIDPs))
-            ->info('SSO: Candidate idps found in metadata after scoping');
+        $log->attach(array_values($candidateIDPs), 'Candidate IDPs (after scoping)');
 
         // No IdPs found! Send an error response back.
         if (count($candidateIDPs) === 0) {
@@ -222,8 +220,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         $log = $this->_server->getSessionLog();
-        $log->attach($request)
-            ->info('Received unsolicited request');
+        $log->attach($request, 'Unsollicited Request');
 
         return $request;
     }
@@ -245,8 +242,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         );
 
         $log = $this->_server->getSessionLog();
-        $log->attach($request)
-            ->info('Received debug request');
+        $log->attach($request, 'Debug request');
 
         return $request;
     }
@@ -261,16 +257,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 $scopedIdPs[] = $IDPEntry[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ProviderID'];
             }
 
-            $log->attach($scopedIdPs)
-                ->info('SSO: Request contains scoped idps');
+            $log->attach($scopedIdPs, 'Scoped IDPs');
         }
 
         // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
         $presetIdP  = $this->_server->getConfig('Idp');
         if ($presetIdP) {
             $scopedIdPs = array($presetIdP);
-            $log->attach($scopedIdPs[0])
-                ->info('SSO: Scoped idp found in metadata');
+            $log->attach($scopedIdPs[0], 'Scoped IDP');
         }
         return $scopedIdPs;
     }
