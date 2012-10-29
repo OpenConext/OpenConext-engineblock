@@ -158,8 +158,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     {
         // show error when acl is given without binding or vice versa
         if (
-            (empty($request['_AssertionConsumerServiceURL'])) xor
-            (empty($request['_ProtocolBinding']))
+            (empty($request['_AssertionConsumerServiceURL']) && !empty($request['_ProtocolBinding'])) ||
+            (!empty($request['_AssertionConsumerServiceURL']) && empty($request['_ProtocolBinding']))
         ) {
             $this->_server->getSessionLog()->err(
                 "Incomplete ACS location found in request (missing URL or binding)"
