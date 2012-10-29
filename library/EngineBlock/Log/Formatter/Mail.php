@@ -46,17 +46,11 @@ class EngineBlock_Log_Formatter_Mail
 
             if (is_array($configValue)) {
                 foreach ($configValue as $configValueElement) {
-                    $event['message'] = str_replace($configValueElement, self::REPLACE_WITH, $event['message']);
-                    if (array_key_exists('details', $event)) {
-                        $event['details'] = str_replace($configValueElement, self::REPLACE_WITH, $event['details']);
-                    }
+                    $this->_array_strip($event, $configValueElement);
                 }
             }
             else {
-                $event['message'] = str_replace($configValue, self::REPLACE_WITH, $event['message']);
-                if (array_key_exists('details', $event)) {
-                    $event['details'] = str_replace($configValue, self::REPLACE_WITH, $event['details']);
-                }
+                $this->_array_strip($event, $configValue);
             }
         }
 
@@ -95,5 +89,29 @@ class EngineBlock_Log_Formatter_Mail
             }
         }
         return null;
+    }
+
+    protected function _array_strip($array, $stripValue)
+    {
+        foreach ($array as &$value) {
+            if (is_string($value)) {
+                $value = str_replace($stripValue, self::REPLACE_WITH, $value);
+            }
+            else if (is_integer($value) || is_float($value)) {
+                continue;
+            }
+            else if (is_array($value)) {
+                $value = $this->_array_strip($value, $stripValue);
+            }
+            else if ($value instanceof EngineBlock_Log_Message_AdditionalInfo) {
+                $value->setDetails(str_replace($stripValue, self::REPLACE_WITH, $value->getDetails()));
+            }
+            else {
+                $e = new EngineBlock_Exception("Value is neither string on array, unable to strip '$stripValue'");
+                $e->description = var_export($value, true);
+                throw $e;
+            }
+        }
+        return $array;
     }
 }
