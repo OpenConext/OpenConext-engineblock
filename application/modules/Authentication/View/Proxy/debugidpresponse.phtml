@@ -48,7 +48,7 @@ $attributesValidated = $validator->validate();
 <?php if ($attributesValidated) : ?>
 <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/tick.png') ?>" alt="" />
 <?php echo $this->t('attributes_validation_succeeded'); ?>
-<? else: ?>
+<?php else: ?>
     <?php if (count($validator->getErrors()) > 0): ?>
 <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/exclamation.png') ?>" alt="" style="vertical-align: bottom" />
     <?php else: ?>
@@ -56,7 +56,7 @@ $attributesValidated = $validator->validate();
     <?php endif; ?>
 
 <?php echo $this->t('attributes_validation_failed'); ?>
-<? endif; ?>
+<?php endif; ?>
 
 <form method="post" style="float: right">
     <input type="hidden" name="clear" value="true" />
