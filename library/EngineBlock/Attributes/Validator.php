@@ -52,6 +52,17 @@ class EngineBlock_Attributes_Validator
                 $validAttributeSet = false;
             }
         }
+
+        $attributesNotInDefinitions = array_diff(array_keys($this->_attributes), array_keys($this->_definitions));
+        if (!empty($attributesNotInDefinitions)) {
+            foreach ($attributesNotInDefinitions as $attributeName) {
+                $this->_warnings[$attributeName] = array(array(
+                    'error_attribute_validator_not_in_definitions',
+                    $attributeName,
+                ));
+            }
+            $validAttributeSet = false;
+        }
         return $validAttributeSet;
     }
 

@@ -280,6 +280,7 @@ If you want to use this application you have to:<br />
     'error_attribute_validator_min'                 => 'Require at least %2$d values (%3d given)',
     'error_attribute_validator_max'                 => 'Must have no more than %2$d values (%3d given)',
     'error_attribute_validator_regex'               => '\'%3$s\' does not match the expected format of this attribute (%2$s)',
+    'error_attribute_validator_not_in_definitions'  => '%1$s is not known in the SURFconext schema',
 
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',

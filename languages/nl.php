@@ -280,6 +280,7 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_attribute_validator_min'                 => '%1$s heeft minimaal %2$d waardes nodig (%3$d gegeven)',
     'error_attribute_validator_max'                 => '%1$s heeft maximaal %2$d waardes (%3$d gegeven)',
     'error_attribute_validator_regex'               => '\'%3$s\' voldoet niet aan de voorwaarden voor waardes van dit attribuut (%2$s)',
+    'error_attribute_validator_not_in_definitions'  => '%1$s is niet bekend in het SURFconext schema',
 
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen falen validatie',
