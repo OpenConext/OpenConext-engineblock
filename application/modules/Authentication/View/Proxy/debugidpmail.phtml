@@ -47,10 +47,12 @@ Values:
 * "<?php echo $attributeValue ?>"
 <?php   endforeach; ?>
 <?php   foreach ($validator->getErrors($attributeName) as $error): ?>
-Error: <?php echo call_user_func_array('sprintf', $error); ?>
+Error: <?php echo call_user_func_array(array($this, 'translate'), $error); ?>
+
 <?php   endforeach; ?>
 <?php   foreach ($validator->getWarnings($attributeName) as $warning): ?>
-Warning: <?php echo call_user_func_array('sprintf', $warning); ?>
+Warning: <?php echo call_user_func_array(array($this, 'translate'), $warning); ?>
+
 <?php   endforeach; ?>
 
 
