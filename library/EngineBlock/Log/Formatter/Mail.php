@@ -46,11 +46,11 @@ class EngineBlock_Log_Formatter_Mail
 
             if (is_array($configValue)) {
                 foreach ($configValue as $configValueElement) {
-                    $this->_array_strip($event, $configValueElement);
+                    $event = $this->_array_strip($event, $configValueElement);
                 }
             }
             else {
-                $this->_array_strip($event, $configValue);
+                $event = $this->_array_strip($event, $configValue);
             }
         }
 
