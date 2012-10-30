@@ -25,9 +25,12 @@
 
 ini_set('date.timezone', 'Europe/Amsterdam');
 
-require dirname(__FILE__).'/../library/EngineBlock/ApplicationSingleton.php';
+require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
+$autoloader = new EngineBlock_Application_Autoloader();
+spl_autoload_register(array($autoloader, 'load'));
 
-spl_autoload_register(array($application, 'autoLoad'));
-$application->setLogInstance(new Zend_Log())->addWriter(new Zend_Log_Writer_Null());
+$log = new Zend_Log();
+$log->addWriter(new Zend_Log_Writer_Null());
+$application->setLogInstance($log);
