@@ -49,12 +49,27 @@ class Janus_Client_CacheProxy
             return $cache->call(array($client, $name), $arguments);
 
         } catch(Exception $e) { // Whoa, something went wrong, maybe the SR is down? Trying to use stale cache...
+            $httpClient = $client->getRestClient()->getHttpClient();
+
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $application->getLogInstance()->attach(
+                $httpClient->getLastRequest(),
+                'HTTP Request'
+            );
+            $application->getLogInstance()->attach(
+                $httpClient->getLastResponse()->asString(),
+                'HTTP Response'
+            );
+            $application->getLogInstance()->attach(
+                $httpClient->getLastResponse()->getBody(),
+                'HTTP Response body'
+            );
             $e = new Janus_Client_CacheProxy_Exception(
                 "Unable to access JANUS?!? Using stale cache",
                 EngineBlock_Exception::CODE_WARNING,
                 $e
             );
-            EngineBlock_ApplicationSingleton::getInstance()->reportError($e);
+            $application->reportError($e);
 
             // Give any stale cache some more time
             $callback = array($originalClient, $name);

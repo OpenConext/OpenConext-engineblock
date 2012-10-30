@@ -32,11 +32,11 @@ class Janus_Client
      * The REST client used to communicate to the Janus service registry.
      * @var $_restClient EngineBlock_Rest_Client
      */
-    protected $_restClient = NULL;
+    protected $_restClient = null;
 
     public function getEntity($entityId)
     {
-        return $this->_getRestClient()->getEntity()
+        return $this->getRestClient()->getEntity()
                                         ->entityid($entityId)
                                         ->get();
     }
@@ -48,7 +48,7 @@ class Janus_Client
      */
     public function getMetadata($entityId) 
     {
-        $response = $this->_getRestClient()->getMetadata()
+        $response = $this->getRestClient()->getMetadata()
                                            ->entityid($entityId)
                                            ->get();
         return $response;     
@@ -62,14 +62,14 @@ class Janus_Client
      */
     public function getMetaDataForKey($entityId, $key)
     {
-        $response = $this->_getRestClient()->getMetadata()
+        $response = $this->getRestClient()->getMetadata()
                                           ->entityid($entityId)
                                           ->keys($key)
                                           ->get();    
         if (isset($response[$key])) {
             return $response[$key];
         }
-        return NULL;
+        return null;
     }
     
     /**
@@ -80,7 +80,7 @@ class Janus_Client
      */
     public function getMetaDataForKeys($entityId, $keys)
     {
-        $response = $this->_getRestClient()->getMetadata()
+        $response = $this->getRestClient()->getMetadata()
                                            ->entityid($entityId)
                                            ->keys(implode(",", $keys))
                                            ->get();
@@ -97,7 +97,7 @@ class Janus_Client
      */
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
-        $response = $this->_getRestClient()->isConnectionAllowed()
+        $response = $this->getRestClient()->isConnectionAllowed()
                                            ->spentityid($spEntityId)
                                            ->idpentityid($idpEntityId)
                                            ->get();
@@ -113,7 +113,7 @@ class Janus_Client
      */
     public function getAllowedIdps($spEntityId)
     {
-        $response = $this->_getRestClient()->getAllowedIdps()
+        $response = $this->getRestClient()->getAllowedIdps()
                                            ->spentityid($spEntityId)
                                            ->get();
         return $response;
@@ -128,7 +128,7 @@ class Janus_Client
      */
     public function getAllowedSps($idpEntityId)
     {
-        $response = $this->_getRestClient()->getAllowedSps()
+        $response = $this->getRestClient()->getAllowedSps()
                                            ->idpentityid($idpEntityId)
                                            ->get();
         return $response;
@@ -146,7 +146,7 @@ class Janus_Client
      */
     public function getArp($spEntityId)
     {
-        $response = $this->_getRestClient()->arp()
+        $response = $this->getRestClient()->arp()
                                           ->entityid($spEntityId)
                                           ->get();
         return $response;
@@ -164,9 +164,9 @@ class Janus_Client
      *               identifier. Each value is another associative 
      *               array with key/value pairs containing the metadata.
      */
-    public function getIdpList($keys=array(), $forSpEntityId=NULL)
+    public function getIdpList($keys=array(), $forSpEntityId=null)
     {
-        $response = $this->_getRestClient()->getIdpList()
+        $response = $this->getRestClient()->getIdpList()
                                            ->keys(implode(",", $keys))
                                            ->spentityid($forSpEntityId)
                                            ->get();                                        
@@ -184,7 +184,7 @@ class Janus_Client
      */
     public function getSpList($keys=array())
     {
-        $response = $this->_getRestClient()->getSpList()
+        $response = $this->getRestClient()->getSpList()
                                            ->keys(implode(",", $keys))
                                            ->get();
         return $response;                                         
@@ -205,42 +205,44 @@ class Janus_Client
      */
     public function findIdentifiersByMetadata($key, $value)
     {
-        $response = $this->_getRestClient()->findIdentifiersByMetadata()
+        $response = $this->getRestClient()->findIdentifiersByMetadata()
                                           ->key($key)
                                           ->value($value)
                                           ->get();
         return $response;
     }
-    
+
     /**
-     * Retrieve the rest client.
+     * @return Janus_Rest_Client
+     * @throws Janus_Client_Exception
      */
-    protected function _getRestClient()
+    public function getRestClient()
     {
-        if ($this->_restClient==NULL) {
-            $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
-            $location = $config->location;
-            if (!$location) {
-                throw new Janus_Client_Exception(
-                    'No Service Registry location provided! Please set "serviceRegistry.location" in your application configuration.'
-                );
-            }
-            
-            $user = $config->user;
-            if (!$user) {
-                throw new Janus_Client_Exception(
-                    'No Service Registry user provided! Please set "serviceRegistry.user" in your application configuration.'
-                );
-            }
-            
-            $secret = $config->user_secret;
-            if (!$secret) {
-                throw new Janus_Client_Exception(
-                    'No Service Registry user secret provided! Please set "serviceRegistry.user_secret" in your application configuration.'
-                );
-            }
-            $this->_restClient = new Janus_Rest_Client($location, $user, $secret);
+        if ($this->_restClient) {
+            return $this->_restClient;
         }
+        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
+        $location = $config->location;
+        if (!$location) {
+            throw new Janus_Client_Exception(
+                'No Service Registry location provided! Please set "serviceRegistry.location" in your application configuration.'
+            );
+        }
+
+        $user = $config->user;
+        if (!$user) {
+            throw new Janus_Client_Exception(
+                'No Service Registry user provided! Please set "serviceRegistry.user" in your application configuration.'
+            );
+        }
+
+        $secret = $config->user_secret;
+        if (!$secret) {
+            throw new Janus_Client_Exception(
+                'No Service Registry user secret provided! Please set "serviceRegistry.user_secret" in your application configuration.'
+            );
+        }
+        $this->_restClient = new Janus_Rest_Client($location, $user, $secret);
         return $this->_restClient;
     }
     
