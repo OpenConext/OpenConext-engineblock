@@ -58,7 +58,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     {
         $this->_response['__']['IntendedNameId'] = $this->_collabPersonId;
 
-        $entityId = $this->_type === self::TYPE_IDP ? $this->_response['saml:Issuer']['__v'] : $this->_request['saml:Issuer']['__v'];
+        $entityId = ($this->_type === self::TYPE_IDP) ?
+            $this->_response['saml:Issuer']['__v'] :
+            $this->_request['saml:Issuer']['__v'];
 
         // Try entity specific file based manipulation from Service Registry
         $manipulator = new EngineBlock_Attributes_Manipulator_ServiceRegistry($this->_type);
@@ -70,6 +72,12 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
         );
         if ($manipulated) {
             return true;
+        }
+
+        // IdP Manipulations can only come from the Service Registry,
+        // but for SP manipulations we still support file based manipulations.
+        if ($this->_type !== self::TYPE_SP) {
+            return false;
         }
 
         // Legacy: Try file-based general manipulation for all entities of this type
@@ -93,9 +101,6 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             return true;
         }
 
-        if ($this->_type !== self::TYPE_SP) {
-            return false;
-        }
         // Legacy legacy: We can have attribute manipulations which were not prefixed with 'sp/'
 
         $manipulator = new EngineBlock_Attributes_Manipulator_File();
