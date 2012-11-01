@@ -85,7 +85,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
-        catch (EngineBlock_AttributeManipulator_CustomException $e) {
+        catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
             $application->reportError($e);
 
             $_SESSION['feedback_custom'] = $e->getFeedback();
