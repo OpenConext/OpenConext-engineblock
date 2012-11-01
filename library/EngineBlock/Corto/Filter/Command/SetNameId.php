@@ -84,7 +84,7 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
         // Add the eduPersonTargetedId
         $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
-            array(
+            0 => array(
                 "saml:NameID" => $nameId,
             )
         );
@@ -99,16 +99,31 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
      */
     protected function _getTransientNameId($spId, $idpId)
     {
-        if (!empty($_SESSION[$spId][$idpId])) {
-            return $_SESSION[$spId][$idpId];
+        $nameIdFromSession = $this->_getTransientNameIdFromSession($spId, $idpId);
+        if ($nameIdFromSession) {
+            return $nameIdFromSession;
         }
 
-        $nameId = sha1((string)mt_rand(0, mt_getrandmax()));
+        $nameId = $this->_generateTransientNameId();
 
+        $this->_storeTransientNameIdToSession($nameId, $spId, $idpId);
+        return $nameId;
+    }
+
+    protected function _generateTransientNameId()
+    {
+        return sha1((string)mt_rand(0, mt_getrandmax()));
+    }
+
+    protected function _getTransientNameIdFromSession($spId, $idpId)
+    {
+        return isset($_SESSION[$spId][$idpId]) ? $_SESSION[$spId][$idpId] : false;
+    }
+
+    protected function _storeTransientNameIdToSession($nameId, $spId, $idpId)
+    {
         // store to session
         $_SESSION[$spId][$idpId] = $nameId;
-
-        return $nameId;
     }
 
     protected function _getNameIdFormat($request, $spEntityMetadata)
@@ -140,71 +155,102 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
     protected function _getPersistentNameId($originalCollabPersonId, $spEntityId)
     {
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        $db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        $serviceProviderUuid = $this->_getServiceProviderUuid($spEntityId);
+        $userUuid            = $this->_getUserUuid($originalCollabPersonId);
+        $persistentId = $this->_fetchPersistentId($serviceProviderUuid, $userUuid);
 
-        $serviceProviderUuid = $this->_getServiceProviderUuid($spEntityId, $db);
-        $userUuid = $this->_getUserUuid($originalCollabPersonId);
+        if (!$persistentId) {
+            $persistentId = $this->_generatePersistentId($serviceProviderUuid, $userUuid);
+            $this->_storePersistentId($persistentId, $serviceProviderUuid, $userUuid);
+        }
+        return $persistentId;
+    }
 
-        $statement = $db->prepare(
+    protected function _getServiceProviderUuid($spEntityId)
+    {
+        $uuid = $this->_fetchServiceProviderUuid($spEntityId);
+
+        if ($uuid) {
+            return $uuid;
+        }
+
+        $uuid = (string)Surfnet_Zend_Uuid::generate();
+        $this->_storeServiceProviderUuid($spEntityId, $uuid);
+
+        return $uuid;
+    }
+
+    protected function _fetchServiceProviderUuid($spEntityId)
+    {
+        $statement = $this->_getDb()->prepare(
+            'SELECT uuid FROM service_provider_uuid WHERE service_provider_entity_id=?'
+        );
+        $statement->execute(array($spEntityId));
+        $result = $statement->fetchAll();
+
+        if (count($result) > 1) {
+            throw new EngineBlock_Exception('Multiple SP UUIDs found? For: SP: ' . $spEntityId);
+        }
+
+        return isset($result[0]['uuid']) ? $result[0]['uuid'] : false;
+    }
+
+    protected function _storeServiceProviderUuid($spEntityId, $uuid)
+    {
+        $this->_getDb()->prepare(
+            'INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)'
+        )->execute(
+            array(
+                $uuid,
+                $spEntityId,
+            )
+        );
+    }
+
+    protected function _fetchPersistentId($serviceProviderUuid, $userUuid)
+    {
+        $statement = $this->_getDb()->prepare(
             "SELECT persistent_id FROM saml_persistent_id WHERE service_provider_uuid = ? AND user_uuid = ?"
         );
         $statement->execute(array($serviceProviderUuid, $userUuid));
-        $rows = $statement->fetchAll();
-
-        if (empty($rows)) {
-            $persistentId = sha1(self::PERSISTENT_NAMEID_SALT . $userUuid . $serviceProviderUuid);
-            $statement = $db->prepare(
-                "INSERT INTO saml_persistent_id (persistent_id, service_provider_uuid, user_uuid) VALUES (?,?,?)"
-            );
-            $result = $statement->execute(array($persistentId, $serviceProviderUuid, $userUuid));
-            if (!$result) {
-                throw new EngineBlock_Exception(
-                    'Unable to store new persistent id for SP UUID: ' . $serviceProviderUuid .
-                        ' and user uuid: ' . $userUuid .
-                        ' error info: ' . var_export($statement->errorInfo(), true),
-                    $statement->errorCode()
-                );
-            }
-            return $persistentId;
-        }
-        else if (count($rows) > 1) {
+        $result = $statement->fetchAll();
+        if (count($result) > 1) {
             throw new EngineBlock_Exception(
                 'Multiple persistent IDs found? For: SPUUID: ' . $serviceProviderUuid . ' and user UUID: ' . $userUuid
             );
         }
-        else {
-            return $rows[0]['persistent_id'];
-        }
+        return isset($result[0]['persistent_id']) ? $result[0]['persistent_id'] : false;
     }
 
-    protected function _getServiceProviderUuid($spEntityId, $db)
+    protected function _generatePersistentId($serviceProviderUuid, $userUuid)
     {
-        $statement = $db->prepare("SELECT uuid FROM service_provider_uuid WHERE service_provider_entity_id=?");
-        $statement->execute(array($spEntityId));
-        $result = $statement->fetchAll();
+        return sha1(self::PERSISTENT_NAMEID_SALT . $userUuid . $serviceProviderUuid);
+    }
 
-        if (empty($result)) {
-            $uuid = (string)Surfnet_Zend_Uuid::generate();
-            $statement = $db->prepare("INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)");
-            $statement->execute(
-                array(
-                    $uuid,
-                    $spEntityId,
-                )
-            );
+    protected function _storePersistentId($persistentId, $serviceProviderUuid, $userUuid)
+    {
+        $statement = $this->_getDb()->prepare(
+            "INSERT INTO saml_persistent_id (persistent_id, service_provider_uuid, user_uuid) VALUES (?,?,?)"
+        );
+        $statement->execute(array($persistentId, $serviceProviderUuid, $userUuid));
+    }
+
+    protected function _getDb()
+    {
+        static $s_db;
+        if ($s_db) {
+            return $s_db;
         }
-        else {
-            $uuid = $result[0]['uuid'];
-        }
-        return $uuid;
+
+        $factory = new EngineBlock_Database_ConnectionFactory();
+        $s_db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+
+        return $s_db;
     }
 
     protected function _getUserUuid($collabPersonId)
     {
-        $userDirectory = new EngineBlock_UserDirectory(
-            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->ldap
-        );
+        $userDirectory = $this->_getUserDirectory();
         $users = $userDirectory->findUsersByIdentifier($collabPersonId);
         if (count($users) > 1) {
             throw new EngineBlock_Exception('Multiple users found for collabPersonId: ' . $collabPersonId);
@@ -215,5 +261,12 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         }
 
         return $users[0]['collabpersonuuid'];
+    }
+
+    protected function _getUserDirectory()
+    {
+        return new EngineBlock_UserDirectory(
+            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->ldap
+        );
     }
 }
