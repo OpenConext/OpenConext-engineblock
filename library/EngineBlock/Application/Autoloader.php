@@ -5,7 +5,21 @@ class EngineBlock_Application_Autoloader
     const PSR0_CLASS_SEPARATOR = '_';
     const PHP_FILE_EXTENSION = '.php';
 
+    /**
+     * @var array
+     */
     protected $_modules;
+
+    /**
+     * @var bool
+     */
+    protected $_mayLoadTestClasses = false;
+
+    public function mayLoadTestClasses($may = true)
+    {
+        $this->_mayLoadTestClasses = $may;
+        return $this;
+    }
 
     /**
      * Try to auto-load a class.
@@ -19,7 +33,7 @@ class EngineBlock_Application_Autoloader
     public function load($className)
     {
         if (!isset($this->_modules)) {
-            $this->loadModules();
+            $this->_loadModules();
         }
 
         if ($this->_loadModuleClass($className)) {
@@ -30,13 +44,19 @@ class EngineBlock_Application_Autoloader
             return true;
         }
 
+        if ($this->_mayLoadTestClasses) {
+            if ($this->_loadTestClass($className)) {
+                return true;
+            }
+        }
+
         return false;
     }
 
     /**
      * Find all module directories.
      */
-    public function loadModules()
+    protected function _loadModules()
     {
         $modules = array();
 
@@ -75,6 +95,21 @@ class EngineBlock_Application_Autoloader
     protected function _loadLibraryClass($className)
     {
         return $this->_tryPsr0Load($className, ENGINEBLOCK_FOLDER_LIBRARY);
+    }
+
+    /**
+     * @param $className
+     * @return bool
+     */
+    protected function _loadTestClass($className)
+    {
+        $classNamePrefix = substr($className, 0, strpos($className, self::PSR0_CLASS_SEPARATOR));
+        if ($classNamePrefix !== 'Test') {
+            return false;
+        }
+
+        $classNameWithoutPrefix = substr($className, 5);
+        return $this->_tryPsr0Load($classNameWithoutPrefix, ENGINEBLOCK_FOLDER_ROOT . '/tests/library/');
     }
 
     /**

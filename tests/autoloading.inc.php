@@ -29,6 +29,7 @@ require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
 $autoloader = new EngineBlock_Application_Autoloader();
+$autoloader->mayLoadTestClasses();
 spl_autoload_register(array($autoloader, 'load'));
 
 $log = new Zend_Log();
