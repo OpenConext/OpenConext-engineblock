@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_AttributeManipulator_CustomException extends EngineBlock_Exception
+class EngineBlock_Attributes_Manipulator_CustomException extends EngineBlock_Exception
 {
     private $_feedback = array();
 
