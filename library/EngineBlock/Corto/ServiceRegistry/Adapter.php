@@ -283,12 +283,32 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         }
 
         // Keywords for searching in the WAYF
-        self::_multiLang($cortoEntity, $serviceRegistryEntity, array(
-            'keywords'                              => 'Keywords',
-        ));
+        self::_multiLang(
+            $cortoEntity,
+            $serviceRegistryEntity,
+            array('keywords' => 'Keywords')
+        );
 
         if (isset($serviceRegistryEntity['NameIDFormat'])) {
             $cortoEntity['NameIDFormat'] = $serviceRegistryEntity['NameIDFormat'];
+        }
+
+        $cortoEntity['NameIDFormats'] = array();
+        if (isset($serviceRegistryEntity['NameIDFormats:0'])) {
+            $cortoEntity['NameIDFormats'][] = $serviceRegistryEntity['NameIDFormats:0'];
+        }
+        if (isset($serviceRegistryEntity['NameIDFormats:1'])) {
+            $cortoEntity['NameIDFormats'][] = $serviceRegistryEntity['NameIDFormats:1'];
+        }
+        if (isset($serviceRegistryEntity['NameIDFormats:2'])) {
+            $cortoEntity['NameIDFormats'][] = $serviceRegistryEntity['NameIDFormats:2'];
+        }
+
+        if (empty($cortoEntity['NameIDFormats'])) {
+            $cortoEntity['NameIDFormats'] = array(
+                EngineBlock_Corto_Filter_Command_SetNameId::SAML2_NAME_ID_FORMAT_TRANSIENT,
+                EngineBlock_Corto_Filter_Command_SetNameId::SAML2_NAME_ID_FORMAT_PERSISTENT,
+            );
         }
 
         // Contacts
