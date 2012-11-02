@@ -135,6 +135,10 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                         'en' => 'https://www.surfnet.nl/en/',
                     ),
                 ),
+                'NameIDFormats' => array(
+                    0 => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                    1 => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+                ),
                 'ContactPersons' => array(
                     1 => array(
                         'ContactType' => 'support',
@@ -184,6 +188,10 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     'en' => 'test,english',
                 ),
                 "AuthnRequestsSigned" => true,
+                'NameIDFormats' => array(
+                    0 => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                    1 => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+                ),
                 'EntityID' => 'https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp',
             ),
         );
