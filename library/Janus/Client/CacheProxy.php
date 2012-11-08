@@ -26,7 +26,7 @@
 /**
  * A Caching Proxy for the Service Registry, will cache all function calls.
  *
- * Can even detect Sercvice Registry problems and chug along on the (stale) cache. 
+ * Can even detect Sercvice Registry problems and chug along on the (stale) cache.
  */
 class Janus_Client_CacheProxy
 {
@@ -56,14 +56,18 @@ class Janus_Client_CacheProxy
                 $httpClient->getLastRequest(),
                 'HTTP Request'
             );
-            $application->getLogInstance()->attach(
-                $httpClient->getLastResponse()->asString(),
-                'HTTP Response'
-            );
-            $application->getLogInstance()->attach(
-                $httpClient->getLastResponse()->getBody(),
-                'HTTP Response body'
-            );
+
+            if ($httpClient->getLastResponse()) {
+                $application->getLogInstance()->attach(
+                    $httpClient->getLastResponse()->asString(),
+                    'HTTP Response'
+                );
+                $application->getLogInstance()->attach(
+                    $httpClient->getLastResponse()->getBody(),
+                    'HTTP Response body'
+                );
+            }
+
             $e = new Janus_Client_CacheProxy_Exception(
                 "Unable to access JANUS?!? Using stale cache",
                 EngineBlock_Exception::CODE_WARNING,
