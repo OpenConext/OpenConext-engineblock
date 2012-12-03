@@ -132,6 +132,12 @@ class EngineBlock_Log extends Zend_Log
                 $attachmentTotal = count($this->_attachments);
                 for ($i = $attachmentTotal - 1; $i >= 0; $i--) {
                     $attachment = $this->_attachments[$i];
+                    if (!is_string($attachment['message'])) {
+                        // allow more using memory to decode large objects
+                        ini_set('memory_limit', '256M');
+
+                        $attachment['message'] = print_r($attachment['message'], true);
+                    }
                     $attachmentEvent = $event;
                     $attachmentMessagePrefix = $this->getAttachmentPrefix(
                         $attachment['name'],
@@ -205,10 +211,6 @@ class EngineBlock_Log extends Zend_Log
      */
     public function attach($data, $name)
     {
-        if (!is_string($data)) {
-            $data = print_r($data, true);
-        }
-
         $this->_attachments[] = array(
             'name' => $name,
             'message' => $data,
