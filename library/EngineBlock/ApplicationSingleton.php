@@ -151,7 +151,13 @@ class EngineBlock_ApplicationSingleton
 
         $log->attach($exception->getTraceAsString(), 'trace');
 
-        // log exception first
+        // attach previous exceptions
+        $prevException = $exception;
+        while ($prevException = $prevException->getPrevious()) {
+            $log->attach($prevException, 'previous exception');
+        }
+
+        // log exception
         $log->log(
             $exception->getMessage(),
             $severity,
@@ -160,10 +166,6 @@ class EngineBlock_ApplicationSingleton
 
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
-
-        while ($prevException = $exception->getPrevious()) {
-            $log->attach($prevException, 'previous exception');
-        }
 
         return true;
     }
