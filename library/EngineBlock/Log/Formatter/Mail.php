@@ -66,6 +66,8 @@ class EngineBlock_Log_Formatter_Mail
             $view->attachments = array();
         }
 
+        $view->attachments = EngineBlock_Log::encodeAttachments($view->attachments);
+
         return $view;
     }
 
