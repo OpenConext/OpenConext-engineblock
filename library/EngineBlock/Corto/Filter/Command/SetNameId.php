@@ -165,8 +165,9 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
                             "instead of sending an error. SP might not be happy with this violation of the spec " .
                             "but it's probably a lot happier with a valid Response than an Error Response"
                     );
+                        
+                    $mayUseRequestedNameIdFormat = false;
                 }
-                $mayUseRequestedNameIdFormat = false;
             }
 
             if ($mayUseRequestedNameIdFormat) {
