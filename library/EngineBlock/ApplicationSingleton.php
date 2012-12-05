@@ -143,25 +143,29 @@ class EngineBlock_ApplicationSingleton
 
         if ($exception instanceof EngineBlock_Exception) {
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
+            $severity = $exception->getSeverity();
         } else {
             $additionalInfo = null;
+            $severity = EngineBlock_Log::ERR;
         }
 
         $log->attach($exception->getTraceAsString(), 'trace');
 
-        // flush all messages in queue, something went wrong!
-        $log->getQueueWriter()->flush('error caught');
-
-        while ($prevException = $exception->getPrevious()) {
+        // attach previous exceptions
+        $prevException = $exception;
+        while ($prevException = $prevException->getPrevious()) {
             $log->attach($prevException, 'previous exception');
         }
 
-        $severity = $exception->getSeverity() ?:EngineBlock_Log::ERR;
+        // log exception
         $log->log(
             $exception->getMessage(),
             $severity,
             $additionalInfo
         );
+
+        // flush all messages in queue, something went wrong!
+        $log->getQueueWriter()->flush('error caught');
 
         return true;
     }

@@ -36,6 +36,31 @@ class EngineBlock_Log extends Zend_Log
     protected $_attachments = array();
 
     /**
+     * @param array $attachments
+     * @return array
+     */
+    static public function encodeAttachments(array $attachments)
+    {
+        foreach ($attachments as $key => $attachment) {
+            if (!is_string($attachment['message'])) {
+                // allow more using memory to decode large objects
+                ini_set('memory_limit', '256M');
+
+                $attachment['message'] = print_r($attachment['message'], true);
+
+                if (strlen($attachment['message']) > 128*1024) {
+                    $attachment['message'] = substr($attachment['message'], 0, 128*1024)
+                                            . '... (message truncated to 128K)';
+                }
+                
+                $attachments[$key] = $attachment;
+            }
+        }
+
+        return $attachments;
+    }
+
+    /**
      * Factory to construct the logger and one or more writers
      * based on the configuration array
      *
@@ -123,15 +148,16 @@ class EngineBlock_Log extends Zend_Log
 
             // Inline attachments for Mail writer
             if ($writer instanceof EngineBlock_Log_Writer_Mail) {
-                $writerEvent['attachments'] = $this->_attachments;
+                $writerEvent['attachments'] = self::encodeAttachments($this->_attachments);
 
                 $writer->write($writerEvent);
 
             } else {
                 // Number the attachments and write them separately
-                $attachmentTotal = count($this->_attachments);
+                $attachments = self::encodeAttachments($this->_attachments);
+                $attachmentTotal = count($attachments);
                 for ($i = $attachmentTotal - 1; $i >= 0; $i--) {
-                    $attachment = $this->_attachments[$i];
+                    $attachment = $attachments[$i];
                     $attachmentEvent = $event;
                     $attachmentMessagePrefix = $this->getAttachmentPrefix(
                         $attachment['name'],
@@ -205,10 +231,6 @@ class EngineBlock_Log extends Zend_Log
      */
     public function attach($data, $name)
     {
-        if (!is_string($data)) {
-            $data = print_r($data, true);
-        }
-
         $this->_attachments[] = array(
             'name' => $name,
             'message' => $data,

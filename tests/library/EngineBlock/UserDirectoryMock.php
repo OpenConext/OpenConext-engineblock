@@ -23,10 +23,22 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-class EngineBlock_UserDirectoryMock extends EngineBlock_UserDirectory
+class Test_EngineBlock_UserDirectoryMock extends EngineBlock_UserDirectory
 {
-    public function getCommonNameFromAttributes($attributes)
+    protected $_users = array();
+
+    public function __construct()
     {
-        return $this->_getCommonNameFromAttributes($attributes);
+    }
+
+    public function setUser($id, $user)
+    {
+        $this->_users[$id] = $user;
+        return $this;
+    }
+
+    public function findUsersByIdentifier($identifier, $ldapAttributes = array())
+    {
+        return array($this->_users[$identifier]);
     }
 }
