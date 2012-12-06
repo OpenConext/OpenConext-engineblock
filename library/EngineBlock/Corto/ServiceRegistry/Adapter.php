@@ -145,6 +145,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             $cortoEntity['PublishInEdugain'] = $serviceRegistryEntity['coin:publish_in_edugain'];
         }
 
+        // Disable SAML scoping
+        if (isset($serviceRegistryEntity['coin:disable_scoping'])) {
+            $cortoEntity['DisableScoping'] = $serviceRegistryEntity['coin:disable_scoping'];
+        }
+
         // Enable additional logging
         if (isset($serviceRegistryEntity['coin:additional_logging'])) {
             $cortoEntity['AdditionalLogging'] = $serviceRegistryEntity['coin:additional_logging'];

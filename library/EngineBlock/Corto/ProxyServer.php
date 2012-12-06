@@ -414,35 +414,37 @@ class EngineBlock_Corto_ProxyServer
             $request['_AttributeConsumingServiceIndex'] = $originalRequest['_AttributeConsumingServiceIndex'];
         }
 
-        if ($scoping) {
-            $scoping = (array) $scoping;
-            foreach ($scoping as $scopedIdP) {
-                $request['samlp:Scoping']['samlp:IDPList']['samlp:IDPEntry'][] = array('_ProviderID' => $scoping);
+        if (empty($remoteMetaData['DisableScoping'])) {
+            if ($scoping) {
+                $scoping = (array) $scoping;
+                foreach ($scoping as $scopedIdP) {
+                    $request['samlp:Scoping']['samlp:IDPList']['samlp:IDPEntry'][] = array('_ProviderID' => $scoping);
+                }
+                return $request;
             }
-            return $request;
-        }
 
-        // Copy original scoping rules
-        if (isset($originalRequest['samlp:Scoping'])) {
-            $request['samlp:Scoping'] = $originalRequest['samlp:Scoping'];
-        }
-        else {
-            $request['samlp:Scoping'] = array();
-        }
+            // Copy original scoping rules
+            if (isset($originalRequest['samlp:Scoping'])) {
+                $request['samlp:Scoping'] = $originalRequest['samlp:Scoping'];
+            }
+            else {
+                $request['samlp:Scoping'] = array();
+            }
 
-        // Decrease or initialize the proxycount
-        if (isset($originalRequest['samlp:Scoping']['_ProxyCount'])) {
-            $request['samlp:Scoping']['_ProxyCount']--;
-        }
-        else {
-            $request['samlp:Scoping']['_ProxyCount'] = $this->getConfig('max_proxies', 10);
-        }
+            // Decrease or initialize the proxycount
+            if (isset($originalRequest['samlp:Scoping']['_ProxyCount'])) {
+                $request['samlp:Scoping']['_ProxyCount']--;
+            }
+            else {
+                $request['samlp:Scoping']['_ProxyCount'] = $this->getConfig('max_proxies', 10);
+            }
 
-        // Add the issuer of the original request as requester
-        if (!isset($request['samlp:Scoping']['samlp:RequesterID'])) {
-            $request['samlp:Scoping']['samlp:RequesterID'] = array();
+            // Add the issuer of the original request as requester
+            if (!isset($request['samlp:Scoping']['samlp:RequesterID'])) {
+                $request['samlp:Scoping']['samlp:RequesterID'] = array();
+            }
+            $request['samlp:Scoping']['samlp:RequesterID'][] = array('__v' => $originalRequest['saml:Issuer']['__v']);
         }
-        $request['samlp:Scoping']['samlp:RequesterID'][] = array('__v' => $originalRequest['saml:Issuer']['__v']);
 
         return $request;
     }
