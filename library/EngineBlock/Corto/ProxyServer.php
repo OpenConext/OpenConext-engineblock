@@ -381,6 +381,21 @@ class EngineBlock_Corto_ProxyServer
     public function createEnhancedRequest($originalRequest, $idp, array $scoping = null)
     {
         $remoteMetaData = $this->getRemoteEntity($idp);
+
+        $nameIdPolicy = array('_AllowCreate'  => 'true');
+        /**
+         * Name policy is not required, so it is only set if configured, SAML 2.0 spec
+         * says only following values are allowed:
+         *  - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+         *  - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent.
+         *
+         * Note: Some IDP's like those using ADFS2 do not understand those, for these cases the format can be 'configured as empty
+         * or set to an older version.
+         */
+        if (!empty($remoteMetaData['NameIdFormat'])) {
+            $nameIdPolicy['_Format'] = $remoteMetaData['NameIdFormat'];
+        }
+
         $request = array(
             EngineBlock_Corto_XmlToArray::TAG_NAME_PFX       => 'samlp:AuthnRequest',
             EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
@@ -404,10 +419,8 @@ class EngineBlock_Corto_ProxyServer
 
             'saml:Issuer' => array('__v' => $this->getUrl('spMetadataService')),
             'ds:Signature' => '__placeholder__',
-            'samlp:NameIDPolicy' => array(
-                '_Format'       => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-                '_AllowCreate'  => 'true',
-            ),
+
+            'samlp:NameIDPolicy' => $nameIdPolicy
         );
 
         if (isset($originalRequest['_AttributeConsumingServiceIndex'])) {
