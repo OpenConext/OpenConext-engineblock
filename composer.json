@@ -1,0 +1,9 @@
+{
+    "name": "surfnet/openconextengineblock",
+    "description": "Surfnet OpenConext SAML proxy",
+    "minimum-stability": "stable",
+
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    }
+}
