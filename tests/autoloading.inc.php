@@ -25,6 +25,9 @@
 
 ini_set('date.timezone', 'Europe/Amsterdam');
 
+// Requiring composer autoloader
+require_once '../vendor/autoload.php';
+
 require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();

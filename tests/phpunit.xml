@@ -1,0 +1,16 @@
+<phpunit bootstrap="bootstrap.php" colors="true"
+	convertErrorsToExceptions="true"
+	convertNoticesToExceptions="false"
+	convertWarningsToExceptions="false">
+	<php>
+		<!-- Set the APPLICATION_ENV constant -->
+		<const name="APPLICATION_ENV" value="testing"/>
+	</php>
+	<testsuites>
+		<!-- Declare a testsuite called All -->
+		<testsuite name="All">
+			<!-- Look for our unit tests in the following directory. They must end with Test.php -->
+			<directory suffix="Test.php">.</directory>
+		</testsuite>
+	</testsuites>
+</phpunit>
