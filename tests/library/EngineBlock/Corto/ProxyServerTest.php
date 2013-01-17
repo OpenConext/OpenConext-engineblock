@@ -1,6 +1,6 @@
 <?php
 /**
- * Note: this Test only tests setting of NameIdFormat, add other tests if required
+ * Note: this Test only tests setting of NameIDFormat, add other tests if required
  */
 class EngineBlock_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 {
@@ -11,7 +11,7 @@ class EngineBlock_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST'] = null;
     }
 
-    public function testNameIdFormatIsNotSetByDefault()
+    public function testNameIDFormatIsNotSetByDefault()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
 
@@ -26,12 +26,12 @@ class EngineBlock_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         $this->assertNotContains('_Format', $enhancedRequest['samlp:NameIDPolicy']);
     }
 
-    public function testNameIdFormatIsSetFromRemoteMetaData()
+    public function testNameIDFormatIsSetFromRemoteMetaData()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
 
         $remoteEntities = $this->factoryRemoteEntities();
-        $remoteEntities['testIdp']['NameIdFormat'] = 'fooFormat';
+        $remoteEntities['testIdp']['NameIDFormat'] = 'fooFormat';
         $proxyServer->setRemoteEntities($remoteEntities);
 
         $originalRequest = $this->factoryOriginalRequest();

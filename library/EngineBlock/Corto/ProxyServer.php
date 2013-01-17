@@ -392,8 +392,9 @@ class EngineBlock_Corto_ProxyServer
          * Note: Some IDP's like those using ADFS2 do not understand those, for these cases the format can be 'configured as empty
          * or set to an older version.
          */
-        if (!empty($remoteMetaData['NameIdFormat'])) {
-            $nameIdPolicy['_Format'] = $remoteMetaData['NameIdFormat'];
+        // @todo check why it is empty
+        if (!empty($remoteMetaData['NameIDFormat'])) {
+            $nameIdPolicy['_Format'] = $remoteMetaData['NameIDFormat'];
         }
 
         $request = array(
