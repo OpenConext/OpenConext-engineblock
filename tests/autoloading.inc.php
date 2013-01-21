@@ -25,8 +25,9 @@
 
 ini_set('date.timezone', 'Europe/Amsterdam');
 
-// Requiring composer autoloader
-require_once '../vendor/autoload.php';
+// Include composer autoloader, this intentionally included instead of required since CI system does not
+// use composer and will fail on requiring a non-existent autoload file
+include_once '../vendor/autoload.php';
 
 require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
 
