@@ -410,8 +410,10 @@ class EngineBlock_Corto_Adapter
             'private'   => $application->getConfiguration()->encryption->key->private,
         );
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
+            // @todo Convert to constants
             'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            // @todo Convert to 1.1
             'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
         );
 
@@ -427,8 +429,10 @@ class EngineBlock_Corto_Adapter
             'private'   => $application->getConfiguration()->encryption->key->private,
         );
         $remoteEntities[$spEntityId]['NameIDFormats'] = array(
+            // @todo Convert to constants
             'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            // @todo Convert to 1.1
             'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
         );
         $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
