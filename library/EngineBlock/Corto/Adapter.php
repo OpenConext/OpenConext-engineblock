@@ -405,6 +405,7 @@ class EngineBlock_Corto_Adapter
         if (!isset($remoteEntities[$idpEntityId])) {
             $remoteEntities[$idpEntityId] = array();
         }
+        $remoteEntities[$idpEntityId]['EntityId'] = $idpEntityId;
         $remoteEntities[$idpEntityId]['certificates'] = array(
             'public'    => $application->getConfiguration()->encryption->key->public,
             'private'   => $application->getConfiguration()->encryption->key->private,
@@ -424,6 +425,7 @@ class EngineBlock_Corto_Adapter
         if (!isset($remoteEntities[$spEntityId])) {
             $remoteEntities[$spEntityId] = array();
         }
+        $remoteEntities[$idpEntityId]['EntityId'] = $spEntityId;
         $remoteEntities[$spEntityId]['certificates'] = array(
             'public'    => $application->getConfiguration()->encryption->key->public,
             'private'   => $application->getConfiguration()->encryption->key->private,
@@ -496,6 +498,13 @@ class EngineBlock_Corto_Adapter
             )
         );
 
+        // Store current entities separate from remote entities
+        $proxyServer->setCurrentEntities(array(
+            'spMetadataService' => $remoteEntities[$spEntityId],
+            'idpMetadataService' => $remoteEntities[$idpEntityId],
+        ));
+        unset($remoteEntities[$spEntityId]);
+        unset($remoteEntities[$idpEntityId]);
         $proxyServer->setRemoteEntities($remoteEntities);
 
         $proxyServer->setTemplateSource(
