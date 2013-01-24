@@ -5,7 +5,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
     public function serve($serviceName)
     {
         // Get the configuration for EngineBlock in it's IdP / SP role.
-        $entityDetails = $this->_getCurrentEntity($serviceName);
+        $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
 
         // Override the EntityID and SSO location to optionally append VO id
         if ($serviceName==='idpMetadataService') {
@@ -58,24 +58,6 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         //$this->_server->sendHeader('Content-Type', 'application/samlmetadata+xml');
         $this->_server->sendHeader('Content-Type', 'application/xml');
         $this->_server->sendOutput($xml);
-    }
-
-    /**
-     * Get the current configuration for EngineBlock in it's IdP role from the metadata we received from
-     * the Service Registry.
-     *
-     * @param string $serviceName
-     * @return array Entity configuration
-     */
-    protected function _getCurrentEntity($serviceName)
-    {
-        $server = $this->_server;
-        $canonicalIdpEntityId = "";
-        $this->_withNoVoContext(function() use ($server, $serviceName, &$canonicalIdpEntityId) {
-            $canonicalIdpEntityId = $server->getUrl($serviceName);
-        });
-
-        return $this->_server->getRemoteEntity($canonicalIdpEntityId);
     }
 
     /**
