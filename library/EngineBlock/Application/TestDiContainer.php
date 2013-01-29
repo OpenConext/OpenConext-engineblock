@@ -23,7 +23,9 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
     protected function registerConsentFactory() {
         $this[self::CONSENT_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container) {
             $consentFactoryMock = Phake::mock('EngineBlock_Corto_Model_Consent_Factory');
-            Phake::when($consentFactoryMock)->create(Phake::anyParameters())->thenReturn(Phake::mock('EngineBlock_Corto_Model_Consent'));
+            Phake::when($consentFactoryMock)
+                ->create(Phake::anyParameters())
+                ->thenReturn(Phake::mock('EngineBlock_Corto_Model_Consent'));
             return $consentFactoryMock;
         });
     }
