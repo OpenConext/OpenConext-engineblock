@@ -2,8 +2,14 @@
 
 class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var EngineBlock_Application_DiContainer
+     */
+    private $diContainer;
+
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
+        $this->diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
     }
 
     public function testServe()
@@ -13,9 +19,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $bindingsModuleMock = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);
 
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock);
+        $xmlConverterMock = $this->mockXmlConverter();
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
         Phake::when($provideConsentService->consentFactory)->hasStoredConsent()->thenReturn(false);
-        $this->mockXmlConverter($provideConsentService->xmlConverter);
 
         $provideConsentService->serve('idpMetadata');
     }
@@ -76,10 +82,13 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     }
 
     /**
-     * @param EngineBlock_Corto_Module_Service_ProvideConsent $provideConsentService
+     * @return EngineBlock_Corto_XmlToArray
      */
-    private function mockXmlConverter(EngineBlock_Corto_XmlToArray $xmlConverter)
+    private function mockXmlConverter()
     {
+        /** @var $xmlConverter EngineBlock_Corto_XmlToArray */
+        $xmlConverter = $this->diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
+
         // Mock xml conversion
         $xmlFixture = array(
             'urn:org:openconext:corto:internal:sp-entity-id' => array(
@@ -92,5 +101,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         Phake::when($xmlConverter)
             ->attributesToArray(Phake::anyParameters())
             ->thenReturn($xmlFixture);
+
+        return $xmlConverter;
     }
 }
