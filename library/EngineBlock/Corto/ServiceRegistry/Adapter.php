@@ -215,8 +215,16 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 }
             }
 
+            // Global consent disabling
             if (isset($serviceRegistryEntity['coin:no_consent_required']) && $serviceRegistryEntity['coin:no_consent_required']) {
                 $cortoEntity['NoConsentRequired'] = TRUE;
+            }
+
+            // Per IdP consent disabling
+            $cortoEntity['IdPsWithoutConsent'] = array();
+            $i = 0;
+            while(isset($serviceRegistryEntity["disableConsent:$i"])) {
+                $cortoEntity['IdPsWithoutConsent'][] = $serviceRegistryEntity["disableConsent:$i"];
             }
 
             if (isset($serviceRegistryEntity['coin:eula']) && $serviceRegistryEntity['coin:eula']) {

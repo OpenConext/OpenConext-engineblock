@@ -51,7 +51,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
             return;
         }
 
-        if (isset($spEntityMetadata['NoConsentRequired']) && $spEntityMetadata['NoConsentRequired']) {
+        if ($this->isConsentDisabled($spEntityMetadata, $identityProviderEntityId))   {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
 
             $response['_Destination'] = $response['__']['Return'];
@@ -75,5 +75,45 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
                 'commonName'=> $commonName,
             ));
         $this->_server->sendOutput($html);
+    }
+
+    /**
+     * @param array $spEntityMetadata
+     * @param string $identityProviderEntityId
+     * @return bool
+     */
+    private function isConsentDisabled(array $spEntityMetadata, $identityProviderEntityId)
+    {
+        if ($this->isConsentGloballyDisabled($spEntityMetadata)
+            || $this->isConsentDisabledForCurrentIdp($spEntityMetadata, $identityProviderEntityId) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $spEntityMetadata
+     * @return bool
+     */
+    private function isConsentGloballyDisabled(array $spEntityMetadata)
+    {
+        return isset($spEntityMetadata['NoConsentRequired'])
+            && $spEntityMetadata['NoConsentRequired'];
+    }
+
+    /**
+     * @param array $spEntityMetadata
+     * @param string $identityProviderEntityId
+     * @return bool
+     */
+    private function isConsentDisabledForCurrentIdp(array $spEntityMetadata, $identityProviderEntityId)
+    {
+        if (isset($spEntityMetadata['IdPsWithoutConsent'])
+            && in_array($identityProviderEntityId, $spEntityMetadata['IdPsWithoutConsent'])) {
+            return true;
+        }
+
+        return false;
     }
 }

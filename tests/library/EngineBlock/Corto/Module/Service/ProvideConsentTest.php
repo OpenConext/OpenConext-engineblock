@@ -26,8 +26,62 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $provideConsentService->serve('idpMetadata');
     }
 
+    public function testConsentIsSkippedWhenGloballyDisabled()
+    {
+        $proxyServerMock = $this->mockProxyServer();
+
+        $bindingsModuleMock = $this->mockBindingsModule();
+        $proxyServerMock->setBindingsModule($bindingsModuleMock);
+
+        $xmlConverterMock = $this->mockXmlConverter();
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
+        Phake::when($provideConsentService->consentFactory)->hasStoredConsent()->thenReturn(false);
+
+        Phake::when($proxyServerMock)
+            ->getRemoteEntity('testSp')
+            ->thenReturn(
+                array(
+                    'NoConsentRequired' => true
+                )
+            );
+
+        $provideConsentService->serve('idpMetadata');
+
+        Phake::verify($proxyServerMock->getBindingsModule())
+            ->send(Phake::capture($message), Phake::anyParameters());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message['_Consent']);
+    }
+
+    public function testConsentIsSkippedWhenDisabledPerIdp()
+    {
+        $proxyServerMock = $this->mockProxyServer();
+
+        $bindingsModuleMock = $this->mockBindingsModule();
+        $proxyServerMock->setBindingsModule($bindingsModuleMock);
+
+        $xmlConverterMock = $this->mockXmlConverter();
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
+        Phake::when($provideConsentService->consentFactory)->hasStoredConsent()->thenReturn(false);
+
+        Phake::when($proxyServerMock)
+            ->getRemoteEntity('testSp')
+            ->thenReturn(
+                array(
+                    'IdPsWithoutConsent' => array(
+                        'testIdP'
+                    )
+                )
+            );
+
+        $provideConsentService->serve('idpMetadata');
+
+        Phake::verify($proxyServerMock->getBindingsModule())
+            ->send(Phake::capture($message), Phake::anyParameters());
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message['_Consent']);
+    }
+
     /**
-     * @return Phake_IMock
+     * @return EngineBlock_Corto_ProxyServer
      */
     private function mockProxyServer()
     {
@@ -55,7 +109,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     }
 
     /**
-     * @return Phake_IMock
+     * @return EngineBlock_Corto_Module_Bindings
      */
     private function mockBindingsModule()
     {
