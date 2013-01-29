@@ -12,7 +12,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $this->diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
     }
 
-    public function testServe()
+    public function testConsentRequested()
     {
         $proxyServerMock = $this->mockProxyServer();
 
@@ -20,7 +20,18 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
         Phake::when($provideConsentService->consentFactory)->hasStoredConsent()->thenReturn(false);
 
+        Phake::when($proxyServerMock)
+            ->renderTemplate(Phake::anyParameters())
+            ->thenReturn(null);
+
+        Phake::when($proxyServerMock)
+            ->sendOutput(Phake::anyParameters())
+            ->thenReturn(null);
+
         $provideConsentService->serve('idpMetadata');
+
+        Phake::verify($proxyServerMock)
+            ->renderTemplate(Phake::anyParameters());
     }
 
     public function testConsentIsSkippedWhenGloballyDisabled()
@@ -86,15 +97,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         Phake::when($proxyServerMock)
             ->getRemoteEntity('testIdP')
             ->thenReturn(array());
-
-        // @todo do not always mock this
-        Phake::when($proxyServerMock)
-            ->renderTemplate(Phake::anyParameters())
-            ->thenReturn(null);
-
-        Phake::when($proxyServerMock)
-            ->sendOutput(Phake::anyParameters())
-            ->thenReturn(null);
 
         $bindingsModuleMock = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);
