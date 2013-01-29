@@ -40,10 +40,11 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
-        $this->_bootstrapDiContainer();
         $this->_bootstrapAutoLoading();
 
         $this->_setEnvironmentIdByEnvironment();
+
+        $this->_bootstrapDiContainer();
 
         $this->_bootstrapConfiguration();
 
@@ -74,6 +75,8 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapAutoLoading()
     {
+        require_once ENGINEBLOCK_FOLDER_ROOT . "vendor/autoload.php";
+
         if (!function_exists('spl_autoload_register')) {
             throw new EngineBlock_Application_Bootstrapper_Exception(
                 'SPL Autoload not available! Please use PHP > v5.1.2',
