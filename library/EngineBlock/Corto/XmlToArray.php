@@ -136,6 +136,16 @@ class EngineBlock_Corto_XmlToArray
         'md:ServiceName'
     );
 
+    /**
+     * Non static alias function for use in unit testable code
+     *
+     * @param array $attributes
+     * @return array
+     */
+    public function attributesToArray(array $attributes) {
+        return self::attributes2array($attributes);
+    }
+
     public static function xml2array($xml)
     {
         $parser = xml_parser_create();

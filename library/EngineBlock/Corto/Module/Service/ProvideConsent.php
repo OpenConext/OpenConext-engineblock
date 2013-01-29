@@ -7,16 +7,34 @@
  */
 class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_Module_Service_Abstract
 {
+    /**
+     * @var EngineBlock_Corto_XmlToArray
+     * @workaround made these vars public to access them from unit test
+     */
+    public $xmlConverter;
+
+    /**
+     * @var EngineBlock_Corto_Model_Consent_Factory
+     * @workaround made these vars public to access them from unit test
+     */
+    public $consentFactory;
+
+    protected function init() {
+        // @todo inject xml converter instead of getting it directly from di container
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $this->xmlConverter = $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
+        $this->consentFactory = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
+    }
+
     public function serve($serviceName)
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $_SESSION['consent'][$response['_ID']]['response'] = $response;
 
-        $attributes = EngineBlock_Corto_XmlToArray::attributes2array(
-            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
-        );
+        $attributes = $this->xmlConverter->attributesToArray($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']);
 
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
+
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
         $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
 
@@ -25,12 +43,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
 
         $commonName = $attributes['urn:mace:dir:attribute-def:cn'][0];
 
-        $consent = new EngineBlock_Corto_Model_Consent(
-            $this->_server->getConfig('ConsentDbTable', 'consent'),
-            $this->_server->getConfig('ConsentStoreValues', true),
-            $response,
-            $attributes
-        );
+        $consent = $this->consentFactory->create($this->_server, $response, $attributes);
         $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
         if ($priorConsent) {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
