@@ -39,6 +39,7 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
+        $this->_bootstrapDiContainer();
         $this->_bootstrapAutoLoading();
 
         $this->_setEnvironmentIdByEnvironment();
@@ -60,6 +61,14 @@ class EngineBlock_Application_Bootstrapper
         $this->_bootstrapped = true;
 
         return $this;
+    }
+
+    protected function _bootstrapDiContainer() {
+        if (ENGINEBLOCK_ENV == 'testing') {
+            $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
+        } else {
+            $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
+        }
     }
 
     protected function _bootstrapAutoLoading()

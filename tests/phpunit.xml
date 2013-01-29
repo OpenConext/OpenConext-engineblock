@@ -4,7 +4,7 @@
 	convertWarningsToExceptions="false">
 	<php>
 		<!-- Set the APPLICATION_ENV constant -->
-		<const name="APPLICATION_ENV" value="testing"/>
+		<const name="ENGINEBLOCK_ENV" value="testing"/>
 	</php>
 	<testsuites>
 		<!-- Declare a testsuite called All -->
