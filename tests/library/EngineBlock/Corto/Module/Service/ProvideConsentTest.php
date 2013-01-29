@@ -16,9 +16,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     {
         $proxyServerMock = $this->mockProxyServer();
 
-        $bindingsModuleMock = $this->mockBindingsModule();
-        $proxyServerMock->setBindingsModule($bindingsModuleMock);
-
         $xmlConverterMock = $this->mockXmlConverter();
         $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
         Phake::when($provideConsentService->consentFactory)->hasStoredConsent()->thenReturn(false);
@@ -29,9 +26,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     public function testConsentIsSkippedWhenGloballyDisabled()
     {
         $proxyServerMock = $this->mockProxyServer();
-
-        $bindingsModuleMock = $this->mockBindingsModule();
-        $proxyServerMock->setBindingsModule($bindingsModuleMock);
 
         $xmlConverterMock = $this->mockXmlConverter();
         $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
@@ -55,9 +49,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     public function testConsentIsSkippedWhenDisabledPerIdp()
     {
         $proxyServerMock = $this->mockProxyServer();
-
-        $bindingsModuleMock = $this->mockBindingsModule();
-        $proxyServerMock->setBindingsModule($bindingsModuleMock);
 
         $xmlConverterMock = $this->mockXmlConverter();
         $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
@@ -104,6 +95,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         Phake::when($proxyServerMock)
             ->sendOutput(Phake::anyParameters())
             ->thenReturn(null);
+
+        $bindingsModuleMock = $this->mockBindingsModule();
+        $proxyServerMock->setBindingsModule($bindingsModuleMock);
 
         return $proxyServerMock;
     }
