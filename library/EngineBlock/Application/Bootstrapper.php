@@ -6,6 +6,7 @@ require __DIR__ . '/Bootstrapper/Exception.php';
 class EngineBlock_Application_Bootstrapper
 {
     const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
+    // @todo correct typo
     const CONFIG_FILE_ENVIORNMENT   = '/etc/surfconext/engineblock.ini';
 
     /**
