@@ -337,6 +337,11 @@ class EngineBlock_Corto_XmlToArray
         }
     }
 
+    /**
+     * @deprecated Use XML converter from DI container and use none static method attributesToArray() instead
+     * @param $attributes
+     * @return array
+     */
     public static function attributes2array($attributes)
     {
         $res = array();
