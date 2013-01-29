@@ -10,8 +10,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     protected function registerXmlConverter() {
-        return;
-
         $this[self::XML_CONVERTER] = $this->share(function (EngineBlock_Application_DiContainer $container) {
             return new EngineBlock_Corto_XmlToArray();
         });
