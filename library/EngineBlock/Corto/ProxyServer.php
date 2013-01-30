@@ -579,7 +579,7 @@ class EngineBlock_Corto_ProxyServer
             'saml:Subject' => array(
                 'saml:NameID' => array(
                     '_SPNameQualifier'  => $this->getUrl('idpMetadataService'),
-                    '_Format'           => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                    '_Format'           => EngineBlock_Urn::SAML2_NAMEID_FORMAT_TRANSIENT,
                     '__v'               => $this->getNewId(),
                 ),
                 'saml:SubjectConfirmation' => array(
