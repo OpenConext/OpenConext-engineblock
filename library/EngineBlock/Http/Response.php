@@ -77,6 +77,12 @@ class EngineBlock_Http_Response
      */
     public function setCookie($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)
     {
+        // @todo improve this
+        // @workaround, do no write cookies in CLI environment for this causes output warnings in unit tests
+        if (php_sapi_name() == 'cli') {
+            return;
+        }
+
         return setcookie($name, $value, $expire, $path, $domain, $secure, $httpOnly);
     }
 }

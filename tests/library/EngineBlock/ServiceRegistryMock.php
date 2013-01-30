@@ -23,6 +23,9 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+/**
+ * @todo replace this with Phake
+ */
 class ServiceRegistryMock
 {
     protected $_idpList;

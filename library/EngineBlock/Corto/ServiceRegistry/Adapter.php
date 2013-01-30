@@ -215,6 +215,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 }
             }
 
+            // Global consent disabling
             if (isset($serviceRegistryEntity['coin:no_consent_required']) && $serviceRegistryEntity['coin:no_consent_required']) {
                 $cortoEntity['NoConsentRequired'] = TRUE;
             }
@@ -243,6 +244,14 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
             if (isset($serviceRegistryEntity['coin:schachomeorganization'])) {
                 $cortoEntity['SchacHomeOrganization'] = $serviceRegistryEntity['coin:schachomeorganization'];
+            }
+
+            // Per SP consent disabling
+            $cortoEntity['SpsWithoutConsent'] = array();
+            $i = 0;
+            while(isset($serviceRegistryEntity["disableConsent:$i"])) {
+                $cortoEntity['SpsWithoutConsent'][] = $serviceRegistryEntity["disableConsent:$i"];
+                $i++;
             }
         }
 

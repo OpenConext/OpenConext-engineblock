@@ -76,7 +76,9 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         }
         if (class_exists($className, true)) {
             /** @var $serviceName EngineBlock_Corto_Module_Service_Abstract */
-            $service = new $className($this->_server);
+            $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+            $this->xmlConverter = $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
+            $service = new $className($this->_server, $this->xmlConverter);
             $service->serve($serviceName);
             return;
         }

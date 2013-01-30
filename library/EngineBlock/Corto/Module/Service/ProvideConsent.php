@@ -7,16 +7,27 @@
  */
 class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_Module_Service_Abstract
 {
+    /**
+     * @var EngineBlock_Corto_Model_Consent_Factory
+     * @workaround made these vars public to access them from unit test
+     */
+    public $consentFactory;
+
+    protected function init() {
+        // @todo inject/set consent factory instead of getting it directly from di container
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $this->consentFactory = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
+    }
+
     public function serve($serviceName)
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $_SESSION['consent'][$response['_ID']]['response'] = $response;
 
-        $attributes = EngineBlock_Corto_XmlToArray::attributes2array(
-            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
-        );
+        $attributes = $this->_xmlConverter->attributesToArray($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']);
 
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
+
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
         $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
 
@@ -25,12 +36,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
 
         $commonName = $attributes['urn:mace:dir:attribute-def:cn'][0];
 
-        $consent = new EngineBlock_Corto_Model_Consent(
-            $this->_server->getConfig('ConsentDbTable', 'consent'),
-            $this->_server->getConfig('ConsentStoreValues', true),
-            $response,
-            $attributes
-        );
+        $consent = $this->consentFactory->create($this->_server, $response, $attributes);
         $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
         if ($priorConsent) {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
@@ -45,7 +51,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
             return;
         }
 
-        if (isset($spEntityMetadata['NoConsentRequired']) && $spEntityMetadata['NoConsentRequired']) {
+        if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
 
             $response['_Destination'] = $response['__']['Return'];
@@ -69,5 +75,46 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
                 'commonName'=> $commonName,
             ));
         $this->_server->sendOutput($html);
+    }
+
+    /**
+     * @param array $spEntityMetadata
+     * @param array $idpEntityMetadata
+     * @param $serviceProviderEntityId
+     * @return bool
+     */
+    private function isConsentDisabled(array $spEntityMetadata, array $idpEntityMetadata, $serviceProviderEntityId)
+    {
+        if ($this->isConsentGloballyDisabled($spEntityMetadata)
+            || $this->isConsentDisabledByIdpForCurrentSp($idpEntityMetadata, $serviceProviderEntityId) ) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $spEntityMetadata
+     * @return bool
+     */
+    private function isConsentGloballyDisabled(array $spEntityMetadata)
+    {
+        return isset($spEntityMetadata['NoConsentRequired'])
+            && $spEntityMetadata['NoConsentRequired'];
+    }
+
+    /**
+     * @param array $idpEntityMetadata
+     * @param $serviceProviderEntityId
+     * @return bool
+     */
+    private function isConsentDisabledByIdpForCurrentSp(array $idpEntityMetadata, $serviceProviderEntityId)
+    {
+        if (isset($idpEntityMetadata['SpsWithoutConsent'])
+            && in_array($serviceProviderEntityId, $idpEntityMetadata['SpsWithoutConsent'])) {
+            return true;
+        }
+
+        return false;
     }
 }
