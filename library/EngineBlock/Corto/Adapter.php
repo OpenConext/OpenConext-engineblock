@@ -412,7 +412,7 @@ class EngineBlock_Corto_Adapter
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
             'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
+            'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
         );
 
         /**
@@ -429,7 +429,7 @@ class EngineBlock_Corto_Adapter
         $remoteEntities[$spEntityId]['NameIDFormats'] = array(
             'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
+            'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
         );
         $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
             array(
