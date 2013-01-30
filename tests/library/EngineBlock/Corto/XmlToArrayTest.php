@@ -7,7 +7,7 @@
  * @todo test also array2attributes
  * @todo test also formatXml *
  */
-class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
 {
     public function testAttributesToArray()
     {
