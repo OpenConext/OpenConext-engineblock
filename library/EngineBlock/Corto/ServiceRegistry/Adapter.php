@@ -220,11 +220,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 $cortoEntity['NoConsentRequired'] = TRUE;
             }
 
-            // Per IdP consent disabling
-            $cortoEntity['IdPsWithoutConsent'] = array();
+            // Per SP consent disabling
+            $cortoEntity['SpsWithoutConsent'] = array();
             $i = 0;
             while(isset($serviceRegistryEntity["disableConsent:$i"])) {
-                $cortoEntity['IdPsWithoutConsent'][] = $serviceRegistryEntity["disableConsent:$i"];
+                $cortoEntity['SpsWithoutConsent'][] = $serviceRegistryEntity["disableConsent:$i"];
             }
 
             if (isset($serviceRegistryEntity['coin:eula']) && $serviceRegistryEntity['coin:eula']) {

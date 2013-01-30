@@ -79,7 +79,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message['_Consent']);
     }
 
-    public function testConsentIsSkippedWhenDisabledPerIdp()
+    public function testConsentIsSkippedWhenDisabledPerSp()
     {
         $proxyServerMock = $this->mockProxyServer();
 
@@ -88,11 +88,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $this->mockConsent($provideConsentService);
 
         Phake::when($proxyServerMock)
-            ->getRemoteEntity('testSp')
+            ->getRemoteEntity('testIdP')
             ->thenReturn(
                 array(
-                    'IdPsWithoutConsent' => array(
-                        'testIdP'
+                    'SpsWithoutConsent' => array(
+                        'testSp'
                     )
                 )
             );

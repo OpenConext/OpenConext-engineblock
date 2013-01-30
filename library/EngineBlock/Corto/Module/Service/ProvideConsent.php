@@ -51,7 +51,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
             return;
         }
 
-        if ($this->isConsentDisabled($spEntityMetadata, $identityProviderEntityId))   {
+        if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
 
             $response['_Destination'] = $response['__']['Return'];
@@ -79,13 +79,14 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
 
     /**
      * @param array $spEntityMetadata
-     * @param string $identityProviderEntityId
+     * @param array $idpEntityMetadata
+     * @param $serviceProviderEntityId
      * @return bool
      */
-    private function isConsentDisabled(array $spEntityMetadata, $identityProviderEntityId)
+    private function isConsentDisabled(array $spEntityMetadata, array $idpEntityMetadata, $serviceProviderEntityId)
     {
         if ($this->isConsentGloballyDisabled($spEntityMetadata)
-            || $this->isConsentDisabledForCurrentIdp($spEntityMetadata, $identityProviderEntityId) ) {
+            || $this->isConsentDisabledByIdpForCurrentSp($idpEntityMetadata, $serviceProviderEntityId) ) {
             return true;
         }
 
@@ -103,14 +104,14 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
     }
 
     /**
-     * @param array $spEntityMetadata
-     * @param string $identityProviderEntityId
+     * @param array $idpEntityMetadata
+     * @param $serviceProviderEntityId
      * @return bool
      */
-    private function isConsentDisabledForCurrentIdp(array $spEntityMetadata, $identityProviderEntityId)
+    private function isConsentDisabledByIdpForCurrentSp(array $idpEntityMetadata, $serviceProviderEntityId)
     {
-        if (isset($spEntityMetadata['IdPsWithoutConsent'])
-            && in_array($identityProviderEntityId, $spEntityMetadata['IdPsWithoutConsent'])) {
+        if (isset($idpEntityMetadata['SpsWithoutConsent'])
+            && in_array($serviceProviderEntityId, $idpEntityMetadata['SpsWithoutConsent'])) {
             return true;
         }
 
