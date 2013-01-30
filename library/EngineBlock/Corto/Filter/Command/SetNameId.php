@@ -27,7 +27,7 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 {
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
-    const SAML2_NAME_ID_FORMAT_UNSPECIFIED  = 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified';
+    const SAML1_NAME_ID_FORMAT_UNSPECIFIED  = 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
     const SAML2_NAME_ID_FORMAT_TRANSIENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
     const SAML2_NAME_ID_FORMAT_PERSISTENT   = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
 
@@ -41,7 +41,7 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
     private $SUPPORTED_NAMEID_FORMATS = array(
         self::SAML2_NAME_ID_FORMAT_PERSISTENT,
         self::SAML2_NAME_ID_FORMAT_TRANSIENT,
-        self::SAML2_NAME_ID_FORMAT_UNSPECIFIED,
+        self::SAML1_NAME_ID_FORMAT_UNSPECIFIED,
     );
 
     public function getResponse()
@@ -67,7 +67,7 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         else {
             $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
 
-            if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_UNSPECIFIED) {
+            if ($nameIdFormat === self::SAML1_NAME_ID_FORMAT_UNSPECIFIED) {
                 $nameIdValue = $this->_response['__']['IntendedNameId'];
             } else if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_TRANSIENT) {
                 $nameIdValue = $this->_getTransientNameId(
