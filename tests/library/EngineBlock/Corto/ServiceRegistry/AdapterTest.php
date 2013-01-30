@@ -52,6 +52,8 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 "SingleSignOnService:0:Location" => "https://idp.testing.dev.coin.surf.net/simplesaml/saml2/idp/SSOService.php",
                 "metadataUrl" => "https://ss.idp.ebdev.net/simplesaml/saml2/idp/metadata.php",
                 "entityID" => "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp",
+                "disableConsent:0" => "http://test-sp"
+
             ),
         ));
         $serviceRegistry->setSPList(array(
@@ -193,6 +195,9 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     1 => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
                 ),
                 'EntityID' => 'https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp',
+                "SpsWithoutConsent" => array(
+                    "http://test-sp"
+                )
             ),
         );
         $this->assertEquals($expectedResult, $metadata, "Converting a simple result from Service Registry with 1 IdP and 1 SP to Cortos Metadata format");
