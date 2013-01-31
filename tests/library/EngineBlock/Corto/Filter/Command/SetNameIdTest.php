@@ -61,7 +61,7 @@ class Test_EngineBlock_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
+            '_Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
             '__v' => $response['__']['IntendedNameId'],
         );
 
@@ -91,7 +91,7 @@ class Test_EngineBlock_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
+            '_Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
             '__v' => $response['__']['IntendedNameId'],
         );
         $command->setSpMetadata(
@@ -122,7 +122,7 @@ class Test_EngineBlock_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified',
+            '_Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
             '__v' => $response['__']['IntendedNameId'],
         );
         $command->setSpMetadata(
