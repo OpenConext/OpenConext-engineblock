@@ -35,11 +35,11 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
      * @var array
      */
     private $SUPPORTED_NAMEID_FORMATS = array(
-        EngineBlock_Urn::SAML2_NAMEID_FORMAT_PERSISTENT,
-        EngineBlock_Urn::SAML2_NAMEID_FORMAT_TRANSIENT,
+        EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+        EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
         EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
         // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-        EngineBlock_Urn::SAML2_NAMEID_FORMAT_UNSPECIFIED
+        EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
     );
 
     public function getResponse()
@@ -67,9 +67,9 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
             if ($nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED
                 || // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-                $nameIdFormat === EngineBlock_Urn::SAML2_NAMEID_FORMAT_UNSPECIFIED) {
+                $nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED) {
                 $nameIdValue = $this->_response['__']['IntendedNameId'];
-            } else if ($nameIdFormat === EngineBlock_Urn::SAML2_NAMEID_FORMAT_TRANSIENT) {
+            } else if ($nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT) {
                 $nameIdValue = $this->_getTransientNameId(
                     $this->_spMetadata['EntityId'], $this->_idpMetadata['EntityId']
                 );

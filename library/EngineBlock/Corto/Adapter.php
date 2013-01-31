@@ -410,11 +410,11 @@ class EngineBlock_Corto_Adapter
             'private'   => $application->getConfiguration()->encryption->key->private,
         );
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
-            EngineBlock_Urn::SAML2_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_NAMEID_FORMAT_TRANSIENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_NAMEID_FORMAT_UNSPECIFIED
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
 
         /**
@@ -429,11 +429,11 @@ class EngineBlock_Corto_Adapter
             'private'   => $application->getConfiguration()->encryption->key->private,
         );
         $remoteEntities[$spEntityId]['NameIDFormats'] = array(
-            EngineBlock_Urn::SAML2_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_NAMEID_FORMAT_TRANSIENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_NAMEID_FORMAT_UNSPECIFIED
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
         $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
             array(
