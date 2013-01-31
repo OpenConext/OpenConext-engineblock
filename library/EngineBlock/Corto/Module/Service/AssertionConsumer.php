@@ -47,7 +47,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['paramname']        = 'SAMLResponse';
 
             $responseAssertionAttributes = &$newResponse['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
-            $attributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
+            $attributes = $this->_xmlConverter->attributesToArray($responseAssertionAttributes);
             $attributes['urn:org:openconext:corto:internal:sp-entity-id'] = array($receivedRequest['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX]);
             $responseAssertionAttributes = EngineBlock_Corto_XmlToArray::array2attributes($attributes);
 

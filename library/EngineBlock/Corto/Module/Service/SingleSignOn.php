@@ -26,7 +26,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                     array(
                         'idp'       => $this->_server->getRemoteEntity($response['saml:Issuer']['__v']),
                         'response'  => $response,
-                        'attributes'=> EngineBlock_Corto_XmlToArray::attributes2array(
+                        'attributes'=> $this->_xmlConverter->attributesToArray(
                             $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
                         ),
                     )
@@ -449,7 +449,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             }
 
             $idp = $this->_server->getRemoteEntity($response['saml:Issuer']['__v']);
-            $attributes = EngineBlock_Corto_XmlToArray::attributes2array(
+            $attributes = $this->_xmlConverter->attributesToArray(
                 $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
             );
             $output = $this->_server->renderTemplate('debugidpmail', array(

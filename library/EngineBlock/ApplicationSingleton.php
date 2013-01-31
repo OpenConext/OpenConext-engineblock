@@ -88,6 +88,11 @@ class EngineBlock_ApplicationSingleton
     protected $_errorHandler;
 
     /**
+     * @var EngineBlock_Application_DiContainer
+     */
+    protected $_diContainer;
+
+    /**
      *
      */
     protected function __construct()
@@ -323,5 +328,22 @@ class EngineBlock_ApplicationSingleton
     {
         $this->_errorHandler = $errorHandler;
         return $this;
+    }
+
+    /**
+     * @param \EngineBlock_Application_DiContainer $diContainer
+     */
+    public function setDiContainer(\EngineBlock_Application_DiContainer $diContainer)
+    {
+        $this->_diContainer = $diContainer;
+        return $this;
+    }
+
+    /**
+     * @return \EngineBlock_Application_DiContainer
+     */
+    public function getDiContainer()
+    {
+        return $this->_diContainer;
     }
 }

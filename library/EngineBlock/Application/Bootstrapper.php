@@ -6,6 +6,7 @@ require __DIR__ . '/Bootstrapper/Exception.php';
 class EngineBlock_Application_Bootstrapper
 {
     const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
+    // @todo correct typo
     const CONFIG_FILE_ENVIORNMENT   = '/etc/surfconext/engineblock.ini';
 
     /**
@@ -43,6 +44,8 @@ class EngineBlock_Application_Bootstrapper
 
         $this->_setEnvironmentIdByEnvironment();
 
+        $this->_bootstrapDiContainer();
+
         $this->_bootstrapConfiguration();
 
         $this->_setEnvironmentIdByDetection();
@@ -62,8 +65,18 @@ class EngineBlock_Application_Bootstrapper
         return $this;
     }
 
+    protected function _bootstrapDiContainer() {
+        if (ENGINEBLOCK_ENV == 'testing') {
+            $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
+        } else {
+            $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
+        }
+    }
+
     protected function _bootstrapAutoLoading()
     {
+        require_once ENGINEBLOCK_FOLDER_ROOT . "vendor/autoload.php";
+
         if (!function_exists('spl_autoload_register')) {
             throw new EngineBlock_Application_Bootstrapper_Exception(
                 'SPL Autoload not available! Please use PHP > v5.1.2',

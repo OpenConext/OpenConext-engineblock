@@ -16,7 +16,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent extends EngineBlock_Corto_
         }
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 
-        $attributes = EngineBlock_Corto_XmlToArray::attributes2array(
+        $attributes = $this->_xmlConverter->attributesToArray(
             $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
         );
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
