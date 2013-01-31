@@ -25,8 +25,6 @@
 
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const SAML2_NAMEID_FORMAT_PERSISTENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
-
     /**
      * This command modifies the response
      *
@@ -62,7 +60,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
         $this->_response['__']['OriginalNameId'] = $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'];
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
         $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
-            '_Format' => self::SAML2_NAMEID_FORMAT_PERSISTENT,
+            '_Format' => EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             '__v'     => $subjectId
         );
     }
