@@ -24,6 +24,7 @@
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/cpd" />
         <mkdir dir="${basedir}/build/dependencies" />
+        <antcall target="composer" />
     </target>
 
     <target name="lint" description="Run syntax check for all classes" >
@@ -38,6 +39,7 @@
                 <exclude name="library/simplesamlphp/**"/>
                 <exclude name="library/Zend/**"/>
                 <exclude name="library/ZendX/**"/>
+                <exclude name="vendor/**"/>
             </fileset>
         </apply>
     </target>
@@ -53,8 +55,16 @@
 
     </target>
 
+    <target name="composer">
+        <!-- install vendor code -->
+        <exec dir="${basedir}" executable="bin/composer.phar" failonerror="true">
+            <arg line="install
+                --dev" />
+        </exec>
+    </target>
+
     <target name="phpunit">
-        <exec dir="${basedir}/tests" executable="phpunit" failonerror="true">
+        <exec dir="${basedir}/tests" executable="../vendor/bin/phpunit" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/tests/phpunit.xml
                        --coverage-clover ${basedir}/build/logs/clover.xml
                        --coverage-html ${basedir}/build/coverage
