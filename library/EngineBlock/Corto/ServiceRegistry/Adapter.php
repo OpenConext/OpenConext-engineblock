@@ -320,8 +320,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
         if (empty($cortoEntity['NameIDFormats'])) {
             $cortoEntity['NameIDFormats'] = array(
-                EngineBlock_Corto_Filter_Command_SetNameId::SAML2_NAME_ID_FORMAT_TRANSIENT,
-                EngineBlock_Corto_Filter_Command_SetNameId::SAML2_NAME_ID_FORMAT_PERSISTENT,
+                EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
+                EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT
             );
         }
 

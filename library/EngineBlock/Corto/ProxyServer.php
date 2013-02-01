@@ -278,7 +278,23 @@ class EngineBlock_Corto_ProxyServer
 
     public function getRemoteEntities()
     {
-        return array_intersect($this->_entities['remote'], array($this->_entities['current']));
+        return $this->_entities['remote'];
+    }
+
+    /**
+     * Gets current entity by name
+     *
+     * @param string $name spMetadataService|idpMetadataService
+     * @return array mixed
+     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
+     */
+    public function getCurrentEntity($name)
+    {
+        if (!isset($this->_entities['current'][$name])) {
+            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($name);
+        }
+        $entity = $this->_entities['current'][$name];
+        return $entity;
     }
 
     public function getIdpEntityIds()
@@ -290,6 +306,14 @@ class EngineBlock_Corto_ProxyServer
             }
         }
         return $idps;
+    }
+
+    /**
+     * @param array $entities
+     */
+    public function setCurrentEntities(array $entities)
+    {
+        $this->_entities['current'] = $entities;
     }
 
     public function setRemoteEntities($entities)
@@ -579,7 +603,7 @@ class EngineBlock_Corto_ProxyServer
             'saml:Subject' => array(
                 'saml:NameID' => array(
                     '_SPNameQualifier'  => $this->getUrl('idpMetadataService'),
-                    '_Format'           => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+                    '_Format'           => EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
                     '__v'               => $this->getNewId(),
                 ),
                 'saml:SubjectConfirmation' => array(

@@ -27,10 +27,6 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 {
     const PERSISTENT_NAMEID_SALT = 'COIN:';
 
-    const SAML1_NAME_ID_FORMAT_UNSPECIFIED  = 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
-    const SAML2_NAME_ID_FORMAT_TRANSIENT    = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
-    const SAML2_NAME_ID_FORMAT_PERSISTENT   = 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
-
     /**
      * Note the significant ordering, from least privacy sensitive to most privacy sensitive.
      * See also:
@@ -39,9 +35,11 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
      * @var array
      */
     private $SUPPORTED_NAMEID_FORMATS = array(
-        self::SAML2_NAME_ID_FORMAT_PERSISTENT,
-        self::SAML2_NAME_ID_FORMAT_TRANSIENT,
-        self::SAML1_NAME_ID_FORMAT_UNSPECIFIED,
+        EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+        EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
+        EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
+        // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+        EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
     );
 
     public function getResponse()
@@ -67,9 +65,11 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         else {
             $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
 
-            if ($nameIdFormat === self::SAML1_NAME_ID_FORMAT_UNSPECIFIED) {
+            if ($nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED
+                || // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+                $nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED) {
                 $nameIdValue = $this->_response['__']['IntendedNameId'];
-            } else if ($nameIdFormat === self::SAML2_NAME_ID_FORMAT_TRANSIENT) {
+            } else if ($nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT) {
                 $nameIdValue = $this->_getTransientNameId(
                     $this->_spMetadata['EntityId'], $this->_idpMetadata['EntityId']
                 );

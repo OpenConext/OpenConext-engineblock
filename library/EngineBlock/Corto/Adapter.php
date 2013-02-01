@@ -405,14 +405,17 @@ class EngineBlock_Corto_Adapter
         if (!isset($remoteEntities[$idpEntityId])) {
             $remoteEntities[$idpEntityId] = array();
         }
+        $remoteEntities[$idpEntityId]['EntityId'] = $idpEntityId;
         $remoteEntities[$idpEntityId]['certificates'] = array(
             'public'    => $application->getConfiguration()->encryption->key->public,
             'private'   => $application->getConfiguration()->encryption->key->private,
         );
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
-            'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-            'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
+            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
+            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
 
         /**
@@ -422,14 +425,17 @@ class EngineBlock_Corto_Adapter
         if (!isset($remoteEntities[$spEntityId])) {
             $remoteEntities[$spEntityId] = array();
         }
+        $remoteEntities[$idpEntityId]['EntityId'] = $spEntityId;
         $remoteEntities[$spEntityId]['certificates'] = array(
             'public'    => $application->getConfiguration()->encryption->key->public,
             'private'   => $application->getConfiguration()->encryption->key->private,
         );
         $remoteEntities[$spEntityId]['NameIDFormats'] = array(
-            'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-            'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
+            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
+            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
         $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
             array(
@@ -492,6 +498,13 @@ class EngineBlock_Corto_Adapter
             )
         );
 
+        // Store current entities separate from remote entities
+        $proxyServer->setCurrentEntities(array(
+            'spMetadataService' => $remoteEntities[$spEntityId],
+            'idpMetadataService' => $remoteEntities[$idpEntityId],
+        ));
+        unset($remoteEntities[$spEntityId]);
+        unset($remoteEntities[$idpEntityId]);
         $proxyServer->setRemoteEntities($remoteEntities);
 
         $proxyServer->setTemplateSource(
