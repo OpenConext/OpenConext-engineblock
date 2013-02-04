@@ -65,8 +65,28 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     }
 
     // @todo test response is sent
+    public function testConsentIsStored()
+    {
+        $proxyServerMock = $this->mockProxyServer();
+        Phake::when($proxyServerMock)
+            ->redirect(Phake::anyParameters())
+            ->thenReturn(null);
 
-    // @Todo test consent is stored
+        $xmlConverterMock = $this->mockXmlConverter();
+
+        $this->mockGlobals();
+
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+
+        $consentMock = $this->mockConsent($provideConsentService);
+        Phake::when($consentMock)
+            ->storeConsent(Phake::anyParameters())
+            ->thenReturn(true);
+
+        $provideConsentService->serve(null);
+
+        Phake::verify(($consentMock))->storeConsent(Phake::anyParameters());
+    }
 
     /**
      * @return EngineBlock_Corto_ProxyServer
@@ -79,6 +99,10 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
 
         $bindingsModuleMock = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);
+
+        Phake::when($proxyServerMock)
+            ->getRemoteEntity(Phake::anyParameters())
+            ->thenReturn(array());
 
         return $proxyServerMock;
     }
@@ -116,5 +140,23 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $_POST['ID'] = 'test';
         $_POST['consent'] = 'yes';
         $_SESSION['consent']['test']['response']['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'] = array();
+    }
+
+    /**
+     * @param EngineBlock_Corto_Module_Service_ProvideConsent $provideConsentService
+     * @return EngineBlock_Corto_Model_Consent
+     */
+    private function mockConsent(EngineBlock_Corto_Module_Service_ProcessConsent $provideConsentService)
+    {
+        $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
+        Phake::when($consentMock)
+            ->hasStoredConsent(Phake::anyParameters())
+            ->thenReturn(false);
+        Phake::when($provideConsentService->consentFactory)
+            ->create(Phake::anyParameters())
+            ->thenReturn($consentMock);
+
+        return $consentMock;
+
     }
 }

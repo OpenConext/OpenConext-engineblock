@@ -4,6 +4,18 @@ class EngineBlock_Corto_Module_Service_ProcessConsent extends EngineBlock_Corto_
 {
     const INTRODUCTION_EMAIL = 'introduction_email';
 
+    /**
+     * @var EngineBlock_Corto_Model_Consent_Factory
+     * @workaround made these vars public to access them from unit test
+     */
+    public $consentFactory;
+
+    protected function init() {
+        // @todo inject/set consent factory instead of getting it directly from di container
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $this->consentFactory = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
+    }
+
     public function serve($serviceName)
     {
         if (!isset($_SESSION['consent'])) {
@@ -27,12 +39,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent extends EngineBlock_Corto_
             return;
         }
 
-        $consent = new EngineBlock_Corto_Model_Consent(
-            $this->_server->getConfig('ConsentDbTable', 'consent'),
-            $this->_server->getConfig('ConsentStoreValues', true),
-            $response,
-            $attributes
-        );
+        $consent = $this->consentFactory->create($this->_server, $response, $attributes);
         $consent->storeConsent($serviceProviderEntityId, $this->_server->getRemoteEntity($serviceProviderEntityId));
         if ($consent->countTotalConsent($response, $attributes) === 1) {
             $this->_sendIntroductionMail($response, $attributes);
