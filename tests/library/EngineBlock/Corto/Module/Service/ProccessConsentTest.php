@@ -15,7 +15,6 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $this->diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
     }
 
-
     /**
      * @expectedException EngineBlock_Corto_Module_Services_SessionLostException
      * @expectedExceptionMessage Session lost after consent
