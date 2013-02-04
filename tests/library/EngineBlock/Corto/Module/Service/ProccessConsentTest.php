@@ -107,7 +107,32 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         Phake::verify(($consentMock))->storeConsent(Phake::anyParameters());
     }
 
-    // @todo test introduction mail is sent
+    public function testIntroductionMailIsSentOnFirstConsentIfEmailIsKnown() {
+        $proxyServerMock = $this->mockProxyServer();
+        $this->mockXmlConverterResponse();
+
+        $this->mockGlobals();
+
+        $consentMock = $this->mockConsent();
+        Phake::when($consentMock)
+            ->countTotalConsent(Phake::anyParameters())
+            ->thenReturn(1);
+
+        $configurationMock = new stdClass();
+        $configurationMock->email = new stdClass();
+        $configurationMock->email->sendWelcomeMail = true;
+
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock,
+            $this->mailerMock
+        );
+
+        $processConsentService->serve(null);
+
+        Phake::verify($this->mailerMock)->sendMail(Phake::anyParameters());
+    }
 
     public function testResponseIsSent() {
         $proxyServerMock = $this->mockProxyServer();
@@ -170,7 +195,9 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     private function mockXmlConverterResponse()
     {
         // Mock xml conversion
-        $xmlFixture = array();
+        $xmlFixture = array(
+            'urn:mace:dir:attribute-def:mail' => 'test@test.test'
+        );
         Phake::when($this->xmlConverterMock)
             ->attributesToArray(Phake::anyParameters())
             ->thenReturn($xmlFixture);
