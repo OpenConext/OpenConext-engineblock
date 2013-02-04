@@ -27,8 +27,8 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $this->mockGlobals();
         unset($_SESSION['consent']);
 
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
-        $provideConsentService->serve(null);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService->serve(null);
     }
 
     /**
@@ -43,8 +43,8 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $this->mockGlobals();
         unset($_SESSION['consent']['test']);
 
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
-        $provideConsentService->serve(null);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService->serve(null);
     }
 
     public function testRedirectToFeedbackPageIfConsentNotInPost() {
@@ -58,8 +58,8 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $this->mockGlobals();
         unset($_POST['consent']);
 
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
-        $provideConsentService->serve(null);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService->serve(null);
 
         Phake::verify(($proxyServerMock))->redirect(Phake::anyParameters());
     }
@@ -71,14 +71,14 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
 
         $this->mockGlobals();
 
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
 
-        $consentMock = $this->mockConsent($provideConsentService);
+        $consentMock = $this->mockConsent($processConsentService);
         Phake::when($consentMock)
             ->storeConsent(Phake::anyParameters())
             ->thenReturn(true);
 
-        $provideConsentService->serve(null);
+        $processConsentService->serve(null);
 
         Phake::verify(($consentMock))->storeConsent(Phake::anyParameters());
     }
@@ -99,8 +99,8 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
 
         $this->mockGlobals();
 
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
-        $provideConsentService->serve(null);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService->serve(null);
 
         Phake::verify(($proxyServerMock->getBindingsModule()))->send(Phake::anyParameters());
     }
@@ -160,16 +160,16 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     }
 
     /**
-     * @param EngineBlock_Corto_Module_Service_ProvideConsent $provideConsentService
+     * @param EngineBlock_Corto_Module_Service_ProvideConsent $processConsentService
      * @return EngineBlock_Corto_Model_Consent
      */
-    private function mockConsent(EngineBlock_Corto_Module_Service_ProcessConsent $provideConsentService)
+    private function mockConsent(EngineBlock_Corto_Module_Service_ProcessConsent $processConsentService)
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
             ->hasStoredConsent(Phake::anyParameters())
             ->thenReturn(false);
-        Phake::when($provideConsentService->consentFactory)
+        Phake::when($processConsentService->consentFactory)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);
 
