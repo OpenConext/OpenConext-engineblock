@@ -29,4 +29,15 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
             return $consentFactoryMock;
         });
     }
+
+    /**
+     * Registers a mocked mailer
+     */
+    protected function registerMailer()
+    {
+        $this[self::MAILER] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        {
+            return Phake::mock('EngineBlock_Mail_Mailer');
+        });
+    }
 }

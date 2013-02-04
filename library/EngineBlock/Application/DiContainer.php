@@ -3,11 +3,13 @@ class EngineBlock_Application_DiContainer extends Pimple
 {
     const XML_CONVERTER = 'xmlConverter';
     const CONSENT_FACTORY = 'consentFactory';
+    const MAILER = 'mailer';
 
     public function __construct()
     {
         $this->registerXmlConverter();
         $this->registerConsentFactory();
+        $this->registerMailer();
     }
 
     protected function registerXmlConverter()
@@ -23,6 +25,14 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this[self::CONSENT_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_Model_Consent_Factory();
+        });
+    }
+
+    protected function registerMailer()
+    {
+        $this[self::MAILER] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        {
+            return new EngineBlock_Mail_Mailer();
         });
     }
 }
