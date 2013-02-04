@@ -67,10 +67,6 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     public function testConsentIsStored()
     {
         $proxyServerMock = $this->mockProxyServer();
-        Phake::when($proxyServerMock)
-            ->redirect(Phake::anyParameters())
-            ->thenReturn(null);
-
         $xmlConverterMock = $this->mockXmlConverter();
 
         $this->mockGlobals();
