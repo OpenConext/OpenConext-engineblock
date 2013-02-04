@@ -2,17 +2,21 @@
 
 class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var EngineBlock_Application_DiContainer
-     */
-    private $diContainer;
+    /** @var EngineBlock_Corto_XmlToArray */
+    private $xmlConverterMock;
 
-    /** @var EngineBlock_Corto_Model_Consent */
-    private $consent;
+    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    private $consentFactoryMock;
+
+    /** @var EngineBlock_Mail_Mailer */
+    private $mailerMock;
 
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
-        $this->diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $this->xmlConverterMock = $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
+        $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
+        $this->mailerMock = $diContainer[EngineBlock_Application_DiContainer::MAILER];
     }
 
     /**
@@ -22,12 +26,17 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     public function testSessionLostExceptionIfNoSession()
     {
         $proxyServerMock = $this->mockProxyServer();
-        $xmlConverterMock = $this->mockXmlConverter();
+        $this->mockXmlConverterResponse();
 
         $this->mockGlobals();
         unset($_SESSION['consent']);
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock,
+            $this->mailerMock
+        );
         $processConsentService->serve(null);
     }
 
@@ -38,12 +47,17 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     public function testSessionLostExceptionIfPostIdNotInSession()
     {
         $proxyServerMock = $this->mockProxyServer();
-        $xmlConverterMock = $this->mockXmlConverter();
+        $this->mockXmlConverterResponse();
 
         $this->mockGlobals();
         unset($_SESSION['consent']['test']);
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock,
+            $this->mailerMock
+        );
         $processConsentService->serve(null);
     }
 
@@ -53,12 +67,17 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
             ->redirect(Phake::anyParameters())
             ->thenReturn(null);
 
-        $xmlConverterMock = $this->mockXmlConverter();
+        $this->mockXmlConverterResponse();
 
         $this->mockGlobals();
         unset($_POST['consent']);
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock,
+            $this->mailerMock
+        );
         $processConsentService->serve(null);
 
         Phake::verify(($proxyServerMock))->redirect(Phake::anyParameters());
@@ -67,13 +86,18 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     public function testConsentIsStored()
     {
         $proxyServerMock = $this->mockProxyServer();
-        $xmlConverterMock = $this->mockXmlConverter();
+        $this->mockXmlConverterResponse();
 
         $this->mockGlobals();
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock,
+            $this->mailerMock
+        );
 
-        $consentMock = $this->mockConsent($processConsentService);
+        $consentMock = $this->mockConsent();
         Phake::when($consentMock)
             ->storeConsent(Phake::anyParameters())
             ->thenReturn(true);
@@ -95,11 +119,16 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
             ->send(Phake::anyParameters())
             ->thenReturn(null);
 
-        $xmlConverterMock = $this->mockXmlConverter();
+        $this->mockXmlConverterResponse();
 
         $this->mockGlobals();
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock,
+            $this->mailerMock
+        );
         $processConsentService->serve(null);
 
         Phake::verify(($proxyServerMock->getBindingsModule()))->send(Phake::anyParameters());
@@ -138,18 +167,13 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     /**
      * @return EngineBlock_Corto_XmlToArray
      */
-    private function mockXmlConverter()
+    private function mockXmlConverterResponse()
     {
-        /** @var $xmlConverter EngineBlock_Corto_XmlToArray */
-        $xmlConverter = $this->diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
-
         // Mock xml conversion
         $xmlFixture = array();
-        Phake::when($xmlConverter)
+        Phake::when($this->xmlConverterMock)
             ->attributesToArray(Phake::anyParameters())
             ->thenReturn($xmlFixture);
-
-        return $xmlConverter;
     }
 
     private function mockGlobals()
@@ -160,20 +184,19 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     }
 
     /**
-     * @param EngineBlock_Corto_Module_Service_ProvideConsent $processConsentService
+     * @param EngineBlock_Corto_Model_Consent_Factory $this->consentFactoryMock
      * @return EngineBlock_Corto_Model_Consent
      */
-    private function mockConsent(EngineBlock_Corto_Module_Service_ProcessConsent $processConsentService)
+    private function mockConsent()
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
             ->hasStoredConsent(Phake::anyParameters())
             ->thenReturn(false);
-        Phake::when($processConsentService->consentFactory)
+        Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);
 
         return $consentMock;
-
     }
 }

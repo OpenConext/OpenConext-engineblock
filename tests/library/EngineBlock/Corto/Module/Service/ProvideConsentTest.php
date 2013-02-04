@@ -2,26 +2,30 @@
 
 class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var EngineBlock_Application_DiContainer
-     */
-    private $diContainer;
+    /** @var EngineBlock_Corto_XmlToArray */
+    private $xmlConverterMock;
 
-    /** @var EngineBlock_Corto_Model_Consent */
-    private $consent;
+    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    private $consentFactoryMock;
 
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
-        $this->diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $this->xmlConverterMock = $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
+        $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
     }
 
     public function testConsentRequested()
     {
         $proxyServerMock = $this->mockProxyServer();
 
-        $xmlConverterMock = $this->mockXmlConverter();
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
-        $this->mockConsent($provideConsentService);
+        $this->mockXmlConverterResponse();
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock
+        );
+        $this->mockConsent();
 
         Phake::when($proxyServerMock)
             ->renderTemplate(Phake::anyParameters())
@@ -41,9 +45,13 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     {
         $proxyServerMock = $this->mockProxyServer();
 
-        $xmlConverterMock = $this->mockXmlConverter();
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
-        $consentMock = $this->mockConsent($provideConsentService);
+        $this->mockXmlConverterResponse();
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock
+        );
+        $consentMock = $this->mockConsent();
 
         Phake::when($consentMock)
             ->hasStoredConsent(Phake::anyParameters())
@@ -60,9 +68,13 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     {
         $proxyServerMock = $this->mockProxyServer();
 
-        $xmlConverterMock = $this->mockXmlConverter();
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
-        $this->mockConsent($provideConsentService);
+        $this->mockXmlConverterResponse();
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock
+        );
+        $this->mockConsent();
 
         Phake::when($proxyServerMock)
             ->getRemoteEntity('testSp')
@@ -83,8 +95,12 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     {
         $proxyServerMock = $this->mockProxyServer();
 
-        $xmlConverterMock = $this->mockXmlConverter();
-        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent($proxyServerMock, $xmlConverterMock);
+        $this->mockXmlConverterResponse();
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProvideConsent(
+            $proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock
+        );
         $this->mockConsent($provideConsentService);
 
         Phake::when($proxyServerMock)
@@ -156,11 +172,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     /**
      * @return EngineBlock_Corto_XmlToArray
      */
-    private function mockXmlConverter()
+    private function mockXmlConverterResponse()
     {
-        /** @var $xmlConverter EngineBlock_Corto_XmlToArray */
-        $xmlConverter = $this->diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
-
         // Mock xml conversion
         $xmlFixture = array(
             'urn:org:openconext:corto:internal:sp-entity-id' => array(
@@ -170,24 +183,21 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
                 null
             )
         );
-        Phake::when($xmlConverter)
+        Phake::when($this->xmlConverterMock)
             ->attributesToArray(Phake::anyParameters())
             ->thenReturn($xmlFixture);
-
-        return $xmlConverter;
     }
 
     /**
-     * @param EngineBlock_Corto_Module_Service_ProvideConsent $provideConsentService
      * @return EngineBlock_Corto_Model_Consent
      */
-    private function mockConsent(EngineBlock_Corto_Module_Service_ProvideConsent $provideConsentService)
+    private function mockConsent()
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
             ->hasStoredConsent(Phake::anyParameters())
             ->thenReturn(false);
-        Phake::when($provideConsentService->consentFactory)
+        Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);
 
