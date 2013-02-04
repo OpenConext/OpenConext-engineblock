@@ -2,6 +2,9 @@
 
 class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
 {
+    /** @var EngineBlock_Corto_ProxyServer */
+    private $proxyServerMock;
+
     /** @var EngineBlock_Corto_XmlToArray */
     private $xmlConverterMock;
 
@@ -13,10 +16,15 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
 
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
+
+        $this->proxyServerMock = $this->mockProxyServer();
+
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $this->xmlConverterMock = $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
+        $this->xmlConverterMock = $this->mockXmlConverter($diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER]);
         $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
         $this->mailerMock = $diContainer[EngineBlock_Application_DiContainer::MAILER];
+
+        $this->mockGlobals();
     }
 
     /**
@@ -25,18 +33,10 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
      */
     public function testSessionLostExceptionIfNoSession()
     {
-        $proxyServerMock = $this->mockProxyServer();
-        $this->mockXmlConverterResponse();
+        $processConsentService = $this->factoryService();
 
-        $this->mockGlobals();
         unset($_SESSION['consent']);
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
-            $proxyServerMock,
-            $this->xmlConverterMock,
-            $this->consentFactoryMock,
-            $this->mailerMock
-        );
         $processConsentService->serve(null);
     }
 
@@ -46,56 +46,29 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
      */
     public function testSessionLostExceptionIfPostIdNotInSession()
     {
-        $proxyServerMock = $this->mockProxyServer();
-        $this->mockXmlConverterResponse();
-
-        $this->mockGlobals();
         unset($_SESSION['consent']['test']);
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
-            $proxyServerMock,
-            $this->xmlConverterMock,
-            $this->consentFactoryMock,
-            $this->mailerMock
-        );
+        $processConsentService = $this->factoryService();
         $processConsentService->serve(null);
     }
 
     public function testRedirectToFeedbackPageIfConsentNotInPost() {
-        $proxyServerMock = $this->mockProxyServer();
-        Phake::when($proxyServerMock)
+        $processConsentService = $this->factoryService();
+
+        Phake::when($this->proxyServerMock)
             ->redirect(Phake::anyParameters())
             ->thenReturn(null);
 
-        $this->mockXmlConverterResponse();
-
-        $this->mockGlobals();
         unset($_POST['consent']);
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
-            $proxyServerMock,
-            $this->xmlConverterMock,
-            $this->consentFactoryMock,
-            $this->mailerMock
-        );
         $processConsentService->serve(null);
 
-        Phake::verify(($proxyServerMock))->redirect(Phake::anyParameters());
+        Phake::verify(($this->proxyServerMock))->redirect(Phake::anyParameters());
     }
 
     public function testConsentIsStored()
     {
-        $proxyServerMock = $this->mockProxyServer();
-        $this->mockXmlConverterResponse();
-
-        $this->mockGlobals();
-
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
-            $proxyServerMock,
-            $this->xmlConverterMock,
-            $this->consentFactoryMock,
-            $this->mailerMock
-        );
+        $processConsentService = $this->factoryService();
 
         $consentMock = $this->mockConsent();
         Phake::when($consentMock)
@@ -108,10 +81,7 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     }
 
     public function testIntroductionMailIsSentOnFirstConsentIfEmailIsKnown() {
-        $proxyServerMock = $this->mockProxyServer();
-        $this->mockXmlConverterResponse();
-
-        $this->mockGlobals();
+        $processConsentService = $this->factoryService();
 
         $consentMock = $this->mockConsent();
         Phake::when($consentMock)
@@ -122,41 +92,25 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $configurationMock->email = new stdClass();
         $configurationMock->email->sendWelcomeMail = true;
 
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
-            $proxyServerMock,
-            $this->xmlConverterMock,
-            $this->consentFactoryMock,
-            $this->mailerMock
-        );
-
         $processConsentService->serve(null);
 
         Phake::verify($this->mailerMock)->sendMail(Phake::anyParameters());
     }
 
     public function testResponseIsSent() {
-        $proxyServerMock = $this->mockProxyServer();
-        Phake::when($proxyServerMock)
+        $processConsentService = $this->factoryService();
+
+        Phake::when($this->proxyServerMock)
             ->redirect(Phake::anyParameters())
             ->thenReturn(null);
 
-        Phake::when($proxyServerMock->getBindingsModule())
+        Phake::when($this->proxyServerMock->getBindingsModule())
             ->send(Phake::anyParameters())
             ->thenReturn(null);
 
-        $this->mockXmlConverterResponse();
-
-        $this->mockGlobals();
-
-        $processConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent(
-            $proxyServerMock,
-            $this->xmlConverterMock,
-            $this->consentFactoryMock,
-            $this->mailerMock
-        );
         $processConsentService->serve(null);
 
-        Phake::verify(($proxyServerMock->getBindingsModule()))->send(Phake::anyParameters());
+        Phake::verify(($this->proxyServerMock->getBindingsModule()))->send(Phake::anyParameters());
     }
 
     /**
@@ -190,17 +144,20 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     }
 
     /**
+     * @param EngineBlock_Corto_XmlToArray $xmlConverterMock
      * @return EngineBlock_Corto_XmlToArray
      */
-    private function mockXmlConverterResponse()
+    private function mockXmlConverter(EngineBlock_Corto_XmlToArray $xmlConverterMock)
     {
         // Mock xml conversion
         $xmlFixture = array(
             'urn:mace:dir:attribute-def:mail' => 'test@test.test'
         );
-        Phake::when($this->xmlConverterMock)
+        Phake::when($xmlConverterMock)
             ->attributesToArray(Phake::anyParameters())
             ->thenReturn($xmlFixture);
+
+        return $xmlConverterMock;
     }
 
     private function mockGlobals()
@@ -225,5 +182,18 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
             ->thenReturn($consentMock);
 
         return $consentMock;
+    }
+
+    /**
+     * @return EngineBlock_Corto_Module_Service_ProcessConsent
+     */
+    private function factoryService()
+    {
+        return new EngineBlock_Corto_Module_Service_ProcessConsent(
+            $this->proxyServerMock,
+            $this->xmlConverterMock,
+            $this->consentFactoryMock,
+            $this->mailerMock
+        );
     }
 }
