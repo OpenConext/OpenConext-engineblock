@@ -64,7 +64,6 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         Phake::verify(($proxyServerMock))->redirect(Phake::anyParameters());
     }
 
-    // @todo test response is sent
     public function testConsentIsStored()
     {
         $proxyServerMock = $this->mockProxyServer();
@@ -86,6 +85,28 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $provideConsentService->serve(null);
 
         Phake::verify(($consentMock))->storeConsent(Phake::anyParameters());
+    }
+
+    // @todo test introduction mail is sent
+
+    public function testResponseIsSent() {
+        $proxyServerMock = $this->mockProxyServer();
+        Phake::when($proxyServerMock)
+            ->redirect(Phake::anyParameters())
+            ->thenReturn(null);
+
+        Phake::when($proxyServerMock->getBindingsModule())
+            ->send(Phake::anyParameters())
+            ->thenReturn(null);
+
+        $xmlConverterMock = $this->mockXmlConverter();
+
+        $this->mockGlobals();
+
+        $provideConsentService = new EngineBlock_Corto_Module_Service_ProcessConsent($proxyServerMock, $xmlConverterMock);
+        $provideConsentService->serve(null);
+
+        Phake::verify(($proxyServerMock->getBindingsModule()))->send(Phake::anyParameters());
     }
 
     /**
