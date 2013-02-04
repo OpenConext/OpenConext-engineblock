@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var EngineBlock_Application_DiContainer
