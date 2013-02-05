@@ -5,7 +5,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
     public function serve($serviceName)
     {
         // Get the configuration for EngineBlock in it's IdP / SP role.
-        $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
+        $entityDetails = $this->_server->getCurrentEntity($serviceName);
 
         // Override the EntityID and SSO location to optionally append VO id
         if ($serviceName==='idpMetadataService') {
