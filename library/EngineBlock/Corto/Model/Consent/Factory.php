@@ -1,6 +1,15 @@
 <?php
 class EngineBlock_Corto_Model_Consent_Factory
 {
+    /** @var EngineBlock_Corto_Filter_Command_Factory */
+    private $_filterCommandFactory;
+
+
+    public function __construct(EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory)
+    {
+        $this->_filterCommandFactory = $filterCommandFactory;
+    }
+
     /**
      * Creates a new Consent instance
      *
@@ -14,7 +23,8 @@ class EngineBlock_Corto_Model_Consent_Factory
             $proxyServer->getConfig('ConsentDbTable', 'consent'),
             $proxyServer->getConfig('ConsentStoreValues', true),
             $response,
-            $attributes
+            $attributes,
+            $this->_filterCommandFactory
         );
     }
 }

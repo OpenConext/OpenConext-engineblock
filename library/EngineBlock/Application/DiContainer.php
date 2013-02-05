@@ -4,12 +4,16 @@ class EngineBlock_Application_DiContainer extends Pimple
     const XML_CONVERTER = 'xmlConverter';
     const CONSENT_FACTORY = 'consentFactory';
     const MAILER = 'mailer';
+    const FILTER_COMMAND_FACTORY = 'filterCommandFactory';
+    const DATABASE_CONNECTION_FACTORY = 'databaseConnectionFactory';
 
     public function __construct()
     {
         $this->registerXmlConverter();
         $this->registerConsentFactory();
         $this->registerMailer();
+        $this->registerFilterCommandFactory();
+        $this->registerDatabaseConnectionFactory();
     }
 
     protected function registerXmlConverter()
@@ -24,7 +28,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         $this[self::CONSENT_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
         {
-            return new EngineBlock_Corto_Model_Consent_Factory();
+            return new EngineBlock_Corto_Model_Consent_Factory($container[self::FILTER_COMMAND_FACTORY]);
         });
     }
 
@@ -33,6 +37,22 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this[self::MAILER] = $this->share(function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Mail_Mailer();
+        });
+    }
+
+    protected function registerFilterCommandFactory()
+    {
+        $this[self::FILTER_COMMAND_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        {
+            return new EngineBlock_Corto_Filter_Command_Factory();
+        });
+    }
+
+    protected function registerDatabaseConnectionFactory()
+    {
+        $this[self::DATABASE_CONNECTION_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        {
+            return new EngineBlock_Database_ConnectionFactory();
         });
     }
 }
