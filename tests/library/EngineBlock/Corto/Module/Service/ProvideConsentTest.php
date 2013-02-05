@@ -87,6 +87,23 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message['_Consent']);
     }
 
+    public function testFilteredAttributesAreUsedToRenderTemplate()
+    {
+        $provideConsentService = $this->factoryService();
+
+        $expectedFilteredAttributes = array('foo');
+        Phake::when($this->consentMock)
+            ->getFilteredResponseAttributes(Phake::anyParameters())
+            ->thenReturn($expectedFilteredAttributes);
+
+        $provideConsentService->serve(null);
+
+        Phake::verify($this->proxyServerMock)
+            ->renderTemplate(Phake::capture($templateName), Phake::capture($vars));
+
+        $this->assertEquals($expectedFilteredAttributes, $vars['attributes']);
+    }
+
     /**
      * @return EngineBlock_Corto_ProxyServer
      */
