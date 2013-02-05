@@ -1,4 +1,7 @@
 <?php
+/**
+ * @todo, currently only arp is tested, test all other functionality too
+ */
 class EngineBlock_Corto_Model_ConsentTest extends PHPUnit_Framework_TestCase
 {
     /** @var EngineBlock_Corto_Model_Consent */
