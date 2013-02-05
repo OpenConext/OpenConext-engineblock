@@ -78,13 +78,13 @@ class EngineBlock_Log_Writer_Syslog extends Zend_Log_Writer_Syslog
             ? $this->_normalizeMessage($event['message']) : '';
 
         preg_match_all(
-            '/(.*\[[a-zA-Z0-9 ]+\]\[[a-zA-Z0-9 ]+\](\[DUMP\])?)( .*)/',
+            '/(.*\[[a-zA-Z0-9 ]+\]\[[a-zA-Z0-9 ]+\](\[DUMP[^\]]*\])?)( .*)/',
             $message, $matches
         );
 
         return array(
-            'prefix' => isset($matches[1][0]) ? $matches[1][0] : '',
-            'message' => isset($matches[3][0]) ? $matches[3][0] : '',
+            'prefix' => isset($matches[1][0]) ? $matches[1][0] : 'PREFIX REMOVED BY PARSER',
+            'message' => isset($matches[3][0]) ? $matches[3][0] : 'MESSAGE REMOVED BY PARSER',
         );
     }
 

@@ -5,18 +5,28 @@
  *
  * Note this is part 1/2 of the Corto Consent Internal Response Processing service.
  */
-class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_Module_Service_Abstract
+class EngineBlock_Corto_Module_Service_ProvideConsent
+    implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
+    /** @var \EngineBlock_Corto_ProxyServer */
+    private $_server;
     /**
-     * @var EngineBlock_Corto_Model_Consent_Factory
-     * @workaround made these vars public to access them from unit test
+     * @var EngineBlock_Corto_XmlToArray
      */
-    public $consentFactory;
+    private $_xmlConverter;
 
-    protected function init() {
-        // @todo inject/set consent factory instead of getting it directly from di container
-        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $this->consentFactory = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
+    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    private  $_consentFactory;
+
+    public function __construct(
+        EngineBlock_Corto_ProxyServer $server,
+        EngineBlock_Corto_XmlToArray $xmlConverter,
+        EngineBlock_Corto_Model_Consent_Factory $consentFactory
+    )
+    {
+        $this->_server = $server;
+        $this->_xmlConverter = $xmlConverter;
+        $this->_consentFactory = $consentFactory;
     }
 
     public function serve($serviceName)
@@ -36,7 +46,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
 
         $commonName = $attributes['urn:mace:dir:attribute-def:cn'][0];
 
-        $consent = $this->consentFactory->create($this->_server, $response, $attributes);
+        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
         $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
         if ($priorConsent) {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
@@ -69,7 +79,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent extends EngineBlock_Corto_
             array(
                 'action'    => $this->_server->getUrl('processConsentService'),
                 'ID'        => $response['_ID'],
-                'attributes'=> $attributes,
+                'attributes'=> $consent->getFilteredResponseAttributes(),
                 'sp'        => $spEntityMetadata,
                 'idp'       => $idpEntityMetadata,
                 'commonName'=> $commonName,
