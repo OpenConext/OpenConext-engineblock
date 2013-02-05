@@ -193,7 +193,8 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
             $this->proxyServerMock,
             $this->xmlConverterMock,
             $this->consentFactoryMock,
-            $this->mailerMock
+            $this->mailerMock,
+            new EngineBlock_User_PreferredNameAttributeFilter()
         );
     }
 }

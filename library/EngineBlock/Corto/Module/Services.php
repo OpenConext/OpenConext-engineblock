@@ -105,11 +105,13 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY]
                 );
             case 'EngineBlock_Corto_Module_Service_ProcessConsent' :
+                $preferredNameAttributeFilter = new EngineBlock_User_PreferredNameAttributeFilter();
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
                     $server,
                     $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER],
                     $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY],
-                    $diContainer[EngineBlock_Application_DiContainer::MAILER]
+                    $diContainer[EngineBlock_Application_DiContainer::MAILER],
+                    $preferredNameAttributeFilter
                 );
             default :
                 return new $className(
