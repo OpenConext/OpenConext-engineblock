@@ -13,6 +13,9 @@ class EngineBlock_Corto_Model_Consent
     /** @var EngineBlock_Database_ConnectionFactory */
     private $_databaseConnectionFactory;
 
+    /** @var array */
+    private $_filteredResponseAttributes;
+
     /**
      * @param $tableName
      * @param $mustStoreValues
@@ -38,23 +41,38 @@ class EngineBlock_Corto_Model_Consent
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
     }
 
+    /**
+     * @return array
+     */
+    public function getFilteredResponseAttributes()
+    {
+        return $this->_filteredResponseAttributes;
+    }
+
+    /**
+     * @param array $spMetadata
+     * @return array
+     */
+    public function applyArp(array $spMetadata)
+    {
+        $arpFilter = $this->_filterCommandFactory->create('AttributeReleasePolicy');
+        $arpFilter->setSpMetadata($spMetadata);
+        $arpFilter->setResponseAttributes($this->_responseAttributes);
+        $arpFilter->execute();
+        return $arpFilter->getResponseAttributes();
+    }
+
     public function hasStoredConsent($serviceProviderEntityId, $spMetadata)
     {
         try {
-            // Apply ARP
-            /** @var $arpFilter EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
-            $arpFilter = $this->_filterCommandFactory->create('AttributeReleasePolicy');
-            $arpFilter->setSpMetadata($spMetadata);
-            $arpFilter->setResponseAttributes($this->_responseAttributes);
-            $arpFilter->execute();
-            $attributes = $arpFilter->getResponseAttributes();
+            $this->_filteredResponseAttributes = $this->applyArp($spMetadata);
 
             $dbh = $this->_getConsentDatabaseConnection();
             if (!$dbh) {
                 return false;
             }
 
-            $attributesHash = $this->_getAttributesHash($attributes);
+            $attributesHash = $this->_getAttributesHash($this->_filteredResponseAttributes);
 
             $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ?";
             $parameters = array(
@@ -88,13 +106,7 @@ class EngineBlock_Corto_Model_Consent
 
     public function storeConsent($serviceProviderEntityId, $spMetadata)
     {
-        // Apply ARP
-        /** @var $arpFilter EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
-        $arpFilter = $this->_filterCommandFactory->create('AttributeReleasePolicy');
-        $arpFilter->setSpMetadata($spMetadata);
-        $arpFilter->setResponseAttributes($this->_responseAttributes);
-        $arpFilter->execute();
-        $attributes = $arpFilter->getResponseAttributes();
+        $this->_filteredResponseAttributes = $this->applyArp($spMetadata);
 
         $dbh = $this->_getConsentDatabaseConnection();
         if (!$dbh) {
@@ -107,7 +119,7 @@ class EngineBlock_Corto_Model_Consent
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProviderEntityId,
-            $this->_getAttributesHash($attributes)
+            $this->_getAttributesHash($this->_filteredResponseAttributes)
         );
 
         $statement = $dbh->prepare($query);

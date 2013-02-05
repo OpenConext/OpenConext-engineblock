@@ -79,7 +79,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             array(
                 'action'    => $this->_server->getUrl('processConsentService'),
                 'ID'        => $response['_ID'],
-                'attributes'=> $attributes,
+                'attributes'=> $consent->getFilteredResponseAttributes(),
                 'sp'        => $spEntityMetadata,
                 'idp'       => $idpEntityMetadata,
                 'commonName'=> $commonName,
