@@ -9,7 +9,7 @@ class EngineBlock_Log_Writer_Syslog_MessageSplitterTest extends PHPUnit_Framewor
     /**
      * @dataProvider parsedEventProvider
      */
-    public function testMessageParsingIsCorrect($parsedEvent, $expectedMessage)
+    public function testMessageParsingIsCorrect(array $parsedEvent, $expectedMessage)
     {
         $syslogMessageSplitter = new EngineBlock_Log_Writer_Syslog_MessageSplitter(1024);
         $chunks = $syslogMessageSplitter->split($parsedEvent['prefix'], $parsedEvent['message']);
