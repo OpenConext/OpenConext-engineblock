@@ -44,6 +44,15 @@ class EngineBlock_Log_Writer_Syslog_MessageParserTest extends PHPUnit_Framework_
                     'prefix' => 'QUEUED TIMESTAMP: 2013-02-06T12:21:49+01:00| EB[2fg8dc6i39etfmfmgm2hc989c1][51123ccc0c925]',
                     'message' => ' Identifier "filterCommandFactory" is not defined. [dumped 12 objects]'
                 )
+            ),
+            array(
+                array(
+                    'message' => '> QUEUED TIMESTAMP: 2013-02-06T14:31:16+01:00| EB[5eip02tcmfepv8mo9o0atouns2][51125b23e2507][DUMP \'previous exception\' (2/2)] Exception Object\n(\n    [message:protected] => test\n    [string:Exception:private] => \n    [code:protected] => 0\n    [file:protected] => /opt/www-on-host/OpenConext-engineblock/application/modules/Authentication/Controller/Proxy.php\n    [line:protected] => 36\n    [trace:Exception:private] => Array\n        (\n            [0] => Array\n                (\n                    [fun"...'
+                ),
+                'expectedResult' => array(
+                    'prefix'    => '> QUEUED TIMESTAMP: 2013-02-06T14:31:16+01:00| EB[5eip02tcmfepv8mo9o0atouns2][51125b23e2507][DUMP \'previous exception\' (2/2)]',
+                    'message' => ' Exception Object\n(\n    [message:protected] => test\n    [string:Exception:private] => \n    [code:protected] => 0\n    [file:protected] => /opt/www-on-host/OpenConext-engineblock/application/modules/Authentication/Controller/Proxy.php\n    [line:protected] => 36\n    [trace:Exception:private] => Array\n        (\n            [0] => Array\n                (\n                    [fun"...'
+                )
             )
         );
     }
