@@ -11,7 +11,7 @@ class EngineBlock_Log_Writer_Syslog_MessageParser
             ? $this->_normalizeMessage($event['message']) : '';
 
         preg_match_all(
-            '/(.*\[[a-zA-Z0-9 ]+\]\[[a-zA-Z0-9 ]+\](\[DUMP[^\]]*\])?)( .*)/',
+            '/([\]]*\[[a-zA-Z0-9 ]+\]\[[a-zA-Z0-9 ]+\](\[DUMP[^\]]*\])?)( .*)/',
             $message, $matches
         );
 
