@@ -20,6 +20,15 @@ class EngineBlock_Log_Writer_Syslog_MessageParserTest extends PHPUnit_Framework_
         return array(
             array(
                 array(
+                    'message' => 'non matching message'
+                ),
+                'expectedResult' => array(
+                    'prefix' => 'PREFIX REMOVED BY PARSER',
+                    'message' => 'MESSAGE REMOVED BY PARSER'
+                )
+            ),
+            array(
+                array(
                     'message' => 'EB[2fg8dc6i39etfmfmgm2hc989c1][51123ccdbc9d6] FLUSHING 72 LOG MESSAGES IN SESSION QUEUE (error caught)'
                 ),
                 'expectedResult' => array(
