@@ -53,10 +53,17 @@ class EngineBlock_Log_Writer_Syslog extends Zend_Log_Writer_Syslog
     protected function _write($event)
     {
         // @todo Move to factory
+        $messageParser = new EngineBlock_Log_Writer_Syslog_MessageParser();
+        $parsed = $messageParser->parse($event);
+
+        // @todo Move to factory
         $messageSplitter = new EngineBlock_Log_Writer_Syslog_MessageSplitter(self::MESSAGE_SPLIT_SIZE);
-        $chunks = $messageSplitter->split($event);
+        $chunks = $messageSplitter->split(
+            $parsed['prefix'], $parsed['message']
+        );
 
         foreach ($chunks as $chunk) {
+            $event['message'] = $chunk;
             parent::_write($event);
         }
 
