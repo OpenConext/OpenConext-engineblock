@@ -23,8 +23,7 @@ class EngineBlock_Log_Writer_Syslog_MessageSplitter
             $parsed['prefix'], $parsed['message']
         );
 
-        $message = array();
-
+        $messages = array();
         foreach ($chunks as $chunk) {
             $event['message'] = $chunk;
             $messages[] = $event;
