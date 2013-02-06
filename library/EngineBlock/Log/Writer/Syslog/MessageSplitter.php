@@ -46,10 +46,7 @@ class EngineBlock_Log_Writer_Syslog_MessageSplitter
             '/(.*\[[a-zA-Z0-9 ]+\]\[[a-zA-Z0-9 ]+\](\[DUMP[^\]]*\])?)( .*)/',
             $message, $matches
         );
-
-//        header('Content-Type: text/plain');
-//        var_dump($matches);
-
+    
         return array(
             'prefix' => isset($matches[1][0]) ? $matches[1][0] : 'PREFIX REMOVED BY PARSER',
             'message' => isset($matches[3][0]) ? $matches[3][0] : 'MESSAGE REMOVED BY PARSER',
