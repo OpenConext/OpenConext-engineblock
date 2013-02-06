@@ -13,8 +13,6 @@ class EngineBlock_Log_Writer_Syslog_MessageSplitterTest extends PHPUnit_Framewor
     {
         $syslogMessageSplitter = new EngineBlock_Log_Writer_Syslog_MessageSplitter(1024);
         $chunks = $syslogMessageSplitter->split($event);
-
-//        $this->assertEquals($expectedPrefix, $chunks[0]['prefix']);
         $this->assertEquals($expectedMessage, $chunks[0]['message']);
     }
 
