@@ -23,6 +23,10 @@ class EngineBlock_Log_Writer_Syslog_MessageSplitter
         $baseSplitLength = $this->messageSplitSize - 24;
         $splitLength = $baseSplitLength - strlen($prefix);
 
+        if ($splitLength < 1) {
+            throw new InvalidArgumentException('Cannot split this message, prefix is (almost) longer than split size');
+        }
+
         // split message (approx $this->$messageSplitSize, never more) into smaller messages
         $messages = array();
         $chunks = str_split(

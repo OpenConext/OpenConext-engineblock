@@ -42,4 +42,16 @@ class EngineBlock_Log_Writer_Syslog_MessageSplitterTest extends PHPUnit_Framewor
             )
         );
     }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Cannot split this message, prefix is (almost) longer than split size
+     */
+    public function testPrefixIsTooLong()
+    {
+        $syslogMessageSplitter = new EngineBlock_Log_Writer_Syslog_MessageSplitter(1024);
+        $prefix = str_repeat('x', 2000);
+        $message = 'test';
+        $chunks = $syslogMessageSplitter->split($prefix, $message);
+    }
 }
