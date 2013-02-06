@@ -32,7 +32,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         }
 
         // Get the configuration for EngineBlock in it's IdP role.
-        $entityDetails = $this->_getCurrentEntity('idpMetadataService');
+        $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
 
         $idpEntities = array();
         // Note that Shibboleth likes to see it's self in the metadata, so if an sp-entity-id was passed along
@@ -102,27 +102,10 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
     }
 
     /**
-     * Get the current configuration for EngineBlock in it's IdP role from the metadata we received from
-     * the Service Registry.
-     *
-     * @return array Entity configuration
-     */
-    protected function _getCurrentEntity($serviceName)
-    {
-        $server = $this->_server;
-        $canonicalIdpEntityId = "";
-        $this->_withNoVoContext(function() use ($server, $serviceName, &$canonicalIdpEntityId) {
-            /** @var $server EngineBlock_Corto_ProxyServer */
-            $canonicalIdpEntityId = $server->getUrl($serviceName);
-        });
-
-        return $this->_server->getRemoteEntity($canonicalIdpEntityId);
-    }
-
-    /**
      * Disable VO context and do something, then reinstate the VO context.
      *
      * @param callable $callbackFn Callback function to execute when no VO Context is set
+     * @todo does not seem to be used, remove?
      */
     protected function _withNoVoContext($callbackFn)
     {

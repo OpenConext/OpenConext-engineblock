@@ -76,9 +76,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         }
         if (class_exists($className, true)) {
             /** @var $serviceName EngineBlock_Corto_Module_Service_Abstract */
-            $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-            $this->xmlConverter = $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER];
-            $service = new $className($this->_server, $this->xmlConverter);
+            $service = $this->factoryService($className, $this->_server);
             $service->serve($serviceName);
             return;
         }
@@ -86,5 +84,40 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         throw new EngineBlock_Corto_Module_Services_Exception(
             "Unable to load service '$serviceName' (resolved to '$resolvedServiceName') tried className '$className'!"
         );
+    }
+
+    /**
+     * Creates services objects with their own specific needs
+     *
+     * @param string $className
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @return EngineBlock_Corto_Module_Service_Abstract
+     */
+    private function factoryService($className, EngineBlock_Corto_ProxyServer $server)
+    {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+
+        switch($className) {
+            case 'EngineBlock_Corto_Module_Service_ProvideConsent' :
+                return new EngineBlock_Corto_Module_Service_ProvideConsent(
+                    $server,
+                    $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER],
+                    $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY]
+                );
+            case 'EngineBlock_Corto_Module_Service_ProcessConsent' :
+                $preferredNameAttributeFilter = new EngineBlock_User_PreferredNameAttributeFilter();
+                return new EngineBlock_Corto_Module_Service_ProcessConsent(
+                    $server,
+                    $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER],
+                    $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY],
+                    $diContainer[EngineBlock_Application_DiContainer::MAILER],
+                    $preferredNameAttributeFilter
+                );
+            default :
+                return new $className(
+                    $server,
+                    $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER]
+                );
+        }
     }
 }

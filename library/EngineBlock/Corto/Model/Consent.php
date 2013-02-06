@@ -7,36 +7,72 @@ class EngineBlock_Corto_Model_Consent
     private $_response;
     private $_responseAttributes;
 
+    /** @var EngineBlock_Corto_Filter_Command_Factory */
+    private $_filterCommandFactory;
+
+    /** @var EngineBlock_Database_ConnectionFactory */
+    private $_databaseConnectionFactory;
+
+    /** @var array */
+    private $_filteredResponseAttributes;
+
     /**
-     * @param string $tableName         Table to use for storing consent
-     * @param bool $mustStoreValues     Whether to store only the attribute names or also the attribute values
-     * @param array $response           SAML Response in array format
-     * @param array $responseAttributes SAML Response Attributes
+     * @param $tableName
+     * @param $mustStoreValues
+     * @param array $response
+     * @param array $responseAttributes
+     * @param EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory
+     * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
      */
-    public function __construct($tableName, $mustStoreValues, array $response, array $responseAttributes)
+    public function __construct(
+        $tableName,
+        $mustStoreValues,
+        array $response,
+        array $responseAttributes,
+        EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory,
+        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
+    )
     {
         $this->_tableName = $tableName;
         $this->_mustStoreValues = $mustStoreValues;
         $this->_response = $response;
         $this->_responseAttributes = $responseAttributes;
+        $this->_filterCommandFactory = $filterCommandFactory;
+        $this->_databaseConnectionFactory = $databaseConnectionFactory;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFilteredResponseAttributes()
+    {
+        return $this->_filteredResponseAttributes;
+    }
+
+    /**
+     * @param array $spMetadata
+     * @return array
+     */
+    public function applyArp(array $spMetadata)
+    {
+        $arpFilter = $this->_filterCommandFactory->create('AttributeReleasePolicy');
+        $arpFilter->setSpMetadata($spMetadata);
+        $arpFilter->setResponseAttributes($this->_responseAttributes);
+        $arpFilter->execute();
+        return $arpFilter->getResponseAttributes();
     }
 
     public function hasStoredConsent($serviceProviderEntityId, $spMetadata)
     {
         try {
-            // Apply ARP
-            $arpFilter = new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy();
-            $arpFilter->setSpMetadata($spMetadata);
-            $arpFilter->setResponseAttributes($this->_responseAttributes);
-            $arpFilter->execute();
-            $attributes = $arpFilter->getResponseAttributes();
+            $this->_filteredResponseAttributes = $this->applyArp($spMetadata);
 
             $dbh = $this->_getConsentDatabaseConnection();
             if (!$dbh) {
                 return false;
             }
 
-            $attributesHash = $this->_getAttributesHash($attributes);
+            $attributesHash = $this->_getAttributesHash($this->_filteredResponseAttributes);
 
             $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ?";
             $parameters = array(
@@ -70,12 +106,7 @@ class EngineBlock_Corto_Model_Consent
 
     public function storeConsent($serviceProviderEntityId, $spMetadata)
     {
-        // Apply ARP
-        $arpFilter = new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy();
-        $arpFilter->setSpMetadata($spMetadata);
-        $arpFilter->setResponseAttributes($this->_responseAttributes);
-        $arpFilter->execute();
-        $attributes = $arpFilter->getResponseAttributes();
+        $this->_filteredResponseAttributes = $this->applyArp($spMetadata);
 
         $dbh = $this->_getConsentDatabaseConnection();
         if (!$dbh) {
@@ -88,7 +119,7 @@ class EngineBlock_Corto_Model_Consent
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProviderEntityId,
-            $this->_getAttributesHash($attributes)
+            $this->_getAttributesHash($this->_filteredResponseAttributes)
         );
 
         $statement = $dbh->prepare($query);
@@ -133,8 +164,7 @@ class EngineBlock_Corto_Model_Consent
     protected function _getConsentDatabaseConnection()
     {
         // We only use the write connection because consent is 3 queries of which only 1 light select query.
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        return $this->_databaseConnectionFactory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
     }
 
     protected function _getConsentUid()
