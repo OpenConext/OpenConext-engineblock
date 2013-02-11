@@ -66,6 +66,10 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
         $this->_addIsMemberOfSurfNlAttribute();
     }
 
+    /**
+     * @todo this looks a lot like new EngineBlock_User_PreferredNameAttributeFilter::getAttribute()
+     * if functionality is the same use it, or merge code
+     */
     protected function _determineCommonNameFromAttributes()
     {
         if (isset($this->_responseAttributes['urn:mace:dir:attribute-def:givenName'][0]) &&

@@ -1,0 +1,936 @@
+{
+    "urn:oid:2.5.4.3": "urn:mace:dir:attribute-def:cn",    
+    "urn:mace:dir:attribute-def:cn": {
+        "Description": {
+            "en": "your full name",
+            "nl": "volledige persoonsnaam"
+        },
+        "Name": {
+            "en": "Full Name",
+            "nl": "Volledige persoonsnaam"
+        }
+    },
+    "urn:oid:2.16.840.1.113730.3.1.241": "urn:mace:dir:attribute-def:displayName",
+    "urn:mace:dir:attribute-def:displayName": {
+        "Description": {
+            "en": "display name as shown in applications",
+            "nl": "weergave naam zoals getoond in applicaties"
+        },
+        "Name": {
+            "en": "Display Name",
+            "nl": "Weergavenaam"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.1": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+    "urn:mace:dir:attribute-def:eduPersonAffiliation": {
+        "Description": {
+            "en": "Status of this account in SURFconext",
+            "nl": "Status van deze account in SURFconext"
+        },
+        "Name": {
+            "en": "Accountstatus",
+            "nl": "Accountstatus"
+        },
+        "Conditions": {
+            "caseInsensitive": true,
+            "warning": {
+                "allowed": [
+                    "affiliate",
+                    "alum",
+                    "employee",
+                    "student",
+                    "staff"
+                ]
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.7": "urn:mace:dir:attribute-def:eduPersonEntitlement",
+    "urn:mace:dir:attribute-def:eduPersonEntitlement": {
+        "Description": {
+            "en": "entitlement which decides upon your authorization within the application",
+            "nl": "rechtaanduiding; URI (URL of URN) dat een recht op iets aangeeft; wordt bepaald door een contract tussen dienstaanbieder en instelling"
+        },
+        "Name": {
+            "en": "Entitlement",
+            "nl": "Rechtaanduiding"
+        },
+        "Conditions": {
+            "warning": {
+                "type": "URI"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.6": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
+    "urn:mace:dir:attribute-def:eduPersonPrincipalName": {
+        "Description": {
+            "en": "your unique username within your organization augmented with \"@organizationname.nl\"",
+            "nl": "jouw unieke gebruikersnaam binnen jouw instelling aangevuld met \"@instellingsnaam.nl\""
+        },
+        "Name": {
+            "en": "Net-ID",
+            "nl": "Net-ID"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1",
+                "regex": "\/[\\S]+@[\\S]+\/"
+            },
+            "caseInsensitive": true
+        }
+    },
+    "urn:oid:2.5.4.42": "urn:mace:dir:attribute-def:givenName",
+    "urn:mace:dir:attribute-def:givenName": {
+        "Description": {
+            "en": "your name",
+            "nl": "voornaam\/roepnaam"
+        },
+        "Name": {
+            "en": "Name",
+            "nl": "Voornaam"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:0.9.2342.19200300.100.1.3": "urn:mace:dir:attribute-def:mail",
+    "urn:mace:dir:attribute-def:mail": {
+        "_Comment": "Values SHOULD match RFC2821",
+        "Description": {
+            "en": "your e-mailaddress as known within your organization",
+            "nl": "jouw e-mailadres zoals bekend binnen jouw instelling"
+        },
+        "Name": {
+            "en": "E-mailaddress",
+            "nl": "E-mailadres"
+        },
+        "Conditions": {
+            "warning": {
+                "type": "EmailAddress"
+            }
+        }
+    },
+    "urn:oid:2.16.840.1.113730.3.1.39": "urn:mace:dir:attribute-def:preferredLanguage",
+    "urn:mace:dir:attribute-def:preferredLanguage": {
+        "Description": {
+            "en": "a two letter abbreviation according to ISO 639; no subcodes",
+            "nl": "een tweeletterige afkorting van de voorkeurstaal volgens de ISO 639 taalafkortings codetabel; geen subcodes"
+        },
+        "Name": {
+            "en": "Preferred Language",
+            "nl": "Voorkeurstaal"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:2.5.4.4": "urn:mace:dir:attribute-def:sn",
+    "urn:mace:dir:attribute-def:sn": {
+        "Description": {
+            "en": "your surname",
+            "nl": "jouw achternaam"
+        },
+        "Name": {
+            "en": "Surname",
+            "nl": "Achternaam"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:0.9.2342.19200300.100.1.1": "urn:mace:dir:attribute-def:uid",
+    "urn:mace:dir:attribute-def:uid": {
+        "Description": {
+            "en": "your unique username within your organization",
+            "nl": "jouw unieke gebruikersnaam binnen jouw instelling"
+        },
+        "Name": {
+            "en": "UID",
+            "nl": "UID"
+        },
+        "Conditions": {
+            "error": {
+                "min": "1",
+                "max": "1",
+                "maxLength": "256"
+            }
+        }
+    },
+    "urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier": {
+        "Description": {
+            "en": "Digital Author Identifier (DAI) as described at: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480",
+            "nl": "Digital Author Identifier (DAI) zoals beschreven op: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480"
+        },
+        "Name": {
+            "en": "DAI",
+            "nl": "DAI"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:mace:surffederatie.nl:attribute-def:nlEduPersonHomeOrganization": {
+        "Description": {
+            "en": "display name of the organization",
+            "nl": "weergavenaam van de instelling"
+        },
+        "Name": {
+            "en": "Display name of Organization",
+            "nl": "Weergavenaam van de Instelling"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.40.20.10.1": "urn:mace:surffederatie.nl:attribute-def:nlEduPersonOrgUnit",
+    "urn:mace:surffederatie.nl:attribute-def:nlEduPersonOrgUnit": {
+        "Description": {
+            "en": "unit name",
+            "nl": " naam van de afdeling"
+        },
+        "Name": {
+            "en": "Unitname",
+            "nl": "Afdelingsnaam"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.40.20.10.2": "urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch",
+    "urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch": {
+        "_Comment": "CROHO code",
+        "Description": {
+            "en": "study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown",
+            "nl": "opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft"
+        },
+        "Name": {
+            "en": "Study Branch",
+            "nl": "Opleiding"
+        }
+    },
+    "1.3.6.1.4.1.1076.20.40.20.10.3": "urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer",
+    "urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer": {
+        "_Comment": "Studielink code",
+        "Description": {
+            "en": "studielinknummer of the student as registered at www.studielink.nl",
+            "nl": "studielinknummer van student zoals geregistreerd bij www.studielink.nl"
+        },
+        "Name": {
+            "en": "Studielinknummer",
+            "nl": "Studielinknummer"
+        },
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.25178.1.2.9": "urn:mace:terena.org:attribute-def:schacHomeOrganization",
+    "urn:mace:terena.org:attribute-def:schacHomeOrganization": {
+        "_Comment": "Note that urn:oid:1.3.6.1.4.1.1466.115.121.1.15 is a non-conforming version that is deprecated",
+        "Description": {
+            "en": "name for the organization, making use of the domain name of the  organization conform RFC 1035",
+            "nl": "aanduiding voor de organisatie van een persoon gebruikmakend van de domeinnaam van de organisatie; syntax conform RFC 1035"
+        },
+        "Name": {
+            "en": "Organization",
+            "nl": "Organisatie"
+        },
+        "Conditions": {
+            "error": {
+                "min": "1",
+                "max": "1",
+                "type": "HostName"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.25178.1.2.10": "urn:mace:terena.org:attribute-def:schacHomeOrganizationType",
+    "urn:mace:terena.org:attribute-def:schacHomeOrganizationType": {
+        "Description": {
+            "en": "type of organization to which the user belongs",
+            "nl": "aanduiding voor het type organisatie waartoe een persoon behoort, gebruikmakend van de waarden zoals geregisteerd door Terena op: http:\/\/www.terena.org\/registry\/terena.org\/schac\/homeOrganizationType"
+        },
+        "Name": {
+            "en": "Type of Organization",
+            "nl": "Type Organisatie"
+        },
+        "Conditions": {
+            "warning": {
+                "allowed": [
+                    "urn:mace:terena.org:schac:homeOrganizationType:eu:higherEducationInstitution",
+                    "urn:mace:terena.org:schac:homeOrganizationType:eu:educationInstitution",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:NREN",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:universityHospital",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:NRENAffiliate",
+                    "urn:mace:terena.org:schac:homeOrganizationType:int:other"
+                ],
+                "max": "1"
+            }
+        }
+    },
+    "urn:nl.surfconext.licenseInfo": {
+        "Description": {
+            "en": "License information for the current service",
+            "nl": "Licentie informatie voor de huidige dienst"
+        },
+        "Name": {
+            "en": "License information",
+            "nl": "Licentieinformatie"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1": {
+        "Description": {
+            "en": "Status of this account in SURFconext",
+            "nl": "Status van deze account in SURFconext"
+        },
+        "Name": {
+            "en": "Accountstatus",
+            "nl": "Accountstatus"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2": {
+        "Description": {
+            "en": "The name of the Virtual Urganisation for which you have authenticated",
+            "nl": "De naam van de Virtuele Organisatie waarvoor je bent ingelogd."
+        },
+        "Name": {
+            "en": "Virtual Organisation Name",
+            "nl": "Naam Virtuele Organisatie"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.1076.20.40.40.1": {
+        "Description": {
+            "en": "Status of this account in SURFconext",
+            "nl": "Status van deze account in SURFconext"
+        },
+        "Name": {
+            "en": "Identifier",
+            "nl": "Identifier"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.10": "urn:mace:dir:attribute-def:eduPersonTargetedID",
+    "urn:mace:dir:attribute-def:eduPersonTargetedID": {
+        "Description": {
+            "en": "Status of this account in SURFconext",
+            "nl": "Status van deze account in SURFconext"
+        },
+        "Name": {
+            "en": "Identifier",
+            "nl": "Identifier"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.5.1.1": "urn:mace:dir:attribute-def:isMemberOf",
+    "urn:mace:dir:attribute-def:isMemberOf": {
+        "Description": {
+            "en": "Membership of Virtual Organizations and SURFconext.",
+            "nl": "Lidmaatschap van virtuele organisaties en SURFconext"
+        },
+        "Name": {
+            "en": "Membership",
+            "nl": "Lidmaatschap"
+        }
+    },
+    "nameid": {
+        "Description": {
+            "en": "Status of this account in SURFconext",
+            "nl": "Status van deze account in SURFconext"
+        },
+        "Name": {
+            "en": "Identifier",
+            "nl": "Identifier"
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.2": "urn:mace:dir:attribute-def:eduPersonNickname",
+    "urn:mace:dir:attribute-def:eduPersonNickname": {
+        "Conditions": {
+            "caseInsensitive": true
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.3": "urn:mace:dir:attribute-def:eduPersonOrgDN",
+    "urn:mace:dir:attribute-def:eduPersonOrgDN": {
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.4": "urn:mace:dir:attribute-def:eduPersonOrgUnitDN",
+    "urn:mace:dir:attribute-def:eduPersonOrgUnitDN": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.5": "urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation",
+    "urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation": {
+        "Conditions": {
+            "warning": {
+                "max": "1",
+                "allowed": [
+                    "affiliate",
+                    "alum",
+                    "employee",
+                    "student",
+                    "staff"
+                ]
+            },
+            "caseInsensitive": true
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.8": "urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN",
+    "urn:mace:dir:attribute-def:eduPersonPrimaryOrgUnitDN": {
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.9": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
+    "urn:mace:dir:attribute-def:eduPersonScopedAffiliation": {
+        "Conditions": {
+            "caseInsensitive": true
+        }
+    },
+    "urn:mace:dir:attribute-def:eduPersonAssurance": {
+        "Conditions": {
+            "warning": {
+                "type": "URI"
+            }
+        }
+    },
+    "urn:oid:0.9.2342.19200300.100.1.55": "urn:mace:dir:attribute-def:audio",
+    "urn:mace:dir:attribute-def:audio": {
+
+    },
+    "urn:oid:2.5.4.13": "urn:mace:dir:attribute-def:description",
+    "urn:mace:dir:attribute-def:description": {
+
+    },
+    "urn:mace:dir:attribute-def:facsimileTelephoneNumber": {
+
+    },
+    "urn:mace:dir:attribute-def:homePhone": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.39": "urn:mace:dir:attribute-def:homePostalAddress",
+    "urn:mace:dir:attribute-def:homePostalAddress": {
+        "Conditions": {
+            "warning": {
+                "max": "6",
+                "maxLength": "30"
+            }
+        }
+    },
+    "urn:oid:2.5.4.43": "urn:mace:dir:attribute-def:initials",
+    "urn:mace:dir:attribute-def:initials": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.60": "urn:mace:dir:attribute-def:jpegPhoto",
+    "urn:mace:dir:attribute-def:jpegPhoto": {
+
+    },
+    "urn:mace:dir:attribute-def:l": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.250.1.57": "urn:mace:dir:attribute-def:labeledURI",
+    "urn:mace:dir:attribute-def:labeledURI": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.10": "urn:mace:dir:attribute-def:manager",
+    "urn:mace:dir:attribute-def:manager": {
+
+    },
+    "urn:mace:dir:attribute-def:mobile": {
+
+    },
+    "urn:mace:dir:attribute-def:o": {
+
+    },
+    "urn:mace:dir:attribute-def:ou": {
+
+    },
+    "urn:mace:dir:attribute-def:pager": {
+
+    },
+    "urn:oid:2.5.4.16": "urn:mace:dir:attribute-def:postalAddress",
+    "urn:mace:dir:attribute-def:postalAddress": {
+
+    },
+    "urn:oid:2.5.4.17": "urn:mace:dir:attribute-def:postalCode",
+    "urn:mace:dir:attribute-def:postalCode": {
+
+    },
+    "urn:oid:2.5.4.18": "urn:mace:dir:attribute-def:postOfficeBox",
+    "urn:mace:dir:attribute-def:postOfficeBox": {
+
+    },
+    "urn:oid:2.5.4.34": "urn:mace:dir:attribute-def:seeAlso",
+    "urn:mace:dir:attribute-def:seeAlso": {
+
+    },
+    "urn:mace:dir:attribute-def:st": {
+
+    },
+    "urn:mace:dir:attribute-def:street": {
+
+    },
+    "urn:oid:2.5.4.20": "urn:mace:dir:attribute-def:telephoneNumber",
+    "urn:mace:dir:attribute-def:telephoneNumber": {
+
+    },
+    "urn:oid:2.5.4.12": "urn:mace:dir:attribute-def:title",
+    "urn:mace:dir:attribute-def:title": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.44": "urn:mace:dir:attribute-def:uniqueIdentifier",
+    "urn:mace:dir:attribute-def:uniqueIdentifier": {
+        "Conditions": {
+            "warning": {
+                "max": "1"
+            }
+        }
+    },
+    "urn:oid:2.5.4.36": "urn:mace:dir:attribute-def:userCertificate",
+    "urn:mace:dir:attribute-def:userCertificate": {
+
+    },
+    "urn:oid:2.5.4.35": "urn:mace:dir:attribute-def:userPassword",
+    "urn:mace:dir:attribute-def:userPassword": {
+
+    },
+    "urn:oid:2.16.840.1.113730.3.1.40": "urn:mace:dir:attribute-def:userSMIMECertificate",
+    "urn:mace:dir:attribute-def:userSMIMECertificate": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.26": "urn:mace:dir:attribute-def:aRecord",
+    "urn:mace:dir:attribute-def:aRecord": {
+
+    },
+    "urn:oid:2.5.4.1": "urn:mace:dir:attribute-def:aliasedEntryName",
+    "urn:mace:dir:attribute-def:aliasedObjectName": "urn:mace:dir:attribute-def:aliasedEntryName",
+    "urn:mace:dir:attribute-def:aliasedEntryName": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.37": "urn:mace:dir:attribute-def:associatedDomain",
+    "urn:mace:dir:attribute-def:associatedDomain": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.38": "urn:mace:dir:attribute-def:associatedName",
+    "urn:mace:dir:attribute-def:associatedName": {
+
+    },
+    "urn:oid:2.5.4.38": "urn:mace:dir:attribute-def:authorityRevocationList",
+    "urn:mace:dir:attribute-def:authorityRevocationList": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.48": "urn:mace:dir:attribute-def:buildingName",
+    "urn:mace:dir:attribute-def:buildingName": {
+
+    },
+    "urn:oid:2.5.4.15": "urn:mace:dir:attribute-def:businessCategory",
+    "urn:mace:dir:attribute-def:businessCategory": {
+
+    },
+    "urn:oid:2.5.4.6": "urn:mace:dir:attribute-def:c",
+    "urn:mace:dir:attribute-def:countryName": "urn:mace:dir:attribute-def:c",
+    "urn:mace:dir:attribute-def:c": {
+
+    },
+    "urn:oid:2.5.4.37": "urn:mace:dir:attribute-def:cACertificate",
+    "urn:mace:dir:attribute-def:cACertificate": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.31": "urn:mace:dir:attribute-def:cNAMERecord",
+    "urn:mace:dir:attribute-def:cNAMERecord": {
+
+    },
+    "urn:oid:2.16.840.1.113730.3.1.1": "urn:mace:dir:attribute-def:carLicense",
+    "urn:mace:dir:attribute-def:carLicense": {
+
+    },
+    "urn:oid:2.5.4.39": "urn:mace:dir:attribute-def:certificateRevocationList",
+    "urn:mace:dir:attribute-def:certificateRevocationList": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.43": "urn:mace:dir:attribute-def:co",
+    "urn:mace:dir:attribute-def:friendlyCountryName": "urn:mace:dir:attribute-def:co",
+    "urn:mace:dir:attribute-def:co": {
+
+    },
+    "urn:oid:2.5.4.40": "urn:mace:dir:attribute-def:crossCertificatePair",
+    "urn:mace:dir:attribute-def:crossCertificatePair": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.54": "urn:mace:dir:attribute-def:dITRedirect",
+    "urn:mace:dir:attribute-def:dITRedirect": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.49": "urn:mace:dir:attribute-def:dSAQuality",
+    "urn:mace:dir:attribute-def:dSAQuality": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.25": "urn:mace:dir:attribute-def:dc",
+    "urn:mace:dir:attribute-def:domainComponent": "urn:mace:dir:attribute-def:dc",
+    "urn:mace:dir:attribute-def:dc": {
+
+    },
+    "urn:oid:2.5.4.53": "urn:mace:dir:attribute-def:deltaRevocationList",
+    "urn:mace:dir:attribute-def:deltaRevocationList": {
+
+    },
+    "urn:oid:2.16.840.1.113730.3.1.2": "urn:mace:dir:attribute-def:departmentNumber",
+    "urn:mace:dir:attribute-def:departmentNumber": {
+
+    },
+    "urn:oid:2.5.4.27": "urn:mace:dir:attribute-def:destinationIndicator",
+    "urn:mace:dir:attribute-def:destinationIndicator": {
+
+    },
+    "urn:oid:2.5.4.49": "urn:mace:dir:attribute-def:distinguishedName",
+    "urn:mace:dir:attribute-def:distinguishedName": {
+
+    },
+    "urn:oid:2.5.4.54": "urn:mace:dir:attribute-def:dmdName",
+    "urn:mace:dir:attribute-def:dmdName": {
+
+    },
+    "urn:oid:2.5.4.46": "urn:mace:dir:attribute-def:dnQualifier",
+    "urn:mace:dir:attribute-def:dnQualifier": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.14": "urn:mace:dir:attribute-def:documentAuthor",
+    "urn:mace:dir:attribute-def:documentAuthor": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.11": "urn:mace:dir:attribute-def:documentIdentifier",
+    "urn:mace:dir:attribute-def:documentIdentifier": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.15": "urn:mace:dir:attribute-def:documentLocation",
+    "urn:mace:dir:attribute-def:documentLocation": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.56": "urn:mace:dir:attribute-def:documentPublisher",
+    "urn:mace:dir:attribute-def:documentPublisher": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.12": "urn:mace:dir:attribute-def:documentTitle",
+    "urn:mace:dir:attribute-def:documentTitle": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.13": "urn:mace:dir:attribute-def:documentVersion",
+    "urn:mace:dir:attribute-def:documentVersion": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.5": "urn:mace:dir:attribute-def:drink",
+    "urn:mace:dir:attribute-def:favouriteDrink": "urn:mace:dir:attribute-def:drink",
+    "urn:mace:dir:attribute-def:drink": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.2.1.2": "urn:mace:dir:attribute-def:eduOrgHomePageURI",
+    "urn:mace:dir:attribute-def:eduOrgHomePageURI": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.2.1.3": "urn:mace:dir:attribute-def:eduOrgIdentityAuthNPolicyURI",
+    "urn:mace:dir:attribute-def:eduOrgIdentityAuthNPolicyURI": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.2.1.4": "urn:mace:dir:attribute-def:eduOrgLegalName",
+    "urn:mace:dir:attribute-def:eduOrgLegalName": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.2.1.5": "urn:mace:dir:attribute-def:eduOrgSuperiorURI",
+    "urn:mace:dir:attribute-def:eduOrgSuperiorURI": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.5923.1.2.1.6": "urn:mace:dir:attribute-def:eduOrgWhitePagesURI",
+    "urn:mace:dir:attribute-def:eduOrgWhitePagesURI": {
+
+    },
+    "urn:oid:1.2.840.113549.1.9.1": "urn:mace:dir:attribute-def:email",
+    "urn:mace:dir:attribute-def:emailAddress": "urn:mace:dir:attribute-def:email",
+    "urn:mace:dir:attribute-def:pkcs9email": "urn:mace:dir:attribute-def:email",
+    "urn:mace:dir:attribute-def:email": {
+
+    },
+    "urn:oid:2.16.840.1.113730.3.1.3": "urn:mace:dir:attribute-def:employeeNumber",
+    "urn:mace:dir:attribute-def:employeeNumber": {
+
+    },
+    "urn:oid:2.16.840.1.113730.3.1.4": "urn:mace:dir:attribute-def:employeeType",
+    "urn:mace:dir:attribute-def:employeeType": {
+
+    },
+    "urn:oid:2.5.4.47": "urn:mace:dir:attribute-def:enhancedSearchGuide",
+    "urn:mace:dir:attribute-def:enhancedSearchGuide": {
+
+    },
+    "urn:oid:2.5.4.23": "urn:mace:dir:attribute-def:fax",
+    "urn:mace:dir:attribute-def:fax": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.9": "urn:mace:dir:attribute-def:federationFeideSchemaVersion",
+    "urn:mace:dir:attribute-def:federationFeideSchemaVersion": {
+
+    },
+    "urn:oid:2.5.4.44": "urn:mace:dir:attribute-def:generationQualifier",
+    "urn:mace:dir:attribute-def:generationQualifier": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.20": "urn:mace:dir:attribute-def:homeTelephoneNumber",
+    "urn:mace:dir:attribute-def:homeTelephoneNumber": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.9": "urn:mace:dir:attribute-def:host",
+    "urn:mace:dir:attribute-def:host": {
+
+    },
+    "urn:oid:2.5.4.51": "urn:mace:dir:attribute-def:houseIdentifier",
+    "urn:mace:dir:attribute-def:houseIdentifier": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.4": "urn:mace:dir:attribute-def:info",
+    "urn:mace:dir:attribute-def:info": {
+
+    },
+    "urn:oid:2.5.4.25": "urn:mace:dir:attribute-def:internationaliSDNNumber",
+    "urn:mace:dir:attribute-def:internationaliSDNNumber": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.46": "urn:mace:dir:attribute-def:janetMailbox",
+    "urn:mace:dir:attribute-def:janetMailbox": {
+
+    },
+    "urn:oid:2.5.4.2": "urn:mace:dir:attribute-def:knowledgeInformation",
+    "urn:mace:dir:attribute-def:knowledgeInformation": {
+
+    },
+    "urn:oid:2.5.4.7": "urn:mace:dir:attribute-def:localityName",
+    "urn:mace:dir:attribute-def:localityName": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.27": "urn:mace:dir:attribute-def:mDRecord",
+    "urn:mace:dir:attribute-def:mDRecord": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.28": "urn:mace:dir:attribute-def:mXRecord",
+    "urn:mace:dir:attribute-def:mXRecord": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.47": "urn:mace:dir:attribute-def:mailPreferenceOption",
+    "urn:mace:dir:attribute-def:mailPreferenceOption": {
+
+    },
+    "urn:oid:2.5.4.31": "urn:mace:dir:attribute-def:member",
+    "urn:mace:dir:attribute-def:member": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.41": "urn:mace:dir:attribute-def:mobileTelephoneNumber",
+    "urn:mace:dir:attribute-def:mobileTelephoneNumber": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.29": "urn:mace:dir:attribute-def:nSRecord",
+    "urn:mace:dir:attribute-def:nSRecord": {
+
+    },
+    "urn:oid:2.5.4.41": "urn:mace:dir:attribute-def:name",
+    "urn:mace:dir:attribute-def:name": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.6": "urn:mace:dir:attribute-def:norEduOrgAcronym",
+    "urn:mace:dir:attribute-def:norEduOrgAcronym": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.12": "urn:mace:dir:attribute-def:norEduOrgNIN",
+    "urn:mace:dir:attribute-def:norEduOrgNIN": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.11": "urn:mace:dir:attribute-def:norEduOrgSchemaVersion",
+    "urn:mace:dir:attribute-def:norEduOrgSchemaVersion": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.7": "urn:mace:dir:attribute-def:norEduOrgUniqueIdentifier",
+    "urn:mace:dir:attribute-def:norEduOrgUniqueIdentifier": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.1": "urn:mace:dir:attribute-def:norEduOrgUniqueNumber",
+    "urn:mace:dir:attribute-def:norEduOrgUniqueNumber": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.8": "urn:mace:dir:attribute-def:norEduOrgUnitUniqueIdentifier",
+    "urn:mace:dir:attribute-def:norEduOrgUnitUniqueIdentifier": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.2": "urn:mace:dir:attribute-def:norEduOrgUnitUniqueNumber",
+    "urn:mace:dir:attribute-def:norEduOrgUnitUniqueNumber": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.3": "urn:mace:dir:attribute-def:norEduPersonBirthDate",
+    "urn:mace:dir:attribute-def:norEduPersonBirthDate": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.4": "urn:mace:dir:attribute-def:norEduPersonLIN",
+    "urn:mace:dir:attribute-def:norEduPersonLIN": {
+
+    },
+    "urn:oid:1.3.6.1.4.1.2428.90.1.5": "urn:mace:dir:attribute-def:norEduPersonNIN",
+    "urn:mace:dir:attribute-def:norEduPersonNIN": {
+
+    },
+    "urn:oid:2.5.4.0": "urn:mace:dir:attribute-def:objectClass",
+    "urn:mace:dir:attribute-def:objectClass": {
+
+    },
+    "urn:oid:2.5.4.10": "urn:mace:dir:attribute-def:organizationName",
+    "urn:mace:dir:attribute-def:organizationName": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.45": "urn:mace:dir:attribute-def:organizationalStatus",
+    "urn:mace:dir:attribute-def:organizationalStatus": {
+
+    },
+    "urn:oid:2.5.4.11": "urn:mace:dir:attribute-def:organizationalUnitName",
+    "urn:mace:dir:attribute-def:organizationalUnitName": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.22": "urn:mace:dir:attribute-def:otherMailbox",
+    "urn:mace:dir:attribute-def:otherMailbox": {
+
+    },
+    "urn:oid:2.5.4.32": "urn:mace:dir:attribute-def:owner",
+    "urn:mace:dir:attribute-def:owner": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.42": "urn:mace:dir:attribute-def:pagerTelephoneNumber",
+    "urn:mace:dir:attribute-def:pagerTelephoneNumber": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.53": "urn:mace:dir:attribute-def:personalSignature",
+    "urn:mace:dir:attribute-def:personalSignature": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.40": "urn:mace:dir:attribute-def:personalTitle",
+    "urn:mace:dir:attribute-def:personalTitle": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.7": "urn:mace:dir:attribute-def:photo",
+    "urn:mace:dir:attribute-def:photo": {
+
+    },
+    "urn:oid:2.5.4.19": "urn:mace:dir:attribute-def:physicalDeliveryOfficeName",
+    "urn:mace:dir:attribute-def:physicalDeliveryOfficeName": {
+
+    },
+    "urn:oid:2.5.4.28": "urn:mace:dir:attribute-def:preferredDeliveryMethod",
+    "urn:mace:dir:attribute-def:preferredDeliveryMethod": {
+
+    },
+    "urn:oid:2.5.4.29": "urn:mace:dir:attribute-def:presentationAddress",
+    "urn:mace:dir:attribute-def:presentationAddress": {
+
+    },
+    "urn:oid:2.5.4.48": "urn:mace:dir:attribute-def:protocolInformation",
+    "urn:mace:dir:attribute-def:protocolInformation": {
+
+    },
+    "urn:oid:2.5.4.65": "urn:mace:dir:attribute-def:pseudonym",
+    "urn:mace:dir:attribute-def:pseudonym": {
+
+    },
+    "urn:oid:2.5.4.26": "urn:mace:dir:attribute-def:registeredAddress",
+    "urn:mace:dir:attribute-def:registeredAddress": {
+
+    },
+    "urn:oid:2.5.4.33": "urn:mace:dir:attribute-def:roleOccupant",
+    "urn:mace:dir:attribute-def:roleOccupant": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.6": "urn:mace:dir:attribute-def:roomNumber",
+    "urn:mace:dir:attribute-def:roomNumber": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.30": "urn:mace:dir:attribute-def:sOARecord",
+    "urn:mace:dir:attribute-def:sOARecord": {
+
+    },
+    "urn:oid:2.5.4.14": "urn:mace:dir:attribute-def:searchGuide",
+    "urn:mace:dir:attribute-def:searchGuide": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.21": "urn:mace:dir:attribute-def:secretary",
+    "urn:mace:dir:attribute-def:secretary": {
+
+    },
+    "urn:oid:2.5.4.5": "urn:mace:dir:attribute-def:serialNumber",
+    "urn:mace:dir:attribute-def:serialNumber": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.50": "urn:mace:dir:attribute-def:singleLevelQuality",
+    "urn:mace:dir:attribute-def:singleLevelQuality": {
+
+    },
+    "urn:oid:2.5.4.8": "urn:mace:dir:attribute-def:stateOrProvinceName",
+    "urn:mace:dir:attribute-def:stateOrProvinceName": {
+
+    },
+    "urn:oid:2.5.4.9": "urn:mace:dir:attribute-def:streetAddress",
+    "urn:mace:dir:attribute-def:streetAddress": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.52": "urn:mace:dir:attribute-def:subtreeMaximumQuality",
+    "urn:mace:dir:attribute-def:subtreeMaximumQuality": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.51": "urn:mace:dir:attribute-def:subtreeMinimumQuality",
+    "urn:mace:dir:attribute-def:subtreeMinimumQuality": {
+
+    },
+    "urn:oid:2.5.4.52": "urn:mace:dir:attribute-def:supportedAlgorithms",
+    "urn:mace:dir:attribute-def:supportedAlgorithms": {
+
+    },
+    "urn:oid:2.5.4.30": "urn:mace:dir:attribute-def:supportedApplicationContext",
+    "urn:mace:dir:attribute-def:supportedApplicationContext": {
+
+    },
+    "urn:oid:2.5.4.22": "urn:mace:dir:attribute-def:teletexTerminalIdentifier",
+    "urn:mace:dir:attribute-def:teletexTerminalIdentifier": {
+
+    },
+    "urn:oid:2.5.4.21": "urn:mace:dir:attribute-def:telexNumber",
+    "urn:mace:dir:attribute-def:telexNumber": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.2": "urn:mace:dir:attribute-def:textEncodedORAddress",
+    "urn:mace:dir:attribute-def:textEncodedORAddress": {
+
+    },
+    "urn:oid:2.5.4.50": "urn:mace:dir:attribute-def:uniqueMember",
+    "urn:mace:dir:attribute-def:uniqueMember": {
+
+    },
+    "urn:oid:0.9.2342.19200300.100.1.8": "urn:mace:dir:attribute-def:userClass",
+    "urn:mace:dir:attribute-def:userClass": {
+
+    },
+    "urn:oid:2.16.840.1.113730.3.1.216": "urn:mace:dir:attribute-def:userPKCS12",
+    "urn:mace:dir:attribute-def:userPKCS12": {
+
+    },
+    "urn:oid:2.5.4.24": "urn:mace:dir:attribute-def:x121Address",
+    "urn:mace:dir:attribute-def:x121Address": {
+
+    },
+    "urn:oid:2.5.4.45": "urn:mace:dir:attribute-def:x500UniqueIdentifier",
+    "urn:mace:dir:attribute-def:x500UniqueIdentifier": {
+
+    }
+}
