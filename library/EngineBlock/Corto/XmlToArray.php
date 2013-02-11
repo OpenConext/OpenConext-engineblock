@@ -148,7 +148,7 @@ class EngineBlock_Corto_XmlToArray
 
     public static function xml2array($xml)
     {
-        $parser = xml_parser_create();
+        $parser = xml_parser_create_ns();
         $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         if (!$foldingOptionSet) {
             throw new EngineBlock_Corto_XmlToArray_Exception(
@@ -185,10 +185,9 @@ class EngineBlock_Corto_XmlToArray
      */
 
     protected static $counter = 0;
-     
+
     protected static function _xml2array(&$elements, $level = 1, $namespaceMapping = array())
     {
-        static $defaultNs;
         $newElement = array();
 
         while(isset($elements[self::$counter])) {
@@ -206,25 +205,19 @@ class EngineBlock_Corto_XmlToArray
             if (isset($value['attributes']) && $attributes = $value['attributes']) {
                 foreach($attributes as $attributeKey => $attributeValue) {
                     unset($attributes[$attributeKey]);
-
-                    if (preg_match("/^xmlns:(.+)$/", $attributeKey, $namespacePrefixAndTag)) {
-                        if (!self::$_namespaces[$attributeValue]) {
-                            self::$_namespaces[$attributeValue] = $namespacePrefixAndTag[1];
-                        }
-                        $namespaceMapping[$namespacePrefixAndTag[1]] = self::$_namespaces[$attributeValue];
-                        $hashedAttributes['_xmlns:'.self::$_namespaces[$attributeValue]] = $attributeValue;
-                    } elseif (preg_match("/^xmlns$/", $attributeKey)) {
-                        $defaultNs = self::$_namespaces[$attributeValue];
-                    } else {
-                        $hashedAttributes[self::ATTRIBUTE_PFX . $attributeKey] = $attributeValue;
-                    }
+                    $hashedAttributes[self::ATTRIBUTE_PFX . $attributeKey] = $attributeValue;
                 }
             }
+
             $complete = array();
-            if (preg_match("/^(.+):(.+)$/", $tagName, $namespacePrefixAndTag) && $prefix = $namespaceMapping[$namespacePrefixAndTag[1]]) {
-                $tagName = $prefix . ":" . $namespacePrefixAndTag[2];
-            } else {
-                $tagName = $defaultNs . ":" . $tagName;
+            // find prefix and elementname. Prefix is lookup of the namespace within self::_namespaces
+            $full_namespace =  substr($tagName, 0, strrpos($tagName, ':'));
+            if ($full_namespace != "") {
+                // search _namespaces for namespace_prefix
+                if (isset(self::$_namespaces[$full_namespace])) {
+                    // prefix is found, replaces tagName with prefix:elementName
+                    $tagName =  self::$_namespaces[$full_namespace] . ":" . substr($tagName, strrpos($tagName, ':') +1 );
+                }
             }
             $complete[self::TAG_NAME_PFX] = $tagName;
             if ($hashedAttributes) {
