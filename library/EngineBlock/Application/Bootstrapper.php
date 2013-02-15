@@ -117,12 +117,11 @@ class EngineBlock_Application_Bootstrapper
      */
     protected function _mergeConfigFiles(array $configFiles)
     {
-        $configContent = '';
+        $configFileContents = "";
         foreach($configFiles as $configFile) {
-            $configContent .= file_get_contents($configFile);
+            $configFileContents .= file_get_contents($configFile);
         }
-
-        return $configContent;
+        return $configFileContents;
     }
 
     /**
