@@ -119,7 +119,7 @@ class EngineBlock_Application_Bootstrapper
     {
         $configFileContents = "";
         foreach($configFiles as $configFile) {
-            $configFileContents .= file_get_contents($configFile);
+            $configFileContents .= file_get_contents($configFile) .PHP_EOL;
         }
         return $configFileContents;
     }
