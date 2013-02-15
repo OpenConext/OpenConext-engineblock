@@ -98,10 +98,8 @@ class EngineBlock_Application_Bootstrapper
     }
 
     /**
-     * Concatenate the INI files from /application/configs/application.ini
-     * and from /etc/surfconext/engineblock.ini and return the result as a string.
-     *
-     * @return string
+     * return a list of config files (default and environment overrides) that shoud be loaded
+     * @return array
      */
     protected function _getAllConfigFiles()
     {
@@ -112,24 +110,49 @@ class EngineBlock_Application_Bootstrapper
     }
 
     /**
-     * Merges the various config files
+     * Merges content of given config files
+     *
+     * @param array $configFiles
+     * @return string
+     */
+    protected function _mergeConfigFiles(array $configFiles)
+    {
+        $configContent = '';
+        foreach($configFiles as $configFile) {
+            $configContent .= file_get_contents($configFile);
+        }
+
+        return $configContent;
+    }
+
+    /**
+     * Tries to parse config files, if this fails each file will be verified to provide more debug information
      *
      * @param array $configFiles
      * @return EngineBlock_Config_Ini
      */
     protected function _getConfigurationLoader(array $configFiles)
     {
-        /** @var $config EngineBlock_Config_Ini */
-        $config = null;
-        foreach($configFiles as $configFile) {
-            if ($config instanceof EngineBlock_Config_Ini) {
-                $config->merge(new EngineBlock_Config_Ini($configFile));
-            } else {
-                $config = new EngineBlock_Config_Ini($configFile);
-            }
+        try {
+            $config = new EngineBlock_Config_Ini($this->_mergeConfigFiles($configFiles));
+        } catch (EngineBlock_Exception $ex) {
+            $this->_verifyConfigFiles($configFiles);
         }
 
         return $config;
+    }
+
+    /**
+     * Tries to parse config files, if this fails an exception will be thrown in EngineBlock_Config_Ini, this is useful
+     * to determine which of the files contains an error
+     *
+     * @param array $configFiles
+     */
+    private function _verifyConfigFiles(array $configFiles) {
+        /** @var $config EngineBlock_Config_Ini */
+        foreach($configFiles as $configFile) {
+            new EngineBlock_Config_Ini($configFile);
+        }
     }
 
     protected function _setEnvironmentIdByDetection()
