@@ -50,7 +50,7 @@ class EngineBlock_Config_Ini extends Zend_Config_Ini
 
         // Check if there was a error while loading file
         if ($this->_loadFileErrorStr !== null) {
-            throw new EngineBlock_Exception($this->_loadFileErrorStr, EngineBlock_Exception::CODE_ALERT);
+            throw new EngineBlock_Exception('Parsing config file failed: ' . $this->_loadFileErrorStr, EngineBlock_Exception::CODE_ALERT);
         }
 
         return $iniArray;
