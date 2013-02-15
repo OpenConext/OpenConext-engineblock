@@ -99,6 +99,7 @@ class EngineBlock_Application_Bootstrapper
 
     /**
      * return a list of config files (default and environment overrides) that shoud be loaded
+     *
      * @return array
      */
     protected function _getAllConfigFiles()
@@ -118,7 +119,7 @@ class EngineBlock_Application_Bootstrapper
     protected function _mergeConfigFiles(array $configFiles)
     {
         $configFileContents = "";
-        foreach($configFiles as $configFile) {
+        foreach ($configFiles as $configFile) {
             $configFileContents .= file_get_contents($configFile) . PHP_EOL;
         }
         return $configFileContents;
@@ -147,9 +148,10 @@ class EngineBlock_Application_Bootstrapper
      *
      * @param array $configFiles
      */
-    private function _verifyConfigFiles(array $configFiles) {
+    private function _verifyConfigFiles(array $configFiles)
+    {
         /** @var $config EngineBlock_Config_Ini */
-        foreach($configFiles as $configFile) {
+        foreach ($configFiles as $configFile) {
             new EngineBlock_Config_Ini($configFile);
         }
     }
