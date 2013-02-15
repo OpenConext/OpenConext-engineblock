@@ -92,7 +92,7 @@ class EngineBlock_Application_Bootstrapper
     {
         $this->_application->setConfiguration(
             $this->_getConfigurationLoader(
-                $this->_getAllConfigsContent()
+                $this->_getAllConfigFiles()
             )
         );
     }
@@ -103,23 +103,33 @@ class EngineBlock_Application_Bootstrapper
      *
      * @return string
      */
-    protected function _getAllConfigsContent()
+    protected function _getAllConfigFiles()
     {
-        $configFiles = array(
+        return array(
             ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
             self::CONFIG_FILE_ENVIORNMENT,
         );
-
-        $configFileContents = "";
-        foreach ($configFiles as $configFile) {
-            $configFileContents .= file_get_contents($configFile) . PHP_EOL;
-        }
-        return $configFileContents;
     }
 
-    protected function _getConfigurationLoader($configContent)
+    /**
+     * Merges the various config files
+     *
+     * @param array $configFiles
+     * @return EngineBlock_Config_Ini
+     */
+    protected function _getConfigurationLoader(array $configFiles)
     {
-        return new EngineBlock_Config_Ini($configContent);
+        /** @var $config EngineBlock_Config_Ini */
+        $config = null;
+        foreach($configFiles as $configFile) {
+            if ($config instanceof EngineBlock_Config_Ini) {
+                $config->merge(new EngineBlock_Config_Ini($configFile));
+            } else {
+                $config = new EngineBlock_Config_Ini($configFile);
+            }
+        }
+
+        return $config;
     }
 
     protected function _setEnvironmentIdByDetection()
