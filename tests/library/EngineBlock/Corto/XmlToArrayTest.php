@@ -40,7 +40,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider xmlDataProvider
+     * @dataProvider xmlInputProvider
      */
     public function testXmlToArray($xmlFile, $phpFile)
     {
@@ -51,11 +51,22 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Loads a set of testcases from resources dir
+     * @dataProvider xmlOutputProvider
+     */
+    public function testArrayToXml($phpFile, $xmlFile)
+    {
+        $phpInput = require $phpFile;
+        $expectedXmlOutput = file_get_contents($xmlFile);
+
+        $this->assertEquals($expectedXmlOutput, EngineBlock_Corto_XmlToArray::array2xml($phpInput));
+    }
+
+    /**
+     * Loads a set of xml to php testcases from resources dir
      *
      * @return array
      */
-    public function xmlDataProvider()
+    public function xmlInputProvider()
     {
         $testCasesDir = new DirectoryIterator(TEST_RESOURCES_DIR . '/xml-to-array');
 
@@ -69,6 +80,31 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
             $testCases[$testCaseDir->getFilename()] = array(
                 'xmlFile' => $testCaseDir->getPathname() . '/input.xml',
                 'phpFile' => $testCaseDir->getPathname() . '/output.php',
+            );
+        }
+
+        return $testCases;
+    }
+
+    /**
+     * Loads a set of php to xml testcases from resources dir
+     *
+     * @return array
+     */
+    public function xmlOutputProvider()
+    {
+        $testCasesDir = new DirectoryIterator(TEST_RESOURCES_DIR . '/xml-to-array');
+
+        $testCases = array();
+        /** @var $testCaseDir DirectoryIterator */
+        foreach($testCasesDir as $testCaseDir) {
+            if ($testCaseDir->isDot()) {
+                continue;
+            }
+
+            $testCases[$testCaseDir->getFilename()] = array(
+                'phpFile' => $testCaseDir->getPathname() . '/output.php',
+                'xmlFile' => $testCaseDir->getPathname() . '/output.xml'
             );
         }
 
