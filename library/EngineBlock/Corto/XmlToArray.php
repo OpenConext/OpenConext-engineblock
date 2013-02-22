@@ -249,12 +249,12 @@ class EngineBlock_Corto_XmlToArray
     private static function _mapNamespacesToSaml($tagName)
     {
         // find prefix and elementname. Prefix is lookup of the namespace within self::_namespaces
-        $full_namespace =  substr($tagName, 0, strrpos($tagName, ':'));
-        if ($full_namespace != "") {
+        $fullNamespace =  substr($tagName, 0, strrpos($tagName, ':'));
+        if ($fullNamespace != "") {
             // search _namespaces for namespace_prefix
-            if (isset(self::$_namespaces[$full_namespace])) {
+            if (isset(self::$_namespaces[$fullNamespace])) {
                 // prefix is found, replaces tagName with prefix:elementName
-                $tagName =  self::$_namespaces[$full_namespace] . ":" . substr($tagName, strrpos($tagName, ':') +1 );
+                $tagName =  self::$_namespaces[$fullNamespace] . ":" . substr($tagName, strrpos($tagName, ':') +1 );
             }
         }
 
