@@ -1,7 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../../../autoloading.inc.php');
-
 class Test_EngineBlock_Attributes_NormalizerTest extends \PHPUnit_Framework_TestCase
 {
     public function testNormalizeUnnecessary()
