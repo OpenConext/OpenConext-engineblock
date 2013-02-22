@@ -79,7 +79,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
 
             $testCases[$testCaseDir->getFilename()] = array(
                 'xmlFile' => $testCaseDir->getPathname() . '/input.xml',
-                'phpFile' => $testCaseDir->getPathname() . '/output.php',
+                'phpFile' => $testCaseDir->getPathname() . '/output.php'
             );
         }
 
