@@ -237,6 +237,30 @@ class Test_EngineBlock_Attributes_NormalizerTest extends \PHPUnit_Framework_Test
         );
     }
 
+    public function testDenormalizeDoesNotBreakOnUndefinedAttributes()
+    {
+        $attributes = array(
+            'knownAttribute1' => array('val1', 'val2'),
+            'unknownAttribute' => array('val1', 'val2'),
+            'knownAttribute2' => array('val1', 'val2'),
+        );
+        $definition = array(
+            'knownAttribute1' => '',
+            'knownAttribute2' => ''
+        );
+        $denormalized = $this->_denormalize($attributes, $definition);
+
+        $this->assertEquals(
+            array(
+                'knownAttribute1' => array('val1', 'val2'),
+                'unknownAttribute' => array('val1', 'val2'),
+                'knownAttribute2' => array('val1', 'val2'),
+            ),
+            $denormalized,
+            "Denormalization with undefined attributes"
+        );
+    }
+
     /**
      * @var Zend_Log_Writer_Mock
      */

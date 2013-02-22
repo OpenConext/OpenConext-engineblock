@@ -132,7 +132,7 @@ class EngineBlock_Attributes_Normalizer
                 $this->_logger->debug(
                     "Attribute Denormalization: Don't have a definition for '$attributeName', unable to add any aliases"
                 );
-                break;
+                continue;
             }
 
             $aliases = $this->_getAliasesForAttribute($attributeName);
