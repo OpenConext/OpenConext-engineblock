@@ -2,8 +2,6 @@
 /**
  * Incomplete test class for xml conversion
  *
- * @todo test also xml2array
- * @todo test also array2xml
  * @todo test also array2attributes
  * @todo test also formatXml *
  */
