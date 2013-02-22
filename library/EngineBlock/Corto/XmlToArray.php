@@ -210,15 +210,9 @@ class EngineBlock_Corto_XmlToArray
             }
 
             $complete = array();
-            // find prefix and elementname. Prefix is lookup of the namespace within self::_namespaces
-            $full_namespace =  substr($tagName, 0, strrpos($tagName, ':'));
-            if ($full_namespace != "") {
-                // search _namespaces for namespace_prefix
-                if (isset(self::$_namespaces[$full_namespace])) {
-                    // prefix is found, replaces tagName with prefix:elementName
-                    $tagName =  self::$_namespaces[$full_namespace] . ":" . substr($tagName, strrpos($tagName, ':') +1 );
-                }
-            }
+
+            $tagName = self::_mapNamespacesToSaml($tagName);
+
             $complete[self::TAG_NAME_PFX] = $tagName;
             if ($hashedAttributes) {
                 $complete = array_merge($complete, $hashedAttributes);
@@ -244,6 +238,27 @@ class EngineBlock_Corto_XmlToArray
         }
         self::$counter = 0;
         return $newElement;
+    }
+
+    /**
+     * Maps namespace prefixes to the correct ones as used in saml
+     * 
+     * @param string $tagName
+     * @return string
+     */
+    private static function _mapNamespacesToSaml($tagName)
+    {
+        // find prefix and elementname. Prefix is lookup of the namespace within self::_namespaces
+        $full_namespace =  substr($tagName, 0, strrpos($tagName, ':'));
+        if ($full_namespace != "") {
+            // search _namespaces for namespace_prefix
+            if (isset(self::$_namespaces[$full_namespace])) {
+                // prefix is found, replaces tagName with prefix:elementName
+                $tagName =  self::$_namespaces[$full_namespace] . ":" . substr($tagName, strrpos($tagName, ':') +1 );
+            }
+        }
+
+        return $tagName;
     }
 
     /**
