@@ -1,0 +1,88 @@
+<fiets:Response xmlns:fiets="urn:oasis:names:tc:SAML:2.0:protocol"
+                xmlns:feestmuts="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="_a6b2c192b7f715a84b0a4237251c3ebe56028a4414"
+                InResponseTo="CORTOea1ef358da695ef0e9357626dd93071dd89848d7"
+                Version="2.0"
+                IssueInstant="2013-01-10T08:48:14Z"
+                Destination="https://engine.surfconext.nl/authentication/sp/consume-assertion"
+                >
+    <driewieler:Issuer xmlns:driewieler="urn:oasis:names:tc:SAML:2.0:assertion">https://surfguest.nl</driewieler:Issuer>
+    <auto:Status xmlns:auto="urn:oasis:names:tc:SAML:2.0:protocol">
+        <fiets:StatusCode xmlns:fiets="urn:oasis:names:tc:SAML:2.0:protocol"
+                          Value="urn:oasis:names:tc:SAML:2.0:status:Success"
+                          />
+    </auto:Status>
+    <feestmuts:Assertion Version="2.0"
+                    ID="pfxbbc4f790-d52b-4221-fdf3-21269c285de0"
+                    IssueInstant="2013-01-10T08:48:14Z"
+                    >
+        <feestmuts:Issuer>https://surfguest.nl</feestmuts:Issuer>
+        <deurbel:Signature xmlns:deurbel="http://www.w3.org/2000/09/xmldsig#">
+            <deurbel:SignedInfo>
+                <deurbel:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                <deurbel:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+                <deurbel:Reference URI="#pfxbbc4f790-d52b-4221-fdf3-21269c285de0">
+                    <deurbel:Transforms>
+                        <deurbel:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                        <deurbel:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                    </deurbel:Transforms>
+                    <deurbel:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                    <deurbel:DigestValue>3kqZA8wvtqv1INYTTR5F6o/cO90=</deurbel:DigestValue>
+                </deurbel:Reference>
+            </deurbel:SignedInfo>
+            <deurbel:SignatureValue>K0SN9f7NiBkCXh7A+u1WdsS61LkqhLy8eD0DKunpi1N82IJZP8H4i1nM/+q0hCmth4oVf53R/o9lb8CriYNxAzBIesGrWFvZYoRTG1XliAR3e0eeSI8cQXwRMdRLM1OZfBlmK1S9wfvkgX50zZL654Bstj1RTistutuUQUqRkH8=</deurbel:SignatureValue>
+        </deurbel:Signature>
+        <feestmuts:Subject>
+            <feestmuts:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">remold@surfguest.nl</feestmuts:NameID>
+            <feestmuts:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                <feestmuts:SubjectConfirmationData NotOnOrAfter="2013-01-10T08:53:14Z"
+                                              InResponseTo="CORTOea1ef358da695ef0e9357626dd93071dd89848d7"
+                                              Recipient="https://engine.surfconext.nl/authentication/sp/consume-assertion"
+                                              />
+            </feestmuts:SubjectConfirmation>
+        </feestmuts:Subject>
+        <feestmuts:Conditions NotBefore="2013-01-10T08:47:44Z"
+                         NotOnOrAfter="2013-01-10T08:53:14Z"
+                         >
+            <feestmuts:AudienceRestriction>
+                <feestmuts:Audience>https://engine.surfconext.nl/authentication/sp/metadata</feestmuts:Audience>
+            </feestmuts:AudienceRestriction>
+        </feestmuts:Conditions>
+        <feestmuts:AuthnStatement AuthnInstant="2013-01-10T08:48:14Z"
+                             SessionIndex="4c9d75576aedba536e0868182f2aaede"
+                             >
+            <feestmuts:AuthnContext>
+                <feestmuts:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</feestmuts:AuthnContextClassRef>
+            </feestmuts:AuthnContext>
+        </feestmuts:AuthnStatement>
+        <feestmuts:AttributeStatement>
+            <feestmuts:Attribute Name="urn:mace:dir:attribute-def:uid">
+                <feestmuts:AttributeValue>remold</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:mace:dir:attribute-def:cn">
+                <feestmuts:AttributeValue>Remold Krol</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:mace:dir:attribute-def:givenName">
+                <feestmuts:AttributeValue>Remold</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:mace:dir:attribute-def:sn">
+                <feestmuts:AttributeValue>Krol</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:mace:dir:attribute-def:displayName">
+                <feestmuts:AttributeValue>Remold Krol</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:mace:dir:attribute-def:mail">
+                <feestmuts:AttributeValue>remold@everett.nl</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganization">
+                <feestmuts:AttributeValue>surfguest.nl</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:mace:dir:attribute-def:eduPersonPrincipalName">
+                <feestmuts:AttributeValue>remold@SURFguest.nl</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+            <feestmuts:Attribute Name="urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1">
+                <feestmuts:AttributeValue>guest</feestmuts:AttributeValue>
+            </feestmuts:Attribute>
+        </feestmuts:AttributeStatement>
+    </feestmuts:Assertion>
+</fiets:Response>

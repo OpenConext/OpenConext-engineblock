@@ -38,4 +38,40 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
         $this->assertEquals($expectedOutput, $xmlConverter->attributesToArray($input));
     }
+
+    /**
+     * @dataProvider xmlDataProvider
+     */
+    public function testXmlToArray($xmlFile, $phpFile)
+    {
+        $xmlInput = file_get_contents($xmlFile);
+        $expectedPhpOutput = require $phpFile;
+
+        $this->assertEquals($expectedPhpOutput, EngineBlock_Corto_XmlToArray::xml2array($xmlInput));
+    }
+
+    /**
+     * Loads a set of testcases from resources dir
+     *
+     * @return array
+     */
+    public function xmlDataProvider()
+    {
+        $testCasesDir = new DirectoryIterator(TEST_RESOURCES_DIR . '/xml-to-array');
+
+        $testCases = array();
+        /** @var $testCaseDir DirectoryIterator */
+        foreach($testCasesDir as $testCaseDir) {
+            if ($testCaseDir->isDot()) {
+                continue;
+            }
+
+            $testCases[$testCaseDir->getFilename()] = array(
+                'xmlFile' => $testCaseDir->getPathname() . '/input.xml',
+                'phpFile' => $testCaseDir->getPathname() . '/output.php',
+            );
+        }
+
+        return $testCases;
+    }
 }
