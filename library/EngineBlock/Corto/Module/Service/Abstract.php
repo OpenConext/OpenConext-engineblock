@@ -36,19 +36,4 @@ abstract class EngineBlock_Corto_Module_Service_Abstract
     protected function doRemoteEntitiesRequireAdditionalLogging(array $sp, array $idp = null) {
         return (!empty($sp['AdditionalLogging']) || !empty($idp['AdditionalLogging']));
     }
-
-    /**
-     * Flushes log  queue
-     */
-    protected function flushLogQueue()
-    {
-        $queue = EngineBlock_ApplicationSingleton::getInstance()
-            ->getLogInstance()
-            ->getQueueWriter();
-
-        $queue->getStorage()
-            ->setForceFlush(true);
-
-        $queue->flush();
-    }
 }

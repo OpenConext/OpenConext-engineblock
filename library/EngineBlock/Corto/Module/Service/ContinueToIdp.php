@@ -31,7 +31,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         $sp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($request));
         $idp = $this->_server->getRemoteEntity($selectedIdp);
         if ($this->doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
-            $this->flushLogQueue();
+            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
         $this->_server->sendAuthenticationRequest($request, $selectedIdp);

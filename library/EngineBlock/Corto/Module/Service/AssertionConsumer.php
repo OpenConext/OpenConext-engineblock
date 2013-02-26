@@ -14,7 +14,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         $sp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($receivedRequest));
         $idp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($receivedResponse));
         if ($this->doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
-            $this->flushLogQueue();
+            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
         $isDebugRequest = (isset($receivedRequest[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']) &&
