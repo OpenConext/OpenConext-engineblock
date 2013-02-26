@@ -10,6 +10,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']
         );
 
+        // Check if SP or IdP requires additional logging
+        $sp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($receivedRequest));
+        $idp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($receivedResponse));
+        if ($this->doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
+            $this->flushLogQueue();
+        }
+
         $isDebugRequest = (isset($receivedRequest[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']) &&
             $receivedRequest[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']);
         if ($isDebugRequest) {
