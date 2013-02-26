@@ -27,8 +27,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         }
         $request = $_SESSION[$id]['SAMLRequest'];
 
-        $spId = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-        $sp = $this->_server->getRemoteEntity($spId);
+        $sp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($request));
         $idp = $this->_server->getRemoteEntity($selectedIdp);
         if ($this->doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
             $this->flushLogQueue();

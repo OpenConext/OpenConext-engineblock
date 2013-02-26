@@ -18,6 +18,17 @@ abstract class EngineBlock_Corto_Module_Service_Abstract
     }
 
     /**
+     * Extracts sp or idp from SAML message
+     *
+     * @param array $samlMessage
+     * @return string
+     */
+    protected function extractIssuerFromMessage(array $samlMessage)
+    {
+        return $samlMessage['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
+    }
+
+    /**
      * @param array $sp
      * @param array $idp
      * @return bool

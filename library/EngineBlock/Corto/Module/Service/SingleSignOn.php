@@ -48,8 +48,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             );
         }
 
-        $spId = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-        $sp = $this->_server->getRemoteEntity($spId);
+        $sp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($request));
         if ($this->doRemoteEntitiesRequireAdditionalLogging($sp)) {
             $this->flushLogQueue();
         }
