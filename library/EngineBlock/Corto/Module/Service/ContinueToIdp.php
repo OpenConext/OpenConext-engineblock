@@ -27,6 +27,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         }
         $request = $_SESSION[$id]['SAMLRequest'];
 
+        // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($request));
         $idp = $this->_server->getRemoteEntity($selectedIdp);
         if ($this->doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {

@@ -10,7 +10,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']
         );
 
-        // Check if SP or IdP requires additional logging
+        // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($receivedRequest));
         $idp = $this->_server->getRemoteEntity($this->extractIssuerFromMessage($receivedResponse));
         if ($this->doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
