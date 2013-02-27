@@ -18,6 +18,17 @@ class EngineBlock_SamlHelper
     }
 
     /**
+     * Extracts sp or idp from SAML message
+     *
+     * @param array $samlMessage
+     * @return string
+     */
+    public static function extractOriginalIssuerFromMessage(array $samlMessage)
+    {
+        return $samlMessage[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['OriginalIssuer'];
+    }
+
+    /**
      * @param array $sp
      * @param array $idp
      * @return bool

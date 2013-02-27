@@ -9,6 +9,14 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
 
         $remainingProcessingEntities = &$_SESSION['Processing'][$receivedRequest[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['RemainingEntities'];
 
+        // @todo check if this is the correct place to flush log
+        // Flush log if SP or IdP has additional logging enabled
+        $sp = $this->_server->getRemoteEntity(EngineBlock_SamlHelper::extractIssuerFromMessage($receivedRequest));
+        $idp = $this->_server->getRemoteEntity(EngineBlock_SamlHelper::extractOriginalIssuerFromMessage($response));
+        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
+            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
+        }
+
         if (!empty($remainingProcessingEntities)) { // Moar processing!
             $nextProcessingEntity = array_shift($remainingProcessingEntities);
 
