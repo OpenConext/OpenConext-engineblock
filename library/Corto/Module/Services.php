@@ -1030,11 +1030,12 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
 
             $attributesHash = $this->_getAttributesHash($responseAttributes);
+            $hashedUserId = sha1($this->_getConsentUid($response, $responseAttributes));
 
             $table = $this->_server->getConfig('ConsentDbTable', 'consent');
             $query = "SELECT * FROM {$table} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ?";
             $parameters = array(
-                sha1($this->_getConsentUid($response, $responseAttributes)),
+                $hashedUserId,
                 $serviceProviderEntityId,
                 $attributesHash
             );
@@ -1049,8 +1050,11 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
 
             // Update usage date
-            $statement = $dbh->prepare("UPDATE LOW PRIORITY {$table} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ? AND attribute = ? ");
-            $statement->execute($parameters);
+            $statement = $dbh->prepare("UPDATE LOW PRIORITY {$table} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ?");
+            $statement->execute(array(
+                $hashedUserId,
+                $serviceProviderEntityId,
+            ));
 
             return true;
         } catch (PDOException $e) {
