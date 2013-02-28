@@ -1049,8 +1049,8 @@ class Corto_Module_Services extends Corto_Module_Abstract
             }
 
             // Update usage date
-            $statement = $dbh->prepare("UPDATE LOW PRIORITY {$table} SET usage_date = NOW() WHERE attribute = ?");
-            $statement->execute(array($attributesHash));
+            $statement = $dbh->prepare("UPDATE LOW PRIORITY {$table} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ? AND attribute = ? ");
+            $statement->execute($parameters);
 
             return true;
         } catch (PDOException $e) {
