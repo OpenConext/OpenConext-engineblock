@@ -279,6 +279,19 @@ class EngineBlock_Log extends Zend_Log
     }
 
     /**
+     * Flushes log  queue
+     */
+    public function flushQueue()
+    {
+        $queue = $this->getQueueWriter();
+
+        $queue->getStorage()
+            ->setForceFlush(true);
+
+        $queue->flush();
+    }
+
+    /**
      * Returns unique ID pre request
      *
      * @return string
