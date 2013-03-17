@@ -69,7 +69,7 @@ class EngineBlock_Mail_Mailer
         $emailSubject = $rows[0]['email_subject'];
         $mail = new Zend_Mail('UTF-8');
         $mail->setBodyHtml($emailText, 'utf-8', 'utf-8');
-        $mail->setFrom($emailFrom, "SURFconext Support");
+        $mail->setFrom($emailFrom, "Jacson Support");
         $mail->addTo($emailAddress);
         $mail->setSubject($emailSubject);
         $mail->send();
