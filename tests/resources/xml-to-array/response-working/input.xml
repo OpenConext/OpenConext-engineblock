@@ -1,0 +1,88 @@
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="_a6b2c192b7f715a84b0a4237251c3ebe56028a4414"
+                InResponseTo="CORTOea1ef358da695ef0e9357626dd93071dd89848d7"
+                Version="2.0"
+                IssueInstant="2013-01-10T08:48:14Z"
+                Destination="https://engine.surfconext.nl/authentication/sp/consume-assertion"
+                >
+    <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">https://surfguest.nl</saml:Issuer>
+    <samlp:Status xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+        <samlp:StatusCode xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                          Value="urn:oasis:names:tc:SAML:2.0:status:Success"
+                          />
+    </samlp:Status>
+    <saml:Assertion Version="2.0"
+                    ID="pfxbbc4f790-d52b-4221-fdf3-21269c285de0"
+                    IssueInstant="2013-01-10T08:48:14Z"
+                    >
+        <saml:Issuer>https://surfguest.nl</saml:Issuer>
+        <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:SignedInfo>
+                <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+                <ds:Reference URI="#pfxbbc4f790-d52b-4221-fdf3-21269c285de0">
+                    <ds:Transforms>
+                        <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                        <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                    </ds:Transforms>
+                    <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                    <ds:DigestValue>3kqZA8wvtqv1INYTTR5F6o/cO90=</ds:DigestValue>
+                </ds:Reference>
+            </ds:SignedInfo>
+            <ds:SignatureValue>K0SN9f7NiBkCXh7A+u1WdsS61LkqhLy8eD0DKunpi1N82IJZP8H4i1nM/+q0hCmth4oVf53R/o9lb8CriYNxAzBIesGrWFvZYoRTG1XliAR3e0eeSI8cQXwRMdRLM1OZfBlmK1S9wfvkgX50zZL654Bstj1RTistutuUQUqRkH8=</ds:SignatureValue>
+        </ds:Signature>
+        <saml:Subject>
+            <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">remold@surfguest.nl</saml:NameID>
+            <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                <saml:SubjectConfirmationData NotOnOrAfter="2013-01-10T08:53:14Z"
+                                              InResponseTo="CORTOea1ef358da695ef0e9357626dd93071dd89848d7"
+                                              Recipient="https://engine.surfconext.nl/authentication/sp/consume-assertion"
+                                              />
+            </saml:SubjectConfirmation>
+        </saml:Subject>
+        <saml:Conditions NotBefore="2013-01-10T08:47:44Z"
+                         NotOnOrAfter="2013-01-10T08:53:14Z"
+                         >
+            <saml:AudienceRestriction>
+                <saml:Audience>https://engine.surfconext.nl/authentication/sp/metadata</saml:Audience>
+            </saml:AudienceRestriction>
+        </saml:Conditions>
+        <saml:AuthnStatement AuthnInstant="2013-01-10T08:48:14Z"
+                             SessionIndex="4c9d75576aedba536e0868182f2aaede"
+                             >
+            <saml:AuthnContext>
+                <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef>
+            </saml:AuthnContext>
+        </saml:AuthnStatement>
+        <saml:AttributeStatement>
+            <saml:Attribute Name="urn:mace:dir:attribute-def:uid">
+                <saml:AttributeValue>remold</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:mace:dir:attribute-def:cn">
+                <saml:AttributeValue>Remold Krol</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:mace:dir:attribute-def:givenName">
+                <saml:AttributeValue>Remold</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:mace:dir:attribute-def:sn">
+                <saml:AttributeValue>Krol</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:mace:dir:attribute-def:displayName">
+                <saml:AttributeValue>Remold Krol</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:mace:dir:attribute-def:mail">
+                <saml:AttributeValue>remold@everett.nl</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganization">
+                <saml:AttributeValue>surfguest.nl</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonPrincipalName">
+                <saml:AttributeValue>remold@SURFguest.nl</saml:AttributeValue>
+            </saml:Attribute>
+            <saml:Attribute Name="urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1">
+                <saml:AttributeValue>guest</saml:AttributeValue>
+            </saml:Attribute>
+        </saml:AttributeStatement>
+    </saml:Assertion>
+</samlp:Response>

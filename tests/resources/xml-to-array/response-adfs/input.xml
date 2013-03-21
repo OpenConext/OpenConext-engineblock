@@ -1,0 +1,75 @@
+
+<samlp:Response ID="_2ccd45db-3fdc-45c7-98ca-be7b4a16d287"
+                Version="2.0"
+                IssueInstant="2013-01-10T10:42:29.194Z"
+                Destination="https://engine.test.surfconext.nl/authentication/sp/consume-assertion"
+                Consent="urn:oasis:names:tc:SAML:2.0:consent:unspecified"
+                InResponseTo="CORTO8f7159267a98a60f3c821b13a356a64269674a0d"
+                xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+                >
+    <Issuer xmlns="urn:oasis:names:tc:SAML:2.0:assertion">http://ad.w2k8.test.localdomain/adfs/services/trust</Issuer>
+    <samlp:Status>
+        <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success" />
+    </samlp:Status>
+    <Assertion ID="_9b963c6e-dc69-4b2a-80d5-00f4d9082960"
+               IssueInstant="2013-01-10T10:42:29.194Z"
+               Version="2.0"
+               xmlns="urn:oasis:names:tc:SAML:2.0:assertion"
+               >
+        <Issuer>http://ad.w2k8.test.localdomain/adfs/services/trust</Issuer>
+        <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+            <ds:SignedInfo>
+                <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" />
+                <ds:Reference URI="#_9b963c6e-dc69-4b2a-80d5-00f4d9082960">
+                    <ds:Transforms>
+                        <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" />
+                        <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" />
+                    </ds:Transforms>
+                    <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+                    <ds:DigestValue>D7XerHtkVCZZB5ZWE4/oqMe8rm8=</ds:DigestValue>
+                </ds:Reference>
+            </ds:SignedInfo>
+            <ds:SignatureValue>bW3kNLEd1eBoc4q55c/yiCbN6cxAWfa0IdUuD4TD5E6hNDbNRFMCnxNr2pv0y0f06sNZCZ2apoyYXPkJPImd+t4sIr9ntAn36rn+d74taT65aWOJ224cZ9Bmgl+eaBWdxIrfSg6TVoprj/c/I3/+Brxy4Saz0SdvV/aT72tUFEOV99uaWHNfYAP66Okf0uHduB1finyKvYNl/kfGwEPGX5LqAdNwy3DSBfvv9oG43OfK2HUwBBg571pHzhRABFg8e4w8MXrQPlnTlQQZ7rvmuf4KXnp7J8gZvAY13o1aPBuHTSLP0Yidqng7zhx4Eu6i4t1agVzIvqVoA9jYyKB6Pw==</ds:SignatureValue>
+            <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+                <ds:X509Data>
+                    <ds:X509Certificate>MIIC7DCCAdSgAwIBAgIQMnLa3TMbHa1FyPMboZeMCDANBgkqhkiG9w0BAQsFADAyMTAwLgYDVQQDEydBREZTIFNpZ25pbmcgLSBhZC53Mms4LnRlc3QubG9jYWxkb21haW4wHhcNMTIxMTA1MTEwMzA1WhcNMTMxMTA1MTEwMzA1WjAyMTAwLgYDVQQDEydBREZTIFNpZ25pbmcgLSBhZC53Mms4LnRlc3QubG9jYWxkb21haW4wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDBfTZLFMSIq6R6UGBOu7kCYmDDvfFYum5vCPu8DQk5jzNLJrqgEHuKqlteUGqCaNpjmw5WRZrn2zQgW0C9PqwSinKro9AVAbpvDzICMNLl3R2G/dfkqMIx4jZ3NRvBY5tA3aJU17apXWqGm8oYW3GRtP5wi1n6OSLKWqyoaMUKf1xa5+D3TAjOvsUxYyZtgMrqq3SXFofDzHqHd02T386TMQTR47nMozuS5zdCoxzE84+1Sl0PTHiwGPVYER6qM7UA3yTOBjEaDlStc0YL3Not3i2VVoqVC7AInCg2KP1mamdhYLdN1NKIhEsrd/fXeLipZWuhzqPa0bbezJ3OkZ9JAgMBAAEwDQYJKoZIhvcNAQELBQADggEBALjgxi5Hxv2/SgWz+taLkVbfgI1tZ5ILmFO9O2d/qpJNgohIPVPW2IcAQGGFstxIixegf7+KTxnLzZ3C7jRt8xC3NznOuQNvvcfwqzwQ3hDYlFzPmQXNP39jRO7Cpuef8+Y0trUSiKeTuUD94WwlbwXuQftnVgIMqla4EIjxWuWk6IVLXDQXL9ZnYdEjc1NjEWD4l29mhOpkOdqOMq33Sk4SP98nZnbQHj5Ir2ke6xAagNogwdRksifikBFwebX9xaYCLSGXj0tRO0dLVbXq1zo3+9deE8fVo1pDQ+mJhzLbh7ZZE46hTVtLgVXQrjjZrytyce4ebfTR6HcAVo4dOkg=</ds:X509Certificate>
+                </ds:X509Data>
+            </KeyInfo>
+        </ds:Signature>
+        <Subject>
+            <NameID>Administrator@w2k8.test.localdomain</NameID>
+            <SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+                <SubjectConfirmationData InResponseTo="CORTO8f7159267a98a60f3c821b13a356a64269674a0d"
+                                         NotOnOrAfter="2013-01-10T10:47:29.194Z"
+                                         Recipient="https://engine.test.surfconext.nl/authentication/sp/consume-assertion"
+                                         />
+            </SubjectConfirmation>
+        </Subject>
+        <Conditions NotBefore="2013-01-10T10:42:29.179Z"
+                    NotOnOrAfter="2013-01-10T11:42:29.179Z"
+                    >
+            <AudienceRestriction>
+                <Audience>https://engine.test.surfconext.nl/authentication/sp/metadata</Audience>
+            </AudienceRestriction>
+        </Conditions>
+        <AttributeStatement>
+            <Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganization">
+                <AttributeValue>demo.nl</AttributeValue>
+            </Attribute>
+            <Attribute Name="urn:mace:dir:attribute-def:uid">
+                <AttributeValue>Administrator</AttributeValue>
+            </Attribute>
+            <Attribute Name="urn:mace:dir:attribute-def:mail">
+                <AttributeValue>Administrator@w2k8.test.localdomain</AttributeValue>
+            </Attribute>
+        </AttributeStatement>
+        <AuthnStatement AuthnInstant="2013-01-10T10:42:29.069Z"
+                        SessionIndex="_9b963c6e-dc69-4b2a-80d5-00f4d9082960"
+                        >
+            <AuthnContext>
+                <AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</AuthnContextClassRef>
+            </AuthnContext>
+        </AuthnStatement>
+    </Assertion>
+</samlp:Response>
