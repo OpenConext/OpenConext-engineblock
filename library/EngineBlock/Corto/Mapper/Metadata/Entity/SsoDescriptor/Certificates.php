@@ -32,6 +32,11 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
                     ),
                 ),
             ),
+/**
+ * https://jira.surfconext.nl/jira/browse/BACKLOG-874
+ *
+ * Encryption key is no longer provided to prevent the idp returning an encrypted response
+
             array(
                 EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
                 EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'use' => 'encryption',
@@ -48,6 +53,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
                     ),
                 ),
             ),
+*/
         );
         return $rootElement;
     }
