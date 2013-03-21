@@ -297,6 +297,18 @@ class EngineBlock_Corto_ProxyServer
         return $entity;
     }
 
+    /**
+     * Merges current entities (EB as IdP and SP) to remote entities
+     * This should only be used for very special cases like debugSingleSingOn where EB fakes an SP instead of proxying
+     * a request for a real SP. In those cases code expects information about remote entity
+     */
+    public function mergeCurrentEntitiesWithRemoteEntities()
+    {
+        foreach($this->_entities['current'] as $currentEntity) {
+            $this->_entities['remote'][$currentEntity['EntityID']] = $currentEntity;
+        }
+    }
+
     public function getIdpEntityIds()
     {
         $idps = array();

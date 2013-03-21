@@ -44,12 +44,15 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $identityProviderEntityId = $response['__']['OriginalIssuer'];
         $idpEntityMetadata = $this->_server->getRemoteEntity($identityProviderEntityId);
 
+        // Flush log if SP or IdP has additional logging enabled
+        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($spEntityMetadata, $idpEntityMetadata)) {
+            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
+        }
+
         $commonName = $attributes['urn:mace:dir:attribute-def:cn'][0];
 
-        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
-        if ($priorConsent) {
-            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
+        if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
+            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
 
             $response['_Destination'] = $response['__']['Return'];
             $response['__']['ProtocolBinding'] = 'INTERNAL';
@@ -61,8 +64,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
-        if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
-            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
+        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
+        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
+        if ($priorConsent) {
+            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
 
             $response['_Destination'] = $response['__']['Return'];
             $response['__']['ProtocolBinding'] = 'INTERNAL';

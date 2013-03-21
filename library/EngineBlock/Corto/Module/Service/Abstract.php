@@ -16,4 +16,6 @@ abstract class EngineBlock_Corto_Module_Service_Abstract
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
     }
+
+
 }

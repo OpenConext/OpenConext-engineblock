@@ -14,6 +14,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $request = $this->_createUnsolicitedRequest();
         }
         else if ($serviceName === 'debugSingleSignOnService') {
+            // When debugging EB imitates an SP so add the metadata of EB to remote entities as this required for logging and showing wayf
+            $this->_server->mergeCurrentEntitiesWithRemoteEntities();
             if (isset($_SESSION['debugIdpResponse']) && !isset($_POST['clear'])) {
                 $response = $_SESSION['debugIdpResponse'];
 
@@ -48,22 +50,15 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             );
         }
 
-        $requestIssuer = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-        $remoteEntity = $this->_server->getRemoteEntity($requestIssuer);
-        if (!empty($remoteEntity['AdditionalLogging'])) {
-            $queue = EngineBlock_ApplicationSingleton::getInstance()
-                ->getLogInstance()
-                ->getQueueWriter();
-
-            $queue->getStorage()
-                  ->setForceFlush(true);
-
-            $queue->flush();
+        // Flush log if SP or IdP has additional logging enabled
+        $sp = $this->_server->getRemoteEntity(EngineBlock_SamlHelper::extractIssuerFromMessage($request));
+        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)) {
+            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
         // validate custom acs-location (only for unsolicited, normal logins
         //  fall back to default ACS location instead of showing error page)
-        if ($isUnsolicited && !$this->_verifyAcsLocation($request, $remoteEntity)) {
+        if ($isUnsolicited && !$this->_verifyAcsLocation($request, $sp)) {
             throw new EngineBlock_Corto_Exception_InvalidAcsLocation(
                 'Unknown or invalid ACS location requested'
             );
