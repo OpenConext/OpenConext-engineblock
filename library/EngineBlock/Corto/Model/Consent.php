@@ -75,8 +75,9 @@ class EngineBlock_Corto_Model_Consent
             $attributesHash = $this->_getAttributesHash($this->_filteredResponseAttributes);
 
             $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ?";
+            $hashedUserId = sha1($this->_getConsentUid());
             $parameters = array(
-                sha1($this->_getConsentUid()),
+                $hashedUserId,
                 $serviceProviderEntityId,
                 $attributesHash
             );
@@ -92,8 +93,11 @@ class EngineBlock_Corto_Model_Consent
             }
 
             // Update usage date
-            $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE attribute = ?");
-            $statement->execute(array($attributesHash));
+            $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ?");
+            $statement->execute(array(
+                $hashedUserId,
+                $serviceProviderEntityId,
+             ));
 
             return true;
         } catch (PDOException $e) {
