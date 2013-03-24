@@ -25,7 +25,7 @@
 
 class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
-    public function singleSignOnAction()
+    public function singleSignOnAction($actionArguments = array())
     {
         $this->setNoRender();
         $application = EngineBlock_ApplicationSingleton::getInstance();
@@ -38,6 +38,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             // Optionally allow /single-sign-on/vo:myVoId/remoteIdPHash or
             // /single-sign-on/remoteIdPHash/vo:myVoId
             $arguments = func_get_args();
+            $logout = false;
+	    if (!empty($arguments) && $arguments[0] == "logout") {
+	  	$logout = true;
+		array_splice($arguments, 0, 1);
+	    }
             foreach ($arguments as $argument) {
                 if (substr($argument, 0, 3) == "vo:") {
                     $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
@@ -46,7 +51,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 }
             }
 
-            $proxyServer->singleSignOn($idPEntityId);
+            $proxyServer->singleSignOn($idPEntityId, $logout);
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->reportError($e);
