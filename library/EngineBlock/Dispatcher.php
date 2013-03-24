@@ -166,4 +166,13 @@ class EngineBlock_Dispatcher
     {
         return ucfirst($module) . '_Controller_' . ucfirst($controller);
     }
+
+    /**
+     * @return EngineBlock_Log
+     */
+    protected function _getSessionLog()
+    {
+        return EngineBlock_ApplicationSingleton::getLog();
+    }
+
 }
