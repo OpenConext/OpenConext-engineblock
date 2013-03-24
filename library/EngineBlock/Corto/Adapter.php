@@ -46,14 +46,14 @@ class EngineBlock_Corto_Adapter
      */
     protected $_remoteEntitiesFilter = array();
 
-    public function singleSignOn($idPProviderHash)
+    public function singleSignOn($idPProviderHash, $logout)
     {
         $this->_addRemoteEntitiesFilter(array($this, '_annotateRequestWithImplicitVo'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestScopingRequesterId'));
 
-        $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
+        $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash, $logout);
     }
 
     public function idPMetadata()
@@ -310,13 +310,18 @@ class EngineBlock_Corto_Adapter
         return $workflowState;
     }
 
-    protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
+    protected function _callCortoServiceUri($serviceName, $idPProviderHash = "", $logout = false)
     {
         $this->_initProxy();
 
-        $this->_proxyServer->serve($serviceName, $idPProviderHash);
+	if ($logout) {
+	    $_SESSION['logout'] = true;
+	    $this->_getSessionLog()->info("Logout.");
+	}
 
-        $this->_processProxyServerResponse();
+        $this->_proxyServer->serve($serviceName, $idPProviderHash);
+        
+	$this->_processProxyServerResponse();
 
         unset($this->_proxyServer);
     }
