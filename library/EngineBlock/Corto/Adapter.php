@@ -444,7 +444,6 @@ class EngineBlock_Corto_Adapter
             array(
                 'Name' => 'urn:oid:0.9.2342.19200300.100.1.3',
                 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true,
             ),
 
             // DisplayName (example: John Doe)
@@ -454,7 +453,6 @@ class EngineBlock_Corto_Adapter
             array(
                 'Name' => 'urn:oid:2.16.840.1.113730.3.1.241',
                 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true,
             ),
 
             // Surname (example: Doe)
@@ -464,7 +462,6 @@ class EngineBlock_Corto_Adapter
             array(
                 'Name' => 'urn:oid:2.5.4.4',
                 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true,
             ),
 
             // Given name (example: John)
@@ -474,7 +471,6 @@ class EngineBlock_Corto_Adapter
             array(
                 'Name' => 'urn:oid:2.5.4.42',
                 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true,
             ),
 
             // SchachomeOrganization
