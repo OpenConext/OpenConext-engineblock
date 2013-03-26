@@ -24,6 +24,8 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumin
             }
             if (!empty($requestedAttribute['Required'])) {
                 $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired'] = 'true';
+            } else {
+                $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired'] = 'false';
             }
             $rootElement['md:RequestedAttribute'][] = $element;
         }

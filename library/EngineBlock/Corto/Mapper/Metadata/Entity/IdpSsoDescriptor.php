@@ -23,6 +23,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor extends EngineBl
         $rootElement['md:IDPSSODescriptor'] = $this->_mapCertificates($rootElement['md:IDPSSODescriptor']);
         $rootElement['md:IDPSSODescriptor'] = $this->_mapNameIdFormats($rootElement['md:IDPSSODescriptor']);
         $rootElement['md:IDPSSODescriptor'] = $this->_mapSingleSignOnService($rootElement['md:IDPSSODescriptor']);
+        $rootElement['md:SPSSODescriptor'] = $this->_mapOrganization($rootElement['md:IDPSSODescriptor']);
 
         return $rootElement;
     }
@@ -30,6 +31,16 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor extends EngineBl
     protected function _mapSingleSignOnService($rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor_SingleSignOnService($this->_entity);
+        return $mapper->mapTo($rootElement);
+    }
+
+    /**
+     * @param array $rootElement
+     * @return array
+     */
+    protected function _mapOrganization(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 }

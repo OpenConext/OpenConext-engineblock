@@ -53,9 +53,6 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     const RESPONSE_CACHE_TYPE_IN  = 'in';
     const RESPONSE_CACHE_TYPE_OUT = 'out';
 
-    // @todo move this to translations?
-    const META_TOU_COMMENT = 'Use of this metadata is subject to the Terms of Use at http://www.edugain.org/policy/metadata-tou_1_0.txt';
-
     const INTRODUCTION_EMAIL = 'introduction_email';
 
     /**

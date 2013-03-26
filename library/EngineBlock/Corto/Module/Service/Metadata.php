@@ -35,6 +35,13 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         );
         $document = $mapper->setEntity($entityDetails)->map();
 
+        /**
+         * https://jira.surfconext.nl/jira/browse/BACKLOG-960
+         *
+         * This comment should only in metadata for edugain metadata
+         */
+        unset($document[EngineBlock_Corto_XmlToArray::COMMENT_PFX]);
+
         // Sign the document
         $document = $this->_server->sign(
             $document,
