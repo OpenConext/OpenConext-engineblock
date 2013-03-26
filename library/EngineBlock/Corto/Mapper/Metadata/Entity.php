@@ -57,7 +57,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
      */
     protected function _mapOrganization(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization($this->_entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 }
