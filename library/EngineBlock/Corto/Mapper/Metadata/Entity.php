@@ -27,6 +27,8 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
         $rootElement = $this->_mapIdpSsoDescriptor($rootElement);
         $rootElement = $this->_mapSpSsoDescriptor($rootElement);
         $rootElement = $this->_mapContactPersons($rootElement);
+        $rootElement = $this->_mapOrganization($rootElement);
+
 
         return $rootElement;
     }
@@ -46,6 +48,16 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
     protected function _mapContactPersons($rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_ContactPersons($this->_entity);
+        return $mapper->mapTo($rootElement);
+    }
+
+    /**
+     * @param array $rootElement
+     * @return array
+     */
+    protected function _mapOrganization(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 }
