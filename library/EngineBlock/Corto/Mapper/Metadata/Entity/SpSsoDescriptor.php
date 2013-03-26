@@ -24,6 +24,8 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlo
         $rootElement['md:SPSSODescriptor'] = $this->_mapNameIdFormats($rootElement['md:SPSSODescriptor']);
         $rootElement['md:SPSSODescriptor'] = $this->_mapAssertionConsumerServices($rootElement['md:SPSSODescriptor']);
         $rootElement['md:SPSSODescriptor'] = $this->_mapAttributeConsumingService($rootElement['md:SPSSODescriptor']);
+        $rootElement['md:SPSSODescriptor'] = $this->_mapOrganization($rootElement['md:SPSSODescriptor']);
+
 
         return $rootElement;
     }
@@ -39,4 +41,15 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlo
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumingService($this->_entity);
         return $mapper->mapTo($rootElement);
     }
+
+    /**
+     * @param array $rootElement
+     * @return array
+     */
+    protected function _mapOrganization(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization($this->_entity);
+        return $mapper->mapTo($rootElement);
+    }
+
 }
