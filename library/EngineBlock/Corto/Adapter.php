@@ -468,11 +468,48 @@ class EngineBlock_Corto_Adapter
                 'Required' => true
             ),
 
+            // SchachomeOrganizationType
+            array(
+                'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganizationType',
+                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+            ),
+
+
             // UID (example: john.doe)
             array(
                 'Name' => 'urn:mace:dir:attribute-def:uid',
                 'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
                 'Required' => true
+            ),
+
+            // Cn
+            array(
+                'Name' => 'urn:mace:dir:attribute-def:cn',
+                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+            ),
+
+            // EduPersonAffiliation
+            array(
+                'Name' => 'urn:mace:dir:attribute-def:eduPersonAffiliation',
+                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+            ),
+
+            // eduPersonEntitlement
+            array(
+                'Name' => 'urn:mace:dir:attribute-def:eduPersonEntitlement',
+                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+            ),
+
+            // eduPersonPrincipalName
+            array(
+                'Name' => 'urn:mace:dir:attribute-def:eduPersonPrincipalName',
+                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+            ),
+
+            // preferredLanguage
+            array(
+                'Name' => 'urn:mace:dir:attribute-def:preferredLanguage',
+                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
             )
         );
 
