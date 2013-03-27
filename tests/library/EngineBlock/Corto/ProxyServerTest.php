@@ -42,16 +42,13 @@ class EngineBlock_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($enhancedRequest['samlp:NameIDPolicy']['_Format'], 'fooFormat');
     }
 
-    public function testCurrentEntitiesAreMergedToRemoteEntities()
+    public function testGettingCurrentEntityIsProxiedViaGetRemoteEntity()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
-        $proxyServer->setCurrentEntities(array(
-            array('EntityID' => 'testEntity')
-        ));
-        $this->assertArrayNotHasKey('testEntity', $proxyServer->getRemoteEntities());
-        $proxyServer->mergeCurrentEntitiesWithRemoteEntities();
-        $this->assertArrayHasKey('testEntity', $proxyServer->getRemoteEntities());
+        $currentEntity = array('EntityID' => 'testEntity');
+        $proxyServer->setCurrentEntities(array($currentEntity));
 
+        $this->assertEquals($currentEntity, $proxyServer->getRemoteEntity('testEntity'));
     }
 
     /**
