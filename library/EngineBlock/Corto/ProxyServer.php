@@ -284,6 +284,7 @@ class EngineBlock_Corto_ProxyServer
             if (empty($entity)) {
                 throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
             }
+            return $entity;
         }
         $entity = $this->_entities['remote'][$entityId];
         $entity['EntityId'] = $entityId;
