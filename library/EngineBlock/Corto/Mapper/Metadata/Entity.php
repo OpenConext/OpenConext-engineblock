@@ -26,9 +26,8 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
 
         $rootElement = $this->_mapIdpSsoDescriptor($rootElement);
         $rootElement = $this->_mapSpSsoDescriptor($rootElement);
-        $rootElement = $this->_mapContactPersons($rootElement);
         $rootElement = $this->_mapOrganization($rootElement);
-
+        $rootElement = $this->_mapContactPersons($rootElement);
 
         return $rootElement;
     }
