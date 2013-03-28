@@ -347,13 +347,13 @@ class EngineBlock_Corto_XmlToArray
 
     /**
      * @deprecated Use XML converter from DI container and use none static method attributesToArray() instead
-     * @param $attributes
+     * @param array $attributes
      * @return array
      */
-    public static function attributes2array($attributes)
+    public static function attributes2array(array $attributes)
     {
         $res = array();
-        foreach((array)$attributes as $attribute) {
+        foreach($attributes as $attribute) {
             foreach ($attribute['saml:AttributeValue'] as $value) {
                 $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
             }
