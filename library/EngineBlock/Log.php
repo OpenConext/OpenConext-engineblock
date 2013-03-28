@@ -31,7 +31,7 @@ class EngineBlock_Log extends Zend_Log
      *
      * sudo tail -f /var/log/messages | grep 'message:'
      */
-    const MESSAGE_PREFIX = 'message: ';
+    const MESSAGE_PREFIX = '[Message %s]';
 
     /**
      * Remember unique request ID
@@ -179,7 +179,7 @@ class EngineBlock_Log extends Zend_Log
                 }
 
                 // Annotate the message
-                $writerEvent['message'] = $this->getPrefix() . self::MESSAGE_PREFIX . $message . $this->getSuffix();
+                $writerEvent['message'] = $this->getPrefix() . sprintf(self::MESSAGE_PREFIX, $event['priorityName']) . ' ' . $message . $this->getSuffix();
 
                 // log line for each file/message
                 $writer->write($writerEvent);
