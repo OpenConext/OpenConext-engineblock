@@ -52,7 +52,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
      * @expectedException EngineBlock_Corto_XmlToArray_Exception
      * @expectedExceptionMessage Missing AttributeValue collection
      */
-    public function testMissingAttributeIsNotAccepted()
+    public function testAttributeCollectionIsRequired()
     {
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
         $attributes = array(
