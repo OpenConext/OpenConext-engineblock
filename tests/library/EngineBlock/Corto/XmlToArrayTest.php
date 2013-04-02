@@ -22,7 +22,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
                 '_Name' => 'urn:mace:dir:attribute-def:cn',
                 'saml:AttributeValue' => array(
                     array(
-                        '__v' => null
+                        '__v' => 'Joe Smooth'
                     )
                 )
             )
@@ -30,7 +30,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
 
         $expectedOutput = array(
             'urn:org:openconext:corto:internal:sp-entity-id' => array('testSp'),
-            'urn:mace:dir:attribute-def:cn' => array(null),
+            'urn:mace:dir:attribute-def:cn' => array('Joe Smooth'),
         );
 
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
