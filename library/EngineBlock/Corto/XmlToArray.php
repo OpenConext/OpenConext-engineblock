@@ -363,6 +363,10 @@ class EngineBlock_Corto_XmlToArray
                 throw new EngineBlock_Corto_XmlToArray_Exception('Missing AttributeValue collection');
             }
 
+            if(!is_array($attribute['saml:AttributeValue'])) {
+                throw new EngineBlock_Corto_XmlToArray_Exception('AttributeValue collection is not an array');
+            }
+
             // Add each value of the collection to the result
             foreach ($attribute['saml:AttributeValue'] as $value) {
                 if(!isset($value[self::VALUE_PFX])) {

@@ -63,6 +63,22 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
         $xmlConverter->attributesToArray($attributes);
     }
 
+    /**
+     * @expectedException EngineBlock_Corto_XmlToArray_Exception
+     * @expectedExceptionMessage AttributeValue collection is not an array
+     */
+    public function testAttributeValueCollectionShouldBeAnArray()
+    {
+        $xmlConverter = new EngineBlock_Corto_XmlToArray();
+        $attributes = array(
+            array(
+                '_Name' => 'example',
+                'saml:AttributeValue' => ''
+            )
+        );
+        $xmlConverter->attributesToArray($attributes);
+    }
+
      * @dataProvider xmlInputProvider
      */
     public function testXmlToArray($xmlFile, $phpFile)
