@@ -354,6 +354,7 @@ class EngineBlock_Corto_XmlToArray
     {
         $res = array();
         foreach($attributes as $attribute) {
+            // Add each value of the collection to the result
             foreach ($attribute['saml:AttributeValue'] as $value) {
                 $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
             }
