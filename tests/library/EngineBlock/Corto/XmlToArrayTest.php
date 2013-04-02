@@ -9,7 +9,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
 {
     public function testAttributesToArray()
     {
-        $input = array(
+        $attributes = array(
             array(
                 '_Name' => 'urn:org:openconext:corto:internal:sp-entity-id',
                 'saml:AttributeValue' => array(
@@ -34,7 +34,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
         );
 
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
-        $this->assertEquals($expectedOutput, $xmlConverter->attributesToArray($input));
+        $this->assertEquals($expectedOutput, $xmlConverter->attributesToArray($attributes));
     }
 
     /**
@@ -44,8 +44,8 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
     public function testAttributeNameIsRequired()
     {
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
-        $attribute = array(array());
-        $xmlConverter->attributesToArray($attribute);
+        $attributes = array(array());
+        $xmlConverter->attributesToArray($attributes);
     }
 
      * @dataProvider xmlInputProvider
