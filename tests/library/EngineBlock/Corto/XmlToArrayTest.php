@@ -38,6 +38,16 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException EngineBlock_Corto_XmlToArray_Exception
+     * @expectedExceptionMessage Missing attribute name
+     */
+    public function testAttributeNameIsRequired()
+    {
+        $xmlConverter = new EngineBlock_Corto_XmlToArray();
+        $collection = array(array());
+        $xmlConverter->attributesToArray($collection);
+    }
+
      * @dataProvider xmlInputProvider
      */
     public function testXmlToArray($xmlFile, $phpFile)
