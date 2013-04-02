@@ -44,8 +44,8 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
     public function testAttributeNameIsRequired()
     {
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
-        $collection = array(array());
-        $xmlConverter->attributesToArray($collection);
+        $attribute = array(array());
+        $xmlConverter->attributesToArray($attribute);
     }
 
      * @dataProvider xmlInputProvider
