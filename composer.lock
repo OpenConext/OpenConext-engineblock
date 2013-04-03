@@ -1,9 +1,9 @@
 {
-    "hash": "68352d12bfbb5a5fc551489d6e2080ce",
+    "hash": "45e5a72c33ee0fc3d54d5c3a28e102e5",
     "packages": [
         {
             "name": "pimple/pimple",
-            "version": "dev-master",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Pimple.git",
@@ -512,7 +512,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "pimple/pimple": 20,
         "phake/phake": 20
     },
     "platform": [
