@@ -14,8 +14,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $request = $this->_createUnsolicitedRequest();
         }
         else if ($serviceName === 'debugSingleSignOnService') {
-            // When debugging EB imitates an SP so add the metadata of EB to remote entities as this required for logging and showing wayf
-            $this->_server->mergeCurrentEntitiesWithRemoteEntities();
             if (isset($_SESSION['debugIdpResponse']) && !isset($_POST['clear'])) {
                 $response = $_SESSION['debugIdpResponse'];
 

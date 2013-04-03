@@ -36,19 +36,19 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $proxyServer->consumeAssertion();
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLogInstance()->notice('User not a member error');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->getLogInstance()->notice('SingleSignOn: Unable to receive SAMLResponse');
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unknown-issuer?entity-id='.urlencode($e->getEntityId()).'&destination='.urlencode($e->getDestination()));
         }
         catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
-            $application->getLog()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/missing-required-fields');
         }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
@@ -70,11 +70,11 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $proxyServer->processConsent();
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
-            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLogInstance()->notice($e->getMessage(), EngineBlock_Log_Message_AdditionalInfo::createFromException($e));
+            $application->reportError($e);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {

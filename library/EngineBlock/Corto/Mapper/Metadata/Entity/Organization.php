@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization
+class EngineBlock_Corto_Mapper_Metadata_Entity_Organization
 {
     private $_entity;
 
@@ -28,7 +28,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization
      */
     protected function _mapOrganizationNames(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization_OrganizationNames($this->_entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization_OrganizationNames($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 
@@ -38,7 +38,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization
      */
     protected function _mapOrganizationDisplayNames(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization_OrganizationDisplayNames($this->_entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization_OrganizationDisplayNames($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 
@@ -48,7 +48,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization
      */
     protected function _mapOrganizationURLs(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization_OrganizationURLs($this->_entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization_OrganizationURLs($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 }
