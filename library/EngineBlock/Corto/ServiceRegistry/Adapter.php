@@ -288,9 +288,9 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         // Organization info
         $cortoEntity['Organization'] = array();
         self::_multiLang($cortoEntity['Organization'], $serviceRegistryEntity, array(
-            'organization:OrganizationName'         => 'Name',
-            'organization:OrganizationDisplayName'  => 'DisplayName',
-            'organization:OrganizationURL'          => 'URL',
+            'OrganizationName'         => 'Name',
+            'OrganizationDisplayName'  => 'DisplayName',
+            'OrganizationURL'          => 'URL',
         ));
         if (empty($cortoEntity['Organization'])) {
             unset($cortoEntity['Organization']);

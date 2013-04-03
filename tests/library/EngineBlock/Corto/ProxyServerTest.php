@@ -42,6 +42,15 @@ class EngineBlock_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($enhancedRequest['samlp:NameIDPolicy']['_Format'], 'fooFormat');
     }
 
+    public function testGettingCurrentEntityIsProxiedViaGetRemoteEntity()
+    {
+        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $currentEntity = array('EntityID' => 'testEntity');
+        $proxyServer->setCurrentEntities(array($currentEntity));
+
+        $this->assertEquals($currentEntity, $proxyServer->getRemoteEntity('testEntity'));
+    }
+
     /**
      * @return array
      */

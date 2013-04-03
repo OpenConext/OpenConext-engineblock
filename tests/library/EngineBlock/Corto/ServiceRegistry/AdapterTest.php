@@ -74,10 +74,10 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 'contacts:1:emailAddress'=> 'boy@ibuildings.nl',
                 'contacts:1:givenName'   => 'Boy',
                 'contacts:1:surName'     => 'Baukema',
-                'organization:OrganizationName:nl' => 'SURFnet',
-                'organization:OrganizationName:en' => 'SURFnet',
-                'organization:OrganizationURL:en' => 'https://www.surfnet.nl/en/',
-                'organization:OrganizationURL:nl' => 'https://www.surfnet.nl',
+                'OrganizationName:nl' => 'SURFnet',
+                'OrganizationName:en' => 'SURFnet',
+                'OrganizationURL:en' => 'https://www.surfnet.nl/en/',
+                'OrganizationURL:nl' => 'https://www.surfnet.nl',
             ),
         ));
 
