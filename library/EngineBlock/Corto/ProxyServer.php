@@ -44,6 +44,17 @@ class EngineBlock_Corto_ProxyServer
     protected $_sessionLogDefault;
 
     protected $_configs;
+
+
+    /**
+     * @var array
+     *
+     * Remote are all SP's and IdP's except Engineblock itself. Metadata of engineblock as IdP and SP is stored
+     * separately in current entities. This is done EngineBlock can never remove it's own metadata by filtering etc.
+     * It is recommended to use getCurrentEntity() to get Engineblock metadata however using getRemoteEntity() is also possible
+     * since this will proxy current entity information
+     *
+     */
     protected $_entities = array(
         'current'=>array(),
         'hosted'=>array(),
@@ -269,7 +280,11 @@ class EngineBlock_Corto_ProxyServer
     public function getRemoteEntity($entityId)
     {
         if (!isset($this->_entities['remote'][$entityId])) {
-            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
+            $entity = $this->findRemoteEntityInCurrentEntities($entityId);
+            if (empty($entity)) {
+                throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
+            }
+            return $entity;
         }
         $entity = $this->_entities['remote'][$entityId];
         $entity['EntityId'] = $entityId;
@@ -298,14 +313,17 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * Merges current entities (EB as IdP and SP) to remote entities
-     * This should only be used for very special cases like debugSingleSingOn where EB fakes an SP instead of proxying
-     * a request for a real SP. In those cases code expects information about remote entity
+     * Tries to find the requested in the current entity list
+     *
+     * @param $name string
+     * @return null|array
      */
-    public function mergeCurrentEntitiesWithRemoteEntities()
+    public function findRemoteEntityInCurrentEntities($name)
     {
         foreach($this->_entities['current'] as $currentEntity) {
-            $this->_entities['remote'][$currentEntity['EntityID']] = $currentEntity;
+            if ($name == $currentEntity['EntityID']) {
+                return $currentEntity;
+            }
         }
     }
 

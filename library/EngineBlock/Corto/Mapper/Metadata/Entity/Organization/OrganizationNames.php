@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization_OrganizationURLs
+class EngineBlock_Corto_Mapper_Metadata_Entity_Organization_OrganizationNames
 {
     private $_entity;
 
@@ -11,19 +11,19 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Organization_Organi
 
     public function mapTo(array $rootElement)
     {
-        if (!isset($this->_entity['Organization']['URL'])) {
+        if (!isset($this->_entity['Organization']['Name'])) {
             return $rootElement;
         }
 
-        foreach($this->_entity['Organization']['URL'] as $descriptionLanguageCode => $descriptionName) {
+        foreach($this->_entity['Organization']['Name'] as $descriptionLanguageCode => $descriptionName) {
             if (empty($descriptionName)) {
                 continue;
             }
 
-            if (!isset($rootElement['md:OrganizationURL'])) {
-                $rootElement['md:OrganizationURL'] = array();
+            if (!isset($rootElement['md:OrganizationName'])) {
+                $rootElement['md:OrganizationName'] = array();
             }
-            $rootElement['md:OrganizationURL'][] = array(
+            $rootElement['md:OrganizationName'][] = array(
                 EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $descriptionLanguageCode,
                 EngineBlock_Corto_XmlToArray::VALUE_PFX => $descriptionName
             );
