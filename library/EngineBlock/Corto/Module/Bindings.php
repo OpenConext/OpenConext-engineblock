@@ -788,6 +788,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $messageType = $message['__']['paramname'];
 
+        if ($messageType === self::KEY_RESPONSE) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException('Redirecting response is not supported');
+        }
+
         // Determine if we should sign the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
