@@ -779,7 +779,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * Note response redirecting is currently broken for response redirection to fix this do the following:
      * - Refactor the signing related parts so that $mustSign is also true for redirect responses
      * - Configure correct signing algorithm: 'http://www.w3.org/2000/09/xmldsig#rsa-sha1'
-     * - Remove the signature from the assertion instead of from the message
+     * - Change signature removal so that the signature is removed from the assertion instead of from the message
      *
      * @param array $message
      * @param array $remoteEntity
