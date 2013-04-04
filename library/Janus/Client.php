@@ -36,9 +36,15 @@ class Janus_Client
 
     public function getEntity($entityId)
     {
-        return $this->getRestClient()->getEntity()
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
+        $response = $this->getRestClient()->getEntity()
                                         ->entityid($entityId)
                                         ->get();
+
+        \Lvl\Profiler::getInstance()->endBlock();
+        return $response;
+
     }
     
     /**
@@ -48,10 +54,13 @@ class Janus_Client
      */
     public function getMetadata($entityId) 
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->getMetadata()
                                            ->entityid($entityId)
                                            ->get();
-        return $response;     
+        \Lvl\Profiler::getInstance()->endBlock();
+        return $response;
     }
     
     /**
@@ -62,10 +71,14 @@ class Janus_Client
      */
     public function getMetaDataForKey($entityId, $key)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->getMetadata()
                                           ->entityid($entityId)
                                           ->keys($key)
-                                          ->get();    
+                                          ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         if (isset($response[$key])) {
             return $response[$key];
         }
@@ -80,10 +93,14 @@ class Janus_Client
      */
     public function getMetaDataForKeys($entityId, $keys)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->getMetadata()
                                            ->entityid($entityId)
                                            ->keys(implode(",", $keys))
                                            ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return $response;
     }    
     
@@ -97,10 +114,15 @@ class Janus_Client
      */
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->isConnectionAllowed()
                                            ->spentityid($spEntityId)
                                            ->idpentityid($idpEntityId)
                                            ->get();
+
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return ((isset($response[0]) && $response[0]==true) || (isset($response["allowed"]) && $response["allowed"]=="yes"));
     }
 
@@ -113,9 +135,13 @@ class Janus_Client
      */
     public function getAllowedIdps($spEntityId)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->getAllowedIdps()
                                            ->spentityid($spEntityId)
                                            ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return $response;
     }
 
@@ -128,9 +154,13 @@ class Janus_Client
      */
     public function getAllowedSps($idpEntityId)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->getAllowedSps()
                                            ->idpentityid($idpEntityId)
                                            ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return $response;
     }
 
@@ -146,9 +176,13 @@ class Janus_Client
      */
     public function getArp($spEntityId)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->arp()
                                           ->entityid($spEntityId)
                                           ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return $response;
     }
     
@@ -166,10 +200,14 @@ class Janus_Client
      */
     public function getIdpList($keys=array(), $forSpEntityId=null)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->getIdpList()
                                            ->keys(implode(",", $keys))
                                            ->spentityid($forSpEntityId)
-                                           ->get();                                        
+                                           ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return $response;                                          
     }
     
@@ -184,9 +222,13 @@ class Janus_Client
      */
     public function getSpList($keys=array())
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->getSpList()
                                            ->keys(implode(",", $keys))
                                            ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return $response;                                         
     }
     
@@ -205,10 +247,14 @@ class Janus_Client
      */
     public function findIdentifiersByMetadata($key, $value)
     {
+        \Lvl\Profiler::getInstance()->startBlock(__METHOD__);
+
         $response = $this->getRestClient()->findIdentifiersByMetadata()
                                           ->key($key)
                                           ->value($value)
                                           ->get();
+        \Lvl\Profiler::getInstance()->endBlock();
+
         return $response;
     }
 
