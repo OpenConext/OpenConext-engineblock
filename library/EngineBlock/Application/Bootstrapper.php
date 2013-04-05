@@ -343,7 +343,7 @@ class EngineBlock_Application_Bootstrapper
      * Initializes profiler
      */
     protected function _bootstrapProfiler() {
-        $profiler = new Profiler();
+        $profiler = new \Lvl\Profiler();
 
         $logger = $this->_application->getLog();
         $profiler->setLogCallback(function($message) use ($logger) {
