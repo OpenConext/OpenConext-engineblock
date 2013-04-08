@@ -55,18 +55,23 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucasvanlierop/php-profiler.git",
-                "reference": "dc9a305d8d23d99bde4d5efbf22db142fea05d29"
+                "reference": "7570eb788e4e20c228e9c6ae388d2f9d4d507164"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/dc9a305d8d23d99bde4d5efbf22db142fea05d29",
-                "reference": "dc9a305d8d23d99bde4d5efbf22db142fea05d29",
+                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/7570eb788e4e20c228e9c6ae388d2f9d4d507164",
+                "reference": "7570eb788e4e20c228e9c6ae388d2f9d4d507164",
                 "shasum": ""
             },
             "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Lvl\\Profiler\\": "lib"
+                }
+            },
             "notification-url": "https://packagist.org/downloads/",
             "description": "A basic php profiler",
-            "time": "2013-04-03 11:42:24"
+            "time": "2013-04-08 11:53:22"
         },
         {
             "name": "phake/phake",
@@ -74,12 +79,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mlively/Phake.git",
-                "reference": "20d66b008436d8785bb2bf6ecb151c511a2e3394"
+                "reference": "5f92246f57e7e8f09e9def04e40ceef49f87470d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlively/Phake/zipball/20d66b008436d8785bb2bf6ecb151c511a2e3394",
-                "reference": "20d66b008436d8785bb2bf6ecb151c511a2e3394",
+                "url": "https://api.github.com/repos/mlively/Phake/zipball/5f92246f57e7e8f09e9def04e40ceef49f87470d",
+                "reference": "5f92246f57e7e8f09e9def04e40ceef49f87470d",
                 "shasum": ""
             },
             "require": {
@@ -122,7 +127,7 @@
                 "mock",
                 "testing"
             ],
-            "time": "2013-03-28 16:35:41"
+            "time": "2013-04-06 15:06:01"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -480,17 +485,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.2.0",
+            "version": "v2.2.1",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.2.0-RC3"
+                "reference": "v2.2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.0-RC3",
-                "reference": "v2.2.0-RC3",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.2.1",
+                "reference": "v2.2.1",
                 "shasum": ""
             },
             "require": {
@@ -523,7 +528,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-01-27 16:49:19"
+            "time": "2013-03-23 07:49:54"
         }
     ],
     "aliases": [
