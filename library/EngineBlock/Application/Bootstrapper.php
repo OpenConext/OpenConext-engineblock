@@ -2,6 +2,7 @@
 
 require __DIR__ . '/Autoloader.php';
 require __DIR__ . '/Bootstrapper/Exception.php';
+require '../../vendor/lucasvanlierop/php-profiler/lib/Profiler/Reporter.php';
 
 class EngineBlock_Application_Bootstrapper
 {
@@ -346,14 +347,15 @@ class EngineBlock_Application_Bootstrapper
         $profiler = new \Lvl\Profiler();
 
         $logger = $this->_application->getLog();
-        $profiler->setLogCallback(function($message) use ($logger) {
+        $reporter = new \Lvl\Profiler\Reporter();
+        $reporter->setLogCallback(function($message) use ($logger) {
             //$logger->info($message);
             file_put_contents('/var/log/surfconext/engineblock-profiling', $message . PHP_EOL, FILE_APPEND);
         });
         \Lvl\Profiler::getInstance()->startBlock('app');
 
-        register_shutdown_function(function() use ($profiler, $logger) {
-            $profiler->logReport();
+        register_shutdown_function(function() use ($profiler, $reporter, $logger) {
+            $reporter->logReport($profiler->getRecords());
             //$logger->getQueueWriter()->flush('post profiling');
         });
 
