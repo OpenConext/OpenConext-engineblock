@@ -341,15 +341,15 @@ class EngineBlock_Corto_Adapter
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
     {
-        \Lvl\Profiler::getInstance()->startBlock('init proxy');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('init proxy');
 
         $this->_initProxy();
 
-        \Lvl\Profiler::getInstance()->startBlock('proxy server');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('proxy server');
 
         $this->_proxyServer->serve($serviceName, $idPProviderHash);
 
-        \Lvl\Profiler::getInstance()->startBlock('proxy response');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('proxy response');
 
         $this->_processProxyServerResponse();
 
@@ -362,24 +362,24 @@ class EngineBlock_Corto_Adapter
             return;
         }
 
-        \Lvl\Profiler::getInstance()->startBlock('get core proxy');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('get core proxy');
 
         $proxyServer = $this->_getCoreProxy();
 
-        \Lvl\Profiler::getInstance()->startBlock('configure proxy');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('configure proxy');
 
         $this->_configureProxyServer($proxyServer);
 
         $this->_proxyServer = $proxyServer;
 
-        \Lvl\Profiler::getInstance()->startBlock('apply rem ent filter');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('apply rem ent filter');
 
         $this->_applyRemoteEntitiesFilters($this->_proxyServer);
     }
 
     protected function _configureProxyServer(EngineBlock_Corto_ProxyServer $proxyServer)
     {
-        \Lvl\Profiler::getInstance()->startBlock('set Log');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('set Log');
 
         $proxyServer->setSystemLog($this->_getSystemLog());
         $proxyServer->setSessionLogDefault($this->_getSessionLog());
@@ -387,7 +387,7 @@ class EngineBlock_Corto_Adapter
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
 
-        \Lvl\Profiler::getInstance()->startBlock('set configs');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('set configs');
 
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
@@ -413,11 +413,11 @@ class EngineBlock_Corto_Adapter
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
         ));
 
-        \Lvl\Profiler::getInstance()->startBlock('get remote entities');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('get remote entities');
 
         $remoteEntities = $this->_getRemoteEntities();
 
-        \Lvl\Profiler::getInstance()->startBlock('decorate remote entities');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('decorate remote entities');
 
         /**
          * Augment our own IdP entry with stuff that can't be set via the Service Registry (yet)
@@ -544,22 +544,22 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setRemoteEntities($remoteEntities);
 
 
-        \Lvl\Profiler::getInstance()->startBlock('set template source');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('set template source');
 
         $proxyServer->setTemplateSource(
             EngineBlock_Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
             array('FilePath'=>ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/')
         );
 
-        \Lvl\Profiler::getInstance()->startBlock('set bindings');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('set bindings');
 
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
 
-        \Lvl\Profiler::getInstance()->startBlock('set services');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('set services');
 
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
 
-        \Lvl\Profiler::getInstance()->startBlock('set vo context');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('set vo context');
 
         if ($this->_voContext!=null) {
             $proxyServer->setVirtualOrganisationContext($this->_voContext);

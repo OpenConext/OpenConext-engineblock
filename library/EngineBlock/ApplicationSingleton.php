@@ -24,8 +24,8 @@
  */
 define('ENGINEBLOCK_FOLDER_ROOT'       , dirname(__FILE__) . '/../../');
 
-require_once ENGINEBLOCK_FOLDER_ROOT . 'vendor/lucasvanlierop/php-profiler/lib/Profiler.php';
-\Lvl\Profiler::markBootstrapStart();
+require_once ENGINEBLOCK_FOLDER_ROOT . 'vendor/lucasvanlierop/php-profiler/lib/Profiler/Profiler.php';
+\Lvl\Profiler\Profiler::markBootstrapStart();
 
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
@@ -97,7 +97,7 @@ class EngineBlock_ApplicationSingleton
 
 
     /**
-     * @var \Lvl\Profiler
+     * @var \Lvl\Profiler\Profiler
      */
     protected $profiler;
 
@@ -362,16 +362,16 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @param \\Lvl\Profiler $profiler
+     * @param \\Lvl\Profiler\Profiler $profiler
      */
-    public function setProfiler(\Lvl\Profiler $profiler)
+    public function setProfiler(\Lvl\Profiler\Profiler $profiler)
     {
         $this->profiler = $profiler;
         return $this;
     }
 
     /**
-     * @return \\Lvl\Profiler
+     * @return \\Lvl\Profiler\Profiler
      */
     public function getProfiler()
     {

@@ -110,7 +110,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
     public function metadataAction($argument = null)
     {
-        \Lvl\Profiler::getInstance()->startBlock(__FUNCTION__ . ' start');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock(__FUNCTION__ . ' start');
 
         $this->setNoRender();
 
@@ -122,7 +122,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
         $proxyServer->idPMetadata();
 
-        \Lvl\Profiler::getInstance()->startBlock('after');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('after');
     }
 
     public function processConsentAction()

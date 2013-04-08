@@ -344,7 +344,7 @@ class EngineBlock_Application_Bootstrapper
      * Initializes profiler
      */
     protected function _bootstrapProfiler() {
-        $profiler = new \Lvl\Profiler();
+        $profiler = new \Lvl\Profiler\Profiler();
 
         $logger = $this->_application->getLog();
         $reporter = new \Lvl\Profiler\Reporter();
@@ -352,7 +352,7 @@ class EngineBlock_Application_Bootstrapper
             //$logger->info($message);
             file_put_contents('/var/log/surfconext/engineblock-profiling', $message . PHP_EOL, FILE_APPEND);
         });
-        \Lvl\Profiler::getInstance()->startBlock('app');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('app');
 
         register_shutdown_function(function() use ($profiler, $reporter, $logger) {
             $reporter->logReport($profiler->getRecords());
