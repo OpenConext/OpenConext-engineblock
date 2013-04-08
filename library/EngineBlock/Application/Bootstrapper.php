@@ -2,7 +2,6 @@
 
 require __DIR__ . '/Autoloader.php';
 require __DIR__ . '/Bootstrapper/Exception.php';
-require '../../vendor/lucasvanlierop/php-profiler/lib/Profiler/Reporter.php';
 
 class EngineBlock_Application_Bootstrapper
 {

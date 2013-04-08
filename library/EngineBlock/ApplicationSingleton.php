@@ -24,7 +24,7 @@
  */
 define('ENGINEBLOCK_FOLDER_ROOT'       , dirname(__FILE__) . '/../../');
 
-require_once ENGINEBLOCK_FOLDER_ROOT . 'vendor/lucasvanlierop/php-profiler/lib/Profiler/Profiler.php';
+require_once ENGINEBLOCK_FOLDER_ROOT . 'vendor/lucasvanlierop/php-profiler/lib/Lvl/Profiler/Profiler.php';
 \Lvl\Profiler\Profiler::markBootstrapStart();
 
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
