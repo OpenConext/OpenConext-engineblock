@@ -347,13 +347,14 @@ class EngineBlock_Application_Bootstrapper
 
         $logger = $this->_application->getLog();
         $profiler->setLogCallback(function($message) use ($logger) {
-            $logger->info($message);
+            //$logger->info($message);
+            file_put_contents('/var/log/surfconext/engineblock-profiling', $message . PHP_EOL, FILE_APPEND);
         });
         \Lvl\Profiler::getInstance()->startBlock('app');
 
         register_shutdown_function(function() use ($profiler, $logger) {
             $profiler->logReport();
-            $logger->getQueueWriter()->flush('post profiling');
+            //$logger->getQueueWriter()->flush('post profiling');
         });
 
         $this->_application->setProfiler($profiler);
