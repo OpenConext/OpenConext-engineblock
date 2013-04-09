@@ -344,6 +344,9 @@ class EngineBlock_Application_Bootstrapper
      */
     protected function _bootstrapProfiler() {
         $profiler = new \Lvl\Profiler\Profiler();
+        $profiler->setMetadataValue('host', gethostname());
+        $profiler->setMetadataValue('httpHost', $_SERVER['HTTP_HOST']);
+        $profiler->setMetadataValue('requestUri', $_SERVER['REQUEST_URI']);
 
         $logger = $this->_application->getLog();
         $reporter = new \Lvl\Profiler\Reporter();
