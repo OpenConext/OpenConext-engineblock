@@ -55,12 +55,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucasvanlierop/php-profiler.git",
-                "reference": "7570eb788e4e20c228e9c6ae388d2f9d4d507164"
+                "reference": "9a911c20fe753b77f897a863a7a2281464fc4f46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/7570eb788e4e20c228e9c6ae388d2f9d4d507164",
-                "reference": "7570eb788e4e20c228e9c6ae388d2f9d4d507164",
+                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/9a911c20fe753b77f897a863a7a2281464fc4f46",
+                "reference": "9a911c20fe753b77f897a863a7a2281464fc4f46",
                 "shasum": ""
             },
             "type": "library",
@@ -71,7 +71,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "A basic php profiler",
-            "time": "2013-04-08 11:53:22"
+            "time": "2013-04-08 13:04:16"
         },
         {
             "name": "phake/phake",
