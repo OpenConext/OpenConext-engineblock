@@ -353,6 +353,13 @@ class EngineBlock_Application_Bootstrapper
         register_shutdown_function($this->_sendProfileToQueue());
 
         $this->_application->setProfiler($profiler);
+
+        $profilingConfig = $this->_application->getConfiguration()->get('profiling');
+        $enable = (bool) $profilingConfig->get('enable', false);
+        if (!$enable) {
+            return;
+        }
+
     }
 
     /**
