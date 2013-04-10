@@ -352,7 +352,7 @@ class EngineBlock_Application_Bootstrapper
         \Lvl\Profiler\Profiler::getInstance()->startBlock('app');
 
         $diContainer = $this->_application->getDiContainer();
-        register_shutdown_function(function() use ($profiler, $reporter, $diContainer) {
+        register_shutdown_function(function() use ($profiler, $diContainer) {
             // @todo create a better key
             // Store in redis for processing
             $key = 'profiler.' . gethostname() . '.' . microtime(true);
