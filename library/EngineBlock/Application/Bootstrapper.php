@@ -350,8 +350,6 @@ class EngineBlock_Application_Bootstrapper
 
         \Lvl\Profiler\Profiler::getInstance()->startBlock('app');
 
-        register_shutdown_function($this->_sendProfileToQueue());
-
         $this->_application->setProfiler($profiler);
 
         $profilingConfig = $this->_application->getConfiguration()->get('profiling');
@@ -360,6 +358,7 @@ class EngineBlock_Application_Bootstrapper
             return;
         }
 
+        register_shutdown_function(array($this, 'sendProfileToQueue'));
     }
 
     /**
