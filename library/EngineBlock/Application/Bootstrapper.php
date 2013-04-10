@@ -364,7 +364,7 @@ class EngineBlock_Application_Bootstrapper
     /**
      * Sends Profile result to Redis queue
      */
-    protected function _sendProfileToQueue()
+    public function sendProfileToQueue()
     {
         $diContainer = $this->_application->getDiContainer();
         $profiler = $this->_application->getProfiler();
