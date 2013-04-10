@@ -350,16 +350,24 @@ class EngineBlock_Application_Bootstrapper
 
         \Lvl\Profiler\Profiler::getInstance()->startBlock('app');
 
-        $diContainer = $this->_application->getDiContainer();
-        register_shutdown_function(function() use ($profiler, $diContainer) {
-            // @todo create a better key
-            // Store in redis for processing
-            $key = 'profiler.' . gethostname() . '.' . microtime(true);
-            $redisClient = $diContainer->getRedisClient();
-            $redisClient->set($key, serialize($profiler->toArray()));
-        });
+        register_shutdown_function($this->_sendProfileToQueue());
 
         $this->_application->setProfiler($profiler);
+    }
+
+    /**
+     * Sends Profile result to Redis queue
+     */
+    protected function _sendProfileToQueue()
+    {
+        $diContainer = $this->_application->getDiContainer();
+        $profiler = $this->_application->getProfiler();
+
+        // @todo create a better key
+        // Store in redis for processing
+        $key = 'profiler.' . gethostname() . '.' . microtime(true);
+        $redisClient = $diContainer->getRedisClient();
+        $redisClient->set($key, serialize($profiler->toArray()));
     }
 
     protected function _setEnvironmentIdByEnvironment()
