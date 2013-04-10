@@ -348,7 +348,6 @@ class EngineBlock_Application_Bootstrapper
         $profiler->setMetadataValue('httpHost', $_SERVER['HTTP_HOST']);
         $profiler->setMetadataValue('requestUri', $_SERVER['REQUEST_URI']);
 
-        $logger = $this->_application->getLog();
         \Lvl\Profiler\Profiler::getInstance()->startBlock('app');
 
         $diContainer = $this->_application->getDiContainer();
