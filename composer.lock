@@ -50,18 +50,63 @@
     ],
     "packages-dev": [
         {
+            "name": "jlogsdon/cli",
+            "version": "v0.9.1",
+            "source": {
+                "type": "git",
+                "url": "git://github.com/jlogsdon/php-cli-tools.git",
+                "reference": "v0.9.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/jlogsdon/php-cli-tools/zipball/v0.9.1",
+                "reference": "v0.9.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "cli": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "James Logsdon",
+                    "email": "jlogsdon@php.net",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Console utilities for PHP",
+            "homepage": "http://github.com/jlogsdon/php-cli-tools",
+            "keywords": [
+                "cli",
+                "console"
+            ],
+            "time": "2012-09-15 14:09:00"
+        },
+        {
             "name": "lucasvanlierop/php-profiler",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucasvanlierop/php-profiler.git",
-                "reference": "9a911c20fe753b77f897a863a7a2281464fc4f46"
+                "reference": "5eee2a604e5e7ae0a92f58d6a9f355d552303fce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/9a911c20fe753b77f897a863a7a2281464fc4f46",
-                "reference": "9a911c20fe753b77f897a863a7a2281464fc4f46",
+                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/5eee2a604e5e7ae0a92f58d6a9f355d552303fce",
+                "reference": "5eee2a604e5e7ae0a92f58d6a9f355d552303fce",
                 "shasum": ""
+            },
+            "require": {
+                "jlogsdon/cli": "*"
             },
             "type": "library",
             "autoload": {
@@ -71,7 +116,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "A basic php profiler",
-            "time": "2013-04-08 13:04:16"
+            "time": "2013-04-11 09:04:44"
         },
         {
             "name": "phake/phake",
