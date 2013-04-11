@@ -12,6 +12,6 @@ while(true) {
         $profile = unserialize($redisClient->get($profileKey));
         $redisClient->del($profileKey);
 
-        echo $reporter->getReport($profile['records'], $profile['metadata']);
+        $reporter->printReport($profile['records'], $profile['metadata']);
     }
 }
