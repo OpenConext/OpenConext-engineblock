@@ -1,7 +1,7 @@
 <?php
 class EngineBlock_Corto_Mapper_Metadata_Entity_OrganizationTest extends PHPUnit_Framework_TestCase
 {
-    public function testResult()
+    public function testOrganizationIsCorrectlyAddedToRootElement()
     {
         $entity = $this->factoryEntity();
         $organizationMapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization($entity);
