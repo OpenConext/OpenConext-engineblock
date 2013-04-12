@@ -353,6 +353,10 @@ class EngineBlock_Application_Bootstrapper
         $this->_application->setProfiler($profiler);
 
         $profilingConfig = $this->_application->getConfiguration()->get('profiling');
+        if (!$profilingConfig instanceof Zend_Config) {
+            return;
+        }
+
         $enable = (bool) $profilingConfig->get('enable', false);
         if (!$enable) {
             return;
