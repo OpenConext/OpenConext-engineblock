@@ -44,6 +44,22 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_OrganizationTest extends PHPUnit_
         $this->assertEquals($expectedRootElement, $organizationMapper->mapTo($rootElement));
     }
 
+    public function testOrganizationIsNotAddedToRootElementWhenRequiredChildElementIsNotPresent()
+    {
+        $entity = $this->factoryEntity();
+
+        $childElementNames = array_keys($entity['Organization']);
+        foreach($childElementNames as $childElementName) {
+            $entityCopy = $entity;
+            unset($entityCopy['Organization'][$childElementName]);
+
+            $organizationMapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization($entityCopy);
+            $rootElement = array();
+            $this->assertEquals(array(), $organizationMapper->mapTo($rootElement));
+        }
+
+    }
+
     /**
      * @return array
      */
