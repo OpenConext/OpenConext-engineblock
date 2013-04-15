@@ -348,21 +348,26 @@ class EngineBlock_Application_Bootstrapper
         $profiler->setMetadataValue('httpHost', $_SERVER['HTTP_HOST']);
         $profiler->setMetadataValue('requestUri', $_SERVER['REQUEST_URI']);
 
-        \Lvl\Profiler\Profiler::getInstance()->startBlock('app');
+        $profiler->startBlock('app');
 
         $this->_application->setProfiler($profiler);
 
-        $profilingConfig = $this->_application->getConfiguration()->get('profiling');
-        if (!$profilingConfig instanceof Zend_Config) {
-            return;
-        }
+        $bootstrapper = $this;
+        $application = $this->_application;
+        register_shutdown_function(function() use ($bootstrapper, $application) {
 
-        $enable = (bool) $profilingConfig->get('enable', false);
-        if (!$enable) {
-            return;
-        }
+            $profilingConfig = $application->getConfiguration()->get('profiling');
+            if (!$profilingConfig instanceof Zend_Config) {
+                return;
+            }
 
-        register_shutdown_function(array($this, 'sendProfileToQueue'));
+            $enable = (bool) $profilingConfig->get('enable', false);
+            if (!$enable) {
+                return;
+            }
+
+            $bootstrapper->sendProfileToQueue();
+        });
     }
 
     /**
