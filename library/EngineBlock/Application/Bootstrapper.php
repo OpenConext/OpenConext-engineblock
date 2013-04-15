@@ -42,25 +42,53 @@ class EngineBlock_Application_Bootstrapper
 
         $this->_bootstrapAutoLoading();
 
+        $this->_bootstrapProfiler();
+
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Environment id');
+
         $this->_setEnvironmentIdByEnvironment();
+
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: DI container');
 
         $this->_bootstrapDiContainer();
 
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Configuration');
+
         $this->_bootstrapConfiguration();
+
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Environment by detection');
 
         $this->_setEnvironmentIdByDetection();
 
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: DI Environment config');
+
         $this->_bootstrapEnvironmentConfiguration();
 
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Php settings');
+
         $this->_bootstrapPhpSettings();
+
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Error reporting');
+
         $this->_bootstrapErrorReporting();
+
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Logging');
+
         $this->_bootstrapLogging();
+
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: http communication');
+
         $this->_bootstrapHttpCommunication();
 
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Layout');
+
         $this->_bootstrapLayout();
+
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('Bootstrap: Translations');
+
         $this->_bootstrapTranslations();
 
-        $this->_bootstrapProfiler();
+        \Lvl\Profiler\Profiler::getInstance()->endBlock();
 
         $this->_bootstrapped = true;
 
