@@ -55,16 +55,16 @@
     "packages-dev": [
         {
             "name": "jlogsdon/cli",
-            "version": "v0.9.1",
+            "version": "v0.9.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucasvanlierop/php-cli-tools.git",
-                "reference": "v0.9.1"
+                "reference": "v0.9.1.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucasvanlierop/php-cli-tools/zipball/v0.9.1",
-                "reference": "v0.9.1",
+                "url": "https://api.github.com/repos/lucasvanlierop/php-cli-tools/zipball/v0.9.1.1",
+                "reference": "v0.9.1.1",
                 "shasum": ""
             },
             "require": {
@@ -93,9 +93,9 @@
                 "console"
             ],
             "support": {
-                "source": "https://github.com/lucasvanlierop/php-cli-tools/tree/v0.9.1"
+                "source": "https://github.com/lucasvanlierop/php-cli-tools/tree/master"
             },
-            "time": "2012-09-15 21:09:00"
+            "time": "2013-04-12 12:59:18"
         },
         {
             "name": "lucasvanlierop/php-profiler",
@@ -103,16 +103,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucasvanlierop/php-profiler.git",
-                "reference": "c08ffd54de6335fa31af2df8c797e68fe45a4b02"
+                "reference": "aa172e3f62ebd54660a55f844a853d09bacf70ba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/c08ffd54de6335fa31af2df8c797e68fe45a4b02",
-                "reference": "c08ffd54de6335fa31af2df8c797e68fe45a4b02",
+                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/aa172e3f62ebd54660a55f844a853d09bacf70ba",
+                "reference": "aa172e3f62ebd54660a55f844a853d09bacf70ba",
                 "shasum": ""
             },
             "require": {
-                "jlogsdon/cli": "*"
+                "jlogsdon/cli": "v0.9.1.1"
             },
             "type": "library",
             "autoload": {
@@ -122,7 +122,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "A basic php profiler",
-            "time": "2013-04-15 13:20:12"
+            "time": "2013-04-15 14:37:01"
         },
         {
             "name": "phake/phake",
