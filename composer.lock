@@ -1,5 +1,9 @@
 {
-    "hash": "3f450c201a008fe468b22d237ad9e2b2",
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "ffe53f1b8dcbf530bede895864040631",
     "packages": [
         {
             "name": "pimple/pimple",
@@ -54,12 +58,12 @@
             "version": "v0.9.1",
             "source": {
                 "type": "git",
-                "url": "git://github.com/jlogsdon/php-cli-tools.git",
+                "url": "https://github.com/lucasvanlierop/php-cli-tools.git",
                 "reference": "v0.9.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://github.com/jlogsdon/php-cli-tools/zipball/v0.9.1",
+                "url": "https://api.github.com/repos/lucasvanlierop/php-cli-tools/zipball/v0.9.1",
                 "reference": "v0.9.1",
                 "shasum": ""
             },
@@ -72,7 +76,6 @@
                     "cli": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -89,7 +92,10 @@
                 "cli",
                 "console"
             ],
-            "time": "2012-09-15 14:09:00"
+            "support": {
+                "source": "https://github.com/lucasvanlierop/php-cli-tools/tree/v0.9.1"
+            },
+            "time": "2012-09-15 21:09:00"
         },
         {
             "name": "lucasvanlierop/php-profiler",
@@ -97,12 +103,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/lucasvanlierop/php-profiler.git",
-                "reference": "5eee2a604e5e7ae0a92f58d6a9f355d552303fce"
+                "reference": "c08ffd54de6335fa31af2df8c797e68fe45a4b02"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/5eee2a604e5e7ae0a92f58d6a9f355d552303fce",
-                "reference": "5eee2a604e5e7ae0a92f58d6a9f355d552303fce",
+                "url": "https://api.github.com/repos/lucasvanlierop/php-profiler/zipball/c08ffd54de6335fa31af2df8c797e68fe45a4b02",
+                "reference": "c08ffd54de6335fa31af2df8c797e68fe45a4b02",
                 "shasum": ""
             },
             "require": {
@@ -116,7 +122,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "description": "A basic php profiler",
-            "time": "2013-04-11 09:04:44"
+            "time": "2013-04-15 13:20:12"
         },
         {
             "name": "phake/phake",
