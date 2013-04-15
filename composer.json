@@ -2,6 +2,12 @@
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
     "minimum-stability": "stable",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/lucasvanlierop/php-cli-tools"
+        }
+    ],
     "require" : {
         "pimple/pimple": "1.0.x"
     },
