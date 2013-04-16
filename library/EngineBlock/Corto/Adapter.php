@@ -345,7 +345,7 @@ class EngineBlock_Corto_Adapter
 
         $this->_initProxy();
 
-        \Lvl\Profiler\Profiler::getInstance()->startBlock('proxy server');
+        \Lvl\Profiler\Profiler::getInstance()->startBlock('start proxy server');
 
         $this->_proxyServer->serve($serviceName, $idPProviderHash);
 
