@@ -28,6 +28,7 @@ class EngineBlock_Group_Provider_OpenSocial_HttpBasic
 {
     public static function createFromConfigs(Zend_Config $config, $userId)
     {
+        // @todo get client from factory via DI container instead of instantiating it here, this would make testing and logging easier
         $httpClient = new Zend_Http_Client($config->url);
         $httpClient->setAuth(
             $config->user,

@@ -11,7 +11,10 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_Organization
 
     public function mapTo(array $rootElement)
     {
-        if (empty($this->_entity['Organization'])) {
+        // All Child elements are required so element will be rendered only if all of then are filled in
+        if (empty($this->_entity['Organization']['Name']) ||
+            empty($this->_entity['Organization']['DisplayName']) ||
+            empty($this->_entity['Organization']['URL'])) {
             return $rootElement;
         }
         $rootElement['md:Organization'] = array();
