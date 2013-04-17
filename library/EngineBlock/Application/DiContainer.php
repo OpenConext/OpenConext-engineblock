@@ -7,6 +7,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     const FILTER_COMMAND_FACTORY = 'filterCommandFactory';
     const DATABASE_CONNECTION_FACTORY = 'databaseConnectionFactory';
     const REDIS_CLIENT = 'redisClient';
+    const APPLICATION_CACHE = 'applicationCache';
 
     public function __construct()
     {
@@ -16,6 +17,7 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerFilterCommandFactory();
         $this->registerDatabaseConnectionFactory();
         $this->registerRedisClient();
+        $this->registerApplicationCache();
     }
 
     protected function registerXmlConverter()
@@ -77,6 +79,25 @@ class EngineBlock_Application_DiContainer extends Pimple
             $redisClient->connect('127.0.0.1');
 
             return $redisClient;
+        });
+    }
+
+    /**
+     * @return Zend_Cache_Backend_Apc
+     */
+    public function getApplicationCache()
+    {
+        return $this[self::APPLICATION_CACHE];
+    }
+
+    protected function registerApplicationCache()
+    {
+        $this[self::APPLICATION_CACHE] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        {
+            $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
+            if ($isApcEnabled) {
+                return new Zend_Cache_Backend_Apc();
+            }
         });
     }
 }

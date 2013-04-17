@@ -120,7 +120,10 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapConfiguration()
     {
-        $configProxy = new EngineBlock_Config_CacheProxy($this->_getAllConfigFiles());
+        $configProxy = new EngineBlock_Config_CacheProxy(
+            $this->_getAllConfigFiles(),
+            $this->_application->getDiContainer()->getApplicationCache()
+        );
         $this->_application->setConfiguration($configProxy->load());
     }
 
@@ -275,8 +278,11 @@ class EngineBlock_Application_Bootstrapper
             'en' => ENGINEBLOCK_FOLDER_ROOT . '/languages/en.php',
             'nl' => ENGINEBLOCK_FOLDER_ROOT . '/languages/nl.php'
         );
+        $translationCacheProxy = new EngineBlock_Translate_CacheProxy(
+            $translationFiles,
+            $this->_application->getDiContainer()->getApplicationCache()
+        );
 
-        $translationCacheProxy = new EngineBlock_Translate_CacheProxy($translationFiles);
         $translate = $translationCacheProxy->load();
 
         // If the URL has &lang=nl in it or the lang var is posted, or a lang cookie was set, then use that locale

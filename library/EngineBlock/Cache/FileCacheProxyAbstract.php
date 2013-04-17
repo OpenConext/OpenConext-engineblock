@@ -2,16 +2,23 @@
 abstract class EngineBlock_Cache_FileCacheProxyAbstract
 {
     /**
+     * @var Zend_Cache_Backend_Apc
+     */
+    private $applicationCache;
+
+    /**
      * @var array
      */
     protected $_files;
 
     /**
      * @param array $files
+     * @param null|Zend_Cache_Backend_Apc $applicationCache
      */
-    public function __construct(array $files)
+    public function __construct(array $files, Zend_Cache_Backend_Apc $applicationCache = null)
     {
         $this->_files = $files;
+        $this->applicationCache = $applicationCache;
     }
 
     abstract protected function getCacheKey();
@@ -59,21 +66,28 @@ abstract class EngineBlock_Cache_FileCacheProxyAbstract
     abstract protected function _isCacheValid($cachedData);
 
     /**
-     * @param array $files
+     * Tries to load data from cache if available
+     *
+     * @param int $timestamp
      * @return mixed
      */
     protected function _loadFromCache($timestamp)
     {
-        // Try to get from cache
-        if ($this->isApcEnabled()) {
-            $cache = apc_fetch($this->getCacheKey());
-
-            $isCacheValid = $this->_isCacheValid($cache['data']) &&
-                $cache['timestamp'] === $timestamp;
-            if ($isCacheValid) {
-                return $cache['data'];
-            }
+        if (!$this->applicationCache instanceof Zend_Cache_Backend_Apc) {
+            return;
         }
+
+        if ($timestamp > $this->applicationCache->test($this->getCacheKey())) {
+            return;
+        }
+
+        $cache = $this->applicationCache->load($this->getCacheKey());
+
+        if (!$this->_isCacheValid($cache)) {
+            return;
+        }
+
+        return $cache;
     }
 
     /**
@@ -82,17 +96,10 @@ abstract class EngineBlock_Cache_FileCacheProxyAbstract
      */
     protected function _storeInCache($timestamp, $data)
     {
-        if ($this->isApcEnabled()) {
-            $cache['data'] = $data;
-            $cache['timestamp'] = $timestamp;
-            apc_add($this->getCacheKey(), $cache);
+        if (!$this->applicationCache instanceof Zend_Cache_Backend_Apc) {
+            return;
         }
-    }
 
-    /**
-     * @return bool
-     */
-    private function isApcEnabled() {
-        return extension_loaded('apc') && ini_get('apc.enabled');
+        $this->applicationCache->save($data, $this->getCacheKey());
     }
 }
