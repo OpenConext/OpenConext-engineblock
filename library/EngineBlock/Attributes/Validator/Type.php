@@ -36,10 +36,11 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
         }
 
         $attributeValues = $attributes[$this->_attributeName];
+        $uriValidator = new EngineBlock_Validator_Uri();
         switch($this->_options) {
             case 'URI':
                 foreach ($attributeValues as $attributeValue) {
-                    if (!Zend_Uri::check($attributeValue)) {
+                    if (!$uriValidator->validate($attributeValue)) {
                         $this->_messages[] = array(
                             self::ERROR_ATTRIBUTE_VALIDATOR_URI,
                             $this->_attributeName,
