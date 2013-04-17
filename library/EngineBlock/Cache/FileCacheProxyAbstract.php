@@ -36,7 +36,7 @@ abstract class EngineBlock_Cache_FileCacheProxyAbstract
 
         if (!$data) {
             $data = $this->_loadFromFiles($this->_files);
-            $this->_storeInCache($timestamp, $data);
+            $this->_storeInCache($data);
         }
 
         return $data;
@@ -91,10 +91,9 @@ abstract class EngineBlock_Cache_FileCacheProxyAbstract
     }
 
     /**
-     * @param $timestamp
      * @param mixed $data
      */
-    protected function _storeInCache($timestamp, $data)
+    protected function _storeInCache($data)
     {
         if (!$this->applicationCache instanceof Zend_Cache_Backend_Apc) {
             return;
