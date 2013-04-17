@@ -22,7 +22,7 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-define('ENGINEBLOCK_FOLDER_ROOT'       , dirname(__FILE__) . '/../../');
+define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(dirname(__FILE__) . '/../../') . '/');
 
 require_once ENGINEBLOCK_FOLDER_ROOT . 'vendor/lucasvanlierop/php-profiler/lib/Lvl/Profiler/Profiler.php';
 \Lvl\Profiler\Profiler::markBootstrapStart();
