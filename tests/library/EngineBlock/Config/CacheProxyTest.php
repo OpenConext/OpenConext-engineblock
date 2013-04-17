@@ -13,7 +13,7 @@ class EngineBlock_Config_CacheProxyTest
     {
         $this->files = array(
             ENGINEBLOCK_FOLDER_ROOT . 'tests/resources/config/config1.ini',
-            ENGINEBLOCK_FOLDER_ROOT . 'tests/resources/config/config2.ini',
+            ENGINEBLOCK_FOLDER_ROOT . 'tests/resources/config/config2.ini'
         );
 
         $this->expectedConfigArray = array(
