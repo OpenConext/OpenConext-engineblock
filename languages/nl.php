@@ -274,6 +274,8 @@ Als u deze applicatie wilt gebruiken moet u:<br />
      * @url http://nl3.php.net/sprintf
      */
     'error_attribute_validator_type_uri'            => '\'%3$s\' is geen geldige URI',
+    'error_attribute_validator_type_urn'            => '\'%3$s\' is geen geldige URN',
+    'error_attribute_validator_type_url'            => '\'%3$s\' is geen geldige URL',
     'error_attribute_validator_type_hostname'       => '\'%3$s\' is geen geldige hostname',
     'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is geen geldig emailadres',
     'error_attribute_validator_minlength'           => '\'%3$s\' is niet lang genoeg (minimaal %2$d karakters)',
