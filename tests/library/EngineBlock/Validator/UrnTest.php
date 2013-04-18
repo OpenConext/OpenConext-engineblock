@@ -1,0 +1,70 @@
+<?php
+class EngineBlock_Validator_UrnTest
+    extends PHPUnit_Framework_TestCase
+{
+    /**
+     * @dataProvider validUrnProvider
+     */
+    public function testUrnValidates($urn)
+    {
+        $validator = new EngineBlock_Validator_Urn();
+        $this->assertTrue($validator->validate($urn));
+
+    }
+
+    public function testUrnValidationFails()
+    {
+        $validator = new EngineBlock_Validator_Urn();
+        $this->assertFalse($validator->validate('urn:nl.surfconext.licenseInfo'));
+    }
+
+    /**
+     * Extracts all urns from the metadata config
+     *
+     * @return array
+     */
+    public function validUrnProvider()
+    {
+        $filename = TEST_RESOURCES_DIR .'/validator/urns.php';
+
+        // Uncomment to regenerate test data from metadata config
+        //$this->createTestDataFromMetadata(ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes-SURFconext.json', $filename);
+
+        return require $filename;
+    }
+
+    private function isUrn($string)
+    {
+        return substr($string, 0, 3) === 'urn';
+    }
+
+    /**
+     * Creates test data in PHPUnit data provider format, was used to generate the test data and can be used to update it
+     *
+     * @param string $metadataFile
+     * @param string $testDataFile
+     */
+    private function createTestDataFromMetadata($metadataFile, $testDataFile)
+    {
+        $metadata = json_decode(file_get_contents($metadataFile), true);
+
+        $urns = array();
+        foreach($metadata as $key => $value) {
+            if ($this->isUrn($key)) {
+                $urns[$key] = array($key);
+            }
+            if (is_string($value) && $this->isUrn($value)) {
+                $urns[$value] = array($value);
+            }
+        }
+
+        // Remove known invalid metadata config
+        unset($urns['urn:nl.surfconext.licenseInfo']);
+
+        ksort($urns);
+        $export = var_export($urns, true);
+        $export = '<?php' . PHP_EOL . 'return ' . $export . ';';
+
+        file_put_contents($testDataFile, $export);
+    }
+}
