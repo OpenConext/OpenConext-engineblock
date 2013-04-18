@@ -13,8 +13,8 @@ class EngineBlock_Validator_Uri
      * @param string $string
      * @return bool
      */
-    public function validate($string)
+    public function validate($uri)
     {
-        return (bool) preg_match(self::REGEX, $string);
+        return (bool) preg_match(self::REGEX, $uri);
     }
 }
