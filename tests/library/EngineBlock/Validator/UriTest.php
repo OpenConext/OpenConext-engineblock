@@ -6,12 +6,21 @@ class EngineBlock_Validator_UriTest
     extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var EngineBlock_Validator_Urn
+     */
+    private $validator;
+
+    public function setUp()
+    {
+        $this->validator = new EngineBlock_Validator_Uri();
+    }
+
+    /**
      * @dataProvider validUriProvider
      */
     public function testUriValidates($uri)
     {
-        $validator = new EngineBlock_Validator_Uri();
-        $this->assertTrue($validator->validate($uri));
+        $this->assertTrue($this->validator->validate($uri));
     }
 
     public function validUriProvider()

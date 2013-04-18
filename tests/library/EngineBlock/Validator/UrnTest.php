@@ -3,19 +3,28 @@ class EngineBlock_Validator_UrnTest
     extends PHPUnit_Framework_TestCase
 {
     /**
+     * @var EngineBlock_Validator_Urn
+     */
+    private $validator;
+
+    public function setUp()
+    {
+        $this->validator = new EngineBlock_Validator_Urn();
+    }
+
+    /**
      * @dataProvider validUrnProvider
      */
     public function testUrnValidates($urn)
     {
-        $validator = new EngineBlock_Validator_Urn();
-        $this->assertTrue($validator->validate($urn));
+
+        $this->assertTrue($this->validator->validate($urn));
 
     }
 
     public function testUrnValidationFails()
     {
-        $validator = new EngineBlock_Validator_Urn();
-        $this->assertFalse($validator->validate('urn:nl.surfconext.licenseInfo'));
+        $this->assertFalse($this->validator->validate('urn:nl.surfconext.licenseInfo'));
     }
 
     /**
