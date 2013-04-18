@@ -56,6 +56,9 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
 
             $_SESSION['feedback_custom'] = $e->getFeedback();
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/custom');
+        } catch (EngineBlock_Corto_Module_Bindings_UnsupportedBindingException $e) {
+            $application->reportError($e);
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/invalid-acs-binding');
         }
     }
 

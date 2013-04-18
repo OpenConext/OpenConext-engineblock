@@ -1,0 +1,5 @@
+<?php
+
+class EngineBlock_Corto_Module_Bindings_UnsupportedBindingException extends EngineBlock_Corto_Module_Bindings_Exception
+{
+}
