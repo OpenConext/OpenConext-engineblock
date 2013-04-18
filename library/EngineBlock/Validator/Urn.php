@@ -11,7 +11,9 @@ class EngineBlock_Validator_Urn
      * RFC2141 compliant urn regex
      * based on: http://stackoverflow.com/questions/5492885/is-there-a-java-library-that-validates-urns
      */
-    const REGEX = '/^urn:[a-z0-9][a-z0-9-]{0,31}:([a-z0-9()+,\\-.:=@;$_!*\']|%[0-9a-f]{2})+$/i';
+    const REGEX = <<<'REGEX'
+/^urn:[a-z0-9][a-z0-9-]{0,31}:([a-z0-9()+,\-.:=@;$_!*']|%[0-9a-f]{2})+$/i
+REGEX;
 
     /**
      * @param string $string
