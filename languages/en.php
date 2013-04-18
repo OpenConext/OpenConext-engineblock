@@ -275,6 +275,8 @@ If you want to use this application you have to:<br />
      * @url http://nl3.php.net/sprintf
      */
     'error_attribute_validator_type_uri'            => '\'%3$s\' is not a valid URI',
+    'error_attribute_validator_type_urn'            => '\'%3$s\' is not a valid URN',
+    'error_attribute_validator_type_url'            => '\'%3$s\' is not a valid URL',
     'error_attribute_validator_type_hostname'       => '\'%3$s\' is not a valid hostname',
     'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is not a valid email address',
     'error_attribute_validator_minlength'           => '\'%3$s\' is not long enough (minimum is %2$d characters)',
