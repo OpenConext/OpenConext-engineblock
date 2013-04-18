@@ -61,7 +61,7 @@
         },
         "Conditions": {
             "warning": {
-                "type": "URI"
+                "type": "URN"
             }
         }
     },
@@ -403,7 +403,7 @@
     "urn:mace:dir:attribute-def:eduPersonAssurance": {
         "Conditions": {
             "warning": {
-                "type": "URI"
+                "type": "URN"
             }
         }
     },
