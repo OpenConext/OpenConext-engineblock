@@ -17,19 +17,18 @@ class EngineBlock_Validator_UrnTest
      */
     public function testUrnValidates($urn)
     {
-
         $this->assertTrue($this->validator->validate($urn));
-
-    }
-
-    public function testUrnValidationFails()
-    {
-        $this->assertFalse($this->validator->validate('urn:nl.surfconext.licenseInfo'));
     }
 
     /**
-     * Extracts all urns from the metadata config
-     *
+     * @dataProvider invalidUrnProvider
+     */
+    public function testUrnValidationFails($invalidUrn)
+    {
+        $this->assertFalse($this->validator->validate($invalidUrn));
+    }
+
+    /**
      * @return array
      */
     public function validUrnProvider()
@@ -40,6 +39,14 @@ class EngineBlock_Validator_UrnTest
         //$this->createTestDataFromMetadata(ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes-SURFconext.json', $filename);
 
         return require $filename;
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidUrnProvider()
+    {
+        return require TEST_RESOURCES_DIR .'/validator/invalid-urns.php';
     }
 
     private function isUrn($string)

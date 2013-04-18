@@ -12,7 +12,7 @@ class EngineBlock_Validator_Urn
      * based on: http://stackoverflow.com/questions/5492885/is-there-a-java-library-that-validates-urns
      */
     const REGEX = <<<'REGEX'
-/^urn:[a-z0-9][a-z0-9-]{0,31}:([a-z0-9()+,\-.:=@;$_!*']|%[0-9a-f]{2})+$/i
+/^urn:[a-z0-9][a-z0-9-]{1,31}:([a-z0-9()+,-.:=@;$_!*']|%(0[1-9a-f]|[1-9a-f][0-9a-f]))+$/i
 REGEX;
 
     /**
