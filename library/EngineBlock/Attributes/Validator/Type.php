@@ -36,9 +36,9 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
         }
 
         $attributeValues = $attributes[$this->_attributeName];
-        $uriValidator = new EngineBlock_Validator_Uri();
         switch($this->_options) {
             case 'URI':
+                $uriValidator = new EngineBlock_Validator_Uri();
                 foreach ($attributeValues as $attributeValue) {
                     if (!$uriValidator->validate($attributeValue)) {
                         $this->_messages[] = array(
