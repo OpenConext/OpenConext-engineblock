@@ -90,11 +90,11 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapConfiguration()
     {
-        $this->_application->setConfiguration(
-            $this->_getConfigurationLoader(
-                $this->_getAllConfigFiles()
-            )
+        $configProxy = new EngineBlock_Config_CacheProxy(
+            $this->_getAllConfigFiles(),
+            $this->_application->getDiContainer()->getApplicationCache()
         );
+        $this->_application->setConfiguration($configProxy->load());
     }
 
     /**
@@ -108,52 +108,6 @@ class EngineBlock_Application_Bootstrapper
             ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
             self::CONFIG_FILE_ENVIORNMENT,
         );
-    }
-
-    /**
-     * Merges content of given config files
-     *
-     * @param array $configFiles
-     * @return string
-     */
-    protected function _mergeConfigFiles(array $configFiles)
-    {
-        $configFileContents = "";
-        foreach ($configFiles as $configFile) {
-            $configFileContents .= file_get_contents($configFile) . PHP_EOL;
-        }
-        return $configFileContents;
-    }
-
-    /**
-     * Tries to parse config files, if this fails each file will be verified to provide more debug information
-     *
-     * @param array $configFiles
-     * @return EngineBlock_Config_Ini
-     */
-    protected function _getConfigurationLoader(array $configFiles)
-    {
-        try {
-            $config = new EngineBlock_Config_Ini($this->_mergeConfigFiles($configFiles));
-        } catch (EngineBlock_Exception $ex) {
-            $this->_verifyConfigFiles($configFiles);
-        }
-
-        return $config;
-    }
-
-    /**
-     * Tries to parse config files, if this fails an exception will be thrown in EngineBlock_Config_Ini, this is useful
-     * to determine which of the files contains an error
-     *
-     * @param array $configFiles
-     */
-    private function _verifyConfigFiles(array $configFiles)
-    {
-        /** @var $config EngineBlock_Config_Ini */
-        foreach ($configFiles as $configFile) {
-            new EngineBlock_Config_Ini($configFile);
-        }
     }
 
     protected function _setEnvironmentIdByDetection()
@@ -290,18 +244,16 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapTranslations()
     {
-        $translate = new Zend_Translate(
-            'Array',
-            ENGINEBLOCK_FOLDER_ROOT . '/languages/en.php',
-            'en'
+        $translationFiles = array(
+            'en' => ENGINEBLOCK_FOLDER_ROOT . '/languages/en.php',
+            'nl' => ENGINEBLOCK_FOLDER_ROOT . '/languages/nl.php'
+        );
+        $translationCacheProxy = new EngineBlock_Translate_CacheProxy(
+            $translationFiles,
+            $this->_application->getDiContainer()->getApplicationCache()
         );
 
-        $translate->addTranslation(
-            array(
-                'content' => ENGINEBLOCK_FOLDER_ROOT . '/languages/nl.php',
-                'locale'  => 'nl'
-            )
-        );
+        $translate = $translationCacheProxy->load();
 
         // If the URL has &lang=nl in it or the lang var is posted, or a lang cookie was set, then use that locale
         $httpRequest = $this->_application->getHttpRequest();
