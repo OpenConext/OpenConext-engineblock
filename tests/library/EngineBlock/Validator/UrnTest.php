@@ -33,7 +33,7 @@ class EngineBlock_Validator_UrnTest
      */
     public function validUrnProvider()
     {
-        $filename = TEST_RESOURCES_DIR .'/validator/urns.php';
+        $filename = TEST_RESOURCES_DIR .'/validator/urn/valid-urns.php';
 
         // Uncomment to regenerate test data from metadata config
         //$this->createTestDataFromMetadata(ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes-SURFconext.json', $filename);
@@ -46,7 +46,7 @@ class EngineBlock_Validator_UrnTest
      */
     public function invalidUrnProvider()
     {
-        return require TEST_RESOURCES_DIR .'/validator/invalid-urns.php';
+        return require TEST_RESOURCES_DIR .'/validator/urn/invalid-urns.php';
     }
 
     private function isUrn($string)
