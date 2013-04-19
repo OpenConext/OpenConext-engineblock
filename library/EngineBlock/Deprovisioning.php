@@ -281,6 +281,7 @@ class EngineBlock_Deprovisioning
 
     protected function _findUsers($time)
     {
+        // @todo this is not a factory by a PDO
         $factory = $this->_getDatabaseConnection();
 
         $query = "SELECT DISTINCT userid FROM log_logins
