@@ -49,6 +49,7 @@ class EngineBlock_User
 
     public function deleteConsent($spId)
     {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getDatabaseConnection();
 
         $query = "DELETE FROM consent
@@ -60,6 +61,7 @@ class EngineBlock_User
 
     public function deleteOauthConsent($consumerKey)
     {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getShindigDatabaseConnection();
         $query = 'DELETE FROM oauth_entry WHERE consumer_key = ?
                     AND user_id = ?';
@@ -69,6 +71,7 @@ class EngineBlock_User
     }
 
     public function deleteOauthGroupConsent($providerId) {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getDatabaseConnection();
 
         $query = "DELETE FROM group_provider_user_oauth
@@ -80,6 +83,7 @@ class EngineBlock_User
 
     public function getUserOauth()
     {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getDatabaseConnection();
         $query = 'SELECT provider_id, user_id FROM group_provider_user_oauth
                     WHERE user_id = ?';
@@ -101,6 +105,7 @@ class EngineBlock_User
 
     public function getThreeLeggedShindigOauth()
     {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getShindigDatabaseConnection();
         $query = 'SELECT consumer_key FROM oauth_entry
                     WHERE user_id = ?';
@@ -121,6 +126,7 @@ class EngineBlock_User
 
     public function getConsent()
     {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getDatabaseConnection();
         $query = 'SELECT service_id FROM consent
                     WHERE hashed_user_id = ?';
@@ -178,6 +184,7 @@ class EngineBlock_User
      */
     protected function _deleteUserConsent()
     {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getDatabaseConnection();
 
         $query = "DELETE FROM consent
@@ -192,6 +199,7 @@ class EngineBlock_User
 
     protected function _deleteOauthTokens()
     {
+        // @todo this is not a factory but a PDO
         $factory = $this->_getDatabaseConnection();
 
         $query = "DELETE FROM group_provider_user_oauth
