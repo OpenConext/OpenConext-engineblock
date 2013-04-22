@@ -6,6 +6,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     const MAILER = 'mailer';
     const FILTER_COMMAND_FACTORY = 'filterCommandFactory';
     const DATABASE_CONNECTION_FACTORY = 'databaseConnectionFactory';
+    const REDIS_CLIENT = 'redisClient';
     const APPLICATION_CACHE = 'applicationCache';
 
     public function __construct()
@@ -15,6 +16,7 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerMailer();
         $this->registerFilterCommandFactory();
         $this->registerDatabaseConnectionFactory();
+        $this->registerRedisClient();
         $this->registerApplicationCache();
     }
 
@@ -60,6 +62,26 @@ class EngineBlock_Application_DiContainer extends Pimple
             return new EngineBlock_Database_ConnectionFactory();
         });
     }
+
+    /**
+     * @return Redis
+     */
+    public function getRedisClient()
+    {
+        return $this[self::REDIS_CLIENT];
+    }
+
+    protected function registerRedisClient()
+    {
+        $this[self::REDIS_CLIENT] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        {
+            $redisClient = new Redis();
+            $redisClient->connect('127.0.0.1');
+
+            return $redisClient;
+        });
+    }
+
     /**
      * @return Zend_Cache_Backend_Apc
      */
