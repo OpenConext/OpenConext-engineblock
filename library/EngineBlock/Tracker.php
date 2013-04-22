@@ -25,28 +25,58 @@
 
 class EngineBlock_Tracker
 {
-    public function __construct() 
+    /**
+     * @var Redis
+     */
+    private $redisClient;
+
+    public function __construct(Redis $redisClient)
     {
+        $this->redisClient = $redisClient;
     }
-    
+
+    /**
+     * @param array $spEntityMetadata
+     * @param array $idpEntityMetadata
+     * @param string $subjectId
+     * @param string $voContext
+     */
     public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext)
     {
-        $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
-        $db = $this->_getDbConnection();
-        
-        $stmt = $db->prepare("
-            INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname)
-            VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname)"
-        );
         $spEntityName  = (isset($spEntityMetadata['Name']['en']) && !empty($spEntityMetadata['Name']['en']) ? $spEntityMetadata['Name']['en'] : $spEntityMetadata['EntityId']);
         $idpEntityName = (isset($idpEntityMetadata['Name']['en']) && !empty($idpEntityMetadata['Name']['en']) ? $idpEntityMetadata['Name']['en'] : $idpEntityMetadata['EntityId']);
-        $stmt->bindParam('userid'       , $subjectId);
-        $stmt->bindParam('spentityid'   , $spEntityMetadata['EntityId']);
-        $stmt->bindParam('spentityname' , $spEntityName);
-        $stmt->bindParam('idpentityid'  , $idpEntityMetadata['EntityId']);
-        $stmt->bindParam('idpentityname', $idpEntityName);
-        $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
-        $stmt->bindParam('voname'       , $voContext);
+        $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
+        $loginStamp = new DateTime();
+        $params = array(
+            'loginstamp' => $loginStamp->format(DATE_ISO8601),
+            'userid' => $subjectId,
+            'spentityid' => $spEntityMetadata['EntityId'],
+            'spentityname' => $spEntityName,
+            'idpentityid' => $idpEntityMetadata['EntityId'],
+            'idpentityname' => $idpEntityName,
+            'useragent' => $request->getHeader('User-Agent'),
+            'voname' => $voContext,
+        );
+
+        $key = 'login-' . sha1(serialize($params));
+        $this->redisClient->set($key, serialize($params));
+    }
+
+    /**
+     * Stores login in database
+     *
+     * @param array $params
+     */
+    public function storeInDatabase(array $params)
+    {
+        $db = $this->_getDbConnection();
+        $stmt = $db->prepare("
+            INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname)
+            VALUES                 (:loginstamp, :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname)"
+        );
+        foreach($params as $paramName => $paramValue) {
+            $stmt->bindParam($paramName, $params[$paramName]);
+        }
         $stmt->execute();
     }
     

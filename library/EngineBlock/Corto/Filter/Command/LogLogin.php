@@ -40,7 +40,8 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             $voContext = $this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0];
         }
 
-        $tracker = new EngineBlock_Tracker();
+        $redisClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getRedisClient();
+        $tracker = new EngineBlock_Tracker($redisClient);
         $tracker->trackLogin(
             $this->_spMetadata,
             $this->_idpMetadata,
