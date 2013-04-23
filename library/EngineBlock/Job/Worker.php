@@ -53,11 +53,12 @@ class EngineBlock_Job_Worker
         );
     }
 
+    /**
+     * Checks if there are any items in the queues in order of priority. If all are empty, wait until timeout for
+     * something to be added to the queue.
+     */
     public function run()
     {
-        // Check to see if there are any items in the queues in
-        // order of priority. If all are empty, wait up to 10
-        // seconds for something to be added to the queue.
         $function = array(
             $this->redisClient,
             'brpop'
@@ -69,7 +70,7 @@ class EngineBlock_Job_Worker
             $job = call_user_func_array($function, $params);
 
             if ($job) {
-                $queueName = $job[0]; // 0 is the name of the queue
+                $queueName = $job[0];
                 $priority = $this->queues[$queueName]['priority'];
                 $queue = $this->queues[$queueName]['queue'];
 
