@@ -44,7 +44,10 @@ class EngineBlock_Job_Worker
      */
     public function registerQueue(EngineBlock_Job_Queue_QueueAbstract $queue)
     {
-        $this->queues[$queue->getName()] = $queue;
+        $this->queues[$queue->getName()] = array(
+            'priority' => count($this->queues) + 1,
+            'queue' => $queue
+        );
     }
 
     public function run()
@@ -64,9 +67,10 @@ class EngineBlock_Job_Worker
 
             if ($job) {
                 $queueName = $job[0]; // 0 is the name of the queue
-                $queue = $this->queues[$queueName];
+                $priority = $this->queues[$queueName]['priority'];
+                $queue = $this->queues[$queueName]['queue'];
 
-                echo 'Processing job from queue: '. $queueName . PHP_EOL;
+                echo "Processing job with priority {$priority} from queue: {$queueName}" . PHP_EOL;
                 if ($queue->handleJob($job[1])) {
                     // @todo find out what to do in case job is not handled correctly
                 }
