@@ -40,13 +40,16 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             $voContext = $this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0];
         }
 
-        $redisClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getRedisClient();
-        $tracker = new EngineBlock_Tracker($redisClient);
-        $tracker->trackLogin(
+        $tracker = new EngineBlock_Tracker();
+        $parsedLogin = $tracker->parseLogin(
             $this->_spMetadata,
             $this->_idpMetadata,
             $this->_collabPersonId,
             $voContext
         );
+
+        $redisClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getRedisClient();
+        $jobQueue = new EngineBlock_Job_Queue_LoginTracking($redisClient);
+        $jobQueue->push($parsedLogin);
     }
 }

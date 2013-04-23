@@ -1,0 +1,87 @@
+<?php
+/**
+ * Improve support for priorities
+ */
+class EngineBlock_Job_Worker
+{
+    /**
+     * Run 1 hour
+     *
+     * @var int
+     * @todo make this configurable?
+     */
+    private $workerTimeout = 3600;
+
+    /**
+     * @var int
+     * @todo make this configurable?
+     */
+    private $redisTimeout = 10;
+
+    /**
+     * @var int
+     */
+    private $endTime;
+
+    /**
+     * @var Redis
+     */
+    private $redisClient;
+
+    /**
+     * @var array
+     */
+    private $queues;
+
+    public function __construct(Redis $redisClient)
+    {
+        $this->endTime = time()  + $this->workerTimeout;
+        $this->redisClient = $redisClient;
+    }
+
+    /**
+     * @param EngineBlock_Job_Queue_QueueAbstract $queue
+     */
+    public function registerQueue(EngineBlock_Job_Queue_QueueAbstract $queue)
+    {
+        $this->queues[$queue->getName()] = $queue;
+    }
+
+    public function run()
+    {
+        // Check to see if there are any items in the queues in
+        // order of priority. If all are empty, wait up to 10
+        // seconds for something to be added to the queue.
+        $function = array(
+            $this->redisClient,
+            'brpop'
+        );
+        $params = array_keys($this->queues);
+        $params[] = $this->redisTimeout;
+
+        while(!$this->isItTimeToQuit()) {
+            $job = call_user_func_array($function, $params);
+
+            if ($job) {
+                $queueName = $job[0]; // 0 is the name of the queue
+                $queue = $this->queues[$queueName];
+
+                echo 'Processing job from queue: '. $queueName . PHP_EOL;
+                if ($queue->handleJob($job[1])) {
+                    // @todo find out what to do in case job is not handled correctly
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Returns false if the script has been running for more than allowed time.
+     *
+     * @return bool
+     */
+    private function isItTimeToQuit()
+    {
+        return time() > $this->endTime;
+    }
+}

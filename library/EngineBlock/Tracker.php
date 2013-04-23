@@ -26,22 +26,13 @@
 class EngineBlock_Tracker
 {
     /**
-     * @var Redis
-     */
-    private $redisClient;
-
-    public function __construct(Redis $redisClient)
-    {
-        $this->redisClient = $redisClient;
-    }
-
-    /**
      * @param array $spEntityMetadata
      * @param array $idpEntityMetadata
      * @param string $subjectId
      * @param string $voContext
+     * @return array
      */
-    public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext)
+    public function parseLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext)
     {
         $spEntityName  = (isset($spEntityMetadata['Name']['en']) && !empty($spEntityMetadata['Name']['en']) ? $spEntityMetadata['Name']['en'] : $spEntityMetadata['EntityId']);
         $idpEntityName = (isset($idpEntityMetadata['Name']['en']) && !empty($idpEntityMetadata['Name']['en']) ? $idpEntityMetadata['Name']['en'] : $idpEntityMetadata['EntityId']);
@@ -58,8 +49,7 @@ class EngineBlock_Tracker
             'voname' => $voContext,
         );
 
-        $key = 'login-' . sha1(serialize($params));
-        $this->redisClient->set($key, serialize($params));
+        return $params;
     }
 
     /**
