@@ -40,6 +40,9 @@ class EngineBlock_Job_Worker
     }
 
     /**
+     * Registers a jobqueue which should be processed, note that queues are processed in order of registration.
+     * This means the first registered queue will be processed until it's empty, then the second one etc.
+     *
      * @param EngineBlock_Job_Queue_QueueAbstract $queue
      */
     public function registerQueue(EngineBlock_Job_Queue_QueueAbstract $queue)
