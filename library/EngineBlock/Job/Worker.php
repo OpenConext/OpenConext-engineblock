@@ -67,7 +67,7 @@ class EngineBlock_Job_Worker
     }
 
     /**
-     * Checks if there are any items in the queues in order of priority.
+     * Checks if there are any items in the queues in order of priority and tries to execute them
      *
      * @return bool
      */
