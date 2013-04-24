@@ -54,8 +54,7 @@ class EngineBlock_Job_Worker
     }
 
     /**
-     * Checks if there are any items in the queues in order of priority. If all are empty, wait until timeout for
-     * something to be added to the queue.
+     * Processes jobs from queues, if all are empty, wait until timeout
      */
     public function run()
     {
@@ -67,6 +66,11 @@ class EngineBlock_Job_Worker
         }
     }
 
+    /**
+     * Checks if there are any items in the queues in order of priority.
+     *
+     * @return bool
+     */
     private function processJobs()
     {
         /** @var $queue EngineBlock_Job_Queue_QueueAbstract */
@@ -78,7 +82,6 @@ class EngineBlock_Job_Worker
                 return true;
             }
         }
-
     }
 
     /**
