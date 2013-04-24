@@ -35,7 +35,7 @@ class EngineBlock_Job_Worker
 
     public function __construct(Redis $redisClient)
     {
-        $this->endTime = time()  + $this->workerTimeout;
+        $this->endTime = time() + $this->workerTimeout;
         $this->redisClient = $redisClient;
     }
 
