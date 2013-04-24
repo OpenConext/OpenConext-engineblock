@@ -59,28 +59,42 @@ class EngineBlock_Job_Worker
      */
     public function run()
     {
-        $function = array(
-            $this->redisClient,
-            'brpop'
-        );
-        $params = array_keys($this->queues);
-        $params[] = $this->redisTimeout;
-
         while(!$this->isItTimeToQuit()) {
-            $job = call_user_func_array($function, $params);
+            if ($this->processJobs()) {
+                continue;
+            }
+            sleep($this->redisTimeout);
+        }
+    }
+
+    private function processJobs()
+    {
+        /** @var $queue EngineBlock_Job_Queue_QueueAbstract */
+        foreach($this->queues as $queue) {
+            $job = $queue['queue']->getNextJob();
 
             if ($job) {
-                $queueName = $job[0];
-                $priority = $this->queues[$queueName]['priority'];
-                $queue = $this->queues[$queueName]['queue'];
-
-                echo "Processing job with priority {$priority} from queue: {$queueName}" . PHP_EOL;
-                if ($queue->handleJob($job[1])) {
-                    // @todo find out what to do in case job is not handled correctly
-                }
+                $this->processJob($queue['queue'], $job);
+                return true;
             }
         }
 
+    }
+
+    /**
+     * @param EngineBlock_Job_Queue_QueueAbstract $queue
+     * @param string $job
+     */
+    private function processJob(EngineBlock_Job_Queue_QueueAbstract $queue, $job)
+    {
+        $jobDetails = $job;
+        $queueName = $queue->getName();
+        $priority = $this->queues[$queueName]['priority'];
+
+        echo "Processing job with priority {$priority} from queue: {$queueName}" . PHP_EOL;
+        if ($queue->handleJob($jobDetails)) {
+            $queue->finishJob($jobDetails);
+        }
     }
 
     /**

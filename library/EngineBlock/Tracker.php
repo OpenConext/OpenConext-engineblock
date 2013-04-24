@@ -67,7 +67,10 @@ class EngineBlock_Tracker
         foreach($params as $paramName => $paramValue) {
             $stmt->bindParam($paramName, $params[$paramName]);
         }
-        $stmt->execute();
+        if ($stmt->execute())
+        {
+            return true;
+        }
     }
     
     protected function _getDbConnection()
