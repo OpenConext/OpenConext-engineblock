@@ -16,7 +16,7 @@ class EngineBlock_Job_Worker
      * @var int
      * @todo make this configurable?
      */
-    private $redisTimeout = 10;
+    private $iterationTimeout = 10;
 
     /**
      * @var int
@@ -63,7 +63,7 @@ class EngineBlock_Job_Worker
             if ($this->processJobs()) {
                 continue;
             }
-            sleep($this->redisTimeout);
+            sleep($this->iterationTimeout);
         }
     }
 
