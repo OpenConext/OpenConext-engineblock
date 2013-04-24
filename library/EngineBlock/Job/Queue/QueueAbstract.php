@@ -71,7 +71,7 @@ abstract class EngineBlock_Job_Queue_QueueAbstract
      * @param string $serializedJob
      * @return bool
      */
-    abstract public function handleJob($serializedJob);
+    abstract public function executeJob($serializedJob);
 
     /**
      * @return

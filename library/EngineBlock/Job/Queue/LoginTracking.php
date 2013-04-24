@@ -21,7 +21,7 @@ class EngineBlock_Job_Queue_LoginTracking
     /**
      * @param string $encodedJob
      */
-    public function handleJob($encodedJob)
+    public function executeJob($encodedJob)
     {
         $login = $this->decodeJob($encodedJob);
         if ($this->tracker->storeInDatabase($login))

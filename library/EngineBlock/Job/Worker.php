@@ -40,8 +40,8 @@ class EngineBlock_Job_Worker
     }
 
     /**
-     * Registers a jobqueue which should be processed, note that queues are processed in order of registration.
-     * This means the first registered queue will be processed until it's empty, then the second one etc.
+     * Registers a jobqueue which should be executeed, note that queues are executeed in order of registration.
+     * This means the first registered queue will be executeed until it's empty, then the second one etc.
      *
      * @param EngineBlock_Job_Queue_QueueAbstract $queue
      */
@@ -54,12 +54,12 @@ class EngineBlock_Job_Worker
     }
 
     /**
-     * Processes jobs from queues, if all are empty, wait until timeout
+     * Executes jobs from queues, if all are empty, wait until timeout
      */
     public function run()
     {
         while(!$this->isItTimeToQuit()) {
-            if ($this->processJobs()) {
+            if ($this->executeJobs()) {
                 continue;
             }
             sleep($this->iterationTimeout);
@@ -71,14 +71,14 @@ class EngineBlock_Job_Worker
      *
      * @return bool
      */
-    private function processJobs()
+    private function executeJobs()
     {
         /** @var $queue EngineBlock_Job_Queue_QueueAbstract */
         foreach($this->queues as $queue) {
             $job = $queue['queue']->getNextJob();
 
             if ($job) {
-                $this->processJob($queue['queue'], $job);
+                $this->executeJob($queue['queue'], $job);
                 return true;
             }
         }
@@ -88,14 +88,14 @@ class EngineBlock_Job_Worker
      * @param EngineBlock_Job_Queue_QueueAbstract $queue
      * @param string $job
      */
-    private function processJob(EngineBlock_Job_Queue_QueueAbstract $queue, $job)
+    private function executeJob(EngineBlock_Job_Queue_QueueAbstract $queue, $job)
     {
         $jobDetails = $job;
         $queueName = $queue->getName();
         $priority = $this->queues[$queueName]['priority'];
 
-        echo "Processing job with priority {$priority} from queue: {$queueName}" . PHP_EOL;
-        if ($queue->handleJob($jobDetails)) {
+        echo "Executeing job with priority {$priority} from queue: {$queueName}" . PHP_EOL;
+        if ($queue->executeJob($jobDetails)) {
             $queue->finishJob($jobDetails);
         }
     }
