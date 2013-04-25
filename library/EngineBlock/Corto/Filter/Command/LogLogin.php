@@ -48,8 +48,9 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             $voContext
         );
 
-        $redisClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getRedisClient();
-        $jobQueue = new EngineBlock_Job_Queue_LoginTracking($redisClient);
-        $jobQueue->push($parsedLogin);
+        // @todo check if a newer version the future accepts injecting a connection
+        Resque::setBackend('localhost:6379');
+        $args = array ('login' => $parsedLogin);
+        Resque::enqueue('default', 'EngineBlock_Job_Job_LoginTracking', $args);
     }
 }
