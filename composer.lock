@@ -1,6 +1,49 @@
 {
-    "hash": "45e5a72c33ee0fc3d54d5c3a28e102e5",
+    "hash": "946c2b1e145131a1cd594735a53b39e3",
     "packages": [
+        {
+            "name": "chrisboulton/php-resque",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chrisboulton/php-resque.git",
+                "reference": "1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://github.com/chrisboulton/php-resque/zipball/1.2",
+                "reference": "1.2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Resque": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Boulton",
+                    "email": "chris@bigcommerce.com"
+                }
+            ],
+            "description": "Redis backed library for creating background jobs and processing them later. Based on resque for Ruby.",
+            "homepage": "http://www.github.com/chrisboulton/php-resque/",
+            "keywords": [
+                "background",
+                "job",
+                "redis",
+                "resque"
+            ],
+            "time": "2012-10-13 00:23:06"
+        },
         {
             "name": "pimple/pimple",
             "version": "v1.0.2",
@@ -55,12 +98,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mlively/Phake.git",
-                "reference": "20d66b008436d8785bb2bf6ecb151c511a2e3394"
+                "reference": "5f92246f57e7e8f09e9def04e40ceef49f87470d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mlively/Phake/zipball/20d66b008436d8785bb2bf6ecb151c511a2e3394",
-                "reference": "20d66b008436d8785bb2bf6ecb151c511a2e3394",
+                "url": "https://api.github.com/repos/mlively/Phake/zipball/5f92246f57e7e8f09e9def04e40ceef49f87470d",
+                "reference": "5f92246f57e7e8f09e9def04e40ceef49f87470d",
                 "shasum": ""
             },
             "require": {
@@ -103,7 +146,7 @@
                 "mock",
                 "testing"
             ],
-            "time": "2013-03-28 16:35:41"
+            "time": "2013-04-06 15:06:01"
         },
         {
             "name": "phpunit/php-code-coverage",
