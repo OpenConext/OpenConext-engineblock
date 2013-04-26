@@ -53,7 +53,7 @@ class EngineBlock_Corto_Model_Consent
      * @param array $spMetadata
      * @return array
      */
-    public function applyArp(array $spMetadata)
+    private function applyArp(array $spMetadata)
     {
         $arpFilter = $this->_filterCommandFactory->create('AttributeReleasePolicy');
         $arpFilter->setSpMetadata($spMetadata);
