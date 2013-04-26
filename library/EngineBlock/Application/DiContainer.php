@@ -55,12 +55,28 @@ class EngineBlock_Application_DiContainer extends Pimple
         });
     }
 
+    /**
+     * @return EngineBlock_Corto_Filter_Command_Factory
+     */
+    public function getFilterCommandFactory()
+    {
+        return $this[self::FILTER_COMMAND_FACTORY];
+    }
+
     protected function registerFilterCommandFactory()
     {
         $this[self::FILTER_COMMAND_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_Filter_Command_Factory();
         });
+    }
+
+    /**
+     * @return EngineBlock_Database_ConnectionFactory
+     */
+    public function getDatabaseConnectionFactory()
+    {
+        return $this[self::DATABASE_CONNECTION_FACTORY];
     }
 
     protected function registerDatabaseConnectionFactory()
