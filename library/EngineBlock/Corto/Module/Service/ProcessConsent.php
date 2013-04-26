@@ -61,7 +61,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
         $consent->storeConsent($serviceProviderEntityId, $this->_server->getRemoteEntity($serviceProviderEntityId));
         if ($consent->countTotalConsent() === 1) {
-            $this->_sendIntroductionMail($response, $attributes);
+            $this->_sendIntroductionMail($attributes);
         }
 
         $response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:obtained';
@@ -74,7 +74,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         );
     }
 
-    protected function _sendIntroductionMail($response, $attributes)
+    protected function _sendIntroductionMail($attributes)
     {
         if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
             return;
