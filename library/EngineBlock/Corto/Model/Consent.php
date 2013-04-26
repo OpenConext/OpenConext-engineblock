@@ -145,10 +145,10 @@ class EngineBlock_Corto_Model_Consent
         return true;
     }
 
-    public function countTotalConsent($response, $attributes)
+    public function countTotalConsent()
     {
         $dbh = $this->_getConsentDatabaseConnection();
-        $hashedUserId = sha1($this->_getConsentUid($response, $attributes));
+        $hashedUserId = sha1($this->_getConsentUid());
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
         $parameters = array($hashedUserId);
         $statement = $dbh->prepare($query);

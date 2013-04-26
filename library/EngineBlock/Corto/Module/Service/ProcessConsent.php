@@ -60,7 +60,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
         $consent->storeConsent($serviceProviderEntityId, $this->_server->getRemoteEntity($serviceProviderEntityId));
-        if ($consent->countTotalConsent($response, $attributes) === 1) {
+        if ($consent->countTotalConsent() === 1) {
             $this->_sendIntroductionMail($response, $attributes);
         }
 
