@@ -28,6 +28,14 @@ class EngineBlock_Application_DiContainer extends Pimple
         });
     }
 
+    /**
+     * @return EngineBlock_Corto_Model_Consent_Factory
+     */
+    public function getConsentFactory()
+    {
+        return $this[self::CONSENT_FACTORY];
+    }
+
     protected function registerConsentFactory()
     {
         $this[self::CONSENT_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
