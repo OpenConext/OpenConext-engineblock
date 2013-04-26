@@ -1,6 +1,5 @@
 <?php
-class EngineBlock_Job_Job_LoginTracking
-    implements EngineBlock_Job_Job_JobInterface
+class EngineBlock_Job_LoginTracking
 {
     /**
      * @var EngineBlock_Tracker
