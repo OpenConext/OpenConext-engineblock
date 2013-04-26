@@ -8,6 +8,7 @@ class EngineBlock_Job_LoginTracking
 
     public function setUp()
     {
+        echo 'setup';
         $this->tracker = new EngineBlock_Tracker();
     }
 
