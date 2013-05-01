@@ -347,14 +347,36 @@ class EngineBlock_Corto_XmlToArray
 
     /**
      * @deprecated Use XML converter from DI container and use none static method attributesToArray() instead
-     * @param $attributes
+     * @param array $attributes
      * @return array
+     * @throws EngineBlock_Corto_XmlToArray_Exception
      */
-    public static function attributes2array($attributes)
+    public static function attributes2array(array $attributes)
     {
         $res = array();
-        foreach((array)$attributes as $attribute) {
+        foreach($attributes as $attribute) {
+            if(!isset($attribute['_Name'])) {
+                throw new EngineBlock_Corto_XmlToArray_Exception('Missing attribute name');
+            }
+
+            if(!isset($attribute['saml:AttributeValue'])) {
+                throw new EngineBlock_Corto_XmlToArray_Exception('Missing AttributeValue collection');
+            }
+
+            if(!is_array($attribute['saml:AttributeValue'])) {
+                throw new EngineBlock_Corto_XmlToArray_Exception('AttributeValue collection is not an array');
+            }
+
+            // Add each value of the collection to the result
             foreach ($attribute['saml:AttributeValue'] as $value) {
+                if(!is_array($value)) {
+                    throw new EngineBlock_Corto_XmlToArray_Exception('AttributeValue is not an array');
+                }
+
+                if(!isset($value[self::VALUE_PFX])) {
+                    throw new EngineBlock_Corto_XmlToArray_Exception('AttributeValue has no value');
+                }
+
                 $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
             }
         }

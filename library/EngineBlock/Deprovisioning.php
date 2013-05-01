@@ -32,6 +32,7 @@ class EngineBlock_Deprovisioning
     const DEPROVISION_WARNING_EMAIL_GROUP_MEMBERS = 'deprovisioning_warning_email_group_members';
 
     /**
+     * @todo this is a PDO not a factory
      * @var EngineBlock_Database_ConnectionFactory
      */
     protected $_factory;
@@ -280,6 +281,7 @@ class EngineBlock_Deprovisioning
 
     protected function _findUsers($time)
     {
+        // @todo this is not a factory by a PDO
         $factory = $this->_getDatabaseConnection();
 
         $query = "SELECT DISTINCT userid FROM log_logins

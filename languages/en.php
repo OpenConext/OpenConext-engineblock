@@ -211,6 +211,8 @@ If you want to use this application you have to:<br />
     'error_no_message'              => 'Error - No message received..',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
+    'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
+    'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
         A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
@@ -273,6 +275,8 @@ If you want to use this application you have to:<br />
      * @url http://nl3.php.net/sprintf
      */
     'error_attribute_validator_type_uri'            => '\'%3$s\' is not a valid URI',
+    'error_attribute_validator_type_urn'            => '\'%3$s\' is not a valid URN',
+    'error_attribute_validator_type_url'            => '\'%3$s\' is not a valid URL',
     'error_attribute_validator_type_hostname'       => '\'%3$s\' is not a valid hostname',
     'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is not a valid email address',
     'error_attribute_validator_minlength'           => '\'%3$s\' is not long enough (minimum is %2$d characters)',

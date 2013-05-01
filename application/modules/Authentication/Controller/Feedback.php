@@ -79,4 +79,9 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         header('HTTP/1.1 400 Bad Request');
     }
 
+    public function invalidAcsBindingAction()
+    {
+        // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
+    }
+
 }

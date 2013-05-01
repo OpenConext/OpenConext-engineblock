@@ -9,7 +9,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
 {
     public function testAttributesToArray()
     {
-        $input = array(
+        $attributes = array(
             array(
                 '_Name' => 'urn:org:openconext:corto:internal:sp-entity-id',
                 'saml:AttributeValue' => array(
@@ -22,7 +22,7 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
                 '_Name' => 'urn:mace:dir:attribute-def:cn',
                 'saml:AttributeValue' => array(
                     array(
-                        '__v' => null
+                        '__v' => 'Joe Smooth'
                     )
                 )
             )
@@ -30,11 +30,91 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
 
         $expectedOutput = array(
             'urn:org:openconext:corto:internal:sp-entity-id' => array('testSp'),
-            'urn:mace:dir:attribute-def:cn' => array(null),
+            'urn:mace:dir:attribute-def:cn' => array('Joe Smooth'),
         );
 
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
-        $this->assertEquals($expectedOutput, $xmlConverter->attributesToArray($input));
+        $this->assertEquals($expectedOutput, $xmlConverter->attributesToArray($attributes));
+    }
+
+    /**
+     * @expectedException EngineBlock_Corto_XmlToArray_Exception
+     * @expectedExceptionMessage Missing attribute name
+     */
+    public function testAttributeNameIsRequired()
+    {
+        $xmlConverter = new EngineBlock_Corto_XmlToArray();
+        $attributes = array(array());
+        $xmlConverter->attributesToArray($attributes);
+    }
+
+    /**
+     * @expectedException EngineBlock_Corto_XmlToArray_Exception
+     * @expectedExceptionMessage Missing AttributeValue collection
+     */
+    public function testAttributeValueCollectionIsRequired()
+    {
+        $xmlConverter = new EngineBlock_Corto_XmlToArray();
+        $attributes = array(
+            array(
+                '_Name' => 'example'
+            )
+        );
+        $xmlConverter->attributesToArray($attributes);
+    }
+
+    /**
+     * @expectedException EngineBlock_Corto_XmlToArray_Exception
+     * @expectedExceptionMessage AttributeValue collection is not an array
+     */
+    public function testAttributeValueCollectionShouldBeAnArray()
+    {
+        $xmlConverter = new EngineBlock_Corto_XmlToArray();
+        $attributes = array(
+            array(
+                '_Name' => 'example',
+                'saml:AttributeValue' => ''
+            )
+        );
+        $xmlConverter->attributesToArray($attributes);
+    }
+
+    /**
+     * @expectedException EngineBlock_Corto_XmlToArray_Exception
+     * @expectedExceptionMessage AttributeValue is not an array
+     */
+    public function testAttributeValueShouldBeAnArray()
+    {
+        $xmlConverter = new EngineBlock_Corto_XmlToArray();
+        $attributes = array(
+            array(
+                '_Name' => 'example',
+                'saml:AttributeValue' => array(
+                    null
+                )
+            )
+        );
+        $xmlConverter->attributesToArray($attributes);
+    }
+
+    /**
+     * @expectedException EngineBlock_Corto_XmlToArray_Exception
+     * @expectedExceptionMessage AttributeValue has no value
+     */
+    public function testAttributeValueShouldNotBeEmpty()
+    {
+        $xmlConverter = new EngineBlock_Corto_XmlToArray();
+        $attributes = array(
+            array(
+                '_Name' => 'example',
+                'saml:AttributeValue' => array(
+                    array(
+                        '__v' => null
+                    )
+                )
+            )
+        );
+        $xmlConverter->attributesToArray($attributes);
     }
 
     /**

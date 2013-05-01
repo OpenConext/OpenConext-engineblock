@@ -62,6 +62,7 @@ class EngineBlock_Group_Provider_OpenSocial_Oauth_ThreeLegged extends EngineBloc
             }
         }
 
+        // @todo get client from factory via DI container instead of instantiating it here, this would make testing and logging easier
         $httpClient = new Zend_Oauth_Client($authConfig, $config->url, $config);
 
         $accessToken = $accessTokenHelper->loadAccessToken();
