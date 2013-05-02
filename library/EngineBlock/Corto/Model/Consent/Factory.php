@@ -28,10 +28,28 @@ class EngineBlock_Corto_Model_Consent_Factory
     public function create(EngineBlock_Corto_ProxyServer $proxyServer, array $response, array $attributes) {
         return new EngineBlock_Corto_Model_Consent(
             $proxyServer->getConfig('ConsentDbTable', 'consent'),
-            $proxyServer->getConfig('ConsentStoreValues', true),
             $response,
-            $attributes,
+            $this->hashAttributes($attributes, $proxyServer->getConfig('ConsentStoreValues', true)),
             $this->_databaseConnectionFactory
         );
+    }
+
+    /**
+     * @param array $attributes
+     * @param bool $mustStoreValues
+     * @return string
+     */
+    private function hashAttributes(array $attributes, $mustStoreValues)
+    {
+        $hashBase = NULL;
+        if ($mustStoreValues) {
+            ksort($attributes);
+            $hashBase = serialize($attributes);
+        } else {
+            $names = array_keys($attributes);
+            sort($names);
+            $hashBase = implode('|', $names);
+        }
+        return sha1($hashBase);
     }
 }

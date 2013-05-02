@@ -3,41 +3,37 @@
 class EngineBlock_Corto_Model_Consent
 {
     private $_tableName;
-    private $_mustStoreValues;
     private $_response;
-    private $_responseAttributes;
+    private $_attributesHash;
 
     /** @var EngineBlock_Database_ConnectionFactory */
     private $_databaseConnectionFactory;
 
     /**
      * @param $tableName
-     * @param $mustStoreValues
      * @param array $response
-     * @param array $responseAttributes
+     * @param string $attributesHash
      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
      */
     public function __construct(
         $tableName,
-        $mustStoreValues,
         array $response,
-        array $responseAttributes,
+        $attributesHash,
         EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
     )
     {
         $this->_tableName = $tableName;
-        $this->_mustStoreValues = $mustStoreValues;
         $this->_response = $response;
-        $this->_responseAttributes = $responseAttributes;
+        $this->_attributesHash = $attributesHash;
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getResponseAttributes()
+    public function getAttributesHash()
     {
-        return $this->_responseAttributes;
+        return $this->_attributesHash;
     }
 
     public function hasStoredConsent($serviceProviderEntityId)
@@ -48,14 +44,12 @@ class EngineBlock_Corto_Model_Consent
                 return false;
             }
 
-            $attributesHash = $this->_getAttributesHash($this->_responseAttributes);
-
             $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ?";
             $hashedUserId = sha1($this->_getConsentUid());
             $parameters = array(
                 $hashedUserId,
                 $serviceProviderEntityId,
-                $attributesHash
+                $this->_attributesHash
             );
 
             /** @var $statement PDOStatement */
@@ -97,7 +91,7 @@ class EngineBlock_Corto_Model_Consent
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProviderEntityId,
-            $this->_getAttributesHash($this->_responseAttributes)
+            $this->_attributesHash
         );
 
         $statement = $dbh->prepare($query);
@@ -148,19 +142,5 @@ class EngineBlock_Corto_Model_Consent
     protected function _getConsentUid()
     {
         return $this->_response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
-    }
-
-    protected function _getAttributesHash($attributes)
-    {
-        $hashBase = NULL;
-        if ($this->_mustStoreValues) {
-            ksort($attributes);
-            $hashBase = serialize($attributes);
-        } else {
-            $names = array_keys($attributes);
-            sort($names);
-            $hashBase = implode('|', $names);
-        }
-        return sha1($hashBase);
     }
 }
