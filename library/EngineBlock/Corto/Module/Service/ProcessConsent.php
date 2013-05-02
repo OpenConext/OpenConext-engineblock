@@ -20,12 +20,16 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     /** @var EngineBlock_User_PreferredNameAttributeFilter */
     private $_preferredNameAttributeFilter;
 
+    /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
+    private $_arpFilter;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
         EngineBlock_Mail_Mailer $mailer,
-        EngineBlock_User_PreferredNameAttributeFilter $preferredNameAttributeFilter
+        EngineBlock_User_PreferredNameAttributeFilter $preferredNameAttributeFilter,
+        EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter
     )
     {
         $this->_server = $server;
@@ -33,6 +37,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $this->_consentFactory = $consentFactory;
         $this->_mailer = $mailer;
         $this->_preferredNameAttributeFilter = $preferredNameAttributeFilter;
+        $this->_arpFilter = $arpFilter;
     }
 
     public function serve($serviceName)
@@ -58,8 +63,17 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
             return;
         }
 
-        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $consent->storeConsent($serviceProviderEntityId, $this->_server->getRemoteEntity($serviceProviderEntityId));
+        $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
+
+        // Should be moved to generic method
+        // Filter attributes
+        $this->_arpFilter->setSpMetadata($spEntityMetadata);
+        $this->_arpFilter->setResponseAttributes($attributes);
+        $this->_arpFilter->execute();
+        $filteredResponseAttributes = $this->_arpFilter->getResponseAttributes();
+
+        $consent = $this->_consentFactory->create($this->_server, $response, $filteredResponseAttributes);
+        $consent->storeConsent($serviceProviderEntityId);
         if ($consent->countTotalConsent() === 1) {
             $this->_sendIntroductionMail($attributes);
         }

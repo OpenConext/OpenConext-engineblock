@@ -11,6 +11,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     /** @var EngineBlock_Corto_Model_Consent */
     private $consentMock;
 
+    /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
+    private $attributeReleasePolicyFilterMock;
+
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
 
@@ -20,6 +23,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $this->xmlConverterMock = $this->mockXmlConverter($diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER]);
         $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
         $this->consentMock = $this->mockConsent();
+        $this->attributeReleasePolicyFilterMock = $this->mockAttributeReleasePolicyFilter();
     }
 
     public function testConsentRequested()
@@ -87,15 +91,29 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message['_Consent']);
     }
 
-    public function testFilteredAttributesAreUsedToRenderTemplate()
+    public function testFilteredAttributesAreUsedToCreateConsent()
     {
-        $provideConsentService = $this->factoryService();
-
         $expectedFilteredAttributes = array('foo');
-        Phake::when($this->consentMock)
-            ->getFilteredResponseAttributes(Phake::anyParameters())
+
+        Phake::when($this->attributeReleasePolicyFilterMock)
+            ->getResponseAttributes()
             ->thenReturn($expectedFilteredAttributes);
 
+        $provideConsentService = $this->factoryService();
+        $provideConsentService->serve(null);
+
+        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, Phake::anyParameters(), $expectedFilteredAttributes);
+    }
+
+    public function testFilteredAttributesAreUsedToRenderTemplate()
+    {
+        $expectedFilteredAttributes = array('foo');
+
+        Phake::when($this->attributeReleasePolicyFilterMock)
+            ->getResponseAttributes()
+            ->thenReturn($expectedFilteredAttributes);
+
+        $provideConsentService = $this->factoryService();
         $provideConsentService->serve(null);
 
         Phake::verify($this->proxyServerMock)
@@ -201,6 +219,16 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     }
 
     /**
+     * @return EngineBlock_Corto_Filter_Command_AttributeReleasePolicy
+     */
+    private function mockAttributeReleasePolicyFilter()
+    {
+        $attributeReleasePolicyFilterMock = Phake::mock('EngineBlock_Corto_Filter_Command_AttributeReleasePolicy');
+        Phake::when($attributeReleasePolicyFilterMock)->getResponseAttributes()->thenReturn(array());
+        return $attributeReleasePolicyFilterMock;
+    }
+
+    /**
      * @return EngineBlock_Corto_Module_Service_ProvideConsent
      */
     private function factoryService()
@@ -208,7 +236,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         return new EngineBlock_Corto_Module_Service_ProvideConsent(
             $this->proxyServerMock,
             $this->xmlConverterMock,
-            $this->consentFactoryMock
+            $this->consentFactoryMock,
+            $this->attributeReleasePolicyFilterMock
         );
     }
 }

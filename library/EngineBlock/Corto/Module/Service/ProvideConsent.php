@@ -18,15 +18,23 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var EngineBlock_Corto_Model_Consent_Factory */
     private  $_consentFactory;
 
+    /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
+    private $_arpFilter;
+
+    /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
+    private $attributeReleasePolicyFilterMock;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        EngineBlock_Corto_Model_Consent_Factory $consentFactory
+        EngineBlock_Corto_Model_Consent_Factory $consentFactory,
+        EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter
     )
     {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
+        $this->_arpFilter = $arpFilter;
     }
 
     public function serve($serviceName)
@@ -64,8 +72,15 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
-        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
+        // Should be moved to generic method
+        // Filter attributes
+        $this->_arpFilter->setSpMetadata($spEntityMetadata);
+        $this->_arpFilter->setResponseAttributes($attributes);
+        $this->_arpFilter->execute();
+        $filteredResponseAttributes = $this->_arpFilter->getResponseAttributes();
+
+        $consent = $this->_consentFactory->create($this->_server, $response, $filteredResponseAttributes);
+        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId);
         if ($priorConsent) {
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
 
@@ -84,7 +99,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             array(
                 'action'    => $this->_server->getUrl('processConsentService'),
                 'ID'        => $response['_ID'],
-                'attributes'=> $consent->getFilteredResponseAttributes(),
+                'attributes'=> $filteredResponseAttributes,
                 'sp'        => $spEntityMetadata,
                 'idp'       => $idpEntityMetadata,
                 'commonName'=> $commonName,

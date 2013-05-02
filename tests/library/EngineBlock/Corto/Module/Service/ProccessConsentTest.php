@@ -14,6 +14,9 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     /** @var EngineBlock_Mail_Mailer */
     private $mailerMock;
 
+    /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
+    private $attributeReleasePolicyFilterMock;
+
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
 
@@ -23,6 +26,7 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $this->xmlConverterMock = $this->mockXmlConverter($diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER]);
         $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
         $this->mailerMock = $diContainer[EngineBlock_Application_DiContainer::MAILER];
+        $this->attributeReleasePolicyFilterMock = $this->mockAttributeReleasePolicyFilter();
 
         $this->mockGlobals();
     }
@@ -66,6 +70,20 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         Phake::verify(($this->proxyServerMock))->redirect(Phake::anyParameters());
     }
 
+    public function testFilteredAttributesAreUsedToCreateConsent()
+    {
+        $expectedFilteredAttributes = array('foo');
+
+        Phake::when($this->attributeReleasePolicyFilterMock)
+            ->getResponseAttributes()
+            ->thenReturn($expectedFilteredAttributes);
+
+        $provideConsentService = $this->factoryService();
+        $provideConsentService->serve(null);
+
+        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, Phake::anyParameters(), $expectedFilteredAttributes);
+    }
+
     public function testConsentIsStored()
     {
         $processConsentService = $this->factoryService();
@@ -77,7 +95,7 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
 
         $processConsentService->serve(null);
 
-        Phake::verify(($consentMock))->storeConsent(Phake::anyParameters());
+        Phake::verify($consentMock)->storeConsent(Phake::anyParameters());
     }
 
     public function testIntroductionMailIsSentOnFirstConsentIfEmailIsKnown() {
@@ -185,6 +203,16 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     }
 
     /**
+     * @return EngineBlock_Corto_Filter_Command_AttributeReleasePolicy
+     */
+    private function mockAttributeReleasePolicyFilter()
+    {
+        $attributeReleasePolicyFilterMock = Phake::mock('EngineBlock_Corto_Filter_Command_AttributeReleasePolicy');
+        Phake::when($attributeReleasePolicyFilterMock)->getResponseAttributes()->thenReturn(array());
+        return $attributeReleasePolicyFilterMock;
+    }
+
+    /**
      * @return EngineBlock_Corto_Module_Service_ProcessConsent
      */
     private function factoryService()
@@ -194,7 +222,8 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
             $this->xmlConverterMock,
             $this->consentFactoryMock,
             $this->mailerMock,
-            new EngineBlock_User_PreferredNameAttributeFilter()
+            new EngineBlock_User_PreferredNameAttributeFilter(),
+            $this->attributeReleasePolicyFilterMock
         );
     }
 }
