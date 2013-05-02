@@ -35,6 +35,9 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
         return $this->_responseAttributes;
     }
 
+    /**
+     * @return EngineBlock_Corto_Filter_Command_AttributeReleasePolicy
+     */
     public function execute()
     {
         $spEntityId = $this->_spMetadata['EntityId'];
@@ -73,6 +76,8 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
             }
             $this->_responseAttributes = $newAttributes;
         }
+
+        return $this;
     }
 
     protected function _getServiceRegistryAdapter()
