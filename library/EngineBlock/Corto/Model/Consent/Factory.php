@@ -21,14 +21,14 @@ class EngineBlock_Corto_Model_Consent_Factory
      * Creates a new Consent instance
      *
      * @param EngineBlock_Corto_ProxyServer $proxyServer
-     * @param array $response
+     * @param string $userId
      * @param array $attributes
      * @return EngineBlock_Corto_Model_Consent
      */
-    public function create(EngineBlock_Corto_ProxyServer $proxyServer, array $response, array $attributes) {
+    public function create(EngineBlock_Corto_ProxyServer $proxyServer, $userId, array $attributes) {
         return new EngineBlock_Corto_Model_Consent(
             $proxyServer->getConfig('ConsentDbTable', 'consent'),
-            $response,
+            $this->hashUserId($userId),
             $this->hashAttributes($attributes, $proxyServer->getConfig('ConsentStoreValues', true)),
             $this->_databaseConnectionFactory
         );
@@ -51,5 +51,22 @@ class EngineBlock_Corto_Model_Consent_Factory
             $hashBase = implode('|', $names);
         }
         return sha1($hashBase);
+    }
+
+    /**
+     * @param string $userId
+     * @return string
+     */
+    private function hashUserId($userId)
+    {
+        return sha1($userId);
+    }
+
+    /**
+     * @param array $response
+     * @return string
+     */
+    public static function extractUidFromResponse(array $response) {
+        return $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
     }
 }

@@ -32,14 +32,12 @@ class EngineBlock_Corto_Model_ConsentTest extends PHPUnit_Framework_TestCase
     private function factoryConsent(EngineBlock_Application_DiContainer $diContainer)
     {
         $tableName = null;
-        $mustStoreValues = true;
-        $response = array();
+        $userId = 'foo';
         $responseAttributes = array();
 
         $consent = new EngineBlock_Corto_Model_Consent(
             $tableName,
-            $mustStoreValues,
-            $response,
+            $userId,
             $responseAttributes,
             $diContainer[EngineBlock_Application_DiContainer::DATABASE_CONNECTION_FACTORY]
         );

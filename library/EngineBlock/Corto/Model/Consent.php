@@ -3,7 +3,7 @@
 class EngineBlock_Corto_Model_Consent
 {
     private $_tableName;
-    private $_response;
+    private $_userIdHash;
     private $_attributesHash;
 
     /** @var EngineBlock_Database_ConnectionFactory */
@@ -11,19 +11,19 @@ class EngineBlock_Corto_Model_Consent
 
     /**
      * @param $tableName
-     * @param array $response
+     * @param string $userIdHash
      * @param string $attributesHash
      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
      */
     public function __construct(
         $tableName,
-        array $response,
+        $userIdHash,
         $attributesHash,
         EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
     )
     {
         $this->_tableName = $tableName;
-        $this->_response = $response;
+        $this->_userIdHash = $userIdHash;
         $this->_attributesHash = $attributesHash;
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
     }
@@ -45,9 +45,8 @@ class EngineBlock_Corto_Model_Consent
             }
 
             $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ?";
-            $hashedUserId = sha1($this->_getConsentUid());
             $parameters = array(
-                $hashedUserId,
+                $this->_userIdHash,
                 $serviceProviderEntityId,
                 $this->_attributesHash
             );
@@ -65,7 +64,7 @@ class EngineBlock_Corto_Model_Consent
             // Update usage date
             $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ?");
             $statement->execute(array(
-                $hashedUserId,
+                $this->_userIdHash,
                 $serviceProviderEntityId,
              ));
 
@@ -89,7 +88,7 @@ class EngineBlock_Corto_Model_Consent
                   VALUES (NOW(), ?, ?, ?)
                   ON DUPLICATE KEY UPDATE usage_date=VALUES(usage_date), attribute=VALUES(attribute)";
         $parameters = array(
-            sha1($this->_getConsentUid()),
+            $this->_userIdHash(),
             $serviceProviderEntityId,
             $this->_attributesHash
         );
@@ -116,9 +115,8 @@ class EngineBlock_Corto_Model_Consent
     public function countTotalConsent()
     {
         $dbh = $this->_getConsentDatabaseConnection();
-        $hashedUserId = sha1($this->_getConsentUid());
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
-        $parameters = array($hashedUserId);
+        $parameters = array($this->_userIdHash);
         $statement = $dbh->prepare($query);
         if (!$statement) {
             throw new EngineBlock_Exception(
@@ -139,8 +137,5 @@ class EngineBlock_Corto_Model_Consent
         return $this->_databaseConnectionFactory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
     }
 
-    protected function _getConsentUid()
-    {
-        return $this->_response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
-    }
+
 }
