@@ -51,7 +51,7 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
 
         // @todo check if a newer version the future accepts injecting a connection
         Resque::setBackend('localhost:6379');
-        $args = array ('login' => $parsedLogin);
+        $args = array('login' => $parsedLogin);
         Resque::enqueue(self::QUEUE_NAME, 'EngineBlock_Job_Job_LoginTracking', $args);
     }
 }
