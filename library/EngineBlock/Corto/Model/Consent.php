@@ -11,9 +11,9 @@ class EngineBlock_Corto_Model_Consent
     private $_attributesHash;
 
     /**
-     * @param $userIdHash
-     * @param $serviceProviderEntityId
-     * @param $attributesHash
+     * @param string $userIdHash
+     * @param string $serviceProviderEntityId
+     * @param string $attributesHash
      */
     public function __construct(
         $userIdHash,
