@@ -1,8 +1,13 @@
 <?php
 class EngineBlock_Corto_Model_Consent
 {
+    /** @var string */
     private $_userIdHash;
+
+    /** @var string */
     private $_serviceProviderEntityId;
+
+    /** @var string */
     private $_attributesHash;
 
     /**
