@@ -26,7 +26,7 @@ class EngineBlock_Corto_Model_Consent_Factory
      * @param bool $mustStoreValues
      * @return string
      */
-    private function hashAttributes(array $attributes, $mustStoreValues)
+    private function hashAttributes(array $attributes, $mustStoreValues = true)
     {
         $hashBase = NULL;
         if ($mustStoreValues) {
