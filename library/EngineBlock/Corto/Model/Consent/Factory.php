@@ -17,7 +17,8 @@ class EngineBlock_Corto_Model_Consent_Factory
         return new EngineBlock_Corto_Model_Consent(
             $this->hashUserId($userId),
             $serviceProviderEntityId,
-            $this->hashAttributes($attributes, $proxyServer->getConfig('ConsentStoreValues', true))
+            $this->hashAttributes($attributes, $proxyServer->getConfig('ConsentStoreValues', true)),
+            new DateTime()
         );
     }
 

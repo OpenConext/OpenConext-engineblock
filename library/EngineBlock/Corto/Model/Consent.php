@@ -11,18 +11,26 @@ class EngineBlock_Corto_Model_Consent
     private $_attributesHash;
 
     /**
+     * @var DateTime
+     */
+    private $_usageDate;
+
+    /**
      * @param string $userIdHash
      * @param string $serviceProviderEntityId
      * @param string $attributesHash
+     * @param DateTime $usageDate
      */
     public function __construct(
         $userIdHash,
         $serviceProviderEntityId,
-        $attributesHash
+        $attributesHash,
+        DateTime $usageDate
     ){
         $this->_userIdHash = $userIdHash;
         $this->_serviceProviderEntityId = $serviceProviderEntityId;
         $this->_attributesHash = $attributesHash;
+        $this->_usageDate = $usageDate;
     }
 
     /**
@@ -47,5 +55,14 @@ class EngineBlock_Corto_Model_Consent
     public function getUserIdHash()
     {
         return $this->_userIdHash;
+    }
+
+    /**
+     * @param \DateTime $usageDate
+     */
+    public function setUsageDate($usageDate)
+    {
+        $this->_usageDate = $usageDate;
+        return $this;
     }
 }
