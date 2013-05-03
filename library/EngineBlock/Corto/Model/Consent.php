@@ -2,18 +2,18 @@
 class EngineBlock_Corto_Model_Consent
 {
     /** @var string */
-    private $_userIdHash;
+    protected $userIdHash;
 
     /** @var string */
-    private $_serviceProviderEntityId;
+    protected $serviceProviderEntityId;
 
     /** @var string */
-    private $_attributesHash;
+    protected $attributesHash;
 
     /**
      * @var DateTime
      */
-    private $_usageDate;
+    protected $usageDate;
 
     /**
      * @param string $userIdHash
@@ -27,10 +27,10 @@ class EngineBlock_Corto_Model_Consent
         $attributesHash,
         DateTime $usageDate
     ){
-        $this->_userIdHash = $userIdHash;
-        $this->_serviceProviderEntityId = $serviceProviderEntityId;
-        $this->_attributesHash = $attributesHash;
-        $this->_usageDate = $usageDate;
+        $this->userIdHash = $userIdHash;
+        $this->serviceProviderEntityId = $serviceProviderEntityId;
+        $this->attributesHash = $attributesHash;
+        $this->usageDate = $usageDate;
     }
 
     /**
@@ -38,7 +38,7 @@ class EngineBlock_Corto_Model_Consent
      */
     public function getAttributesHash()
     {
-        return $this->_attributesHash;
+        return $this->attributesHash;
     }
 
     /**
@@ -46,7 +46,7 @@ class EngineBlock_Corto_Model_Consent
      */
     public function getServiceProviderEntityId()
     {
-        return $this->_serviceProviderEntityId;
+        return $this->serviceProviderEntityId;
     }
 
     /**
@@ -54,7 +54,7 @@ class EngineBlock_Corto_Model_Consent
      */
     public function getUserIdHash()
     {
-        return $this->_userIdHash;
+        return $this->userIdHash;
     }
 
     /**
@@ -62,7 +62,7 @@ class EngineBlock_Corto_Model_Consent
      */
     public function setUsageDate($usageDate)
     {
-        $this->_usageDate = $usageDate;
+        $this->usageDate = $usageDate;
         return $this;
     }
 }
