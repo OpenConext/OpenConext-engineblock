@@ -40,7 +40,10 @@ class EngineBlock_Corto_Model_Consent_RepositoryCacheProxy
         $cacheKey = $this->createCacheKey($consent);
         $this->redisClient->set($cacheKey, true, self::CACHE_EXPIRATION_TIME);
 
-        Resque::enqueue(self::QUEUE_NAME, 'EngineBlock_Job_StoreConsent', $consent);
+        $args = array(
+            'consent' => serialize($consent)
+        );
+        Resque::enqueue(self::QUEUE_NAME, 'EngineBlock_Job_StoreConsent', $args);
     }
 
     /**
