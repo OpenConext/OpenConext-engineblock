@@ -36,7 +36,7 @@ class EngineBlock_Corto_Model_Consent_Repository
             $dbh = $this->_getConsentDatabaseConnection();
 
             $query = "
-                SELECT  id
+                SELECT  consent_date
                 FROM    {$this->_tableName}
                 WHERE   hashed_user_id = ?
                     AND service_id = ?
