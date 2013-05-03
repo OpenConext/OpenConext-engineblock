@@ -39,7 +39,7 @@ class EngineBlock_Corto_Model_ConsentTest extends PHPUnit_Framework_TestCase
             $tableName,
             $userId,
             $responseAttributes,
-            $diContainer[EngineBlock_Application_DiContainer::DATABASE_CONNECTION_FACTORY]
+            new DateTime()
         );
 
         return $consent;
