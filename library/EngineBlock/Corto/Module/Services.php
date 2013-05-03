@@ -141,5 +141,6 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         $databaseConnectionFactory = $diContainer->getDatabaseConnectionFactory();
         $consentRepository = new EngineBlock_Corto_Model_Consent_RepositoryCacheProxy($databaseConnectionFactory);
         $consentRepository->setRedisClient($diContainer->getRedisClient());
+        return $consentRepository;
     }
 }
