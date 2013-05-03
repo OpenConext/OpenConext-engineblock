@@ -139,6 +139,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     private function createConsentRepository(EngineBlock_Application_DiContainer $diContainer)
     {
         $databaseConnectionFactory = $diContainer->getDatabaseConnectionFactory();
-        return new EngineBlock_Corto_Model_Consent_Repository($databaseConnectionFactory);
+        $consentRepository = new EngineBlock_Corto_Model_Consent_RepositoryCacheProxy($databaseConnectionFactory);
+        $consentRepository->setRedisClient($diContainer->getRedisClient());
     }
 }

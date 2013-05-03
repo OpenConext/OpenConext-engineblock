@@ -58,6 +58,14 @@ class EngineBlock_Corto_Model_Consent
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getUsageDate()
+    {
+        return $this->usageDate;
+    }
+
+    /**
      * @param \DateTime $usageDate
      */
     public function setUsageDate($usageDate)
