@@ -13,7 +13,12 @@ class EngineBlock_Corto_Model_Consent_Factory
      * @param array $attributes
      * @return EngineBlock_Corto_Model_Consent
      */
-    public function create(EngineBlock_Corto_ProxyServer $proxyServer, $userId, $serviceProviderEntityId, array $attributes) {
+    public function create(
+        EngineBlock_Corto_ProxyServer $proxyServer,
+        $userId,
+        $serviceProviderEntityId,
+        array $attributes
+    ) {
         return new EngineBlock_Corto_Model_Consent(
             $this->hashUserId($userId),
             $serviceProviderEntityId,

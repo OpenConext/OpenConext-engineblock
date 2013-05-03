@@ -82,7 +82,12 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $filteredResponseAttributes = $this->_arpFilter->getResponseAttributes();
 
         $userId = EngineBlock_Corto_Model_Consent_Factory::extractUidFromResponse($response);
-        $consent = $this->_consentFactory->create($this->_server, $userId, $serviceProviderEntityId, $filteredResponseAttributes);
+        $consent = $this->_consentFactory->create(
+            $this->_server,
+            $userId,
+            $serviceProviderEntityId,
+            $filteredResponseAttributes
+        );
         if ($this->_consentRepository->isStored($consent)) {
             $this->_consentRepository->updateUsage($consent);
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';

@@ -78,7 +78,12 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $filteredResponseAttributes = $this->_arpFilter->getResponseAttributes();
 
         $userId = EngineBlock_Corto_Model_Consent_Factory::extractUidFromResponse($response);
-        $consent = $this->_consentFactory->create($this->_server, $userId, $serviceProviderEntityId, $filteredResponseAttributes);
+        $consent = $this->_consentFactory->create(
+            $this->_server,
+            $userId,
+            $serviceProviderEntityId,
+            $filteredResponseAttributes
+        );
         $this->_consentRepository->store($consent);
         if ($this->_consentRepository->countTotalConsent($consent->getUserIdHash()) === 1) {
             $this->_sendIntroductionMail($attributes);
