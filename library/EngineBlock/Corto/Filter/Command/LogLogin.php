@@ -26,6 +26,7 @@
 class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter_Command_Abstract
 {
     const VO_NAME_ATTRIBUTE         = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
+    const QUEUE_NAME = 'logintracking';
 
     public function execute()
     {
@@ -51,6 +52,6 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
         // @todo check if a newer version the future accepts injecting a connection
         Resque::setBackend('localhost:6379');
         $args = array ('login' => $parsedLogin);
-        Resque::enqueue('default', 'EngineBlock_Job_Job_LoginTracking', $args);
+        Resque::enqueue(self::QUEUE_NAME, 'EngineBlock_Job_Job_LoginTracking', $args);
     }
 }
