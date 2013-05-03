@@ -106,7 +106,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $provideConsentService = $this->factoryService();
         $provideConsentService->serve(null);
 
-        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, null, 'testSp', $expectedFilteredAttributes);
+        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, 'testUser', 'testSp', $expectedFilteredAttributes);
     }
 
     public function testFilteredAttributesAreUsedToRenderTemplate()
@@ -169,6 +169,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
                 'saml:AttributeStatement' => array(
                     array(
                         'saml:Attribute' => array()
+                    )
+                ),
+                'saml:Subject' => array(
+                    'saml:NameID' => array(
+                        '__v' => 'testUser'
                     )
                 )
             ),

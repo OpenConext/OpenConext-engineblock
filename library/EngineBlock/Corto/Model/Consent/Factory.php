@@ -54,6 +54,11 @@ class EngineBlock_Corto_Model_Consent_Factory
      * @return string
      */
     public static function extractUidFromResponse(array $response) {
+        if (!isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v']))
+        {
+            throw new EngineBlock_Exception('Name id is not set');
+        }
+
         return $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
     }
 }

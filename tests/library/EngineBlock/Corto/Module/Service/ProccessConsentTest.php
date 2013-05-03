@@ -84,7 +84,7 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $provideConsentService = $this->factoryService();
         $provideConsentService->serve(null);
 
-        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, null, null, $expectedFilteredAttributes);
+        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, 'testUser', null, $expectedFilteredAttributes);
     }
 
     public function testConsentIsStored()
@@ -184,6 +184,7 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $_POST['ID'] = 'test';
         $_POST['consent'] = 'yes';
         $_SESSION['consent']['test']['response']['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'] = array();
+        $_SESSION['consent']['test']['response']['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] = 'testUser';
     }
 
     /**
