@@ -4,33 +4,20 @@
  */
 class EngineBlock_Corto_Model_Consent_Factory
 {
-    /** @var EngineBlock_Database_ConnectionFactory */
-    private $_databaseConnectionFactory;
-
-     /**
-      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
-      */
-    public function __construct(
-        EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
-    )
-    {
-        $this->_databaseConnectionFactory = $databaseConnectionFactory;
-    }
-
     /**
      * Creates a new Consent instance
      *
      * @param EngineBlock_Corto_ProxyServer $proxyServer
      * @param string $userId
+     * @param string $serviceProviderEntityId
      * @param array $attributes
      * @return EngineBlock_Corto_Model_Consent
      */
-    public function create(EngineBlock_Corto_ProxyServer $proxyServer, $userId, array $attributes) {
+    public function create(EngineBlock_Corto_ProxyServer $proxyServer, $userId, $serviceProviderEntityId, array $attributes) {
         return new EngineBlock_Corto_Model_Consent(
-            $proxyServer->getConfig('ConsentDbTable', 'consent'),
             $this->hashUserId($userId),
-            $this->hashAttributes($attributes, $proxyServer->getConfig('ConsentStoreValues', true)),
-            $this->_databaseConnectionFactory
+            $serviceProviderEntityId,
+            $this->hashAttributes($attributes, $proxyServer->getConfig('ConsentStoreValues', true))
         );
     }
 

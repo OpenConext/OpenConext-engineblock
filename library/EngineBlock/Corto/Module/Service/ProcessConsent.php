@@ -23,13 +23,17 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
     private $_arpFilter;
 
+    /** @var EngineBlock_Corto_Model_Consent_Repository */
+    private $_consentRepository;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
         EngineBlock_Mail_Mailer $mailer,
         EngineBlock_User_PreferredNameAttributeFilter $preferredNameAttributeFilter,
-        EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter
+        EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter,
+        EngineBlock_Corto_Model_Consent_Repository $consentRepository
     )
     {
         $this->_server = $server;
@@ -38,6 +42,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $this->_mailer = $mailer;
         $this->_preferredNameAttributeFilter = $preferredNameAttributeFilter;
         $this->_arpFilter = $arpFilter;
+        $this->_consentRepository = $consentRepository;
     }
 
     public function serve($serviceName)
@@ -73,9 +78,9 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $filteredResponseAttributes = $this->_arpFilter->getResponseAttributes();
 
         $userId = EngineBlock_Corto_Model_Consent_Factory::extractUidFromResponse($response);
-        $consent = $this->_consentFactory->create($this->_server, $userId, $filteredResponseAttributes);
-        $consent->storeConsent($serviceProviderEntityId);
-        if ($consent->countTotalConsent() === 1) {
+        $consent = $this->_consentFactory->create($this->_server, $userId, $serviceProviderEntityId, $filteredResponseAttributes);
+        $this->_consentRepository->store($consent);
+        if ($this->_consentRepository->countTotalConsent($consent->getUserIdHash()) === 1) {
             $this->_sendIntroductionMail($attributes);
         }
 

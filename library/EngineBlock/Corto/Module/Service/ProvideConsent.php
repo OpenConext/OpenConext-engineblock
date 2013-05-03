@@ -21,20 +21,22 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
     private $_arpFilter;
 
-    /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
-    private $attributeReleasePolicyFilterMock;
+    /** @var EngineBlock_Corto_Model_Consent_Repository */
+    private $_consentRepository;
 
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
-        EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter
+        EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter,
+        EngineBlock_Corto_Model_Consent_Repository $consentRepository
     )
     {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
         $this->_arpFilter = $arpFilter;
+        $this->_consentRepository = $consentRepository;
     }
 
     public function serve($serviceName)
@@ -80,9 +82,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $filteredResponseAttributes = $this->_arpFilter->getResponseAttributes();
 
         $userId = EngineBlock_Corto_Model_Consent_Factory::extractUidFromResponse($response);
-        $consent = $this->_consentFactory->create($this->_server, $userId, $filteredResponseAttributes);
-        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId);
-        if ($priorConsent) {
+        $consent = $this->_consentFactory->create($this->_server, $userId, $serviceProviderEntityId, $filteredResponseAttributes);
+        if ($this->_consentRepository->isStored($consent)) {
+            $this->_consentRepository->updateUsage($consent);
             $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
 
             $response['_Destination'] = $response['__']['Return'];

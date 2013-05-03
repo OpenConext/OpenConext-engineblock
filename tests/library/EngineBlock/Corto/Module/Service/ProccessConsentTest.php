@@ -17,6 +17,9 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
     private $attributeReleasePolicyFilterMock;
 
+    /** @var EngineBlock_Corto_Model_Consent_Repository */
+    private $consentRepositoryMock;
+
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
 
@@ -27,7 +30,7 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
         $this->mailerMock = $diContainer[EngineBlock_Application_DiContainer::MAILER];
         $this->attributeReleasePolicyFilterMock = $this->mockAttributeReleasePolicyFilter();
-
+        $this->consentRepositoryMock = $this->mockConsentRepository();
         $this->mockGlobals();
     }
 
@@ -81,28 +84,26 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         $provideConsentService = $this->factoryService();
         $provideConsentService->serve(null);
 
-        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, Phake::anyParameters(), $expectedFilteredAttributes);
+        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, null, null, $expectedFilteredAttributes);
     }
 
     public function testConsentIsStored()
     {
         $processConsentService = $this->factoryService();
 
-        $consentMock = $this->mockConsent();
-        Phake::when($consentMock)
-            ->storeConsent(Phake::anyParameters())
+        Phake::when($this->consentRepositoryMock)
+            ->store(Phake::anyParameters())
             ->thenReturn(true);
 
         $processConsentService->serve(null);
 
-        Phake::verify($consentMock)->storeConsent(Phake::anyParameters());
+        Phake::verify($this->consentRepositoryMock)->store(Phake::anyParameters());
     }
 
     public function testIntroductionMailIsSentOnFirstConsentIfEmailIsKnown() {
         $processConsentService = $this->factoryService();
 
-        $consentMock = $this->mockConsent();
-        Phake::when($consentMock)
+        Phake::when($this->consentRepositoryMock)
             ->countTotalConsent(Phake::anyParameters())
             ->thenReturn(1);
 
@@ -192,9 +193,6 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
     private function mockConsent()
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
-        Phake::when($consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
-            ->thenReturn(false);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);
@@ -212,6 +210,16 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
         return $attributeReleasePolicyFilterMock;
     }
 
+    private function mockConsentRepository()
+    {
+        $consentFactoryMock = Phake::mock('EngineBlock_Corto_Model_Consent_Repository');
+        Phake::when($consentFactoryMock)
+            ->isStored(Phake::anyParameters())
+            ->thenReturn(false);
+
+        return $consentFactoryMock;
+    }
+
     /**
      * @return EngineBlock_Corto_Module_Service_ProcessConsent
      */
@@ -223,7 +231,8 @@ class EngineBlock_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Frame
             $this->consentFactoryMock,
             $this->mailerMock,
             new EngineBlock_User_PreferredNameAttributeFilter(),
-            $this->attributeReleasePolicyFilterMock
+            $this->attributeReleasePolicyFilterMock,
+            $this->consentRepositoryMock
         );
     }
 }

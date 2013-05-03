@@ -40,9 +40,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         $this[self::CONSENT_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
         {
-            return new EngineBlock_Corto_Model_Consent_Factory(
-                $container[$container::DATABASE_CONNECTION_FACTORY]
-            );
+            return new EngineBlock_Corto_Model_Consent_Factory();
         });
     }
 

@@ -100,7 +100,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $server,
                     $diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER],
                     $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY],
-                    $this->createArpFilter($diContainer)
+                    $this->createArpFilter($diContainer),
+                    $this->createConsentRepository($diContainer)
                 );
             case 'EngineBlock_Corto_Module_Service_ProcessConsent' :
                 $preferredNameAttributeFilter = new EngineBlock_User_PreferredNameAttributeFilter();
@@ -110,7 +111,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY],
                     $diContainer[EngineBlock_Application_DiContainer::MAILER],
                     $preferredNameAttributeFilter,
-                    $this->createArpFilter($diContainer)
+                    $this->createArpFilter($diContainer),
+                    $this->createConsentRepository($diContainer)
                 );
             default :
                 return new $className(
@@ -128,5 +130,15 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     {
         $filterCommandFactory = $diContainer->getFilterCommandFactory();
         return $filterCommandFactory->create('AttributeReleasePolicy');
+    }
+
+    /**
+     * @param EngineBlock_Application_DiContainer $diContainer
+     * @return EngineBlock_Corto_Model_Consent_Repository
+     */
+    private function createConsentRepository(EngineBlock_Application_DiContainer $diContainer)
+    {
+        $databaseConnectionFactory = $diContainer->getDatabaseConnectionFactory();
+        return new EngineBlock_Corto_Model_Consent_Repository($databaseConnectionFactory);
     }
 }

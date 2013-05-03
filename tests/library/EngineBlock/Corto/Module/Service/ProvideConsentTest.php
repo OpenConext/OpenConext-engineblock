@@ -14,6 +14,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy */
     private $attributeReleasePolicyFilterMock;
 
+    /** @var EngineBlock_Corto_Model_Consent_Repository */
+    private $consentRepositoryMock;
+
     public function setup() {
         EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
 
@@ -24,6 +27,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
         $this->consentMock = $this->mockConsent();
         $this->attributeReleasePolicyFilterMock = $this->mockAttributeReleasePolicyFilter();
+        $this->consentRepositoryMock = $this->mockConsentRepository();
     }
 
     public function testConsentRequested()
@@ -40,8 +44,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     {
         $provideConsentService = $this->factoryService();
 
-        Phake::when($this->consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
+        Phake::when($this->consentRepositoryMock)
+            ->isStored(Phake::anyParameters())
             ->thenReturn(true);
 
         $provideConsentService->serve(null);
@@ -102,7 +106,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         $provideConsentService = $this->factoryService();
         $provideConsentService->serve(null);
 
-        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, Phake::anyParameters(), $expectedFilteredAttributes);
+        Phake::verify($this->consentFactoryMock)->create($this->proxyServerMock, null, 'testSp', $expectedFilteredAttributes);
     }
 
     public function testFilteredAttributesAreUsedToRenderTemplate()
@@ -208,9 +212,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
     private function mockConsent()
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
-        Phake::when($consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
-            ->thenReturn(false);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
             ->thenReturn($consentMock);
@@ -228,6 +229,16 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
         return $attributeReleasePolicyFilterMock;
     }
 
+    private function mockConsentRepository()
+    {
+        $consentFactoryMock = Phake::mock('EngineBlock_Corto_Model_Consent_Repository');
+        Phake::when($consentFactoryMock)
+            ->isStored(Phake::anyParameters())
+            ->thenReturn(false);
+
+        return $consentFactoryMock;
+    }
+
     /**
      * @return EngineBlock_Corto_Module_Service_ProvideConsent
      */
@@ -237,7 +248,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framew
             $this->proxyServerMock,
             $this->xmlConverterMock,
             $this->consentFactoryMock,
-            $this->attributeReleasePolicyFilterMock
+            $this->attributeReleasePolicyFilterMock,
+            $this->consentRepositoryMock
         );
     }
 }
