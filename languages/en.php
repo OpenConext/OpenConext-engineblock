@@ -256,7 +256,7 @@ If you want to use this application you have to:<br />
         Please contact your institution with the information stated below.
     </p>
     <p>
-        Login failed because the institution\'s identity provider did not provide SURFconext with the following required attribute(s):
+        Login failed because the institution\'s identity provider did not provide SURFconext with one or more of the following required attribute(s):
         <ul>
             <li>UID</li>
             <li>schacHomeOrganization</li>
