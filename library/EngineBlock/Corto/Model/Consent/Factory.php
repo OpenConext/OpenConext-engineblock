@@ -19,10 +19,11 @@ class EngineBlock_Corto_Model_Consent_Factory
         $serviceProviderEntityId,
         array $attributes
     ) {
+        $mustStoreValues = $proxyServer->getConfig('ConsentStoreValues', true);
         return new EngineBlock_Corto_Model_Consent(
             $this->hashUserId($userId),
             $serviceProviderEntityId,
-            $this->hashAttributes($attributes, $proxyServer->getConfig('ConsentStoreValues', true)),
+            $this->hashAttributes($attributes, $mustStoreValues),
             new DateTime()
         );
     }
