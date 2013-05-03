@@ -23,7 +23,7 @@ class EngineBlock_Corto_Model_Consent_RepositoryCacheProxy
     {
         $isStored = $this->redisClient->get($this->createCacheKey($consent));
         if (!$isStored) {
-            $isStored = parent::isConsentStored($consent);
+            $isStored = parent::isStored($consent);
         }
 
         return $isStored;
@@ -51,6 +51,6 @@ class EngineBlock_Corto_Model_Consent_RepositoryCacheProxy
      */
     private function createCacheKey(EngineBlock_Corto_Model_Consent $consent)
     {
-        return self::CACHE_NAMESPACE . ":{$consent->getHashedUserId()}:{$consent->getServiceProviderEntityId()}:{$consent->getAttributesHash()}";
+        return self::CACHE_NAMESPACE . ":{$consent->getUserIdHash()}:{$consent->getServiceProviderEntityId()}:{$consent->getAttributesHash()}";
     }
 }
