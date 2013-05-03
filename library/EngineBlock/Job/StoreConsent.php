@@ -14,7 +14,8 @@ class EngineBlock_Job_StoreConsent
 
     public function perform()
     {
-        if (!$this->consentRepository->store($this->args['consent']))
+        $consent = $this->args['consent'];
+        if (!$this->consentRepository->store($consent))
         {
             throw new Exception('Could not stored tracked login in database');
         }
