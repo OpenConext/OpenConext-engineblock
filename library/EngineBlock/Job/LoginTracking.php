@@ -14,9 +14,10 @@ class EngineBlock_Job_LoginTracking
     public function perform()
     {
         $login = $this->args['login'];
-        if (!$this->tracker->storeInDatabase($login));
-        {
-            throw new Exception('Could not stored tracked login in database');
+        try {
+            $this->tracker->storeInDatabase($login);
+        } catch (Exception $e) {
+            throw new Exception('Could not store login in database', $e->getCode(), $e);
         }
     }
 }
