@@ -1,21 +1,20 @@
 <?php
-class EngineBlock_Job_LoginTracking
+class EngineBlock_Job_StoreConsent
 {
     /**
-     * @var EngineBlock_Tracker
+     * @var EngineBlock_Corto_Model_Consent_Repository
      */
-    private $tracker;
+    private $consentRepository;
 
     public function setUp()
     {
-        echo 'setup';
-        $this->tracker = new EngineBlock_Tracker();
+        $databaseConnectionFactory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        $this->consentRepository = new EngineBlock_Corto_Model_Consent_Repository($databaseConnectionFactory);
     }
 
     public function perform()
     {
-        $login = $this->args['login'];
-        if (!$this->tracker->storeInDatabase($login));
+        if (!$this->consentRepository->store($this->args['consent']))
         {
             throw new Exception('Could not stored tracked login in database');
         }
