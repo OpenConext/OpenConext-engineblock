@@ -68,7 +68,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             $entityId,
             $this->_response['__']['IntendedNameId'],
             $this->_responseAttributes,
-            $this->_response
+            $this->_response,
+            $this->_idpMetadata,
+            $this->_spMetadata
         );
         if ($manipulated) {
             return true;
@@ -86,7 +88,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             '',
             $this->_response['__']['IntendedNameId'],
             $this->_responseAttributes,
-            $this->_response
+            $this->_response,
+            $this->_idpMetadata,
+            $this->_spMetadata
         );
 
         // Legacy: Try entity specific file based manipulation
@@ -95,7 +99,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             $entityId,
             $this->_response['__']['IntendedNameId'],
             $this->_responseAttributes,
-            $this->_response
+            $this->_response,
+            $this->_idpMetadata,
+            $this->_spMetadata
         );
         if ($manipulated) {
             return true;
@@ -108,7 +114,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             '',
             $this->_response['__']['IntendedNameId'],
             $this->_responseAttributes,
-            $this->_response
+            $this->_response,
+            $this->_idpMetadata,
+            $this->_spMetadata
         );
 
         // Legacy: Try entity specific file based manipulation
@@ -117,7 +125,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             $entityId,
             $this->_response['__']['IntendedNameId'],
             $this->_responseAttributes,
-            $this->_response
+            $this->_response,
+            $this->_idpMetadata,
+            $this->_spMetadata
         );
         return (bool)$manipulated;
     }
