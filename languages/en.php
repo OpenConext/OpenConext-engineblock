@@ -19,7 +19,7 @@ return array(
     'idp_selection_title'       => 'Identity Provider Selection - %s',
     'idp_selection_subheader'   => 'Login via your institution',
     'search'                    => 'or search for an institution',
-    'idp_selection_desc'        => 'Select your institution and continue to login to <i>%s</i>',
+    'idp_selection_desc'        => '<table><tr><td><p style="font-size: 12pt; color: #666; line-height: 1.5;"><b>Welcome to <i>%s</i>!</p><p>Jisc Conext facilitates collaboration by providing you with state-of-the art tools that integrate seemlessly.</p><p>Please select your institution from below to log in.</p></td><td><img src="https://static.collaborate.jiscadvance.biz/media/conext-small.png" align="right" /></td></tr></table>',
     'our_suggestion'            => 'Our suggestion:',
     'no_access'                 => 'No access',
     'no_access_more_info'       => 'No access. &raquo;',
@@ -27,14 +27,14 @@ return array(
     'error_header'              => 'Error',
 
     //Footer
-    'footer'                => 'This service is powered by <a href="http://www.surfconext.nl/">SURFconext</a> - brought to you by SURFnet.',
+    'footer'                => 'This service is powered by <a href="http://conext.jiscadvance.biz/">Jisc Conext</a> using OpenConext components', 
 
     //Help
     'help_header'           => 'Help',
-    'help_description'      => '<p>Check the FAQ below if you have any questions about this screen or about SURFconext.</p>
+    'help_description'      => '<p>Check the FAQ below if you have any questions about this screen or about Jisc Conext.</p>
 
-    <p>For more detailed information, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
+    <p>For more detailed information, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the OpenConext support pages from SURFnet</a>
+        or contact the Jisc Conext helpdesk at <a href="mailto:conext@jiscadvance.biz">conext@jiscadvance.biz</a></p>',
 
     'close_question'        =>      'Close',
 
@@ -171,7 +171,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_intro'                     => '%s requests this information that %s has stored for you:',
     'consent_idp_provides'              => 'wants to provide the following information:',
     'consent_sp_is_provided'            => 'to',
-    'consent_terms_of_service'          => 'This information will be stored in SURFconext and passed on to %s. Terms of service of %s and %s apply.',
+    'consent_terms_of_service'          => 'This information will be stored in the Jisc Conext system and passed on to %s. Terms of service of %s and %s apply.',
 
     'consent_accept'                    => 'Yes, share this information',
     'consent_decline'                   => 'No, share no information',
@@ -182,8 +182,8 @@ If you have any questions about your privacy and the policy applied, please visi
     'error_404_desc'                    => 'This page has not been found.',
     'error_help_desc'               => '<p>
         If this does not solve your problem, please visit
-        <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the OpenConext support pages from SURFnet</a>
+        or contact the Jisc Conext helpdesk at <a href="mailto:conext@jiscadvance.biz">conext@jiscadvance.biz</a>.
     </p>',
     'error_no_consent'              => 'Unable to continue to service',
     'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
@@ -211,11 +211,9 @@ If you want to use this application you have to:<br />
     'error_no_message'              => 'Error - No message received..',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
-    'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
-    'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the Jisc Conext helpdesk at <a href="mailto:conext@jiscadvance.biz">conext@jiscadvance.biz</a>.
         <table class="error-table">
             <tbody>
             <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
@@ -227,7 +225,7 @@ If you want to use this application you have to:<br />
 
     'error_unknown_issuer'          => 'Error - Unknown application..',
     'error_unknown_issuer_desc'     => '<p>
-        This application is not available using SURFconext. Please notify the provider of this service and provide them with the following information:
+        This application is not available using Jisc Conext. Please notify the provider of this service and provide them with the following information:
         <table class="error-table">
             <tbody>
             <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
@@ -237,8 +235,8 @@ If you want to use this application you have to:<br />
             </tbody>
         </table>
         <br />
-        If this doesn\'t solve your problem, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        If this doesn\'t solve your problem, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the OpenConext support pages from SURFnet</a>
+        or contact the Jisc Conext team at <a href="mailto:conext@jiscadvance.biz">conext@jiscadvance.biz</a>.
         <br /><br />
     </p>',
     'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
@@ -275,8 +273,6 @@ If you want to use this application you have to:<br />
      * @url http://nl3.php.net/sprintf
      */
     'error_attribute_validator_type_uri'            => '\'%3$s\' is not a valid URI',
-    'error_attribute_validator_type_urn'            => '\'%3$s\' is not a valid URN',
-    'error_attribute_validator_type_url'            => '\'%3$s\' is not a valid URL',
     'error_attribute_validator_type_hostname'       => '\'%3$s\' is not a valid hostname',
     'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is not a valid email address',
     'error_attribute_validator_minlength'           => '\'%3$s\' is not long enough (minimum is %2$d characters)',
