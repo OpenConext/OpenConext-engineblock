@@ -225,6 +225,10 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
 
             $cortoEntity['ProvideIsMemberOf'] = !empty($serviceRegistryEntity['coin:provide_is_member_of']);
+
+            if (isset($serviceRegistryEntity['coin:do_not_add_attribute_aliases']) && $serviceRegistryEntity['coin:do_not_add_attribute_aliases']) {
+                $cortoEntity['SkipDenormalization'] = TRUE;
+            }
         }
 
         // For Idps
