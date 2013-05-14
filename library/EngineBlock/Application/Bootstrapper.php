@@ -248,8 +248,8 @@ class EngineBlock_Application_Bootstrapper
     protected function _bootstrapTranslations()
     {
         $translationFiles = array(
-            'en' => ENGINEBLOCK_FOLDER_ROOT . '/languages/en.php',
-            'nl' => ENGINEBLOCK_FOLDER_ROOT . '/languages/nl.php'
+            'en' => ENGINEBLOCK_FOLDER_ROOT . 'languages/en.php',
+            'nl' => ENGINEBLOCK_FOLDER_ROOT . 'languages/nl.php'
         );
         $translationCacheProxy = new EngineBlock_Translate_CacheProxy(
             $translationFiles,
