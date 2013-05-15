@@ -359,8 +359,9 @@ class EngineBlock_Corto_XmlToArray
                 throw new EngineBlock_Corto_XmlToArray_Exception('Missing attribute name');
             }
 
+            $res[$attribute['_Name']] = array();
             if(!isset($attribute['saml:AttributeValue'])) {
-                throw new EngineBlock_Corto_XmlToArray_Exception('Missing AttributeValue collection');
+                continue;
             }
 
             if(!is_array($attribute['saml:AttributeValue'])) {
