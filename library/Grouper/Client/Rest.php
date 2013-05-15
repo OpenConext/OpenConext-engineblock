@@ -410,6 +410,7 @@ XML;
                 $response->getBody()
         );
 
+        // @todo do not use isSuccessful it is not very safe
         if (!$response->isSuccessful()) {
             $e = new Grouper_Client_Exception(
                 'Could not execute grouper REST request]',
