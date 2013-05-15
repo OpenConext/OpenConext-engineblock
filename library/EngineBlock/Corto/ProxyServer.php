@@ -469,7 +469,8 @@ class EngineBlock_Corto_ProxyServer
             EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
                 'paramname'         => 'SAMLRequest',
                 'destinationid'     => $idp,
-                'ProtocolBinding'   => $remoteMetaData['SingleSignOnService']['Binding'],
+                // Use the default binding even if more exist
+                'ProtocolBinding'   => $remoteMetaData['SingleSignOnService'][0]['Binding'],
             ),
             '_xmlns:saml'                       => 'urn:oasis:names:tc:SAML:2.0:assertion',
             '_xmlns:samlp'                      => 'urn:oasis:names:tc:SAML:2.0:protocol',
@@ -477,7 +478,8 @@ class EngineBlock_Corto_ProxyServer
             '_ID'                               => $this->getNewId(),
             '_Version'                          => '2.0',
             '_IssueInstant'                     => $this->timeStamp(),
-            '_Destination'                      => $remoteMetaData['SingleSignOnService']['Location'],
+            // Use the default location even if more exist
+            '_Destination'                      => $remoteMetaData['SingleSignOnService'][0]['Location'],
             '_ForceAuthn'                       => ($originalRequest['_ForceAuthn']) ? 'true' : 'false',
             '_IsPassive'                        => ($originalRequest['_IsPassive']) ? 'true' : 'false',
 

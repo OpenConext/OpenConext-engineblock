@@ -10,7 +10,9 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         // Override the EntityID and SSO location to optionally append VO id
         if ($serviceName==='idpMetadataService') {
             $entityDetails['EntityID'] = $this->_server->getUrl($serviceName);
-            $entityDetails['SingleSignOnService']['Location'] = $this->_server->getUrl('singleSignOnService');
+            foreach($entityDetails['SingleSignOnService'] as &$service) {
+                $service['Location'] = $this->_server->getUrl('singleSignOnService');
+            }
         }
 
         try {
