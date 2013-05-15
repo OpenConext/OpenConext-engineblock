@@ -22,6 +22,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlo
 
         $rootElement['md:SPSSODescriptor'] = $this->_mapUiInfo($rootElement['md:SPSSODescriptor']);
         $rootElement['md:SPSSODescriptor'] = $this->_mapCertificates($rootElement['md:SPSSODescriptor']);
+        $rootElement['md:SPSSODescriptor'] = $this->_mapSingleLogoutService($rootElement['md:SPSSODescriptor']);
         $rootElement['md:SPSSODescriptor'] = $this->_mapAssertionConsumerServices($rootElement['md:SPSSODescriptor']);
         $rootElement['md:SPSSODescriptor'] = $this->_mapAttributeConsumingService($rootElement['md:SPSSODescriptor']);
 
