@@ -1,4 +1,3 @@
-
 <?php
 /**
  * SURFconext EngineBlock
@@ -34,18 +33,8 @@ $layout->title = $layout->title. ' - Logout';
 $layout->header = $layout->title;
 $layout->subheader = 'Logout';
 $layout->footerText = $this->t('footer');
-
 ?>
-
-wddfdffd
-    <div class="bottom"></div>
-</div>
-<div class="main">
     <h1>Logout</h1>
-    fddf
-    <?php $layout->footerText = $this->t('logout_description'); ?><br />
+    <?php echo $this->t('logout_description');?>
     <br />
-
-    aa
-    <?php $layout->footerText = $this->t('logout_information_link'); ?>
-    aa
+    <?php echo $this->t('logout_information_link'); ?>
