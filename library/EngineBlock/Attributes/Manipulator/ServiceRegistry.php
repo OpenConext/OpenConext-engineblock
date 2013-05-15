@@ -34,20 +34,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     {
         $this->_entityType = $entityType;
     }
-/*
-    public function manipulate($entityId, &$subjectId, array &$attributes, array &$response)
-    {
-        $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
-        if (empty($entity['manipulation'])) {
-            return false;
-        }
-        $idpMetadata = array();
-        $spMetadata = array();
 
-        $this->_doManipulation($entity['manipulation'], $entityId, $subjectId, $attributes, $response, $idpMetadata, &$spMetadata);
-        return true;
-    }
-*/
     public function manipulate($entityId, &$subjectId, array &$attributes, array &$response, array $idpMetadata, array $spMetadata)
     {
         $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
