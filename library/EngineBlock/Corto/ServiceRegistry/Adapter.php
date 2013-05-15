@@ -229,10 +229,18 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
         // For Idps
         if (isset($serviceRegistryEntity['SingleSignOnService:0:Location'])) {
-            $cortoEntity['SingleSignOnService'] = array(
-                'Binding'   => $serviceRegistryEntity['SingleSignOnService:0:Binding'],
-                'Location'  => $serviceRegistryEntity['SingleSignOnService:0:Location'],
-            );
+            $cortoEntity['SingleSignOnService'] = array();
+
+            // Map one or more services
+            $serviceIndex = 0;
+            while(isset($serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Binding"]) &&
+                isset($serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Location"]) ) {
+                $cortoEntity['SingleSignOnService'][] = array(
+                    'Binding'   => $serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Binding"],
+                    'Location'  => $serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Location"],
+                );
+                $serviceIndex++;
+            }
 
             // Only for IdPs
             $cortoEntity['GuestQualifier'] = 'All';
