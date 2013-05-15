@@ -49,10 +49,8 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException EngineBlock_Corto_XmlToArray_Exception
-     * @expectedExceptionMessage Missing AttributeValue collection
      */
-    public function testAttributeValueCollectionIsRequired()
+    public function testAttributeEmptyValueCollectionIsSkipped()
     {
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
         $attributes = array(
@@ -60,7 +58,9 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
                 '_Name' => 'example'
             )
         );
-        $xmlConverter->attributesToArray($attributes);
+        $output = $xmlConverter->attributesToArray($attributes);
+
+        $this->assertEquals(array(), $output['example']);
     }
 
     /**
