@@ -16,10 +16,13 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_SingleLogoutService
      */
     public function mapTo(array $rootElement)
     {
-        $rootElement['md:SingleLogoutService'] = array(
-            EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding' => EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_REDIRECT,
-            EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => "https://engine.surfconext.nl/logout"
-        );
+        if (isset($this->_entity['SingleLogoutService'])) {
+            $rootElement['md:SingleLogoutService'] = array(
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding' => EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_REDIRECT,
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $this->_entity['SingleLogoutService']
+            );
+        }
+        
         return $rootElement;
     }
 

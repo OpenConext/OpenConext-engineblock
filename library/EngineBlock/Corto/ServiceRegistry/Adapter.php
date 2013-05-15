@@ -303,6 +303,10 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             array('keywords' => 'Keywords')
         );
 
+        if (isset($serviceRegistryEntity['SingleLogoutService'])) {
+            $cortoEntity['SingleLogoutService'] = $serviceRegistryEntity['SingleLogoutService'];
+        }
+
         if (isset($serviceRegistryEntity['NameIDFormat'])) {
             $cortoEntity['NameIDFormat'] = $serviceRegistryEntity['NameIDFormat'];
         }
