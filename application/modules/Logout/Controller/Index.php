@@ -28,5 +28,16 @@ class Logout_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
+        $this->destroySession();
+    }
+
+    /**
+     * Destroys session and removes it's cookie
+     */
+    private function destroySession()
+    {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', 0, $params['path'], $params['domain'], $params['secure'], isset($params['httponly']));
+        session_destroy();
     }
 }
