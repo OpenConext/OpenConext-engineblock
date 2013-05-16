@@ -318,8 +318,10 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['SingleLogoutService_Binding']) &&
             isset($serviceRegistryEntity['SingleLogoutService_Location'])) {
             $cortoEntity['SingleLogoutService'] = array(
-                'Binding' => $serviceRegistryEntity['SingleLogoutService_Binding'],
-                'Location' => $serviceRegistryEntity['SingleLogoutService_Location']
+                array(
+                    'Binding' => $serviceRegistryEntity['SingleLogoutService_Binding'],
+                    'Location' => $serviceRegistryEntity['SingleLogoutService_Location']
+                )
             );
         }
 

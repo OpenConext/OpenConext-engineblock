@@ -153,8 +153,10 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                 ),
                 'EntityID' => 'https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp',
                 'SingleLogoutService' => array(
-                    'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                    'Location' => 'https://engine.surfconext.nl/logout'
+                    array(
+                        'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                        'Location' => 'https://engine.surfconext.nl/logout'
+                    )
                 ),
             ),
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
