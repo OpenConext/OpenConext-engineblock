@@ -62,9 +62,9 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             // Generate a URL that points to EngineBlock, but with the given IdP preselected.
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
 
-            foreach($entity['SingleSignOnService'] as &$service) {
-                $service['Location'] = $transparentSsoUrl;
-                $service['Binding']  = $entityDetails['SingleSignOnService'][0]['Binding'];
+            foreach($entity['SingleSignOnService'] as &$ssoService) {
+                $ssoService['Location'] = $transparentSsoUrl;
+                $ssoService['Binding']  = $entityDetails['SingleSignOnService'][0]['Binding'];
             }
 
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
