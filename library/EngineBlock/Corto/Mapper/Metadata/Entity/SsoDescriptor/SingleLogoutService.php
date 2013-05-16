@@ -16,13 +16,15 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_SingleLogoutService
      */
     public function mapTo(array $rootElement)
     {
-        if (isset($this->_entity['SingleLogoutService'])) {
+
+        if (isset($this->_entity['SingleLogoutService']['Binding']) &&
+            isset($this->_entity['SingleLogoutService']['Location'])) {
             $rootElement['md:SingleLogoutService'] = array(
-                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding' => EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_REDIRECT,
-                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $this->_entity['SingleLogoutService']
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding' => $this->_entity['SingleLogoutService']['Binding'],
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $this->_entity['SingleLogoutService']['Location']
             );
         }
-        
+
         return $rootElement;
     }
 
