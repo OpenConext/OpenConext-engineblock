@@ -28,6 +28,7 @@ class EngineBlock_Corto_ProxyServer
 
         'idpMetadataService'                => '/authentication/idp/metadata',
         'spMetadataService'                 => '/authentication/sp/metadata',
+        'singleLogoutService'               => '/logout'
     );
 
     protected $_headers = array();
@@ -265,7 +266,8 @@ class EngineBlock_Corto_ProxyServer
         if (!$this->_processingMode && $this->_voContext !== null && $serviceName != "spMetadataService" && !$isImplicitVo) {
             $mappedUri .= '/' . "vo:" . $this->_voContext;
         }
-        if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $remoteEntityId) {
+        // @todo improve this if construction
+        if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $serviceName !== 'singleLogoutService' && $remoteEntityId) {
             $mappedUri .= '/' . md5($remoteEntityId);
         }
 
