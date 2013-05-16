@@ -47,8 +47,10 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         'debugSingleSignOnService'      => 'singleSignOn',
     );
 
-    const DEFAULT_REQUEST_BINDING  = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
-    const DEFAULT_RESPONSE_BINDING = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
+    const BINDING_TYPE_HTTP_REDIRECT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
+    const BINDING_TYPE_HTTP_POST = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
+    const DEFAULT_REQUEST_BINDING  = self::BINDING_TYPE_HTTP_REDIRECT;
+    const DEFAULT_RESPONSE_BINDING = self::BINDING_TYPE_HTTP_POST;
 
     const RESPONSE_CACHE_TYPE_IN  = 'in';
     const RESPONSE_CACHE_TYPE_OUT = 'out';

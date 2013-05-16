@@ -10,6 +10,16 @@ abstract class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor
         return $mapper->mapTo($rootElement);
     }
 
+    /**
+     * @param array $rootElement
+     * @return array
+     */
+    protected function _mapSingleLogoutService(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_SingleLogoutService($this->_entity);
+        return $mapper->mapTo($rootElement);
+    }
+
     protected function _mapNameIdFormats(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_NameIdFormat($this->_entity);
