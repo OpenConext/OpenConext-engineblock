@@ -256,7 +256,7 @@ If you want to use this application you have to:<br />
         Please contact your institution with the information stated below.
     </p>
     <p>
-        Login failed because the institution\'s identity provider did not provide SURFconext with the following required attribute(s):
+        Login failed because the institution\'s identity provider did not provide SURFconext with one or more of the following required attribute(s):
         <ul>
             <li>UID</li>
             <li>schacHomeOrganization</li>
@@ -296,4 +296,8 @@ If you want to use this application you have to:<br />
                                         use the "Mail to surfconext-beheer" button below
                                         to mail the information in this screen.',
     'idp_debugging_mail_button' => 'Mail to surfconext-beheer',
+
+    // Logout
+    'logout_description' => 'This application uses centralized log in, which provides single sign on for several applications. To be sure your log out is 100%% secure you should close your browser completely.',
+    'logout_information_link' => '<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Log+out+SURFconext">More information about secure log out</a>',
 );

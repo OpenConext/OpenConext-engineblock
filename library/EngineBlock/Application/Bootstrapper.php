@@ -8,6 +8,7 @@ class EngineBlock_Application_Bootstrapper
     const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
     // @todo correct typo
     const CONFIG_FILE_ENVIORNMENT   = '/etc/surfconext/engineblock.ini';
+    const P3P_HEADER = 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"';
 
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -193,6 +194,8 @@ class EngineBlock_Application_Bootstrapper
 
         $response = new EngineBlock_Http_Response();
         $response->setHeader('Strict-Transport-Security', 'max-age=15768000; includeSubDomains');
+        // workaround, P3P is needed to support iframes like iframe gadgets in portals
+        $response->setHeader('P3P', self::P3P_HEADER);
         $this->_application->setHttpResponse($response);
     }
 
@@ -245,8 +248,8 @@ class EngineBlock_Application_Bootstrapper
     protected function _bootstrapTranslations()
     {
         $translationFiles = array(
-            'en' => ENGINEBLOCK_FOLDER_ROOT . '/languages/en.php',
-            'nl' => ENGINEBLOCK_FOLDER_ROOT . '/languages/nl.php'
+            'en' => ENGINEBLOCK_FOLDER_ROOT . 'languages/en.php',
+            'nl' => ENGINEBLOCK_FOLDER_ROOT . 'languages/nl.php'
         );
         $translationCacheProxy = new EngineBlock_Translate_CacheProxy(
             $translationFiles,

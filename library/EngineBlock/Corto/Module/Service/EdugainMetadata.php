@@ -4,11 +4,26 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
 {
     public function serve($serviceName)
     {
+        // Get the configuration for EngineBlock in it's IdP role.
+        $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
+
         $edugainEntities = array();
         foreach ($this->_server->getRemoteEntities() as $entity) {
             // Only add entities that have a SSO service registered
             if (empty($entity['PublishInEdugain'])) {
                 continue;
+            }
+
+            // Generate a URL that points to EngineBlock logout service
+            $transparentSlUrl = $this->_server->getUrl('singleLogoutService', $entity['EntityID']);
+            // Set default value for single logout service
+            if (empty($entity['SingleLogoutService'])) {
+                $entity['SingleLogoutService'] = array(array());
+            }
+            // Override Single Logout Service information of entities with info of EngineBlock
+            foreach($entity['SingleLogoutService'] as &$slService) {
+                $slService['Location'] = $transparentSlUrl;
+                $slService['Binding']  = $entityDetails['SingleLogoutService'][0]['Binding'];
             }
 
             $edugainEntities[] = $entity;

@@ -225,14 +225,26 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
 
             $cortoEntity['ProvideIsMemberOf'] = !empty($serviceRegistryEntity['coin:provide_is_member_of']);
+
+            if (isset($serviceRegistryEntity['coin:do_not_add_attribute_aliases']) && $serviceRegistryEntity['coin:do_not_add_attribute_aliases']) {
+                $cortoEntity['SkipDenormalization'] = TRUE;
+            }
         }
 
         // For Idps
         if (isset($serviceRegistryEntity['SingleSignOnService:0:Location'])) {
-            $cortoEntity['SingleSignOnService'] = array(
-                'Binding'   => $serviceRegistryEntity['SingleSignOnService:0:Binding'],
-                'Location'  => $serviceRegistryEntity['SingleSignOnService:0:Location'],
-            );
+            $cortoEntity['SingleSignOnService'] = array();
+
+            // Map one or more services
+            $serviceIndex = 0;
+            while(isset($serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Binding"]) &&
+                isset($serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Location"]) ) {
+                $cortoEntity['SingleSignOnService'][] = array(
+                    'Binding'   => $serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Binding"],
+                    'Location'  => $serviceRegistryEntity["SingleSignOnService:{$serviceIndex}:Location"],
+                );
+                $serviceIndex++;
+            }
 
             // Only for IdPs
             $cortoEntity['GuestQualifier'] = 'All';
@@ -302,6 +314,16 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             $serviceRegistryEntity,
             array('keywords' => 'Keywords')
         );
+
+        if (isset($serviceRegistryEntity['SingleLogoutService_Binding']) &&
+            isset($serviceRegistryEntity['SingleLogoutService_Location'])) {
+            $cortoEntity['SingleLogoutService'] = array(
+                array(
+                    'Binding' => $serviceRegistryEntity['SingleLogoutService_Binding'],
+                    'Location' => $serviceRegistryEntity['SingleLogoutService_Location']
+                )
+            );
+        }
 
         if (isset($serviceRegistryEntity['NameIDFormat'])) {
             $cortoEntity['NameIDFormat'] = $serviceRegistryEntity['NameIDFormat'];

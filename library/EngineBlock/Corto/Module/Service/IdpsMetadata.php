@@ -61,8 +61,23 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 
             // Generate a URL that points to EngineBlock, but with the given IdP preselected.
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
-            $entity['SingleSignOnService']['Location'] = $transparentSsoUrl;
-            $entity['SingleSignOnService']['Binding']  = $entityDetails['SingleSignOnService']['Binding'];
+
+            foreach($entity['SingleSignOnService'] as &$ssoService) {
+                $ssoService['Location'] = $transparentSsoUrl;
+                $ssoService['Binding']  = $entityDetails['SingleSignOnService'][0]['Binding'];
+            }
+
+            // Generate a URL that points to EngineBlock logout service
+            $transparentSlUrl = $this->_server->getUrl('singleLogoutService', $entity['EntityID']);
+            // Set default value for single logout service
+            if (empty($entity['SingleLogoutService'])) {
+                $entity['SingleLogoutService'] = array(array());
+            }
+            // Override Single Logout Service information of idp's with info of EngineBlock
+            foreach($entity['SingleLogoutService'] as &$slService) {
+                $slService['Location'] = $transparentSlUrl;
+                $slService['Binding']  = $entityDetails['SingleLogoutService'][0]['Binding'];
+            }
 
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
 

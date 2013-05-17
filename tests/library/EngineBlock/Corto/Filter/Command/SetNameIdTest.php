@@ -269,4 +269,46 @@ class Test_EngineBlock_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
             'Asking for another NameID in a new session, for the same SP and IdP, gives a different NameID'
         );
     }
+
+    public function testNameIDIsAddedAtCorrectLocation()
+    {
+        global $_SESSION;
+        $_SESSION = array();
+
+        // Input
+        $command = clone $this->_command;
+
+        $inputResponse = array(
+            'saml:Assertion' => array(
+                'saml:Subject' => array(
+                    'saml:SubjectConfirmation' => array()
+                )
+            )
+        );
+        $command->setResponse($inputResponse);
+        $nameId = array(
+            '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            '__v' => '',
+        );
+
+        $command->setSpMetadata(
+            array_merge_recursive(
+                $command->getSpMetadata(),
+                array('NameIDFormat' => $nameId['_Format'])
+            )
+        );
+
+        // Run
+        $command->execute();
+
+        // Output
+        $outputResponse = $command->getResponse();
+
+        // Test
+        $this->assertEquals(
+            array('saml:NameID', 'saml:SubjectConfirmation'),
+            array_keys($outputResponse['saml:Assertion']['saml:Subject'])
+        );
+    }
+
 }

@@ -14,6 +14,10 @@ class EngineBlock_Corto_Filter_Command_DenormalizeAttributes extends EngineBlock
 
     public function execute()
     {
+        if (isset($this->_spMetadata['SkipDenormalization']) && $this->_spMetadata['SkipDenormalization']) {
+            return;
+        }
+
         $normalizer = new EngineBlock_Attributes_Normalizer($this->_responseAttributes);
         $this->_responseAttributes = $normalizer->denormalize();
     }

@@ -109,7 +109,7 @@ class EngineBlock_Log_Formatter_Mail
                 $value->setDetails(str_replace($stripValue, self::REPLACE_WITH, $value->getDetails()));
             }
             else {
-                $e = new EngineBlock_Exception("Value is neither string on array, unable to strip '$stripValue'");
+                $e = new EngineBlock_Exception("Value is neither string on array, unable to strip (" . gettype($value) . ") ' . $stripValue'");
                 $e->description = var_export($value, true);
                 throw $e;
             }
