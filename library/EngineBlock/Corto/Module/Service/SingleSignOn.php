@@ -21,14 +21,17 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                     $this->_sendDebugMail($response);
                 }
 
+                $attributes = array();
+                // If attributes exists convert them to internal format
+                if (isset($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'])) {
+                    $attributes = $this->_xmlConverter->attributesToArray($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']);
+                }
                 $this->_server->sendOutput($this->_server->renderTemplate(
                     'debugidpresponse',
                     array(
                         'idp'       => $this->_server->getRemoteEntity($response['saml:Issuer']['__v']),
                         'response'  => $response,
-                        'attributes'=> $this->_xmlConverter->attributesToArray(
-                            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
-                        ),
+                        'attributes'=> $attributes
                     )
                 ));
                 return;
@@ -442,9 +445,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             }
 
             $idp = $this->_server->getRemoteEntity($response['saml:Issuer']['__v']);
-            $attributes = $this->_xmlConverter->attributesToArray(
-                $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
-            );
+
+            $attributes = array();
+            // If attributes exists convert them to internal format
+            if (isset($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'])) {
+                $attributes = $this->_xmlConverter->attributesToArray($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']);
+            }
             $output = $this->_server->renderTemplate('debugidpmail', array(
                     'idp'       => $idp,
                     'response'  => $response,

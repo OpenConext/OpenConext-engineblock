@@ -78,6 +78,8 @@ class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_Te
                 'OrganizationName:en' => 'SURFnet',
                 'OrganizationURL:en' => 'https://www.surfnet.nl/en/',
                 'OrganizationURL:nl' => 'https://www.surfnet.nl',
+                'SingleLogoutService_Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                'SingleLogoutService_Location' => 'https://engine.surfconext.nl/logout'
             ),
         ));
 
@@ -150,11 +152,19 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                     ),
                 ),
                 'EntityID' => 'https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp',
+                'SingleLogoutService' => array(
+                    array(
+                        'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                        'Location' => 'https://engine.surfconext.nl/logout'
+                    )
+                ),
             ),
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
                 "SingleSignOnService" => array(
-                    'Binding'   => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
-                    'Location'  => "https://idp.testing.dev.coin.surf.net/simplesaml/saml2/idp/SSOService.php"
+                    array(
+                        'Binding'   => "urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect",
+                        'Location'  => "https://idp.testing.dev.coin.surf.net/simplesaml/saml2/idp/SSOService.php"
+                    )
                 ),
                 "GuestQualifier" => "All",
                 "certificates" => array(
