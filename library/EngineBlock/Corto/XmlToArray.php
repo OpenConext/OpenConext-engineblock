@@ -375,7 +375,7 @@ class EngineBlock_Corto_XmlToArray
                 }
 
                 if(!isset($value[self::VALUE_PFX])) {
-                    throw new EngineBlock_Corto_XmlToArray_Exception('AttributeValue has no value');
+                    continue;
                 }
 
                 $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
