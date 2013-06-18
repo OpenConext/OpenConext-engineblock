@@ -98,10 +98,8 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException EngineBlock_Corto_XmlToArray_Exception
-     * @expectedExceptionMessage AttributeValue has no value
      */
-    public function testAttributeValueShouldNotBeEmpty()
+    public function testAttributeValueIsSkippedWhenEmpty()
     {
         $xmlConverter = new EngineBlock_Corto_XmlToArray();
         $attributes = array(
@@ -114,7 +112,11 @@ class EngineBlock_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
                 )
             )
         );
-        $xmlConverter->attributesToArray($attributes);
+
+        $expectedArray = array(
+            'example' => array()
+        );
+        $this->assertEquals($expectedArray, $xmlConverter->attributesToArray($attributes));
     }
 
     /**

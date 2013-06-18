@@ -16,8 +16,10 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         }
 
         // Override Single Logout Service Location with generated url
-        foreach($entityDetails['SingleLogoutService'] as &$slService) {
-            $slService['Location'] = $this->_server->getUrl('singleLogoutService');
+        if (isset($entityDetails['SingleLogoutService'])) {
+            foreach($entityDetails['SingleLogoutService'] as &$slService) {
+                $slService['Location'] = $this->_server->getUrl('singleLogoutService');
+            }
         }
 
         try {
