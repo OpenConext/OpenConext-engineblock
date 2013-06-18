@@ -132,7 +132,15 @@ class EngineBlock_Controller_Abstract
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse();
     }
-    
+ 
+    /**
+     * @return EngineBlock_Log
+     */
+    protected function _getSessionLog()
+    {
+        return EngineBlock_ApplicationSingleton::getLog();
+    }
+   
     // DEPENDENCIES
 
     /**

@@ -66,9 +66,16 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // or we could have it configured that the SP may only be serviced by specific IdPs
         $scopedIdps = $this->_getScopedIdPs($request);
 
-        $cacheResponseSent = $this->_sendCachedResponse($request, $scopedIdps);
-        if ($cacheResponseSent) {
-            return;
+        // Check if this is a logout request
+        if (isset($_SESSION['logout']) && $_SESSION['logout'] == true) {
+            unset($_SESSION['CachedResponses']);
+            unset($_SESSION['logout']);
+        } else {
+            $cacheResponseSent = $this->_sendCachedResponse($request, $scopedIdps);
+            if ($cacheResponseSent) {
+                $this->_server->getSessionLog()->info("Sent cached response.");
+                return;
+            }
         }
 
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error

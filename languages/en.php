@@ -17,7 +17,7 @@ return array(
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selection - %s',
-    'idp_selection_subheader'   => 'Login via your institution',
+    'idp_selection_subheader'   => 'Login to via your institution',
     'search'                    => 'or search for an institution',
     'idp_selection_desc'        => '<table><tr><td><p style="font-size: 12pt; color: #666; line-height: 1.5;"><b>Welcome to <i>%s</i>!</p><p>Jisc Conext facilitates collaboration by providing you with state-of-the art tools that integrate seemlessly.</p><p>Please select your institution from below to log in.</p></td><td><img src="https://static.collaborate.jiscadvance.biz/media/conext-small.png" align="right" /></td></tr></table>',
     'our_suggestion'            => 'Our suggestion:',
