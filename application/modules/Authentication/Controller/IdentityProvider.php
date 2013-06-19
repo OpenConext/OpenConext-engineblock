@@ -61,14 +61,16 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             // Optionally allow /single-sign-on/vo:myVoId/remoteIdPHash or
             // /single-sign-on/remoteIdPHash/vo:myVoId
             $arguments = func_get_args();
+		error_log("SWOOSH");
+		error_log(var_export($arguments, true));
             $logout = false;
-	    if (!empty($arguments) && $arguments[0] == "logout") {
+	    if (!empty($arguments) && $arguments[1][0] == "logout") {
 	  	$logout = true;
 		array_splice($arguments, 0, 1);
 	    }
 
             foreach ($arguments as $argument) {
-                if (substr($argument, 0, 3) == "vo:") {
+                if (@substr($argument, 0, 3) == "vo:") {
                     $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
                 } else {
                     $idPEntityId = $argument;
@@ -84,8 +86,8 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             }
 
             // call service
-            $proxyServer->$service($idPEntityId);
-            $proxyServer->singleSignOn($idPEntityId, $logout);
+            $proxyServer->$service($idPEntityId, $logout);
+            //$proxyServer->singleSignOn($idPEntityId, $logout);
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->reportError($e);
