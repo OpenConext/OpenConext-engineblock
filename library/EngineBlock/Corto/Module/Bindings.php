@@ -423,6 +423,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         } else {
             $keyTransportIdentifier = $element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:EncryptionMethod'][0]['_Algorithm'];
             $log->info("Encryption method identifier: " . $keyTransportIdentifier);
+            if (!array_key_exists($keyTransportIdentifier, $this->_encryptionMethods)) {
+                throw new EngineBlock_Corto_Module_Bindings_Exception("XML Encryption: Unknown encryption method.");
+            }
             $encryptionMethod = $this->_encryptionMethods[$keyTransportIdentifier];
         }
 	$log->info("Encryption method: " . $encryptionMethod);
