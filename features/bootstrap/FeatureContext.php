@@ -6,13 +6,14 @@ use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode,
     Behat\Gherkin\Node\TableNode;
+use Behat\MinkExtension\Context\MinkContext;
 
 // Require 3rd-party libraries here:
 
 /**
  * Features context.
  */
-class FeatureContext extends BehatContext
+class FeatureContext extends MinkContext
 {
     /**
      * Initializes context.
@@ -41,7 +42,7 @@ class FeatureContext extends BehatContext
         $message = $this->encodeSamlMessage($samlPAuthNRequest);
         $engineRequestUrl = $destinationUrl .'?SAMLRequest=' . urlencode($message);
 
-        $session = $this->getSession();
+        $session = $this->factorySession();
         $session->visit($engineRequestUrl);
     }
 }
@@ -57,7 +58,7 @@ class FeatureContext extends BehatContext
     /**
      * @return \Behat\Mink\Session
      */
-    private function getSession()
+    private function factorySession()
     {
         $client = new \Behat\Mink\Driver\Goutte\Client();
         $driver = new \Behat\Mink\Driver\GoutteDriver($client);
