@@ -1,6 +1,5 @@
 <?php
 
-require __DIR__ . '/Autoloader.php';
 require __DIR__ . '/Bootstrapper/Exception.php';
 
 class EngineBlock_Application_Bootstrapper
@@ -84,9 +83,6 @@ class EngineBlock_Application_Bootstrapper
                 EngineBlock_Exception::CODE_ALERT
             );
         }
-
-        $autoLoader = new EngineBlock_Application_Autoloader();
-        spl_autoload_register(array($autoLoader, 'load'));
     }
 
     protected function _bootstrapConfiguration()

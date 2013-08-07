@@ -12,5 +12,29 @@
         "behat/mink": "*",
         "behat/mink-extension": "*",
         "behat/mink-goutte-driver": "*"
+    },
+    "autoload": {
+        "psr-0": {
+            "DbPatch_": "library/",
+            "EngineBlock_": "library/",
+            "Grouper_": "library/",
+            "Janus_": "library/",
+            "OpenSocial_": "library/",
+            "SurfConext_": "library/",
+            "Surfnet_": "library/",
+            "Zend_": "library/",
+            "Authentication_":"application/modules/",
+            "Cron_":"application/modules/",
+            "Default_":"application/modules/",
+            "DummyIdp_":"application/modules/",
+            "Logout_":"application/modules/",
+            "Profile_":"application/modules/",
+            "Service_":"application/modules/",
+            "Social_":"application/modules/",
+            "VoManage_":"application/modules/"
+        },
+        "classmap":[
+            "tests"
+        ]
     }
 }
