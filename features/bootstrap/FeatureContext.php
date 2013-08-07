@@ -42,7 +42,7 @@ class FeatureContext extends MinkContext
         $message = $this->encodeSamlMessage($samlPAuthNRequest);
         $engineRequestUrl = $destinationUrl .'?SAMLRequest=' . urlencode($message);
 
-        $session = $this->factorySession();
+        $session = $this->getSession();
         $session->visit($engineRequestUrl);
     }
 }
@@ -56,25 +56,11 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @return \Behat\Mink\Session
+     * @param string $destinationUrl
+     * @param string $assertionConsumerServiceURL
+     * @param string $issuerUrl
+     * @return string
      */
-    private function factorySession()
-    {
-        $client = new \Behat\Mink\Driver\Goutte\Client();
-        $driver = new \Behat\Mink\Driver\GoutteDriver($client);
-        $client->setClient(new \Guzzle\Http\Client('', array(
-            'ssl.certificate_authority' => false
-        )));
-
-        // init session:
-        $session = new \Behat\Mink\Session($driver);
-
-        // start session:
-        $session->start();
-
-        return $session;
-    }
-
     private function factorySamlPAuthNRequest(
         $destinationUrl,
         $assertionConsumerServiceURL,
