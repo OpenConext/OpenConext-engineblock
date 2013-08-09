@@ -416,14 +416,6 @@ class EngineBlock_SocialData
     }
 
     /**
-     * @param $serviceRegistry
-     */
-    public function setServiceRegistry($serviceRegistry)
-    {
-        $this->_serviceRegistry = $serviceRegistry;
-    }
-
-    /**
      * @return EngineBlock_SocialData_FieldMapper mapper
      */
     protected function _getFieldMapper()
