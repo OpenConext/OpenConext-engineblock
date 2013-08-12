@@ -31,11 +31,11 @@ class FeatureContext extends MinkContext
      */
     public function iRequestEngineToLogMeIn()
     {
-        $engineUrl = 'https://engine.demo.openconext.org';
+        $engineUrl = 'https://engine-test.demo.openconext.org';
 
         $destinationUrl = $engineUrl . '/authentication/idp/single-sign-on';
-        $assertionConsumerServiceURL = 'https://profile.demo.openconext.org/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp';
-        $issuerUrl = 'https://profile.demo.openconext.org/simplesaml/module.php/saml/sp/metadata.php/default-sp';
+        $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy-sp';
+        $issuerUrl = 'https://engine-test.demo.openconext.org/dummy-sp';
         $samlPAuthNRequest = $this->factorySamlPAuthNRequest($assertionConsumerServiceURL, $destinationUrl, $issuerUrl);
 
 
