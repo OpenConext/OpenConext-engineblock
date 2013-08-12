@@ -27,9 +27,9 @@ class FeatureContext extends MinkContext
     }
 
     /**
-     * @Given /^I request Engine to log me in$/
+     * @Given /^An authn request is sent to Engineblock$/
      */
-    public function iRequestEngineToLogMeIn()
+    public function anAuthnRequestIsSentToEngineblock()
     {
         $engineUrl = 'https://engine-test.demo.openconext.org';
 
