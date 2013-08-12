@@ -68,6 +68,8 @@ class EngineBlock_Application_Bootstrapper
     protected function _bootstrapDiContainer() {
         if (ENGINEBLOCK_ENV == 'testing') {
             $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
+        } elseif (ENGINEBLOCK_ENV == 'functional-testing') {
+            $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
         } else {
             $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
         }
