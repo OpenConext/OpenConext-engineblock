@@ -57,11 +57,13 @@ return array(
         'logo:0:height' => 60,
         'logo:0:url' => 'https://.png',
         'logo:0:width' => 120,
-        'name:en' => '',
-        'name:nl' => '',
+        'name:en' => 'Dummy Idp',
+        'name:nl' => 'Dummy Idp',
         'redirect.sign' => false,
         'SingleSignOnService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
         'SingleSignOnService:0:Location' => 'https://engine-test.demo.openconext.org/dummy-idp',
+        'workflowState' => 'prodaccepted',
+    ),
         'workflowState' => 'testaccepted',
     )
 );
