@@ -67,12 +67,14 @@ class FeatureContext extends MinkContext
         $issuerUrl
     )
     {
+        $dateTimeFormatted = gmdate('Y-m-d\TH:i:s\Z', time());
+
         $samlpAuthNRequest = <<<SAML
 <samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     ID="_5a62d5699e34038989f590149c0df34678126614da"
                     Version="2.0"
-                    IssueInstant="2013-08-03T02:52:40Z"
+                    IssueInstant="$dateTimeFormatted"
                     Destination="$destinationUrl"
                     AssertionConsumerServiceURL="$assertionConsumerServiceURL"
                     ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
