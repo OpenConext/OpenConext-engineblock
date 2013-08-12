@@ -38,14 +38,13 @@ class FeatureContext extends MinkContext
         $issuerUrl = 'https://engine-test.demo.openconext.org/dummy-sp';
         $samlPAuthNRequest = $this->factorySamlPAuthNRequest($assertionConsumerServiceURL, $destinationUrl, $issuerUrl);
 
-
         $message = $this->encodeSamlMessage($samlPAuthNRequest);
-        $engineRequestUrl = $destinationUrl .'?SAMLRequest=' . urlencode($message);
+        $engineRequestUrl = $destinationUrl . '?SAMLRequest=' . urlencode($message);
 
         $session = $this->getSession();
         $session->visit($engineRequestUrl);
     }
-}
+
     /**
      * @param $samlMessage
      * @return string
@@ -88,3 +87,4 @@ SAML;
 
         return $samlpAuthNRequest;
     }
+}
