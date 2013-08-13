@@ -30,8 +30,6 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
-        $this->setNoRender();
-
         $samlRequest = $this->decodeSamlRequest($this->getSamlRequest());
 
         $authNRequestDomElement = $this->authnRequestToDomElement($samlRequest);
@@ -42,6 +40,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 
         $formHtml = $this->factoryForm($samlResponse);
 
+        $this->setNoRender();
         header('Content-Type: text/html');
         echo $formHtml;
         exit;
