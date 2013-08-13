@@ -24,6 +24,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+require_once ENGINEBLOCK_FOLDER_LIBRARY . 'simplesamlphp/lib/_autoload.php';
+
 class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
@@ -34,7 +36,6 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 
         $authNRequestDomElement = $this->authnRequestToDomElement($samlRequest);
 
-        require_once ENGINEBLOCK_FOLDER_LIBRARY . 'simplesamlphp/lib/_autoload.php';
         $authnRequest = SAML2_AuthnRequest::fromXML($authNRequestDomElement);
 
         $samlResponse = $this->factorySaml2PResponse($authnRequest);
