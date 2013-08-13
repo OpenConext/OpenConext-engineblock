@@ -30,7 +30,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
     {
         $this->setNoRender();
 
-        $samlRequest = $this->decodedSamlRequest($this->getSamlRequest());
+        $samlRequest = $this->decodeSamlRequest($this->getSamlRequest());
 
         $authNRequestDomElement = $this->authnRequestToDomElement($samlRequest);
 
@@ -65,7 +65,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
      * @param string $samlRequestEncoded
      * @return string
      */
-    private function decodedSamlRequest($samlRequestEncoded)
+    private function decodeSamlRequest($samlRequestEncoded)
     {
         return gzinflate(base64_decode($samlRequestEncoded));
     }
