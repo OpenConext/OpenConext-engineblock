@@ -42,7 +42,6 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 
         $formHtml = $this->factoryForm($samlResponse);
 
-        // @todo find out what correct content type is
         header('Content-Type: text/html');
         echo $formHtml;
         exit;
