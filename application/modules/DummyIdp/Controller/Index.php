@@ -30,11 +30,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
-        $samlRequest = $this->decodeSamlRequest($this->getSamlRequest());
-
-        $authNRequestDomElement = $this->authnRequestToDomElement($samlRequest);
-
-        $authnRequest = SAML2_AuthnRequest::fromXML($authNRequestDomElement);
+        $authnRequest = $this->factoryAuthNRequestFromHttpRequest($this->_getRequest());
 
         $samlResponse = $this->factorySaml2PResponse($authnRequest);
 
@@ -47,26 +43,39 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
     }
 
     /**
-     * @return string
-     * @throws Exception
+     * @param EngineBlock_Http_Request $httpRequest
+     * @return SAML2_Message
      */
-    private function getSamlRequest()
+    private function factoryAuthNRequestFromHttpRequest(EngineBlock_Http_Request $httpRequest)
     {
-        $samlRequestEncoded = $this->_getRequest()->getQueryParameter('SAMLRequest');
-        if (empty($samlRequestEncoded)) {
-            throw new Exception('No SAMLRrquest Attribute');
-        }
-
-        return $samlRequestEncoded;
+        $samlRequestParameter = $this->getSamlRequestParameterFromHttpRequest($httpRequest);
+        $samlRequest = $this->decodeSamlRequestParameter($samlRequestParameter);
+        $authnRequestDomElement = $this->authnRequestToDomElement($samlRequest);
+        return SAML2_AuthnRequest::fromXML($authnRequestDomElement);
     }
 
     /**
-     * @param string $samlRequestEncoded
+     * @param EngineBlock_Http_Request $httpRequest
+     * @return string
+     * @throws Exception
+     */
+    private function getSamlRequestParameterFromHttpRequest(EngineBlock_Http_Request $httpRequest)
+    {
+        $samlRequestParameter = $httpRequest->getQueryParameter('SAMLRequest');
+        if (empty($samlRequestParameter)) {
+            throw new Exception('No SAMLRequest Attribute');
+        }
+
+        return $samlRequestParameter;
+    }
+
+    /**
+     * @param string $samlRequestParameter
      * @return string
      */
-    private function decodeSamlRequest($samlRequestEncoded)
+    private function decodeSamlRequestParameter($samlRequestParameter)
     {
-        return gzinflate(base64_decode($samlRequestEncoded));
+        return gzinflate(base64_decode($samlRequestParameter));
     }
 
     /**
