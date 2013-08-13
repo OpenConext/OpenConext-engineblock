@@ -66,6 +66,7 @@ return array(
         'SingleLogoutService_Location' => 'https://engine.surfconext.nl/logout#sp',
         'url:en' => '',
         'url:nl' => '',
-        'workflowState' => 'prodaccepted'
+        'workflowState' => 'prodaccepted',
+        'coin:no_consent_required' => true
     )
 );
