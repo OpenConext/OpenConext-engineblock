@@ -89,15 +89,6 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         return $document->getElementsByTagNameNs('urn:oasis:names:tc:SAML:2.0:protocol', 'AuthnRequest')->item(0);
     }
 
-    /**
-     * @param int $time
-     * @return string
-     */
-    private function formatTime($time)
-    {
-        return gmdate('Y-m-d\TH:i:s\Z', $time);
-    }
-
     private function factorySaml2PResponse(
         SAML2_AuthnRequest $authnRequest
     )
