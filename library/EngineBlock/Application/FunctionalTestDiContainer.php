@@ -14,7 +14,7 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
             Phake::when($serviceRegistryClient)->getSPList()->thenReturn(require_once $resourcesDir . '/spList.php');
             Phake::when($serviceRegistryClient)->getAllowedIdps(Phake::anyParameters())->thenReturn(require_once $resourcesDir . '/allowedIdps.php');
             Phake::when($serviceRegistryClient)->isConnectionAllowed(Phake::anyParameters())->thenReturn(array(true));
-            Phake::when($serviceRegistryClient)->getArp(Phake::anyParameters())->thenReturn(new StdClass());
+            Phake::when($serviceRegistryClient)->getArp(Phake::anyParameters())->thenReturn(array());
 
             return $serviceRegistryClient;
         });
