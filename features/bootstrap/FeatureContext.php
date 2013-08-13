@@ -1,5 +1,8 @@
 <?php
 
+$rootDir = realpath(__DIR__ . '/../../');
+require_once $rootDir . '/library/simplesamlphp/lib/_autoload.php';
+
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,
     Behat\Behat\Context\BehatContext,
@@ -66,25 +69,17 @@ class FeatureContext extends MinkContext
         $issuerUrl
     )
     {
-        $dateTimeFormatted = gmdate('Y-m-d\TH:i:s\Z', time());
+        $samlpAuthNRequest = new SAML2_AuthnRequest();
+        $samlpAuthNRequest->setDestination($destinationUrl);
+        $samlpAuthNRequest->setAssertionConsumerServiceURL($assertionConsumerServiceURL);
+        $samlpAuthNRequest->setIssuer($issuerUrl);
+        $samlpAuthNRequest->setProtocolBinding('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST');
+        $samlpAuthNRequest->setNameIdPolicy(array(
+            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'AllowCreate' => true
+        ));
 
-        $samlpAuthNRequest = <<<SAML
-<samlp:AuthnRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                    ID="_5a62d5699e34038989f590149c0df34678126614da"
-                    Version="2.0"
-                    IssueInstant="$dateTimeFormatted"
-                    Destination="$destinationUrl"
-                    AssertionConsumerServiceURL="$assertionConsumerServiceURL"
-                    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
-                    >
-    <saml:Issuer>$issuerUrl</saml:Issuer>
-    <samlp:NameIDPolicy Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-                        AllowCreate="true"
-                        />
-</samlp:AuthnRequest>
-SAML;
-
-        return $samlpAuthNRequest;
+        $samlpAuthNRequestDomElement = $samlpAuthNRequest->toUnsignedXML();
+        return $samlpAuthNRequestDomElement->ownerDocument->saveXML($samlpAuthNRequestDomElement);
     }
 }
