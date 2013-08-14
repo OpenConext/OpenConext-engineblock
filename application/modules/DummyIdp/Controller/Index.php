@@ -115,6 +115,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         $assertion->setIssuer($authnRequest->getIssuer());
         // @todo get this from constant
         $assertion->setNameId(array(
+            'Value' => 'johndoe',
             'Format' => "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
         ));
         $assertion->setNotBefore(time());
