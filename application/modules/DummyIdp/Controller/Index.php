@@ -119,7 +119,8 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         ));
         $assertion->setNotBefore(time());
         $assertion->setNotOnOrAfter(time() + 5*60);
-        $assertion->setValidAudiences(array($authnRequest->getIssuer()));
+        // Valid audiences is not required so disabled for now
+        // $assertion->setValidAudiences(array($authnRequest->getIssuer()));
 
         // Add a few required attributes
         $returnAttributes = array(
