@@ -4,4 +4,4 @@ Feature:
     And I press "Dummy Idp"
     And I press "Continue"
     And I press "Submit"
-    Then print last response
+    Then I should see "DUMMY SP"
