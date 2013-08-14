@@ -145,7 +145,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         $response->setIssuer($_SERVER['SCRIPT_URI']);
         $response->setInResponseTo($authnRequest->getId());
         $response->setAssertions(array($assertion));
-        // Signing of message is not requried so disabled for now
+        // Signing of message is not required so disabled for now
         // sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $response);
 
         $samlResponse = $response->toSignedXML();
