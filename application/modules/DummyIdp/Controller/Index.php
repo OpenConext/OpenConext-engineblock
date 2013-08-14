@@ -133,8 +133,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
         $subjectConfirmation->SubjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
         $subjectConfirmation->SubjectConfirmationData->NotOnOrAfter = time() + 5*60;
-// @todo set these values
-//        $subjectConfirmation->SubjectConfirmationData->Recipient = $endpoint;
+        $subjectConfirmation->SubjectConfirmationData->Recipient = $authnRequest->getAssertionConsumerServiceURL();
         $subjectConfirmation->SubjectConfirmationData->InResponseTo = $authnRequest->getId();
         $assertion->setSubjectConfirmation(array($subjectConfirmation));
         sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $assertion);
