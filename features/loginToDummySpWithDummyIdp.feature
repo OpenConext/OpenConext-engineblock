@@ -1,5 +1,5 @@
 Feature:
-  Scenario: EngineBlock fails on Idp giving an invalid name id policy status code
+  Scenario: It is possible to login at Dummy SP using engineblock
     Given An authn request is sent to Engineblock
     And I press "Dummy Idp"
     And I press "Continue"
