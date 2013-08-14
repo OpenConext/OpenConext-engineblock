@@ -141,8 +141,8 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 
         $response = new SAML2_Response();
         $response->setRelayState($authnRequest->getRelayState());
-        $response->setDestination($authnRequest->getDestination());
-        $response->setIssuer($authnRequest->getIssuer());
+        $response->setDestination($authnRequest->getAssertionConsumerServiceURL());
+        $response->setIssuer($_SERVER['SCRIPT_URI']);
         $response->setInResponseTo($authnRequest->getId());
         $response->setAssertions(array($assertion));
         sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $response);
