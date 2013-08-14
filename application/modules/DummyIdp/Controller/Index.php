@@ -110,9 +110,11 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 
         $spMetadata = new SimpleSAML_Configuration(array(), null);
 
+        $issuer = $_SERVER['SCRIPT_URI'];
+
         /* $returnAttributes contains the attributes we should return. Send them. */
         $assertion = new SAML2_Assertion();
-        $assertion->setIssuer($authnRequest->getIssuer());
+        $assertion->setIssuer($issuer);
         // @todo get this from constant
         $assertion->setNameId(array(
             'Value' => 'johndoe',
@@ -143,7 +145,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         $response = new SAML2_Response();
         $response->setRelayState($authnRequest->getRelayState());
         $response->setDestination($authnRequest->getAssertionConsumerServiceURL());
-        $response->setIssuer($_SERVER['SCRIPT_URI']);
+        $response->setIssuer($issuer);
         $response->setInResponseTo($authnRequest->getId());
         $response->setAssertions(array($assertion));
         // Signing of message is not required so disabled for now
