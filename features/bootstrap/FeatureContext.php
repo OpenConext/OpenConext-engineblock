@@ -39,7 +39,7 @@ class FeatureContext extends MinkContext
         $destinationUrl = $engineUrl . '/authentication/idp/single-sign-on';
         $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy-sp';
         $issuerUrl = 'https://engine-test.demo.openconext.org/dummy-sp';
-        $samlPAuthNRequest = $this->factorySamlPAuthNRequest($assertionConsumerServiceURL, $destinationUrl, $issuerUrl);
+        $samlPAuthNRequest = $this->factorySamlPAuthNRequest($destinationUrl, $assertionConsumerServiceURL, $issuerUrl);
 
         $message = $this->encodeSamlMessage($samlPAuthNRequest);
         $engineRequestUrl = $destinationUrl . '?SAMLRequest=' . urlencode($message);
