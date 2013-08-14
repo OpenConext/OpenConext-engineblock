@@ -34,7 +34,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 
         $samlResponse = $this->factorySaml2PResponse($authnRequest);
 
-        $formHtml = $this->factoryForm($samlResponse);
+        $formHtml = $this->factoryForm($samlResponse, $authnRequest->getAssertionConsumerServiceURL());
 
         $this->setNoRender();
         header('Content-Type: text/html');
@@ -157,14 +157,15 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
      * @param string $samlResponse
      * @return string
      */
-    private function factoryForm($samlResponse)
+    private function factoryForm($samlResponse, $assertionConsumerServiceUrl)
     {
         $samlResponseEncoded = base64_encode($samlResponse);
+        $assertionConsumerServiceUrlEncoded = htmlspecialchars($assertionConsumerServiceUrl);
 
         $formHtml = <<<FORM_HTML
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
     <body onload="document.forms[0].submit()">
-        <form action="https&#x3a;&#x2f;&#x2f;engine-test.demo.openconext.org&#x2f;authentication&#x2f;sp&#x2f;consume-assertion" method="post">
+        <form action="$assertionConsumerServiceUrlEncoded" method="post">
             <input type="hidden" name="SAMLResponse" value="$samlResponseEncoded"/>
             <input type="submit" value="Continue"/>
         </form>
