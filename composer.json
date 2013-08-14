@@ -27,6 +27,7 @@
             "Cron_":"application/modules/",
             "Default_":"application/modules/",
             "DummyIdp_":"application/modules/",
+            "DummySp_":"application/modules/",
             "Logout_":"application/modules/",
             "Profile_":"application/modules/",
             "Service_":"application/modules/",
