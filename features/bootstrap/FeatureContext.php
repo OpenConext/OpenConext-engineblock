@@ -28,12 +28,4 @@ class FeatureContext extends MinkContext
     {
         // Initialize your context here
     }
-
-    /**
-     * @Given /^Dummy Idp is configured to give the "([^"]*)" response$/
-     */
-    public function dummyIdpIsConfiguredToGiveTheResponse($responseType)
-    {
-        $_SESSION['functionalTesting']['dummyIdp']['response'] = $responseType;
-    }
 }
