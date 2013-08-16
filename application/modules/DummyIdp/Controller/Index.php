@@ -30,122 +30,21 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
-        $authnRequest = $this->factoryAuthNRequestFromHttpRequest($this->_getRequest());
+        $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
+        $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
 
-        $samlResponse = $this->factorySaml2PResponse($authnRequest);
+        $responseFactory = new EngineBlock_Saml_ResponseFactory();
+        $samlResponse = $responseFactory->create($authnRequest);
 
-        $formHtml = $this->factoryForm($samlResponse, $authnRequest->getAssertionConsumerServiceURL());
+        $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
+        $samlResponseXml = $samlMessageSerializer->serialize($samlResponse);
+
+        $formHtml = $this->factoryForm($samlResponseXml, $authnRequest->getAssertionConsumerServiceURL());
 
         $this->setNoRender();
         header('Content-Type: text/html');
         echo $formHtml;
         exit;
-    }
-
-    /**
-     * @param EngineBlock_Http_Request $httpRequest
-     * @return SAML2_Message
-     */
-    private function factoryAuthNRequestFromHttpRequest(EngineBlock_Http_Request $httpRequest)
-    {
-        $samlRequestParameter = $this->getSamlRequestParameterFromHttpRequest($httpRequest);
-        $samlRequest = $this->decodeSamlRequestParameter($samlRequestParameter);
-        $authnRequestDomElement = $this->authnRequestToDomElement($samlRequest);
-        return SAML2_AuthnRequest::fromXML($authnRequestDomElement);
-    }
-
-    /**
-     * @param EngineBlock_Http_Request $httpRequest
-     * @return string
-     * @throws Exception
-     */
-    private function getSamlRequestParameterFromHttpRequest(EngineBlock_Http_Request $httpRequest)
-    {
-        $samlRequestParameter = $httpRequest->getQueryParameter('SAMLRequest');
-        if (empty($samlRequestParameter)) {
-            throw new Exception('No SAMLRequest Attribute');
-        }
-
-        return $samlRequestParameter;
-    }
-
-    /**
-     * @param string $samlRequestParameter
-     * @return string
-     */
-    private function decodeSamlRequestParameter($samlRequestParameter)
-    {
-        return gzinflate(base64_decode($samlRequestParameter));
-    }
-
-    /**
-     * @param string $samlRequest
-     * @return DOMNode
-     */
-    private function authnRequestToDomElement($samlRequest)
-    {
-        $document = new DOMDocument();
-        $document->loadXML($samlRequest);
-        return $document->getElementsByTagNameNs('urn:oasis:names:tc:SAML:2.0:protocol', 'AuthnRequest')->item(0);
-    }
-
-    private function factorySaml2PResponse(
-        SAML2_AuthnRequest $authnRequest
-    )
-    {
-        $sspIdpConfig = array();
-        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/private_key.pem';
-        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/certificate.crt');
-        $idpMetadata = new SimpleSAML_Configuration($sspIdpConfig, null);
-
-        $spMetadata = new SimpleSAML_Configuration(array(), null);
-
-        $issuer = $_SERVER['SCRIPT_URI'];
-
-        /* $returnAttributes contains the attributes we should return. Send them. */
-        $assertion = new SAML2_Assertion();
-        $assertion->setIssuer($issuer);
-        // @todo get this from constant
-        $assertion->setNameId(array(
-            'Value' => 'johndoe',
-            'Format' => "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
-        ));
-        $assertion->setNotBefore(time());
-        $assertion->setNotOnOrAfter(time() + 5*60);
-        // Valid audiences is not required so disabled for now
-        // $assertion->setValidAudiences(array($authnRequest->getIssuer()));
-
-        // Add a few required attributes
-        $returnAttributes = array(
-            'urn:mace:dir:attribute-def:uid' => array('johndoe'),
-            'urn:mace:terena.org:attribute-def:schacHomeOrganization' => array('example.com'),
-        );
-        $assertion->setAttributes($returnAttributes);
-        $assertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_UNSPECIFIED);
-        $assertion->setAuthnContext(' urn:oasis:names:tc:SAML:2.0:ac:classes:Password');
-
-        $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
-        $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
-        $subjectConfirmation->SubjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
-        $subjectConfirmation->SubjectConfirmationData->NotOnOrAfter = time() + 5*60;
-        $subjectConfirmation->SubjectConfirmationData->Recipient = $authnRequest->getAssertionConsumerServiceURL();
-        $subjectConfirmation->SubjectConfirmationData->InResponseTo = $authnRequest->getId();
-        $assertion->setSubjectConfirmation(array($subjectConfirmation));
-        sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $assertion);
-
-        $response = new SAML2_Response();
-        $response->setRelayState($authnRequest->getRelayState());
-        $response->setDestination($authnRequest->getAssertionConsumerServiceURL());
-        $response->setIssuer($issuer);
-        $response->setInResponseTo($authnRequest->getId());
-        $response->setAssertions(array($assertion));
-        // Signing of message is not required so disabled for now
-        // sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $response);
-
-        $samlResponse = $response->toSignedXML();
-        $samlResponseXml = $samlResponse->ownerDocument->saveXML($samlResponse);
-
-        return $samlResponseXml;
     }
 
     /**
@@ -170,6 +69,5 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 FORM_HTML;
 
         return $formHtml;
-
     }
 }
