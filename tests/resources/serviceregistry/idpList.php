@@ -64,6 +64,7 @@ return array(
         'SingleSignOnService:0:Location' => 'https://engine-test.demo.openconext.org/dummy-idp',
         'workflowState' => 'prodaccepted',
     ),
+    // Dummy Idp #2 is only here to make sure EngineBlock does not skip Wayf
     'https://engine-test.demo.openconext.org/dummy-idp#2' =>
     array(
         'certData' => '',
