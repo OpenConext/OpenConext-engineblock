@@ -122,6 +122,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         );
         $assertion->setAttributes($returnAttributes);
         $assertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_UNSPECIFIED);
+        $assertion->setAuthnContext(' urn:oasis:names:tc:SAML:2.0:ac:classes:Password');
 
         $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
         $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
