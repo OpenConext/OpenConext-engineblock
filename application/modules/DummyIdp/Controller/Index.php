@@ -30,7 +30,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
-        $this->setResponseTypeFromRequest($this->_getRequest());
+        $this->setTestCaseFromRequest($this->_getRequest());
 
         $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
@@ -38,14 +38,9 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         $responseFactory = new EngineBlock_Saml_ResponseFactory();
         $samlResponse = $responseFactory->create($authnRequest);
 
-        if (isset($_SESSION['responseType'])) {
-            switch($_SESSION['responseType']) {
-                case 'InvalidNameIdPolicy' :
-                    $samlResponse->setStatus(array(
-                        'Code' => 'urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy'
-                    ));
-                    break;
-            }
+        $testCase = $this->factoryTestCaseFromSession($_SESSION);
+        if ($testCase instanceof DummyIdp_Model_TestCase_TestCaseInterface) {
+            $testCase->decorateResponse($samlResponse);
         }
 
         $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
@@ -59,13 +54,32 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         exit;
     }
 
-    private function setResponseTypeFromRequest(EngineBlock_Http_Request $httpRequest)
+    /**
+     * @param EngineBlock_Http_Request $httpRequest
+     */
+    private function setTestCaseFromRequest(EngineBlock_Http_Request $httpRequest)
     {
-        $responseType = $httpRequest->getQueryParameter('responseType');
-        if ($responseType) {
-            $_SESSION['responseType'] = $responseType;
+        $testCase = $httpRequest->getQueryParameter('testCase');
+        if ($testCase) {
+            $_SESSION['testCase'] = $testCase;
             exit;
         }
+    }
+
+    /**
+     * @param array $session
+     * @throws InvalidArgumentException
+     */
+    private function factoryTestCaseFromSession(array $session) {
+        if (!isset($session['testCase'])) {
+            return;
+        }
+        $testCaseClass = 'DummyIdp_Model_TestCase_' . $session['testCase'];
+        if (!class_exists($testCaseClass)) {
+            throw new \InvalidArgumentException("Idp testcase '" . $testCaseClass . ' does not exist');
+        }
+
+        return new $testCaseClass();
     }
 
     /**
