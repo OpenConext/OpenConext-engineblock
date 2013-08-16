@@ -93,19 +93,9 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         SAML2_AuthnRequest $authnRequest
     )
     {
-        $engineBlockApp = EngineBlock_ApplicationSingleton::getInstance();
-        $config = $engineBlockApp->getConfiguration();
-        $encryptionConfig = $config->get('encryption')->toArray();
-
         $sspIdpConfig = array();
-        $privateKeyPath = tempnam(sys_get_temp_dir(), 'ssp_private_key');
-        file_put_contents($privateKeyPath, $encryptionConfig['key']['private']);
-        $sspIdpConfig['privatekey'] = $privateKeyPath;
-
-        $publicKeyPath = tempnam(sys_get_temp_dir(), 'ssp_public_key');
-        file_put_contents($publicKeyPath, $encryptionConfig['key']['public']);
-        $sspIdpConfig['publickey'] = $publicKeyPath;
-
+        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/private_key.pem';
+        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/certificate.crt');
         $idpMetadata = new SimpleSAML_Configuration($sspIdpConfig, null);
 
         $spMetadata = new SimpleSAML_Configuration(array(), null);
