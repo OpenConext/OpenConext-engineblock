@@ -267,6 +267,12 @@ Als u deze applicatie wilt gebruiken moet u:<br />
         Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br />
     </p>',
+
+    'error_received_error_status_code'     => 'Error - De Idp gaf een fout',
+    'error_received_error_status_code_desc'=> '<p>
+        Het is niet mogelijk om in te loggen, de Identity Provider gaf een fout
+    </p>',
+
     /**
      * %1 AttributeName
      * %2 Options

@@ -28,4 +28,12 @@ class FeatureContext extends MinkContext
     {
         // Initialize your context here
     }
+
+    /**
+     * @Given /^Dummy Idp is configured to give the "([^"]*)" response$/
+     */
+    public function dummyIdpIsConfiguredToGiveTheResponse($responseType)
+    {
+        $this->getSession()->visit('https://engine-test.demo.openconext.org/dummy-idp?responseType=' . urlencode($responseType));
+    }
 }

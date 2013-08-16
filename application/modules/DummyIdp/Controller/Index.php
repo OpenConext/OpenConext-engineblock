@@ -30,11 +30,23 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
+        $this->setResponseTypeFromRequest($this->_getRequest());
+
         $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
 
         $responseFactory = new EngineBlock_Saml_ResponseFactory();
         $samlResponse = $responseFactory->create($authnRequest);
+
+        if (isset($_SESSION['responseType'])) {
+            switch($_SESSION['responseType']) {
+                case 'InvalidNameIdPolicy' :
+                    $samlResponse->setStatus(array(
+                        'Code' => 'urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy'
+                    ));
+                    break;
+            }
+        }
 
         $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
         $samlResponseXml = $samlMessageSerializer->serialize($samlResponse);
@@ -45,6 +57,15 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         header('Content-Type: text/html');
         echo $formHtml;
         exit;
+    }
+
+    private function setResponseTypeFromRequest(EngineBlock_Http_Request $httpRequest)
+    {
+        $responseType = $httpRequest->getQueryParameter('responseType');
+        if ($responseType) {
+            $_SESSION['responseType'] = $responseType;
+            exit;
+        }
     }
 
     /**
