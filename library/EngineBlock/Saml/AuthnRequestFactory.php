@@ -13,7 +13,7 @@ class EngineBlock_Saml_AuthnRequestFactory
      * @param string $destinationUrl
      * @param string $assertionConsumerServiceURL
      * @param string $issuerUrl
-     * @return string
+     * @return SAML2_AuthnRequest
      */
     public function create(
         $destinationUrl,
