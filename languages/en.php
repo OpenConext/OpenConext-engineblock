@@ -269,7 +269,13 @@ If you want to use this application you have to:<br />
        </p>',
     'error_received_error_status_code'     => 'Error - Idp error',
     'error_received_error_status_code_desc'=> '<p>
-        It is not possible to login becuase the Identity Provider returned an error
+        Your Identity Provider sent an authentication response with an error status code.
+    </p>
+    <p>
+        Status Code: %s
+    </p>
+    <p>
+        Status Message: %s
     </p>',
 
     /**

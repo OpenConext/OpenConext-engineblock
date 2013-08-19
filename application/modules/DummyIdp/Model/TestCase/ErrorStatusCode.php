@@ -5,7 +5,8 @@ class DummyIdp_Model_TestCase_ErrorStatusCode
     public function decorateResponse(SAML2_Response $response)
     {
         $response->setStatus(array(
-            'Code' => 'urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy'
+            'Code' => 'urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy',
+            'Message' => 'NameIdPolicy is invalid'
         ));
     }
 }

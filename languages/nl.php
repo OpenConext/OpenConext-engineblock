@@ -270,8 +270,13 @@ Als u deze applicatie wilt gebruiken moet u:<br />
 
     'error_received_error_status_code'     => 'Error - Idp fout',
     'error_received_error_status_code_desc'=> '<p>
-        Het is niet mogelijk om in te loggen, de Identity Provider gaf een fout
-    </p>',
+        Uw Identity Provider stuurde een authenticatie respons met een fout code.
+    </p>
+    <p>
+        Status Code: %s
+    <p>
+        Status Message: %s
+   </p>',
 
     /**
      * %1 AttributeName

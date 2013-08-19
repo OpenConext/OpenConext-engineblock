@@ -35,12 +35,19 @@ class EngineBlock_Corto_Filter_Command_ValidateSuccessfulResponse extends Engine
         $statusCode = $this->_response['samlp:Status']['samlp:StatusCode']['_Value'];
         if ($statusCode !== self::SAML2_STATUS_CODE_SUCCESS) {
             // Idp returned an error
-            throw new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
+
+            $statusMessage = $this->_response['samlp:Status']['samlp:StatusMessage']['__v'];
+
+            $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
                 'Response received with Status: ' .
-                    $this->_response['samlp:Status']['samlp:StatusCode']['_Value'] .
+                    $statusCode .
                     ' - ' .
-                    $this->_response['samlp:Status']['samlp:StatusMessage']['__v']
+                    $statusMessage
             );
+            $exception->setFeedbackStatusCode($statusCode);
+            $exception->setFeedbackStatusMessage($statusMessage);
+
+            throw $exception;
         }
     }
 }
