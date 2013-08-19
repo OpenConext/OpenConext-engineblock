@@ -268,7 +268,7 @@ Als u deze applicatie wilt gebruiken moet u:<br />
         <br />
     </p>',
 
-    'error_received_error_status_code'     => 'Error - De Idp gaf een fout',
+    'error_received_error_status_code'     => 'Error - Idp fout',
     'error_received_error_status_code_desc'=> '<p>
         Het is niet mogelijk om in te loggen, de Identity Provider gaf een fout
     </p>',

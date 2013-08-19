@@ -4,4 +4,4 @@ Feature:
     When I go to "https://engine-test.demo.openconext.org/dummy-sp"
     And I press "Dummy Idp"
     And I press "Continue"
-    Then I should see "Idp has an error"
+    Then I should see "Idp error"

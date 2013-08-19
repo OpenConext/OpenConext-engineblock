@@ -267,7 +267,7 @@ If you want to use this application you have to:<br />
         The external group provider <b>%s</b> reported an error. </p>
         <p>Please contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
        </p>',
-    'error_received_error_status_code'     => 'Error - Idp has an error',
+    'error_received_error_status_code'     => 'Error - Idp error',
     'error_received_error_status_code_desc'=> '<p>
         It is not possible to login becuase the Identity Provider returned an error
     </p>',
