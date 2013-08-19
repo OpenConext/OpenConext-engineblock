@@ -1,5 +1,4 @@
 <?php
-//    DummyIdp/Model/TestCase/ErrorStatusCode.php
 class DummyIdp_Model_TestCase_ErrorStatusCode
     implements DummyIdp_Model_TestCase_TestCaseInterface
 {
