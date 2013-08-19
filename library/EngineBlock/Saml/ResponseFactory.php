@@ -90,7 +90,7 @@ class EngineBlock_Saml_ResponseFactory
     {
         $parameter = $httpRequest->getPostParameter('SAMLResponse');
         if (empty($parameter)) {
-            throw new Exception('No SAMLResponse');
+            throw new Exception('No SAMLResponse parameter');
         }
 
         return $parameter;
