@@ -57,7 +57,11 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
         $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy-sp';
         $issuerUrl = 'https://engine-test.demo.openconext.org/dummy-sp';
         $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
-        $authnRequest = $authnRequestFactory->create($destinationUrl, $assertionConsumerServiceURL, $issuerUrl);
+        $authnRequest = $authnRequestFactory->create(
+            $destinationUrl,
+            $assertionConsumerServiceURL,
+            $issuerUrl
+        );
         $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
         $authNRequestXml = $samlMessageSerializer->serialize($authnRequest);
 
