@@ -21,17 +21,17 @@ class EngineBlock_Saml_AuthnRequestFactory
         $issuerUrl
     )
     {
-        $samlpAuthNRequest = new SAML2_AuthnRequest();
-        $samlpAuthNRequest->setDestination($destinationUrl);
-        $samlpAuthNRequest->setAssertionConsumerServiceURL($assertionConsumerServiceURL);
-        $samlpAuthNRequest->setIssuer($issuerUrl);
-        $samlpAuthNRequest->setProtocolBinding(self::BINDING_DEFAULT);
-        $samlpAuthNRequest->setNameIdPolicy(array(
+        $request = new SAML2_AuthnRequest();
+        $request->setDestination($destinationUrl);
+        $request->setAssertionConsumerServiceURL($assertionConsumerServiceURL);
+        $request->setIssuer($issuerUrl);
+        $request->setProtocolBinding(self::BINDING_DEFAULT);
+        $request->setNameIdPolicy(array(
             'Format' => self::NAME_ID_FORMAT_DEFAULT,
             'AllowCreate' => true
         ));
 
-        return $samlpAuthNRequest;
+        return $request;
     }
 
     /**
@@ -40,11 +40,11 @@ class EngineBlock_Saml_AuthnRequestFactory
      */
     public function createFromHttpRequest(EngineBlock_Http_Request $httpRequest)
     {
-        $samlAuthnrequestParameter = $this->getSAMLAuthnrequestParameterFromHttpRequest($httpRequest);
-        $samlAuthnrequest = $this->decodeSAMLAuthnrequestParameter($samlAuthnrequestParameter);
+        $parameter = $this->getParameterFromHttpRequest($httpRequest);
+        $requestXml = $this->decodeParameter($parameter);
 
-        $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
-        return $samlMessageSerializer->deserialize($samlAuthnrequest, 'SAML2_AuthnRequest');
+        $serializer = new EngineBlock_Saml_MessageSerializer();
+        return $serializer->deserialize($requestXml, 'SAML2_AuthnRequest');
     }
 
     /**
@@ -52,22 +52,22 @@ class EngineBlock_Saml_AuthnRequestFactory
      * @return string
      * @throws Exception
      */
-    private function getSAMLAuthnrequestParameterFromHttpRequest(EngineBlock_Http_Request $httpRequest)
+    private function getParameterFromHttpRequest(EngineBlock_Http_Request $httpRequest)
     {
-        $samlAuthnrequestParameter = $httpRequest->getQueryParameter('SAMLRequest');
-        if (empty($samlAuthnrequestParameter)) {
+        $parameter = $httpRequest->getQueryParameter('SAMLRequest');
+        if (empty($parameter)) {
             throw new Exception('No SAMLRequest parameter');
         }
 
-        return $samlAuthnrequestParameter;
+        return $parameter;
     }
 
     /**
-     * @param string $samlAuthnrequestParameter
+     * @param string $parameter
      * @return string
      */
-    private function decodeSAMLAuthnrequestParameter($samlAuthnrequestParameter)
+    private function decodeParameter($parameter)
     {
-        return gzinflate(base64_decode($samlAuthnrequestParameter));
+        return gzinflate(base64_decode($parameter));
     }
 }

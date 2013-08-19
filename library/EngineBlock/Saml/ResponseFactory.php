@@ -56,16 +56,16 @@ class EngineBlock_Saml_ResponseFactory
         $assertion->setSubjectConfirmation(array($subjectConfirmation));
         sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $assertion);
 
-        $response = new SAML2_Response();
-        $response->setRelayState($authnRequest->getRelayState());
-        $response->setDestination($authnRequest->getAssertionConsumerServiceURL());
-        $response->setIssuer($issuer);
-        $response->setInResponseTo($authnRequest->getId());
-        $response->setAssertions(array($assertion));
+        $responseXml = new SAML2_Response();
+        $responseXml->setRelayState($authnRequest->getRelayState());
+        $responseXml->setDestination($authnRequest->getAssertionConsumerServiceURL());
+        $responseXml->setIssuer($issuer);
+        $responseXml->setInResponseTo($authnRequest->getId());
+        $responseXml->setAssertions(array($assertion));
         // Signing of message is not required so disabled for now
-        // sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $response);
+        // sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $responseXml);
 
-        return $response;
+        return $responseXml;
     }
 
     /**
@@ -74,11 +74,11 @@ class EngineBlock_Saml_ResponseFactory
      */
     public function createFromHttpRequest(EngineBlock_Http_Request $httpRequest)
     {
-        $samlResponseParameter = $this->getSAMLResponseParameterFromHttpRequest($httpRequest);
-        $samlResponse = $this->decodeSAMLResponseParameter($samlResponseParameter);
+        $parameter = $this->getParameterFromHttpRequest($httpRequest);
+        $responseXml = $this->decodeParameter($parameter);
 
-        $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
-        return $samlMessageSerializer->deserialize($samlResponse, 'SAML2_Response');
+        $serializer = new EngineBlock_Saml_MessageSerializer();
+        return $serializer->deserialize($responseXml, 'SAML2_Response');
     }
 
     /**
@@ -86,22 +86,22 @@ class EngineBlock_Saml_ResponseFactory
      * @return string
      * @throws Exception
      */
-    private function getSAMLResponseParameterFromHttpRequest(EngineBlock_Http_Request $httpRequest)
+    private function getParameterFromHttpRequest(EngineBlock_Http_Request $httpRequest)
     {
-        $samlResponseParameter = $httpRequest->getPostParameter('SAMLResponse');
-        if (empty($samlResponseParameter)) {
+        $parameter = $httpRequest->getPostParameter('SAMLResponse');
+        if (empty($parameter)) {
             throw new Exception('No SAMLResponse');
         }
 
-        return $samlResponseParameter;
+        return $parameter;
     }
 
     /**
-     * @param string $samlResponseParameter
+     * @param string $parameter
      * @return string
      */
-    private function decodeSAMLResponseParameter($samlResponseParameter)
+    private function decodeParameter($parameter)
     {
-        return base64_decode($samlResponseParameter);
+        return base64_decode($parameter);
     }
 }
