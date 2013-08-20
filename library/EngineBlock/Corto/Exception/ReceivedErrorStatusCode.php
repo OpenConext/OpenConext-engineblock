@@ -17,7 +17,8 @@ class EngineBlock_Corto_Exception_ReceivedErrorStatusCode extends EngineBlock_Ex
         $this->feedbackInfo['statusMessage'] = $statusMessage;
     }
 
-    public function getFeedbackInfo() {
+    public function getFeedbackInfo()
+    {
         return $this->feedbackInfo;
     }
 }
