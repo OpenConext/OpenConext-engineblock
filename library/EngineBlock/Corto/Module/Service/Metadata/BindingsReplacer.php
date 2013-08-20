@@ -22,12 +22,12 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
      * @param string $url
      * @param array $supportedBindings
      */
-    public function replace($key, $url, array $supportedBindings)
+    public function replace($key, $location, array $supportedBindings)
     {
         $this->entity[$key] = array();
         foreach($supportedBindings as $binding) {
             $this->entity[$key][] = array(
-                'Location'=> $url,
+                'Location'=> $location,
                 'Binding' => $binding
             );
         }
