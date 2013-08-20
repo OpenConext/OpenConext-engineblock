@@ -65,7 +65,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             // Replace service locations and bindings with those of EB
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
             $ssoBindingsReplacer->replace($entity, $transparentSsoUrl);
-            $transparentSlUrl = $this->_server->getUrl('singleLogoutService', $entity['EntityID']);
+            $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
             $slBindingsReplacer->replace($entity, $transparentSlUrl);
 
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
