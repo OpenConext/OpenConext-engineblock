@@ -31,7 +31,7 @@ class EngineBlock_Saml_ResponseFactory
         // @todo get this from constant
         $assertion->setNameId(array(
             'Value' => 'johndoe',
-            'Format' => "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+            'Format' => self::NAMEID_UNSPECIFIED
         ));
         $assertion->setNotBefore(time());
         $assertion->setNotOnOrAfter(time() + 5*60);
@@ -45,7 +45,7 @@ class EngineBlock_Saml_ResponseFactory
         );
         $assertion->setAttributes($returnAttributes);
         $assertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_UNSPECIFIED);
-        $assertion->setAuthnContext(' urn:oasis:names:tc:SAML:2.0:ac:classes:Password');
+        $assertion->setAuthnContext(SAML2_Const::AC_PASSWORD);
 
         $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
         $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
