@@ -36,7 +36,22 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
 
         $responseFactory = new EngineBlock_Saml_ResponseFactory();
-        $samlResponse = $responseFactory->create($authnRequest);
+        $idpConfig = $this->createIdpConfig();
+        // Required attributes
+        $nameId = 'johndoe';
+        $issuer = $_SERVER['SCRIPT_URI'];
+        $attributes = array(
+            'urn:mace:dir:attribute-def:uid' => array('johndoe'),
+            'urn:mace:terena.org:attribute-def:schacHomeOrganization' => array('example.com'),
+        );
+
+        $samlResponse = $responseFactory->create(
+            $authnRequest,
+            $idpConfig,
+            $nameId,
+            $issuer,
+            $attributes
+        );
 
         $testCase = $this->factoryTestCaseFromSession($_SESSION);
         if ($testCase instanceof DummyIdp_Model_TestCase_TestCaseInterface) {
@@ -52,6 +67,19 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         header('Content-Type: text/html');
         echo $formHtml;
         exit;
+    }
+
+    /**
+     * Creates a config containing the keys needed for signing
+     *
+     * @return SimpleSAML_Configuration
+     */
+    private function createIdpConfig()
+    {
+        $sspIdpConfig = array();
+        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/private_key.pem';
+        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/certificate.crt');
+        return new SimpleSAML_Configuration($sspIdpConfig, null);
     }
 
     /**

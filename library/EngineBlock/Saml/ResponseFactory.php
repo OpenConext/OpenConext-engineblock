@@ -10,40 +10,30 @@ class EngineBlock_Saml_ResponseFactory
      * @todo make this generic
      *
      * @param SAML2_AuthnRequest $authnRequest
+     * @param SimpleSAML_Configuration $idpConfig
+     * @param array $attributes
      * @return SAML2_Response
      */
     public function create(
-        SAML2_AuthnRequest $authnRequest
+        SAML2_AuthnRequest $authnRequest,
+        SimpleSAML_Configuration $idpConfig,
+        $nameId,
+        $issuer,
+        array $attributes
     )
     {
-        $sspIdpConfig = array();
-        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/private_key.pem';
-        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/certificate.crt');
-        $idpMetadata = new SimpleSAML_Configuration($sspIdpConfig, null);
-
-        $spMetadata = new SimpleSAML_Configuration(array(), null);
-
-        $issuer = $_SERVER['SCRIPT_URI'];
-
         /* $returnAttributes contains the attributes we should return. Send them. */
         $assertion = new SAML2_Assertion();
         $assertion->setIssuer($issuer);
-        // @todo get this from constant
         $assertion->setNameId(array(
-            'Value' => 'johndoe',
+            'Value' => $nameId,
             'Format' => SAML2_Const::NAMEID_UNSPECIFIED
         ));
         $assertion->setNotBefore(time());
         $assertion->setNotOnOrAfter(time() + 5*60);
         // Valid audiences is not required so disabled for now
         // $assertion->setValidAudiences(array($authnRequest->getIssuer()));
-
-        // Add a few required attributes
-        $returnAttributes = array(
-            'urn:mace:dir:attribute-def:uid' => array('johndoe'),
-            'urn:mace:terena.org:attribute-def:schacHomeOrganization' => array('example.com'),
-        );
-        $assertion->setAttributes($returnAttributes);
+        $assertion->setAttributes($attributes);
         $assertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_UNSPECIFIED);
         $assertion->setAuthnContext(SAML2_Const::AC_PASSWORD);
 
@@ -54,7 +44,6 @@ class EngineBlock_Saml_ResponseFactory
         $subjectConfirmation->SubjectConfirmationData->Recipient = $authnRequest->getAssertionConsumerServiceURL();
         $subjectConfirmation->SubjectConfirmationData->InResponseTo = $authnRequest->getId();
         $assertion->setSubjectConfirmation(array($subjectConfirmation));
-        sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $assertion);
 
         $response = new SAML2_Response();
         $response->setRelayState($authnRequest->getRelayState());
@@ -62,10 +51,22 @@ class EngineBlock_Saml_ResponseFactory
         $response->setIssuer($issuer);
         $response->setInResponseTo($authnRequest->getId());
         $response->setAssertions(array($assertion));
-        // Signing of message is not required so disabled for now
-        // sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $response);
+
+        $this->addSigns($response, $idpConfig);
 
         return $response;
+    }
+
+    /**
+     * @param SAML2_Response $response
+     * @param SimpleSAML_Configuration $idpConfig
+     */
+    private function addSigns(SAML2_Response $response, SimpleSAML_Configuration $idpConfig)
+    {
+        $assertions = $response->getAssertions();
+        sspmod_saml_Message::addSign($idpConfig, null, $assertions[0]);
+        // Signing of message is not required so disabled for now
+        // sspmod_saml_Message::addSign($idpConfig, null, $response);
     }
 
     /**
