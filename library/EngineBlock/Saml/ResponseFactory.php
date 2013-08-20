@@ -56,16 +56,16 @@ class EngineBlock_Saml_ResponseFactory
         $assertion->setSubjectConfirmation(array($subjectConfirmation));
         sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $assertion);
 
-        $responseXml = new SAML2_Response();
-        $responseXml->setRelayState($authnRequest->getRelayState());
-        $responseXml->setDestination($authnRequest->getAssertionConsumerServiceURL());
-        $responseXml->setIssuer($issuer);
-        $responseXml->setInResponseTo($authnRequest->getId());
-        $responseXml->setAssertions(array($assertion));
+        $response = new SAML2_Response();
+        $response->setRelayState($authnRequest->getRelayState());
+        $response->setDestination($authnRequest->getAssertionConsumerServiceURL());
+        $response->setIssuer($issuer);
+        $response->setInResponseTo($authnRequest->getId());
+        $response->setAssertions(array($assertion));
         // Signing of message is not required so disabled for now
-        // sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $responseXml);
+        // sspmod_saml_Message::addSign($idpMetadata, $spMetadata, $response);
 
-        return $responseXml;
+        return $response;
     }
 
     /**
