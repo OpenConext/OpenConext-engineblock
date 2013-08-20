@@ -61,7 +61,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 
             $bindingsReplacer = new EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer($entity);
 
-            // Replace SSP locations with thiose of EB
+            // Replace SSP locations with those of EB
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
             $supportedSsoBindings = array(
                 EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_REDIRECT,
