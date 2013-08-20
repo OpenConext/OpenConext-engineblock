@@ -31,7 +31,7 @@ class EngineBlock_Saml_ResponseFactory
         // @todo get this from constant
         $assertion->setNameId(array(
             'Value' => 'johndoe',
-            'Format' => self::NAMEID_UNSPECIFIED
+            'Format' => SAML2_Const::NAMEID_UNSPECIFIED
         ));
         $assertion->setNotBefore(time());
         $assertion->setNotOnOrAfter(time() + 5*60);
