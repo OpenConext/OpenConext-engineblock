@@ -26,7 +26,7 @@
 /**
  * A Caching Proxy for the Service Registry, will cache all function calls.
  *
- * Can even detect Sercvice Registry problems and chug along on the (stale) cache.
+ * Can even detect Service Registry problems and chug along on the (stale) cache.
  */
 class Janus_Client_CacheProxy
 {

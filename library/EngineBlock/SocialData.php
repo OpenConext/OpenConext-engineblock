@@ -410,17 +410,9 @@ class EngineBlock_SocialData
     protected function _getServiceRegistry()
     {
         if ($this->_serviceRegistry == NULL) {
-            $this->_serviceRegistry = new Janus_Client_CacheProxy();
+            $this->_serviceRegistry = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryClient();
         }
         return $this->_serviceRegistry;
-    }
-
-    /**
-     * @param $serviceRegistry
-     */
-    public function setServiceRegistry($serviceRegistry)
-    {
-        $this->_serviceRegistry = $serviceRegistry;
     }
 
     /**

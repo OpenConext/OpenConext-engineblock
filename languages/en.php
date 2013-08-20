@@ -267,6 +267,16 @@ If you want to use this application you have to:<br />
         The external group provider <b>%s</b> reported an error. </p>
         <p>Please contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
        </p>',
+    'error_received_error_status_code'     => 'Error - Idp error',
+    'error_received_error_status_code_desc'=> '<p>
+        Your Identity Provider sent an authentication response with an error status code.
+    </p>
+    <p>
+        Status Code: %s
+    </p>
+    <p>
+        Status Message: %s
+    </p>',
 
     /**
      * %1 AttributeName

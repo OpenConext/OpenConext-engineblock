@@ -1,6 +1,5 @@
 <?php
 
-require __DIR__ . '/Autoloader.php';
 require __DIR__ . '/Bootstrapper/Exception.php';
 
 class EngineBlock_Application_Bootstrapper
@@ -69,6 +68,8 @@ class EngineBlock_Application_Bootstrapper
     protected function _bootstrapDiContainer() {
         if (ENGINEBLOCK_ENV == 'testing') {
             $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
+        } elseif (ENGINEBLOCK_ENV == 'functional-testing') {
+            $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
         } else {
             $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
         }
@@ -84,9 +85,6 @@ class EngineBlock_Application_Bootstrapper
                 EngineBlock_Exception::CODE_ALERT
             );
         }
-
-        $autoLoader = new EngineBlock_Application_Autoloader();
-        spl_autoload_register(array($autoLoader, 'load'));
     }
 
     protected function _bootstrapConfiguration()
