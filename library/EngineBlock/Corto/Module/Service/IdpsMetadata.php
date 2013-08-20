@@ -40,6 +40,9 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         if (isset($spEntity)) {
             $idpEntities[] = $spEntity;
         }
+
+        $ssoBindingsReplacer = new EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer($entityDetails, 'SingleSignOnService');
+        $slBindingsReplacer = new EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer($entityDetails, 'SingleLogoutService');
         foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
             // Don't add ourselves
             if ($entity['EntityID'] === $entityDetails['EntityID']) {
@@ -59,23 +62,11 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             unset($entity['NameIDFormat']);
             $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
 
-            $bindingsReplacer = new EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer($entity);
-
-            // Replace SSP locations with those of EB
+            // Replace service locations and bindings with those of EB
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
-            $supportedSsoBindings = array(
-                EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_REDIRECT,
-                EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_POST
-            );
-            $bindingsReplacer->replace('SingleSignOnService', $transparentSsoUrl, $supportedSsoBindings);
-
-            // Replace SSP locations with those of EB
+            $ssoBindingsReplacer->replace($entity, $transparentSsoUrl);
             $transparentSlUrl = $this->_server->getUrl('singleLogoutService', $entity['EntityID']);
-            $supportedSslBindings = array(
-                EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_REDIRECT,
-                EngineBlock_Corto_Module_Services::BINDING_TYPE_HTTP_POST
-            );
-            $bindingsReplacer->replace('SingleLogoutService', $transparentSlUrl, $supportedSslBindings);
+            $slBindingsReplacer->replace($entity, $transparentSlUrl);
 
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
 

@@ -1,0 +1,4 @@
+<?php
+class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer_Exception extends Exception
+{
+}
