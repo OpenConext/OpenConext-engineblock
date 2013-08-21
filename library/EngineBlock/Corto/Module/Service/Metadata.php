@@ -1,6 +1,6 @@
 <?php
 
-use EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer as BindingsReplacer;
+use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -12,15 +12,15 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         // Override the EntityID and SSO location to optionally append VO id
         if ($serviceName==='idpMetadataService') {
             $entityDetails['EntityID'] = $this->_server->getUrl($serviceName);
-            $ssoBindingsReplacer = new BindingsReplacer($entityDetails, 'SingleSignOnService', BindingsReplacer::REQUIRED);
+            $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
             $ssoLocation = $this->_server->getUrl('singleSignOnService');
-            $ssoBindingsReplacer->replace($entityDetails, $ssoLocation);
+            $ssoServiceReplacer->replace($entityDetails, $ssoLocation);
         }
 
         // Override Single Logout Service Location with generated url
-        $slBindingsReplacer = new BindingsReplacer($entityDetails, 'SingleLogoutService', BindingsReplacer::OPTIONAL);
+        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
         $slLocation = $this->_server->getUrl('singleLogoutService');
-        $slBindingsReplacer->replace($entityDetails, $slLocation);
+        $slServiceReplacer->replace($entityDetails, $slLocation);
 
         try {
             // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)

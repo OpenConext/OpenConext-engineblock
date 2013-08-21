@@ -1,6 +1,6 @@
 <?php
 /**
- * Replaces bindings like SingleSignOn and SingleLogout with bindings of EngineBlock
+ * Replaces services like SingleSignOn and SingleLogout with services of EngineBlock
  * 
  * It works as follows
  * 
@@ -11,9 +11,9 @@
  * - Entity has no service configured, Proxy has service configured -> Service replaced by proxy configuration
  */
 
-use EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer_Exception as Exception;
+use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception as Exception;
 
-class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
+class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
 {
     const REQUIRED = true;
     const OPTIONAL = false;
@@ -64,7 +64,7 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
     }
 
     /**
-     * Builds a list of bindings supported by the proxy
+     * Builds a list of services supported by the proxy
      *
      * @param array $proxyEntity
      * @param bool $required
@@ -89,7 +89,7 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
         $supportedBindings = $this->parseBindingsFromServices($services);
 
         if (count($supportedBindings) === 0 && $required == self::REQUIRED) {
-            throw new Exception("No '$this->serviceName' bindings configured in EngineBlock metadata");
+            throw new Exception("No '$this->serviceName' service bindings configured in EngineBlock metadata");
         }
 
         return $supportedBindings;
@@ -98,7 +98,7 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
     /**
      * @param array $services
      * @return array
-     * @throws EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer_Exception
+     * @throws EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception
      */
     private function parseBindingsFromServices(array $services)
     {

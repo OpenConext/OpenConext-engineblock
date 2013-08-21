@@ -1,6 +1,6 @@
 <?php
 
-use EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer as BindingsReplacer;
+use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
 
 class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -43,8 +43,8 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             $idpEntities[] = $spEntity;
         }
 
-        $ssoBindingsReplacer = new BindingsReplacer($entityDetails, 'SingleSignOnService', BindingsReplacer::REQUIRED);
-        $slBindingsReplacer = new BindingsReplacer($entityDetails, 'SingleLogoutService', BindingsReplacer::OPTIONAL);
+        $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
         foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
             // Don't add ourselves
             if ($entity['EntityID'] === $entityDetails['EntityID']) {
@@ -66,9 +66,9 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 
             // Replace service locations and bindings with those of EB
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
-            $ssoBindingsReplacer->replace($entity, $transparentSsoUrl);
+            $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
             $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
-            $slBindingsReplacer->replace($entity, $transparentSlUrl);
+            $slServiceReplacer->replace($entity, $transparentSlUrl);
 
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
 
