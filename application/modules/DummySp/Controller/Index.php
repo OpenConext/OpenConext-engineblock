@@ -29,6 +29,8 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
+        $this->setTestCaseFromRequest($this->_getRequest());
+
         if (!empty($_POST)) {
             $responseFactory = new EngineBlock_Saml_ResponseFactory();
             $samlResponse = $responseFactory->createFromHttpRequest($this->_getRequest());
@@ -40,6 +42,11 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
 
             $authNRequest = $this->factoryAuthnRequest();
 
+            $testCase = $this->factoryTestCaseFromSession($_SESSION);
+            if ($testCase instanceof DummySp_Model_TestCase_TestCaseInterface) {
+                $testCase->decorateRequest($authNRequest);
+            }
+
             $bindingFactory = new DummyIdp_Model_Binding_BindingFactory();
             $binding = $bindingFactory->create($authNRequest, $bindingFactory::TYPE_REDIRECT);
             $binding->output();
@@ -47,6 +54,34 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
 
         header('Content-Type: text/html');
         die('<html><body><h1>DUMMY SP</h1></body></html>');
+    }
+
+    /**
+     * @param EngineBlock_Http_Request $httpRequest
+     */
+    private function setTestCaseFromRequest(EngineBlock_Http_Request $httpRequest)
+    {
+        $testCase = $httpRequest->getQueryParameter('testCase');
+        if ($testCase) {
+            $_SESSION['dummy']['sp']['testCase'] = $testCase;
+            exit;
+        }
+    }
+
+    /**
+     * @param array $session
+     * @throws InvalidArgumentException
+     */
+    private function factoryTestCaseFromSession(array $session) {
+        if (!isset($session['dummy']['sp']['testCase'])) {
+            return;
+        }
+        $testCaseClass = 'DummySp_Model_TestCase_' . $session['dummy']['sp']['testCase'];
+        if (!class_exists($testCaseClass)) {
+            throw new \InvalidArgumentException("Sp testcase '" . $testCaseClass . ' does not exist');
+        }
+
+        return new $testCaseClass();
     }
 
     /**

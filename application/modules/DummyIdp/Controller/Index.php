@@ -83,7 +83,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
     {
         $testCase = $httpRequest->getQueryParameter('testCase');
         if ($testCase) {
-            $_SESSION['testCase'] = $testCase;
+            $_SESSION['dummy']['idp']['testCase'] = $testCase;
             exit;
         }
     }
@@ -93,10 +93,10 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
      * @throws InvalidArgumentException
      */
     private function factoryTestCaseFromSession(array $session) {
-        if (!isset($session['testCase'])) {
+        if (!isset($session['dummy']['idp']['testCase'])) {
             return;
         }
-        $testCaseClass = 'DummyIdp_Model_TestCase_' . $session['testCase'];
+        $testCaseClass = 'DummyIdp_Model_TestCase_' . $session['dummy']['idp']['testCase'];
         if (!class_exists($testCaseClass)) {
             throw new \InvalidArgumentException("Idp testcase '" . $testCaseClass . ' does not exist');
         }
