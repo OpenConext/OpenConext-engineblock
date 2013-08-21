@@ -34,6 +34,6 @@ class FeatureContext extends MinkContext
      */
     public function dummyIdpIsConfiguredToUseTheTestcase($testCase)
     {
-        $this->getSession()->visit('https://engine-test.demo.openconext.org/dummy-idp?testCase=' . urlencode($testCase));
+        $this->getSession()->visit('https://engine-test.demo.openconext.org/dummy/idp?testCase=' . urlencode($testCase));
     }
 }

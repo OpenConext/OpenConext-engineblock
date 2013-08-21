@@ -26,7 +26,7 @@
 
 require_once ENGINEBLOCK_FOLDER_LIBRARY . 'simplesamlphp/lib/_autoload.php';
 
-class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
+class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
@@ -54,11 +54,11 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         );
 
         $testCase = $this->factoryTestCaseFromSession($_SESSION);
-        if ($testCase instanceof DummyIdp_Model_TestCase_TestCaseInterface) {
+        if ($testCase instanceof Dummy_Model_Idp_TestCase_TestCaseInterface) {
             $testCase->decorateResponse($samlResponse);
         }
 
-        $bindingFactory = new DummyIdp_Model_Binding_BindingFactory();
+        $bindingFactory = new Dummy_Model_Binding_BindingFactory();
         $binding = $bindingFactory->create($samlResponse, $bindingFactory::TYPE_POST);
         $binding->output();
     }
@@ -71,8 +71,8 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
     private function createIdpConfig()
     {
         $sspIdpConfig = array();
-        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/private_key.pem';
-        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/certificate.crt');
+        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/private_key.pem';
+        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/certificate.crt');
         return new SimpleSAML_Configuration($sspIdpConfig, null);
     }
 
@@ -96,7 +96,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         if (!isset($session['dummy']['idp']['testCase'])) {
             return;
         }
-        $testCaseClass = 'DummyIdp_Model_TestCase_' . $session['dummy']['idp']['testCase'];
+        $testCaseClass = 'Dummy_Model_Idp_TestCase_' . $session['dummy']['idp']['testCase'];
         if (!class_exists($testCaseClass)) {
             throw new \InvalidArgumentException("Idp testcase '" . $testCaseClass . ' does not exist');
         }

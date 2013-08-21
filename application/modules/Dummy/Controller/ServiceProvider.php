@@ -25,7 +25,7 @@
 
 require_once ENGINEBLOCK_FOLDER_LIBRARY . 'simplesamlphp/lib/_autoload.php';
 
-class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
+class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
@@ -43,11 +43,11 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
             $authNRequest = $this->factoryAuthnRequest();
 
             $testCase = $this->factoryTestCaseFromSession($_SESSION);
-            if ($testCase instanceof DummySp_Model_TestCase_TestCaseInterface) {
+            if ($testCase instanceof Dummy_Model_Sp_TestCase_TestCaseInterface) {
                 $testCase->decorateRequest($authNRequest);
             }
 
-            $bindingFactory = new DummyIdp_Model_Binding_BindingFactory();
+            $bindingFactory = new Dummy_Model_Binding_BindingFactory();
             $binding = $bindingFactory->create($authNRequest, $bindingFactory::TYPE_REDIRECT);
             $binding->output();
         }
@@ -76,7 +76,7 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
         if (!isset($session['dummy']['sp']['testCase'])) {
             return;
         }
-        $testCaseClass = 'DummySp_Model_TestCase_' . $session['dummy']['sp']['testCase'];
+        $testCaseClass = 'Dummy_Model_Sp_TestCase_' . $session['dummy']['sp']['testCase'];
         if (!class_exists($testCaseClass)) {
             throw new \InvalidArgumentException("Sp testcase '" . $testCaseClass . ' does not exist');
         }
@@ -92,8 +92,8 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
         $engineUrl = 'https://engine-test.demo.openconext.org';
 
         $destinationUrl = $engineUrl . '/authentication/idp/single-sign-on';
-        $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy-sp';
-        $issuerUrl = 'https://engine-test.demo.openconext.org/dummy-sp';
+        $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy/sp';
+        $issuerUrl = 'https://engine-test.demo.openconext.org/dummy/sp';
         $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->create(
             $destinationUrl,

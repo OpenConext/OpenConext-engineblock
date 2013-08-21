@@ -1,6 +1,6 @@
 <?php
-class DummyIdp_Model_Binding_Redirect
-    implements DummyIdp_Model_Binding_BindingInterface
+class Dummy_Model_Binding_Redirect
+    implements Dummy_Model_Binding_BindingInterface
 {
     /**
      * @var SAML2_Message

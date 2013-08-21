@@ -1,5 +1,5 @@
 <?php
-interface DummySp_Model_TestCase_TestCaseInterface
+interface Dummy_Model_Sp_TestCase_TestCaseInterface
 {
     public function decorateResponse(SAML2_AuthnRequest $request);
 }

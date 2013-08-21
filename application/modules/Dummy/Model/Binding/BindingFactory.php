@@ -1,5 +1,5 @@
 <?php
-class DummyIdp_Model_Binding_BindingFactory
+class Dummy_Model_Binding_BindingFactory
 {
     const TYPE_REDIRECT = 'redirect';
     const TYPE_POST = 'post';
@@ -26,7 +26,7 @@ class DummyIdp_Model_Binding_BindingFactory
     /**
      * @param SAML2_Message $samlMessage
      * @param string $type
-     * @return DummyIdp_Model_Binding_BindingInterface
+     * @return Dummy_Model_Binding_BindingInterface
      * @throws InvalidArgumentException
      */
     public function create(SAML2_Message $samlMessage, $type)
@@ -36,7 +36,7 @@ class DummyIdp_Model_Binding_BindingFactory
             throw new InvalidArgumentException("Invalid Binding type '$type'");
         }
 
-        $bindingClass = 'DummyIdp_Model_Binding_' . ucfirst($type);
+        $bindingClass = 'Dummy_Model_Binding_' . ucfirst($type);
         return new $bindingClass($samlMessage, $parameterName, $this->messageSerializer);
     }
 
