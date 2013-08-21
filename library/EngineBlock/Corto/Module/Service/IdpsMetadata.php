@@ -1,5 +1,7 @@
 <?php
 
+use EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer as BindingsReplacer;
+
 class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
@@ -41,8 +43,8 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             $idpEntities[] = $spEntity;
         }
 
-        $ssoBindingsReplacer = new EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer($entityDetails, 'SingleSignOnService');
-        $slBindingsReplacer = new EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer($entityDetails, 'SingleLogoutService');
+        $ssoBindingsReplacer = new BindingsReplacer($entityDetails, 'SingleSignOnService', BindingsReplacer::REQUIRED);
+        $slBindingsReplacer = new BindingsReplacer($entityDetails, 'SingleLogoutService', BindingsReplacer::OPTIONAL);
         foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
             // Don't add ourselves
             if ($entity['EntityID'] === $entityDetails['EntityID']) {

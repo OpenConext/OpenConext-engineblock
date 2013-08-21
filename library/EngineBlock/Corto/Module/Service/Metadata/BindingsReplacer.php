@@ -1,12 +1,23 @@
 <?php
 /**
  * Replaces bindings like SingleSignOn and SingleLogout with bindings of EngineBlock
-  */
+ * 
+ * It works as follows
+ * 
+ * - Entity has no service configured, Proxy has no service configured -> Service not configured
+ * - Entity has service configured, Proxy has no service configured -> Service will be removed
+ * - Entity has service configured, Proxy has no service configured and not optional -> Error
+ * - Entity has service configured, Proxy has service configured -> Service replaced by proxy configuration
+ * - Entity has no service configured, Proxy has service configured -> Service replaced by proxy configuration
+ */
 
 use EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer_Exception as Exception;
 
 class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
 {
+    const REQUIRED = true;
+    const OPTIONAL = false;
+
     private $serviceName;
     
     /**
@@ -25,11 +36,12 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
     /**
      * @param array $proxyEntity
      * @param string $serviceName
+     * @param bool $required (use either REQUIRED or OPTIONAL const)
      */
-    public function __construct(array $proxyEntity, $serviceName)
+    public function __construct(array $proxyEntity, $serviceName, $required)
     {
         $this->serviceName = $serviceName;
-        $this->supportedBindings = $this->getSupportedBindingsFromProxy($proxyEntity, $serviceName);
+        $this->supportedBindings = $this->getSupportedBindingsFromProxy($proxyEntity, $required);
     }
 
     /**
@@ -39,6 +51,10 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
     public function replace(array &$entity, $location)
     {
         $entity[$this->serviceName] = array();
+        if (empty($this->supportedBindings)) {
+            return;
+        }
+
         foreach($this->supportedBindings as $binding) {
             $entity[$this->serviceName][] = array(
                 'Location'=> $location,
@@ -51,12 +67,17 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
      * Builds a list of bindings supported by the proxy
      *
      * @param array $proxyEntity
+     * @param bool $required
      * @return array
      * @throws Exception
      */
-    private function getSupportedBindingsFromProxy(array $proxyEntity)
+    private function getSupportedBindingsFromProxy(array $proxyEntity, $required)
     {
         if (!isset($proxyEntity[$this->serviceName])) {
+            if ($required == self::OPTIONAL) {
+                return;
+            }
+
             throw new Exception("'No service '$this->serviceName' is configured in EngineBlock metadata");
         }
 
@@ -65,6 +86,22 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
             throw new Exception("Service '$this->serviceName' in EngineBlock metadata is not an array");
         }
 
+        $supportedBindings = $this->parseBindingsFromServices($services);
+
+        if (count($supportedBindings) === 0 && $required == self::REQUIRED) {
+            throw new Exception("No '$this->serviceName' bindings configured in EngineBlock metadata");
+        }
+
+        return $supportedBindings;
+    }
+
+    /**
+     * @param array $services
+     * @return array
+     * @throws EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer_Exception
+     */
+    private function parseBindingsFromServices(array $services)
+    {
         $supportedBindings = array();
         foreach($services as $serviceInfo) {
             if (!isset($serviceInfo['Binding'])) {
@@ -77,10 +114,6 @@ class EngineBlock_Corto_Module_Service_Metadata_BindingsReplacer
             }
 
             $supportedBindings[] = $binding;
-        }
-
-        if (count($supportedBindings) === 0) {
-            throw new Exception("No '$this->serviceName' bindings configured in EngineBlock metadata");
         }
 
         return $supportedBindings;
