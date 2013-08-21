@@ -36,4 +36,12 @@ class FeatureContext extends MinkContext
     {
         $this->getSession()->visit('https://engine-test.demo.openconext.org/dummy/idp?testCase=' . urlencode($testCase));
     }
+
+    /**
+     * @Given /^Dummy Sp is configured to use the "([^"]*)" testcase$/
+     */
+    public function dummySpIsConfiguredToUseTheTestcase($testCase)
+    {
+        $this->getSession()->visit('https://engine-test.demo.openconext.org/dummy/sp?testCase=' . urlencode($testCase));
+    }
 }
