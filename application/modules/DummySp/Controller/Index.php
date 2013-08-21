@@ -37,19 +37,22 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
         }
 
         if (empty($_SESSION['loggedin'])) {
-            header('Location: ' . $this->getRedirectUrl());
-            exit;
+
+            $authNRequest = $this->factoryAuthnRequest();
+
+            $bindingFactory = new DummyIdp_Model_Binding_BindingFactory();
+            $binding = $bindingFactory->create($authNRequest, $bindingFactory::TYPE_REDIRECT);
+            $binding->output();
         }
 
-        $this->setNoRender();
         header('Content-Type: text/html');
         die('<html><body><h1>DUMMY SP</h1></body></html>');
     }
 
     /**
-     * @return string
+     * @return SAML2_AuthnRequest
      */
-    private function getRedirectUrl()
+    private function factoryAuthnRequest()
     {
         $engineUrl = 'https://engine-test.demo.openconext.org';
 
@@ -62,18 +65,7 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
             $assertionConsumerServiceURL,
             $issuerUrl
         );
-        $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
-        $authNRequestXml = $samlMessageSerializer->serialize($authnRequest);
 
-        return $destinationUrl . '?SAMLRequest=' . urlencode($this->encodeSamlMessage($authNRequestXml));
-    }
-
-    /**
-     * @param $samlMessage
-     * @return string
-     */
-    private function encodeSamlMessage($samlMessage)
-    {
-        return base64_encode(gzdeflate($samlMessage));
+        return $authnRequest;
     }
 }

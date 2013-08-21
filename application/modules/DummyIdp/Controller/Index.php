@@ -58,15 +58,9 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
             $testCase->decorateResponse($samlResponse);
         }
 
-        $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
-        $samlResponseXml = $samlMessageSerializer->serialize($samlResponse);
-
-        $formHtml = $this->factoryForm($samlResponseXml, $authnRequest->getAssertionConsumerServiceURL());
-
-        $this->setNoRender();
-        header('Content-Type: text/html');
-        echo $formHtml;
-        exit;
+        $bindingFactory = new DummyIdp_Model_Binding_BindingFactory();
+        $binding = $bindingFactory->create($samlResponse, $bindingFactory::TYPE_POST);
+        $binding->output();
     }
 
     /**
@@ -110,27 +104,4 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         return new $testCaseClass();
     }
 
-    /**
-     * @param string $samlResponse
-     * @param string $assertionConsumerServiceUrl
-     * @return string
-     */
-    private function factoryForm($samlResponse, $assertionConsumerServiceUrl)
-    {
-        $samlResponseEncoded = base64_encode($samlResponse);
-        $assertionConsumerServiceUrlEncoded = htmlspecialchars($assertionConsumerServiceUrl);
-
-        $formHtml = <<<FORM_HTML
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <body onload="document.forms[0].submit()">
-        <form action="$assertionConsumerServiceUrlEncoded" method="post">
-            <input type="hidden" name="SAMLResponse" value="$samlResponseEncoded"/>
-            <input type="submit" value="Continue"/>
-        </form>
-    </body>
-</html>
-FORM_HTML;
-
-        return $formHtml;
-    }
 }
