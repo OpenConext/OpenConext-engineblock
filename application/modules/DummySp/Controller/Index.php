@@ -49,7 +49,7 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
     /**
      * @return string
      */
-    public function getRedirectUrl()
+    private function getRedirectUrl()
     {
         $engineUrl = 'https://engine-test.demo.openconext.org';
 
