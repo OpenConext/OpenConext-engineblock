@@ -9,4 +9,6 @@ class Dummy_Model_Idp_TestCase_ErrorStatusCode
             'Message' => 'NameIdPolicy is invalid'
         ));
     }
+
+    public function setBindingType(&$bindingType){}
 }
