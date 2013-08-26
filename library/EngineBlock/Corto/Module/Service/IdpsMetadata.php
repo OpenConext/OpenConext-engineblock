@@ -51,6 +51,10 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
                 continue;
             }
 
+            if ($entity['isHidden']) {
+                continue;
+            }
+
             // Use EngineBlock certificates
             $entity['certificates'] = $entityDetails['certificates'];
 
