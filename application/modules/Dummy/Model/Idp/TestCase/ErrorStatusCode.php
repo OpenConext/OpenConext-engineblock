@@ -1,6 +1,6 @@
 <?php
-class DummyIdp_Model_TestCase_ErrorStatusCode
-    implements DummyIdp_Model_TestCase_TestCaseInterface
+class Dummy_Model_Idp_TestCase_ErrorStatusCode
+    implements Dummy_Model_Idp_TestCase_TestCaseInterface
 {
     public function decorateResponse(SAML2_Response $response)
     {
@@ -9,4 +9,6 @@ class DummyIdp_Model_TestCase_ErrorStatusCode
             'Message' => 'NameIdPolicy is invalid'
         ));
     }
+
+    public function setBindingType(&$bindingType){}
 }

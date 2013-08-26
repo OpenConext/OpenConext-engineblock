@@ -26,7 +26,7 @@
 
 require_once ENGINEBLOCK_FOLDER_LIBRARY . 'simplesamlphp/lib/_autoload.php';
 
-class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
+class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
@@ -53,20 +53,16 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
             $attributes
         );
 
+        $bindingType = Dummy_Model_Binding_BindingFactory::TYPE_POST;
         $testCase = $this->factoryTestCaseFromSession($_SESSION);
-        if ($testCase instanceof DummyIdp_Model_TestCase_TestCaseInterface) {
+        if ($testCase instanceof Dummy_Model_Idp_TestCase_TestCaseInterface) {
             $testCase->decorateResponse($samlResponse);
+            $testCase->setBindingType($bindingType);
         }
 
-        $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
-        $samlResponseXml = $samlMessageSerializer->serialize($samlResponse);
-
-        $formHtml = $this->factoryForm($samlResponseXml, $authnRequest->getAssertionConsumerServiceURL());
-
-        $this->setNoRender();
-        header('Content-Type: text/html');
-        echo $formHtml;
-        exit;
+        $bindingFactory = new Dummy_Model_Binding_BindingFactory();
+        $binding = $bindingFactory->create($samlResponse, $bindingType);
+        $binding->output();
     }
 
     /**
@@ -77,8 +73,8 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
     private function createIdpConfig()
     {
         $sspIdpConfig = array();
-        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/private_key.pem';
-        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/DummyIdp/keys/certificate.crt');
+        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/private_key.pem';
+        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/certificate.crt');
         return new SimpleSAML_Configuration($sspIdpConfig, null);
     }
 
@@ -89,7 +85,7 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
     {
         $testCase = $httpRequest->getQueryParameter('testCase');
         if ($testCase) {
-            $_SESSION['testCase'] = $testCase;
+            $_SESSION['dummy']['idp']['testCase'] = $testCase;
             exit;
         }
     }
@@ -99,10 +95,10 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
      * @throws InvalidArgumentException
      */
     private function factoryTestCaseFromSession(array $session) {
-        if (!isset($session['testCase'])) {
+        if (!isset($session['dummy']['idp']['testCase'])) {
             return;
         }
-        $testCaseClass = 'DummyIdp_Model_TestCase_' . $session['testCase'];
+        $testCaseClass = 'Dummy_Model_Idp_TestCase_' . $session['dummy']['idp']['testCase'];
         if (!class_exists($testCaseClass)) {
             throw new \InvalidArgumentException("Idp testcase '" . $testCaseClass . ' does not exist');
         }
@@ -110,27 +106,4 @@ class DummyIdp_Controller_Index extends EngineBlock_Controller_Abstract
         return new $testCaseClass();
     }
 
-    /**
-     * @param string $samlResponse
-     * @param string $assertionConsumerServiceUrl
-     * @return string
-     */
-    private function factoryForm($samlResponse, $assertionConsumerServiceUrl)
-    {
-        $samlResponseEncoded = base64_encode($samlResponse);
-        $assertionConsumerServiceUrlEncoded = htmlspecialchars($assertionConsumerServiceUrl);
-
-        $formHtml = <<<FORM_HTML
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
-    <body onload="document.forms[0].submit()">
-        <form action="$assertionConsumerServiceUrlEncoded" method="post">
-            <input type="hidden" name="SAMLResponse" value="$samlResponseEncoded"/>
-            <input type="submit" value="Continue"/>
-        </form>
-    </body>
-</html>
-FORM_HTML;
-
-        return $formHtml;
-    }
 }

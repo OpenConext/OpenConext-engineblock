@@ -34,10 +34,10 @@ return array(
         'url:nl' => '',
         'workflowState' => 'prodaccepted'
     ),
-    'https://engine-test.demo.openconext.org/dummy-sp' =>
+    'https://engine-test.demo.openconext.org/dummy/sp' =>
     array(
         'AssertionConsumerService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-        'AssertionConsumerService:0:Location' => 'https://engine-test.demo.openconext.org/dummy-sp',
+        'AssertionConsumerService:0:Location' => 'https://engine-test.demo.openconext.org/dummy/sp',
         'contacts:0:contactType' => 'technical',
         'contacts:0:emailAddress' => 'support@openconext.org',
         'contacts:0:givenName' => 'Support',

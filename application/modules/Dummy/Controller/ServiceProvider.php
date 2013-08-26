@@ -25,10 +25,12 @@
 
 require_once ENGINEBLOCK_FOLDER_LIBRARY . 'simplesamlphp/lib/_autoload.php';
 
-class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
+class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
+        $this->setTestCaseFromRequest($this->_getRequest());
+
         if (!empty($_POST)) {
             $responseFactory = new EngineBlock_Saml_ResponseFactory();
             $samlResponse = $responseFactory->createFromHttpRequest($this->_getRequest());
@@ -37,43 +39,70 @@ class DummySp_Controller_Index extends EngineBlock_Controller_Abstract
         }
 
         if (empty($_SESSION['loggedin'])) {
-            header('Location: ' . $this->getRedirectUrl());
-            exit;
+
+            $authNRequest = $this->factoryAuthnRequest();
+
+            $bindingType = Dummy_Model_Binding_BindingFactory::TYPE_REDIRECT;
+            $testCase = $this->factoryTestCaseFromSession($_SESSION);
+            if ($testCase instanceof Dummy_Model_Sp_TestCase_TestCaseInterface) {
+                $testCase->decorateRequest($authNRequest);
+                $testCase->setBindingType($bindingType);
+            }
+
+            $bindingFactory = new Dummy_Model_Binding_BindingFactory();
+            $binding = $bindingFactory->create($authNRequest, $bindingType);
+            $binding->output();
         }
 
-        $this->setNoRender();
         header('Content-Type: text/html');
         die('<html><body><h1>DUMMY SP</h1></body></html>');
     }
 
     /**
-     * @return string
+     * @param EngineBlock_Http_Request $httpRequest
      */
-    public function getRedirectUrl()
+    private function setTestCaseFromRequest(EngineBlock_Http_Request $httpRequest)
+    {
+        $testCase = $httpRequest->getQueryParameter('testCase');
+        if ($testCase) {
+            $_SESSION['dummy']['sp']['testCase'] = $testCase;
+            exit;
+        }
+    }
+
+    /**
+     * @param array $session
+     * @throws InvalidArgumentException
+     */
+    private function factoryTestCaseFromSession(array $session) {
+        if (!isset($session['dummy']['sp']['testCase'])) {
+            return;
+        }
+        $testCaseClass = 'Dummy_Model_Sp_TestCase_' . $session['dummy']['sp']['testCase'];
+        if (!class_exists($testCaseClass)) {
+            throw new \InvalidArgumentException("Sp testcase '" . $testCaseClass . ' does not exist');
+        }
+
+        return new $testCaseClass();
+    }
+
+    /**
+     * @return SAML2_AuthnRequest
+     */
+    private function factoryAuthnRequest()
     {
         $engineUrl = 'https://engine-test.demo.openconext.org';
 
         $destinationUrl = $engineUrl . '/authentication/idp/single-sign-on';
-        $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy-sp';
-        $issuerUrl = 'https://engine-test.demo.openconext.org/dummy-sp';
+        $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy/sp';
+        $issuerUrl = 'https://engine-test.demo.openconext.org/dummy/sp';
         $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->create(
             $destinationUrl,
             $assertionConsumerServiceURL,
             $issuerUrl
         );
-        $samlMessageSerializer = new EngineBlock_Saml_MessageSerializer();
-        $authNRequestXml = $samlMessageSerializer->serialize($authnRequest);
 
-        return $destinationUrl . '?SAMLRequest=' . urlencode($this->encodeSamlMessage($authNRequestXml));
-    }
-
-    /**
-     * @param $samlMessage
-     * @return string
-     */
-    private function encodeSamlMessage($samlMessage)
-    {
-        return base64_encode(gzdeflate($samlMessage));
+        return $authnRequest;
     }
 }

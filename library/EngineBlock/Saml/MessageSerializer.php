@@ -8,16 +8,15 @@ class EngineBlock_Saml_MessageSerializer
 {
     /**
      * @param SAML2_Message $samlMessage
-     * @param bool $signed
      * @return mixed
      */
-    public function serialize(SAML2_Message $samlMessage, $signed = true)
+    public function serialize(SAML2_Message $samlMessage)
     {
-        if ($signed) {
-            $samlMessagetDomElement = $samlMessage->toUnsignedXML();
+        if ($samlMessage->getSignatureKey()) {
+            $samlMessagetDomElement = $samlMessage->toSignedXML();
         } else {
             $samlMessagetDomElement = $samlMessage->toUnsignedXML();
-        }        
+        }
         return $samlMessagetDomElement->ownerDocument->saveXML($samlMessagetDomElement);
     }
 
