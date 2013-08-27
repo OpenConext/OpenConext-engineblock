@@ -1,0 +1,1 @@
+The fixes in this dir have been applied already however they must by fixed again when simplesamlphp is installed as a vendor dependency

@@ -1,0 +1,10 @@
+--- library/simplesamlphp/lib/SAML2/AuthnRequest.php	2013-08-27 08:38:40.250592061 +0200
++++ library/simplesamlphp/lib/SAML2/AuthnRequest.php    	2013-08-27 08:40:51.202586445 +0200
+@@ -482,6 +482,7 @@
+ 			}
+ 			if (count($this->RequesterID) > 0) {
+ 				SAML2_Utils::addStrings($scoping, SAML2_Const::NS_SAMLP, 'RequesterID', FALSE, $this->RequesterID);
++                $root->appendChild($scoping);
+ 			}
+ 		}
+ 

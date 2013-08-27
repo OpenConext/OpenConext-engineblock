@@ -482,6 +482,7 @@ class SAML2_AuthnRequest extends SAML2_Request {
 			}
 			if (count($this->RequesterID) > 0) {
 				SAML2_Utils::addStrings($scoping, SAML2_Const::NS_SAMLP, 'RequesterID', FALSE, $this->RequesterID);
+                $root->appendChild($scoping);
 			}
 		}
 
