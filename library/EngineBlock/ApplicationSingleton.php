@@ -174,10 +174,39 @@ class EngineBlock_ApplicationSingleton
             $additionalInfo
         );
 
+        // Store some valuable debug info in session so it can be displayed on feedback pages
+        $queue = $log->getQueueWriter()->getStorage()->getQueue();
+        $lastEvent = end($queue);
+        $_SESSION['debugInfo'] = $this->collectDebugInfo($lastEvent);
+
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
 
         return true;
+    }
+
+    /**
+     * @param array $logEvent
+     * @return array
+     */
+    private function collectDebugInfo(array $logEvent)
+    {
+        $debugInfo = array();
+        $debugInfo['timestamp'] = $logEvent['timestamp'];
+        $debugInfo['requestId'] = $logEvent['requestid'];
+        $debugInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        $debugInfo['ipAddress'] = $_SERVER['REMOTE_ADDR'];
+
+        // @todo find a better way to do this
+        // Find the current service provider
+        foreach($_SESSION as $key => $value) {
+            if (isset($value['SAMLRequest'])) {
+                $debugInfo['serviceProvider'] = $value['SAMLRequest']['saml:Issuer']['__v'];
+                break;
+            }
+        }
+
+        return $debugInfo;
     }
 
     /**

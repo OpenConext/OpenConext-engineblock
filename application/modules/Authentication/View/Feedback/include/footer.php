@@ -1,3 +1,20 @@
+<p>
+    Debug information:
+</p>
+<table>
+    <?php
+    if (!empty($_SESSION['debugInfo']) && is_array($_SESSION['debugInfo'])) {
+        foreach($_SESSION['debugInfo'] as $name => $value) {
+        ?>
+            <tr>
+                <td><strong><?php echo $name?>:</strong></td>
+                <td><?php echo $value;?></td>
+            </tr>
+        <?php
+        }
+    }
+    ?>
+     </table>
    </div>
 </div>
 
