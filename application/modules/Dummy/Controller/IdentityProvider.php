@@ -36,7 +36,7 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
         $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
 
         $responseFactory = new EngineBlock_Saml_ResponseFactory();
-        $idpConfig = $this->createIdpConfig();
+        $idpConfig = Dummy_Model_DiContainer::getInstance()->getSimpleSamlPhpConfig();
         // Required attributes
         $nameId = 'johndoe';
         $issuer = $_SERVER['SCRIPT_URI'];
@@ -63,19 +63,6 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
         $bindingFactory = new Dummy_Model_Binding_BindingFactory();
         $binding = $bindingFactory->create($samlResponse, $bindingType);
         $binding->output();
-    }
-
-    /**
-     * Creates a config containing the keys needed for signing
-     *
-     * @return SimpleSAML_Configuration
-     */
-    private function createIdpConfig()
-    {
-        $sspIdpConfig = array();
-        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/private_key.pem';
-        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/certificate.crt');
-        return new SimpleSAML_Configuration($sspIdpConfig, null);
     }
 
     /**
