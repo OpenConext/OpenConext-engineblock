@@ -45,8 +45,8 @@ class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
             $bindingType = Dummy_Model_Binding_BindingFactory::TYPE_REDIRECT;
             $testCase = $this->factoryTestCaseFromSession($_SESSION);
             if ($testCase instanceof Dummy_Model_Sp_TestCase_TestCaseInterface) {
-                $testCase->decorateRequest($authNRequest);
-                $testCase->setBindingType($bindingType);
+                $authNRequest = $testCase->decorateRequest($authNRequest);
+                $bindingType = $testCase->setBindingType($bindingType);
             }
 
             $bindingFactory = new Dummy_Model_Binding_BindingFactory();

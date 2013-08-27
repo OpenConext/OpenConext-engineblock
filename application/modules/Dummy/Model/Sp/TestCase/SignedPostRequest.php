@@ -7,13 +7,14 @@ class Dummy_Model_Sp_TestCase_SignedPostRequest
     {
         $sspConfig = Dummy_Model_DiContainer::getInstance()->getSimpleSamlPhpConfig();
         sspmod_saml_Message::addSign($sspConfig, null, $request);
+        return $request;
     }
 
     /**
      * @param string &$bindingType
      */
-    public function setBindingType(&$bindingType)
+    public function setBindingType($bindingType)
     {
-        $bindingType = Dummy_Model_Binding_BindingFactory::TYPE_POST;
+        return Dummy_Model_Binding_BindingFactory::TYPE_POST;
     }
 }

@@ -56,8 +56,8 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
         $bindingType = Dummy_Model_Binding_BindingFactory::TYPE_POST;
         $testCase = $this->factoryTestCaseFromSession($_SESSION);
         if ($testCase instanceof Dummy_Model_Idp_TestCase_TestCaseInterface) {
-            $testCase->decorateResponse($samlResponse);
-            $testCase->setBindingType($bindingType);
+            $samlResponse = $testCase->decorateResponse($samlResponse);
+            $bindingType = $testCase->setBindingType($bindingType);
         }
 
         $bindingFactory = new Dummy_Model_Binding_BindingFactory();
