@@ -28,7 +28,7 @@ class Dummy_Model_DiContainer extends Pimple
     }
 
     /**
-     * @note thi might have to be split up between idp/sp sometime, for now config contains only keys which they share  
+     * @note this might have to be split up between idp/sp sometime, for now config contains only keys which they share
      */
     protected function registerSimpleSamlPhpConfig()
     {
