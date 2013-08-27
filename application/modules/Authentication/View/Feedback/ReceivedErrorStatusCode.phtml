@@ -51,13 +51,5 @@ $feedbackInfo = array(
             <span class="btn-wrap-right">&nbsp;</span>
             </a>
         </div>
-    </div>
-</div>
 
-<?php if ($exception) { ?>
-<pre>
-    <?php var_dump($exception); ?>
-</pre>
-
-<?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-<?php } ?>
+<?php require_once __DIR__ . '/include/footer.php';
