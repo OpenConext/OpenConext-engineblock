@@ -5,14 +5,14 @@ class Dummy_Model_Sp_TestCase_PostRequest
 {
     public function decorateRequest(SAML2_Request $request)
     {
-
+        return $request;
     }
 
     /**
      * @param string &$bindingType
      */
-    public function setBindingType(&$bindingType)
+    public function setBindingType($bindingType)
     {
-        $bindingType = Dummy_Model_Binding_BindingFactory::TYPE_POST;
+        return Dummy_Model_Binding_BindingFactory::TYPE_POST;
     }
 }

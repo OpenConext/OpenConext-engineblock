@@ -36,8 +36,14 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
         $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
 
         $responseFactory = new EngineBlock_Saml_ResponseFactory();
-        $idpConfig = $this->createIdpConfig();
-        // Required attributes
+        $idpConfig = Dummy_Model_DiContainer::getInstance()->getSimpleSamlPhpConfig();
+
+        $testCase = $this->factoryTestCaseFromSession($_SESSION);
+        if ($testCase instanceof Dummy_Model_Idp_TestCase_TestCaseInterface) {
+            $idpConfig = $testCase->decorateConfig($idpConfig);
+        }
+
+            // Required attributes
         $nameId = 'johndoe';
         $issuer = $_SERVER['SCRIPT_URI'];
         $attributes = array(
@@ -54,28 +60,14 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
         );
 
         $bindingType = Dummy_Model_Binding_BindingFactory::TYPE_POST;
-        $testCase = $this->factoryTestCaseFromSession($_SESSION);
         if ($testCase instanceof Dummy_Model_Idp_TestCase_TestCaseInterface) {
-            $testCase->decorateResponse($samlResponse);
-            $testCase->setBindingType($bindingType);
+            $samlResponse = $testCase->decorateResponse($samlResponse);
+            $bindingType = $testCase->setBindingType($bindingType);
         }
 
         $bindingFactory = new Dummy_Model_Binding_BindingFactory();
         $binding = $bindingFactory->create($samlResponse, $bindingType);
         $binding->output();
-    }
-
-    /**
-     * Creates a config containing the keys needed for signing
-     *
-     * @return SimpleSAML_Configuration
-     */
-    private function createIdpConfig()
-    {
-        $sspIdpConfig = array();
-        $sspIdpConfig['privatekey'] = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/private_key.pem';
-        $sspIdpConfig['certData'] = file_get_contents(ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/certificate.crt');
-        return new SimpleSAML_Configuration($sspIdpConfig, null);
     }
 
     /**

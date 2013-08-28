@@ -137,9 +137,10 @@ class EngineBlock_ApplicationSingleton
 
     /**
      * @param Exception $exception
+     * @param string $messageSuffix
      * @return bool
      */
-    public function reportError(Exception $exception)
+    public function reportError(Exception $exception, $messageSuffix = '')
     {
         $log = $this->getLogInstance();
         if (!$log) {
@@ -167,6 +168,10 @@ class EngineBlock_ApplicationSingleton
             $message = 'Exception without message "' . get_class($exception) . '"';
         }
 
+        if ($messageSuffix) {
+            $message .= ' | ' . $messageSuffix;
+        }
+
         // log exception
         $log->log(
             $message,
@@ -174,10 +179,63 @@ class EngineBlock_ApplicationSingleton
             $additionalInfo
         );
 
+        // Store some valuable debug info in session so it can be displayed on feedback pages
+        $queue = $log->getQueueWriter()->getStorage()->getQueue();
+        $lastEvent = end($queue);
+        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
+
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
 
         return true;
+    }
+
+    /**
+     * @param array $logEvent
+     * @return array
+     */
+    private function collectFeedbackInfo(array $logEvent)
+    {
+        $feedbackInfo = array();
+        $feedbackInfo['timestamp'] = $logEvent['timestamp'];
+        $feedbackInfo['requestId'] = $logEvent['requestid'];
+        $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        $feedbackInfo['ipAddress'] = $_SERVER['REMOTE_ADDR'];
+
+        // @todo find a better way to do this
+        // Find the current service provider
+        foreach($_SESSION as $key => $value) {
+            if (isset($value['SAMLRequest'])) {
+                $feedbackInfo['serviceProvider'] = $value['SAMLRequest']['saml:Issuer']['__v'];
+                break;
+            }
+        }
+
+        // Find the current identity provider
+        if (isset($_SESSION['CachedResponses'][0]['idp'])) {
+            $feedbackInfo['identityProvider'] = $_SESSION['CachedResponses'][0]['idp'];
+        }
+
+        return $feedbackInfo;
+    }
+
+    /**
+     * Logs exception and redirects user to feedback page
+     *
+     * @param Exception $exception
+     * @param string $feedbackUrl Url to which the user will be redirected
+     * @param array $feedbackInfo Optional feedback info in name/value format which will be shown on feedback page
+     */
+    public function handleExceptionWithFeedback(
+        Exception $exception,
+        $feedbackUrl,
+        $feedbackInfo = array()
+    )
+    {
+        $messageSuffix = '-> Redirecting to feedback page';
+        $this->reportError($exception, $messageSuffix);
+        $_SESSION['feedbackInfo'] = array_merge($feedbackInfo, $_SESSION['feedbackInfo']);
+        $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
     }
 
     /**
