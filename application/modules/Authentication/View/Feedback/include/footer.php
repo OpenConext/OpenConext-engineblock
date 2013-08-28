@@ -1,7 +1,7 @@
 <?php
 $log = EngineBlock_ApplicationSingleton::getInstance()->getLog();
 $log->log('Showing feedback page with message: ' . $layout->title, EngineBlock_Log::INFO);
-$log->getQueueWriter()->flush('error caught');
+$log->getQueueWriter()->flush('feedback page shown');
 ?>
 
     <hr />
