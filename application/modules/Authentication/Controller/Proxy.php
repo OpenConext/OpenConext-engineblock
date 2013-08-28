@@ -48,8 +48,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
 
             $proxyServer->idPsMetadata();
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl(
+            $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId())
             );
         }
@@ -66,8 +65,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         try {
             $proxyServer->edugainMetadata($queryString);
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl(
+            $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId())
             );
         }
@@ -82,14 +80,13 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             $proxyServer->processedAssertionConsumer();
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
-            $application->reportError($e);
-
             $_SESSION['feedback_custom'] = $e->getFeedback();
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/custom');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/custom');
         }
     }
 }

@@ -30,15 +30,13 @@ $layout = $this->layout();
 $layout->setLayout('1-column-blue-grey-narrow');
 
 // Set Layout properties
-$layout->title = $layout->title. ' - ' .$this->t('error_missing_required_fields');
+$layout->title = $layout->title. ' - ' .$this->t('error_received_invalid_response');
 $layout->header = $layout->title;
-$layout->subheader = $this->t('error_missing_required_fields');
+$layout->subheader = $this->t('error_received_invalid_response');
 $layout->footerText = $this->t('footer');
-
 ?>
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $this->t('error_missing_required_fields_desc'); ?>
 
 <?php require_once __DIR__ . '/include/footer.php';
