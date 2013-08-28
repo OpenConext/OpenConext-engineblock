@@ -12,9 +12,6 @@ class Dummy_Model_Idp_TestCase_RedirectResponse
         return $response;
     }
 
-    /**
-     * @param string &$bindingType
-     */
     public function setBindingType($bindingType)
     {
         return Dummy_Model_Binding_BindingFactory::TYPE_REDIRECT;

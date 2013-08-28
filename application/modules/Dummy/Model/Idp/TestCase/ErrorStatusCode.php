@@ -4,7 +4,7 @@ class Dummy_Model_Idp_TestCase_ErrorStatusCode
 {
     public function decorateConfig(SimpleSAML_Configuration $config)
     {
-
+        return $config;
     }
 
     public function decorateResponse(SAML2_Response $response)
@@ -13,7 +13,11 @@ class Dummy_Model_Idp_TestCase_ErrorStatusCode
             'Code' => 'urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy',
             'Message' => 'NameIdPolicy is invalid'
         ));
+
+        return $response;
     }
 
-    public function setBindingType(&$bindingType){}
+    public function setBindingType($bindingType){
+        return $bindingType;
+    }
 }
