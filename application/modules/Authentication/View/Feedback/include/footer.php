@@ -3,11 +3,11 @@
 </p>
 <table>
     <?php
-    if (!empty($_SESSION['debugInfo']) && is_array($_SESSION['debugInfo'])) {
-        foreach($_SESSION['debugInfo'] as $name => $value) {
+    if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])) {
+        foreach($_SESSION['feedbackInfo'] as $name => $value) {
         ?>
             <tr>
-                <td><strong><?php echo $name?>:</strong></td>
+                <td><strong><?php echo $this->t($name)?>:</strong></td>
                 <td><?php echo $value;?></td>
             </tr>
         <?php

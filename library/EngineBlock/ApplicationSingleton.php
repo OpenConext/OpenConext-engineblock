@@ -177,7 +177,7 @@ class EngineBlock_ApplicationSingleton
         // Store some valuable debug info in session so it can be displayed on feedback pages
         $queue = $log->getQueueWriter()->getStorage()->getQueue();
         $lastEvent = end($queue);
-        $_SESSION['debugInfo'] = $this->collectDebugInfo($lastEvent);
+        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
 
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
@@ -189,29 +189,29 @@ class EngineBlock_ApplicationSingleton
      * @param array $logEvent
      * @return array
      */
-    private function collectDebugInfo(array $logEvent)
+    private function collectFeedbackInfo(array $logEvent)
     {
-        $debugInfo = array();
-        $debugInfo['timestamp'] = $logEvent['timestamp'];
-        $debugInfo['requestId'] = $logEvent['requestid'];
-        $debugInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
-        $debugInfo['ipAddress'] = $_SERVER['REMOTE_ADDR'];
+        $feedbackInfo = array();
+        $feedbackInfo['timestamp'] = $logEvent['timestamp'];
+        $feedbackInfo['requestId'] = $logEvent['requestid'];
+        $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        $feedbackInfo['ipAddress'] = $_SERVER['REMOTE_ADDR'];
 
         // @todo find a better way to do this
         // Find the current service provider
         foreach($_SESSION as $key => $value) {
             if (isset($value['SAMLRequest'])) {
-                $debugInfo['serviceProvider'] = $value['SAMLRequest']['saml:Issuer']['__v'];
+                $feedbackInfo['serviceProvider'] = $value['SAMLRequest']['saml:Issuer']['__v'];
                 break;
             }
         }
 
         // Find the current identity provider
         if (isset($_SESSION['CachedResponses'][0]['idp'])) {
-            $debugInfo['identityProvider'] = $_SESSION['CachedResponses'][0]['idp'];
+            $feedbackInfo['identityProvider'] = $_SESSION['CachedResponses'][0]['idp'];
         }
 
-        return $debugInfo;
+        return $feedbackInfo;
     }
 
     /**
