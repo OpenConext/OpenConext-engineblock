@@ -24,6 +24,9 @@
         <?php echo $this->t('error_help_desc'); ?>
     </p>
 
+    <?php
+    // @todo make the number of steps in history that the back button makes dynamic, it is not always 2
+    ?>
     <div class="button-row">
         <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
             <?php echo $this->t('go_back'); ?>
