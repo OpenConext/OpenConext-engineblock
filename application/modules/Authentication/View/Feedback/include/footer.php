@@ -1,7 +1,6 @@
-<p>
-    Debug information:
-</p>
-<table>
+    <hr />
+
+    <table>
     <?php
     if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])) {
         foreach($_SESSION['feedbackInfo'] as $name => $value) {
@@ -15,6 +14,20 @@
     }
     ?>
      </table>
+
+    <hr />
+
+    <p>
+        <?php echo $this->t('error_help_desc'); ?>
+    </p>
+
+    <div class="button-row">
+        <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
+            <?php echo $this->t('go_back'); ?>
+            <span class="btn-wrap-right">&nbsp;</span>
+        </a>
+    </div>
+
    </div>
 </div>
 

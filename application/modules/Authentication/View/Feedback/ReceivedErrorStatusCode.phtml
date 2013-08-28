@@ -35,21 +35,10 @@ $layout->header = $layout->title;
 $layout->subheader = $this->t('error_received_error_status_code');
 $layout->footerText = $this->t('footer');
 
-$feedbackInfo = array(
-    'statusCode' => isset($_SESSION['feedback_info']['statusCode']) ? $_SESSION['feedback_info']['statusCode'] : '-',
-    'statusMessage' => isset($_SESSION['feedback_info']['statusMessage']) ? $_SESSION['feedback_info']['statusMessage'] : '-'
-);
 ?>
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $this->t('error_received_error_status_code_desc', $feedbackInfo['statusCode'], $feedbackInfo['statusMessage']); ?><br /><br />
-        <?php echo $this->t('error_help_desc'); ?>
-        <div class="button-row">
-            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-            <?php echo $this->t('go_back'); ?>
-            <span class="btn-wrap-right">&nbsp;</span>
-            </a>
-        </div>
+        <?php echo $this->t('error_received_error_status_code_desc'); ?>
 
 <?php require_once __DIR__ . '/include/footer.php';

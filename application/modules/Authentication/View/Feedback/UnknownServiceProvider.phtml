@@ -38,14 +38,10 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $this->t('error_unknown_service_provider_desc',
-        $this->_data['entity-id'],
-        Zend_Date::now()->toString(Zend_Date::DATETIME, null, $this->language())); ?>
-        <div class="button-row">
-            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-                <?php echo $this->t('go_back'); ?>
-                <span class="btn-wrap-right">&nbsp;</span>
-            </a>
-        </div>
+        <?php echo $this->t('error_unknown_service_provider_desc');
 
-<?php require_once __DIR__ . '/include/footer.php';
+// Add feedback info from url
+$customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
+$_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
+
+require_once __DIR__ . '/include/footer.php';

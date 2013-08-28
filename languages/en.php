@@ -225,34 +225,14 @@ If you want to use this application you have to:<br />
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
         A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-        <table class="error-table">
-            <tbody>
-            <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
-            <tr><td width="100px"><strong>Timestamp</strong></td><td>%s</td></tr>
-            </tr>
-            </tbody>
-        </table>
     </p>',
 
     'error_unknown_issuer'          => 'Error - Unknown application..',
     'error_unknown_issuer_desc'     => '<p>
         This application is not available using SURFconext. Please notify the provider of this service and provide them with the following information:
-        <table class="error-table">
-            <tbody>
-            <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
-            <tr><td width="100px"><strong>DestinationID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
-            <tr><td width="100px"><strong>Timestamp</strong></td><td>%s</td></tr>
-            </tr>
-            </tbody>
-        </table>
-        <br />
-        If this doesn\'t solve your problem, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-        <br /><br />
     </p>',
     'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
-    'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation. Please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> if you have any questions.',
+    'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation.',
     'error_generic'                     => 'Error - An error occurred.',
     'error_generic_desc'                => '<p>
         It is not possible to sign in. Please try again.
