@@ -36,7 +36,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         );
         $this->groupOauth = $this->user->getUserOauth();
 
-        $serviceRegistryClient = new Janus_Client_CacheProxy();
+        $serviceRegistryClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryClient();
         $this->spList = $serviceRegistryClient->getSpList();
 
         $this->consent = $this->user->getConsent();

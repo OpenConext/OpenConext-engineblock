@@ -13,7 +13,16 @@ return array(
     'note_no_script'        => 'Uw browser ondersteunt geen javascript. U moet op de onderstaande knop drukken om door te gaan.',
     'go_back'               => '&lt;&lt; Ga terug',
     'authentication_urls'   => 'Authenticatie URLs',
-    'timestamp'                  => 'Timestamp',
+    'timestamp'             => 'Timestamp',
+
+     // Feedback
+    'requestId'             => 'Uniek Request Id',
+    'identityProvider'      => 'Identity Provider',
+    'serviceProvider'       => 'Service Provider',
+    'userAgent'             => 'User Agent',
+    'ipAddress'             => 'Ip Adres',
+    'statusCode'            => 'Status Code',
+    'statusMessage'         => 'Status Bericht',
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selectie - %s',
@@ -215,34 +224,14 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
         Er kon geen Service Provider worden gevonden met het opgegeven EntityID. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-        <table class="error-table">
-            <tbody>
-            <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
-            <tr><td width="100px"><strong>Timestamp</strong></td><td>%s</td></tr>
-            </tr>
-            </tbody>
-        </table>
     </p>',
 
     'error_unknown_issuer'              => 'Error - Onbekende applicatie..',
     'error_unknown_issuer_desc'     => '<p>
         Deze applicatie is niet beschikbaar voor SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
-        <table class="error-table">
-            <tbody>
-            <tr><td width="100px"><strong>EntityID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
-            <tr><td width="100px"><strong>DestinationID</strong></td><td class="word-wrap"><i>%s</i></td></tr>
-            <tr><td width="100px"><strong>Timestamp</strong></td><td>%s</td></tr>
-            </tr>
-            </tbody>
-        </table>
-        <br />
-        Bezoek alstublieft <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
-        of neem contact op met het SURFconext team via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> als dit uw probleem niet oplost.
-        <br /><br />
     </p>',
     'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
-    'error_vo_membership_required_desc' => 'U bent succesvol ingelogd bij uw Identity Provider, maar om gebruik te kunnen maken van deze dienst moet u ook lid zijn van een Virtuele Organisatie. Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>
-        of neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a> indien u meer informatie wenst.',
+    'error_vo_membership_required_desc' => 'U bent succesvol ingelogd bij uw Identity Provider, maar om gebruik te kunnen maken van deze dienst moet u ook lid zijn van een Virtuele Organisatie.',
     'error_generic'                     => 'Error - Foutmelding..',
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeert u het alstublieft opnieuw.
@@ -267,6 +256,16 @@ Als u deze applicatie wilt gebruiken moet u:<br />
         Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br />
     </p>',
+
+    'error_received_error_status_code'     => 'Error - Idp fout',
+    'error_received_error_status_code_desc'=> '<p>
+        Uw Identity Provider stuurde een authenticatie respons met een fout code.
+    </p>',
+    'error_received_invalid_response'     => 'Error - Ongeldig Idp antwoord',
+    'error_received_status_code_desc'=> '<p>
+        Uw Identity Provider stuurde een ongeldig authenticatie respons terug.
+    </p>',
+
     /**
      * %1 AttributeName
      * %2 Options
