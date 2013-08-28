@@ -21,6 +21,8 @@ return array(
     'serviceProvider'       => 'Service Provider',
     'userAgent'             => 'User Agent',
     'ipAddress'             => 'Ip Adres',
+    'statusCode'            => 'Status Code',
+    'statusMessage'         => 'Status Bericht',
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selectie - %s',
@@ -278,12 +280,7 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_received_error_status_code'     => 'Error - Idp fout',
     'error_received_error_status_code_desc'=> '<p>
         Uw Identity Provider stuurde een authenticatie respons met een fout code.
-    </p>
-    <p>
-        Status Code: %s
-    <p>
-        Status Message: %s
-   </p>',
+    </p>',
 
     /**
      * %1 AttributeName

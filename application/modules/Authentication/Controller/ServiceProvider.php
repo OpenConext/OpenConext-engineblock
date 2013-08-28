@@ -61,7 +61,8 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/invalid-acs-binding');
         } catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
             $application->reportError($e);
-            $_SESSION['feedback_info'] = $e->getFeedbackInfo();
+            // Add extra feedback info
+            $_SESSION['feedbackInfo'] = array_merge($e->getFeedbackInfo(), $_SESSION['feedbackInfo']);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/received-error-status-code');
         }
     }

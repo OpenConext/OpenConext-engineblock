@@ -21,6 +21,9 @@ return array(
     'serviceProvider'       => 'Service Provider',
     'userAgent'             => 'User Agent',
     'ipAddress'             => 'Ip Address',
+    'statusCode'            => 'Status Code',
+    'statusMessage'         => 'Status Message',
+
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selection - %s',
     'idp_selection_subheader'   => 'Login via your institution',
@@ -276,12 +279,6 @@ If you want to use this application you have to:<br />
     'error_received_error_status_code'     => 'Error - Idp error',
     'error_received_error_status_code_desc'=> '<p>
         Your Identity Provider sent an authentication response with an error status code.
-    </p>
-    <p>
-        Status Code: %s
-    </p>
-    <p>
-        Status Message: %s
     </p>',
 
     /**
