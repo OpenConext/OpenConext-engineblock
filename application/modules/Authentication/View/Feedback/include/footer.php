@@ -1,3 +1,8 @@
+<?php
+$log = EngineBlock_ApplicationSingleton::getInstance()->getLog();
+$log->log('Showing feedback page with message: ' . $layout->title, EngineBlock_Log::INFO);
+?>
+
     <hr />
 
     <table>
