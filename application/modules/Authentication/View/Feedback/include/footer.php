@@ -6,8 +6,8 @@
         foreach($_SESSION['feedbackInfo'] as $name => $value) {
         ?>
             <tr>
-                <td><strong><?php echo $this->t($name)?>:</strong></td>
-                <td><?php echo $value;?></td>
+                <td><strong><?php echo htmlentities($this->t($name))?>:</strong></td>
+                <td><?php echo htmlentities($value);?></td>
             </tr>
         <?php
         }
