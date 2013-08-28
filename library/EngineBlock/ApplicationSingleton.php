@@ -137,9 +137,10 @@ class EngineBlock_ApplicationSingleton
 
     /**
      * @param Exception $exception
+     * @param string $messageSuffix
      * @return bool
      */
-    public function reportError(Exception $exception)
+    public function reportError(Exception $exception, $messageSuffix = '')
     {
         $log = $this->getLogInstance();
         if (!$log) {
@@ -165,6 +166,10 @@ class EngineBlock_ApplicationSingleton
         $message = $exception->getMessage();
         if (empty($message)) {
             $message = 'Exception without message "' . get_class($exception) . '"';
+        }
+
+        if ($messageSuffix) {
+            $message .= ' - ' . $messageSuffix;
         }
 
         // log exception
@@ -212,6 +217,25 @@ class EngineBlock_ApplicationSingleton
         }
 
         return $feedbackInfo;
+    }
+
+    /**
+     * Logs exception and redirects user to feedback page
+     *
+     * @param Exception $exception
+     * @param string $feedbackUrl Url to which the user will be redirected
+     * @param array $feedbackInfo Optional feedback info in name/value format which will be shown on feedback page
+     */
+    public function handleExceptionWithFeedback(
+        Exception $exception,
+        $feedbackUrl,
+        $feedbackInfo = array()
+    )
+    {
+        $messageSuffix = 'Redirecting to feedback page';
+        $this->reportError($exception, $messageSuffix);
+        $_SESSION['feedbackInfo'] = array_merge($feedbackInfo, $_SESSION['feedbackInfo']);
+        $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
     }
 
     /**
