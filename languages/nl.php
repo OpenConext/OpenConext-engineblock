@@ -261,6 +261,10 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_received_error_status_code_desc'=> '<p>
         Uw Identity Provider stuurde een authenticatie respons met een fout code.
     </p>',
+    'error_received_invalid_response'     => 'Error - Ongeldig Idp antwoord',
+    'error_received_status_code_desc'=> '<p>
+        Uw Identity Provider stuurde een ongeldig authenticatie respons terug.
+    </p>',
 
     /**
      * %1 AttributeName

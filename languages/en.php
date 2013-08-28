@@ -260,6 +260,10 @@ If you want to use this application you have to:<br />
     'error_received_error_status_code_desc'=> '<p>
         Your Identity Provider sent an authentication response with an error status code.
     </p>',
+    'error_received_invalid_response'     => 'Error - Invalid Idp response',
+    'error_received_status_code_desc'=> '<p>
+        Your Identity Provider sent an authentication response that was invalid.
+    </p>',
 
     /**
      * %1 AttributeName

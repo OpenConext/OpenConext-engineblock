@@ -64,6 +64,9 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             // Add extra feedback info
             $_SESSION['feedbackInfo'] = array_merge($e->getFeedbackInfo(), $_SESSION['feedbackInfo']);
             $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/received-error-status-code');
+        } catch (EngineBlock_Corto_Module_Bindings_VerificationException $e) {
+            $application->reportError($e);
+            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/received-invalid-response');
         }
     }
 
