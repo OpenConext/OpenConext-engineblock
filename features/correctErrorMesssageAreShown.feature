@@ -12,7 +12,7 @@ Feature:
     And I should see "Status Code: urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy"
     And I should see "Status Message: NameIdPolicy is invalid"
 
-  Scenario: Engineblock shows useful status code and message when Idp returns an error code
+  Scenario: Engineblock shows useful message when The IdP sends an invalid response
     Given Dummy Idp is configured to use the "PrivateKeyRollover" testcase
     When I go to "https://engine-test.demo.openconext.org/dummy/sp"
     And I press "Dummy Idp"
@@ -20,7 +20,6 @@ Feature:
     Then I should see "Invalid Idp response"
 
   #@todo test:
-    # - The IdP signs the response with a certificate that we do not trust. This happens when the IdP did a key rollover.
     # - The assertion is not valid yet. This happens when the clock on the IdP is running ahead.
     # - We cannot locate the session identifier of the user. This happens when: a user is directed to another LB or we loose their session info for some other reason.
     # - The ACL does not allow a user to access the service: This happens with SPs the use our transparent (idps) metadata and send an AuthnRequest for an IdP this is not allowed access to the SP.
