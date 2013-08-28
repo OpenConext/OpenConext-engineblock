@@ -4,6 +4,9 @@
     <?php
     if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])) {
         foreach($_SESSION['feedbackInfo'] as $name => $value) {
+            if (empty($value)) {
+                continue;
+            }
         ?>
             <tr>
                 <td><strong><?php echo htmlentities($this->t($name))?>:</strong></td>
