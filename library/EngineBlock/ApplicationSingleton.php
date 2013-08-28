@@ -206,6 +206,11 @@ class EngineBlock_ApplicationSingleton
             }
         }
 
+        // Find the current identity provider
+        if (isset($_SESSION['CachedResponses'][0]['idp'])) {
+            $debugInfo['identityProvider'] = $_SESSION['CachedResponses'][0]['idp'];
+        }
+
         return $debugInfo;
     }
 
