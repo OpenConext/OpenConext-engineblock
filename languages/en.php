@@ -15,6 +15,12 @@ return array(
     'authentication_urls'   => 'Authentication URLs',
     'timestamp'             => 'Timestamp',
 
+    // Feedback
+    'requestId'             => 'Unique Request Id',
+    'identityProvider'      => 'Identity Provider',
+    'serviceProvider'       => 'Service Provider',
+    'userAgent'             => 'User Agent',
+    'ipAddress'             => 'Ip Address',
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selection - %s',
     'idp_selection_subheader'   => 'Login via your institution',
