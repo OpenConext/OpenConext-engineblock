@@ -169,7 +169,7 @@ class EngineBlock_ApplicationSingleton
         }
 
         if ($messageSuffix) {
-            $message .= ' - ' . $messageSuffix;
+            $message .= ' | ' . $messageSuffix;
         }
 
         // log exception
@@ -232,7 +232,7 @@ class EngineBlock_ApplicationSingleton
         $feedbackInfo = array()
     )
     {
-        $messageSuffix = 'Redirecting to feedback page';
+        $messageSuffix = '-> Redirecting to feedback page';
         $this->reportError($exception, $messageSuffix);
         $_SESSION['feedbackInfo'] = array_merge($feedbackInfo, $_SESSION['feedbackInfo']);
         $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
