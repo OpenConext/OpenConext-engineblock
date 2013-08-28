@@ -72,63 +72,6 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
             $this->_idpMetadata,
             $this->_spMetadata
         );
-        if ($manipulated) {
-            return true;
-        }
-
-        // IdP Manipulations can only come from the Service Registry,
-        // but for SP manipulations we still support file based manipulations.
-        if ($this->_type !== self::TYPE_SP) {
-            return false;
-        }
-
-        // Legacy: Try file-based general manipulation for all entities of this type
-        $manipulator = new EngineBlock_Attributes_Manipulator_File($this->_type);
-        $manipulator->manipulate(
-            '',
-            $this->_response['__']['IntendedNameId'],
-            $this->_responseAttributes,
-            $this->_response,
-            $this->_idpMetadata,
-            $this->_spMetadata
-        );
-
-        // Legacy: Try entity specific file based manipulation
-        $manipulator = new EngineBlock_Attributes_Manipulator_File($this->_type);
-        $manipulated = $manipulator->manipulate(
-            $entityId,
-            $this->_response['__']['IntendedNameId'],
-            $this->_responseAttributes,
-            $this->_response,
-            $this->_idpMetadata,
-            $this->_spMetadata
-        );
-        if ($manipulated) {
-            return true;
-        }
-
-        // Legacy legacy: We can have attribute manipulations which were not prefixed with 'sp/'
-
-        $manipulator = new EngineBlock_Attributes_Manipulator_File();
-        $manipulator->manipulate(
-            '',
-            $this->_response['__']['IntendedNameId'],
-            $this->_responseAttributes,
-            $this->_response,
-            $this->_idpMetadata,
-            $this->_spMetadata
-        );
-
-        // Legacy: Try entity specific file based manipulation
-        $manipulator = new EngineBlock_Attributes_Manipulator_File();
-        $manipulated = $manipulator->manipulate(
-            $entityId,
-            $this->_response['__']['IntendedNameId'],
-            $this->_responseAttributes,
-            $this->_response,
-            $this->_idpMetadata,
-            $this->_spMetadata
-        );
         return (bool)$manipulated;
     }
 }
