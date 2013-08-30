@@ -1,9 +1,10 @@
 <?php
+$hostUrl = 'https://' . $_SERVER['HTTP_HOST'];
 return array(
-    'https://engine-test.demo.openconext.org/dummy/sp' => array(
-        0 => 'https://engine-test.demo.openconext.org/authentication/idp/metadata',
-        1 => 'https://engine-test.demo.openconext.org/dummy/idp',
-        2 => 'https://engine-test.demo.openconext.org/dummy/idp#2'
+    $hostUrl .'/dummy/sp' => array(
+        0 => $hostUrl .'/authentication/idp/metadata',
+        1 => $hostUrl .'/dummy/idp',
+        2 => $hostUrl .'/dummy/idp#2'
     ),
-    'https://engine-test.demo.openconext.org/dummy/sp?nr=2' => array()
+    $hostUrl .'/dummy/sp?nr=2' => array()
 );

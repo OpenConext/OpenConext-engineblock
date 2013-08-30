@@ -91,7 +91,7 @@ class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
      */
     private function factoryAuthnRequest()
     {
-        $engineUrl = 'https://engine-test.demo.openconext.org';
+        $engineUrl = 'https://' . $_SERVER['HTTP_HOST'];
 
         $destinationUrl = $engineUrl . '/authentication/idp/single-sign-on';
 

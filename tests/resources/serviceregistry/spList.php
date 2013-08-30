@@ -1,9 +1,10 @@
 <?php
+$hostUrl = 'https://' . $_SERVER['HTTP_HOST'];
 return array(
-    'https://engine-test.demo.openconext.org/authentication/sp/metadata' =>
+    $hostUrl .'/authentication/sp/metadata' =>
     array(
         'AssertionConsumerService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-        'AssertionConsumerService:0:Location' => 'https://engine-test.demo.openconext.org/authentication/sp/consume-assertion',
+        'AssertionConsumerService:0:Location' => $hostUrl .'/authentication/sp/consume-assertion',
         'contacts:0:contactType' => 'technical',
         'contacts:0:emailAddress' => 'support@openconext.org',
         'contacts:0:givenName' => 'Support',
@@ -34,10 +35,10 @@ return array(
         'url:nl' => '',
         'workflowState' => 'prodaccepted'
     ),
-    'https://engine-test.demo.openconext.org/dummy/sp' =>
+    $hostUrl .'/dummy/sp' =>
     array(
         'AssertionConsumerService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-        'AssertionConsumerService:0:Location' => 'https://engine-test.demo.openconext.org/dummy/sp',
+        'AssertionConsumerService:0:Location' => $hostUrl .'/dummy/sp',
         'contacts:0:contactType' => 'technical',
         'contacts:0:emailAddress' => 'support@openconext.org',
         'contacts:0:givenName' => 'Support',
@@ -69,10 +70,10 @@ return array(
         'workflowState' => 'prodaccepted',
         'coin:no_consent_required' => true
     ),
-    'https://engine-test.demo.openconext.org/dummy/sp?nr=2' =>
+    $hostUrl .'/dummy/sp?nr=2' =>
     array(
         'AssertionConsumerService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-        'AssertionConsumerService:0:Location' => 'https://engine-test.demo.openconext.org/dummy/sp#2',
+        'AssertionConsumerService:0:Location' => $hostUrl .'/dummy/sp#2',
         'contacts:0:contactType' => 'technical',
         'contacts:0:emailAddress' => 'support@openconext.org',
         'contacts:0:givenName' => 'Support',

@@ -1,6 +1,7 @@
 <?php
+$hostUrl = 'https://' . $_SERVER['HTTP_HOST'];
 return array(
-    'https://engine-test.demo.openconext.org/authentication/idp/metadata' =>
+    $hostUrl .'/authentication/idp/metadata' =>
     array(
         'certData' => 'MIIDYzCCAkugAwIBAgIJAMWzFQ+2+7UtMA0GCSqGSIb3DQEBBQUAMEgxFDASBgNVBAMMC0VuZ2luZUJsb2NrMREwDwYDVQQLDAhTZXJ2aWNlczEQMA4GA1UECgwHU1VSRm5ldDELMAkGA1UEBhMCTkwwHhcNMTIwNjEyMDczNjA2WhcNMjIwNjEyMDczNjA2WjBIMRQwEgYDVQQDDAtFbmdpbmVCbG9jazERMA8GA1UECwwIU2VydmljZXMxEDAOBgNVBAoMB1NVUkZuZXQxCzAJBgNVBAYTAk5MMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyl/YsyxuCsqh44RwBz8a0qy15/NbFNL635N0DW2vBVzkppJQN5SJih1aG+ES7pEleWcnvMDyAWSnKTA6uOQCNQIAPJMaJXJuYK8tdTbJWFJTAmiaJxF2NvpA4q4ToY1n1L7cLWBvM9HERLIPC6rFLgv6O05c00s/XqzymlMV9EsAXQbJRp3n5DXNOJrRjfqclK7gpy8O5cD1NWy4OuaA086ipjW6lESKPONTscdFjKDtLarX3JthjAoaK8b/0OCQcbAklaDJXpQTnZNtFZUBWj3n/fuv4jyKvVBWwx5XGACrPEnLTwkLkZZG7oav75jS9sOiDxnTEh+m42Tp17tFZQIDAQABo1AwTjAdBgNVHQ4EFgQU0S9rclotGkC2jUYpy7HTgB/DCU0wHwYDVR0jBBgwFoAU0S9rclotGkC2jUYpy7HTgB/DCU0wDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQUFAAOCAQEAHbAa/lSpNf1ayKtq0c513vxboCTaclZ76vmN2jTFpu5qWiwboumRsn9q4Irhxt2kIjdpUHIg8hr46tYtep/tmf9UjbdDeZxZ1sxwhxzrMMjv972/mF1wJcENBZW/degXevz4fiEB//t0wyaA7bWeC2Ry13cvmg0x8fztqJgr4JjjxOSNKbBJ2PmN9ES3hf54UZZTy5iyW2E/3I59uRYyuPhDZDu2Uf0LlEeEuYmbY2AEgPvC+W2eR6axWkw6406jLh0Qf2ph0Wk+1YV94QmHBT9dFCyumnYIByWbqj2TSz2pCu5Gv8Kiik5k/xDDXMQ5W3EHUZIf6gdajhyH3kQkRg==',
         'coin:guest_qualifier' => 'All',
@@ -29,12 +30,12 @@ return array(
         'SingleLogoutService_Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
         'SingleLogoutService_Location' => 'https://engine.surfconext.nl/logout#idp',
         'SingleSignOnService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-        'SingleSignOnService:0:Location' => 'https://engine-test.demo.openconext.org/authentication/idp/single-sign-on',
+        'SingleSignOnService:0:Location' => $hostUrl .'/authentication/idp/single-sign-on',
         'SingleSignOnService:1:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-        'SingleSignOnService:1:Location' => 'https://engine-test.demo.openconext.org/authentication/idp/single-sign-on',
+        'SingleSignOnService:1:Location' => $hostUrl .'/authentication/idp/single-sign-on',
         'workflowState' => 'prodaccepted',
     ),
-    'https://engine-test.demo.openconext.org/dummy/idp' =>
+    $hostUrl .'/dummy/idp' =>
     array(
         'certData' => 'MIIDrzCCApegAwIBAgIJAOaOFTs6UrvPMA0GCSqGSIb3DQEBBQUAMG4xCzAJBgNVBAYTAk5MMRAwDgYDVQQIDAdVdHJlY2h0MRAwDgYDVQQHDAdVdHJlY2h0MRAwDgYDVQQKDAdTdXJmbmV0MRMwEQYDVQQLDApPcGVuQ29uZXh0MRQwEgYDVQQDDAtFbmdpbmVCbG9jazAeFw0xMzA4MTYwNzQxMDVaFw00MTAxMDEwNzQxMDVaMG4xCzAJBgNVBAYTAk5MMRAwDgYDVQQIDAdVdHJlY2h0MRAwDgYDVQQHDAdVdHJlY2h0MRAwDgYDVQQKDAdTdXJmbmV0MRMwEQYDVQQLDApPcGVuQ29uZXh0MRQwEgYDVQQDDAtFbmdpbmVCbG9jazCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALRDrSUvOMwaLg2UbZaPbxvpRublp5m8kSFRg8hlMnStXPPPSpBbD7hzaV+Ey8bgTcw5mmoxf0wQar2HsH/99W9lvbhVrbhwPJygcSEmPVbjjCZaUx9b/52wjJby6omC0LkXkeJkQYBFYLHPqc32HdlvALSxcW146LWQR8X9cblJuEx9Iz18vHCNnRLI+/w3o5qyI2EG4kJF7vBdhbLMUnaDl6XGvHWyXej35feAhJByeCckxpmqAm79W1a+s6I7dUfLHtFWaHH1+r4dsiOmoViqKGVqtQY18FM2nTfR6VZ+Gj0uvGwCUUrIs7NjGqeWVL1EHQ9uSWhE/BSDKd3ugpcCAwEAAaNQME4wHQYDVR0OBBYEFMdjB4+yV5QG4Ct9RvXSus5dYv+qMB8GA1UdIwQYMBaAFMdjB4+yV5QG4Ct9RvXSus5dYv+qMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADggEBAFyq+F3zM+BU85ROM7SZv5poUxKeQ8pP12Sx7LzAsJVZUMtfQwK7WlFkIJXasolL/iuwj/9Y9OMgqUl6IdHrMPNI5znn+Er7wmo2RCbenNAYw9/ywWP/kNa28nb8FVhgX43+0oBf2s8dJngBiLB87Jp/ZGc7CIMqbADJ+ZVGC/6DN9yRXModL4mqnlkXaUVwGoU6EsDbr5WoJyEdpy69HotE7CiIZniMjeVSQ//8enkp7d/rsOAlGCQLD5ajUzaAm3ymIzkMLPGdSpsNjTcMPgEc64ZcOu2gzn8M8/b36nfr3xMS9MutksOPHIO/So7DgFAwvKwiWGk0FUereNM+yMg=',
         'coin:guest_qualifier' => 'All',
@@ -61,11 +62,11 @@ return array(
         'name:nl' => 'Dummy Idp',
         'redirect.sign' => false,
         'SingleSignOnService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-        'SingleSignOnService:0:Location' => 'https://engine-test.demo.openconext.org/dummy/idp',
+        'SingleSignOnService:0:Location' => $hostUrl .'/dummy/idp',
         'workflowState' => 'prodaccepted',
     ),
     // Dummy Idp #2 is only here to make sure EngineBlock does not skip Wayf
-    'https://engine-test.demo.openconext.org/dummy/idp#2' =>
+    $hostUrl .'/dummy/idp#2' =>
     array(
         'certData' => '',
         'coin:guest_qualifier' => 'All',
@@ -92,7 +93,7 @@ return array(
         'name:nl' => 'Dummy Idp 2',
         'redirect.sign' => false,
         'SingleSignOnService:0:Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-        'SingleSignOnService:0:Location' => 'https://engine-test.demo.openconext.org/dummy/idp#2',
+        'SingleSignOnService:0:Location' => $hostUrl .'/dummy/idp#2',
         'workflowState' => 'prodaccepted',
     )
 );

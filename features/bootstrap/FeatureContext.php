@@ -18,6 +18,8 @@ use Behat\MinkExtension\Context\MinkContext;
  */
 class FeatureContext extends MinkContext
 {
+    private $hostUrl;
+
     /**
      * Initializes context.
      * Every scenario gets it's own context object.
@@ -26,7 +28,12 @@ class FeatureContext extends MinkContext
      */
     public function __construct(array $parameters)
     {
-        // Initialize your context here
+        // (Ab)use engineblock location config for ssp to get the url of eb
+        $engineblockApp = EngineBlock_ApplicationSingleton::getInstance();
+        $engineblockApp->bootstrap();
+        $engineBlockLocation = $engineblockApp->getConfiguration()->get('auth')->get('simplesamlphp')->get('idp')->get('location');
+        $parsedUrl = parse_url($engineBlockLocation);
+        $this->hostUrl = 'https://' . $parsedUrl['host'];
     }
 
     /**
@@ -34,7 +41,7 @@ class FeatureContext extends MinkContext
      */
     public function dummyIdpIsConfiguredToUseTheTestcase($testCase)
     {
-        $this->getSession()->visit('https://engine-test.demo.openconext.org/dummy/idp?testCase=' . urlencode($testCase));
+        $this->getSession()->visit($this->hostUrl . '/dummy/idp?testCase=' . urlencode($testCase));
     }
 
     /**
@@ -42,6 +49,14 @@ class FeatureContext extends MinkContext
      */
     public function dummySpIsConfiguredToUseTheTestcase($testCase)
     {
-        $this->getSession()->visit('https://engine-test.demo.openconext.org/dummy/sp?testCase=' . urlencode($testCase));
+        $this->getSession()->visit($this->hostUrl . '/dummy/sp?testCase=' . urlencode($testCase));
+    }
+
+    /**
+     * @When /^I go to engine-test "([^"]*)"$/
+     */
+    public function iGoToEngineTest($uri)
+    {
+        $this->getSession()->visit($this->hostUrl . $uri);
     }
 }
