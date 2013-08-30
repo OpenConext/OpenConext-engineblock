@@ -19,6 +19,10 @@ Feature:
     And I press "Continue"
     Then I should see "Invalid Idp response"
 
+  Scenario: Engineblock shows useful message when no idps are configured for the given sp
+    When I go to "https://engine-test.demo.openconext.org/dummy/sp?nr=2"
+    Then I should see "No Identity Providers found"
+
   #@todo test:
     # - The assertion is not valid yet. This happens when the clock on the IdP is running ahead.
     # - We cannot locate the session identifier of the user. This happens when: a user is directed to another LB or we loose their session info for some other reason.

@@ -108,12 +108,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 return;
             }
             else {
-                $output = $this->_server->renderTemplate(
-                    'noidps',
-                    array(
-                    ));
-                $this->_server->sendOutput($output);
-                return;
+                throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No Idps found');
             }
         }
         // Exactly 1 candidate found, send authentication request to the first one
