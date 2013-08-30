@@ -91,11 +91,16 @@ class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
      */
     private function factoryAuthnRequest()
     {
-        $engineUrl = 'https://engine-test.demo.openconext.org';
+        $engineUrl = 'https://' . $_SERVER['HTTP_HOST'];
 
         $destinationUrl = $engineUrl . '/authentication/idp/single-sign-on';
-        $assertionConsumerServiceURL = 'https://engine-test.demo.openconext.org/dummy/sp';
-        $issuerUrl = 'https://engine-test.demo.openconext.org/dummy/sp';
+
+        $spUrl = $_SERVER['SCRIPT_URI'];
+        if (!empty($_GET['nr'])) {
+            $spUrl .= '?nr=' . urlencode($_GET['nr']);
+        }
+        $assertionConsumerServiceURL = $spUrl;
+        $issuerUrl = $spUrl;
         $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->create(
             $destinationUrl,

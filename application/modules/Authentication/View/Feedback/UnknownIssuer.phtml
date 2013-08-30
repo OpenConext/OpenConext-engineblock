@@ -47,4 +47,4 @@ $customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
 $customFeedbackInfo['Destination'] = $this->_data['destination'];
 $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
 
-require_once __DIR__ . '/include/footer.php';
+require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

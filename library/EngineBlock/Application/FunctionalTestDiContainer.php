@@ -12,7 +12,11 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
             $resourcesDir = realpath(ENGINEBLOCK_FOLDER_ROOT . 'tests/resources/serviceregistry');
             Phake::when($serviceRegistryClient)->getIdpList()->thenReturn(require_once $resourcesDir . '/idpList.php');
             Phake::when($serviceRegistryClient)->getSPList()->thenReturn(require_once $resourcesDir . '/spList.php');
-            Phake::when($serviceRegistryClient)->getAllowedIdps(Phake::anyParameters())->thenReturn(require_once $resourcesDir . '/allowedIdps.php');
+            $allowedIdpsConfig = require_once $resourcesDir . '/allowedIdps.php';
+            foreach($allowedIdpsConfig as $spEntityId => $idps) {
+                Phake::when($serviceRegistryClient)->getAllowedIdps($spEntityId)->thenReturn($idps);
+            }
+
             Phake::when($serviceRegistryClient)->isConnectionAllowed(Phake::anyParameters())->thenReturn(array(true));
             Phake::when($serviceRegistryClient)->getArp(Phake::anyParameters())->thenReturn(array());
 

@@ -97,6 +97,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 '&destination=' . urlencode($e->getDestination())
             );
         }
+        catch (EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/no-idps'
+            );
+        }
     }
 
     public function processWayfAction()

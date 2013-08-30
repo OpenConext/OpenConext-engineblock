@@ -202,18 +202,16 @@ class EngineBlock_ApplicationSingleton
         $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
         $feedbackInfo['ipAddress'] = $_SERVER['REMOTE_ADDR'];
 
-        // @todo find a better way to do this
-        // Find the current service provider
-        foreach($_SESSION as $key => $value) {
-            if (isset($value['SAMLRequest'])) {
-                $feedbackInfo['serviceProvider'] = $value['SAMLRequest']['saml:Issuer']['__v'];
-                break;
-            }
+        // @todo  reset this when login is succesful
+        // Find the current identity provider
+        if (isset($_SESSION['currentServiceProvider'])) {
+            $feedbackInfo['serviceProvider'] = $_SESSION['currentServiceProvider'];
         }
 
+        // @todo  reset this when login is succesful
         // Find the current identity provider
-        if (isset($_SESSION['CachedResponses'][0]['idp'])) {
-            $feedbackInfo['identityProvider'] = $_SESSION['CachedResponses'][0]['idp'];
+        if (isset($_SESSION['currentIdentityProvider'])) {
+            $feedbackInfo['identityProvider'] = $_SESSION['currentIdentityProvider'];
         }
 
         return $feedbackInfo;
