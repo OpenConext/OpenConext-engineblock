@@ -1,0 +1,21 @@
+# install Apache and php
+- sudo apt-get update > /dev/null
+- sudo apt-get install -y --force-yes apache2 libapache2-mod-php5 php5-curl php5-mysql php5-intl
+
+# install vhost
+- sudo sed -i -e "/DocumentRoot/i\ServerName engine-test" /etc/apache2/sites-available/default
+# @todo set functional testing env
+- echo "127.0.0.1 engine-test" | sudo tee -a /etc/hosts
+- sudo /etc/init.d/apache2 restart
+
+# install dependencies
+- composer self-update
+- composer install
+
+# Create custom config
+- mkdir /etc/surfconext
+- echo "127.0.0.1 engine-test" | sudo tee -a /etc/surfconext/engineblock.ini
+
+# Run tests
+# @todo run phpunit
+# @todo run behat
