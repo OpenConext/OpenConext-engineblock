@@ -207,7 +207,8 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                 'EntityID' => 'https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp',
                 "SpsWithoutConsent" => array(
                     "http://test-sp"
-                )
+                ),
+                'isHidden' => false
             ),
         );
         $this->assertEquals($expectedResult, $metadata, "Converting a simple result from Service Registry with 1 IdP and 1 SP to Cortos Metadata format");
