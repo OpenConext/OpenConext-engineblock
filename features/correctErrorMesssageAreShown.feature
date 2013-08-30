@@ -11,6 +11,12 @@ Feature:
     Then I should see "Idp error"
     And I should see "Status Code: urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy"
     And I should see "Status Message: NameIdPolicy is invalid"
+    And I should see "Timestamp:"
+    And I should see "Unique Request Id:"
+    And I should see "User Agent:"
+    And I should see "IP Address:"
+    And I should see "Service Provider:"
+    And I should see "Identity Provider:"
 
   Scenario: Engineblock shows useful message when The IdP sends an invalid response
     Given Dummy Idp is configured to use the "PrivateKeyRollover" testcase
@@ -18,10 +24,21 @@ Feature:
     And I press "Dummy Idp"
     And I press "Continue"
     Then I should see "Invalid Idp response"
+    And I should see "Timestamp:"
+    And I should see "Unique Request Id:"
+    And I should see "User Agent:"
+    And I should see "IP Address:"
+    And I should see "Service Provider:"
+    And I should see "Identity Provider:"
 
   Scenario: Engineblock shows useful message when no idps are configured for the given sp
     When I go to "https://engine-test.demo.openconext.org/dummy/sp?nr=2"
     Then I should see "No Identity Providers found"
+    And I should see "Timestamp:"
+    And I should see "Unique Request Id:"
+    And I should see "User Agent:"
+    And I should see "IP Address:"
+    And I should see "Service Provider:"
 
   #@todo test:
     # - The assertion is not valid yet. This happens when the clock on the IdP is running ahead.
