@@ -4,8 +4,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 {
     public function serve($serviceName)
     {
-        $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
-
+        $receivedResponse = $this-> _server->getBindingsModule()->receiveResponse();
         $receivedRequest = $this->_server->getReceivedRequestFromResponse(
             $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']
         );

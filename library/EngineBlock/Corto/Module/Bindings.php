@@ -99,6 +99,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             return $response;
         }
 
+        // Remember idp for debugging
+        $_SESSION['currentIdentityProvider'] = $response['saml:Issuer']['__v'];
+
         $this->_decryptResponse($response);
         $this->_verifyResponse($response);
 

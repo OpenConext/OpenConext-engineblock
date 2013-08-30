@@ -211,9 +211,10 @@ class EngineBlock_ApplicationSingleton
             }
         }
 
+        // @todo  reset this when login is succesful
         // Find the current identity provider
-        if (isset($_SESSION['CachedResponses'][0]['idp'])) {
-            $feedbackInfo['identityProvider'] = $_SESSION['CachedResponses'][0]['idp'];
+        if (isset($_SESSION['currentIdentityProvider'])) {
+            $feedbackInfo['identityProvider'] = $_SESSION['currentIdentityProvider'];
         }
 
         return $feedbackInfo;
