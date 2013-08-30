@@ -28,10 +28,10 @@ class FeatureContext extends MinkContext
      */
     public function __construct(array $parameters)
     {
-        // (Ab)use engineblock location config for ssp to get the url of eb
+        // Set host url for functional testing
         $engineblockApp = EngineBlock_ApplicationSingleton::getInstance();
         $engineblockApp->bootstrap();
-        $engineBlockLocation = $engineblockApp->getConfiguration()->get('auth')->get('simplesamlphp')->get('idp')->get('location');
+        $engineBlockLocation = $engineblockApp->getConfiguration()->get('functionalTesting')->get('engineBlockUrl');
         $parsedUrl = parse_url($engineBlockLocation);
         $this->hostUrl = 'https://' . $parsedUrl['host'];
     }

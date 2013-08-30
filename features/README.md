@@ -21,3 +21,12 @@ Example:
 <code>
 192.168.56.101 engine-test.demo.openconext.org
 </code>
+
+Set functional testing domain in engineblock application config
+=======================================
+Example
+<code>
+[demo : base]
+
+functionalTesting.engineBlockUrl = "https://engine-test.demo.openconext.org"
+</code>
