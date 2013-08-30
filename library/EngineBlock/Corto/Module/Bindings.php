@@ -73,6 +73,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $request = $this->_receiveMessage(self::KEY_REQUEST);
 
+        // Remember idp for debugging
+        $_SESSION['currentServiceProvider'] = $request['saml:Issuer']['__v'];
+
         $log = $this->_server->getSessionLog();
         $log->attach($request, 'Request')
             ->info('Received request');
