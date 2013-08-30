@@ -39,6 +39,7 @@ Feature:
     And I should see "User Agent:"
     And I should see "IP Address:"
     And I should see "Service Provider:"
+    And I should not see "Identity Provider:"
 
   Scenario: Engineblock shows useful message when sp is unknown
     When I go to engine-test "/dummy/sp?nr=3"
@@ -48,6 +49,7 @@ Feature:
     And I should see "User Agent:"
     And I should see "IP Address:"
     And I should see "Service Provider:"
+    And I should not see "Identity Provider:"
 
   #@todo test:
     # - The assertion is not valid yet. This happens when the clock on the IdP is running ahead.
