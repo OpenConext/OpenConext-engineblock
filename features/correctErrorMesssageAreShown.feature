@@ -40,6 +40,15 @@ Feature:
     And I should see "IP Address:"
     And I should see "Service Provider:"
 
+  Scenario: Engineblock shows useful message when sp is unknown
+    When I go to "https://engine-test.demo.openconext.org/dummy/sp?nr=3"
+    Then I should see "Unknown application"
+    And I should see "Timestamp:"
+    And I should see "Unique Request Id:"
+    And I should see "User Agent:"
+    And I should see "IP Address:"
+    And I should see "Service Provider:"
+
   #@todo test:
     # - The assertion is not valid yet. This happens when the clock on the IdP is running ahead.
     # - We cannot locate the session identifier of the user. This happens when: a user is directed to another LB or we loose their session info for some other reason.
