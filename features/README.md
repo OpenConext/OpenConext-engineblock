@@ -18,4 +18,6 @@ Example:
 Add functional testing domain to hosts file of system running the tests
 =======================================================================
 Example:
+<code>
 192.168.56.101 engine-test.demo.openconext.org
+</code>
