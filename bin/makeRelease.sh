@@ -48,8 +48,9 @@ cd ${RELEASE_DIR}/${PROJECT_NAME}
 php ${RELEASE_DIR}/composer.phar install --no-dev
 )
 
-# remove Git and Composer files
+# remove files that are not required for production
 (
+rm -rf ${RELEASE_DIR}/${PROJECT_NAME}/.idea
 rm -rf ${RELEASE_DIR}/${PROJECT_NAME}/.git
 rm -f ${RELEASE_DIR}/${PROJECT_NAME}/.gitignore
 rm -f ${RELEASE_DIR}/${PROJECT_NAME}/composer.json
