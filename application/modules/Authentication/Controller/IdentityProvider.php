@@ -80,22 +80,26 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->$service($idPEntityId);
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl(
+            $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
                 '&destination=' . urlencode($e->getDestination())
+            );
+        }
+        catch (EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/no-idps'
             );
         }
     }
@@ -131,28 +135,27 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->processConsent();
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/unable-to-receive-message');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/vomembershiprequired');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/session-lost');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $application->reportError($e);
-            $application->getHttpResponse()->setRedirectUrl(
+            $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
                 '&destination=' . urlencode($e->getDestination())
             );
         }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
-            $application->reportError($e);
             $_SESSION['feedback_custom'] = $e->getFeedback();
-            $application->getHttpResponse()->setRedirectUrl('/authentication/feedback/custom');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/custom');
         }
     }
 

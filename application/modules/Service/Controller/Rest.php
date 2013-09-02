@@ -125,6 +125,6 @@ class Service_Controller_Rest extends EngineBlock_Controller_Abstract
      */
     protected function _getRegistry()
     {
-        return new Janus_Client_CacheProxy();
-    }   
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryClient();
+    }
 }

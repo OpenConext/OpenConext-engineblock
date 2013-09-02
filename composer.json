@@ -3,10 +3,38 @@
     "description": "Surfnet OpenConext SAML proxy",
     "minimum-stability": "stable",
     "require" : {
-        "pimple/pimple": "1.0.x"
+        "pimple/pimple": "1.0.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "phake/phake": "dev-master"
+        "phpunit/phpunit": "3.7.19",
+        "phake/phake": "2.0.0-alpha2",
+        "behat/behat": "2.4.6",
+        "behat/mink": "1.5.0",
+        "behat/mink-extension": "1.1.4",
+        "behat/mink-goutte-driver": "1.0.9"
+    },
+    "autoload": {
+        "psr-0": {
+            "DbPatch_": "library/",
+            "EngineBlock_": "library/",
+            "Grouper_": "library/",
+            "Janus_": "library/",
+            "OpenSocial_": "library/",
+            "SurfConext_": "library/",
+            "Surfnet_": "library/",
+            "Zend_": "library/",
+            "Authentication_":"application/modules/",
+            "Cron_":"application/modules/",
+            "Default_":"application/modules/",
+            "Dummy_":"application/modules/",
+            "Logout_":"application/modules/",
+            "Profile_":"application/modules/",
+            "Service_":"application/modules/",
+            "Social_":"application/modules/",
+            "VoManage_":"application/modules/"
+        },
+        "classmap":[
+            "tests"
+        ]
     }
 }

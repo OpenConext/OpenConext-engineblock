@@ -603,10 +603,7 @@ class EngineBlock_Corto_Adapter
 
     public function getServiceRegistryAdapter()
     {
-        // @todo this seems to be called multiple times!
-        return new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new Janus_Client_CacheProxy()
-        );
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
     }
 
     protected function _processProxyServerResponse()

@@ -265,6 +265,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 $cortoEntity['SpsWithoutConsent'][] = $serviceRegistryEntity["disableConsent:$i"];
                 $i++;
             }
+
+            $cortoEntity['isHidden'] = (isset($serviceRegistryEntity['coin:hidden']) && $serviceRegistryEntity['coin:hidden'] === true);
         }
 
         // In general

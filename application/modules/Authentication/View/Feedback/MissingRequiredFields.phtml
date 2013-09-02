@@ -39,15 +39,6 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $this->t('error_missing_required_fields_desc'); ?>
-        <?php echo $this->t('timestamp'); ?>: <?php echo Zend_Date::now()->toString(Zend_Date::DATETIME, null, $this->language());?>
-    </div>
-</div>
+        <?php echo $this->t('error_missing_required_fields_desc');
 
-<?php if ($exception) { ?>
-<pre>
-    <?php var_dump($exception); ?>
-</pre>
-
-<?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-<?php } ?>
+        require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

@@ -83,8 +83,6 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
 
     protected function _getServiceRegistryAdapter()
     {
-        return new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new Janus_Client_CacheProxy()
-        );
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
     }
 }

@@ -46,15 +46,6 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $description; ?>
-    </div>
-</div>
+        <?php echo $description;
 
-<?php if (isset($exception)) { ?>
-<strong><?php echo $exception->getMessage();?></strong>
-<pre>
-    <?php var_dump($exception); ?>
-</pre>
-
-<?php if (isset($exception->xdebug_message)) { echo $exception->xdebug_message; } ?>
-<?php } ?>
+        require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');
