@@ -23,10 +23,10 @@ Example:
 </code>
 
 Set functional testing domain in engineblock application config
-=======================================
+===============================================================
 Example
 <code>
-[demo : base]
+[functional-testing : testing]
 
 functionalTesting.engineBlockUrl = "https://engine-test.demo.openconext.org"
 </code>
