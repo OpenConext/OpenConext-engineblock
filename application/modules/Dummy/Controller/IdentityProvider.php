@@ -24,7 +24,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require_once ENGINEBLOCK_FOLDER_LIBRARY . 'simplesamlphp/lib/_autoload.php';
+// @todo see if composer can replace these autoloaders
+require_once ENGINEBLOCK_FOLDER_VENDOR . 'simplesamlphp/simplesamlphp/lib/_autoload.php';
 
 class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
