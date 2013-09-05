@@ -84,6 +84,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Get all registered Single Sign On Services
         $candidateIDPs = $this->_server->getIdpEntityIds();
+
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
             unset($candidateIDPs[$posOfOwnIdp]);
@@ -422,7 +423,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                     : EngineBlock_View::staticUrl() . '/media/idp-logo-not-found.png',
                 'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en'])
                     : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
-                'Access' => '1',
+                'Access' => ((isset($metadata['Access']) && $metadata['Access']) ? '1' : '0'),
                 'ID' => md5($idpEntityId),
                 'EntityId' => $idpEntityId,
             );

@@ -160,6 +160,10 @@ if ($preselectedIdp) {
                 <div id="help">
                 </div>
 
+                <!-- HELP -->
+                <div id="requestAccess">
+                </div>
+
                 <div class="bottom">
                     <hr />
                     <p>
@@ -173,7 +177,8 @@ if ($preselectedIdp) {
             <li id="c${ID}" class="${NoAccessClass}">
                 <a alt="${Alt}" href="#">
                     <img src="${Logo}" />
-                    <span>${Name}</span>${NoAccess}
+                    <span>${Name}</span>
+                    <em>${NoAccess}</em>
                 </a>
             </li>
         </script>
@@ -200,7 +205,7 @@ if ($preselectedIdp) {
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/keyboardNavigator.js"></script>
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/typewatch.js"></script>
 
-        <script type="text/javascript" src="./../../js/discover.js"></script>
+        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/discover.js"></script>
 
         <script>
         <?php

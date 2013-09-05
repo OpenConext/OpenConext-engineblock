@@ -185,6 +185,22 @@ var Discover = function() {
             });
         },
 
+        showRequestAccess: function(speed) {
+            speed = speed || 'fast';
+            if ($('#help:visible').length > 0 && $.trim($('#help:visible').html()) !== "") {
+                return;
+            }
+            $.get('/authentication/idp/requestAccess?lang='+library.lang, function(data) {
+                $("#content").hide(speed);
+
+                var help = $("#help");
+                help.html(data);
+                help.show(speed, function() { library.handleScrollBars(); });
+
+                library.prepareFaq();
+            });
+        },
+
         showHelp: function(speed) {
             speed = speed || 'fast';
             if ($('#help:visible').length > 0 && $.trim($('#help:visible').html()) !== "") {
@@ -235,7 +251,7 @@ var Discover = function() {
                         idp['noAccess'] = '<em>No access. &raquo;</em>';
                     }
                     idp['NoAccessClass'] = 'noAccess';
-                    idp['Name'] = this.clipString(idp['Name'], 45); //Clip string to prevent overlap with 'No access' label
+                    idp['Name'] = library.clipString(idp['Name'], 45); //Clip string to prevent overlap with 'No access' label
                 }
                 var html = $('#idpListSuggestionTemplate').tmpl(idp);
                 $('#IdpSuggestion').append(html).click(function(e) {
@@ -379,24 +395,18 @@ var Discover = function() {
 
                     idp['ID'] = result['ID'];
                     idp['Logo'] = result['Logo'];
-
                     idp['Name'] = library.resolveIdPName(result, this.lang);
-//                    idp['Name'] = result['Name_nl'];
-//                    if ((this.lang == 'en') & (result['Name_en'] != undefined)) {
-//                        idp['Name'] = result['Name_en'];
-//                    }
-
                     idp['Alt'] = encodeURIComponent(result['EntityId']);
                     idp['NoAccess'] = '';
                     idp['NoAccessClass'] = '';
 
                     if (result['Access'] == 0) {
-                        idp['NoAccess'] = '<em>Geen toegang. &raquo;</em>';
+                        idp['NoAccess'] = 'Geen toegang. &raquo;';
                         if (this.lang == 'en') {
-                            idp['NoAccess'] = '<em>No access. &raquo;</em>';
+                            idp['NoAccess'] = 'No access. &raquo;';
                         }
                         idp['NoAccessClass'] = 'noAccess';
-                        idp['Name'] = clipString(idp['Name'], 45); //Clip string to prevent overlap with 'No access' label
+                        idp['Name'] = library.clipString(idp['Name'], 45); //Clip string to prevent overlap with 'No access' label
                     }
 
                     // Use jquery template to create html

@@ -58,6 +58,26 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
     }
 
     /**
+     * Given a list of (SAML2) entities, mark those idps that are not allowed
+     * for the given Service Provider.
+     *
+     * @param array $entities
+     * @param string $spEntityId
+     * @return array the entities
+     */
+    public function markEntitiesBySp(array $entities, $spEntityId)
+    {
+        $allowedEntities = $this->_serviceRegistry->getAllowedIdps($spEntityId);
+        foreach ($entities as $entityId => $entityData) {
+            if (isset($entityData['SingleSignOnService'])) {
+                // entity is an idp
+                $entities[$entityId]['Access'] = in_array($entityId, $allowedEntities);
+            }
+        }
+        return $entities;
+    }
+
+    /**
      * Given a list of (SAML2) entities, filter out the entities that do not have the requested workflow state
      *
      * @param array $entities
@@ -165,6 +185,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             // implicit vo
             if (isset($serviceRegistryEntity['coin:implicit_vo_id'])) {
                 $cortoEntity['VoContext'] = $serviceRegistryEntity['coin:implicit_vo_id'];
+            }
+
+            // show all IdP's in the WAYF
+            if (isset($serviceRegistryEntity['coin:display_unconnected_idps_wayf'])) {
+                $cortoEntity['DisplayUnconnectedIdpsWayf'] = $serviceRegistryEntity['coin:display_unconnected_idps_wayf'];
             }
 
             $cortoEntity['AssertionConsumerServices'] = array();

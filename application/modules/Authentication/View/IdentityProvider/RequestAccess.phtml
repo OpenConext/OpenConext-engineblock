@@ -1,0 +1,48 @@
+<?php
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
+
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+$layout->setLayout('empty');
+?>
+<p class="back"><a href="index.php?rid=65b006502b4ec9a79793ad895c3447ba">terug</a></p>
+<h2>Helaas, <i>Gereformeerde Hogeschool</i> heeft nog geen toegang tot deze dienst. Wat nu?</h2>
+<p>Wil je toch graag toegang tot deze dienst, vul dan
+    onderstaand formulier in. Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>		<hr />
+<form action="noAccess.php?rid=65b006502b4ec9a79793ad895c3447ba" method="post" class="apply clearfix">
+    <input name="idp-name" type="hidden" value="Gereformeerde Hogeschool">
+    <label for="name">Naam:</label>
+    <input name="name" id="name" >
+    <br />
+    <label for="email">E-mail:</label>
+    <input name="email" id="email"  />
+    <br />
+    <label for="message">Toelichting:</label>
+    <textarea name="message" id="message"></textarea>
+    <hr />
+			<span class="button">
+			<input name="Submit" type="submit" value="Verstuur"/>
+			</span> <a class="cancel" href="index.php?rid=65b006502b4ec9a79793ad895c3447ba">Annuleren</a>
+</form>
