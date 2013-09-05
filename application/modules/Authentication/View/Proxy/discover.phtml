@@ -71,6 +71,7 @@ if ($preselectedIdp) {
         }
     }
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -81,8 +82,8 @@ if ($preselectedIdp) {
 
         <title><?php echo $this->layout()->title; ?></title>
 
-        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/responsive/screen.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo STATIC_HOST; ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
+        <link href="<?php echo STATIC_HOST; ?>/css/responsive/screen.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="index">
         <div id="wrapper">
@@ -199,7 +200,7 @@ if ($preselectedIdp) {
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/keyboardNavigator.js"></script>
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/typewatch.js"></script>
 
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/discover.js"></script>
+        <script type="text/javascript" src="./../../js/discover.js"></script>
 
         <script>
         <?php
