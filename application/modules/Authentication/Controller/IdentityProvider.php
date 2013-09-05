@@ -164,6 +164,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
     }
 
+    public function requestAccessAction($argument = null)
+    {
+
+    }
+
     public function certificateAction()
     {
         $this->setNoRender();
