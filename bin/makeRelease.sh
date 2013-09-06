@@ -31,25 +31,18 @@ mkdir -p ${RELEASE_DIR}
 rm -rf ${RELEASE_DIR}/${PROJECT_NAME}
 
 # get Composer
-(
 cd ${RELEASE_DIR}
 curl -O http://getcomposer.org/composer.phar
-)
 
 # clone the tag
-(
 cd ${RELEASE_DIR}
     git clone -b ${TAG} https://github.com/${GITHUB_USER}/${PROJECT_NAME}.git
-)
 
 # run Composer
-(
 cd ${RELEASE_DIR}/${PROJECT_NAME}
 php ${RELEASE_DIR}/composer.phar install --no-dev
-)
 
 # remove files that are not required for production
-(
 rm -rf ${RELEASE_DIR}/${PROJECT_NAME}/.idea
 rm -rf ${RELEASE_DIR}/${PROJECT_NAME}/.git
 rm -f ${RELEASE_DIR}/${PROJECT_NAME}/.gitignore
@@ -63,23 +56,17 @@ rm -rf ${RELEASE_DIR}/${PROJECT_NAME}/build.xml
 rm -rf ${RELEASE_DIR}/${PROJECT_NAME}/tests
 rm -rf ${RELEASE_DIR}/${PROJECT_NAME}/ci
 
-)
 
 # create tarball
-(
 cd ${RELEASE_DIR}
 
 tar -czf ${PROJECT_NAME}-${TAG}.tar.gz ${PROJECT_NAME}
-)
 
 # create checksum file
-(
 cd ${RELEASE_DIR}
 shasum ${PROJECT_NAME}-${TAG}.tar.gz > ${PROJECT_NAME}.sha
-)
 
 # sign it if requested
-(
 if [ -n "$2" ]
 then
 	if [ "$2" == "sign" ]
@@ -88,4 +75,3 @@ then
 		gpg -o ${PROJECT_NAME}.sha.gpg  --clearsign ${PROJECT_NAME}.sha
 	fi
 fi
-)
