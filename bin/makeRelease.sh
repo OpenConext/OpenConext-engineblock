@@ -1,4 +1,5 @@
 #!/bin/sh
+# @todo add more error handling
 
 RELEASE_DIR=${HOME}/Releases
 GITHUB_USER=OpenConext
