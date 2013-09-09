@@ -36,7 +36,6 @@
                 <include name="**/*.phtml"/>
                 <exclude name=".svn/**"/>
                 <exclude name="library/shindig/**"/>
-                <exclude name="library/simplesamlphp/**"/>
                 <exclude name="library/Zend/**"/>
                 <exclude name="library/ZendX/**"/>
                 <exclude name="vendor/**"/>
