@@ -164,9 +164,19 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
     }
 
-    public function requestAccessAction($argument = null)
+    public function requestAccessAction()
     {
+        $this->queryParameters = $this->_getRequest()->getQueryParameters();
+    }
 
+    public function performRequestAccessAction()
+    {
+        if (!$this->_requiredDataValid(array("name", "email", "comment"))) {
+            $this->queryParameters = $_POST;
+            $this->renderAction("requestAccess");
+        } else {
+            $this->_sendRequestAccessMail($_POST['idpEntityId'], $_POST['spEntityId'], $_POST['name'], $_POST['email'], $_POST['comment'] );
+        }
     }
 
     public function certificateAction()
@@ -175,5 +185,37 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->idpCertificate();
+    }
+
+    protected function _requiredDataValid($names)
+    {
+        $dataValid = true;
+        foreach ($names as $name) {
+            if (empty($_POST[$name])) {
+                $name = $name.'Error';
+                $this->$name = true;
+                $dataValid = false;
+            }
+        }
+        return $dataValid;
+    }
+
+    protected function _sendRequestAccessMail($idp, $sp, $name, $email, $comment) {
+        $body = <<<EOT
+There has been a request to allow access for IdP ($idp) to SP ($sp). The request was made by:
+
+$name <$email>
+
+The comment was:
+
+$comment
+
+EOT;
+        $mailer = new Zend_Mail('UTF-8');
+        $mailer->setFrom($_POST['email']);
+        $mailer->addTo(EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->help);
+        $mailer->setSubject(sprintf("Request for IdP access (%s)", gethostname()));
+        $mailer->setBodyText($body);
+        $mailer->send();
     }
 }
