@@ -201,7 +201,6 @@ class EngineBlock_Corto_Adapter
 
         if (isset($entityData['DisplayUnconnectedIdpsWayf']) && $entityData['DisplayUnconnectedIdpsWayf']) {
             return $this->getServiceRegistryAdapter()->markEntitiesBySp($entities, $issuerSpEntityId);
-
         }
         else {
             return $this->getServiceRegistryAdapter()->filterEntitiesBySp($entities, $issuerSpEntityId);
