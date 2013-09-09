@@ -27,22 +27,35 @@
 $layout = $this->layout();
 $layout->setLayout('empty');
 ?>
-<p class="back"><a href="index.php?rid=65b006502b4ec9a79793ad895c3447ba">terug</a></p>
-<h2>Helaas, <i>Gereformeerde Hogeschool</i> heeft nog geen toegang tot deze dienst. Wat nu?</h2>
-<p>Wil je toch graag toegang tot deze dienst, vul dan
-    onderstaand formulier in. Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>		<hr />
-<form action="noAccess.php?rid=65b006502b4ec9a79793ad895c3447ba" method="post" class="apply clearfix">
-    <input name="idp-name" type="hidden" value="Gereformeerde Hogeschool">
-    <label for="name">Naam:</label>
-    <input name="name" id="name" >
-    <br />
-    <label for="email">E-mail:</label>
-    <input name="email" id="email"  />
-    <br />
-    <label for="message">Toelichting:</label>
-    <textarea name="message" id="message"></textarea>
-    <hr />
-			<span class="button">
-			<input name="Submit" type="submit" value="Verstuur"/>
-			</span> <a class="cancel" href="index.php?rid=65b006502b4ec9a79793ad895c3447ba">Annuleren</a>
+<p class="back"><a id="back_request_access" href="#"><?php echo $this->t('back'); ?></a></p>
+<h2><?php echo $this->t('sorry'); ?><i><?php echo $queryParameters['spName']; ?></i> <?php echo $this->t('form_description'); ?>
+
+<form id="request_access_form" action="#" method="post" class="apply clearfix">
+    <input name="idpName" type="hidden" value="<?php echo $queryParameters['idpName']; ?>">
+    <input name="idpEntityId" type="hidden" value="<?php echo $queryParameters['idpEntityId']; ?>">
+    <input name="spName" type="hidden" value="<?php echo $queryParameters['spName']; ?>">
+    <input name="spEntityId" type="hidden" value="<?php echo  $queryParameters['spEntityId']; ?>">
+
+    <?php if (isset($nameError)) : ?>
+        <div><label class="error"> <?php echo $this->t('name_error'); ?></label></div>
+    <?php endif; ?>
+    <label for="name"><?php echo $this->t('name'); ?>:</label>
+    <input name="name" id="name" value="<?php echo $queryParameters['name']; ?>">
+
+    <?php if (isset($emailError)) : ?>
+        <div><label class="error"> <?php echo $this->t('email_error'); ?></label></div>
+    <?php endif; ?>
+    <label for="email"><?php echo $this->t('email'); ?>:</label>
+    <input name="email" id="email" value="<?php echo $queryParameters['email']; ?>" />
+
+    <?php if (isset($commentError)) : ?>
+        <div><label class="error"> <?php echo $this->t('comment_error'); ?></label></div>
+    <?php endif; ?>
+    <label for="comment" class="top"><?php echo $this->t('comment'); ?>:</label>
+    <textarea name="comment" id="comment"><?php echo $queryParameters['comment']; ?></textarea>
+
+    <div class="right">
+        <a id="cancel_request_access" class="cancel" href="#"><?php echo $this->t('cancel'); ?></a>
+        <input id="request_access_submit" name="Submit" type="submit" value="<?php echo $this->t('send'); ?>"/>
+    <div>
 </form>

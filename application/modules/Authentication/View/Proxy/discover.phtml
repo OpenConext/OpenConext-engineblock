@@ -61,6 +61,15 @@ if (isset($metaDataSP['Name'][$lang])) {
 else if (isset($metaDataSP['DisplayName'][$lang])) {
     $displayName = $metaDataSP['DisplayName'][$lang];
 }
+if ($displayName == '') {
+    $fallback_lang = ($lang == 'en' ? 'nl' : 'en');
+    if (isset($metaDataSP['Name'][$fallback_lang])) {
+        $displayName = $metaDataSP['Name'][$fallback_lang];
+    }
+    else if (isset($metaDataSP['DisplayName'][$fallback_lang])) {
+        $displayName = $metaDataSP['DisplayName'][$fallback_lang];
+    }
+}
 
 $preselectedIdpData = array();
 if ($preselectedIdp) {
@@ -160,7 +169,7 @@ if ($preselectedIdp) {
                 <div id="help">
                 </div>
 
-                <!-- HELP -->
+                <!-- Request Access -->
                 <div id="requestAccess">
                 </div>
 
@@ -217,10 +226,12 @@ if ($preselectedIdp) {
             discoveryScreen.setLanguage('". $lang ."');
             discoveryScreen.setSearchText('". $this->t('search') ."');
             discoveryScreen.setIdpList(". json_encode($idpList) .");
+            discoveryScreen.setSpEntityId(". json_encode($metaDataSP['EntityID']) .");
+            discoveryScreen.setSpName(". json_encode($displayName) .");
             discoveryScreen.setUri('". json_encode($uri). "');
             ". $preselectedIdpJson ."
             discoveryScreen.show();
-            " . (isset($_GET['show-help']) && $_GET['show-help'] === 'yes' ? 'discoveryScreen.showHelp(0);' : '');
+            " . (isset($_GET['show-help']) && $_GET['show-help'] === 'yes' ? 'discoveryScreen.showHelp();' : '');
         ?>
 
         $('ul.nav li.lang a').click(function(e) {
