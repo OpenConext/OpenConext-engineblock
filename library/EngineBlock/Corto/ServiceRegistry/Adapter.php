@@ -51,6 +51,8 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 // entity is an idp
                 if (!in_array($entityId, $allowedEntities)) {
                     unset($entities[$entityId]);
+                } else {
+                    $entities[$entityId]['Access'] = true;
                 }
             }
         }

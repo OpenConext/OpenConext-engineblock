@@ -192,6 +192,15 @@ if ($preselectedIdp) {
             </li>
         </script>
 
+        <script id="idpListTemplateMobile" type="text/x-jquery-tmpl">
+            <li id="c${ID}" class="${NoAccessClass}">
+                <a alt="${Alt}" href="#">
+                    <span>${Name}</span>
+                    <em>${NoAccess}</em>
+                </a>
+            </li>
+        </script>
+
         <script id="idpListSuggestionTemplate" type="text/x-jquery-tmpl">
             <p>
             <p>${Suggestion}</p>
@@ -214,6 +223,7 @@ if ($preselectedIdp) {
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/keyboardNavigator.js"></script>
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/typewatch.js"></script>
 
+        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/matchMedia.js"></script>
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/discover.js"></script>
 
         <script>
