@@ -3,8 +3,50 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e0de07a226863dd930ce91efd3af8164",
+    "hash": "0d93852034be96b18a1319a3f5681948",
     "packages": [
+        {
+            "name": "dbpatch/dbpatch",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dbpatch/DbPatch.git",
+                "reference": "c8f8bdb66d351f2995ac51a02bcfc3278e467660"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dbpatch/DbPatch/zipball/c8f8bdb66d351f2995ac51a02bcfc3278e467660",
+                "reference": "c8f8bdb66d351f2995ac51a02bcfc3278e467660",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.1.0"
+            },
+            "bin": [
+                "bin/dbpatch.php"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "Sandy Pleyte"
+                },
+                {
+                    "name": "Martijn de Letter"
+                }
+            ],
+            "description": "DbPatch is a commandline utility to manage/track (my)sql/php patch files.",
+            "homepage": "http://www.dbpatch-project.com/",
+            "keywords": [
+                "database",
+                "db",
+                "migrations"
+            ],
+            "time": "2012-06-13 17:30:48"
+        },
         {
             "name": "pimple/pimple",
             "version": "v1.0.2",
@@ -61,6 +103,22 @@
                 "shasum": null
             },
             "type": "library"
+        },
+        {
+            "name": "zendframework/zendframework1",
+            "version": "1.10.9",
+            "dist": {
+                "type": "zip",
+                "url": "https://packages.zendframework.com/releases/ZendFramework-1.10.9/ZendFramework-1.10.9-minimal.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Zend_": "library/"
+                }
+            }
         }
     ],
     "packages-dev": [
