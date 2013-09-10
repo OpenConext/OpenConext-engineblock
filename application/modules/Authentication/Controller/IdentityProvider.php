@@ -196,7 +196,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     {
         $dataValid = true;
         foreach ($names as $name) {
-            if (empty($_POST[$name])) {
+            if (empty($_POST[$name]) || ($name === 'email' && !filter_var($_POST[$name], FILTER_VALIDATE_EMAIL))) {
                 $name = $name.'Error';
                 $this->$name = true;
                 $dataValid = false;

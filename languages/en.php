@@ -82,7 +82,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'name'                  => 'Name',
     'name_error'            => 'Enter your name',
     'email'                 => 'Email',
-    'email_error'           => 'Enter your email address',
+    'email_error'           => 'Enter your (correct) email address',
     'comment'               => 'Comment',
     'comment_error'         => 'Enter a comment',
     'cancel'                => 'Cancel',
