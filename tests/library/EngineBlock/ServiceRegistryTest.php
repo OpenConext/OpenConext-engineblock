@@ -23,12 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require_once(dirname(__FILE__) . '/../../autoloading.inc.php');
-require_once 'PHPUnit/Framework/TestCase.php';
-
-require_once 'RestClientMock.php';
-
-
 // TODO: replace the calls with a mock rest server, currently tests against
 // actual content in Ivo's janus db.
 

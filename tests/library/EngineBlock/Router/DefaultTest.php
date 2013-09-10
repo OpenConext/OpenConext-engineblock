@@ -22,12 +22,6 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-
-require_once(dirname(__FILE__) . '/../../../autoloading.inc.php');
-
-require_once 'Abstract.php';
-require_once 'AssertionBuilder.php';
-
 class Test_EngineBlock_Router_DefaultTest extends Test_EngineBlock_Router_Abstract
 {
     public function testRoutables()

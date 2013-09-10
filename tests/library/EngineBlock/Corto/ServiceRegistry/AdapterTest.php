@@ -22,11 +22,6 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-
-require_once dirname(__FILE__) . '/../../../../autoloading.inc.php';
-require_once 'PHPUnit/Framework/TestCase.php';
-require_once dirname(__FILE__) . '/../../ServiceRegistryMock.php';
-
 class EngineBlock_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_TestCase
 {
     /**

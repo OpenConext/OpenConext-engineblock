@@ -23,9 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require_once(dirname(__FILE__) . '/../../autoloading.inc.php');
-require_once 'PHPUnit/Framework/TestCase.php';
-
 /**
  * Tests for EngineBlock_Log
  *

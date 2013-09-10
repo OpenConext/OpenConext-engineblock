@@ -1,8 +1,4 @@
 <?php
-
-require_once(dirname(__FILE__) . '/../../../../autoloading.inc.php');
-require_once 'PHPUnit/Framework/TestCase.php';
-
 class EngineBlock_Log_Formatter_MailTest extends PHPUnit_Framework_TestCase
 {
     protected $_testEvent;

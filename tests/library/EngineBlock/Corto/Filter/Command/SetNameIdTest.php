@@ -1,7 +1,5 @@
 <?php
 
-require_once(dirname(__FILE__) . '/../../../../../autoloading.inc.php');
-
 class Test_EngineBlock_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framework_TestCase
 {
     /**
