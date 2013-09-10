@@ -29,14 +29,11 @@ define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/
 define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
 define('ENGINEBLOCK_FOLDER_VENDOR'    , ENGINEBLOCK_FOLDER_ROOT . 'vendor/');
 
-// @todo see if composer can autoload engineblock
+require_once ENGINEBLOCK_FOLDER_VENDOR . 'autoload.php';
+
 $includePath = get_include_path();
-$includePath = ENGINEBLOCK_FOLDER_LIBRARY . PATH_SEPARATOR . $includePath;
 $includePath = ENGINEBLOCK_FOLDER_VENDOR .  'zendframework/zendframework1/library' . PATH_SEPARATOR . $includePath;
 set_include_path($includePath);
-
-require __DIR__ . '/Exception.php';
-require __DIR__ . '/Application/Bootstrapper.php';
 
 class EngineBlock_ApplicationSingleton
 {
