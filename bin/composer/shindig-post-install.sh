@@ -33,4 +33,4 @@ rm -rf vendor/apache/shindig/build.xml \
 cd vendor/apache
 find . -name '*.php' \
 -print0  | \
-xargs -0 sed --regexp-extended --in-place "s#(require_once\ '(src|external))[^;]*;##g"
+xargs -0 sed --regexp-extended --in-place "s#require(_once)?\ '[^;]*;##g"
