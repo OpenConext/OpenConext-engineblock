@@ -81,7 +81,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'name'                  => 'Naam',
     'name_error'            => 'Vul je naam in',
     'email'                 => 'Email',
-    'email_error'           => 'Vul je e-mailadres in',
+    'email_error'           => 'Vul je (juiste) e-mailadres in',
     'comment'               => 'Toelichting',
     'comment_error'         => 'Vul een toelichting in',
     'cancel'                => 'Annuleren',
@@ -92,7 +92,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     <p>SURFnet faciliteert het doorsturen van je verzoek maar heeft geen controle over de snelheid waarmee je antwoord of toegang krijgt.</p>
 
-    <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:info@surfconext.nl">info@surfconext.nl</a></p>',
+    <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
     //Profile
     'profile_header'                    => 'SURFconext',
