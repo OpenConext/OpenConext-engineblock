@@ -173,7 +173,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     {
         if (!$this->_requiredDataValid(array("name", "email", "comment"))) {
             $this->queryParameters = $_POST;
-            $this->renderAction("requestAccess");
+            $this->renderAction("RequestAccess");
         } else {
             $this->_sendRequestAccessMail(
                 urldecode($_POST['idpEntityId']),
