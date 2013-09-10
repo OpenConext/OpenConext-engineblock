@@ -44,7 +44,7 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
                                  'group_service'        => 'EngineBlock_Shindig_DataService',
         ));
 
-        // Shindig expects urls to be moiunted on /social/rest so we enforce that.
+        // Shindig expects urls to be mounted on /social/rest so we enforce that.
         $_SERVER['REQUEST_URI'] = '/social/rest/' . $url;
         // We only support JSON
         $_SERVER['CONTENT_TYPE'] = 'application/json';
