@@ -49,10 +49,10 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         foreach ($entities as $entityId => $entityData) {
             if (isset($entityData['SingleSignOnService'])) {
                 // entity is an idp
-                if (!in_array($entityId, $allowedEntities)) {
-                    unset($entities[$entityId]);
-                } else {
+                if (in_array($entityId, $allowedEntities)) {
                     $entities[$entityId]['Access'] = true;
+                } else {
+                    unset($entities[$entityId]);
                 }
             }
         }
