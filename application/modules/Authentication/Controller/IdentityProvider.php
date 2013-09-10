@@ -175,7 +175,12 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $this->queryParameters = $_POST;
             $this->renderAction("requestAccess");
         } else {
-            $this->_sendRequestAccessMail($_POST['idpEntityId'], $_POST['spEntityId'], $_POST['name'], $_POST['email'], $_POST['comment'] );
+            $this->_sendRequestAccessMail(
+                urldecode($_POST['idpEntityId']),
+                urldecode($_POST['spEntityId']),
+                $_POST['name'],
+                $_POST['email'],
+                $_POST['comment'] );
         }
     }
 
@@ -202,7 +207,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
     protected function _sendRequestAccessMail($idp, $sp, $name, $email, $comment) {
         $body = <<<EOT
-There has been a request to allow access for IdP ($idp) to SP ($sp). The request was made by:
+There has been a request to allow access for IdP '$idp' to SP '$sp'. The request was made by:
 
 $name <$email>
 
