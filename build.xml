@@ -34,7 +34,6 @@
                 <include name="**/*.php"/>
                 <include name="**/*.html"/>
                 <include name="**/*.phtml"/>
-                <exclude name=".svn/**"/>
                 <exclude name="library/shindig/**"/>
                 <exclude name="vendor/**"/>
             </fileset>
