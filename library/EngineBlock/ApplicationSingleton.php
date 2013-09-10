@@ -31,6 +31,7 @@ define('ENGINEBLOCK_FOLDER_VENDOR'    , ENGINEBLOCK_FOLDER_ROOT . 'vendor/');
 
 require_once ENGINEBLOCK_FOLDER_VENDOR . 'autoload.php';
 
+// @todo this only necessary for code which bypasses autoloading like Zend_Translate
 $includePath = get_include_path();
 $includePath = ENGINEBLOCK_FOLDER_VENDOR .  'zendframework/zendframework1/library' . PATH_SEPARATOR . $includePath;
 set_include_path($includePath);
