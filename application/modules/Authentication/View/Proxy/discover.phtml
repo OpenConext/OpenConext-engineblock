@@ -53,6 +53,7 @@ if (isset($_GET['lang'])) {
 if (!in_array($lang, array('nl','en'))) {
     $lang = 'en';
 }
+$fallback_lang = ($lang == 'en' ? 'nl' : 'en');
 
 $displayName = '';
 if (isset($metaDataSP['Name'][$lang])) {
@@ -62,7 +63,7 @@ else if (isset($metaDataSP['DisplayName'][$lang])) {
     $displayName = $metaDataSP['DisplayName'][$lang];
 }
 if ($displayName == '') {
-    $fallback_lang = ($lang == 'en' ? 'nl' : 'en');
+
     if (isset($metaDataSP['Name'][$fallback_lang])) {
         $displayName = $metaDataSP['Name'][$fallback_lang];
     }
@@ -76,6 +77,10 @@ if ($preselectedIdp) {
     foreach ($idpList as $idp) {
         if ($idp['EntityId'] === $preselectedIdp) {
             $preselectedIdpData = $idp;
+            $preselectedIdpName = $preselectedIdpData['Name_'.$lang];
+            if (empty($preselectedIdpName)) {
+                $preselectedIdpName = $preselectedIdpData['Name'.$fallback_lang];
+            }
             break;
         }
     }
@@ -129,7 +134,8 @@ if ($preselectedIdp) {
                                 <p>
                                     <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
                                     <input type="hidden" name="idp" value="<?php echo htmlentities($preselectedIdp); ?>" />
-                                    <input type="submit" value="<?php echo htmlentities($preselectedIdpData['Name_en']); ?>" />
+
+                                    <input type="submit" value="<?php echo htmlentities($preselectedIdpName); ?>" />
                                 </p>
                             </form>
                         </noscript>
