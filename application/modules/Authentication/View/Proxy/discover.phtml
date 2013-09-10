@@ -106,10 +106,10 @@ if ($preselectedIdp) {
                 <ul class="nav">
                     <li id="help_nav"><a href="#">HELP</a></li>
                     <li class="lang <?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
+                        <a data-lang="en" href="#">EN</a>
                     </li>
                     <li class="lang <?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
+                        <a data-lang="nl" href="#">NL</a>
                     </li>
                 </ul>
 
