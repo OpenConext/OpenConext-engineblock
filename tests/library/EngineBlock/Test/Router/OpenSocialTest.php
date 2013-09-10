@@ -22,10 +22,6 @@
  * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 class EngineBlock_Test_Router_OpenSocialTest extends EngineBlock_Test_Router_Abstract
 {
     public function testUnroutables()
