@@ -75,6 +75,7 @@
         "psr-0": {
             "DbPatch_": "vendor/dbpatch/dbpatch/src/",
             "EngineBlock_": "library/",
+            "EngineBlock_Test": "tests/library/",
             "Grouper_": "library/",
             "Janus_": "library/",
             "OpenSocial_": "library/",
@@ -89,9 +90,6 @@
             "Service_":"application/modules/",
             "Social_":"application/modules/",
             "VoManage_":"application/modules/"
-        },
-        "classmap":[
-            "tests"
-        ]
+        }
     }
 }
