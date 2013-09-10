@@ -3,8 +3,24 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "0d93852034be96b18a1319a3f5681948",
+    "hash": "043c861a0127e2a229144ae927016c46",
     "packages": [
+        {
+            "name": "apache/shindig",
+            "version": "1094333",
+            "source": {
+                "type": "svn",
+                "url": "http://svn.apache.org/repos/asf/shindig/trunk",
+                "reference": "php@1094333"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "external",
+                    "src"
+                ]
+            }
+        },
         {
             "name": "dbpatch/dbpatch",
             "version": "v1.1.1",

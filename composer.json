@@ -22,13 +22,32 @@
                     }
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "apache/shindig",
+                "version": "1094333",
+                "source": {
+                    "type": "svn",
+                    "url": "http://svn.apache.org/repos/asf/shindig/trunk",
+                    "reference": "php@1094333"
+                },
+                "autoload" : {
+                    "classmap" : [
+                        "external/OAuth",
+                        "src"
+                    ]
+                }
+            }
         }
     ],
     "require": {
         "pimple/pimple": "1.0.2",
         "simplesamlphp/simplesamlphp": "1.9.0",
         "dbpatch/dbpatch": "1.1.1",
-        "zendframework/zendframework1":"1.10.9"
+        "zendframework/zendframework1":"1.10.9",
+        "apache/shindig":"1094333"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",
@@ -42,13 +61,15 @@
         "post-install-cmd": [
             "bin/composer/dbpatch-post-install.sh",
             "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh"
+            "bin/composer/zend-framework-post-install.sh",
+            "bin/composer/shindig-post-install.sh"
         ],
         "post-update-cmd": [
             "bin/composer/dbpatch-post-install.sh",
             "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh"
-            ]
+            "bin/composer/zend-framework-post-install.sh",
+            "bin/composer/shindig-post-install.sh"
+        ]
     },
     "autoload": {
         "psr-0": {
