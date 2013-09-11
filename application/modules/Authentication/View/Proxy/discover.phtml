@@ -33,8 +33,6 @@
  * @var $preselectedIdp string
  */
 
-define('STATIC_HOST', EngineBlock_View::staticUrl());
-
 /**
  * @var Zend_Layout $layout
  */
@@ -96,8 +94,8 @@ if ($preselectedIdp) {
 
         <title><?php echo $this->layout()->title; ?></title>
 
-        <link href="<?php echo STATIC_HOST; ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo STATIC_HOST; ?>/css/responsive/screen.css" rel="stylesheet" type="text/css" />
+        <link href="/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
+        <link href="/css/responsive/screen.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="index">
         <div id="wrapper">
@@ -218,19 +216,17 @@ if ($preselectedIdp) {
             </div>
             </p>
         </script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/respond.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery-1.5.1.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.mousewheel.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.putCursorAtEnd.1.0.js"></script>
-<!--        <script type="text/javascript" src="--><?php //echo STATIC_HOST; ?><!--/javascript/jquery.jscrollpane.min.js"></script>-->
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.tmpl.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/javascript/respond.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.mousewheel.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.putCursorAtEnd.1.0.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.tmpl.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.cookie.js"></script>
 
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/keyboardNavigator.js"></script>
-<!--        <script type="text/javascript" src="--><?php //echo STATIC_HOST; ?><!--/javascript/typewatch.js"></script>-->
+        <script type="text/javascript" src="/javascript/keyboardNavigator.js"></script>
 
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/matchMedia.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/discover.js"></script>
+        <script type="text/javascript" src="/javascript/matchMedia.js"></script>
+        <script type="text/javascript" src="/javascript/discover.js"></script>
 
         <script>
         <?php
@@ -249,17 +245,6 @@ if ($preselectedIdp) {
             discoveryScreen.show();"
 
         ?>
-
-//        $('ul.nav li.lang a').click(function(e) {
-//            e.preventDefault();
-//            if ($('#help').is(':visible') && $.trim($('#help').html()).length > 0) {
-//                window.location.href = $(this).attr('href') + '&show-help=yes';
-//            }
-//            else {
-//                window.location.href = $(this).attr('href');
-//            }
-//            return false;
-//        });
 
         </script>
     </body>

@@ -52,8 +52,8 @@ $layout->subheader  = $this->t('profile_subheader');
 $layout->header     = $this->t('profile_header') . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
-$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
-$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/profile.js');
+$layout->getView()->inlineScript()->appendFile('/javascript/screen.js');
+$layout->getView()->inlineScript()->appendFile('/javascript/profile.js');
 $layout->getView()->inlineScript()->appendScript("
     var profile = new Profile();
     profile.init();");
@@ -217,10 +217,10 @@ foreach ($spList as $spId => $sp) {
     <p>
         <?php echo $this->t('profile_apps_share',
             "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
             </a>",
             "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
             </a>"
         ); ?>
 
@@ -330,10 +330,10 @@ foreach ($spList as $spId => $sp) {
         <div class="exit-disclaimer"/>
         <?php echo $this->t('profile_leave_surfconext_disclaim',
             "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
             </a>",
             "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/SURFteams+Best+Practice\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
+                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
             </a>"
         ); ?><br />
         </div>

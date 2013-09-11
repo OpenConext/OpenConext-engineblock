@@ -46,7 +46,7 @@ if (!isset($idp)) {
 $lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
 
 // Set new window icon
-$newWindowIconUrl = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
+$newWindowIconUrl = '/media/new_window_icon.gif';
 $newWindowHtml = '<img src="' . $newWindowIconUrl . '" alt="(' . $this->t('external_link') . ')" style="border: 0pt none; float: none;" />';
 $termsOfServiceUrl = 'https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+(' . strtoupper($lang) . ')';
 $surfConextTosLinkHtml = '<a href="' . $termsOfServiceUrl . '" target="_blank">SURFconext</a>' . $newWindowHtml;
@@ -79,17 +79,16 @@ $view = $layout->getView();
 /** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
 $inlineScriptHelper = $view->getHelper('InlineScript');
 // Set javascript
-$staticHost = EngineBlock_View::staticUrl();
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.mousewheel.min.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.putCursorAtEnd.1.0.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.jscrollpane.min.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.tmpl.min.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/keyboardNavigator.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/typewatch.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.cookie.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/discover.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/screen.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/discover.js');
+$inlineScriptHelper->appendFile('/javascript/jquery.mousewheel.min.js');
+$inlineScriptHelper->appendFile('/javascript/jquery.putCursorAtEnd.1.0.js');
+$inlineScriptHelper->appendFile('/javascript/jquery.jscrollpane.min.js');
+$inlineScriptHelper->appendFile('/javascript/jquery.tmpl.min.js');
+$inlineScriptHelper->appendFile('/javascript/keyboardNavigator.js');
+$inlineScriptHelper->appendFile('/javascript/typewatch.js');
+$inlineScriptHelper->appendFile('/javascript/jquery.cookie.js');
+$inlineScriptHelper->appendFile('/javascript/discover.js');
+$inlineScriptHelper->appendFile('/javascript/screen.js');
+$inlineScriptHelper->appendFile('/javascript/discover.js');
 
 $inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
 $inlineScriptHelper->appendScript('
@@ -163,7 +162,7 @@ $("#scrollViewport").jScrollPane({
 
 <img class="arrow"
      alt="<?php echo $this->t('consent_sp_is_provided'); ?>"
-     src="<?php echo $staticHost . '/media/arrow.png'; ?>" />
+     src="<?php echo '/media/arrow.png'; ?>" />
 
 <?php if ($spLogo) : ?>
 <img class="logo"

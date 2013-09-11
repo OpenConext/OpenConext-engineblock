@@ -1,0 +1,50 @@
+/*
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@import "partials/general";
+@import "partials/clearfix";
+@import "partials/panel";
+@import "partials/faq";
+@import "partials/jqscroll";
+@import "partials/nav-top";
+@import "partials/attribute-table";
+
+div.results {
+  background: url(../../media/bck2-small.png) no-repeat left top;
+  width: 451px;
+  height: 95px;
+  display: block;
+  margin-bottom: 0;
+  position: relative;
+  overflow: visible;
+  padding: 3px 0px 3px 0px;
+}
+
+#scrollViewport {
+  overflow: hidden;
+  height: 91px;
+}
+
+/* IE7 hacks */
+input.bigbutton {
+    padding: 0 .25em;
+    width: 0;  /* IE table-cell margin fix */
+    overflow: visible;
+}
+
+input.bigbutton[class] {  /* IE ignores [class] */
+    width: auto;  /* cancel margin fix for other browsers */
+}
