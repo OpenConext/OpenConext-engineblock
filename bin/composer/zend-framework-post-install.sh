@@ -7,6 +7,10 @@
 # - ending on .php'; or .php"; or.php'); or .php");
 # ending in a semicolon or a (double) quote and a semicolon
 
+ROOT_DIR="$(cd -P "$(dirname $0)/../../" && pwd)"
+
+cd $ROOT_DIR
+
 cd vendor/zendframework
 find . -name '*.php' -print0  | \
 xargs -0 sed --regexp-extended --in-place "s#(include|require)_once[^;]*\.php['\"][)]?;##g"
