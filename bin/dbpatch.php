@@ -24,12 +24,7 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-set_include_path(realpath(__DIR__ . '/../library') . PATH_SEPARATOR . get_include_path());
-
-require_once 'Zend/Loader/Autoloader.php';
-$autoloader = Zend_Loader_Autoloader::getInstance();
-$autoloader->registerNamespace('DbPatch_');
-$autoloader->registerNamespace('EngineBlock_');
+require realpath(__DIR__ . '/../vendor') . '/autoload.php';
 
 $application = new EngineBlock_DbPatch_Core_Application();
 $application->main();

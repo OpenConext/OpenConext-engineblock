@@ -23,9 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require_once('Surfnet/Zend/Auth/Adapter/Saml.php');
-require_once('SurfConext/Identity.php');
-
 /**
  * Action helper to force authentication in every action.
  *

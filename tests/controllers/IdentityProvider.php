@@ -23,8 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require_once(dirname(__FILE__) . '/../autoloading.inc.php');
-
 class Test_Controller_IdentityProvider extends PHPUnit_Framework_TestCase
 {
     public function testSendAuthenticationRequestWithIdP()
