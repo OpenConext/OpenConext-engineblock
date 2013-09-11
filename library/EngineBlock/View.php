@@ -117,20 +117,6 @@ class EngineBlock_View
     }
 
     /**
-     * Return the url of the Static vhost containing media, script and css files
-     *
-     * @example <?php echo $this->staticUrl(); ?>
-     *
-     * @return string
-     */
-    public static function staticUrl($path = "")
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $settings = $application->getConfiguration();
-        return $settings->static->protocol . '://'. $settings->static->host . $path;
-    }
-
-    /**
      * Return the url of the Profile vhost
      *
      * @example <?php echo $this->profileUrl(); ?>

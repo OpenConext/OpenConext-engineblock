@@ -1,0 +1,739 @@
+/*
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@charset "UTF-8";
+/* CSS Document */
+
+/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++
++	File		: screen.css
++	Author		: frismedia.nl
++	Date		: 10-12-2010
++	 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*      HTML ELEMENTS     */
+
+* {
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    color: #333;
+    font: 12px/17px Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    background: #e7e7e7;
+}
+
+h1 {
+    font-size: 14px;
+    margin: 0 0 15px 0;
+    padding: 0;
+    color: #fff;
+}
+
+h2, h3 {
+    font-size: 14px;
+    margin: 0 0 3px 0;
+    padding: 0;
+}
+
+p {
+    padding: 0;
+    margin: 0 0 8px 0;
+}
+
+a {
+    color: #288dd5;
+    text-decoration: none;
+    outline: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    border: none;
+    border-bottom: 1px solid #d7d7d7;
+    margin: 10px 0 10px 0;
+    padding: 0;
+    height: 1px;
+}
+
+:focus {
+    outline: none;
+}
+
+/*      HTML ELEMENTS     */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*    GENERAL CLASSES     */
+
+.clearfix:after, #main:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+* html .clearfix {
+    height: 1%;
+}
+
+/*    GENERAL CLASSES     */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*      MAIN ELEMENTS     */
+
+div#wrapper {
+    margin: 0 auto;
+    width: 478px;
+}
+
+div#header {
+    background: url(../../media/headerBck.gif) no-repeat left bottom;
+    padding: 15px 0 34px 22px;
+    margin-bottom: 10px;
+}
+
+div#main {
+    background: url(../../media/contentBck.gif) no-repeat left top;
+    padding: 12px 14px 0px 14px;
+    margin-bottom: 20px;
+    position: relative; /*height: 472px;*/
+}
+
+body.noAccess div#main {
+    /*height: 600px;*/
+}
+
+/*      MAIN ELEMENTS     */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*           NAV          */
+
+ul.nav {
+    float: right;
+    list-style: none;
+    text-transform: uppercase;
+}
+
+ul.nav li {
+    float: left;
+    list-style: none;
+    font-weight: bold;
+    background: url(../../media/divider.gif) no-repeat left 3px;
+    margin-left: 5px;
+    padding-left: 6px;
+}
+
+ul.nav li a {
+    color: #fff;
+    padding-bottom: 6px;
+}
+
+ul.nav li.active a {
+    color: #1166a4;
+    background: url(../../media/menu_active.gif) no-repeat center bottom;
+}
+
+ul.nav li:first-child {
+    background: none;
+}
+
+ul.nav li.first {
+    background: none;
+}
+
+ul.nav li.first.active a {
+    background-image: none;
+}
+
+/* Tabs */
+ul.tabs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0px;
+    right: 25px;
+}
+
+ul.tabs li {
+    float: left;
+    margin-left: 4px;
+    width: 25px;
+    height: 14px;
+    display: block;
+    float: left;
+    text-indent: -9999px;
+    cursor: pointer;
+}
+
+ul.tabs li.thumbs {
+    background: url(../../media/thumbs2.gif) no-repeat left top;
+}
+
+ul.tabs li.active.thumbs {
+    background-image: url(../../media/thumbs1.gif);
+}
+
+ul.tabs li.list {
+    background: url(../../media/list2.gif) no-repeat left top;
+}
+
+ul.tabs li.active.list {
+    background-image: url(../../media/list1.gif);
+}
+
+/*           NAV          */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*         CONTENT        */
+
+div.suggestion {
+    background: url(../../media/bck1.png) no-repeat left top;
+    width: 451px;
+    height: 76px;
+    display: block;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+div.suggestion em {
+    display: none;
+}
+
+div.suggestion a {
+    height: 73px;
+    display: block;
+    float: left;
+}
+
+div.suggestion a.noAccess span {
+    float: left;
+    line-height: 14px;
+    width: 185px;
+    margin-top: 18px;
+    padding-left: 20px;
+}
+
+div.suggestion a.noAccess em {
+    color: #cc0000;
+    font-style: normal;
+    /*	background: url(../media/noAccess.png) repeat;*/
+    display: block;
+    font-size: 11px;
+}
+
+div.dimmed a.noAccess em {
+    position: absolute;
+    top: 5px;
+    left: 107px;
+    width: 185px;
+    padding-left: 145px;
+    height: 23px;
+    padding-top: 43px;
+    background: url(../../media/dimmedSuggestion.png) left top;
+}
+
+div.suggestion a.noAccess:hover em {
+    text-decoration: underline;
+}
+
+div.suggestion p {
+    color: #999;
+    font-weight: bold;
+    padding: 7px 10px 0 9px;
+    float: left;
+    clear: none;
+}
+
+div.suggestion a img {
+    float: left;
+    border: 0;
+    max-height: 60px;
+    max-width: 122px;
+}
+
+div.suggestion a span {
+    margin: 30px 0 0 7px;
+    display: block;
+    float: left;
+}
+
+div.suggestion a.noAccess {
+    color: #333;
+}
+
+div.suggestion a:hover span {
+    text-decoration: underline;
+}
+
+div.suggestion a:hover, div.suggestion a:hover p {
+    /* Ensure "our suggestion" won't be underlined */
+    text-decoration: none;
+}
+
+div.suggestion a.noAccess:hover span {
+    text-decoration: none;
+}
+
+div.suggestion img.logo {
+    float: left;
+    margin: 12px 0 0 10px;
+}
+
+div#main div.bottom {
+    background: url(../../media/contentBtm.gif) no-repeat left bottom;
+    width: 450px;
+    padding: 8px 14px 10px 14px;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    margin-left: -14px;
+}
+
+div.results {
+    background: url(../../media/bck2.gif) no-repeat left top;
+    width: 451px;
+    height: 239px;
+    display: block;
+    margin-bottom: 0;
+    position: relative;
+    overflow: visible;
+    padding: 3px 0px 3px 0px;
+}
+
+p.back {
+    border-bottom: 1px solid #d7d7d7;
+    padding-bottom: 10px;
+}
+
+p.back a {
+    background: url(../../media/back.png) no-repeat left center;
+    padding: 1px 0 2px 22px;
+    margin-left: -3px;
+}
+
+p.warning {
+    padding: 7px 0 7px 35px;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: #f6ff03 url(../../media/warning.png) no-repeat 10px center;
+}
+
+p.noresults {
+    background: url(../../media/warning.png) no-repeat center 95px;
+    text-align: center;
+    padding-top: 115px;
+}
+
+.word-wrap {
+    word-wrap: break-word;
+}
+
+table.error-table {
+    margin: 0 0 0 10px;
+    width: 360px;
+    table-layout: fixed;
+    border: 1px solid #999;
+    background: #f5f4f4;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+/*         CONTENT        */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*   THUMBNAILS & LIST    */
+
+ul#organisationsContainer {
+    margin: 0 0 0 2px;
+    padding: 13px 3px 0 3px;
+    list-style: none;
+    line-height: 19px;
+    /*height:245px;
+     overflow:hidden;*/
+}
+
+ul#organisationsContainer li {
+    margin: 0;
+    padding: 0;
+
+}
+
+ul#organisationsContainer li a {
+    background: url(../../media/bullet2.gif) no-repeat 7px center;
+    padding: 0 0 0 14px;
+    display: block;
+}
+
+/* list */
+ul#organisationsContainer.list li.selected {
+    background-color: #eee;
+    color: #288dd5;
+}
+
+ul#organisationsContainer.list li.noAccess a:hover em, ul#organisationsContainer.list li.noAccess.selected a em {
+    color: #cc0000;
+    text-decoration: underline;
+}
+
+ul#organisationsContainer.list img {
+    display: none;
+}
+
+ul#organisationsContainer.list li.noAccess a {
+    color: #A9D1EE;
+}
+
+ul#organisationsContainer.list li.noAccess em {
+    margin-left: 10px;
+    color: #cc0000;
+    font-size: 11px;
+    font-style: normal;
+}
+
+/* thumbs */
+ul#organisationsContainer.thumbs {
+    list-style: none;
+    margin: 0 -20px 0 0;
+    padding: 13px 9px;
+    font-size: 11px;
+    line-height: 12px;
+}
+
+ul#organisationsContainer.thumbs li {
+    margin: 0 8px 8px 0;
+    padding: 0;
+    float: left;
+    position: relative;
+    text-align: center;
+    width: 133px;
+}
+
+ul#organisationsContainer.thumbs li a {
+    display: block;
+    height: 100px;
+    width: 133px;
+    margin: 0;
+    padding: 5px 0 0 0;
+    background: none;
+    text-align: center;
+    position: relative;
+}
+
+ul#organisationsContainer.thumbs li a img {
+    display: block;
+    border: medium none;
+    margin: 0 0 0 5px;
+    max-height: 60px;
+    max-width: 122px;
+    margin: 0 auto;
+}
+
+ul#organisationsContainer.thumbs li a:hover, ul#organisationsContainer.thumbs li.selected a {
+    background: url(../../media/selectionHover.gif) no-repeat left top;
+}
+
+ul#organisationsContainer.thumbs li a:hover span, ul#organisationsContainer.thumbs li a:hover em {
+    text-decoration: underline;
+}
+
+ul#organisationsContainer.thumbs li.selected a, ul.thumbs li.selected a:hover {
+    background: url(../../media/selection.gif) no-repeat left top;
+}
+
+ul#organisationsContainer.thumbs span {
+    position: absolute;
+    left: 5px;
+    top: 62px;
+    text-align: left;
+    text-align: center;
+    width: 122px;
+}
+
+ul#organisationsContainer.thumbs li em {
+    color: #cc0000;
+    font-style: normal;
+    background: url(../../media/selectionNodatabase.png) no-repeat left top;
+    display: block;
+    height: 105px;
+    width: 139px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding-top: 88px;
+    padding-left: 5px;
+    text-align: left;
+}
+
+/*   THUMBNAILS & LIST    */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*           FAQ          */
+
+div#help {
+    display: block;
+}
+
+ul#faq {
+    list-style: none;
+    margin: 0;
+    padding: 6px 9px 9px 9px;
+}
+
+ul#faq li {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #d7d7d7;
+    margin-bottom: 5px;
+    padding-bottom: 3px;
+    clear: both;
+    display: block;
+}
+
+ul#faq li ul {
+    padding: 0;
+}
+
+ul#faq li ul li {
+    border: none;
+    padding-left: 10px;
+    background: url(../../media/bullet1.gif) no-repeat 3px 7px;
+}
+
+ul#faq li h3 {
+    padding-right: 10px;
+    color: #419bda;
+    cursor: pointer;
+    background: url(../../media/down.gif) no-repeat right 6px;
+    font-size: 12px;
+}
+
+ul#faq li.open {
+    padding-bottom: 20px;
+}
+
+ul#faq li.open h3 {
+    background: none;
+}
+
+ul#faq li h3:hover {
+    text-decoration: underline;
+}
+
+span.openClose {
+    cursor: pointer;
+    float: right;
+    color: #288dd5;
+    background: url(../../media/up.gif) no-repeat right 6px;
+    padding-right: 12px;
+    clear: both;
+    display: none;
+}
+
+span.openClose:hover {
+    text-decoration: underline;
+}
+
+ul#faq li.open span.openClose {
+    display: block;
+}
+
+ul#faq li p, ul#faq li ul {
+    display: none;
+}
+
+ul#faq li.open p, ul#faq li.open ul {
+    display: block;
+}
+
+/*           FAQ          */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*          FORM          */
+
+input, textarea, select {
+    font: 13px/16px Arial, Helvetica, sans-serif;
+    line-height: 29px; /* Vertical centering IE */
+}
+
+input.error, textarea.error, select.error {
+    outline: solid 1px #CC0000;
+}
+
+label.error {
+    color: #CC0000;
+}
+
+span.errorMessage {
+    background: url(../../media/formError.gif) no-repeat left 1px;
+    padding-left: 20px;
+    margin: 0px 0px 0px 80px;
+    color: #CC0000;
+    display: block;
+}
+
+input {
+    width: 365px;
+    height: 26px;
+    background: url(../../media/input.gif) no-repeat left top;
+    border: none;
+    padding: 0px 5px 2px 5px;
+    margin-bottom: 10px;
+}
+
+textarea {
+    width: 365px;
+    height: 130px;
+    background: url(../../media/textarea.gif) no-repeat left top;
+    border: none;
+    padding: 5px 5px 5px 5px;
+    margin-bottom: 10px;
+    line-height: normal;
+}
+
+input.search {
+    width: 461px;
+    height: 18px;
+    background-image: url(../../media/search.gif);
+    padding: 7px 25px 7px 5px;
+    font: 13px/13px Arial, Helvetica, sans-serif
+}
+
+input.search:focus {
+    border: none;
+    outline: none;
+}
+
+span.button {
+    display: block;
+    background: url(../../media/buttonRight.gif) no-repeat right top;
+    float: right;
+    margin-right: -2px;
+}
+
+span.button input {
+    background: url(../../media/buttonLeft.gif) no-repeat left top;
+    width: auto;
+    height: 32px;
+    padding-left: 3px;
+    cursor: pointer;
+    color: #fff;
+    padding: 0 15px 2px 13px;
+    font-weight: bold;
+}
+
+span.button input:hover {
+    text-decoration: underline;
+}
+
+form.apply input, form.apply textarea {
+    float: left;
+}
+
+form.apply label {
+    float: left;
+    width: 74px;
+    margin-top: 3px;
+}
+
+form br {
+    clear: both;
+}
+
+a.cancel {
+    float: right;
+    margin: 8px 15px 0 0;
+    font-weight: bold;
+    color: #333;
+}
+
+/*          FORM          */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*         SCROLL         */
+
+#scrollViewport {
+    overflow: hidden;
+    /*	height:239px;*/
+    height: 235px;
+}
+
+#scrollViewportHelp {
+    height: 235px;
+}
+
+.jspVerticalBar {
+
+    background-color: transparent;
+
+}
+
+.jspCap {
+    /* Top and bottom insets */
+    display: block;
+    height: 7px;
+}
+
+.jspTrack {
+    /* Scroll track */
+    width: 10px;
+    background: #E2EBF4 url(../../media/scrollBck.gif) no-repeat left top;
+}
+
+.jspDrag {
+    /* Scroll handle */
+    width: 8px;
+    margin: 0 auto;
+    background: #419bda;
+    border: 1px solid #3f769d;
+    display: block;
+    position: absolute;
+    outline: none;
+}
+
+.jspArrowUp, .jspArrowUp.jspDisabled {
+    height: 13px;
+    background: url(../../media/slider_up.gif) no-repeat left 5px;
+}
+
+.jspArrowDown, .jspArrowDown.jspDisabled {
+    height: 10px;
+    background: url(../../media/slider_down.gif) no-repeat left 2px;
+}
+
+/*         SCROLL         */
+/*++++++++++++++++++++++++*/

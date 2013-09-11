@@ -59,7 +59,9 @@ $layout->footerText = $this->t('footer');
                         <?php else : echo htmlentities($row['attribute_value'][0]); endif; ?>
                     <?php else : echo htmlentities($row['attribute_value']); endif; ?>
                     </td>
-                    <td style="width: 36px"><a href="#" onclick="$('#action').val('Edit'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="<?php echo EngineBlock_View::staticUrl(); ?>/media/edit.png" alt="<?php echo $this->t('vomanage_index_edit'); ?>"/></a>&nbsp;<a href="#" onclick="$('#action').val('Delete'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();"><img src="<?php echo EngineBlock_View::staticUrl(); ?>/media/delete.png" alt="<?php echo $this->t('vomanage_index_delete'); ?>"/></a>
+                    <td style="width: 36px"><a href="#" onclick="$('#action').val('Edit'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();">
+                            <img src="/media/edit.png" alt="<?php echo $this->t('vomanage_index_edit'); ?>"/></a>&nbsp;<a href="#" onclick="$('#action').val('Delete'); $('#id').val('<?php echo $row['id']; ?>'); $('#actionform').submit();">
+                            <img src="/media/delete.png" alt="<?php echo $this->t('vomanage_index_delete'); ?>"/></a>
                     </td>
                 </tr>
             <?php } ?>
