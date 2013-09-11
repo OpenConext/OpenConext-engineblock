@@ -1,0 +1,463 @@
+/*
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+@charset "UTF-8";
+/*++++++++++++++++++++++++*/
+/*      HTML ELEMENTS     */
+
+* {
+    margin: 0;
+}
+
+html, body {
+    height: 100%;
+}
+
+body {
+    color: #333;
+    font: 12px/17px Arial, Helvetica, sans-serif;
+    padding: 0;
+    margin: 0;
+    background: #e7e7e7;
+}
+
+h1 {
+    font-size: 15px;
+    margin: 0 0 15px 0;
+    padding: 8px 0 0 0;
+    color: #fff;
+}
+
+h2, h3 {
+    font-size: 14px;
+    margin: 0 0 3px 0;
+    padding: 0;
+}
+
+p {
+    padding: 0;
+    margin: 10px 0 8px 0;
+}
+
+a {
+    color: #288dd5;
+    text-decoration: none;
+    outline: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    border: none;
+    border-bottom: 1px solid #d7d7d7;
+    margin: 10px 0 10px 0;
+    padding: 0;
+    height: 1px;
+}
+
+:focus {
+    outline: none;
+}
+
+table, tr, th, td {
+    border: 0 none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
+}
+
+th {
+    border-bottom: 1px solid #C1C1BD;
+    border-top: 1px solid #C1C1BD;
+    color: #999996;
+    font-weight: normal;
+    text-align: left;
+}
+
+th, td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+td {
+    border-left: 1px dotted #C1C1BD;
+}
+
+td:first-child {
+    border-left: 0 none;
+}
+
+/*      HTML ELEMENTS     */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*    GENERAL CLASSES     */
+
+.clearfix:after, #main:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+* html .clearfix {
+    height: 1%;
+}
+
+/*    GENERAL CLASSES     */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*      MAIN ELEMENTS     */
+
+div.wrapper {
+    margin: 0 auto;
+    width: 968px;
+}
+
+div.header {
+    background: url(../../media/headerBck-wide.gif) no-repeat left bottom;
+    padding: 15px 0 34px 22px;
+    margin-bottom: 10px;
+}
+
+div.main {
+    background: url(../../media/contentBck-wide.gif) no-repeat left top;
+    padding: 4px 14px 0px 14px;
+    margin-bottom: 20px;
+    position: relative; /*height: 472px;*/
+}
+
+div.bottom {
+    background: url(../../media/contentBtm-wide.gif) no-repeat left bottom;
+    width: 941px;
+    padding: 8px 14px 10px 14px;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    margin-left: -14px;
+}
+
+/*      MAIN ELEMENTS     */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*           NAV          */
+
+ul.nav {
+    float: right;
+    list-style: none;
+    text-transform: uppercase;
+    padding: 8px 0 0 0;
+}
+
+ul.nav li {
+    float: left;
+    list-style: none;
+    font-weight: bold;
+    background: url(../../media/divider.gif) no-repeat left 3px;
+    margin-left: 5px;
+    padding-left: 6px;
+}
+
+ul.nav li:first-child {
+    background: none;
+}
+
+ul.nav li a {
+    color: #fff;
+    padding-bottom: 6px;
+}
+
+ul.nav li.active a {
+    color: #1166a4;
+    background: url(../../media/menu_active.gif) no-repeat center bottom;
+}
+
+ul.nav li.first {
+    background: none;
+}
+
+ul.nav li.first.active a {
+    background-image: none;
+}
+
+/*           NAV          */
+/*++++++++++++++++++++++++*/
+
+/*++++++++++++++++++++++++*/
+/*         CONTENT        */
+
+div.header {
+    font-size: 17px;
+}
+
+span.logo {
+    float: right;
+    margin: -11px 30px 0 0;
+}
+
+div.content-top {
+    background: url(../../media/bck2-top.gif) no-repeat left top;
+    height: 6px;
+    width: 451px;
+    display: block;
+    margin-bottom: 0;
+    position: relative;
+}
+
+div.content {
+    background: url(../../media/bck2-main.gif) left top;
+    width: 451px;
+    display: block;
+    margin-bottom: 0;
+    position: relative;
+    overflow: visible;
+    padding: 3px 0px 3px 0px;
+}
+
+div.content-bottom {
+    background: url(../../media/bck2-bottom.gif) no-repeat left top;
+    height: 9px;
+    width: 451px;
+    display: block;
+    margin-bottom: 0;
+    position: relative;
+}
+
+div.trace-wrapper {
+    border: 1px solid #999999;
+    max-height: 1000px;
+    overflow-y: auto;
+    margin: 5px 0 0 0;
+    padding: 5px;
+    font-size: 10px;
+}
+p.back {
+    border-bottom: 1px solid #d7d7d7;
+    padding-bottom: 10px;
+}
+
+p.back a {
+    /*background: url(../images/back.png) no-repeat left center;*/
+    padding: 1px 0 2px 22px;
+    margin-left: -3px;
+}
+
+span.category {
+    display: block;
+    margin: 10px 0 1px 7px;
+    clear: both;
+}
+
+span.category.top {
+    margin: 0 0 1px 7px;
+}
+
+span.description {
+    display: block;
+    margin: 0 0 0 12px;
+    width: 310px;
+    min-height: 60px;
+}
+
+span.text {
+    display: block;
+    margin: 0 0 0 5px;
+    width: 100%;
+}
+
+input[type=submit] {
+    margin: 0 10px 0 0;
+}
+
+.form {
+    float: none;
+    text-align: center;
+    margin-top: 10px;
+}
+
+img.app-thumb {
+    position: absolute;
+    max-width: 120px;
+    max-height: 60px;
+    top: 156px;
+    right: 5px;
+    margin-right: 2px;
+}
+
+img.app-icon {
+    max-width: 32px;
+    max-height: 32px;
+}
+
+span.revoke-gp-access {
+    float: right;
+    margin:  -12px -10px 0 0;
+}
+
+div.exit-disclaimer {
+	border-style: solid;
+	border-width: 1px;
+	padding: 5px;
+	margin-top: 15px;
+	margin-bottom: 18px;
+}
+
+/* LIST */
+
+dl, dd, dt {
+    list-style: none outside none;
+    margin: 0;
+}
+
+.column dt {
+    color: #B2B2AE;
+    margin-right: 25px;
+    overflow: hidden;
+    padding: 5px 0 2px;
+}
+
+.column dd {
+    border-bottom: 1px dotted #979795;
+    color: #000000;
+    padding: 0 0 2px 10px;
+    overflow: hidden;
+}
+
+.column dd.last {
+    border-bottom: medium none;
+    padding-bottom: 0;
+}
+
+.column dd.last.user-id {
+    height: 32px;
+    word-wrap: break-word;
+}
+
+/* COLUMNS */
+
+.column-container {
+    overflow: auto;
+    width: 451px;
+    margin: 0;
+    padding: 0;
+    border-top: 1px dotted #979795;
+    border-bottom: 1px dotted #979795;
+}
+
+.column {
+    width: 205px;
+    clear: none;
+    float: left;
+    padding: 0 10px 10px;
+}
+
+.first-column {
+    border-right: 1px dotted #979795;
+}
+
+tr.odd {
+    background-color: #dadada;
+    border-right: 1px solid #dadada;
+}
+
+/*         CONTENT        */
+/*++++++++++++++++++++++++*/
+
+
+/* Datatable */
+
+table.datatable, table.datatable tr, table.datatable th, table.datatable td {
+    border: 0 none;
+    border-collapse: collapse;
+    border-spacing: 0;
+    font-size: 11px;
+    margin: 0;
+    padding: 0;
+}
+
+table.datatable th {
+    border: 1px solid #C1C1BD;
+    color: black;
+    font-weight: bold;
+    text-align: left;
+}
+
+table.datatable th, table.datatable td {
+    padding: 5px;
+    vertical-align: top;
+}
+
+table.datatable td {
+    border: 1px solid #C1C1BD;
+}
+div.datatable_footer {
+    font-size: 10px;
+    font-style: italic;
+}
+
+/* Formtable */
+
+table.formtable td {
+    border: 0 none;
+    vertical-align: baseline;
+}
+
+table.formtable li {
+    margin-left: -26px;
+}
+
+/* My Apps table */
+
+tr.detail-row {
+    border: 1px solid #DADADA;
+}
+
+div.attribute-table-wrapper {
+    max-height: 400px;
+    overflow: auto;
+}
+
+table.attribute-table {
+    margin: 10px;
+}
+
+/* General styling */
+
+.hide {
+    display: none;
+}
+
+.left {
+    float: left;
+}
+
+/* metadata and certificates page */
+dl.metadata-certificates-list dd,
+dl.metadata-certificates-list dt {
+    margin-bottom: 5px;
+}
+
+dl.metadata-certificates-list dd {
+    padding-left: 25px;
+    margin-bottom: 15px;
+}

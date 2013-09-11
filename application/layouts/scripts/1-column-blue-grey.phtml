@@ -4,10 +4,10 @@ require PARTIAL_DIR . 'header-start.php';
 ?>
         <title><?php echo $this->layout()->title;?></title>
 
-        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/wide/screen.css" rel="stylesheet" type="text/css" />
+        <link href="/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
+        <link href="/css/wide/screen.css" rel="stylesheet" type="text/css" />
         <!--[if lt IE 8 ]>
-        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/wide/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
+        <link href="/css/wide/screen_ie.css" rel="stylesheet" type="text/css" media="screen" />
         <![endif]-->
 
         <?php echo $this->headStyle(); ?>
@@ -18,7 +18,7 @@ require PARTIAL_DIR . 'header-start.php';
             <div class="header" style="font-weight: bold; font-size: large">
                 <?php echo $this->layout()->header; ?>
                 <span class="logo">
-                    <img src="<?php echo EngineBlock_View::staticUrl(); ?>/media/surfconext.png" alt="SURFconext">
+                    <img src="/media/surfconext.png" alt="SURFconext">
                 </span>
             </div>
 
@@ -46,7 +46,7 @@ require PARTIAL_DIR . 'header-start.php';
             </div>
         </div>
 
-        <script type="text/javascript" src="<?php echo EngineBlock_View::staticUrl(); ?>/javascript/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
         <?php echo $this->inlineScript() ?>
     </body>
 </html>

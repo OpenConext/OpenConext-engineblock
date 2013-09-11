@@ -222,20 +222,6 @@ class EngineBlock_Corto_ProxyServer
         return $metadata->getDescription($attributeId, $ietfLanguageTag);
     }
 
-    /**
-     * Return the url of the Static vhost containing media, script and css files
-     *
-     * @example <?php echo $this->staticUrl(); ?>
-     *
-     * @return string
-     */
-    public static function staticUrl($path = "")
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $settings = $application->getConfiguration();
-        return $settings->static->protocol . '://'. $settings->static->host . $path;
-    }
-
     public function getUrl($serviceName = "", $remoteEntityId = "", $request = "")
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {

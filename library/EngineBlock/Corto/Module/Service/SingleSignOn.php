@@ -420,7 +420,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 'Name_nl' => $nameNl,
                 'Name_en' => $nameEn,
                 'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL']
-                    : EngineBlock_View::staticUrl() . '/media/idp-logo-not-found.png',
+                    : '/media/idp-logo-not-found.png',
                 'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en'])
                     : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
                 'Access' => ((isset($metadata['Access']) && $metadata['Access']) ? '1' : '0'),

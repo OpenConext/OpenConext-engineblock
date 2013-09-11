@@ -1,0 +1,61 @@
+//
+// Copyright 2011 SURFnet bv, The Netherlands
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+#scrollViewport {
+  overflow: hidden;
+  height: 235px;
+}
+
+#scrollViewportHelp {
+  height: 235px;
+}
+
+.jspVerticalBar {
+  background-color: transparent;
+}
+
+.jspCap {
+/* Top and bottom insets */
+  display: block;
+  height: 7px;
+}
+
+.jspTrack {
+/* Scroll track */
+  width: 10px;
+  background: #E2EBF4 url(../../media/scrollBck.gif) no-repeat left top;
+}
+
+.jspDrag {
+/* Scroll handle */
+  width: 8px;
+  margin: 0 auto;
+  background: #419bda;
+  border: 1px solid #3f769d;
+  display: block;
+  position: absolute;
+  outline: none;
+}
+
+.jspArrowUp, .jspArrowUp.jspDisabled {
+  height: 13px;
+  background: url(../../media/slider_up.gif) no-repeat left 5px;
+}
+
+.jspArrowDown, .jspArrowDown.jspDisabled {
+  height: 10px;
+  background: url(../../media/slider_down.gif) no-repeat left 2px;
+}
