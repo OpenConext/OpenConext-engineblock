@@ -106,10 +106,10 @@ if ($preselectedIdp) {
                 <ul class="nav">
                     <li id="help_nav"><a href="#">HELP</a></li>
                     <li class="lang <?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a data-lang="en" href="#">EN</a>
+                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
                     </li>
                     <li class="lang <?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a data-lang="nl" href="#">NL</a>
+                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
                     </li>
                 </ul>
 
@@ -227,7 +227,7 @@ if ($preselectedIdp) {
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.cookie.js"></script>
 
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/keyboardNavigator.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/typewatch.js"></script>
+<!--        <script type="text/javascript" src="--><?php //echo STATIC_HOST; ?><!--/javascript/typewatch.js"></script>-->
 
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/matchMedia.js"></script>
         <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/discover.js"></script>
@@ -246,8 +246,8 @@ if ($preselectedIdp) {
             discoveryScreen.setSpName(". json_encode($displayName) .");
             discoveryScreen.setUri('". json_encode($uri). "');
             ". $preselectedIdpJson ."
-            discoveryScreen.show();
-            " . (isset($_GET['show-help']) && $_GET['show-help'] === 'yes' ? 'discoveryScreen.showHelp();' : '');
+            discoveryScreen.show();"
+
         ?>
 
         $('ul.nav li.lang a').click(function(e) {
