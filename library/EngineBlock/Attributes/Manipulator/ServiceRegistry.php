@@ -35,29 +35,28 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         $this->_entityType = $entityType;
     }
 
-    public function manipulate($entityId, &$subjectId, array &$attributes, array &$response)
+    public function manipulate($entityId, &$subjectId, array &$attributes, array &$response, array $idpMetadata, array $spMetadata)
     {
         $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
         if (empty($entity['manipulation'])) {
             return false;
         }
 
-        $this->_doManipulation($entity['manipulation'], $entityId, $subjectId, $attributes, $response);
+        $this->_doManipulation($entity['manipulation'], $entityId, $subjectId, $attributes, $response, $idpMetadata, $spMetadata);
         return true;
     }
-
-    protected function _doManipulation($manipulationCode, &$entityId, &$subjectId, &$attributes, &$response)
+    protected function _doManipulation($manipulationCode, $entityId, &$subjectId, &$attributes, &$response, array $idpMetadata, array $spMetadata)
     {
         $entityType = $this->_entityType;
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $application->getErrorHandler()->withExitHandler(
             // Try
-            function() use ($manipulationCode, &$entityId, &$subjectId, &$attributes, &$response) {
+            function() use ($manipulationCode, $entityId, &$subjectId, &$attributes, &$response, $idpMetadata, $spMetadata) {
                 eval($manipulationCode);
             },
             // Should an error occur, log the input, if nothing happens, then don't
-            function(EngineBlock_Exception $exception) use ($entityType, $manipulationCode, $entityId, $subjectId, $attributes, $response) {
+            function(EngineBlock_Exception $exception) use ($entityType, $manipulationCode, $entityId, $subjectId, $attributes, $response, $idpMetadata, $spMetadata) {
                 EngineBlock_ApplicationSingleton::getLog()->attach(
                     array(
                         'EntityID'          => $entityId,
@@ -65,6 +64,8 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
                         'Subject NameID'    => $subjectId,
                         'Attributes'        => $attributes,
                         'Response'          => $response,
+                        'IdPMetadata'       => $idpMetadata,
+                        'SPMetadata'        => $spMetadata,
                     ),
                     'manipulation data'
                 );
@@ -82,8 +83,6 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
 
     protected function _getServiceRegistryAdapter()
     {
-        return new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new Janus_Client_CacheProxy()
-        );
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
     }
 }

@@ -160,7 +160,7 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
     }
 
     protected function getServiceProviders() {
-        $registry = new Janus_Client_CacheProxy();
+        $registry = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryClient();
         $spList = $registry->getSpList();
         // get human-readable names where possible
         $lng = $this->getLanguage();

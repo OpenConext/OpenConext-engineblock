@@ -196,7 +196,7 @@ configuration:
 
 Also set an alias for simplesaml for the third virtual host:
 
-    Alias /simplesaml /opt/www/engineblock/library/simplesamlphp/www
+    Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
 
 4th virtual host:
 
@@ -211,7 +211,7 @@ configuration:
 
 Also set an alias for simplesaml for the fourth virtual host:
 
-    Alias /simplesaml /opt/www/engineblock/library/simplesamlphp/www
+    Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
 
 ### Virtual host for static files ###
 

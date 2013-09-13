@@ -41,21 +41,5 @@ $layout->footerText = $this->t('footer');
     <div class="error-icon"></div>
     <div class="error-text">
         <?php echo $this->t('error_generic_desc'); ?>
-        <?php echo $this->t('error_help_desc'); ?>
-        <div class="button-row">
-            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-            <?php echo $this->t('go_back'); ?>
-            <span class="btn-wrap-right">&nbsp;</span>
-            </a>
-        </div>
-    </div>
-</div>
 
-<?php if (isset($exception)) { ?>
-<strong><?php echo $exception->getMessage();?></strong>
-<pre>
-    <?php var_dump($exception); ?>
-</pre>
-
-<?php if (isset($exception->xdebug_message)) { echo $exception->xdebug_message; } ?>
-<?php } ?>
+<?php require_once __DIR__ . '/include/footer.php';

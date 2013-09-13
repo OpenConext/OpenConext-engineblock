@@ -27,14 +27,10 @@ ini_set('date.timezone', 'Europe/Amsterdam');
 
 // Include composer autoloader, this intentionally included instead of required since CI system does not
 // use composer and will fail on requiring a non-existent autoload file
-require_once '../vendor/autoload.php';
-
-require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
+$rootDir = realpath(__DIR__ . '/../');
+require_once $rootDir . '/vendor/autoload.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
-$autoloader = new EngineBlock_Application_Autoloader();
-$autoloader->mayLoadTestClasses();
-spl_autoload_register(array($autoloader, 'load'));
 
 $log = new Zend_Log();
 $log->addWriter(new Zend_Log_Writer_Null());

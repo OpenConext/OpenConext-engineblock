@@ -89,6 +89,13 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         // Adjust the NameID in the NEW response, set the collab:person uid
         $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = $nameId;
 
+
+        /**
+         * Workaround, if name id does not exist it will be added at wrong location in xml due to order in Subject array
+         * @see: https://jira.surfconext.nl/jira/browse/BACKLOG-1028
+         */
+        $this->_response['saml:Assertion']['saml:Subject'] = $this->orderSubjectElements($this->_response['saml:Assertion']['saml:Subject']);
+
         // Add the eduPersonTargetedId
         $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
             0 => array(
@@ -96,6 +103,21 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
             )
         );
     }
+
+    /**
+     * Orders elements in subject so that the order is correct
+     * 
+     * @param array $subject
+     * @return array
+     */
+    private function orderSubjectElements(array $subject) {
+        $subjectDefaultOrder = array(
+            'saml:NameID' => null,
+            'saml:SubjectConfirmation' => null
+        );
+
+        return array_merge($subjectDefaultOrder, $subject);
+   }
 
     /**
      * Load transient Name ID from session or generate a new one

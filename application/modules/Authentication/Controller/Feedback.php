@@ -84,4 +84,18 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
     }
 
+    public function receivedErrorStatusCodeAction()
+    {
+        // @todo Send 4xx or 5xx header?
+    }
+
+    public function receivedInvalidResponseAction()
+    {
+        // @todo Send 4xx or 5xx header?
+    }
+
+    public function noIdpsAction()
+    {
+        // @todo Send 4xx or 5xx header?
+    }
 }

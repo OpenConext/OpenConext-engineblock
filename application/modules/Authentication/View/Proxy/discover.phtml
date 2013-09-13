@@ -33,8 +33,6 @@
  * @var $preselectedIdp string
  */
 
-define('STATIC_HOST', EngineBlock_View::staticUrl());
-
 /**
  * @var Zend_Layout $layout
  */
@@ -53,6 +51,7 @@ if (isset($_GET['lang'])) {
 if (!in_array($lang, array('nl','en'))) {
     $lang = 'en';
 }
+$fallback_lang = ($lang == 'en' ? 'nl' : 'en');
 
 $displayName = '';
 if (isset($metaDataSP['Name'][$lang])) {
@@ -61,16 +60,30 @@ if (isset($metaDataSP['Name'][$lang])) {
 else if (isset($metaDataSP['DisplayName'][$lang])) {
     $displayName = $metaDataSP['DisplayName'][$lang];
 }
+if ($displayName == '') {
+
+    if (isset($metaDataSP['Name'][$fallback_lang])) {
+        $displayName = $metaDataSP['Name'][$fallback_lang];
+    }
+    else if (isset($metaDataSP['DisplayName'][$fallback_lang])) {
+        $displayName = $metaDataSP['DisplayName'][$fallback_lang];
+    }
+}
 
 $preselectedIdpData = array();
 if ($preselectedIdp) {
     foreach ($idpList as $idp) {
         if ($idp['EntityId'] === $preselectedIdp) {
             $preselectedIdpData = $idp;
+            $preselectedIdpName = $preselectedIdpData['Name_'.$lang];
+            if (empty($preselectedIdpName)) {
+                $preselectedIdpName = $preselectedIdpData['Name'.$fallback_lang];
+            }
             break;
         }
     }
 }
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -81,8 +94,8 @@ if ($preselectedIdp) {
 
         <title><?php echo $this->layout()->title; ?></title>
 
-        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="<?php echo EngineBlock_View::staticUrl(); ?>/css/responsive/screen.css" rel="stylesheet" type="text/css" />
+        <link href="/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
+        <link href="/css/responsive/screen.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="index">
         <div id="wrapper">
@@ -119,7 +132,8 @@ if ($preselectedIdp) {
                                 <p>
                                     <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
                                     <input type="hidden" name="idp" value="<?php echo htmlentities($preselectedIdp); ?>" />
-                                    <input type="submit" value="<?php echo htmlentities($preselectedIdpData['Name_en']); ?>" />
+
+                                    <input type="submit" value="<?php echo htmlentities($preselectedIdpName); ?>" />
                                 </p>
                             </form>
                         </noscript>
@@ -127,7 +141,7 @@ if ($preselectedIdp) {
                     <?php endif; ?>
 
                     <!-- Search -->
-                    <input type="search" class="search" id="searchBox" value="<?php echo $this->t('search'); ?>"/>
+                    <input type="search" class="search" id="searchBox" placeholder="<?php echo $this->t('search'); ?>" />
 
                     <!-- Results -->
                     <div class="results">
@@ -159,6 +173,10 @@ if ($preselectedIdp) {
                 <div id="help">
                 </div>
 
+                <!-- Request Access -->
+                <div id="requestAccess">
+                </div>
+
                 <div class="bottom">
                     <hr />
                     <p>
@@ -172,7 +190,17 @@ if ($preselectedIdp) {
             <li id="c${ID}" class="${NoAccessClass}">
                 <a alt="${Alt}" href="#">
                     <img src="${Logo}" />
-                    <span>${Name}</span>${NoAccess}
+                    <span>${Name}</span>
+                    <em>${NoAccess}</em>
+                </a>
+            </li>
+        </script>
+
+        <script id="idpListTemplateMobile" type="text/x-jquery-tmpl">
+            <li id="c${ID}" class="${NoAccessClass}">
+                <a alt="${Alt}" href="#">
+                    <span>${Name}</span>
+                    <em>${NoAccess}</em>
                 </a>
             </li>
         </script>
@@ -188,18 +216,17 @@ if ($preselectedIdp) {
             </div>
             </p>
         </script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/respond.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery-1.5.1.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.mousewheel.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.putCursorAtEnd.1.0.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.jscrollpane.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.tmpl.min.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/jquery.cookie.js"></script>
+        <script type="text/javascript" src="/javascript/respond.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.mousewheel.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.putCursorAtEnd.1.0.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.tmpl.min.js"></script>
+        <script type="text/javascript" src="/javascript/jquery.cookie.js"></script>
 
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/keyboardNavigator.js"></script>
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/typewatch.js"></script>
+        <script type="text/javascript" src="/javascript/keyboardNavigator.js"></script>
 
-        <script type="text/javascript" src="<?php echo STATIC_HOST; ?>/javascript/discover.js"></script>
+        <script type="text/javascript" src="/javascript/matchMedia.js"></script>
+        <script type="text/javascript" src="/javascript/discover.js"></script>
 
         <script>
         <?php
@@ -211,22 +238,13 @@ if ($preselectedIdp) {
             discoveryScreen.setLanguage('". $lang ."');
             discoveryScreen.setSearchText('". $this->t('search') ."');
             discoveryScreen.setIdpList(". json_encode($idpList) .");
+            discoveryScreen.setSpEntityId(". json_encode($metaDataSP['EntityID']) .");
+            discoveryScreen.setSpName(". json_encode($displayName) .");
             discoveryScreen.setUri('". json_encode($uri). "');
             ". $preselectedIdpJson ."
-            discoveryScreen.show();
-            " . (isset($_GET['show-help']) && $_GET['show-help'] === 'yes' ? 'discoveryScreen.showHelp(0);' : '');
-        ?>
+            discoveryScreen.show();"
 
-        $('ul.nav li.lang a').click(function(e) {
-            e.preventDefault();
-            if ($('#help').is(':visible') && $.trim($('#help').html()).length > 0) {
-                window.location.href = $(this).attr('href') + '&show-help=yes';
-            }
-            else {
-                window.location.href = $(this).attr('href');
-            }
-            return false;
-        });
+        ?>
 
         </script>
     </body>

@@ -40,23 +40,11 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $this->t('error_unknown_issuer_desc',
-                     $this->_data['entity-id'],
-                     $this->_data['destination'],
-                     Zend_Date::now()->toString(Zend_Date::DATETIME, null, $this->language())); ?>
-        <div class="button-row">
-            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-            <?php echo $this->t('go_back'); ?>
-            <span class="btn-wrap-right">&nbsp;</span>
-            </a>
-        </div>
-    </div>
-</div>
+        <?php echo $this->t('error_unknown_issuer_desc');
 
-<?php if (isset($exception)) { ?>
-<pre>
-    <?php var_dump($exception); ?>
-</pre>
+// Add feedback info from url
+$customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
+$customFeedbackInfo['Destination'] = $this->_data['destination'];
+$_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
 
-<?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-<?php } ?>
+require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

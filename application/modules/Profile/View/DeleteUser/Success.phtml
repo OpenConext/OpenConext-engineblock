@@ -37,7 +37,7 @@ $layout->title = $layout->title. ' - ' .$layout->header;
 $layout->subheader = $this->t('deleteuser_success_subheader');
 $layout->footerText = $this->t('footer');
 
-$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
+$layout->getView()->inlineScript()->appendFile('/javascript/screen.js');
 
 ?>
 <div>

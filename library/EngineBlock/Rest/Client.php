@@ -23,8 +23,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-require_once("Zend/Rest/Client.php");
-
 /**
  * This extends Zend_Rest_Client with an improved way of retrieving
  * results.

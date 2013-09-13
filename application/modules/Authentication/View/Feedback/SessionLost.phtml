@@ -39,21 +39,6 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $this->t('error_session_lost_desc'); ?>
-        <?php echo $this->t('error_help_desc'); ?>
-        <div class="button-row">
-            <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-            <?php echo $this->t('go_back'); ?>
-            <span class="btn-wrap-right">&nbsp;</span>
-            </a>
-        </div>
-    </div>
-</div>
+        <?php echo $this->t('error_session_lost_desc');
 
-<?php if ($exception) { ?>
-<pre>
-    <?php var_dump($exception); ?>
-</pre>
-
-<?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-<?php } ?>
+        require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

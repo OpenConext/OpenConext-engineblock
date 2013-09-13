@@ -2,12 +2,95 @@
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
     "minimum-stability": "stable",
-    "require" : {
-        "pimple/pimple": "1.0.x",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://raw.github.com/cpliakas/simplesamlphp-composer/master"
+        },
+        {
+            "type":"package",
+            "package": {
+                "name": "zendframework/zendframework1",
+                "version": "1.10.9",
+                "dist": {
+                    "url": "https://packages.zendframework.com/releases/ZendFramework-1.10.9/ZendFramework-1.10.9-minimal.zip",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Zend_": "library/"
+                    }
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "apache/shindig",
+                "version": "1094333",
+                "source": {
+                    "type": "svn",
+                    "url": "http://svn.apache.org/repos/asf/shindig/trunk",
+                    "reference": "php@1094333"
+                },
+                "autoload" : {
+                    "classmap" : [
+                        "external/OAuth",
+                        "src"
+                    ]
+                }
+            }
+        }
+    ],
+    "require": {
+        "pimple/pimple": "1.0.2",
+        "simplesamlphp/simplesamlphp": "1.9.0",
+        "dbpatch/dbpatch": "1.1.1",
+        "zendframework/zendframework1":"1.10.9",
+        "apache/shindig":"1094333",
         "chrisboulton/php-resque": "1.2.x"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "phake/phake": "dev-master"
+        "phpunit/phpunit": "3.7.19",
+        "phake/phake": "2.0.0-alpha2",
+        "behat/behat": "2.4.6",
+        "behat/mink": "1.5.0",
+        "behat/mink-extension": "1.1.4",
+        "behat/mink-goutte-driver": "1.0.9"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "bin/composer/dbpatch-post-install.sh",
+            "bin/composer/simplesamlphp-post-install.sh",
+            "bin/composer/zend-framework-post-install.sh",
+            "bin/composer/shindig-post-install.sh"
+        ],
+        "post-update-cmd": [
+            "bin/composer/dbpatch-post-install.sh",
+            "bin/composer/simplesamlphp-post-install.sh",
+            "bin/composer/zend-framework-post-install.sh",
+            "bin/composer/shindig-post-install.sh"
+        ]
+    },
+    "autoload": {
+        "psr-0": {
+            "DbPatch_": "vendor/dbpatch/dbpatch/src/",
+            "EngineBlock_": "library/",
+            "EngineBlock_Test": "tests/library/",
+            "Grouper_": "library/",
+            "Janus_": "library/",
+            "OpenSocial_": "library/",
+            "SurfConext_": "library/",
+            "Surfnet_": "library/",
+            "Authentication_":"application/modules/",
+            "Cron_":"application/modules/",
+            "Default_":"application/modules/",
+            "Dummy_":"application/modules/",
+            "Logout_":"application/modules/",
+            "Profile_":"application/modules/",
+            "Service_":"application/modules/",
+            "Social_":"application/modules/",
+            "VoManage_":"application/modules/"
+        }
     }
 }

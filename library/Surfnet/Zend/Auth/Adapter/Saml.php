@@ -62,7 +62,7 @@ class Surfnet_Zend_Auth_Adapter_Saml implements Zend_Auth_Adapter_Interface
 
     protected function _getAuthenticator()
     {
-        require_once(LIBRARY_PATH . '/simplesamlphp/lib/_autoload.php');
+        require_once(ENGINEBLOCK_FOLDER_VENDOR . 'simplesamlphp/simplesamlphp/lib/_autoload.php');
         return new SimpleSAML_Auth_Simple('default-sp');
     }
 }

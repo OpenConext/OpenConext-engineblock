@@ -38,15 +38,6 @@ $layout->footerText = $this->t('footer');
 ?>
 <div class="error-wrapper">
     <div class="stop-text">
-        <?php echo $this->t('error_no_consent_desc'); ?>
-        <br /><br />
-    </div>
-</div>
+        <?php echo $this->t('error_no_consent_desc');
 
-<?php if (isset($exception)) { ?>
-<pre>
-    <?php var_dump($exception); ?>
-</pre>
-
-<?php if ($exception->xdebug_message) { echo $exception->xdebug_message; } ?>
-<?php } ?>
+        require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

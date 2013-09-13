@@ -1,5 +1,7 @@
 <?php
 
+use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+
 class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
@@ -40,6 +42,9 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         if (isset($spEntity)) {
             $idpEntities[] = $spEntity;
         }
+
+        $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
         foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
             // Don't add ourselves
             if ($entity['EntityID'] === $entityDetails['EntityID']) {
@@ -51,6 +56,10 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
                 continue;
             }
 
+            if ($entity['isHidden']) {
+                continue;
+            }
+
             // Use EngineBlock certificates
             $entity['certificates'] = $entityDetails['certificates'];
 
@@ -59,10 +68,11 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             unset($entity['NameIDFormat']);
             $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
 
-            // Generate a URL that points to EngineBlock, but with the given IdP preselected.
+            // Replace service locations and bindings with those of EB
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
-            $entity['SingleSignOnService']['Location'] = $transparentSsoUrl;
-            $entity['SingleSignOnService']['Binding']  = $entityDetails['SingleSignOnService']['Binding'];
+            $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
+            $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
+            $slServiceReplacer->replace($entity, $transparentSlUrl);
 
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
 

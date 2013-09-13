@@ -1,5 +1,7 @@
 <?php
 
+use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
@@ -10,8 +12,15 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         // Override the EntityID and SSO location to optionally append VO id
         if ($serviceName==='idpMetadataService') {
             $entityDetails['EntityID'] = $this->_server->getUrl($serviceName);
-            $entityDetails['SingleSignOnService']['Location'] = $this->_server->getUrl('singleSignOnService');
+            $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+            $ssoLocation = $this->_server->getUrl('singleSignOnService');
+            $ssoServiceReplacer->replace($entityDetails, $ssoLocation);
         }
+
+        // Override Single Logout Service Location with generated url
+        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
+        $slLocation = $this->_server->getUrl('singleLogoutService');
+        $slServiceReplacer->replace($entityDetails, $slLocation);
 
         try {
             // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)

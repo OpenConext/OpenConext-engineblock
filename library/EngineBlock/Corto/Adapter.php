@@ -186,7 +186,8 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * Filter out IdPs that are not allowed to connect to the given SP.
+     * Filter out IdPs that are not allowed to connect to the given SP. We don't filter out
+     * any IdP's if this is explicitly configured for the given in SR.
      *
      * Determines SP based on Authn Request (required).
      *
@@ -195,10 +196,16 @@ class EngineBlock_Corto_Adapter
      */
     protected function _filterRemoteEntitiesByRequestSp(array $entities)
     {
-        return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
-            $entities,
-            $this->_getIssuerSpEntityId()
-        );
+        $issuerSpEntityId = $this->_getIssuerSpEntityId();
+        $entityData = $this->_proxyServer->getRemoteEntity($issuerSpEntityId);
+
+        if (isset($entityData['DisplayUnconnectedIdpsWayf']) && $entityData['DisplayUnconnectedIdpsWayf']) {
+            return $this->getServiceRegistryAdapter()->markEntitiesBySp($entities, $issuerSpEntityId);
+        }
+        else {
+            return $this->getServiceRegistryAdapter()->filterEntitiesBySp($entities, $issuerSpEntityId);
+        }
+
     }
 
     /**
@@ -546,6 +553,7 @@ class EngineBlock_Corto_Adapter
         }
 
         $remoteEntities = $proxyServer->getRemoteEntities();
+
         foreach($this->_remoteEntitiesFilter as $remoteEntityFilter) {
             $remoteEntities = call_user_func_array(
                 $remoteEntityFilter,
@@ -603,10 +611,7 @@ class EngineBlock_Corto_Adapter
 
     public function getServiceRegistryAdapter()
     {
-        // @todo this seems to be called multiple times!
-        return new EngineBlock_Corto_ServiceRegistry_Adapter(
-            new Janus_Client_CacheProxy()
-        );
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
     }
 
     protected function _processProxyServerResponse()
