@@ -63,9 +63,6 @@ var Discover = function() {
                 return false;
             });
 
-            //Initialize keyboard navigator
-            keyboardNavigator.init();
-
             //Get start organisations
             library.sortIdps();
             library.loadIdps($('#searchBox').val());
@@ -81,8 +78,11 @@ var Discover = function() {
                         case 37:
                         case 39:
                             break;
+                        case 13: //return
+                            $('#organisationsContainer li.selected').click();
+                            break;
                         default:
-                            library.loadIdps($('#searchBox').val());
+                            library.loadIdps($(this).val());
                     }
                 }).
                 // To support HTML5 search reset (see Chrome)
@@ -90,31 +90,7 @@ var Discover = function() {
                     library.loadIdps($('#searchBox').val());
                 });
 
-            //Disable or enable keyboardNavigator if search field gets or looses focus
-            $('#searchBox').focus(function() {
-                keyboardNavigator.enabled = false;
-                // clear searchbox text on focus
-                if ($('#searchBox').val() == library.searchText) {
-                    $('#searchBox').val('');
-                }
-            });
-
-            $('#searchBox').blur(function() {
-                keyboardNavigator.enabled = true;
-            });
-
-            $('#tabThumbs').click(library.showThumbs);
-            $('#tabList').click(library.showList);
-
             library.initLinks();
-
-            // set thums/list view based on cookie
-            if ($.cookie("tabs") == 'thumbs') {
-                library.showThumbs();
-            }
-            if ($.cookie("tabs") == 'list') {
-                library.showList();
-            }
 
             // In case of a preselected IdP fill the suggestion
             if (library.selectedEntityId !== '') {
@@ -155,13 +131,13 @@ var Discover = function() {
         },
 
         initLinks : function() {
-            $("#help_nav a").live("click", function() {
+            $("#help_nav a").on("click", function() {
                 library.showHelp();
             });
         },
 
         showRequestAccess: function(idpEntityId, idpName, spEntityId, spName) {
-            keyboardNavigator.enabled = false;
+           // keyboardNavigator.enabled = false;
             var speed = 'fast';
             var params = {lang:library.lang, idpEntityId:idpEntityId, idpName:idpName, spEntityId:spEntityId, spName:spName};
             $.get('/authentication/idp/requestAccess?'+ $.param(params), function(data) {
@@ -170,19 +146,19 @@ var Discover = function() {
                 var requestAccess = $("#requestAccess");
                 requestAccess.html(data);
                 requestAccess.show(speed, function() {
-                    $('#cancel_request_access, #back_request_access').live("click",function(e){
+                    $('#cancel_request_access, #back_request_access').on("click",function(e){
                         $("#requestAccess").hide(speed);
                         $("#content").show(speed);
                         keyboardNavigator.enabled = true;
 
                     });
-                    $('#request_access_submit').live("click",function(e){
+                    $('#request_access_submit').on("click",function(e){
                         e.preventDefault();
                         var formData = $('#request_access_form').serialize();
                         $.post('/authentication/idp/performRequestAccess', formData, function(data) {
                             $("#requestAccess").html(data);
                         });
-                        keyboardNavigator.enabled = true;
+                      //  keyboardNavigator.enabled = true;
                         return false;
                     });
                 });
@@ -216,7 +192,7 @@ var Discover = function() {
                 $('#faq li').not(this).removeClass('open');
             });
 
-            $("#back_link").live("click", function(e) {
+            $("#back_link").on("click", function(e) {
                 $("#help").hide('fast');
                 $("#content").show('fast');
 
@@ -321,16 +297,7 @@ var Discover = function() {
          * @param filter    string used to filter idps
          */
         loadIdps : function(filter, isSearch) {
-            if (filter == this.searchText) {
-                filter = '';
-            }
             library.displayIdps(library.filterIdps(filter));
-
-            // Return focus on searchbox if it is a search
-//            if (filter !== '') {
-//                $('#searchBox').focus();
-//                $('#searchBox').putCursorAtEnd();
-//            }
         },
 
         filterIdps : function(filter) {
@@ -379,10 +346,8 @@ var Discover = function() {
                 $('#noResultsMessage').show();
                 $('#scrollViewport').hide();
             } else {
-                if (window.innerWidth>=768) {
-                    $('#noResultsMessage').hide();
-                    $('#scrollViewport').show();
-                }
+                  $('#noResultsMessage').hide();
+                  $('#scrollViewport').show();
 
                 //Clear results box
                 $('#organisationsContainer').html('');
@@ -421,21 +386,20 @@ var Discover = function() {
                     $('#organisationsContainer').append(html);
                 }
 
-                // Check whether there is a search and a selection has to be made
-                if (($('#searchBox').val() == "") || ($('#searchBox').val() == this.searchText)) {
-                    // no search no selection
-                     keyboardNavigator.setSelectedIndex(-1);
+                // Check whether this is a successful search and a selection has to be made
+                if (($('#searchBox').val() == '') || ($('#searchBox').val() == this.searchText)) {
+                    // no search, no selection, but fallback to the possible preselected idp
                     $('#organisationsContainer li').removeClass('selected');
+                    this.selectSuggestion();
                 } else {
                     // search, select first in list
-                     keyboardNavigator.setSelectedIndex(0);
+                    $('#organisationsContainer li').removeClass('selected');
                     $('#organisationsContainer li:first').addClass('selected', '');
                 }
 
-                //Hook up onclick handler for keynavigator
+                //Hook up for clicking a IdP
                 $('#organisationsContainer li').click(function() {
-                    //check if there is a selected item
-                    var org = $('ul#organisationsContainer li.selected a').attr('alt');
+                    var org =  $(this).find('a').attr('alt');
                     //if no select suggestion
                     if (org == undefined) {
                         library.selectSuggestion();
@@ -459,38 +423,8 @@ var Discover = function() {
         // set selection of suggestion in list
         selectSuggestion : function() {
             id = $('#organisationsContainer li#c' + this.selectedId).index();
-            keyboardNavigator.setSelectedIndex(id);
             $('#organisationsContainer li#c' + this.selectedId).addClass('selected', '');
-        },
-
-        showThumbs : function() {
-            // set cookie for tabs thums view
-            $.cookie("tabs", "thumbs", { expires: 7 });
-
-            //Toggle tab active class
-            $('#tabThumbs').addClass('active');
-            $('#tabList').removeClass('active');
-
-            $('#organisationsContainer').addClass('thumbs');
-            $('#organisationsContainer').removeClass('list');
-
-            keyboardNavigator.setMode(keyboardNavigator.MODE_3COLUMN_GRID);
-        },
-
-        showList : function() {
-            // set cookie for tabs list view
-            $.cookie("tabs", "list", { expires: 7 });
-
-            //Toggle tab active class
-            $('#tabList').addClass('active');
-            $('#tabThumbs').removeClass('active');
-
-            $('#organisationsContainer').removeClass('thumbs');
-            $('#organisationsContainer').addClass('list');
-
-            keyboardNavigator.setMode(keyboardNavigator.MODE_LIST);
         }
-
     };
 
     return module;

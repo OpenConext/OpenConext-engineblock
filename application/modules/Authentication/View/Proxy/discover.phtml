@@ -217,20 +217,20 @@ if ($preselectedIdp) {
             </p>
         </script>
         <script type="text/javascript" src="/javascript/respond.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.mousewheel.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.putCursorAtEnd.1.0.js"></script>
+        <script type="text/javascript" src="/javascript/jquery-1.10.2.min.js"></script>
+<!--        <script type="text/javascript" src="/javascript/jquery.mousewheel.min.js"></script>-->
+<!--        <script type="text/javascript" src="/javascript/jquery.putCursorAtEnd.1.0.js"></script>-->
         <script type="text/javascript" src="/javascript/jquery.tmpl.min.js"></script>
         <script type="text/javascript" src="/javascript/jquery.cookie.js"></script>
 
-        <script type="text/javascript" src="/javascript/keyboardNavigator.js"></script>
+<!--        <script type="text/javascript" src="/javascript/keyboardNavigator.js"></script>-->
 
         <script type="text/javascript" src="/javascript/matchMedia.js"></script>
         <script type="text/javascript" src="/javascript/discover.js"></script>
 
         <script>
         <?php
-            $preselectedIdpJson = isset($preselectedIdp) ? 'discoveryScreen.setSelectedEntityId('.json_encode($preselectedIdp).')' : '';
+            $preselectedIdpJson = isset($preselectedIdp) ? 'discoveryScreen.setSelectedEntityId('.json_encode($preselectedIdp).');' : '';
 
             $uri = $_SERVER['REQUEST_URI'];
             echo "
