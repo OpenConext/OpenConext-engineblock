@@ -79,16 +79,10 @@ $view = $layout->getView();
 /** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
 $inlineScriptHelper = $view->getHelper('InlineScript');
 // Set javascript
-$inlineScriptHelper->appendFile('/javascript/jquery.mousewheel.min.js');
-$inlineScriptHelper->appendFile('/javascript/jquery.putCursorAtEnd.1.0.js');
-$inlineScriptHelper->appendFile('/javascript/jquery.jscrollpane.min.js');
 $inlineScriptHelper->appendFile('/javascript/jquery.tmpl.min.js');
-$inlineScriptHelper->appendFile('/javascript/keyboardNavigator.js');
-$inlineScriptHelper->appendFile('/javascript/typewatch.js');
 $inlineScriptHelper->appendFile('/javascript/jquery.cookie.js');
 $inlineScriptHelper->appendFile('/javascript/discover.js');
 $inlineScriptHelper->appendFile('/javascript/screen.js');
-$inlineScriptHelper->appendFile('/javascript/discover.js');
 
 $inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
 $inlineScriptHelper->appendScript('
@@ -97,13 +91,6 @@ $inlineScriptHelper->appendScript('
     d.linkHelp();
 ' . (isset($_POST['show-help']) && $_POST['show-help'] === 'yes' ? 'd.showHelp(0)' : '') .
 ' })();');
-$inlineScriptHelper->appendScript('
-//Create scrollbar
-$("#scrollViewport").jScrollPane({
-    maintainPosition: false,
-    enableKeyboardNavigation: true,
-    showArrows: true
-});');
 ?>
 <style>
     img.logo, img.arrow {
@@ -145,11 +132,11 @@ $("#scrollViewport").jScrollPane({
             </td>
             <td>
                 <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                <?php echo htmlentities($attributeValues[0]);?>
+                <?php echo htmlspecialchars($attributeValues[0]);?>
                 <?php } /** Multiple attribute values */ else { ?>
                 <ul>
                 <?php foreach ($attributeValues as $value) { ?>
-                    <li><?php echo htmlentities($value); ?></li>
+                    <li><?php echo htmlspecialchars($value); ?></li>
                 <?php } ?>
                 </ul>
                 <?php } ?>
@@ -166,11 +153,11 @@ $("#scrollViewport").jScrollPane({
 
 <?php if ($spLogo) : ?>
 <img class="logo"
-     alt="<?php echo htmlentities($spName); ?>"
-     title="<?php echo htmlentities($spName); ?>"
-     src="<?php echo htmlentities($spLogo); ?>" />
+     alt="<?php echo htmlspecialchars($spName); ?>"
+     title="<?php echo htmlspecialchars($spName); ?>"
+     src="<?php echo htmlspecialchars($spLogo); ?>" />
 <?php else: ?>
-<h4 style="text-align: center"><?php echo htmlentities($spName); ?></h4>
+<h4 style="text-align: center"><?php echo htmlspecialchars($spName); ?></h4>
 <?php endif; ?>
 
 <p>
@@ -185,9 +172,9 @@ $("#scrollViewport").jScrollPane({
 
 <div id="approve">
 <!-- YES -->
-<form id="accept" method="post" action="<?php echo htmlentities($action); ?>">
+<form id="accept" method="post" action="<?php echo htmlspecialchars($action); ?>">
     <p>
-        <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
+        <input type="hidden" name="ID"      value="<?php echo htmlspecialchars($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
 
         <input id="accept_terms_button"
@@ -199,9 +186,9 @@ $("#scrollViewport").jScrollPane({
 </form>
 
 <!-- NO -->
-<form id="reject" method="post" action="<?php echo htmlentities($action); ?>">
+<form id="reject" method="post" action="<?php echo htmlspecialchars($action); ?>">
     <p>
-        <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
+        <input type="hidden" name="ID"      value="<?php echo htmlspecialchars($ID); ?>">
         <input type="hidden" name="consent" value="no" />
 
         <input id="decline_terms_button"

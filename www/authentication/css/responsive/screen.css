@@ -188,7 +188,7 @@ div.results ul#organisationsContainer li a
 
 #scrollViewport
 {
-    overflow: auto;
+    overflow: hidden;
 }
 
 input.bigbutton
