@@ -36,7 +36,7 @@ return array(
     'error_header'              => 'Error',
 
     //Footer
-    'footer'                => 'This service is powered by <a href="http://www.surfconext.nl/">SURFconext</a> - brought to you by SURFnet.',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29">Terms of Service</a>',
 
     //Help
     'help_header'           => 'Help',
@@ -182,9 +182,14 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_sp_is_provided'            => 'to',
     'consent_terms_of_service'          => 'This information will be stored in SURFconext and passed on to %s. Terms of service of %s and %s apply.',
 
-    'consent_accept'                    => 'Yes, share this information',
-    'consent_decline'                   => 'No, share no information',
-    'consent_notice'                    => 'This message only appears when you log in at a new service or when the information, passed to the service, is changed.',
+    'consent_accept'                    => 'Yes, share this data',
+    'consent_decline'                   => 'No, I don\'t want to use this service',
+    'consent_notice'                    => '(We will ask you again when the information changes)',
+
+    //New Consent
+    'consent_header_info'               => 'Request for information transfer',
+    'consent_sp_idp_info'               => 'To be able to use %s, we must share the following information provided by the %s:',
+    'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
 
     //Error screens
     'error_404'                         => '404 Page not found',

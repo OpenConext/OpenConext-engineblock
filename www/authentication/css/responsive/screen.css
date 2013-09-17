@@ -134,22 +134,26 @@ span.openClose:hover { text-decoration: underline; }
 .jspArrowUp, .jspArrowUp.jspDisabled { height: 13px; background: url("/media/slider_up.gif") no-repeat scroll left 5px transparent; }
 .jspArrowDown, .jspArrowDown.jspDisabled { height: 10px; background: url("/media/slider_down.gif") no-repeat scroll left 2px transparent; }
 ul.nav { float: right; list-style: none outside none; text-transform: uppercase; }
+ul.top { margin: 0px; padding: 0px; }
 ul.nav li { float: left; list-style: none outside none; font-weight: bold; background: url("/media/divider.gif") no-repeat scroll left 3px transparent; margin-left: 5px; padding-left: 6px; }
 ul.nav li a { color: rgb(255, 255, 255); padding-bottom: 6px; }
 ul.nav li.active a { height: 15px; display: block; color: rgb(17, 102, 164); background: url("/media/menu_active.gif") no-repeat scroll center bottom transparent; }
 ul.nav li:first-child { background: none repeat scroll 0% 0% transparent; }
 ul.nav li.first { background: none repeat scroll 0% 0% transparent; }
 ul.nav li.first.active a { background-image: none; }
-table, tr, th, td { border: 0pt none; border-collapse: collapse; border-spacing: 0pt; font-size: 11px; margin: 0pt; padding: 0pt; }
+table, tr, th, td { border: 0pt none; border-collapse: collapse; border-spacing: 0pt; font-size: 11px; margin: 0pt; padding: 0pt; border-bottom: 1px solid rgb(241, 243, 231);}
 th { color: rgb(153, 153, 150); font-weight: normal; text-align: left; }
 th, td { padding: 5px; vertical-align: top; }
-td { border-left: 1px dotted rgb(193, 193, 189); }
+td {  }
 td:first-child { border-left: 0pt none; }
-tr.odd { background-color: rgb(218, 218, 218); border-right: 1px solid rgb(218, 218, 218); }
+tr.odd { background-color: rgb(241, 243, 231); border-right: 1px solid rgb(241, 243, 231); }
 
-div.results
+div.centered
 {
+    margin: 10px;
 }
+
+
 
 div.results ul#organisationsContainer li.noAccess {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
@@ -208,8 +212,7 @@ div#approve
 {
     margin: 0px auto;
     position: relative;
-    margin-bottom: 12px;
-    padding-top: 8px;
+    padding-top: 20px;
 }
 
 div#approve form#accept
@@ -402,6 +405,11 @@ div.suggestion p
     clear: none;
 }
 
+p.grey {
+    color: #808080;
+    margin-bottom: 15px;
+}
+
 a#SuggestionLink
 {
     float: left;
@@ -554,17 +562,6 @@ div.right input{
 
 
 @media only screen and (min-width: 768px) {
-    /* Tablets/netbooks (768px+) styles go here */
-
-    /*#scrollViewport*/
-    /*{*/
-        /*height: 255px;*/
-    /*}*/
-
-    /*.consent #scrollViewport*/
-    /*{*/
-        /*height: 89px;*/
-    /*}*/
 
     div.results
     {
@@ -582,9 +579,10 @@ div.right input{
         padding-right: 6px;
     }
 
-
-    /*#scrollViewport { overflow: hidden; }*/
-    /*#scrollViewportHelp { height: 235px; }*/
+    div.centered
+    {
+        margin: 20px 20px 0px 20px;
+    }
 
 
     ul#organisationsContainer
@@ -693,7 +691,7 @@ div.right input{
     {
         margin: 0px auto;
         position: relative;
-        height: 60px;
+        height: 50px;
     }
 
     div#approve form#accept
@@ -707,14 +705,14 @@ div.right input{
 
     div#approve form#accept input.bigbutton
     {
-        float: right;
-        margin-right: 8px;
+        /*float: right;*/
+        /*margin-right: 8px;*/
     }
 
     div#approve form#reject input.bigbutton
     {
-        float: left;
-        margin-left: 8px;
+        /*float: left;*/
+        /*margin-left: 8px;*/
     }
 
     div#approve form#reject

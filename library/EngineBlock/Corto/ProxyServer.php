@@ -210,6 +210,19 @@ class EngineBlock_Corto_ProxyServer
         return $this;
     }
 
+    public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->getDisplayName($attributeId, $ietfLanguageTag);
+
+    }
+
+    public function sortConsentDisplayOrder(&$attributes)
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->sortConsentDisplayOrder($attributes);
+    }
+
     public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
     {
         $metadata = new EngineBlock_Attributes_Metadata();

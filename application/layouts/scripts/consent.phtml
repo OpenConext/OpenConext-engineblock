@@ -48,7 +48,7 @@ require PARTIAL_DIR . 'header-start.php';
                         <input type="hidden" name="lang" id="LangVar" />
                         <input type="hidden" name="show-help" id="showHelp" />
                     </div>
-                    <ul class="nav">
+                    <ul class="nav top">
                         <li id="help_nav">
                             <a href="#">help</a>
                         </li>
@@ -62,10 +62,10 @@ require PARTIAL_DIR . 'header-start.php';
                 </form>
 
                 <!-- Subheader -->
-                <h1><?php echo $this->layout()->subheader; ?></h1>
+                <h1></h1>
 
                 <!-- Main content -->
-                <div id="content">
+                <div id="content" class="centered">
                     <?php echo $this->layout()->content; ?>
                 </div>
 

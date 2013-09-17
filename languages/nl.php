@@ -35,7 +35,7 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
-    'footer'                => 'Deze dienst is powered by <a href="http://www.surfconext.nl/">SURFconext</a> - aangeboden door SURFnet.',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a> | <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help_header'           => 'Help',
@@ -183,9 +183,14 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_sp_is_provided'            => 'aan',
     'consent_terms_of_service'          => 'Deze informatie zal worden opgeslagen in SURFconext en doorgegeven aan %s. Gebruiksvoorwaarden van %s en %s zijn van toepassing.',
 
-    'consent_accept'                    => 'Ja, deel deze informatie',
-    'consent_decline'                   => 'Nee, deel geen informatie',
-    'consent_notice'                    => 'Deze melding verschijnt alleen als u voor de eerste keer inlogt op een nieuwe dienst of als de gegevens, die worden doorgegeven, wijzigen.',
+    'consent_accept'                    => 'Ja, deel deze gegevens',
+    'consent_decline'                   => 'Nee, ik wil geen gebruik maken van deze dienst',
+    'consent_notice'                    => '(We zullen dit nogmaals vragen als uw informatie wijzigt)',
+
+    //New Consent
+    'consent_header_info'               => 'Verzoek voor informatie uitwisseling',
+    'consent_sp_idp_info'               => 'Om gebruik te kunnen maken van %s is het nodig om de volgende informatie, verkregen van de %s, te delen:',
+    'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
 
     //Error screens
     'error_404'                         => '404 Pagina niet gevonden',
