@@ -35,7 +35,7 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a> | <a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29">Gebruiksvoorwaarden</a>',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help_header'           => 'Help',
@@ -191,6 +191,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_header_info'               => 'Verzoek voor informatie uitwisseling',
     'consent_sp_idp_info'               => 'Om gebruik te kunnen maken van %s is het nodig om de volgende informatie, verkregen van de %s, te delen:',
     'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
+    'name_id'                           => 'SURFconext gebruikers ID',
 
     //Error screens
     'error_404'                         => '404 Pagina niet gevonden',

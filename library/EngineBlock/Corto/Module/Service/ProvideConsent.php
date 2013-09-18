@@ -78,6 +78,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             );
             return;
         }
+        $nameId =  isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v']) ?
+            $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] : null;
 
         $html = $this->_server->renderTemplate(
             'consent',
@@ -88,6 +90,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'sp'        => $spEntityMetadata,
                 'idp'       => $idpEntityMetadata,
                 'commonName'=> $commonName,
+                'nameId'    => $nameId,
             ));
         $this->_server->sendOutput($html);
     }

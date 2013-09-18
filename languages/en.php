@@ -190,6 +190,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_header_info'               => 'Request for information transfer',
     'consent_sp_idp_info'               => 'To be able to use %s, we must share the following information provided by the %s:',
     'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
+    'name_id'                           => 'SURFconext user ID',
 
     //Error screens
     'error_404'                         => '404 Page not found',

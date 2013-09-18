@@ -47,15 +47,15 @@ $lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_
 $fallback_lang = ($lang == 'en' ? 'nl' : 'en');
 
 // Set new window icon
-$newWindowIconUrl = '/media/new_window_icon.gif';
-$newWindowHtml = '<img src="' . $newWindowIconUrl . '" alt="(' . $this->t('external_link') . ')" style="border: 0pt none; float: none;" />';
-$termsOfServiceUrl = 'https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+(' . strtoupper($lang) . ')';
-$surfConextTosLinkHtml = '<a href="' . $termsOfServiceUrl . '" target="_blank">SURFconext</a>' . $newWindowHtml;
+//$newWindowIconUrl = '/media/new_window_icon.gif';
+//$newWindowHtml = '<img src="' . $newWindowIconUrl . '" alt="(' . $this->t('external_link') . ')" style="border: 0pt none; float: none;" />';
+//$termsOfServiceUrl = 'https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+(' . strtoupper($lang) . ')';
+//$surfConextTosLinkHtml = '<a href="' . $termsOfServiceUrl . '" target="_blank">SURFconext</a>' . $newWindowHtml;
 
 $spName         = isset($sp['Name'][$lang])  ? $sp['Name'][$lang] : $sp['Name'][$fallback_lang];
 $idpName        = isset($idp['Name'][$lang]) ? $idp['Name'][$lang] : $idp['Name'][$fallback_lang];
-$spLogo         = isset($sp['Logo']['URL'])  ? $sp['Logo']['URL'] : false;
-$idpLogo        = isset($idp['Logo']['URL']) ? $idp['Logo']['URL'] : false;
+//$spLogo         = isset($sp['Logo']['URL'])  ? $sp['Logo']['URL'] : false;
+//$idpLogo        = isset($idp['Logo']['URL']) ? $idp['Logo']['URL'] : false;
 
 /**
  * @var Zend_Layout $layout
@@ -133,6 +133,16 @@ $inlineScriptHelper->appendScript('
             </tr>
         <?php endif; ?>
     <?php } ?>
+    <?php if ($nameId) : ?>
+        <tr>
+            <td>
+                <?php echo $this->t('name_id'); ?>
+            </td>
+            <td>
+                <?= $nameId ?>
+            </td>
+        </tr>
+    <?php endif; ?>
     </table>
 </div>
 
