@@ -1,7 +1,6 @@
 {
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
-    "minimum-stability": "stable",
     "repositories": [
         {
             "type": "composer",
@@ -47,8 +46,7 @@
         "simplesamlphp/simplesamlphp": "1.9.0",
         "dbpatch/dbpatch": "1.1.1",
         "zendframework/zendframework1":"1.10.9",
-        "apache/shindig":"1094333",
-        "kriswallsmith/assetic": "1.2.*@dev"
+        "apache/shindig":"1094333"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",
@@ -56,7 +54,9 @@
         "behat/behat": "2.4.6",
         "behat/mink": "1.5.0",
         "behat/mink-extension": "1.1.4",
-        "behat/mink-goutte-driver": "1.0.9"
+        "behat/mink-goutte-driver": "1.0.9",
+        "kriswallsmith/assetic": "1.2.*@dev",
+        "mrclay/minify": "dev-master"
     },
     "scripts": {
         "post-install-cmd": [
