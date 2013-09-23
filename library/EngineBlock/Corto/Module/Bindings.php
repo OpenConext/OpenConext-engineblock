@@ -606,11 +606,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         $referencedElement = $xpathResults->item(0);
-        $referencedDocument  = new DomDocument();
-        $importedNode = $referencedDocument->importNode($referencedElement->cloneNode(true), true);
-        $referencedDocument->appendChild($importedNode);
-
-        $referencedDocumentXml = $referencedDocument->saveXML();
+        $referencedDocumentXml = $document->saveXML($referencedElement->cloneNode(true));
 
         // First process any transforms
         if (isset($reference['ds:Transforms']['ds:Transform'])) {
