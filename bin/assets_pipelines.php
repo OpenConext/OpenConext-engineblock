@@ -37,6 +37,7 @@ $jsFiles = array(
     '/javascript/jquery.tmpl.min.js' => false,
     '/javascript/jquery.cookie.js' => true,
     '/javascript/matchMedia.js' => true,
+    '/javascript/screen.js' => true,
     '/javascript/discover.js' => true);
 
 $cssFiles = array(

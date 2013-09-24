@@ -30,8 +30,7 @@ require PARTIAL_DIR . 'header-start.php';
 ?>
         <meta name="viewport" content="width=device-width"/>
 
-        <link href="/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="/css/responsive/screen.css" rel="stylesheet" type="text/css" media="screen"/>
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
 
         <?php echo $this->headStyle(); ?>
         <?php echo $this->headScript(); ?>
@@ -84,7 +83,7 @@ require PARTIAL_DIR . 'header-start.php';
         </div>
 
         <!-- JAVSCRIPT -->
-        <script type="text/javascript" src="/javascript/jquery-1.10.2.min.js"></script>
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#SubmitEnForm').click(function(e) {

@@ -70,12 +70,6 @@ $profileUrl = EngineBlock_View::profileUrl();
 $view = $layout->getView();
 /** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
 $inlineScriptHelper = $view->getHelper('InlineScript');
-// Set javascript
-$inlineScriptHelper->appendFile('/javascript/jquery.tmpl.min.js');
-$inlineScriptHelper->appendFile('/javascript/jquery.cookie.js');
-$inlineScriptHelper->appendFile('/javascript/discover.js');
-$inlineScriptHelper->appendFile('/javascript/screen.js');
-
 $inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
 $inlineScriptHelper->appendScript('
 (function() {
