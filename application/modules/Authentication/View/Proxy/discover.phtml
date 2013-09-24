@@ -94,7 +94,7 @@ if ($preselectedIdp) {
 
         <title><?php echo $this->layout()->title; ?></title>
 
-        <?php echo EngineBlock_AssetManager::getCss(); ?>
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
     </head>
     <body class="index">
         <div id="wrapper">
@@ -215,7 +215,7 @@ if ($preselectedIdp) {
             </div>
             </p>
         </script>
-        <?php echo EngineBlock_AssetManager::getJs(); ?>
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
 
         <script>
         <?php

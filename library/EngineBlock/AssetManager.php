@@ -25,39 +25,36 @@
 
 class EngineBlock_AssetManager
 {
-    protected static $_assetInfo;
+    protected $_assetInfo;
 
-    protected static $_dynamicEnvironments = array("");//"dev", "test", "demo");
+    protected $_dynamicEnvironments = array("dev", "test", "demo");
 
-    public static function getCss()
+    public function __construct()
     {
-        return self::getAssets('css');
+        $this->_assetInfo = json_decode(file_get_contents(ENGINEBLOCK_FOLDER_ROOT . 'www/authentication/assets.json'), true);
     }
 
-    public static function getJs()
+    public function getCss()
     {
-        return self::getAssets('js');
+        return $this->getAssets('css');
     }
 
-    protected static function _loadAssetInfo()
+    public function getJs()
     {
-        if (!isset(self::$_assetInfo)) {
-            self::$_assetInfo = json_decode(file_get_contents(ENGINEBLOCK_FOLDER_ROOT . 'www/authentication/assets.json'), true);
-        }
+        return $this->getAssets('js');
     }
 
-    protected static function _isDynamicEnvironment()
+    protected function _isDynamicEnvironment()
     {
         $env = EngineBlock_ApplicationSingleton::getInstance()->getEnvironmentId();
-        return in_array($env, self::$_dynamicEnvironments);
+        return in_array($env, $this->_dynamicEnvironments);
     }
 
-    protected static function getAssets($type)
+    protected function getAssets($type)
     {
-        self::_loadAssetInfo();
         $assets = array();
-        $env = self::_isDynamicEnvironment() ? 'dynamic' : 'static';
-        $files = self::$_assetInfo[$type][$env];
+        $env = $this->_isDynamicEnvironment() ? 'dynamic' : 'static';
+        $files = $this->_assetInfo[$type][$env];
         foreach ($files as $asset) {
             $assets[] = ($type == 'css' ?
                 "<link href='" . $asset . "' rel='stylesheet' type='text/css' />" :
