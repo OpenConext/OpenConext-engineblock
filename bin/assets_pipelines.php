@@ -28,24 +28,47 @@ require realpath(__DIR__ . '/../vendor') . '/autoload.php';
 
 use Assetic\Asset\AssetCollection;
 use Assetic\Asset\FileAsset;
-use Assetic\Asset\GlobAsset;
 use Assetic\Filter\JSMinPlusFilter;
+use Assetic\Filter\CssMinFilter;
 
-$js = new AssetCollection(
-    array(
-        new FileAsset('../www/authentication/javascript/respond.min.js'),
-        new FileAsset('../www/authentication/javascript/jquery-1.10.2.min.js'),
-        new FileAsset('../www/authentication/javascript/jquery.tmpl.min.js'),
-        new FileAsset('../www/authentication/javascript/jquery.cookie.js'),
-        new FileAsset('../www/authentication/javascript/matchMedia.js'),
-        new FileAsset('../www/authentication/javascript/discover.js'),
-    ), array(
-    new JSMinPlusFilter(),
+$jsFiles = array(
+    '/javascript/respond.min.js',
+    '/javascript/jquery-1.10.2.min.js',
+    '/javascript/jquery.tmpl.min.js',
+    '/javascript/jquery.cookie.js',
+    '/javascript/matchMedia.js',
+    '/javascript/discover.js');
 
-));
+$cssFiles = array(
+    '/css/ext/jqueryjscrollpane/jquery.jscrollpane.css',
+    '/css/responsive/screen.css');
 
-// the code is merged when the asset is dumped
-$dir = '../www/authentication/javascript/generated/' . time();
-mkdir($dir, 0777, true);
-file_put_contents($dir . '/js.min.js', $js->dump());
+$time = time();
+$assetInfo = array();
+foreach(array('css' => $cssFiles,'js' => $jsFiles) as $assetType => $files) {
+    $assetCollection = array();
+
+    foreach ($files as $file) {
+        $assetCollection[] = new FileAsset('../www/authentication' . $file);
+    }
+
+    $js = new AssetCollection(
+        $assetCollection
+    //TODO find out why the minify of the JavaScript breaks the JS functionality?
+    //    ,array($assetType == 'css' ? new CssMinFilter() : new JSMinPlusFilter(),)
+    );
+
+    $asset = 'generated/' . $assetType . '/' . $time;
+    $dir = '../www/authentication/' . $asset;
+    mkdir($dir, 0777, true);
+    $assetFile = $dir . '/' . $assetType . '.min.' . $assetType;
+    file_put_contents($assetFile, $js->dump());
+
+    $assetInfo[$assetType] = array("static" => array('/' . $asset . '/' . $assetType . '.min.' . $assetType), "dynamic" => $files);
+
+}
+
+file_put_contents('../www/authentication/assets.json', json_encode($assetInfo));
+
+
 

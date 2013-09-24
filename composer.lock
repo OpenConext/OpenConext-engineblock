@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "91dc14c79675828efbbf3fb5e1844978",
+    "hash": "2bd20198459adddef20de335564fb127",
     "packages": [
         {
             "name": "apache/shindig",
@@ -480,6 +480,22 @@
                 "testing"
             ],
             "time": "2013-07-03 18:43:54"
+        },
+        {
+            "name": "cssmin/cssmin",
+            "version": "3.0.1",
+            "dist": {
+                "type": "file",
+                "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "cssmin-v3.0.1.php"
+                ]
+            }
         },
         {
             "name": "fabpot/goutte",

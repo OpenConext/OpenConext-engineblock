@@ -49,6 +49,7 @@ php ${RELEASE_DIR}/composer.phar install --no-dev
 
 # run Assetic
 cd ${PROJECT_DIR}
+rm -fr ${PROJECT_DIR}/www/authentication/generated
 php ${RELEASE_DIR}/assets_pipelines.php
 
 # remove files that are not required for production

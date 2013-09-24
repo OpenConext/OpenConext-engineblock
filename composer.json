@@ -39,7 +39,17 @@
                     ]
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "cssmin/cssmin",
+                "version": "3.0.1",
+                "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
+                "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
+            }
         }
+
     ],
     "require": {
         "pimple/pimple": "1.0.2",
@@ -56,7 +66,8 @@
         "behat/mink-extension": "1.1.4",
         "behat/mink-goutte-driver": "1.0.9",
         "kriswallsmith/assetic": "1.2.*@dev",
-        "mrclay/minify": "dev-master"
+        "mrclay/minify": "dev-master",
+        "cssmin/cssmin": "*"
     },
     "scripts": {
         "post-install-cmd": [
