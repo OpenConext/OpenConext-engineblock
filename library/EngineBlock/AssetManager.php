@@ -27,7 +27,7 @@ class EngineBlock_AssetManager
 {
     protected $_assetInfo;
 
-    protected $_dynamicEnvironments = array();//array("dev", "test", "demo");
+    protected $_dynamicEnvironments = array("dev", "test", "demo");
 
     public function __construct()
     {
