@@ -58,8 +58,8 @@
         "zendframework/zendframework1":"1.10.9",
         "apache/shindig":"1094333",
         "kriswallsmith/assetic": "1.2.*@dev",
-        "mrclay/minify": "dev-master",
-        "cssmin/cssmin": "*"
+        "mrclay/minify": "2.1.7",
+        "cssmin/cssmin": "3.0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",
