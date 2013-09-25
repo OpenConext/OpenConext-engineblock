@@ -70,13 +70,7 @@
         "behat/mink-goutte-driver": "1.0.9"
     },
     "scripts": {
-        "post-install-cmd": [
-            "bin/composer/dbpatch-post-install.sh",
-            "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh",
-            "bin/composer/shindig-post-install.sh"
-        ],
-        "post-update-cmd": [
+        "pre-autoload-dump": [
             "bin/composer/dbpatch-post-install.sh",
             "bin/composer/simplesamlphp-post-install.sh",
             "bin/composer/zend-framework-post-install.sh",
