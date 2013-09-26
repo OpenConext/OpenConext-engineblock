@@ -39,6 +39,10 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/vomembershiprequired');
         }
+        catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/session-lost');
+        }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unable-to-receive-message');

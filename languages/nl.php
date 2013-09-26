@@ -216,7 +216,7 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_session_lost'                => 'Error - Uw sessie is verloren gegaan..',
     'error_session_lost_desc'           => '<p>
         Uw sessie is ergens verloren gegaan.<br />
-        Misschien heeft u uw cookies uitgezet?<br />
+        Waarschijnlijk mocht de cookie niet worden gezet door de strikte privacy configuratie van uw browser?<br />
         Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
