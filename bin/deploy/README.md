@@ -1,0 +1,1 @@
+This dir contains a collection of deployment script used by SURFnet, you can use these as inspiration

@@ -930,7 +930,7 @@ class EngineBlock_Corto_ProxyServer
         // Check the session for a AuthnRequest with the given ID
         // Expect to get back an AuthnRequest issued by EngineBlock and destined for the IdP
         if (!$id || !isset($_SESSION[$id])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
+            throw new EngineBlock_Corto_Module_Services_SessionLostException(
                 "Trying to find a AuthnRequest (we made and sent) with id '$id' but it is not known in this session? ".
                 "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE

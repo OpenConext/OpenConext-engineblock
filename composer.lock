@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "3cdf280d50c3510a8605b7c96ef70a7e",
+    "hash": "a25c9ab3b87f9064ba6f37534347c71c",
     "packages": [
         {
             "name": "apache/shindig",
@@ -18,6 +18,22 @@
                 "classmap": [
                     "external",
                     "src"
+                ]
+            }
+        },
+        {
+            "name": "cssmin/cssmin",
+            "version": "3.0.1",
+            "dist": {
+                "type": "file",
+                "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php",
+                "reference": null,
+                "shasum": null
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "cssmin-v3.0.1.php"
                 ]
             }
         },
@@ -133,6 +149,46 @@
                 "minification"
             ],
             "time": "2013-09-03 12:45:02"
+        },
+        {
+            "name": "mrclay/minify",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mrclay/minify.git",
+                "reference": "681885762dea27319c63d63b6403d5c3143b2f66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mrclay/minify/zipball/681885762dea27319c63d63b6403d5c3143b2f66",
+                "reference": "681885762dea27319c63d63b6403d5c3143b2f66",
+                "shasum": ""
+            },
+            "require": {
+                "ext-pcre": "*",
+                "php": ">=5.2.1"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "min/lib/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Clay",
+                    "email": "steve@mrclay.org",
+                    "homepage": "http://www.mrclay.org/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
+            "homepage": "http://code.google.com/p/minify/",
+            "time": "2013-09-21 00:09:51"
         },
         {
             "name": "pimple/pimple",
@@ -657,17 +713,17 @@
         },
         {
             "name": "guzzle/common",
-            "version": "v3.7.2",
+            "version": "v3.7.3",
             "target-dir": "Guzzle/Common",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/common.git",
-                "reference": "70c8e8a624e2ef1657ce0045d845bee9f46a325e"
+                "reference": "bf73c87375f60861f8c7ccc7b95878023ade5306"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/common/zipball/70c8e8a624e2ef1657ce0045d845bee9f46a325e",
-                "reference": "70c8e8a624e2ef1657ce0045d845bee9f46a325e",
+                "url": "https://api.github.com/repos/guzzle/common/zipball/bf73c87375f60861f8c7ccc7b95878023ade5306",
+                "reference": "bf73c87375f60861f8c7ccc7b95878023ade5306",
                 "shasum": ""
             },
             "require": {
@@ -697,21 +753,21 @@
                 "event",
                 "exception"
             ],
-            "time": "2013-08-02 18:31:05"
+            "time": "2013-09-08 21:09:18"
         },
         {
             "name": "guzzle/http",
-            "version": "v3.7.2",
+            "version": "v3.7.3",
             "target-dir": "Guzzle/Http",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/http.git",
-                "reference": "a18954489d8af2e04ee9e3bafd3bf703b55459ff"
+                "reference": "1034125dfd906b73119e535f03153a62fccb1989"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/http/zipball/a18954489d8af2e04ee9e3bafd3bf703b55459ff",
-                "reference": "a18954489d8af2e04ee9e3bafd3bf703b55459ff",
+                "url": "https://api.github.com/repos/guzzle/http/zipball/1034125dfd906b73119e535f03153a62fccb1989",
+                "reference": "1034125dfd906b73119e535f03153a62fccb1989",
                 "shasum": ""
             },
             "require": {
@@ -754,11 +810,11 @@
                 "http",
                 "http client"
             ],
-            "time": "2013-07-30 22:07:23"
+            "time": "2013-09-06 11:34:26"
         },
         {
             "name": "guzzle/parser",
-            "version": "v3.7.2",
+            "version": "v3.7.3",
             "target-dir": "Guzzle/Parser",
             "source": {
                 "type": "git",
@@ -802,7 +858,7 @@
         },
         {
             "name": "guzzle/stream",
-            "version": "v3.7.2",
+            "version": "v3.7.3",
             "target-dir": "Guzzle/Stream",
             "source": {
                 "type": "git",
@@ -911,16 +967,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "1.2.12",
+            "version": "1.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "0e9958c459d675fb497d8dc5001c91d335734e48"
+                "reference": "466e7cd2554b4e264c9e3f31216d25ac0e5f3d94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/0e9958c459d675fb497d8dc5001c91d335734e48",
-                "reference": "0e9958c459d675fb497d8dc5001c91d335734e48",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/466e7cd2554b4e264c9e3f31216d25ac0e5f3d94",
+                "reference": "466e7cd2554b4e264c9e3f31216d25ac0e5f3d94",
                 "shasum": ""
             },
             "require": {
@@ -968,7 +1024,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-07-06 06:26:16"
+            "time": "2013-09-10 08:14:32"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1105,16 +1161,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.2.0",
+            "version": "1.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "31babf400e5b5868573bf49a000a3519d3978233"
+                "reference": "5220af2a7929aa35cf663d97c89ad3d50cf5fa3e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/31babf400e5b5868573bf49a000a3519d3978233",
-                "reference": "31babf400e5b5868573bf49a000a3519d3978233",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/5220af2a7929aa35cf663d97c89ad3d50cf5fa3e",
+                "reference": "5220af2a7929aa35cf663d97c89ad3d50cf5fa3e",
                 "shasum": ""
             },
             "require": {
@@ -1151,7 +1207,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2013-08-04 05:57:48"
+            "time": "2013-09-13 04:58:23"
         },
         {
             "name": "phpunit/phpunit",
@@ -1849,6 +1905,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "kriswallsmith/assetic": 20,
+        "mrclay/minify": 20,
         "phake/phake": 15
     },
     "platform": [

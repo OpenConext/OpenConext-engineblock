@@ -94,8 +94,7 @@ if ($preselectedIdp) {
 
         <title><?php echo $this->layout()->title; ?></title>
 
-        <link href="/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="/css/responsive/screen.css" rel="stylesheet" type="text/css" />
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
     </head>
     <body class="index">
         <div id="wrapper">
@@ -216,12 +215,7 @@ if ($preselectedIdp) {
             </div>
             </p>
         </script>
-        <script type="text/javascript" src="/javascript/respond.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery-1.10.2.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.tmpl.min.js"></script>
-        <script type="text/javascript" src="/javascript/jquery.cookie.js"></script>
-        <script type="text/javascript" src="/javascript/matchMedia.js"></script>
-        <script type="text/javascript" src="/javascript/discover.js"></script>
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
 
         <script>
         <?php
