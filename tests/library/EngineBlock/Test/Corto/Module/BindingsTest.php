@@ -4,6 +4,9 @@
  */
 class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var EngineBlock_Corto_Module_Bindings
+     */
     private $bindings;
 
     public function setup()
