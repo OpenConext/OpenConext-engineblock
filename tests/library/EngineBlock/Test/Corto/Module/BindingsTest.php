@@ -9,6 +9,8 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
     public function setup()
     {
         $proxyServer = Phake::mock('EngineBlock_Corto_ProxyServer');
+        $log = Phake::mock('EngineBlock_Log');
+        Phake::when($proxyServer)->getSessionLog()->thenReturn($log);
         $this->bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
     }
 
@@ -35,8 +37,6 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
      */
     public function testInvalidNameId($xmlFile, $certificateFile)
     {
-        $server = Phake::mock('EngineBlock_Corto_ProxyServer');
-        $bindings = new EngineBlock_Corto_Module_Bindings($server);
         $xml2array = new EngineBlock_Corto_XmlToArray();
         $xml = file_get_contents($xmlFile);
 
@@ -44,7 +44,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
 
         $publicKey = openssl_pkey_get_public($certificateFile);
         $this->assertTrue(
-            $bindings->_verifySignatureXMLElement(
+            $this->bindings->_verifySignatureXMLElement(
                 $publicKey,
                 $xml,
                 $element['saml:Assertion']
