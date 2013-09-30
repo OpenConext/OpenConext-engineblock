@@ -29,10 +29,11 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
 
     /**
      * @param string $xmlFile
+     * @param string $certificateFile
      *
      * @dataProvider responseFilePathsProvider
      */
-    public function testInvalidNameId($xmlFile, $publiKey)
+    public function testInvalidNameId($xmlFile, $certificateFile)
     {
         $server = Phake::mock('EngineBlock_Corto_ProxyServer');
         $bindings = new EngineBlock_Corto_Module_Bindings($server);
@@ -41,23 +42,14 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
 
         $element = $xml2array->xml2array($xml);
 
-
-
-        if (isset( $element['saml:Assertion']['ds:Signature']['ds:KeyInfo']['ds:X509Data'][0]['ds:X509Certificate'][0]['__v'])) {
-            $publicKey = openssl_pkey_get_public($element['saml:Assertion']['ds:Signature']['ds:KeyInfo']['ds:X509Data'][0]['ds:X509Certificate'][0]['__v']);
-
-            var_dump($publicKey);
-
-            // @todo find out how some public key's work and others do not
-
-            $this->assertTrue(
-                $bindings->_verifySignatureXMLElement(
-                    $publicKey,
-                    $xml,
-                    $element['saml:Assertion']
-                )
-            );
-        }
+        $publicKey = openssl_pkey_get_public($certificateFile);
+        $this->assertTrue(
+            $bindings->_verifySignatureXMLElement(
+                $publicKey,
+                $xml,
+                $element['saml:Assertion']
+            )
+        );
     }
 
     /**
@@ -72,10 +64,13 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
         /** @var $responseFile DirectoryIterator */
         foreach($responsesDir as $responseFile) {
             if ($responseFile->isFile() && !$responseFile->isDot()) {
-                $responseFiles[] = array(
-                    $responseFile->getPath() . '/' . $responseFile->getFilename(),
-                    $responseFile->getFilename()
-                );
+                $extension = substr($responseFile->getFilename(), -3);
+                $fileNameWithoutExtension = substr($responseFile->getFilename(), 0, -4);
+                if ($extension == 'pem') {
+                    $responseFiles[$fileNameWithoutExtension]['certificateFile'] = $responseFile->getRealPath();
+                } elseif ($extension == 'xml') {
+                    $responseFiles[$fileNameWithoutExtension]['responseXmlFile'] = $responseFile->getRealPath();
+                }
             }
         }
 
