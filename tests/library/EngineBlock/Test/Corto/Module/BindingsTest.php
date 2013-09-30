@@ -45,8 +45,8 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
 
         $element = $xml2array->xml2array($xml);
 
-        $publicKey = openssl_pkey_get_public($certificateFile);
-        if (isset($element['saml:Assertion'])) {
+        $publicKey = (file_get_contents($certificateFile));
+
         if (isset($element['ds:Signature'])) {
             $this->assertTrue(
                 $this->bindings->_verifySignatureXMLElement(
