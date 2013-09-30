@@ -45,7 +45,15 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
 
         $element = $xml2array->xml2array($xml);
 
-        $publicKey = (file_get_contents($certificateFile));
+        $publicCertificate = file_get_contents($certificateFile);
+
+        // tmp fix, please correct the contents of the pem files with the results of this method
+        if (!strstr($publicCertificate, 'CERTIFICATE')) {
+            $publicCertificate = EngineBlock_X509Certificate::getPublicPemCertFromCertData($publicCertificate);
+            echo "Please correct the contents of '{$certificateFile}'  files with '{$publicCertificate}'";
+        }
+
+        $publicKey = openssl_pkey_get_public($publicCertificate);
 
         if (isset($element['ds:Signature'])) {
             $this->assertTrue(
