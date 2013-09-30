@@ -559,7 +559,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         return ($verified === 1);
     }
 
-    protected function _verifySignatureXMLElement($publicKey, $xml, $element)
+    /**
+     * Note: this method is only public to make it unit testable, it would be better to move it's content to one or more separate classes
+     * which can be tested separately
+     */
+    public function _verifySignatureXMLElement($publicKey, $xml, $element)
     {
         if (!isset($element['ds:Signature'])) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
