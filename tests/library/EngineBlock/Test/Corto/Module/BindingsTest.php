@@ -38,7 +38,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
      *
      * @dataProvider responseProvider
      */
-    public function testInvalidNameId($xmlFile, $certificateFile)
+    public function testResponseVerifies($xmlFile, $certificateFile)
     {
         $xml2array = new EngineBlock_Corto_XmlToArray();
         $xml = file_get_contents($xmlFile);
