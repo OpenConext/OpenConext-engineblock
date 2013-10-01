@@ -13,4 +13,4 @@ cd $ROOT_DIR
 
 cd vendor/zendframework
 find . -name '*.php' -print0  | \
-xargs -0 sed --regexp-extended --in-place "s#(include|require)_once[^;]*\.php['\"][)]?;##g"
+xargs -0 sed -E -i -e "s#(include|require)_once[^;]*\.php['\"][)]?;##g"
