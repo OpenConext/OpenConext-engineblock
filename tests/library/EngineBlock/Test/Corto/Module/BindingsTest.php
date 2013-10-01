@@ -90,8 +90,8 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
             if ($responseFile->isFile() && !$responseFile->isDot()) {
                 $extension = substr($responseFile->getFilename(), -3);
                 $fileNameWithoutExtension = substr($responseFile->getFilename(), 0, -4);
-                if ($extension == 'pem') {
                     $responseFiles[$fileNameWithoutExtension]['certificateFile'] = $responseFile->getRealPath();
+                if ($extension == 'cer') {
                 } elseif ($extension == 'xml') {
                     $responseFiles[$fileNameWithoutExtension]['responseXmlFile'] = $responseFile->getRealPath();
                 }
