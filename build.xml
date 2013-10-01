@@ -41,12 +41,12 @@
 
     <target name="behat" description="BDD Acceptance tests with Behat">
         <!-- First we do it so that we get jUnit XML for bamboo-->
-        <exec dir="${basedir}" executable="behat">
+        <exec dir="${basedir}" executable="vendor/bin/behat">
             <arg line="-f junit --out ${basedir}/build/logs/tests/" />
         </exec>
         <!-- Then we run it again, only this time we want output
         for in the logs and an exit code so Bamboo can fail the build if necessary -->
-        <exec dir="${basedir}" executable="behat" failonerror="true" />
+        <exec dir="${basedir}" executable="vendor/bin/behat" failonerror="true" />
 
     </target>
 
