@@ -36,7 +36,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
      * @param string $xmlFile
      * @param string $certificateFile
      *
-     * @dataProvider responseFilePathsProvider
+     * @dataProvider responseProvider
      */
     public function testInvalidNameId($xmlFile, $certificateFile)
     {
@@ -46,12 +46,6 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
         $element = $xml2array->xml2array($xml);
 
         $publicCertificate = file_get_contents($certificateFile);
-
-        // tmp fix, please correct the contents of the pem files with the results of this method
-        if (!strstr($publicCertificate, 'CERTIFICATE')) {
-            $publicCertificate = EngineBlock_X509Certificate::getPublicPemCertFromCertData($publicCertificate);
-            echo "Please correct the contents of '{$certificateFile}'  files with '{$publicCertificate}'";
-        }
 
         $publicKey = openssl_pkey_get_public($publicCertificate);
 
@@ -77,27 +71,29 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
     }
 
     /**
-     * Provides a list of paths to response xml files
+     * Provides a list of paths to response xml files and certificate files
      * 
      * @return array
      */
-    public function responseFilePathsProvider()
+    public function responseProvider()
     {
         $responseFiles = array();
+        $certificateFiles = array();
         $responsesDir = new DirectoryIterator(TEST_RESOURCES_DIR . '/saml/responses');
         /** @var $responseFile DirectoryIterator */
         foreach($responsesDir as $responseFile) {
             if ($responseFile->isFile() && !$responseFile->isDot()) {
                 $extension = substr($responseFile->getFilename(), -3);
                 $fileNameWithoutExtension = substr($responseFile->getFilename(), 0, -4);
-                    $responseFiles[$fileNameWithoutExtension]['certificateFile'] = $responseFile->getRealPath();
+
                 if ($extension == 'cer') {
+                    $certificateFiles[$fileNameWithoutExtension] = $responseFile->getRealPath();
                 } elseif ($extension == 'xml') {
-                    $responseFiles[$fileNameWithoutExtension]['responseXmlFile'] = $responseFile->getRealPath();
+                    $responseFiles[$fileNameWithoutExtension] = $responseFile->getRealPath();
                 }
             }
         }
 
-        return $responseFiles;
+        return array_merge_recursive($responseFiles, $certificateFiles);
     }
 }
