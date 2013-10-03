@@ -1,4 +1,4 @@
-#!/bin/sh
+bin/sh
 # @todo add more error handling
 
 RELEASE_DIR=${HOME}/Releases
@@ -74,7 +74,11 @@ tar -czf ${PROJECT_DIR_NAME}.tar.gz ${PROJECT_DIR_NAME}
 
 # create checksum file
 cd ${RELEASE_DIR}
-sha1sum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha
+if hash sha1sum 2>/dev/null; then
+    sha1sum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha 
+else
+    shasum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha 
+fi
 
 # sign it if requested
 if [ -n "$2" ]
