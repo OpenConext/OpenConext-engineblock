@@ -20,6 +20,7 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
         $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = self::META_TOU_COMMENT;
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md'] = 'urn:oasis:names:tc:SAML:2.0:metadata';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
+        $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdrpi'] = 'urn:oasis:names:tc:SAML:metadata:rpi';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil'] = $this->_validUntil;
 
         if (isset($this->_entities)) {
