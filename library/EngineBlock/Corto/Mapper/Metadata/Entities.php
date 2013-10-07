@@ -3,10 +3,16 @@
 class EngineBlock_Corto_Mapper_Metadata_Entities
 {
     private $_entities;
+    private $_eduGain;
 
-    public function __construct(array $entities)
+    /**
+     * @param array $entities
+     * @param boolean$eduGain
+     */
+    public function __construct(array $entities, $eduGain)
     {
         $this->_entities = $entities;
+        $this->_eduGain = $eduGain;
     }
 
     public function map()
@@ -31,7 +37,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
 
     protected function _mapEntity(array $entity)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($entity, $this->_eduGain);
         return $mapper->map();
     }
 }

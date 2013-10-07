@@ -82,7 +82,8 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
             $this->_server->getNewId(),
-            $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400))
+            $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
+            false
         );
         $document = $mapper->setEntities($idpEntities)->map();
 

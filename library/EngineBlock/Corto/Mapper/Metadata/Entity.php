@@ -3,10 +3,16 @@
 class EngineBlock_Corto_Mapper_Metadata_Entity
 {
     private $_entity;
+    private $_eduGain;
 
-    public function __construct($entity)
+    /**
+     * @param array $entity
+     * @param boolean $eduGain
+     */
+    public function __construct($entity, $eduGain)
     {
         $this->_entity = $entity;
+        $this->_eduGain = $eduGain;
     }
 
     public function map()
@@ -24,7 +30,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID'] = $this->_entity['EntityID'];
         $rootElement[EngineBlock_Corto_XmlToArray::TAG_NAME_PFX] = 'md:EntityDescriptor';
 
-        $rootElement = $this->_mapMdRpi($rootElement);
+        if ($this->_eduGain) {
+            $rootElement = $this->_mapMdRpi($rootElement);
+        }
         $rootElement = $this->_mapIdpSsoDescriptor($rootElement);
         $rootElement = $this->_mapSpSsoDescriptor($rootElement);
         $rootElement = $this->_mapOrganization($rootElement);
