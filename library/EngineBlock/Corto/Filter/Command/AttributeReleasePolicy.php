@@ -70,8 +70,10 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
                     } else {
                         //Prefix matching check
                         foreach ($allowedValues as $allowedValue) {
+                            $suffix = substr($allowedValue, 0, -1);
                             if ($this->_endsWith($allowedValue, '*') &&
-                                $this->_startsWith($attributeValue, substr($allowedValue, 0, -1))) {
+                                $this->_startsWith($attributeValue, $suffix)
+                            ) {
                                 if (!isset($newAttributes[$attribute])) {
                                     $newAttributes[$attribute] = array();
                                 }
