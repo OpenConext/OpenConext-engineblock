@@ -32,8 +32,8 @@ class EngineBlock_X509Certificate
 
     public static function getPublicPemCertFromCertData($certData)
     {
-        // Remove newlines and spaces
-        $certData = implode('', explode(' ', implode('', explode("\n", $certData))));
+        // Remove newlines, spaces and tabs (http://micro-optimization.com/str_replace-vs-implode-explode)
+        $certData = str_replace(array("\n", " ", "\t"),"", $certData);
 
         // Chunk it in 64 character bytes
         $publicKey = self::PEM_PUBLIC_HEADER .
