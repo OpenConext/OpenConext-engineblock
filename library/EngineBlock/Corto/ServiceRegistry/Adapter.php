@@ -305,6 +305,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 $cortoEntity['certificates']['public-fallback'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
                     $serviceRegistryEntity['certData2']
                 );
+                if (isset($serviceRegistryEntity['certData3']) && $serviceRegistryEntity['certData3']) {
+                    $cortoEntity['certificates']['public-fallback2'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
+                        $serviceRegistryEntity['certData3']
+                    );
+                }
             }
         }
 
