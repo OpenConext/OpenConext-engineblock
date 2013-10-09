@@ -116,10 +116,8 @@ class EngineBlock_Application_ErrorHandler
             echo "<br />" . PHP_EOL;
         }
         $message = 'A very serious error occurred, it has been logged and sent to the administrator.';
-        if ($this->_application->getConfiguration()->debug) {
-            $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
-            $message .= '<br /><strong style="color: red"><pre>' . var_export($lastError, true) . '</pre></strong>';
-        }
+        $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
+        $message .= '<br /><strong style="color: red"><pre>' . var_export($lastError, true) . '</pre></strong>';
         die($message);
     }
 }
