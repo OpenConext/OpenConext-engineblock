@@ -481,7 +481,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Otherwise it's in the message or in the assertion in the message (HTTP Post Response)
         $messageIssuer = $message['saml:Issuer']['__v'];
         $publicKey = $this->_getRemoteEntityPublicKey($messageIssuer);
-        $publicKeyFallback = $this->_getRemoteEntityFallbackPublicKey($messageIssuer);
+        $publicKeyFallbacks = $this->_getRemoteEntityFallbackPublicKeys($messageIssuer);
 
         if ($requireMessageSigning || isset($message['ds:Signature'])) {
             $messageVerified = $this->_verifySignatureXMLElement(
@@ -489,12 +489,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 $message['__']['Raw'],
                 $message
             );
-            if (!$messageVerified && $publicKeyFallback) {
-                $messageVerified = $this->_verifySignatureXMLElement(
-                    $publicKeyFallback,
-                    $message['__']['Raw'],
-                    $message
-                );
+            if (!$messageVerified && !empty($publicKeyFallbacks)) {
+                foreach ($publicKeyFallbacks as $publicKeyFallback) {
+                    $messageVerified = $this->_verifySignatureXMLElement(
+                        $publicKeyFallback,
+                        $message['__']['Raw'],
+                        $message
+                    );
+                    if ($messageVerified) {
+                        break;
+                    }
+                }
             }
             if (!$messageVerified) {
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException("Invalid signature on message");
@@ -510,12 +515,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             isset($message['saml:Assertion']['__']['Raw']) ? $message['saml:Assertion']['__']['Raw'] : $message['__']['Raw'],
             $message['saml:Assertion']
         );
-        if (!$assertionVerified && $publicKeyFallback) {
-            $assertionVerified = $this->_verifySignatureXMLElement(
-                $publicKeyFallback,
-                isset($message['saml:Assertion']['__']['Raw']) ? $message['saml:Assertion']['__']['Raw'] : $message['__']['Raw'],
-                $message['saml:Assertion']
-            );
+        if (!$assertionVerified && !empty($publicKeyFallbacks)) {
+            foreach ($publicKeyFallbacks as $publicKeyFallback) {
+                $assertionVerified = $this->_verifySignatureXMLElement(
+                    $publicKeyFallback,
+                    isset($message['saml:Assertion']['__']['Raw']) ? $message['saml:Assertion']['__']['Raw'] : $message['__']['Raw'],
+                    $message['saml:Assertion']
+                );
+                if ($assertionVerified) {
+                    break;
+                }
+            }
         }
 
         if (!$assertionVerified) {
@@ -537,19 +547,24 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         $messageIssuer = $message['saml:Issuer']['__v'];
         $publicKey          = $this->_getRemoteEntityPublicKey($messageIssuer);
-        $publicKeyFallback  = $this->_getRemoteEntityFallbackPublicKey($messageIssuer);
+        $publicKeyFallbacks  = $this->_getRemoteEntityFallbackPublicKeys($messageIssuer);
 
         $verified = openssl_verify(
             $queryString,
             base64_decode($message['__']['Signature']),
             $publicKey
         );
-        if (!$verified && $publicKeyFallback) {
-            $verified = openssl_verify(
-                $queryString,
-                base64_decode($message['__']['Signature']),
-                $publicKeyFallback
-            );
+        if (!$verified && !empty($publicKeyFallbacks)) {
+            foreach ($publicKeyFallbacks as $publicKeyFallback) {
+                $verified = openssl_verify(
+                    $queryString,
+                    base64_decode($message['__']['Signature']),
+                    $publicKeyFallback
+                );
+                if ($verified) {
+                    break;
+                }
+            }
         }
 
         if (!$verified) {
@@ -877,22 +892,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     protected function _getRemoteEntityPublicKey($entityId)
     {
-        $remoteEntity = $this->_server->getRemoteEntity($entityId);
-
-        if (!isset($remoteEntity['certificates']['public'])) {
-            throw new EngineBlock_Corto_Module_Bindings_VerificationException("No public key known for $entityId");
-        }
-
-        $publicKey = openssl_pkey_get_public($remoteEntity['certificates']['public']);
-        if ($publicKey === false) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Public key for $entityId is NOT a valid PEM SSL public key?!?! Value: " .
-                    $remoteEntity['certificates']['public'],
-                EngineBlock_Exception::CODE_WARNING
-            );
-        }
-
-        return $publicKey;
+        return $this->_doGetRemoteEntityKey($entityId, 'public', true);
     }
 
     /**
@@ -902,24 +902,42 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * @param $entityId
      * @return bool|resource
      */
-    protected function _getRemoteEntityFallbackPublicKey($entityId)
+    protected function _getRemoteEntityFallbackPublicKeys($entityId)
+    {
+        $keys = array();
+        $types = array('public-fallback', 'public-fallback2');
+        foreach ($types as $certType) {
+            $publicKey = $this->_doGetRemoteEntityKey($entityId, $certType, false);
+            if ($publicKey) {
+                $keys[] = $publicKey;
+            }
+        }
+        return $keys;
+    }
+
+    protected function _doGetRemoteEntityKey($entityId, $certificateType, $certificateRequired)
     {
         $remoteEntity = $this->_server->getRemoteEntity($entityId);
 
-        if (!isset($remoteEntity['certificates']['public-fallback'])) {
-            return false;
+        if (!isset($remoteEntity['certificates'][$certificateType])) {
+            if ($certificateRequired) {
+                throw new EngineBlock_Corto_Module_Bindings_VerificationException("No $certificateType key known for $entityId");
+            } else {
+                return false;
+            }
         }
 
-        $publicKey = openssl_pkey_get_public($remoteEntity['certificates']['public-fallback']);
+        $publicKey = openssl_pkey_get_public($remoteEntity['certificates'][$certificateType]);
         if ($publicKey === false) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Public key for $entityId is NOT a valid PEM SSL public key?!?! Value: " .
-                    $remoteEntity['certificates']['public'],
+                "$certificateType key for $entityId is NOT a valid PEM SSL public key?!?! Value: " .
+                $remoteEntity['certificates'][$certificateType],
                 EngineBlock_Exception::CODE_WARNING
             );
         }
 
         return $publicKey;
+
     }
 
     protected function _sendHTTPPost($message, $remoteEntity)
