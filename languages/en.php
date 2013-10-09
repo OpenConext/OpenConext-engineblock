@@ -221,8 +221,6 @@ If you want to use this application you have to:<br />
         Please go back and try again.
         <br /><br />
     </p>',
-    'error_message_timeout'         => 'Error - Message time-out..',
-    'error_message_timeout_desc'    => 'We received an out of date message. Please try again.',
     'error_no_message'              => 'Error - No message received..',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',

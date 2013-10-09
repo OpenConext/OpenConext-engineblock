@@ -220,8 +220,6 @@ Als u deze applicatie wilt gebruiken moet u:<br />
         Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
-    'error_message_timeout'             => 'Error - Bericht time-out..',
-    'error_message_timeout_desc'        => 'We hebben een bericht ontvangen dat niet meer geldig is. Probeer opnieuw in te loggen alstublieft.',
     'error_no_message'                  => 'Error - Geen bericht ontvangen..',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',

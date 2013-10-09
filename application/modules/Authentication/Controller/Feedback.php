@@ -40,11 +40,6 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         header('HTTP/1.1 400 Bad Request');
     }
 
-    public function timeoutAction()
-    {
-        header('HTTP/1.1 408 Request Timeout');
-    }
-
     public function unknownIssuerAction()
     {
         header('HTTP/1.1 404 Not Found');
