@@ -69,7 +69,7 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         $proxyServer->startSession();
     }
 
-    public function invalidAcsLocation()
+    public function invalidAcsLocationAction()
     {
         header('HTTP/1.1 400 Bad Request');
     }

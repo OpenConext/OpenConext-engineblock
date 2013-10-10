@@ -102,6 +102,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 '/authentication/feedback/no-idps'
             );
         }
+        catch (EngineBlock_Corto_Exception_InvalidAcsLocation $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/invalidAcsLocation'
+            );
+        }
     }
 
     public function processWayfAction()
