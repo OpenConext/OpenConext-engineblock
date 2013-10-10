@@ -78,8 +78,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             );
             return;
         }
-        $nameId =  isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v']) ?
-            $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] : null;
+        /*
+         * We don't show the nameId for now as we must base this on the nameID format and this will
+         * be later on in the process defined.
+         */
+        $nameId = null;
 
         $html = $this->_server->renderTemplate(
             'consent',
