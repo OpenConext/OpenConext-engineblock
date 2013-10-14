@@ -46,13 +46,13 @@ $attributesValidated = $validator->validate();
 ?>
 
 <?php if ($attributesValidated) : ?>
-<img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/tick.png') ?>" alt="" />
+<img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="" />
 <?php echo $this->t('attributes_validation_succeeded'); ?>
 <?php else: ?>
     <?php if (count($validator->getErrors()) > 0): ?>
-<img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/exclamation.png') ?>" alt="" style="vertical-align: bottom" />
+<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png' alt="" style="vertical-align: bottom" />
     <?php else: ?>
-<img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/error.png') ?>" alt="" style="vertical-align: bottom" />
+<img src="/media/famfamfam_silk_icons_v013/icons/error.png'" alt="" style="vertical-align: bottom" />
     <?php endif; ?>
 
 <?php echo $this->t('attributes_validation_failed'); ?>
@@ -63,7 +63,7 @@ $attributesValidated = $validator->validate();
     <input type="submit" value="Retry" />
 </form>
 <hr style="clear: both" />
-<!--<pre>--><?php //var_dump($idp); ?><!--</pre>-->
+
 <h2>Identity Provider</h2>
 <table>
     <tr>
@@ -114,13 +114,13 @@ $attributesValidated = $validator->validate();
 <h2><?php echo $this->t('attributes') ?></h2>
 <?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
     <p class="error">
-        <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/exclamation.png'); ?>" alt="[error]" style="vertical-align: bottom" /> <?php
+        <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
     echo htmlentities(call_user_func_array(array($this, 'translate'), $error), ENT_COMPAT, 'UTF-8');
     ?></p>
 <?php endforeach; ?>
 <?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
     <p class="warning">
-        <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/error.png'); ?>" alt="[error]" style="vertical-align: bottom" /> <?php
+        <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
     echo htmlentities(call_user_func_array(array($this, 'translate'), $warning), ENT_COMPAT, 'UTF-8');
     ?></p>
 <?php endforeach; ?>
@@ -163,17 +163,17 @@ $attributesValidated = $validator->validate();
             </td>
             <td>
                 <?php if ($validator->isValid($attributeName)): ?>
-                <img src="<?php echo $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/tick.png') ?>" alt="valid" />
+                <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="valid" />
                 <?php else:
                     foreach ($validator->getErrors($attributeName) as $error) {
                         echo '<p class="error">' .
-                                '<img src="' . $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/exclamation.png') . '" alt="[error]" style="vertical-align: bottom" /> ' .
+                                '<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
                                 htmlentities(call_user_func_array(array($this, 'translate'), $error), ENT_COMPAT, 'UTF-8') .
                             '</p>';
                     }
                     foreach ($validator->getWarnings($attributeName) as $warning) {
                         echo '<p class="warning">'.
-                                '<img src="' . $this->staticUrl('/media/famfamfam_silk_icons_v013/icons/error.png') . '" alt="[error]" style="vertical-align: bottom" /> ' .
+                                '<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
                                 htmlentities(call_user_func_array(array($this, 'translate'), $warning), ENT_COMPAT, 'UTF-8') .
                             '</p>';
                     }

@@ -23,7 +23,10 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
- if (!isset($action)) {
+/**
+ * See OpenConext-engineblock/library/EngineBlock/Corto/Module/Service/ProvideConsent.php#84
+ */
+if (!isset($action)) {
     throw new EngineBlock_View_Exception('No Consent action given to consent screen');
 }
 if (!isset($ID)) {

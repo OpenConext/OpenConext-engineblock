@@ -29,8 +29,6 @@ class VoManage_Controller_Index extends Default_Controller_LoggedIn
      */
     public function indexAction($dispatch=TRUE)
     {
-        //var_dump($this->_getRequest()->getPostParameters());
-        
         // VO selected?
         $this->getSelectedVO();
 

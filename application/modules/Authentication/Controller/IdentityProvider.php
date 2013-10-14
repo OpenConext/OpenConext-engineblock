@@ -102,6 +102,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 '/authentication/feedback/no-idps'
             );
         }
+        catch (EngineBlock_Corto_Exception_InvalidAcsLocation $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/invalidAcsLocation'
+            );
+        }
     }
 
     public function processWayfAction()
@@ -115,6 +120,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     public function metadataAction($argument = null)
     {
         $this->setNoRender();
+        $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $proxyServer = new EngineBlock_Corto_Adapter();
 
@@ -122,7 +128,14 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
         }
 
-        $proxyServer->idPMetadata();
+        try {
+            $proxyServer->idPMetadata();
+        }
+        catch (EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId()));
+        }
+
     }
 
     public function processConsentAction()
@@ -156,6 +169,10 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $_SESSION['feedback_custom'] = $e->getFeedback();
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/custom');
+        }
+        catch (EngineBlock_Corto_Exception_NoConsentProvided $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/no-consent');
         }
     }
 

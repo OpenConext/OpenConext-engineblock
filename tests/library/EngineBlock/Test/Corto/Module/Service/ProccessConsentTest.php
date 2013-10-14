@@ -52,18 +52,14 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
         $processConsentService->serve(null);
     }
 
+    /**
+     * @expectedException EngineBlock_Corto_Exception_NoConsentProvided
+     */
     public function testRedirectToFeedbackPageIfConsentNotInPost() {
         $processConsentService = $this->factoryService();
 
-        Phake::when($this->proxyServerMock)
-            ->redirect(Phake::anyParameters())
-            ->thenReturn(null);
-
         unset($_POST['consent']);
-
         $processConsentService->serve(null);
-
-        Phake::verify(($this->proxyServerMock))->redirect(Phake::anyParameters());
     }
 
     public function testConsentIsStored()
