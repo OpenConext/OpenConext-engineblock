@@ -11,11 +11,11 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi
 
     public function mapTo(array $rootElement)
     {
-        $rootElement = $this->_RegistrationPolicy($rootElement);
+        $rootElement = $this->_registrationPolicy($rootElement);
         return $rootElement;
     }
 
-    protected function _RegistrationPolicy(array $rootElement)
+    protected function _registrationPolicy(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_RegistrationPolicy($this->_entity);
         return $mapper->mapTo($rootElement);
