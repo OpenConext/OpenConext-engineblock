@@ -12,13 +12,16 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_RegistrationPolicy
     public function mapTo(array $rootElement)
     {
 
+        $registration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->eduXgain->registration;
+
+
         if (!isset($rootElement['md:Extensions'])) {
             $rootElement['md:Extensions'] = array();
         }
         if (!isset($rootElement['md:Extensions']['mdrpi:RegistrationInfo'])) {
             $registrationInfo = array(
                     EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdrpi' => "urn:oasis:names:tc:SAML:metadata:rpi",
-                    EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . "registrationAuthority" => "http://www.surfconext.nl/",
+                    EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . "registrationAuthority" => $registration->authority,
 
             );
             if (isset($this->_entity['PublishInEdugainDate'])) {
@@ -27,7 +30,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_RegistrationPolicy
             $registrationInfo['mdrpi:RegistrationPolicy'] = array(
                 array(
                     EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => "en",
-                    EngineBlock_Corto_XmlToArray::VALUE_PFX => "https://wiki.surfnetlabs.nl/display/eduGAIN/EduGAIN"
+                    EngineBlock_Corto_XmlToArray::VALUE_PFX => $registration->policy
                 )
             );
             $rootElement['md:Extensions']['mdrpi:RegistrationInfo'] = array($registrationInfo);
