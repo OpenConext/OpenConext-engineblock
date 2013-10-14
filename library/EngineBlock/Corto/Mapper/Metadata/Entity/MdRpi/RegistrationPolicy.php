@@ -12,8 +12,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_RegistrationPolicy
     public function mapTo(array $rootElement)
     {
 
-        $registration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->eduXgain->registration;
-
+        $registration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->edugain->registration;
 
         if (!isset($rootElement['md:Extensions'])) {
             $rootElement['md:Extensions'] = array();
