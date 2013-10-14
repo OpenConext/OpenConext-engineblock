@@ -1,5 +1,7 @@
 <?php
 
+use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+
 class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
@@ -8,23 +10,31 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
 
         $edugainEntities = array();
+
+        $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
+
         foreach ($this->_server->getRemoteEntities() as $entity) {
             // Only add entities that have a SSO service registered
             if (empty($entity['PublishInEdugain'])) {
                 continue;
             }
 
-            // Generate a URL that points to EngineBlock logout service
-            $transparentSlUrl = $this->_server->getUrl('singleLogoutService', $entity['EntityID']);
-            // Set default value for single logout service
-            if (empty($entity['SingleLogoutService'])) {
-                $entity['SingleLogoutService'] = array(array());
-            }
-            // Override Single Logout Service information of entities with info of EngineBlock
-            foreach($entity['SingleLogoutService'] as &$slService) {
-                $slService['Location'] = $transparentSlUrl;
-                $slService['Binding']  = $entityDetails['SingleLogoutService'][0]['Binding'];
-            }
+            // Use EngineBlock certificates
+            $entity['certificates'] = $entityDetails['certificates'];
+
+            // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
+            // NameIDs, so advertise that.
+            unset($entity['NameIDFormat']);
+            $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
+
+            // Replace service locations and bindings with those of EB
+            $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
+            $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
+            $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
+            $slServiceReplacer->replace($entity, $transparentSlUrl);
+
+            $entity['ContactPersons'] = $entityDetails['ContactPersons'];
 
             $edugainEntities[] = $entity;
         }
