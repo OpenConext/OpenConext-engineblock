@@ -2,6 +2,6 @@
 *.ipr
 *.iws
 .idea/
-
+/build
 /vendor/
 /www/authentication/generated/
