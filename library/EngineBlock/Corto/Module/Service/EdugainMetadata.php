@@ -14,7 +14,9 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
         $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
 
-        foreach ($this->_server->getRemoteEntities() as $entity) {
+        $remoteEntities = $this->_server->getRemoteEntities();
+
+        foreach ($remoteEntities as $entity) {
             // Only add entities that have a SSO service registered
             if (empty($entity['PublishInEdugain'])) {
                 continue;
@@ -28,14 +30,14 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
             unset($entity['NameIDFormat']);
             $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
 
-            // Replace service locations and bindings with those of EB
-            $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
-            $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
-            $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
-            $slServiceReplacer->replace($entity, $transparentSlUrl);
-
+            if (array_key_exists('SingleSignOnService', $entity)) {
+                // Replace service locations and bindings with those of EB
+                $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
+                $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
+                $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
+                $slServiceReplacer->replace($entity, $transparentSlUrl);
+            }
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
-
             $edugainEntities[] = $entity;
         }
 
@@ -67,4 +69,5 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $this->_server->sendHeader('Content-Type', 'application/xml');
         $this->_server->sendOutput($xml);
     }
+
 }

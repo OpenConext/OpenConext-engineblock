@@ -33,6 +33,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
         if ($this->_eduGain) {
             $rootElement = $this->_mapMdRpi($rootElement);
         }
+
         $rootElement = $this->_mapIdpSsoDescriptor($rootElement);
         $rootElement = $this->_mapSpSsoDescriptor($rootElement);
         $rootElement = $this->_mapOrganization($rootElement);
