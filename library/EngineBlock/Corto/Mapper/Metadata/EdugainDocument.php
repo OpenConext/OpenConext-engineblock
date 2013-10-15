@@ -2,8 +2,6 @@
 
 class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 {
-    const META_TOU_COMMENT = 'Use of this metadata is subject to the Terms of Use at http://www.edugain.org/policy/metadata-tou_1_0.txt';
-
     private $_id;
     private $_validUntil;
     private $_eduGain;
@@ -24,7 +22,7 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 
     public function map()
     {
-        $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = self::META_TOU_COMMENT;
+        $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = $this->_getTermsOfUse();
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md'] = 'urn:oasis:names:tc:SAML:2.0:metadata';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
         if ($this->_eduGain) {
@@ -71,5 +69,12 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
     {
         $this->_entity = $entity;
         return $this;
+    }
+
+    protected function _getTermsOfUse()
+    {
+        return $this->_eduGain ?
+            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->edugain->termsOfUse :
+            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->surfconext->termsOfUse ;
     }
 }

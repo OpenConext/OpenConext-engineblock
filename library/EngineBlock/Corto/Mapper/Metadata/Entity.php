@@ -72,7 +72,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
 
     protected function _mapMdRpi(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi($this->_entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_RegistrationPolicy($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 

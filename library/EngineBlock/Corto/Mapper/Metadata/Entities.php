@@ -28,6 +28,10 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
             return $rootElement;
         }
 
+        if ($this->_eduGain) {
+            $rootElement = $this->_mapMdRpi($rootElement);
+        }
+
         $rootElement['md:EntityDescriptor'] = array();
         foreach ($this->_entities as $entity) {
             $rootElement['md:EntityDescriptor'][] = $this->_mapEntity($entity);
@@ -39,5 +43,11 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($entity, $this->_eduGain);
         return $mapper->map();
+    }
+
+    protected function _mapMdRpi(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_PublicationInfo($this->_entity);
+        return $mapper->mapTo($rootElement);
     }
 }
