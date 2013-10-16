@@ -19,6 +19,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor extends EngineBl
             EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'protocolSupportEnumeration' => "urn:oasis:names:tc:SAML:2.0:protocol",
         );
 
+        $rootElement['md:IDPSSODescriptor'] = $this->_mapScope($rootElement['md:IDPSSODescriptor']);
         $rootElement['md:IDPSSODescriptor'] = $this->_mapUiInfo($rootElement['md:IDPSSODescriptor']);
         $rootElement['md:IDPSSODescriptor'] = $this->_mapCertificates($rootElement['md:IDPSSODescriptor']);
         $rootElement['md:IDPSSODescriptor'] = $this->_mapSingleLogoutService($rootElement['md:IDPSSODescriptor']);
@@ -28,9 +29,15 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor extends EngineBl
         return $rootElement;
     }
 
-    protected function _mapSingleSignOnService($rootElement)
+    protected function _mapSingleSignOnService(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor_SingleSignOnService($this->_entity);
+        return $mapper->mapTo($rootElement);
+    }
+
+    protected function _mapScope(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor_Scope($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 }
