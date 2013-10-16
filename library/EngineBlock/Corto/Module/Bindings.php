@@ -71,6 +71,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     public function receiveRequest()
     {
+        return $this->receive();
         $request = $this->_receiveMessage(self::KEY_REQUEST);
 
         // Remember idp for debugging
@@ -84,6 +85,24 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->_c14nRequest($request);
 
         return $request;
+    }
+
+    public function receive()
+    {
+        $binding = SAML2_Binding::getCurrentBinding();
+        $message = $binding->receive();
+
+        // Remember idp for debugging
+        $_SESSION['currentServiceProvider'] = $message->getIssuer();
+
+        $log = $this->_server->getSessionLog();
+        $log->attach($message, 'Message')
+            ->info('Received message');
+
+        $idpMetadata = new
+
+        sspmod_saml_Message::validateMessage($idpMetadata, $spMetadata, $message);
+
     }
 
     /**
