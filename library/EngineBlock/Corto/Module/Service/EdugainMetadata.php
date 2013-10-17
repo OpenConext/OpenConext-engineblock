@@ -30,6 +30,7 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
             unset($entity['NameIDFormat']);
             $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
 
+            // For IdP's replace the SingleSignService with the one from EB
             if (array_key_exists('SingleSignOnService', $entity)) {
                 // Replace service locations and bindings with those of EB
                 $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
@@ -38,6 +39,13 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
                 $slServiceReplacer->replace($entity, $transparentSlUrl);
             }
             $entity['ContactPersons'] = $entityDetails['ContactPersons'];
+
+            // Add the SP ARP attributes for the RequestedAttribute information in the AttributeConsumingService (only if ARp is set)
+            if (!array_key_exists('SingleSignOnService', $entity)) {
+
+            }
+            $entity = $this->_addRequestAttributes($entity);
+
             $edugainEntities[] = $entity;
         }
 
@@ -69,5 +77,13 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $this->_server->sendHeader('Content-Type', 'application/xml');
         $this->_server->sendOutput($xml);
     }
+
+
+    protected function _addRequestAttributes($entity)
+    {
+        $arpRequestedAttributes = new EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes();
+        return $arpRequestedAttributes->addRequestAttributes($entity);
+    }
+
 
 }
