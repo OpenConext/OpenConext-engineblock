@@ -23,6 +23,8 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
+require ENGINEBLOCK_FOLDER_VENDOR . 'simplesamlphp/simplesamlphp/lib/_autoload.php';
+
 /**
  * The bindings module for Corto, which implements support for various data
  * bindings.
@@ -71,14 +73,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     public function receiveRequest()
     {
-        return $this->receive();
+        //return $this->receive();
         $request = $this->_receiveMessage(self::KEY_REQUEST);
 
         // Remember idp for debugging
         $_SESSION['currentServiceProvider'] = $request['saml:Issuer']['__v'];
 
-        $log = $this->_server->getSessionLog();
-        $log->attach($request, 'Request')
+        $this->_server->getSessionLog()
+            ->attach($request, 'Request')
             ->info('Received request');
 
         $this->_verifyRequest($request);
@@ -87,21 +89,118 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         return $request;
     }
 
-    public function receive()
+    public function idpReceive()
     {
+        $metadata = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
+        $idpEntityId = $metadata->getMetaDataCurrentEntityID('saml20-idp-hosted');
+        $idp = SimpleSAML_IdP::getById('saml2:' . $idpEntityId);
+        sspmod_saml_IdP_SAML2::receiveAuthnRequest($idp);
+    }
+
+    public function spReceive()
+    {
+        $configs = $this->_server->getConfigs();
+        $publicPem = $configs['certificates']['public'];
+        $publicPem = str_replace(
+            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
+            '',
+            $publicPem
+        );
+
+        $spMetadata = SimpleSAML_Configuration::loadFromArray(
+            array(
+                'entityid' => $this->_server->getUrl('spMetadataService'),
+                'SingleSignOnService' => array (
+                        array (
+                            'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                            'Location' => $this->_server->getUrl('spMetadataService'),
+                        ),
+                ),
+                'keys' => array (
+                    array (
+                        'signing' => true,
+                        'type' => 'X509Certificate',
+                        'X509Certificate' => $publicPem,
+                    ),
+                )
+            )
+        );
+
         $binding = SAML2_Binding::getCurrentBinding();
-        $message = $binding->receive();
+        if ($binding instanceof SAML2_HTTPArtifact) {
+            $binding->setSPMetadata($spMetadata);
+        }
 
-        // Remember idp for debugging
-        $_SESSION['currentServiceProvider'] = $message->getIssuer();
+        $response = $binding->receive();
+        if (!($response instanceof SAML2_Response)) {
+            throw new SimpleSAML_Error_BadRequest('Invalid message received to AssertionConsumerService endpoint.');
+        }
 
-        $log = $this->_server->getSessionLog();
-        $log->attach($message, 'Message')
-            ->info('Received message');
+        $idp = $response->getIssuer();
+        if ($idp === NULL) {
+            throw new Exception('Missing <saml:Issuer> in message delivered to AssertionConsumerService.');
+        }
 
-        $idpMetadata = new
+        $cortoIdpMetadata = $this->_server->getRemoteEntity($idp);
+        $publicPem = $cortoIdpMetadata['certificates']['public'];
+        $publicPem = str_replace(
+            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
+            '',
+            $publicPem
+        );
 
-        sspmod_saml_Message::validateMessage($idpMetadata, $spMetadata, $message);
+        $sspIdpMetadata = SimpleSAML_Configuration::loadFromArray(
+            array(
+                'entityid'             => $cortoIdpMetadata['EntityID'],
+                'SingleSignOnService'  => $cortoIdpMetadata['SingleSignOnService']['Location'],
+                'keys' => array (
+                    array (
+                        'signing' => true,
+                        'type' => 'X509Certificate',
+                        'X509Certificate' => $publicPem,
+                    ),
+                ),
+            )
+        );
+
+        try {
+            $assertions = sspmod_saml_Message::processResponse($spMetadata, $sspIdpMetadata, $response);
+
+            if (count($assertions) > 1) {
+                throw new SimpleSAML_Error_Exception('More than one assertion in received response.');
+            }
+            $assertion = $assertions[0];
+        } catch (sspmod_saml_Error $e) {
+            /* We don't have an error handler. Show an error page. */
+            throw new SimpleSAML_Error_Error('RESPONSESTATUSNOSUCCESS', $e);
+        }
+
+        echo "<pre>";var_dump($assertion);exit;
+
+//        $binding = SAML2_Binding::getCurrentBinding();
+//        $message = $binding->receive();
+//
+//        // Remember idp for debugging
+//        $_SESSION['currentServiceProvider'] = $message->getIssuer();
+//
+//        $log = $this->_server->getSessionLog();
+//        $log->attach($message, 'Message')
+//            ->info('Received message');
+//
+//        if ($message instanceof SAML2_AuthnRequest) {
+//            $this->_verifyRequest();
+//        } else if ($message instanceof SAML2_Response) {
+//
+//        } else {
+//
+//        }
+//
+//        $this->_verifyRequest()
+//
+//        $idpMetadata = new SimpleSAML_Configuration();
+//        $spMetadata  = new SimpleSAML_Configuration();
+//
+//        sspmod_saml_Message::validateMessage($idpMetadata, $spMetadata, $message);
 
     }
 
@@ -110,6 +209,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     public function receiveResponse()
     {
+        $this->spReceive();
+        exit;
+
         $response = $this->_receiveMessage(self::KEY_RESPONSE);
 
         $log = $this->_server->getSessionLog();
