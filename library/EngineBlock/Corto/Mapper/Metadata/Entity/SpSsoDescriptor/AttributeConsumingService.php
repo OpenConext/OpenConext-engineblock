@@ -16,8 +16,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumin
             return $rootElement;
         }
         $rootElement['md:AttributeConsumingService'] = array(
-            // @todo get correct value for index
-            EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'index' => 1,
+            EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'index' => 0,
         );
 
         $rootElement['md:AttributeConsumingService'] = $this->_mapServiceNames($rootElement['md:AttributeConsumingService']);
