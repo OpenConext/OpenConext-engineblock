@@ -36,7 +36,7 @@ class Profile_Controller_AttributeSupport extends Default_Controller_LoggedIn
         $normalizer = new EngineBlock_Attributes_Normalizer($this->attributes);
         $normalizedAttributes = $normalizer->normalize();
         $email = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->help;
-        $nameId = $normalizedAttributes['nameid'];
+        $nameId = $normalizedAttributes['nameid'][0];
 
         $view = $this->_getView();
         $view->setData(
@@ -47,10 +47,6 @@ class Profile_Controller_AttributeSupport extends Default_Controller_LoggedIn
             )
         );
         $body = $view->render(ENGINEBLOCK_FOLDER_MODULES . '/Profile/View/AttributeSupport/ProfileMail.phtml', false);
-
-        EngineBlock_ApplicationSingleton::getLog()->info(
-            $body
-        );
 
         $mailer = new Zend_Mail('UTF-8');
         $mailer->setFrom($email);
