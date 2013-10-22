@@ -51,7 +51,7 @@ class Profile_Controller_AttributeSupport extends Default_Controller_LoggedIn
         $mailer = new Zend_Mail('UTF-8');
         $mailer->setFrom($email);
         $mailer->addTo($email);
-        $mailer->setSubject(sprintf("Personal debug info of (%s)", $nameId));
+        $mailer->setSubject(sprintf("Personal debug info of %s", $nameId));
         $mailer->setBodyHtml($body);
         $mailer->send();
     }
