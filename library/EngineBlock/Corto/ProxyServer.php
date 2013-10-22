@@ -1001,7 +1001,11 @@ class EngineBlock_Corto_ProxyServer
             );
         }
 
-        $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
+        if (isset($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'])) {
+            $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
+        } else {
+            $responseAssertionAttributes = array();
+        }
 
         // Take the attributes out
         $responseAttributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
