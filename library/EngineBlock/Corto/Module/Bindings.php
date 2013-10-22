@@ -89,147 +89,114 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         return $request;
     }
 
-    public function idpReceive()
-    {
-        $metadata = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
-        $idpEntityId = $metadata->getMetaDataCurrentEntityID('saml20-idp-hosted');
-        $idp = SimpleSAML_IdP::getById('saml2:' . $idpEntityId);
-        sspmod_saml_IdP_SAML2::receiveAuthnRequest($idp);
-    }
-
-    public function spReceive()
-    {
-        $configs = $this->_server->getConfigs();
-        $publicPem = $configs['certificates']['public'];
-        $publicPem = str_replace(
-            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
-            '',
-            $publicPem
-        );
-
-        $spMetadata = SimpleSAML_Configuration::loadFromArray(
-            array(
-                'entityid' => $this->_server->getUrl('spMetadataService'),
-                'SingleSignOnService' => array (
-                        array (
-                            'Binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                            'Location' => $this->_server->getUrl('spMetadataService'),
-                        ),
-                ),
-                'keys' => array (
-                    array (
-                        'signing' => true,
-                        'type' => 'X509Certificate',
-                        'X509Certificate' => $publicPem,
-                    ),
-                )
-            )
-        );
-
-        $binding = SAML2_Binding::getCurrentBinding();
-        if ($binding instanceof SAML2_HTTPArtifact) {
-            $binding->setSPMetadata($spMetadata);
-        }
-
-        $response = $binding->receive();
-        if (!($response instanceof SAML2_Response)) {
-            throw new SimpleSAML_Error_BadRequest('Invalid message received to AssertionConsumerService endpoint.');
-        }
-
-        $idp = $response->getIssuer();
-        if ($idp === NULL) {
-            throw new Exception('Missing <saml:Issuer> in message delivered to AssertionConsumerService.');
-        }
-
-        $cortoIdpMetadata = $this->_server->getRemoteEntity($idp);
-        $publicPem = $cortoIdpMetadata['certificates']['public'];
-        $publicPem = str_replace(
-            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
-            '',
-            $publicPem
-        );
-
-        $sspIdpMetadata = SimpleSAML_Configuration::loadFromArray(
-            array(
-                'entityid'             => $cortoIdpMetadata['EntityID'],
-                'SingleSignOnService'  => $cortoIdpMetadata['SingleSignOnService']['Location'],
-                'keys' => array (
-                    array (
-                        'signing' => true,
-                        'type' => 'X509Certificate',
-                        'X509Certificate' => $publicPem,
-                    ),
-                ),
-            )
-        );
-
-        try {
-            $assertions = sspmod_saml_Message::processResponse($spMetadata, $sspIdpMetadata, $response);
-
-            if (count($assertions) > 1) {
-                throw new SimpleSAML_Error_Exception('More than one assertion in received response.');
-            }
-            $assertion = $assertions[0];
-        } catch (sspmod_saml_Error $e) {
-            /* We don't have an error handler. Show an error page. */
-            throw new SimpleSAML_Error_Error('RESPONSESTATUSNOSUCCESS', $e);
-        }
-
-        echo "<pre>";var_dump($assertion);exit;
-
-//        $binding = SAML2_Binding::getCurrentBinding();
-//        $message = $binding->receive();
-//
-//        // Remember idp for debugging
-//        $_SESSION['currentServiceProvider'] = $message->getIssuer();
-//
-//        $log = $this->_server->getSessionLog();
-//        $log->attach($message, 'Message')
-//            ->info('Received message');
-//
-//        if ($message instanceof SAML2_AuthnRequest) {
-//            $this->_verifyRequest();
-//        } else if ($message instanceof SAML2_Response) {
-//
-//        } else {
-//
-//        }
-//
-//        $this->_verifyRequest()
-//
-//        $idpMetadata = new SimpleSAML_Configuration();
-//        $spMetadata  = new SimpleSAML_Configuration();
-//
-//        sspmod_saml_Message::validateMessage($idpMetadata, $spMetadata, $message);
-
-    }
-
-    /**
-     * Process an incoming SAML response message.
-     */
     public function receiveResponse()
     {
-        $this->spReceive();
-        exit;
+        // First check if we parked a Response somewhere in memory and are just faking a SSO
+        if ($sspResponse = $this->_receiveMessageFromInternalBinding(self::KEY_RESPONSE)) {
+            // If so, no need to do any further verification, we trust our own responses.
+            return $sspResponse;
+        }
 
-        $response = $this->_receiveMessage(self::KEY_RESPONSE);
+        // Compose the metadata for the 'SP' (which is us in this case) for use by SSP.
+        $sspSpMetadata = $this->getSspSpMetadata();
 
-        $log = $this->_server->getSessionLog();
-        $log->attach($response, 'Response')
-            ->info('Received response');
+        // Detect the binding being used from the global variables (GET, POST, SERVER)
+        $sspBinding = SAML2_Binding::getCurrentBinding();
 
-        if (isset($response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Binding']) &&
-            $response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Binding'] === "INTERNAL") {
-            return $response;
+        // We only support HTTP-Post and HTTP-Redirect bindings
+        if (!($sspBinding instanceof SAML2_HTTPPost || $sspBinding instanceof SAML2_HTTPRedirect)) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Unsupported Binding used'
+            );
+        }
+        /** @var SAML2_HTTPPost|SAML2_HTTPRedirect $sspBinding */
+
+        // Receive a message from the binding
+        $sspResponse = $sspBinding->receive();
+
+        // This message MUST be a SAML2 response, we don't want a AuthnRequest, LogoutResponse, etc.
+        if (!($sspResponse instanceof SAML2_Response)) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Invalid message received to AssertionConsumerService endpoint.'
+            );
+        }
+
+        // Make sure the response from the idp has an Issuer
+        $idpEntityId = $sspResponse->getIssuer();
+        if ($idpEntityId === NULL) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Missing <saml:Issuer> in message delivered to AssertionConsumerService.'
+            );
         }
 
         // Remember idp for debugging
-        $_SESSION['currentIdentityProvider'] = $response['saml:Issuer']['__v'];
+        $_SESSION['currentIdentityProvider'] = $idpEntityId;
 
-        $this->_decryptResponse($response);
-        $this->_verifyResponse($response);
+        // Log the response we received for troubleshooting
+        $log = $this->_server->getSessionLog();
+        $log->attach($sspResponse->toUnsignedXML(), 'Response')
+            ->info('Received response');
 
-        return $response;
+        // Verify that we know this IdP and have metadata for it.
+        $cortoIdpMetadata = $this->_verifyKnownMessageIssuer(
+            $idpEntityId,
+            isset($message['_Destination']) ? $message['_Destination'] : ''
+        );
+
+        // Load the metadata for this IdP in SimpleSAMLphp style
+        $sspIdpMetadata = SimpleSAML_Configuration::loadFromArray(
+            $this->mapCortoIdpMetadataToSspIdpMetadata($cortoIdpMetadata)
+        );
+
+        // Create a simple Corto response out of this (without assertion)
+        $cortoResponse = $this->initCortoResponse($sspResponse);
+
+        // Make sure it has a InResponseTo (Unsollicited is not supported) but don't actually check that what it's
+        // in response to is actually a message we sent quite yet.
+        $this->_verifyInResponseTo($cortoResponse);
+
+        try {
+            // 'Process' the response, verify the signature, verify the timings.
+            $assertions = sspmod_saml_Message::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+
+            // We only support 1 assertion
+            if (count($assertions) > 1) {
+                throw new EngineBlock_Corto_Module_Bindings_Exception(
+                    'More than one assertion in received response.',
+                    EngineBlock_Exception::CODE_NOTICE
+                );
+            }
+            $assertion = $assertions[0];
+        }
+        // This misnamed exception is only thrown when the Response status code is not Success
+        // If so then we don't even need to map the Assertion data, we can let the Corto Output Filters handle it.
+        catch (sspmod_saml_Error $e) {
+            $log->attach($e->getMessage(), 'exception message')
+                ->attach($e->getStatus(), 'status')
+                ->attach($e->getSubStatus(), 'substatus')
+                ->attach($e->getStatusMessage(), 'status message')
+                ->notice('Received an Error Response');
+            return $cortoResponse;
+        }
+        // Thrown when timings are out of whack or other some such verification exceptions.
+        catch (SimpleSAML_Error_Exception $e) {
+            throw new EngineBlock_Corto_Module_Bindings_VerificationException(
+                $e->getMessage(),
+                EngineBlock_Exception::CODE_NOTICE,
+                $e
+            );
+        }
+        // General Response whackiness (like Destinations not matching)
+        catch (Exception $e) {
+            throw new EngineBlock_Corto_Module_Bindings_VerificationException(
+                $e->getMessage(),
+                EngineBlock_Exception::CODE_NOTICE,
+                $e
+            );
+        }
+
+        $cortoResponse = $this->mapSspResponseToCortoResponse($assertion, $cortoResponse, $sspResponse);
+        return $cortoResponse;
     }
 
     /**
@@ -362,18 +329,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * Decode a JSON or XML encoded message into a PHP array. It uses a crude
-     * detection to see whether it's dealing with json (if the message starts
-     * with '{') or xml (all other cases).
-     * @param String $message A Json or XML encoded message
+     * Unmarshall an SAML2 XML Message to an array representation.
+     * @param String $message the XML encoded message
      * @return array An array of data that was contained in the message
      */
     protected function _getArrayFromReceivedMessage($message)
     {
-        if (substr($message, 0, 1) == '{') {
-            return json_decode($message, true);
-        }
-
         return EngineBlock_Corto_XmlToArray::xml2array($message);
     }
 
@@ -387,7 +348,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _verifyRequest(array &$request)
     {
-        $remoteEntity = $this->_verifyKnownIssuer($request);
+        $remoteEntity = $this->_verifyKnownMessageIssuer(
+            $request['saml:Issuer']['__v'],
+            isset($request['_Destination']) ? $request['Destination'] : ''
+        );
         // Determine if we should sign the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
@@ -405,17 +369,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * Verify if a message has an issuer that is known to us. If not, it
      * throws a Corto_Module_Bindings_VerificationException.
-     * @param array $message
+     * @param array $messageIssuer
+     * @param string $destination
      * @return array Remote Entity that issued the message
      * @throws EngineBlock_Corto_Exception_UnknownIssuer
      */
-    protected function _verifyKnownIssuer(array $message)
+    protected function _verifyKnownMessageIssuer($messageIssuer, $destination = '')
     {
-        $messageIssuer = $message['saml:Issuer']['__v'];
-        $destination = "";
-        if (isset($message['_Destination'])) {
-            $destination = $message['_Destination'];
-        }
         try {
             $remoteEntity = $this->_server->getRemoteEntity($messageIssuer);
         } catch (EngineBlock_Corto_ProxyServer_Exception $e) {
@@ -495,22 +455,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * Decrypt a response message
-     * @param array $response The response to decrypt.
-     */
-    protected function _decryptResponse(array &$response)
-    {
-        if (isset($response['saml:EncryptedAssertion'])) {
-            $encryptedAssertion = $response['saml:EncryptedAssertion'];
-
-            $response['saml:Assertion'] = $this->_decryptElement(
-                $this->_getCurrentEntityPrivateKey(),
-                $encryptedAssertion
-            );
-        }
-    }
-
-    /**
      * Decrypt an xml fragment.
      *
      * @param resource $privateKey OpenSSL private key for Corto to get the symmetric key.
@@ -561,35 +505,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $newElement = EngineBlock_Corto_XmlToArray::xml2array($decryptedData);
             $newElement['__']['Raw'] = $decryptedData;
             return $newElement;
-        }
-    }
-
-    protected function _verifyResponse(array &$response)
-    {
-        try {
-            $this->_verifyKnownIssuer($response);
-
-            $this->_verifySignature($response, self::KEY_RESPONSE);
-            $request['__']['WasSigned'] = true;
-
-            $this->_verifyTimings($response);
-
-            $this->_verifyInResponseTo($response);
-        } catch (EngineBlock_Exception $e) {
-            try {
-                if (isset($response['_InResponseTo'])) {
-                    $request = $this->_server->getReceivedRequestFromResponse(
-                        $response['_InResponseTo']
-                    );
-                    $e->spEntityId = $request['saml:Issuer']['__v'];
-                }
-            } catch (Exception $x) {
-                // not throwing a new exception
-            }
-
-            $e->idpEntityId = $response['saml:Issuer']['__v'];
-
-            throw $e;
         }
     }
 
@@ -835,51 +750,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         return (openssl_verify($signedInfoXml, $signatureValue, $publicKey) == 1);
     }
 
-    protected function _verifyTimings(array $message)
-    {
-        // just use string cmp all times in ISO like format without timezone (but everybody appends a Z anyways ...)
-        $skew = $this->_server->getConfig('max_age_seconds', 3600);
-        $aShortWhileAgo = $this->_server->timeStamp(-$skew);
-        $inAShortWhile  = $this->_server->timeStamp($skew);
-        $issues = array();
-
-        // Check SAMLResponse SubjectConfirmation timings
-
-        if (isset($message['saml:Assertion']['saml:Subject']['saml:SubjectConfirmation']['saml:SubjectConfirmationData']['_NotOnOrAfter'])) {
-            if ($aShortWhileAgo > $message['saml:Assertion']['saml:Subject']['saml:SubjectConfirmation']['saml:SubjectConfirmationData']['_NotOnOrAfter']) {
-                $issues[] = 'SubjectConfirmation too old';
-            }
-        }
-
-        // Check SAMLResponse Conditions timings
-
-        if (isset($message['saml:Assertion']['saml:Conditions']['_NotBefore'])) {
-            if ($inAShortWhile < $message['saml:Assertion']['saml:Conditions']['_NotBefore']) {
-                $issues[] = 'Assertion Conditions not valid yet';
-            }
-        }
-
-        if (isset($message['saml:Assertion']['saml:Conditions']['_NotOnOrAfter'])) {
-            if ($aShortWhileAgo > $message['saml:Assertion']['saml:Conditions']['_NotOnOrAfter']) {
-                $issues[] = 'Assertions Condition too old';
-            }
-        }
-
-        // Check SAMLResponse AuthnStatement timing
-
-        if (isset($message['saml:Assertion']['saml:AuthnStatement']['_SessionNotOnOrAfter'])) {
-            if ($aShortWhileAgo > $message['saml:Assertion']['saml:AuthnStatement']['_SessionNotOnOrAfter']) {
-                $issues[] = 'AuthnStatement Session too old';
-            }
-        }
-
-        if (!empty($issues)) {
-            $message = 'Problems detected with timings! Please check if your server has the correct time set.';
-            $message .= ' Issues: '.implode(PHP_EOL, $issues);
-            throw new EngineBlock_Corto_Module_Bindings_TimingException($message);
-        }
-        return true;
-    }
 
     protected function _verifyInResponseTo($response)
     {
@@ -1305,5 +1175,193 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             return array_search($a, $sequence) > array_search($b, $sequence) ? 1 : -1;
         }
         return false;
+    }
+
+    /**
+     * @param $cortoIdpMetadata
+     * @return array
+     */
+    protected function mapCortoIdpMetadataToSspIdpMetadata($cortoIdpMetadata)
+    {
+        $publicPems = array($cortoIdpMetadata['certificates']['public']);
+        if (isset($cortoIdpMetadata['certificates']['public-fallback'])) {
+            $publicPems[] = $cortoIdpMetadata['certificates']['public-fallback'];
+        }
+        if (isset($cortoIdpMetadata['certificates']['public-fallback2'])) {
+            $publicPems[] = $cortoIdpMetadata['certificates']['public-fallback2'];
+        }
+        $publicPems = str_replace(
+            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
+            '',
+            $publicPems
+        );
+
+        $config = array(
+            'entityid'            => $cortoIdpMetadata['EntityID'],
+            'SingleSignOnService' => $cortoIdpMetadata['SingleSignOnService']['Location'],
+            'keys'                => array(),
+        );
+        foreach ($publicPems as $publicPem) {
+            $config['keys'][] = array(
+                'signing'         => true,
+                'type'            => 'X509Certificate',
+                'X509Certificate' => $publicPem,
+            );
+        }
+        return $config;
+    }
+
+    /**
+     * @param $sspResponse
+     * @param $sspResponseStatus
+     * @return array
+     */
+    protected function initCortoResponse(SAML2_Response $sspResponse)
+    {
+        $sspResponseStatus = $sspResponse->getStatus();
+        $cortoResponse = array(
+            '__t'           => 'samlp:Response',
+            '_Destination'  => $sspResponse->getDestination(),
+            '_ID'           => $sspResponse->getId(),
+            '_InResponseTo' => $sspResponse->getInResponseTo(),
+            '_IssueInstant' => $this->_server->timeStamp(0, $sspResponse->getIssueInstant()),
+            '_Version'      => '2.0',
+            'saml:Issuer'   =>
+                array(
+                    '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:entity',
+                    '__v'     => $sspResponse->getIssuer(),
+                ),
+            'samlp:Status'  =>
+                array(
+                    'samlp:StatusCode' => array(
+                        '_Value' => $sspResponseStatus['Code'],
+                    ),
+                ),
+        );
+        if ($sspResponseStatus['Message']) {
+            $cortoResponse['samlp:Status']['samlp:StatusMessage'] = array(
+                '__v' => $sspResponseStatus['Message'],
+            );
+        }
+        return $cortoResponse;
+    }
+
+    /**
+     * @return SimpleSAML_Configuration
+     */
+    protected function getSspSpMetadata()
+    {
+        $configs   = $this->_server->getConfigs();
+        $publicPem = $configs['certificates']['public'];
+        $publicPem = str_replace(
+            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
+            '',
+            $publicPem
+        );
+
+        $spMetadata = SimpleSAML_Configuration::loadFromArray(
+            array(
+                'entityid'            => $this->_server->getUrl('spMetadataService'),
+                'SingleSignOnService' => array(
+                    array(
+                        'Binding'  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+                        'Location' => $this->_server->getUrl('spMetadataService'),
+                    ),
+                ),
+                'keys'                => array(
+                    array(
+                        'signing'         => true,
+                        'type'            => 'X509Certificate',
+                        'X509Certificate' => $publicPem,
+                    ),
+                    array(
+                        'signing'         => true,
+                        'type'            => 'X509Certificate',
+                        'X509Certificate' => $publicPem,
+                    ),
+                ),
+            )
+        );
+        return $spMetadata;
+    }
+
+    /**
+     * @param $assertion
+     * @param $cortoResponse
+     * @param $sspResponse
+     * @return mixed
+     */
+    protected function mapSspResponseToCortoResponse($assertion, $cortoResponse, $sspResponse)
+    {
+        $nameId                          = $assertion->getNameId();
+        $cortoResponse['saml:Assertion'] = array(
+            '_ID'           => $assertion->getId(),
+            '_IssueInstant' => $this->_server->timeStamp(0, $assertion->getIssueInstant()),
+            '_Version'      => '2.0',
+            'saml:Issuer'   => array(
+                '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:entity',
+                '__v'     => $assertion->getIssuer(),
+            ),
+        );
+
+        $subjectConfirmations                            = $assertion->getSubjectConfirmation();
+        $subjectConfirmation                             = $subjectConfirmations[0];
+        $cortoResponse['saml:Assertion']['saml:Subject'] = array(
+            'saml:NameID'              => array(
+                '_Format' => $nameId['Format'],
+                '__v'     => $nameId['Value'],
+            ),
+            'saml:SubjectConfirmation' => array(
+                '_Method'                      => $subjectConfirmation->Method,
+                'saml:SubjectConfirmationData' => array(
+                    '_Address'      => $subjectConfirmation->SubjectConfirmationData->Address,
+                    '_InResponseTo' => $subjectConfirmation->SubjectConfirmationData->InResponseTo,
+                    '_NotOnOrAfter' => $subjectConfirmation->SubjectConfirmationData->NotOnOrAfter,
+                    '_Recipient'    => $subjectConfirmation->SubjectConfirmationData->Recipient,
+                ),
+            ),
+        );
+
+        $authnAuthorities                                       = $assertion->getAuthenticatingAuthority();
+        $cortoResponse['saml:Assertion']['saml:AuthnStatement'] = array(
+            '_AuthnInstant'     => $this->_server->timeStamp(0, $assertion->getAuthnInstant()),
+            'saml:AuthnContext' =>
+                array(
+                    'saml:AuthnContextClassRef'    =>
+                        array(
+                            '__v' => $assertion->getAuthnContext(),
+                        ),
+                    'saml:AuthenticatingAuthority' =>
+                        array(),
+                ),
+        );
+        foreach ($authnAuthorities as $authnAuthority) {
+            $cortoResponse['saml:Assertion']['saml:AuthnStatement']['saml:AuthnContext']['saml:AuthenticatingAuthority'][] = array(
+                EngineBlock_Corto_XmlToArray::VALUE_PFX => $authnAuthority,
+            );
+        }
+
+        $attributes                                                 = $assertion->getAttributes();
+        $cortoResponse['saml:Assertion']['saml:AttributeStatement'] = array(
+            array(
+                'saml:Attribute' => array(),
+            ),
+        );
+        foreach ($attributes as $name => $values) {
+            $attribute = array(
+                '_Name'               => $name,
+                'saml:AttributeValue' => array(),
+            );
+            foreach ($values as $value) {
+                $attribute['saml:AttributeValue'][] = array(EngineBlock_Corto_XmlToArray::VALUE_PFX => $value);
+            }
+            $cortoResponse['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'][] = $attribute;
+        }
+        $cortoResponse['__'] = array(
+            'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+            'RelayState'      => $sspResponse->getRelayState(),
+            'paramname'       => 'SAMLResponse',
+        );
+        return $cortoResponse;
     }
 }

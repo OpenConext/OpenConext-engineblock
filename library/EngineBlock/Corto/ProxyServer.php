@@ -1292,11 +1292,16 @@ class EngineBlock_Corto_ProxyServer
      * Delta 0 gives current date and time, delta 3600 is +1 hour, delta -3600 is -1 hour.
      *
      * @param int $deltaSeconds
+     * @param int|null $time Current time to add delta to.
      * @return string
      */
-    public function timeStamp($deltaSeconds = 0)
+    public function timeStamp($deltaSeconds = 0, $time = null)
     {
-        return gmdate('Y-m-d\TH:i:s\Z', time() + $deltaSeconds);
+        $time = (int) $time;
+        if ($time === 0) {
+            $time = time();
+        }
+        return gmdate('Y-m-d\TH:i:s\Z', $time + $deltaSeconds);
     }
 
     public function getNewId()
