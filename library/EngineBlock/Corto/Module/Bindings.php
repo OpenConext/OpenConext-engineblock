@@ -60,6 +60,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         null                                                        => '_sendHTTPRedirect'
     );
 
+    /**
+     * @var array
+     */
     protected $_internalBindingMessages = array();
 
     /**
@@ -67,26 +70,73 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected $_server;
 
-    /**
-     * Process an incoming SAML request message. The data is retrieved automatically
-     * depending on the binding used.
-     */
     public function receiveRequest()
     {
-        //return $this->receive();
-        $request = $this->_receiveMessage(self::KEY_REQUEST);
+        $sspBinding = SAML2_Binding::getCurrentBinding();
+        $sspRequest = $sspBinding->receive();
 
-        // Remember idp for debugging
-        $_SESSION['currentServiceProvider'] = $request['saml:Issuer']['__v'];
-
-        $this->_server->getSessionLog()
-            ->attach($request, 'Request')
+        // Log the request we received for troubleshooting
+        $log = $this->_server->getSessionLog();
+        $log->attach($sspRequest->toUnsignedXML(), 'Request')
             ->info('Received request');
 
-        $this->_verifyRequest($request);
-        $this->_c14nRequest($request);
+        if (!($sspRequest instanceof SAML2_AuthnRequest)) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Unsupported Binding used',
+                EngineBlock_Exception::CODE_NOTICE
+            );
+        }
 
-        return $request;
+        // Make sure the request from the sp has an Issuer
+        $spEntityId = $sspRequest->getIssuer();
+        if (!$spEntityId) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Missing <saml:Issuer> in message delivered to AssertionConsumerService.'
+            );
+        }
+        // Remember sp for debugging
+        $_SESSION['currentServiceProvider'] = $sspRequest->getIssuer();
+
+        // Verify that we know this SP and have metadata for it.
+        $cortoSpMetadata = $this->_verifyKnownMessageIssuer(
+            $spEntityId,
+            $sspRequest->getDestination()
+        );
+
+        // Load the metadata for this IdP in SimpleSAMLphp style
+        $sspSpMetadata = SimpleSAML_Configuration::loadFromArray(
+            $this->mapCortoEntityMetadataToSspEntityMetadata($cortoSpMetadata)
+        );
+
+        // Determine if we should sign the message
+        $wantRequestsSigned = (
+            // If the destination wants the AuthnRequests signed
+            (isset($cortoSpMetadata['AuthnRequestsSigned']) && $cortoSpMetadata['AuthnRequestsSigned'])
+            ||
+            // Or we currently demand that all AuthnRequests are sent signed
+            $this->_server->getConfig('WantsAuthnRequestsSigned')
+        );
+        if ($wantRequestsSigned) {
+            // Check the Signature on the Request
+            if (!sspmod_saml_Message::checkSign($sspSpMetadata, $sspRequest)) {
+                throw new EngineBlock_Corto_Module_Bindings_VerificationException(
+                    'Validation of received messages enabled, but no signature found on message.'
+                );
+            }
+            $request['__']['WasSigned'] = true;
+        }
+
+        $cortoRequest = EngineBlock_Corto_XmlToArray::xml2array($sspRequest->toUnsignedXML());
+        $cortoRequest['__'] = array(
+            'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
+            'RelayState'      => $sspRequest->getRelayState(),
+            'paramname'       => 'SAMLResponse',
+        );
+        $voContext = $this->_server->getVirtualOrganisationContext();
+        if ($voContext != NULL) {
+            $cortoRequest['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $voContext;
+        }
+        return $cortoRequest;
     }
 
     public function receiveResponse()
@@ -98,7 +148,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         // Compose the metadata for the 'SP' (which is us in this case) for use by SSP.
-        $sspSpMetadata = $this->getSspSpMetadata();
+        $sspSpMetadata = $this->getSspOwnMetadata();
 
         // Detect the binding being used from the global variables (GET, POST, SERVER)
         $sspBinding = SAML2_Binding::getCurrentBinding();
@@ -106,13 +156,19 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // We only support HTTP-Post and HTTP-Redirect bindings
         if (!($sspBinding instanceof SAML2_HTTPPost || $sspBinding instanceof SAML2_HTTPRedirect)) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Unsupported Binding used'
+                'Unsupported Binding used',
+                EngineBlock_Exception::CODE_NOTICE
             );
         }
         /** @var SAML2_HTTPPost|SAML2_HTTPRedirect $sspBinding */
 
         // Receive a message from the binding
         $sspResponse = $sspBinding->receive();
+
+        // Log the response we received for troubleshooting
+        $log = $this->_server->getSessionLog();
+        $log->attach($sspResponse->toUnsignedXML(), 'Response')
+            ->info('Received response');
 
         // This message MUST be a SAML2 response, we don't want a AuthnRequest, LogoutResponse, etc.
         if (!($sspResponse instanceof SAML2_Response)) {
@@ -132,11 +188,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Remember idp for debugging
         $_SESSION['currentIdentityProvider'] = $idpEntityId;
 
-        // Log the response we received for troubleshooting
-        $log = $this->_server->getSessionLog();
-        $log->attach($sspResponse->toUnsignedXML(), 'Response')
-            ->info('Received response');
-
         // Verify that we know this IdP and have metadata for it.
         $cortoIdpMetadata = $this->_verifyKnownMessageIssuer(
             $idpEntityId,
@@ -145,15 +196,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Load the metadata for this IdP in SimpleSAMLphp style
         $sspIdpMetadata = SimpleSAML_Configuration::loadFromArray(
-            $this->mapCortoIdpMetadataToSspIdpMetadata($cortoIdpMetadata)
+            $this->mapCortoEntityMetadataToSspEntityMetadata($cortoIdpMetadata)
         );
-
-        // Create a simple Corto response out of this (without assertion)
-        $cortoResponse = $this->initCortoResponse($sspResponse);
 
         // Make sure it has a InResponseTo (Unsollicited is not supported) but don't actually check that what it's
         // in response to is actually a message we sent quite yet.
-        $this->_verifyInResponseTo($cortoResponse);
+        if (!$sspResponse->getInResponseTo()) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Unsollicited assertion (no InResponseTo in message) not supported!'
+            );
+        }
 
         try {
             // 'Process' the response, verify the signature, verify the timings.
@@ -166,17 +218,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     EngineBlock_Exception::CODE_NOTICE
                 );
             }
-            $assertion = $assertions[0];
         }
         // This misnamed exception is only thrown when the Response status code is not Success
-        // If so then we don't even need to map the Assertion data, we can let the Corto Output Filters handle it.
+        // If so, let the Corto Output Filters handle it.
         catch (sspmod_saml_Error $e) {
             $log->attach($e->getMessage(), 'exception message')
                 ->attach($e->getStatus(), 'status')
                 ->attach($e->getSubStatus(), 'substatus')
                 ->attach($e->getStatusMessage(), 'status message')
                 ->notice('Received an Error Response');
-            return $cortoResponse;
         }
         // Thrown when timings are out of whack or other some such verification exceptions.
         catch (SimpleSAML_Error_Exception $e) {
@@ -195,53 +245,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        $cortoResponse = $this->mapSspResponseToCortoResponse($assertion, $cortoResponse, $sspResponse);
-        return $cortoResponse;
-    }
-
-    /**
-     * Retrieve a message of a certain key, depending on the binding used.
-     * A number of bindings is tried in sequence. If the message is available
-     * as an artifact, then that is used. Else if the message is available as
-     * an http binding, that will be used or finally if the message is
-     * available via a http redirect binding than that is used.
-     * If none are available, then nothing is returned.
-     * @param String $key The key to find
-     * @return String The message that was received.
-     */
-    protected function _receiveMessage($key)
-    {
-        $message = $this->_receiveMessageFromInternalBinding($key);
-        if (!empty($message)) {
-            return $this->_addVoContextToRequest($key, $message);
-        }
-
-        $message = $this->_receiveMessageFromHttpPost($key);
-        if (!empty($message)) {
-            return $this->_addVoContextToRequest($key, $message);
-        }
-
-        $message = $this->_receiveMessageFromHttpRedirect($key);
-        if (!empty($message)) {
-            return $this->_addVoContextToRequest($key, $message);
-        }
-
-        throw new EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException(
-            'Unable to receive message: ' . $key
+        $cortoResponse = EngineBlock_Corto_XmlToArray::xml2array($sspResponse->toUnsignedXML());
+        $cortoResponse['__'] = array(
+            'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+            'RelayState'      => $sspResponse->getRelayState(),
+            'paramname'       => 'SAMLResponse',
         );
-    }
-
-    protected function _addVoContextToRequest($key, array $message)
-    {
-        if ($key == self::KEY_REQUEST) {
-            // We're dealing with a request, on its way towards the idp. If there's a VO context, we need to store it in the request.
-
-            $voContext = $this->_server->getVirtualOrganisationContext();
-            if ($voContext != NULL) {
-                $message['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $voContext;
-            }
-        }
-        return $message;
+        return $cortoResponse;
     }
 
     protected function _receiveMessageFromInternalBinding($key)
@@ -253,117 +263,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $message = $this->_internalBindingMessages[$key];
         $message[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Binding'] = "INTERNAL";
         return $message;
-    }
-
-    /**
-     * Retrieve a message via http post binding.
-     * @param String $key The key to look for.
-     * @return mixed False if there was no suitable message in this binding
-     *               String the message if it was found
-     *               An exception if something went wrong.
-     */
-    protected function _receiveMessageFromHttpPost($key)
-    {
-        if (!isset($_POST[$key])) {
-            return false;
-        }
-
-        $message        = base64_decode($_POST[$key]);
-        $messageArray   = $this->_getArrayFromReceivedMessage($message);
-
-        $relayState = "";
-        if (isset($_POST['RelayState'])) {
-            $relayState     = $_POST['RelayState'];
-        }
-        $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
-        $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['RelayState']   = $relayState;
-        $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Raw']          = $message;
-        $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['paramname']    = $key;
-        if (isset($_POST['return'])) {
-            $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Return'] = $_POST['return'];
-        }
-
-        return $messageArray;
-    }
-
-    /**
-     * Retrieve a message via http redirect binding.
-     * @param String $key The key to look for.
-     * @return mixed False if there was no suitable message in this binding
-     *               String the message if it was found
-     *               An exception if something went wrong.
-     */
-    protected function _receiveMessageFromHttpRedirect($key)
-    {
-        if (!isset($_GET[$key])) {
-            return false;
-        }
-
-        $message = @base64_decode($_GET[$key], true);
-        if (!$message) {
-            throw new EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException("Message not base64 encoded!");
-        }
-
-        $message = @gzinflate($message);
-        if (!$message) {
-            throw new EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException("Message not gzipped!");
-        }
-
-        $messageArray = $this->_getArrayFromReceivedMessage($message);
-
-        if (isset($_GET['RelayState'])) {
-            $relayState         = $_GET['RelayState'];
-            $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['RelayState'] = $relayState;
-        }
-
-        if (isset($_GET['Signature'])) {
-            $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Signature']        = $_GET['Signature'];
-            $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['SigningAlgorithm'] = $_GET['SigAlg'];
-        }
-
-        $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
-        $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Raw'] = $message;
-        $messageArray[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['paramname'] = $key;
-
-        return $messageArray;
-    }
-
-    /**
-     * Unmarshall an SAML2 XML Message to an array representation.
-     * @param String $message the XML encoded message
-     * @return array An array of data that was contained in the message
-     */
-    protected function _getArrayFromReceivedMessage($message)
-    {
-        return EngineBlock_Corto_XmlToArray::xml2array($message);
-    }
-
-    /**
-     * Verify if a request has a valid signature (if required), whether
-     * the issuer is a known entity and whether the message is destined for
-     * us. Throws an exception if any of these conditions are not met.
-     * @param array $request The array with request data
-     * @throws EngineBlock_Corto_Module_Bindings_VerificationException if any of the
-     * verifications fail
-     */
-    protected function _verifyRequest(array &$request)
-    {
-        $remoteEntity = $this->_verifyKnownMessageIssuer(
-            $request['saml:Issuer']['__v'],
-            isset($request['_Destination']) ? $request['Destination'] : ''
-        );
-        // Determine if we should sign the message
-        $wantRequestsSigned = (
-            // If the destination wants the AuthnRequests signed
-            (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned'])
-                ||
-                // Or we currently demand that all AuthnRequests are sent signed
-                $this->_server->getConfig('WantsAuthnRequestsSigned')
-        );
-        if ($wantRequestsSigned) {
-            $this->_verifySignature($request, self::KEY_REQUEST, true);
-            $request['__']['WasSigned'] = true;
-        }
     }
 
     /**
@@ -386,16 +285,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         return $remoteEntity;
-    }
-
-    /**
-     * Transform a request array into a canonical form.
-     * @param array $request
-     */
-    protected function _c14nRequest(array &$request)
-    {
-        $request['_ForceAuthn'] = isset($request['_ForceAuthn']) && ($request['_ForceAuthn'] == 'true' || $request['_ForceAuthn'] == '1');
-        $request['_IsPassive']  = isset($request['_IsPassive'])  && ($request['_IsPassive']  == 'true' || $request['_IsPassive']  == '1');
     }
 
     /**
@@ -452,311 +341,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             ),
         );
         return $encryptedElement;
-    }
-
-    /**
-     * Decrypt an xml fragment.
-     *
-     * @param resource $privateKey OpenSSL private key for Corto to get the symmetric key.
-     * @param array $element Array representation of an xml fragment
-     * @param Bool $returnAsXML If true, the method returns an xml string.
-     *                          If false (default), it returns an array
-     *                          representation of the xml fragment.
-     * @return String|Array The decrypted element (as an array or string
-     *                      depending on the returnAsXml parameter.
-     */
-    protected function _decryptElement($privateKey, $element, $returnAsXML = false)
-    {
-        if (!isset($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v'])) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception("XML Encryption: No encrypted key found?");
-        }
-        if (!isset($element['xenc:EncryptedData']['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v'])) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception("XML Encryption: No encrypted data found?");
-        }
-        $encryptedKey  = base64_decode($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v']);
-        $encryptedData = base64_decode($element['xenc:EncryptedData']['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v']);
-
-        $sessionKey = null;
-        if (!openssl_private_decrypt($encryptedKey, $sessionKey, $privateKey, OPENSSL_PKCS1_PADDING)) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception("XML Encryption: Unable to decrypt symmetric key using private key");
-        }
-        openssl_free_key($privateKey);
-
-        $cipher = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', MCRYPT_MODE_CBC, '');
-        $ivSize = mcrypt_enc_get_iv_size($cipher);
-        $iv = substr($encryptedData, 0, $ivSize);
-
-        mcrypt_generic_init($cipher, $sessionKey, $iv);
-
-        $decryptedData = mdecrypt_generic($cipher, substr($encryptedData, $ivSize));
-
-        // Remove the CBC block padding
-        $dataLen = strlen($decryptedData);
-        $paddingLength = substr($decryptedData, $dataLen - 1, 1);
-        $decryptedData = substr($decryptedData, 0, $dataLen - ord($paddingLength));
-
-        mcrypt_generic_deinit($cipher);
-        mcrypt_module_close($cipher);
-
-        if ($returnAsXML) {
-            return $decryptedData;
-        }
-        else {
-            $newElement = EngineBlock_Corto_XmlToArray::xml2array($decryptedData);
-            $newElement['__']['Raw'] = $decryptedData;
-            return $newElement;
-        }
-    }
-
-    protected function _verifySignature(array $message, $key, $requireMessageSigning = false)
-    {
-        if (isset($message['__']['Signature'])) { // We got a Signature in the URL (HTTP Redirect)
-            return $this->_verifySignatureMessage($message, $key);
-        }
-
-        // Otherwise it's in the message or in the assertion in the message (HTTP Post Response)
-        $messageIssuer = $message['saml:Issuer']['__v'];
-        $publicKey = $this->_getRemoteEntityPublicKey($messageIssuer);
-        $publicKeyFallbacks = $this->_getRemoteEntityFallbackPublicKeys($messageIssuer);
-
-        if ($requireMessageSigning || isset($message['ds:Signature'])) {
-            $messageVerified = $this->_verifySignatureXMLElement(
-                $publicKey,
-                $message['__']['Raw'],
-                $message
-            );
-            if (!$messageVerified && !empty($publicKeyFallbacks)) {
-                foreach ($publicKeyFallbacks as $publicKeyFallback) {
-                    $messageVerified = $this->_verifySignatureXMLElement(
-                        $publicKeyFallback,
-                        $message['__']['Raw'],
-                        $message
-                    );
-                    if ($messageVerified) {
-                        break;
-                    }
-                }
-            }
-            if (!$messageVerified) {
-                throw new EngineBlock_Corto_Module_Bindings_VerificationException("Invalid signature on message");
-            }
-        }
-
-        if (!isset($message['saml:Assertion'])) {
-            return true;
-        }
-
-        $assertionVerified = $this->_verifySignatureXMLElement(
-            $publicKey,
-            isset($message['saml:Assertion']['__']['Raw']) ? $message['saml:Assertion']['__']['Raw'] : $message['__']['Raw'],
-            $message['saml:Assertion']
-        );
-        if (!$assertionVerified && !empty($publicKeyFallbacks)) {
-            foreach ($publicKeyFallbacks as $publicKeyFallback) {
-                $assertionVerified = $this->_verifySignatureXMLElement(
-                    $publicKeyFallback,
-                    isset($message['saml:Assertion']['__']['Raw']) ? $message['saml:Assertion']['__']['Raw'] : $message['__']['Raw'],
-                    $message['saml:Assertion']
-                );
-                if ($assertionVerified) {
-                    break;
-                }
-            }
-        }
-
-        if (!$assertionVerified) {
-            throw new EngineBlock_Corto_Module_Bindings_VerificationException("Invalid signature on assertion");
-        }
-
-        return true;
-    }
-
-    protected function _verifySignatureMessage($message, $key)
-    {
-        $rawGet = $this->_server->getRawGet();
-
-        $queryString = "$key=" . $rawGet[$key];
-        if (isset($rawGet[$key])) {
-            $queryString .= '&RelayState=' . $rawGet['RelayState'];
-        }
-        $queryString .= '&SigAlg=' . $rawGet['SigAlg'];
-
-        $messageIssuer = $message['saml:Issuer']['__v'];
-        $publicKey          = $this->_getRemoteEntityPublicKey($messageIssuer);
-        $publicKeyFallbacks  = $this->_getRemoteEntityFallbackPublicKeys($messageIssuer);
-
-        $verified = openssl_verify(
-            $queryString,
-            base64_decode($message['__']['Signature']),
-            $publicKey
-        );
-        if (!$verified && !empty($publicKeyFallbacks)) {
-            foreach ($publicKeyFallbacks as $publicKeyFallback) {
-                $verified = openssl_verify(
-                    $queryString,
-                    base64_decode($message['__']['Signature']),
-                    $publicKeyFallback
-                );
-                if ($verified) {
-                    break;
-                }
-            }
-        }
-
-        if (!$verified) {
-            throw new EngineBlock_Corto_Module_Bindings_VerificationException("Invalid signature on message");
-        }
-
-        return ($verified === 1);
-    }
-
-    protected function _verifySignatureXMLElement($publicKey, $xml, $element)
-    {
-        if (!isset($element['ds:Signature'])) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Element is not signed! " . $xml
-            );
-        }
-
-        $document = new DOMDocument();
-        $document->loadXML($xml);
-        $xp = new DomXPath($document);
-        $xp->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
-
-        if (count($element['ds:Signature']['ds:SignedInfo']['ds:Reference']) > 1) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Unsupported use of multiple Reference in a single Signature: " . $xml
-            );
-        }
-
-        $reference = $element['ds:Signature']['ds:SignedInfo']['ds:Reference'][0];
-        if (!in_array($reference['_URI'], array("", "#" . $element['_ID']))) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Unsupported use of URI Reference, should be empty or be XPointer to Signature parent id: " . $xml
-            );
-        }
-
-        if (!isset($element['_ID']) || !$element['_ID']) {
-            $log = $this->_server->getSessionLog();
-            $log->attach($element, 'Signed element');
-
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Trying to verify signature on an element without an ID is not supported'
-            );
-        }
-
-        $xpathResults = $xp->query("//*[@ID = '{$element['_ID']}']");
-        if ($xpathResults->length === 0) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "URI Reference, not found? " . $xml
-            );
-        }
-        if ($xpathResults->length > 1) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Multiple nodes found for URI Reference ID? " . $xml
-            );
-        }
-        $referencedElement = $xpathResults->item(0);
-        $referencedDocument  = new DomDocument();
-        $importedNode = $referencedDocument->importNode($referencedElement->cloneNode(true), true);
-        $referencedDocument->appendChild($importedNode);
-
-        $referencedDocumentXml = $referencedDocument->saveXML();
-
-        // First process any transforms
-        if (isset($reference['ds:Transforms']['ds:Transform'])) {
-            foreach ($reference['ds:Transforms']['ds:Transform'] as $transform) {
-                switch ($transform['_Algorithm']) {
-                    case 'http://www.w3.org/2000/09/xmldsig#enveloped-signature':
-                        $transformDocument = new DOMDocument();
-                        $transformDocument->loadXML($referencedDocumentXml);
-                        $transformXpath = new DomXPath($transformDocument);
-                        $transformXpath->registerNamespace('ds', 'http://www.w3.org/2000/09/xmldsig#');
-                        $signature = $transformXpath->query(".//ds:Signature", $transformDocument)->item(0);
-                        $signature->parentNode->removeChild($signature);
-                        $referencedDocumentXml = $transformDocument->saveXML();
-                        break;
-                    case 'http://www.w3.org/2001/10/xml-exc-c14n#':
-                        $nsPrefixes = array();
-                        if (isset($transform['ec:InclusiveNamespaces']['_PrefixList'])) {
-                            $nsPrefixes = explode(' ', $transform['ec:InclusiveNamespaces']['_PrefixList']);
-                        }
-                        $transformDocument = new DOMDocument();
-                        $transformDocument->loadXML($referencedDocumentXml);
-                        $referencedDocumentXml = $transformDocument->C14N(true, false, null, $nsPrefixes);
-                        break;
-                    default:
-                        throw new EngineBlock_Corto_Module_Bindings_Exception(
-                            "Unsupported transform " . $transform['_Algorithm'] . ' on XML: ' . $xml
-                        );
-                }
-            }
-        }
-
-        // Verify the digest over the (transformed) element
-        if ($reference['ds:DigestMethod']['_Algorithm'] !== 'http://www.w3.org/2000/09/xmldsig#sha1') {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Unsupported DigestMethod " . $reference['ds:DigestMethod']['_Algorithm'] . ' on XML: ' . $xml
-            );
-        }
-        $ourDigest = sha1($referencedDocumentXml, TRUE);
-        $theirDigest = base64_decode($reference['ds:DigestValue']['__v']);
-        if ($ourDigest !== $theirDigest) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Digests do not match! on XML: " . $xml
-            );
-        }
-        // Verify the signature over the SignedInfo (not over the entire document, only over the digest)
-
-        $c14Algorithm = $element['ds:Signature']['ds:SignedInfo']['ds:CanonicalizationMethod']['_Algorithm'];
-        if ($c14Algorithm !== 'http://www.w3.org/2001/10/xml-exc-c14n#') {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Unsupported CanonicalizationMethod '$c14Algorithm' on XML: $xml"
-            );
-        }
-        if (!isset($element['ds:Signature']['ds:SignatureValue']['__v'])) {
-            $this->_server->getSessionLog()->attach($element, 'Signed element');
-
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'No sigurature value found on element?'
-            );
-        }
-
-        $signatureAlgorithm = $element['ds:Signature']['ds:SignedInfo']['ds:SignatureMethod']['_Algorithm'];
-        if ($signatureAlgorithm !== "http://www.w3.org/2000/09/xmldsig#rsa-sha1") {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Unsupported SignatureMethod '$signatureAlgorithm' on XML: $xml"
-            );
-        }
-
-        // Find the signed element (like an assertion) in the global document (like a response)
-        $signedInfoNodes = $xp->query("./ds:Signature/ds:SignedInfo", $referencedElement);
-        if ((int)$signedInfoNodes->length === 0) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "No SignatureInfo found? On XML: $xml"
-            );
-        }
-        if ($signedInfoNodes->length > 1) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Multiple SignatureInfo nodes found? On XML: $xml"
-            );
-        }
-        $signedInfoNode = $signedInfoNodes->item(0);
-        $signedInfoXml = $signedInfoNode->C14N(true, false);
-
-        $signatureValue = $element['ds:Signature']['ds:SignatureValue']['__v'];
-        $signatureValue = base64_decode($signatureValue);
-
-        return (openssl_verify($signedInfoXml, $signatureValue, $publicKey) == 1);
-    }
-
-
-    protected function _verifyInResponseTo($response)
-    {
-        if (!$response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']) {
-            $message = "Unsollicited assertion (no InResponseTo in message) not supported!";
-            throw new EngineBlock_Corto_Module_Bindings_Exception($message);
-        }
     }
 
     public function send(array $message, array $remoteEntity)
@@ -879,56 +463,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         return $key;
-    }
-
-    protected function _getRemoteEntityPublicKey($entityId)
-    {
-        return $this->_doGetRemoteEntityKey($entityId, 'public', true);
-    }
-
-    /**
-     * Get a fallback public key, if one is known.
-     *
-     * @throws EngineBlock_Corto_Module_Bindings_Exception
-     * @param $entityId
-     * @return bool|resource
-     */
-    protected function _getRemoteEntityFallbackPublicKeys($entityId)
-    {
-        $keys = array();
-        $types = array('public-fallback', 'public-fallback2');
-        foreach ($types as $certType) {
-            $publicKey = $this->_doGetRemoteEntityKey($entityId, $certType, false);
-            if ($publicKey) {
-                $keys[] = $publicKey;
-            }
-        }
-        return $keys;
-    }
-
-    protected function _doGetRemoteEntityKey($entityId, $certificateType, $certificateRequired)
-    {
-        $remoteEntity = $this->_server->getRemoteEntity($entityId);
-
-        if (!isset($remoteEntity['certificates'][$certificateType])) {
-            if ($certificateRequired) {
-                throw new EngineBlock_Corto_Module_Bindings_VerificationException("No $certificateType key known for $entityId");
-            } else {
-                return false;
-            }
-        }
-
-        $publicKey = openssl_pkey_get_public($remoteEntity['certificates'][$certificateType]);
-        if ($publicKey === false) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "$certificateType key for $entityId is NOT a valid PEM SSL public key?!?! Value: " .
-                $remoteEntity['certificates'][$certificateType],
-                EngineBlock_Exception::CODE_WARNING
-            );
-        }
-
-        return $publicKey;
-
     }
 
     protected function _sendHTTPPost($message, $remoteEntity)
@@ -1178,17 +712,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * @param $cortoIdpMetadata
+     * @param $cortoEntityMetadata
      * @return array
      */
-    protected function mapCortoIdpMetadataToSspIdpMetadata($cortoIdpMetadata)
+    protected function mapCortoEntityMetadataToSspEntityMetadata($cortoEntityMetadata)
     {
-        $publicPems = array($cortoIdpMetadata['certificates']['public']);
-        if (isset($cortoIdpMetadata['certificates']['public-fallback'])) {
-            $publicPems[] = $cortoIdpMetadata['certificates']['public-fallback'];
+        $publicPems = array($cortoEntityMetadata['certificates']['public']);
+        if (isset($cortoEntityMetadata['certificates']['public-fallback'])) {
+            $publicPems[] = $cortoEntityMetadata['certificates']['public-fallback'];
         }
-        if (isset($cortoIdpMetadata['certificates']['public-fallback2'])) {
-            $publicPems[] = $cortoIdpMetadata['certificates']['public-fallback2'];
+        if (isset($cortoEntityMetadata['certificates']['public-fallback2'])) {
+            $publicPems[] = $cortoEntityMetadata['certificates']['public-fallback2'];
         }
         $publicPems = str_replace(
             array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
@@ -1197,10 +731,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         );
 
         $config = array(
-            'entityid'            => $cortoIdpMetadata['EntityID'],
-            'SingleSignOnService' => $cortoIdpMetadata['SingleSignOnService']['Location'],
+            'entityid'            => $cortoEntityMetadata['EntityID'],
             'keys'                => array(),
         );
+        if (isset($cortoEntityMetadata['SingleSignOnService']['Location'])) {
+            $config['SingleSignOnService'] = $cortoEntityMetadata['SingleSignOnService']['Location'];
+        }
+        if (isset($cortoEntityMetadata['AssertionConsumerServices'][0]['Location'])) {
+            $config['AssertionConsumerService'] = $cortoEntityMetadata['AssertionConsumerServices'][0]['Location'];
+        }
         foreach ($publicPems as $publicPem) {
             $config['keys'][] = array(
                 'signing'         => true,
@@ -1212,44 +751,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * @param $sspResponse
-     * @param $sspResponseStatus
-     * @return array
-     */
-    protected function initCortoResponse(SAML2_Response $sspResponse)
-    {
-        $sspResponseStatus = $sspResponse->getStatus();
-        $cortoResponse = array(
-            '__t'           => 'samlp:Response',
-            '_Destination'  => $sspResponse->getDestination(),
-            '_ID'           => $sspResponse->getId(),
-            '_InResponseTo' => $sspResponse->getInResponseTo(),
-            '_IssueInstant' => $this->_server->timeStamp(0, $sspResponse->getIssueInstant()),
-            '_Version'      => '2.0',
-            'saml:Issuer'   =>
-                array(
-                    '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:entity',
-                    '__v'     => $sspResponse->getIssuer(),
-                ),
-            'samlp:Status'  =>
-                array(
-                    'samlp:StatusCode' => array(
-                        '_Value' => $sspResponseStatus['Code'],
-                    ),
-                ),
-        );
-        if ($sspResponseStatus['Message']) {
-            $cortoResponse['samlp:Status']['samlp:StatusMessage'] = array(
-                '__v' => $sspResponseStatus['Message'],
-            );
-        }
-        return $cortoResponse;
-    }
-
-    /**
      * @return SimpleSAML_Configuration
      */
-    protected function getSspSpMetadata()
+    protected function getSspOwnMetadata()
     {
         $configs   = $this->_server->getConfigs();
         $publicPem = $configs['certificates']['public'];
@@ -1283,85 +787,5 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             )
         );
         return $spMetadata;
-    }
-
-    /**
-     * @param $assertion
-     * @param $cortoResponse
-     * @param $sspResponse
-     * @return mixed
-     */
-    protected function mapSspResponseToCortoResponse($assertion, $cortoResponse, $sspResponse)
-    {
-        $nameId                          = $assertion->getNameId();
-        $cortoResponse['saml:Assertion'] = array(
-            '_ID'           => $assertion->getId(),
-            '_IssueInstant' => $this->_server->timeStamp(0, $assertion->getIssueInstant()),
-            '_Version'      => '2.0',
-            'saml:Issuer'   => array(
-                '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:entity',
-                '__v'     => $assertion->getIssuer(),
-            ),
-        );
-
-        $subjectConfirmations                            = $assertion->getSubjectConfirmation();
-        $subjectConfirmation                             = $subjectConfirmations[0];
-        $cortoResponse['saml:Assertion']['saml:Subject'] = array(
-            'saml:NameID'              => array(
-                '_Format' => $nameId['Format'],
-                '__v'     => $nameId['Value'],
-            ),
-            'saml:SubjectConfirmation' => array(
-                '_Method'                      => $subjectConfirmation->Method,
-                'saml:SubjectConfirmationData' => array(
-                    '_Address'      => $subjectConfirmation->SubjectConfirmationData->Address,
-                    '_InResponseTo' => $subjectConfirmation->SubjectConfirmationData->InResponseTo,
-                    '_NotOnOrAfter' => $subjectConfirmation->SubjectConfirmationData->NotOnOrAfter,
-                    '_Recipient'    => $subjectConfirmation->SubjectConfirmationData->Recipient,
-                ),
-            ),
-        );
-
-        $authnAuthorities                                       = $assertion->getAuthenticatingAuthority();
-        $cortoResponse['saml:Assertion']['saml:AuthnStatement'] = array(
-            '_AuthnInstant'     => $this->_server->timeStamp(0, $assertion->getAuthnInstant()),
-            'saml:AuthnContext' =>
-                array(
-                    'saml:AuthnContextClassRef'    =>
-                        array(
-                            '__v' => $assertion->getAuthnContext(),
-                        ),
-                    'saml:AuthenticatingAuthority' =>
-                        array(),
-                ),
-        );
-        foreach ($authnAuthorities as $authnAuthority) {
-            $cortoResponse['saml:Assertion']['saml:AuthnStatement']['saml:AuthnContext']['saml:AuthenticatingAuthority'][] = array(
-                EngineBlock_Corto_XmlToArray::VALUE_PFX => $authnAuthority,
-            );
-        }
-
-        $attributes                                                 = $assertion->getAttributes();
-        $cortoResponse['saml:Assertion']['saml:AttributeStatement'] = array(
-            array(
-                'saml:Attribute' => array(),
-            ),
-        );
-        foreach ($attributes as $name => $values) {
-            $attribute = array(
-                '_Name'               => $name,
-                'saml:AttributeValue' => array(),
-            );
-            foreach ($values as $value) {
-                $attribute['saml:AttributeValue'][] = array(EngineBlock_Corto_XmlToArray::VALUE_PFX => $value);
-            }
-            $cortoResponse['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'][] = $attribute;
-        }
-        $cortoResponse['__'] = array(
-            'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-            'RelayState'      => $sspResponse->getRelayState(),
-            'paramname'       => 'SAMLResponse',
-        );
-        return $cortoResponse;
     }
 }

@@ -148,6 +148,13 @@ class EngineBlock_Corto_XmlToArray
 
     public static function xml2array($xml)
     {
+        if ($xml instanceof DOMDocument) {
+            $xml = $xml->saveXML();
+        }
+        else if ($xml instanceof DOMElement) {
+            $xml = $xml->ownerDocument->saveXML();
+        }
+
         $parser = xml_parser_create_ns();
         $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         if (!$foldingOptionSet) {
