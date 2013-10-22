@@ -72,12 +72,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     public function receiveRequest()
     {
+        // Detect the current binding from the super globals
         $sspBinding = SAML2_Binding::getCurrentBinding();
+
+        // Receive the request.
         $sspRequest = $sspBinding->receive();
+        $requestXml = $sspRequest->toUnsignedXML()->ownerDocument->saveXML();
 
         // Log the request we received for troubleshooting
         $log = $this->_server->getSessionLog();
-        $log->attach($sspRequest->toUnsignedXML(), 'Request')
+        $log->attach($requestXml, 'Request')
             ->info('Received request');
 
         if (!($sspRequest instanceof SAML2_AuthnRequest)) {
@@ -108,7 +112,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $this->mapCortoEntityMetadataToSspEntityMetadata($cortoSpMetadata)
         );
 
-        // Determine if we should sign the message
+        // Determine if we should check the signature of the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
             (isset($cortoSpMetadata['AuthnRequestsSigned']) && $cortoSpMetadata['AuthnRequestsSigned'])
@@ -116,26 +120,36 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             // Or we currently demand that all AuthnRequests are sent signed
             $this->_server->getConfig('WantsAuthnRequestsSigned')
         );
+
+        // If we should, then check it.
+        $wasSigned = false;
         if ($wantRequestsSigned) {
-            // Check the Signature on the Request
+            // Check the Signature on the Request, if there is no signature, or verification fails
+            // throw an exception.
             if (!sspmod_saml_Message::checkSign($sspSpMetadata, $sspRequest)) {
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException(
                     'Validation of received messages enabled, but no signature found on message.'
                 );
             }
-            $request['__']['WasSigned'] = true;
+            // Otherwise validation succeeded.
+            $wasSigned = true;
         }
 
-        $cortoRequest = EngineBlock_Corto_XmlToArray::xml2array($sspRequest->toUnsignedXML());
+        // Convert the SSP Request to a Corto Request
+        $cortoRequest = EngineBlock_Corto_XmlToArray::xml2array($requestXml);
         $cortoRequest['__'] = array(
             'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             'RelayState'      => $sspRequest->getRelayState(),
             'paramname'       => 'SAMLResponse',
+            'WasSigned'       => $wasSigned,
         );
+
+        // If the request was received on a VO endpoint, add the context to the request metadata.
         $voContext = $this->_server->getVirtualOrganisationContext();
         if ($voContext != NULL) {
             $cortoRequest['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $voContext;
         }
+
         return $cortoRequest;
     }
 
@@ -164,10 +178,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Receive a message from the binding
         $sspResponse = $sspBinding->receive();
+        $responseXml = $sspResponse->toUnsignedXML()->ownerDocument->saveXML();
 
         // Log the response we received for troubleshooting
         $log = $this->_server->getSessionLog();
-        $log->attach($sspResponse->toUnsignedXML(), 'Response')
+        $log->attach($responseXml, 'Response')
             ->info('Received response');
 
         // This message MUST be a SAML2 response, we don't want a AuthnRequest, LogoutResponse, etc.
@@ -245,7 +260,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        $cortoResponse = EngineBlock_Corto_XmlToArray::xml2array($sspResponse->toUnsignedXML());
+        $cortoResponse = EngineBlock_Corto_XmlToArray::xml2array($responseXml);
         $cortoResponse['__'] = array(
             'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
             'RelayState'      => $sspResponse->getRelayState(),
