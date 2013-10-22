@@ -105,7 +105,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_header_exit'               => 'Exit',
     'profile_header_auth_needed'        => 'Authentication required',
     'profile_header_leave_surfconext'   => 'Leave SURFconext',
-    'profile_store_info'                => 'The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.',
+    'profile_store_info'                => 'The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and a subset of this data will be shared with services accessed via SURFconext.',
     'profile_group_membership_desc'     => 'You are a member of the following groups.',
     'profile_no_groups'                 => 'No Groups',
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',
@@ -117,6 +117,9 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile?',
     'profile_eula_link'                 => 'Terms of use',
     'profile_support_link'              => 'Support pages',
+    'profile_mail_text'                 => 'SURFconext support may ask you to share the above data. This information can help them to answer your support question.',
+    'profile_mail_attributes'           => 'Mail data to help@surfconext.nl',
+    'profile_mail_send_success'         => 'The mail with your information has been successfully send.',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Connected Apps and Services',

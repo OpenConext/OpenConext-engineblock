@@ -40,6 +40,8 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->consent = $this->user->getConsent();
         $this->spAttributesList = $this->_getSpAttributeList($this->spList);
 
+        $this->mailSend = isset($_GET["mailSend"]) ? $_GET["mailSend"] : null;
+
     }
 
     /**
@@ -53,28 +55,13 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
     protected function _getSpAttributeList($spList)
     {
         $serviceRegistryClient = $this->_getServiceRegistryClient();
-
-        $results = array();
-
+        $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
         $attributes = $this->_getClensedAttributes();
 
+        $results = array();
         foreach ($spList as $spId => $sp) {
             $arp = $serviceRegistryClient->getArp($spId);
-            if ($arp) {
-                $newAttributes = array();
-                foreach ($attributes as $attributeId => $attributeValues) {
-                    $filteredAttributeValues = EngineBlock_Corto_Filter_Command_AttributeReleasePolicy::filterByAllowedByArp($arp, $attributeId, $attributeValues);
-                    if ($filteredAttributeValues) {
-                        if (!isset($newAttributes[$attributeId])) {
-                            $newAttributes[$attributeId] = array();
-                        }
-                        $newAttributes[$attributeId] = $filteredAttributeValues;
-                    }
-                }
-                $results[$spId] = $newAttributes;
-            } else {
-                $results[$spId] = $attributes;
-            }
+            $results[$spId] = $enforcer->enforceArp($arp, $attributes);
         }
 
         return $results;

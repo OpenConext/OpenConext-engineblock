@@ -203,7 +203,8 @@ Q4/67OZfHd7R+POBXhophSMv1ZOo
                 "SpsWithoutConsent" => array(
                     "http://test-sp"
                 ),
-                'isHidden' => false
+                'isHidden' => false,
+                'shibmd:scopes' => Array ()
             ),
         );
         $this->assertEquals($expectedResult, $metadata, "Converting a simple result from Service Registry with 1 IdP and 1 SP to Cortos Metadata format");

@@ -104,7 +104,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_header_surfteams'          => 'SURFteams',
     'profile_header_auth_needed'        => 'Authenticatie vereist',
     'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan diensten die u via SURFconext benadert.',
+    'profile_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat een subset van deze gegevens worden verstrekt aan diensten die u via SURFconext benadert.',
+
     'profile_group_membership_desc'     => 'U bent lid van de volgende groepen.',
     'profile_no_groups'                 => 'Geen Groepen',
     'profile_extra_groups_desc'         => 'Om uw instellingsgroepen te zien moet u het gebruik hiervoor binnen SURFconext autoriseren.',
@@ -116,6 +117,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_leave_surfconext_conf'     => 'Weet je zeker dat je je profiel wilt verwijderen?',
     'profile_eula_link'                 => 'Gebruikersvoorwaarden',
     'profile_support_link'              => 'Ondersteunings pagina\'s',
+    'profile_mail_text'                 => 'SURFconext support kan je vragen om bovenstaande informatie te delen. Deze informatie kan hen helpen om jouw supportvraag te beantwoorden.',
+    'profile_mail_attributes'           => 'Mail data naar help@surfconext.nl',
+    'profile_mail_send_success'         => 'De mail met bovenstaande informatie is succesvol verstuurd.',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Beschikbare Apps en Services',
