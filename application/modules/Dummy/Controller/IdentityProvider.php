@@ -24,9 +24,6 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-// @todo see if composer can replace these autoloaders
-require_once ENGINEBLOCK_FOLDER_VENDOR . 'simplesamlphp/simplesamlphp/lib/_autoload.php';
-
 class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
@@ -44,7 +41,7 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
             $idpConfig = $testCase->decorateConfig($idpConfig);
         }
 
-            // Required attributes
+        // Required attributes
         $nameId = 'johndoe';
         $issuer = $_SERVER['SCRIPT_URI'];
         $attributes = array(

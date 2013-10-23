@@ -65,7 +65,11 @@ class EngineBlock_Saml_ResponseFactory
     {
         // @todo find out why multiple assertions can exist
         $assertions = $response->getAssertions();
-        sspmod_saml_Message::addSign($idpConfig, null, $assertions[0]);
+        sspmod_saml_Message::addSign(
+            $idpConfig,
+            SimpleSAML_Configuration::loadFromArray(array()),
+            $assertions[0]
+        );
         // Signing of message is not required so disabled for now
         // sspmod_saml_Message::addSign($idpConfig, null, $response);
     }

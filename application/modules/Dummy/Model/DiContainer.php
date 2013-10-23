@@ -32,14 +32,16 @@ class Dummy_Model_DiContainer extends Pimple
      */
     protected function registerSimpleSamlPhpConfig()
     {
-        $this[self::SIMPLESAMLPHP_CONFIG] = $this->share(function (Dummy_Model_DiContainer $container)
-        {
-            // Create a config containing the keys needed for signing
-            $sspConfig = array();
-            $keysPath = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/';
-            $sspConfig['privatekey'] = $keysPath . 'private_key.pem';
-            $sspConfig['certData'] = file_get_contents($keysPath . 'certificate.crt');
-            return new SimpleSAML_Configuration($sspConfig, null);
-        });
+        $this[self::SIMPLESAMLPHP_CONFIG] = $this->share(
+            function (Dummy_Model_DiContainer $container)
+            {
+                // Create a config containing the keys needed for signing
+                $sspConfig = array();
+                $keysPath = ENGINEBLOCK_FOLDER_APPLICATION . 'modules/Dummy/keys/';
+                $sspConfig['privatekey'] = $keysPath . 'private_key.pem';
+                $sspConfig['certData'] = file_get_contents($keysPath . 'certificate.crt');
+                return new SimpleSAML_Configuration($sspConfig, null);
+            }
+        );
     }
 }

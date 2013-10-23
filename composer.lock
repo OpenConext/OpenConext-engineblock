@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "a91081559e0ac9c38c65f7cb3c1126a6",
+    "hash": "07c6fe108905a1382adcd077155bf0e7",
     "packages": [
         {
             "name": "apache/shindig",
@@ -244,7 +244,12 @@
                 "url": "http://simplesamlphp.googlecode.com/svn",
                 "reference": "trunk@3281"
             },
-            "type": "library"
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "lib/_autoload.php"
+                ]
+            }
         },
         {
             "name": "symfony/process",

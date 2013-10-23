@@ -37,6 +37,9 @@
                     "type": "svn",
                     "url": "http://simplesamlphp.googlecode.com/svn",
                     "reference": "trunk@3281"
+                },
+                "autoload": {
+                    "files": ["lib/_autoload.php"]
                 }
             }
         },
