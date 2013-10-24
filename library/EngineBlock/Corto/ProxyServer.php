@@ -739,13 +739,7 @@ class EngineBlock_Corto_ProxyServer
             '_Version'      => '2.0',
             '_IssueInstant' => $now,
             '_InResponseTo' => $request['_ID'],
-
-            'saml:Issuer' => array('__v' => $this->getUrl('idpMetadataService', $destinationID, $request)),
-            'samlp:Status' => array(
-                'samlp:StatusCode' => array(
-                    '_Value' => 'urn:oasis:names:tc:SAML:2.0:status:Success',
-                ),
-            ),
+            '_Consent'      => null,
         );
 
         // the original request was unsolicited, remove InResponseTo attribute
@@ -762,6 +756,15 @@ class EngineBlock_Corto_ProxyServer
                 "No Destination in request or metadata for: $destinationID"
             );
         }
+
+        $response['saml:Issuer'] = array(
+            '__v' => $this->getUrl('idpMetadataService', $destinationID, $request)
+        );
+        $response['samlp:Status'] = array(
+            'samlp:StatusCode' => array(
+                '_Value' => 'urn:oasis:names:tc:SAML:2.0:status:Success',
+            )
+        );
 
         return $response;
     }
