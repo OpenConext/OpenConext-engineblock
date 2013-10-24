@@ -142,12 +142,55 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             'WasSigned'       => $wasSigned,
         );
 
-        // If the request was received on a VO endpoint, add the context to the request metadata.
-        $voContext = $this->_server->getVirtualOrganisationContext();
-        if ($voContext != NULL) {
-            $cortoRequest['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $voContext;
+        $cortoRequest = $this->_annotateRequestWithVoContext($cortoRequest, $cortoSpMetadata);
+
+        return $cortoRequest;
+    }
+
+    /**
+     * @param array $cortoRequest
+     * @param array $cortoSpMetadata
+     * @return array
+     * @throws EngineBlock_Corto_Exception_VoMismatch
+     */
+    protected function _annotateRequestWithVoContext(array $cortoRequest, array $cortoSpMetadata)
+    {
+        // Check if the request was received on a VO endpoint.
+        $explicitVo = $this->_server->getVirtualOrganisationContext();
+
+        // Check if the SP should always use a VO (implicit VO).
+        $implicitVo = NULL;
+        if (isset($cortoSpMetadata['VoContext']) && $cortoSpMetadata['VoContext']) {
+            $implicitVo = $cortoSpMetadata['VoContext'];
         }
 
+        // If we have neither, then we're done here
+        if (!$explicitVo && !$implicitVo) {
+            return $cortoRequest;
+        }
+
+        // If we have both then they'd better match!
+        if ($explicitVo && $implicitVo && $explicitVo !== $implicitVo) {
+            throw new EngineBlock_Corto_Exception_VoMismatch(
+                "Explicit VO '$explicitVo' does not match implicit VO '$implicitVo'!"
+            );
+        }
+
+        $requestMetadata = &$cortoRequest[EngineBlock_Corto_XmlToArray::PRIVATE_PFX];
+
+        // If we received the request on a vo endpoint, then we should register it in the metadata,
+        // so we know to use that as Issuer of the resulting Response.
+        // And the implicit VO no longer matters.
+        if ($explicitVo) {
+            $requestMetadata[EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $explicitVo;
+            return $cortoRequest;
+        }
+
+        // If we received the request from an SP with an implicit VO, then register it in the metadata,
+        // so it can be verified.
+        if ($implicitVo) {
+            $requestMetadata[EngineBlock_Corto_ProxyServer::VO_CONTEXT_IMPLICIT] = $implicitVo;
+        }
         return $cortoRequest;
     }
 

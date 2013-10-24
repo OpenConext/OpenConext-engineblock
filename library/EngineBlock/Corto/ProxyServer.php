@@ -14,6 +14,7 @@ class EngineBlock_Corto_ProxyServer
     const MESSAGE_TYPE_RESPONSE = 'SAMLResponse';
 
     const VO_CONTEXT_PFX          = 'voContext';
+    const VO_CONTEXT_IMPLICIT     = 'VoContextImplicit';
 
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
