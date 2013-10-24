@@ -6,7 +6,11 @@ class Dummy_Model_Sp_TestCase_SignedPostRequest
     public function decorateRequest(SAML2_Request $request)
     {
         $sspConfig = Dummy_Model_DiContainer::getInstance()->getSimpleSamlPhpConfig();
-        sspmod_saml_Message::addSign($sspConfig, null, $request);
+        sspmod_saml_Message::addSign(
+            $sspConfig,
+            SimpleSAML_Configuration::loadFromArray(array()),
+            $request
+        );
         return $request;
     }
 
