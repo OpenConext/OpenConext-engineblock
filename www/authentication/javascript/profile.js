@@ -34,8 +34,8 @@ var Profile = function() {
                 autoHeight: false
             });
 
-            $('.delete').click(function() {
-                return confirm('Are you sure you want to delete your profile ?');
+            $('#delete-confirmation-form').submit(function() {
+                return confirm($('#delete-confirmation-text').attr('data-confirmation-text'));
             });
 
             $('.show-details').live('click', function(e){

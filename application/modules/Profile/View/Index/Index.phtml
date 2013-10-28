@@ -129,14 +129,7 @@ foreach ($spList as $spId => $sp) {
 <div id="MyApps">
     <p><?php echo $this->t('profile_apps_connected_aps'); ?></p>
     <p>
-        <?php echo $this->t('profile_apps_share',
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>",
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>"
-        ); ?>
+        <?php echo $this->t('profile_apps_share'); ?>
 
     </p>
     <table id="MyAppsTable" class="no-layout-fix">
@@ -223,19 +216,14 @@ foreach ($spList as $spId => $sp) {
 <div id="Exit">
     <p>
         <?php echo $this->t('profile_leave_surfconext_desc'); ?><br />
+        <form id="delete-confirmation-form" method="post" action="/profile/delete-user">
+            <input id="delete-confirmation-text"
+                   type="submit" value="<?php echo $this->t('profile_leave_surfconext_link'); ?>"
+                   data-confirmation-text="<?php echo $this->t('profile_leave_surfconext_conf'); ?>" >
+        </form>
 
         <div class="exit-disclaimer"/>
-        <?php echo $this->t('profile_leave_surfconext_disclaim',
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>",
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/SURFteams+Best+Practice\" target=\"_blank\">
-                <img src=\"/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>"
-        ); ?><br />
+            <?php echo $this->t('profile_leave_surfconext_disclaim'); ?><br />
         </div>
-        <a class="delete" href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
-        <?php echo $this->t('profile_leave_surfconext_link_add'); ?><br />
-        <input id="delete-confirmation-text" type="hidden" value="<?php echo $this->t('profile_leave_surfconext_conf'); ?>"/>
     </p>
 </div>

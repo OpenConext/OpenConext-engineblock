@@ -105,16 +105,22 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_header_exit'               => 'Exit',
     'profile_header_auth_needed'        => 'Authentication required',
     'profile_header_leave_surfconext'   => 'Leave SURFconext',
-    'profile_store_info'                => 'The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and a subset of this data will be shared with services accessed via SURFconext.',
+    'profile_store_info'                => 'The following profile data have been provided by your home institution. This profile will be stored in (and used by) SURFconext. It is also possible that a subset of this information is provided to services that you accessed via SURFconext.',
     'profile_group_membership_desc'     => 'You are a member of the following groups.',
     'profile_no_groups'                 => 'No Groups',
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',
-    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more 3rd party application(s) with your institutional account. In addition, your group membership(s) may be shared with these applications.</p>If you would like to quit using SURFconext and delete your SURFconext profile, please click the link below.',
+    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more applications with your institutional account. It is possible to delete your SURFconext profile by pressing the button below.',
     'profile_leave_surfconext_link'     => 'Delete my SURFconext account!',
-    'profile_leave_surfconext_disclaim' => 'Please note: You may reassign group%s, document or content ownership to a collegue. Otherwise ongoing projects may be disrupted and/or content may become inaccessible! Consult the deprovisioning and dataportability good practice section%s for more information',
+    'profile_leave_surfconext_disclaim' => 'Note:
+                                            <ul>
+                                                <li>Only information stored in the SURFconext service will be deleted.</li>
+                                                <li>Applications accessed with SURFconext will not be notified. It is possible your personal data is still stored in these applications.</li>
+                                                <li>After a new SURFconext login automatically a new profile is created.</li>
+                                             </ul>
+                                             <br>More information about what information is stored by SURFconext can be found on the <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">the SURFconext support pages</a>',
     'profile_leave_surfconext_link_add' => '(close your browser after this action to finalize the deprovisioning procedure)',
     'profile_revoke_access'             => 'Revoke access',
-    'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile?',
+    'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile? You will need to restart your browser to finalize this action',
     'profile_eula_link'                 => 'Terms of use',
     'profile_support_link'              => 'Support pages',
     'profile_mail_text'                 => 'SURFconext support may ask you to share the above data. This information can help them to answer your support question.',
@@ -122,8 +128,8 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_mail_send_success'         => 'The mail with your information has been successfully send.',
 
     //Profile MyApps
-    'profile_apps_connected_aps'        => 'Connected Apps and Services',
-    'profile_apps_share'                => 'You have shared your profile%s and optionally group information%s with the following services',
+    'profile_apps_connected_aps'        => 'SURFconext Apps',
+    'profile_apps_share'                => 'You have given permission to share profile information with the following services:',
     'profile_apps_service_th'           => 'Service/App',
     'profile_apps_eula_th'              => 'EULA',
     'profile_apps_support_name_th'      => 'Support person name',
