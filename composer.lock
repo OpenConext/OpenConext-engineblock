@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "07c6fe108905a1382adcd077155bf0e7",
+    "hash": "bfa29b43595ef47ae9d09d4cab4dd500",
     "packages": [
         {
             "name": "apache/shindig",
@@ -85,12 +85,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "0cee699eca14f7c23d0667fa5f7e14d1a8b3af87"
+                "reference": "d4680d449a9da80fb82e17627270c91b93a0d46d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/0cee699eca14f7c23d0667fa5f7e14d1a8b3af87",
-                "reference": "0cee699eca14f7c23d0667fa5f7e14d1a8b3af87",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/d4680d449a9da80fb82e17627270c91b93a0d46d",
+                "reference": "d4680d449a9da80fb82e17627270c91b93a0d46d",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +148,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-10-05 09:46:50"
+            "time": "2013-10-25 15:17:36"
         },
         {
             "name": "mrclay/minify",
@@ -237,19 +237,162 @@
             "time": "2013-03-08 08:21:40"
         },
         {
-            "name": "simplesamlphp/simplesamlphp",
-            "version": "1.12.0-alpha",
+            "name": "robrichards/xmlseclibs",
+            "version": "1.3.1",
             "source": {
                 "type": "svn",
-                "url": "http://simplesamlphp.googlecode.com/svn",
-                "reference": "trunk@3281"
+                "url": "http://xmlseclibs.googlecode.com/svn",
+                "reference": "trunk@50"
             },
             "type": "library",
             "autoload": {
                 "files": [
-                    "lib/_autoload.php"
+                    "xmlseclibs.php"
                 ]
             }
+        },
+        {
+            "name": "simplesamlphp/libsimplesaml",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplesamlphp-test/libsimplesaml.git",
+                "reference": "d2dcc72b68ac8e1b468d2494b5d14260b9b2d0a5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplesamlphp-test/libsimplesaml/zipball/d2dcc72b68ac8e1b468d2494b5d14260b9b2d0a5",
+                "reference": "d2dcc72b68ac8e1b468d2494b5d14260b9b2d0a5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "~1.5",
+                "phpunit/phpunit": "~3.7",
+                "sebastian/phpcpd": "~1.4",
+                "sensiolabs/security-checker": "~1.1",
+                "squizlabs/php_codesniffer": "~1.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SimpleSAML_": "src/"
+                }
+            },
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Åkre Solberg",
+                    "email": "andreas.solberg@uninett.no"
+                }
+            ],
+            "description": "SAML2 PHP library from SimpleSAMLphp",
+            "support": {
+                "source": "https://github.com/simplesamlphp-test/libsimplesaml/tree/1.0.0",
+                "issues": "https://github.com/simplesamlphp-test/libsimplesaml/issues"
+            },
+            "time": "2013-10-28 10:20:23"
+        },
+        {
+            "name": "simplesamlphp/saml2",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplesamlphp-test/saml2.git",
+                "reference": "4a63d720be1a1539f1a6b309e3e426b942e51ae8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplesamlphp-test/saml2/zipball/4a63d720be1a1539f1a6b309e3e426b942e51ae8",
+                "reference": "4a63d720be1a1539f1a6b309e3e426b942e51ae8",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "robrichards/xmlseclibs": "1.3.*",
+                "simplesamlphp/libsimplesaml": "1.0.0"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "~1.5",
+                "phpunit/phpunit": "~3.7",
+                "sebastian/phpcpd": "~1.4",
+                "sensiolabs/security-checker": "~1.1",
+                "squizlabs/php_codesniffer": "~1.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SAML2_": "src/"
+                }
+            },
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Åkre Solberg",
+                    "email": "andreas.solberg@uninett.no"
+                }
+            ],
+            "description": "SAML2 PHP library from SimpleSAMLphp",
+            "support": {
+                "source": "https://github.com/simplesamlphp-test/saml2/tree/1.0.0",
+                "issues": "https://github.com/simplesamlphp-test/saml2/issues"
+            },
+            "time": "2013-10-28 10:18:41"
+        },
+        {
+            "name": "simplesamlphp/simplesamlphp",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/relaxnow/simplesamlphp.git",
+                "reference": "9eb035a5cdfea20eb3908d8949d229c1e53daf9d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/relaxnow/simplesamlphp/zipball/9eb035a5cdfea20eb3908d8949d229c1e53daf9d",
+                "reference": "9eb035a5cdfea20eb3908d8949d229c1e53daf9d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "simplesamlphp/libsimplesaml": "1.0.0",
+                "simplesamlphp/saml2": "1.0.0"
+            },
+            "type": "project",
+            "autoload": {
+                "files": [
+                    "lib/_autoload.php"
+                ]
+            },
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Åkre Solberg",
+                    "email": "andreas.solberg@uninett.no"
+                },
+                {
+                    "name": "Olav Morken",
+                    "email": "olav.morken@uninett.no"
+                }
+            ],
+            "description": "A PHP implementation of SAML 2.0 service provider and identity provider functionality. And is also compatible with Shibboleth 1.3 and 2.0.",
+            "homepage": "https://github.com/aschamberger/XmlSecurity",
+            "keywords": [
+                "saml"
+            ],
+            "support": {
+                "issues": "https://code.google.com/p/simplesamlphp/issues/list",
+                "source": "https://github.com/simplesamlphp/simplesamlphp"
+            },
+            "time": "2013-10-28 09:50:13"
         },
         {
             "name": "symfony/process",
@@ -1908,7 +2051,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "simplesamlphp/simplesamlphp": 15,
+        "simplesamlphp/simplesamlphp": 20,
         "kriswallsmith/assetic": 20,
         "phake/phake": 15
     },
