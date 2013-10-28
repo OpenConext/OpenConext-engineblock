@@ -117,7 +117,7 @@ If you have any questions about your privacy and the policy applied, please visi
                                                 <li>Applications accessed with SURFconext will not be notified. It is possible your personal data is still stored in these applications.</li>
                                                 <li>After a new SURFconext login automatically a new profile is created.</li>
                                              </ul>
-                                             <br>More information about what information is stored by SURFconext can be found on the <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">the SURFconext support pages</a>',
+                                             <br>More information about what information is stored by SURFconext can be found on <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">the SURFconext support pages</a>',
     'profile_leave_surfconext_link_add' => '(close your browser after this action to finalize the deprovisioning procedure)',
     'profile_revoke_access'             => 'Revoke access',
     'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile? You will need to restart your browser to finalize this action',
