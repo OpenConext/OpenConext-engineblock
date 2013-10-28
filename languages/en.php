@@ -128,7 +128,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_apps_eula_th'              => 'EULA',
     'profile_apps_support_name_th'      => 'Support person name',
     'profile_apps_support_url_th'       => 'Support URL',
-    'profile_apps_support_email_th'     => 'Support person email',
+    'profile_apps_support_email_th'     => 'Support email',
     'profile_apps_support_phone_th'     => 'Support person phone',
     'profile_apps_consent_th'           => 'Consent group information',
     'profile_revoke_consent'            => 'Revoke',
