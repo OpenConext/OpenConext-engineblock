@@ -79,10 +79,11 @@ class EngineBlock_Memcache_ConnectionFactory {
      *                          [, int $retry_interval
      * )
      *
-     * @param  $serverConfiguration
-     * @return void
+     * @param string $serverName
+     * @param stdClass $serverConfiguration
+     * @return string[]
      */
-    protected function _getServerArgumentsForConfiguration($serverName, $serverConfiguration)
+    protected function _getServerArgumentsForConfiguration($serverName, stdClass $serverConfiguration)
     {
         $arguments = array();
         // HOST
