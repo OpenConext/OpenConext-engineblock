@@ -94,8 +94,7 @@
             "Logout_":"application/modules/",
             "Profile_":"application/modules/",
             "Service_":"application/modules/",
-            "Social_":"application/modules/",
-            "VoManage_":"application/modules/"
+            "Social_":"application/modules/"
         }
     }
 }

@@ -144,4 +144,17 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
         $this->_collabPersonId = $collabPersonId;
         return $this;
     }
+
+    /**
+     * Check the existence of collabPersonId
+     */
+    public function invariant()
+    {
+        if (!$this->_collabPersonId) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing collabPersonId'
+            );
+        }
+
+    }
 }

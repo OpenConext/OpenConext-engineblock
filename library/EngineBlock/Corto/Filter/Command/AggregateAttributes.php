@@ -28,8 +28,6 @@
  */
 class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const VO_NAME_ATTRIBUTE         = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
-
     /**
      * This command may modify the response attributes
      *
@@ -42,19 +40,11 @@ class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_C
 
     public function execute()
     {
-        if (!$this->_collabPersonId) {
-            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
-                'Missing collabPersonId'
-            );
-        }
 
-        $voContext = null;
-        if (isset($attributes[self::VO_NAME_ATTRIBUTE])) {
-            $voContext = $this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0];
-        }
+        $this->invariant();
 
         $aggregator = $this->_getAttributeAggregator(
-            $this->_getAttributeProviders($this->_spMetadata['EntityId'], $voContext)
+            $this->_getAttributeProviders($this->_spMetadata['EntityId'])
         );
         $this->_responseAttributes = $aggregator->aggregateFor(
             $this->_responseAttributes,
@@ -67,12 +57,8 @@ class EngineBlock_Corto_Filter_Command_AggregateAttributes extends EngineBlock_C
         return new EngineBlock_AttributeAggregator($providers);
     }
 
-    protected function _getAttributeProviders($spEntityId, $voContext = null)
+    protected function _getAttributeProviders($spEntityId)
     {
-        $providers = array();
-        if ($voContext) {
-            $providers[] = new EngineBlock_Attributes_Provider_VoManage($voContext, $spEntityId);
-        }
-        return $providers;
+        return array();
     }
 }

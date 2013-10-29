@@ -26,7 +26,7 @@
 /**
  *
  */
-class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_Filter_Command_Abstract
 {
     const URN_SURF_PERSON_AFFILIATION       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
     const URN_IS_MEMBER_OF                  = 'urn:mace:dir:attribute-def:isMemberOf';
@@ -44,70 +44,10 @@ class EngineBlock_Corto_Filter_Command_AddMissingAttributes extends EngineBlock_
 
     public function execute()
     {
-        // If we don't have a commonName, determine one from the attributes
-        if (!isset($this->_responseAttributes['urn:mace:dir:attribute-def:cn'][0])) {
-            $this->_responseAttributes['urn:mace:dir:attribute-def:cn'] = array(
-                $this->_determineCommonNameFromAttributes($this->_responseAttributes)
-            );
-        }
-        // If we don't have a displayName, use the commonName
-        if (!isset($this->_responseAttributes['urn:mace:dir:attribute-def:displayName'][0])) {
-            $this->_responseAttributes['urn:mace:dir:attribute-def:displayName'] = array(
-                $this->_responseAttributes['urn:mace:dir:attribute-def:cn'][0]
-            );
-        }
-        // If we don't have a surName use the commonName
-        if (!isset($this->_responseAttributes['urn:mace:dir:attribute-def:sn'])) {
-            $this->_responseAttributes['urn:mace:dir:attribute-def:sn'] = array(
-                $this->_responseAttributes['urn:mace:dir:attribute-def:cn'][0]
-            );
-        }
         // Is a guest user?
         $this->_addIsMemberOfSurfNlAttribute();
     }
 
-    /**
-     * @todo this looks a lot like new EngineBlock_User_PreferredNameAttributeFilter::getAttribute()
-     * if functionality is the same use it, or merge code
-     */
-    protected function _determineCommonNameFromAttributes()
-    {
-        if (isset($this->_responseAttributes['urn:mace:dir:attribute-def:givenName'][0]) &&
-            isset($this->_responseAttributes['urn:mace:dir:attribute-def:sn'][0])) {
-            return $this->_responseAttributes['urn:mace:dir:attribute-def:givenName'][0] . ' ' .
-                $this->_responseAttributes['urn:mace:dir:attribute-def:sn'][0];
-        }
-
-        if (isset($this->_responseAttributes['urn:mace:dir:attribute-def:sn'][0])) {
-            return $this->_responseAttributes['urn:mace:dir:attribute-def:sn'][0];
-        }
-
-        if (isset($this->_responseAttributes['urn:mace:dir:attribute-def:displayName'][0])) {
-            return $this->_responseAttributes['urn:mace:dir:attribute-def:displayName'][0];
-        }
-
-        if (isset($this->_responseAttributes['urn:mace:dir:attribute-def:mail'][0])) {
-            return $this->_responseAttributes['urn:mace:dir:attribute-def:mail'][0];
-        }
-
-        if (isset($this->_responseAttributes['urn:mace:dir:attribute-def:givenName'][0])) {
-            return $this->_responseAttributes['urn:mace:dir:attribute-def:givenName'][0];
-        }
-
-        if (!isset($this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0])) {
-            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
-                'Missing UID attribute'
-            );
-        }
-
-        if (!isset($this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0])) {
-            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
-                'Missing UID attribute'
-            );
-        }
-
-        return $this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0];
-    }
 
     /**
      * Add the 'urn:collab:org:surf.nl' value to the isMemberOf attribute in case a user

@@ -98,11 +98,6 @@ class EngineBlock_AttributeAggregator
                 $ebAttributes[$attribName] = $attribValues;
             }
             else {
-                // @todo we may need to differentiate between single and multi-valued attributes
-                //       for instance the Idp could have provided an e-mail attribute, but
-                //       attribute aggregation could add another e-mail.
-                //       however we don't want to add a new value for the uid attribute.
-                //       So for now, if EB already has an attribute, we ignore attributes from aggregation.
                 continue;
             }
         }

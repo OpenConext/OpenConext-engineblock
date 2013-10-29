@@ -61,8 +61,8 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Require valid UID and SchacHomeOrganization
             new EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes(),
 
-            // Add a CommonName, displayName, surName and guest status (isMemberOf)
-            new EngineBlock_Corto_Filter_Command_AddMissingAttributes(),
+            // Add guest status (isMemberOf)
+            new EngineBlock_Corto_Filter_Command_AddGuestStatus(),
 
             // Provision the User to LDAP and figure out the collabPersonId
             new EngineBlock_Corto_Filter_Command_ProvisionUser(),
