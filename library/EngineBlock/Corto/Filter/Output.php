@@ -50,9 +50,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
 
-            // Aggregate attributes from other sources (none for now)
-            new EngineBlock_Corto_Filter_Command_AggregateAttributes(),
-
             // Apply ARP before we add the OID variants
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 

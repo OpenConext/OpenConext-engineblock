@@ -48,11 +48,6 @@ class EngineBlock_SocialData
     protected $_fieldMapper = NULL;
 
     /**
-     * @var EngineBlock_AttributeAggregator
-     */
-    protected $_attributeAggregator;
-
-    /**
      * @var String
      */
     protected $_appId = NULL;
