@@ -83,7 +83,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             ->info('Received request');
 
         if (!($sspRequest instanceof SAML2_AuthnRequest)) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
                 'Unsupported Binding used',
                 EngineBlock_Exception::CODE_NOTICE
             );
@@ -210,7 +210,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // We only support HTTP-Post and HTTP-Redirect bindings
         if (!($sspBinding instanceof SAML2_HTTPPost || $sspBinding instanceof SAML2_HTTPRedirect)) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
                 'Unsupported Binding used',
                 EngineBlock_Exception::CODE_NOTICE
             );
