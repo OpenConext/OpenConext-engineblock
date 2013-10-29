@@ -30,10 +30,10 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
     {
         $this->setTestCaseFromRequest($this->_getRequest());
 
-        $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
+        $authnRequestFactory = new EngineBlock_Saml2_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
 
-        $responseFactory = new EngineBlock_Saml_ResponseFactory();
+        $responseFactory = new EngineBlock_Saml2_ResponseFactory();
         $idpConfig = Dummy_Model_DiContainer::getInstance()->getSimpleSamlPhpConfig();
 
         $testCase = $this->factoryTestCaseFromSession($_SESSION);

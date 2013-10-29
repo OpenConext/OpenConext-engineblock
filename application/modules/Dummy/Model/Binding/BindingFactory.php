@@ -13,14 +13,14 @@ class Dummy_Model_Binding_BindingFactory
     );
 
     /**
-     * @var EngineBlock_Saml_MessageSerializer
+     * @var EngineBlock_Saml2_MessageSerializer
      */
     private $messageSerializer;
 
     public function __construct()
     {
         // @todo get via dependency injection
-        $this->messageSerializer = new EngineBlock_Saml_MessageSerializer();
+        $this->messageSerializer = new EngineBlock_Saml2_MessageSerializer();
     }
 
     /**

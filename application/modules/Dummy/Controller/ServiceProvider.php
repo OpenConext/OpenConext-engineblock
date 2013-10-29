@@ -30,7 +30,7 @@ class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
         $this->setTestCaseFromRequest($this->_getRequest());
 
         if (!empty($_POST)) {
-            $responseFactory = new EngineBlock_Saml_ResponseFactory();
+            $responseFactory = new EngineBlock_Saml2_ResponseFactory();
             $samlResponse = $responseFactory->createFromHttpRequest($this->_getRequest());
             // @todo check status, for now it's assumed that a receiving a valid response means the user is logged in
             $_SESSION['loggedin'] = true;
@@ -99,7 +99,7 @@ class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
         }
         $assertionConsumerServiceURL = $spUrl;
         $issuerUrl = $spUrl;
-        $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
+        $authnRequestFactory = new EngineBlock_Saml2_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->create(
             $destinationUrl,
             $assertionConsumerServiceURL,

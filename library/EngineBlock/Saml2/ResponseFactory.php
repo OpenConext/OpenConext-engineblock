@@ -4,7 +4,7 @@
  *
  * @todo write test
  */
-class EngineBlock_Saml_ResponseFactory
+class EngineBlock_Saml2_ResponseFactory
 {
     /**
      * @todo make this generic
@@ -83,7 +83,7 @@ class EngineBlock_Saml_ResponseFactory
         $parameter = $this->getParameterFromHttpRequest($httpRequest);
         $responseXml = $this->decodeParameter($parameter);
 
-        $serializer = new EngineBlock_Saml_MessageSerializer();
+        $serializer = new EngineBlock_Saml2_MessageSerializer();
         return $serializer->deserialize($responseXml, 'SAML2_Response');
     }
 
