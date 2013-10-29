@@ -45,45 +45,8 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
             EngineBlock_ApplicationSingleton::getLog()->info(
                 "Applying attribute release policy {$arp['name']} for $spEntityId"
             );
-
-            $newAttributes = array();
-            foreach ($this->_responseAttributes as $attribute => $attributeValues) {
-                if (!isset($arp['attributes'][$attribute])) {
-                    EngineBlock_ApplicationSingleton::getLog()->info(
-                        "ARP: Removing attribute $attribute"
-                    );
-                    continue;
-                }
-
-                $allowedValues = $arp['attributes'][$attribute];
-                if (in_array('*', $allowedValues)) {
-                    // Pass through all values
-                    $newAttributes[$attribute] = $attributeValues;
-                    continue;
-                }
-                foreach ($attributeValues as $attributeValue) {
-                    if (in_array($attributeValue, $allowedValues)) {
-                        if (!isset($newAttributes[$attribute])) {
-                            $newAttributes[$attribute] = array();
-                        }
-                        $newAttributes[$attribute][] = $attributeValue;
-                    } else {
-                        //Prefix matching check
-                        foreach ($allowedValues as $allowedValue) {
-                            $suffix = substr($allowedValue, 0, -1);
-                            if ($this->_endsWith($allowedValue, '*') &&
-                                $this->_startsWith($attributeValue, $suffix)
-                            ) {
-                                if (!isset($newAttributes[$attribute])) {
-                                    $newAttributes[$attribute] = array();
-                                }
-                                $newAttributes[$attribute][] = $attributeValue;
-                            }
-                        }
-
-                    }
-                }
-            }
+            $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
+            $newAttributes = $enforcer->enforceArp($arp, $this->_responseAttributes);
             $this->_responseAttributes = $newAttributes;
         }
     }
@@ -91,15 +54,5 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
     protected function _getServiceRegistryAdapter()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
-    }
-
-    protected function _endsWith($str, $suffix)
-    {
-        return substr($str, -strlen($suffix)) === $suffix;
-    }
-
-    protected function _startsWith($str, $suffix)
-    {
-        return strpos($str, $suffix) === 0;
     }
 }

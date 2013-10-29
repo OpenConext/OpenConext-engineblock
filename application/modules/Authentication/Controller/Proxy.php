@@ -69,6 +69,11 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId())
             );
+        } catch(Janus_Client_CacheProxy_Exception $e) {
+            $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId)
+            );
         }
     }
 

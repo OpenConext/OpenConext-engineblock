@@ -74,7 +74,7 @@ tar -czf ${PROJECT_DIR_NAME}.tar.gz ${PROJECT_DIR_NAME}
 
 # create checksum file
 cd ${RELEASE_DIR}
-sha1sum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha
+# sha1sum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha
 
 # sign it if requested
 if [ -n "$2" ]

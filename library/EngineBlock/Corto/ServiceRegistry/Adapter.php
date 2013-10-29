@@ -166,6 +166,9 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['coin:publish_in_edugain'])) {
             $cortoEntity['PublishInEdugain'] = $serviceRegistryEntity['coin:publish_in_edugain'];
         }
+        if (isset($serviceRegistryEntity['coin:publish_in_edugain_date'])) {
+            $cortoEntity['PublishInEdugainDate'] = $serviceRegistryEntity['coin:publish_in_edugain_date'];
+        }
 
         // Disable SAML scoping
         if (isset($serviceRegistryEntity['coin:disable_scoping'])) {
@@ -294,6 +297,18 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
 
             $cortoEntity['isHidden'] = (isset($serviceRegistryEntity['coin:hidden']) && $serviceRegistryEntity['coin:hidden'] === true);
+
+            $cortoEntity['shibmd:scopes'] = array();
+            for ($i = 0; $i < 10; $i++) {
+                if (isset($serviceRegistryEntity["shibmd:scope:$i:allowed"])) {
+                    $regexp = isset($serviceRegistryEntity["shibmd:scope:$i:regexp"]) ? $serviceRegistryEntity["shibmd:scope:$i:regexp"] : false;
+                    $cortoEntity['shibmd:scopes'][$i] = array(
+                        'allowed'  => $serviceRegistryEntity["shibmd:scope:$i:allowed"],
+                        'regexp' => $regexp
+                    );
+                }
+            }
+
         }
 
         // In general
