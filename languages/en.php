@@ -48,32 +48,45 @@ return array(
     'close_question'        =>      'Close',
 
     //Help questions
-    'question_screen'                   =>      'Why this screen?',
-    'answer_screen'                     =>      '<p>You can log in to this service with your institutional account. In this screen, you select the institution you are affiliated to.</p>',
+    // general help questions
     'question_surfconext'               =>      'What is SURFconext?',
-    'answer_surfconext'                 =>      '<p>SURFconext is a next generation collaboration infrastructure that creates new opportunities to collaborate online based on a combination of federation technology (SURFfederatie), group management, concepts from social networking and applications from different providers. SURFfederatie is an important component that allows you to access online services with the user name and password issued to you by your own institution. Both SURFfederatie and SURFconext are brought to you by SURFnet.</p>',
-    'question_log_in'                   =>      'How do you log in via SURFconext?',
+    'answer_surfconext'                 =>      '<p>SURFconext is a next generation collaboration infrastructure that creates new opportunities to collaborate online based on a combination of federation technology, group management, concepts from social networking and applications from different providers. SURFconext allows you to access online services with the username and password issued to you by your own institution.</p>',
+    'question_log_in'                   =>      'How do you login via SURFconext?',
     'answer_log_in'                     =>      '<ul>
                             <li>Click on your institution in this screen.</li>
                             <li>You will then be redirected to the log-in page of your institution where you can log in.</li>
-                            <li>Your institution will notify SURFconext via SURFfederatie that you have logged in successfully.</li>
+                            <li>Your institution will notify SURFconext that you have logged in successfully.</li>
                             <li>You will be taken to the service for which you have logged in. You can then start using that service.</li>
                         </ul>',
     'question_security'                 =>      'Is SURFconext secure?',
     'answer_security'                   =>      '<p>Your institution and SURFnet believe that user privacy is extremely important.<br />
 <br />
-Personal details are only provided to a service provider if these details are needed to use the service. Contractual agreements between your institution, SURFfederatie/SURFconext, and the service provider guarantee that your personal details will be handled and processed with care.<br />
+Personal details are only provided to a service provider if these details are needed to use the service. Contractual agreements between your institution, SURFconext and the service provider guarantee that your personal details will be handled and processed with care.<br />
 <br />
 If you have any questions about your privacy and the policy applied, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a> for more information or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
+
+    	// consent help questions
+    'question_consentscreen'           	=>      'Why this screen?',
+    'answer_consentscreen'             	=>      '<p>To be able to use this service it is necessary to share some of your personal information with this service.</p>',
+    'question_consentinfo'           	=>      'What happens with my information?',
+	'answer_consentinfo'             	=>      '<p>When you agree to share your information with the service the information shown will be provided to the service. The service provider will use and possibly store this information in order to ensure a proper functioning service. On this screen there is a link to the "Terms of Service" of the service and of SURFconext which will give you more information on how the personal data is handled.</p>',
+    'question_consentno'           		=>      'What happens when i don\'t want to share my information?',
+    'answer_consentno'             		=>      '<p>When you don\'t agree to share your information with the service you cannot use the service. In this case, the information shown will not be shared with the service.</p>',
+    'question_consentagain'           	=>      'I\'ve previously shared my information with the service, but why do i get the same question again?',
+    'answer_consentagain'             	=>      '<p>When your information previously provided to the service has changed, you will be asked again if you allow the sharing of your information.</p>',
+
+		// WAYF help questions
+    'question_screen'                   =>      'Why this screen?',
+    'answer_screen'                     =>      '<p>You can log in to this service with your institutional account. In this screen, you select the institution you are affiliated with.</p>',
     'question_institution_not_listed'   =>      'My institution is not listed. What should I do?',
-    'answer_institution_not_listed'     =>      '<p>If your institution is not listed, then it is either not linked to the SURFfederatie or your institution may not allow access to this particular service. Go back to the page for the service. In some cases, there will be alternative ways of logging in.</p>',
+    'answer_institution_not_listed'     =>      '<p>If your institution is not listed, then it is either not linked to SURFconext or your institution may not allow access to this particular service. Go back to the page for the service. In some cases, there will be alternative ways of logging in.</p>',
     'question_institution_no_access'    =>      'My institution does not allow access to the service. What should I do?',
-    'answer_institution_no_access'      =>      '<p>It is possible that your institution is connected to SURFfederatie but has not (or not yet) made any arrangements with the service provider about the use of the service. We will forward your request to your institution. Based on your request your institution may consider to add this service to its service portfolio.</p>',
+    'answer_institution_no_access'      =>      '<p>It is possible that your institution is connected to SURFconext but has not (or not yet) made any arrangements with the service provider about the use of the service. We will forward your request to your institution. Based on your request your institution may consider to add this service to its service portfolio.</p>',
     'question_asked_institution_access'  =>      'I have asked my institution for access but I still cannot get access. Why not?',
     'answer_asked_institution_access'    =>      '<p>Apparently, your institution has not arranged a license yet or, access to this service is not on the roadmap of your institution. Such decisions are beyond the scope and control of SURFnet.</p>',
     'question_cannot_select'            =>      'In my browser I cannot select my institution. What should I do?',
-    'answer_cannot_select'              =>      '<p>The dialog box to select your institution can be used in most popular browsers, including Internet Explorer 7 and 8, Firefox, Chrome, and Safari. Other browsers may not be supported. Your browser must support the use of cookies and JavaScript.</p>',
+    'answer_cannot_select'              =>      '<p>The dialog box to select your institution can be used in most popular browsers, including Internet Explorer, Firefox, Chrome, and Safari. Other browsers may not be supported. Your browser must support the use of cookies and JavaScript.</p>',
 
     //Form
     'sorry'                 => 'Unfortunately,',
