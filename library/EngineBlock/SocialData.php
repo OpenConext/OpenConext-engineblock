@@ -83,12 +83,12 @@ class EngineBlock_SocialData
      * @param null|string $voId
      * @return array OpenSocial groups
      */
-    public function getGroupsForPerson($identifier, $groupId = null, $voId = null, $spEntityId = null)
+    public function getGroupsForPerson($identifier, $groupId = null, $spEntityId = null)
     {
         $identifier = $this->_getCollabPersonIdForPersistentId($identifier);
         if (!$identifier) {
             $this->_getLog()->notice(
-                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$spEntityId')" .
                     ", personId: $identifier cannot be resolved to a collabPersonId?"
             );
             return false;
@@ -97,7 +97,7 @@ class EngineBlock_SocialData
         if (!$spEntityId) {
             //without spEntityId we can't check if we are allowed to return Groups
             $this->_getLog()->notice(
-                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$spEntityId')" .
                     ", no SP entity ID, required to return groups"
             );
             return false;
@@ -105,7 +105,7 @@ class EngineBlock_SocialData
         $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
         if (!$spGroupAcls) {
             $this->_getLog()->notice(
-                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$spEntityId')" .
                     ", no GroupAcl (set in Manage) means by definition that there are no positive permissions"
             );
             return false;
@@ -113,14 +113,7 @@ class EngineBlock_SocialData
 
         $engineBlockGroups = NULL;
         $groupProvider = $this->_getGroupProvider($identifier);
-        if ($voId) {
-            $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
-            $groupStem = $virtualOrganization->getStem();
-            $engineBlockGroups = $groupProvider->getGroupsByStem($groupStem,$spGroupAcls);
-        }
-        else {
-            $engineBlockGroups = $groupProvider->getGroups($spGroupAcls);
-        }
+        $engineBlockGroups = $groupProvider->getGroups($spGroupAcls);
 
         $openSocialGroups = array();
         foreach ($engineBlockGroups as $group) {

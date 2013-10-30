@@ -60,17 +60,44 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
 
         $this->_adapter->setVirtualOrganisationContext($vo);
 
-        // If in VO context, validate the user's membership
-        $validator = new EngineBlock_VirtualOrganization_Validator();
-        $isMember = $validator->isMember(
-            $vo,
-            $this->_collabPersonId,
-            $this->_idpMetadata['EntityId']
-        );
+        EngineBlock_ApplicationSingleton::getLog()->debug("VO membership required: $vo");
+
+        $isMember = $this->_validateVoMembership($vo, $this->_collabPersonId, $this->_idpMetadata['EntityId'] );
+
         if (!$isMember) {
             throw new EngineBlock_Corto_Exception_UserNotMember("User not a member of VO $vo");
         }
 
         $this->_responseAttributes[self::VO_NAME_ATTRIBUTE] = $vo;
+
+    }
+
+    protected function _validateVoMembership($vo, $collabPersonId, $entityId)
+    {
+        //here we make a call to API to determine if the VO membership is valid
+        $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->api->vovalidate;
+
+        $client = new Zend_Http_Client($conf->url);
+        $client->setConfig(array('timeout' => 15));
+        try {
+            $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
+                    ->setAuth($conf->key, $conf->secret)
+                    ->setParameterGet('vo', urlencode($vo))
+                    ->setParameterGet('personId', urlencode($collabPersonId))
+                    ->setParameterGet('identityProviderEntityId', urlencode($entityId))
+                    ->request('GET');
+            $body = $client->getLastResponse()->getBody();
+            $response = json_decode($body, true);
+            $result = $response['value'];
+        } catch (Exception $exception) {
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+                ->setUserId($collabPersonId)
+                ->setIdp($entityId)
+                ->setSp($this->_spMetadata['EntityId'])
+                ->setDetails($exception->getTraceAsString());
+            EngineBlock_ApplicationSingleton::getLog()->err("Could not connect to API for VO validation" . $exception->getMessage(), $additionalInfo);
+            return false;
+        }
+        return $result;
     }
 }
