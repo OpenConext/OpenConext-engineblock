@@ -72,24 +72,36 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
 
     }
 
+    public function getVoValidationUrl($configuredUrl, $vo, $collabPersonId, $entityId)
+    {
+        //"/vo/validate/{vo:.+}/{uid:.+}/{idp:.+}")
+        $slash = '/';
+        $configuredUrl = (substr($configuredUrl, -strlen($slash)) === $slash) ? $configuredUrl : $configuredUrl . $slash;
+        $configuredUrl .= urlencode($vo) . $slash;
+        $configuredUrl .= urlencode($collabPersonId) . $slash;
+        $configuredUrl .= urlencode($entityId);
+        return $configuredUrl;
+    }
+
     protected function _validateVoMembership($vo, $collabPersonId, $entityId)
     {
         //here we make a call to API to determine if the VO membership is valid
         $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->api->vovalidate;
 
-        $client = new Zend_Http_Client($conf->url);
+
+        $url = $this->getVoValidationUrl($conf->url, $vo, $collabPersonId, $entityId);
+
+        $client = $this->getHttpClient($url);
         $client->setConfig(array('timeout' => 15));
         try {
             $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
                     ->setAuth($conf->key, $conf->secret)
-                    ->setParameterGet('vo', urlencode($vo))
-                    ->setParameterGet('personId', urlencode($collabPersonId))
-                    ->setParameterGet('identityProviderEntityId', urlencode($entityId))
                     ->request('GET');
             $body = $client->getLastResponse()->getBody();
             $response = json_decode($body, true);
             $result = $response['value'];
         } catch (Exception $exception) {
+            var_dump($exception);exit;
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
                 ->setUserId($collabPersonId)
                 ->setIdp($entityId)
@@ -99,5 +111,14 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
             return false;
         }
         return $result;
+    }
+
+    /**
+     * @param $url The url for instantiating the Zend_Http_Client
+     * @return Zend_Http_Client
+     */
+    protected function getHttpClient($url)
+    {
+        return new Zend_Http_Client($url);
     }
 }
