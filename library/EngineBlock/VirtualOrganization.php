@@ -25,87 +25,56 @@
 
 class EngineBlock_VirtualOrganization
 {
-    const STEM_PREFIX = 'vo:';
-
-    protected $_id;
     protected $_data;
     protected $_db;
 
     public function __construct($id)
     {
-        $this->_id = $id;
-    }
-
-    public function setId($id)
-    {
-        $this->_id  = $id;
-        return $id;
-    }
-
-    public function getId()
-    {
-        return $this->_id;
+        $this->_load($id);
     }
 
     public function getType()
     {
-        $this->_load();
-        
         return $this->_data['vo_type'];
     }
 
-    public function getStem()
+    public function getGroupsIdentifiers()
     {
-        return self::STEM_PREFIX . $this->_id;
-    }
-
-    public function getGroups()
-    {
-        $this->_load();
-
-        // Get the records
         $db = $this->_getDbConnection();
         $stmt = $db->prepare(
             "SELECT vog.group_id
              FROM `virtual_organisation_group` vog
              WHERE vog.vo_id = ?"
         );
-        $stmt->execute(array($this->_id));
+        $stmt->execute(array($this->_getId()));
         $groupRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        // Map them to value objects
         $groups = array();
         foreach ($groupRecords as $groupRecord) {
-            $group = new EngineBlock_VirtualOrganization_Group();
-            $group->id = $groupRecord['group_id'];
-            $groups[] = $group;
+            $groups[] = $groupRecord['group_id'];
         }
         return $groups;
     }
 
-    public function getIdps()
+    public function getIdpIdentifiers()
     {
-        $this->_load();
-
         $db = $this->_getDbConnection();
         $stmt = $db->prepare(
             "SELECT voi.idp_id
              FROM `virtual_organisation_idp` voi
              WHERE voi.vo_id = ?"
         );
-        $stmt->execute(array($this->_id));
+        $stmt->execute(array($this->_getId()));
         $idpRecords = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         $idps = array();
         foreach ($idpRecords as $idpRecord) {
-            $idp = new EngineBlock_VirtualOrganization_Idp();
-            $idp->entityId = $idpRecord['idp_id'];
-            $idps[] = $idp;
+            $idps[] = $idpRecord['idp_id'];
         }
         return $idps;
     }
 
-    protected function _load()
+    protected function _load($id)
     {
         $db = $this->_getDbConnection();
         $stmt = $db->prepare(
@@ -114,12 +83,12 @@ class EngineBlock_VirtualOrganization
              WHERE vo.vo_id = ?
              LIMIT 0,1"
         );
-        $stmt->execute(array($this->_id));
+        $stmt->execute(array($id));
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
         
         if (empty($data)) {
             throw new EngineBlock_VirtualOrganization_VoIdentifierNotFoundException(
-                "No data found for Virtual Organization '{$this->_id}'"
+                "No data found for Virtual Organization '{$id}'"
             );
         }
 
@@ -136,5 +105,13 @@ class EngineBlock_VirtualOrganization
         $this->_db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
 
         return $this->_db;
+    }
+
+    /**
+     * @return id
+     */
+    protected function _getId()
+    {
+        return $this->_data['vo_id'];
     }
 }

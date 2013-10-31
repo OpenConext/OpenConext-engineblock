@@ -60,10 +60,16 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
 
         $this->_adapter->setVirtualOrganisationContext($vo);
 
+        // If in VO context, validate the user's membership
+
         EngineBlock_ApplicationSingleton::getLog()->debug("VO membership required: $vo");
 
-        $isMember = $this->_validateVoMembership($vo, $this->_collabPersonId, $this->_idpMetadata['EntityId'] );
-
+        $validator = $this->_getValidator();
+        $isMember = $validator->isMember(
+            $vo,
+            $this->_collabPersonId,
+            $this->_idpMetadata['EntityId']
+        );
         if (!$isMember) {
             throw new EngineBlock_Corto_Exception_UserNotMember("User not a member of VO $vo");
         }
@@ -72,53 +78,12 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
 
     }
 
-    public function getVoValidationUrl($configuredUrl, $vo, $collabPersonId, $entityId)
-    {
-        //"/vo/validate/{vo:.+}/{uid:.+}/{idp:.+}")
-        $slash = '/';
-        $configuredUrl = (substr($configuredUrl, -strlen($slash)) === $slash) ? $configuredUrl : $configuredUrl . $slash;
-        $configuredUrl .= urlencode($vo) . $slash;
-        $configuredUrl .= urlencode($collabPersonId) . $slash;
-        $configuredUrl .= urlencode($entityId);
-        return $configuredUrl;
-    }
-
-    protected function _validateVoMembership($vo, $collabPersonId, $entityId)
-    {
-        //here we make a call to API to determine if the VO membership is valid
-        $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->api->vovalidate;
-
-
-        $url = $this->getVoValidationUrl($conf->url, $vo, $collabPersonId, $entityId);
-
-        $client = $this->getHttpClient($url);
-        $client->setConfig(array('timeout' => 15));
-        try {
-            $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
-                    ->setAuth($conf->key, $conf->secret)
-                    ->request('GET');
-            $body = $client->getLastResponse()->getBody();
-            $response = json_decode($body, true);
-            $result = $response['value'];
-        } catch (Exception $exception) {
-            var_dump($exception);exit;
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
-                ->setUserId($collabPersonId)
-                ->setIdp($entityId)
-                ->setSp($this->_spMetadata['EntityId'])
-                ->setDetails($exception->getTraceAsString());
-            EngineBlock_ApplicationSingleton::getLog()->err("Could not connect to API for VO validation" . $exception->getMessage(), $additionalInfo);
-            return false;
-        }
-        return $result;
-    }
-
     /**
-     * @param $url The url for instantiating the Zend_Http_Client
-     * @return Zend_Http_Client
+     * @return EngineBlock_VirtualOrganization_Validator
      */
-    protected function getHttpClient($url)
+    protected function _getValidator()
     {
-        return new Zend_Http_Client($url);
+        return new EngineBlock_VirtualOrganization_Validator();
     }
+
 }
