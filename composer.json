@@ -1,10 +1,47 @@
 {
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
+    "require": {
+        "pimple/pimple": "1.0.2",
+        "simplesamlphp/simplesamlphp": "1.12.0-alpha",
+        "dbpatch/dbpatch": "1.1.1",
+        "zendframework/zendframework1":"1.10.9",
+        "apache/shindig":"1094333",
+        "kriswallsmith/assetic": "1.2.*@dev",
+        "mrclay/minify": "2.1.7",
+        "cssmin/cssmin": "3.0.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.19",
+        "phake/phake": "2.0.0-alpha2",
+        "behat/behat": "2.4.6",
+        "behat/mink": "1.5.0",
+        "behat/mink-extension": "1.1.4",
+        "behat/mink-goutte-driver": "1.0.9"
+    },
+    "scripts": {
+        "pre-autoload-dump": [
+            "bin/composer/dbpatch-post-install.sh",
+            "bin/composer/simplesamlphp-post-install.sh",
+            "bin/composer/zend-framework-post-install.sh",
+            "bin/composer/shindig-post-install.sh"
+        ]
+    },
     "repositories": [
         {
-            "type": "composer",
-            "url": "https://raw.github.com/cpliakas/simplesamlphp-composer/master"
+            "type": "package",
+            "package": {
+                "name": "simplesamlphp/simplesamlphp",
+                "version": "1.12.0-alpha",
+                "source": {
+                    "type": "svn",
+                    "url": "http://simplesamlphp.googlecode.com/svn",
+                    "reference": "trunk@3281"
+                },
+                "autoload": {
+                    "files": ["lib/_autoload.php"]
+                }
+            }
         },
         {
             "type":"package",
@@ -51,32 +88,6 @@
         }
 
     ],
-    "require": {
-        "pimple/pimple": "1.0.2",
-        "simplesamlphp/simplesamlphp": "1.9.0",
-        "dbpatch/dbpatch": "1.1.1",
-        "zendframework/zendframework1":"1.10.9",
-        "apache/shindig":"1094333",
-        "kriswallsmith/assetic": "1.2.*@dev",
-        "mrclay/minify": "2.1.7",
-        "cssmin/cssmin": "3.0.1"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "3.7.19",
-        "phake/phake": "2.0.0-alpha2",
-        "behat/behat": "2.4.6",
-        "behat/mink": "1.5.0",
-        "behat/mink-extension": "1.1.4",
-        "behat/mink-goutte-driver": "1.0.9"
-    },
-    "scripts": {
-        "pre-autoload-dump": [
-            "bin/composer/dbpatch-post-install.sh",
-            "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh",
-            "bin/composer/shindig-post-install.sh"
-        ]
-    },
     "autoload": {
         "psr-0": {
             "DbPatch_": "vendor/dbpatch/dbpatch/src/",

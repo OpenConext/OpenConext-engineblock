@@ -14,6 +14,7 @@ class EngineBlock_Corto_ProxyServer
     const MESSAGE_TYPE_RESPONSE = 'SAMLResponse';
 
     const VO_CONTEXT_PFX          = 'voContext';
+    const VO_CONTEXT_IMPLICIT     = 'VoContextImplicit';
 
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
@@ -739,13 +740,7 @@ class EngineBlock_Corto_ProxyServer
             '_Version'      => '2.0',
             '_IssueInstant' => $now,
             '_InResponseTo' => $request['_ID'],
-
-            'saml:Issuer' => array('__v' => $this->getUrl('idpMetadataService', $destinationID, $request)),
-            'samlp:Status' => array(
-                'samlp:StatusCode' => array(
-                    '_Value' => 'urn:oasis:names:tc:SAML:2.0:status:Success',
-                ),
-            ),
+            '_Consent'      => null,
         );
 
         // the original request was unsolicited, remove InResponseTo attribute
@@ -762,6 +757,15 @@ class EngineBlock_Corto_ProxyServer
                 "No Destination in request or metadata for: $destinationID"
             );
         }
+
+        $response['saml:Issuer'] = array(
+            '__v' => $this->getUrl('idpMetadataService', $destinationID, $request)
+        );
+        $response['samlp:Status'] = array(
+            'samlp:StatusCode' => array(
+                '_Value' => 'urn:oasis:names:tc:SAML:2.0:status:Success',
+            )
+        );
 
         return $response;
     }
@@ -1001,7 +1005,11 @@ class EngineBlock_Corto_ProxyServer
             );
         }
 
-        $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
+        if (isset($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'])) {
+            $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
+        } else {
+            $responseAssertionAttributes = array();
+        }
 
         // Take the attributes out
         $responseAttributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
@@ -1288,11 +1296,16 @@ class EngineBlock_Corto_ProxyServer
      * Delta 0 gives current date and time, delta 3600 is +1 hour, delta -3600 is -1 hour.
      *
      * @param int $deltaSeconds
+     * @param int|null $time Current time to add delta to.
      * @return string
      */
-    public function timeStamp($deltaSeconds = 0)
+    public function timeStamp($deltaSeconds = 0, $time = null)
     {
-        return gmdate('Y-m-d\TH:i:s\Z', time() + $deltaSeconds);
+        $time = (int) $time;
+        if ($time === 0) {
+            $time = time();
+        }
+        return gmdate('Y-m-d\TH:i:s\Z', $time + $deltaSeconds);
     }
 
     public function getNewId()

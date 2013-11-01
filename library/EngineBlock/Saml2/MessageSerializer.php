@@ -4,7 +4,7 @@
  *
  * @todo write test
  */
-class EngineBlock_Saml_MessageSerializer
+class EngineBlock_Saml2_MessageSerializer
 {
     /**
      * @param SAML2_Message $samlMessage

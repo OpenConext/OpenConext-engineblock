@@ -30,7 +30,13 @@ class FeatureContext extends MinkContext
         // Set host url for functional testing
         $engineblockApp = EngineBlock_ApplicationSingleton::getInstance();
         $engineblockApp->bootstrap();
-        $engineBlockLocation = $engineblockApp->getConfiguration()->get('functionalTesting')->get('engineBlockUrl');
+        $config = $engineblockApp->getConfiguration()->get('functionalTesting');
+        if (!$config) {
+            throw new EngineBlock_Exception(
+                'No functional testing configuration!'
+            );
+        }
+        $engineBlockLocation = $config->get('engineBlockUrl');
         $parsedUrl = parse_url($engineBlockLocation);
         $this->hostUrl = 'https://' . $parsedUrl['host'];
     }

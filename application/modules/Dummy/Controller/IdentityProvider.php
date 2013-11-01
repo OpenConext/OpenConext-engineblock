@@ -24,19 +24,16 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-// @todo see if composer can replace these autoloaders
-require_once ENGINEBLOCK_FOLDER_VENDOR . 'simplesamlphp/simplesamlphp/lib/_autoload.php';
-
 class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
         $this->setTestCaseFromRequest($this->_getRequest());
 
-        $authnRequestFactory = new EngineBlock_Saml_AuthnRequestFactory();
+        $authnRequestFactory = new EngineBlock_Saml2_AuthnRequestFactory();
         $authnRequest = $authnRequestFactory->createFromHttpRequest($this->_getRequest());
 
-        $responseFactory = new EngineBlock_Saml_ResponseFactory();
+        $responseFactory = new EngineBlock_Saml2_ResponseFactory();
         $idpConfig = Dummy_Model_DiContainer::getInstance()->getSimpleSamlPhpConfig();
 
         $testCase = $this->factoryTestCaseFromSession($_SESSION);
@@ -44,7 +41,7 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
             $idpConfig = $testCase->decorateConfig($idpConfig);
         }
 
-            // Required attributes
+        // Required attributes
         $nameId = 'johndoe';
         $issuer = $_SERVER['SCRIPT_URI'];
         $attributes = array(

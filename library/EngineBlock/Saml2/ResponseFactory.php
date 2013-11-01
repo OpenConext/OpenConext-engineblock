@@ -4,7 +4,7 @@
  *
  * @todo write test
  */
-class EngineBlock_Saml_ResponseFactory
+class EngineBlock_Saml2_ResponseFactory
 {
     /**
      * @todo make this generic
@@ -65,7 +65,11 @@ class EngineBlock_Saml_ResponseFactory
     {
         // @todo find out why multiple assertions can exist
         $assertions = $response->getAssertions();
-        sspmod_saml_Message::addSign($idpConfig, null, $assertions[0]);
+        sspmod_saml_Message::addSign(
+            $idpConfig,
+            SimpleSAML_Configuration::loadFromArray(array()),
+            $assertions[0]
+        );
         // Signing of message is not required so disabled for now
         // sspmod_saml_Message::addSign($idpConfig, null, $response);
     }
@@ -79,7 +83,7 @@ class EngineBlock_Saml_ResponseFactory
         $parameter = $this->getParameterFromHttpRequest($httpRequest);
         $responseXml = $this->decodeParameter($parameter);
 
-        $serializer = new EngineBlock_Saml_MessageSerializer();
+        $serializer = new EngineBlock_Saml2_MessageSerializer();
         return $serializer->deserialize($responseXml, 'SAML2_Response');
     }
 

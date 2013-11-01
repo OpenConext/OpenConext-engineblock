@@ -46,8 +46,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
 
             // Change the destiny of the received response
-            $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']          = $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo'];
-            $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination']           = $firstProcessingEntity['Location'];
+            $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']  = $receivedResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo'];
+            $newResponse[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination']   = $firstProcessingEntity['Location'];
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding']  = $firstProcessingEntity['Binding'];
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Return']           = $this->_server->getUrl('processedAssertionConsumerService');
             $newResponse[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['paramname']        = 'SAMLResponse';

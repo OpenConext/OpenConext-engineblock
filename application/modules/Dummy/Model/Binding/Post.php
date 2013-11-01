@@ -13,16 +13,16 @@ class Dummy_Model_Binding_Post
     private $parameterName;
 
     /**
-     * @var EngineBlock_Saml_MessageSerializer
+     * @var EngineBlock_Saml2_MessageSerializer
      */
     private $messageSerializer;
 
     /**
      * @param SAML2_Message $samlMessage
      * @param string $parameterName
-     * @param EngineBlock_Saml_MessageSerializer $messageSerializer
+     * @param EngineBlock_Saml2_MessageSerializer $messageSerializer
      */
-    public function __construct(SAML2_Message $samlMessage, $parameterName, EngineBlock_Saml_MessageSerializer $messageSerializer)
+    public function __construct(SAML2_Message $samlMessage, $parameterName, EngineBlock_Saml2_MessageSerializer $messageSerializer)
     {
         $this->samlMessage = $samlMessage;
         $this->parameterName = $parameterName;
