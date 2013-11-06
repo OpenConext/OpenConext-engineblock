@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4d909a9de91716c5d1fb89942e4d9881",
+    "hash": "5a77d2198396cf0ed873de3b0a564dd0",
     "packages": [
         {
             "name": "apache/shindig",
@@ -16,7 +16,7 @@
             "type": "library",
             "autoload": {
                 "classmap": [
-                    "external",
+                    "external/OAuth",
                     "src"
                 ]
             }
@@ -180,7 +180,7 @@
             ],
             "authors": [
                 {
-                    "name": "Steve Clay",
+                    "name": "Stephen Clay",
                     "email": "steve@mrclay.org",
                     "homepage": "http://www.mrclay.org/",
                     "role": "Developer"
@@ -191,17 +191,66 @@
             "time": "2013-07-23 19:58:28"
         },
         {
+            "name": "openid/php-openid",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openid/php-openid.git",
+                "reference": "ee669c6a9d4d95b58ecd9b6945627276807694fb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openid/php-openid/zipball/ee669c6a9d4d95b58ecd9b6945627276807694fb",
+                "reference": "ee669c6a9d4d95b58ecd9b6945627276807694fb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-dom": "*",
+                "ext-gmp": "*",
+                "php": ">=4.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Auth"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "include-path": [
+                "."
+            ],
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "JanRain Inc.",
+                    "homepage": "http://www.openidenabled.com"
+                }
+            ],
+            "description": "OpenID library for PHP5",
+            "homepage": "http://github.com/openid/php-openid",
+            "keywords": [
+                "Authentication",
+                "OpenId",
+                "auth",
+                "yadis"
+            ],
+            "time": "2013-10-03 21:21:20"
+        },
+        {
             "name": "pimple/pimple",
             "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Pimple.git",
-                "reference": "v1.0.2"
+                "reference": "ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/v1.0.2",
-                "reference": "v1.0.2",
+                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94",
+                "reference": "ae11e57e8c2bb414b2ff93396dbbfc0eb92feb94",
                 "shasum": ""
             },
             "require": {
@@ -237,19 +286,162 @@
             "time": "2013-03-08 08:21:40"
         },
         {
-            "name": "simplesamlphp/simplesamlphp",
-            "version": "1.12.0-alpha",
+            "name": "psr/log",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/log.git",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Psr\\Log\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for logging libraries",
+            "keywords": [
+                "log",
+                "psr",
+                "psr-3"
+            ],
+            "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "robrichards/xmlseclibs",
+            "version": "1.3.1",
             "source": {
                 "type": "svn",
-                "url": "http://simplesamlphp.googlecode.com/svn",
-                "reference": "trunk@3281"
+                "url": "http://xmlseclibs.googlecode.com/svn",
+                "reference": "trunk@50"
             },
             "type": "library",
             "autoload": {
                 "files": [
-                    "lib/_autoload.php"
+                    "xmlseclibs.php"
                 ]
             }
+        },
+        {
+            "name": "simplesamlphp/saml2",
+            "version": "v0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplesamlphp/saml2.git",
+                "reference": "a8d493c6eef80b623f3dd77ef04c7cb71468f951"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/a8d493c6eef80b623f3dd77ef04c7cb71468f951",
+                "reference": "a8d493c6eef80b623f3dd77ef04c7cb71468f951",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "pimple/pimple": "v1.0.2",
+                "psr/log": "1.0.0",
+                "robrichards/xmlseclibs": "1.3.*"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "~1.5",
+                "phpunit/phpunit": "~3.7",
+                "sebastian/phpcpd": "~1.4",
+                "sensiolabs/security-checker": "~1.1",
+                "squizlabs/php_codesniffer": "~1.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SAML2_": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Åkre Solberg",
+                    "email": "andreas.solberg@uninett.no"
+                }
+            ],
+            "description": "SAML2 PHP library from SimpleSAMLphp",
+            "time": "2013-11-06 09:22:10"
+        },
+        {
+            "name": "simplesamlphp/simplesamlphp",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simplesamlphp/simplesamlphp-test2.git",
+                "reference": "c9ee328a6a7aec50cb6c9ed0ab58847e3fa6b5e7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp-test2/zipball/c9ee328a6a7aec50cb6c9ed0ab58847e3fa6b5e7",
+                "reference": "c9ee328a6a7aec50cb6c9ed0ab58847e3fa6b5e7",
+                "shasum": ""
+            },
+            "require": {
+                "openid/php-openid": "dev-master#ee669c6a9d4d95b58ecd9b6945627276807694fb as 2.2.2",
+                "php": ">=5.3.0",
+                "simplesamlphp/saml2": "0.1.0"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-0": {
+                    "SimpleSAML_": "lib/"
+                },
+                "files": [
+                    "lib/_autoload.php"
+                ]
+            },
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Åkre Solberg",
+                    "email": "andreas.solberg@uninett.no"
+                },
+                {
+                    "name": "Olav Morken",
+                    "email": "olav.morken@uninett.no"
+                }
+            ],
+            "description": "A PHP implementation of SAML 2.0 service provider and identity provider functionality. And is also compatible with Shibboleth 1.3 and 2.0.",
+            "homepage": "http://simplesamlphp.org",
+            "keywords": [
+                "aselect",
+                "idp",
+                "oauth",
+                "openid",
+                "saml2",
+                "shibboleth",
+                "sp",
+                "ws-federation"
+            ],
+            "support": {
+                "issues": "https://code.google.com/p/simplesamlphp/issues/list",
+                "source": "https://code.google.com/p/simplesamlphp"
+            },
+            "time": "2013-11-06 15:12:57"
         },
         {
             "name": "symfony/process",
@@ -1904,11 +2096,17 @@
         }
     ],
     "aliases": [
-
+        {
+            "alias": "2.2.2",
+            "alias_normalized": "2.2.2.0",
+            "version": "9999999-dev",
+            "package": "openid/php-openid"
+        }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "simplesamlphp/simplesamlphp": 15,
+        "simplesamlphp/simplesamlphp": 20,
+        "openid/php-openid": 20,
         "kriswallsmith/assetic": 20,
         "phake/phake": 15
     },
