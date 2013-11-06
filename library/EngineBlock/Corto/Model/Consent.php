@@ -2,18 +2,35 @@
 
 class EngineBlock_Corto_Model_Consent
 {
+    /**
+     * @var string
+     */
     private $_tableName;
+
+    /**
+     * @var bool
+     */
     private $_mustStoreValues;
+
     private $_response;
+    /**
+     * @var array
+     */
     private $_responseAttributes;
 
-    /** @var EngineBlock_Corto_Filter_Command_Factory */
+    /**
+     * @var EngineBlock_Corto_Filter_Command_Factory
+     */
     private $_filterCommandFactory;
 
-    /** @var EngineBlock_Database_ConnectionFactory */
+    /**
+     * @var EngineBlock_Database_ConnectionFactory
+     */
     private $_databaseConnectionFactory;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $_filteredResponseAttributes;
 
     /**

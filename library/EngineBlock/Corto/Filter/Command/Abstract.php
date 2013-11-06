@@ -75,6 +75,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @return \EngineBlock_Corto_Filter_Command_Abstract
+     * @return $this
      */
     public function stopFiltering()
     {
@@ -84,6 +85,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param \EngineBlock_Corto_Adapter $adapter
+     * @return $this
      */
     public function setAdapter(EngineBlock_Corto_Adapter $adapter)
     {
@@ -93,6 +95,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param array $idpMetadata
+     * @return $this
      */
     public function setIdpMetadata(array $idpMetadata)
     {
@@ -102,6 +105,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param array $request
+     * @return $this
      */
     public function setRequest(array $request)
     {
@@ -111,6 +115,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param array $response
+     * @return $this
      */
     public function setResponse(array $response)
     {
@@ -120,6 +125,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param array $responseAttributes
+     * @return $this
      */
     public function setResponseAttributes(array $responseAttributes)
     {
@@ -129,6 +135,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param array $spMetadata
+     * @return $this
      */
     public function setSpMetadata(array $spMetadata)
     {
@@ -138,6 +145,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param string $collabPersonId
+     * @return $this
      */
     public function setCollabPersonId($collabPersonId)
     {
