@@ -4,6 +4,7 @@
     "require": {
         "pimple/pimple": "1.0.2",
         "simplesamlphp/simplesamlphp": "dev-master",
+        "openid/php-openid": "dev-master#ee669c6a9d4d95b58ecd9b6945627276807694fb as 2.2.2",
         "dbpatch/dbpatch": "1.1.1",
         "zendframework/zendframework1":"1.10.9",
         "apache/shindig":"1094333",
@@ -30,15 +31,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/relaxnow/simplesamlphp"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/simplesamlphp-test/libsimplesaml"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/simplesamlphp-test/saml2"
+            "url": "https://github.com/simplesamlphp/simplesamlphp-test2"
         },
         {
             "type":"package",
