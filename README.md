@@ -261,18 +261,6 @@ Use these URLs to test your Engineblock instance:
 [https://static.example.com][]
 
 
-### Optional: Install attribute-manipulations ###
-
-EngineBlock has the concept of Attribute Manipulations, which allows you to manipulations per Service Provider on
-the attributes and response released to that Service Provider.
-
-If you want to use attribute-manipulations, simply make a directory called 'attribute-manipulations' in the same folder
-that EngineBlock is located in.
-
-For more documentation please see 
-[https://svn.surfnet.nl/svn/coin-eb/attribute-manipulations/trunk/][SURFnets attribute manipulations].
-
-
 ## Updating ##
 
 It is recommended practice that you deploy engineblock in a directory that includes the version number and use a
