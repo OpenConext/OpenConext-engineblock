@@ -62,7 +62,7 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
 
         // If in VO context, validate the user's membership
 
-        EngineBlock_ApplicationSingleton::getLog()->debug("VO membership required: $vo");
+        EngineBlock_ApplicationSingleton::getLog()->debug("VO $vo membership required");
 
         $validator = $this->_getValidator();
         $isMember = $validator->isMember(
