@@ -37,9 +37,6 @@ class EngineBlock_Corto_ProxyServer
 
     protected $_voContext = null;
 
-    protected $_requestArray;
-    protected $_responseArray;
-
     protected $_server;
     protected $_systemLog;
     protected $_sessionLog;
