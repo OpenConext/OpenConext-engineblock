@@ -170,7 +170,8 @@ var Discover = function () {
             if ($('#help:visible').length > 0 && $.trim($('#help:visible').html()) !== "") {
                 return;
             }
-            $.get('/authentication/idp/help?lang=' + library.lang, function (data) {
+            var helpType = $('#help_nav a').attr('data-help-type');
+            $.get('/authentication/idp/help-' + helpType + '?lang=' + library.lang, function (data) {
                 $("#content").hide(speed);
                 $("#requestAccess").hide(speed);
 
