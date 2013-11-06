@@ -198,21 +198,6 @@ Also set an alias for simplesaml for the third virtual host:
 
     Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
 
-4th virtual host:
-
-    ServerName      vomanage.[dev|test|acc|prod].surfconext.nl:443
-    DocumentRoot    /opt/www/engineblock/www/vomanage
-
-Also for the 4th virtual host (VO attribute management interface) you should specify an extra *RewriteCond*.
-Add it behind the last *RewriteCond* descriptive (but before the *RewriteRule* descriptive) in your virtual host
-configuration:
-
-    RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
-
-Also set an alias for simplesaml for the fourth virtual host:
-
-    Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
-
 ### Virtual host for static files ###
 
 Engineblock needs a fourth virtual host for media, style and script files, below an example virtual host configuration

@@ -176,7 +176,12 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         }
     }
 
-    public function helpAction($argument = null)
+    public function helpConsentAction($argument = null)
+    {
+
+    }
+
+    public function helpDiscoverAction($argument = null)
     {
 
     }
