@@ -32,16 +32,16 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     public function serve($serviceName)
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
-        $_SESSION['consent'][$response['_ID']]['response'] = $response;
+        $_SESSION['consent'][$response->getId()]['response'] = $response;
 
-        $attributes = $this->_xmlConverter->attributesToArray($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']);
+        $attributes = $response->getAssertion()->getAttributes();
 
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
 
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
         $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
 
-        $identityProviderEntityId = $response['__']['OriginalIssuer'];
+        $identityProviderEntityId = $response->getOriginalIssuer();
         $idpEntityMetadata = $this->_server->getRemoteEntity($identityProviderEntityId);
 
         // Flush log if SP or IdP has additional logging enabled
@@ -52,10 +52,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $commonName = $attributes['urn:mace:dir:attribute-def:cn'][0];
 
         if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
-            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
+            $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
 
-            $response['_Destination'] = $response['__']['Return'];
-            $response['__']['ProtocolBinding'] = 'INTERNAL';
+            $response->setDestination($response->getReturn());
+            $response->setDeliverByBinding('INTERNAL');
 
             $this->_server->getBindingsModule()->send(
                 $response,
@@ -67,10 +67,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
         $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
         if ($priorConsent) {
-            $response['_Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
+            $response->setConsent(SAML2_Const::CONSENT_PRIOR);
 
-            $response['_Destination'] = $response['__']['Return'];
-            $response['__']['ProtocolBinding'] = 'INTERNAL';
+            $response->setDestination($response->getReturn());
+            $response->setDeliverByBinding('INTERNAL');
 
             $this->_server->getBindingsModule()->send(
                 $response,
@@ -83,7 +83,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             'consent',
             array(
                 'action'    => $this->_server->getUrl('processConsentService'),
-                'ID'        => $response['_ID'],
+                'ID'        => $response->getId(),
                 'attributes'=> $consent->getFilteredResponseAttributes(),
                 'sp'        => $spEntityMetadata,
                 'idp'       => $idpEntityMetadata,
@@ -104,20 +104,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
          * Complex refactoring is required, but not for now. Decided is to - for now - not show the nameId on the consent screen. If the setNameId is done
          * before consent we can uncomment the following code.
          */
-
-        $nameId = null;
-//        if (isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'])) {
-//            $format = $response['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'];
-//            switch ($format) {
-//                case EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED:
-//                case EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT:
-//                case EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED:
-//                    if (isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'])) {
-//                        $nameId = $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
-//                    }
-//            }
-//        }
-        return $nameId;
+        return;
 
     }
 

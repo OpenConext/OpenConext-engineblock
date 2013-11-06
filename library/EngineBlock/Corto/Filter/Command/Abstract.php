@@ -36,7 +36,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     protected $_adapter;
 
     /**
-     * @var array
+     * @var EngineBlock_Saml2_ResponseAnnotationDecorator
      */
     protected $_response;
 
@@ -46,7 +46,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     protected $_responseAttributes;
 
     /**
-     * @var array
+     * @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      */
     protected $_request;
 
@@ -104,20 +104,20 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param array $request
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @return $this
      */
-    public function setRequest(array $request)
+    public function setRequest(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         $this->_request = $request;
         return $this;
     }
 
     /**
-     * @param array $response
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @return $this
      */
-    public function setResponse(array $response)
+    public function setResponse(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
         $this->_response = $response;
         return $this;
@@ -144,7 +144,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param string $collabPersonId
+     * @param $collabPersonId
      * @return $this
      */
     public function setCollabPersonId($collabPersonId)

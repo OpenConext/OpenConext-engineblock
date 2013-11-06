@@ -12,6 +12,9 @@ class EngineBlock_Corto_Model_Consent
      */
     private $_mustStoreValues;
 
+    /**
+     * @var EngineBlock_Saml2_ResponseAnnotationDecorator
+     */
     private $_response;
     /**
      * @var array
@@ -34,9 +37,9 @@ class EngineBlock_Corto_Model_Consent
     private $_filteredResponseAttributes;
 
     /**
-     * @param $tableName
-     * @param $mustStoreValues
-     * @param array $response
+     * @param string $tableName
+     * @param bool $mustStoreValues
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @param array $responseAttributes
      * @param EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory
      * @param EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
@@ -44,7 +47,7 @@ class EngineBlock_Corto_Model_Consent
     public function __construct(
         $tableName,
         $mustStoreValues,
-        array $response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array $responseAttributes,
         EngineBlock_Corto_Filter_Command_Factory $filterCommandFactory,
         EngineBlock_Database_ConnectionFactory $databaseConnectionFactory
@@ -190,7 +193,7 @@ class EngineBlock_Corto_Model_Consent
 
     protected function _getConsentUid()
     {
-        return $this->_response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
+        return $this->_response->getNameIdValue();
     }
 
     protected function _getAttributesHash($attributes)

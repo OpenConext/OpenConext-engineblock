@@ -49,26 +49,29 @@ abstract class EngineBlock_Corto_Filter_Abstract
      * @return void
      */
     public function filter(
-        array &$response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         array &$responseAttributes,
-        array $request,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         array $spEntityMetadata,
         array $idpEntityMetadata
     )
     {
+        /** @var SAML2_AuthnRequest $request */
         // Note that IDs are only unique per SP... we hope...
-        $sessionKey = $spEntityMetadata['EntityId'] . '>' . $request['_ID'];
+        $responseNameId = $response->getAssertion()->getNameId();
+
+        $sessionKey = $spEntityMetadata['EntityId'] . '>' . $request->getId();
         if (isset($_SESSION[$sessionKey]['collabPersonId'])) {
             $collabPersonId = $_SESSION[$sessionKey]['collabPersonId'];
         }
-        else if (isset($response['__']['collabPersonId'])) {
-            $collabPersonId = $response['__']['collabPersonId'];
+        else if ($response->getCollabPersonId()) {
+            $collabPersonId = $response->getCollabPersonId();
         }
         else if (isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0])) {
             $collabPersonId = $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0];
         }
-        else if (isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'])) {
-            $collabPersonId = $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
+        else if (!empty($responseNameId['Value'])) {
+            $collabPersonId = $responseNameId['Value'];
         }
         else {
             $collabPersonId = null;

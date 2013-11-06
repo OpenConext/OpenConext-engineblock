@@ -20,8 +20,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
         $originalRequest = $this->factoryOriginalRequest();
         $idpEntityId = 'testIdp';
-        $scope = array();
-        $enhancedRequest = $proxyServer->createEnhancedRequest($originalRequest, $idpEntityId, $scope);
+        $enhancedRequest = $proxyServer->createEnhancedRequest($originalRequest, $idpEntityId);
 
         $this->assertNotContains('_Format', $enhancedRequest['samlp:NameIDPolicy']);
     }
@@ -36,8 +35,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
         $originalRequest = $this->factoryOriginalRequest();
         $idpEntityId = 'testIdp';
-        $scope = array();
-        $enhancedRequest = $proxyServer->createEnhancedRequest($originalRequest, $idpEntityId, $scope);
+        $enhancedRequest = $proxyServer->createEnhancedRequest($originalRequest, $idpEntityId);
 
         $this->assertEquals($enhancedRequest['samlp:NameIDPolicy']['_Format'], 'fooFormat');
     }

@@ -184,7 +184,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['AssertionConsumerService:0:Location'])) {
             // Transparant issuer
             if (isset($serviceRegistryEntity['coin:transparant_issuer'])) {
-                $cortoEntity['TransparantIssuer'] = $serviceRegistryEntity['coin:transparant_issuer'];
+                $cortoEntity['TransparentIssuer'] = $serviceRegistryEntity['coin:transparant_issuer'];
             }
 
             // implicit vo

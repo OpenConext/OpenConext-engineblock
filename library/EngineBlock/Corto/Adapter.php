@@ -135,7 +135,7 @@ class EngineBlock_Corto_Adapter
     /**
      * Get the SAML2 Authn Request
      *
-     * @return array $request
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      */
     protected function _getRequestInstance() {
         // Use the binding module to get the request
@@ -268,25 +268,15 @@ class EngineBlock_Corto_Adapter
      */
     protected function _getRequestScopingRequesterIds() {
         $request = $this->_getRequestInstance();
-        $requesterIds = array();
-        if (!empty($request['samlp:Scoping']['samlp:RequesterID'])) {
-            foreach ($request['samlp:Scoping']['samlp:RequesterID'] as $requesterIdElement) {
-                $requesterIds[] = $requesterIdElement['__v'];
-            }
-            return $requesterIds;
-        }
-        else {
-            return $requesterIds;
-        }
+        /** @var SAML2_AuthnRequest $request */
+        return $request->getRequesterID();
     }
 
     /**
      * @return string $issuerSpEntityId
      */
     protected function _getIssuerSpEntityId() {
-        $request = $this->_getRequestInstance();
-        $issuerSpEntityId = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-        return $issuerSpEntityId;
+        return $this->_getRequestInstance()->getIssuer();
     }
 
     /**
@@ -353,10 +343,6 @@ class EngineBlock_Corto_Adapter
                 'public'    => $application->getConfiguration()->encryption->key->public,
                 'private'   => $application->getConfiguration()->encryption->key->private,
             ),
-            // Note that we use an input filter because consent requires a persistent NameID
-            // and we only get that after provisioning
-            'infilter'  => array(new EngineBlock_Corto_Filter_Input($this), 'filter'),
-            'outfilter' => array(new EngineBlock_Corto_Filter_Output($this), 'filter'),
             'Processing' => array(
                 'Consent' => array(
                     'Binding'  => 'INTERNAL',
