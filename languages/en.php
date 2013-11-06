@@ -142,43 +142,6 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_consent'                   => 'Granted consent',
     'profile_attribute_release'         => 'The following attributes are released to this Service Provider:',
 
-    //Profile
-    'vomanage_header'                   => 'SURFconext - VO User Attributes',
-    'vomanage_sub_header'               => 'VO User Attributes',
-    'vomanage_index_intro'              => 'Manage the user attributes of a Virtual Organisation.',
-    'vomanage_index_add'                => 'Add new',
-    'vomanage_index_edit'               => 'Edit',
-    'vomanage_index_delete'             => 'Delete',
-    'vomanage_index_selectvo'           => 'Select another VO',
-    'vomanage_selectvo_intro'           => 'Before accessing the user attributes, select a Virtual Organisation first.',
-    'vomanage_selectvo_header'          => 'Available Virtual Organisations:',
-    'vomanage_selectvo_submit'          => 'Select',
-    'vomanage_add_intro'                => 'Create a new user attribute.',
-    'vomanage_add_newvalue'             => 'Add',
-    'vomanage_add_save'                 => 'Save',
-    'vomanage_add_cancel'               => 'Cancel',
-    'vomanage_edit_intro'               => 'Edit a user attribute.',
-    'vomanage_edit_save'                => 'Save',
-    'vomanage_edit_cancel'              => 'Cancel',
-    'vomanage_delete_intro'             => 'Delete a user attribute.',
-    'vomanage_delete_question'          => 'Are you sure you want to delete this user attribute?',
-    'vomanage_delete_back'              => 'Back to index',
-    'vomanage_delete_success'           => 'The user attribute has been deleted succesfully.',
-    'vomanage_delete_fail'              => 'An error occurred while deleting the user attribute.',
-    'vomanage_save_success'             => 'The user attribute has been stored succesfully.',
-    'vomanage_save_fail'                => 'An error occurred while saving the user attribute.',
-    'vomanage_save_back'                => 'Back to index',
-    'vomanage_of'                       => 'of',
-    'vomanage_yes'                      => 'Yes',
-    'vomanage_no'                       => 'No',
-    'vomanage_novalues'                 => '- no values -',
-    // form errors
-    'Field is obligatory, but no input given' => 'Obligatory field',
-    'xor_error'                         => 'One of these fields must contain a valid value.',
-    // SQL errors
-    '23000'                             => 'Error: This combination already exists.',
-
-
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'You are almost done..',

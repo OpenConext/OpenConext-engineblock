@@ -142,44 +142,6 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_consent'                   => 'Consent gegeven',
     'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
 
-    //VO Manage
-    'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',
-    'vomanage_sub_header'               => 'VO Gebruikersattributen',
-    'vomanage_index_intro'              => 'Beheer de gebruikersattributen van een Virtuele Organisatie.',
-    'vomanage_index_add'                => 'Toevoegen',
-    'vomanage_index_edit'               => 'Bewerken',
-    'vomanage_index_delete'             => 'Verwijderen',
-    'vomanage_index_selectvo'           => 'Andere VO selecteren',
-    'vomanage_selectvo_intro'           => 'Selecteer eerst een Virtuele Organisatie.',
-    'vomanage_selectvo_header'          => 'Beschikbare Virtuele Organisaties:',
-    'vomanage_selectvo_submit'          => 'Selecteer',
-    'vomanage_add_intro'                => 'Maak een nieuw gebruikersattribuut aan.',
-    'vomanage_add_newvalue'             => 'Toevoegen',
-    'vomanage_add_save'                 => 'Opslaan',
-    'vomanage_add_cancel'               => 'Annuleren',
-    'vomanage_edit_intro'               => 'Bewerk een gebruikersattribuut.',
-    'vomanage_edit_save'                => 'Opslaan',
-    'vomanage_edit_cancel'              => 'Annuleren',
-    'vomanage_delete_intro'             => 'Verwijder een gebruikersattribuut.',
-    'vomanage_delete_question'          => 'Weet je zeker dat je dit attribuut wilt verwijderen?',
-    'vomanage_delete_back'              => 'Terug naar het overzicht',
-    'vomanage_delete_success'           => 'Het gebruikersattribuut is succesvol verwijderd.',
-    'vomanage_delete_fail'              => 'Er is een fout opgetreden bij het verwijderen van het gebruikersattribuut.',
-    'vomanage_save_success'             => 'Het gebruikersattribuut is succesvol opgeslagen.',
-    'vomanage_save_fail'                => 'Er is een fout opgetreden bij het opslaan van het gebruikersattribuut.',
-    'vomanage_save_back'                => 'Terug naar het overzicht',
-    'vomanage_of'                       => 'van',
-    'vomanage_yes'                      => '',
-    'vomanage_no'                       => '',
-    'vomanage_novalues'                 => '- geen waarden -',
-    // form errors
-    'Field is obligatory, but no input given' => 'Verplicht veld',
-    'xor_error'                         => 'Eén van deze velden moet een geldige waarde bevatten.',
-    // SQL errors
-    '23000'                             => 'Fout: Deze combinatie bestaat al.',
-
-
-
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'U bent bijna klaar..',

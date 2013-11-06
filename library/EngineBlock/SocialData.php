@@ -48,11 +48,6 @@ class EngineBlock_SocialData
     protected $_fieldMapper = NULL;
 
     /**
-     * @var EngineBlock_AttributeAggregator
-     */
-    protected $_attributeAggregator;
-
-    /**
      * @var String
      */
     protected $_appId = NULL;
@@ -227,14 +222,6 @@ class EngineBlock_SocialData
             $person = array_shift($persons);
             $person = $fieldMapper->ldapToSocialData($person, $socialAttributes);
 
-            if ($voId && $spEntityId) {
-                $person = $this->_getAttributeAggregator($voId, $spEntityId)->aggregateFor(
-                    $person,
-                    $person['id'],
-                    EngineBlock_AttributeAggregator::FORMAT_OPENSOCIAL
-                );
-            }
-
             // Make sure we only include attributes that we are allowed to share
             $person = $this->_enforceArp($person);
 
@@ -378,23 +365,6 @@ class EngineBlock_SocialData
             $this->_groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor($userId);
         }
         return $this->_groupProvider;
-    }
-
-    /**
-     * @param $voId
-     * @param $spEntityId
-     * @return EngineBlock_AttributeAggregator
-     */
-    protected function _getAttributeAggregator($voId, $spEntityId)
-    {
-        if (!isset($this->_attributeAggregator)) {
-            $this->_attributeAggregator = new EngineBlock_AttributeAggregator(
-                array(
-                     new EngineBlock_Attributes_Provider_VoManage($voId, $spEntityId),
-                )
-            );
-        }
-        return $this->_attributeAggregator;
     }
 
     /**
