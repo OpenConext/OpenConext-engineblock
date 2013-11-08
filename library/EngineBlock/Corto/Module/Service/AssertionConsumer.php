@@ -11,7 +11,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 
         // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRemoteEntity($receivedRequest->getIssuer());
-        $idp = $this->_server->getRemoteEntity(EngineBlock_SamlHelper::extractIssuerFromMessage($receivedResponse));
+        $idp = $this->_server->getRemoteEntity($receivedResponse->getIssuer());
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }

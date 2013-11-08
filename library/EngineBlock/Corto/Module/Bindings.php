@@ -95,10 +95,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        /**
-         * Decorator proxies all unknown calls to AuthnRequest
-         * @var SAML2_AuthnRequest $ebRequest
-         */
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
         // Make sure the request from the sp has an Issuer
@@ -135,7 +131,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if ($wantRequestsSigned) {
             // Check the Signature on the Request, if there is no signature, or verification fails
             // throw an exception.
-            if (!sspmod_saml_Message::checkSign($sspSpMetadata, $ebRequest->getSspRequest())) {
+            if (!sspmod_saml_Message::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException(
                     'Validation of received messages enabled, but no signature found on message.'
                 );
@@ -321,10 +317,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     protected function _receiveMessageFromInternalBinding($key)
     {
-        if (!isset($this->_internalBindingMessages[$key]) || !is_array($this->_internalBindingMessages[$key])) {
+        if (!isset($this->_internalBindingMessages[$key])) {
             return false;
         }
-
         return $this->_internalBindingMessages[$key];
     }
 
@@ -362,7 +357,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             return;
         }
 
-        if ($this->shouldMessageBeSigned($message, $remoteEntity)) {
+        if ($this->shouldMessageBeSigned($sspMessage, $remoteEntity)) {
             $certificates = $this->_server->getConfig('certificates');
 
             $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
@@ -410,7 +405,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
             }
 
-            $url = $sspBinding->getRedirectURL($message);
+            $url = $sspBinding->getRedirectURL($sspMessage);
             $this->_server->redirect($url, $message);
         }
         else {

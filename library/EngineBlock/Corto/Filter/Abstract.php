@@ -25,11 +25,11 @@
 
 abstract class EngineBlock_Corto_Filter_Abstract
 {
-    protected $_adapter;
+    protected $_server;
 
-    public function __construct(EngineBlock_Corto_Adapter $adapter)
+    public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
-        $this->_adapter = $adapter;
+        $this->_server = $server;
     }
 
     /**
@@ -82,7 +82,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
         /** @var EngineBlock_Corto_Filter_Command_Abstract $command */
         foreach ($commands as $command) {
             // Inject everything we have into the adapter
-            $command->setAdapter($this->_adapter);
+            $command->setProxyServer($this->_server);
             $command->setIdpMetadata($idpEntityMetadata);
             $command->setSpMetadata($spEntityMetadata);
             $command->setRequest($request);

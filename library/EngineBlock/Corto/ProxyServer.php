@@ -497,7 +497,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Set up the Subject Confirmation element.
         $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
-        $newAssertion->setSubjectConfirmation($subjectConfirmation);
+        $newAssertion->setSubjectConfirmation(array($subjectConfirmation));
         $subjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
         $subjectConfirmation->SubjectConfirmationData = $subjectConfirmationData;
 

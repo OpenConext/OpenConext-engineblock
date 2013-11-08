@@ -31,9 +31,9 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     protected $_continueFiltering = TRUE;
 
     /**
-     * @var EngineBlock_Corto_Adapter
+     * @var EngineBlock_Corto_ProxyServer
      */
-    protected $_adapter;
+    protected $_server;
 
     /**
      * @var EngineBlock_Saml2_ResponseAnnotationDecorator
@@ -84,12 +84,12 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param \EngineBlock_Corto_Adapter $adapter
+     * @param \EngineBlock_Corto_ProxyServer $server
      * @return $this
      */
-    public function setAdapter(EngineBlock_Corto_Adapter $adapter)
+    public function setProxyServer(EngineBlock_Corto_ProxyServer $server)
     {
-        $this->_adapter = $adapter;
+        $this->_server = $server;
         return $this;
     }
 
