@@ -49,8 +49,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
-        $commonName = $attributes['urn:mace:dir:attribute-def:cn'][0];
-
         if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
 
@@ -87,25 +85,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attributes'=> $consent->getFilteredResponseAttributes(),
                 'sp'        => $spEntityMetadata,
                 'idp'       => $idpEntityMetadata,
-                'commonName'=> $commonName,
-                'nameId'    => $this->resolveNameId($response),
             ));
         $this->_server->sendOutput($html);
-    }
-
-    /*
-     * https://wiki.surfnet.nl/display/conextdocumentation/Consent+screen+improvements
-     */
-    private function resolveNameId($response)
-    {
-        /*
-         * We have problem here namely the format NameID is not 'calculated' yet. This is done in the EngineBlock_Corto_Filter_Command_SetNameId.
-         *
-         * Complex refactoring is required, but not for now. Decided is to - for now - not show the nameId on the consent screen. If the setNameId is done
-         * before consent we can uncomment the following code.
-         */
-        return;
-
     }
 
     /**
