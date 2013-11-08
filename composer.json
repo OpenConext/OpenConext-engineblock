@@ -4,6 +4,7 @@
     "require": {
         "pimple/pimple": "1.0.2",
         "simplesamlphp/simplesamlphp": "dev-master",
+        "simplesamlphp/saml2": "dev-master#733bbd10905fa1889d4eaaad0b5e85e9068faf65 as 0.1.0",
         "openid/php-openid": "dev-master#ee669c6a9d4d95b58ecd9b6945627276807694fb as 2.2.2",
         "dbpatch/dbpatch": "1.1.1",
         "zendframework/zendframework1":"1.10.9",
