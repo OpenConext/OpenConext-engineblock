@@ -36,6 +36,7 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
     #region proxy methods
 
     /**
+     * Get message ID
      * @return string
      */
     public function getId()
@@ -44,11 +45,23 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
     }
 
     /**
+     * Get the message Issuer.
+     *
      * @return NULL|string
      */
     public function getIssuer()
     {
         return $this->sspMessage->getIssuer();
+    }
+
+    /**
+     * Get the message Destination
+     *
+     * @return NULL|string
+     */
+    public function getDestination()
+    {
+        return $this->sspMessage->getDestination();
     }
 
     #endregion proxy methods
