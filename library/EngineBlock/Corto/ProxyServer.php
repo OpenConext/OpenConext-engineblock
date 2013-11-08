@@ -239,11 +239,17 @@ class EngineBlock_Corto_ProxyServer
 
         $mappedUri = $this->_serviceToControllerMapping[$serviceName];
 
-        // Append the (explicit) VO context
-        if ($request->getVoContext()  && $request->isVoContextExplicit()) {
-            if (!$this->_processingMode && $serviceName !== "spMetadataService") {
-                $mappedUri .= '/vo:' . $request->getVoContext();
-            }
+        $voContext = false;
+        if ($request && $request->getVoContext()  && $request->isVoContextExplicit()) {
+            $voContext = $request->getVoContext();
+        }
+        else if ($this->_voContext) {
+            $voContext = $this->_voContext;
+        }
+
+        // Append the (explicit) VO context from the request
+        if ($voContext && !$this->_processingMode && $serviceName !== "spMetadataService") {
+            $mappedUri .= '/vo:' . $voContext;
         }
 
         // Append the Transparent identifier

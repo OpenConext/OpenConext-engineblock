@@ -122,11 +122,6 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('processedAssertionConsumerService');
     }
 
-    public function getVirtualOrganisationContext()
-    {
-        return $this->_voContext;
-    }
-
     public function setVirtualOrganisationContext($virtualOrganisation)
     {
         $this->_voContext = $virtualOrganisation;
