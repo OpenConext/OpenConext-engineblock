@@ -71,15 +71,28 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
         return $assertions[0];
     }
 
+    public function getNameId()
+    {
+        $assertion = $this->getAssertion();
+        return $assertion->getNameId();
+    }
 
     public function getNameIdValue()
     {
-        $assertion = $this->getAssertion();
-        $nameId = $assertion->getNameId();
+        $nameId = $this->getNameId();
         if (empty($nameId['Value'])) {
             throw new \RuntimeException('No NameID in Assertion?');
         }
         return $nameId['Value'];
+    }
+
+    public function getNameIdFormat()
+    {
+        $nameId = $this->getNameId();
+        if (empty($nameId['Format'])) {
+            throw new \RuntimeException('No NameID in Assertion?');
+        }
+        return $nameId['Format'];
     }
 
     /**
