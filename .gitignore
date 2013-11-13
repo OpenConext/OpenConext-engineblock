@@ -5,4 +5,4 @@
 
 /vendor/
 /www/authentication/generated/
-/build
+bin/ignore_me.php
