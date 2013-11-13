@@ -35,7 +35,7 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
-    'footer'                => 'Deze dienst is powered by <a href="http://www.surfconext.nl/">SURFconext</a> - aangeboden door SURFnet.',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help_header'           => 'Help',
@@ -81,7 +81,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'name'                  => 'Naam',
     'name_error'            => 'Vul je naam in',
     'email'                 => 'Email',
-    'email_error'           => 'Vul je e-mailadres in',
+    'email_error'           => 'Vul je (juiste) e-mailadres in',
     'comment'               => 'Toelichting',
     'comment_error'         => 'Vul een toelichting in',
     'cancel'                => 'Annuleren',
@@ -92,7 +92,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     <p>SURFnet faciliteert het doorsturen van je verzoek maar heeft geen controle over de snelheid waarmee je antwoord of toegang krijgt.</p>
 
-    <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:info@surfconext.nl">info@surfconext.nl</a></p>',
+    <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
     //Profile
     'profile_header'                    => 'SURFconext',
@@ -104,30 +104,42 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_header_surfteams'          => 'SURFteams',
     'profile_header_auth_needed'        => 'Authenticatie vereist',
     'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens, alsmede uw groepsrelaties, worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat deze gegevens worden verstrekt aan diensten die u via SURFconext benadert.',
+    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat een subset van deze gegevens worden verstrekt aan diensten die je via SURFconext benadert.',
+
     'profile_group_membership_desc'     => 'U bent lid van de volgende groepen.',
     'profile_no_groups'                 => 'Geen Groepen',
     'profile_extra_groups_desc'         => 'Om uw instellingsgroepen te zien moet u het gebruik hiervoor binnen SURFconext autoriseren.',
-    'profile_leave_surfconext_desc'     => 'Als u geen gebruik meer wilt maken van SURFconext en alle informatie die over u wordt opgeslagen wilt verwijderen, klik dan op de onderstaande link.',
+    'profile_leave_surfconext_desc'     => 'Je gebruikt SURFconext om met je instellingsaccount in te loggen op een of meerdere applicaties. Je kan je SURFconext profiel verwijderen door op onderstaande knop te drukken.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
-    'profile_leave_surfconext_disclaim' => 'Belangrijk: Je kan group%s, document en content eigenaarschap overzetten naar een collega. Het gevaar bestaat anders dat lopende projecten schade ondervinden en/of content niet meer toegankelijk is. De deprovisioning en dataportability sectien%s beschrijft best practices op dit gebied',
+    'profile_leave_surfconext_disclaim' => 'Let op:
+                                            <ul>
+                                                <li>Alleen de informatie welke in SURFconext wordt opgeslagen zal verwijderd worden.</li>
+                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens hier nog opgeslagen zijn.</li>
+                                                <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel worden aangemaakt.</li>
+                                             </ul>
+                                             <br>Meer informatie over welke informatie er wordt opgeslagen door SURFconext kan je vinden op de <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">SURFconext supportpagina\'s</a>.',
     'profile_leave_surfconext_link_add' => '(sluit je browser na deze actie om de deprovisioning procedure te voltooien)',
     'profile_revoke_access'             => 'Trek toegang in',
-    'profile_leave_surfconext_conf'     => 'Weet je zeker dat je je profiel wilt verwijderen?',
+    'profile_leave_surfconext_conf'     => 'Weet je zeker dat je je profiel wilt verwijderen? Je zult je browser moeten afsluiten om deze actie te voltooien',
     'profile_eula_link'                 => 'Gebruikersvoorwaarden',
     'profile_support_link'              => 'Ondersteunings pagina\'s',
+    'profile_mail_text'                 => 'SURFconext support kan je vragen om bovenstaande informatie te delen. Deze informatie kan hen helpen om jouw supportvraag te beantwoorden.',
+    'profile_mail_attributes'           => 'Mail data naar help@surfconext.nl',
+    'profile_mail_send_success'         => 'De mail met bovenstaande informatie is succesvol verstuurd.',
 
     //Profile MyApps
-    'profile_apps_connected_aps'        => 'Beschikbare Apps en Services',
-    'profile_apps_share'                => 'Je kan je profiel%s en eventuele groepen informatie%s delen met de volgende services',
+    'profile_apps_connected_aps'        => 'SURFconext Apps',
+    'profile_apps_share'                => 'Je hebt toestemming gegeven om profielinformatie te delen met de volgende diensten:',
     'profile_apps_service_th'           => 'Service/Applicatie',
     'profile_apps_eula_th'              => 'EULA',
     'profile_apps_support_name_th'      => 'Support contact',
-    'profile_apps_support_email_th'	=> 'Support email',
+    'profile_apps_support_url_th'       => 'Support URL',
+    'profile_apps_support_email_th'	    => 'Support email',
     'profile_apps_support_phone_th'     => 'Support telefoon',
     'profile_apps_consent_th'           => 'Consent groep informatie',
     'profile_revoke_consent'            => 'Consent intrekken',
     'profile_no_consent'                => 'Nog niet uitgedeeld',
+    'profile_consent'                   => 'Consent gegeven',
     'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
 
     //VO Manage
@@ -183,9 +195,15 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_sp_is_provided'            => 'aan',
     'consent_terms_of_service'          => 'Deze informatie zal worden opgeslagen in SURFconext en doorgegeven aan %s. Gebruiksvoorwaarden van %s en %s zijn van toepassing.',
 
-    'consent_accept'                    => 'Ja, deel deze informatie',
-    'consent_decline'                   => 'Nee, deel geen informatie',
-    'consent_notice'                    => 'Deze melding verschijnt alleen als u voor de eerste keer inlogt op een nieuwe dienst of als de gegevens, die worden doorgegeven, wijzigen.',
+    'consent_accept'                    => 'Ja, deel deze gegevens',
+    'consent_decline'                   => 'Nee, ik wil geen gebruik maken van deze dienst',
+    'consent_notice'                    => '(We zullen dit nogmaals vragen als uw informatie wijzigt)',
+
+    //New Consent
+    'consent_header_info'               => 'Verzoek voor informatie uitwisseling',
+    'consent_sp_idp_info'               => 'Om gebruik te kunnen maken van %s is het nodig om de volgende informatie, verkregen van de %s, te delen:',
+    'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
+    'name_id'                           => 'SURFconext gebruikers ID',
 
     //Error screens
     'error_404'                         => '404 Pagina niet gevonden',
@@ -210,12 +228,10 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_session_lost'                => 'Error - Uw sessie is verloren gegaan..',
     'error_session_lost_desc'           => '<p>
         Uw sessie is ergens verloren gegaan.<br />
-        Misschien heeft u uw cookies uitgezet?<br />
+        Waarschijnlijk mocht de cookie niet worden gezet door de strikte privacy configuratie van uw browser?<br />
         Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
-    'error_message_timeout'             => 'Error - Bericht time-out..',
-    'error_message_timeout_desc'        => 'We hebben een bericht ontvangen dat niet meer geldig is. Probeer opnieuw in te loggen alstublieft.',
     'error_no_message'                  => 'Error - Geen bericht ontvangen..',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',

@@ -36,7 +36,7 @@ return array(
     'error_header'              => 'Error',
 
     //Footer
-    'footer'                => 'This service is powered by <a href="http://www.surfconext.nl/">SURFconext</a> - brought to you by SURFnet.',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29">Terms of Service</a>',
 
     //Help
     'help_header'           => 'Help',
@@ -82,7 +82,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'name'                  => 'Name',
     'name_error'            => 'Enter your name',
     'email'                 => 'Email',
-    'email_error'           => 'Enter your email address',
+    'email_error'           => 'Enter your (correct) email address',
     'comment'               => 'Comment',
     'comment_error'         => 'Enter a comment',
     'cancel'                => 'Cancel',
@@ -105,30 +105,41 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_header_exit'               => 'Exit',
     'profile_header_auth_needed'        => 'Authentication required',
     'profile_header_leave_surfconext'   => 'Leave SURFconext',
-    'profile_store_info'                => 'The following profile data have been provided by your home institution. These data as well as your group membership data (e.g.SURFteams) will be stored in SURFconext and shared with services accessed via SURFconext.',
+    'profile_store_info'                => 'The following profile data have been provided by your home institution. This profile will be stored in (and used by) SURFconext. It is also possible that a subset of this information is provided to services that you accessed via SURFconext.',
     'profile_group_membership_desc'     => 'You are a member of the following groups.',
     'profile_no_groups'                 => 'No Groups',
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',
-    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more 3rd party application(s) with your institutional account. In addition, your group membership(s) may be shared with these applications.</p>If you would like to quit using SURFconext and delete your SURFconext profile, please click the link below.',
+    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more applications with your institutional account. It is possible to delete your SURFconext profile by pressing the button below.',
     'profile_leave_surfconext_link'     => 'Delete my SURFconext account!',
-    'profile_leave_surfconext_disclaim' => 'Please note: You may reassign group%s, document or content ownership to a collegue. Otherwise ongoing projects may be disrupted and/or content may become inaccessible! Consult the deprovisioning and dataportability good practice section%s for more information',
+    'profile_leave_surfconext_disclaim' => 'Note:
+                                            <ul>
+                                                <li>Only information stored in the SURFconext service will be deleted.</li>
+                                                <li>Applications accessed with SURFconext will not be notified. It is possible your personal data is still stored in these applications.</li>
+                                                <li>After a new SURFconext login automatically a new profile is created.</li>
+                                             </ul>
+                                             <br>More information about what information is stored by SURFconext can be found on <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">the SURFconext support pages</a>',
     'profile_leave_surfconext_link_add' => '(close your browser after this action to finalize the deprovisioning procedure)',
     'profile_revoke_access'             => 'Revoke access',
-    'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile?',
+    'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile? You will need to restart your browser to finalize this action',
     'profile_eula_link'                 => 'Terms of use',
     'profile_support_link'              => 'Support pages',
+    'profile_mail_text'                 => 'SURFconext support may ask you to share the above data. This information can help them to answer your support question.',
+    'profile_mail_attributes'           => 'Mail data to help@surfconext.nl',
+    'profile_mail_send_success'         => 'The mail with your information has been successfully send.',
 
     //Profile MyApps
-    'profile_apps_connected_aps'        => 'Connected Apps and Services',
-    'profile_apps_share'                => 'You have shared your profile%s and optionally group information%s with the following services',
+    'profile_apps_connected_aps'        => 'SURFconext Apps',
+    'profile_apps_share'                => 'You have given permission to share profile information with the following services:',
     'profile_apps_service_th'           => 'Service/App',
     'profile_apps_eula_th'              => 'EULA',
     'profile_apps_support_name_th'      => 'Support person name',
-    'profile_apps_support_email_th'     => 'Support person email',
+    'profile_apps_support_url_th'       => 'Support URL',
+    'profile_apps_support_email_th'     => 'Support email',
     'profile_apps_support_phone_th'     => 'Support person phone',
     'profile_apps_consent_th'           => 'Consent group information',
     'profile_revoke_consent'            => 'Revoke',
     'profile_no_consent'                => 'Not granted yet',
+    'profile_consent'                   => 'Granted consent',
     'profile_attribute_release'         => 'The following attributes are released to this Service Provider:',
 
     //Profile
@@ -182,9 +193,15 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_sp_is_provided'            => 'to',
     'consent_terms_of_service'          => 'This information will be stored in SURFconext and passed on to %s. Terms of service of %s and %s apply.',
 
-    'consent_accept'                    => 'Yes, share this information',
-    'consent_decline'                   => 'No, share no information',
-    'consent_notice'                    => 'This message only appears when you log in at a new service or when the information, passed to the service, is changed.',
+    'consent_accept'                    => 'Yes, share this data',
+    'consent_decline'                   => 'No, I don\'t want to use this service',
+    'consent_notice'                    => '(We will ask you again when the information changes)',
+
+    //New Consent
+    'consent_header_info'               => 'Request for information transfer',
+    'consent_sp_idp_info'               => 'To be able to use %s, we must share the following information provided by the %s:',
+    'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
+    'name_id'                           => 'SURFconext user ID',
 
     //Error screens
     'error_404'                         => '404 Page not found',
@@ -211,12 +228,10 @@ If you want to use this application you have to:<br />
     'error_session_lost'            => 'Error - your session was lost..',
     'error_session_lost_desc'       => '<p>
         Somewhere along the way, your session with us was lost. <br />
-        Maybe you have cookies disabled? <br />
+        Most likely your browser privacy or security settings prevented the cookie to be set? <br />
         Please go back and try again.
         <br /><br />
     </p>',
-    'error_message_timeout'         => 'Error - Message time-out..',
-    'error_message_timeout_desc'    => 'We received an out of date message. Please try again.',
     'error_no_message'              => 'Error - No message received..',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',

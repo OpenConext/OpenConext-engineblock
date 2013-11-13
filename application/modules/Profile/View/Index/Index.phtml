@@ -1,9 +1,9 @@
 <?php
 /**
- * @var array $attributes
+ * @var array $userAttributes
  */
-if (!isset($attributes)) {
-    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: attributes");
+if (!isset($userAttributes)) {
+    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: userAttributes");
 }
 
 /**
@@ -39,7 +39,6 @@ $layout->setLayout('1-column-blue-grey-tabs');
 // The tabs
 $layout->tabs = array(
     'MyProfile' => $this->t('profile_header_my_profile'),
-    'MyGroups' => $this->t('profile_header_my_groups'),
     'MyApps' => $this->t('profile_header_my_apps'),
     'Exit' => $this->t('profile_header_exit'),
 );
@@ -52,8 +51,8 @@ $layout->subheader  = $this->t('profile_subheader');
 $layout->header     = $this->t('profile_header') . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
-$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/screen.js');
-$layout->getView()->inlineScript()->appendFile(EngineBlock_View::staticUrl(). '/javascript/profile.js');
+$layout->getView()->inlineScript()->appendFile('/javascript/screen.js');
+$layout->getView()->inlineScript()->appendFile('/javascript/profile.js');
 $layout->getView()->inlineScript()->appendScript("
     var profile = new Profile();
     profile.init();");
@@ -86,7 +85,6 @@ foreach ($spList as $spId => $sp) {
         <?php echo $this->t('profile_store_info'); ?>
     </p>
     <br />
-
     <table>
         <thead>
             <tr>
@@ -94,7 +92,7 @@ foreach ($spList as $spId => $sp) {
                 <th><?php echo $this->t('value'); ?></th>
             </tr>
         </thead>
-    <?php foreach ($attributes as $attributeId => $attributeValues) { ?>
+    <?php foreach ($userAttributes as $attributeId => $attributeValues) { ?>
         <tr>
             <td style="font-weight: bold;" title="<?php echo $attributeId?>">
                 <?=$metadata->getName($attributeId, $lang)?>
@@ -113,116 +111,25 @@ foreach ($spList as $spId => $sp) {
         </tr>
     <?php } ?>
     </table>
-</div>
 
-<div id="MyGroups">
     <p>
-        <?php echo $this->t('profile_group_membership_desc'); ?>
+        <?php echo $this->t('profile_mail_text'); ?>
     </p>
 
-    <div id="GroupProviders">
-    <?php
-
-    $invalidProviders = $aggregator->getInvalidProviders();
-    foreach ($aggregator->getProviders() as $groupProvider):?>
-    <h3><a href="#"><?php echo $groupProvider->getDisplayName(); ?></a></h3>
-    <div id="<?php echo $groupProvider->getId(); ?>" class="group-providers">
-        <?php if(count($groupOauth) && array_key_exists($groupProvider->getId(),$groupOauth )): ?>
-            <span class="revoke-gp-access">
-                <a href="/profile/group-oauth/revoke?provider=<?php echo urlencode($groupProvider->getId()); ?>"><?=
-                    $this->t('profile_revoke_access'); ?>
-                </a>
-            </span>
-        <?php endif; ?>
-        <?php
-        $groups = array();
-        try{
-            $aclProvider = new EngineBlock_Group_Acl_GroupProviderAcl();
-            $groupProviderAcl = $aclProvider->getSpGroupAcls($entityId);
-            $groups = $groupProvider->getGroups($groupProviderAcl);
-        }
-        catch (EngineBlock_Group_Provider_Exception_Unauthorized $e) {
-            $invalidProviders[] = $groupProvider;
-        }
-        catch(EngineBlock_Exception $e) {
-            $e->userId = $user->getUid();
-            EngineBlock_ApplicationSingleton::getInstance()->reportError($e);
-        }
-        catch(Zend_Http_Client_Exception $e) {
-            EngineBlock_ApplicationSingleton::getInstance()->reportError(
-                new EngineBlock_Exception($e->getMessage(), EngineBlock_Exception::CODE_WARNING, $e)
-            );
-        }
-        catch(Exception $e) {
-            EngineBlock_ApplicationSingleton::getInstance()->reportError(
-                new EngineBlock_Exception($e->getMessage(), EngineBlock_Exception::CODE_ERROR, $e)
-            );
-        }
-        if (!empty($groups)):
-    ?>
-
-    <ul>
-        <?php foreach ($groups as $group): ?>
-        <li><?php echo $group->title; ?></li>
-        <?php endforeach; ?>
-    </ul>
-
-    <?php else: ?>
-        <p><?php echo $this->t('profile_no_groups'); ?></p>
+    <?php if (!empty($mailSend)) : ?>
+        <p><?php echo $this->t('profile_mail_send_success'); ?></p>
     <?php endif; ?>
-    </div>
-    <?php endforeach; ?>
 
-    <?php
-        $oauthGroupProviders = array();
-        foreach ($invalidProviders as $groupProvider) {
-            /**
-             * @var EngineBlock_Group_Provider_Interface $groupProvider
-             */
-
-            // Remove the precondition that this provider needs an access token
-            $groupProvider->removePreconditionByClassName(
-                'EngineBlock_Group_Provider_Precondition_OpenSocial_Oauth_AccessTokenExists'
-            );
-
-            // Then if it matches all other preconditions
-            // (like 'user should belong to a specific schacHomeOrganization')
-            // add it as an OAuth group Provider
-
-            if ($groupProvider->validatePreconditions()) {
-                $oauthGroupProviders[] = $groupProvider;
-            }
-        }
-    ?>
-    </div>
-    <?php if (!empty($oauthGroupProviders)): ?>
-    <br /><br />
-    <h3><?php echo $this->t('profile_header_auth_needed'); ?></h3>
-    <p><?php echo $this->t('profile_extra_groups_desc'); ?></p>
-    <ul>
-    <?php foreach ($oauthGroupProviders as $oauthGroupProvider): ?>
-        <li>
-            <a href="/profile/group-oauth/authenticate/<?php echo $oauthGroupProvider->getId();
-                ?>?return_url=/#MyGroups">
-                <?php echo $oauthGroupProvider->getDisplayName(); ?>
-            </a>
-        </li>
-    <?php endforeach;?>
-    </ul>
-    <?php endif; ?>
+    <form method="post" action="/profile/attribute-support">
+        <input type="hidden" name="mail" value="true">
+        <input type="submit" value="<?php echo $this->t('profile_mail_attributes'); ?>">
+    </form>
 </div>
 
 <div id="MyApps">
     <p><?php echo $this->t('profile_apps_connected_aps'); ?></p>
     <p>
-        <?php echo $this->t('profile_apps_share',
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>",
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>"
-        ); ?>
+        <?php echo $this->t('profile_apps_share'); ?>
 
     </p>
     <table id="MyAppsTable" class="no-layout-fix">
@@ -230,20 +137,18 @@ foreach ($spList as $spId => $sp) {
             <tr>
                 <th><?php echo $this->t('profile_apps_service_th'); ?></th>
                 <th><?php echo $this->t('profile_apps_eula_th'); ?></th>
-                <th><?php echo $this->t('profile_apps_support_name_th'); ?></th>
+                <th><?php echo $this->t('profile_apps_support_url_th'); ?></th>
                 <th><?php echo $this->t('profile_apps_support_email_th'); ?></th>
-                <th><?php echo $this->t('profile_apps_support_phone_th'); ?></th>
-                <th><?php echo $this->t('profile_apps_consent_th'); ?></th>
             </tr>
         </thead>
         <tbody class="apps">
         <?php foreach ($spList as $spId => $sp) : ?>
-            <?php if (in_array($spId, $consent) || (isset($spOauthList) && array_key_exists($spId, $spOauthList))) : ?>
+            <?php if (in_array($spId, $consent)) : ?>
                 <tr>
                     <td>
                         <a href="#" class="show-details">
                             <span class="ui-icon ui-icon-triangle-1-e left"></span>
-                            <?=$sp["displayName:en"]?>
+                            <?php echo $this->getDisplayName($sp); ?>
                         </a>
                     </td>
                     <td>
@@ -252,8 +157,11 @@ foreach ($spList as $spId => $sp) {
                         <?php endif; ?>
                     </td>
                     <td>
-                        <?php if (isset($sp['supportContact'])) : ?>
-                            <?php echo $sp['supportContact']['givenName'] . ' ' .  $sp['supportContact']['surName']; ?>
+                        <?php if (isset($sp['url:en']) && $sp['url:en'] != ''): ?>
+                            <a href="<?php echo $sp['url:en']; ?>"><?php echo $this->t('profile_support_link');?></a>
+                        <?php elseif (isset($sp['url:nl']) && $sp['url:nl'] != ''): ?>
+                            <a href="<?php echo $sp['url:nl']; ?>"><?php echo $this->t('profile_support_link');?></a>
+                        <?php else: ?>
                         <?php endif; ?>
                     </td>
                     <td>
@@ -261,24 +169,6 @@ foreach ($spList as $spId => $sp) {
                             <a href="mailto:<?php echo $sp['supportContact']['emailAddress']; ?>"><?php
                                 echo $sp['supportContact']['emailAddress']; ?>
                             </a>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if (isset($sp['supportContact']['telephoneNumber'])) : ?>
-                            <a href="mailto:<?php echo $sp['supportContact']['telephoneNumber']; ?>"><?php
-                                echo $sp['supportContact']['telephoneNumber']; ?>
-                            </a>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <?php if (isset($spOauthList) && array_key_exists($spId,$spOauthList)) : ?>
-                            <span class="revoke-consent">
-                                <a href="/profile/delete-oauth-consent?consumer_key=<?php echo urlencode($spOauthList[$spId]); ?>">
-                                    <?php echo $this->t('profile_revoke_consent'); ?>
-                                </a>
-                            </span>
-                        <?php else : ?>
-                            <?php echo $this->t('profile_no_consent'); ?>
                         <?php endif; ?>
                     </td>
                 </tr>
@@ -326,19 +216,14 @@ foreach ($spList as $spId => $sp) {
 <div id="Exit">
     <p>
         <?php echo $this->t('profile_leave_surfconext_desc'); ?><br />
+        <form id="delete-confirmation-form" method="post" action="/profile/delete-user">
+            <input id="delete-confirmation-text"
+                   type="submit" value="<?php echo $this->t('profile_leave_surfconext_link'); ?>"
+                   data-confirmation-text="<?php echo $this->t('profile_leave_surfconext_conf'); ?>" >
+        </form>
 
         <div class="exit-disclaimer"/>
-        <?php echo $this->t('profile_leave_surfconext_disclaim',
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/Profile+page\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>",
-            "<a href=\"https://wiki.surfnetlabs.nl/display/conextsupport/SURFteams+Best+Practice\" target=\"_blank\">
-                <img src=\"" . EngineBlock_View::staticUrl() . "/media/question-mark.jpg\" alt=\"SURFconext Information\">
-            </a>"
-        ); ?><br />
+            <?php echo $this->t('profile_leave_surfconext_disclaim'); ?><br />
         </div>
-        <a class="delete" href="/profile/delete-user"><?php echo $this->t('profile_leave_surfconext_link'); ?></a>
-        <?php echo $this->t('profile_leave_surfconext_link_add'); ?><br />
-        <input id="delete-confirmation-text" type="hidden" value="<?php echo $this->t('profile_leave_surfconext_conf'); ?>"/>
     </p>
 </div>

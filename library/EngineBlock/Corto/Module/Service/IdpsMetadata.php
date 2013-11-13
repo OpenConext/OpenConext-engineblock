@@ -12,15 +12,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $alternateKeys = false;
         if ($spEntityId) {
             // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
-            try {
-                $spEntity = $this->_server->getRemoteEntity($spEntityId);
-            } catch (EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
-                $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
-                $this->_server->redirect(
-                    '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId),
-                    "Unknown SP!");
-                return;
-            }
+            $spEntity = $this->_server->getRemoteEntity($spEntityId);
 
             // Check if an alternative Public key has been set for the requesting SP
             // If yes, use these in the metadata of EngineBlock
@@ -82,7 +74,8 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
             $this->_server->getNewId(),
-            $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400))
+            $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
+            false
         );
         $document = $mapper->setEntities($idpEntities)->map();
 

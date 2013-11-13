@@ -4,6 +4,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumin
 {
     private $_entity;
 
+    const URN_OASIS_NAMES_TC_SAML_2_0_ATTRNAME_FORMAT_URI =
+        EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes::URN_OASIS_NAMES_TC_SAML_2_0_ATTRNAME_FORMAT_URI;
+
     public function __construct($entity)
     {
         $this->_entity = $entity;
@@ -16,20 +19,17 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumin
         }
         $rootElement['md:RequestedAttribute'] = array();
         foreach ($this->_entity['RequestedAttributes'] as $requestedAttribute) {
-            $element = array(
-                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Name' => $requestedAttribute['Name'],
-            );
-            if (isset($requestedAttribute['NameFormat'])) {
-                $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat'] = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-            }
-            if (!empty($requestedAttribute['Required'])) {
-                $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired'] = 'true';
-            } else {
-                $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired'] = 'false';
-            }
+            $element = array();
+
+            $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Name'] = $requestedAttribute['Name'];
+
+            $nameFormat = isset($requestedAttribute['NameFormat']) ? $requestedAttribute['NameFormat'] : self::URN_OASIS_NAMES_TC_SAML_2_0_ATTRNAME_FORMAT_URI;
+            $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'NameFormat'] = $nameFormat;
+
+            $element[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'isRequired'] = empty($requestedAttribute['Required']) ? 'false' : 'true';
+
             $rootElement['md:RequestedAttribute'][] = $element;
         }
-
         return $rootElement;
     }
 }

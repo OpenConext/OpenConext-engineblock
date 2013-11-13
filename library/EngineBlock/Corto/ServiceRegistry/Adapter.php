@@ -49,9 +49,31 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         foreach ($entities as $entityId => $entityData) {
             if (isset($entityData['SingleSignOnService'])) {
                 // entity is an idp
-                if (!in_array($entityId, $allowedEntities)) {
+                if (in_array($entityId, $allowedEntities)) {
+                    $entities[$entityId]['Access'] = true;
+                } else {
                     unset($entities[$entityId]);
                 }
+            }
+        }
+        return $entities;
+    }
+
+    /**
+     * Given a list of (SAML2) entities, mark those idps that are not allowed
+     * for the given Service Provider.
+     *
+     * @param array $entities
+     * @param string $spEntityId
+     * @return array the entities
+     */
+    public function markEntitiesBySp(array $entities, $spEntityId)
+    {
+        $allowedEntities = $this->_serviceRegistry->getAllowedIdps($spEntityId);
+        foreach ($entities as $entityId => $entityData) {
+            if (isset($entityData['SingleSignOnService'])) {
+                // entity is an idp
+                $entities[$entityId]['Access'] = in_array($entityId, $allowedEntities);
             }
         }
         return $entities;
@@ -144,6 +166,9 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         if (isset($serviceRegistryEntity['coin:publish_in_edugain'])) {
             $cortoEntity['PublishInEdugain'] = $serviceRegistryEntity['coin:publish_in_edugain'];
         }
+        if (isset($serviceRegistryEntity['coin:publish_in_edugain_date'])) {
+            $cortoEntity['PublishInEdugainDate'] = $serviceRegistryEntity['coin:publish_in_edugain_date'];
+        }
 
         // Disable SAML scoping
         if (isset($serviceRegistryEntity['coin:disable_scoping'])) {
@@ -165,6 +190,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             // implicit vo
             if (isset($serviceRegistryEntity['coin:implicit_vo_id'])) {
                 $cortoEntity['VoContext'] = $serviceRegistryEntity['coin:implicit_vo_id'];
+            }
+
+            // show all IdP's in the WAYF
+            if (isset($serviceRegistryEntity['coin:display_unconnected_idps_wayf'])) {
+                $cortoEntity['DisplayUnconnectedIdpsWayf'] = $serviceRegistryEntity['coin:display_unconnected_idps_wayf'];
             }
 
             $cortoEntity['AssertionConsumerServices'] = array();
@@ -267,6 +297,18 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
 
             $cortoEntity['isHidden'] = (isset($serviceRegistryEntity['coin:hidden']) && $serviceRegistryEntity['coin:hidden'] === true);
+
+            $cortoEntity['shibmd:scopes'] = array();
+            for ($i = 0; $i < 10; $i++) {
+                if (isset($serviceRegistryEntity["shibmd:scope:$i:allowed"])) {
+                    $regexp = isset($serviceRegistryEntity["shibmd:scope:$i:regexp"]) ? $serviceRegistryEntity["shibmd:scope:$i:regexp"] : false;
+                    $cortoEntity['shibmd:scopes'][$i] = array(
+                        'allowed'  => $serviceRegistryEntity["shibmd:scope:$i:allowed"],
+                        'regexp' => $regexp
+                    );
+                }
+            }
+
         }
 
         // In general
@@ -278,6 +320,11 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
                 $cortoEntity['certificates']['public-fallback'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
                     $serviceRegistryEntity['certData2']
                 );
+                if (isset($serviceRegistryEntity['certData3']) && $serviceRegistryEntity['certData3']) {
+                    $cortoEntity['certificates']['public-fallback2'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
+                        $serviceRegistryEntity['certData3']
+                    );
+                }
             }
         }
 

@@ -210,6 +210,19 @@ class EngineBlock_Corto_ProxyServer
         return $this;
     }
 
+    public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->getDisplayName($attributeId, $ietfLanguageTag);
+
+    }
+
+    public function sortConsentDisplayOrder(&$attributes)
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->sortConsentDisplayOrder($attributes);
+    }
+
     public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
     {
         $metadata = new EngineBlock_Attributes_Metadata();
@@ -220,20 +233,6 @@ class EngineBlock_Corto_ProxyServer
     {
         $metadata = new EngineBlock_Attributes_Metadata();
         return $metadata->getDescription($attributeId, $ietfLanguageTag);
-    }
-
-    /**
-     * Return the url of the Static vhost containing media, script and css files
-     *
-     * @example <?php echo $this->staticUrl(); ?>
-     *
-     * @return string
-     */
-    public static function staticUrl($path = "")
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $settings = $application->getConfiguration();
-        return $settings->static->protocol . '://'. $settings->static->host . $path;
     }
 
     public function getUrl($serviceName = "", $remoteEntityId = "", $request = "")
@@ -931,7 +930,7 @@ class EngineBlock_Corto_ProxyServer
         // Check the session for a AuthnRequest with the given ID
         // Expect to get back an AuthnRequest issued by EngineBlock and destined for the IdP
         if (!$id || !isset($_SESSION[$id])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
+            throw new EngineBlock_Corto_Module_Services_SessionLostException(
                 "Trying to find a AuthnRequest (we made and sent) with id '$id' but it is not known in this session? ".
                 "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE

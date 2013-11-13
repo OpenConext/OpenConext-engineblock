@@ -103,6 +103,26 @@ class EngineBlock_View
     }
 
     /**
+     * Get the displayName for the entity
+     *
+     * @param array $entity the rmeote entity metadata
+     * @return the name to display
+     */
+    public function getDisplayName(array $entity) {
+        $lang = $this->language();
+        $lang != null ? $lang : 'en';
+
+        $displayAttributes = array('name', 'description', 'displayName');
+        foreach ($displayAttributes as $key) {
+            $ret = $this->_getLanguageFallback($entity, $key, $lang);
+            if ($ret) {
+                return $ret;
+            }
+        }
+        return "Unknown (meta-data incomplete)";
+    }
+
+    /**
      * Return the language.
      *
      * @example <?php echo $this->language(); ?>
@@ -112,22 +132,7 @@ class EngineBlock_View
     public function language()
     {
         $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
-
         return $translator->getLocale();
-    }
-
-    /**
-     * Return the url of the Static vhost containing media, script and css files
-     *
-     * @example <?php echo $this->staticUrl(); ?>
-     *
-     * @return string
-     */
-    public static function staticUrl($path = "")
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $settings = $application->getConfiguration();
-        return $settings->static->protocol . '://'. $settings->static->host . $path;
     }
 
     /**
@@ -142,6 +147,17 @@ class EngineBlock_View
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $settings = $application->getConfiguration();
         return $settings->profile->protocol . '://'. $settings->profile->host . $path;
+    }
+
+    /**
+     * Return the module name
+     *
+     * @return string
+     */
+    public static function moduleName()
+    {
+        $serverName = $_SERVER['SERVER_NAME'];
+        return $serverName ? strtolower(trim(substr($serverName, 0, strpos($serverName, '.')))) : 'engine';
     }
 
     /**
@@ -205,4 +221,16 @@ class EngineBlock_View
 
         return $params;
     }
+
+    protected function _getLanguageFallback(array $entity, $key, $lang) {
+        if (isset($entity["$key:$lang"])) {
+            return $entity["$key:$lang"];
+        }
+        $lang = ($lang == 'en' ? 'nl' : 'en');
+        if (isset($entity["$key:$lang"])) {
+            return $entity["$key:$lang"];
+        }
+        return null;
+    }
+
 }

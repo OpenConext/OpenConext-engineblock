@@ -23,17 +23,18 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-define('ENGINEBLOCK_FOLDER_ROOT'       , dirname(__FILE__) . '/../../');
+define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
 define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
+define('ENGINEBLOCK_FOLDER_VENDOR'    , ENGINEBLOCK_FOLDER_ROOT . 'vendor/');
 
-define('LIBRARY_PATH', ENGINEBLOCK_FOLDER_LIBRARY);
+require_once ENGINEBLOCK_FOLDER_VENDOR . 'autoload.php';
 
-set_include_path(ENGINEBLOCK_FOLDER_LIBRARY . PATH_SEPARATOR . get_include_path());
-
-require __DIR__ . '/Exception.php';
-require __DIR__ . '/Application/Bootstrapper.php';
+// @todo this only necessary for code which bypasses autoloading like Zend_Translate
+$includePath = get_include_path();
+$includePath = ENGINEBLOCK_FOLDER_VENDOR .  'zendframework/zendframework1/library' . PATH_SEPARATOR . $includePath;
+set_include_path($includePath);
 
 class EngineBlock_ApplicationSingleton
 {
@@ -182,8 +183,9 @@ class EngineBlock_ApplicationSingleton
         // Store some valuable debug info in session so it can be displayed on feedback pages
         $queue = $log->getQueueWriter()->getStorage()->getQueue();
         $lastEvent = end($queue);
-        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
-
+        if ($lastEvent) {
+            $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
+        }
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
 

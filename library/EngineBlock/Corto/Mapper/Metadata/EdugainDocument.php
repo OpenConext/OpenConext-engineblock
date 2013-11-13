@@ -2,24 +2,32 @@
 
 class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 {
-    const META_TOU_COMMENT = 'Use of this metadata is subject to the Terms of Use at http://www.edugain.org/policy/metadata-tou_1_0.txt';
-
     private $_id;
     private $_validUntil;
+    private $_eduGain;
     private $_entities;
     private $_entity;
 
-    public function __construct($id, $validUntil)
+    /**
+     * @param string $id
+     * @param $validUntil
+     * @param boolean $eduGain
+     */
+    public function __construct($id, $validUntil, $eduGain)
     {
         $this->_id = $id;
         $this->_validUntil = $validUntil;
+        $this->_eduGain = $eduGain;
     }
 
     public function map()
     {
-        $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = self::META_TOU_COMMENT;
+        $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = $this->_getTermsOfUse();
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md'] = 'urn:oasis:names:tc:SAML:2.0:metadata';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
+        if ($this->_eduGain) {
+            $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdrpi'] = 'urn:oasis:names:tc:SAML:metadata:rpi';
+        }
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'validUntil'] = $this->_validUntil;
 
         if (isset($this->_entities)) {
@@ -41,13 +49,13 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 
     protected function _mapEntities($rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entities($this->_entities);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entities($this->_entities, $this->_eduGain);
         return $mapper->mapTo($rootElement);
     }
 
     protected function _mapEntity($rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($this->_entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($this->_entity, $this->_eduGain);
         return $mapper->mapTo($rootElement);
     }
 
@@ -61,5 +69,12 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
     {
         $this->_entity = $entity;
         return $this;
+    }
+
+    protected function _getTermsOfUse()
+    {
+        return $this->_eduGain ?
+            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->edugain->termsOfUse :
+            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->surfconext->termsOfUse ;
     }
 }

@@ -84,6 +84,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Get all registered Single Sign On Services
         $candidateIDPs = $this->_server->getIdpEntityIds();
+
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
             unset($candidateIDPs[$posOfOwnIdp]);
@@ -355,13 +356,16 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     protected function _showWayf($request, $candidateIdPs)
     {
+        $isDebugRequest = (isset($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']) &&
+            $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']);
+
         // Post to the 'continueToIdp' service
         $action = $this->_server->getUrl('continueToIdP');
 
         $requestIssuer = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
 
         $remoteEntity = $this->_server->getRemoteEntity($requestIssuer);
-        $idpList = $this->_transformIdpsForWAYF($candidateIdPs);
+        $idpList = $this->_transformIdpsForWAYF($candidateIdPs, $isDebugRequest);
 
         $output = $this->_server->renderTemplate(
             'discover',
@@ -375,7 +379,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $this->_server->sendOutput($output);
     }
 
-    protected function _transformIdpsForWayf($idps)
+    protected function _transformIdpsForWayf($idps, $isDebugRequest)
     {
         $wayfIdps = array();
         foreach ($idps as $idpEntityId) {
@@ -419,10 +423,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 'Name_nl' => $nameNl,
                 'Name_en' => $nameEn,
                 'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL']
-                    : EngineBlock_View::staticUrl() . '/media/idp-logo-not-found.png',
+                    : '/media/idp-logo-not-found.png',
                 'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en'])
                     : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
-                'Access' => '1',
+                'Access' => ((isset($metadata['Access']) && $metadata['Access']) || $isDebugRequest ) ? '1' : '0',
                 'ID' => md5($idpEntityId),
                 'EntityId' => $idpEntityId,
             );

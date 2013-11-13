@@ -45,32 +45,8 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
             EngineBlock_ApplicationSingleton::getLog()->info(
                 "Applying attribute release policy {$arp['name']} for $spEntityId"
             );
-
-            $newAttributes = array();
-            foreach ($this->_responseAttributes as $attribute => $attributeValues) {
-                if (!isset($arp['attributes'][$attribute])) {
-                    EngineBlock_ApplicationSingleton::getLog()->info(
-                        "ARP: Removing attribute $attribute"
-                    );
-                    continue;
-                }
-
-                $allowedValues = $arp['attributes'][$attribute];
-                if (in_array('*', $allowedValues)) {
-                    // Passthrough all values
-                    $newAttributes[$attribute] = $attributeValues;
-                    continue;
-                }
-
-                foreach ($attributeValues as $attributeValue) {
-                    if (in_array($attributeValue, $allowedValues)) {
-                        if (!isset($newAttributes[$attribute])) {
-                            $newAttributes[$attribute] = array();
-                        }
-                        $newAttributes[$attribute][] = $attributeValue;
-                    }
-                }
-            }
+            $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
+            $newAttributes = $enforcer->enforceArp($arp, $this->_responseAttributes);
             $this->_responseAttributes = $newAttributes;
         }
     }

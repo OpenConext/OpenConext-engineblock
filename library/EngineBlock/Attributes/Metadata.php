@@ -28,6 +28,36 @@ class EngineBlock_Attributes_Metadata
     protected $_definitions;
     protected $_logger;
 
+    public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
+    {
+        $this->_loadAttributeDefinitions();
+
+        $name = $this->_getDataType($attributeId, 'Name', $ietfLanguageTag);
+        if ($this->_definitions[$attributeId]['DisplayConsent']) {
+            return $name;
+        }
+        return null;
+    }
+
+    public function sortConsentDisplayOrder(&$attributes)
+    {
+        $this->_loadAttributeDefinitions();
+
+        uksort($attributes, array("EngineBlock_Attributes_Metadata", "sortCallback"));
+    }
+
+    public function sortCallback($a, $b) {
+        $orderA = -1;
+        $orderB = -1;
+        if (isset($this->_definitions[$a]['DisplayOrder'])) {
+            $orderA = $this->_definitions[$a]['DisplayOrder'];
+        }
+        if (isset($this->_definitions[$b]['DisplayOrder'])) {
+            $orderB = $this->_definitions[$b]['DisplayOrder'];
+        }
+        return $orderA - $orderB;
+    }
+
     public function getName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
     {
         $this->_loadAttributeDefinitions();
@@ -139,4 +169,5 @@ class EngineBlock_Attributes_Metadata
         }
         return $this->_logger;
     }
+
 }

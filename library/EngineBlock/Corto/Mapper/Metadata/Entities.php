@@ -3,10 +3,16 @@
 class EngineBlock_Corto_Mapper_Metadata_Entities
 {
     private $_entities;
+    private $_eduGain;
 
-    public function __construct(array $entities)
+    /**
+     * @param array $entities
+     * @param boolean$eduGain
+     */
+    public function __construct(array $entities, $eduGain)
     {
         $this->_entities = $entities;
+        $this->_eduGain = $eduGain;
     }
 
     public function map()
@@ -22,6 +28,10 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
             return $rootElement;
         }
 
+        if ($this->_eduGain) {
+            $rootElement = $this->_mapMdRpi($rootElement);
+        }
+
         $rootElement['md:EntityDescriptor'] = array();
         foreach ($this->_entities as $entity) {
             $rootElement['md:EntityDescriptor'][] = $this->_mapEntity($entity);
@@ -31,7 +41,13 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
 
     protected function _mapEntity(array $entity)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($entity, $this->_eduGain);
         return $mapper->map();
+    }
+
+    protected function _mapMdRpi(array $rootElement)
+    {
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_PublicationInfo($this->_entity);
+        return $mapper->mapTo($rootElement);
     }
 }

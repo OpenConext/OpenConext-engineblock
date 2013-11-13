@@ -1,7 +1,6 @@
 <?php
 
 $rootDir = realpath(__DIR__ . '/../../');
-require_once $rootDir . '/library/simplesamlphp/lib/_autoload.php';
 
 use Behat\Behat\Context\ClosuredContextInterface,
     Behat\Behat\Context\TranslatedContextInterface,

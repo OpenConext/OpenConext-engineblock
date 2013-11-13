@@ -47,6 +47,11 @@ git clone -b ${TAG} https://github.com/${GITHUB_USER}/${PROJECT_NAME}.git ${PROJ
 cd ${PROJECT_DIR}
 php ${RELEASE_DIR}/composer.phar install --no-dev
 
+# run Assetic
+cd ${PROJECT_DIR}/bin
+rm -fr ${PROJECT_DIR}/www/authentication/generated
+php ./assets_pipelines.php
+
 # remove files that are not required for production
 rm -rf ${PROJECT_DIR}/.idea
 rm -rf ${PROJECT_DIR}/.git
@@ -69,7 +74,7 @@ tar -czf ${PROJECT_DIR_NAME}.tar.gz ${PROJECT_DIR_NAME}
 
 # create checksum file
 cd ${RELEASE_DIR}
-shasum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha
+# sha1sum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha
 
 # sign it if requested
 if [ -n "$2" ]

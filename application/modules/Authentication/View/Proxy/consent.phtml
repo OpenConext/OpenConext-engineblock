@@ -23,7 +23,10 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
- if (!isset($action)) {
+/**
+ * See OpenConext-engineblock/library/EngineBlock/Corto/Module/Service/ProvideConsent.php#84
+ */
+if (!isset($action)) {
     throw new EngineBlock_View_Exception('No Consent action given to consent screen');
 }
 if (!isset($ID)) {
@@ -44,18 +47,10 @@ if (!isset($idp)) {
 
 // The current language
 $lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
+$fallback_lang = ($lang == 'en' ? 'nl' : 'en');
 
-// Set new window icon
-$newWindowIconUrl = EngineBlock_View::staticUrl(). '/media/new_window_icon.gif';
-$newWindowHtml = '<img src="' . $newWindowIconUrl . '" alt="(' . $this->t('external_link') . ')" style="border: 0pt none; float: none;" />';
-$termsOfServiceUrl = 'https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+(' . strtoupper($lang) . ')';
-$surfConextTosLinkHtml = '<a href="' . $termsOfServiceUrl . '" target="_blank">SURFconext</a>' . $newWindowHtml;
-
-$spName         = isset($sp['Name'][$lang])  ? $sp['Name'][$lang]                                   : array_shift($sp['Name']);
-$idpName        = isset($idp['Name'][$lang]) ? $idp['Name'][$lang]                                  : array_shift($idp['Name']);
-$spLogo         = isset($sp['Logo']['URL'])  ? $sp['Logo']['URL']                                   : false;
-$idpLogo        = isset($idp['Logo']['URL']) ? $idp['Logo']['URL']                                  : false;
-$spEulaLinkHtml = isset($sp['Eula']) ? '<a href="' . $sp['Eula'] . '" target="_blank">' . $spName . '</a>' . $newWindowHtml  : $spName;
+$spName         = isset($sp['Name'][$lang])  ? $sp['Name'][$lang] : $sp['Name'][$fallback_lang];
+$idpName        = isset($idp['Name'][$lang]) ? $idp['Name'][$lang] : $idp['Name'][$fallback_lang];
 
 /**
  * @var Zend_Layout $layout
@@ -78,19 +73,6 @@ $profileUrl = EngineBlock_View::profileUrl();
 $view = $layout->getView();
 /** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
 $inlineScriptHelper = $view->getHelper('InlineScript');
-// Set javascript
-$staticHost = EngineBlock_View::staticUrl();
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.mousewheel.min.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.putCursorAtEnd.1.0.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.jscrollpane.min.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.tmpl.min.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/keyboardNavigator.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/typewatch.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/jquery.cookie.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/discover.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/screen.js');
-$inlineScriptHelper->appendFile($staticHost . '/javascript/discover.js');
-
 $inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
 $inlineScriptHelper->appendScript('
 (function() {
@@ -98,85 +80,54 @@ $inlineScriptHelper->appendScript('
     d.linkHelp();
 ' . (isset($_POST['show-help']) && $_POST['show-help'] === 'yes' ? 'd.showHelp(0)' : '') .
 ' })();');
-$inlineScriptHelper->appendScript('
-//Create scrollbar
-$("#scrollViewport").jScrollPane({
-    maintainPosition: false,
-    enableKeyboardNavigation: true,
-    showArrows: true
-});');
 ?>
 <style>
-    img.logo, img.arrow {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     table {
         width: 100%;
     }
 </style>
-<p style="font-weight: bold;">
-    <?php echo $this->t('consent_intro', $spName, $idpName); ?>
-</p>
-
-<?php if ($idpLogo) : ?>
-<img class="logo"
-     alt="<?php echo htmlentities($idpName); ?>"
-     title="<?php echo htmlentities($idpName); ?>"
-     src="<?php echo htmlentities($idpLogo); ?>" />
-<?php else: ?>
-<h4><?php echo htmlentities($idpName); ?></h4>
-<?php endif; ?>
-
-<div class="results consent">
-    <div id="scrollViewport" class="jspScrollable">
-    <table>
-        <thead>
-            <tr>
-                <th><?php echo $this->t('attribute'); ?></th>
-                <th><?php echo $this->t('value'); ?></th>
-            </tr>
-        </thead>
-    <?php foreach ($attributes as $uid => $attributeValues) { ?>
-        <tr>
-            <td style="font-weight: bold;">
-                <?=$this->getAttributeName($uid, $lang)?>
-            </td>
-            <td>
-                <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                <?php echo htmlentities($attributeValues[0]);?>
-                <?php } /** Multiple attribute values */ else { ?>
-                <ul>
-                <?php foreach ($attributeValues as $value) { ?>
-                    <li><?php echo htmlentities($value); ?></li>
-                <?php } ?>
-                </ul>
-                <?php } ?>
-            </td>
-        </tr>
-    <?php } ?>
-    </table>
-    </div>
-</div>
-
-<img class="arrow"
-     alt="<?php echo $this->t('consent_sp_is_provided'); ?>"
-     src="<?php echo $staticHost . '/media/arrow.png'; ?>" />
-
-<?php if ($spLogo) : ?>
-<img class="logo"
-     alt="<?php echo htmlentities($spName); ?>"
-     title="<?php echo htmlentities($spName); ?>"
-     src="<?php echo htmlentities($spLogo); ?>" />
-<?php else: ?>
-<h4 style="text-align: center"><?php echo htmlentities($spName); ?></h4>
-<?php endif; ?>
+<h2><?php echo $this->t('consent_header_info'); ?></h2>
 
 <p>
-    <?php echo $this->t('consent_terms_of_service', $spName, $surfConextTosLinkHtml, $spEulaLinkHtml); ?>
+    <?php echo $this->t('consent_sp_idp_info', $spName, $idpName); ?>
 </p>
+
+<div>
+    <?php $this->sortConsentDisplayOrder($attributes) ?>
+    <table>
+    <?php foreach ($attributes as $uid => $attributeValues) { ?>
+        <?php $attributeName = $this->getDisplayName($uid, $lang, false)?>
+        <?php if ($attributeName) : ?>
+            <tr>
+                <td>
+                    <?= $attributeName ?>
+                </td>
+                <td>
+                    <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                        <?php echo htmlspecialchars($attributeValues[0]);?>
+                    <?php } /** Multiple attribute values */ else { ?>
+                        <ul>
+                            <?php foreach ($attributeValues as $value) { ?>
+                                <li><?php echo htmlspecialchars($value); ?></li>
+                            <?php } ?>
+                        </ul>
+                    <?php } ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+    <?php } ?>
+    <?php if ($nameId) : ?>
+        <tr>
+            <td>
+                <?php echo $this->t('name_id'); ?>
+            </td>
+            <td>
+                <?= $nameId ?>
+            </td>
+        </tr>
+    <?php endif; ?>
+    </table>
+</div>
 
 <style>
     input.submit {
@@ -186,31 +137,31 @@ $("#scrollViewport").jScrollPane({
 
 <div id="approve">
 <!-- YES -->
-<form id="accept" method="post" action="<?php echo htmlentities($action); ?>">
-    <p>
-        <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
+<form id="accept" method="post" action="<?php echo htmlspecialchars($action); ?>">
+        <input type="hidden" name="ID"      value="<?php echo htmlspecialchars($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
 
         <input id="accept_terms_button"
                class="submit bigbutton"
                type="submit"
                value="<?php echo $this->t('consent_accept'); ?>"
-               style="font-weight: bold;" />
-    </p>
+               />
 </form>
 
 <!-- NO -->
-<form id="reject" method="post" action="<?php echo htmlentities($action); ?>">
-    <p>
-        <input type="hidden" name="ID"      value="<?php echo htmlentities($ID); ?>">
+<form id="reject" method="post" action="<?php echo htmlspecialchars($action); ?>">
+        <input type="hidden" name="ID"      value="<?php echo htmlspecialchars($ID); ?>">
         <input type="hidden" name="consent" value="no" />
 
-        <input id="decline_terms_button"
-               class="submit bigbutton"
-               type="submit"
-               value="<?php echo $this->t('consent_decline'); ?>" />
-    </p>
+        <a id="decline_terms_button" style="line-height: 40px;" href="javascript:;" onclick="document.getElementById('reject').submit();">
+            <?php echo $this->t('consent_decline'); ?>
+        </a>
 </form>
 </div>
 
-<p><?php echo $this->t('consent_notice'); ?></p>
+<p class="grey"><?php echo $this->t('consent_notice'); ?></p>
+
+<?php if (isset($sp['Eula'])) : ?>
+    <?php echo $this->t('sp_terms_of_service', $spName, $sp['Eula']); ?>
+<?php endif; ?>
+

@@ -1,9 +1,65 @@
 {
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
-    "minimum-stability": "stable",
-    "require" : {
-        "pimple/pimple": "1.0.2"
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://raw.github.com/cpliakas/simplesamlphp-composer/master"
+        },
+        {
+            "type":"package",
+            "package": {
+                "name": "zendframework/zendframework1",
+                "version": "1.10.9",
+                "dist": {
+                    "url": "https://packages.zendframework.com/releases/ZendFramework-1.10.9/ZendFramework-1.10.9-minimal.zip",
+                    "type": "zip"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Zend_": "library/"
+                    }
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "apache/shindig",
+                "version": "1094333",
+                "source": {
+                    "type": "svn",
+                    "url": "http://svn.apache.org/repos/asf/shindig/trunk",
+                    "reference": "php@1094333"
+                },
+                "autoload" : {
+                    "classmap" : [
+                        "external/OAuth",
+                        "src"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "cssmin/cssmin",
+                "version": "3.0.1",
+                "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
+                "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
+            }
+        }
+
+    ],
+    "require": {
+        "pimple/pimple": "1.0.2",
+        "simplesamlphp/simplesamlphp": "1.9.0",
+        "dbpatch/dbpatch": "1.1.1",
+        "zendframework/zendframework1":"1.10.9",
+        "apache/shindig":"1094333",
+        "kriswallsmith/assetic": "1.2.*@dev",
+        "mrclay/minify": "2.1.7",
+        "cssmin/cssmin": "3.0.1"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",
@@ -13,16 +69,24 @@
         "behat/mink-extension": "1.1.4",
         "behat/mink-goutte-driver": "1.0.9"
     },
+    "scripts": {
+        "pre-autoload-dump": [
+            "bin/composer/dbpatch-post-install.sh",
+            "bin/composer/simplesamlphp-post-install.sh",
+            "bin/composer/zend-framework-post-install.sh",
+            "bin/composer/shindig-post-install.sh"
+        ]
+    },
     "autoload": {
         "psr-0": {
-            "DbPatch_": "library/",
+            "DbPatch_": "vendor/dbpatch/dbpatch/src/",
             "EngineBlock_": "library/",
+            "EngineBlock_Test": "tests/library/",
             "Grouper_": "library/",
             "Janus_": "library/",
             "OpenSocial_": "library/",
             "SurfConext_": "library/",
             "Surfnet_": "library/",
-            "Zend_": "library/",
             "Authentication_":"application/modules/",
             "Cron_":"application/modules/",
             "Default_":"application/modules/",
@@ -32,9 +96,6 @@
             "Service_":"application/modules/",
             "Social_":"application/modules/",
             "VoManage_":"application/modules/"
-        },
-        "classmap":[
-            "tests"
-        ]
+        }
     }
 }

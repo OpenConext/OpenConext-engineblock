@@ -37,7 +37,6 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
-        $queryString = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryString();
         $proxyServer = new EngineBlock_Corto_Adapter();
         try {
             if (substr($argument, 0, 3) == "vo:") {
@@ -45,12 +44,14 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             } else if (!empty($argument)) {
                 throw new EngineBlock_Exception("Unknown argument", EngineBlock_Exception::CODE_NOTICE);
             }
-
             $proxyServer->idPsMetadata();
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
             $application->handleExceptionWithFeedback($e,
-                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId())
-            );
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId()));
+        } catch(Janus_Client_CacheProxy_Exception $e) {
+            $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId));
         }
     }
 
@@ -67,6 +68,11 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId())
+            );
+        } catch(Janus_Client_CacheProxy_Exception $e) {
+            $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId)
             );
         }
     }

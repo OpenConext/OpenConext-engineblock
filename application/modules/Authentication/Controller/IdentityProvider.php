@@ -102,6 +102,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 '/authentication/feedback/no-idps'
             );
         }
+        catch (EngineBlock_Corto_Exception_InvalidAcsLocation $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/invalidAcsLocation'
+            );
+        }
     }
 
     public function processWayfAction()
@@ -115,6 +120,7 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     public function metadataAction($argument = null)
     {
         $this->setNoRender();
+        $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $proxyServer = new EngineBlock_Corto_Adapter();
 
@@ -122,7 +128,14 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
         }
 
-        $proxyServer->idPMetadata();
+        try {
+            $proxyServer->idPMetadata();
+        }
+        catch (EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId()));
+        }
+
     }
 
     public function processConsentAction()
@@ -157,11 +170,35 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/custom');
         }
+        catch (EngineBlock_Corto_Exception_NoConsentProvided $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/no-consent');
+        }
     }
 
     public function helpAction($argument = null)
     {
 
+    }
+
+    public function requestAccessAction()
+    {
+        $this->queryParameters = $this->_getRequest()->getQueryParameters();
+    }
+
+    public function performRequestAccessAction()
+    {
+        if (!$this->_requiredDataValid(array("name", "email", "comment"))) {
+            $this->queryParameters = $_POST;
+            $this->renderAction("RequestAccess");
+        } else {
+            $this->_sendRequestAccessMail(
+                urldecode($_POST['idpEntityId']),
+                urldecode($_POST['spEntityId']),
+                $_POST['name'],
+                $_POST['email'],
+                $_POST['comment'] );
+        }
     }
 
     public function certificateAction()
@@ -170,5 +207,37 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->idpCertificate();
+    }
+
+    protected function _requiredDataValid($names)
+    {
+        $dataValid = true;
+        foreach ($names as $name) {
+            if (empty($_POST[$name]) || ($name === 'email' && !filter_var($_POST[$name], FILTER_VALIDATE_EMAIL))) {
+                $name = $name.'Error';
+                $this->$name = true;
+                $dataValid = false;
+            }
+        }
+        return $dataValid;
+    }
+
+    protected function _sendRequestAccessMail($idp, $sp, $name, $email, $comment) {
+        $body = <<<EOT
+There has been a request to allow access for IdP '$idp' to SP '$sp'. The request was made by:
+
+$name <$email>
+
+The comment was:
+
+$comment
+
+EOT;
+        $mailer = new Zend_Mail('UTF-8');
+        $mailer->setFrom($_POST['email']);
+        $mailer->addTo(EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->help);
+        $mailer->setSubject(sprintf("Request for IdP access (%s)", gethostname()));
+        $mailer->setBodyText($body);
+        $mailer->send();
     }
 }

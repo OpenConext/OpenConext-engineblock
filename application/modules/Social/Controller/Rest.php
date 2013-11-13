@@ -23,18 +23,16 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-define('ENGINEBLOCK_FOLDER_SHINDIG', ENGINEBLOCK_FOLDER_LIBRARY.'shindig/php/');
- 
+define('ENGINEBLOCK_FOLDER_SHINDIG', ENGINEBLOCK_FOLDER_VENDOR . 'apache/shindig/');
+
 class Social_Controller_Rest extends EngineBlock_Controller_Abstract
 {
     public function indexAction($url)
     {
         $this->setNoRender(); // let shindig do the rendering
 
-        set_include_path(ENGINEBLOCK_FOLDER_SHINDIG . PATH_SEPARATOR . get_include_path());
-        
-        include_once('src/common/Config.php');
-        include_once('src/common/File.php');
+        require_once(ENGINEBLOCK_FOLDER_SHINDIG . 'src/common/Config.php');
+        require_once(ENGINEBLOCK_FOLDER_SHINDIG . 'src/common/File.php');
 
         // You can't inject a Config, so force it to try loading
         // and ignore errors from config file not being there :(
@@ -46,9 +44,7 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
                                  'group_service'        => 'EngineBlock_Shindig_DataService',
         ));
 
-        spl_autoload_register(array(get_class($this), 'shindigAutoLoad'));
-        
-        // Shindig expects urls to be moiunted on /social/rest so we enforce that.
+        // Shindig expects urls to be mounted on /social/rest so we enforce that.
         $_SERVER['REQUEST_URI'] = '/social/rest/' . $url;
         // We only support JSON
         $_SERVER['CONTENT_TYPE'] = 'application/json';
@@ -67,41 +63,5 @@ class Social_Controller_Rest extends EngineBlock_Controller_Abstract
             echo "Invalid method";
             // @todo Error out
         }
-    }
-
-    public static function shindigAutoLoad($className)
-    {
-        $locations = array(
-            'src/common',
-            'src/common/sample',
-            'src/gadgets',
-            'src/gadgets/servlet',
-            'src/gadgets/oauth',
-            'src/gadgets/sample',
-            'src/social',
-            'src/social/servlet',
-            'src/social/service',
-            'src/social/opensocial',
-            'src/social/model',
-            'src/social/spi',
-            'src/social/converters',
-            'src/social/oauth',
-            'src/social/sample'
-        );
-        
-        $extensionClassPaths = Config::get('extension_class_paths');
-        if (!empty($extensionClassPaths)) {
-            $locations = array_merge(explode(',', $extensionClassPaths), $locations);
-        }
-
-        // Check for the presence of this class in our all our directories.
-        $fileName = $className . '.php';
-        foreach ($locations as $path) {
-            if (file_exists(ENGINEBLOCK_FOLDER_SHINDIG."{$path}/$fileName")) {
-                require $path . '/' . $fileName;
-                return true;
-            }
-        }
-        return false;
     }
 }

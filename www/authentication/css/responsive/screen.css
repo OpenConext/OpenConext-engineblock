@@ -1,0 +1,768 @@
+/* Effective stylesheet produced by snapshot save */
+.jspContainer { overflow: hidden; position: relative; }
+.jspPane { position: absolute; }
+.jspVerticalBar { position: absolute; top: 0pt; right: 0pt; width: 16px; height: 100%; background: none repeat scroll 0% 0%; }
+.jspHorizontalBar { position: absolute; bottom: 0pt; left: 0pt; width: 100%; height: 16px; background: none repeat scroll 0% 0%; }
+.jspVerticalBar *, .jspHorizontalBar * { margin: 0pt; padding: 0pt; }
+.jspCap { display: none; }
+.jspHorizontalBar .jspCap { float: left; }
+.jspTrack { background: none repeat scroll 0% 0% rgb(221, 221, 238); position: relative; }
+.jspDrag { background: none repeat scroll 0% 0% rgb(187, 187, 221); position: relative; top: 0pt; left: 0pt; cursor: pointer; }
+.jspHorizontalBar .jspTrack, .jspHorizontalBar .jspDrag { float: left; height: 100%; }
+.jspArrow { background: none repeat scroll 0% 0% rgb(80, 80, 109); text-indent: -20000px; display: block; cursor: pointer; }
+.jspArrow.jspDisabled { cursor: default; background: none repeat scroll 0% 0% rgb(128, 128, 141); }
+.jspVerticalBar .jspArrow { height: 16px; }
+.jspHorizontalBar .jspArrow { width: 10px; float: left; height: 100%; }
+.jspVerticalBar .jspArrow:focus { outline: medium none; }
+.jspCorner { background: none repeat scroll 0% 0% rgb(238, 238, 244); float: left; height: 100%; }
+* html .jspCorner { margin: 0pt -3px 0pt 0pt; }
+
+
+
+
+/* Effective stylesheet produced by snapshot save */
+* { margin: 0pt; }
+html, body { height: 100%; }
+body { color: rgb(51, 51, 51); font: 12px/17px Arial,Helvetica,sans-serif; padding: 0pt; margin: 0pt; background: none repeat scroll 0% 0% rgb(231, 231, 231); }
+h1 { font-size: 14px; margin: 0pt 0pt 15px; padding: 0pt; color: rgb(255, 255, 255); }
+h2, h3 { font-size: 14px; margin: 0pt 0pt 3px; padding: 0pt; }
+p { padding: 0pt; margin: 0pt 0pt 8px; }
+a { color: rgb(40, 141, 213); text-decoration: none; outline: medium none; }
+a:hover { text-decoration: underline; }
+hr { border-width: medium medium 1px; border-style: none none solid; border-color: -moz-use-text-color -moz-use-text-color rgb(215, 215, 215); -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; -moz-border-image: none; margin: 10px 0pt; padding: 0pt; height: 1px; }
+:focus { outline: medium none; }
+.word-wrap { word-wrap: break-word;}
+
+
+.clearfix:before, .clearfix:after { content: ""; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { zoom: 1; }
+
+img.arrow
+{
+    margin-bottom: 6px;
+    margin-top: 6px;
+}
+
+div#wrapper
+{
+    margin: 0 auto;
+    width: auto;
+    padding: 12px;
+    max-width: 650px
+}
+
+div#header
+{
+    background: #fff url("/media/panelBg.png") repeat-x scroll left 47px;
+    padding: 15px 0 16px 22px;
+    position: relative;
+    top: -12px;
+    -moz-border-radius-topleft: 0px;
+    -moz-border-radius-topright: 0px;
+    -moz-border-radius-bottomright: 15px;
+    -moz-border-radius-bottomleft: 15px;
+    -webkit-border-radius: 0px 0px 15px 15px;
+    border-radius: 0px 0px 15px 15px;  -webkit-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    color: #000;
+    font-size: 16px;
+}
+
+div#header h1
+{
+    color: #000;
+    overflow: hidden;
+    height: 16px;
+}
+
+div#main
+{
+    background: #fff url("/media/panelBg.png") repeat-x scroll left -15px;
+    padding: 9px 14px 0px 14px;
+    margin-bottom: 20px;
+    position: relative;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    -webkit-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 2px 1px rgba(0, 0, 0, 0.2);
+}
+
+div#main div.bottom
+{
+    padding: 8px 0 10px 0;
+    position: relative;
+    bottom: 0pt;
+    left: 0pt;
+    color: #999;
+}
+
+div#main h1
+{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 14px;
+    line-height: 18px;
+    height: 18px;
+}
+
+
+p.back { border-bottom: 1px solid rgb(215, 215, 215); padding-bottom: 10px; }
+p.back a { background: url("/media/back.png") no-repeat scroll left center transparent; padding: 1px 0pt 2px 22px; margin-left: -3px; }
+#faq { list-style: none outside none; margin: 0pt; padding: 6px 9px 9px; }
+#faq li { margin: 0pt 0pt 5px; padding: 0pt 0pt 3px; border-bottom: 1px solid rgb(215, 215, 215); clear: both; display: block; }
+#faq li ul { padding: 0pt; }
+#faq li ul li { border: medium none; padding-left: 10px; background: url("/media/bullet1.gif") no-repeat scroll 3px 7px transparent; }
+#faq li h3 { padding-right: 10px; color: rgb(65, 155, 218); cursor: pointer; background: url("/media/down.gif") no-repeat scroll right 6px transparent; font-size: 12px; }
+#faq li.open { padding-bottom: 20px; }
+#faq li.open h3 { background: none repeat scroll 0% 0% transparent; }
+#faq li h3:hover { text-decoration: underline; }
+span.openClose { cursor: pointer; float: right; color: rgb(40, 141, 213); background: url("/media/up.gif") no-repeat scroll right 6px transparent; padding-right: 12px; clear: both; display: none; }
+span.openClose:hover { text-decoration: underline; }
+#faq li.open span.openClose { display: block; }
+#faq li p, #faq li ul { display: none; }
+#faq li.open p, #faq li.open ul { display: block; }
+.jspVerticalBar { background-color: transparent; }
+.jspCap { display: block; height: 7px; }
+.jspTrack { width: 10px; background: url("/media/scrollBck.gif") no-repeat scroll left top rgb(226, 235, 244); }
+.jspDrag { width: 8px; margin: 0pt auto; background: none repeat scroll 0% 0% rgb(65, 155, 218); border: 1px solid rgb(63, 118, 157); display: block; position: absolute; outline: medium none; }
+.jspArrowUp, .jspArrowUp.jspDisabled { height: 13px; background: url("/media/slider_up.gif") no-repeat scroll left 5px transparent; }
+.jspArrowDown, .jspArrowDown.jspDisabled { height: 10px; background: url("/media/slider_down.gif") no-repeat scroll left 2px transparent; }
+ul.nav { float: right; list-style: none outside none; text-transform: uppercase; }
+ul.top { margin: 0px; padding: 0px; }
+ul.nav li { float: left; list-style: none outside none; font-weight: bold; background: url("/media/divider.gif") no-repeat scroll left 3px transparent; margin-left: 5px; padding-left: 6px; }
+ul.nav li a { color: rgb(255, 255, 255); padding-bottom: 6px; }
+ul.nav li.active a { height: 15px; display: block; color: rgb(17, 102, 164); background: url("/media/menu_active.gif") no-repeat scroll center bottom transparent; }
+ul.nav li:first-child { background: none repeat scroll 0% 0% transparent; }
+ul.nav li.first { background: none repeat scroll 0% 0% transparent; }
+ul.nav li.first.active a { background-image: none; }
+table, tr, th, td { border: 0pt none; border-collapse: collapse; border-spacing: 0pt; font-size: 11px; margin: 0pt; padding: 0pt; border-bottom: 1px solid rgb(241, 243, 231);}
+th { color: rgb(153, 153, 150); font-weight: normal; text-align: left; }
+th, td { padding: 5px; vertical-align: top; }
+td {  }
+td:first-child { border-left: 0pt none; }
+tr.odd { background-color: rgb(241, 243, 231); border-right: 1px solid rgb(241, 243, 231); }
+
+div.centered
+{
+    margin: 10px;
+}
+
+
+
+div.results ul#organisationsContainer li.noAccess {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=50)";
+    filter: alpha(opacity=50);
+    -moz-opacity: 0.5;
+    -khtml-opacity: 0.5;
+    opacity: 0.5;
+}
+
+div.results ul#organisationsContainer li.noAccess em {
+    font-size: 12px;
+    color: #ffffff;
+    display: block;
+    float: right;
+}
+
+div.results ul#organisationsContainer li a
+{
+    font-size: 14px;
+    color: #fff;
+    border: 0;
+    padding: 10px 20px;
+    background-color: #50a2dd;
+    background: -moz-linear-gradient( top, #50a2dd 0%,  #2484c9);
+    background: -webkit-gradient(   linear, left top, left bottom, from(#50a2dd), to(#2484c9));
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-box-shadow:    0px 1px 3px rgba(000,000,000,0.2), inset 0px 0px 1px rgba(255,255,255,0.2);
+    -webkit-box-shadow: 0px 1px 3px rgba(000,000,000,0.2), inset 0px 0px 1px rgba(255,255,255,0.2);
+    text-shadow:    0px -1px 0px rgba(44,53,148,0.5),   0px 1px 0px rgba(255,255,255,0.3);
+    margin-bottom: 12px;
+}
+
+
+
+#scrollViewport
+{
+    overflow: hidden;
+}
+
+input.bigbutton
+{
+    padding: 2pt 1.25em;
+    overflow: visible;
+    padding: 8px;
+    display: block;
+    margin: 6px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+div#approve
+{
+    margin: 0px auto;
+    position: relative;
+    padding-top: 20px;
+}
+
+div#approve form#accept
+{
+}
+
+div#approve form#accept input.bigbutton
+{
+    float: right;
+}
+
+div#approve form input.bigbutton
+{
+    float: right;
+    font-size: 14px;
+    color: #fff;
+    border: 0;
+    padding: 10px 20px;
+    background: #3892D2;
+    background: -moz-linear-gradient( top, #50a2dd 0%,  #2484c9);
+    background: -webkit-gradient(   linear, left top, left bottom, from(#50a2dd), to(#2484c9));
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-box-shadow:    0px 1px 3px rgba(000,000,000,0.2), inset 0px 0px 1px rgba(255,255,255,0.2);
+    -webkit-box-shadow: 0px 1px 3px rgba(000,000,000,0.2), inset 0px 0px 1px rgba(255,255,255,0.2);
+    text-shadow:    0px -1px 0px rgba(44,53,148,0.5),   0px 1px 0px rgba(255,255,255,0.3);
+}
+
+div#approve form#reject,
+div#approve form#accept
+{
+    display: block;
+    position: relative;
+    text-align: center;
+}
+
+div#approve form#reject input.bigbutton
+{
+    background: #333;
+    background: -moz-linear-gradient( top, #666 0%, #444);
+    background: -webkit-gradient(   linear, left top, left bottom, from(#666), to(#444));
+}
+
+
+div#approve form#reject input.bigbutton,
+div#approve form#accept input.bigbutton
+{
+    float: none;
+    position: relative;
+    margin: 0 auto;
+    width: 270px;
+}
+
+
+ul#organisationsContainer
+{
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
+ul#organisationsContainer li
+{
+    margin-right: 12px;
+    margin-bottom: 8px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+ul#organisationsContainer li span
+{
+    font-size: 90%;
+}
+
+
+ul#organisationsContainer li a
+{
+    display: block;
+    text-align: left;
+    display: block;
+    padding: 12px 0 12px 0;
+}
+
+ul#organisationsContainer li img
+{
+    display: none;
+    margin: 0 auto;
+    max-height: 55px;
+    max-width: 122px;
+}
+
+#content img.logo {
+    max-height: 60px;
+    max-width: 122px;
+}
+
+/* tabs */
+
+ul.tabs
+{
+    list-style: none outside none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    right: 25px;
+    top: -1px;
+}
+
+ul.tabs li
+{
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 14px;
+    margin-left: 4px;
+    text-indent: -9999px;
+    width: 25px;
+}
+
+ul.tabs li.thumbs
+{
+    background: url(/media/thumbs2.gif) no-repeat scroll left top transparent;
+}
+
+ul.tabs li.active.thumbs
+{
+    background-image: url(/media/thumbs1.gif);
+}
+
+ul.tabs li.list
+{
+    background: url(/media/list2.gif) no-repeat scroll left top transparent;
+}
+
+ul.tabs li.active.list
+{
+    background-image: url(/media/list1.gif);
+}
+
+div.inputBox
+{
+    display: block;
+    margin-bottom: 20px;
+    -webkit-box-shadow: inset 0px 0px 3px 3px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0px 0px 3px 3px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 0px 3px 3px rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+    padding: 7px 7px 7px 5px;
+}
+
+input.search
+{
+    font: 13px/13px Arial, Helvetica, sans-serif;
+    height: 32px;
+    width: 100%;
+    margin-bottom: 0.8em;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+div.suggestion
+{
+    display: block;
+    height: 76px;
+    margin-bottom: 0.8em;
+    position: relative;
+    -webkit-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    padding: 12px;
+}
+
+div.suggestion p
+{
+    color: #999;
+    font-weight: bold;
+    padding: 7px 10px 0 9px;
+    float: left;
+    clear: none;
+}
+
+p.grey {
+    color: #808080;
+    margin-bottom: 20px;
+}
+
+a#SuggestionLink
+{
+    float: left;
+    text-align: center;
+}
+
+a#SuggestionLink img
+{
+    max-height: 60px;
+    max-width: 122px;
+}
+
+a#SuggestionLink span
+{
+    display: block;
+}
+
+ul#resultTabs
+{
+    display: none;
+}
+
+.jspArrowUp,
+.jspArrowUp.jspDisabled
+{
+    background: url("/media/slider_up.gif") no-repeat scroll left 5px transparent;
+    height: 13px;
+}
+
+.jspVerticalBar .jspArrow
+{
+    height: 16px;
+}
+
+.jspArrow.jspDisabled
+{
+    background: none repeat scroll 0 0 #80808D;
+    cursor: default;
+}
+
+.jspArrowUp,
+.jspArrowUp.jspDisabled
+{
+    background: url("/media/slider_up.gif") no-repeat scroll left 5px transparent;
+    height: 13px;
+}
+
+.jspArrow
+{
+    background: none repeat scroll 0 0 #50506D;
+    cursor: pointer;
+    display: block;
+    text-indent: -20000px;
+}
+
+.jspVerticalBar *,
+.jspHorizontalBar *
+{
+    margin: 0;
+    padding: 0;
+}
+
+form.apply input, form.apply textarea {
+    width: 100%;
+    margin-left: 0;
+}
+
+form.apply label {
+    width: 100%;
+}
+
+form.apply label.top {
+    vertical-align: top;
+}
+
+form.apply label.error {
+    margin-left: 0%;
+    color: red;
+}
+
+div.results ul#organisationsContainer li.noAccess em {
+    float: right;
+}
+
+div.right a {
+    width: 100%;
+}
+
+div.right a {
+    display: inline-block;
+    text-align: center;
+}
+
+div.right input{
+    width: 100%;
+}
+
+/*++++++++++++++++++++++++*/
+/*         SCROLL         */
+
+/*#scrollViewport*/
+/*{*/
+    /*overflow: hidden;*/
+/*}*/
+
+/*#scrollViewportHelp*/
+/*{*/
+    /*height: 235px;*/
+/*}*/
+
+.jspVerticalBar
+{
+    background-color: transparent;
+}
+
+.jspCap
+{
+    display: block;
+    height: 7px;
+}
+
+.jspTrack
+{
+    width: 10px;
+    background: #E2EBF4 url(../../media/scrollBck.gif) no-repeat left top;
+}
+
+.jspDrag
+{
+    width: 8px;
+    margin: 0 auto;
+    background: #419bda;
+    border: 1px solid #3f769d;
+    display: block;
+    position: absolute;
+    outline: none;
+}
+
+.jspArrowUp, .jspArrowUp.jspDisabled
+{
+    height: 13px;
+    background: url(../../media/slider_up.gif) no-repeat left 5px;
+}
+
+.jspArrowDown, .jspArrowDown.jspDisabled
+{
+    height: 10px;
+    background: url(../../media/slider_down.gif) no-repeat left 2px;
+}
+
+
+@media only screen and (min-width: 768px) {
+
+    div.results
+    {
+        -webkit-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+        -moz-box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0px 0px 0px 1px rgba(0, 0, 0, 0.2);
+        -webkit-border-radius: 4px;
+        -moz-border-radius: 4px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        display: block;
+        margin-bottom: 0pt;
+        position: relative;
+        padding: 12px;
+        padding-right: 6px;
+    }
+
+    div.centered
+    {
+        margin: 20px 20px 0px 20px;
+    }
+
+
+    ul#organisationsContainer
+    {
+        width: auto;
+        margin: 0;
+        padding: 0;
+    }
+
+    ul#organisationsContainer li
+    {
+        margin-right: 12px;
+        display: block;
+        margin-bottom: 8px;
+        float: left;
+        width: 133px;
+        height: auto;
+        list-style: none;
+        padding: 0;
+        text-align: center;
+    }
+
+
+    div.results  ul#organisationsContainer li a
+    {
+        font-size: 11px;
+        color: #fff;
+        border: 0;
+        height: 100px;
+        width: 133px;
+        padding: 5px 0 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+        -moz-border-radius: 0;
+        -webkit-border-radius: 0;
+        -moz-box-shadow:    none;
+        -webkit-box-shadow: none;
+        text-shadow:    none;
+        margin-bottom: 12px;
+        color: #288DD5;
+        position: relative;
+    }
+
+    div.results  ul#organisationsContainer li a img {
+        border: 0;
+    }
+
+    div.results  ul#organisationsContainer li a:hover
+    {
+        background: url(/media/selection.gif) no-repeat scroll left top transparent;
+    }
+
+
+    ul#organisationsContainer li span
+    {
+        left: 10px;
+        text-align: center;
+        top: 62px;
+        width: 112px;
+        font-size: 11px;
+        line-height: 12px;
+        color: #288DD5;
+        position: absolute;
+        display: block;
+    }
+
+    ul#resultTabs
+    {
+        display: block;
+    }
+
+    ul#organisationsContainer li span
+    {
+        font-size: 90%;
+    }
+
+
+    ul#organisationsContainer li a
+    {
+        display: block;
+        text-align: center;
+    }
+
+    ul#organisationsContainer li img
+    {
+        display: block;
+        margin: 0 auto;
+    }
+
+
+
+    input.bigbutton
+    {
+        padding: 2pt 1.25em;
+        overflow: visible;
+        padding: 8px;
+        display: block;
+        margin: 6px;
+        -webkit-border-radius: 6px;
+        -moz-border-radius: 6px;
+        border-radius: 6px;
+    }
+
+    div#approve
+    {
+        margin: 0px auto;
+        position: relative;
+        height: 50px;
+    }
+
+    div#approve form#accept
+    {
+        display: block;
+        position: absolute;
+        left: 0;
+        right: 50%;
+        text-align: right;
+    }
+
+    div#approve form#accept input.bigbutton
+    {
+        /*float: right;*/
+        /*margin-right: 8px;*/
+    }
+
+    div#approve form#reject input.bigbutton
+    {
+        /*float: left;*/
+        /*margin-left: 8px;*/
+    }
+
+    div#approve form#reject
+    {
+        display: block;
+        position: absolute;
+        left: 50%;
+        right: 0;
+    }
+
+    /* The form for requesting access */
+
+    form.apply input, form.apply textarea {
+        display: inline-block;
+        width: 80%;
+        line-height: 22px;
+        margin: 5px;
+    }
+
+    form.apply label {
+        display: inline-block;
+        width: 15%;
+    }
+
+    form.apply label.top {
+        vertical-align: top;
+    }
+
+    form.apply label.error {
+        width: 100%;
+        margin-left: 16%;
+    }
+    div.right {
+        float: right;
+        margin-right: 13px;
+    }
+    div.right a {
+        display: inline;
+    }
+    div.right input[type='submit'] {
+        width: 80px;
+    }
+    div.results ul#organisationsContainer li.noAccess em {
+        left: 10px;
+        color: red;
+        text-align: center;
+        top: 86px;
+        width: 112px;
+        position: absolute;
+        display: block;
+    }
+
+}
