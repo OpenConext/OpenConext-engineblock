@@ -503,13 +503,13 @@ class EngineBlock_Corto_ProxyServer
 
         // Set up the Subject Confirmation element.
         $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
+        $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
         $newAssertion->setSubjectConfirmation(array($subjectConfirmation));
         $subjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
         $subjectConfirmation->SubjectConfirmationData = $subjectConfirmationData;
 
         // Confirm where we are sending it.
         $acs = $this->getRequestAssertionConsumer($request);
-        $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
         $subjectConfirmationData->Recipient = $acs['Location'];
 
         // Confirm that this is in response to their AuthnRequest (unless, you know, it isn't).
