@@ -13,11 +13,11 @@ class EngineBlock_Saml2_MessageSerializer
     public function serialize(SAML2_Message $samlMessage)
     {
         if ($samlMessage->getSignatureKey()) {
-            $samlMessagetDomElement = $samlMessage->toSignedXML();
+            $samlMessageDomElement = $samlMessage->toSignedXML();
         } else {
-            $samlMessagetDomElement = $samlMessage->toUnsignedXML();
+            $samlMessageDomElement = $samlMessage->toUnsignedXML();
         }
-        return $samlMessagetDomElement->ownerDocument->saveXML($samlMessagetDomElement);
+        return $samlMessageDomElement->ownerDocument->saveXML($samlMessageDomElement);
     }
 
     /**

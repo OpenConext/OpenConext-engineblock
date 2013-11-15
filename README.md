@@ -1,13 +1,15 @@
 # OpenConext EngineBlock #
 
-The SURFnet SURFconext EngineBlock is a multi-purpose software component
-that has as it's goal the following:
+## License
 
-1. Publicly Proxy and manage Single Sign On authentication requests and responses
-2. Privately offer OpenSocial data based on the SSO user data and Grouper information
+See the LICENSE-2.0.txt file
+
+## Disclaimer
+
+See the NOTICE.txt file
 
 
-## Requirements ##
+## System Requirements ##
 
 * Linux
 * Apache with modules:
