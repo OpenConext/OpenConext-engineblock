@@ -25,7 +25,7 @@
 
 /**
  * Injected:
- * @var array $response
+ * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
  * @var array $idp
  * @var array $attributes
  * @var EngineBlock_Corto_ProxyServer $this
@@ -106,7 +106,7 @@ $attributesValidated = $validator->validate();
         <th>NameID</th>
 
         <td>
-            <?php echo htmlentities($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'], ENT_COMPAT, 'UTF-8'); ?>
+            <?php echo htmlentities($response->getAssertion()->getNameId(), ENT_COMPAT, 'UTF-8'); ?>
         </td>
     </tr>
 </table>

@@ -2,7 +2,7 @@
 /**
  * Injected:
  *
- * @var array $response
+ * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
  * @var array $idp
  * @var array $attributes
  * @var EngineBlock_Corto_ProxyServer $this
@@ -23,7 +23,7 @@ echo 'Workflow Status:   ' . $idp['WorkflowState'] . PHP_EOL;
 SAML2 Subject
 =============
 <?php
-echo 'NameID             ' . $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'] ?>
+echo 'NameID             ' . $response->getAssertion()->getNameId() ?>
 
 
 

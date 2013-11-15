@@ -25,10 +25,11 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
                 'Session lost after WAYF'
             );
         }
+        /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request */
         $request = $_SESSION[$id]['SAMLRequest'];
 
         // Flush log if SP or IdP has additional logging enabled
-        $sp = $this->_server->getRemoteEntity(EngineBlock_SamlHelper::extractIssuerFromMessage($request));
+        $sp = $this->_server->getRemoteEntity($request->getIssuer());
         $idp = $this->_server->getRemoteEntity($selectedIdp);
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();

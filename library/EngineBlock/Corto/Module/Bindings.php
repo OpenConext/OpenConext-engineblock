@@ -68,6 +68,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected $_server;
 
+    /**
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
+     * @throws EngineBlock_Corto_Module_Bindings_VerificationException
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     */
     public function receiveRequest()
     {
         // Detect the current binding from the super globals
@@ -89,20 +95,22 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
+        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
+
         // Make sure the request from the sp has an Issuer
-        $spEntityId = $sspRequest->getIssuer();
+        $spEntityId = $ebRequest->getIssuer();
         if (!$spEntityId) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Missing <saml:Issuer> in message delivered to AssertionConsumerService.'
             );
         }
         // Remember sp for debugging
-        $_SESSION['currentServiceProvider'] = $sspRequest->getIssuer();
+        $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer();
 
         // Verify that we know this SP and have metadata for it.
         $cortoSpMetadata = $this->_verifyKnownMessageIssuer(
             $spEntityId,
-            $sspRequest->getDestination()
+            $ebRequest->getDestination()
         );
 
         // Load the metadata for this IdP in SimpleSAMLphp style
@@ -120,41 +128,33 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         );
 
         // If we should, then check it.
-        $wasSigned = false;
         if ($wantRequestsSigned) {
             // Check the Signature on the Request, if there is no signature, or verification fails
             // throw an exception.
-            if (!sspmod_saml_Message::checkSign($sspSpMetadata, $sspRequest)) {
+            if (!sspmod_saml_Message::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException(
                     'Validation of received messages enabled, but no signature found on message.'
                 );
             }
-            // Otherwise validation succeeded.
-            $wasSigned = true;
+            /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest */
+            $ebRequest->setWasSigned();
         }
 
-        // Convert the SSP Request to a Corto Request
-        $cortoRequest = EngineBlock_Corto_XmlToArray::xml2array($requestXml);
-        $cortoRequest['__'] = array(
-            'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-            'RelayState'      => $sspRequest->getRelayState(),
-            'paramname'       => 'SAMLResponse',
-            'WasSigned'       => $wasSigned,
-        );
+        $this->_annotateRequestWithVoContext($ebRequest, $cortoSpMetadata);
 
-        $cortoRequest = $this->_annotateRequestWithVoContext($cortoRequest, $cortoSpMetadata);
-
-        return $cortoRequest;
+        return $ebRequest;
     }
 
     /**
-     * @param array $cortoRequest
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest
      * @param array $cortoSpMetadata
-     * @return array
+     * @return void
      * @throws EngineBlock_Corto_Exception_VoMismatch
      */
-    protected function _annotateRequestWithVoContext(array $cortoRequest, array $cortoSpMetadata)
-    {
+    protected function _annotateRequestWithVoContext(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest,
+        array $cortoSpMetadata
+    ) {
         // Check if the request was received on a VO endpoint.
         $explicitVo = $this->_server->getVirtualOrganisationContext();
 
@@ -166,7 +166,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // If we have neither, then we're done here
         if (!$explicitVo && !$implicitVo) {
-            return $cortoRequest;
+            return;
         }
 
         // If we have both then they'd better match!
@@ -176,24 +176,28 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        $requestMetadata = &$cortoRequest[EngineBlock_Corto_XmlToArray::PRIVATE_PFX];
-
         // If we received the request on a vo endpoint, then we should register it in the metadata,
         // so we know to use that as Issuer of the resulting Response.
         // And the implicit VO no longer matters.
         if ($explicitVo) {
-            $requestMetadata[EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $explicitVo;
-            return $cortoRequest;
+            $ebRequest->setExplicitVoContext($explicitVo);
+            return;
         }
 
         // If we received the request from an SP with an implicit VO, then register it in the metadata,
         // so it can be verified.
         if ($implicitVo) {
-            $requestMetadata[EngineBlock_Corto_ProxyServer::VO_CONTEXT_IMPLICIT] = $implicitVo;
+            $ebRequest->setImplicitVoContext($implicitVo);
+            return;
         }
-        return $cortoRequest;
     }
 
+    /**
+     * @return bool|EngineBlock_Saml2_ResponseAnnotationDecorator|SAML2_Response
+     * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
+     * @throws EngineBlock_Corto_Module_Bindings_VerificationException
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     */
     public function receiveResponse()
     {
         // First check if we parked a Response somewhere in memory and are just faking a SSO
@@ -219,11 +223,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Receive a message from the binding
         $sspResponse = $sspBinding->receive();
-        $responseXml = $sspResponse->toUnsignedXML()->ownerDocument->saveXML();
+        if (!($sspResponse instanceof SAML2_Response)) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                'Unsupported Message received',
+                EngineBlock_Exception::CODE_NOTICE
+            );
+        }
 
         // Log the response we received for troubleshooting
         $log = $this->_server->getSessionLog();
-        $log->attach($responseXml, 'Response')
+        $log->attach($sspResponse->toUnsignedXML()->ownerDocument->saveXML(), 'Response')
             ->info('Received response');
 
         // This message MUST be a SAML2 response, we don't want a AuthnRequest, LogoutResponse, etc.
@@ -274,6 +283,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     EngineBlock_Exception::CODE_NOTICE
                 );
             }
+
+            $sspResponse->setAssertions($assertions);
         }
         // This misnamed exception is only thrown when the Response status code is not Success
         // If so, let the Corto Output Filters handle it.
@@ -301,24 +312,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        $cortoResponse = EngineBlock_Corto_XmlToArray::xml2array($responseXml);
-        $cortoResponse['__'] = array(
-            'ProtocolBinding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-            'RelayState'      => $sspResponse->getRelayState(),
-            'paramname'       => 'SAMLResponse',
-        );
-        return $cortoResponse;
+        return new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
     }
 
     protected function _receiveMessageFromInternalBinding($key)
     {
-        if (!isset($this->_internalBindingMessages[$key]) || !is_array($this->_internalBindingMessages[$key])) {
+        if (!isset($this->_internalBindingMessages[$key])) {
             return false;
         }
-
-        $message = $this->_internalBindingMessages[$key];
-        $message[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Binding'] = "INTERNAL";
-        return $message;
+        return $this->_internalBindingMessages[$key];
     }
 
     /**
@@ -343,20 +345,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         return $remoteEntity;
     }
 
-    public function send(array $message, array $remoteEntity)
-    {
-        $bindingUrn = $message['__']['ProtocolBinding'];
+    public function send(
+        EngineBlock_Saml2_MessageAnnotationDecorator $message,
+        array $remoteEntity
+    ) {
+        $bindingUrn = $message->getDeliverByBinding();
+        $sspMessage = $message->getSspMessage();
 
         if ($bindingUrn === 'INTERNAL') {
-            $this->sendInternal($message, $remoteEntity);
+            $this->sendInternal($message);
             return;
         }
-
-        // Convert Corto Message to SSP message
-        $xml = EngineBlock_Corto_XmlToArray::array2xml($message);
-        $document = new DOMDocument();
-        $document->loadXML($xml);
-        $sspMessage = SAML2_Message::fromXML($document->firstChild);
 
         if ($this->shouldMessageBeSigned($sspMessage, $remoteEntity)) {
             $certificates = $this->_server->getConfig('certificates');
@@ -375,11 +374,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             $this->validateXml($xml);
 
-            $name = $message['__']['paramname'];
-
             $extra = '';
-            $extra .= isset($message['__']['RelayState']) ? '<input type="hidden" name="RelayState" value="' . htmlspecialchars($message['__']['RelayState']) . '">' : '';
-            $extra .= isset($message['__']['return'])     ? '<input type="hidden" name="return" value="'     . htmlspecialchars($message['__']['return']) . '">' : '';
+            $extra .= method_exists($message, 'getReturn')? '<input type="hidden" name="return" value="'     . htmlspecialchars($message->getReturn()) . '">' : '';
+            $extra .= $sspMessage->getRelayState()           ? '<input type="hidden" name="RelayState" value="' . htmlspecialchars($sspMessage->getRelayState()) . '">' : '';
+
             $encodedMessage = htmlspecialchars(base64_encode($xml));
 
             $action = $sspMessage->getDestination();
@@ -394,12 +392,19 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     'action' => $action,
                     'message' => $encodedMessage,
                     'xtra' => $extra,
-                    'name' => $name,
-                    'trace' => $this->_server->getConfig('debug', false) ? htmlentities(EngineBlock_Corto_XmlToArray::formatXml(EngineBlock_Corto_XmlToArray::array2xml($message))) : '',
-                ));
+                    'name' => $message->getMessageType(),
+                    'trace' => $this->_server->getConfig('debug', false) ? htmlentities($xml) : '',
+                )
+            );
             $this->_server->sendOutput($output);
 
         } else if ($sspBinding instanceof SAML2_HTTPRedirect) {
+            if ($sspMessage instanceof SAML2_Response) {
+                throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
+                    'May not send a Reponse via HTTP Redirect'
+                );
+            }
+
             $url = $sspBinding->getRedirectURL($sspMessage);
             $this->_server->redirect($url, $message);
         }
@@ -451,13 +456,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         return (isset($this->_bindings[$binding]));
     }
 
-    public function sendInternal($message, $remoteEntity)
+    public function sendInternal(EngineBlock_Saml2_MessageAnnotationDecorator $message)
     {
         // Store the message
-        $name            = $message['__']['paramname'];
+        $name = $message->getMessageType();
         $this->_internalBindingMessages[$name] = $message;
 
-        $destinationLocation = $message['_Destination'];
+        /** @var SAML2_Message $message */
+        $destinationLocation = $message->getDestination();
         $parameters = $this->_server->getParametersFromUrl($destinationLocation);
         if (isset($parameters['RemoteIdPMd5'])) {
             $this->_server->setRemoteIdpMd5($parameters['RemoteIdPMd5']);
@@ -474,6 +480,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $log->info("Done calling service '$serviceName'");
     }
 
+    /**
+     * @param $key
+     * @param $message
+     * @return $this
+     */
     public function registerInternalBindingMessage($key, $message)
     {
         $this->_internalBindingMessages[$key] = $message;

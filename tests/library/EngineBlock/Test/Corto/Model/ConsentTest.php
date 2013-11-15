@@ -60,7 +60,7 @@ class EngineBlock_Test_Corto_Model_ConsentTest extends PHPUnit_Framework_TestCas
     {
         $tableName = null;
         $mustStoreValues = true;
-        $response = array();
+        $response = new EngineBlock_Saml2_ResponseAnnotationDecorator(new SAML2_Response());
         $responseAttributes = array();
 
         $consent = new EngineBlock_Corto_Model_Consent(

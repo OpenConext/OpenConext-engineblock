@@ -3,7 +3,9 @@
     "description": "Surfnet OpenConext SAML proxy",
     "require": {
         "pimple/pimple": "1.0.2",
-        "simplesamlphp/simplesamlphp": "1.12.0-alpha",
+        "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
+        "simplesamlphp/simplesamlphp": "dev-trunk",
+        "simplesamlphp/saml2": "0.2.0",
         "dbpatch/dbpatch": "1.1.1",
         "zendframework/zendframework1":"1.10.9",
         "apache/shindig":"1094333",
@@ -28,21 +30,6 @@
         ]
     },
     "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "simplesamlphp/simplesamlphp",
-                "version": "1.12.0-alpha",
-                "source": {
-                    "type": "svn",
-                    "url": "http://simplesamlphp.googlecode.com/svn",
-                    "reference": "trunk@3281"
-                },
-                "autoload": {
-                    "files": ["lib/_autoload.php"]
-                }
-            }
-        },
         {
             "type":"package",
             "package": {
@@ -84,6 +71,21 @@
                 "version": "3.0.1",
                 "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
                 "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
+            }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "robrichards/xmlseclibs",
+                "version": "1.3.1",
+                "source": {
+                    "type": "svn",
+                    "url": "http://xmlseclibs.googlecode.com/svn",
+                    "reference": "trunk@50"
+                },
+                "autoload": {
+                    "files": ["xmlseclibs.php"]
+                }
             }
         }
 
