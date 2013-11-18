@@ -1011,6 +1011,11 @@ class EngineBlock_Corto_ProxyServer
             $responseAssertionAttributes = array();
         }
 
+        // Workaround When response does not contain an Assertion -> $responseAssertionAttributes will be null
+        // EngineBlock_Corto_XmlToArray::attributes2array parameter is type hinted to be an array
+        if (empty($responseAssertionAttributes)) {
+            $responseAssertionAttributes = array();
+        }
         // Take the attributes out
         $responseAttributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
         // Pass em along
