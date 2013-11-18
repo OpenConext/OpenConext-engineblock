@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_0d39c86699584fa9e498d16a11fd12f203bdc236b9" InResponseTo="CORTOca9cbf8c98b750abd9b6d354a0b9eab1e0704dfd" Version="2.0" IssueInstant="2013-06-11T09:50:00Z" Destination="https://engine.surfconext.nl/authentication/sp/consume-assertion">
+  <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">http://idp.example.org/metadata</saml:Issuer>
+  <samlp:Status xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+    <samlp:StatusCode xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+  </samlp:Status>
+  <saml:Assertion Version="2.0" ID="pfxcbd4e6ed-06ce-6bc2-b66b-a6342b02341c" IssueInstant="2013-06-11T09:50:00Z">
+    <saml:Issuer>http://idp.example.org/metadata</saml:Issuer>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfxcbd4e6ed-06ce-6bc2-b66b-a6342b02341c"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>/f9tEoIca8LoFt8Vsi7GnxtBB5s=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>DqR9Wn+5bz22lhrTh7G/dQQxKyycBXek6zR0/DlF8wq1+NCo/xY8QSOzSo3lfZfvPtWCUFV84joTpqmZFNjsEMz8hAIT+rNDf77pQGpQ4aduNt44zA68MT13+Zv3J+zGTA2/deF2Khd9AahzUOGVCyZhs6gv20H8hORbmXMOxXA=</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB8DCCAVmgAwIBAgIJAIhLb8zPNPnBMA0GCSqGSIb3DQEBBQUAMBExDzANBgNVBAMMBnNpZ25lcjAeFw0xMzEwMDEwOTQ3MjdaFw0xMzEwMzEwOTQ3MjdaMBExDzANBgNVBAMMBnNpZ25lcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr0U1nTuBa4tdJeJU9AvANPUY47bWAHyKJAxbvG68IgRqKb/qkUeloKmRZ4qLFh2XwQne/lfjLMH7WvPojC3HbWxbVIY2v79TIIVlhvgjIIPWxVsQY3OPAXr+ITam9BQCmauiqqPUeoVoarQWN1NPDvqR6uRvcpU34B12fqwk960CAwEAAaNQME4wHQYDVR0OBBYEFF0KAqCedIPuov2znuCPFlBF1j/jMB8GA1UdIwQYMBaAFF0KAqCedIPuov2znuCPFlBF1j/jMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAounOqenGu5sCbRE+xUFjhiRJmn2b6m7IWJjl8m+NZaQvtVSRX1ktNqwEhT6ZA/XEB9y1m52aKQYmBN8imToA5gdSfQdzq7346d1sAAwfXWm9LzCGgb0MgCysJVfJSEKC4xZgWLFLkNzCWfMciPO0sRpf3xap+LcmWleqcSf0c4I=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><saml:Subject>
+      <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">john.doe@example.org</saml:NameID>
+      <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+        <saml:SubjectConfirmationData NotOnOrAfter="2013-06-11T09:55:00Z" InResponseTo="CORTOca9cbf8c98b750abd9b6d354a0b9eab1e0704dfd" Recipient="https://engine.surfconext.nl/authentication/sp/consume-assertion"/>
+      </saml:SubjectConfirmation>
+    </saml:Subject>
+    <saml:Conditions NotBefore="2013-06-11T09:49:30Z" NotOnOrAfter="2013-06-11T09:55:00Z">
+      <saml:AudienceRestriction>
+        <saml:Audience>http://idp.example.org/metadata</saml:Audience>
+      </saml:AudienceRestriction>
+    </saml:Conditions>
+    <saml:AuthnStatement AuthnInstant="2013-06-11T09:50:00Z" SessionIndex="2497c61cc101a4df96c62996d1d87f59">
+      <saml:AuthnContext>
+        <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef>
+      </saml:AuthnContext>
+    </saml:AuthnStatement>
+    <saml:AttributeStatement>
+      <saml:Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganization">
+        <saml:AttributeValue>example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:company">
+        <saml:AttributeValue>J</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:sn">
+        <saml:AttributeValue>Doe</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation">
+        <saml:AttributeValue>employee</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:uid">
+        <saml:AttributeValue>john.doe@example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="givenName">
+        <saml:AttributeValue>John</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="uid">
+        <saml:AttributeValue>john.doe@example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="mail">
+        <saml:AttributeValue>john.doe@example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonPrincipalName">
+        <saml:AttributeValue>john.doe@example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="eduPersonAffiliation">
+        <saml:AttributeValue>employee</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="nlEduPersonHomeOrganizationId">
+        <saml:AttributeValue>12AB</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="employeeNumber">
+        <saml:AttributeValue>john.doe@example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="nlEduPersonHomeOrganization">
+        <saml:AttributeValue>university</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:givenName">
+        <saml:AttributeValue>John</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:cn">
+        <saml:AttributeValue>John Doe</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:displayName">
+        <saml:AttributeValue>John Doe</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:mail">
+        <saml:AttributeValue>john.doe@example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:sAMAccountName">
+        <saml:AttributeValue>john.doe</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:department">
+        <saml:AttributeValue>Something</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="sn">
+        <saml:AttributeValue>Doe</saml:AttributeValue>
+      </saml:Attribute>
+    </saml:AttributeStatement>
+  </saml:Assertion>
+</samlp:Response>

@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" ID="pfx933c2762-fb7c-fff2-6693-34f0f23caefa" Version="2.0" IssueInstant="2013-09-20T09:16:09.699Z" Destination="https://engine.john.no-ip.org/authentication/sp/consume-assertion" Consent="urn:oasis:names:tc:SAML:2.0:consent:unspecified" InResponseTo="CORTO78ebac8fc5833168aee8eba0f22ada6df088ead6">
+  <Issuer xmlns="urn:oasis:names:tc:SAML:2.0:assertion">http://adfs2.aai.example.org/adfs/services/trust</Issuer>
+  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfx933c2762-fb7c-fff2-6693-34f0f23caefa"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>PmEjnVx49Vd388KAsd+oPZDGmjE=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>pVRR0WFCE4r88wG7KcpSJx8bJzyrkhtxIGqC05eJX2RodWDFh3abvXZa6nz/HbnA4ev2GxD6P1j71OfWpcmbFJfFqtv/vvjuJf15vGZIf8dnvW8mFxiiNhwW12SOBjXK1bOD23BFnU3CqJR0/XCgnt0X/tD+XGXuwfVUyodBAFg=</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB8DCCAVmgAwIBAgIJAIhLb8zPNPnBMA0GCSqGSIb3DQEBBQUAMBExDzANBgNVBAMMBnNpZ25lcjAeFw0xMzEwMDEwOTQ3MjdaFw0xMzEwMzEwOTQ3MjdaMBExDzANBgNVBAMMBnNpZ25lcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr0U1nTuBa4tdJeJU9AvANPUY47bWAHyKJAxbvG68IgRqKb/qkUeloKmRZ4qLFh2XwQne/lfjLMH7WvPojC3HbWxbVIY2v79TIIVlhvgjIIPWxVsQY3OPAXr+ITam9BQCmauiqqPUeoVoarQWN1NPDvqR6uRvcpU34B12fqwk960CAwEAAaNQME4wHQYDVR0OBBYEFF0KAqCedIPuov2znuCPFlBF1j/jMB8GA1UdIwQYMBaAFF0KAqCedIPuov2znuCPFlBF1j/jMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAounOqenGu5sCbRE+xUFjhiRJmn2b6m7IWJjl8m+NZaQvtVSRX1ktNqwEhT6ZA/XEB9y1m52aKQYmBN8imToA5gdSfQdzq7346d1sAAwfXWm9LzCGgb0MgCysJVfJSEKC4xZgWLFLkNzCWfMciPO0sRpf3xap+LcmWleqcSf0c4I=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><samlp:Status>
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Requester">
+      <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:InvalidNameIDPolicy"/>
+    </samlp:StatusCode>
+  </samlp:Status>
+</samlp:Response>

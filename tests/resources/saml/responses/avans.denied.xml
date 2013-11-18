@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Destination="https://engine.surfconext.nl/authentication/sp/consume-assertion" ID="pfx624601b5-377b-0847-dc4c-455a7f78e983" InResponseTo="CORTO2fb0401915abb2cd4c85991e2b432743b93bdfcf" IssueInstant="2013-09-02T18:50:46Z" Version="2.0">
+  <saml:Issuer>http://idp.example.org/metadata</saml:Issuer>
+  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfx624601b5-377b-0847-dc4c-455a7f78e983"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>9tdMr38QmkG+dWWXwE9PeLhyYBE=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>dH2Eoklhbg3jnsHUYRH8tQVirPEF99dCwcOoQGHOYCTkOdiMvCT4RK2LnDvcDFRmGWra0UfE1aKWfN1+8c8JTBYfciK16mDst0qCj9iNCJLjiocY8w68sxLCa/ct4AjANCvS9FJ1LaqmFQAxQ/vQfz4TEThUifk8Ne5N8OXx2TQ=</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB8DCCAVmgAwIBAgIJAIhLb8zPNPnBMA0GCSqGSIb3DQEBBQUAMBExDzANBgNVBAMMBnNpZ25lcjAeFw0xMzEwMDEwOTQ3MjdaFw0xMzEwMzEwOTQ3MjdaMBExDzANBgNVBAMMBnNpZ25lcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr0U1nTuBa4tdJeJU9AvANPUY47bWAHyKJAxbvG68IgRqKb/qkUeloKmRZ4qLFh2XwQne/lfjLMH7WvPojC3HbWxbVIY2v79TIIVlhvgjIIPWxVsQY3OPAXr+ITam9BQCmauiqqPUeoVoarQWN1NPDvqR6uRvcpU34B12fqwk960CAwEAAaNQME4wHQYDVR0OBBYEFF0KAqCedIPuov2znuCPFlBF1j/jMB8GA1UdIwQYMBaAFF0KAqCedIPuov2znuCPFlBF1j/jMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAounOqenGu5sCbRE+xUFjhiRJmn2b6m7IWJjl8m+NZaQvtVSRX1ktNqwEhT6ZA/XEB9y1m52aKQYmBN8imToA5gdSfQdzq7346d1sAAwfXWm9LzCGgb0MgCysJVfJSEKC4xZgWLFLkNzCWfMciPO0sRpf3xap+LcmWleqcSf0c4I=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><samlp:Status>
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">
+      <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>
+    </samlp:StatusCode>
+  </samlp:Status>
+</samlp:Response>
