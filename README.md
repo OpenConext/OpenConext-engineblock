@@ -1,13 +1,15 @@
 # OpenConext EngineBlock #
 
-The SURFnet SURFconext EngineBlock is a multi-purpose software component
-that has as it's goal the following:
+## License
 
-1. Publicly Proxy and manage Single Sign On authentication requests and responses
-2. Privately offer OpenSocial data based on the SSO user data and Grouper information
+See the LICENSE-2.0.txt file
+
+## Disclaimer
+
+See the NOTICE.txt file
 
 
-## Requirements ##
+## System Requirements ##
 
 * Linux
 * Apache with modules:
@@ -244,18 +246,6 @@ Use these URLs to test your Engineblock instance:
 [https://engineblock-internal.example.com][]
 [https://engineblock-internal.example.com/social/][]
 [https://static.example.com][]
-
-
-### Optional: Install attribute-manipulations ###
-
-EngineBlock has the concept of Attribute Manipulations, which allows you to manipulations per Service Provider on
-the attributes and response released to that Service Provider.
-
-If you want to use attribute-manipulations, simply make a directory called 'attribute-manipulations' in the same folder
-that EngineBlock is located in.
-
-For more documentation please see 
-[https://svn.surfnet.nl/svn/coin-eb/attribute-manipulations/trunk/][SURFnets attribute manipulations].
 
 
 ## Updating ##

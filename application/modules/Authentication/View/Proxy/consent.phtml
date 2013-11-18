@@ -35,9 +35,6 @@ if (!isset($ID)) {
 if (!isset($attributes)) {
     throw new EngineBlock_View_Exception('No Attributes given to consent screen');
 }
-if (!isset($commonName)) {
-    throw new EngineBlock_View_Exception('No common name given to consent screen');
-}
 if (!isset($sp)) {
     throw new EngineBlock_View_Exception('No SP information given to consent screen');
 }
@@ -116,16 +113,6 @@ $inlineScriptHelper->appendScript('
             </tr>
         <?php endif; ?>
     <?php } ?>
-    <?php if ($nameId) : ?>
-        <tr>
-            <td>
-                <?php echo $this->t('name_id'); ?>
-            </td>
-            <td>
-                <?= $nameId ?>
-            </td>
-        </tr>
-    <?php endif; ?>
     </table>
 </div>
 

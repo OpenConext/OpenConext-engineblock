@@ -121,7 +121,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     protected function _getReservedSchacHomeOrganizations()
     {
         $schacHomeOrganizations = array();
-        $remoteEntities = $this->_adapter->getProxyServer()->getRemoteEntities();
+        $remoteEntities = $this->_server->getRemoteEntities();
         foreach ($remoteEntities as $remoteEntity) {
             if (isset($remoteEntity['SchacHomeOrganization'])) {
                 $schacHomeOrganizations[] = $remoteEntity['SchacHomeOrganization'];

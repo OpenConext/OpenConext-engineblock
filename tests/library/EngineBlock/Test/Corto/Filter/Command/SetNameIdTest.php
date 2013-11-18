@@ -10,9 +10,17 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
     public function setUp()
     {
         $command = new EngineBlock_Test_Corto_Filter_Command_SetNameIdMock();
-        $command->setResponse(array('__' => array('IntendedNameId' => 'urn:collab:person:example.edu:mock1')));
+
+        $assertion = new SAML2_Assertion();
+        $assertion->setAttributes(array());
+        $response = new SAML2_Response();
+        $response->setAssertions(array($assertion));
+        $response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
+        $response->setIntendedNameId('urn:collab:person:example.edu:mock1');
+        $command->setResponse($response);
+
         $command->setCollabPersonId('urn:collab:person:example.edu:mock1');
-        $command->setRequest(array());
+        $command->setRequest(new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new SAML2_AuthnRequest()));
         $command->setIdpMetadata(array('EntityId' => 'http://idp.example.edu'));
         $command->setSpMetadata(array('EntityId' => 'http://sp.example.edu'));
         $command->setResponseAttributes(array());
@@ -24,13 +32,12 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         // Input
         $command = clone $this->_command;
         $nameId = array(
-            '_Format' => '',
-            '__v'     => '',
+            'Format' => '',
+            'Value' => '',
         );
-        $command->setResponse(array(
-            '__' => array(
-                'CustomNameId' => $nameId
-        )));
+
+        $response = $command->getResponse();
+        $response->setCustomNameId($nameId);
 
         // Run
         $command->execute();
@@ -42,12 +49,17 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         // Test
         $this->assertEquals(
             $nameId,
-            $response['saml:Assertion']['saml:Subject']['saml:NameID'],
+            $response->getAssertion()->getNameId(),
             'Assertion NameID is set to CustomNameId, allowing overrides in Attribute Manipulations'
         );
+        /** @var DOMNodeList $eppn */
+        $eppn = $responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0];
+        $this->assertEquals(1, $eppn->length, "Only 1 NameID is provided");
+        $eppnNode = $eppn->item(0);
+
         $this->assertEquals(
-            $nameId,
-            $responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'][0]['saml:NameID'],
+            $nameId['Value'],
+            $eppnNode->attributes->getNamedItem('Value'),
             'CustomNameId is also set in attributes'
         );
     }
@@ -59,14 +71,13 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-            '__v' => $response['__']['IntendedNameId'],
+            'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+            'Value' => $response->getIntendedNameId(),
         );
 
-        $command->setRequest(
-            array_merge_recursive(
-                $command->getRequest(),
-                array('samlp:NameIDPolicy' => array('_Format' => $nameId['_Format']))));
+        $request = $command->getRequest();
+        /** @var SAML2_AuthnRequest $request */
+        $request->setNameIdPolicy(array('Format' => $nameId['Format']));
 
         // Run
         $command->execute();
@@ -77,7 +88,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         // Test
         $this->assertEquals(
             $nameId,
-            $response['saml:Assertion']['saml:Subject']['saml:NameID'],
+            $response->getAssertion()->getNameId(),
             'Assertion NameID is set to unspecified, as requested in the AuthnRequest/NameIDPolicy[Format]'
         );
     }
@@ -89,13 +100,13 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-            '__v' => $response['__']['IntendedNameId'],
+            'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+            'Value' => $response->getIntendedNameId(),
         );
         $command->setSpMetadata(
             array_merge_recursive(
                 $command->getSpMetadata(),
-                array('NameIDFormat' => $nameId['_Format'])
+                array('NameIDFormat' => $nameId['Format'])
             )
         );
 
@@ -108,7 +119,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         // Test
         $this->assertEquals(
             $nameId,
-            $response['saml:Assertion']['saml:Subject']['saml:NameID'],
+            $response->getAssertion()->getNameId(),
             'Assertion NameID is set to CustomNameId, allowing overrides in Attribute Manipulations'
         );
     }
@@ -120,19 +131,18 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-            '__v' => $response['__']['IntendedNameId'],
+            'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+            'Value' => $response->getIntendedNameId(),
         );
         $command->setSpMetadata(
             array_merge_recursive(
                 $command->getSpMetadata(),
-                array('NameIDFormat' => $nameId['_Format'])
+                array('NameIDFormat' => $nameId['Format'])
             )
         );
-        $command->setRequest(
-            array_merge_recursive(
-                $command->getRequest(),
-                array('samlp:NameIDPolicy' => array('_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'))));
+        $request = $command->getRequest();
+        /** @var SAML2_AuthnRequest $request */
+        $request->setNameIdPolicy(array('Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'));
 
         // Run
         $command->execute();
@@ -143,7 +153,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         // Test
         $this->assertEquals(
             $nameId,
-            $response['saml:Assertion']['saml:Subject']['saml:NameID'],
+            $response->getAssertion()->getNameId(),
             'Assertion NameID is set to what is set for this SP in the Metadata, NOT what it requested'
         );
     }
@@ -153,15 +163,14 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         // Input
         $command = clone $this->_command;
 
-        $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
-            '__v' => '',
+            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
+            'Value' => '',
         );
         $command->setSpMetadata(
             array_merge_recursive(
                 $command->getSpMetadata(),
-                array('NameIDFormat' => $nameId['_Format'])
+                array('NameIDFormat' => $nameId['Format'])
             )
         );
 
@@ -173,8 +182,8 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         // Test
         $this->assertEquals(
-            $nameId['_Format'],
-            $firstResponse['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'],
+            $nameId['Format'],
+            $firstResponse->getNameIdFormat(),
             'Requesting Persistent gives a persistent identifier'
         );
 
@@ -183,8 +192,8 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         // Test
         $this->assertEquals(
-            $firstResponse['saml:Assertion']['saml:Subject']['saml:NameID'],
-            $secondResponse['saml:Assertion']['saml:Subject']['saml:NameID'],
+            $firstResponse->getNameId(),
+            $secondResponse->getNameId(),
             'Persistent NameID is persistent'
         );
     }
@@ -199,13 +208,13 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $response = $command->getResponse();
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            '__v' => '',
+            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'Value' => '',
         );
         $command->setSpMetadata(
             array_merge_recursive(
                 $command->getSpMetadata(),
-                array('NameIDFormat' => $nameId['_Format'])
+                array('NameIDFormat' => $nameId['Format'])
             )
         );
 
@@ -214,11 +223,12 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         // Output
         $firstResponse = $command->getResponse();
+        $firstResponseNameId = $firstResponse->getNameId();
 
         // Test
         $this->assertEquals(
-            $nameId['_Format'],
-            $firstResponse['saml:Assertion']['saml:Subject']['saml:NameID']['_Format'],
+            $nameId['Format'],
+            $firstResponseNameId['Format'],
             'Assertion NameID is set to what is set for this SP in the Metadata, NOT what it requested'
         );
 
@@ -227,11 +237,12 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         // Output
         $secondResponse = $command->getResponse();
+        $secondResponseNameId = $secondResponse->getNameId();
 
         // Test
         $this->assertEquals(
-            $firstResponse['saml:Assertion']['saml:Subject']['saml:NameID']['__v'],
-            $secondResponse['saml:Assertion']['saml:Subject']['saml:NameID']['__v'],
+            $firstResponseNameId['Value'],
+            $secondResponseNameId['Value'],
             'Asking for another NameID in a given session, for the same SP and IdP, gives the same id'
         );
 
@@ -243,11 +254,12 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         // Output
         $thirdResponse = $command->getResponse();
+        $thirdResponseNameId = $thirdResponse->getNameId();
 
         // Test
         $this->assertNotEquals(
-            $secondResponse['saml:Assertion']['saml:Subject']['saml:NameID'],
-            $thirdResponse['saml:Assertion']['saml:Subject']['saml:NameID'],
+            $secondResponseNameId,
+            $thirdResponseNameId,
             'Asking for another NameID in a given session, for a different SP, gives a different NameID'
         );
 
@@ -259,11 +271,12 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         // Output
         $fourthResponse = $command->getResponse();
+        $fourthResponseNameId = $fourthResponse->getNameId();
 
         // Test
         $this->assertNotEquals(
-            $thirdResponse['saml:Assertion']['saml:Subject']['saml:NameID'],
-            $fourthResponse['saml:Assertion']['saml:Subject']['saml:NameID'],
+            $thirdResponseNameId,
+            $fourthResponseNameId,
             'Asking for another NameID in a new session, for the same SP and IdP, gives a different NameID'
         );
     }
@@ -275,24 +288,15 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         // Input
         $command = clone $this->_command;
-
-        $inputResponse = array(
-            'saml:Assertion' => array(
-                'saml:Subject' => array(
-                    'saml:SubjectConfirmation' => array()
-                )
-            )
-        );
-        $command->setResponse($inputResponse);
         $nameId = array(
-            '_Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-            '__v' => '',
+            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'Value' => '',
         );
 
         $command->setSpMetadata(
             array_merge_recursive(
                 $command->getSpMetadata(),
-                array('NameIDFormat' => $nameId['_Format'])
+                array('NameIDFormat' => $nameId['Format'])
             )
         );
 
@@ -303,10 +307,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         $outputResponse = $command->getResponse();
 
         // Test
-        $this->assertEquals(
-            array('saml:NameID', 'saml:SubjectConfirmation'),
-            array_keys($outputResponse['saml:Assertion']['saml:Subject'])
-        );
+        $this->assertNotEmpty($outputResponse->getAssertion()->getNameId());
     }
 
 }

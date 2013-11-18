@@ -160,7 +160,14 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
     {
         $_POST['ID'] = 'test';
         $_POST['consent'] = 'yes';
-        $_SESSION['consent']['test']['response']['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'] = array();
+
+        $assertion = new SAML2_Assertion();
+        $assertion->setAttributes(array(
+            'urn:mace:dir:attribute-def:mail' => 'test@test.test'
+        ));
+        $sspResponse = new SAML2_Response();
+        $sspResponse->setAssertions(array($assertion));
+        $_SESSION['consent']['test']['response'] = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
     }
 
     /**

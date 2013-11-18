@@ -35,7 +35,7 @@ class EngineBlock_Corto_Filter_Command_SetAlternateKeys extends EngineBlock_Cort
             return;
         }
 
-        $this->_adapter->getProxyServer()->setConfig('certificates', array(
+        $this->_server->setConfig('certificates', array(
             'private' => $this->_spMetadata['AlternatePrivateKey'],
             'public'  => $this->_spMetadata['AlternatePublicKey'],
         ));

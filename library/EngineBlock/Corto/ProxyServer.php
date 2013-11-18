@@ -37,9 +37,6 @@ class EngineBlock_Corto_ProxyServer
 
     protected $_voContext = null;
 
-    protected $_requestArray;
-    protected $_responseArray;
-
     protected $_server;
     protected $_systemLog;
     protected $_sessionLog;
@@ -119,17 +116,6 @@ class EngineBlock_Corto_ProxyServer
     public function isInProcessingMode()
     {
         return $this->_processingMode;
-    }
-
-    /**
-     * Does the request have an "unsolicited" flag
-     *
-     * @param array $request
-     * @return type
-     */
-    public function isUnsolicitedRequest(array $request)
-    {
-        return !empty($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Unsolicited']);
     }
 
     /**
@@ -221,7 +207,7 @@ class EngineBlock_Corto_ProxyServer
     public function sortConsentDisplayOrder(&$attributes)
     {
         $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->sortConsentDisplayOrder($attributes);
+        $metadata->sortConsentDisplayOrder($attributes);
     }
 
     public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
@@ -236,7 +222,7 @@ class EngineBlock_Corto_ProxyServer
         return $metadata->getDescription($attributeId, $ietfLanguageTag);
     }
 
-    public function getUrl($serviceName = "", $remoteEntityId = "", $request = "")
+    public function getUrl($serviceName = "", $remoteEntityId = "", EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request = null)
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
@@ -253,22 +239,24 @@ class EngineBlock_Corto_ProxyServer
 
         $mappedUri = $this->_serviceToControllerMapping[$serviceName];
 
-        $isImplicitVo = false;
-        $remoteEntity = false;
+        $voContext = false;
+        if ($request && $request->getVoContext()  && $request->isVoContextExplicit()) {
+            $voContext = $request->getVoContext();
+        }
+        else if ($this->_voContext) {
+            $voContext = $this->_voContext;
+        }
+
+        // Append the (explicit) VO context from the request
+        if ($voContext && !$this->_processingMode && $serviceName !== "spMetadataService") {
+            $mappedUri .= '/vo:' . $voContext;
+        }
+
+        // Append the Transparent identifier
         if ($remoteEntityId) {
-            $remoteEntity = $this->getRemoteEntity($remoteEntityId);
-        }
-        if ($remoteEntity && isset($remoteEntity['VoContext'])) {
-            if ($request && !isset($request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX])) {
-                $isImplicitVo = true;
+            if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $serviceName !== 'singleLogoutService') {
+                $mappedUri .= '/' . md5($remoteEntityId);
             }
-        }
-        if (!$this->_processingMode && $this->_voContext !== null && $serviceName != "spMetadataService" && !$isImplicitVo) {
-            $mappedUri .= '/' . "vo:" . $this->_voContext;
-        }
-        // @todo improve this if construction
-        if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $serviceName !== 'singleLogoutService' && $remoteEntityId) {
-            $mappedUri .= '/' . md5($remoteEntityId);
         }
 
         return $scheme . '://' . $host . $mappedUri;
@@ -416,18 +404,21 @@ class EngineBlock_Corto_ProxyServer
 
 ////////  REQUEST HANDLING /////////
 
-    public function sendAuthenticationRequest(array $request, $idpEntityId, $scope = null)
-    {
+    public function sendAuthenticationRequest(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        $idpEntityId
+    ) {
         $cookieExpiresStamp = null;
         if (isset($this->_configs['rememberIdp'])) {
             $cookieExpiresStamp = strtotime($this->_configs['rememberIdp']);
         }
         $this->setCookie('selectedIdp', $idpEntityId, $cookieExpiresStamp);
 
-        $originalId = $request['_ID'];
+        $originalId = $request->getId();
 
-        $newRequest = $this->createEnhancedRequest($request, $idpEntityId, $scope);
-        $newId = $newRequest['_ID'];
+        $idpMetadata = $this->getRemoteEntity($idpEntityId);
+        $newRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($request, $idpMetadata, $this);
+        $newId = $newRequest->getId();
 
         // Store the original Request
         $_SESSION[$originalId]['SAMLRequest'] = $request;
@@ -440,333 +431,138 @@ class EngineBlock_Corto_ProxyServer
         $this->getBindingsModule()->send($newRequest, $this->getRemoteEntity($idpEntityId));
     }
 
-    /**
-     *
-     *
-     * @param string $idp
-     * @param array|null $scoping
-     * @return array
-     */
-    public function createEnhancedRequest($originalRequest, $idp, array $scoping = null)
-    {
-        $remoteMetaData = $this->getRemoteEntity($idp);
-
-        $nameIdPolicy = array('_AllowCreate'  => 'true');
-        /**
-         * Name policy is not required, so it is only set if configured, SAML 2.0 spec
-         * says only following values are allowed:
-         *  - urn:oasis:names:tc:SAML:2.0:nameid-format:transient
-         *  - urn:oasis:names:tc:SAML:2.0:nameid-format:persistent.
-         *
-         * Note: Some IDP's like those using ADFS2 do not understand those, for these cases the format can be 'configured as empty
-         * or set to an older version.
-         */
-        // @todo check why it is empty
-        if (!empty($remoteMetaData['NameIDFormat'])) {
-            $nameIdPolicy['_Format'] = $remoteMetaData['NameIDFormat'];
-        }
-
-        $request = array(
-            EngineBlock_Corto_XmlToArray::TAG_NAME_PFX       => 'samlp:AuthnRequest',
-            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
-                'paramname'         => 'SAMLRequest',
-                'destinationid'     => $idp,
-                // Use the default binding even if more exist
-                'ProtocolBinding'   => $remoteMetaData['SingleSignOnService'][0]['Binding'],
-            ),
-            '_xmlns:saml'                       => 'urn:oasis:names:tc:SAML:2.0:assertion',
-            '_xmlns:samlp'                      => 'urn:oasis:names:tc:SAML:2.0:protocol',
-
-            '_ID'                               => $this->getNewId(),
-            '_Version'                          => '2.0',
-            '_IssueInstant'                     => $this->timeStamp(),
-            // Use the default location even if more exist
-            '_Destination'                      => $remoteMetaData['SingleSignOnService'][0]['Location'],
-            '_ForceAuthn'                       => ($originalRequest['_ForceAuthn']) ? 'true' : 'false',
-            '_IsPassive'                        => ($originalRequest['_IsPassive']) ? 'true' : 'false',
-
-            // Send the response to us.
-            '_AssertionConsumerServiceURL'      => $this->getUrl('assertionConsumerService'),
-            '_ProtocolBinding'                  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
-
-            'saml:Issuer' => array('__v' => $this->getUrl('spMetadataService')),
-            'ds:Signature' => '__placeholder__',
-
-            'samlp:NameIDPolicy' => $nameIdPolicy
-        );
-
-        if (isset($originalRequest['_AttributeConsumingServiceIndex'])) {
-            $request['_AttributeConsumingServiceIndex'] = $originalRequest['_AttributeConsumingServiceIndex'];
-        }
-
-        if (empty($remoteMetaData['DisableScoping'])) {
-            if ($scoping) {
-                $scoping = (array) $scoping;
-                foreach ($scoping as $scopedIdP) {
-                    $request['samlp:Scoping']['samlp:IDPList']['samlp:IDPEntry'][] = array('_ProviderID' => $scoping);
-                }
-                return $request;
-            }
-
-            // Copy original scoping rules
-            if (isset($originalRequest['samlp:Scoping'])) {
-                $request['samlp:Scoping'] = $originalRequest['samlp:Scoping'];
-            }
-            else {
-                $request['samlp:Scoping'] = array();
-            }
-
-            // Decrease or initialize the proxycount
-            if (isset($originalRequest['samlp:Scoping']['_ProxyCount'])) {
-                $request['samlp:Scoping']['_ProxyCount']--;
-            }
-            else {
-                $request['samlp:Scoping']['_ProxyCount'] = $this->getConfig('max_proxies', 10);
-            }
-
-            // Add the issuer of the original request as requester
-            if (!isset($request['samlp:Scoping']['samlp:RequesterID'])) {
-                $request['samlp:Scoping']['samlp:RequesterID'] = array();
-            }
-            $request['samlp:Scoping']['samlp:RequesterID'][] = array('__v' => $originalRequest['saml:Issuer']['__v']);
-        }
-
-        return $request;
-    }
-
 //////// RESPONSE HANDLING ////////
 
-    public function createErrorResponse($request, $errorStatus)
-    {
+    public function createErrorResponse(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        $errorStatus
+    ) {
         $response = $this->_createBaseResponse($request);
-
-        $errorCodePrefix = 'urn:oasis:names:tc:SAML:2.0:status:';
-        $response['samlp:Status'] = array(
-            'samlp:StatusCode' => array(
-                '_Value' => 'urn:oasis:names:tc:SAML:2.0:status:Responder',
-                'samlp:StatusCode' => array(
-                    '_Value' => $errorCodePrefix . $errorStatus,
-                ),
-            ),
-        );
+        $response->setStatus(array(
+            'Code' => 'urn:oasis:names:tc:SAML:2.0:status:' . $errorStatus
+        ));
         return $response;
     }
 
-    public function createEnhancedResponse($request, $sourceResponse)
-    {
-        $response = $this->_createBaseResponse($request);
+    /**
+     * @param SAML2_AuthnRequest|EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $sourceResponse
+     */
+    public function createEnhancedResponse(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $sourceResponse
+    ) {
+        $newResponse = $this->_createBaseResponse($request);
 
-        // Store the Origin response (from the IdP)
-        if (isset($sourceResponse['__']['OriginalResponse'])) {
-            $response['__']['OriginalResponse'] = $sourceResponse['__']['OriginalResponse'];
-        }
-        else {
-            $response['__']['OriginalResponse'] = $sourceResponse;
-        }
+        // We don't support multiple assertions, only use the first one.
+        $sourceAssertions = $sourceResponse->getAssertions();
+        $sourceAssertion = $sourceAssertions[0];
 
-        $inTransparentMode = isset($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent']) &&
-                $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent'];
-
-        if (isset($sourceResponse['__']['OriginalIssuer'])) {
-            $response['__']['OriginalIssuer'] = $sourceResponse['__']['OriginalIssuer'];
-        }
-        else {
-            $response['__']['OriginalIssuer'] = $sourceResponse['saml:Issuer']['__v'];
-        }
-
-        if (!$this->isInProcessingMode() && $inTransparentMode) {
-            // Patch Migration BACKLOG-915 Begin
-            if (substr($response['__']['OriginalIssuer'],-8) == '/migrate') {
-                $response['__']['OriginalIssuer'] = substr($response['__']['OriginalIssuer'],0,-8);
-            }
-            // Patch Migration BACKLOG-915 End
-            $response['saml:Issuer']['__v']                   = $response['__']['OriginalIssuer'];
-            $response['saml:Assertion']['saml:Issuer']['__v'] = $response['__']['OriginalIssuer'];
-        }
-
-        if (isset($sourceResponse['_Consent'])) {
-            $response['_Consent'] = $sourceResponse['_Consent'];
-        }
-
-        $response['samlp:Status']   = $sourceResponse['samlp:Status'];
-        $response['saml:Assertion'] = $sourceResponse['saml:Assertion'];
-
-        // remove us from the list otherwise we will as a proxy be there multiple times
-        // as the assertion passes through multiple times ???
-        $authenticatingAuthorities = &$response['saml:Assertion']['saml:AuthnStatement']['saml:AuthnContext']['saml:AuthenticatingAuthority'];
-        foreach ((array) $authenticatingAuthorities as $key => $authenticatingAuthority) {
-            if ($authenticatingAuthority['__v'] === $this->getUrl('idpMetadataService')) {
-                unset($authenticatingAuthorities[$key]);
-            }
-        }
-        if ($this->getUrl('idpMetadataService') !== $sourceResponse['saml:Issuer']['__v']) {
-            $authenticatingAuthorities[] = array('__v' => $sourceResponse['saml:Issuer']['__v']);
-        }
-
-        $acs = $this->getRequestAssertionConsumer($request);
-
-        $subjectConfirmation = &$response['saml:Assertion']['saml:Subject']['saml:SubjectConfirmation']['saml:SubjectConfirmationData'];
-        $subjectConfirmation['_Recipient']    = $acs['Location'];
-
-        // only set InResponseTo attribute when request was solicited
-        if (!$this->isUnsolicitedRequest($request)) {
-            $subjectConfirmation['_InResponseTo'] = $request['_ID'];
-        }
-
-        $subjectConfirmation['_NotOnOrAfter'] = $this->timeStamp($this->getConfig('NotOnOrAfter', 300));
-
-        $response['saml:Assertion']['_ID'] = $this->getNewId();
-        $response['saml:Assertion']['_IssueInstant'] = $this->timeStamp();
-        $response['saml:Assertion']['saml:Conditions']['_NotBefore']    = $this->timeStamp();
-        $response['saml:Assertion']['saml:Conditions']['_NotOnOrAfter'] = $this->timeStamp($this->getConfig('NotOnOrAfter', 300));
-
-        $entity = $this->getRemoteEntity(
-            $request['saml:Issuer']['__v']
+        // Store the Origin response and issuer (from the IdP)
+        $newResponse->setOriginalResponse(
+            $sourceResponse->getOriginalResponse() ?
+                $sourceResponse->getOriginalResponse() :
+                $sourceResponse
+        );
+        $newResponse->setOriginalIssuer(
+            $sourceResponse->getOriginalIssuer() ?
+                $sourceResponse->getOriginalIssuer() :
+                $sourceResponse->getIssuer()
         );
 
-        if (empty($entity['TransparantIssuer'])) {
-            $response['saml:Assertion']['saml:Issuer'] = array('__v' => $response['saml:Issuer']['__v']);
+        // Copy over the Status (which should be success)
+        $newResponse->setStatus($sourceResponse->getStatus());
+
+        // Create a new assertion by us.
+        $newAssertion = new SAML2_Assertion();
+        $newResponse->setAssertions(array($newAssertion));
+        $newAssertion->setId($this->getNewId());
+        $newAssertion->setIssueInstant(time());
+        $newAssertion->setIssuer($newResponse->getIssuer());
+
+        // Unless off course we are in 'stealth' / transparent mode, in which case,
+        // pretend to be the Identity Provider.
+        $serviceProvider = $this->getRemoteEntity($request->getIssuer());
+        $mustProxyTransparently = ($request->isTransparent() || !empty($serviceProvider['TransparentIssuer']));
+        if (!$this->isInProcessingMode() && $mustProxyTransparently) {
+            $newResponse->setIssuer($newResponse->getOriginalIssuer());
+            $newAssertion->setIssuer($newResponse->getOriginalIssuer());
         }
 
-        $response['saml:Assertion']['saml:Conditions']['saml:AudienceRestriction']['saml:Audience']['__v'] = $request['saml:Issuer']['__v'];
-
-        return $response;
-    }
-
-    public function createNewResponse($request, $attributes = array())
-    {
-        $response = $this->_createBaseResponse($request);
-
-        $soon       = $this->timeStamp($this->getConfig('NotOnOrAfter', 300));
-        $sessionEnd = $this->timeStamp($this->getConfig('SessionEnd'  , 60 * 60 * 12));
-
-        $response['saml:Assertion'] = array(
-            '_xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-            '_xmlns:xs' => 'http://www.w3.org/2001/XMLSchema',
-            '_xmlns:samlp' => 'urn:oasis:names:tc:SAML:2.0:protocol',
-            '_xmlns:saml' => 'urn:oasis:names:tc:SAML:2.0:assertion',
-
-            '_ID'           => $this->getNewId(),
-            '_Version'      => '2.0',
-            '_IssueInstant' => $response['_IssueInstant'],
-
-            'saml:Issuer' => array('__v' => $response['saml:Issuer']['__v']),
-            'ds:Signature' => '__placeholder__',
-            'saml:Subject' => array(
-                'saml:NameID' => array(
-                    '_SPNameQualifier'  => $this->getUrl('idpMetadataService'),
-                    '_Format'           => EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
-                    '__v'               => $this->getNewId(),
-                ),
-                'saml:SubjectConfirmation' => array(
-                    '_Method' => 'urn:oasis:names:tc:SAML:2.0:cm:bearer',
-                    'saml:SubjectConfirmationData' => array(
-                        '_NotOnOrAfter' => $soon,
-                        '_Recipient'    => $request['_AssertionConsumerServiceURL'], # req issuer
-                        '_InResponseTo' => $request['_ID'],
-                    ),
-                ),
-            ),
-            'saml:Conditions' => array(
-                '_NotBefore'    => $response['_IssueInstant'],
-                '_NotOnOrAfter' => $soon,
-                'saml:AudienceRestriction' => array(
-                    'saml:Audience' => array('__v' => $request['saml:Issuer']['__v']),
-                ),
-            ),
-            'saml:AuthnStatement' => array(
-                '_AuthnInstant'         => $response['_IssueInstant'],
-                '_SessionNotOnOrAfter'  => $sessionEnd,
-                'saml:SubjectLocality' => array(
-                    '_Address' => $_SERVER['REMOTE_ADDR'],
-                    '_DNSName' => $_SERVER['REMOTE_HOST'],
-                ),
-                'saml:AuthnContext' => array(
-                    'saml:AuthnContextClassRef' => array('__v' => 'urn:oasis:names:tc:SAML:2.0:ac:classes:Password'),
-                ),
-            ),
-        );
-
-        if (!isset($attributes['binding'])) {
-            $attributes['binding'] = array();
-        }
-        $attributes['binding'][] = $response['__']['ProtocolBinding'];
-        foreach ((array) $attributes as $key => $vs) {
-            foreach ($vs as $v) {
-                $attributeStatement[$key][] = $v;
-            }
-        }
-
-        $attributeConsumingServiceIndex = $request['_AttributeConsumingServiceIndex'];
-        if ($attributeConsumingServiceIndex) {
-            $attributeStatement['AttributeConsumingServiceIndex'] = "AttributeConsumingServiceIndex: $attributeConsumingServiceIndex";
-        }
-        else {
-            $attributeStatement['AttributeConsumingServiceIndex'] = '-no AttributeConsumingServiceIndex given-';
-        }
-
-        $attributes = EngineBlock_Corto_XmlToArray::array2attributes($attributeStatement);
-        if (!empty($attributes)) {
-            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'] = $attributes;
-        }
-        else {
-            unset($response['saml:Assertion']['saml:AttributeStatement']);
-        }
-
-        return $response;
-    }
-
-    protected function _createBaseResponse($request)
-    {
-        if (isset($request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX])) {
-            $vo = $request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX];
-            $this->setVirtualOrganisationContext($vo);
-        }
-
-        $now = $this->timeStamp();
-        $destinationID = $request['saml:Issuer']['__v'];
-
-        $response = array(
-            EngineBlock_Corto_XmlToArray::TAG_NAME_PFX => 'samlp:Response',
-            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
-                'paramname' => 'SAMLResponse',
-                'RelayState'=> $request['__']['RelayState'],
-                'destinationid' => $destinationID,
-            ),
-            '_xmlns:samlp' => 'urn:oasis:names:tc:SAML:2.0:protocol',
-            '_xmlns:saml'  => 'urn:oasis:names:tc:SAML:2.0:assertion',
-
-            '_ID'           => $this->getNewId(),
-            '_Version'      => '2.0',
-            '_IssueInstant' => $now,
-            '_InResponseTo' => $request['_ID'],
-            '_Consent'      => null,
-        );
-
-        // the original request was unsolicited, remove InResponseTo attribute
-        if ($this->isUnsolicitedRequest($request)) {
-            unset($response['_InResponseTo']);
-        }
-
-        $acs = $this->getRequestAssertionConsumer($request);
-        $response['_Destination']           = $acs['Location'];
-        $response['__']['ProtocolBinding']  = $acs['Binding'];
-
-        if (!$response['_Destination']) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                "No Destination in request or metadata for: $destinationID"
+        // Copy over the NameID for now...
+        // (further on in this filters we'll have more info and set this to something better)
+        $sourceNameId = $sourceAssertion->getNameId();
+        if (!empty($sourceNameId) && !empty($sourceNameId['Value']) && !empty($sourceNameId['Format'])) {
+            $newAssertion->setNameId(
+                array(
+                    'Value'  => $sourceNameId['Value'],
+                    'Format' => $sourceNameId['Format'],
+                )
             );
         }
 
-        $response['saml:Issuer'] = array(
-            '__v' => $this->getUrl('idpMetadataService', $destinationID, $request)
-        );
-        $response['samlp:Status'] = array(
-            'samlp:StatusCode' => array(
-                '_Value' => 'urn:oasis:names:tc:SAML:2.0:status:Success',
-            )
-        );
+        // Set up the Subject Confirmation element.
+        $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
+        $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
+        $newAssertion->setSubjectConfirmation(array($subjectConfirmation));
+        $subjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
+        $subjectConfirmation->SubjectConfirmationData = $subjectConfirmationData;
 
+        // Confirm where we are sending it.
+        $acs = $this->getRequestAssertionConsumer($request);
+        $subjectConfirmationData->Recipient = $acs['Location'];
+
+        // Confirm that this is in response to their AuthnRequest (unless, you know, it isn't).
+        if (!$request->isUnsollicited()) {
+            /** @var SAML2_AuthnRequest $request */
+            $subjectConfirmationData->InResponseTo = $request->getId();
+        }
+
+        // Note that it is valid for some 5 minutes.
+        $notOnOrAfter = time() + $this->getConfig('NotOnOrAfter', 300);
+        $newAssertion->setNotBefore(time() - 1);
+        $newAssertion->setNotOnOrAfter($notOnOrAfter);
+        $subjectConfirmationData->NotOnOrAfter = $notOnOrAfter;
+
+        // And only valid for the SP that requested it.
+        $newAssertion->setValidAudiences(array($request->getIssuer()));
+
+        // Copy over the Authentication information because the IdP did the authentication, not us.
+        $newAssertion->setAuthnInstant($sourceAssertion->getAuthnInstant());
+        $newAssertion->setSessionIndex($sourceAssertion->getSessionIndex());
+        $newAssertion->setAuthnContext($sourceAssertion->getAuthnContext());
+        $newAssertion->setAuthenticatingAuthority($sourceAssertion->getAuthenticatingAuthority());
+
+        // Copy over the attributes
+        $newAssertion->setAttributes($sourceAssertion->getAttributes());
+
+        return $newResponse;
+    }
+
+    protected function _createBaseResponse(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
+    {
+        if ($request->getVoContext() && $request->isVoContextExplicit()) {
+            $this->setVirtualOrganisationContext($request->getVoContext());
+        }
+        $requestWasUnsollicited = $request->isUnsollicited();
+
+        $response = new SAML2_Response();
+        /** @var SAML2_AuthnRequest $request */
+        $response->setRelayState($request->getRelayState());
+        $response->setId($this->getNewId());
+        $response->setIssueInstant(time());
+        if (!$requestWasUnsollicited) {
+            $response->setInResponseTo($request->getId());
+        }
+        $response->setDestination($request->getIssuer());
+        $response->setIssuer($this->getUrl('idpMetadataService', $request->getIssuer(), $request));
+
+        $acs = $this->getRequestAssertionConsumer($request);
+        $response->setDestination($acs['Location']);
+        $response->setStatus(array('Code' => SAML2_Const::STATUS_SUCCESS));
+
+        $response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
+        $response->setDeliverByBinding($acs['Binding']);
         return $response;
     }
 
@@ -776,9 +572,10 @@ class EngineBlock_Corto_ProxyServer
      *
      * @param array $request
      */
-    public function getRequestAssertionConsumer(array $request)
+    public function getRequestAssertionConsumer(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
-        $remoteEntity = $this->getRemoteEntity($request['saml:Issuer']['__v']);
+        /** @var SAML2_AuthnRequest $request */
+        $remoteEntity = $this->getRemoteEntity($request->getIssuer());
 
         // parse and validate custom ACS location
         $custom = $this->getCustomAssertionConsumer($request, $remoteEntity);
@@ -819,30 +616,31 @@ class EngineBlock_Corto_ProxyServer
      * @param array $request
      * @param array $remoteEntity
      */
-    public function getCustomAssertionConsumer(array $request, array $remoteEntity)
-    {
-        $requestWasSigned    = (isset($request['__']['WasSigned']) && $request['__']['WasSigned']===true);
-        $requestHasCustomAcs = $this->hasCustomAssertionConsumer($request);
-        $requestHasAcsIndex  = $this->hasCustomAssertionConsumerIndex($request);
+    public function getCustomAssertionConsumer(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        array $remoteEntity
+    ) {
+        $requestWasSigned    = $request->wasSigned();
 
         // Custom ACS Location & ProtocolBinding goes first
-        if ($requestHasCustomAcs) {
+        /** @var SAML2_AuthnRequest $request */
+        if ($request->getAssertionConsumerServiceURL()) {
             if ($requestWasSigned) {
                 $this->_server->getSessionLog()->info(
-                    "Using AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
-                        "and ProtocolBinding '{$request['_ProtocolBinding']}' from signed request. "
+                    "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
+                        "and ProtocolBinding '{$request->getProtocolBinding()}' from signed request. "
                 );
                 return array(
-                    'Location' => $request['_AssertionConsumerServiceURL'],
-                    'Binding'  => $request['_ProtocolBinding'],
+                    'Location' => $request->getAssertionConsumerServiceURL(),
+                    'Binding'  => $request->getProtocolBinding(),
                 );
             }
             else {
                 $requestAcsIsRegisteredInMetadata = false;
                 foreach ($remoteEntity['AssertionConsumerServices'] as $entityAcs) {
                     $requestAcsIsRegisteredInMetadata = (
-                        $entityAcs['Location'] === $request['_AssertionConsumerServiceURL'] &&
-                        $entityAcs['Binding']  === $request['_ProtocolBinding']
+                        $entityAcs['Location'] === $request->getAssertionConsumerServiceURL() &&
+                        $entityAcs['Binding']  === $request->getProtocolBinding()
                     );
                     if ($requestAcsIsRegisteredInMetadata) {
                         break;
@@ -850,29 +648,30 @@ class EngineBlock_Corto_ProxyServer
                 }
                 if ($requestAcsIsRegisteredInMetadata) {
                     $this->_server->getSessionLog()->info(
-                        "Using AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
-                            "and ProtocolBinding '{$request['_ProtocolBinding']}' from unsigned request, " .
+                        "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
+                            "and ProtocolBinding '{$request->getProtocolBinding()}' from unsigned request, " .
                             "it's okay though, the ACSLocation and Binding were registered in the metadata"
                     );
                     return array(
-                        'Location' => $request['_AssertionConsumerServiceURL'],
-                        'Binding'  => $request['_ProtocolBinding'],
+                        'Location' => $request->getAssertionConsumerServiceURL(),
+                        'Binding'  => $request->getProtocolBinding(),
                     );
                 }
                 else {
                     $this->_server->getSessionLog()->notice(
-                        "AssertionConsumerServiceLocation '{$request['_AssertionConsumerServiceURL']}' " .
-                            "and ProtocolBinding '{$request['_ProtocolBinding']}' were mentioned in request, " .
+                        "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
+                            "and ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, " .
                             "but the AuthnRequest was not signed, and the ACSLocation and Binding were not found in " .
                             "the metadata for the SP, so I am disallowed from acting upon it." .
                             "Trying the default endpoint.."
                     );
                 }
             }
+            return false;
         }
 
-        if ($requestHasAcsIndex) {
-            $index = (int)$request['_AssertionConsumerServiceIndex'];
+        if ($request->getAssertionConsumerServiceIndex()) {
+            $index = (int)$request->getAssertionConsumerServiceIndex();
             if (isset($remoteEntity['AssertionConsumerServices'][$index])) {
                 $this->_server->getSessionLog()->info(
                     "Using AssertionConsumerServiceIndex '$index' from request"
@@ -889,46 +688,33 @@ class EngineBlock_Corto_ProxyServer
         }
     }
 
-    /**
-     * See if request specifies a custom ACS location
-     *
-     * @param array $request
-     * @return bool
-     */
-    public function hasCustomAssertionConsumer(array $request)
-    {
-        return (isset($request['_ProtocolBinding']) &&
-            isset($request['_AssertionConsumerServiceURL']));
-    }
-
-    /**
-     * See if request specifies a custom ACS index
-     *
-     * @param array $request
-     * @return bool
-     */
-    public function hasCustomAssertionConsumerIndex(array $request)
-    {
-        return isset($request['_AssertionConsumerServiceIndex']);
-    }
-
-    public function sendResponseToRequestIssuer($request, $response)
-    {
-        $requestIssuer = $request['saml:Issuer']['__v'];
+    public function sendResponseToRequestIssuer(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response
+    ) {
+        /** @var SAML2_AuthnRequest $request */
+        $requestIssuer = $request->getIssuer();
         $sp = $this->getRemoteEntity($requestIssuer);
 
-        if ($response['samlp:Status']['samlp:StatusCode']['_Value'] == 'urn:oasis:names:tc:SAML:2.0:status:Success') {
-
-            $this->filterOutputAssertionAttributes($response, $request);
-
-            return $this->getBindingsModule()->send($response, $sp);
+        // Detect error responses and send them off without an assertion.
+        /** @var SAML2_Response $response */
+        $status = $response->getStatus();
+        if ($status['Code'] !== 'urn:oasis:names:tc:SAML:2.0:status:Success') {
+            $response->setAssertions(array());
+            $this->getBindingsModule()->send($response, $sp);
+            return;
         }
-        else {
-            unset($response['saml:Assertion']);
-            return $this->getBindingsModule()->send($response, $sp);
-        }
+
+        $this->filterOutputAssertionAttributes($response, $request);
+        $this->getBindingsModule()->send($response, $sp);
     }
 
+    /**
+     * @param $id
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     * @throws EngineBlock_Corto_Module_Services_SessionLostException
+     */
     public function getReceivedRequestFromResponse($id)
     {
         // Check the session for a AuthnRequest with the given ID
@@ -964,67 +750,50 @@ class EngineBlock_Corto_ProxyServer
 
 ////////  ATTRIBUTE FILTERING /////////
 
-    public function filterInputAssertionAttributes(&$response, $request)
-    {
-        $responseIssuer = $response['saml:Issuer']['__v'];
-        $idpEntityMetadata = $this->getRemoteEntity($responseIssuer);
-
-        $requestIssuer = $request['saml:Issuer']['__v'];
-        $spEntityMetadata = $this->getRemoteEntity($requestIssuer);
-
-        if (isset($idpEntityMetadata['filter'])) {
-            $this->callAttributeFilter($idpEntityMetadata['filter'], $response, $request, $spEntityMetadata, $idpEntityMetadata);
-        }
-        if (isset($this->_configs['infilter'])) {
-            $this->callAttributeFilter($this->_configs['infilter'], $response, $request, $spEntityMetadata, $idpEntityMetadata);
-        }
+    public function filterInputAssertionAttributes(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+    ) {
+        $this->callAttributeFilter(
+            array(new EngineBlock_Corto_Filter_Input($this), 'filter'),
+            $response,
+            $request,
+            $this->getRemoteEntity($request->getIssuer()),
+            $this->getRemoteEntity($response->getIssuer())
+        );
     }
 
-    public function filterOutputAssertionAttributes(&$response, $request)
-    {
-        $hostedMetaData = $this->_configs;
-        $responseIssuer = $response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['OriginalIssuer'];
-        $idpEntityMetadata = $this->getRemoteEntity($responseIssuer);
-
-        $requestIssuer = $request['saml:Issuer']['__v'];
-        $spEntityMetadata = $this->getRemoteEntity($requestIssuer);
-
-        if (isset($idpEntityMetadata['filter'])) {
-            $this->callAttributeFilter($idpEntityMetadata['filter'], $response, $request, $spEntityMetadata, $idpEntityMetadata);
-        }
-        if (isset($hostedMetaData['outfilter'])) {
-            $this->callAttributeFilter($hostedMetaData['outfilter'], $response, $request, $spEntityMetadata, $idpEntityMetadata);
-        }
+    public function filterOutputAssertionAttributes(
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+    ) {
+        $this->callAttributeFilter(
+            array(new EngineBlock_Corto_Filter_Output($this), 'filter'),
+            $response,
+            $request,
+            $this->getRemoteEntity($request->getIssuer()),
+            $this->getRemoteEntity($response->getOriginalIssuer())
+        );
     }
 
-    protected function callAttributeFilter($callback, array &$response, array $request, array $spEntityMetadata, array $idpEntityMetadata)
-    {
-        if (!$callback || !is_callable($callback)) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                'callback: ' . var_export($callback, true) . ' isn\'t callable'
-            );
-        }
+    protected function callAttributeFilter(
+        $callback,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        array $spEntityMetadata,
+        array $idpEntityMetadata
+    ) {
+        // Take em out
+        $responseAttributes = $response->getAssertion()->getAttributes();
 
-        if (isset($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'])) {
-            $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
-        } else {
-            $responseAssertionAttributes = array();
-        }
+        // Call the filter
+        call_user_func_array(
+            $callback,
+            array(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata)
+        );
 
-        // Workaround When response does not contain an Assertion -> $responseAssertionAttributes will be null
-        // EngineBlock_Corto_XmlToArray::attributes2array parameter is type hinted to be an array
-        if (empty($responseAssertionAttributes)) {
-            $responseAssertionAttributes = array();
-        }
-        // Take the attributes out
-        $responseAttributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
-        // Pass em along
-        call_user_func_array($callback, array(&$response, &$responseAttributes, $request, $spEntityMetadata, $idpEntityMetadata));
         // Put em back where they belong
-        $responseAssertionAttributes = EngineBlock_Corto_XmlToArray::array2attributes($responseAttributes);
-        if (empty($responseAssertionAttributes)) {
-            unset($response['saml:Assertion']['saml:AttributeStatement']);
-        }
+        $response->getAssertion()->setAttributes($responseAttributes);
     }
 
 ////////  TEMPLATE RENDERING /////////

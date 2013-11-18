@@ -59,17 +59,24 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
     public function execute()
     {
-        if (isset($this->_response['__']['CustomNameId'])) {
-            $nameId = $this->_response['__']['CustomNameId'];
+        if ($this->_response->getCustomNameId()) {
+            $nameId = $this->_response->getCustomNameId();
         }
         else {
             $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
 
-            if ($nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED
-                || // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-                $nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED) {
-                $nameIdValue = $this->_response['__']['IntendedNameId'];
-            } else if ($nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT) {
+            $requireUnspecified =
+                (
+                    $nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED
+                    || // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+                    $nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
+                );
+            $requireTransient = ($nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT);
+
+            if ($requireUnspecified) {
+                $nameIdValue = $this->_response->getIntendedNameId();
+
+            } else if ($requireTransient) {
                 $nameIdValue = $this->_getTransientNameId(
                     $this->_spMetadata['EntityId'], $this->_idpMetadata['EntityId']
                 );
@@ -81,43 +88,25 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
             }
             $nameId = array(
-                '_Format' => $nameIdFormat,
-                '__v'     => $nameIdValue,
+                'Format' => $nameIdFormat,
+                'Value'  => $nameIdValue,
             );
         }
 
         // Adjust the NameID in the NEW response, set the collab:person uid
-        $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = $nameId;
+        $this->_response->getAssertion()->setNameId($nameId);
 
-
-        /**
-         * Workaround, if name id does not exist it will be added at wrong location in xml due to order in Subject array
-         * @see: https://jira.surfconext.nl/jira/browse/BACKLOG-1028
-         */
-        $this->_response['saml:Assertion']['saml:Subject'] = $this->orderSubjectElements($this->_response['saml:Assertion']['saml:Subject']);
-
+        $document = new DOMDocument();
+        $document->loadXML(
+<<<XML
+<saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Format="{$nameId['Format']}">{$nameId['Value']}</saml:NameID>
+XML
+);
         // Add the eduPersonTargetedId
         $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
-            0 => array(
-                "saml:NameID" => $nameId,
-            )
+            $document->childNodes
         );
     }
-
-    /**
-     * Orders elements in subject so that the order is correct
-     * 
-     * @param array $subject
-     * @return array
-     */
-    private function orderSubjectElements(array $subject) {
-        $subjectDefaultOrder = array(
-            'saml:NameID' => null,
-            'saml:SubjectConfirmation' => null
-        );
-
-        return array_merge($subjectDefaultOrder, $subject);
-   }
 
     /**
      * Load transient Name ID from session or generate a new one
@@ -163,9 +152,11 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         }
 
         // If the SP requests a specific NameIDFormat in their AuthnRequest
-        if (isset($request['samlp:NameIDPolicy']['_Format'])) {
+        /** @var SAML2_AuthnRequest $request */
+        $nameIdPolicy = $request->getNameIdPolicy();
+        if (!empty($nameIdPolicy['Format'])) {
             $mayUseRequestedNameIdFormat = true;
-            $requestedNameIdFormat = $request['samlp:NameIDPolicy']['_Format'];
+            $requestedNameIdFormat = $nameIdPolicy['Format'];
 
             // Do we support the NameID Format that the SP requests?
             if (!in_array($requestedNameIdFormat, $this->SUPPORTED_NAMEID_FORMATS)) {

@@ -32,7 +32,11 @@ class EngineBlock_Corto_Model_Consent_Factory
      * @param array $attributes
      * @return EngineBlock_Corto_Model_Consent
      */
-    public function create(EngineBlock_Corto_ProxyServer $proxyServer, array $response, array $attributes) {
+    public function create(
+        EngineBlock_Corto_ProxyServer $proxyServer,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        array $attributes
+    ) {
         return new EngineBlock_Corto_Model_Consent(
             $proxyServer->getConfig('ConsentDbTable', 'consent'),
             $proxyServer->getConfig('ConsentStoreValues', true),
