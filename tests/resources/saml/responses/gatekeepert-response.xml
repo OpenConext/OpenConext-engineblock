@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<saml2p:Response xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" Destination="https://engine.surfconext.nl/authentication/sp/consume-assertion" ID="pfx1e406e60-93d7-25c7-31c7-1b024426a4d8" InResponseTo="CORTOf285b1299c59e3756996fd92c32d25767da2ddb2" IssueInstant="2013-09-17T10:21:56.461Z" Version="2.0">
+  <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion">host.example.org</saml2:Issuer>
+  <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfx1e406e60-93d7-25c7-31c7-1b024426a4d8"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>B90dxnDL4Ic/2kd0xZ4uLPCz6yw=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>XUF11FiyMwLGzBJLW8APhsdY3SrLoFtvqp8SKSBpAYMMenxVcxmdaMBFhMZ/MRC7IfoOHObMbu0549uIeFC8yDFDw5MEJmS6EmwDR5LW9YQHPosV5xV24hj7greik+/dHDxUWVAbi6B1dhAdfmWPD1yqnbK6qJbJv5KNW1UkzxE=</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB8DCCAVmgAwIBAgIJAIhLb8zPNPnBMA0GCSqGSIb3DQEBBQUAMBExDzANBgNVBAMMBnNpZ25lcjAeFw0xMzEwMDEwOTQ3MjdaFw0xMzEwMzEwOTQ3MjdaMBExDzANBgNVBAMMBnNpZ25lcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr0U1nTuBa4tdJeJU9AvANPUY47bWAHyKJAxbvG68IgRqKb/qkUeloKmRZ4qLFh2XwQne/lfjLMH7WvPojC3HbWxbVIY2v79TIIVlhvgjIIPWxVsQY3OPAXr+ITam9BQCmauiqqPUeoVoarQWN1NPDvqR6uRvcpU34B12fqwk960CAwEAAaNQME4wHQYDVR0OBBYEFF0KAqCedIPuov2znuCPFlBF1j/jMB8GA1UdIwQYMBaAFF0KAqCedIPuov2znuCPFlBF1j/jMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAounOqenGu5sCbRE+xUFjhiRJmn2b6m7IWJjl8m+NZaQvtVSRX1ktNqwEhT6ZA/XEB9y1m52aKQYmBN8imToA5gdSfQdzq7346d1sAAwfXWm9LzCGgb0MgCysJVfJSEKC4xZgWLFLkNzCWfMciPO0sRpf3xap+LcmWleqcSf0c4I=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><saml2p:Status>
+    <saml2p:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+  </saml2p:Status>
+  <saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" ID="pfx631fe53c-d9b0-9fe7-eb8d-3026f2de74b6" IssueInstant="2013-09-17T10:21:56.440Z" Version="2.0">
+    <saml2:Issuer>host.example.org</saml2:Issuer>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfx631fe53c-d9b0-9fe7-eb8d-3026f2de74b6"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>HeIdnAFBWNRL4S130nggsZvc/uI=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>iHWkp4J04gf0P1OM72cYKLX3hpbWcvJP04eGIoohew83XI+Wsml8KLRsrjLctqMGawIattcQBz2T7/RRbtg4qUuV9zMP6aA8t30xAn2RULsSLxbDES1f+D4pNCGOO+9uiwtZQo8HmMqY2OpYaX6tF3EsvzXWh7uxvrrFN8sTspY=</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB8DCCAVmgAwIBAgIJAIhLb8zPNPnBMA0GCSqGSIb3DQEBBQUAMBExDzANBgNVBAMMBnNpZ25lcjAeFw0xMzEwMDEwOTQ3MjdaFw0xMzEwMzEwOTQ3MjdaMBExDzANBgNVBAMMBnNpZ25lcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr0U1nTuBa4tdJeJU9AvANPUY47bWAHyKJAxbvG68IgRqKb/qkUeloKmRZ4qLFh2XwQne/lfjLMH7WvPojC3HbWxbVIY2v79TIIVlhvgjIIPWxVsQY3OPAXr+ITam9BQCmauiqqPUeoVoarQWN1NPDvqR6uRvcpU34B12fqwk960CAwEAAaNQME4wHQYDVR0OBBYEFF0KAqCedIPuov2znuCPFlBF1j/jMB8GA1UdIwQYMBaAFF0KAqCedIPuov2znuCPFlBF1j/jMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAounOqenGu5sCbRE+xUFjhiRJmn2b6m7IWJjl8m+NZaQvtVSRX1ktNqwEhT6ZA/XEB9y1m52aKQYmBN8imToA5gdSfQdzq7346d1sAAwfXWm9LzCGgb0MgCysJVfJSEKC4xZgWLFLkNzCWfMciPO0sRpf3xap+LcmWleqcSf0c4I=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><saml2:Subject>
+      <saml2:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" NameQualifier="host.example.org">jdoe@example.org</saml2:NameID>
+      <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+        <saml2:SubjectConfirmationData InResponseTo="CORTOf285b1299c59e3756996fd92c32d25767da2ddb2" NotOnOrAfter="2013-09-17T10:22:56.440Z" Recipient="https://engine.surfconext.nl/authentication/sp/consume-assertion"/>
+      </saml2:SubjectConfirmation>
+    </saml2:Subject>
+    <saml2:Conditions NotBefore="2013-09-17T10:21:56.442Z" NotOnOrAfter="2013-09-17T10:22:56.440Z">
+      <saml2:AudienceRestriction>
+        <saml2:Audience>http://idp.example.org/metadata</saml2:Audience>
+      </saml2:AudienceRestriction>
+    </saml2:Conditions>
+    <saml2:AuthnStatement AuthnInstant="2013-09-17T10:21:56.440Z" SessionIndex="_-SgLITyCVxbZ7gQIaH-tS8RCtCW7drlURIjjOZ0jUR4aAGzN_n9QsNTp2ENbwNIqKVTz9ygMESGzoAat5PzLBksEO5c0-X1AvHDrdHzky9J3ijeoFeJdeiCtFcryUSVjh2gwrFYFCMr7Ve2HEwuE1k45d6q_lDap2s6l6dQr8dD8bBwAb40fTd2sC9fP0aTu-gH50O6SrxOVIkt6shnyMPJIi-CS5Q6uKqStsy6jjnRnfi_bMRl7f5i2KkSpP7dekN0v9kRn4Y5h_jinomG0GCEtvVcpIO0X_S4G-P-j2gTqzBSmHBfQSzkIdrrkQyRSgSUQrw7FxlPG2oP-NCul1A" SessionNotOnOrAfter="2013-09-17T13:21:55.425Z">
+      <saml2:AuthnContext>
+        <saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:password</saml2:AuthnContextClassRef>
+      </saml2:AuthnContext>
+    </saml2:AuthnStatement>
+    <saml2:AttributeStatement>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:eduPersonPrincipalName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">jdoe@example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="mail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">J.Doe@example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:surffederatie.nl:attribute-def:nlStudielinkNummer" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">123456</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:mail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">J.Doe@example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">employee</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:sn" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">Doe</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:eduPersonEntitlement" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">urn:mace:dir:entitlement:common-lib-terms</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:surffederatie.nl:attribute-def:nlEduPersonHomeOrganization" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">University of Technology</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganization" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:cn" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">John Doe</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:givenName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">John</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganizationType" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">urn:mace:terena.org:schac:homeOrganizationType:eu:higherEducationInstitution</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="givenName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">John</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:uid" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">jdoe</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:surffederatie.nl:attribute-def:nlEduPersonOrgUnit" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">Institution</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:dir:attribute-def:preferredLanguage" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">nl</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute Name="urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified">
+        <saml2:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">12345</saml2:AttributeValue>
+      </saml2:Attribute>
+    </saml2:AttributeStatement>
+  </saml2:Assertion>
+</saml2p:Response>

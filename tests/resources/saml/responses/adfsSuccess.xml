@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="CORTO0fccdd3c4490a6ba81831ffc38cb521dc60fbae9" Version="2.0" IssueInstant="2013-09-20T09:24:52Z" InResponseTo="_e87be690b87dd4ac565e05bfec3033538a7c455a43">
+  <saml:Issuer>http://idp.example.org/metadata</saml:Issuer>
+  <samlp:Status>
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+  </samlp:Status>
+  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="pfxcf008788-9791-d4b3-6f1f-1347e8e78a70" IssueInstant="2013-09-20T09:24:52Z" Version="2.0">
+    <saml:Issuer>http://idp.example.org/metadata</saml:Issuer>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfxcf008788-9791-d4b3-6f1f-1347e8e78a70"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>0aPPupVCsQaXEvqaU2e4sGm2Ys0=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>lxSx8K0ZVSTc+68k8vRDHgomuk4lyuOCmxFUKgAYdgI9pRbNox+h5iWeKVZ6CijK+sZ++rsyJKrg/cp17/Q0EnzOUEcevmvtyTZQRsPDrlJ9+6JfoM2UQf5Wfzfak/sO6bj6aSsxcJMvVen25aEWK8efiEyipCWa6zGY5OonSIE=</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB8DCCAVmgAwIBAgIJAIhLb8zPNPnBMA0GCSqGSIb3DQEBBQUAMBExDzANBgNVBAMMBnNpZ25lcjAeFw0xMzEwMDEwOTQ3MjdaFw0xMzEwMzEwOTQ3MjdaMBExDzANBgNVBAMMBnNpZ25lcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr0U1nTuBa4tdJeJU9AvANPUY47bWAHyKJAxbvG68IgRqKb/qkUeloKmRZ4qLFh2XwQne/lfjLMH7WvPojC3HbWxbVIY2v79TIIVlhvgjIIPWxVsQY3OPAXr+ITam9BQCmauiqqPUeoVoarQWN1NPDvqR6uRvcpU34B12fqwk960CAwEAAaNQME4wHQYDVR0OBBYEFF0KAqCedIPuov2znuCPFlBF1j/jMB8GA1UdIwQYMBaAFF0KAqCedIPuov2znuCPFlBF1j/jMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAounOqenGu5sCbRE+xUFjhiRJmn2b6m7IWJjl8m+NZaQvtVSRX1ktNqwEhT6ZA/XEB9y1m52aKQYmBN8imToA5gdSfQdzq7346d1sAAwfXWm9LzCGgb0MgCysJVfJSEKC4xZgWLFLkNzCWfMciPO0sRpf3xap+LcmWleqcSf0c4I=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><saml:Subject>
+      <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">11de6119a9fc0ab4f331392f84365a00ffb2fc92</saml:NameID>
+      <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+        <saml:SubjectConfirmationData InResponseTo="_e87be690b87dd4ac565e05bfec3033538a7c455a43" NotOnOrAfter="2013-09-20T09:29:52Z" Recipient="https://migration-sp.aai.example.org/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp"/>
+      </saml:SubjectConfirmation>
+    </saml:Subject>
+    <saml:Conditions NotBefore="2013-09-20T09:24:52Z" NotOnOrAfter="2013-09-20T09:29:52Z">
+      <saml:AudienceRestriction>
+        <saml:Audience>https://migration-sp.aai.example.org/simplesaml/module.php/saml/sp/metadata.php/default-sp</saml:Audience>
+      </saml:AudienceRestriction>
+    </saml:Conditions>
+    <saml:AuthnStatement AuthnInstant="2013-09-20T09:24:44.530Z" SessionIndex="_099dfb04-6257-46e9-b05e-feff84b5aa47">
+      <saml:AuthnContext>
+        <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
+        <saml:AuthenticatingAuthority>http://adfs2.aai.example.org/adfs/services/trust</saml:AuthenticatingAuthority>
+      </saml:AuthnContext>
+    </saml:AuthnStatement>
+    <saml:AttributeStatement>
+      <saml:Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganization" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>aai.example.org</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:uid" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>John</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:displayName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>John</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:cn" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>John</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:sn" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>John</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:isMemberOf" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>urn:collab:org:surf.nl</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:oid:1.3.6.1.4.1.1076.20.40.40.1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>urn:collab:person:aai.example.org:John</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:nl.surfconext.licenseInfo" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>LICENSE_UNKNOWN</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>
+          <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">11de6119a9fc0ab4f331392f84365a00ffb2fc92</saml:NameID>
+        </saml:AttributeValue>
+      </saml:Attribute>
+    </saml:AttributeStatement>
+  </saml:Assertion>
+</samlp:Response>

@@ -79,17 +79,24 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
     {
         $responseFiles = array();
         $certificateFiles = array();
-        $responsesDir = new DirectoryIterator(TEST_RESOURCES_DIR . '/saml/responses');
+        $responsesDir = TEST_RESOURCES_DIR . '/saml/responses';
+        $defaultCertFile = $responsesDir . '/defaultCert';
+        $responsesDirIterator = new DirectoryIterator($responsesDir);
         /** @var $responseFile DirectoryIterator */
-        foreach($responsesDir as $responseFile) {
+        foreach($responsesDirIterator as $responseFile) {
             if ($responseFile->isFile() && !$responseFile->isDot()) {
                 $extension = substr($responseFile->getFilename(), -3);
                 $fileNameWithoutExtension = substr($responseFile->getFilename(), 0, -4);
 
-                if ($extension == 'cer') {
+                if ($extension == 'cer' || $extension == 'pem') {
                     $certificateFiles[$fileNameWithoutExtension] = $responseFile->getRealPath();
                 } elseif ($extension == 'xml') {
                     $responseFiles[$fileNameWithoutExtension] = $responseFile->getRealPath();
+
+                    // Set default certificate, can be overridden by adding a certificate with the same name as the response
+                    if (!isset($certificateFiles[$fileNameWithoutExtension])) {
+                        $certificateFiles[$fileNameWithoutExtension] = $defaultCertFile;
+                    }
                 }
             }
         }
