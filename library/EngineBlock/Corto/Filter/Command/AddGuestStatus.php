@@ -30,7 +30,6 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
 {
     const URN_SURF_PERSON_AFFILIATION       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
     const URN_IS_MEMBER_OF                  = 'urn:mace:dir:attribute-def:isMemberOf';
-    const URN_COLLAB_ORG_SURF               = 'urn:collab:org:surf.nl';
 
     /**
      * This command may modify the response attributes
@@ -109,6 +108,7 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
         if (!isset($this->_responseAttributes[static::URN_IS_MEMBER_OF])) {
             $this->_responseAttributes[static::URN_IS_MEMBER_OF] = array();
         }
-        $this->_responseAttributes[static::URN_IS_MEMBER_OF][] = self::URN_COLLAB_ORG_SURF;
+        $this->_responseAttributes[static::URN_IS_MEMBER_OF][] =
+            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->addgueststatus->guestqualifier;
     }
 }
