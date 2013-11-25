@@ -147,9 +147,8 @@ EngineBlock requires database settings, without it the install script will not f
 
 ### Configure HTTP server ###
 
-Install 3 HTTPS virtual hosts, one that points to the authentication interface, which handles authentication and
-proxying thereof. The second one should point to the internal interface. Finally, the third one should point to the
-profile interface.
+Configure 2 HTTPS virtual hosts, one that points to the authentication interface, which handles authentication and
+proxying thereof. The second one should point to the profile interface.
 
 Make sure the ENGINEBLOCK_ENV is set.
 
@@ -184,13 +183,9 @@ For all virtual hosts you should specify a different *DocumentRoot*.
 
 2nd virtual host:
 
-    DocumentRoot    /opt/www/engineblock/www/internal
-
-3rd virtual host:
-
     DocumentRoot    /opt/www/engineblock/www/profile
 
-Also for the 3rd virtual host (profile interface) you should specify an extra *RewriteCond*.
+Also for the 2nd virtual host (profile interface) you should specify an extra *RewriteCond*.
 Add it behind the last *RewriteCond* descriptive (but before the *RewriteRule* descriptive) in your virtual host
 configuration:
 
