@@ -27,75 +27,63 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
 {
     public function indexAction()
     {
-        $normalizer = new EngineBlock_Attributes_Normalizer($this->attributes);
-        $this->attributes = $normalizer->normalize();
+        $this->userAttributes = $this->_getClensedAttributes();
 
         $this->metadata = new EngineBlock_Attributes_Metadata();
         $this->aggregator = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor(
             $this->attributes['nameid'][0]
         );
-        $this->groupOauth = $this->user->getUserOauth();
 
-        $serviceRegistryClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryClient();
+        $serviceRegistryClient = $this->_getServiceRegistryClient();
         $this->spList = $serviceRegistryClient->getSpList();
 
         $this->consent = $this->user->getConsent();
         $this->spAttributesList = $this->_getSpAttributeList($this->spList);
 
-        try {
-            $this->spOauthList = $this->_getSpOauthList($this->spList);
-        }
+        $this->mailSend = isset($_GET["mailSend"]) ? $_GET["mailSend"] : null;
 
-        catch (Exception $e) {
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
-                ->setUserId($this->user->getUid())
-                ->setDetails($e->getTraceAsString());
-
-            EngineBlock_ApplicationSingleton::getLog()->crit($e->getMessage(), $additionalInfo);
-        }
-    }
-
-    /**
-     * @param $spList all service providers
-     * @return all service providers that have an entry in the oauth (consent can be revoked)
-     */
-    protected function _getSpOauthList($spList)
-    {
-        /** @var $user EngineBlock_User */
-        $user = $this->user;
-        $oauthList = $user->getThreeLeggedShindigOauth();
-        $results = array();
-        foreach ($spList as $spId => $sp) {
-            if (array_key_exists('coin:gadgetbaseurl', $sp)) {
-                $pattern = '#' . $sp['coin:gadgetbaseurl'] . '#';
-                foreach ($oauthList as $oauth) {
-                    if (preg_match($pattern, $oauth)) {
-                        $results[$spId] = $oauth;
-                    }
-                }
-            }
-        }
-        return $results;
     }
 
     /**
      * Returns an array with attributes that are released to each SP.
      *
-     * For now we use the attributes that are released to the profile SP. Because we do not have an APR yet and therefore
-     * each SP receives the same set of attributes.
-     * TODO If the ARP is implemented change the code below to actually retrieve the set of attributes that is released to that specific SP
+     * We check if there is an ARP and then return this otherwise all attributes we have gotten.
      *
      * @param $spList all service providers
-     * @return all service providers that have an entry in the oauth (consent can be revoked)
+     * @return array with service providers Id's with the ARP
      */
     protected function _getSpAttributeList($spList)
     {
-        $results = array();
+        $serviceRegistryClient = $this->_getServiceRegistryClient();
+        $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
+        $attributes = $this->_getClensedAttributes();
 
+        $results = array();
         foreach ($spList as $spId => $sp) {
-            $results[$spId] = $this->attributes;
+            $arp = $serviceRegistryClient->getArp($spId);
+            $results[$spId] = $enforcer->enforceArp($arp, $attributes);
         }
 
         return $results;
+    }
+
+    /**
+     * Return the clensed attributes
+     */
+    protected function _getClensedAttributes()
+    {
+        $normalizer = new EngineBlock_Attributes_Normalizer($this->attributes);
+        $normalizedAttributes = $normalizer->normalize();
+        unset($normalizedAttributes['nameid']);
+        return $normalizedAttributes;
+    }
+
+    /**
+     * @return Janus_Client_CacheProxy
+     */
+    protected function _getServiceRegistryClient()
+    {
+        $serviceRegistryClient = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryClient();
+        return $serviceRegistryClient;
     }
 }

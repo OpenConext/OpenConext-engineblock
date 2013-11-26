@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<saml2p:Response xmlns:saml2p="urn:oasis:names:tc:SAML:2.0:protocol" Destination="https://engine.surfconext.nl/authentication/sp/consume-assertion" ID="_c1790849691f8417de02e5f24607a2aa" InResponseTo="CORTO517bc443751284752bf127916d4a791a85f1ee46" IssueInstant="2013-09-13T14:05:55.763Z" Version="2.0">
+  <saml2:Issuer xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">http://idp.example.org/metadata</saml2:Issuer>
+  <saml2p:Status>
+    <saml2p:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+  </saml2p:Status>
+  <saml2:Assertion xmlns:saml2="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" ID="pfxb86e6996-e6e5-d10c-5204-fc4675105fc1" IssueInstant="2013-09-13T14:05:55.763Z" Version="2.0">
+    <saml2:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">http://idp.example.org/metadata</saml2:Issuer>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    <ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <ds:Reference URI="#pfxb86e6996-e6e5-d10c-5204-fc4675105fc1"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>aM5ve+VJyW8b2nzj0xclwuQ1chQ=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue>bpUyPKYXayvhx5CZJt/zjuHj7bYTPY02TP3SZqXvMV15fWINuawYwopm/vI+aX7QbFeLwnUG7HPii5vn+Z8F3XWquC5jSYxSUEafhs6ydX39XJ1lCpaSRfHPaPcYIi6DRT/caIOhmDHq80+DcnZtROt/ekA8EOivhuuhPRiAeks=</ds:SignatureValue>
+<ds:KeyInfo><ds:X509Data><ds:X509Certificate>MIIB8DCCAVmgAwIBAgIJAIhLb8zPNPnBMA0GCSqGSIb3DQEBBQUAMBExDzANBgNVBAMMBnNpZ25lcjAeFw0xMzEwMDEwOTQ3MjdaFw0xMzEwMzEwOTQ3MjdaMBExDzANBgNVBAMMBnNpZ25lcjCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEAr0U1nTuBa4tdJeJU9AvANPUY47bWAHyKJAxbvG68IgRqKb/qkUeloKmRZ4qLFh2XwQne/lfjLMH7WvPojC3HbWxbVIY2v79TIIVlhvgjIIPWxVsQY3OPAXr+ITam9BQCmauiqqPUeoVoarQWN1NPDvqR6uRvcpU34B12fqwk960CAwEAAaNQME4wHQYDVR0OBBYEFF0KAqCedIPuov2znuCPFlBF1j/jMB8GA1UdIwQYMBaAFF0KAqCedIPuov2znuCPFlBF1j/jMAwGA1UdEwQFMAMBAf8wDQYJKoZIhvcNAQEFBQADgYEAounOqenGu5sCbRE+xUFjhiRJmn2b6m7IWJjl8m+NZaQvtVSRX1ktNqwEhT6ZA/XEB9y1m52aKQYmBN8imToA5gdSfQdzq7346d1sAAwfXWm9LzCGgb0MgCysJVfJSEKC4xZgWLFLkNzCWfMciPO0sRpf3xap+LcmWleqcSf0c4I=</ds:X509Certificate></ds:X509Data></ds:KeyInfo></ds:Signature><saml2:Subject>
+      <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" NameQualifier="http://idp.example.org/metadata" SPNameQualifier="http://idp.example.org/metadata">_e273070347ef87e8529c13fa9188f093</saml2:NameID>
+      <saml2:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+        <saml2:SubjectConfirmationData Address="172.16.19.170" InResponseTo="CORTO517bc443751284752bf127916d4a791a85f1ee46" NotOnOrAfter="2013-09-13T14:10:55.763Z" Recipient="https://engine.surfconext.nl/authentication/sp/consume-assertion"/>
+      </saml2:SubjectConfirmation>
+    </saml2:Subject>
+    <saml2:Conditions NotBefore="2013-09-13T14:05:55.763Z" NotOnOrAfter="2013-09-13T14:10:55.763Z">
+      <saml2:AudienceRestriction>
+        <saml2:Audience>http://idp.example.org/metadata</saml2:Audience>
+      </saml2:AudienceRestriction>
+    </saml2:Conditions>
+    <saml2:AuthnStatement AuthnInstant="2013-09-13T14:05:55.585Z" SessionIndex="_be92dec0eb8648bee696db0c58fde5e6">
+      <saml2:SubjectLocality Address="172.16.19.170"/>
+      <saml2:AuthnContext>
+        <saml2:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml2:AuthnContextClassRef>
+      </saml2:AuthnContext>
+    </saml2:AuthnStatement>
+    <saml2:AttributeStatement>
+      <saml2:Attribute FriendlyName="uid" Name="urn:mace:dir:attribute-def:uid" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">johndoe</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="eduPersonAffiliation" Name="urn:mace:dir:attribute-def:eduPersonAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">employee</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="eduPersonPrincipalName" Name="urn:mace:dir:attribute-def:eduPersonPrincipalName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">johndoe@example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="mail" Name="urn:mace:dir:attribute-def:mail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">John.Doe@example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="damlrPersonHostingInstitute" Name="urn:mace:dir:attribute-def:damlrPersonHostingInstitute" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">ABC</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="organizationName" Name="urn:mace:dir:attribute-def:organizationName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">Institute</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="localPrincipalName" Name="urn:mace:dir:attribute-def:localPrincipalName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">johndoe@example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="surName" Name="urn:mace:dir:attribute-def:surName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">Doe</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="schacHomeOrganization" Name="urn:mace:terena.org:attribute-def:schacHomeOrganization" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">example.org</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="givenName" Name="urn:mace:dir:attribute-def:givenName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">John</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="damlrPersonAffiliation" Name="urn:mace:dir:attribute-def:damlrPersonAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">unspecified</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="cn" Name="urn:mace:dir:attribute-def:cn" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">John Doe</saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="eduPersonTargetedID" Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue>
+          <saml2:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" NameQualifier="http://idp.example.org/metadata" SPNameQualifier="http://idp.example.org/metadata">u1cVi+Q9h9hPVIDrajlStNdOBv0=</saml2:NameID>
+        </saml2:AttributeValue>
+      </saml2:Attribute>
+      <saml2:Attribute FriendlyName="displayName" Name="urn:mace:dir:attribute-def:displayName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml2:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">John Doe</saml2:AttributeValue>
+      </saml2:Attribute>
+    </saml2:AttributeStatement>
+  </saml2:Assertion>
+</saml2p:Response>

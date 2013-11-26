@@ -28,7 +28,7 @@ $layout = $this->layout();
 $layout->setLayout('empty');
 ?>
 <p class="back"><a id="back_request_access" href="#"><?php echo $this->t('back'); ?></a></p>
-<h2><?php echo $this->t('sorry'); ?><i><?php echo $queryParameters['spName']; ?></i> <?php echo $this->t('form_description'); ?>
+<h2><?php echo $this->t('sorry'); ?>&nbsp<i><?php echo $queryParameters['idpName']; ?></i> <?php echo $this->t('form_description'); ?>
 
 <form id="request_access_form" action="#" method="post" class="apply clearfix">
     <input name="idpName" type="hidden" value="<?php echo $queryParameters['idpName']; ?>">

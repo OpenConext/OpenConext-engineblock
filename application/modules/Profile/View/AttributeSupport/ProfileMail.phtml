@@ -1,0 +1,32 @@
+<p>The following attribute information was send through the Profile application:</p>
+<table>
+    <thead>
+        <tr>
+            <th>Attribute identifier</th>
+            <th>Attribute name</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+
+    <?php foreach ($userAttributes as $attributeId => $attributeValues) { ?>
+        <tr>
+            <td>
+                <?php echo $attributeId?>
+            </td>
+            <td>
+                <?=$metadata->getName($attributeId, $lang)?>
+            </td>
+            <td>
+                <?php if (count($attributeValues)==1) { ?>
+                    <?=$attributeValues[0];?>
+                <?php } else { ?>
+                    <ul>
+                        <?php foreach ($attributeValues as $value) { ?>
+                            <li><?=$value?></li>
+                        <?php } ?>
+                    </ul>
+                <?php } ?>
+            </td>
+        </tr>
+    <?php } ?>
+</table>

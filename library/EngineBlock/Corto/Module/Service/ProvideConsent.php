@@ -101,6 +101,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             );
             return;
         }
+        /*
+         * We don't show the nameId for now as we must base this on the nameID format and this will
+         * be later on in the process defined.
+         */
+        $nameId = null;
 
         $html = $this->_server->renderTemplate(
             'consent',
@@ -111,6 +116,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'sp'        => $spEntityMetadata,
                 'idp'       => $idpEntityMetadata,
                 'commonName'=> $commonName,
+                'nameId'    => $nameId,
             ));
         $this->_server->sendOutput($html);
     }

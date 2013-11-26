@@ -64,8 +64,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
 
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
-            $this->_server->redirect('/authentication/feedback/no-consent', 'No consent given...');
-            return;
+            throw new EngineBlock_Corto_Exception_NoConsentProvided('No consent given...');
         }
 
         $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);

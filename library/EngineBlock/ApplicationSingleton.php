@@ -183,8 +183,9 @@ class EngineBlock_ApplicationSingleton
         // Store some valuable debug info in session so it can be displayed on feedback pages
         $queue = $log->getQueueWriter()->getStorage()->getQueue();
         $lastEvent = end($queue);
-        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
-
+        if ($lastEvent) {
+            $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
+        }
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
 

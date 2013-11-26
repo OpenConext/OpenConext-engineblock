@@ -210,6 +210,19 @@ class EngineBlock_Corto_ProxyServer
         return $this;
     }
 
+    public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->getDisplayName($attributeId, $ietfLanguageTag);
+
+    }
+
+    public function sortConsentDisplayOrder(&$attributes)
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->sortConsentDisplayOrder($attributes);
+    }
+
     public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
     {
         $metadata = new EngineBlock_Attributes_Metadata();
@@ -917,7 +930,7 @@ class EngineBlock_Corto_ProxyServer
         // Check the session for a AuthnRequest with the given ID
         // Expect to get back an AuthnRequest issued by EngineBlock and destined for the IdP
         if (!$id || !isset($_SESSION[$id])) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
+            throw new EngineBlock_Corto_Module_Services_SessionLostException(
                 "Trying to find a AuthnRequest (we made and sent) with id '$id' but it is not known in this session? ".
                 "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
@@ -990,6 +1003,11 @@ class EngineBlock_Corto_ProxyServer
 
         $responseAssertionAttributes = &$response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'];
 
+        // Workaround When response does not contain an Assertion -> $responseAssertionAttributes will be null
+        // EngineBlock_Corto_XmlToArray::attributes2array parameter is type hinted to be an array
+        if (empty($responseAssertionAttributes)) {
+            $responseAssertionAttributes = array();
+        }
         // Take the attributes out
         $responseAttributes = EngineBlock_Corto_XmlToArray::attributes2array($responseAssertionAttributes);
         // Pass em along

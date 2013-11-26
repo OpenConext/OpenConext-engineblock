@@ -1,5 +1,7 @@
 <?php
 
+use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+
 class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
@@ -8,23 +10,41 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
 
         $edugainEntities = array();
-        foreach ($this->_server->getRemoteEntities() as $entity) {
+
+        $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
+
+        $remoteEntities = $this->_server->getRemoteEntities();
+
+        foreach ($remoteEntities as $entity) {
             // Only add entities that have a SSO service registered
             if (empty($entity['PublishInEdugain'])) {
                 continue;
             }
 
-            // Generate a URL that points to EngineBlock logout service
-            $transparentSlUrl = $this->_server->getUrl('singleLogoutService', $entity['EntityID']);
-            // Set default value for single logout service
-            if (empty($entity['SingleLogoutService'])) {
-                $entity['SingleLogoutService'] = array(array());
+            // Use EngineBlock certificates
+            $entity['certificates'] = $entityDetails['certificates'];
+
+            // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
+            // NameIDs, so advertise that.
+            unset($entity['NameIDFormat']);
+            $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
+
+            // For IdP's replace the SingleSignService with the one from EB
+            if (array_key_exists('SingleSignOnService', $entity)) {
+                // Replace service locations and bindings with those of EB
+                $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
+                $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
+                $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
+                $slServiceReplacer->replace($entity, $transparentSlUrl);
             }
-            // Override Single Logout Service information of entities with info of EngineBlock
-            foreach($entity['SingleLogoutService'] as &$slService) {
-                $slService['Location'] = $transparentSlUrl;
-                $slService['Binding']  = $entityDetails['SingleLogoutService'][0]['Binding'];
+            $entity['ContactPersons'] = $entityDetails['ContactPersons'];
+
+            // Add the SP ARP attributes for the RequestedAttribute information in the AttributeConsumingService (only if ARp is set)
+            if (!array_key_exists('SingleSignOnService', $entity)) {
+
             }
+            $entity = $this->_addRequestAttributes($entity);
 
             $edugainEntities[] = $entity;
         }
@@ -32,7 +52,8 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
             $this->_server->getNewId(),
-            $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400))
+            $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
+            true
         );
         $document = $mapper->setEntities($edugainEntities)->map();
 
@@ -56,4 +77,13 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $this->_server->sendHeader('Content-Type', 'application/xml');
         $this->_server->sendOutput($xml);
     }
+
+
+    protected function _addRequestAttributes($entity)
+    {
+        $arpRequestedAttributes = new EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes();
+        return $arpRequestedAttributes->addRequestAttributes($entity);
+    }
+
+
 }

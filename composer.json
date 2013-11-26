@@ -40,7 +40,17 @@
                     ]
                 }
             }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "cssmin/cssmin",
+                "version": "3.0.1",
+                "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
+                "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
+            }
         }
+
     ],
     "require": {
         "pimple/pimple": "1.0.2",
@@ -48,6 +58,9 @@
         "dbpatch/dbpatch": "1.1.1",
         "zendframework/zendframework1":"1.10.9",
         "apache/shindig":"1094333",
+        "kriswallsmith/assetic": "1.2.*@dev",
+        "mrclay/minify": "2.1.7",
+        "cssmin/cssmin": "3.0.1",
         "chrisboulton/php-resque": "1.2.x"
     },
     "require-dev": {
@@ -59,13 +72,7 @@
         "behat/mink-goutte-driver": "1.0.9"
     },
     "scripts": {
-        "post-install-cmd": [
-            "bin/composer/dbpatch-post-install.sh",
-            "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh",
-            "bin/composer/shindig-post-install.sh"
-        ],
-        "post-update-cmd": [
+        "pre-autoload-dump": [
             "bin/composer/dbpatch-post-install.sh",
             "bin/composer/simplesamlphp-post-install.sh",
             "bin/composer/zend-framework-post-install.sh",

@@ -30,8 +30,7 @@ require PARTIAL_DIR . 'header-start.php';
 ?>
         <meta name="viewport" content="width=device-width"/>
 
-        <link href="/css/ext/jqueryjscrollpane/jquery.jscrollpane.css" rel="stylesheet" type="text/css" />
-        <link href="/css/responsive/screen.css" rel="stylesheet" type="text/css" media="screen"/>
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
 
         <?php echo $this->headStyle(); ?>
         <?php echo $this->headScript(); ?>
@@ -48,7 +47,7 @@ require PARTIAL_DIR . 'header-start.php';
                         <input type="hidden" name="lang" id="LangVar" />
                         <input type="hidden" name="show-help" id="showHelp" />
                     </div>
-                    <ul class="nav">
+                    <ul class="nav top">
                         <li id="help_nav">
                             <a href="#">help</a>
                         </li>
@@ -62,10 +61,10 @@ require PARTIAL_DIR . 'header-start.php';
                 </form>
 
                 <!-- Subheader -->
-                <h1><?php echo $this->layout()->subheader; ?></h1>
+                <h1></h1>
 
                 <!-- Main content -->
-                <div id="content">
+                <div id="content" class="centered">
                     <?php echo $this->layout()->content; ?>
                 </div>
 
@@ -84,7 +83,7 @@ require PARTIAL_DIR . 'header-start.php';
         </div>
 
         <!-- JAVSCRIPT -->
-        <script type="text/javascript" src="/javascript/jquery-1.5.1.min.js"></script>
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#SubmitEnForm').click(function(e) {

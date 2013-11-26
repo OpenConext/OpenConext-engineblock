@@ -22,35 +22,35 @@
  * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
  */
 
-var Discover = function() {
+var Discover = function () {
 
     var module = {
 
-        setLanguage : function(lang) {
+        setLanguage: function (lang) {
             library.lang = lang;
         },
-        setSearchText : function(text) {
+        setSearchText: function (text) {
             library.searchText = text;
         },
-        setIdpList : function(idpList) {
+        setIdpList: function (idpList) {
             library.idpList = idpList;
         },
-        setSpEntityId : function(spEntityId) {
+        setSpEntityId: function (spEntityId) {
             library.spEntityId = spEntityId;
         },
-        setSpName : function(spName) {
+        setSpName: function (spName) {
             library.spName = spName;
         },
-        setUri : function(uri) {
+        setUri: function (uri) {
             library.uri = uri;
         },
-        setSelectedEntityId : function(selectedEntityId) {
+        setSelectedEntityId: function (selectedEntityId) {
             library.selectedEntityId = selectedEntityId;
         },
 
-        show : function() {
+        show: function () {
             // Restrict the form from submitting unless a valid idp has been chosen
-            $('#IdpListForm').submit(function() {
+            $('#IdpListForm').submit(function () {
                 var selectedIdp = $('#Idp').attr('value');
                 if (!selectedIdp) {
                     return false;
@@ -62,9 +62,6 @@ var Discover = function() {
                 }
                 return false;
             });
-
-            //Initialize keyboard navigator
-            keyboardNavigator.init();
 
             //Get start organisations
             library.sortIdps();
@@ -81,40 +78,19 @@ var Discover = function() {
                         case 37:
                         case 39:
                             break;
+                        case 13: //return
+                            $('#organisationsContainer li.selected').click();
+                            break;
                         default:
-                            library.loadIdps($('#searchBox').val());
+                            library.loadIdps($(this).val());
                     }
                 }).
                 // To support HTML5 search reset (see Chrome)
-                bind('search', function(e) {
+                bind('search', function (e) {
                     library.loadIdps($('#searchBox').val());
                 });
 
-            //Disable or enable keyboardNavigator if search field gets or looses focus
-            $('#searchBox').focus(function() {
-                keyboardNavigator.enabled = false;
-                // clear searchbox text on focus
-                if ($('#searchBox').val() == library.searchText) {
-                    $('#searchBox').val('');
-                }
-            });
-
-            $('#searchBox').blur(function() {
-                keyboardNavigator.enabled = true;
-            });
-
-            $('#tabThumbs').click(library.showThumbs);
-            $('#tabList').click(library.showList);
-
             library.initLinks();
-
-            // set thums/list view based on cookie
-            if ($.cookie("tabs") == 'thumbs') {
-                library.showThumbs();
-            }
-            if ($.cookie("tabs") == 'list') {
-                library.showList();
-            }
 
             // In case of a preselected IdP fill the suggestion
             if (library.selectedEntityId !== '') {
@@ -126,26 +102,26 @@ var Discover = function() {
             }
         },
 
-        linkHelp: function() {
+        linkHelp: function () {
             library.initLinks();
         },
 
-        showHelp: function() {
+        showHelp: function () {
             library.showHelp();
         }
     };
 
     var library = {
-        lang : '',
-        searchText : '',
-        idpList : '',
-        spEntityId : '',
-        spName : '',
-        selectedId : '',
-        selectedEntityId : '',
-        uri : '',
+        lang: '',
+        searchText: '',
+        idpList: '',
+        spEntityId: '',
+        spName: '',
+        selectedId: '',
+        selectedEntityId: '',
+        uri: '',
 
-        selectIdpJSON : function() {
+        selectIdpJSON: function () {
             for (var idp in this.idpList) {
                 if (this.idpList[idp].hasOwnProperty('EntityId') && this.idpList[idp]['EntityId'] == this.selectedEntityId) {
                     return this.idpList[idp];
@@ -154,35 +130,34 @@ var Discover = function() {
             return null;
         },
 
-        initLinks : function() {
-            $("#help_nav a").live("click", function() {
+        initLinks: function () {
+            $("#help_nav a").on("click", function () {
                 library.showHelp();
             });
         },
 
-        showRequestAccess: function(idpEntityId, idpName, spEntityId, spName) {
-            keyboardNavigator.enabled = false;
+        showRequestAccess: function (idpEntityId, idpName, spEntityId, spName) {
             var speed = 'fast';
-            var params = {lang:library.lang, idpEntityId:idpEntityId, idpName:idpName, spEntityId:spEntityId, spName:spName};
-            $.get('/authentication/idp/requestAccess?'+ $.param(params), function(data) {
+            var params = {lang: library.lang, idpEntityId: idpEntityId, idpName: idpName, spEntityId: spEntityId, spName: spName};
+            $.get('/authentication/idp/requestAccess?' + $.param(params), function (data) {
                 $("#content").hide(speed);
 
                 var requestAccess = $("#requestAccess");
                 requestAccess.html(data);
-                requestAccess.show(speed, function() {
-                    $('#cancel_request_access, #back_request_access').live("click",function(e){
+                requestAccess.show(speed, function () {
+                    $('#name').focus();
+                    requestAccess.on('click','#cancel_request_access, #back_request_access', function () {
                         $("#requestAccess").hide(speed);
                         $("#content").show(speed);
-                        keyboardNavigator.enabled = true;
-
+                        $("#searchBox").focus();
                     });
-                    $('#request_access_submit').live("click",function(e){
+                    requestAccess.on('click','#request_access_submit', function (e) {
                         e.preventDefault();
                         var formData = $('#request_access_form').serialize();
-                        $.post('/authentication/idp/performRequestAccess', formData, function(data) {
-                            $("#requestAccess").html(data);
-                        });
-                        keyboardNavigator.enabled = true;
+                        $.post('/authentication/idp/performRequestAccess', formData)
+                            .done(function (data) {
+                                $("#requestAccess").html(data);
+                            });
                         return false;
                     });
                 });
@@ -190,12 +165,12 @@ var Discover = function() {
         },
 
 
-        showHelp: function() {
+        showHelp: function () {
             var speed = 'fast';
             if ($('#help:visible').length > 0 && $.trim($('#help:visible').html()) !== "") {
                 return;
             }
-            $.get('/authentication/idp/help?lang='+library.lang, function(data) {
+            $.get('/authentication/idp/help?lang=' + library.lang, function (data) {
                 $("#content").hide(speed);
                 $("#requestAccess").hide(speed);
 
@@ -207,23 +182,23 @@ var Discover = function() {
             });
         },
 
-        prepareFaq : function() {
+        prepareFaq: function () {
             //Attach click handler to open and close help items
-            $("#faq li").click(function(e) {
+            $("#faq li").click(function (e) {
                 $(this).toggleClass("open");
 
                 //Close all faq items except the clicked one
                 $('#faq li').not(this).removeClass('open');
             });
 
-            $("#back_link").live("click", function(e) {
+            $("#back_link").on("click", function (e) {
                 $("#help").hide('fast');
                 $("#content").show('fast');
 
             });
         },
 
-        fillSuggestion : function() {
+        fillSuggestion: function () {
             var idp = this.selectIdpJSON();
             if (idp) {
                 this.selectedId = idp['ID'];
@@ -245,7 +220,7 @@ var Discover = function() {
                     idp['Name'] = library.clipString(idp['Name'], 45); //Clip string to prevent overlap with 'No access' label
                 }
                 var html = $('#idpListSuggestionTemplate').tmpl(idp);
-                $('#IdpSuggestion').append(html).click(function(e) {
+                $('#IdpSuggestion').append(html).click(function (e) {
                     e.preventDefault();
                     //action no access or access
                     if (idp['Access'] == 0) {
@@ -272,7 +247,7 @@ var Discover = function() {
          * @param maxLength        desired string length
          * @return string        clipped string with ellipsis appended
          */
-        clipString : function (string, maxLength) {
+        clipString: function (string, maxLength) {
             var appendString = '...';
 
             if (string.length <= maxLength) {
@@ -289,7 +264,7 @@ var Discover = function() {
             }
         },
 
-        resolveIdPName : function(iDp, language) {
+        resolveIdPName: function (iDp, language) {
             var name = iDp['Name_' + language];
             if (name == undefined || name === '') {
                 language = (language == 'en') ? 'nl' : 'en';
@@ -298,8 +273,8 @@ var Discover = function() {
             return name;
         },
 
-        sortIdps : function() {
-            this.idpList.sort(function(o1, o2){
+        sortIdps: function () {
+            this.idpList.sort(function (o1, o2) {
                 var name1 = library.resolveIdPName(o1, library.lang);
                 var name2 = library.resolveIdPName(o2, library.lang);
 
@@ -320,20 +295,11 @@ var Discover = function() {
          *
          * @param filter    string used to filter idps
          */
-        loadIdps : function(filter, isSearch) {
-            if (filter == this.searchText) {
-                filter = '';
-            }
+        loadIdps: function (filter, isSearch) {
             library.displayIdps(library.filterIdps(filter));
-
-            // Return focus on searchbox if it is a search
-//            if (filter !== '') {
-//                $('#searchBox').focus();
-//                $('#searchBox').putCursorAtEnd();
-//            }
         },
 
-        filterIdps : function(filter) {
+        filterIdps: function (filter) {
             var filteredResults = [];
 
             // empty filter
@@ -372,17 +338,15 @@ var Discover = function() {
          *
          * @param results    array of idps
          */
-        displayIdps : function(results) {
+        displayIdps: function (results) {
 
             //Display no results message if needed
             if (results.length == 0) {
                 $('#noResultsMessage').show();
                 $('#scrollViewport').hide();
             } else {
-                if (window.innerWidth>=768) {
-                    $('#noResultsMessage').hide();
-                    $('#scrollViewport').show();
-                }
+                $('#noResultsMessage').hide();
+                $('#scrollViewport').show();
 
                 //Clear results box
                 $('#organisationsContainer').html('');
@@ -412,30 +376,29 @@ var Discover = function() {
 
                     // Use jquery template to create html
                     if (matchMedia('only screen and (min-width: 768px)').matches) {
-                       var html = $('#idpListTemplate').tmpl(idp);
+                        var html = $('#idpListTemplate').tmpl(idp);
                     }
                     else {
-                       var html = $('#idpListTemplateMobile').tmpl(idp);
+                        var html = $('#idpListTemplateMobile').tmpl(idp);
                     }
 
                     $('#organisationsContainer').append(html);
                 }
 
-                // Check whether there is a search and a selection has to be made
-                if (($('#searchBox').val() == "") || ($('#searchBox').val() == this.searchText)) {
-                    // no search no selection
-                     keyboardNavigator.setSelectedIndex(-1);
+                // Check whether this is a successful search and a selection has to be made
+                if (($('#searchBox').val() == '') || ($('#searchBox').val() == this.searchText)) {
+                    // no search, no selection, but fallback to the possible preselected idp
                     $('#organisationsContainer li').removeClass('selected');
+                    this.selectSuggestion();
                 } else {
                     // search, select first in list
-                     keyboardNavigator.setSelectedIndex(0);
+                    $('#organisationsContainer li').removeClass('selected');
                     $('#organisationsContainer li:first').addClass('selected', '');
                 }
 
-                //Hook up onclick handler for keynavigator
-                $('#organisationsContainer li').click(function() {
-                    //check if there is a selected item
-                    var org = $('ul#organisationsContainer li.selected a').attr('alt');
+                //Hook up for clicking a IdP
+                $('#organisationsContainer li').click(function () {
+                    var org = $(this).find('a').attr('alt');
                     //if no select suggestion
                     if (org == undefined) {
                         library.selectSuggestion();
@@ -457,40 +420,10 @@ var Discover = function() {
         },
 
         // set selection of suggestion in list
-        selectSuggestion : function() {
+        selectSuggestion: function () {
             id = $('#organisationsContainer li#c' + this.selectedId).index();
-            keyboardNavigator.setSelectedIndex(id);
             $('#organisationsContainer li#c' + this.selectedId).addClass('selected', '');
-        },
-
-        showThumbs : function() {
-            // set cookie for tabs thums view
-            $.cookie("tabs", "thumbs", { expires: 7 });
-
-            //Toggle tab active class
-            $('#tabThumbs').addClass('active');
-            $('#tabList').removeClass('active');
-
-            $('#organisationsContainer').addClass('thumbs');
-            $('#organisationsContainer').removeClass('list');
-
-            keyboardNavigator.setMode(keyboardNavigator.MODE_3COLUMN_GRID);
-        },
-
-        showList : function() {
-            // set cookie for tabs list view
-            $.cookie("tabs", "list", { expires: 7 });
-
-            //Toggle tab active class
-            $('#tabList').addClass('active');
-            $('#tabThumbs').removeClass('active');
-
-            $('#organisationsContainer').removeClass('thumbs');
-            $('#organisationsContainer').addClass('list');
-
-            keyboardNavigator.setMode(keyboardNavigator.MODE_LIST);
         }
-
     };
 
     return module;
