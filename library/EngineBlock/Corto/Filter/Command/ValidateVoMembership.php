@@ -60,7 +60,7 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
         $isMember = $validator->isMember(
             $vo,
             $this->_collabPersonId,
-            $this->_idpMetadata['EntityId']
+            $this->_idpMetadata['EntityID']
         );
         if (!$isMember) {
             throw new EngineBlock_Corto_Exception_UserNotMember("User not a member of VO $vo");

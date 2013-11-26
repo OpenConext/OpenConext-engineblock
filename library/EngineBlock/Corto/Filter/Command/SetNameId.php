@@ -78,12 +78,12 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
             } else if ($requireTransient) {
                 $nameIdValue = $this->_getTransientNameId(
-                    $this->_spMetadata['EntityId'], $this->_idpMetadata['EntityId']
+                    $this->_spMetadata['EntityID'], $this->_idpMetadata['EntityID']
                 );
             } else {
                 $nameIdValue = $this->_getPersistentNameId(
                     $this->_collabPersonId,
-                    $this->_spMetadata['EntityId']
+                    $this->_spMetadata['EntityID']
                 );
 
             }

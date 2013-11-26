@@ -417,7 +417,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                     : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
                 'Access' => ((isset($metadata['Access']) && $metadata['Access']) || $isDebugRequest ) ? '1' : '0',
                 'ID' => md5($idpEntityId),
-                'EntityId' => $idpEntityId,
+                'EntityID' => $idpEntityId,
             );
             $wayfIdps[] = $wayfIdp;
         }

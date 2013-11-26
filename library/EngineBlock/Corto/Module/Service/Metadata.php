@@ -63,7 +63,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
     }
 
     /**
-     * Look if a Service Provider EntityId was passed allong (with sp-entity-id) and this entity requires use of
+     * Look if a Service Provider EntityID was passed allong (with sp-entity-id) and this entity requires use of
      * different keys (key rollover).
      *
      * @return array|bool

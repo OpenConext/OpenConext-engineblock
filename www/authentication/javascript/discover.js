@@ -56,7 +56,7 @@ var Discover = function () {
                     return false;
                 }
                 for (var idp in library.idpList) {
-                    if (encodeURIComponent(library.idpList[idp].EntityId) === selectedIdp) {
+                    if (encodeURIComponent(library.idpList[idp].EntityID) === selectedIdp) {
                         return true;
                     }
                 }
@@ -123,7 +123,7 @@ var Discover = function () {
 
         selectIdpJSON: function () {
             for (var idp in this.idpList) {
-                if (this.idpList[idp].hasOwnProperty('EntityId') && this.idpList[idp]['EntityId'] == this.selectedEntityId) {
+                if (this.idpList[idp].hasOwnProperty('EntityID') && this.idpList[idp]['EntityID'] == this.selectedEntityId) {
                     return this.idpList[idp];
                 }
             }
@@ -205,7 +205,7 @@ var Discover = function () {
                 this.selectedId = idp['ID'];
 
                 idp['Name'] = this.resolveIdPName(idp, this.lang);
-                idp['Alt'] = encodeURIComponent(idp['EntityId']);
+                idp['Alt'] = encodeURIComponent(idp['EntityID']);
 
                 idp['Suggestion'] = 'Onze Suggestie:';
                 if ((this.lang == 'en')) {
@@ -362,7 +362,7 @@ var Discover = function () {
                     idp['ID'] = result['ID'];
                     idp['Logo'] = result['Logo'];
                     idp['Name'] = library.resolveIdPName(result, this.lang);
-                    idp['Alt'] = encodeURIComponent(result['EntityId']);
+                    idp['Alt'] = encodeURIComponent(result['EntityID']);
                     idp['NoAccess'] = '';
                     idp['NoAccessClass'] = '';
 

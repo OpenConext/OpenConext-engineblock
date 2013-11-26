@@ -37,7 +37,7 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
 
     public function execute()
     {
-        $spEntityId = $this->_spMetadata['EntityId'];
+        $spEntityId = $this->_spMetadata['EntityID'];
 
         $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
         $arp = $serviceRegistryAdapter->getArp($spEntityId);

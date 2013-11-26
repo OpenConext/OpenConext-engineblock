@@ -277,7 +277,7 @@ class EngineBlock_Corto_ProxyServer
             return $entity;
         }
         $entity = $this->_entities['remote'][$entityId];
-        $entity['EntityId'] = $entityId;
+        $entity['EntityID'] = $entityId;
         return $entity;
     }
 

@@ -60,7 +60,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
         // Note that IDs are only unique per SP... we hope...
         $responseNameId = $response->getAssertion()->getNameId();
 
-        $sessionKey = $spEntityMetadata['EntityId'] . '>' . $request->getId();
+        $sessionKey = $spEntityMetadata['EntityID'] . '>' . $request->getId();
         if (isset($_SESSION[$sessionKey]['collabPersonId'])) {
             $collabPersonId = $_SESSION[$sessionKey]['collabPersonId'];
         }

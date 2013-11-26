@@ -73,7 +73,7 @@ if ($displayName == '') {
 $preselectedIdpData = array();
 if ($preselectedIdp) {
     foreach ($idpList as $idp) {
-        if ($idp['EntityId'] === $preselectedIdp) {
+        if ($idp['EntityID'] === $preselectedIdp) {
             $preselectedIdpData = $idp;
             $preselectedIdpName = $preselectedIdpData['Name_'.$lang];
             if (empty($preselectedIdpName)) {
@@ -154,7 +154,7 @@ if ($preselectedIdp) {
                                 <form method="post" action="<?php echo $action ?>">
                                     <p>
                                         <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
-                                        <input type="hidden" name="idp" value="<?php echo htmlentities($idp['EntityId']); ?>" />
+                                        <input type="hidden" name="idp" value="<?php echo htmlentities($idp['EntityID']); ?>" />
                                         <input type="submit" value="<?php echo htmlentities($idp['Name_en']); ?>" />
                                     </p>
                                 </form>
