@@ -54,4 +54,21 @@ class EngineBlock_Test_LogTest extends PHPUnit_Framework_TestCase
         EngineBlock_Log::factory($this->config)
             ->attach(array('arrayelement'), 'object');
     }
+
+    public function testLastEventIsSet()
+    {
+        $log = EngineBlock_Log::factory($this->config);
+        $log->log(
+            'testMessage',
+            1,
+            array('test')
+        );
+        $lastEvent = $log->getLastEvent();
+
+        $this->assertArrayHasKey('timestamp', $lastEvent);
+        $this->assertEquals('testMessage', $lastEvent['message']);
+        $this->assertArrayHasKey('requestid', $lastEvent);
+        $this->assertEquals(1, $lastEvent['priority']);
+        $this->assertEquals(array('test'), $lastEvent['info']);
+    }
 }

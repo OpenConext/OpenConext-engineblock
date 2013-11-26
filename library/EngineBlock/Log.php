@@ -44,6 +44,11 @@ class EngineBlock_Log extends Zend_Log
     protected $_attachments = array();
 
     /**
+     * @var array
+     */
+    private $lastEvent;
+
+    /**
      * @param array $attachments
      * @return array
      */
@@ -116,6 +121,15 @@ class EngineBlock_Log extends Zend_Log
      */
     public function log($message, $priority, $additionalInfo = null)
     {
+        // pack into event required by filters and writers
+        $this->lastEvent = array(
+            'timestamp'     => date('c'),
+            'message'       => $message,
+            'priority'      => $priority,
+            'info'          => $additionalInfo,
+            'requestid'     => $this->getRequestId()
+        );
+
         // sanity checks
         if (empty($this->_writers)) {
             throw new Zend_Log_Exception('No writers were added');
@@ -125,25 +139,17 @@ class EngineBlock_Log extends Zend_Log
             throw new Zend_Log_Exception('Bad log priority');
         }
 
+        $this->lastEvent['priorityName'] = $this->_priorities[$priority];
+
         // see if we need to set event items, used by Mail writer
         if ($additionalInfo instanceof EngineBlock_Log_Message_AdditionalInfo) {
             $this->_setAdditionalEventItems($additionalInfo);
         }
 
-        // pack into event required by filters and writers
-        $event = array(
-            'timestamp'     => date('c'),
-            'message'       => $message,
-            'priority'      => $priority,
-            'priorityName'  => $this->_priorities[$priority],
-            'info'          => $additionalInfo,
-            'requestid'     => $this->getRequestId(),
-        );
-
         // abort if rejected by the global filters
         /** @var $filter Zend_Log_Filter_Interface */
         foreach ($this->_filters as $filter) {
-            if (!$filter->accept($event)) {
+            if (!$filter->accept($this->lastEvent)) {
                 return;
             }
         }
@@ -152,7 +158,7 @@ class EngineBlock_Log extends Zend_Log
         /** @var $writer Zend_Log_Writer_Abstract */
         foreach ($this->_writers as $writer) {
             // get message array
-            $writerEvent = $event;
+            $writerEvent = $this->lastEvent;
 
             // Inline attachments for Mail writer
             if ($writer instanceof EngineBlock_Log_Writer_Mail) {
@@ -169,7 +175,7 @@ class EngineBlock_Log extends Zend_Log
                 $attachmentTotal = count($attachments);
                 for ($i = $attachmentTotal - 1; $i >= 0; $i--) {
                     $attachment = $attachments[$i];
-                    $attachmentEvent = $event;
+                    $attachmentEvent = $this->lastEvent;
                     $attachmentMessagePrefix = $this->getAttachmentPrefix(
                         $attachment['name'],
                         $i + 1,
@@ -182,7 +188,7 @@ class EngineBlock_Log extends Zend_Log
                 }
 
                 // Annotate the message
-                $writerEvent['message'] = $this->getPrefix() . sprintf(self::MESSAGE_PREFIX, $event['priorityName']) . ' ' . $message . $this->getSuffix();
+                $writerEvent['message'] = $this->getPrefix() . sprintf(self::MESSAGE_PREFIX, $this->lastEvent['priorityName']) . ' ' . $message . $this->getSuffix();
 
                 // log line for each file/message
                 $writer->write($writerEvent);
@@ -315,6 +321,14 @@ class EngineBlock_Log extends Zend_Log
         }
 
         return $this->_requestId;
+    }
+
+    /**
+     * @return array
+     */
+    public function getLastEvent()
+    {
+        return $this->lastEvent;
     }
 
     /**
