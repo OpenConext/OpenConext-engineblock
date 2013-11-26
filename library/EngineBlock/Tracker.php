@@ -38,8 +38,12 @@ class EngineBlock_Tracker
             INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname)
             VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname)"
         );
-        $spEntityName  = (!empty($spEntityMetadata['Name']['en']) ? $spEntityMetadata['Name']['en'] : $spEntityMetadata['EntityID']);
-        $idpEntityName = (!empty($idpEntityMetadata['Name']['en']) ? $idpEntityMetadata['Name']['en'] : $idpEntityMetadata['EntityID']);
+        $spEntityName  = (!empty($spEntityMetadata['Name']['en'])
+            ? $spEntityMetadata['Name']['en']
+            : $spEntityMetadata['EntityID']);
+        $idpEntityName = (!empty($idpEntityMetadata['Name']['en'])
+            ? $idpEntityMetadata['Name']['en']
+            : $idpEntityMetadata['EntityID']);
         $stmt->bindParam('userid'       , $subjectId);
         $stmt->bindParam('spentityid'   , $spEntityMetadata['EntityID']);
         $stmt->bindParam('spentityname' , $spEntityName);
