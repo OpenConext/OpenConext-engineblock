@@ -88,10 +88,11 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
     /**
      * @param array $session
      * @throws InvalidArgumentException
+     * @return Dummy_Model_Idp_TestCase_TestCaseInterface|null
      */
     private function factoryTestCaseFromSession(array $session) {
         if (!isset($session['dummy']['idp']['testCase'])) {
-            return;
+            return null;
         }
         $testCaseClass = 'Dummy_Model_Idp_TestCase_' . $session['dummy']['idp']['testCase'];
         if (!class_exists($testCaseClass)) {
@@ -100,5 +101,4 @@ class Dummy_Controller_IdentityProvider extends EngineBlock_Controller_Abstract
 
         return new $testCaseClass();
     }
-
 }

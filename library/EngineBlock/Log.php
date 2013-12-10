@@ -163,6 +163,7 @@ class EngineBlock_Log extends Zend_Log
             } else {
                 // Number the attachments and write them separately
                 $attachments = self::encodeAttachments($this->_attachments);
+
                 // Flush attachments to prevent attachments from being logged multiple times, this reduces the amount of
                 // logged information a lot
                 $this->_attachments = array();

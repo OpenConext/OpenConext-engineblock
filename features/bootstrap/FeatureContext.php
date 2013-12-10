@@ -24,6 +24,7 @@ class FeatureContext extends MinkContext
      * Every scenario gets it's own context object.
      *
      * @param array $parameters context parameters (set them up through behat.yml)
+     * @throws EngineBlock_Exception
      */
     public function __construct(array $parameters)
     {

@@ -9,7 +9,8 @@ class Dummy_Model_Sp_TestCase_PostRequest
     }
 
     /**
-     * @param string &$bindingType
+     * @param string $bindingType
+     * @return string
      */
     public function setBindingType($bindingType)
     {
