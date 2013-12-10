@@ -27,6 +27,11 @@ class Dummy_Controller_ServiceProvider extends EngineBlock_Controller_Abstract
 {
     public function indexAction()
     {
+        // Guard against production usage.
+        if (!EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('functionalTesting')) {
+            throw new EngineBlock_Exception('No functional testing configuration defined!');
+        }
+
         $this->setTestCaseFromRequest($this->_getRequest());
 
         if (!empty($_POST)) {
