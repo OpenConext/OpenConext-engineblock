@@ -50,7 +50,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRemoteEntity($request->getIssuer());
-        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)) {
+        if (
+            $this->_server->getConfig('debug', false) ||
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)
+        ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
