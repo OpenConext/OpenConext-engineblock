@@ -95,14 +95,14 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerServiceRegistryClient()
     {
-        $this[self::SERVICE_REGISTRY_CLIENT] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::SERVICE_REGISTRY_CLIENT] = $this->share(function ()
         {
             return new Janus_Client_CacheProxy();
         });
     }
 
     /**
-     * @return EngineBlock_Corto_ServiceRegistry_Adapter()
+     * @return EngineBlock_Corto_ServiceRegistry_JanusRestAdapter()
      */
     public function getServiceRegistryAdapter()
     {
@@ -113,7 +113,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         $this[self::SERVICE_REGISTRY_ADAPTER] = $this->share(function (EngineBlock_Application_DiContainer $container)
         {
-            return new EngineBlock_Corto_ServiceRegistry_Adapter($container->getServiceRegistryClient());
+            return new EngineBlock_Corto_ServiceRegistry_JanusRestAdapter($container->getServiceRegistryClient());
         });
     }
 
@@ -127,10 +127,22 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerAssetManager()
     {
-        $this[self::ASSET_MANAGER] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::ASSET_MANAGER] = $this->share(function ()
         {
             return new EngineBlock_AssetManager();
         });
     }
 
+    public function getDateTime()
+    {
+        return $this[self::DATE_TIME];
+    }
+
+    protected function registerTimeFunction()
+    {
+        $this[self::DATE_TIME] = $this->share(function ()
+        {
+            return new EngineBlock_DateTime();
+        });
+    }
 }
