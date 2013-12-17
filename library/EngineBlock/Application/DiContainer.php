@@ -10,6 +10,8 @@ class EngineBlock_Application_DiContainer extends Pimple
     const SERVICE_REGISTRY_CLIENT = 'serviceRegistryClient';
     const SERVICE_REGISTRY_ADAPTER = 'serviceRegistryAdapter';
     const ASSET_MANAGER = 'assetManager';
+    const SAML2_TIMESTAMP = 'dateTime';
+    const SAML2_ID = 'id';
 
     public function __construct()
     {
@@ -22,6 +24,8 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerServiceRegistryClient();
         $this->registerServiceRegistryAdapter();
         $this->registerAssetManager();
+        $this->registerSaml2TimestampProvider();
+        $this->registerSaml2IdGenerator();
     }
 
     protected function registerXmlConverter()
@@ -133,16 +137,36 @@ class EngineBlock_Application_DiContainer extends Pimple
         });
     }
 
-    public function getDateTime()
+    /**
+     * @return EngineBlock_Saml2_TimestampProvider_Interface
+     */
+    public function getSaml2TimestampProvider()
     {
-        return $this[self::DATE_TIME];
+        return $this[self::SAML2_TIMESTAMP];
     }
 
-    protected function registerTimeFunction()
+    protected function registerSaml2TimestampProvider()
     {
-        $this[self::DATE_TIME] = $this->share(function ()
+        $this[self::SAML2_TIMESTAMP] = $this->share(function ()
         {
-            return new EngineBlock_DateTime();
+            return new EngineBlock_Saml2_TimestampProvider_Default();
         });
+    }
+
+    /**
+     * @return EngineBlock_Saml2_IdGenerator_Interface
+     */
+    public function getSaml2IdGenerator()
+    {
+        return $this[self::SAML2_ID];
+    }
+
+    protected function registerSaml2IdGenerator()
+    {
+        $this[self::SAML2_ID] = $this->share(function()
+            {
+                return new EngineBlock_Saml2_IdGenerator_Default();
+            }
+        );
     }
 }

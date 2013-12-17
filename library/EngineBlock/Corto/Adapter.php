@@ -558,6 +558,11 @@ class EngineBlock_Corto_Adapter
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
     }
 
+    public function getDateTime()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2TimestampProvider();
+    }
+
     protected function _processProxyServerResponse()
     {
         $response = EngineBlock_ApplicationSingleton::getInstance()->getHttpResponse();

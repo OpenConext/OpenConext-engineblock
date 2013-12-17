@@ -1075,16 +1075,14 @@ class EngineBlock_Corto_ProxyServer
      */
     public function timeStamp($deltaSeconds = 0, $time = null)
     {
-        $time = (int) $time;
-        if ($time === 0) {
-            $time = time();
-        }
-        return gmdate('Y-m-d\TH:i:s\Z', $time + $deltaSeconds);
+        $provider = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2TimestampProvider();
+        return $provider->timestamp($deltaSeconds, $time);
     }
 
     public function getNewId()
     {
-        return self::ID_PREFIX . sha1(uniqid(mt_rand(), true));
+        $generator = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2IdGenerator();
+        return $generator->generate(self::ID_PREFIX);
     }
 
     public function startSession()
