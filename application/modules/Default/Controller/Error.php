@@ -27,7 +27,7 @@ class Default_Controller_Error extends EngineBlock_Controller_Abstract
 {
     public function displayAction($exception)
     {
-        header('HTTP/1.1 500 Internal Server Error', true, 500);
+        $this->_getResponse()->setStatus(500, 'Internal Server Error');
         $application = EngineBlock_ApplicationSingleton::getInstance();
         if ($application->getConfigurationValue('debug', false)) {
             $this->exception = $exception;
@@ -36,7 +36,7 @@ class Default_Controller_Error extends EngineBlock_Controller_Abstract
 
     public function notFoundAction()
     {
-        header("HTTP/1.0 404 Not Found", true, 404);
+        $this->_getResponse()->setStatus(404, 'Not Found');
     }
 
     public function testExceptionAction()
