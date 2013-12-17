@@ -1,6 +1,15 @@
 {
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
+    "type": "project",
+    "keywords": ["saml", "proxy", "openconext", "SURFnet"],
+    "homepage": "http://www.openconext.org",
+    "license": "Apache-2.0",
+    "support": {
+        "email": "openconext-users@list.surfnet.nl",
+        "issues": "https://github.com/OpenConext/OpenConext-engineblock/issues",
+        "source": "https://github.com/OpenConext/OpenConext-engineblock"
+    },
     "require": {
         "pimple/pimple": "1.0.2",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
