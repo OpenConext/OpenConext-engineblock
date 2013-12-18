@@ -34,6 +34,12 @@ class Janus_Client implements Janus_Client_Interface
      */
     protected $_restClient = null;
 
+    /**
+     * Get full information for a given entity.
+     *
+     * @param $entityId
+     * @return mixed
+     */
     public function getEntity($entityId)
     {
         return $this->getRestClient()->getEntity()
