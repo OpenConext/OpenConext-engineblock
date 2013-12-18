@@ -2,7 +2,7 @@
 
 class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGenerator_Interface
 {
-    const FIXTURE_FILE = '/tmp/eb-fixtures/saml2-id';
+    const FIXTURE_FILE = '/tmp/eb-fixtures/saml2/id';
 
     public function generate($prefix = 'EB')
     {
