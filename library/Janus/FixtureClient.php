@@ -202,12 +202,28 @@ class Janus_FixtureClient implements Janus_Client_Interface
      */
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
-        $file1 = self::DIR . 'connection-forbidden-' . md5($spEntityId) . '-' . md5($idpEntityId);
-        $file2 = self::DIR . 'connection-forbidden-' . md5($idpEntityId) . '-' . md5($spEntityId);
-        if (file_exists($file1) || file_exists($file2)) {
-            return false;
+        $blacklistedSpFile = self::DIR . 'blacklisted-' . md5($spEntityId);
+        $blacklistedIdpFile = self::DIR . 'blacklisted-' . md5($idpEntityId);
+        $eitherSideIsBlacklisted = (file_exists($blacklistedSpFile) || file_exists($blacklistedIdpFile));
+        if ($eitherSideIsBlacklisted) {
+            $connectionIsWhitelisted = file_exists(self::DIR . 'connection-allowed-' . md5($spEntityId) . '-' . md5($idpEntityId));
+            if ($connectionIsWhitelisted) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
-        return true;
+        else {
+            $file1 = self::DIR . 'connection-forbidden-' . md5($spEntityId) . '-' . md5($idpEntityId);
+            $file2 = self::DIR . 'connection-forbidden-' . md5($idpEntityId) . '-' . md5($spEntityId);
+            if (file_exists($file1) || file_exists($file2)) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
     }
 
     /**
