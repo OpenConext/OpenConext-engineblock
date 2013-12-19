@@ -422,7 +422,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $dom = new DOMDocument();
             $dom->loadXML($xml);
             if (!$dom->schemaValidate($schemaUrl)) {
-                throw new Exception('Messagge = Ee XML doesnt validate against XSD at Oasis-open.org?!');
+                throw new Exception('Message XML doesnt validate against XSD at Oasis-open.org?!');
             }
         }
     }
