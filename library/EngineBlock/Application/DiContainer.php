@@ -10,7 +10,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     const SERVICE_REGISTRY_CLIENT = 'serviceRegistryClient';
     const SERVICE_REGISTRY_ADAPTER = 'serviceRegistryAdapter';
     const ASSET_MANAGER = 'assetManager';
-    const SAML2_TIMESTAMP = 'dateTime';
+    const TIME = 'dateTime';
     const SAML2_ID = 'id';
 
     public function __construct()
@@ -24,7 +24,7 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerServiceRegistryClient();
         $this->registerServiceRegistryAdapter();
         $this->registerAssetManager();
-        $this->registerSaml2TimestampProvider();
+        $this->registerTimeProvider();
         $this->registerSaml2IdGenerator();
     }
 
@@ -138,19 +138,20 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return EngineBlock_Saml2_TimestampProvider_Interface
+     * @return EngineBlock_TimeProvider_Interface
      */
-    public function getSaml2TimestampProvider()
+    public function getTimeProvider()
     {
-        return $this[self::SAML2_TIMESTAMP];
+        return $this[self::TIME];
     }
 
-    protected function registerSaml2TimestampProvider()
+    protected function registerTimeProvider()
     {
-        $this[self::SAML2_TIMESTAMP] = $this->share(function ()
+        $this[self::TIME] = $this->share(function ()
         {
-            return new EngineBlock_Saml2_TimestampProvider_Default();
-        });
+                return new EngineBlock_TimeProvider_Default();
+            }
+        );
     }
 
     /**
@@ -168,5 +169,15 @@ class EngineBlock_Application_DiContainer extends Pimple
                 return new EngineBlock_Saml2_IdGenerator_Default();
             }
         );
+    }
+
+    /**
+     * Classname to use for Message utilities.
+     *
+     * @return string
+     */
+    public function getMessageUtilClassName()
+    {
+       return 'sspmod_saml_Message';
     }
 }

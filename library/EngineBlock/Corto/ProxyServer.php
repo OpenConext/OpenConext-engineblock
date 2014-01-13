@@ -1073,10 +1073,10 @@ class EngineBlock_Corto_ProxyServer
      * @param int|null $time Current time to add delta to.
      * @return string
      */
-    public function timeStamp($deltaSeconds = 0, $time = null)
+    public function timeStamp($deltaSeconds = 0)
     {
-        $provider = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2TimestampProvider();
-        return $provider->timestamp($deltaSeconds, $time);
+        $provider = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTimeProvider();
+        return $provider->timestamp($deltaSeconds);
     }
 
     public function getNewId()

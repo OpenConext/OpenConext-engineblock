@@ -560,7 +560,7 @@ class EngineBlock_Corto_Adapter
 
     public function getDateTime()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2TimestampProvider();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTimeProvider();
     }
 
     protected function _processProxyServerResponse()

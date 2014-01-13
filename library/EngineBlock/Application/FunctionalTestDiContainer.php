@@ -12,11 +12,11 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         });
     }
 
-    protected function registerSaml2TimestampProvider()
+    protected function registerTimeProvider()
     {
-        $this[self::SAML2_TIMESTAMP] = $this->share(function ()
+        $this[self::TIME] = $this->share(function ()
         {
-            return new EngineBlock_Saml2_TimestampProvider_Fixture();
+            return new EngineBlock_TimeProvider_Fixture();
         });
     }
 
@@ -27,5 +27,10 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
                 return new EngineBlock_Saml2_IdGenerator_Fixture();
             }
         );
+    }
+
+    public function getMessageUtilClassName()
+    {
+        return 'EngineBlock_Ssp_sspmod_saml_Message';
     }
 }
