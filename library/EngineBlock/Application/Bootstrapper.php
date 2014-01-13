@@ -38,14 +38,12 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
-        $this->_setEnvironmentIdByEnvironment();
+        $this->_bootstrapEnvironmentIdByEnvironment();
 
         $this->_bootstrapDiContainer();
-
         $this->_bootstrapConfiguration();
 
-        $this->_setEnvironmentIdByDetection();
-
+        $this->_bootstrapEnvironmentIdByDetection();
         $this->_bootstrapEnvironmentConfiguration();
 
         $this->_bootstrapPhpSettings();
@@ -61,12 +59,30 @@ class EngineBlock_Application_Bootstrapper
         return $this;
     }
 
-    protected function _bootstrapDiContainer() {
-        if (ENGINEBLOCK_ENV == 'testing') {
+    protected function _bootstrapEnvironmentIdByEnvironment()
+    {
+        // Get from environment variable (from Apache or the shell)
+        if (!defined('ENGINEBLOCK_ENV') && getenv('ENGINEBLOCK_ENV')) {
+            define('ENGINEBLOCK_ENV', getenv('ENGINEBLOCK_ENV'));
+        }
+        // Get from predefined constant
+        if (defined('ENGINEBLOCK_ENV')) {
+            $this->_application->setEnvironmentId(ENGINEBLOCK_ENV);
+        }
+    }
+
+    protected function _bootstrapDiContainer()
+    {
+        if (defined('ENGINEBLOCK_ENV') && ENGINEBLOCK_ENV === 'testing') {
             $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
-        } elseif (ENGINEBLOCK_ENV == 'functional-testing') {
+            return;
+        }
+
+        if (defined('ENGINEBLOCK_ENV') && ENGINEBLOCK_ENV === 'functional-testing') {
             $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
-        } else {
+            return;
+        }
+
             $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
         }
     }
@@ -81,7 +97,7 @@ class EngineBlock_Application_Bootstrapper
     }
 
     /**
-     * return a list of config files (default and environment overrides) that shoud be loaded
+     * Return a list of config files (default and environment overrides) that should be loaded
      *
      * @return array
      */
@@ -93,7 +109,7 @@ class EngineBlock_Application_Bootstrapper
         );
     }
 
-    protected function _setEnvironmentIdByDetection()
+    protected function _bootstrapEnvironmentIdByDetection()
     {
         if ($this->_application->getEnvironmentId()) {
             // Detection not required.
@@ -272,17 +288,5 @@ class EngineBlock_Application_Bootstrapper
         }
 
         $this->_application->setTranslator($translate);
-    }
-
-    protected function _setEnvironmentIdByEnvironment()
-    {
-        // Get from environment variable (from Apache or the shell)
-        if (!defined('ENGINEBLOCK_ENV') && getenv('ENGINEBLOCK_ENV')) {
-            define('ENGINEBLOCK_ENV', getenv('ENGINEBLOCK_ENV'));
-        }
-        // Get from predefined constant
-        if (defined('ENGINEBLOCK_ENV')) {
-            $this->_application->setEnvironmentId(ENGINEBLOCK_ENV);
-        }
     }
 }
