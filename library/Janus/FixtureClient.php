@@ -51,7 +51,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
         $allowedEntities = array($spEntityId);
         $entities = $this->_getEntities();
         foreach ($entities as $entityId => $entity) {
-            if (!in_array('IDP', $entity['Types'])) {
+            if (!isset($entity['SingleSignOnService:0:Location'])) {
                 continue;
             }
 
@@ -83,7 +83,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
         $allowedEntities = array($idpEntityId);
         $entities = $this->_getEntities();
         foreach ($entities as $entityId => $entity) {
-            if (!in_array('SP', $entity['Types'])) {
+            if (!isset($entity['AssertionConsumerService:0:Location'])) {
                 continue;
             }
 
@@ -108,7 +108,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
         $spEntities = array();
         $entities = $this->_getEntities();
         foreach ($entities as $entityId => $entity) {
-            if (!in_array('SP', $entity['Types'])) {
+            if (!isset($entity['AssertionConsumerService:0:Location'])) {
                 continue;
             }
 
@@ -146,7 +146,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
         $entities = $this->_getEntities();
         foreach ($entities as $entityId => $entity) {
             // Skip if the entity is not an IDP
-            if (!in_array('IDP', $entity['Types'])) {
+            if (!isset($entity['SingleSignOnService:0:Location'])) {
                 continue;
             }
 
