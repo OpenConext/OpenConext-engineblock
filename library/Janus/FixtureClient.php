@@ -241,7 +241,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
     {
         $file = self::DIR . 'arp-' . md5($spEntityId);
         if (!file_exists($file)) {
-            throw new RuntimeException("Missing Janus fixture: " . $file);
+            return null;
         }
         return json_decode(file_get_contents($file), true);
     }
