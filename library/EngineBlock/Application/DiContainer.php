@@ -12,6 +12,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     const ASSET_MANAGER = 'assetManager';
     const TIME = 'dateTime';
     const SAML2_ID = 'id';
+    const SUPER_GLOBAL_MANAGER = 'superGlobalManager';
 
     public function __construct()
     {
@@ -26,6 +27,7 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerAssetManager();
         $this->registerTimeProvider();
         $this->registerSaml2IdGenerator();
+        $this->registerSuperGlobalManager();
     }
 
     protected function registerXmlConverter()
@@ -148,7 +150,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     protected function registerTimeProvider()
     {
         $this[self::TIME] = $this->share(function ()
-        {
+            {
                 return new EngineBlock_TimeProvider_Default();
             }
         );
@@ -169,6 +171,19 @@ class EngineBlock_Application_DiContainer extends Pimple
                 return new EngineBlock_Saml2_IdGenerator_Default();
             }
         );
+    }
+
+    /**
+     * @return EngineBlock_Application_SuperGlobalManager
+     */
+    public function getSuperGlobalManager()
+    {
+        return $this[self::SUPER_GLOBAL_MANAGER];
+    }
+
+    protected function registerSuperGlobalManager()
+    {
+        $this[self::SUPER_GLOBAL_MANAGER] = false;
     }
 
     /**

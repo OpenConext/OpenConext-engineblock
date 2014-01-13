@@ -29,6 +29,13 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         );
     }
 
+    protected function registerSuperGlobalManager()
+    {
+        $this[self::SUPER_GLOBAL_MANAGER] = function() {
+            return new EngineBlock_Application_SuperGlobalManager();
+        };
+    }
+
     public function getMessageUtilClassName()
     {
         return 'EngineBlock_Ssp_sspmod_saml_Message';

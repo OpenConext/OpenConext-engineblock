@@ -49,6 +49,8 @@ class EngineBlock_Application_Bootstrapper
         $this->_bootstrapPhpSettings();
         $this->_bootstrapErrorReporting();
         $this->_bootstrapLogging();
+
+        $this->_bootstrapSuperGlobalOverrides();
         $this->_bootstrapHttpCommunication();
 
         $this->_bootstrapLayout();
@@ -83,8 +85,24 @@ class EngineBlock_Application_Bootstrapper
             return;
         }
 
-            $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
+        $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
+    }
+
+    /**
+     * We need this because we may need to trick EngineBlock into thinking it's hosting on a different URL.
+     *
+     * Known uses:
+     * * SAML Replaying with OpenConext-Engine-Test-Stand.
+     *
+     */
+    protected function _bootstrapSuperGlobalOverrides()
+    {
+        $superGlobalManager = $this->_application->getDiContainer()->getSuperGlobalManager();
+        if (!$superGlobalManager) {
+            return;
         }
+
+        $superGlobalManager->injectOverrides();
     }
 
     protected function _bootstrapConfiguration()
