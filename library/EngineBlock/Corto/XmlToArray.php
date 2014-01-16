@@ -30,7 +30,7 @@ class EngineBlock_Corto_XmlToArray
         'http://www.w3.org/2000/09/xmldsig#'            => 'ds',
         'http://www.w3.org/2001/04/xmlenc#'             => 'xenc',
         'http://www.w3.org/2001/10/xml-exc-c14n#'       => 'ec',
-     );
+    );
 
     /**
      * @var array All XML entities which are treated as single values in Corto.
@@ -114,7 +114,7 @@ class EngineBlock_Corto_XmlToArray
         'ds:Transforms',
 #        'ds:X509Data',
         'ec:InclusiveNamespaces',
-);
+    );
 
     protected static $_multipleValues = array(
         'saml:Attribute',
@@ -242,7 +242,7 @@ class EngineBlock_Corto_XmlToArray
 
     /**
      * Maps namespace prefixes to the correct ones as used in saml
-     * 
+     *
      * @param string $tagName
      * @return string
      */
@@ -401,7 +401,7 @@ class EngineBlock_Corto_XmlToArray
                 }
                 else {
                     $newAttribute['saml:AttributeValue'][] = array (
-                       self::VALUE_PFX  => $value,
+                        self::VALUE_PFX  => $value,
                     );
                 }
             }
@@ -439,13 +439,13 @@ class EngineBlock_Corto_XmlToArray
             // 1. open and closing tags on same line - no change
             if (preg_match('/.+<\/\w[^>]*>$/', $token, $matches)) :
                 $indent = 0;
-                // 2. closing tag - outdent now
+            // 2. closing tag - outdent now
             elseif (preg_match('/^<\/\w/', $token, $matches)) :
                 $pad--;
-                // 3. opening tag - don't pad this one, only subsequent tags
+            // 3. opening tag - don't pad this one, only subsequent tags
             elseif (preg_match('/^<\w[^>]*[^\/]>.*$/', $token, $matches)) :
                 $indent = 1;
-                // 4. no indentation needed
+            // 4. no indentation needed
             else :
                 $indent = 0;
             endif;
