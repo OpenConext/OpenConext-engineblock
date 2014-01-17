@@ -58,6 +58,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         null                                                        => '_sendHTTPRedirect'
     );
 
+    /**
+     * Encryption methods.
+     * @var array
+     */
+    protected $_encryptionMethods = array(
+        'http://www.w3.org/2001/04/xmlenc#rsa-1_5'            => OPENSSL_PKCS1_PADDING,
+        'http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p'     => OPENSSL_PKCS1_OAEP_PADDING,
+        null                                                  => OPENSSL_PKCS1_PADDING
+    );
+
     protected $_internalBindingMessages = array();
 
     /**
@@ -402,6 +412,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _decryptElement($privateKey, $element, $returnAsXML = false)
     {
+	$log = $this->_server->getSessionLog();
+	
         if (!isset($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v'])) {
             throw new EngineBlock_Corto_Module_Bindings_Exception("XML Encryption: No encrypted key found?");
         }
@@ -411,8 +423,21 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $encryptedKey  = base64_decode($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v']);
         $encryptedData = base64_decode($element['xenc:EncryptedData']['xenc:CipherData'][0]['xenc:CipherValue'][0]['__v']);
 
+        $encryptionMethod = OPENSSL_PKCS1_PADDING;
+        if (!isset($element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:EncryptionMethod'][0]['_Algorithm'])) {
+            $log->info("Encryption method for the key not specified. Using the default one:" . OPENSSL_PKCS1_PADDING);
+        } else {
+            $keyTransportIdentifier = $element['xenc:EncryptedData']['ds:KeyInfo']['xenc:EncryptedKey'][0]['xenc:EncryptionMethod'][0]['_Algorithm'];
+            $log->info("Encryption method identifier: " . $keyTransportIdentifier);
+            if (!array_key_exists($keyTransportIdentifier, $this->_encryptionMethods)) {
+                throw new EngineBlock_Corto_Module_Bindings_Exception("XML Encryption: Unknown encryption method.");
+            }
+            $encryptionMethod = $this->_encryptionMethods[$keyTransportIdentifier];
+        }
+	$log->info("Encryption method: " . $encryptionMethod);
+
         $sessionKey = null;
-        if (!openssl_private_decrypt($encryptedKey, $sessionKey, $privateKey, OPENSSL_PKCS1_PADDING)) {
+        if (!openssl_private_decrypt($encryptedKey, $sessionKey, $privateKey, $encryptionMethod)) {
             throw new EngineBlock_Corto_Module_Bindings_Exception("XML Encryption: Unable to decrypt symmetric key using private key");
         }
         openssl_free_key($privateKey);
