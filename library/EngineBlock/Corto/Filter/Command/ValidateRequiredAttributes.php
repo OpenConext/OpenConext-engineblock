@@ -75,10 +75,14 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     protected function _requireValidSchacHomeOrganization($responseAttributes)
     {
         if (!isset($responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG])) {
-            return self::URN_MACE_TERENA_SCHACHOMEORG . " missing in attributes!";
+	    if (!$this->_patchMissingSchac($responseAttributes)) {
+	        return self::URN_MACE_TERENA_SCHACHOMEORG . " missing in attributes!";
+	    } else {
+		$this->_getSessionLog()->info("Response attributes: " + var_export($responseAttributes, true));
+	    }
         }
 
-        $schacHomeOrganizationValues = $responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG];
+        $schacHomeOrganizationValues = $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG];
 
         if (count($schacHomeOrganizationValues) === 0) {
             return self::URN_MACE_TERENA_SCHACHOMEORG . " has no values";
@@ -153,5 +157,53 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
             return "urn:mace:dir:attribute-def:uid is more than 256 characters long!";
         }
         return false;
+    }
+
+    protected function _patchMissingSchac($responseAttributes) {
+
+        /*
+         * Embark on a wonderful rescue mission.
+         */
+        if (isset($this->_idpMetadata["EntityID"])) {
+            /*
+             * First sane choice. Should be a full URI, we'll parse that into a hostname,
+             * since that's what schacHomeOrganization is expected to be.
+             */
+            $entityId = $this->_idpMetadata["EntityID"];
+
+        } else if (isset($this->_idpMetadata["EntityId"])) {
+            /*
+             * Believe it or not, the NCL assertion contains BOTH EntityID and EntityId.
+             * Same story with the URI -> hostname thing.
+             */
+            $entityId = $this->_idpMetadata["EntityId"];
+
+        } else if (isset($this->_idpMetadata['SingleSignOnService']) &&
+		   !empty($this->_idpMetadata['SingleSignOnService'])) {
+
+            /*
+             * Yet another possibility. This can never fail, right...?
+             */
+             $entityId = $responseAttributes['SingleSignOnService'][0]['Location'];
+
+        } else {
+            /*
+             * ... except when it does, we're hopeless.
+             */
+            $entityId = null;
+        }
+
+        /*
+         * Let's see what we got. If we found something usable, we patch $responseAttributes,
+         * and the caller never gets to know our little, dirty, patchy secret.
+         */
+        if ($entityId) {
+            $patchedValue = Zend_Uri_Http::fromString($entityId)->getHost();
+            $this->_getSessionLog()->info("schacHomeOrganization: " . $patchedValue);
+	    $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array($patchedValue);
+            return true;
+        } else {
+            return false;
+        }
     }
 }
