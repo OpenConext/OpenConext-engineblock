@@ -385,6 +385,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $sspBinding = SAML2_Binding::getBinding($bindingUrn);
         if ($sspBinding instanceof SAML2_HTTPPost) {
 
+            // SAML2int dictates that we MUST sign assertions.
+            // The SAML2 library will do that for us, if we just set the key to sign with.
+            if ($sspMessage instanceof SAML2_Response) {
+                foreach ($sspMessage->getAssertions() as $assertion) {
+                    $assertion->setSignatureKey($sspMessage->getSignatureKey());
+                }
+            }
+
             $messageElement = $sspMessage->toSignedXML();
             $xml = $messageElement->ownerDocument->saveXML($messageElement);
 
