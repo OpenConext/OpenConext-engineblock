@@ -391,9 +391,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 foreach ($sspMessage->getAssertions() as $assertion) {
                     $assertion->setSignatureKey($sspMessage->getSignatureKey());
                 }
+                // BWC dictates that we don't sign responses.
+                $messageElement = $sspMessage->toUnsignedXML();
+            }
+            else {
+                $messageElement = $sspMessage->toSignedXML();
             }
 
-            $messageElement = $sspMessage->toSignedXML();
             $xml = $messageElement->ownerDocument->saveXML($messageElement);
 
             $this->validateXml($xml);
