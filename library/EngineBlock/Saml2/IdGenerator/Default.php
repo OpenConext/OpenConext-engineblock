@@ -2,7 +2,7 @@
 
 class EngineBlock_Saml2_IdGenerator_Default implements EngineBlock_Saml2_IdGenerator_Interface
 {
-    public function generate($prefix = 'EB')
+    public function generate($prefix = 'EB', $usage = EngineBlock_Saml2_IdGenerator_Interface::ID_USAGE_OTHER)
     {
         return  $prefix . sha1(uniqid(mt_rand(), true));
     }
