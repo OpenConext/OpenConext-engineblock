@@ -16,6 +16,11 @@ class EngineBlock_Corto_ProxyServer
     const VO_CONTEXT_PFX          = 'voContext';
     const VO_CONTEXT_IMPLICIT     = 'VoContextImplicit';
 
+    /**
+     * @todo remove once https://github.com/simplesamlphp/saml2/pull/7 has been merged.
+     */
+    const NAMEFORMAT_URI = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
+
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
         'debugSingleSignOnService'          => '/authentication/sp/debug',
@@ -535,6 +540,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Copy over the attributes
         $newAssertion->setAttributes($sourceAssertion->getAttributes());
+        $newAssertion->setAttributeNameFormat(static::NAMEFORMAT_URI);
 
         return $newResponse;
     }
