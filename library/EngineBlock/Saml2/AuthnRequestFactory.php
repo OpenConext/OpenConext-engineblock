@@ -1,9 +1,5 @@
 <?php
-/**
- * NOTE: use for testing only!
- *
- * @todo write test
- */
+
 class EngineBlock_Saml2_AuthnRequestFactory
 {
     public static function createFromRequest(
