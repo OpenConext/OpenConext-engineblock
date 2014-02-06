@@ -20,7 +20,8 @@
         "apache/shindig":"1094333",
         "kriswallsmith/assetic": "1.2.*@dev",
         "mrclay/minify": "2.1.7",
-        "cssmin/cssmin": "3.0.1"
+        "cssmin/cssmin": "3.0.1",
+        "openconext/engineblock-fixtures": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",
@@ -96,8 +97,11 @@
                     "files": ["xmlseclibs.php"]
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/relaxnow/OpenConext-engineblock-fixtures"
         }
-
     ],
     "autoload": {
         "psr-0": {
