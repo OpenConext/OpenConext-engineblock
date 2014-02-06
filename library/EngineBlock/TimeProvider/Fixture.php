@@ -16,15 +16,11 @@ class EngineBlock_TimeProvider_Fixture implements EngineBlock_TimeProvider_Inter
 
     public function time()
     {
-        if (isset(self::$s_time)) {
-            return self::$s_time;
-        }
-
-        if (!file_exists(self::FIXTURE_FILE)) {
-            return time();
-        }
-
-        self::$s_time = (int)trim(file_get_contents(self::FIXTURE_FILE));
-        return self::$s_time;
+        $fixture = new \OpenConext\Component\EngineBlockFixtures\TimeFixture(
+            new \OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore(
+                static::FIXTURE_FILE
+            )
+        );
+        return $fixture->get();
     }
 }

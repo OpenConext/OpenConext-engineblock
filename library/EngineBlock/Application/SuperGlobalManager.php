@@ -2,8 +2,10 @@
 
 class EngineBlock_Application_SuperGlobalManager
 {
-    const DIR = '/tmp/eb-fixtures/';
-    const SERVER_FILENAME = 'superglobal.server.overrides.json';
+    /**
+     * File where.
+     */
+    const FILE = '/tmp/eb-fixtures/superglobals.json';
 
     /**
      * @var EngineBlock_Log
@@ -17,27 +19,26 @@ class EngineBlock_Application_SuperGlobalManager
 
     public function injectOverrides()
     {
-        $filePath = self::DIR . self::SERVER_FILENAME;
-        if (!file_exists($filePath) || !is_readable($filePath)) {
-            return false;
-        }
+        $fixture = new \OpenConext\Component\EngineBlockFixtures\SuperGlobalsFixture(
+            new \OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore(
+                self::FILE
+            )
+        );
+        $overrides = $fixture->getAll();
 
-        $overridesData = file_get_contents($filePath);
-        if (!$overridesData) {
-            return false;
-        }
+        foreach ($overrides as $superGlobalName => $values) {
+            $superGlobalName = '_' . $superGlobalName;
 
-        $overrides = json_decode($overridesData, true);
-        if (!$overrides || empty($overrides)) {
-            return false;
-        }
+            global $$superGlobalName;
+            $global = &$$superGlobalName;
 
-        foreach ($overrides as $name => $value) {
-            $this->_logger->log('Overwriting $_SERVER[' . $name . ']', EngineBlock_Log::NOTICE);
-            $this->_logger->attach($_SERVER[$name], 'FROM');
-            $this->_logger->attach($value, 'TO');
+            foreach ($values as $name => $value) {
+                $this->_logger->log('Overwriting $_' . $superGlobalName . '[' . $name . ']', EngineBlock_Log::NOTICE);
+                $this->_logger->attach($_SERVER[$name], 'FROM');
+                $this->_logger->attach($value, 'TO');
 
-            $_SERVER[$name] = $value;
+                $global[$name] = $value;
+            }
         }
         return true;
     }
