@@ -379,6 +379,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
             $privateKey->loadKey($certificates['private']);
 
+            $sspMessage->setCertificates(array($certificates['public']));
             $sspMessage->setSignatureKey($privateKey);
         }
 
@@ -389,6 +390,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             // The SAML2 library will do that for us, if we just set the key to sign with.
             if ($sspMessage instanceof SAML2_Response) {
                 foreach ($sspMessage->getAssertions() as $assertion) {
+                    $assertion->setCertificates($sspMessage->getCertificates());
                     $assertion->setSignatureKey($sspMessage->getSignatureKey());
                 }
                 // BWC dictates that we don't sign responses.
