@@ -526,6 +526,9 @@ class EngineBlock_Corto_ProxyServer
         // Note that it is valid for some 5 minutes.
         $notOnOrAfter = time() + $this->getConfig('NotOnOrAfter', 300);
         $newAssertion->setNotBefore(time() - 1);
+        if ($sourceAssertion->getSessionNotOnOrAfter()) {
+            $newAssertion->setSessionNotOnOrAfter($sourceAssertion->getSessionNotOnOrAfter());
+        }
         $newAssertion->setNotOnOrAfter($notOnOrAfter);
         $subjectConfirmationData->NotOnOrAfter = $notOnOrAfter;
 
