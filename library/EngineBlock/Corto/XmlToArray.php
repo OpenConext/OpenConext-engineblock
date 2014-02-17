@@ -160,9 +160,13 @@ class EngineBlock_Corto_XmlToArray
         $values = array();
         $parserResultStatus = xml_parse_into_struct($parser, $xml, $values);
         if ($parserResultStatus !== 1) {
+            $errorCode = xml_get_error_code($parser);
+            $errorMessage = xml_error_string($errorCode);
             throw new EngineBlock_Corto_XmlToArray_Exception(
                 'Error parsing incoming XML. ' . PHP_EOL .
-                'Error code: ' . xml_error_string(xml_get_error_code($parser)) . PHP_EOL .
+                'Error code: ' . $errorCode . PHP_EOL .
+                'Error message: ' . $errorMessage . PHP_EOL .
+                'Last libXML error: ' . var_export(libxml_get_last_error(), true) . PHP_EOL .
                 'XML: ' . $xml
             );
         }
