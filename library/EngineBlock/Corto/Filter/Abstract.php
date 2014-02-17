@@ -49,7 +49,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
      * @return void
      */
     public function filter(
-        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array &$responseAttributes,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         array $spEntityMetadata,
