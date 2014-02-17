@@ -209,6 +209,7 @@ class EngineBlock_Corto_XmlToArray
             if (isset($value['attributes']) && $attributes = $value['attributes']) {
                 foreach($attributes as $attributeKey => $attributeValue) {
                     unset($attributes[$attributeKey]);
+                    $attributeKey = self::_mapNamespacesToSaml($attributeKey);
                     $hashedAttributes[self::ATTRIBUTE_PFX . $attributeKey] = $attributeValue;
                 }
             }
@@ -462,5 +463,15 @@ class EngineBlock_Corto_XmlToArray
         endwhile;
 
         return $result;
+    }
+
+    public static function registerNamespaces(array $hash)
+    {
+        $namespaces = static::$_namespaces;
+        unset($namespaces['urn:oasis:names:tc:SAML:1.0:protocol']);
+        unset($namespaces['urn:oasis:names:tc:SAML:1.0:assertion']);
+
+        $fixer = new EngineBlock_Corto_XmlToArray_NamespaceFixer($namespaces);
+        return $fixer->fix($hash);
     }
 }

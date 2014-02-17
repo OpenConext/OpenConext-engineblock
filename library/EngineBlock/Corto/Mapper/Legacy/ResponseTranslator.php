@@ -38,7 +38,9 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
      */
     public function fromOldFormat(array $legacyResponse)
     {
+        $legacyResponse = EngineBlock_Corto_XmlToArray::registerNamespaces($legacyResponse);
         $xml = EngineBlock_Corto_XmlToArray::array2xml($legacyResponse);
+
         $document = new DOMDocument();
         $document->loadXML($xml);
 
@@ -63,6 +65,9 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
             $method = 'get' . $privateVar;
             $value = $from->$method();
             if ($value) {
+                if ($value instanceof EngineBlock_Saml2_ResponseAnnotationDecorator) {
+                    $value = $this->fromNewFormat($value);
+                }
                 $to[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][$privateVar] = $value;
             }
         }
@@ -77,10 +82,19 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
     protected function addPrivateVars(EngineBlock_Saml2_ResponseAnnotationDecorator $to, array $from)
     {
         foreach ($this->privateVars as $privateVar) {
-            if (isset($to[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][$privateVar])) {
-                $method = 'set' . $privateVar;
-                $to->$method($to[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][$privateVar]);
+            if (!isset($from[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][$privateVar])) {
+                continue;
             }
+
+            $value = $from[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][$privateVar];
+
+            // Does this value have a __t tag? If so, make sure it's namespaces are registered.
+            if (is_array($value) && isset($value[EngineBlock_Corto_XmlToArray::TAG_NAME_PFX])) {
+                $value = $this->fromOldFormat($value);
+            }
+
+            $method = 'set' . $privateVar;
+            $to->$method($value);
         }
         return $to;
     }

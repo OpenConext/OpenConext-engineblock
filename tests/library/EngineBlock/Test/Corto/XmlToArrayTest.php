@@ -7,6 +7,90 @@
  */
 class EngineBlock_Test_Corto_Module_XMlToArrayTest extends PHPUnit_Framework_TestCase
 {
+    public function testNamespacedAttributes()
+    {
+        $hash = EngineBlock_Corto_XmlToArray::xml2array(
+<<<SAML
+<?xml version="1.0"?>
+<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:1.0:assertion"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <saml:AttributeValue xsi:type="string">test</saml:AttributeValue>
+</saml:Attribute>
+SAML
+
+        );
+
+        $expected = array (
+            '__t' => 'saml:Attribute',
+            'saml:AttributeValue' =>
+                array (
+                    0 =>
+                        array (
+                            '_xsi:type' => 'string',
+                            '__v' => 'test',
+                        ),
+                ),
+        );
+
+        $this->assertEquals($expected, $hash, "Namespaced attributes (like xsi:type) are properly decoded.");
+    }
+
+    public function testRegisterNamespaces()
+    {
+        // <saml:AttributeStatement><saml:Attribute Name="urn:mace:dir:attribute-def:uid" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri"><saml:AttributeValue xsi:type="xs:string">avykq</saml:AttributeValue></saml:Attribute>
+        $hash = array(
+            EngineBlock_Corto_XmlToArray::TAG_NAME_PFX => 'samlp:Response',
+            'saml:Issuer' => 'http://example.edu',
+            'saml:Assertion' => array(
+                'saml:AttributeStatement' => array(
+                    'saml:Attribute' => array(
+                        0 => array(
+                            '_Name' => 'name',
+                            '_NameFormat' => 'a',
+                            '_xsi:type' => 'string',
+                            'saml:AttributeValue' => array(
+                                0 => array(
+                                    '__v' => 'GIANTDAD IS BACK',
+                                )
+                            )
+                        ),
+                    )
+                ),
+            ),
+        );
+
+        $expected =array (
+            '_xmlns:saml' => 'urn:oasis:names:tc:SAML:2.0:assertion',
+            '_xmlns:samlp' => 'urn:oasis:names:tc:SAML:2.0:protocol',
+            '_xmlns:xsi'   => 'http://www.w3.org/2001/XMLSchema-instance',
+            '__t' => 'samlp:Response',
+            'saml:Issuer' => 'http://example.edu',
+            'saml:Assertion' =>
+                array (
+                    'saml:AttributeStatement' =>
+                        array (
+                            'saml:Attribute' =>
+                                array (
+                                    0 =>
+                                        array (
+                                            '_Name' => 'name',
+                                            '_NameFormat' => 'a',
+                                            '_xsi:type' => 'string',
+                                            'saml:AttributeValue' =>
+                                                array (
+                                                    0 =>
+                                                        array (
+                                                            '__v' => 'GIANTDAD IS BACK',
+                                                        ),
+                                                ),
+                                        ),
+                                ),
+                        ),
+                ),
+        );
+
+        $this->assertEquals($expected, EngineBlock_Corto_XmlToArray::registerNamespaces($hash));
+    }
     public function testAttributesToArray()
     {
         $attributes = array(
