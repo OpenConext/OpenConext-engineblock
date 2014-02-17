@@ -472,7 +472,7 @@ class EngineBlock_Corto_ProxyServer
         $newResponse->setOriginalIssuer(
             $sourceResponse->getOriginalIssuer() ?
                 $sourceResponse->getOriginalIssuer() :
-                $sourceResponse->getIssuer()
+                $newResponse->getOriginalResponse()->getIssuer()
         );
 
         // Copy over the Status (which should be success)
@@ -483,7 +483,7 @@ class EngineBlock_Corto_ProxyServer
         $newResponse->setAssertions(array($newAssertion));
         $newAssertion->setId($this->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_ASSERTION));
         $newAssertion->setIssueInstant(time());
-        $newAssertion->setIssuer($newResponse->getIssuer());
+        $newAssertion->setIssuer($newResponse->getOriginalIssuer());
 
         // Unless off course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
