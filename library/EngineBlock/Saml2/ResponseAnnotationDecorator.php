@@ -238,17 +238,17 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @param string $originalResponse
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $originalResponse
      * @return $this
      */
-    public function setOriginalResponse($originalResponse)
+    public function setOriginalResponse(EngineBlock_Saml2_ResponseAnnotationDecorator $originalResponse)
     {
         $this->originalResponse = $originalResponse;
         return $this;
     }
 
     /**
-     * @return string
+     * @return EngineBlock_Saml2_ResponseAnnotationDecorator
      */
     public function getOriginalResponse()
     {
