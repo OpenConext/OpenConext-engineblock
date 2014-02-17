@@ -542,7 +542,9 @@ class EngineBlock_Corto_ProxyServer
 
         // Copy over the Authenticating Authorities and add the IdP.
         $authenticatingAuthorities = $sourceAssertion->getAuthenticatingAuthority();
-        $authenticatingAuthorities[] = $sourceResponse->getIssuer();
+        if (!$this->isInProcessingMode()) {
+            $authenticatingAuthorities[] = $newResponse->getOriginalIssuer();
+        }
         $newAssertion->setAuthenticatingAuthority($authenticatingAuthorities);
 
         // Copy over the attributes
