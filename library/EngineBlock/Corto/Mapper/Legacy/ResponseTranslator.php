@@ -17,6 +17,7 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
         'CollabPersonId',
         'CustomNameId',
         'IntendedNameId',
+        'DeliverByBinding',
     );
 
     /**
