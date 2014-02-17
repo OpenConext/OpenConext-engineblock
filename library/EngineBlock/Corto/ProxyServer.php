@@ -774,7 +774,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     public function filterOutputAssertionAttributes(
-        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
     ) {
         $this->callAttributeFilter(
@@ -788,7 +788,7 @@ class EngineBlock_Corto_ProxyServer
 
     protected function callAttributeFilter(
         $callback,
-        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         array $spEntityMetadata,
         array $idpEntityMetadata
