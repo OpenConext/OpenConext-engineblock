@@ -16,6 +16,11 @@ class EngineBlock_Corto_ProxyServer
     const VO_CONTEXT_PFX          = 'voContext';
     const VO_CONTEXT_IMPLICIT     = 'VoContextImplicit';
 
+    /**
+     * @todo remove once https://github.com/simplesamlphp/saml2/pull/7 has been merged.
+     */
+    const NAMEFORMAT_URI = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
+
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
         'debugSingleSignOnService'          => '/authentication/sp/debug',
@@ -467,7 +472,7 @@ class EngineBlock_Corto_ProxyServer
         $newResponse->setOriginalIssuer(
             $sourceResponse->getOriginalIssuer() ?
                 $sourceResponse->getOriginalIssuer() :
-                $sourceResponse->getIssuer()
+                $newResponse->getOriginalResponse()->getIssuer()
         );
 
         // Copy over the Status (which should be success)
@@ -476,9 +481,9 @@ class EngineBlock_Corto_ProxyServer
         // Create a new assertion by us.
         $newAssertion = new SAML2_Assertion();
         $newResponse->setAssertions(array($newAssertion));
-        $newAssertion->setId($this->getNewId());
+        $newAssertion->setId($this->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_ASSERTION));
         $newAssertion->setIssueInstant(time());
-        $newAssertion->setIssuer($newResponse->getIssuer());
+        $newAssertion->setIssuer($newResponse->getOriginalIssuer());
 
         // Unless off course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
@@ -521,6 +526,9 @@ class EngineBlock_Corto_ProxyServer
         // Note that it is valid for some 5 minutes.
         $notOnOrAfter = time() + $this->getConfig('NotOnOrAfter', 300);
         $newAssertion->setNotBefore(time() - 1);
+        if ($sourceAssertion->getSessionNotOnOrAfter()) {
+            $newAssertion->setSessionNotOnOrAfter($sourceAssertion->getSessionNotOnOrAfter());
+        }
         $newAssertion->setNotOnOrAfter($notOnOrAfter);
         $subjectConfirmationData->NotOnOrAfter = $notOnOrAfter;
 
@@ -531,10 +539,17 @@ class EngineBlock_Corto_ProxyServer
         $newAssertion->setAuthnInstant($sourceAssertion->getAuthnInstant());
         $newAssertion->setSessionIndex($sourceAssertion->getSessionIndex());
         $newAssertion->setAuthnContext($sourceAssertion->getAuthnContext());
-        $newAssertion->setAuthenticatingAuthority($sourceAssertion->getAuthenticatingAuthority());
+
+        // Copy over the Authenticating Authorities and add the IdP.
+        $authenticatingAuthorities = $sourceAssertion->getAuthenticatingAuthority();
+        if (!$this->isInProcessingMode()) {
+            $authenticatingAuthorities[] = $newResponse->getOriginalIssuer();
+        }
+        $newAssertion->setAuthenticatingAuthority($authenticatingAuthorities);
 
         // Copy over the attributes
         $newAssertion->setAttributes($sourceAssertion->getAttributes());
+        $newAssertion->setAttributeNameFormat(static::NAMEFORMAT_URI);
 
         return $newResponse;
     }
@@ -549,7 +564,7 @@ class EngineBlock_Corto_ProxyServer
         $response = new SAML2_Response();
         /** @var SAML2_AuthnRequest $request */
         $response->setRelayState($request->getRelayState());
-        $response->setId($this->getNewId());
+        $response->setId($this->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_RESPONSE));
         $response->setIssueInstant(time());
         if (!$requestWasUnsollicited) {
             $response->setInResponseTo($request->getId());
@@ -764,7 +779,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     public function filterOutputAssertionAttributes(
-        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
     ) {
         $this->callAttributeFilter(
@@ -778,7 +793,7 @@ class EngineBlock_Corto_ProxyServer
 
     protected function callAttributeFilter(
         $callback,
-        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         array $spEntityMetadata,
         array $idpEntityMetadata
@@ -1073,18 +1088,16 @@ class EngineBlock_Corto_ProxyServer
      * @param int|null $time Current time to add delta to.
      * @return string
      */
-    public function timeStamp($deltaSeconds = 0, $time = null)
+    public function timeStamp($deltaSeconds = 0)
     {
-        $time = (int) $time;
-        if ($time === 0) {
-            $time = time();
-        }
-        return gmdate('Y-m-d\TH:i:s\Z', $time + $deltaSeconds);
+        $provider = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTimeProvider();
+        return $provider->timestamp($deltaSeconds);
     }
 
-    public function getNewId()
+    public function getNewId($usage = \OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_OTHER)
     {
-        return self::ID_PREFIX . sha1(uniqid(mt_rand(), true));
+        $generator = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2IdGenerator();
+        return $generator->generate(self::ID_PREFIX, $usage);
     }
 
     public function startSession()

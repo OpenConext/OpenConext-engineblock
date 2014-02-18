@@ -27,6 +27,7 @@ class EngineBlock_Translate_CacheProxy
             'en'
         );
 
+        /** @var Zend_Translate_Adapter_Array $translate */
         $translate->addTranslation(
             array(
                 'content' => $files['nl'],

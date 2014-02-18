@@ -31,7 +31,10 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRemoteEntity($request->getIssuer());
         $idp = $this->_server->getRemoteEntity($selectedIdp);
-        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)) {
+        if (
+            $this->_server->getConfig('debug', false) ||
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)
+        ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 

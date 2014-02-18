@@ -31,7 +31,14 @@ class EngineBlock_Saml2_MessageSerializer
         $document = new DOMDocument();
         $document->loadXML($samlMessageXml);
         $messageDomElement = $document->getElementsByTagNameNs('urn:oasis:names:tc:SAML:2.0:protocol', $elementName)->item(0);
-        return $class::fromXml($messageDomElement);
+        if ($class === 'SAML2_AuthnRequest') {
+            return SAML2_AuthnRequest::fromXML($messageDomElement);
+        }
+        else if ($class === 'SAML2_Response') {
+            return SAML2_Response::fromXML($messageDomElement);
+        }
+
+        throw new EngineBlock_Exception('Unknown message type for deserialization?');
     }
 
     /**

@@ -30,7 +30,7 @@ class EngineBlock_Corto_XmlToArray
         'http://www.w3.org/2000/09/xmldsig#'            => 'ds',
         'http://www.w3.org/2001/04/xmlenc#'             => 'xenc',
         'http://www.w3.org/2001/10/xml-exc-c14n#'       => 'ec',
-     );
+    );
 
     /**
      * @var array All XML entities which are treated as single values in Corto.
@@ -114,7 +114,7 @@ class EngineBlock_Corto_XmlToArray
         'ds:Transforms',
 #        'ds:X509Data',
         'ec:InclusiveNamespaces',
-);
+    );
 
     protected static $_multipleValues = array(
         'saml:Attribute',
@@ -160,9 +160,13 @@ class EngineBlock_Corto_XmlToArray
         $values = array();
         $parserResultStatus = xml_parse_into_struct($parser, $xml, $values);
         if ($parserResultStatus !== 1) {
+            $errorCode = xml_get_error_code($parser);
+            $errorMessage = xml_error_string($errorCode);
             throw new EngineBlock_Corto_XmlToArray_Exception(
                 'Error parsing incoming XML. ' . PHP_EOL .
-                'Error code: ' . xml_error_string(xml_get_error_code($parser)) . PHP_EOL .
+                'Error code: ' . $errorCode . PHP_EOL .
+                'Error message: ' . $errorMessage . PHP_EOL .
+                'Last libXML error: ' . var_export(libxml_get_last_error(), true) . PHP_EOL .
                 'XML: ' . $xml
             );
         }
@@ -205,6 +209,7 @@ class EngineBlock_Corto_XmlToArray
             if (isset($value['attributes']) && $attributes = $value['attributes']) {
                 foreach($attributes as $attributeKey => $attributeValue) {
                     unset($attributes[$attributeKey]);
+                    $attributeKey = self::_mapNamespacesToSaml($attributeKey);
                     $hashedAttributes[self::ATTRIBUTE_PFX . $attributeKey] = $attributeValue;
                 }
             }
@@ -242,7 +247,7 @@ class EngineBlock_Corto_XmlToArray
 
     /**
      * Maps namespace prefixes to the correct ones as used in saml
-     * 
+     *
      * @param string $tagName
      * @return string
      */
@@ -401,7 +406,7 @@ class EngineBlock_Corto_XmlToArray
                 }
                 else {
                     $newAttribute['saml:AttributeValue'][] = array (
-                       self::VALUE_PFX  => $value,
+                        self::VALUE_PFX  => $value,
                     );
                 }
             }
@@ -439,13 +444,13 @@ class EngineBlock_Corto_XmlToArray
             // 1. open and closing tags on same line - no change
             if (preg_match('/.+<\/\w[^>]*>$/', $token, $matches)) :
                 $indent = 0;
-                // 2. closing tag - outdent now
+            // 2. closing tag - outdent now
             elseif (preg_match('/^<\/\w/', $token, $matches)) :
                 $pad--;
-                // 3. opening tag - don't pad this one, only subsequent tags
+            // 3. opening tag - don't pad this one, only subsequent tags
             elseif (preg_match('/^<\w[^>]*[^\/]>.*$/', $token, $matches)) :
                 $indent = 1;
-                // 4. no indentation needed
+            // 4. no indentation needed
             else :
                 $indent = 0;
             endif;
@@ -458,5 +463,15 @@ class EngineBlock_Corto_XmlToArray
         endwhile;
 
         return $result;
+    }
+
+    public static function registerNamespaces(array $hash)
+    {
+        $namespaces = static::$_namespaces;
+        unset($namespaces['urn:oasis:names:tc:SAML:1.0:protocol']);
+        unset($namespaces['urn:oasis:names:tc:SAML:1.0:assertion']);
+
+        $fixer = new EngineBlock_Corto_XmlToArray_NamespaceFixer($namespaces);
+        return $fixer->fix($hash);
     }
 }

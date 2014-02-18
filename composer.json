@@ -1,17 +1,27 @@
 {
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
+    "type": "project",
+    "keywords": ["saml", "proxy", "openconext", "SURFnet"],
+    "homepage": "http://www.openconext.org",
+    "license": "Apache-2.0",
+    "support": {
+        "email": "openconext-users@list.surfnet.nl",
+        "issues": "https://github.com/OpenConext/OpenConext-engineblock/issues",
+        "source": "https://github.com/OpenConext/OpenConext-engineblock"
+    },
     "require": {
         "pimple/pimple": "1.0.2",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
         "simplesamlphp/simplesamlphp": "dev-trunk",
-        "simplesamlphp/saml2": "0.2.0",
+        "simplesamlphp/saml2": "0.3.0",
         "dbpatch/dbpatch": "1.1.1",
         "zendframework/zendframework1":"1.10.9",
         "apache/shindig":"1094333",
         "kriswallsmith/assetic": "1.2.*@dev",
         "mrclay/minify": "2.1.7",
-        "cssmin/cssmin": "3.0.1"
+        "cssmin/cssmin": "3.0.1",
+        "openconext/engineblock-fixtures": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "3.7.19",
@@ -87,8 +97,11 @@
                     "files": ["xmlseclibs.php"]
                 }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/relaxnow/OpenConext-engineblock-fixtures"
         }
-
     ],
     "autoload": {
         "psr-0": {

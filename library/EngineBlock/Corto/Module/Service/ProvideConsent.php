@@ -45,7 +45,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $idpEntityMetadata = $this->_server->getRemoteEntity($identityProviderEntityId);
 
         // Flush log if SP or IdP has additional logging enabled
-        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($spEntityMetadata, $idpEntityMetadata)) {
+        if (
+            $this->_server->getConfig('debug', false) ||
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($spEntityMetadata, $idpEntityMetadata)
+        ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 

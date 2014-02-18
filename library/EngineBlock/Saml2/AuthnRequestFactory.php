@@ -1,9 +1,5 @@
 <?php
-/**
- * NOTE: use for testing only!
- *
- * @todo write test
- */
+
 class EngineBlock_Saml2_AuthnRequestFactory
 {
     public static function createFromRequest(
@@ -29,7 +25,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         /** @var SAML2_AuthnRequest $originalRequest */
 
         $sspRequest = new SAML2_AuthnRequest();
-        $sspRequest->setId($server->getNewId());
+        $sspRequest->setId($server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssueInstant(time());
         $sspRequest->setDestination($idpMetadata['SingleSignOnService'][0]['Location']);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());

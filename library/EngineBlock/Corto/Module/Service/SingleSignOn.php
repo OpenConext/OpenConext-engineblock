@@ -50,7 +50,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRemoteEntity($request->getIssuer());
-        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)) {
+        if (
+            $this->_server->getConfig('debug', false) ||
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)
+        ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
@@ -191,7 +194,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $relayState  = !empty($_GET['RelayState'])   ? $_GET['RelayState']  : null;
 
         $sspRequest = new SAML2_AuthnRequest();
-        $sspRequest->setId($this->_server->getNewId());
+        $sspRequest->setId($this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssuer($entityId);
         $sspRequest->setRelayState($relayState);
 
@@ -219,7 +222,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     protected function _createDebugRequest()
     {
         $sspRequest = new SAML2_AuthnRequest();
-        $sspRequest->setId($this->_server->getNewId());
+        $sspRequest->setId($this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssuer($this->_server->getUrl('spMetadataService'));
 
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);

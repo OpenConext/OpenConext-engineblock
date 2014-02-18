@@ -1,164 +1,14 @@
 <?php
-/**
- * SURFconext EngineBlock
- *
- * LICENSE
- *
- * Copyright 2011 SURFnet bv, The Netherlands
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- *
- * @category  SURFconext EngineBlock
- * @package
- * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- */
 
-class EngineBlock_Corto_ServiceRegistry_Adapter
+class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
 {
     /**
-     * @var Janus_Client
-     */
-    protected $_serviceRegistry;
-
-    public function __construct($serviceRegistry)
-    {
-        $this->_serviceRegistry = $serviceRegistry;
-    }
-
-    /**
-     * Given a list of (SAML2) entities, filter out the idps that are not allowed
-     * for the given Service Provider.
+     * Map a Service Registry key/value (JANUS) array to a Corto Entity Metadata array.
      *
-     * @param array $entities
-     * @param string $spEntityId
-     * @return array Filtered entities
+     * @param array $serviceRegistryEntity
+     * @return array
      */
-    public function filterEntitiesBySp(array $entities, $spEntityId)
-    {
-        $allowedEntities = $this->_serviceRegistry->getAllowedIdps($spEntityId);
-        foreach ($entities as $entityId => $entityData) {
-            if (isset($entityData['SingleSignOnService'])) {
-                // entity is an idp
-                if (in_array($entityId, $allowedEntities)) {
-                    $entities[$entityId]['Access'] = true;
-                } else {
-                    unset($entities[$entityId]);
-                }
-            }
-        }
-        return $entities;
-    }
-
-    /**
-     * Given a list of (SAML2) entities, mark those idps that are not allowed
-     * for the given Service Provider.
-     *
-     * @param array $entities
-     * @param string $spEntityId
-     * @return array the entities
-     */
-    public function markEntitiesBySp(array $entities, $spEntityId)
-    {
-        $allowedEntities = $this->_serviceRegistry->getAllowedIdps($spEntityId);
-        foreach ($entities as $entityId => $entityData) {
-            if (isset($entityData['SingleSignOnService'])) {
-                // entity is an idp
-                $entities[$entityId]['Access'] = in_array($entityId, $allowedEntities);
-            }
-        }
-        return $entities;
-    }
-
-    /**
-     * Given a list of (SAML2) entities, filter out the entities that do not have the requested workflow state
-     *
-     * @param array $entities
-     * @param string $workflowState
-     * @return array Filtered entities
-     */
-    public function filterEntitiesByWorkflowState(array $entities, $workflowState) {
-        foreach ($entities as $entityId => $entityData) {
-            if (!isset($entityData['WorkflowState']) || $entityData['WorkflowState'] !== $workflowState) {
-                unset($entities[$entityId]);
-            }
-        }
-
-        return $entities;
-    }
-
-    public function isConnectionAllowed($spEntityId, $idpEntityId)
-    {
-        return $this->_serviceRegistry->isConnectionAllowed($spEntityId, $idpEntityId);
-    }
-
-    public function getRemoteMetaData()
-    {
-        return $this->_getRemoteSPsMetaData() + $this->_getRemoteIdPsMetadata();
-    }
-
-    public function getEntity($entityId)
-    {
-        return $this->_serviceRegistry->getEntity($entityId);
-    }
-
-    public function getArp($spEntityId)
-    {
-        return $this->_serviceRegistry->getArp($spEntityId);
-    }
-
-    protected function _getRemoteIdPsMetadata()
-    {
-        $metadata = array();
-        $idPs = $this->_serviceRegistry->getIdpList();
-        foreach ($idPs as $idPEntityId => $idP) {
-            try {
-                $idP = self::convertServiceRegistryEntityToCortoEntity($idP);
-                $idP['EntityID'] = $idPEntityId;
-                $metadata[$idPEntityId] = $idP;
-            } catch (Exception $e) {
-                // Whoa, something went wrong trying to convert the SR entity to a Corto entity
-                // We can't use this entity, but we can continue after we've reported
-                // this serious error
-                $application = EngineBlock_ApplicationSingleton::getInstance();
-                $application->reportError($e);
-                continue;
-            }
-        }
-        return $metadata;
-    }
-
-    protected function _getRemoteSPsMetaData()
-    {
-        $metadata = array();
-        $sPs = $this->_serviceRegistry->getSPList();
-        foreach ($sPs as $spEntityId => $sp) {
-            try {
-                $sp = self::convertServiceRegistryEntityToCortoEntity($sp);
-                $sp['EntityID'] = $spEntityId;
-                $metadata[$spEntityId] = $sp;
-            } catch (Exception $e) {
-                // Whoa, something went wrong trying to convert the SR entity to a Corto entity
-                // We can't use this entity, but we can continue after we've reported
-                // this serious error
-                $application = EngineBlock_ApplicationSingleton::getInstance();
-                $application->reportError($e);
-                continue;
-            }
-        }
-        return $metadata;
-    }
-
-    protected static function convertServiceRegistryEntityToCortoEntity($serviceRegistryEntity)
+    public function fromKeyValue(array $serviceRegistryEntity)
     {
         $cortoEntity = array();
 
@@ -328,7 +178,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
             }
         }
 
-        self::_multiLang($cortoEntity, $serviceRegistryEntity, array(
+        $this->_multilang($cortoEntity, $serviceRegistryEntity, array(
             'name'          => 'Name',
             'description'   => 'Description',
             'displayName'   => 'DisplayName',
@@ -348,7 +198,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
 
         // Organization info
         $cortoEntity['Organization'] = array();
-        self::_multiLang($cortoEntity['Organization'], $serviceRegistryEntity, array(
+        $this->_multilang($cortoEntity['Organization'], $serviceRegistryEntity, array(
             'OrganizationName'         => 'Name',
             'OrganizationDisplayName'  => 'DisplayName',
             'OrganizationURL'          => 'URL',
@@ -358,7 +208,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         }
 
         // Keywords for searching in the WAYF
-        self::_multiLang(
+        $this->_multilang(
             $cortoEntity,
             $serviceRegistryEntity,
             array('keywords' => 'Keywords')
@@ -420,7 +270,7 @@ class EngineBlock_Corto_ServiceRegistry_Adapter
         return $cortoEntity;
     }
 
-    protected static function _multiLang(&$cortoEntity, $serviceRegistryEntity, $mapping)
+    protected function _multiLang(&$cortoEntity, $serviceRegistryEntity, $mapping)
     {
         foreach ($mapping as $from => $to) {
             $hasEnglish = isset($serviceRegistryEntity[$from . ':en']);

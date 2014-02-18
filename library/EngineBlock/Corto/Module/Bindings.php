@@ -69,6 +69,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     protected $_server;
 
     /**
+     * @var string
+     */
+    protected $_sspmodSamlMessageClassName;
+
+    public function __construct(EngineBlock_Corto_ProxyServer $server)
+    {
+        parent::__construct($server);
+
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $this->_sspmodSamlMessageClassName = $diContainer->getMessageUtilClassName();
+    }
+
+
+    /**
      * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
      * @throws EngineBlock_Corto_Module_Bindings_VerificationException
@@ -131,7 +145,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if ($wantRequestsSigned) {
             // Check the Signature on the Request, if there is no signature, or verification fails
             // throw an exception.
-            if (!sspmod_saml_Message::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
+            $className = $this->_sspmodSamlMessageClassName;
+            if (!$className::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException(
                     'Validation of received messages enabled, but no signature found on message.'
                 );
@@ -274,7 +289,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         try {
             // 'Process' the response, verify the signature, verify the timings.
-            $assertions = sspmod_saml_Message::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+            $className = $this->_sspmodSamlMessageClassName;
+            $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
 
             // We only support 1 assertion
             if (count($assertions) > 1) {
@@ -363,13 +379,27 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
             $privateKey->loadKey($certificates['private']);
 
+            $sspMessage->setCertificates(array($certificates['public']));
             $sspMessage->setSignatureKey($privateKey);
         }
 
         $sspBinding = SAML2_Binding::getBinding($bindingUrn);
         if ($sspBinding instanceof SAML2_HTTPPost) {
 
-            $messageElement = $sspMessage->toSignedXML();
+            // SAML2int dictates that we MUST sign assertions.
+            // The SAML2 library will do that for us, if we just set the key to sign with.
+            if ($sspMessage instanceof SAML2_Response) {
+                foreach ($sspMessage->getAssertions() as $assertion) {
+                    $assertion->setCertificates($sspMessage->getCertificates());
+                    $assertion->setSignatureKey($sspMessage->getSignatureKey());
+                }
+                // BWC dictates that we don't sign responses.
+                $messageElement = $sspMessage->toUnsignedXML();
+            }
+            else {
+                $messageElement = $sspMessage->toSignedXML();
+            }
+
             $xml = $messageElement->ownerDocument->saveXML($messageElement);
 
             $this->validateXml($xml);
@@ -422,7 +452,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $dom = new DOMDocument();
             $dom->loadXML($xml);
             if (!$dom->schemaValidate($schemaUrl)) {
-                throw new Exception('Messagge = Ee XML doesnt validate against XSD at Oasis-open.org?!');
+                throw new Exception('Message XML doesnt validate against XSD at Oasis-open.org?!');
             }
         }
     }

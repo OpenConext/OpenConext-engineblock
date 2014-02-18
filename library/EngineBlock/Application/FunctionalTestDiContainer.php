@@ -6,21 +6,38 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
 {
     protected function registerServiceRegistryClient()
     {
-        $this[self::SERVICE_REGISTRY_CLIENT] = $this->share(function (EngineBlock_Application_DiContainer $container) {
-            $serviceRegistryClient = Phake::mock('Janus_Client_CacheProxy');
-
-            $resourcesDir = realpath(ENGINEBLOCK_FOLDER_ROOT . 'tests/resources/serviceregistry');
-            Phake::when($serviceRegistryClient)->getIdpList()->thenReturn(require_once $resourcesDir . '/idpList.php');
-            Phake::when($serviceRegistryClient)->getSPList()->thenReturn(require_once $resourcesDir . '/spList.php');
-            $allowedIdpsConfig = require_once $resourcesDir . '/allowedIdps.php';
-            foreach($allowedIdpsConfig as $spEntityId => $idps) {
-                Phake::when($serviceRegistryClient)->getAllowedIdps($spEntityId)->thenReturn($idps);
-            }
-
-            Phake::when($serviceRegistryClient)->isConnectionAllowed(Phake::anyParameters())->thenReturn(array(true));
-            Phake::when($serviceRegistryClient)->getArp(Phake::anyParameters())->thenReturn(array());
-
-            return $serviceRegistryClient;
+        $this[self::SERVICE_REGISTRY_CLIENT] = $this->share(function ()
+        {
+            return new Janus_FixtureClient();
         });
+    }
+
+    protected function registerTimeProvider()
+    {
+        $this[self::TIME] = $this->share(function ()
+        {
+            return new EngineBlock_TimeProvider_Fixture();
+        });
+    }
+
+    protected function registerSaml2IdGenerator()
+    {
+        $this[self::SAML2_ID] = $this->share(function()
+            {
+                return new EngineBlock_Saml2_IdGenerator_Fixture();
+            }
+        );
+    }
+
+    protected function registerSuperGlobalManager()
+    {
+        $this[self::SUPER_GLOBAL_MANAGER] = function() {
+            return new EngineBlock_Application_SuperGlobalManager();
+        };
+    }
+
+    public function getMessageUtilClassName()
+    {
+        return 'EngineBlock_Ssp_sspmod_saml_Message';
     }
 }

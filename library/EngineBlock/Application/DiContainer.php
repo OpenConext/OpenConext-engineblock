@@ -10,6 +10,9 @@ class EngineBlock_Application_DiContainer extends Pimple
     const SERVICE_REGISTRY_CLIENT = 'serviceRegistryClient';
     const SERVICE_REGISTRY_ADAPTER = 'serviceRegistryAdapter';
     const ASSET_MANAGER = 'assetManager';
+    const TIME = 'dateTime';
+    const SAML2_ID = 'id';
+    const SUPER_GLOBAL_MANAGER = 'superGlobalManager';
 
     public function __construct()
     {
@@ -22,6 +25,9 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerServiceRegistryClient();
         $this->registerServiceRegistryAdapter();
         $this->registerAssetManager();
+        $this->registerTimeProvider();
+        $this->registerSaml2IdGenerator();
+        $this->registerSuperGlobalManager();
     }
 
     protected function registerXmlConverter()
@@ -95,14 +101,14 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerServiceRegistryClient()
     {
-        $this[self::SERVICE_REGISTRY_CLIENT] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::SERVICE_REGISTRY_CLIENT] = $this->share(function ()
         {
             return new Janus_Client_CacheProxy();
         });
     }
 
     /**
-     * @return EngineBlock_Corto_ServiceRegistry_Adapter()
+     * @return EngineBlock_Corto_ServiceRegistry_JanusRestAdapter()
      */
     public function getServiceRegistryAdapter()
     {
@@ -113,7 +119,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         $this[self::SERVICE_REGISTRY_ADAPTER] = $this->share(function (EngineBlock_Application_DiContainer $container)
         {
-            return new EngineBlock_Corto_ServiceRegistry_Adapter($container->getServiceRegistryClient());
+            return new EngineBlock_Corto_ServiceRegistry_JanusRestAdapter($container->getServiceRegistryClient());
         });
     }
 
@@ -127,10 +133,66 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerAssetManager()
     {
-        $this[self::ASSET_MANAGER] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::ASSET_MANAGER] = $this->share(function ()
         {
             return new EngineBlock_AssetManager();
         });
     }
 
+    /**
+     * @return EngineBlock_TimeProvider_Interface
+     */
+    public function getTimeProvider()
+    {
+        return $this[self::TIME];
+    }
+
+    protected function registerTimeProvider()
+    {
+        $this[self::TIME] = $this->share(function ()
+            {
+                return new EngineBlock_TimeProvider_Default();
+            }
+        );
+    }
+
+    /**
+     * @return EngineBlock_Saml2_IdGenerator_Interface
+     */
+    public function getSaml2IdGenerator()
+    {
+        return $this[self::SAML2_ID];
+    }
+
+    protected function registerSaml2IdGenerator()
+    {
+        $this[self::SAML2_ID] = $this->share(function()
+            {
+                return new EngineBlock_Saml2_IdGenerator_Default();
+            }
+        );
+    }
+
+    /**
+     * @return EngineBlock_Application_SuperGlobalManager
+     */
+    public function getSuperGlobalManager()
+    {
+        return $this[self::SUPER_GLOBAL_MANAGER];
+    }
+
+    protected function registerSuperGlobalManager()
+    {
+        $this[self::SUPER_GLOBAL_MANAGER] = false;
+    }
+
+    /**
+     * Classname to use for Message utilities.
+     *
+     * @return string
+     */
+    public function getMessageUtilClassName()
+    {
+       return 'sspmod_saml_Message';
+    }
 }

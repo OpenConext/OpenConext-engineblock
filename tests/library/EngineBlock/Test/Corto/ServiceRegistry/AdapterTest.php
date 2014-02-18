@@ -25,7 +25,7 @@
 class EngineBlock_Test_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var EngineBlock_Corto_ServiceRegistry_Adapter
+     * @var EngineBlock_Corto_ServiceRegistry_JanusRestAdapter
      */
     protected $_adapter;
 
@@ -78,7 +78,7 @@ class EngineBlock_Test_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framewo
             ),
         ));
 
-        $this->_adapter = new EngineBlock_Corto_ServiceRegistry_Adapter($serviceRegistry);
+        $this->_adapter = new EngineBlock_Corto_ServiceRegistry_JanusRestAdapter($serviceRegistry);
     }
 
     public function testGetRemoteMetaData()
