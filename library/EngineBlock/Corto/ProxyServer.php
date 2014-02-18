@@ -483,9 +483,9 @@ class EngineBlock_Corto_ProxyServer
         $newResponse->setAssertions(array($newAssertion));
         $newAssertion->setId($this->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_ASSERTION));
         $newAssertion->setIssueInstant(time());
-        $newAssertion->setIssuer($newResponse->getOriginalIssuer());
+        $newAssertion->setIssuer($newResponse->getIssuer());
 
-        // Unless off course we are in 'stealth' / transparent mode, in which case,
+        // Unless of course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
         $serviceProvider = $this->getRemoteEntity($request->getIssuer());
         $mustProxyTransparently = ($request->isTransparent() || !empty($serviceProvider['TransparentIssuer']));
