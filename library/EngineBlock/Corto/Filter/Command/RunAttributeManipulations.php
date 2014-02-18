@@ -66,12 +66,15 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
         $manipulator = new EngineBlock_Attributes_Manipulator_ServiceRegistry($this->_type);
         $manipulated = $manipulator->manipulate(
             $entityId,
-            $this->_response->getIntendedNameId(),
+            $this->_collabPersonId,
             $this->_responseAttributes,
             $this->_response,
             $this->_idpMetadata,
             $this->_spMetadata
         );
+
+        $this->_response->setIntendedNameId($this->_collabPersonId);
+
         return (bool)$manipulated;
     }
 }
