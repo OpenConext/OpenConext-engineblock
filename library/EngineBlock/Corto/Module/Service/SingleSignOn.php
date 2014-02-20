@@ -1,5 +1,7 @@
 <?php
 
+use \OpenConext\Component\EngineBlockFixtures\IdFrame;
+
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
     const RESPONSE_CACHE_TYPE_IN  = 'in';
@@ -194,7 +196,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $relayState  = !empty($_GET['RelayState'])   ? $_GET['RelayState']  : null;
 
         $sspRequest = new SAML2_AuthnRequest();
-        $sspRequest->setId($this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_REQUEST));
+        $sspRequest->setId($this->_server->getNewId(IdFrame::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssuer($entityId);
         $sspRequest->setRelayState($relayState);
 
