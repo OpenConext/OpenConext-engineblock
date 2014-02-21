@@ -540,7 +540,12 @@ class EngineBlock_Corto_ProxyServer
         // Copy over the Authentication information because the IdP did the authentication, not us.
         $newAssertion->setAuthnInstant($sourceAssertion->getAuthnInstant());
         $newAssertion->setSessionIndex($sourceAssertion->getSessionIndex());
-        $newAssertion->setAuthnContext($sourceAssertion->getAuthnContext());
+
+        $newAssertion->setAuthnContextClassRef($sourceAssertion->getAuthnContextClassRef());
+        $newAssertion->setAuthnContextDeclRef($sourceAssertion->getAuthnContextDeclRef());
+        if ($sourceAssertion->getAuthnContextDecl()) {
+            $newAssertion->setAuthnContextDecl($sourceAssertion->getAuthnContextDecl());
+        }
 
         // Copy over the Authenticating Authorities and add the IdP.
         $authenticatingAuthorities = $sourceAssertion->getAuthenticatingAuthority();
