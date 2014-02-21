@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e217a08159056b5dff1fc39c2c88a933",
+    "hash": "7ec002ab4790583d6062df8c75a6dd93",
     "packages": [
         {
             "name": "apache/shindig",
@@ -377,16 +377,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v0.3.0",
+            "version": "v0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "247203b0689fceb6ac49ecef870e948c308ff5ae"
+                "reference": "3cfedfc764de05f0a061e3c07668a24e839d9cf8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/247203b0689fceb6ac49ecef870e948c308ff5ae",
-                "reference": "247203b0689fceb6ac49ecef870e948c308ff5ae",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/3cfedfc764de05f0a061e3c07668a24e839d9cf8",
+                "reference": "3cfedfc764de05f0a061e3c07668a24e839d9cf8",
                 "shasum": ""
             },
             "require": {
@@ -423,20 +423,26 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2014-01-27 19:45:13"
+            "time": "2014-02-21 10:09:30"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "dev-trunk",
+            "version": "v1.11.1",
             "source": {
-                "type": "svn",
-                "url": "http://simplesamlphp.googlecode.com/svn",
-                "reference": "/trunk/@3367"
+                "type": "git",
+                "url": "https://github.com/relaxnow/simplesamlphp-fork-r3374.git",
+                "reference": "b9ef1941861fa712f9b8b39e65e337f60c6ecc8b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/relaxnow/simplesamlphp-fork-r3374/zipball/b9ef1941861fa712f9b8b39e65e337f60c6ecc8b",
+                "reference": "b9ef1941861fa712f9b8b39e65e337f60c6ecc8b",
+                "shasum": ""
             },
             "require": {
                 "openid/php-openid": "dev-master#ee669c6a9d4d95b58ecd9b6945627276807694fb as 2.2.2",
-                "php": ">=5.3.0",
-                "simplesamlphp/saml2": "0.3.0"
+                "php": "~5.3",
+                "simplesamlphp/saml2": "~0.3"
             },
             "type": "project",
             "autoload": {
@@ -447,16 +453,13 @@
                     "lib/_autoload_modules.php"
                 ]
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-2.1"
             ],
             "authors": [
                 {
                     "name": "Andreas Åkre Solberg",
-                    "email": "andreas.solberg@uninett.no",
-                    "homepage": "http://rnd.feide.no",
-                    "role": "Developer"
+                    "email": "andreas.solberg@uninett.no"
                 },
                 {
                     "name": "Olav Morken",
@@ -466,16 +469,20 @@
             "description": "A PHP implementation of SAML 2.0 service provider and identity provider functionality. And is also compatible with Shibboleth 1.3 and 2.0.",
             "homepage": "http://simplesamlphp.org",
             "keywords": [
-                "OpenId",
-                "SAML2",
                 "aselect",
                 "idp",
                 "oauth",
+                "openid",
+                "saml2",
                 "shibboleth",
                 "sp",
                 "ws-federation"
             ],
-            "time": "2014-02-18 17:46:56"
+            "support": {
+                "issues": "https://code.google.com/p/simplesamlphp/issues/list",
+                "source": "https://code.google.com/p/simplesamlphp"
+            },
+            "time": "2014-02-21 14:18:34"
         },
         {
             "name": "symfony/process",
@@ -2203,7 +2210,6 @@
     "stability-flags": {
         "kriswallsmith/assetic": 20,
         "openid/php-openid": 20,
-        "simplesamlphp/simplesamlphp": 20,
         "phake/phake": 15
     },
     "platform": [

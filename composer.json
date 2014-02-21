@@ -19,8 +19,8 @@
         "openconext/engineblock-fixtures": "*",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
         "pimple/pimple": "~2.0",
-        "simplesamlphp/saml2": "~0.3",
-        "simplesamlphp/simplesamlphp": "dev-trunk",
+        "simplesamlphp/saml2": "~0.4",
+        "simplesamlphp/simplesamlphp": "~1.11",
         "zendframework/zendframework1":"~1.12"
     },
     "require-dev": {
@@ -85,6 +85,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/OpenConext/OpenConext-engineblock-fixtures"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/relaxnow/simplesamlphp-fork-r3374"
         }
     ],
     "autoload": {
