@@ -11,25 +11,25 @@
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
     "require": {
-        "pimple/pimple": "1.0.2",
-        "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
-        "simplesamlphp/simplesamlphp": "dev-trunk",
-        "simplesamlphp/saml2": "0.3.0",
-        "dbpatch/dbpatch": "1.1.1",
-        "zendframework/zendframework1":"1.10.9",
         "apache/shindig":"1094333",
-        "kriswallsmith/assetic": "1.2.*@dev",
-        "mrclay/minify": "2.1.7",
         "cssmin/cssmin": "3.0.1",
-        "openconext/engineblock-fixtures": "*"
+        "dbpatch/dbpatch": "~1.2",
+        "kriswallsmith/assetic": "1.2.*@dev",
+        "mrclay/minify": "~2.1",
+        "openconext/engineblock-fixtures": "*",
+        "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
+        "pimple/pimple": "~2.0",
+        "simplesamlphp/saml2": "~0.3",
+        "simplesamlphp/simplesamlphp": "dev-trunk",
+        "zendframework/zendframework1":"~1.12"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.19",
-        "phake/phake": "2.0.0-alpha2",
         "behat/behat": "2.4.6",
         "behat/mink": "1.5.0",
         "behat/mink-extension": "1.1.4",
-        "behat/mink-goutte-driver": "1.0.9"
+        "behat/mink-goutte-driver": "1.0.9",
+        "phake/phake": "2.0.0-alpha2",
+        "phpunit/phpunit": "3.7.19"
     },
     "scripts": {
         "pre-autoload-dump": [
@@ -40,22 +40,6 @@
         ]
     },
     "repositories": [
-        {
-            "type":"package",
-            "package": {
-                "name": "zendframework/zendframework1",
-                "version": "1.10.9",
-                "dist": {
-                    "url": "https://packages.zendframework.com/releases/ZendFramework-1.10.9/ZendFramework-1.10.9-minimal.zip",
-                    "type": "zip"
-                },
-                "autoload": {
-                    "psr-0": {
-                        "Zend_": "library/"
-                    }
-                }
-            }
-        },
         {
             "type": "package",
             "package": {
@@ -87,11 +71,11 @@
             "type": "package",
             "package": {
                 "name": "robrichards/xmlseclibs",
-                "version": "1.3.1",
+                "version": "1.3.2",
                 "source": {
                     "type": "svn",
                     "url": "http://xmlseclibs.googlecode.com/svn",
-                    "reference": "trunk@50"
+                    "reference": "trunk@52"
                 },
                 "autoload": {
                     "files": ["xmlseclibs.php"]
