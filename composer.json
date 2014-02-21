@@ -84,7 +84,7 @@
         },
         {
             "type": "vcs",
-            "url": "https://github.com/relaxnow/OpenConext-engineblock-fixtures"
+            "url": "https://github.com/OpenConext/OpenConext-engineblock-fixtures"
         }
     ],
     "autoload": {

@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "8e41c0ab1459e588246600f01c881271",
+    "hash": "e217a08159056b5dff1fc39c2c88a933",
     "packages": [
         {
             "name": "apache/shindig",
