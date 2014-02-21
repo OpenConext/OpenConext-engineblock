@@ -32,45 +32,45 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerXmlConverter()
     {
-        $this[self::XML_CONVERTER] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::XML_CONVERTER] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_XmlToArray();
-        });
+        };
     }
 
     protected function registerConsentFactory()
     {
-        $this[self::CONSENT_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::CONSENT_FACTORY] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_Model_Consent_Factory(
                 $container[$container::FILTER_COMMAND_FACTORY],
                 $container[$container::DATABASE_CONNECTION_FACTORY]
             );
-        });
+        };
     }
 
     protected function registerMailer()
     {
-        $this[self::MAILER] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::MAILER] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Mail_Mailer();
-        });
+        };
     }
 
     protected function registerFilterCommandFactory()
     {
-        $this[self::FILTER_COMMAND_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::FILTER_COMMAND_FACTORY] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_Filter_Command_Factory();
-        });
+        };
     }
 
     protected function registerDatabaseConnectionFactory()
     {
-        $this[self::DATABASE_CONNECTION_FACTORY] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::DATABASE_CONNECTION_FACTORY] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Database_ConnectionFactory();
-        });
+        };
     }
     /**
      * @return Zend_Cache_Backend_Apc
@@ -82,13 +82,13 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerApplicationCache()
     {
-        $this[self::APPLICATION_CACHE] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::APPLICATION_CACHE] = function (EngineBlock_Application_DiContainer $container)
         {
             $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
             if ($isApcEnabled) {
                 return new Zend_Cache_Backend_Apc();
             }
-        });
+        };
     }
 
     /**
@@ -101,10 +101,10 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerServiceRegistryClient()
     {
-        $this[self::SERVICE_REGISTRY_CLIENT] = $this->share(function ()
+        $this[self::SERVICE_REGISTRY_CLIENT] = function ()
         {
             return new Janus_Client_CacheProxy();
-        });
+        };
     }
 
     /**
@@ -117,10 +117,10 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerServiceRegistryAdapter()
     {
-        $this[self::SERVICE_REGISTRY_ADAPTER] = $this->share(function (EngineBlock_Application_DiContainer $container)
+        $this[self::SERVICE_REGISTRY_ADAPTER] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_ServiceRegistry_JanusRestAdapter($container->getServiceRegistryClient());
-        });
+        };
     }
 
     /**
@@ -133,10 +133,10 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerAssetManager()
     {
-        $this[self::ASSET_MANAGER] = $this->share(function ()
+        $this[self::ASSET_MANAGER] = function ()
         {
             return new EngineBlock_AssetManager();
-        });
+        };
     }
 
     /**
@@ -149,11 +149,10 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerTimeProvider()
     {
-        $this[self::TIME] = $this->share(function ()
-            {
-                return new EngineBlock_TimeProvider_Default();
-            }
-        );
+        $this[self::TIME] = function ()
+        {
+            return new EngineBlock_TimeProvider_Default();
+        };
     }
 
     /**
@@ -166,11 +165,10 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     protected function registerSaml2IdGenerator()
     {
-        $this[self::SAML2_ID] = $this->share(function()
-            {
-                return new EngineBlock_Saml2_IdGenerator_Default();
-            }
-        );
+        $this[self::SAML2_ID] = function()
+        {
+            return new EngineBlock_Saml2_IdGenerator_Default();
+        };
     }
 
     /**
