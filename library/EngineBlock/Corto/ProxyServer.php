@@ -549,8 +549,14 @@ class EngineBlock_Corto_ProxyServer
 
         // Copy over the Authenticating Authorities and add the IdP.
         $authenticatingAuthorities = $sourceAssertion->getAuthenticatingAuthority();
-        if (!$this->isInProcessingMode()) {
+        // We always add the origin IdP
+        if (!in_array($newResponse->getOriginalIssuer(), $authenticatingAuthorities)) {
             $authenticatingAuthorities[] = $newResponse->getOriginalIssuer();
+        }
+        // And ourselves, unless we are proxying transparently, in which case we pretend to be the IdP
+        // which is already in the AA, so the guard against duplicates will fail.
+        if (!in_array($newResponse->getIssuer(), $authenticatingAuthorities)) {
+            $authenticatingAuthorities[] = $newResponse->getIssuer();
         }
         $newAssertion->setAuthenticatingAuthority($authenticatingAuthorities);
 
