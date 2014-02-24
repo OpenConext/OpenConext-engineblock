@@ -547,16 +547,19 @@ class EngineBlock_Corto_ProxyServer
             $newAssertion->setAuthnContextDecl($sourceAssertion->getAuthnContextDecl());
         }
 
-        // Copy over the Authenticating Authorities and add the IdP.
+        // Copy over the Authenticating Authorities and add the EntityId of the Source Response Issuer.
+        // Note that because EB generates multiple responses, this will likely result in:
+        // "https://engine/../idp/metadata" !== "https://original-idp/../idpmetadata" => true, gets added
+        // "https://engine/../idp/metadata" !== "https://engine/../idp/metadata" => false, does not get added
+        // "https://engine/../idp/metadata" !== "https://engine/../idp/metadata" => false, does not get added
+        // UNLESS the Response is destined for an SP in VO mode, in which case the flow will be:
+        // "https://engine/../idp/metadata" !== "https://original-idp/../idpmetadata" => true, gets added
+        // "https://engine/../idp/metadata" !== "https://engine/../idp/metadata" => false, does not get added
+        // "https://engine/../idp/metadata/vo:void" !== "https://engine/../idp/metadata" => TRUE, gets added!
+        // This is a 'bug'/'feature' that we're keeping in for BWC reasons.
         $authenticatingAuthorities = $sourceAssertion->getAuthenticatingAuthority();
-        // We always add the origin IdP
-        if (!in_array($newResponse->getOriginalIssuer(), $authenticatingAuthorities)) {
-            $authenticatingAuthorities[] = $newResponse->getOriginalIssuer();
-        }
-        // And ourselves, unless we are proxying transparently, in which case we pretend to be the IdP
-        // which is already in the AA, so the guard against duplicates will fail.
-        if (!in_array($newResponse->getIssuer(), $authenticatingAuthorities)) {
-            $authenticatingAuthorities[] = $newResponse->getIssuer();
+        if ($this->getUrl('idpMetadataService') !== $sourceResponse->getIssuer()) {
+            $authenticatingAuthorities[] = $sourceResponse->getIssuer();
         }
         $newAssertion->setAuthenticatingAuthority($authenticatingAuthorities);
 
