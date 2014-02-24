@@ -782,7 +782,7 @@ class EngineBlock_Corto_ProxyServer
 ////////  ATTRIBUTE FILTERING /////////
 
     public function filterInputAssertionAttributes(
-        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
     ) {
         $this->callAttributeFilter(
