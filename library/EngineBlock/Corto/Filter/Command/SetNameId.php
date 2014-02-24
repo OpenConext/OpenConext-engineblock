@@ -97,14 +97,12 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         $this->_response->getAssertion()->setNameId($nameId);
 
         $document = new DOMDocument();
-        $document->loadXML(
-<<<XML
-<saml:NameID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Format="{$nameId['Format']}">{$nameId['Value']}</saml:NameID>
-XML
-);
+        $document->loadXML('<base />');
+        SAML2_Utils::addNameId($document->documentElement, $nameId);
+
         // Add the eduPersonTargetedId
         $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
-            $document->childNodes
+            $document->documentElement->childNodes
         );
     }
 
