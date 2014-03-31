@@ -27,35 +27,35 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
 {
     public function vomembershiprequiredAction()
     {
-        header('HTTP/1.1 403 Forbidden');
+        $this->_getResponse()->setStatus(403, 'Forbidden');
     }
 
     public function unableToReceiveMessageAction()
     {
-        header('HTTP/1.1 400 Bad Request');
+        $this->_getResponse()->setStatus(400, 'Bad Request');
     }
 
     public function sessionLostAction()
     {
-        header('HTTP/1.1 400 Bad Request');
+        $this->_getResponse()->setStatus(400, 'Bad Request');
     }
 
     public function unknownIssuerAction()
     {
-        header('HTTP/1.1 404 Not Found');
+        $this->_getResponse()->setStatus(404, 'Not Found');
         $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
         $this->__set('destination', htmlspecialchars($this->_getRequest()->getQueryParameter('destination')));
     }
 
     public function unknownServiceProviderAction()
     {
-        header('HTTP/1.1 400 Bad Request');
+        $this->_getResponse()->setStatus(400, 'Bad Request');
         $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
     }
 
     public function missingRequiredFieldsAction()
     {
-        header('HTTP/1.1 400 Bad Request');
+        $this->_getResponse()->setStatus(400, 'Bad Request');
     }
 
     public function noConsentAction()
@@ -71,7 +71,7 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
 
     public function invalidAcsLocationAction()
     {
-        header('HTTP/1.1 400 Bad Request');
+        $this->_getResponse()->setStatus(400, 'Bad Request');
     }
 
     public function invalidAcsBindingAction()

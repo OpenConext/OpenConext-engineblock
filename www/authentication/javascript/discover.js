@@ -41,9 +41,6 @@ var Discover = function () {
         setSpName: function (spName) {
             library.spName = spName;
         },
-        setUri: function (uri) {
-            library.uri = uri;
-        },
         setSelectedEntityId: function (selectedEntityId) {
             library.selectedEntityId = selectedEntityId;
         },
@@ -56,7 +53,7 @@ var Discover = function () {
                     return false;
                 }
                 for (var idp in library.idpList) {
-                    if (encodeURIComponent(library.idpList[idp].EntityId) === selectedIdp) {
+                    if (encodeURIComponent(library.idpList[idp].EntityID) === selectedIdp) {
                         return true;
                     }
                 }
@@ -119,11 +116,10 @@ var Discover = function () {
         spName: '',
         selectedId: '',
         selectedEntityId: '',
-        uri: '',
 
         selectIdpJSON: function () {
             for (var idp in this.idpList) {
-                if (this.idpList[idp].hasOwnProperty('EntityId') && this.idpList[idp]['EntityId'] == this.selectedEntityId) {
+                if (this.idpList[idp].hasOwnProperty('EntityID') && this.idpList[idp]['EntityID'] == this.selectedEntityId) {
                     return this.idpList[idp];
                 }
             }
@@ -170,7 +166,8 @@ var Discover = function () {
             if ($('#help:visible').length > 0 && $.trim($('#help:visible').html()) !== "") {
                 return;
             }
-            $.get('/authentication/idp/help?lang=' + library.lang, function (data) {
+            var helpType = $('#help_nav a').attr('data-help-type');
+            $.get('/authentication/idp/help-' + helpType + '?lang=' + library.lang, function (data) {
                 $("#content").hide(speed);
                 $("#requestAccess").hide(speed);
 
@@ -204,7 +201,7 @@ var Discover = function () {
                 this.selectedId = idp['ID'];
 
                 idp['Name'] = this.resolveIdPName(idp, this.lang);
-                idp['Alt'] = encodeURIComponent(idp['EntityId']);
+                idp['Alt'] = encodeURIComponent(idp['EntityID']);
 
                 idp['Suggestion'] = 'Onze Suggestie:';
                 if ((this.lang == 'en')) {
@@ -361,7 +358,7 @@ var Discover = function () {
                     idp['ID'] = result['ID'];
                     idp['Logo'] = result['Logo'];
                     idp['Name'] = library.resolveIdPName(result, this.lang);
-                    idp['Alt'] = encodeURIComponent(result['EntityId']);
+                    idp['Alt'] = encodeURIComponent(result['EntityID']);
                     idp['NoAccess'] = '';
                     idp['NoAccessClass'] = '';
 

@@ -25,11 +25,11 @@
 
 abstract class EngineBlock_Corto_Filter_Abstract
 {
-    protected $_adapter;
+    protected $_server;
 
-    public function __construct(EngineBlock_Corto_Adapter $adapter)
+    public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
-        $this->_adapter = $adapter;
+        $this->_server = $server;
     }
 
     /**
@@ -49,26 +49,29 @@ abstract class EngineBlock_Corto_Filter_Abstract
      * @return void
      */
     public function filter(
-        array &$response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array &$responseAttributes,
-        array $request,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         array $spEntityMetadata,
         array $idpEntityMetadata
     )
     {
+        /** @var SAML2_AuthnRequest $request */
         // Note that IDs are only unique per SP... we hope...
-        $sessionKey = $spEntityMetadata['EntityId'] . '>' . $request['_ID'];
+        $responseNameId = $response->getAssertion()->getNameId();
+
+        $sessionKey = $spEntityMetadata['EntityID'] . '>' . $request->getId();
         if (isset($_SESSION[$sessionKey]['collabPersonId'])) {
             $collabPersonId = $_SESSION[$sessionKey]['collabPersonId'];
         }
-        else if (isset($response['__']['collabPersonId'])) {
-            $collabPersonId = $response['__']['collabPersonId'];
+        else if ($response->getCollabPersonId()) {
+            $collabPersonId = $response->getCollabPersonId();
         }
         else if (isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0])) {
             $collabPersonId = $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0];
         }
-        else if (isset($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'])) {
-            $collabPersonId = $response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'];
+        else if (!empty($responseNameId['Value'])) {
+            $collabPersonId = $responseNameId['Value'];
         }
         else {
             $collabPersonId = null;
@@ -79,7 +82,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
         /** @var EngineBlock_Corto_Filter_Command_Abstract $command */
         foreach ($commands as $command) {
             // Inject everything we have into the adapter
-            $command->setAdapter($this->_adapter);
+            $command->setProxyServer($this->_server);
             $command->setIdpMetadata($idpEntityMetadata);
             $command->setSpMetadata($spEntityMetadata);
             $command->setRequest($request);

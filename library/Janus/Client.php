@@ -26,7 +26,7 @@
 /**
  * Implementation of the Engine Block internal Service Registry interface.
  */
-class Janus_Client
+class Janus_Client implements Janus_Client_Interface
 {
     /**
      * The REST client used to communicate to the Janus service registry.
@@ -34,6 +34,12 @@ class Janus_Client
      */
     protected $_restClient = null;
 
+    /**
+     * Get full information for a given entity.
+     *
+     * @param $entityId
+     * @return mixed
+     */
     public function getEntity($entityId)
     {
         return $this->getRestClient()->getEntity()

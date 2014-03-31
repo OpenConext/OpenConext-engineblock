@@ -48,11 +48,6 @@ class EngineBlock_SocialData
     protected $_fieldMapper = NULL;
 
     /**
-     * @var EngineBlock_AttributeAggregator
-     */
-    protected $_attributeAggregator;
-
-    /**
      * @var String
      */
     protected $_appId = NULL;
@@ -83,12 +78,12 @@ class EngineBlock_SocialData
      * @param null|string $voId
      * @return array OpenSocial groups
      */
-    public function getGroupsForPerson($identifier, $groupId = null, $voId = null, $spEntityId = null)
+    public function getGroupsForPerson($identifier, $groupId = null, $spEntityId = null)
     {
         $identifier = $this->_getCollabPersonIdForPersistentId($identifier);
         if (!$identifier) {
             $this->_getLog()->notice(
-                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$spEntityId')" .
                     ", personId: $identifier cannot be resolved to a collabPersonId?"
             );
             return false;
@@ -97,7 +92,7 @@ class EngineBlock_SocialData
         if (!$spEntityId) {
             //without spEntityId we can't check if we are allowed to return Groups
             $this->_getLog()->notice(
-                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$spEntityId')" .
                     ", no SP entity ID, required to return groups"
             );
             return false;
@@ -105,7 +100,7 @@ class EngineBlock_SocialData
         $spGroupAcls = $this->_getSpGroupAcls($spEntityId);
         if (!$spGroupAcls) {
             $this->_getLog()->notice(
-                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$voId', '$spEntityId')" .
+                "[OpenSocial] getGroupsForPerson('$identifier', '$groupId', '$spEntityId')" .
                     ", no GroupAcl (set in Manage) means by definition that there are no positive permissions"
             );
             return false;
@@ -113,14 +108,7 @@ class EngineBlock_SocialData
 
         $engineBlockGroups = NULL;
         $groupProvider = $this->_getGroupProvider($identifier);
-        if ($voId) {
-            $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
-            $groupStem = $virtualOrganization->getStem();
-            $engineBlockGroups = $groupProvider->getGroupsByStem($groupStem,$spGroupAcls);
-        }
-        else {
-            $engineBlockGroups = $groupProvider->getGroups($spGroupAcls);
-        }
+        $engineBlockGroups = $groupProvider->getGroups($spGroupAcls);
 
         $openSocialGroups = array();
         foreach ($engineBlockGroups as $group) {
@@ -233,14 +221,6 @@ class EngineBlock_SocialData
         if (count($persons) === 1) {
             $person = array_shift($persons);
             $person = $fieldMapper->ldapToSocialData($person, $socialAttributes);
-
-            if ($voId && $spEntityId) {
-                $person = $this->_getAttributeAggregator($voId, $spEntityId)->aggregateFor(
-                    $person,
-                    $person['id'],
-                    EngineBlock_AttributeAggregator::FORMAT_OPENSOCIAL
-                );
-            }
 
             // Make sure we only include attributes that we are allowed to share
             $person = $this->_enforceArp($person);
@@ -385,23 +365,6 @@ class EngineBlock_SocialData
             $this->_groupProvider = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor($userId);
         }
         return $this->_groupProvider;
-    }
-
-    /**
-     * @param $voId
-     * @param $spEntityId
-     * @return EngineBlock_AttributeAggregator
-     */
-    protected function _getAttributeAggregator($voId, $spEntityId)
-    {
-        if (!isset($this->_attributeAggregator)) {
-            $this->_attributeAggregator = new EngineBlock_AttributeAggregator(
-                array(
-                     new EngineBlock_Attributes_Provider_VoManage($voId, $spEntityId),
-                )
-            );
-        }
-        return $this->_attributeAggregator;
     }
 
     /**

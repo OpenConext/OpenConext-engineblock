@@ -38,12 +38,16 @@ class EngineBlock_Tracker
             INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname)
             VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname)"
         );
-        $spEntityName  = (isset($spEntityMetadata['Name']['en']) && !empty($spEntityMetadata['Name']['en']) ? $spEntityMetadata['Name']['en'] : $spEntityMetadata['EntityId']);
-        $idpEntityName = (isset($idpEntityMetadata['Name']['en']) && !empty($idpEntityMetadata['Name']['en']) ? $idpEntityMetadata['Name']['en'] : $idpEntityMetadata['EntityId']);
+        $spEntityName  = (!empty($spEntityMetadata['Name']['en'])
+            ? $spEntityMetadata['Name']['en']
+            : $spEntityMetadata['EntityID']);
+        $idpEntityName = (!empty($idpEntityMetadata['Name']['en'])
+            ? $idpEntityMetadata['Name']['en']
+            : $idpEntityMetadata['EntityID']);
         $stmt->bindParam('userid'       , $subjectId);
-        $stmt->bindParam('spentityid'   , $spEntityMetadata['EntityId']);
+        $stmt->bindParam('spentityid'   , $spEntityMetadata['EntityID']);
         $stmt->bindParam('spentityname' , $spEntityName);
-        $stmt->bindParam('idpentityid'  , $idpEntityMetadata['EntityId']);
+        $stmt->bindParam('idpentityid'  , $idpEntityMetadata['EntityID']);
         $stmt->bindParam('idpentityname', $idpEntityName);
         $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
         $stmt->bindParam('voname'       , $voContext);

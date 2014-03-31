@@ -45,11 +45,10 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
                 "Stored response for ResponseID '{$_POST['ID']}' not found"
             );
         }
+        /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 
-        $attributes = $this->_xmlConverter->attributesToArray(
-            $response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']
-        );
+        $attributes = $response->getAssertion()->getAttributes();
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
 
@@ -63,9 +62,9 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
             $this->_sendIntroductionMail($response, $attributes);
         }
 
-        $response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Consent'] = 'urn:oasis:names:tc:SAML:2.0:consent:obtained';
-        $response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Destination'] = $response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Return'];
-        $response[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['ProtocolBinding'] = 'INTERNAL';
+        $response->setConsent(SAML2_Const::CONSENT_OBTAINED);
+        $response->setDestination($response->getReturn());
+        $response->setDeliverByBinding('INTERNAL');
 
         $this->_server->getBindingsModule()->send(
             $response,

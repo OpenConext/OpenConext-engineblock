@@ -46,10 +46,9 @@ return array(
     'close_question'        =>      'Sluit',
 
     //Help questions
-    'question_screen'                   =>      'Waarom dit scherm?',
-    'answer_screen'                     =>      '<p>Je kunt met je instellingsaccount inloggen bij deze dienst. In dit scherm geef je aan via welke instelling je wilt inloggen.</p>',
+		// general help questions
     'question_surfconext'               =>      'Wat is SURFconext?',
-    'answer_surfconext'                 =>      '<p>SURFconext is een verbindingsinfrastructuur die een aantal bouwstenen voor online samenwerking met elkaar verbindt. Die bouwstenen zijn services voor federatieve authenticatie (SURFfederatie), groepsbeheer (SURFteams), sociale netwerken en cloud applicaties van verschillende aanbieders. SURFfederatie is een centrale component die het mogelijk maakt om met je eigen instellingsaccount toegang te krijgen tot diensten van verschillende aanbieders. Deze componenten samen worden onder de noemer SURFconext aangeboden door SURFnet.</p>',
+    'answer_surfconext'                 =>      '<p>SURFconext is een verbindingsinfrastructuur die een aantal bouwstenen voor online samenwerking met elkaar verbindt. Die bouwstenen zijn services voor federatieve authenticatie, groepsbeheer, sociale netwerken en cloud applicaties van verschillende aanbieders. Met SURFconext is het mogelijk om met je eigen instellingsaccount toegang te krijgen tot diensten van verschillende aanbieders.</p>',
     'question_log_in'                   =>      'Hoe werkt inloggen via SURFconext?',
     'answer_log_in'                     =>      '<ul>
                             <li>Je selecteert in dit scherm je eigen instelling.</li>
@@ -62,16 +61,30 @@ return array(
 <br />
 Persoonsgegevens worden alleen verstrekt aan een dienstaanbieder wanneer dat noodzakelijk is voor het gebruik van de dienst. Contractuele afspraken tussen jouw instelling, SURFnet en de dienstaanbieder waarborgen dat er zorgvuldig wordt omgegaan met jouw persoonsgegevens.<br />
 <br />
-Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lezen op <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>. Heeft u vragen ten aanzien van het privacybeleid van SURFconext, mail deze dan naar de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lezen op <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>. Heb je vragen ten aanzien van het privacybeleid van SURFconext, mail deze dan naar de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
+
+    	// consent help questions
+    'question_consentscreen'           	=>      'Waarom dit scherm?',
+    'answer_consentscreen'             	=>      '<p>Om toegang te krijgen tot deze dienst is het noodzakelijk dat een aantal persoonlijke gegevens wordt gedeeld met deze dienst.</p>',
+    'question_consentinfo'           	=>      'Wat gebeurt er met mijn gegevens?',
+    'answer_consentinfo'             	=>      '<p>Indien je akkoord gaat met het verstrekken van je gegevens aan de dienst dan zullen de getoonde gegevens met deze dienst gedeeld worden. De dienstverlener zal de gegevens gebruiken en mogelijk opslaan voor een goede werking van de dienst. Op dit scherm vind je tevens een link naar de gebruiksvoorwaarden van de dienst en SURFconext welke meer informatie geven over de omgang met persoonlijke gegevens.</p>',
+    'question_consentno'           		=>      'Wat gebeurt er als ik mijn gegevens niet wil delen?',
+    'answer_consentno'             		=>      '<p>Als je niet akkoord gaat met het delen van je gegevens kun je geen gebruik maken van de dienst. De getoonde gegevens zullen in dit geval niet met de dienst worden gedeeld.</p>',
+    'question_consentagain'           	=>      'Ik heb eerder al toestemming gegeven voor het delen van mijn gegevens, waarom krijg ik deze vraag opnieuw?',
+    'answer_consentagain'             	=>      '<p>Indien de gegevens die doorgegeven worden aan deze dienst zijn gewijzigd zal er nogmaals gevraagd worden of je akkoord gaat met het delen van jouw gegevens.</p>',
+
+		// WAYF help questions
+    'question_screen'                   =>      'Waarom dit scherm?',
+    'answer_screen'                     =>      '<p>Je kunt met je instellingsaccount inloggen bij deze dienst. In dit scherm geef je aan via welke instelling je wilt inloggen.</p>',
     'question_institution_not_listed'   =>      'Ik zie mijn instelling er niet tussen staan, wat nu?',
-    'answer_institution_not_listed'     =>      '<p>Staat jouw instelling niet in de lijst? Dan is jouw instelling waarschijnlijk nog niet aangesloten bij de SURFfederatie. Ga terug naar de pagina van de dienst; soms biedt een dienst ook alternatieve manieren om in te loggen.</p>',
+    'answer_institution_not_listed'     =>      '<p>Staat jouw instelling niet in de lijst? Dan is jouw instelling waarschijnlijk nog niet aangesloten op SURFconext. Ga terug naar de pagina van de dienst; soms biedt een dienst ook alternatieve manieren om in te loggen.</p>',
     'question_institution_no_access'    =>      'Mijn instelling geeft geen toegang tot deze dienst, wat nu?',
-    'answer_institution_no_access'      =>      '<p>Het kan zijn dat je instelling wel is aangesloten op SURFfederatie maar (nog) geen afspraken heeft gemaakt met de dienstaanbieder over het gebruik van deze dienst. Wij zullen je verzoek doorsturen naar de verantwoordelijke binnen jouw instelling die de toegang tot diensten organiseert. Wellicht is jouw verzoek voor je instelling aanleiding om alsnog afspraken met deze dienstaanbieder te maken.</p>',
+    'answer_institution_no_access'      =>      '<p>Het kan zijn dat je instelling wel is aangesloten op SURFconext maar (nog) geen afspraken heeft gemaakt met de dienstaanbieder over het gebruik van deze dienst. Wij zullen je verzoek doorsturen naar de verantwoordelijke binnen jouw instelling die de toegang tot diensten organiseert. Wellicht is jouw verzoek voor je instelling aanleiding om alsnog afspraken met deze dienstaanbieder te maken.</p>',
     'question_asked_institution_access'  =>      'Ik heb toegang aangevraagd voor mijn instelling, maar mijn instelling geeft nog steeds geen toegang. Waarom niet?',
     'answer_asked_institution_access'    =>      '<p>Blijkbaar is jouw instelling nog niet tot een overeenkomst met de dienstaanbieder gekomen of, het gebruik van deze dienst is niet wenselijk binnen jouw instelling. SURFnet heeft geen controle over de snelheid waarmee je antwoord of toegang krijgt. Die verantwoordelijkheid en zeggenschap ligt bij de instelling.</p>',
     'question_cannot_select'            =>      'Ik kan in mijn browser mijn instelling niet selecteren, wat nu?',
-    'answer_cannot_select'              =>      '<p>Het keuzescherm van SURFfederatie is te gebruiken in de meest gangbare browsers waaronder, Internet Explorer 7 en 8, Firefox, Chrome en Safari. Andere browsers worden mogelijk niet ondersteund. Verder moet je browser het gebruik van cookies en javascript toestaan.</p>',
+    'answer_cannot_select'              =>      '<p>Het keuzescherm van SURFconext is te gebruiken in de meest gangbare browsers waaronder, Internet Explorer, Firefox, Chrome en Safari. Andere browsers worden mogelijk niet ondersteund. Verder moet je browser het gebruik van cookies en javascript toestaan.</p>',
 
     //Form
     'sorry'                 => 'Helaas,',
@@ -141,44 +154,6 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_no_consent'                => 'Nog niet uitgedeeld',
     'profile_consent'                   => 'Consent gegeven',
     'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
-
-    //VO Manage
-    'vomanage_header'                   => 'SURFconext - VO Gebruikersattributen',
-    'vomanage_sub_header'               => 'VO Gebruikersattributen',
-    'vomanage_index_intro'              => 'Beheer de gebruikersattributen van een Virtuele Organisatie.',
-    'vomanage_index_add'                => 'Toevoegen',
-    'vomanage_index_edit'               => 'Bewerken',
-    'vomanage_index_delete'             => 'Verwijderen',
-    'vomanage_index_selectvo'           => 'Andere VO selecteren',
-    'vomanage_selectvo_intro'           => 'Selecteer eerst een Virtuele Organisatie.',
-    'vomanage_selectvo_header'          => 'Beschikbare Virtuele Organisaties:',
-    'vomanage_selectvo_submit'          => 'Selecteer',
-    'vomanage_add_intro'                => 'Maak een nieuw gebruikersattribuut aan.',
-    'vomanage_add_newvalue'             => 'Toevoegen',
-    'vomanage_add_save'                 => 'Opslaan',
-    'vomanage_add_cancel'               => 'Annuleren',
-    'vomanage_edit_intro'               => 'Bewerk een gebruikersattribuut.',
-    'vomanage_edit_save'                => 'Opslaan',
-    'vomanage_edit_cancel'              => 'Annuleren',
-    'vomanage_delete_intro'             => 'Verwijder een gebruikersattribuut.',
-    'vomanage_delete_question'          => 'Weet je zeker dat je dit attribuut wilt verwijderen?',
-    'vomanage_delete_back'              => 'Terug naar het overzicht',
-    'vomanage_delete_success'           => 'Het gebruikersattribuut is succesvol verwijderd.',
-    'vomanage_delete_fail'              => 'Er is een fout opgetreden bij het verwijderen van het gebruikersattribuut.',
-    'vomanage_save_success'             => 'Het gebruikersattribuut is succesvol opgeslagen.',
-    'vomanage_save_fail'                => 'Er is een fout opgetreden bij het opslaan van het gebruikersattribuut.',
-    'vomanage_save_back'                => 'Terug naar het overzicht',
-    'vomanage_of'                       => 'van',
-    'vomanage_yes'                      => '',
-    'vomanage_no'                       => '',
-    'vomanage_novalues'                 => '- geen waarden -',
-    // form errors
-    'Field is obligatory, but no input given' => 'Verplicht veld',
-    'xor_error'                         => 'Eén van deze velden moet een geldige waarde bevatten.',
-    // SQL errors
-    '23000'                             => 'Fout: Deze combinatie bestaat al.',
-
-
 
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',

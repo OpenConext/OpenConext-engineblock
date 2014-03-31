@@ -73,7 +73,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
-            $this->_server->getNewId(),
+            $this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_METADATA),
             $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
             false
         );
@@ -104,19 +104,4 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $this->_server->sendOutput($xml);
     }
 
-    /**
-     * Disable VO context and do something, then reinstate the VO context.
-     *
-     * @param callable $callbackFn Callback function to execute when no VO Context is set
-     * @todo does not seem to be used, remove?
-     */
-    protected function _withNoVoContext($callbackFn)
-    {
-        $voContext = $this->_server->getVirtualOrganisationContext();
-        $this->_server->setVirtualOrganisationContext(null);
-
-        $callbackFn();
-
-        $this->_server->setVirtualOrganisationContext($voContext);
-    }
 }

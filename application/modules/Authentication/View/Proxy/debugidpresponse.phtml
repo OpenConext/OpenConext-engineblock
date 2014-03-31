@@ -25,7 +25,7 @@
 
 /**
  * Injected:
- * @var array $response
+ * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
  * @var array $idp
  * @var array $attributes
  * @var EngineBlock_Corto_ProxyServer $this
@@ -50,9 +50,9 @@ $attributesValidated = $validator->validate();
 <?php echo $this->t('attributes_validation_succeeded'); ?>
 <?php else: ?>
     <?php if (count($validator->getErrors()) > 0): ?>
-<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png' alt="" style="vertical-align: bottom" />
+<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="" style="vertical-align: bottom" />
     <?php else: ?>
-<img src="/media/famfamfam_silk_icons_v013/icons/error.png'" alt="" style="vertical-align: bottom" />
+<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="" style="vertical-align: bottom" />
     <?php endif; ?>
 
 <?php echo $this->t('attributes_validation_failed'); ?>
@@ -106,7 +106,7 @@ $attributesValidated = $validator->validate();
         <th>NameID</th>
 
         <td>
-            <?php echo htmlentities($response['saml:Assertion']['saml:Subject']['saml:NameID']['__v'], ENT_COMPAT, 'UTF-8'); ?>
+            <?php echo htmlentities($response->getAssertion()->getNameId(), ENT_COMPAT, 'UTF-8'); ?>
         </td>
     </tr>
 </table>

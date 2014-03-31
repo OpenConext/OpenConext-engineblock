@@ -56,22 +56,25 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
 
     public function execute()
     {
-        $this->_response['__']['IntendedNameId'] = $this->_collabPersonId;
+        $this->_response->setIntendedNameId($this->_collabPersonId);
 
         $entityId = ($this->_type === self::TYPE_IDP) ?
-            $this->_response['saml:Issuer']['__v'] :
-            $this->_request['saml:Issuer']['__v'];
+            $this->_response->getIssuer() :
+            $this->_request->getIssuer();
 
         // Try entity specific file based manipulation from Service Registry
         $manipulator = new EngineBlock_Attributes_Manipulator_ServiceRegistry($this->_type);
         $manipulated = $manipulator->manipulate(
             $entityId,
-            $this->_response['__']['IntendedNameId'],
+            $this->_collabPersonId,
             $this->_responseAttributes,
             $this->_response,
             $this->_idpMetadata,
             $this->_spMetadata
         );
+
+        $this->_response->setIntendedNameId($this->_collabPersonId);
+
         return (bool)$manipulated;
     }
 }

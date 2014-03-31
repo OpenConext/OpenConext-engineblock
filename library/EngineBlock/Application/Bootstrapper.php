@@ -38,19 +38,19 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
-        $this->_setEnvironmentIdByEnvironment();
+        $this->_bootstrapEnvironmentIdByEnvironment();
 
         $this->_bootstrapDiContainer();
-
         $this->_bootstrapConfiguration();
 
-        $this->_setEnvironmentIdByDetection();
-
+        $this->_bootstrapEnvironmentIdByDetection();
         $this->_bootstrapEnvironmentConfiguration();
 
         $this->_bootstrapPhpSettings();
         $this->_bootstrapErrorReporting();
         $this->_bootstrapLogging();
+
+        $this->_bootstrapSuperGlobalOverrides();
         $this->_bootstrapHttpCommunication();
 
         $this->_bootstrapLayout();
@@ -61,14 +61,48 @@ class EngineBlock_Application_Bootstrapper
         return $this;
     }
 
-    protected function _bootstrapDiContainer() {
-        if (ENGINEBLOCK_ENV == 'testing') {
-            $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
-        } elseif (ENGINEBLOCK_ENV == 'functional-testing') {
-            $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
-        } else {
-            $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
+    protected function _bootstrapEnvironmentIdByEnvironment()
+    {
+        // Get from environment variable (from Apache or the shell)
+        if (!defined('ENGINEBLOCK_ENV') && getenv('ENGINEBLOCK_ENV')) {
+            define('ENGINEBLOCK_ENV', getenv('ENGINEBLOCK_ENV'));
         }
+        // Get from predefined constant
+        if (defined('ENGINEBLOCK_ENV')) {
+            $this->_application->setEnvironmentId(ENGINEBLOCK_ENV);
+        }
+    }
+
+    protected function _bootstrapDiContainer()
+    {
+        if (defined('ENGINEBLOCK_ENV') && ENGINEBLOCK_ENV === 'testing') {
+            $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
+            return;
+        }
+
+        if (defined('ENGINEBLOCK_ENV') && ENGINEBLOCK_ENV === 'functional-testing') {
+            $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
+            return;
+        }
+
+        $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
+    }
+
+    /**
+     * We need this because we may need to trick EngineBlock into thinking it's hosting on a different URL.
+     *
+     * Known uses:
+     * * SAML Replaying with OpenConext-Engine-Test-Stand.
+     *
+     */
+    protected function _bootstrapSuperGlobalOverrides()
+    {
+        $superGlobalManager = $this->_application->getDiContainer()->getSuperGlobalManager();
+        if (!$superGlobalManager) {
+            return;
+        }
+
+        $superGlobalManager->injectOverrides();
     }
 
     protected function _bootstrapConfiguration()
@@ -81,7 +115,7 @@ class EngineBlock_Application_Bootstrapper
     }
 
     /**
-     * return a list of config files (default and environment overrides) that shoud be loaded
+     * Return a list of config files (default and environment overrides) that should be loaded
      *
      * @return array
      */
@@ -93,7 +127,7 @@ class EngineBlock_Application_Bootstrapper
         );
     }
 
-    protected function _setEnvironmentIdByDetection()
+    protected function _bootstrapEnvironmentIdByDetection()
     {
         if ($this->_application->getEnvironmentId()) {
             // Detection not required.
@@ -272,17 +306,5 @@ class EngineBlock_Application_Bootstrapper
         }
 
         $this->_application->setTranslator($translate);
-    }
-
-    protected function _setEnvironmentIdByEnvironment()
-    {
-        // Get from environment variable (from Apache or the shell)
-        if (!defined('ENGINEBLOCK_ENV') && getenv('ENGINEBLOCK_ENV')) {
-            define('ENGINEBLOCK_ENV', getenv('ENGINEBLOCK_ENV'));
-        }
-        // Get from predefined constant
-        if (defined('ENGINEBLOCK_ENV')) {
-            $this->_application->setEnvironmentId(ENGINEBLOCK_ENV);
-        }
     }
 }

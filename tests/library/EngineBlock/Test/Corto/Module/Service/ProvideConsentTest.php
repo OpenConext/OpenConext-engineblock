@@ -44,7 +44,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
             ->send(Phake::capture($message), Phake::anyParameters());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:prior', $message['_Consent']);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:prior', $message->getConsent());
     }
 
     public function testConsentIsSkippedWhenGloballyDisabled()
@@ -63,7 +63,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
             ->send(Phake::capture($message), Phake::anyParameters());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message['_Consent']);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message->getConsent());
     }
 
     public function testConsentIsSkippedWhenDisabledPerSp()
@@ -84,7 +84,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
             ->send(Phake::capture($message), Phake::anyParameters());
-        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message['_Consent']);
+        $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message->getConsent());
     }
 
     public function testFilteredAttributesAreUsedToRenderTemplate()
@@ -141,19 +141,20 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     {
         // Mock bindings module
         $bindingsModuleMock = Phake::mock('EngineBlock_Corto_Module_Bindings');
-        $responseFixture = array(
-            '_ID' => null,
-            'saml:Assertion' => array(
-                'saml:AttributeStatement' => array(
-                    array(
-                        'saml:Attribute' => array()
-                    )
-                )
+        $assertion = new SAML2_Assertion();
+        $assertion->setAttributes(array(
+            'urn:org:openconext:corto:internal:sp-entity-id' => array(
+                'testSp'
             ),
-            '__' => array(
-                'OriginalIssuer' => 'testIdP'
+            'urn:mace:dir:attribute-def:cn' => array(
+                null
             )
-        );
+        ));
+        $responseFixture = new SAML2_Response();
+        $responseFixture->setAssertions(array($assertion));
+        $responseFixture = new EngineBlock_Saml2_ResponseAnnotationDecorator($responseFixture);
+        $responseFixture->setOriginalIssuer('testIdP');
+
         Phake::when($bindingsModuleMock)
             ->receiveResponse()
             ->thenReturn($responseFixture);

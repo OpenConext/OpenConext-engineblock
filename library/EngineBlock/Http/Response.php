@@ -27,8 +27,17 @@ class EngineBlock_Http_Response
 {
     const HTTP_HEADER_RESPONSE_LOCATION = 'Location';
 
+    protected $_statusCode = 200;
+    protected $_statusMessage = 'Okay';
     protected $_headers = array();
     protected $_body    = '';
+
+    public function setStatus($code, $message)
+    {
+        $this->_statusCode = $code;
+        $this->_statusMessage = $message;
+        return $this;
+    }
 
     public function setHeader($name, $value)
     {
@@ -56,6 +65,7 @@ class EngineBlock_Http_Response
 
     public function send()
     {
+        header('HTTP/1.1 ' . $this->_statusCode . ' ' . $this->_statusMessage, true, $this->_statusCode);
         foreach ($this->_headers as $headerName => $headerValue) {
             header("$headerName: $headerValue");
         }

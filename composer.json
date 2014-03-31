@@ -1,27 +1,45 @@
 {
     "name": "surfnet/openconextengineblock",
     "description": "Surfnet OpenConext SAML proxy",
+    "type": "project",
+    "keywords": ["saml", "proxy", "openconext", "SURFnet"],
+    "homepage": "http://www.openconext.org",
+    "license": "Apache-2.0",
+    "support": {
+        "email": "openconext-users@list.surfnet.nl",
+        "issues": "https://github.com/OpenConext/OpenConext-engineblock/issues",
+        "source": "https://github.com/OpenConext/OpenConext-engineblock"
+    },
+    "require": {
+        "apache/shindig":"1094333",
+        "cssmin/cssmin": "3.0.1",
+        "dbpatch/dbpatch": "~1.2",
+        "kriswallsmith/assetic": "1.2.*@dev",
+        "mrclay/minify": "~2.1",
+        "openconext/engineblock-fixtures": "*",
+        "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
+        "pimple/pimple": "~2.0",
+        "simplesamlphp/saml2": "~0.4",
+        "simplesamlphp/simplesamlphp": "~1.12",
+        "zendframework/zendframework1":"~1.12"
+    },
+    "require-dev": {
+        "behat/behat": "2.4.6",
+        "behat/mink": "1.5.0",
+        "behat/mink-extension": "1.1.4",
+        "behat/mink-goutte-driver": "1.0.9",
+        "phake/phake": "2.0.0-alpha2",
+        "phpunit/phpunit": "3.7.19"
+    },
+    "scripts": {
+        "pre-autoload-dump": [
+            "bin/composer/dbpatch-post-install.sh",
+            "bin/composer/simplesamlphp-post-install.sh",
+            "bin/composer/zend-framework-post-install.sh",
+            "bin/composer/shindig-post-install.sh"
+        ]
+    },
     "repositories": [
-        {
-            "type": "composer",
-            "url": "https://raw.github.com/cpliakas/simplesamlphp-composer/master"
-        },
-        {
-            "type":"package",
-            "package": {
-                "name": "zendframework/zendframework1",
-                "version": "1.10.9",
-                "dist": {
-                    "url": "https://packages.zendframework.com/releases/ZendFramework-1.10.9/ZendFramework-1.10.9-minimal.zip",
-                    "type": "zip"
-                },
-                "autoload": {
-                    "psr-0": {
-                        "Zend_": "library/"
-                    }
-                }
-            }
-        },
         {
             "type": "package",
             "package": {
@@ -48,35 +66,12 @@
                 "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
                 "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
             }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/OpenConext/OpenConext-engineblock-fixtures"
         }
-
     ],
-    "require": {
-        "pimple/pimple": "1.0.2",
-        "simplesamlphp/simplesamlphp": "1.9.0",
-        "dbpatch/dbpatch": "1.1.1",
-        "zendframework/zendframework1":"1.10.9",
-        "apache/shindig":"1094333",
-        "kriswallsmith/assetic": "1.2.*@dev",
-        "mrclay/minify": "2.1.7",
-        "cssmin/cssmin": "3.0.1"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "3.7.19",
-        "phake/phake": "2.0.0-alpha2",
-        "behat/behat": "2.4.6",
-        "behat/mink": "1.5.0",
-        "behat/mink-extension": "1.1.4",
-        "behat/mink-goutte-driver": "1.0.9"
-    },
-    "scripts": {
-        "pre-autoload-dump": [
-            "bin/composer/dbpatch-post-install.sh",
-            "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh",
-            "bin/composer/shindig-post-install.sh"
-        ]
-    },
     "autoload": {
         "psr-0": {
             "DbPatch_": "vendor/dbpatch/dbpatch/src/",
@@ -94,8 +89,7 @@
             "Logout_":"application/modules/",
             "Profile_":"application/modules/",
             "Service_":"application/modules/",
-            "Social_":"application/modules/",
-            "VoManage_":"application/modules/"
+            "Social_":"application/modules/"
         }
     }
 }

@@ -56,13 +56,14 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
         $this->setCollabPersonId($subjectId);
 
-        $this->_response['__']['collabPersonId'] = $subjectId;
-        $this->_response['__']['OriginalNameId'] = $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'];
+        $this->_response->setCollabPersonId($subjectId);
+        $this->_response->setOriginalNameId($this->_response->getAssertion()->getNameId());
+
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
-        $this->_response['saml:Assertion']['saml:Subject']['saml:NameID'] = array(
-            '_Format' => EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
-            '__v'     => $subjectId
-        );
+        $this->_response->getAssertion()->setNameId(array(
+            'Value' => $subjectId,
+            'Format' => SAML2_Const::NAMEID_PERSISTENT,
+        ));
     }
 
     protected function _getProvisioning()

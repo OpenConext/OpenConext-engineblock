@@ -48,7 +48,6 @@ class EngineBlock_Corto_Adapter
 
     public function singleSignOn($idPProviderHash)
     {
-        $this->_addRemoteEntitiesFilter(array($this, '_annotateRequestWithImplicitVo'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
         $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestScopingRequesterId'));
@@ -123,11 +122,6 @@ class EngineBlock_Corto_Adapter
         $this->_callCortoServiceUri('processedAssertionConsumerService');
     }
 
-    public function getVirtualOrganisationContext()
-    {
-        return $this->_voContext;
-    }
-
     public function setVirtualOrganisationContext($virtualOrganisation)
     {
         $this->_voContext = $virtualOrganisation;
@@ -136,7 +130,7 @@ class EngineBlock_Corto_Adapter
     /**
      * Get the SAML2 Authn Request
      *
-     * @return array $request
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      */
     protected function _getRequestInstance() {
         // Use the binding module to get the request
@@ -147,42 +141,6 @@ class EngineBlock_Corto_Adapter
         // get the request again from the binding module, it would fail.
         $bindingModule->registerInternalBindingMessage('SAMLRequest', $request);
         return $request;
-    }
-
-    /**
-     * Detect Implicit VOs and annotate the Authn Request if they are detected
-     *
-     * Heinous abuse of the filter functionality.
-     *
-     * @param array $entities
-     * @throws EngineBlock_Exception
-     */
-    protected function _annotateRequestWithImplicitVo(array $entities)
-    {
-        $request = $this->_getRequestInstance();
-        $spEntityId = $request['saml:Issuer']['__v'];
-        if (!isset($entities[$spEntityId]['VoContext']) || !$entities[$spEntityId]['VoContext']) {
-            return $entities;
-        }
-
-        $implicitVo = $entities[$spEntityId]['VoContext'];
-
-        // If we ALSO have an explicit VO
-        if (isset($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX])) {
-            $explicitVo = $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX];
-
-            // Check if they are unequal (no explicit VO or the same VO is okay)
-            if ($implicitVo !== $explicitVo) {
-                throw new EngineBlock_Corto_Exception_VoMismatch(
-                    "Explicit VO '$explicitVo' does not match implicit VO '$implicitVo'!"
-                );
-            }
-        }
-
-        // Annotate and store the request
-        $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['VoContextImplicit'] = $implicitVo;
-        $this->_proxyServer->getBindingsModule()->registerInternalBindingMessage('SAMLRequest', $request);
-        return $entities;
     }
 
     /**
@@ -305,25 +263,15 @@ class EngineBlock_Corto_Adapter
      */
     protected function _getRequestScopingRequesterIds() {
         $request = $this->_getRequestInstance();
-        $requesterIds = array();
-        if (!empty($request['samlp:Scoping']['samlp:RequesterID'])) {
-            foreach ($request['samlp:Scoping']['samlp:RequesterID'] as $requesterIdElement) {
-                $requesterIds[] = $requesterIdElement['__v'];
-            }
-            return $requesterIds;
-        }
-        else {
-            return $requesterIds;
-        }
+        /** @var SAML2_AuthnRequest $request */
+        return $request->getRequesterID();
     }
 
     /**
      * @return string $issuerSpEntityId
      */
     protected function _getIssuerSpEntityId() {
-        $request = $this->_getRequestInstance();
-        $issuerSpEntityId = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-        return $issuerSpEntityId;
+        return $this->_getRequestInstance()->getIssuer();
     }
 
     /**
@@ -390,10 +338,6 @@ class EngineBlock_Corto_Adapter
                 'public'    => $application->getConfiguration()->encryption->key->public,
                 'private'   => $application->getConfiguration()->encryption->key->private,
             ),
-            // Note that we use an input filter because consent requires a persistent NameID
-            // and we only get that after provisioning
-            'infilter'  => array(new EngineBlock_Corto_Filter_Input($this), 'filter'),
-            'outfilter' => array(new EngineBlock_Corto_Filter_Output($this), 'filter'),
             'Processing' => array(
                 'Consent' => array(
                     'Binding'  => 'INTERNAL',
@@ -612,6 +556,11 @@ class EngineBlock_Corto_Adapter
     public function getServiceRegistryAdapter()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
+    }
+
+    public function getDateTime()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTimeProvider();
     }
 
     protected function _processProxyServerResponse()
