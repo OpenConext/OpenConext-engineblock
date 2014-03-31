@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "7ec002ab4790583d6062df8c75a6dd93",
+    "hash": "2631e28d6f8f6954b0ee19a10fc38a1f",
     "packages": [
         {
             "name": "apache/shindig",
@@ -85,12 +85,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "d013aae51baf893fe8d38b41f2d24db03e1cfbf7"
+                "reference": "f7ee64e4497543bfec45101dac34907c415459af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/d013aae51baf893fe8d38b41f2d24db03e1cfbf7",
-                "reference": "d013aae51baf893fe8d38b41f2d24db03e1cfbf7",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/f7ee64e4497543bfec45101dac34907c415459af",
+                "reference": "f7ee64e4497543bfec45101dac34907c415459af",
                 "shasum": ""
             },
             "require": {
@@ -150,20 +150,20 @@
                 "compression",
                 "minification"
             ],
-            "time": "2014-02-04 10:36:39"
+            "time": "2014-03-30 18:38:34"
         },
         {
             "name": "mrclay/minify",
-            "version": "2.1.7",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mrclay/minify.git",
-                "reference": "db7fe244932ea77cf1438965693672ea12b33da8"
+                "reference": "d245bca4987dec197d1e6d7dc117614b60ff7494"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mrclay/minify/zipball/db7fe244932ea77cf1438965693672ea12b33da8",
-                "reference": "db7fe244932ea77cf1438965693672ea12b33da8",
+                "url": "https://api.github.com/repos/mrclay/minify/zipball/d245bca4987dec197d1e6d7dc117614b60ff7494",
+                "reference": "d245bca4987dec197d1e6d7dc117614b60ff7494",
                 "shasum": ""
             },
             "require": {
@@ -182,7 +182,7 @@
             ],
             "authors": [
                 {
-                    "name": "Steve Clay",
+                    "name": "Stephen Clay",
                     "email": "steve@mrclay.org",
                     "homepage": "http://www.mrclay.org/",
                     "role": "Developer"
@@ -190,7 +190,7 @@
             ],
             "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
             "homepage": "http://code.google.com/p/minify/",
-            "time": "2013-07-23 19:58:28"
+            "time": "2014-03-12 12:54:23"
         },
         {
             "name": "openconext/engineblock-fixtures",
@@ -377,16 +377,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v0.4.0",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "3cfedfc764de05f0a061e3c07668a24e839d9cf8"
+                "reference": "3eb0798f12c16c27f912aa594494ca17d9a30c56"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/3cfedfc764de05f0a061e3c07668a24e839d9cf8",
-                "reference": "3cfedfc764de05f0a061e3c07668a24e839d9cf8",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/3eb0798f12c16c27f912aa594494ca17d9a30c56",
+                "reference": "3eb0798f12c16c27f912aa594494ca17d9a30c56",
                 "shasum": ""
             },
             "require": {
@@ -423,20 +423,20 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2014-02-21 10:09:30"
+            "time": "2014-02-26 11:19:09"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v1.11.1",
+            "version": "v1.12.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/relaxnow/simplesamlphp-fork-r3374.git",
-                "reference": "b9ef1941861fa712f9b8b39e65e337f60c6ecc8b"
+                "url": "https://github.com/simplesamlphp/simplesamlphp.git",
+                "reference": "b5ff6f0d44be3ef7ac29087368e6570fbfefbb36"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/relaxnow/simplesamlphp-fork-r3374/zipball/b9ef1941861fa712f9b8b39e65e337f60c6ecc8b",
-                "reference": "b9ef1941861fa712f9b8b39e65e337f60c6ecc8b",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/b5ff6f0d44be3ef7ac29087368e6570fbfefbb36",
+                "reference": "b5ff6f0d44be3ef7ac29087368e6570fbfefbb36",
                 "shasum": ""
             },
             "require": {
@@ -453,13 +453,16 @@
                     "lib/_autoload_modules.php"
                 ]
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "LGPL-2.1"
             ],
             "authors": [
                 {
                     "name": "Andreas Åkre Solberg",
-                    "email": "andreas.solberg@uninett.no"
+                    "email": "andreas.solberg@uninett.no",
+                    "homepage": "http://rnd.feide.no",
+                    "role": "Developer"
                 },
                 {
                     "name": "Olav Morken",
@@ -469,20 +472,16 @@
             "description": "A PHP implementation of SAML 2.0 service provider and identity provider functionality. And is also compatible with Shibboleth 1.3 and 2.0.",
             "homepage": "http://simplesamlphp.org",
             "keywords": [
+                "OpenId",
+                "SAML2",
                 "aselect",
                 "idp",
                 "oauth",
-                "openid",
-                "saml2",
                 "shibboleth",
                 "sp",
                 "ws-federation"
             ],
-            "support": {
-                "issues": "https://code.google.com/p/simplesamlphp/issues/list",
-                "source": "https://code.google.com/p/simplesamlphp"
-            },
-            "time": "2014-02-21 14:18:34"
+            "time": "2014-03-24 13:26:31"
         },
         {
             "name": "symfony/process",
@@ -535,38 +534,34 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.3",
+            "version": "1.12.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf1.git",
-                "reference": "3e31137181d121d03cb1117fd95b07027cfa4bea"
+                "reference": "828191781995123e2a5888a386ed827a4cd7695a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf1/zipball/3e31137181d121d03cb1117fd95b07027cfa4bea",
-                "reference": "3e31137181d121d03cb1117fd95b07027cfa4bea",
+                "url": "https://api.github.com/repos/zendframework/zf1/zipball/828191781995123e2a5888a386ed827a4cd7695a",
+                "reference": "828191781995123e2a5888a386ed827a4cd7695a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.11"
             },
+            "require-dev": {
+                "phpunit/dbunit": "1.3.*",
+                "phpunit/phpunit": "3.7.*"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-trunk": "1.12.x-dev",
-                    "dev-release-1.0": "1.0.x-dev",
-                    "dev-release-1.5": "1.5.x-dev",
-                    "dev-release-1.6": "1.6.x-dev",
-                    "dev-release-1.7": "1.7.x-dev",
-                    "dev-release-1.8": "1.8.x-dev",
-                    "dev-release-1.9": "1.9.x-dev",
-                    "dev-release-1.10": "1.10.x-dev",
-                    "dev-release-1.11": "1.11.x-dev"
+                    "dev-master": "1.12.x-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
-                    "Zend": "library/"
+                    "Zend_": "library/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -582,7 +577,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2013-03-13 16:53:12"
+            "time": "2014-03-07 16:13:40"
         }
     ],
     "packages-dev": [
@@ -1243,16 +1238,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "1.2.15",
+            "version": "1.2.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "6ba4ed2895d538a039d5d5866edc4ec0424c7852"
+                "reference": "6ef2bf3a1c47eca07ea95f0d8a902a6340390b34"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6ba4ed2895d538a039d5d5866edc4ec0424c7852",
-                "reference": "6ba4ed2895d538a039d5d5866edc4ec0424c7852",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/6ef2bf3a1c47eca07ea95f0d8a902a6340390b34",
+                "reference": "6ef2bf3a1c47eca07ea95f0d8a902a6340390b34",
                 "shasum": ""
             },
             "require": {
@@ -1300,7 +1295,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2014-02-03 07:44:47"
+            "time": "2014-03-28 10:53:45"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -1437,16 +1432,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.2.1",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "5220af2a7929aa35cf663d97c89ad3d50cf5fa3e"
+                "reference": "ad4e1e23ae01b483c16f600ff1bebec184588e32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/5220af2a7929aa35cf663d97c89ad3d50cf5fa3e",
-                "reference": "5220af2a7929aa35cf663d97c89ad3d50cf5fa3e",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/ad4e1e23ae01b483c16f600ff1bebec184588e32",
+                "reference": "ad4e1e23ae01b483c16f600ff1bebec184588e32",
                 "shasum": ""
             },
             "require": {
@@ -1483,7 +1478,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2013-09-13 04:58:23"
+            "time": "2014-03-03 05:10:30"
         },
         {
             "name": "phpunit/phpunit",
@@ -2044,17 +2039,17 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.3.10",
+            "version": "v2.3.11",
             "target-dir": "Symfony/Component/Finder",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Finder.git",
-                "reference": "c39a28f2e6bcea817dd696993d528b67917f324e"
+                "reference": "df41b68d0795949c6edcf3fb331c8147b7cc4201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Finder/zipball/c39a28f2e6bcea817dd696993d528b67917f324e",
-                "reference": "c39a28f2e6bcea817dd696993d528b67917f324e",
+                "url": "https://api.github.com/repos/symfony/Finder/zipball/df41b68d0795949c6edcf3fb331c8147b7cc4201",
+                "reference": "df41b68d0795949c6edcf3fb331c8147b7cc4201",
                 "shasum": ""
             },
             "require": {
@@ -2089,7 +2084,7 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-07 13:19:25"
+            "time": "2014-02-20 15:15:12"
         },
         {
             "name": "symfony/translation",
