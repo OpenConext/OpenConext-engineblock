@@ -221,7 +221,6 @@ if ($preselectedIdp) {
         <?php
             $preselectedIdpJson = isset($preselectedIdp) ? 'discoveryScreen.setSelectedEntityId('.json_encode($preselectedIdp).');' : '';
 
-            $uri = $_SERVER['REQUEST_URI'];
             echo "
             var discoveryScreen = new Discover();
             discoveryScreen.setLanguage('". $lang ."');
@@ -229,7 +228,6 @@ if ($preselectedIdp) {
             discoveryScreen.setIdpList(". json_encode($idpList) .");
             discoveryScreen.setSpEntityId(". json_encode($metaDataSP['EntityID']) .");
             discoveryScreen.setSpName(". json_encode($displayName) .");
-            discoveryScreen.setUri('". json_encode($uri). "');
             ". $preselectedIdpJson ."
             discoveryScreen.show();"
 
