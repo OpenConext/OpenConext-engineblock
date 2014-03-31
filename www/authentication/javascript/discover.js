@@ -41,9 +41,6 @@ var Discover = function () {
         setSpName: function (spName) {
             library.spName = spName;
         },
-        setUri: function (uri) {
-            library.uri = uri;
-        },
         setSelectedEntityId: function (selectedEntityId) {
             library.selectedEntityId = selectedEntityId;
         },
@@ -119,7 +116,6 @@ var Discover = function () {
         spName: '',
         selectedId: '',
         selectedEntityId: '',
-        uri: '',
 
         selectIdpJSON: function () {
             for (var idp in this.idpList) {
