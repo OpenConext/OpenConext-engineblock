@@ -305,6 +305,10 @@ class EngineBlock_UserDirectory
         }
 
         if ($user[self::LDAP_ATTR_COLLAB_PERSON_HASH] === $this->_getCollabPersonHash($newAttributes)) {
+            $now = date(DATE_RFC822);
+            $newAttributes = $user + $newAttributes;
+            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
+
             return $newAttributes;
         }
 
