@@ -117,7 +117,7 @@ class EngineBlock_UserDirectory
     public function registerUser(array $saml2attributes, array $idpEntityMetadata)
     {
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
-        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes);
+        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata);
 
         $uid = $this->_getCollabPersonId($ldapAttributes);
         $users = $this->findUsersByIdentifier($uid);
@@ -231,7 +231,7 @@ class EngineBlock_UserDirectory
         return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
     }
 
-    protected function _enrichLdapAttributes($ldapAttributes)
+    protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata)
     {
         if (!isset($ldapAttributes['cn'])) {
             $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
@@ -242,6 +242,9 @@ class EngineBlock_UserDirectory
         if (!isset($ldapAttributes['sn'])) {
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
         }
+        $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
+            $ldapAttributes, $saml2attributes, $idpEntityMetadata
+        )? 'TRUE' : 'FALSE');
         return $ldapAttributes;
     }
 
@@ -251,9 +254,6 @@ class EngineBlock_UserDirectory
 
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonId($newAttributes);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_UUID]          = $this->_getCollabPersonUuid($newAttributes);
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
-            $newAttributes, $saml2attributes, $idpEntityMetadata
-        )? 'TRUE' : 'FALSE');
 
         $now = date(DATE_RFC822);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_REGISTERED]    = $now;
@@ -309,12 +309,6 @@ class EngineBlock_UserDirectory
             $now = date(DATE_RFC822);
             $newAttributes = $user + $newAttributes;
             $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
-            $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
-                $newAttributes, $saml2attributes, $idpEntityMetadata
-            )? 'TRUE' : 'FALSE');
-
-            $dn = $this->_getDnForLdapAttributes($newAttributes);
-            $this->_getLdapClient()->update($dn, $newAttributes);
 
             return $newAttributes;
         }
@@ -325,9 +319,6 @@ class EngineBlock_UserDirectory
         $newAttributes = array_merge($user, $newAttributes);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
-            $newAttributes, $saml2attributes, $idpEntityMetadata
-        )? 'TRUE' : 'FALSE');
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
         $this->_getLdapClient()->update($dn, $newAttributes);
