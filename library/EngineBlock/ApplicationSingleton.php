@@ -179,13 +179,13 @@ class EngineBlock_ApplicationSingleton
             $severity,
             $additionalInfo
         );
+        // Note that it it is possible that the event is not logged for various reasons
+        // Getting the last event this way bypasses the queue which is possibly empty
+        $lastEvent = $log->getLastEvent();
 
         // Store some valuable debug info in session so it can be displayed on feedback pages
-        $queue = $log->getQueueWriter()->getStorage()->getQueue();
-        $lastEvent = end($queue);
-        if ($lastEvent) {
-            $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
-        }
+        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
+
         // flush all messages in queue, something went wrong!
         $log->getQueueWriter()->flush('error caught');
 
