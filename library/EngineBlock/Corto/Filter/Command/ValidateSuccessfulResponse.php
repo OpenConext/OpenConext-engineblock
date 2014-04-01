@@ -32,11 +32,11 @@ class EngineBlock_Corto_Filter_Command_ValidateSuccessfulResponse extends Engine
 
     public function execute()
     {
-        $statusCode = $this->_response['samlp:Status']['samlp:StatusCode']['_Value'];
+        $status = $this->_response->getStatus();
+        $statusCode = $status['Code'];
         if ($statusCode !== self::SAML2_STATUS_CODE_SUCCESS) {
             // Idp returned an error
-
-            $statusMessage = $this->_response['samlp:Status']['samlp:StatusMessage']['__v'];
+            $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
 
             $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
                 'Response received with Status: ' .

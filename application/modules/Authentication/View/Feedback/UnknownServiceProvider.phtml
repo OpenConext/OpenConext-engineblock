@@ -42,6 +42,9 @@ $layout->footerText = $this->t('footer');
 
 // Add feedback info from url
 $customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
+if (!isset($_SESSION['feedbackInfo'])) {
+    $_SESSION['feedbackInfo'] = array();
+}
 $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
 
 require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

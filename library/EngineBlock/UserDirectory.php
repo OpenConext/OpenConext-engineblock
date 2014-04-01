@@ -31,8 +31,7 @@ class EngineBlock_UserDirectory
 {
     const URN_COLLAB_PERSON_NAMESPACE               = 'urn:collab:person';
     const URN_IS_MEMBER_OF                          = 'urn:mace:dir:attribute-def:isMemberOf';
-    const URN_COLLAB_ORG_SURF                       = 'urn:collab:org:surf.nl';
-    
+
     const LDAP_CLASS_COLLAB_PERSON                  = 'collabPerson';
 
     const LDAP_ATTR_COLLAB_PERSON_ID                = 'collabpersonid';
@@ -370,7 +369,8 @@ class EngineBlock_UserDirectory
      */
     protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
     {
-        return !isset($saml2attributes[self::URN_IS_MEMBER_OF]) || !in_array(self::URN_COLLAB_ORG_SURF, $saml2attributes[self::URN_IS_MEMBER_OF]);
+        $guestQualifier = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->addgueststatus->guestqualifier;
+        return !isset($saml2attributes[self::URN_IS_MEMBER_OF]) || !in_array($guestQualifier, $saml2attributes[self::URN_IS_MEMBER_OF]);
     }
 
     protected function _getDnForLdapAttributes($attributes)

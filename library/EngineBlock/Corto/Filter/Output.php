@@ -50,15 +50,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
 
-            // Validate the license for this user / Service Provider
-            new EngineBlock_Corto_Filter_Command_ValidateLicense(),
-
-            // Aggregate attributes from other sources (only VOManage for now)
-            new EngineBlock_Corto_Filter_Command_AggregateAttributes(),
-
-            // If the SP requires knowledge of the VO memberships, add it to the isMemberOf attribute.
-            new EngineBlock_Corto_Filter_Command_AddVoMemberships(),
-
             // Apply ARP before we add the OID variants
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 

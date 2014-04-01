@@ -20,10 +20,14 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
         $originalRequest = $this->factoryOriginalRequest();
         $idpEntityId = 'testIdp';
-        $scope = array();
-        $enhancedRequest = $proxyServer->createEnhancedRequest($originalRequest, $idpEntityId, $scope);
+        /** @var SAML2_AuthnRequest $enhancedRequest */
+        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
+            $originalRequest,
+            $proxyServer->getRemoteEntity($idpEntityId),
+            $proxyServer
+        );
 
-        $this->assertNotContains('_Format', $enhancedRequest['samlp:NameIDPolicy']);
+        $this->assertNotContains('Format', $enhancedRequest->getNameIdPolicy());
     }
 
     public function testNameIDFormatIsSetFromRemoteMetaData()
@@ -36,10 +40,15 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
         $originalRequest = $this->factoryOriginalRequest();
         $idpEntityId = 'testIdp';
-        $scope = array();
-        $enhancedRequest = $proxyServer->createEnhancedRequest($originalRequest, $idpEntityId, $scope);
+        /** @var SAML2_AuthnRequest $enhancedRequest */
+        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
+            $originalRequest,
+            $proxyServer->getRemoteEntity($idpEntityId),
+            $proxyServer
+        );
 
-        $this->assertEquals($enhancedRequest['samlp:NameIDPolicy']['_Format'], 'fooFormat');
+        $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
+        $this->assertEquals($nameIdPolicy['Format'], 'fooFormat');
     }
 
     public function testGettingCurrentEntityIsProxiedViaGetRemoteEntity()
@@ -56,10 +65,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
      */
     private function factoryOriginalRequest()
     {
-        $originalRequest = array();
-        $originalRequest['_ForceAuthn'] = null;
-        $originalRequest['_IsPassive'] = null;
-        $originalRequest['saml:Issuer']['__v'] = null;
+        $originalRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new SAML2_AuthnRequest());
 
         return $originalRequest;
     }

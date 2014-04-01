@@ -25,7 +25,6 @@
 
 class EngineBlock_VirtualOrganization_Validator
 {
-    const STEM_VO_MEMBERS_GROUP = 'members';
 
     public function isMember($voId, $subjectId, $idp)
     {
@@ -60,14 +59,6 @@ class EngineBlock_VirtualOrganization_Validator
                     return false;
                 }
 
-            case 'STEM':
-                if ($this->_isMemberOfStem($virtualOrganization, $subjectId)) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
-
             default:
                 throw new EngineBlock_Exception("Unknown Virtual Organization type '$voType'");
         }
@@ -75,50 +66,20 @@ class EngineBlock_VirtualOrganization_Validator
 
     protected function _isMemberOfGroups(EngineBlock_VirtualOrganization $virtualOrganization, $subjectId)
     {
-        $groupProvider = $this->_getGroupProvider($subjectId);
-
-        try {
-            $groups = $virtualOrganization->getGroups();
-            
-            foreach ($groups as $group) {
-                if ($groupProvider->isMember($group->id)) {
-                    return true;
-                }
-            }
-        } catch (EngineBlock_VirtualOrganization_VoIdentifierNotFoundException $e) {
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
-                ->setUserId($subjectId)
-                ->setDetails($virtualOrganization);
-            EngineBlock_ApplicationSingleton::getLog()->warn($e->getMessage(), $additionalInfo);
-        }
-        return false;
+        $groups = $virtualOrganization->getGroupsIdentifiers();
+        $groupValidator = new EngineBlock_VirtualOrganization_GroupValidator();
+        return $groupValidator->isMember($subjectId, $groups);
     }
 
     protected function _isMemberOfIdps(EngineBlock_VirtualOrganization $virtualOrganization, $idp)
     {
-        $voIdps = $virtualOrganization->getIdps();
-        foreach ($voIdps as $voIdp) {
-            /**
-             * @var EngineBlock_VirtualOrganization_Idp $voIdp
-             */
-            if ($voIdp->entityId === $idp) {
+        $idpIdentifiers = $virtualOrganization->getIdpIdentifiers();
+        foreach ($idpIdentifiers as $idpId) {
+            if ($idpId === $idp) {
                 return true;
             }
         }
         return false;
     }
 
-    protected function _isMemberOfStem(EngineBlock_VirtualOrganization $virtualOrganization, $subjectId)
-    {
-        return $this->_getGroupProvider($subjectId)
-                ->setGroupStem($virtualOrganization->getStem())
-                ->isMember(self::STEM_VO_MEMBERS_GROUP);
-    }
-
-    protected function _getGroupProvider($subjectId)
-    {
-        return EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor(
-            $subjectId
-        );
-    }
 }

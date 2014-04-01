@@ -27,7 +27,7 @@ class EngineBlock_Corto_Filter_Command_RejectProcessingMode extends EngineBlock_
 {
     public function execute()
     {
-        if ($this->_adapter->getProxyServer()->isInProcessingMode()) {
+        if ($this->_server->isInProcessingMode()) {
             $this->stopFiltering();
         }
     }

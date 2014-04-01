@@ -43,7 +43,7 @@ class EngineBlock_Xml_Validator
             $parsedErrorMessage = preg_replace('/\{[^}]*\}/', '', $errorMessage);
             echo '<pre>' . htmlentities(EngineBlock_Corto_XmlToArray::formatXml($xml)) . '</pre>';
             throw new EngineBlock_Exception(
-                'Metadata XML doesnt validate against XSD at Oasis-open.org: ' . $parsedErrorMessage
+                "Metadata XML doesn't validate against schema at '$schemaXml', gives error:: '$parsedErrorMessage'"
             );
         }
     }

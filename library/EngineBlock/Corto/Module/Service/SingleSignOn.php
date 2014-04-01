@@ -1,5 +1,7 @@
 <?php
 
+use \OpenConext\Component\EngineBlockFixtures\IdFrame;
+
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
     const RESPONSE_CACHE_TYPE_IN  = 'in';
@@ -15,21 +17,19 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
         else if ($serviceName === 'debugSingleSignOnService') {
             if (isset($_SESSION['debugIdpResponse']) && !isset($_POST['clear'])) {
+                /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
                 $response = $_SESSION['debugIdpResponse'];
 
                 if (isset($_POST['mail'])) {
                     $this->_sendDebugMail($response);
                 }
 
-                $attributes = array();
-                // If attributes exists convert them to internal format
-                if (isset($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'])) {
-                    $attributes = $this->_xmlConverter->attributesToArray($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']);
-                }
+                $attributes = $response->getAssertion()->getAttributes();
+
                 $this->_server->sendOutput($this->_server->renderTemplate(
                     'debugidpresponse',
                     array(
-                        'idp'       => $this->_server->getRemoteEntity($response['saml:Issuer']['__v']),
+                        'idp'       => $this->_server->getRemoteEntity($response->getIssuer()),
                         'response'  => $response,
                         'attributes'=> $attributes
                     )
@@ -44,16 +44,18 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             // parse SAML request
             $request = $this->_server->getBindingsModule()->receiveRequest();
 
-            // set transparant proxy mode
-            $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Transparent'] = $this->_server->getConfig(
-                'TransparentProxy',
-                false
-            );
+            // set transparent proxy mode
+            if ($this->_server->getConfig('TransparentProxy', false)) {
+                $request->setTransparent();
+            }
         }
 
         // Flush log if SP or IdP has additional logging enabled
-        $sp = $this->_server->getRemoteEntity(EngineBlock_SamlHelper::extractIssuerFromMessage($request));
-        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)) {
+        $sp = $this->_server->getRemoteEntity($request->getIssuer());
+        if (
+            $this->_server->getConfig('debug', false) ||
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)
+        ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
@@ -75,7 +77,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
-        if (isset($request['samlp:Scoping'][EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ProxyCount']) && $request['samlp:Scoping'][EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ProxyCount'] == 0) {
+        /** @var SAML2_AuthnRequest $request */
+
+        if ($request->getProxyCount() === 0) {
             $this->_server->getSessionLog()->info("SSO: Proxy count exceeded!");
             $response = $this->_server->createErrorResponse($request, 'ProxyCountExceeded');
             $this->_server->sendResponseToRequestIssuer($request, $response);
@@ -122,7 +126,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // Multiple IdPs found...
         else {
             // > 1 IdPs found, but isPassive attribute given, unable to show WAYF
-            if (isset($request[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'IsPassive']) && $request[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'IsPassive'] === 'true') {
+            if ($request->getIsPassive()) {
                 $log->info("SSO: IsPassive with multiple IdPs!");
                 $response = $this->_server->createErrorResponse($request, 'NoPassive');
                 $this->_server->sendResponseToRequestIssuer($request, $response);
@@ -130,7 +134,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             }
             else {
                 // Store the request in the session
-                $id = $request[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'];
+                $id = $request->getId();
                 $_SESSION[$id]['SAMLRequest'] = $request;
 
                 // Show WAYF
@@ -142,17 +146,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     }
 
     /**
-     * @param array $request
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param array $remoteEntity
      * @return bool
      */
-    protected function _verifyAcsLocation(array $request, array $remoteEntity)
-    {
+    protected function _verifyAcsLocation(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        array $remoteEntity
+    ) {
+        /** @var SAML2_AuthnRequest $request */
         // show error when acl is given without binding or vice versa
-        if (
-            (empty($request['_AssertionConsumerServiceURL']) && !empty($request['_ProtocolBinding'])) ||
-            (!empty($request['_AssertionConsumerServiceURL']) && empty($request['_ProtocolBinding']))
-        ) {
+        $acsUrl = $request->getAssertionConsumerServiceURL();
+        $acsIndex = $request->getAssertionConsumerServiceIndex();
+        $protocolBinding = $request->getProtocolBinding();
+
+        if ($acsUrl XOR $protocolBinding) {
             $this->_server->getSessionLog()->err(
                 "Incomplete ACS location found in request (missing URL or binding)"
             );
@@ -161,10 +169,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // if none specified, all is ok
-        if (
-            (!$this->_server->hasCustomAssertionConsumer($request)) &&
-            (!$this->_server->hasCustomAssertionConsumerIndex($request))
-        ) {
+        if (!$acsUrl && !$acsIndex) {
             return true;
         }
 
@@ -180,36 +185,32 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     protected function _createUnsolicitedRequest()
     {
         // Entity ID as requeted in GET parameters
-        $entityId = !empty($_GET['sp-entity-id']) ? $_GET['sp-entity-id'] : null;
+        $entityId    = !empty($_GET['sp-entity-id']) ? $_GET['sp-entity-id']: null;
 
         // Request optional  acs-* parameters
-        $acsLocation = !empty($_GET['acs-location']) ? $_GET['acs-location'] : null;
-        $acsIndex    = !empty($_GET['acs-index']) ? $_GET['acs-index'] : null;
-        $binding     = !empty($_GET['acs-binding']) ? $_GET['acs-binding'] : null;
+        $acsLocation = !empty($_GET['acs-location']) ? $_GET['acs-location']: null;
+        $acsIndex    = !empty($_GET['acs-index'])    ? $_GET['acs-index']   : null;
+        $binding     = !empty($_GET['acs-binding'])  ? $_GET['acs-binding'] : null;
 
         // Requested relay state
-        $relayState = !empty($_GET['RelayState']) ? $_GET['RelayState'] : null;
+        $relayState  = !empty($_GET['RelayState'])   ? $_GET['RelayState']  : null;
 
-        // Create 'fake' request object
-        $request = array(
-            '_ID'         => $this->_server->getNewId(),
-            'saml:Issuer' => array(
-                EngineBlock_Corto_XmlToArray::VALUE_PFX => $entityId,
-            ),
-            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
-                'Unsolicited' => true,
-                'RelayState' => $relayState,
-            )
-        );
+        $sspRequest = new SAML2_AuthnRequest();
+        $sspRequest->setId($this->_server->getNewId(IdFrame::ID_USAGE_SAML2_REQUEST));
+        $sspRequest->setIssuer($entityId);
+        $sspRequest->setRelayState($relayState);
 
         if ($acsLocation) {
-            $request['_AssertionConsumerServiceURL'] = $acsLocation;
-            $request['_ProtocolBinding'] = $binding;
+            $sspRequest->setAssertionConsumerServiceURL($acsLocation);
+            $sspRequest->setProtocolBinding($binding);
         }
 
         if ($acsIndex) {
-            $request['_AssertionConsumerServiceIndex'] = $acsIndex;
+            $sspRequest->setAssertionConsumerServiceIndex($acsIndex);
         }
+
+        $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
+        $request->setUnsollicited();
 
         $log = $this->_server->getSessionLog();
         $log->attach($request, 'Unsollicited Request');
@@ -222,16 +223,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     protected function _createDebugRequest()
     {
-        // Create 'fake' request object
-        $request = array(
-            '_ID'         => $this->_server->getNewId(),
-            'saml:Issuer' => array(
-                EngineBlock_Corto_XmlToArray::VALUE_PFX => $this->_server->getUrl('spMetadataService'),
-            ),
-            EngineBlock_Corto_XmlToArray::PRIVATE_PFX => array(
-                'Debug' => true,
-            )
-        );
+        $sspRequest = new SAML2_AuthnRequest();
+        $sspRequest->setId($this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_REQUEST));
+        $sspRequest->setIssuer($this->_server->getUrl('spMetadataService'));
+
+        $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
+        $request->setDebug();
 
         $log = $this->_server->getSessionLog();
         $log->attach($request, 'Debug request');
@@ -239,16 +236,15 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $request;
     }
 
-    protected function _getScopedIdPs($request = null)
-    {
+    protected function _getScopedIdPs(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+    ) {
         $log = $this->_server->getSessionLog();
-        $scopedIdPs = array();
-        // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
-        if (isset($request['samlp:Scoping']['samlp:IDPList']['samlp:IDPEntry'])) {
-            foreach ($request['samlp:Scoping']['samlp:IDPList']['samlp:IDPEntry'] as $IDPEntry) {
-                $scopedIdPs[] = $IDPEntry[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ProviderID'];
-            }
 
+        /** @var SAML2_AuthnRequest $request */
+        $scopedIdPs = $request->getIDPList();
+        // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
+        if (!empty($scopedIdPs)) {
             $log->attach($scopedIdPs, 'Scoped IDPs');
         }
 
@@ -261,9 +257,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $scopedIdPs;
     }
 
-    protected function _sendCachedResponse($request, $scopedIdps)
-    {
-        if (isset($request[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ForceAuthn']) && $request[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ForceAuthn']) {
+    protected function _sendCachedResponse(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        $scopedIdps
+    ) {
+        /** @var SAML2_AuthnRequest $request */
+        if ($request->getForceAuthn()) {
             return false;
         }
 
@@ -273,7 +272,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $cachedResponses = $_SESSION['CachedResponses'];
 
-        $requestIssuerEntityId  = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
+        $requestIssuerEntityId  = $request->getIssuer();
 
         // First, if there is scoping, we reject responses from idps not in the list
         if (count($scopedIdps) > 0) {
@@ -287,7 +286,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
-        $cachedResponse = $this->_pickCachedResponse($cachedResponses, $request, $requestIssuerEntityId);
+        $cachedResponse = $this->_pickCachedResponse($cachedResponses, $requestIssuerEntityId);
         if (!$cachedResponse) {
             return false;
         }
@@ -307,7 +306,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return true;
     }
 
-    protected function _pickCachedResponse(array $cachedResponses, array $request, $requestIssuerEntityId)
+    protected function _pickCachedResponse(array $cachedResponses, $requestIssuerEntityId)
     {
         // Then we look for OUT responses for this sp
         $idpEntityIds = $this->_server->getIdpEntityIds();
@@ -354,32 +353,27 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return false;
     }
 
-    protected function _showWayf($request, $candidateIdPs)
+    protected function _showWayf(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request, array $candidateIdPs)
     {
-        $isDebugRequest = (isset($request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']) &&
-            $request[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Debug']);
-
         // Post to the 'continueToIdp' service
         $action = $this->_server->getUrl('continueToIdP');
 
-        $requestIssuer = $request['saml:Issuer'][EngineBlock_Corto_XmlToArray::VALUE_PFX];
-
-        $remoteEntity = $this->_server->getRemoteEntity($requestIssuer);
-        $idpList = $this->_transformIdpsForWAYF($candidateIdPs, $isDebugRequest);
+        $remoteEntity = $this->_server->getRemoteEntity($request->getIssuer());
+        $idpList = $this->_transformIdpsForWAYF($candidateIdPs, $request->isDebugRequest());
 
         $output = $this->_server->renderTemplate(
             'discover',
             array(
                 'preselectedIdp'    => $this->_server->getCookie('selectedIdp'),
                 'action'            => $action,
-                'ID'                => $request[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID'],
+                'ID'                => $request->getId(),
                 'idpList'           => $idpList,
                 'metaDataSP'        => $remoteEntity,
             ));
         $this->_server->sendOutput($output);
     }
 
-    protected function _transformIdpsForWayf($idps, $isDebugRequest)
+    protected function _transformIdpsForWayf(array $idps, $isDebugRequest)
     {
         $wayfIdps = array();
         foreach ($idps as $idpEntityId) {
@@ -428,7 +422,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                     : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
                 'Access' => ((isset($metadata['Access']) && $metadata['Access']) || $isDebugRequest ) ? '1' : '0',
                 'ID' => md5($idpEntityId),
-                'EntityId' => $idpEntityId,
+                'EntityID' => $idpEntityId,
             );
             $wayfIdps[] = $wayfIdp;
         }
@@ -436,39 +430,40 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $wayfIdps;
     }
 
-    protected function _sendDebugMail($response)
+    /**
+     * @param SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response
+     */
+    protected function _sendDebugMail(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
         $layout = $this->_server->layout();
         $oldLayout = $layout->getLayout();
         $layout->setLayout('empty');
 
-        {
-            $wasEnabled = $layout->isEnabled();
-            if ($wasEnabled) {
-                $layout->disableLayout();
-            }
-
-            $idp = $this->_server->getRemoteEntity($response['saml:Issuer']['__v']);
-
-            $attributes = array();
-            // If attributes exists convert them to internal format
-            if (isset($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute'])) {
-                $attributes = $this->_xmlConverter->attributesToArray($response['saml:Assertion']['saml:AttributeStatement'][0]['saml:Attribute']);
-            }
-            $output = $this->_server->renderTemplate('debugidpmail', array(
-                    'idp'       => $idp,
-                    'response'  => $response,
-                    'attributes'=> $attributes,
-            ));
-
-            $emailConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->idpDebugging;
-            $mailer = new Zend_Mail('UTF-8');
-            $mailer->setFrom($emailConfiguration->from->address, $emailConfiguration->from->name);
-            $mailer->addTo($emailConfiguration->to->address, $emailConfiguration->to->name);
-            $mailer->setSubject(sprintf($emailConfiguration->subject, $idp['Name']['en']));
-            $mailer->setBodyText($output);
-            $mailer->send();
+        $wasEnabled = $layout->isEnabled();
+        if ($wasEnabled) {
+            $layout->disableLayout();
         }
+
+        $idp = $this->_server->getRemoteEntity($response->getIssuer());
+
+        $attributes = $response->getAssertion()->getAttributes();
+        $output = $this->_server->renderTemplate(
+            'debugidpmail',
+            array(
+                'idp'       => $idp,
+                'response'  => $response,
+                'attributes'=> $attributes,
+            )
+        );
+
+        $emailConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->idpDebugging;
+        $mailer = new Zend_Mail('UTF-8');
+        $mailer->setFrom($emailConfiguration->from->address, $emailConfiguration->from->name);
+        $mailer->addTo($emailConfiguration->to->address, $emailConfiguration->to->name);
+        $mailer->setSubject(sprintf($emailConfiguration->subject, $idp['Name']['en']));
+        $mailer->setBodyText($output);
+        $mailer->send();
+
         $layout->setLayout($oldLayout);
     }
 }

@@ -78,7 +78,7 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
                 return;
             }
 
-            throw new Exception("'No service '$this->serviceName' is configured in EngineBlock metadata");
+            throw new Exception("No service '$this->serviceName' is configured in EngineBlock metadata");
         }
 
         $services = $proxyEntity[$this->serviceName];

@@ -31,12 +31,12 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     protected $_continueFiltering = TRUE;
 
     /**
-     * @var EngineBlock_Corto_Adapter
+     * @var EngineBlock_Corto_ProxyServer
      */
-    protected $_adapter;
+    protected $_server;
 
     /**
-     * @var array
+     * @var EngineBlock_Saml2_ResponseAnnotationDecorator
      */
     protected $_response;
 
@@ -46,7 +46,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     protected $_responseAttributes;
 
     /**
-     * @var array
+     * @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      */
     protected $_request;
 
@@ -75,6 +75,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @return \EngineBlock_Corto_Filter_Command_Abstract
+     * @return $this
      */
     public function stopFiltering()
     {
@@ -83,16 +84,18 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param \EngineBlock_Corto_Adapter $adapter
+     * @param \EngineBlock_Corto_ProxyServer $server
+     * @return $this
      */
-    public function setAdapter(EngineBlock_Corto_Adapter $adapter)
+    public function setProxyServer(EngineBlock_Corto_ProxyServer $server)
     {
-        $this->_adapter = $adapter;
+        $this->_server = $server;
         return $this;
     }
 
     /**
      * @param array $idpMetadata
+     * @return $this
      */
     public function setIdpMetadata(array $idpMetadata)
     {
@@ -101,18 +104,20 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param array $request
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @return $this
      */
-    public function setRequest(array $request)
+    public function setRequest(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         $this->_request = $request;
         return $this;
     }
 
     /**
-     * @param array $response
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
+     * @return $this
      */
-    public function setResponse(array $response)
+    public function setResponse(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
         $this->_response = $response;
         return $this;
@@ -120,6 +125,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param array $responseAttributes
+     * @return $this
      */
     public function setResponseAttributes(array $responseAttributes)
     {
@@ -129,6 +135,7 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
 
     /**
      * @param array $spMetadata
+     * @return $this
      */
     public function setSpMetadata(array $spMetadata)
     {
@@ -137,11 +144,25 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param string $collabPersonId
+     * @param $collabPersonId
+     * @return $this
      */
     public function setCollabPersonId($collabPersonId)
     {
         $this->_collabPersonId = $collabPersonId;
         return $this;
+    }
+
+    /**
+     * Check the existence of collabPersonId
+     */
+    public function invariant()
+    {
+        if (!$this->_collabPersonId) {
+            throw new EngineBlock_Corto_Filter_Command_Exception_PreconditionFailed(
+                'Missing collabPersonId'
+            );
+        }
+
     }
 }

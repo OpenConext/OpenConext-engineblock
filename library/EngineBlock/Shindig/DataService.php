@@ -171,7 +171,6 @@ class EngineBlock_Shindig_DataService implements ActivityService, PersonService,
         return $this->_getSocialData()->getGroupsForPerson(
             $userId->getUserId($token),
             $groupId,
-            isset($_REQUEST['vo']) ? $_REQUEST['vo'] : null,
             isset($_REQUEST['sp-entity-id']) ? $_REQUEST['sp-entity-id'] : null
         );
     }

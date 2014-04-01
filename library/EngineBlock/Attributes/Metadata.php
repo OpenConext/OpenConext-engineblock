@@ -142,7 +142,7 @@ class EngineBlock_Attributes_Metadata
 
             foreach ($aliases as $alias) {
                 $this->_definitions[$alias] = $definition;
-                if ($attributeName !== $alias) {
+                if ($attributeName !== $alias && is_array($this->_definitions[$alias])) {
                     $this->_definitions[$alias]['__original__'] = $attributeName;
                 }
             }

@@ -46,31 +46,36 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
         }
 
         // In filter stage we need to take a look at the VO context
-        $vo = false;
-        if (isset($this->_request['__']['VoContextImplicit'])) {
-            $vo = $this->_request['__']['VoContextImplicit'];
-        }
-        else if(isset($this->_request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX])) {
-            $vo = $this->_request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX];
-        }
+        $vo = $this->_request->getVoContext();
 
         if (!$vo) {
             return;
         }
 
-        $this->_adapter->setVirtualOrganisationContext($vo);
-
         // If in VO context, validate the user's membership
-        $validator = new EngineBlock_VirtualOrganization_Validator();
+
+        EngineBlock_ApplicationSingleton::getLog()->debug("VO $vo membership required");
+
+        $validator = $this->_getValidator();
         $isMember = $validator->isMember(
             $vo,
             $this->_collabPersonId,
-            $this->_idpMetadata['EntityId']
+            $this->_idpMetadata['EntityID']
         );
         if (!$isMember) {
             throw new EngineBlock_Corto_Exception_UserNotMember("User not a member of VO $vo");
         }
 
         $this->_responseAttributes[self::VO_NAME_ATTRIBUTE] = $vo;
+
     }
+
+    /**
+     * @return EngineBlock_VirtualOrganization_Validator
+     */
+    protected function _getValidator()
+    {
+        return new EngineBlock_VirtualOrganization_Validator();
+    }
+
 }

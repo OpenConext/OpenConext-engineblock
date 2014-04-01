@@ -35,28 +35,79 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         $this->_entityType = $entityType;
     }
 
-    public function manipulate($entityId, &$subjectId, array &$attributes, array &$response, array $idpMetadata, array $spMetadata)
-    {
+    public function manipulate(
+        $entityId,
+        &$subjectId,
+        array &$attributes,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$responseObj,
+        array $idpMetadata,
+        array $spMetadata
+    ) {
         $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
         if (empty($entity['manipulation'])) {
             return false;
         }
 
-        $this->_doManipulation($entity['manipulation'], $entityId, $subjectId, $attributes, $response, $idpMetadata, $spMetadata);
+        // Note that this can be removed when all references to the old format have been removed from
+        // the attribute manipulations.
+        $translator = new EngineBlock_Corto_Mapper_Legacy_ResponseTranslator();
+        $response = $translator->fromNewFormat($responseObj);
+
+        $this->_doManipulation(
+            $entity['manipulation'],
+            $entityId,
+            $subjectId,
+            $attributes,
+            $response,
+            $responseObj,
+            $idpMetadata,
+            $spMetadata
+        );
+
+        $responseObj = $translator->fromOldFormat($response);
         return true;
     }
-    protected function _doManipulation($manipulationCode, $entityId, &$subjectId, &$attributes, &$response, array $idpMetadata, array $spMetadata)
-    {
+
+    protected function _doManipulation(
+        $manipulationCode,
+        $entityId,
+        &$subjectId,
+        array &$attributes,
+        array &$response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator $responseObj,
+        array $idpMetadata,
+        array $spMetadata
+    ) {
         $entityType = $this->_entityType;
 
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $application->getErrorHandler()->withExitHandler(
+        EngineBlock_ApplicationSingleton::getInstance()->getErrorHandler()->withExitHandler(
             // Try
-            function() use ($manipulationCode, $entityId, &$subjectId, &$attributes, &$response, $idpMetadata, $spMetadata) {
+            function()
+                use (
+                    $manipulationCode,
+                    $entityId,
+                    &$subjectId,
+                    &$attributes,
+                    &$response,
+                    $responseObj,
+                    $idpMetadata,
+                    $spMetadata
+            ) {
                 eval($manipulationCode);
             },
             // Should an error occur, log the input, if nothing happens, then don't
-            function(EngineBlock_Exception $exception) use ($entityType, $manipulationCode, $entityId, $subjectId, $attributes, $response, $idpMetadata, $spMetadata) {
+            function(EngineBlock_Exception $exception)
+                use (
+                    $entityType,
+                    $manipulationCode,
+                    $entityId,
+                    $subjectId,
+                    $attributes,
+                    $response,
+                    $responseObj,
+                    $idpMetadata,
+                    $spMetadata
+            ) {
                 EngineBlock_ApplicationSingleton::getLog()->attach(
                     array(
                         'EntityID'          => $entityId,

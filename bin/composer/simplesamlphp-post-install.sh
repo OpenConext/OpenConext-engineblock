@@ -6,9 +6,11 @@ ROOT_DIR="$(cd -P "$(dirname $0)/../../" && pwd)"
 cd $ROOT_DIR
 
 # Add/override SimpleSamlPhp config
+mkdir -p vendor/simplesamlphp/simplesamlphp/config/
 cp config/simplesamlphp/config/* vendor/simplesamlphp/simplesamlphp/config/
 
 # Add/override SimpleSamlPhp metadata
+mkdir -p vendor/simplesamlphp/simplesamlphp/metadata/
 cp config/simplesamlphp/metadata/* vendor/simplesamlphp/simplesamlphp/metadata/
 
 # Delete unused config, metadata and modules

@@ -38,30 +38,7 @@ class EngineBlock_Provisioning
     {
         $userId = $this->_getUserDirectory()->registerUser($saml2Attributes, $idpEntityMetadata);
 
-        $this->_provisionToExternals($userId, $saml2Attributes, $spEntityMetadata, $idpEntityMetadata);
-
         return $userId;
-    }
-
-    protected function _provisionToExternals($userId, $saml2Attributes, $spEntityMetadata, $idpEntityMetadata)
-    {
-        $provisioners = $this->_getProvisioners();
-        foreach ($provisioners as $provisionerConfig) {
-            $className = $provisionerConfig->className;
-            $provisioner = new $className($provisionerConfig);
-            $provisioner->provisionUser($userId, $saml2Attributes, $spEntityMetadata, $idpEntityMetadata);
-        }
-    }
-
-    protected function _getProvisioners()
-    {
-        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-        if (!isset($config->provisioners)) {
-            return array();
-        }
-        else {
-            return $config->provisioners;
-        }
     }
 
     protected function _getUserDirectory()

@@ -147,9 +147,8 @@ EngineBlock requires database settings, without it the install script will not f
 
 ### Configure HTTP server ###
 
-Install 3 HTTPS virtual hosts, one that points to the authentication interface, which handles authentication and
-proxying thereof. The second one should point to the internal interface. Finally, the third one should point to the
-profile interface.
+Configure 2 HTTPS virtual hosts, one that points to the authentication interface, which handles authentication and
+proxying thereof. The second one should point to the profile interface.
 
 Make sure the ENGINEBLOCK_ENV is set.
 
@@ -184,34 +183,15 @@ For all virtual hosts you should specify a different *DocumentRoot*.
 
 2nd virtual host:
 
-    DocumentRoot    /opt/www/engineblock/www/internal
-
-3rd virtual host:
-
     DocumentRoot    /opt/www/engineblock/www/profile
 
-Also for the 3rd virtual host (profile interface) you should specify an extra *RewriteCond*.
+Also for the 2nd virtual host (profile interface) you should specify an extra *RewriteCond*.
 Add it behind the last *RewriteCond* descriptive (but before the *RewriteRule* descriptive) in your virtual host
 configuration:
 
     RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
 
 Also set an alias for simplesaml for the third virtual host:
-
-    Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
-
-4th virtual host:
-
-    ServerName      vomanage.[dev|test|acc|prod].surfconext.nl:443
-    DocumentRoot    /opt/www/engineblock/www/vomanage
-
-Also for the 4th virtual host (VO attribute management interface) you should specify an extra *RewriteCond*.
-Add it behind the last *RewriteCond* descriptive (but before the *RewriteRule* descriptive) in your virtual host
-configuration:
-
-    RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
-
-Also set an alias for simplesaml for the fourth virtual host:
 
     Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
 
@@ -261,18 +241,6 @@ Use these URLs to test your Engineblock instance:
 [https://engineblock-internal.example.com][]
 [https://engineblock-internal.example.com/social/][]
 [https://static.example.com][]
-
-
-### Optional: Install attribute-manipulations ###
-
-EngineBlock has the concept of Attribute Manipulations, which allows you to manipulations per Service Provider on
-the attributes and response released to that Service Provider.
-
-If you want to use attribute-manipulations, simply make a directory called 'attribute-manipulations' in the same folder
-that EngineBlock is located in.
-
-For more documentation please see 
-[https://svn.surfnet.nl/svn/coin-eb/attribute-manipulations/trunk/][SURFnets attribute manipulations].
 
 
 ## Updating ##

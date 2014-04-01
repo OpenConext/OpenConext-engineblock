@@ -73,7 +73,7 @@ if ($displayName == '') {
 $preselectedIdpData = array();
 if ($preselectedIdp) {
     foreach ($idpList as $idp) {
-        if ($idp['EntityId'] === $preselectedIdp) {
+        if ($idp['EntityID'] === $preselectedIdp) {
             $preselectedIdpData = $idp;
             $preselectedIdpName = $preselectedIdpData['Name_'.$lang];
             if (empty($preselectedIdpName)) {
@@ -101,7 +101,7 @@ if ($preselectedIdp) {
             <div id="main">
                 <!-- Language selection -->
                 <ul class="nav">
-                    <li id="help_nav"><a href="#">HELP</a></li>
+                    <li id="help_nav"><a href="#" data-help-type="discover">HELP</a></li>
                     <li class="lang <?php if ($lang==='en'): ?>active<?php endif; ?>">
                         <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
                     </li>
@@ -154,7 +154,7 @@ if ($preselectedIdp) {
                                 <form method="post" action="<?php echo $action ?>">
                                     <p>
                                         <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
-                                        <input type="hidden" name="idp" value="<?php echo htmlentities($idp['EntityId']); ?>" />
+                                        <input type="hidden" name="idp" value="<?php echo htmlentities($idp['EntityID']); ?>" />
                                         <input type="submit" value="<?php echo htmlentities($idp['Name_en']); ?>" />
                                     </p>
                                 </form>
@@ -221,7 +221,6 @@ if ($preselectedIdp) {
         <?php
             $preselectedIdpJson = isset($preselectedIdp) ? 'discoveryScreen.setSelectedEntityId('.json_encode($preselectedIdp).');' : '';
 
-            $uri = $_SERVER['REQUEST_URI'];
             echo "
             var discoveryScreen = new Discover();
             discoveryScreen.setLanguage('". $lang ."');
@@ -229,7 +228,6 @@ if ($preselectedIdp) {
             discoveryScreen.setIdpList(". json_encode($idpList) .");
             discoveryScreen.setSpEntityId(". json_encode($metaDataSP['EntityID']) .");
             discoveryScreen.setSpName(". json_encode($displayName) .");
-            discoveryScreen.setUri('". json_encode($uri). "');
             ". $preselectedIdpJson ."
             discoveryScreen.show();"
 
