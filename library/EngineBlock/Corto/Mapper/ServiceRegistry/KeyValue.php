@@ -162,9 +162,10 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
         }
 
         // In general
+        $cortoEntity['certificates'] = array();
         if (isset($serviceRegistryEntity['certData']) && $serviceRegistryEntity['certData']) {
-            $cortoEntity['certificates'] = array(
-                'public' => EngineBlock_X509Certificate::getPublicPemCertFromCertData($serviceRegistryEntity['certData']),
+            $cortoEntity['certificates']['public'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
+                $serviceRegistryEntity['certData']
             );
             if (isset($serviceRegistryEntity['certData2']) && $serviceRegistryEntity['certData2']) {
                 $cortoEntity['certificates']['public-fallback'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
