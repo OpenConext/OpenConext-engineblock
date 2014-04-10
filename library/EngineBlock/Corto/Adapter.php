@@ -413,10 +413,8 @@ class EngineBlock_Corto_Adapter
             $remoteEntities[$idpEntityId] = array();
         }
         $remoteEntities[$idpEntityId]['EntityID'] = $idpEntityId;
-        $remoteEntities[$idpEntityId]['certificates'] = array(
-            'public'    => $application->getConfiguration()->encryption->key->public,
-            'private'   => $application->getConfiguration()->encryption->key->private,
-        );
+        $remoteEntities[$idpEntityId]['certificates']['public'] = $application->getConfiguration()->encryption->key->public;
+        $remoteEntities[$idpEntityId]['certificates']['private'] = $application->getConfiguration()->encryption->key->private;
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
