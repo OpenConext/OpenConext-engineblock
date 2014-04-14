@@ -35,6 +35,7 @@ class EngineBlock_Corto_ProxyServer
     protected $_output;
 
     protected $_voContext = null;
+    protected $_keyId = null;
 
     protected $_requestArray;
     protected $_responseArray;
@@ -81,6 +82,16 @@ class EngineBlock_Corto_ProxyServer
     public function getVirtualOrganisationContext()
     {
         return $this->_voContext;
+    }
+
+    public function setKeyId($keyId)
+    {
+        $this->_keyId = $keyId;
+    }
+
+    public function getKeyId()
+    {
+        return $this->_keyId;
     }
 
     public function getOutput()
@@ -262,8 +273,17 @@ class EngineBlock_Corto_ProxyServer
                 $isImplicitVo = true;
             }
         }
-        if (!$this->_processingMode && $this->_voContext !== null && $serviceName != "spMetadataService" && !$isImplicitVo) {
-            $mappedUri .= '/' . "vo:" . $this->_voContext;
+
+        if (!$this->_processingMode && $serviceName !== "spMetadataService") {
+            // Append the (explicit) VO context from the request
+            if ($this->_voContext && !$isImplicitVo) {
+                $mappedUri .= '/vo:' . $this->_voContext;
+            }
+
+            // Append the key identifier
+            if ($this->_keyId) {
+                $mappedUri .= '/key:' . $this->_keyId;
+            }
         }
         // @todo improve this if construction
         if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $serviceName !== 'singleLogoutService' && $remoteEntityId) {
@@ -721,6 +741,9 @@ class EngineBlock_Corto_ProxyServer
             $vo = $request['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX];
             $this->setVirtualOrganisationContext($vo);
         }
+        if (isset($request['__']['key'])) {
+            $this->setKeyId($request['__']['key']);
+        }
 
         $now = $this->timeStamp();
         $destinationID = $request['saml:Issuer']['__v'];
@@ -770,7 +793,8 @@ class EngineBlock_Corto_ProxyServer
      * Returns the a custom ACS location when provided in the request
      * or the default ACS location when omitted.
      *
-     * @param array $request
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @return array|bool
      */
     public function getRequestAssertionConsumer(array $request)
     {

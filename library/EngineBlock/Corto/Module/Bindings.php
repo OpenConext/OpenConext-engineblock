@@ -125,17 +125,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $message = $this->_receiveMessageFromInternalBinding($key);
         if (!empty($message)) {
-            return $this->_addVoContextToRequest($key, $message);
+            return $this->_annotateReceivedMessage($key, $message);
         }
 
         $message = $this->_receiveMessageFromHttpPost($key);
         if (!empty($message)) {
-            return $this->_addVoContextToRequest($key, $message);
+            return $this->_annotateReceivedMessage($key, $message);
         }
 
         $message = $this->_receiveMessageFromHttpRedirect($key);
         if (!empty($message)) {
-            return $this->_addVoContextToRequest($key, $message);
+            return $this->_annotateReceivedMessage($key, $message);
         }
 
         throw new EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException(
@@ -143,16 +143,23 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         );
     }
 
-    protected function _addVoContextToRequest($key, array $message)
+    protected function _annotateReceivedMessage($key, array $message)
     {
-        if ($key == self::KEY_REQUEST) {
-            // We're dealing with a request, on its way towards the idp. If there's a VO context, we need to store it in the request.
-
-            $voContext = $this->_server->getVirtualOrganisationContext();
-            if ($voContext != NULL) {
-                $message['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $voContext;
-            }
+        if ($key !== self::KEY_REQUEST) {
+            return $message;
         }
+        // We're dealing with a request, on its way towards the idp. If there's a VO context, we need to store it in the request.
+
+        $voContext = $this->_server->getVirtualOrganisationContext();
+        if ($voContext != NULL) {
+            $message['__'][EngineBlock_Corto_ProxyServer::VO_CONTEXT_PFX] = $voContext;
+        }
+
+        $keyId = $this->_server->getKeyId();
+        if ($keyId) {
+            $message['__']['key'] = $keyId;
+        }
+
         return $message;
     }
 
@@ -199,11 +206,32 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
+<<<<<<< HEAD
      * Retrieve a message via http redirect binding.
      * @param String $key The key to look for.
      * @return mixed False if there was no suitable message in this binding
      *               String the message if it was found
      *               An exception if something went wrong.
+=======
+     * @param $ebRequest
+     */
+    protected function _annotateRequestWithKeyId(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest)
+    {
+        $keyId = $this->_server->getKeyId();
+
+        if (!$keyId) {
+            return;
+        }
+
+        $ebRequest->setKeyId($keyId);
+    }
+
+    /**
+     * @return bool|EngineBlock_Saml2_ResponseAnnotationDecorator|SAML2_Response
+     * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
+     * @throws EngineBlock_Corto_Module_Bindings_VerificationException
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+>>>>>>> 7304f44... Allow selection of a key by id.
      */
     protected function _receiveMessageFromHttpRedirect($key)
     {
