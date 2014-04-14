@@ -29,14 +29,16 @@ class EngineBlock_Tracker
     {
     }
     
-    public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext)
+    public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext, $keyId)
     {
         $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
         $db = $this->_getDbConnection();
         
         $stmt = $db->prepare("
-            INSERT INTO log_logins (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname)
-            VALUES                 (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname)"
+            INSERT INTO log_logins
+              (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname, keyid)
+            VALUES
+              (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname, :keyid)"
         );
         $spEntityName  = (isset($spEntityMetadata['Name']['en']) && !empty($spEntityMetadata['Name']['en']) ? $spEntityMetadata['Name']['en'] : $spEntityMetadata['EntityId']);
         $idpEntityName = (isset($idpEntityMetadata['Name']['en']) && !empty($idpEntityMetadata['Name']['en']) ? $idpEntityMetadata['Name']['en'] : $idpEntityMetadata['EntityId']);
@@ -47,6 +49,7 @@ class EngineBlock_Tracker
         $stmt->bindParam('idpentityname', $idpEntityName);
         $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
         $stmt->bindParam('voname'       , $voContext);
+        $stmt->bindParam('keyid'        , $keyId);
         $stmt->execute();
     }
     
