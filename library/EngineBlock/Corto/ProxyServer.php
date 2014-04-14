@@ -43,6 +43,7 @@ class EngineBlock_Corto_ProxyServer
     protected $_output;
 
     protected $_voContext = null;
+    protected $_keyId = null;
 
     protected $_server;
     protected $_systemLog;
@@ -86,6 +87,16 @@ class EngineBlock_Corto_ProxyServer
     public function getVirtualOrganisationContext()
     {
         return $this->_voContext;
+    }
+
+    public function setKeyId($keyId)
+    {
+        $this->_keyId = $keyId;
+    }
+
+    public function getKeyId()
+    {
+        return $this->_keyId;
     }
 
     public function getOutput()
@@ -254,9 +265,16 @@ class EngineBlock_Corto_ProxyServer
             $voContext = $this->_voContext;
         }
 
-        // Append the (explicit) VO context from the request
-        if ($voContext && !$this->_processingMode && $serviceName !== "spMetadataService") {
-            $mappedUri .= '/vo:' . $voContext;
+        if (!$this->_processingMode && $serviceName !== "spMetadataService") {
+            // Append the (explicit) VO context from the request
+            if ($voContext) {
+                $mappedUri .= '/vo:' . $voContext;
+            }
+
+            // Append the key identifier
+            if ($this->_keyId) {
+                $mappedUri .= '/key:' . $this->_keyId;
+            }
         }
 
         // Append the Transparent identifier
@@ -520,7 +538,7 @@ class EngineBlock_Corto_ProxyServer
         $subjectConfirmationData->Recipient = $acs['Location'];
 
         // Confirm that this is in response to their AuthnRequest (unless, you know, it isn't).
-        if (!$request->isUnsollicited()) {
+        if (!$request->isUnsolicited()) {
             /** @var SAML2_AuthnRequest $request */
             $subjectConfirmationData->InResponseTo = $request->getId();
         }
@@ -575,7 +593,10 @@ class EngineBlock_Corto_ProxyServer
         if ($request->getVoContext() && $request->isVoContextExplicit()) {
             $this->setVirtualOrganisationContext($request->getVoContext());
         }
-        $requestWasUnsollicited = $request->isUnsollicited();
+        if ($keyId = $request->getKeyId()) {
+            $this->setKeyId($keyId);
+        }
+        $requestWasUnsollicited = $request->isUnsolicited();
 
         $response = new SAML2_Response();
         /** @var SAML2_AuthnRequest $request */
@@ -601,7 +622,8 @@ class EngineBlock_Corto_ProxyServer
      * Returns the a custom ACS location when provided in the request
      * or the default ACS location when omitted.
      *
-     * @param array $request
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @return array|bool
      */
     public function getRequestAssertionConsumer(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
@@ -948,14 +970,9 @@ class EngineBlock_Corto_ProxyServer
      * @param  $element    Element to sign
      * @return array Signed element
      */
-    public function sign(array $element, $alternatePublicKey = null, $alternatePrivateKey = null)
+    public function sign(array $element)
     {
-        if ($alternatePublicKey && $alternatePrivateKey) {
-            $certificates['public'] = $alternatePublicKey;
-            $certificates['private'] = $alternatePrivateKey;
-        } else {
-            $certificates = $this->getConfig('certificates', array());
-        }
+        $certificates = $this->getConfig('certificates', array());
 
         $signature = array(
             '__t' => 'ds:Signature',

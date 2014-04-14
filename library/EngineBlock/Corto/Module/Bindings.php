@@ -157,6 +157,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         $this->_annotateRequestWithVoContext($ebRequest, $cortoSpMetadata);
 
+        $this->_annotateRequestWithKeyId($ebRequest);
+
         return $ebRequest;
     }
 
@@ -205,6 +207,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $ebRequest->setImplicitVoContext($implicitVo);
             return;
         }
+    }
+
+    /**
+     * @param $ebRequest
+     */
+    protected function _annotateRequestWithKeyId(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest)
+    {
+        $keyId = $this->_server->getKeyId();
+
+        if (!$keyId) {
+            return;
+        }
+
+        $ebRequest->setKeyId($keyId);
     }
 
     /**

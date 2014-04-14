@@ -28,63 +28,67 @@ else
     TAG=$1
 fi
 
-PROJECT_DIR_NAME=${PROJECT_NAME}-${TAG}
-PROJECT_DIR=${RELEASE_DIR}/${PROJECT_DIR_NAME}
+PROJECT_DIR_NAME=${PROJECT_NAME}-${TAG} &&
+PROJECT_DIR=${RELEASE_DIR}/${PROJECT_DIR_NAME} &&
 
-# Create empty dir
-mkdir -p ${RELEASE_DIR}
-rm -rf ${PROJECT_DIR}
+echo "Preparing environment" &&
+mkdir -p ${RELEASE_DIR} &&
+rm -rf ${PROJECT_DIR} &&
 
-# get Composer
-cd ${RELEASE_DIR}
-curl -O http://getcomposer.org/composer.phar
+echo "Cloning repository";
+cd ${RELEASE_DIR} &&
+git clone https://github.com/${GITHUB_USER}/${PROJECT_NAME}.git ${PROJECT_DIR_NAME} &&
 
-# clone the tag
-cd ${RELEASE_DIR}
-git clone -b ${TAG} https://github.com/${GITHUB_USER}/${PROJECT_NAME}.git ${PROJECT_DIR_NAME}
+echo "Checking out ${TAG}" &&
+cd ${PROJECT_DIR} &&
+git checkout ${TAG} &&
 
-# run Composer
-cd ${PROJECT_DIR}
-php ${RELEASE_DIR}/composer.phar install --no-dev
+echo "Running Composer Install";
+php ./bin/composer.phar install --no-dev --prefer-dist &&
 
-# run Assetic
-cd ${PROJECT_DIR}/bin
-rm -fr ${PROJECT_DIR}/www/authentication/generated
-php ./assets_pipelines.php
+echo "Tagging the release in RELEASE file" &&
+COMMITHASH=`git rev-parse HEAD` &&
+echo "Tag: ${TAG}" > ${PROJECT_DIR}/RELEASE &&
+echo "Commit: ${COMMITHASH}" >> ${PROJECT_DIR}/RELEASE &&
 
-# remove files that are not required for production
-rm -rf ${PROJECT_DIR}/.idea
-rm -rf ${PROJECT_DIR}/.git
-rm -f ${PROJECT_DIR}/.gitignore
-rm -f ${PROJECT_DIR}/composer.json
-rm -f ${PROJECT_DIR}/composer.lock
-rm -f ${PROJECT_DIR}/makeRelease.sh
-rm -f ${PROJECT_DIR}/bin/composer.phar
-rm -rf ${PROJECT_DIR}/features
-rm -rf ${PROJECT_DIR}/behat.yml
-rm -rf ${PROJECT_DIR}/build.xml
-rm -rf ${PROJECT_DIR}/tests
-rm -rf ${PROJECT_DIR}/ci
-rm -rf ${PROJECT_DIR}/.travis.yml
+echo "Generating assets" &&
+cd ${PROJECT_DIR}/bin &&
+rm -fr ${PROJECT_DIR}/www/authentication/generated &&
+php ./assets_pipelines.php &&
 
-# create tarball
-cd ${RELEASE_DIR}
+echo "Cleaning build of dev files" &&
+rm -rf ${PROJECT_DIR}/.idea &&
+rm -rf ${PROJECT_DIR}/.git &&
+rm -f ${PROJECT_DIR}/.gitignore &&
+rm -f ${PROJECT_DIR}/composer.json &&
+rm -f ${PROJECT_DIR}/composer.lock &&
+rm -f ${PROJECT_DIR}/makeRelease.sh &&
+rm -f ${PROJECT_DIR}/bin/composer.phar &&
+rm -rf ${PROJECT_DIR}/features &&
+rm -rf ${PROJECT_DIR}/behat.yml &&
+rm -rf ${PROJECT_DIR}/build.xml &&
+rm -rf ${PROJECT_DIR}/tests &&
+rm -rf ${PROJECT_DIR}/ci &&
+rm -rf ${PROJECT_DIR}/.travis.yml &&
+
+echo "Create tarball" &&
+cd ${RELEASE_DIR} &&
 tar -czf ${PROJECT_DIR_NAME}.tar.gz ${PROJECT_DIR_NAME}
 
 
-# create checksum file
-cd ${RELEASE_DIR}
+echo "Create checksum file" &&
+cd ${RELEASE_DIR} &&
 if hash sha1sum 2>/dev/null; then
-    sha1sum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha 
+    sha1sum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha
 else
-    shasum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha 
+    shasum ${PROJECT_DIR_NAME}.tar.gz > ${PROJECT_DIR_NAME}.sha
 fi
 
-# sign it if requested
 if [ -n "$2" ]
 then
 	if [ "$2" == "sign" ]
 	then
+	    echo "Signing build"
 		cd ${RELEASE_DIR}
 		gpg -o ${PROJECT_DIR_NAME}.sha.gpg  --clearsign ${PROJECT_DIR_NAME}.sha
 	fi

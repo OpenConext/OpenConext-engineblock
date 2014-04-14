@@ -23,6 +23,7 @@ class EngineBlock_Corto_Model_Response_Cache
             'type'          => $type,
             'response'      => $receivedResponse,
             'vo'            => $receivedRequest->getVoContext(),
+            'key'           => $receivedRequest->getKeyId(),
         );
         return $_SESSION['CachedResponses'][count($_SESSION['CachedResponses']) - 1];
     }

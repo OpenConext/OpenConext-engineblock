@@ -13,6 +13,11 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     protected $voContext;
 
     /**
+     * @var string
+     */
+    protected $keyId;
+
+    /**
      * @var bool
      */
     protected $explicitVoContext = true;
@@ -30,7 +35,7 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @var bool
      */
-    protected $unsollicited = false;
+    protected $unsolicited = false;
 
     /**
      * @var bool
@@ -79,6 +84,21 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
         return $this->explicitVoContext;
     }
 
+    public function getKeyId()
+    {
+        return $this->keyId;
+    }
+
+    /**
+     * @param $keyId
+     * @return $this
+     */
+    public function setKeyId($keyId)
+    {
+        $this->keyId = $keyId;
+        return $this;
+    }
+
     public function setExplicitVoContext($voContext)
     {
         $this->voContext = $voContext;
@@ -107,15 +127,15 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
         return $this->wasSigned;
     }
 
-    public function setUnsollicited()
+    public function setUnsolicited()
     {
-        $this->unsollicited = true;
+        $this->unsolicited = true;
         return $this;
     }
 
-    public function isUnsollicited()
+    public function isUnsolicited()
     {
-        return $this->unsollicited;
+        return $this->unsolicited;
     }
 
     public function setDebug()

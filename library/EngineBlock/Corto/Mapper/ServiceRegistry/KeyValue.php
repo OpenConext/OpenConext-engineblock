@@ -58,18 +58,6 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
                 }
             }
 
-            // Only for SPs
-            if (isset($serviceRegistryEntity['coin:alternate_private_key']) && $serviceRegistryEntity['coin:alternate_private_key']) {
-                $cortoEntity['AlternatePrivateKey'] = EngineBlock_X509Certificate::getPrivatePemCertFromCertData(
-                    $serviceRegistryEntity['coin:alternate_private_key']
-                );
-            }
-            if (isset($serviceRegistryEntity['coin:alternate_public_key']) && $serviceRegistryEntity['coin:alternate_public_key']) {
-                $cortoEntity['AlternatePublicKey'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
-                    $serviceRegistryEntity['coin:alternate_public_key']
-                );
-            }
-
             // External provisioning
             $cortoEntity['MustProvisionExternally'] = FALSE;
             if (isset($serviceRegistryEntity['coin:is_provision_sp']) && $serviceRegistryEntity['coin:is_provision_sp']) {

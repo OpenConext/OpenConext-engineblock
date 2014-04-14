@@ -10,7 +10,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         $entityDetails = $this->_server->getCurrentEntity($serviceName);
 
         // Override the EntityID and SSO location to optionally append VO id
-        if ($serviceName==='idpMetadataService') {
+        if ($serviceName === 'idpMetadataService') {
             $entityDetails['EntityID'] = $this->_server->getUrl($serviceName);
             $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
             $ssoLocation = $this->_server->getUrl('singleSignOnService');
@@ -22,13 +22,6 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         $slLocation = $this->_server->getUrl('singleLogoutService');
         $slServiceReplacer->replace($entityDetails, $slLocation);
 
-         // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
-         $alternateKeys = $this->_getAlternateKeys();
-
-        if ($alternateKeys) {
-            $entityDetails['certificates'] = $alternateKeys;
-        }
-
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
             $this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_METADATA),
@@ -38,11 +31,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         $document = $mapper->setEntity($entityDetails)->map();
 
         // Sign the document
-        $document = $this->_server->sign(
-            $document,
-            ($alternateKeys  ? $alternateKeys['public']  : null),
-            ($alternateKeys  ? $alternateKeys['private']  : null)
-        );
+        $document = $this->_server->sign($document);
 
         // Convert the document to XML
         $xml = EngineBlock_Corto_XmlToArray::array2xml($document);
@@ -60,35 +49,5 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         //$this->_server->sendHeader('Content-Type', 'application/samlmetadata+xml');
         $this->_server->sendHeader('Content-Type', 'application/xml');
         $this->_server->sendOutput($xml);
-    }
-
-    /**
-     * Look if a Service Provider EntityID was passed allong (with sp-entity-id) and this entity requires use of
-     * different keys (key rollover).
-     *
-     * @return array|bool
-     */
-    protected function _getAlternateKeys()
-    {
-        // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
-        $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
-        $spEntityId = $request->getQueryParameter('sp-entity-id');
-        if (!$spEntityId) {
-            return false;
-        }
-
-        $spEntity = $this->_server->getRemoteEntity($spEntityId);
-
-        // Check if an alternative Public key has been set for the requesting SP
-        // If yes, use these in the metadata of EngineBlock
-        if (isset($spEntity['AlternatePublicKey']) && isset($spEntity['AlternatePrivateKey'])) {
-            return array(
-                'public' => $spEntity['AlternatePublicKey'],
-                'private' => $spEntity['AlternatePrivateKey'],
-            );
-        }
-        else {
-            return false;
-        }
     }
 }
