@@ -880,7 +880,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     protected function _getCurrentEntityPrivateKey()
     {
-        $certificates = $this->_server->getConfig('certificates', array());
+        $certificates = $this->_server->getCertificates();
         if (!isset($certificates['private'])) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!',

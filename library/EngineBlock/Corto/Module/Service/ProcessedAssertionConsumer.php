@@ -7,6 +7,10 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($response[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'InResponseTo']);
 
+        if (isset($receivedRequest['__']['key'])) {
+            $this->_server->setKeyId($receivedRequest['__']['key']);
+        }
+
         $remainingProcessingEntities = &$_SESSION['Processing'][$receivedRequest[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'ID']]['RemainingEntities'];
 
         // @todo check if this is the correct place to flush log

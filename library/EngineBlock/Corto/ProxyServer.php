@@ -47,6 +47,8 @@ class EngineBlock_Corto_ProxyServer
 
     protected $_configs;
 
+    protected $_defaultCertificates = null;
+    protected $_extraCertificates = array();
 
     /**
      * @var array
@@ -219,6 +221,27 @@ class EngineBlock_Corto_ProxyServer
     {
         $this->_configs = $configs;
         return $this;
+    }
+
+    public function setCertificates(array $defaultKeyPair, array $extraKeyPairs)
+    {
+        $this->_defaultCertificates = $defaultKeyPair;
+        $this->_extraCertificates = $extraKeyPairs;
+    }
+
+    public function getCertificates()
+    {
+        if (!$this->_keyId) {
+            return $this->_defaultCertificates;
+        }
+
+        if (!isset($this->_extraCertificates[$this->_keyId])) {
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Unknown key id '{$this->_keyId}'"
+            );
+        }
+
+        return $this->_extraCertificates[$this->_keyId];
     }
 
     public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
@@ -1170,7 +1193,7 @@ class EngineBlock_Corto_ProxyServer
             $certificates['public'] = $alternatePublicKey;
             $certificates['private'] = $alternatePrivateKey;
         } else {
-            $certificates = $this->getConfig('certificates', array());
+            $certificates = $this->getCertificates();
         }
 
         $signature = array(
