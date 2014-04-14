@@ -11,11 +11,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
 
     public function mapTo(array $rootElement)
     {
-        if (!empty($this->_entity['AlternatePublicKey'])) {
-            $publicCertificate = $this->_entity['AlternatePublicKey'];
-        } else {
-            $publicCertificate = $this->_entity['certificates']['public'];
-        }
+        $publicCertificate = $this->_entity['certificates']['public'];
 
         if (empty($publicCertificate)) {
             return $rootElement;

@@ -948,14 +948,9 @@ class EngineBlock_Corto_ProxyServer
      * @param  $element    Element to sign
      * @return array Signed element
      */
-    public function sign(array $element, $alternatePublicKey = null, $alternatePrivateKey = null)
+    public function sign(array $element)
     {
-        if ($alternatePublicKey && $alternatePrivateKey) {
-            $certificates['public'] = $alternatePublicKey;
-            $certificates['private'] = $alternatePrivateKey;
-        } else {
-            $certificates = $this->getConfig('certificates', array());
-        }
+        $certificates = $this->getConfig('certificates', array());
 
         $signature = array(
             '__t' => 'ds:Signature',

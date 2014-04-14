@@ -9,20 +9,9 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         // Fetch SP Entity Descriptor for the SP Entity ID that is fetched from the request
         $request = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest();
         $spEntityId = $request->getQueryParameter('sp-entity-id');
-        $alternateKeys = false;
         if ($spEntityId) {
-            // See if an sp-entity-id was specified for which we need to use alternate keys (key rollover)
+            // See if an sp-entity-id was specified for which we need to use sp specific metadata
             $spEntity = $this->_server->getRemoteEntity($spEntityId);
-
-            // Check if an alternative Public key has been set for the requesting SP
-            // If yes, use these in the metadata of EngineBlock
-            if (isset($spEntity['AlternatePublicKey']) && isset($spEntity['AlternatePrivateKey'])) {
-                $entityDetails['certificates'] = array(
-                    'public' => $spEntity['AlternatePublicKey'],
-                    'private' => $spEntity['AlternatePrivateKey'],
-                );
-                $alternateKeys = $entityDetails['certificates'];
-            }
         }
 
         // Get the configuration for EngineBlock in it's IdP role.
@@ -80,11 +69,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $document = $mapper->setEntities($idpEntities)->map();
 
         // Sign the document
-        $document = $this->_server->sign(
-            $document,
-            ($alternateKeys  ? $alternateKeys['public']  : null),
-            ($alternateKeys  ? $alternateKeys['private']  : null)
-        );
+        $document = $this->_server->sign($document);
 
         // Convert the document to XML
         $xml = EngineBlock_Corto_XmlToArray::array2xml($document);
