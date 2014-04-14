@@ -355,9 +355,6 @@ class EngineBlock_Corto_Adapter
 
         $remoteEntities = $this->_getRemoteEntities();
 
-        $certificates = $this->_getKeyPairFromConfig($application->getConfiguration());
-        $proxyServer->setConfig('certificates', $certificates);
-
         /**
          * Augment our own IdP entry with stuff that can't be set via the Service Registry (yet)
          */
@@ -366,8 +363,20 @@ class EngineBlock_Corto_Adapter
             $remoteEntities[$idpEntityId] = array();
         }
         $remoteEntities[$idpEntityId]['EntityID'] = $idpEntityId;
+
+        /** @var Zend_Config $defaultKeyConfig */
+        $defaultKeyConfig = $application->getConfiguration()->encryption->key;
+        /** @var Zend_Config $extraKeyConfig */
+        $extraKeyConfig = $application->getConfiguration()->encryption->keys;
+        $proxyServer->setCertificates($defaultKeyConfig->toArray(), $extraKeyConfig->toArray());
+
+        if ($this->_keyId !== null) {
+            $proxyServer->setKeyId($this->_keyId);
+        }
+
+        $certificates = $proxyServer->getCertificates();
+
         $remoteEntities[$idpEntityId]['certificates']['public']  = $certificates['public'];
-        $remoteEntities[$idpEntityId]['certificates']['private'] = $certificates['private'];
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
@@ -385,7 +394,6 @@ class EngineBlock_Corto_Adapter
         }
         $remoteEntities[$spEntityId]['EntityID'] = $spEntityId;
         $remoteEntities[$spEntityId]['certificates']['public']  = $certificates['public'];
-        $remoteEntities[$spEntityId]['certificates']['private'] = $certificates['private'];
         $remoteEntities[$spEntityId]['NameIDFormats'] = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
@@ -488,9 +496,6 @@ class EngineBlock_Corto_Adapter
 
         if ($this->_voContext!=null) {
             $proxyServer->setVirtualOrganisationContext($this->_voContext);
-        }
-        if ($this->_keyId !== null) {
-            $proxyServer->setKeyId($this->_keyId);
         }
     }
 
@@ -607,30 +612,5 @@ class EngineBlock_Corto_Adapter
     protected function _getCoreProxy()
     {
         return new EngineBlock_Corto_ProxyServer();
-    }
-
-    protected function _getKeyPairFromConfig(Zend_Config $configuration)
-    {
-        /** @var Zend_Config $signingKeyConfig */
-        $signingKeyConfig = $configuration->encryption->key;
-
-        if (!$this->_keyId) {
-            return array(
-                'public'  => $signingKeyConfig->public,
-                'private' => $signingKeyConfig->private
-            );
-        }
-
-        $selectedKeySet = $configuration->encryption->keys->get($this->_keyId);
-        if (!$selectedKeySet) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Unknown key id '{$this->_keyId}'"
-            );
-        }
-
-        return array(
-            'public'  => $selectedKeySet->public,
-            'private' => $selectedKeySet->private,
-        );
     }
 }

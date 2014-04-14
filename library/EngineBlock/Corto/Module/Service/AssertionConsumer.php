@@ -25,6 +25,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             return;
         }
 
+        if ($receivedRequest->getKeyId()) {
+            $this->_server->setKeyId($receivedRequest->getKeyId());
+        }
+
         // Cache the response
         EngineBlock_Corto_Model_Response_Cache::cacheResponse(
             $receivedRequest,
