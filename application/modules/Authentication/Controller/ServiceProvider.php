@@ -108,6 +108,20 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         $this->setNoRender();
 
         $proxyServer = new EngineBlock_Corto_Adapter();
+
+        foreach (func_get_args() as $argument) {
+            if (substr($argument, 0, 3) === 'vo:') {
+                $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
+            } else if (substr($argument, 0, 4) === 'key:') {
+                $proxyServer->setKeyId(substr($argument, 4));
+            } else {
+                EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->notice(
+                    "Ignoring unknown argument '$argument'."
+                );
+            }
+        }
+
+
         $proxyServer->sPMetadata();
     }
 
@@ -116,6 +130,19 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         $this->setNoRender();
 
         $proxyServer = new EngineBlock_Corto_Adapter();
+
+        foreach (func_get_args() as $argument) {
+            if (substr($argument, 0, 3) === 'vo:') {
+                $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
+            } else if (substr($argument, 0, 4) === 'key:') {
+                $proxyServer->setKeyId(substr($argument, 4));
+            } else {
+                EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->notice(
+                    "Ignoring unknown argument '$argument'."
+                );
+            }
+        }
+
         $proxyServer->idpCertificate();
     }
 

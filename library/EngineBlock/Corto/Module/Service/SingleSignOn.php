@@ -330,6 +330,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
             }
 
+            if (isset($cachedResponse['key'])) {
+                $this->_server->setKeyId($cachedResponse['key']);
+            }
+
             return $cachedResponse;
         }
 
@@ -346,6 +350,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
             if (isset($cachedResponse['vo'])) {
                 $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
+            }
+
+            if (isset($cachedResponse['key'])) {
+                $this->_server->setKeyId($cachedResponse['key']);
             }
 
             return $cachedResponse;

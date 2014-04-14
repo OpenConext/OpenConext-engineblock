@@ -44,10 +44,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
     }
 
     /**
-     * Method handling signleSignOn and unsolicitedSingleSignOn
+     * Method handling singleSignOn and unsolicitedSingleSignOn
      *
      * @param string $service
      * @param array $arguments
+     * @throws EngineBlock_Exception
      */
     protected function _singleSignOn($service = 'singleSignOn', array $arguments = array())
     {
@@ -59,11 +60,14 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $idPEntityId = NULL;
 
             // Optionally allow /single-sign-on/vo:myVoId/remoteIdPHash or
-            // /single-sign-on/remoteIdPHash/vo:myVoId
+            // /single-sign-on/remoteIdPHash/vo:myVoId/key:20140420
             foreach ($arguments as $argument) {
-                if (substr($argument, 0, 3) == "vo:") {
+                if (substr($argument, 0, 3) == 'vo:') {
                     $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
-                } else {
+                } else if (substr($argument, 0, 4) === 'key:') {
+                    $proxyServer->setKeyId(substr($argument, 4));
+                }
+                else {
                     $idPEntityId = $argument;
                 }
             }
@@ -117,15 +121,21 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $proxyServer->processWayf();
     }
 
-    public function metadataAction($argument = null)
+    public function metadataAction()
     {
         $this->setNoRender();
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
         $proxyServer = new EngineBlock_Corto_Adapter();
 
-        if (substr($argument, 0, 3) == "vo:") {
-            $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
+        foreach (func_get_args() as $argument) {
+            if (substr($argument, 0, 3) === 'vo:') {
+                $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
+            } else if (substr($argument, 0, 4) === 'key:') {
+                $proxyServer->setKeyId(substr($argument, 4));
+            } else {
+                $application->getLogInstance()->notice("Ignoring unknown argument '$argument'.");
+            }
         }
 
         try {
@@ -206,6 +216,17 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         $this->setNoRender();
 
         $proxyServer = new EngineBlock_Corto_Adapter();
+
+        foreach (func_get_args() as $argument) {
+            if (substr($argument, 0, 4) === 'key:') {
+                $proxyServer->setKeyId(substr($argument, 4));
+            } else {
+                EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->notice(
+                    "Ignoring unknown argument '$argument'."
+                );
+            }
+        }
+
         $proxyServer->idpCertificate();
     }
 
