@@ -32,7 +32,7 @@ ssh $DEPLOY_ADDRESS <<COMMANDS
     echo "Removing buildfile" &&
     rm OpenConext-engineblock-${TAG}.tar.gz &&
     echo "Moving release into place" &&
-    mv OpenConext-engineblock OpenConex-engineblock-old &&
+    mv OpenConext-engineblock OpenConext-engineblock-old &&
     mv OpenConext-engineblock-${TAG} OpenConext-engineblock &&
     echo "Running post-install scripts" &&
     cd /opt/www/engineblock &&
