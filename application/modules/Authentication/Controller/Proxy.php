@@ -31,7 +31,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
      * @param string $encodedIdPEntityId
      * @return void
      */
-    public function idPsMetaDataAction($argument = "")
+    public function idPsMetaDataAction()
     {
         $this->setNoRender();
 
@@ -39,10 +39,16 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
 
         $proxyServer = new EngineBlock_Corto_Adapter();
         try {
-            if (substr($argument, 0, 3) == "vo:") {
-                $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
-            } else if (!empty($argument)) {
-                throw new EngineBlock_Exception("Unknown argument", EngineBlock_Exception::CODE_NOTICE);
+            foreach (func_get_args() as $argument) {
+                if (substr($argument, 0, 3) === 'vo:') {
+                    $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
+                } else if (substr($argument, 0, 4) === 'key:') {
+                    $proxyServer->setKeyId(substr($argument, 4));
+                } else {
+                    EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->notice(
+                        "Ignoring unknown argument '$argument'."
+                    );
+                }
             }
             $proxyServer->idPsMetadata();
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
@@ -63,6 +69,17 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
 
         $queryString = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryString();
         $proxyServer = new EngineBlock_Corto_Adapter();
+
+        foreach (func_get_args() as $argument) {
+            if (substr($argument, 0, 4) === 'key:') {
+                $proxyServer->setKeyId(substr($argument, 4));
+            } else {
+                EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->notice(
+                    "Ignoring unknown argument '$argument'."
+                );
+            }
+        }
+
         try {
             $proxyServer->edugainMetadata($queryString);
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
