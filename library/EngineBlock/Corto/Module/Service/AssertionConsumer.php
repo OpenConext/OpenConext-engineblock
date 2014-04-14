@@ -29,7 +29,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $receivedRequest,
             $receivedResponse,
             EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN,
-            $this->_server->getVirtualOrganisationContext()
+            $this->_server->getVirtualOrganisationContext(),
+            $this->_server->getKeyId()
         );
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
@@ -65,7 +66,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
                 $receivedRequest,
                 $receivedResponse,
                 EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
-                $this->_server->getVirtualOrganisationContext()
+                $this->_server->getVirtualOrganisationContext(),
+                $this->_server->getKeyId()
             );
 
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);

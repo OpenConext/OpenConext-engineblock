@@ -51,7 +51,8 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
                 $receivedRequest,
                 $response,
                 EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT,
-                $this->_server->getVirtualOrganisationContext()
+                $this->_server->getVirtualOrganisationContext(),
+                $this->_server->getKeyId()
             );
 
             $sentResponse = $this->_server->createEnhancedResponse($receivedRequest, $response);
