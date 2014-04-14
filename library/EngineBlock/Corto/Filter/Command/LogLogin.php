@@ -46,7 +46,7 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             $this->_idpMetadata,
             $this->_collabPersonId,
             $voContext,
-            $this->_request->getKeyId()
+            isset($this->_request['__']['key']) ? $this->_request['__']['key'] : null
         );
     }
 }
