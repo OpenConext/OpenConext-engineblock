@@ -47,26 +47,43 @@ $layout->getView()->inlineScript('script', <<<JS
   });
 JS
 );
-
+/** @var Zend_Config $keyPairs */
+$keyPairs = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->encryption->keys;
+$keyPairIds = array_keys($keyPairs->toArray());
 ?>
     <dl class="metadata-certificates-list">
         <dt>
             The Public SAML Signing certificate of the SURFconext IdP
         </dt>
         <dd>
-            <a href="/authentication/idp/certificate">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/idp/certificate">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                <li><a href="/authentication/idp/certificate/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
         </dd>
         <dt>
             The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy
         </dt>
         <dd>
-            <a href="/authentication/idp/metadata">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/idp/metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/idp/metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
         </dd>
         <dt>
             The Public SAML metadata (the entities descriptor) for all the SURFconext IdPs
         </dt>
         <dd>
-            <a href="/authentication/proxy/idps-metadata">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/proxy/idps-metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/proxy/idps-metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
         </dd>
         <dt>
             <strong>Metadata below is only relevant for key rollover or in
@@ -80,7 +97,12 @@ JS
             MAY be different from the regular public key.
         </dt>
         <dd>
-            <a href="/authentication/idp/metadata?sp-entity-id=urn:example.org">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/idp/metadata?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/idp/metadata/key:<?=$keyId?>?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
         </dd>
         <dt>
             The Public SAML metadata (the entities descriptor) of the SURFconext IdPs which allow
@@ -91,7 +113,13 @@ JS
             the number of available IdPs may change over time.
         </dt>
         <dd>
-            <a href="/authentication/proxy/idps-metadata?sp-entity-id=urn:example.org">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/proxy/idps-metadata?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/proxy/idps-metadata/key:<?=$keyId?>?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+
         </dd>
     </dl>
     <div class="bottom"></div>
@@ -109,13 +137,23 @@ JS
             The Public SAML Signing certificate of the SURFconext SP
         </dt>
         <dd>
-            <a href="/authentication/sp/certificate">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/sp/certificate">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/sp/certificate/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
         </dd>
         <dt>
             The Public SAML metadata (the entity descriptor) of the SURFconext SP Proxy
         </dt>
         <dd>
-            <a href="/authentication/sp/metadata">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/sp/metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/sp/metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
         </dd>
     </dl>
     <div class="bottom"></div>
@@ -128,7 +166,12 @@ JS
             the <a href="http://mds.edugain.org/" data-external-link="true" target="_blank">eduGain metadata</a>.
         </dt>
         <dd>
-            <a href="/authentication/proxy/edugain-metadata">&raquo; open link</a>
+            <ul>
+                <li><a href="/authentication/proxy/edugain-metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/proxy/edugain-metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
         </dd>
 
     </dl>
