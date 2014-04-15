@@ -31,12 +31,12 @@ ssh $DEPLOY_ADDRESS <<COMMANDS
     tar -xzf OpenConext-engineblock-${TAG}.tar.gz &&
     echo "Removing buildfile" &&
     rm OpenConext-engineblock-${TAG}.tar.gz &&
+    echo "Clean up old releases" &&
+    rm -rf OpenConext-engineblock-old &&
     echo "Moving release into place" &&
     mv OpenConext-engineblock OpenConext-engineblock-old &&
     mv OpenConext-engineblock-${TAG} OpenConext-engineblock &&
     echo "Running post-install scripts" &&
     cd /opt/www/engineblock &&
-    ./bin/migrate &&
-    echo "Post install cleanup" &&
-    rm -rf OpenConext-engineblock-old
+    ./bin/migrate
 COMMANDS
