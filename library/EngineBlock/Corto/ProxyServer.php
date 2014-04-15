@@ -297,14 +297,14 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        if (!$this->_processingMode && $serviceName !== "spMetadataService") {
+        if (!$this->_processingMode && $serviceName !== 'spMetadataService') {
             // Append the (explicit) VO context from the request
             if ($this->_voContext && !$isImplicitVo) {
                 $mappedUri .= '/vo:' . $this->_voContext;
             }
 
             // Append the key identifier
-            if ($this->_keyId) {
+            if ($this->_keyId && $serviceName !== 'idpMetadataService') {
                 $mappedUri .= '/key:' . $this->_keyId;
             }
         }
