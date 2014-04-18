@@ -106,7 +106,7 @@ $attributesValidated = $validator->validate();
         <th>NameID</th>
 
         <td>
-            <?php echo htmlentities($response->getAssertion()->getNameId(), ENT_COMPAT, 'UTF-8'); ?>
+            <?php $nameId = $response->getAssertion()->getNameId(); echo htmlentities($nameId['Value'], ENT_COMPAT, 'UTF-8'); ?>
         </td>
     </tr>
 </table>
