@@ -364,17 +364,7 @@ class EngineBlock_Corto_Adapter
         }
         $remoteEntities[$idpEntityId]['EntityID'] = $idpEntityId;
 
-        /** @var Zend_Config $defaultKeyConfig */
-        $defaultKeyConfig = $application->getConfiguration()->encryption->key;
-        /** @var Zend_Config $extraKeyConfig */
-        $extraKeyConfig = $application->getConfiguration()->encryption->keys;
-        $proxyServer->setCertificates($defaultKeyConfig->toArray(), $extraKeyConfig->toArray());
-
-        if ($this->_keyId !== null) {
-            $proxyServer->setKeyId($this->_keyId);
-        }
-
-        $certificates = $proxyServer->getCertificates();
+        $certificates = $this->configureProxyCertificates($proxyServer, $application);
 
         $remoteEntities[$idpEntityId]['certificates']['public']  = $certificates['public'];
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
@@ -612,5 +602,37 @@ class EngineBlock_Corto_Adapter
     protected function _getCoreProxy()
     {
         return new EngineBlock_Corto_ProxyServer();
+    }
+
+    /**
+     * Get all certificates from the configuration, the certificate key we were configured with and tell them to
+     * the proxy server. Let the proxy server then decide which signing certificates to use.
+     *
+     * @param EngineBlock_Corto_ProxyServer $proxyServer
+     * @param Zend_Config $applicationConfiguration
+     * @return array
+     */
+    protected function configureProxyCertificates(
+        EngineBlock_Corto_ProxyServer $proxyServer,
+        Zend_Config $applicationConfiguration)
+    {
+        /** @var Zend_Config $keyConfiguration */
+        $keyConfiguration = $applicationConfiguration->encryption;
+
+        /** @var Zend_Config $defaultKeyConfig */
+        $defaultKeyConfig = $keyConfiguration->key->toArray();
+
+        $extraKeysConfig = array();
+        if ($keyConfiguration->get('keys')) {
+            $extraKeysConfig = $keyConfiguration->keys->toArray();
+        }
+
+        $proxyServer->setCertificates($defaultKeyConfig, $extraKeysConfig);
+
+        if ($this->_keyId !== null) {
+            $proxyServer->setKeyId($this->_keyId);
+        }
+
+        return $proxyServer->getSigningCertificates();
     }
 }

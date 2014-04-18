@@ -217,13 +217,17 @@ class EngineBlock_Corto_ProxyServer
         return $this;
     }
 
-    public function setCertificates(array $defaultKeyPair, array $extraKeyPairs)
+    public function setCertificates(array $defaultKeyPair, array $extraKeyPairs = array())
     {
         $this->_defaultCertificates = $defaultKeyPair;
         $this->_extraCertificates = $extraKeyPairs;
     }
 
-    public function getCertificates()
+    /**
+     * @return array
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     */
+    public function getSigningCertificates()
     {
         if (!$this->_keyId) {
             return $this->_defaultCertificates;
@@ -995,7 +999,7 @@ class EngineBlock_Corto_ProxyServer
      */
     public function sign(array $element)
     {
-        $certificates = $this->getCertificates();
+        $certificates = $this->getSigningCertificates();
 
         $signature = array(
             '__t' => 'ds:Signature',

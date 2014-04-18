@@ -390,7 +390,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         if ($this->shouldMessageBeSigned($sspMessage, $remoteEntity)) {
-            $certificates = $this->_server->getCertificates();
+            $certificates = $this->_server->getSigningCertificates();
 
             $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
             $privateKey->loadKey($certificates['private']);
