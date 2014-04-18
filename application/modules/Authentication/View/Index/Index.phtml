@@ -49,7 +49,10 @@ JS
 );
 /** @var Zend_Config $keyPairs */
 $keyPairs = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->encryption->keys;
-$keyPairIds = array_keys($keyPairs->toArray());
+$keyPairIds = array();
+if ($keyPairs) {
+    $keyPairIds = array_keys($keyPairs->toArray());
+}
 ?>
     <dl class="metadata-certificates-list">
         <dt>

@@ -420,7 +420,7 @@ class EngineBlock_Corto_Adapter
         }
         $remoteEntities[$idpEntityId]['EntityID'] = $idpEntityId;
 
-        $certificates = $this->configureProxyCertificates($proxyServer, $application);
+        $certificates = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
 
         $remoteEntities[$idpEntityId]['certificates']['public']  = $certificates['public'];
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
