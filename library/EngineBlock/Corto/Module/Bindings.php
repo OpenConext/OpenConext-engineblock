@@ -392,11 +392,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if ($this->shouldMessageBeSigned($sspMessage, $remoteEntity)) {
             $certificates = $this->_server->getSigningCertificates();
 
-            $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
-            $privateKey->loadKey($certificates['private']);
+            if (isset($certificates['privateFile'])) {
+                $privateKeyIsFile = true;
+                $privateKey = $certificates['privateFile'];
+            }
+            else {
+                $privateKeyIsFile = false;
+                $privateKey = $certificates['private'];
+            }
+
+            $privateKeyObj = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+            $privateKeyObj->loadKey($privateKey, $privateKeyIsFile);
 
             $sspMessage->setCertificates(array($certificates['public']));
-            $sspMessage->setSignatureKey($privateKey);
+            $sspMessage->setSignatureKey($privateKeyObj);
         }
 
         $sspBinding = SAML2_Binding::getBinding($bindingUrn);
