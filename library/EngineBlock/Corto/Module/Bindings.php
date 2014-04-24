@@ -881,20 +881,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     protected function _getCurrentEntityPrivateKey()
     {
         $certificates = $this->_server->getSigningCertificates();
-        if (!isset($certificates['private'])) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Current entity has no private key, unable to sign message! Please set ["certificates"]["private"]!',
-                EngineBlock_Exception::CODE_WARNING
-            );
-        }
-        $key = openssl_pkey_get_private($certificates['private']);
-        if ($key === false) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                "Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? Value: " . $certificates['private'],
-                EngineBlock_Exception::CODE_WARNING
-            );
-        }
-        return $key;
+        return $this->_server->getPrivateKeyFromCertificates($certificates);
     }
 
     protected function _getRemoteEntityPublicKey($entityId)
