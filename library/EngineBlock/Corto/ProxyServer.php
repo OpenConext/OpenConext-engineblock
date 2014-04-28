@@ -291,14 +291,14 @@ class EngineBlock_Corto_ProxyServer
             $voContext = $this->_voContext;
         }
 
-        if (!$this->_processingMode && $serviceName !== 'spMetadataService') {
+        if (!$this->_processingMode) {
             // Append the (explicit) VO context from the request
-            if ($voContext) {
+            if ($voContext && $serviceName !== 'spMetadataService') {
                 $mappedUri .= '/vo:' . $voContext;
             }
 
             // Append the key identifier
-            if ($this->_keyId && $serviceName !== 'idpMetadataService') {
+            if ($this->_keyId && $serviceName === 'singleSignOnService') {
                 $mappedUri .= '/key:' . $this->_keyId;
             }
         }
