@@ -1,2 +1,5 @@
--- Add keyid field to login_logs table for logging the used keypair. See OpenConext/OpenConext-engineblock#29.
-ALTER TABLE `log_logins` ADD `keyid` VARCHAR( 50 ) NULL AFTER `voname`;
+--
+-- We don't use the VO attributes anymore
+--
+
+DROP TABLE `virtual_organisation_attribute` ;
