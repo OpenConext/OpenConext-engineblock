@@ -591,6 +591,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     protected function getSspOwnMetadata()
     {
         $configs   = $this->_server->getConfigs();
+        $certificates = $this->_server->getSigningCertificates();
+
         $publicPem = $configs['certificates']['public'];
         $publicPem = str_replace(
             array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
@@ -619,6 +621,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                         'X509Certificate' => $publicPem,
                     ),
                 ),
+                'privatekey' => isset($certificates['privateFile']) ? $certificates['privateFile'] : '',
             )
         );
         return $spMetadata;
