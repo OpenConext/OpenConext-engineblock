@@ -27,7 +27,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
 {
     public function indexAction()
     {
-        $this->userAttributes = $this->_getClensedAttributes();
+        $this->userAttributes = $this->_normalizeAttributes();
 
         $this->metadata = new EngineBlock_Attributes_Metadata();
         $this->aggregator = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor(
@@ -49,16 +49,16 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
      *
      * We check if there is an ARP and then return this otherwise all attributes we have gotten.
      *
-     * @param $spList all service providers
+     * @param array $spList all service providers
      * @return array with service providers Id's with the ARP
      */
-    protected function _getSpAttributeList($spList)
+    protected function _getSpAttributeList(array $spList)
     {
-        $serviceRegistryClient = $this->_getServiceRegistryClient();
-        $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
-        $attributes = $this->_getClensedAttributes();
+        $attributes = $this->_normalizeAttributes();
 
         $results = array();
+        $serviceRegistryClient = $this->_getServiceRegistryClient();
+        $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
         foreach ($spList as $spId => $sp) {
             $arp = $serviceRegistryClient->getArp($spId);
             $results[$spId] = $enforcer->enforceArp($arp, $attributes);
@@ -68,9 +68,9 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
     }
 
     /**
-     * Return the clensed attributes
+     * Return the cleansed attributes
      */
-    protected function _getClensedAttributes()
+    protected function _normalizeAttributes()
     {
         $normalizer = new EngineBlock_Attributes_Normalizer($this->attributes);
         $normalizedAttributes = $normalizer->normalize();
@@ -79,7 +79,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
     }
 
     /**
-     * @return Janus_Client_CacheProxy
+     * @return Janus_Client
      */
     protected function _getServiceRegistryClient()
     {
