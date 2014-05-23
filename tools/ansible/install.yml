@@ -1,0 +1,48 @@
+---
+- name: Install a build of OpenConext Engineblock.
+  hosts: engine
+  remote_user: "{{ remote_user }}"
+
+  vars:
+    logging_dir: "/var/log/openconext"
+    releases_dir: "/opt/openconext"
+    builds_dir: "{{ releases_dir }}/builds"
+    build_path: "{{ builds_dir }}/OpenConext-engineblock-{{ version }}.tar.gz"
+    current_release_symlink: "/opt/www/engineblock"
+    download_url: "https://github.com/OpenConext/OpenConext-engineblock/releases/download/{{ version }}/OpenConext-engineblock-{{ version }}.tar.gz"
+
+  tasks:
+  - name: Ensure the directories exists
+    file: path={{ item }} state=directory
+    with_items:
+    - "{{ releases_dir }}"
+    - "{{ builds_dir }}"
+
+  - name: Get the current release
+    get_url: dest="{{ build_path }}" url={{ download_url }}
+
+  - name: Unarchive it
+    unarchive: dest={{ releases_dir }} src={{ build_path }} copy=no
+
+  - name: Install default application settings
+    copy:
+      src: "{{ build_path }}/etc/openconext/engineblock.ini"
+      dest: /etc/openconext/engineblock.ini
+      force: no
+
+  - name: Install User Profile with Environment variable.
+    copy:
+      src: "{{ build_path }}/etc/profile.d/openconext-engineblock.sh"
+      dest: /etc/profile.d/openconext-engineblock.sh
+      force: no
+
+  - name: Legacy: Remove obsolete, too generic, profile.d/openconext.sh
+    file: path=/etc/profile.d/openconext.sh state=absent
+
+  - name: Install fresh signing keys if they don't already exist
+
+  - name: Install logging directory
+    file: path={{ logging_dir }} state=directory
+
+  - name: Legacy: Install SURFconext logging directory
+      file: path=/var/log/surfconext src={{ logging_dir }} state=link

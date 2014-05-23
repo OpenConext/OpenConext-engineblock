@@ -1,0 +1,45 @@
+dn: cn={14}collab
+objectClass: olcSchemaConfig
+cn: {14}collab
+olcAttributeTypes: {0}( 1.3.6.1.4.1.1076.20.40.40.1 NAME 'collabPersonId' DESC
+  'Collab unique user identifier' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSu
+ bstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: {1}( 1.3.6.1.4.1.1076.20.40.40.2 NAME 'collabPersonHash' DE
+ SC 'attributes hash' EQUALITY caseIgnoreMatch SUBSTR caseIgnoreSubstringsMatc
+ h SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: {2}( 1.3.6.1.4.1.1076.20.40.40.3 NAME 'collabPersonRegister
+ ed' DESC 'Initial provisioned timestamp' EQUALITY caseIgnoreMatch SUBSTR case
+ IgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: {3}( 1.3.6.1.4.1.1076.20.40.40.4 NAME 'collabPersonLastUpda
+ ted' DESC 'Timestamp for last attributes update' EQUALITY caseIgnoreMatch SUB
+ STR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VAL
+ UE )
+olcAttributeTypes: {4}( 1.3.6.1.4.1.1076.20.40.40.5 NAME 'collabPersonLastAcce
+ ssed' DESC 'Timestamp for last login' EQUALITY caseIgnoreMatch SUBSTR caseIgn
+ oreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE )
+olcAttributeTypes: {5}( 1.3.6.1.4.1.1076.20.40.40.6 NAME 'collabPersonIsGuest'
+  DESC 'guest user' EQUALITY booleanMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 
+ SINGLE-VALUE )
+olcAttributeTypes:: ezZ9KCAxLjMuNi4xLjQuMS4xMDc2LjIwLjQwLjQwLjcgTkFNRSAnY29sbG
+ FiUGVyc29uRmlyc3RXYXJuaW5nU2VudCcgREVTQyAnSXMgdGhlIGZpcnN0IGRlcHJvdmlzaW9uaW5
+ nIHdhcm5pbmcgc2VudD8nIEVRVUFMSVRZIGJvb2xlYW5NYXRjaCBTWU5UQVggMS4zLjYuMS40LjEu
+ MTQ2Ni4xMTUuMTIxLjEuNyBTSU5HTEUtVkFMVUUgKSA=
+olcAttributeTypes:: ezd9KCAxLjMuNi4xLjQuMS4xMDc2LjIwLjQwLjQwLjggTkFNRSAnY29sbG
+ FiUGVyc29uU2Vjb25kV2FybmluZ1NlbnQnIERFU0MgJ0lzIHRoZSBzZWNvbmQgZGVwcm92aXNpb25
+ pbmcgd2FybmluZyBzZW50PycgRVFVQUxJVFkgYm9vbGVhbk1hdGNoIFNZTlRBWCAxLjMuNi4xLjQu
+ MS4xNDY2LjExNS4xMjEuMS43IFNJTkdMRS1WQUxVRSApIA==
+olcAttributeTypes: {8}( 1.3.6.1.4.1.1076.20.40.40.9 NAME 'collabPersonUUID' DE
+ SC 'UUID for person' EQUALITY UUIDMatch ORDERING UUIDOrderingMatch SYNTAX 1.3
+ .6.1.1.16.1 SINGLE-VALUE )
+structuralObjectClass: olcSchemaConfig
+entryUUID: c30d6a74-6e22-1033-81f2-3d9d33597797
+creatorsName: cn=config
+createTimestamp: 20140512131206Z
+olcObjectClasses: {0}( 1.3.6.1.4.1.1076.20.40.20.40 NAME 'collabPerson' DESC '
+ collabPerson - SURFnet COIN attributen' SUP eduPerson AUXILIARY MUST ( collab
+ PersonId ) MAY ( collabPersonUUID $ collabPersonHash $ collabPersonRegistered
+  $ collabPersonLastUpdated $ collabPersonLastAccessed $ collabPersonIsGuest $
+  collabPersonFirstWarningSent $ collabPersonSecondWarningSent ) )
+entryCSN: 20140512132216.608198Z#000000#000#000000
+modifiersName: cn=admin,cn=config
+modifyTimestamp: 20140512132216Z
