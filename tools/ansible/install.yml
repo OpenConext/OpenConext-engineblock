@@ -45,4 +45,4 @@
     file: path={{ logging_dir }} state=directory
 
   - name: Legacy: Install SURFconext logging directory
-      file: path=/var/log/surfconext src={{ logging_dir }} state=link
+    file: path=/var/log/surfconext src={{ logging_dir }} state=link
