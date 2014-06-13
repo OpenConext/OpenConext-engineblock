@@ -27,8 +27,6 @@ class EngineBlock_AssetManager
 {
     protected $_assetInfo;
 
-    protected $_dynamicEnvironments = array("dev", "test", "demo");
-
     public function __construct()
     {
         $this->_assetInfo = json_decode(file_get_contents(ENGINEBLOCK_FOLDER_ROOT . 'www/authentication/assets.json'), true);
@@ -46,7 +44,7 @@ class EngineBlock_AssetManager
 
     protected function _isDynamicEnvironment()
     {
-        $env = EngineBlock_ApplicationSingleton::getInstance()->getEnvironmentId();
+        $env = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('dynamicAssets', false);
         return in_array($env, $this->_dynamicEnvironments);
     }
 
