@@ -44,8 +44,7 @@ class EngineBlock_AssetManager
 
     protected function _isDynamicEnvironment()
     {
-        $env = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('dynamicAssets', false);
-        return in_array($env, $this->_dynamicEnvironments);
+        return EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('dynamicAssets', false);
     }
 
     protected function getAssets($type)
