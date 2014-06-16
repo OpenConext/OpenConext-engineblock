@@ -616,18 +616,47 @@ class EngineBlock_Corto_Adapter
         EngineBlock_Corto_ProxyServer $proxyServer,
         Zend_Config $applicationConfiguration)
     {
-        /** @var Zend_Config $keyConfiguration */
-        $keyConfiguration = $applicationConfiguration->encryption;
-
-        /** @var Zend_Config $defaultKeyConfig */
-        $defaultKeyConfig = $keyConfiguration->key->toArray();
-
-        $extraKeysConfig = array();
-        if ($keyConfiguration->get('keys')) {
-            $extraKeysConfig = $keyConfiguration->keys->toArray();
+        if (!isset($applicationConfiguration->encryption) || !isset($applicationConfiguration->encryption->keys)) {
+            throw new EngineBlock_Corto_ProxyServer_Exception("No encryption/signing keys defined!");
         }
 
-        $proxyServer->setCertificates($defaultKeyConfig, $extraKeysConfig);
+        $keysConfig = $applicationConfiguration->encryption->keys->toArray();
+
+        if (empty($keysConfig)) {
+            throw new EngineBlock_Corto_ProxyServer_Exception("No encryption/signing keys defined!");
+        }
+
+        $publicKeyFactory = new EngineBlock_X509_PublicKeyFactory();
+        $keyPairs = array();
+        foreach ($keysConfig as $keyId => $keyConfig) {
+            if (!isset($keyConfig['privateFile'])) {
+                $this->_getSessionLog()->log(
+                    'Reference to private key file not found for key: ' . $keyId . ' skipping keypair.',
+                    Zend_Log::WARN
+                );
+                continue;
+            }
+            if (!isset($keyConfig['publicFile'])) {
+                $this->_getSessionLog()->log(
+                    'Reference to public key file not found for key: ' . $keyId,
+                    Zend_Log::WARN
+                );
+                continue;
+            }
+
+            $keyPairs[$keyId] = new EngineBlock_X509_KeyPair(
+                new EngineBlock_X509_PrivateKey($keyConfig['privateFile']),
+                $publicKeyFactory->fromFile($keyConfig['publicFile'])
+            );
+        }
+
+        if (empty($keyPairs)) {
+            throw new EngineBlock_Exception(
+                'No (valid) keypairs found in configuration! Please configure at least 1 keypair under encryption.keys'
+            );
+        }
+
+        $proxyServer->setKeyPairs($keysConfig);
 
         if ($this->_keyId !== null) {
             $proxyServer->setKeyId($this->_keyId);

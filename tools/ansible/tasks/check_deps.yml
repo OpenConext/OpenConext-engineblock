@@ -1,0 +1,28 @@
+--
+- name: Require PHP 5.3.3
+
+- name: Require Timezone set
+- name: Recommend APC for PHP < 5.5
+- name: Require PHP-curl
+
+require php >= 5.3.3
+require php timezone
+recommend APC
+require php-curl
+require php-ldap
+require php-mbstring
+require php-mcrypt
+require short open tags
+
+                  php-pecl-apc \
+                  php-cli \
+                  php-curl \
+                  php-devel \
+                  php-ldap \
+                  php-mbstring \
+                  php-mcrypt \
+                  php-mysql \
+                  php-pecl-memcache \
+                  php-soap \
+                  php-xml \
+                  php-mcrypt

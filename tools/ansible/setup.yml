@@ -1,0 +1,16 @@
+--
+- name: Setup an installed version of EngineBlock
+  hosts: engine
+  remote_user: "{{ remote_user }}"
+
+  tasks:
+  - name: Check dependencies
+    include: tasks/check_deps_src.yml
+
+  - name: Run Database Migrations
+    command: ./bin/migrate chdir={{ installed_dir }}
+
+  - name: Run LDAP Migrations
+    command: ./bin/migrate-ldap
+
+  - name: Switch over to new version.
