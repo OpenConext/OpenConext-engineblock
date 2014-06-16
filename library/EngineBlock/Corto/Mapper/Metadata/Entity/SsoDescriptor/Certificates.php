@@ -56,8 +56,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
                 continue;
             }
 
-            $certData = $entityCertificates[$keyName];
-            $pem = $this->_mapPem($certData);
+            /** @var EngineBlock_X509_PublicKey $publicKey */
+            $publicKey = $entityCertificates[$keyName];
+            $pem = $publicKey->toPem();
 
             if (in_array($pem, $alreadyAdded)) {
                 continue;
@@ -83,11 +84,5 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
                 ),
             ),
         );
-    }
-
-    protected function _mapPem($pemKey)
-    {
-        $mapper = new EngineBlock_Corto_Mapper_CertData_Pem($pemKey);
-        return $mapper->map();
     }
 }

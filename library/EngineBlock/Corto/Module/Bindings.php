@@ -552,18 +552,18 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function mapCortoEntityMetadataToSspEntityMetadata($cortoEntityMetadata)
     {
-        $publicPems = array($cortoEntityMetadata['certificates']['public']);
+        /** @var EngineBlock_X509_PublicKey[] $publicKeys */
+        $publicKeys = array();
+
+        $publicKeys[] = $cortoEntityMetadata['certificates']['public'];
+
         if (isset($cortoEntityMetadata['certificates']['public-fallback'])) {
-            $publicPems[] = $cortoEntityMetadata['certificates']['public-fallback'];
+            $publicKeys[] = $cortoEntityMetadata['certificates']['public-fallback'];
         }
+
         if (isset($cortoEntityMetadata['certificates']['public-fallback2'])) {
-            $publicPems[] = $cortoEntityMetadata['certificates']['public-fallback2'];
+            $publicKeys[] = $cortoEntityMetadata['certificates']['public-fallback2'];
         }
-        $publicPems = str_replace(
-            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
-            '',
-            $publicPems
-        );
 
         $config = array(
             'entityid'            => $cortoEntityMetadata['EntityID'],
@@ -575,11 +575,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if (isset($cortoEntityMetadata['AssertionConsumerServices'][0]['Location'])) {
             $config['AssertionConsumerService'] = $cortoEntityMetadata['AssertionConsumerServices'][0]['Location'];
         }
-        foreach ($publicPems as $publicPem) {
+        foreach ($publicKeys as $publicKey) {
             $config['keys'][] = array(
                 'signing'         => true,
                 'type'            => 'X509Certificate',
-                'X509Certificate' => $publicPem,
+                'X509Certificate' => $publicKey->toCertData(),
             );
         }
         return $config;
@@ -593,12 +593,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $configs   = $this->_server->getConfigs();
         $certificates = $this->_server->getSigningCertificates();
 
-        $publicPem = $configs['certificates']['public'];
-        $publicPem = str_replace(
-            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
-            '',
-            $publicPem
-        );
+        /** @var EngineBlock_X509_PublicKey $publicKey */
+        $publicKey = $configs['certificates']['public'];
 
         $spMetadata = SimpleSAML_Configuration::loadFromArray(
             array(
@@ -613,12 +609,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     array(
                         'signing'         => true,
                         'type'            => 'X509Certificate',
-                        'X509Certificate' => $publicPem,
+                        'X509Certificate' => $publicKey->toCertData(),
                     ),
                     array(
                         'signing'         => true,
                         'type'            => 'X509Certificate',
-                        'X509Certificate' => $publicPem,
+                        'X509Certificate' => $publicKey->toCertData(),
                     ),
                 ),
                 'privatekey' => isset($certificates['privateFile']) ? $certificates['privateFile'] : '',

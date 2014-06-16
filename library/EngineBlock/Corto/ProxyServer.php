@@ -53,7 +53,7 @@ class EngineBlock_Corto_ProxyServer
     protected $_configs;
 
     protected $_defaultCertificates = null;
-    protected $_extraCertificates = array();
+    protected $_keyPairs = array();
 
     /**
      * @var array
@@ -217,28 +217,30 @@ class EngineBlock_Corto_ProxyServer
         return $this;
     }
 
-    public function setCertificates(array $defaultKeyPair, array $extraKeyPairs = array())
+    /**
+     * @param EngineBlock_X509_KeyPair[] $keyPairs
+     */
+    public function setKeyPairs(array $keyPairs = array())
     {
-        $this->_defaultCertificates = $defaultKeyPair;
-        $this->_extraCertificates = $extraKeyPairs;
+        $this->_keyPairs = $keyPairs;
     }
 
     /**
-     * @return array
+     * @return EngineBlock_X509_KeyPair
      * @throws EngineBlock_Corto_ProxyServer_Exception
      */
     public function getSigningCertificates()
     {
         if (!$this->_keyId) {
-            return $this->_defaultCertificates;
+            return reset($this->_keyPairs);
         }
 
-        if (!isset($this->_extraCertificates[$this->_keyId])) {
+        if (!isset($this->_keyPairs[$this->_keyId])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 "Unknown key id '{$this->_keyId}'"
             );
         }
-        return $this->_extraCertificates[$this->_keyId];
+        return $this->_keyPairs[$this->_keyId];
     }
 
     public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
@@ -998,7 +1000,7 @@ class EngineBlock_Corto_ProxyServer
      */
     public function sign(array $element)
     {
-        $certificates = $this->getSigningCertificates();
+        $signingKeyPair = $this->getSigningCertificates();
 
         $signature = array(
             '__t' => 'ds:Signature',
@@ -1040,7 +1042,7 @@ class EngineBlock_Corto_ProxyServer
             'ds:KeyInfo' => array(
                 'ds:X509Data' => array(
                     'ds:X509Certificate' => array(
-                        '__v' => $this->getCertDataFromPem($certificates['public']),
+                        '__v' => $signingKeyPair->getPublicKey()->toCertData(),
                     ),
                 ),
             ),
@@ -1074,11 +1076,8 @@ class EngineBlock_Corto_ProxyServer
         $canonicalXml2Dom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo']));
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
-        $privateKey = $this->getPrivateKeyFromCertificates($certificates);
-
         $signatureValue = null;
-        openssl_sign($canonicalXml2, $signatureValue, $privateKey);
-        openssl_free_key($privateKey);
+        $signatureValue = $signingKeyPair->getPrivateKey()->sign($canonicalXml2);
 
         $signature['ds:SignatureValue']['__v'] = base64_encode($signatureValue);
 
@@ -1086,12 +1085,6 @@ class EngineBlock_Corto_ProxyServer
         $element[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Signed'] = true;
 
         return $element;
-    }
-
-    public function getCertDataFromPem($pemKey)
-    {
-        $mapper = new EngineBlock_Corto_Mapper_CertData_Pem($pemKey);
-        return $mapper->map();
     }
 
     /**
@@ -1255,40 +1248,5 @@ class EngineBlock_Corto_ProxyServer
     public function layout()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getLayout();
-    }
-
-    /**
-     * @param $certificates
-     * @return resource
-     * @throws EngineBlock_Corto_ProxyServer_Exception
-     */
-    public function getPrivateKeyFromCertificates($certificates)
-    {
-        if (!empty($certificates['private'])) {
-            $privateKeyPem = $certificates['private'];
-        }
-        else if (!empty($certificates['privateFile'])) {
-            if (!file_exists($certificates['privateFile'])) {
-                throw new EngineBlock_Corto_ProxyServer_Exception(
-                    'Private key PEM not found at: ' . $certificates['privateFile']
-                );
-            }
-            $privateKeyPem = file_get_contents($certificates['privateFile']);
-        }
-        else {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                'Current entity has no private key, unable to sign message! Please set ["certificates"]["privateFile"]!',
-                EngineBlock_Exception::CODE_WARNING
-            );
-        }
-
-        $privateKey = openssl_pkey_get_private($privateKeyPem);
-        if ($privateKey === false) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? ".
-                "Value: '$privateKeyPem'"
-            );
-        }
-        return $privateKey;
     }
 }
