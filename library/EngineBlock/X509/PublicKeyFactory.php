@@ -2,6 +2,9 @@
 
 class EngineBlock_X509_PublicKeyFactory
 {
+    const CERT_HEADER = '-----BEGIN CERTIFICATE-----';
+    const CERT_FOOTER = '-----END CERTIFICATE-----';
+
     public function fromCertData($certData)
     {
         // Remove newlines, spaces and tabs
@@ -10,8 +13,8 @@ class EngineBlock_X509_PublicKeyFactory
         // Chunk it in 64 character bytes
         $publicKey = $this->formatKey(
             $certData,
-            EngineBlock_X509_PublicKey::PEM_HEADER,
-            EngineBlock_X509_PublicKey::PEM_FOOTER
+            static::CERT_HEADER,
+            static::CERT_FOOTER
         );
 
         $openSslPubKey = openssl_pkey_get_public($publicKey);
