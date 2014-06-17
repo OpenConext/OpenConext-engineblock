@@ -20,13 +20,15 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
     foreach ($sectionVars as $sectionVarName => $sectionVarValue) {
         if ($sectionVarName === 'encryption.key.private') {
-            file_put_contents('/etc/surfconext/engineblock.key', $sectionVarValue);
-            $newLocalConfig .= "encryption.keys.$date.publicFile = /etc/surfconext/engineblock.$date.key\n";
+            $filePath = "/etc/surfconext/engineblock.$date.key";
+            file_put_contents($filePath, $sectionVarValue);
+            $newLocalConfig .= "encryption.keys.$date.privateFile = $filePath\n";
             continue;
         }
         if ($sectionVarName === 'encryption.key.public') {
-            file_put_contents('/etc/surfconext/engineblock.pem', $sectionVarValue);
-            $newLocalConfig .= "encryption.keys.$date.privateFile = /etc/surfconext/engineblock.$date.pem\n";
+            $filePath = "/etc/surfconext/engineblock.$date.pem";
+            file_put_contents($filePath, $sectionVarValue);
+            $newLocalConfig .= "encryption.keys.$date.publicFile = $filePath\n";
             continue;
         }
         if ($sectionVarName === 'auth.simplesamlphp.idp.cert') {
@@ -34,8 +36,14 @@ foreach ($localConfig as $sectionName => $sectionVars) {
             continue;
         }
         $matches = array();
-        if (preg_match('/encryption\.keys\.(?P<keyid>.+).public/', $sectionVarName, $matches) > 0) {
+        if (preg_match('/encryption\.keys\.(?P<keyid>.+).public$/', $sectionVarName, $matches) > 0) {
             $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.pem";
+            file_put_contents($fileName, $sectionVarValue);
+            $newLocalConfig .= "{$sectionVarName}File = $fileName\n";
+            continue;
+        }
+        if (preg_match('/encryption\.keys\.(?P<keyid>.+).private$/', $sectionVarName, $matches) > 0) {
+            $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.key";
             file_put_contents($fileName, $sectionVarValue);
             $newLocalConfig .= "{$sectionVarName}File = $fileName\n";
             continue;
@@ -63,16 +71,22 @@ foreach ($localConfig as $sectionName => $sectionVars) {
             $diff = array_diff($sectionVarValue, $baseVarValue);
             if (!empty($diff)) {
                 foreach ($sectionVarValue as $sectionVarSubValue) {
-                    $newLocalConfig .= "{$sectionVarName}[] = $sectionVarSubValue\n";
+                    $newLocalConfig .= "{$sectionVarName}[] = \"$sectionVarSubValue\"\n";
                 }
                 continue;
             }
         }
         else if ($baseVarValue !== $sectionVarValue) {
             if (empty($sectionVarValue)) {
-                $sectionVarValue = 'false';
+                $newLocalConfig .= "{$sectionVarName} = 0\n";
             }
-            $newLocalConfig .= "{$sectionVarName} = $sectionVarValue\n";
+            else if (is_numeric($sectionVarValue)) {
+                $newLocalConfig .= "{$sectionVarName} = $sectionVarValue\n";
+            }
+            else {
+                $newLocalConfig .= "{$sectionVarName} = \"$sectionVarValue\"\n";
+            }
+
             continue;
         }
 
