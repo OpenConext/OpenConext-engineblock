@@ -257,7 +257,8 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
         if (!isset($serviceRegistryEntity['certData']) || !$serviceRegistryEntity['certData']) {
             return $cortoEntity;
         }
-        $cortoEntity['certificates'][] = $certificateFactory->fromCertData(
+        $cortoEntity['certificates'][] = new EngineBlock_X509_CertificateLazyProxy(
+            $certificateFactory,
             $serviceRegistryEntity['certData']
         );
 
@@ -265,7 +266,8 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
         if (!isset($serviceRegistryEntity['certData2']) || !$serviceRegistryEntity['certData2']) {
             return $cortoEntity;
         }
-        $cortoEntity['certificates'][] = $certificateFactory->fromCertData(
+        $cortoEntity['certificates'][] = new EngineBlock_X509_CertificateLazyProxy(
+            $certificateFactory,
             $serviceRegistryEntity['certData2']
         );
 
@@ -273,7 +275,8 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
         if (!isset($serviceRegistryEntity['certData3']) || $serviceRegistryEntity['certData3']) {
             return $cortoEntity;
         }
-        $cortoEntity['certificates'][] = $certificateFactory->fromCertData(
+        $cortoEntity['certificates'][] = new EngineBlock_X509_CertificateLazyProxy(
+            $certificateFactory,
             $serviceRegistryEntity['certData3']
         );
 
