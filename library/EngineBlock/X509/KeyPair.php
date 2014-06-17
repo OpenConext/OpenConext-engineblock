@@ -3,24 +3,26 @@
 class EngineBlock_X509_KeyPair
 {
     /**
-     * @var EngineBlock_X509_PublicKey
+     * @var EngineBlock_X509_Certificate
      */
-    private $public;
+    private $certificate;
 
     /**
      * @var EngineBlock_X509_PrivateKey
      */
     private $private;
 
-    public function __construct(EngineBlock_X509_PrivateKey $private, EngineBlock_X509_PublicKey $public)
-    {
+    public function __construct(
+        EngineBlock_X509_Certificate $certificate = null,
+        EngineBlock_X509_PrivateKey $private = null
+    ) {
+        $this->certificate = $certificate;
         $this->private = $private;
-        $this->public = $public;
     }
 
-    public function getPublicKey()
+    public function getCertificate()
     {
-        return $this->public;
+        return $this->certificate;
     }
 
     public function getPrivateKey()

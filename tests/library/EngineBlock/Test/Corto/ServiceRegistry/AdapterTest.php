@@ -97,7 +97,7 @@ class EngineBlock_Test_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framewo
                 'MustProvisionExternally' => false,
                 'ProvideIsMemberOf' => false,
                 "certificates" => array(
-                    'public' => $metadata['https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp']['certificates']['public'],
+                    'public' => $metadata['https://ss.sp.ebdev.net/simplesaml/module.php/saml/sp/metadata.php/default-sp']['publicKeys'][0],
                 ),
                 "Name"=> array(
                     'nl' => "EngineBlock Testing SP",
@@ -147,7 +147,7 @@ class EngineBlock_Test_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framewo
                 ),
                 "GuestQualifier" => "All",
                 "certificates" => array(
-                    'public' => $metadata['https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp']['certificates']['public'],
+                    'public' => $metadata['https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp']['publicKeys'][0],
                 ),
                 "Name"=> array(
                     'nl' => "EngineBlock Testing IdP",

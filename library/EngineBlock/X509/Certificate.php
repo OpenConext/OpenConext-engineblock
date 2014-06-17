@@ -1,9 +1,9 @@
 <?php
 
-class EngineBlock_X509_PublicKey
+class EngineBlock_X509_Certificate
 {
-    const PEM_HEADER = '-----BEGIN PUBLIC KEY-----';
-    const PEM_FOOTER = '-----END PUBLIC KEY-----';
+    const PEM_HEADER = '-----BEGIN CERTIFICATE-----';
+    const PEM_FOOTER = '-----END CERTIFICATE-----';
 
     /**
      * @var resource
@@ -26,12 +26,14 @@ class EngineBlock_X509_PublicKey
 
     public function toPem()
     {
-        $keyDetails = openssl_pkey_get_details($this->opensslResource);
-        if (!$keyDetails || !$keyDetails['key']) {
-            throw new EngineBlock_Exception("Unable to convert key to PEM?");
+        $pem = '';
+        $exported = openssl_x509_export($this->opensslResource, $pem);
+
+        if (!$exported) {
+            throw new EngineBlock_Exception("Unable to convert certificate to PEM?");
         }
 
-        return $keyDetails['key'];
+        return $pem;
     }
 
     public function toCertData()

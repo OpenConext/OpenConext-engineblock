@@ -1,38 +1,41 @@
 <?php
 
-class EngineBlock_X509_PublicKeyFactory
+class EngineBlock_X509_CertificateFactory
 {
-    const CERT_HEADER = '-----BEGIN CERTIFICATE-----';
-    const CERT_FOOTER = '-----END CERTIFICATE-----';
-
     public function fromCertData($certData)
     {
         // Remove newlines, spaces and tabs
         $certData = $this->_cleanCertData($certData);
 
         // Chunk it in 64 character bytes
-        $publicKey = $this->formatKey(
+        $certificatePem = $this->formatKey(
             $certData,
-            static::CERT_HEADER,
-            static::CERT_FOOTER
+            EngineBlock_X509_Certificate::PEM_HEADER,
+            EngineBlock_X509_Certificate::PEM_FOOTER
         );
 
-        $openSslPubKey = openssl_pkey_get_public($publicKey);
-        if ($openSslPubKey === false){
-            throw new EngineBlock_Exception("Pub key $publicKey is not a valid public key!");
+        $openSslCertificate = openssl_x509_read($certificatePem);
+        if ($openSslCertificate === false){
+            throw new EngineBlock_Exception("Pub key $certificatePem is not a valid public key!");
         }
 
-        return new EngineBlock_X509_PublicKey($openSslPubKey);
+        return new EngineBlock_X509_Certificate($openSslCertificate);
     }
 
+    /**
+     * 
+     * @param $file
+     * @return EngineBlock_X509_Certificate
+     * @throws EngineBlock_Exception
+     */
     public function fromFile($file)
     {
-        $opensslPublicKey = openssl_pkey_get_public(file_get_contents($file));
-        if (!$opensslPublicKey) {
-            throw new EngineBlock_Exception("File '$file' does not contain a valid public key!");
+        $opensslCertificate = openssl_x509_read(file_get_contents($file));
+        if (!$opensslCertificate) {
+            throw new EngineBlock_Exception("File '$file' does not contain a valid certificate!");
         }
 
-        return new EngineBlock_X509_PublicKey($opensslPublicKey);
+        return new EngineBlock_X509_Certificate($opensslCertificate);
     }
 
     /**

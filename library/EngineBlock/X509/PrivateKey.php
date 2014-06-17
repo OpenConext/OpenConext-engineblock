@@ -17,6 +17,18 @@ class EngineBlock_X509_PrivateKey
         $this->_filePath = $filePath;
     }
 
+    public function filePath()
+    {
+        return $this->_filePath;
+    }
+
+    public function toXmlSecurityKey()
+    {
+        $privateKeyObj = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
+        $privateKeyObj->loadKey($this->_filePath, true);
+        return $privateKeyObj;
+    }
+
     /**
      * Sign some data with this private key.
      *

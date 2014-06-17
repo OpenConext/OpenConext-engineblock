@@ -20,30 +20,30 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
     foreach ($sectionVars as $sectionVarName => $sectionVarValue) {
         if ($sectionVarName === 'encryption.key.private') {
-            $filePath = "/etc/surfconext/engineblock.$date.key";
+            $filePath = "/etc/surfconext/engineblock.$date.pem.key";
             file_put_contents($filePath, $sectionVarValue);
             $newLocalConfig .= "encryption.keys.$date.privateFile = $filePath\n";
             continue;
         }
         if ($sectionVarName === 'encryption.key.public') {
-            $filePath = "/etc/surfconext/engineblock.$date.pem";
+            $filePath = "/etc/surfconext/engineblock.$date.pem.crt";
             file_put_contents($filePath, $sectionVarValue);
             $newLocalConfig .= "encryption.keys.$date.publicFile = $filePath\n";
             continue;
         }
         if ($sectionVarName === 'auth.simplesamlphp.idp.cert') {
-            $newLocalConfig .= "auth.simplesamlphp.idp.certificate = /etc/surfconext/engineblock.$date.pem\n";
+            $newLocalConfig .= "auth.simplesamlphp.idp.certificate = /etc/surfconext/engineblock.$date.pem.crt\n";
             continue;
         }
         $matches = array();
         if (preg_match('/encryption\.keys\.(?P<keyid>.+).public$/', $sectionVarName, $matches) > 0) {
-            $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.pem";
+            $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.pem.crt";
             file_put_contents($fileName, $sectionVarValue);
             $newLocalConfig .= "{$sectionVarName}File = $fileName\n";
             continue;
         }
         if (preg_match('/encryption\.keys\.(?P<keyid>.+).private$/', $sectionVarName, $matches) > 0) {
-            $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.key";
+            $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.pem.key";
             file_put_contents($fileName, $sectionVarValue);
             $newLocalConfig .= "{$sectionVarName}File = $fileName\n";
             continue;

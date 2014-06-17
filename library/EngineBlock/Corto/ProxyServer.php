@@ -1042,7 +1042,7 @@ class EngineBlock_Corto_ProxyServer
             'ds:KeyInfo' => array(
                 'ds:X509Data' => array(
                     'ds:X509Certificate' => array(
-                        '__v' => $signingKeyPair->getPublicKey()->toCertData(),
+                        '__v' => $signingKeyPair->getCertificate()->toCertData(),
                     ),
                 ),
             ),

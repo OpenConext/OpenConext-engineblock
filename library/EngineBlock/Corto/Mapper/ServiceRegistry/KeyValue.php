@@ -149,7 +149,7 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
 
         }
 
-        $cortoEntity = $this->mapCertificates($serviceRegistryEntity, $cortoEntity);
+        $cortoEntity = $this->_mapCertificates($serviceRegistryEntity, $cortoEntity);
 
         $this->_multilang($cortoEntity, $serviceRegistryEntity, array(
             'name'          => 'Name',
@@ -248,16 +248,16 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
      * @param $cortoEntity
      * @return array
      */
-    private function mapCertificates(array $serviceRegistryEntity, $cortoEntity)
+    private function _mapCertificates(array $serviceRegistryEntity, $cortoEntity)
     {
-        $publicKeyFactory = new EngineBlock_X509_PublicKeyFactory();
+        $certificateFactory = new EngineBlock_X509_CertificateFactory();
         $cortoEntity['certificates'] = array();
 
         // certData
         if (!isset($serviceRegistryEntity['certData']) || !$serviceRegistryEntity['certData']) {
             return $cortoEntity;
         }
-        $cortoEntity['certificates']['public'] = $publicKeyFactory->fromCertData(
+        $cortoEntity['certificates'][] = $certificateFactory->fromCertData(
             $serviceRegistryEntity['certData']
         );
 
@@ -265,7 +265,7 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
         if (!isset($serviceRegistryEntity['certData2']) || !$serviceRegistryEntity['certData2']) {
             return $cortoEntity;
         }
-        $cortoEntity['certificates']['public-fallback'] = $publicKeyFactory->fromCertData(
+        $cortoEntity['certificates'][] = $certificateFactory->fromCertData(
             $serviceRegistryEntity['certData2']
         );
 
@@ -273,7 +273,7 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
         if (!isset($serviceRegistryEntity['certData3']) || $serviceRegistryEntity['certData3']) {
             return $cortoEntity;
         }
-        $cortoEntity['certificates']['public-fallback2'] = $publicKeyFactory->fromCertData(
+        $cortoEntity['certificates'][] = $certificateFactory->fromCertData(
             $serviceRegistryEntity['certData3']
         );
 
