@@ -21,32 +21,33 @@ try {
     $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
     $restClient = new Janus_Rest_Client($config->location, $config->user, $config->user_secret);
 
-try {
+    try {
 
-$methodName = $argv[1];
-$restClient->$methodName();
+        $methodName = $argv[1];
+        $restClient->$methodName();
 
-if (isset($argv[2])) {
-    $arguments = array();
-    parse_str($argv[2], $arguments);
-    foreach ($arguments as $argumentName => $argumentValue) {
-        $restClient->$argumentName($argumentValue);
+        if (isset($argv[2])) {
+            $arguments = array();
+            parse_str($argv[2], $arguments);
+            foreach ($arguments as $argumentName => $argumentValue) {
+                $restClient->$argumentName($argumentValue);
+            }
+        }
+
+        $result = $restClient->get();
+
+        var_dump($restClient->getHttpClient()->getLastRequest());
+        var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
+        var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
+        var_dump($result);
+    } catch (Exception $e) {
+        var_dump($e);
+        var_dump($restClient->getHttpClient()->getLastRequest());
+        var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
+        var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
+
     }
-}
-
-$result = $restClient->get();
-
-var_dump($restClient->getHttpClient()->getLastRequest());
-var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
-var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
-var_dump($result);
 } catch (Exception $e) {
-    var_dump($restClient->getHttpClient()->getLastRequest());
-    var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
-    var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
     var_dump($e);
-}
-} catch(Exception $e) {
-  var_dump($e);
 }
 
