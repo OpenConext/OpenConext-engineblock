@@ -26,7 +26,6 @@ abstract class EngineBlock_Cache_FileCacheProxyAbstract
     /**
      * Tries to load from cache, if this fails load it from files
      *
-     * @param array $files
      * @return mixed
      */
     public function load()
@@ -74,17 +73,17 @@ abstract class EngineBlock_Cache_FileCacheProxyAbstract
     protected function _loadFromCache($timestamp)
     {
         if (!$this->applicationCache instanceof Zend_Cache_Backend_Apc) {
-            return;
+            return false;
         }
 
         if ($timestamp > $this->applicationCache->test($this->getCacheKey())) {
-            return;
+            return false;
         }
 
         $cache = $this->applicationCache->load($this->getCacheKey());
 
         if (!$this->_isCacheValid($cache)) {
-            return;
+            return false;
         }
 
         return $cache;
