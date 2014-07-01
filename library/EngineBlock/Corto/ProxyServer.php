@@ -232,7 +232,7 @@ class EngineBlock_Corto_ProxyServer
     public function getSigningCertificates()
     {
         if (!$this->_keyId) {
-            return reset($this->_keyPairs);
+            $this->_keyId = 'default';
         }
 
         if (!isset($this->_keyPairs[$this->_keyId])) {
