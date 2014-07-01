@@ -21,17 +21,17 @@ foreach ($localConfig as $sectionName => $sectionVars) {
     // Sort alphabetically
     ksort($sectionVars);
 
-    // Start with section header (example: [demo : base])
-    $newLocalConfig .= "[$sectionName]\n";
+    // Start with section header (ignored)
+    $newLocalConfig .= "[local]\n";
 
     // Set the keyId for the default key to the current date in Year Month Day format.
-    $defaultKeyId = date('Ymd');
+    $defaultKeyId = 'default';
 
     foreach ($sectionVars as $sectionVarName => $sectionVarValue) {
 
         // Move the default private key to a file.
         if ($sectionVarName === 'encryption.key.private') {
-            $filePath = "/etc/surfconext/engineblock.$defaultKeyId.pem.key";
+            $filePath = "/etc/surfconext/engineblock.key";
             file_put_contents($filePath, $sectionVarValue);
             $newLocalConfig .= "encryption.keys.$defaultKeyId.privateFile = $filePath\n";
             continue;
@@ -39,7 +39,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
         // Move the default public key to a file.
         if ($sectionVarName === 'encryption.key.public') {
-            $filePath = "/etc/surfconext/engineblock.$defaultKeyId.pem.crt";
+            $filePath = "/etc/surfconext/engineblock.crt";
             file_put_contents($filePath, $sectionVarValue);
             $newLocalConfig .= "encryption.keys.$defaultKeyId.publicFile = $filePath\n";
             continue;
