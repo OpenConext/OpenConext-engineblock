@@ -117,9 +117,6 @@ class Janus_Client_CacheProxy
 
         $backendCaching        = $cachingConfiguration->backend->get('name', 'File');
         $backendCachingOptions = $cachingConfiguration->backend->options->toArray();
-        if (isset($backendCachingOptions['file_name_prefix'])) {
-            $backendCachingOptions['file_name_prefix'] .= '_' . str_replace($application->getEnvironmentId(), '.', '_');
-        }
 
         $cache = Zend_Cache::factory(
             'Function',

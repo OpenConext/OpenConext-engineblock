@@ -38,13 +38,9 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
-        $this->_bootstrapEnvironmentIdByEnvironment();
-
-        $this->_bootstrapDiContainer();
+        $this->_bootstrapDefaultDiContainer();
         $this->_bootstrapConfiguration();
-
-        $this->_bootstrapEnvironmentIdByDetection();
-        $this->_bootstrapEnvironmentConfiguration();
+        $this->_bootstrapTestDiContainer();
 
         $this->_bootstrapPhpSettings();
         $this->_bootstrapErrorReporting();
@@ -61,31 +57,31 @@ class EngineBlock_Application_Bootstrapper
         return $this;
     }
 
-    protected function _bootstrapEnvironmentIdByEnvironment()
+    protected function _bootstrapDefaultDiContainer()
     {
-        // Get from environment variable (from Apache or the shell)
-        if (!defined('ENGINEBLOCK_ENV') && getenv('ENGINEBLOCK_ENV')) {
-            define('ENGINEBLOCK_ENV', getenv('ENGINEBLOCK_ENV'));
-        }
-        // Get from predefined constant
-        if (defined('ENGINEBLOCK_ENV')) {
-            $this->_application->setEnvironmentId(ENGINEBLOCK_ENV);
-        }
+        $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
     }
 
-    protected function _bootstrapDiContainer()
+    protected function _bootstrapConfiguration()
     {
-        if (defined('ENGINEBLOCK_ENV') && ENGINEBLOCK_ENV === 'testing') {
+        $configProxy = new EngineBlock_Config_CacheProxy(
+            $this->_getAllConfigFiles(),
+            $this->_application->getDiContainer()->getApplicationCache()
+        );
+        $this->_application->setConfiguration($configProxy->load());
+    }
+
+    protected function _bootstrapTestDiContainer()
+    {
+        if (defined('ENGINEBLOCK_ENV') && constant('ENGINEBLOCK_ENV') === 'testing') {
             $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
             return;
         }
 
-        if (defined('ENGINEBLOCK_ENV') && ENGINEBLOCK_ENV === 'functional-testing') {
+        if (defined('ENGINEBLOCK_ENV') && constant('ENGINEBLOCK_ENV') === 'functionalTesting') {
             $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
             return;
         }
-
-        $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
     }
 
     /**
@@ -105,15 +101,6 @@ class EngineBlock_Application_Bootstrapper
         $superGlobalManager->injectOverrides();
     }
 
-    protected function _bootstrapConfiguration()
-    {
-        $configProxy = new EngineBlock_Config_CacheProxy(
-            $this->_getAllConfigFiles(),
-            $this->_application->getDiContainer()->getApplicationCache()
-        );
-        $this->_application->setConfiguration($configProxy->load());
-    }
-
     /**
      * Return a list of config files (default and environment overrides) that should be loaded
      *
@@ -124,60 +111,6 @@ class EngineBlock_Application_Bootstrapper
         return array(
             ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
             self::CONFIG_FILE_ENVIORNMENT,
-        );
-    }
-
-    protected function _bootstrapEnvironmentIdByDetection()
-    {
-        if ($this->_application->getEnvironmentId()) {
-            // Detection not required.
-            return;
-        }
-
-        foreach ($this->_application->getConfiguration() as $environmentId => $environmentConfiguration) {
-            if (!isset($environmentConfiguration->env)) {
-                continue;
-            }
-
-            $environmentMatches = false;
-            if (isset($environmentConfiguration->env->host)) {
-                if (gethostname()===$environmentConfiguration->env->host) {
-                    $environmentMatches = true;
-                }
-                else {
-                    continue;
-                }
-            }
-
-            if (isset($environmentConfiguration->env->path)) {
-                if (strpos(__DIR__, $environmentConfiguration->env->path)===0) {
-                    $environmentMatches = true;
-                }
-                else {
-                    continue;
-                }
-            }
-            if ($environmentMatches) {
-                $this->_application->setEnvironmentId($environmentId);
-                define('ENGINEBLOCK_ENV', $environmentId);
-                return;
-            }
-        }
-
-        throw new EngineBlock_Application_Bootstrapper_Exception(
-            'Unable to detect an environment!'
-        );
-    }
-
-    protected function _bootstrapEnvironmentConfiguration()
-    {
-        $env = $this->_application->getEnvironmentId();
-        if (!isset($this->_application->getConfiguration()->$env)) {
-            throw new EngineBlock_Application_Bootstrapper_Exception("Environment '$env' does not exist?!?");
-        }
-
-        $this->_application->setConfiguration(
-            $this->_application->getConfiguration()->$env
         );
     }
 
