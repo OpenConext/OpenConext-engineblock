@@ -35,13 +35,13 @@ class EngineBlock_Config_Ini extends Zend_Config_Ini
      * handler to convert any loading errors into a Zend_Config_Exception
      *
      * @param string $filename
-     * @throws Zend_Config_Exception
      * @return array
+     * @throws EngineBlock_Exception
      */
     protected function _parseIniFile($filename)
     {
         set_error_handler(array($this, '_loadFileErrorHandler'));
-        if (substr($filename, -4) == '.ini') {
+        if (substr($filename, -4) === '.ini') {
             $iniArray = parse_ini_file($filename, true);
         } else {
             $iniArray = parse_ini_string($filename, true);
@@ -50,7 +50,9 @@ class EngineBlock_Config_Ini extends Zend_Config_Ini
 
         // Check if there was a error while loading file
         if ($this->_loadFileErrorStr !== null) {
-            throw new EngineBlock_Exception('Parsing config file failed: ' . $this->_loadFileErrorStr, EngineBlock_Exception::CODE_ALERT);
+            throw new EngineBlock_Exception(
+                'Parsing config file failed: ' . $this->_loadFileErrorStr, EngineBlock_Exception::CODE_ALERT
+            );
         }
 
         return $iniArray;

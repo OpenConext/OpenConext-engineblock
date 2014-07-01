@@ -30,10 +30,10 @@ class EngineBlock_VirtualOrganization_GroupValidator
 
     public function isMember($subjectId, array $groups)
     {
-        return $this->_validateGroupMembership($subjectId, $groups, false);
+        return $this->_validateGroupMembership($subjectId, $groups);
     }
 
-    protected function _validateGroupMembership($subjectId, array $groups, $requireNew)
+    protected function _validateGroupMembership($subjectId, array $groups, $requireNew = false)
     {
         //here we make a call to API to determine if the VO membership is valid
         $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->api->vovalidate;
@@ -48,7 +48,7 @@ class EngineBlock_VirtualOrganization_GroupValidator
             $response = $client->setHeaders(Zend_Http_Client::CONTENT_TYPE, 'application/json; charset=utf-8')
                 ->setHeaders('Authorization', 'Bearer ' . $accessToken)
                 ->request('GET');
-            if ($response->getStatus() == 200) {
+            if ($response->getStatus() === 200) {
                 $result = json_decode($response->getBody(), true);
                 if (isset($result['entry'])) {
                     $memberShips = array();
@@ -62,11 +62,17 @@ class EngineBlock_VirtualOrganization_GroupValidator
                         "No valid group membership for $subjectId (" . implode(',', $groups) . "). Group memberships returned: " . implode(',', $memberShips)
                     );
                 }
-            } else if (!$requireNew) {
+            } else if (!$requireNew && $response->getStatus() === 400) {
                 EngineBlock_ApplicationSingleton::getLog()->info(
                     "Possible expired accessToken $accessToken. Trying to obtain new accessToken"
                 );
                 return $this->_validateGroupMembership($subjectId, $groups, true);
+            }
+            else {
+                EngineBlock_ApplicationSingleton::getLog()->attach($response->asString(), 'API Response');
+                throw new EngineBlock_Exception(
+                    'Non-200 from API trying to get the group memberships'
+                );
             }
             return false;
         } catch (Exception $exception) {

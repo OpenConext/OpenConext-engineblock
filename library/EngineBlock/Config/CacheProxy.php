@@ -18,44 +18,32 @@ class EngineBlock_Config_CacheProxy
      */
     protected function _loadFromFiles(array $files)
     {
-        try {
-            return new EngineBlock_Config_Ini($this->_mergeFiles($files));
-        } catch (EngineBlock_Exception $ex) {
-            $this->_verifyFiles($files);
+        $flatResults = array();
+        foreach ($files as $iniFile) {
+            $parsed = parse_ini_file($iniFile);
+            $flatResults = array_merge($flatResults, $parsed);
         }
+
+        $nestedResults = array();
+        foreach ($flatResults as $key => $value) {
+            $keyParts = explode('.', $key);
+            $pointer = &$nestedResults;
+
+            foreach ($keyParts as $keyPart) {
+                if (!isset($pointer[$keyPart])) {
+                    $pointer[$keyPart] = array();
+                }
+                $pointer = &$pointer[$keyPart];
+            }
+
+            $pointer = $value;
+        }
+
+        return new Zend_Config($nestedResults);
     }
 
     /**
-     * Merges content of given config files
-     *
-     * @param array $files
-     * @return string
-     */
-    private function _mergeFiles(array $files)
-    {
-        $configFileContents = "";
-        foreach ($files as $configFile) {
-            $configFileContents .= file_get_contents($configFile) . PHP_EOL;
-        }
-        return $configFileContents;
-    }
-
-    /**
-     * Tries to parse config files, if this fails an exception will be thrown in EngineBlock_Config_Ini, this is useful
-     * to determine which of the files contains an error
-     *
-     * @param array $files
-     */
-    private function _verifyFiles(array $files)
-    {
-        /** @var $config EngineBlock_Config_Ini */
-        foreach ($files as $configFile) {
-            new EngineBlock_Config_Ini($configFile);
-        }
-    }
-
-    /**
-     * @param $cacheData
+     * @param $cachedData
      * @return bool
      */
     protected function _isCacheValid($cachedData)
