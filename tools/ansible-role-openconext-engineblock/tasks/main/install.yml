@@ -1,4 +1,14 @@
 ---
+  - name: Ensure the directories exists
+    file: path={{ item }} state=directory
+    with_items:
+    - "{{ releases_dir }}"
+    - "{{ builds_dir }}"
+    - "{{ configs_dir }}"
+
+  - name: Legacy 4.2.0
+    include: legacy/4.2.0.yml
+
   - name: Install Engine from Build (only when version starts with a number)
     include: install-build.yml
     when: engine_version | match("^[0-9]")
@@ -28,6 +38,3 @@
     args:
       chdir: /etc/openconext
     when: default_cert.stat.exists == false
-
-  - name: Legacy 4.2.0
-    include: legacy/4.2.0.yml
