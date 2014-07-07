@@ -1,0 +1,12 @@
+---
+galaxy_info:
+  author: Boy Baukema
+  license: Apache v2
+  min_ansible_version: 1.6
+  platforms:
+  - name: EL
+    versions:
+    - 6
+  categories:
+    - web
+dependencies: []
