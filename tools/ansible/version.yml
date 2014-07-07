@@ -1,5 +1,0 @@
---
-hosts: %{}
-remote_user: ${remote_user}
-tasks:
-  -

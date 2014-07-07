@@ -1,0 +1,33 @@
+---
+  - name: Install Engine from Build (only when version starts with a number)
+    include: install-build.yml
+    when: engine_version | match("^[0-9]")
+
+  - name: Install Engine from source (only when version does not start with a number)
+    include: install-src.yml
+    when: engine_version | match("^[^0-9]")
+
+  - name: Install default application settings (if no settings exist yet)
+    copy:
+      src: "{{ engine_release_dir }}/etc/openconext/engineblock.ini"
+      dest: /etc/openconext/engineblock.ini
+      force: no
+
+  - name: Migrate the configuration file
+    command: "{{ engine_release_dir }}/bin/migrate_etc.php"
+
+  - name: Install migrated configuration file
+    command: install -b /etc/openconext/engineblock.ini.new /etc/openconext/engineblock.ini
+
+  - name: Detect default certificates.
+    stat: path=/etc/openconext/engineblock.key
+    register: default_cert
+
+  - name: Generate new default certificate if none was found.
+    command: openssl req -subj '/CN=Engine/OU=Services/O=OpenConext/C=NL/' -newkey rsa:2048 -new -x509 -days 3652 -nodes -out engineblock.crt -keyout engineblock.key
+    args:
+      chdir: /etc/openconext
+    when: default_cert.stat.exists == false
+
+  - name: Legacy 4.2.0
+    include: legacy/4.2.0.yml

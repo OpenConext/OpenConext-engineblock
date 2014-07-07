@@ -1,3 +1,0 @@
----
-- name: Create the directory structure
-  file: path=

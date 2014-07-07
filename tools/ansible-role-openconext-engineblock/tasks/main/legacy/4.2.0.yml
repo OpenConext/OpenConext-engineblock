@@ -1,0 +1,24 @@
+---
+  - name: Legacy - Remove obsolete profile.d/openconext.sh
+    file: path=/etc/profile.d/openconext.sh state=absent
+
+  - name: Legacy - Move /var/log/surfconext to /var/log/openconext
+    command: mv /var/log/surfconext {{ logging_dir }}
+    ignore_errors: yes
+
+  - name: Legacy- Install logging directory
+    file: path={{ logging_dir }} state=directory
+
+  - name: Legacy: Install symlink from /var/log/surfconext to /var/log/openconext
+    file: path=/var/log/surfconext src={{ logging_dir }} state=link
+
+  - name: Legacy - Detect /etc/surfconext
+    stat: path=/etc/surfconext
+    register: legacy_etc_dir
+
+  - name: Legacy - move directory /etc/surfconext to /etc/openconext
+    command: mv /etc/surfconext "{{ configs_dir }}"
+    when: legacy_etc_dir.stat.exists == true and legacy_etc_dir.stat.isdir == true
+
+  - name: Legacy - Ensure /etc/surfconext points to /etc/openconext
+    file: path=/etc/surfconext src={{ configs_dir }} state=link
