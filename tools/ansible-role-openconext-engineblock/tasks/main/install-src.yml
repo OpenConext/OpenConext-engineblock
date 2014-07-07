@@ -1,12 +1,12 @@
 ---
-  - name: "SRC - Install Git repo"
+  - name: SRC - Install Git repo
     git:
       accept_hostkey: yes
-      repo: https://github.com/OpenConext/OpenConext-engineblock.git
+      repo: "{{ engine_git_url }}"
       dest: "{{ engine_release_dir }}"
       version: "{{ engine_version }}"
 
-  - name: "SRC - Running Composer install"
+  - name: SRC - Running Composer install
     command: ./bin/composer.phar --prefer-dist --no-interaction install
     args:
       chdir: "{{ engine_release_dir }}"
