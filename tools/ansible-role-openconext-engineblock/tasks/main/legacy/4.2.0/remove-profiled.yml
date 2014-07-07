@@ -1,0 +1,3 @@
+---
+  - name: Legacy - Remove obsolete profile.d/openconext.sh
+    file: path=/etc/profile.d/openconext.sh state=absent

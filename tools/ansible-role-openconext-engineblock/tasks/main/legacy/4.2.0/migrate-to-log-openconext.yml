@@ -1,0 +1,11 @@
+---
+  # Migrate to /var/log/openconext
+  - name: Legacy - Move /var/log/surfconext to /var/log/openconext
+    command: mv /var/log/surfconext {{ logging_dir }}
+    ignore_errors: yes
+
+  - name: Legacy - Install logging directory
+    file: path={{ logging_dir }} state=directory
+
+  - name: Legacy - Install symlink from /var/log/surfconext to /var/log/openconext
+    file: path=/var/log/surfconext src={{ logging_dir }} state=link

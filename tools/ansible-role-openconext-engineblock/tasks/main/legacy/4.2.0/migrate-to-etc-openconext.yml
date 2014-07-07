@@ -1,0 +1,12 @@
+---
+  # Migrate to /etc/openconext
+  - name: Legacy - Detect /etc/surfconext
+    stat: path=/etc/surfconext
+    register: legacy_etc_dir
+
+  - name: Legacy - move directory /etc/surfconext to /etc/openconext
+    command: mv /etc/surfconext "{{ configs_dir }}"
+    when: legacy_etc_dir.stat.exists == true and legacy_etc_dir.stat.isdir == true
+
+  - name: Legacy - Ensure /etc/surfconext points to /etc/openconext
+    file: path=/etc/surfconext src={{ configs_dir }} state=link
