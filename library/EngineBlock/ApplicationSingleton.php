@@ -44,11 +44,6 @@ class EngineBlock_ApplicationSingleton
     protected static $s_instance;
 
     /**
-     * @var string
-     */
-    protected $_environmentId;
-
-    /**
      * @var EngineBlock_Http_Request
      */
     protected $_httpRequest;
@@ -271,24 +266,6 @@ class EngineBlock_ApplicationSingleton
     public function setTranslator(Zend_Translate $translator)
     {
         $this->_translator = $translator;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getEnvironmentId()
-    {
-        return $this->_environmentId;
-    }
-
-    /**
-     * @param $environmentId
-     * @return EngineBlock_ApplicationSingleton
-     */
-    public function setEnvironmentId($environmentId)
-    {
-        $this->_environmentId = $environmentId;
         return $this;
     }
 

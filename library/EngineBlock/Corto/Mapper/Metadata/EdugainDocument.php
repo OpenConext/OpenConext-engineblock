@@ -75,6 +75,6 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
     {
         return $this->_eduGain ?
             EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->edugain->termsOfUse :
-            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->surfconext->termsOfUse ;
+            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->openconext->termsOfUse ;
     }
 }
