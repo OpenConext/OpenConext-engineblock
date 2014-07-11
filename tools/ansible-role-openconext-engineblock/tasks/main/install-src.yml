@@ -7,6 +7,7 @@
       version: "{{ engine_version }}"
 
   - name: SRC - Running Composer install
-    command: ./bin/composer.phar --prefer-dist --no-interaction install
+    # Note that we prefer source (which is slower...) because of the GitHub API rate limiting :(
+    command: ./bin/composer.phar --prefer-source --no-interaction install
     args:
       chdir: "{{ engine_release_dir }}"
