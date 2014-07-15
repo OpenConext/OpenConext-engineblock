@@ -1,6 +1,6 @@
 ---
   - name: Update LDAP
-    command: ldapmodify -x -D "{{ admin_ldap_binddn }}" -h localhost -w "{{ admin_ldap password }}" -f {{ item }}
+    command: ldapmodify -x -D {{ldap_admin_bind_dn}} -h localhost -w {{ldap_admin_password}} -f {{item}}
     with_items:
       - "{{ engine_release_dir }}/ldap/changes/addDeprovisionWarningSentAttributes.ldif"
       - "{{ engine_release_dir }}/ldap/changes/addCollabPersonUUID.ldif"
