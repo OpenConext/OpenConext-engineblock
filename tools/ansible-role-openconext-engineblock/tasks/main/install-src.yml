@@ -5,6 +5,8 @@
       repo: "{{ engine_git_url }}"
       dest: "{{ engine_release_dir }}"
       version: "{{ engine_version }}"
+      remote: origin
+      update: yes
 
   - name: SRC - Running Composer install
     # Note that we prefer source (which is slower...) because of the GitHub API rate limiting :(
