@@ -18,6 +18,10 @@ $newLocalConfig = <<<CONFIG
 
 CONFIG;
 foreach ($localConfig as $sectionName => $sectionVars) {
+    if (empty($sectionVars)) {
+        continue;
+    }
+
     // Sort alphabetically
     ksort($sectionVars);
 
@@ -32,7 +36,17 @@ foreach ($localConfig as $sectionName => $sectionVars) {
         // Move the default private key to a file.
         if ($sectionVarName === 'encryption.key.private') {
             $filePath = "/etc/surfconext/engineblock.key";
+            echo "|$sectionVarName| Writing out default private key to $filePath and setting encryption.keys.$defaultKeyId.privateFile";
             file_put_contents($filePath, $sectionVarValue);
+            $newLocalConfig .= "encryption.keys.$defaultKeyId.privateFile = $filePath\n";
+            continue;
+        }
+
+        // Move the default private key to a file.
+        if ($sectionVarName === 'encryption.key.privateFile') {
+            $filePath = "/etc/surfconext/engineblock.key";
+            echo "|$sectionVarName| Moving default private key to $filePath and setting encryption.keys.$defaultKeyId.privateFile";
+            rename($sectionVarValue, $filePath);
             $newLocalConfig .= "encryption.keys.$defaultKeyId.privateFile = $filePath\n";
             continue;
         }
@@ -41,6 +55,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
         if ($sectionVarName === 'encryption.key.public') {
             $filePath = "/etc/surfconext/engineblock.crt";
             file_put_contents($filePath, $sectionVarValue);
+            echo "|$sectionVarName| Writing out default public key to $filePath and setting encryption.keys.$defaultKeyId.publicFile";
             $newLocalConfig .= "encryption.keys.$defaultKeyId.publicFile = $filePath\n";
             continue;
         }
