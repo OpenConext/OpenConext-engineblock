@@ -1,8 +1,16 @@
 ---
   # Migrate to /var/log/openconext
+  - name: Legacy - Detect /etc/surfconext
+    stat: path=/etc/surfconext
+    register: legacy_log_dir
+
+  - name: Legacy - move directory /etc/surfconext to /etc/openconext
+    command: mv -T /etc/surfconext "{{ configs_dir }}"
+
+
   - name: Legacy - Move /var/log/surfconext to /var/log/openconext
-    command: mv /var/log/surfconext {{ logging_dir }}
-    ignore_errors: yes
+    command: mv -T /var/log/surfconext {{ logging_dir }}
+    when: legacy_log_dir.stat.exists and legacy_etc_dir.stat.isdir
 
   - name: Legacy - Install logging directory
     file: path={{ logging_dir }} state=directory

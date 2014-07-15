@@ -17,11 +17,13 @@
     include: install-src.yml
     when: engine_version | match("^[^0-9]")
 
+  - name: Check if /etc/openconext/engineblock.ini exists yet
+    stat: path=/etc/openconext/engineblock.ini
+    register: engineblock_ini
+
   - name: Install default application settings (if no settings exist yet)
-    copy:
-      src: "{{ engine_release_dir }}/etc/openconext/engineblock.ini"
-      dest: /etc/openconext/engineblock.ini
-      force: no
+    command: cp "{{ engine_release_dir }}/etc/openconext/engineblock.ini" /etc/openconext/engineblock.ini
+    when: not engineblock_ini.stat.exists
 
   - name: Migrate the configuration file
     command: "{{ engine_release_dir }}/bin/migrate_etc.php"
@@ -37,4 +39,4 @@
     command: openssl req -subj '/CN=Engine/OU=Services/O=OpenConext/C=NL/' -newkey rsa:2048 -new -x509 -days 3652 -nodes -out engineblock.crt -keyout engineblock.key
     args:
       chdir: /etc/openconext
-    when: default_cert.stat.exists == false
+    when: not default_cert.stat.exists
