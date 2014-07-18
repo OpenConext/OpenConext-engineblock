@@ -18,6 +18,7 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
         'CustomNameId',
         'IntendedNameId',
         'DeliverByBinding',
+        'RelayState',
     );
 
     /**
