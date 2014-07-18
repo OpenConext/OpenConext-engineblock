@@ -703,7 +703,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Custom ACS Location & ProtocolBinding goes first
         /** @var SAML2_AuthnRequest $request */
-        if ($request->getAssertionConsumerServiceURL()) {
+        if ($request->getAssertionConsumerServiceURL() && $request->getProtocolBinding()) {
             if ($requestWasSigned) {
                 $this->_server->getSessionLog()->info(
                     "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
@@ -747,6 +747,18 @@ class EngineBlock_Corto_ProxyServer
                 }
             }
             return false;
+        }
+        else {
+            if ($request->getAssertionConsumerServiceURL() || $request->getProtocolBinding()) {
+                // Note that an SP is not actually required to supply both a URL and a Binding.
+                // But what should we do if we don't have both? Pick out a random counterpart from the metadata?
+                // Seems a little hard to predict for the SP, so we go with the default endpoint.
+                $this->_server->getSessionLog()->notice(
+                    "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
+                    "or ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, " .
+                    "but not both! Ignoring... "
+                );
+            }
         }
 
         if ($request->getAssertionConsumerServiceIndex()) {
