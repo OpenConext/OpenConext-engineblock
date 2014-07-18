@@ -140,7 +140,7 @@ $config = array (
 	 * The process name that should be used when logging to syslog.
 	 * The value is also written out by the other logging handlers.
 	 */
-	'logging.processname' => 'simplesamlphp',
+	'logging.processname' => 'engineblock',
 
 	/* Logging: file - Logfilename in the loggingdir from above.
 	 */
