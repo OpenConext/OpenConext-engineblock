@@ -25,7 +25,7 @@
 
 /**
  * Injected variables;
- * @var $this EngineBlock_Corto_CoreProxy
+ * @var $this EngineBlock_View
  * @var $metaDataSP array
  * @var $idpList array
  * @var $action string
@@ -92,9 +92,9 @@ if ($preselectedIdp) {
         <meta name="robots" content="noindex, nofollow"/>
         <meta name="viewport" content = "width=device-width, initial-scale=1, minimum-scale=0.1, maximum-scale=1" />
 
-        <title><?php echo $this->layout()->title; ?></title>
+        <title><?= $this->layout()->title; ?></title>
 
-        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
+        <?= EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
     </head>
     <body class="index">
         <div id="wrapper">
@@ -103,36 +103,36 @@ if ($preselectedIdp) {
                 <ul class="nav">
                     <li id="help_nav"><a href="#" data-help-type="discover">HELP</a></li>
                     <li class="lang <?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
+                        <a href="<?= EngineBlock_View::setLanguage('en'); ?>">EN</a>
                     </li>
                     <li class="lang <?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
+                        <a href="<?= EngineBlock_View::setLanguage('nl'); ?>">NL</a>
                     </li>
                 </ul>
 
-                <h1><?php echo $this->t('idp_selection_subheader'); ?></h1>
+                <h1><?= $this->t('idp_selection_subheader'); ?></h1>
 
                 <!-- Main content -->
                 <div id="content">
-                    <form id="IdpListForm" method="post" action="<?php echo htmlentities($action); ?>">
+                    <form id="IdpListForm" method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
                         <p>
-                            <input id="ID" type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
+                            <input id="ID" type="hidden" name="ID" value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>" />
                             <input id="Idp" type="hidden" name="idp" value="" />
                         </p>
                     </form>
 
-                    <p><?php echo $this->t('idp_selection_desc', $displayName); ?></p>
+                    <p><?= $this->t('idp_selection_desc', $displayName); ?></p>
 
                     <?php if ($preselectedIdp) : ?>
                     <!-- Preselected IdP -->
                     <div id="IdpSuggestion" class="suggestion">
                         <noscript>
-                            <form method="post" action="<?php echo htmlentities($action); ?>">
+                            <form method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
                                 <p>
-                                    <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
-                                    <input type="hidden" name="idp" value="<?php echo htmlentities($preselectedIdp); ?>" />
+                                    <input type="hidden" name="ID" value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>" />
+                                    <input type="hidden" name="idp" value="<?= $this->htmlSpecialCharsAttributeValue($preselectedIdp); ?>" />
 
-                                    <input type="submit" value="<?php echo htmlentities($preselectedIdpName); ?>" />
+                                    <input type="submit" value="<?= $this->htmlSpecialCharsAttributeValue($preselectedIdpName); ?>" />
                                 </p>
                             </form>
                         </noscript>
@@ -140,22 +140,22 @@ if ($preselectedIdp) {
                     <?php endif; ?>
 
                     <!-- Search -->
-                    <input type="search" class="search" id="searchBox" placeholder="<?php echo $this->t('search'); ?>" />
+                    <input type="search" class="search" id="searchBox" placeholder="<?= $this->t('search'); ?>" />
 
                     <!-- Results -->
                     <div class="results">
                         <div id="noResultsMessage" style="display:none">
-                            <p class="noresults"><?php echo $this->t('no_results'); ?></p>
+                            <p class="noresults"><?= $this->t('no_results'); ?></p>
                         </div>
 
                         <noscript>
                             <div style="width: 451px; height: 250px; overflow: scroll">
                                 <?php foreach ($idpList as $idp) : ?>
-                                <form method="post" action="<?php echo $action ?>">
+                                <form method="post" action="<?= $action ?>">
                                     <p>
-                                        <input type="hidden" name="ID" value="<?php echo htmlentities($ID); ?>" />
-                                        <input type="hidden" name="idp" value="<?php echo htmlentities($idp['EntityID']); ?>" />
-                                        <input type="submit" value="<?php echo htmlentities($idp['Name_en']); ?>" />
+                                        <input type="hidden" name="ID" value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>" />
+                                        <input type="hidden" name="idp" value="<?= $this->htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
+                                        <input type="submit" value="<?= $this->htmlSpecialCharsAttributeValue($idp['Name_en']); ?>" />
                                     </p>
                                 </form>
                                 <?php endforeach; ?>
@@ -179,7 +179,7 @@ if ($preselectedIdp) {
                 <div class="bottom">
                     <hr />
                     <p>
-                        <?php echo $this->t('footer'); ?>
+                        <?= $this->t('footer'); ?>
                     </p>
                 </div>
             </div>
@@ -215,7 +215,7 @@ if ($preselectedIdp) {
             </div>
             </p>
         </script>
-        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
+        <?= EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
 
         <script>
         <?php

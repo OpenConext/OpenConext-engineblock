@@ -28,7 +28,7 @@
  * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
  * @var array $idp
  * @var array $attributes
- * @var EngineBlock_Corto_ProxyServer $this
+ * @var EngineBlock_View $this
  *
  * @var Zend_Layout $layout
  */
@@ -47,7 +47,7 @@ $attributesValidated = $validator->validate();
 
 <?php if ($attributesValidated) : ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="" />
-<?php echo $this->t('attributes_validation_succeeded'); ?>
+<?= $this->t('attributes_validation_succeeded'); ?>
 <?php else: ?>
     <?php if (count($validator->getErrors()) > 0): ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="" style="vertical-align: bottom" />
@@ -55,7 +55,7 @@ $attributesValidated = $validator->validate();
 <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="" style="vertical-align: bottom" />
     <?php endif; ?>
 
-<?php echo $this->t('attributes_validation_failed'); ?>
+<?= $this->t('attributes_validation_failed'); ?>
 <?php endif; ?>
 
 <form method="post" style="float: right">
@@ -71,15 +71,15 @@ $attributesValidated = $validator->validate();
             Logo
         </th>
         <td>
-            <img src="<?php echo $idp['Logo']['URL'] ?>" />
+            <img src="<?= $idp['Logo']['URL'] ?>" />
         </td>
     </tr>
     <tr>
         <th>
-            <?php echo $this->t('name'); ?>
+            <?= $this->t('name'); ?>
         </th>
         <td>
-            <?php echo htmlentities($idp['Name']['en'], ENT_COMPAT, 'UTF-8') ?>
+            <?= $this->htmlSpecialCharsText($idp['Name']['en'], ENT_COMPAT, 'UTF-8') ?>
         </td>
     </tr>
     <tr>
@@ -87,7 +87,7 @@ $attributesValidated = $validator->validate();
             Entity ID
         </th>
         <td>
-            <?php echo htmlentities($idp['EntityID'], ENT_COMPAT, 'UTF-8') ?>
+            <?= $this->htmlSpecialCharsText($idp['EntityID']) ?>
         </td>
     </tr>
     <tr>
@@ -95,7 +95,7 @@ $attributesValidated = $validator->validate();
             Workflow Status
         </th>
         <td <?php if ($idp['WorkflowState']==='production') { echo 'style="color: green"';} ?>>
-            <?php echo htmlentities($idp['WorkflowState'], ENT_COMPAT, 'UTF-8') ?>
+            <?= $this->htmlSpecialCharsText($idp['WorkflowState']) ?>
         </td>
     </tr>
 </table>
@@ -106,22 +106,22 @@ $attributesValidated = $validator->validate();
         <th>NameID</th>
 
         <td>
-            <?php $nameId = $response->getAssertion()->getNameId(); echo htmlentities($nameId['Value'], ENT_COMPAT, 'UTF-8'); ?>
+            <?php $nameId = $response->getAssertion()->getNameId(); echo $this->htmlSpecialCharsText($nameId['Value']); ?>
         </td>
     </tr>
 </table>
 <hr />
-<h2><?php echo $this->t('attributes') ?></h2>
+<h2><?= $this->t('attributes') ?></h2>
 <?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
     <p class="error">
         <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
-    echo htmlentities(call_user_func_array(array($this, 'translate'), $error), ENT_COMPAT, 'UTF-8');
+    echo $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
     ?></p>
 <?php endforeach; ?>
 <?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
     <p class="warning">
         <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
-    echo htmlentities(call_user_func_array(array($this, 'translate'), $warning), ENT_COMPAT, 'UTF-8');
+    echo $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
     ?></p>
 <?php endforeach; ?>
 <table>
@@ -131,13 +131,13 @@ $attributesValidated = $validator->validate();
                 SURFconext Display Name
             </th>
             <th>
-                <?php echo $this->t('name'); ?>
+                <?= $this->t('name'); ?>
             </th>
             <th>
-                <?php echo $this->t('value'); ?>
+                <?= $this->t('value'); ?>
             </th>
             <th>
-                <?php echo $this->t('validation'); ?>
+                <?= $this->t('validation'); ?>
             </th>
         </tr>
     </thead>
@@ -148,15 +148,15 @@ $attributesValidated = $validator->validate();
                 <?= $this->getAttributeName($attributeName, 'en', false) ?>
             </td>
             <td>
-                <?php echo htmlentities($attributeName, ENT_COMPAT, 'UTF-8'); ?>
+                <?= $this->htmlSpecialCharsText($attributeName); ?>
             </td>
             <td>
                 <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                <?php echo htmlentities($attributeValues[0], ENT_COMPAT, 'UTF-8');?>
+                <?= $this->htmlSpecialCharsText($attributeValues[0]);?>
                 <?php } /** Multiple attribute values */ else { ?>
                 <ul>
                     <?php foreach ($attributeValues as $value) { ?>
-                    <li><?php echo htmlentities($value, ENT_COMPAT, 'UTF-8'); ?></li>
+                    <li><?= $this->htmlSpecialCharsText($value); ?></li>
                     <?php } ?>
                 </ul>
                 <?php } ?>
@@ -168,13 +168,13 @@ $attributesValidated = $validator->validate();
                     foreach ($validator->getErrors($attributeName) as $error) {
                         echo '<p class="error">' .
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
-                                htmlentities(call_user_func_array(array($this, 'translate'), $error), ENT_COMPAT, 'UTF-8') .
+                                $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                             '</p>';
                     }
                     foreach ($validator->getWarnings($attributeName) as $warning) {
                         echo '<p class="warning">'.
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
-                                htmlentities(call_user_func_array(array($this, 'translate'), $warning), ENT_COMPAT, 'UTF-8') .
+                                $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
                             '</p>';
                     }
                 endif; ?>
@@ -185,9 +185,9 @@ $attributesValidated = $validator->validate();
 </table>
 <hr />
 <p>
-    <?php echo htmlentities($this->t('idp_debugging_mail_explain', ENT_COMPAT, 'UTF-8')); ?>
+    <?= $this->htmlSpecialCharsText($this->t('idp_debugging_mail_explain')); ?>
 </p>
 <form method="post">
     <input type="hidden" name="mail" value="true" />
-    <input type="submit" value="<?php echo htmlentities($this->t('idp_debugging_mail_button', ENT_COMPAT, 'UTF-8')); ?>" />
+    <input type="submit" value="<?= $this->htmlSpecialCharsAttributeValue($this->t('idp_debugging_mail_button')); ?>" />
 </form>
