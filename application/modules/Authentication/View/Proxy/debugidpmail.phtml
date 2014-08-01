@@ -23,7 +23,8 @@ echo 'Workflow Status:   ' . $idp['WorkflowState'] . PHP_EOL;
 SAML2 Subject
 =============
 <?php
-echo 'NameID             ' . $response->getAssertion()->getNameId() ?>
+$nameId = $response->getAssertion()->getNameId();
+echo 'NameID             ' . $nameId['Value'] ?>
 
 
 
