@@ -37,7 +37,7 @@ $layout->setLayout('empty');
     </head>
     <body>
         <p>
-           <a href="<?php echo htmlspecialchars($location); ?>">GO</a>
+           <a href="<?= $this->htmlSpecialCharsAttributeValue($location); ?>">GO</a>
         <p>
         <pre>
             <?php print_r($message, 1) ?>

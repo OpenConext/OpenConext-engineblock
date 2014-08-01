@@ -41,6 +41,7 @@ if (!isset($sp)) {
 if (!isset($idp)) {
     throw new EngineBlock_View_Exception('No IdP information given to consent screen');
 }
+/** @var EngineBlock_View $this */
 
 // The current language
 $lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
@@ -59,7 +60,7 @@ $layout->setLayout('consent');
 
 // Set Layout variables
 $layout->use_header = false;
-$layout->title      = $layout->title . ' - '. $this->t('consent_header', htmlentities($spName));
+$layout->title      = $layout->title . ' - '. $this->t('consent_header', $this->htmlSpecialCharsText($spName));
 $layout->subheader  = $this->t('consent_subheader', $spName);
 $layout->footerText = $this->t('footer');
 
@@ -83,36 +84,36 @@ $inlineScriptHelper->appendScript('
         width: 100%;
     }
 </style>
-<h2><?php echo $this->t('consent_header_info'); ?></h2>
+<h2><?= $this->t('consent_header_info'); ?></h2>
 
 <p>
-    <?php echo $this->t('consent_sp_idp_info', $spName, $idpName); ?>
+    <?= $this->t('consent_sp_idp_info', $spName, $idpName); ?>
 </p>
 
 <div>
     <?php $this->sortConsentDisplayOrder($attributes) ?>
     <table>
-    <?php foreach ($attributes as $uid => $attributeValues) { ?>
-        <?php $attributeName = $this->getDisplayName($uid, $lang, false)?>
+    <?php foreach ($attributes as $uid => $attributeValues) : ?>
+        <?php $attributeName = $this->getAttributeName($uid, $lang, false)?>
         <?php if ($attributeName) : ?>
             <tr>
                 <td>
-                    <?= $attributeName ?>
+                    <?=$this->htmlSpecialCharsText($attributeName) ?>
                 </td>
                 <td>
-                    <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                        <?php echo htmlspecialchars($attributeValues[0]);?>
-                    <?php } /** Multiple attribute values */ else { ?>
+                    <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
+                        <?=$this->htmlSpecialCharsText($attributeValues[0]);?>
+                    <?php /** Multiple attribute values */ else: ?>
                         <ul>
-                            <?php foreach ($attributeValues as $value) { ?>
-                                <li><?php echo htmlspecialchars($value); ?></li>
-                            <?php } ?>
+                            <?php foreach ($attributeValues as $value) : ?>
+                                <li><?=$this->htmlSpecialCharsText($value); ?></li>
+                            <?php endforeach ?>
                         </ul>
-                    <?php } ?>
+                    <?php endif ?>
                 </td>
             </tr>
         <?php endif; ?>
-    <?php } ?>
+    <?php endforeach ?>
     </table>
 </div>
 
@@ -124,31 +125,31 @@ $inlineScriptHelper->appendScript('
 
 <div id="approve">
 <!-- YES -->
-<form id="accept" method="post" action="<?php echo htmlspecialchars($action); ?>">
-        <input type="hidden" name="ID"      value="<?php echo htmlspecialchars($ID); ?>">
+<form id="accept" method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
+        <input type="hidden" name="ID"      value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
 
         <input id="accept_terms_button"
                class="submit bigbutton"
                type="submit"
-               value="<?php echo $this->t('consent_accept'); ?>"
+               value="<?= $this->t('consent_accept'); ?>"
                />
 </form>
 
 <!-- NO -->
-<form id="reject" method="post" action="<?php echo htmlspecialchars($action); ?>">
-        <input type="hidden" name="ID"      value="<?php echo htmlspecialchars($ID); ?>">
+<form id="reject" method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
+        <input type="hidden" name="ID"      value="<?=$this->htmlSpecialCharsAttributeValue($ID); ?>">
         <input type="hidden" name="consent" value="no" />
 
         <a id="decline_terms_button" style="line-height: 40px;" href="javascript:;" onclick="document.getElementById('reject').submit();">
-            <?php echo $this->t('consent_decline'); ?>
+            <?= $this->t('consent_decline'); ?>
         </a>
 </form>
 </div>
 
-<p class="grey"><?php echo $this->t('consent_notice'); ?></p>
+<p class="grey"><?= $this->t('consent_notice'); ?></p>
 
 <?php if (isset($sp['Eula'])) : ?>
-    <?php echo $this->t('sp_terms_of_service', $spName, $sp['Eula']); ?>
+    <?= $this->t('sp_terms_of_service', $spName, $sp['Eula']); ?>
 <?php endif; ?>
 

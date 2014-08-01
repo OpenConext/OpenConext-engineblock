@@ -30,7 +30,7 @@ $title = !empty($_SESSION['feedback_custom']['title'][$this->language()]) ?
             $_SESSION['feedback_custom']['title'][$this->language()] :
             $this->t('error_generic');
 $description = !empty($_SESSION['feedback_custom']['description'][$this->language()]) ?
-    htmlentities($_SESSION['feedback_custom']['description'][$this->language()], 0, 'UTF-8') :
+    $this->htmlSpecialCharsText($_SESSION['feedback_custom']['description'][$this->language()]) :
     $this->t('error_generic_desc');
 
 $layout = $this->layout();
@@ -46,6 +46,6 @@ $layout->footerText = $this->t('footer');
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
-        <?php echo $description;
+        <?= $description;
 
         require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

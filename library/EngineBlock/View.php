@@ -122,6 +122,18 @@ class EngineBlock_View
         return "Unknown (meta-data incomplete)";
     }
 
+    public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->getName($attributeId, $ietfLanguageTag, $fallbackToId);
+    }
+
+    public function getAttributeDescription($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        return $metadata->getDescription($attributeId, $ietfLanguageTag);
+    }
+
     /**
      * Return the language.
      *
@@ -194,6 +206,22 @@ class EngineBlock_View
         }
 
         return $query;
+    }
+
+    public function htmlSpecialCharsText($content)
+    {
+        return htmlspecialchars($content, ENT_NOQUOTES, 'UTF-8');
+    }
+
+    public function htmlSpecialCharsAttributeValue($content)
+    {
+        return htmlspecialchars($content, ENT_COMPAT, 'UTF-8');
+    }
+
+    public function sortConsentDisplayOrder(&$attributes)
+    {
+        $metadata = new EngineBlock_Attributes_Metadata();
+        $metadata->sortConsentDisplayOrder($attributes);
     }
 
     /**

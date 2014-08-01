@@ -15,8 +15,8 @@ $log->getQueueWriter()->flush('feedback page shown');
             }
         ?>
             <tr>
-                <td><strong><?php echo htmlentities($this->t($name))?>:</strong></td>
-                <td><?php echo htmlentities($value);?></td>
+                <td><strong><?= $this->htmlSpecialCharsText($this->t($name))?>:</strong></td>
+                <td><?= $this->htmlSpecialCharsText($value);?></td>
             </tr>
         <?php
         }
@@ -27,7 +27,7 @@ $log->getQueueWriter()->flush('feedback page shown');
     <hr />
 
     <p>
-        <?php echo $this->t('error_help_desc'); ?>
+        <?= $this->t('error_help_desc'); ?>
     </p>
 
     <?php
@@ -35,7 +35,7 @@ $log->getQueueWriter()->flush('feedback page shown');
     ?>
     <div class="button-row">
         <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-            <?php echo $this->t('go_back'); ?>
+            <?= $this->t('go_back'); ?>
             <span class="btn-wrap-right">&nbsp;</span>
         </a>
     </div>
@@ -44,7 +44,7 @@ $log->getQueueWriter()->flush('feedback page shown');
 </div>
 
    <?php if (isset($exception)) { ?>
-    <strong><?php echo $exception->getMessage();?></strong>
+    <strong><?= $exception->getMessage();?></strong>
     <pre>
     <?php var_dump($exception); ?>
 </pre>

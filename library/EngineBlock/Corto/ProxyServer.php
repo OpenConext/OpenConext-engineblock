@@ -243,31 +243,6 @@ class EngineBlock_Corto_ProxyServer
         return $this->_keyPairs[$this->_keyId];
     }
 
-    public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
-    {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->getDisplayName($attributeId, $ietfLanguageTag);
-
-    }
-
-    public function sortConsentDisplayOrder(&$attributes)
-    {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        $metadata->sortConsentDisplayOrder($attributes);
-    }
-
-    public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
-    {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->getName($attributeId, $ietfLanguageTag, $fallbackToId);
-    }
-
-    public function getAttributeDescription($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
-    {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->getDescription($attributeId, $ietfLanguageTag);
-    }
-
     public function getUrl($serviceName = "", $remoteEntityId = "", EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request = null)
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
@@ -392,20 +367,6 @@ class EngineBlock_Corto_ProxyServer
     public function setRemoteEntities($entities)
     {
         $this->_entities['remote'] = $entities;
-    }
-
-    public function setTemplateSource($type, $arguments)
-    {
-        $this->_templateSource = array(
-            'type'      => $type,
-            'arguments' => $arguments,
-        );
-        return $this;
-    }
-
-    public function getTemplateSource()
-    {
-        return $this->_templateSource;
     }
 
 //////// MAIN /////////
@@ -536,8 +497,7 @@ class EngineBlock_Corto_ProxyServer
         // Unless of course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
         $serviceProvider = $this->getRemoteEntity($request->getIssuer());
-        $mustProxyTransparently = ($request->isTransparent() || !empty($serviceProvider['TransparentIssuer']));
-        if (!$this->isInProcessingMode() && $mustProxyTransparently) {
+        if (!$this->isInProcessingMode() && !empty($serviceProvider['TransparentIssuer'])) {
             $newResponse->setIssuer($newResponse->getOriginalIssuer());
             $newAssertion->setIssuer($newResponse->getOriginalIssuer());
         }
@@ -705,7 +665,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Custom ACS Location & ProtocolBinding goes first
         /** @var SAML2_AuthnRequest $request */
-        if ($request->getAssertionConsumerServiceURL()) {
+        if ($request->getAssertionConsumerServiceURL() && $request->getProtocolBinding()) {
             if ($requestWasSigned) {
                 $this->_server->getSessionLog()->info(
                     "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
@@ -749,6 +709,18 @@ class EngineBlock_Corto_ProxyServer
                 }
             }
             return false;
+        }
+        else {
+            if ($request->getAssertionConsumerServiceURL() || $request->getProtocolBinding()) {
+                // Note that an SP is not actually required to supply both a URL and a Binding.
+                // But what should we do if we don't have both? Pick out a random counterpart from the metadata?
+                // Seems a little hard to predict for the SP, so we go with the default endpoint.
+                $this->_server->getSessionLog()->notice(
+                    "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
+                    "or ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, " .
+                    "but not both! Ignoring... "
+                );
+            }
         }
 
         if ($request->getAssertionConsumerServiceIndex()) {
@@ -877,70 +849,15 @@ class EngineBlock_Corto_ProxyServer
         $response->getAssertion()->setAttributes($responseAttributes);
     }
 
-////////  TEMPLATE RENDERING /////////
-
-    public function renderTemplate($templateName, $vars = array(), $parentTemplates = array())
+    public function renderTemplate($templateName, array $vars = array())
     {
         $this->getSessionLog()->info("Rendering template '$templateName'");
-        if (!is_array($vars)) {
-            $vars = array('content' => $vars);
-        }
 
-        $templateFileName = $templateName . '.phtml';
+        $templateFileName = ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/' . $templateName . '.phtml';
 
-        ob_start();
-
-        $this->_renderTemplate($templateFileName, $vars);
-
-        $content = ob_get_contents();
-        ob_end_clean();
-
-        foreach ($parentTemplates as $parentTemplate) {
-            $content = $this->renderTemplate(
-                $parentTemplate,
-                array(
-                    'content' => $content,
-                )
-            );
-        }
-
-        $layout = $this->layout();
-        $layout->content = $content;
-        return $layout->render();
-    }
-
-    protected function _renderTemplate($templateFileName, $vars)
-    {
-        extract($vars);
-
-        $source = $this->getTemplateSource();
-        switch ($source['type'])
-        {
-            case self::TEMPLATE_SOURCE_MEMORY:
-                if (!isset($source['arguments'][$templateFileName])) {
-                    throw new EngineBlock_Corto_ProxyServer_Exception("Unable to load template '$templateFileName' from memory!");
-                }
-
-                eval('?>' . $source['arguments'][$templateFileName] . '<?');
-                break;
-
-            case self::TEMPLATE_SOURCE_FILESYSTEM;
-                if (!isset($source['arguments']['FilePath'])) {
-                    throw new EngineBlock_Corto_ProxyServer_Exception('Template path not set, unable to render templates from filesystem!');
-                }
-
-                $filePath = $source['arguments']['FilePath'] . $templateFileName;
-                if (!file_exists($filePath)) {
-                    throw new EngineBlock_Corto_ProxyServer_Exception('Template file does not exist: ' . $filePath);
-                }
-
-                include($filePath);
-                break;
-            default:
-                throw new EngineBlock_Corto_ProxyServer_Exception(
-                    'No template source set! Please configure a template source with Corto_ProxyServer->setTemplateSource()'
-                );
-        }
+        $view = new EngineBlock_View();
+        $view->setData($vars);
+        return $view->render($templateFileName);
     }
 
 //////// I/O /////////
@@ -1194,59 +1111,38 @@ class EngineBlock_Corto_ProxyServer
         $this->_sessionLogDefault = $logDefault;
     }
 
-
     /**
-     * Translate a string.
-     *
-     * Alias for 'translate'
-     *
-     * @example <?php echo $this->t('logged_in_as', $this->user->getDisplayName()); ?>
-     *
-     * @param string $from Identifier for string
-     * @param string $arg1 Argument to parse in with sprintf
-     * @return string
+     * @param $certificates
+     * @return resource
+     * @throws EngineBlock_Corto_ProxyServer_Exception
      */
-    public function t($from, $arg1 = null)
+    public function getPrivateKeyFromCertificates($certificates)
     {
-        return call_user_func_array(array($this, 'translate'), func_get_args());
-    }
+        if (!empty($certificates['private'])) {
+            $privateKeyPem = $certificates['private'];
+        }
+        else if (!empty($certificates['privateFile'])) {
+            if (!file_exists($certificates['privateFile'])) {
+                throw new EngineBlock_Corto_ProxyServer_Exception(
+                    'Private key PEM not found at: ' . $certificates['privateFile']
+                );
+            }
+            $privateKeyPem = file_get_contents($certificates['privateFile']);
+        }
+        else {
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                'Current entity has no private key, unable to sign message! Please set ["certificates"]["privateFile"]!',
+                EngineBlock_Exception::CODE_WARNING
+            );
+        }
 
-    /**
-     * Translate a string.
-     *
-     * Has an alias called 't'.
-     *
-     * @example <?php echo $this->translate('logged_in_as', $this->user->getDisplayName()); ?>
-     *
-     * @param string $from Identifier for string
-     * @param string $arg1 Argument to parse in with sprintf
-     * @return string
-     */
-    public function translate($from, $arg1 = null)
-    {
-        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
-
-        $arguments = func_get_args();
-        $arguments[0] = $translator->translate($from);
-        return call_user_func_array('sprintf', $arguments);
-    }
-
-    /**
-     * Return the language.
-     *
-     * @example <?php echo $this->language(); ?>
-     *
-     * @return string
-     */
-    public function language()
-    {
-        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
-
-        return $translator->getLocale();
-    }
-
-    public function layout()
-    {
-        return EngineBlock_ApplicationSingleton::getInstance()->getLayout();
+        $privateKey = openssl_pkey_get_private($privateKeyPem);
+        if ($privateKey === false) {
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Current entity ['certificates']['private'] value is NOT a valid PEM formatted SSL private key?!? ".
+                "Value: '$privateKeyPem'"
+            );
+        }
+        return $privateKey;
     }
 }
