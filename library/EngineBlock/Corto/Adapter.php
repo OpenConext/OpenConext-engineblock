@@ -476,11 +476,6 @@ class EngineBlock_Corto_Adapter
         unset($remoteEntities[$idpEntityId]);
         $proxyServer->setRemoteEntities($remoteEntities);
 
-        $proxyServer->setTemplateSource(
-            EngineBlock_Corto_ProxyServer::TEMPLATE_SOURCE_FILESYSTEM,
-            array('FilePath'=>ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/')
-        );
-
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
 

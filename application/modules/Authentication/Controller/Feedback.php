@@ -43,14 +43,14 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
     public function unknownIssuerAction()
     {
         $this->_getResponse()->setStatus(404, 'Not Found');
-        $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
-        $this->__set('destination', htmlspecialchars($this->_getRequest()->getQueryParameter('destination')));
+        $this->__set('entity-id', $this->_getRequest()->getQueryParameter('entity-id'));
+        $this->__set('destination', $this->_getRequest()->getQueryParameter('destination'));
     }
 
     public function unknownServiceProviderAction()
     {
         $this->_getResponse()->setStatus(400, 'Bad Request');
-        $this->__set('entity-id', htmlspecialchars($this->_getRequest()->getQueryParameter('entity-id')));
+        $this->__set('entity-id', $this->_getRequest()->getQueryParameter('entity-id'));
     }
 
     public function missingRequiredFieldsAction()

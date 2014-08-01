@@ -5,7 +5,7 @@
  * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
  * @var array $idp
  * @var array $attributes
- * @var EngineBlock_Corto_ProxyServer $this
+ * @var EngineBlock_View $this
  */
 
 $validator = new EngineBlock_Attributes_Validator($attributes);
@@ -31,28 +31,28 @@ echo 'NameID             ' . $nameId['Value'] ?>
 Attributes
 ==========
 <?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
-Error: <?php echo call_user_func_array('sprintf', $error); ?>
+Error: <?= call_user_func_array('sprintf', $error); ?>
 <?php endforeach; ?>
 <?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
-Warning: <?php echo call_user_func_array('sprintf', $warning); ?>
+Warning: <?= call_user_func_array('sprintf', $warning); ?>
 <?php endforeach; ?>
 
 
 <?php foreach ($attributes as $attributeName => $attributeValues): ?>
-"<?php echo $attributeName ?>"
+"<?= $attributeName ?>"
 ----------------------------------------------------------
-Name: <?php echo $this->getAttributeName($attributeName, 'en', false) ?>
+Name: <?= $this->getAttributeName($attributeName, 'en', false) ?>
 
 Values:
 <?php   foreach ($attributeValues as $attributeValue): ?>
-* "<?php echo $attributeValue ?>"
+* "<?= $attributeValue ?>"
 <?php   endforeach; ?>
 <?php   foreach ($validator->getErrors($attributeName) as $error): ?>
-Error: <?php echo call_user_func_array(array($this, 'translate'), $error); ?>
+Error: <?= call_user_func_array(array($this, 'translate'), $error); ?>
 
 <?php   endforeach; ?>
 <?php   foreach ($validator->getWarnings($attributeName) as $warning): ?>
-Warning: <?php echo call_user_func_array(array($this, 'translate'), $warning); ?>
+Warning: <?= call_user_func_array(array($this, 'translate'), $warning); ?>
 
 <?php   endforeach; ?>
 
