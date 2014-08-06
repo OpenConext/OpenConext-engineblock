@@ -1,0 +1,4 @@
+dn: cn=config,cn=schema,cn=config
+objectClass: olcGlobal
+cn: config
+olcAllows: bind_v2

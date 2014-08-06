@@ -1,0 +1,25 @@
+dn: cn={9}openldap
+objectClass: olcSchemaConfig
+cn: {9}openldap
+olcObjectIdentifier: {0}OpenLDAProot 1.3.6.1.4.1.4203
+olcObjectIdentifier: {1}OpenLDAP OpenLDAProot:1
+olcObjectIdentifier: {2}OpenLDAPattributeType OpenLDAP:3
+olcObjectIdentifier: {3}OpenLDAPobjectClass OpenLDAP:4
+olcObjectClasses: {0}( OpenLDAPobjectClass:3 NAME 'OpenLDAPorg' DESC 'OpenLDAP
+  Organizational Object' SUP organization STRUCTURAL MAY ( buildingName $ disp
+ layName $ labeledURI ) )
+olcObjectClasses: {1}( OpenLDAPobjectClass:4 NAME 'OpenLDAPou' DESC 'OpenLDAP 
+ Organizational Unit Object' SUP organizationalUnit STRUCTURAL MAY ( buildingN
+ ame $ displayName $ labeledURI $ o ) )
+olcObjectClasses: {2}( OpenLDAPobjectClass:5 NAME 'OpenLDAPperson' DESC 'OpenL
+ DAP Person' SUP ( pilotPerson $ inetOrgPerson ) STRUCTURAL MUST ( uid $ cn ) 
+ MAY ( givenName $ labeledURI $ o ) )
+olcObjectClasses: {3}( OpenLDAPobjectClass:6 NAME 'OpenLDAPdisplayableObject' 
+ DESC 'OpenLDAP Displayable Object' AUXILIARY MAY displayName )
+structuralObjectClass: olcSchemaConfig
+entryUUID: 011953c4-75ed-1033-9666-756567b81bb6
+creatorsName: cn=config
+createTimestamp: 20140522110727Z
+entryCSN: 20140522110727.335388Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20140522110727Z

@@ -1,0 +1,15 @@
+---
+# OpenConext global variables.
+temp_dir: "/tmp"
+logging_dir: "/var/log/openconext"
+releases_dir: "/opt/openconext"
+builds_dir: "{{ releases_dir }}/builds"
+configs_dir: "/etc/openconext"
+
+# Engine installer specific variables.
+engine_git_url: "https://github.com/OpenConext/OpenConext-engineblock.git"
+engine_version_dir: "{{ engine_version | replace('/', '-') }}"
+engine_release_dir: "{{ releases_dir }}/OpenConext-engineblock-{{ engine_version_dir }}"
+engine_build_path: "{{ builds_dir }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"
+engine_download_url: "https://github.com/OpenConext/OpenConext-engineblock/releases/download/{{ engine_version }}/OpenConext-engineblock-{{ engine_version_dir }}.tar.gz"
+engine_current_release_symlink: "/opt/www/engineblock"

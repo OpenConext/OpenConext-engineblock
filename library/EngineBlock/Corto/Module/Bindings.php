@@ -390,22 +390,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         if ($this->shouldMessageBeSigned($sspMessage, $remoteEntity)) {
-            $certificates = $this->_server->getSigningCertificates();
+            $keyPair = $this->_server->getSigningCertificates();
 
-            if (isset($certificates['privateFile'])) {
-                $privateKeyIsFile = true;
-                $privateKey = $certificates['privateFile'];
-            }
-            else {
-                $privateKeyIsFile = false;
-                $privateKey = $certificates['private'];
-            }
-
-            $privateKeyObj = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, array('type' => 'private'));
-            $privateKeyObj->loadKey($privateKey, $privateKeyIsFile);
-
-            $sspMessage->setCertificates(array($certificates['public']));
-            $sspMessage->setSignatureKey($privateKeyObj);
+            $sspMessage->setCertificates(array($keyPair->getCertificate()->toPem()));
+            $sspMessage->setSignatureKey($keyPair->getPrivateKey()->toXmlSecurityKey());
         }
 
         $sspBinding = SAML2_Binding::getBinding($bindingUrn);
@@ -552,18 +540,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function mapCortoEntityMetadataToSspEntityMetadata($cortoEntityMetadata)
     {
-        $publicPems = array($cortoEntityMetadata['certificates']['public']);
-        if (isset($cortoEntityMetadata['certificates']['public-fallback'])) {
-            $publicPems[] = $cortoEntityMetadata['certificates']['public-fallback'];
-        }
-        if (isset($cortoEntityMetadata['certificates']['public-fallback2'])) {
-            $publicPems[] = $cortoEntityMetadata['certificates']['public-fallback2'];
-        }
-        $publicPems = str_replace(
-            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
-            '',
-            $publicPems
-        );
+        /** @var EngineBlock_X509_Certificate[] $certificates */
+        $certificates = $cortoEntityMetadata['certificates'];
 
         $config = array(
             'entityid'            => $cortoEntityMetadata['EntityID'],
@@ -575,11 +553,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if (isset($cortoEntityMetadata['AssertionConsumerServices'][0]['Location'])) {
             $config['AssertionConsumerService'] = $cortoEntityMetadata['AssertionConsumerServices'][0]['Location'];
         }
-        foreach ($publicPems as $publicPem) {
+        foreach ($certificates as $certificate) {
             $config['keys'][] = array(
                 'signing'         => true,
                 'type'            => 'X509Certificate',
-                'X509Certificate' => $publicPem,
+                'X509Certificate' => $certificate->toCertData(),
             );
         }
         return $config;
@@ -590,15 +568,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function getSspOwnMetadata()
     {
-        $configs   = $this->_server->getConfigs();
-        $certificates = $this->_server->getSigningCertificates();
-
-        $publicPem = $configs['certificates']['public'];
-        $publicPem = str_replace(
-            array('-----BEGIN CERTIFICATE-----', '-----END CERTIFICATE-----', "\n", "\t", " "),
-            '',
-            $publicPem
-        );
+        $keyPair = $this->_server->getSigningCertificates();
 
         $spMetadata = SimpleSAML_Configuration::loadFromArray(
             array(
@@ -613,15 +583,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     array(
                         'signing'         => true,
                         'type'            => 'X509Certificate',
-                        'X509Certificate' => $publicPem,
+                        'X509Certificate' => $keyPair->getCertificate()->toCertData(),
                     ),
                     array(
                         'signing'         => true,
                         'type'            => 'X509Certificate',
-                        'X509Certificate' => $publicPem,
+                        'X509Certificate' => $keyPair->getCertificate()->toCertData(),
                     ),
                 ),
-                'privatekey' => isset($certificates['privateFile']) ? $certificates['privateFile'] : '',
+                'privatekey' => $keyPair->getPrivateKey() ? $keyPair->getPrivateKey()->filePath() : '',
             )
         );
         return $spMetadata;
