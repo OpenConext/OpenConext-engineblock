@@ -108,9 +108,9 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\ServiceRegistry\AdapterInterface
+     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepositoryInterface
      */
-    public function getServiceRegistryAdapter()
+    public function getMetadataRepository()
     {
         return $this[self::SERVICE_REGISTRY_ADAPTER];
     }

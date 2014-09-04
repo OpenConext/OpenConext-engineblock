@@ -8,7 +8,7 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
     public function execute()
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $serviceRegistryAdapter = $diContainer->getServiceRegistryAdapter();
+        $serviceRegistryAdapter = $diContainer->getMetadataRepository();
         $isConnectionAllowed = $serviceRegistryAdapter->isConnectionAllowed(
             $this->_spMetadata->entityId,
             $this->_idpMetadata->entityId

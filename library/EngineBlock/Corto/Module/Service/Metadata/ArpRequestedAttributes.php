@@ -32,6 +32,6 @@ class EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes
 
     protected function _getServiceRegistryAdapter()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }
 }

@@ -88,7 +88,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // Get all registered Single Sign On Services
-        $candidateIDPs = $this->_server->getIdpEntityIds();
+        $candidateIDPs = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
 
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
@@ -310,7 +310,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     protected function _pickCachedResponse(array $cachedResponses, $requestIssuerEntityId)
     {
         // Then we look for OUT responses for this sp
-        $idpEntityIds = $this->_server->getIdpEntityIds();
+        $idpEntityIds = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
         foreach ($cachedResponses as $cachedResponse) {
             if ($cachedResponse['type'] !== self::RESPONSE_CACHE_TYPE_OUT) {
                 continue;

@@ -2,6 +2,11 @@
 
 use OpenConext\Component\EngineBlockMetadata\Configuration\RequestedAttribute;
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\DisableDisallowedEntitiesInWayfFilter;
+use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\RemoveDisallowedIdentityProvidersFilter;
+use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\RemoveEntityByEntityId;
+use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\RemoveOtherWorkflowStatesFilter;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
@@ -35,17 +40,17 @@ class EngineBlock_Corto_Adapter
 
     public function singleSignOn($idPProviderHash)
     {
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSp'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestSpWorkflowState'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByRequestScopingRequesterId'));
+        $this->_filterRemoteEntitiesByRequestSp();
+        $this->_filterRemoteEntitiesByRequestSpWorkflowState();
+        $this->_filterRemoteEntitiesByRequestScopingRequesterId();
 
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
 
     public function unsolicitedSingleSignOn($idPProviderHash)
     {
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSp'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
+        $this->_filterRemoteEntitiesByClaimedSp();
+        $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
 
         $this->_callCortoServiceUri('unsolicitedSingleSignOnService', $idPProviderHash);
     }
@@ -82,15 +87,15 @@ class EngineBlock_Corto_Adapter
 
     public function edugainMetadata()
     {
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
+        $this->_filterRemoteEntitiesBySpQueryParam();
+        $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
         $this->_callCortoServiceUri('edugainMetadataService');
     }
 
     public function idPsMetadata()
     {
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesBySpQueryParam'));
-        $this->_addRemoteEntitiesFilter(array($this, '_filterRemoteEntitiesByClaimedSpWorkflowState'));
+        $this->_filterRemoteEntitiesBySpQueryParam();
+        $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
         $this->_callCortoServiceUri('idpsMetadataService');
     }
 
@@ -140,50 +145,48 @@ class EngineBlock_Corto_Adapter
      * any IdP's if this is explicitly configured for the given in SR.
      *
      * Determines SP based on Authn Request (required).
-     *
-     * @param AbstractConfigurationEntity[] $entities
-     * @return AbstractConfigurationEntity[] Remaining entities
      */
-    protected function _filterRemoteEntitiesByRequestSp(array $entities)
+    protected function _filterRemoteEntitiesByRequestSp()
     {
-        $issuerSpEntityId = $this->_getIssuerSpEntityId();
-        /** @var ServiceProviderEntity $requestIssuer */
-        $requestIssuer = $entities[$issuerSpEntityId];
+        $serviceProvider = $this->getMetadataRepository()->fetchServiceProviderByEntityId($this->_getIssuerSpEntityId());
 
-        if ($requestIssuer->displayUnconnectedIdpsWayf) {
-            return $this->getServiceRegistryAdapter()->markEntitiesBySp($entities, $issuerSpEntityId);
+        if ($serviceProvider->displayUnconnectedIdpsWayf) {
+            $this->getMetadataRepository()->filter(new DisableDisallowedEntitiesInWayfFilter(
+                $serviceProvider
+            ));
+            return;
         }
 
-        return $this->getServiceRegistryAdapter()->filterEntitiesBySp($entities, $issuerSpEntityId);
+        $this->getMetadataRepository()->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
     }
 
     /**
      * Filter out IdPs that are not allowed to connect to the given SP.
      *
      * Determines SP based on Authn Request (required).
-     *
-     * @param AbstractConfigurationEntity[] $entities
-     * @return AbstractConfigurationEntity[] Remaining entities
      */
-    protected function _filterRemoteEntitiesByClaimedSp(array $entities)
+    protected function _filterRemoteEntitiesByClaimedSp()
     {
-        return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
-            $entities,
-            $this->_getClaimedSpEntityId()
-        );
+        $serviceProviderEntityId = $this->_getClaimedSpEntityId();
+        if (!$serviceProviderEntityId) {
+            return;
+        }
+
+        $repository = $this->getMetadataRepository();
+        $serviceProvider = $repository->fetchServiceProviderByEntityId($serviceProviderEntityId);
+        $repository->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
     }
 
-    /**
-     * @param AbstractConfigurationEntity[] $entities
-     * @return AbstractConfigurationEntity[]
-     */
-    protected function _filterRemoteEntitiesByRequestScopingRequesterId(array $entities)
+    protected function _filterRemoteEntitiesByRequestScopingRequesterId()
     {
         $requesterIds = $this->_getRequestScopingRequesterIds();
-        $serviceRegistry = $this->getServiceRegistryAdapter();
+
+        $repository = $this->getMetadataRepository();
         foreach ($requesterIds as $requesterId) {
-            if ($this->_proxyServer->hasRemoteEntity($requesterId)) {
-                $entities = $serviceRegistry->filterEntitiesBySp($entities, $requesterId);
+            $serviceProvider = $repository->findServiceProviderByEntityId($requesterId);
+
+            if ($serviceProvider) {
+                $repository->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
             }
             else {
                 $this->_getSessionLog()->warn(
@@ -191,66 +194,63 @@ class EngineBlock_Corto_Adapter
                 );
             }
         }
-        return $entities;
     }
 
     /**
      * Filter out IdPs that are not allowed to connect to the given SP.
      *
      * Determines SP based on URL query param (easily spoofable, thus 'claimed').
-     *
-     * @param AbstractConfigurationEntity[] $entities
-     * @return AbstractConfigurationEntity[] Remaining entities
      */
-    protected function _filterRemoteEntitiesBySpQueryParam(array $entities)
+    protected function _filterRemoteEntitiesBySpQueryParam()
     {
         $claimedSpEntityId = $this->_getClaimedSpEntityId();
         if (!$claimedSpEntityId) {
-            return $entities;
+            return;
         }
 
-        return $this->getServiceRegistryAdapter()->filterEntitiesBySp(
-            $entities,
-            $claimedSpEntityId
-        );
+        $repository = $this->getMetadataRepository();
+        $serviceProvider = $repository->findServiceProviderByEntityId($claimedSpEntityId);
+        if (!$serviceProvider) {
+            return;
+        }
+
+        $this->getMetadataRepository()->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
     }
 
     /**
      * Given a list of Idps, filters out all that do not have the same state as the requesting SP.
      *
      * Determines SP based on Authn Request.
-     *
-     * @param AbstractConfigurationEntity[] $entities
-     * @return AbstractConfigurationEntity[] Filtered entities
      */
-    protected function _filterRemoteEntitiesByRequestSpWorkflowState(array $entities)
+    protected function _filterRemoteEntitiesByRequestSpWorkflowState()
     {
         $spEntityId = $this->_getIssuerSpEntityId();
-        return $this->getServiceRegistryAdapter()->filterEntitiesByWorkflowState(
-            $entities,
-            $this->_getEntityWorkFlowState($spEntityId)
-        );
+
+        $repository = $this->getMetadataRepository();
+        $serviceProvider = $repository->fetchServiceProviderByEntityId($spEntityId);
+
+        $repository->filter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
     }
 
     /**
      * Given a list of Idps, filters out all that do not have the same state as the claimed SP.
      *
      * Determines SP based on URL query param (easily spoofable, thus 'claimed').
-     *
-     * @param AbstractConfigurationEntity[] $entities
-     * @return AbstractConfigurationEntity[] Filtered entities
      */
-    protected function _filterRemoteEntitiesByClaimedSpWorkflowState(array $entities)
+    protected function _filterRemoteEntitiesByClaimedSpWorkflowState()
     {
         $claimedSpEntityId = $this->_getClaimedSpEntityId();
         if (!$claimedSpEntityId) {
-            return $entities;
+            return;
         }
 
-        return $this->getServiceRegistryAdapter()->filterEntitiesByWorkflowState(
-            $entities,
-            $this->_getEntityWorkFlowState($claimedSpEntityId)
-        );
+        $repository = $this->getMetadataRepository();
+        $serviceProvider = $repository->findServiceProviderByEntityId($claimedSpEntityId);
+        if (!$serviceProvider) {
+            return;
+        }
+
+        $repository->filter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
     }
 
     /**
@@ -309,8 +309,6 @@ class EngineBlock_Corto_Adapter
         $this->_configureProxyServer($proxyServer);
 
         $this->_proxyServer = $proxyServer;
-
-        $this->_applyRemoteEntitiesFilters($this->_proxyServer);
     }
 
     protected function _configureProxyServer(EngineBlock_Corto_ProxyServer $proxyServer)
@@ -330,22 +328,21 @@ class EngineBlock_Corto_Adapter
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
         ));
 
-        $remoteEntities = $this->_getRemoteEntities();
-
         /**
          * Augment our own IdP entry with stuff that can't be set via the Service Registry (yet)
          */
         $idpEntityId = $proxyServer->getUrl('idpMetadataService');
-        if (!isset($remoteEntities[$idpEntityId])) {
-            $remoteEntities[$idpEntityId] = new \OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity();
+        $metadataRepository = $this->getMetadataRepository();
+        $engineIdentityProvider = $metadataRepository->findIdentityProviderByEntityId($idpEntityId);
+        if (!$engineIdentityProvider) {
+            $engineIdentityProvider = new IdentityProviderEntity();
         }
-        $engineIdpMetadata = $remoteEntities[$idpEntityId];
-        $engineIdpMetadata->entityId = $idpEntityId;
+        $engineIdentityProvider->entityId = $idpEntityId;
 
         $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
 
-        $engineIdpMetadata->certificates = array($keyPair->getCertificate());
-        $engineIdpMetadata->nameIdFormats = array(
+        $engineIdentityProvider->certificates = array($keyPair->getCertificate());
+        $engineIdentityProvider->nameIdFormats = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
@@ -360,18 +357,18 @@ class EngineBlock_Corto_Adapter
         if (!isset($remoteEntities[$spEntityId])) {
             $remoteEntities[$spEntityId] = new ServiceProviderEntity();
         }
-        /** @var ServiceProviderEntity $engineSpMetadata */
-        $engineSpMetadata = $remoteEntities[$spEntityId];
-        $engineSpMetadata->entityId = $spEntityId;
-        $engineSpMetadata->certificates = array($keyPair->getCertificate());
-        $engineSpMetadata->nameIdFormats = array(
+        /** @var ServiceProviderEntity $engineServiceProvider */
+        $engineServiceProvider = $remoteEntities[$spEntityId];
+        $engineServiceProvider->entityId = $spEntityId;
+        $engineServiceProvider->certificates = array($keyPair->getCertificate());
+        $engineServiceProvider->nameIdFormats = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
-        $engineSpMetadata->requestedAttributes = array(
+        $engineServiceProvider->requestedAttributes = array(
             new RequestedAttribute('urn:mace:dir:attribute-def:mail'),
             new RequestedAttribute('urn:mace:dir:attribute-def:displayName'),   // DisplayName (example: John Doe)
             new RequestedAttribute('urn:mace:dir:attribute-def:sn'),            // Surname (example: Doe)
@@ -385,20 +382,21 @@ class EngineBlock_Corto_Adapter
             new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
             new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
         );
-        $engineSpMetadata->responseProcessingService = new Service(
+        $engineServiceProvider->responseProcessingService = new Service(
             $proxyServer->getUrl('provideConsentService'),
             'INTERNAL'
         );
-        $proxyServer->setConfig('Processing', array('Consent' => $engineSpMetadata));
+        $proxyServer->setConfig('Processing', array('Consent' => $engineServiceProvider));
 
         // Store current entities separate from remote entities
         $proxyServer->setCurrentEntities(array(
-            'spMetadataService' => $engineSpMetadata,
-            'idpMetadataService' => $engineIdpMetadata,
+            'spMetadataService' => $engineServiceProvider,
+            'idpMetadataService' => $engineIdentityProvider,
         ));
-        unset($remoteEntities[$spEntityId]);
-        unset($remoteEntities[$idpEntityId]);
-        $proxyServer->setRemoteEntities($remoteEntities);
+        $metadataRepository->filter(new RemoveEntityByEntityId($engineServiceProvider->entityId));
+        $metadataRepository->filter(new RemoveEntityByEntityId($engineIdentityProvider->entityId));
+
+        $proxyServer->setRepository($metadataRepository);
 
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
@@ -406,31 +404,6 @@ class EngineBlock_Corto_Adapter
         if ($this->_voContext!=null) {
             $proxyServer->setVirtualOrganisationContext($this->_voContext);
         }
-    }
-
-    /**
-     * Applies remote entities filters and passes result to proxy server
-     *
-     * @param EngineBlock_Corto_ProxyServer $proxyServer
-     * @return void
-     */
-    protected function _applyRemoteEntitiesFilters(EngineBlock_Corto_ProxyServer $proxyServer) {
-        if (empty($this->_remoteEntitiesFilter)) {
-            return;
-        }
-
-        $remoteEntities = $proxyServer->getRemoteEntities();
-
-        foreach($this->_remoteEntitiesFilter as $remoteEntityFilter) {
-            $remoteEntities = call_user_func_array(
-                $remoteEntityFilter,
-                array(
-                    $remoteEntities,
-                    $proxyServer
-                )
-            );
-        }
-        $proxyServer->setRemoteEntities($remoteEntities);
     }
 
     /**
@@ -464,21 +437,14 @@ class EngineBlock_Corto_Adapter
         return $configuration->authentication->consent->$name;
     }
 
-    protected function _getRemoteEntities()
-    {
-        $serviceRegistry = $this->getServiceRegistryAdapter();
-        $metadata = $serviceRegistry->getRemoteMetaData();
-        return $metadata;
-    }
-
     public function getProxyServer()
     {
         return $this->_proxyServer;
     }
 
-    public function getServiceRegistryAdapter()
+    public function getMetadataRepository()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }
 
     public function getDateTime()
@@ -511,12 +477,6 @@ class EngineBlock_Corto_Adapter
     {
         $proxyOutput = $this->_proxyServer->getOutput();
         $response->setBody($proxyOutput);
-    }
-
-    protected function _addRemoteEntitiesFilter($callback)
-    {
-        $this->_remoteEntitiesFilter[] = $callback;
-        return $this;
     }
 
     protected function _getCoreProxy()

@@ -30,6 +30,6 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
 
     protected function _getServiceRegistryAdapter()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }
 }

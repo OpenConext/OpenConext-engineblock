@@ -23,7 +23,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         IdentityProviderEntity $idpMetadata,
         ServiceProviderEntity $spMetadata
     ) {
-        $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
+        $entity = $this->_getServiceRegistryAdapter()->fetchEntityByEntityId($entityId);
         if (empty($entity->manipulationCode)) {
             return false;
         }
@@ -118,10 +118,10 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\ServiceRegistry\AdapterInterface
+     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepositoryInterface
      */
     protected function _getServiceRegistryAdapter()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }
 }

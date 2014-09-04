@@ -3,6 +3,7 @@
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
@@ -76,6 +77,11 @@ class EngineBlock_Corto_ProxyServer
     protected $_modules = array();
     protected $_templateSource;
     protected $_processingMode = false;
+
+    /**
+     * @var MetadataRepositoryInterface
+     */
+    private $_repository;
 
     public function __construct()
     {
@@ -306,25 +312,17 @@ class EngineBlock_Corto_ProxyServer
      */
     public function getRemoteEntity($entityId)
     {
-        if (!isset($this->_entities['remote'][$entityId])) {
-            $entity = $this->findRemoteEntityInCurrentEntities($entityId);
-            if (empty($entity)) {
-                throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
-            }
+        $entity = $this->getRepository()->findEntityByEntityId($entityId);
+        if ($entity) {
             return $entity;
         }
-        /** @var AbstractConfigurationEntity $entity */
-        $entity = $this->_entities['remote'][$entityId];
-        $entity->entityId = $entityId;
-        return $entity;
-    }
 
-    /**
-     * @return AbstractConfigurationEntity[]
-     */
-    public function getRemoteEntities()
-    {
-        return $this->_entities['remote'];
+        $entity = $this->findRemoteEntityInCurrentEntities($entityId);
+        if ($entity) {
+            return $entity;
+        }
+
+        throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
     }
 
     /**
@@ -360,17 +358,6 @@ class EngineBlock_Corto_ProxyServer
         return null;
     }
 
-    public function getIdpEntityIds()
-    {
-        $identityProvidersEntityIds = array();
-        foreach ($this->_server->getRemoteEntities() as $remoteEntityId => $remoteEntity) {
-            if ($remoteEntity instanceof IdentityProviderEntity) {
-                $identityProvidersEntityIds[] = $remoteEntityId;
-            }
-        }
-        return $identityProvidersEntityIds;
-    }
-
     /**
      * @param AbstractConfigurationEntity[] $entities
      */
@@ -380,11 +367,21 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @param AbstractConfigurationEntity[] $entities
+     * @param MetadataRepositoryInterface $repository
+     * @return $this
      */
-    public function setRemoteEntities($entities)
+    public function setRepository(MetadataRepositoryInterface $repository)
     {
-        $this->_entities['remote'] = $entities;
+        $this->_repository = $repository;
+        return $this;
+    }
+
+    /**
+     * @return MetadataRepositoryInterface
+     */
+    public function getRepository()
+    {
+        return $this->_repository;
     }
 
 //////// MAIN /////////

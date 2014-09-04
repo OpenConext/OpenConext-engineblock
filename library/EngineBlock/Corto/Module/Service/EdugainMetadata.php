@@ -15,13 +15,9 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $ssoServiceReplacer = new ServiceReplacer($engineIdpEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
         $slServiceReplacer = new ServiceReplacer($engineIdpEntity, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
 
-        $remoteEntities = $this->_server->getRemoteEntities();
+        $remoteEntities = $this->_server->getRepository()->findEntitiesPublishableInEdugain();
 
         foreach ($remoteEntities as $entity) {
-            if ($entity->publishInEdugain) {
-                continue;
-            }
-
             // Use EngineBlock certificates
             $entity->certificates = $engineIdpEntity->certificates;
 

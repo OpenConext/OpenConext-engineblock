@@ -93,20 +93,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
      */
     protected function _isReservedSchacHomeOrganization($schacHomeOrganization)
     {
-        $reservedSchacHomeOrganizations = $this->_getReservedSchacHomeOrganizations();
-        return in_array($schacHomeOrganization, $reservedSchacHomeOrganizations);
-    }
-
-    protected function _getReservedSchacHomeOrganizations()
-    {
-        $schacHomeOrganizations = array();
-        $remoteEntities = $this->_server->getRemoteEntities();
-        foreach ($remoteEntities as $remoteEntity) {
-            if ($remoteEntity instanceof IdentityProviderEntity && $remoteEntity->schacHomeOrganization) {
-                $schacHomeOrganizations[] = $remoteEntity->schacHomeOrganization;
-            }
-        }
-        return $schacHomeOrganizations;
+        return in_array($schacHomeOrganization, $this->_server->getRepository()->findReservedSchacHomeOrganizations());
     }
 
     protected function _requireValidUid($responseAttributes)
