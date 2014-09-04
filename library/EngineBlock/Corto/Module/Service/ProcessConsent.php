@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Corto_Module_Service_ProcessConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -51,15 +53,21 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $attributes = $response->getAssertion()->getAttributes();
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
+        $serviceProvider = $this->_server->getRemoteEntity($serviceProviderEntityId);
+        if (!$serviceProvider instanceof ServiceProviderEntity) {
+            throw new EngineBlock_Exception(
+                'urn:org:openconext:corto:internal:sp-entity-id contained the entityID for an IdentityProvider: ' . $serviceProviderEntityId
+            );
+        }
 
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
             throw new EngineBlock_Corto_Exception_NoConsentProvided('No consent given...');
         }
 
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $consent->storeConsent($serviceProviderEntityId, $this->_server->getRemoteEntity($serviceProviderEntityId));
-        if ($consent->countTotalConsent($response, $attributes) === 1) {
-            $this->_sendIntroductionMail($response, $attributes);
+        $consent->storeConsent($serviceProviderEntityId, $serviceProvider);
+        if ($consent->countTotalConsent() === 1) {
+            $this->_sendIntroductionMail($attributes);
         }
 
         $response->setConsent(SAML2_Const::CONSENT_OBTAINED);
@@ -72,7 +80,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         );
     }
 
-    protected function _sendIntroductionMail($response, $attributes)
+    protected function _sendIntroductionMail(array $attributes)
     {
         if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
             return;

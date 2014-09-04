@@ -1,5 +1,10 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Configuration\RequestedAttribute;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Service;
+
 class EngineBlock_Corto_Adapter
 {
     const DEFAULT_HOSTED_ENTITY = 'main';
@@ -136,21 +141,20 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on Authn Request (required).
      *
-     * @param array $entities
-     * @return array Remaining entities
+     * @param AbstractConfigurationEntity[] $entities
+     * @return AbstractConfigurationEntity[] Remaining entities
      */
     protected function _filterRemoteEntitiesByRequestSp(array $entities)
     {
         $issuerSpEntityId = $this->_getIssuerSpEntityId();
-        $entityData = $this->_proxyServer->getRemoteEntity($issuerSpEntityId);
+        /** @var ServiceProviderEntity $requestIssuer */
+        $requestIssuer = $entities[$issuerSpEntityId];
 
-        if (isset($entityData['DisplayUnconnectedIdpsWayf']) && $entityData['DisplayUnconnectedIdpsWayf']) {
+        if ($requestIssuer->displayUnconnectedIdpsWayf) {
             return $this->getServiceRegistryAdapter()->markEntitiesBySp($entities, $issuerSpEntityId);
         }
-        else {
-            return $this->getServiceRegistryAdapter()->filterEntitiesBySp($entities, $issuerSpEntityId);
-        }
 
+        return $this->getServiceRegistryAdapter()->filterEntitiesBySp($entities, $issuerSpEntityId);
     }
 
     /**
@@ -158,8 +162,8 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on Authn Request (required).
      *
-     * @param array $entities
-     * @return array Remaining entities
+     * @param AbstractConfigurationEntity[] $entities
+     * @return AbstractConfigurationEntity[] Remaining entities
      */
     protected function _filterRemoteEntitiesByClaimedSp(array $entities)
     {
@@ -169,6 +173,10 @@ class EngineBlock_Corto_Adapter
         );
     }
 
+    /**
+     * @param AbstractConfigurationEntity[] $entities
+     * @return AbstractConfigurationEntity[]
+     */
     protected function _filterRemoteEntitiesByRequestScopingRequesterId(array $entities)
     {
         $requesterIds = $this->_getRequestScopingRequesterIds();
@@ -191,8 +199,8 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on URL query param (easily spoofable, thus 'claimed').
      *
-     * @param array $entities
-     * @return array Remaining entities
+     * @param AbstractConfigurationEntity[] $entities
+     * @return AbstractConfigurationEntity[] Remaining entities
      */
     protected function _filterRemoteEntitiesBySpQueryParam(array $entities)
     {
@@ -212,8 +220,8 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on Authn Request.
      *
-     * @param array $entities
-     * @return array Filtered entities
+     * @param AbstractConfigurationEntity[] $entities
+     * @return AbstractConfigurationEntity[] Filtered entities
      */
     protected function _filterRemoteEntitiesByRequestSpWorkflowState(array $entities)
     {
@@ -229,8 +237,8 @@ class EngineBlock_Corto_Adapter
      *
      * Determines SP based on URL query param (easily spoofable, thus 'claimed').
      *
-     * @param array $entities
-     * @return array Filtered entities
+     * @param AbstractConfigurationEntity[] $entities
+     * @return AbstractConfigurationEntity[] Filtered entities
      */
     protected function _filterRemoteEntitiesByClaimedSpWorkflowState(array $entities)
     {
@@ -276,9 +284,7 @@ class EngineBlock_Corto_Adapter
      * @return string $workflowState
      */
     protected function _getEntityWorkFlowState($entityId) {
-        $entityData = $this->_proxyServer->getRemoteEntity($entityId);
-        $workflowState = $entityData['WorkflowState'];
-        return $workflowState;
+        return $this->_proxyServer->getRemoteEntity($entityId)->workflowState;
     }
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
@@ -320,13 +326,7 @@ class EngineBlock_Corto_Adapter
             'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true),
             'NoSupportedIDPError' => 'user',
             'rememberIdp' => '+3 months',
-            'SigningAlgorithm' => '', // @todo Look this up
-            'Processing' => array(
-                'Consent' => array(
-                    'Binding'  => 'INTERNAL',
-                    'Location' => $proxyServer->getUrl('provideConsentService'),
-                ),
-            ),
+            'SigningAlgorithm' => '',
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
         ));
 
@@ -337,14 +337,15 @@ class EngineBlock_Corto_Adapter
          */
         $idpEntityId = $proxyServer->getUrl('idpMetadataService');
         if (!isset($remoteEntities[$idpEntityId])) {
-            $remoteEntities[$idpEntityId] = array();
+            $remoteEntities[$idpEntityId] = new \OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity();
         }
-        $remoteEntities[$idpEntityId]['EntityID'] = $idpEntityId;
+        $engineIdpMetadata = $remoteEntities[$idpEntityId];
+        $engineIdpMetadata->entityId = $idpEntityId;
 
         $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
 
-        $remoteEntities[$idpEntityId]['certificates'] = array($keyPair->getCertificate());
-        $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
+        $engineIdpMetadata->certificates = array($keyPair->getCertificate());
+        $engineIdpMetadata->nameIdFormats = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
@@ -357,97 +358,43 @@ class EngineBlock_Corto_Adapter
          */
         $spEntityId = $proxyServer->getUrl('spMetadataService');
         if (!isset($remoteEntities[$spEntityId])) {
-            $remoteEntities[$spEntityId] = array();
+            $remoteEntities[$spEntityId] = new ServiceProviderEntity();
         }
-        $remoteEntities[$spEntityId]['EntityID'] = $spEntityId;
-        $remoteEntities[$spEntityId]['certificates'] = array($keyPair->getCertificate());
-        $remoteEntities[$spEntityId]['NameIDFormats'] = array(
+        /** @var ServiceProviderEntity $engineSpMetadata */
+        $engineSpMetadata = $remoteEntities[$spEntityId];
+        $engineSpMetadata->entityId = $spEntityId;
+        $engineSpMetadata->certificates = array($keyPair->getCertificate());
+        $engineSpMetadata->nameIdFormats = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
-        $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:mail',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // DisplayName (example: John Doe)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:displayName',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // Surname (example: Doe)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:sn',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // Given name (example: John)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:givenName',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-            ),
-
-            // SchachomeOrganization
-            array(
-                'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true
-            ),
-
-            // SchachomeOrganizationType
-            array(
-                'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganizationType',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-
-            // UID (example: john.doe)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:uid',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true
-            ),
-
-            // Cn
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:cn',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // EduPersonAffiliation
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:eduPersonAffiliation',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // eduPersonEntitlement
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:eduPersonEntitlement',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // eduPersonPrincipalName
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:eduPersonPrincipalName',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // preferredLanguage
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:preferredLanguage',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            )
+        $engineSpMetadata->requestedAttributes = array(
+            new RequestedAttribute('urn:mace:dir:attribute-def:mail'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:displayName'),   // DisplayName (example: John Doe)
+            new RequestedAttribute('urn:mace:dir:attribute-def:sn'),            // Surname (example: Doe)
+            new RequestedAttribute('urn:mace:dir:attribute-def:givenName'),     // Given name (example: John)
+            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganization', true),
+            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganizationType', true),
+            new RequestedAttribute('urn:mace:dir:attribute-def:uid', true),     // UID (example: john.doe)
+            new RequestedAttribute('urn:mace:dir:attribute-def:cn'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonAffiliation'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonEntitlement'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
         );
+        $engineSpMetadata->responseProcessingService = new Service(
+            $proxyServer->getUrl('provideConsentService'),
+            'INTERNAL'
+        );
+        $proxyServer->setConfig('Processing', array('Consent' => $engineSpMetadata));
 
         // Store current entities separate from remote entities
         $proxyServer->setCurrentEntities(array(
-            'spMetadataService' => $remoteEntities[$spEntityId],
-            'idpMetadataService' => $remoteEntities[$idpEntityId],
+            'spMetadataService' => $engineSpMetadata,
+            'idpMetadataService' => $engineIdpMetadata,
         ));
         unset($remoteEntities[$spEntityId]);
         unset($remoteEntities[$idpEntityId]);
@@ -464,6 +411,7 @@ class EngineBlock_Corto_Adapter
     /**
      * Applies remote entities filters and passes result to proxy server
      *
+     * @param EngineBlock_Corto_ProxyServer $proxyServer
      * @return void
      */
     protected function _applyRemoteEntitiesFilters(EngineBlock_Corto_ProxyServer $proxyServer) {

@@ -1,4 +1,7 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Legacy\EntityTranslator;
 
 class EngineBlock_Attributes_Manipulator_ServiceRegistry
 {
@@ -17,11 +20,11 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         &$subjectId,
         array &$attributes,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$responseObj,
-        array $idpMetadata,
-        array $spMetadata
+        IdentityProviderEntity $idpMetadata,
+        ServiceProviderEntity $spMetadata
     ) {
         $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
-        if (empty($entity['manipulation'])) {
+        if (empty($entity->manipulationCode)) {
             return false;
         }
 
@@ -30,15 +33,20 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         $translator = new EngineBlock_Corto_Mapper_Legacy_ResponseTranslator();
         $response = $translator->fromNewFormat($responseObj);
 
+
+        $metadataTranslator = new EntityTranslator();
+        $idpMetadataLegacy = $metadataTranslator->translateIdentityProvider($idpMetadata);
+        $spMetadataLegacy  = $metadataTranslator->translateServiceProvider($spMetadata);
+
         $this->_doManipulation(
-            $entity['manipulation'],
+            $entity->manipulationCode,
             $entityId,
             $subjectId,
             $attributes,
             $response,
             $responseObj,
-            $idpMetadata,
-            $spMetadata
+            $idpMetadataLegacy,
+            $spMetadataLegacy
         );
 
         $responseObj = $translator->fromOldFormat($response);
@@ -109,6 +117,9 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         );
     }
 
+    /**
+     * @return \OpenConext\Component\EngineBlockMetadata\ServiceRegistry\AdapterInterface
+     */
     protected function _getServiceRegistryAdapter()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();

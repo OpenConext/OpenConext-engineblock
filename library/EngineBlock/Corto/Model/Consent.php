@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Corto_Model_Consent
 {
     /**
@@ -70,22 +72,23 @@ class EngineBlock_Corto_Model_Consent
     }
 
     /**
-     * @param array $spMetadata
+     * @param ServiceProviderEntity $serviceProvider
      * @return array
      */
-    public function applyArp(array $spMetadata)
+    public function applyArpFrom(ServiceProviderEntity $serviceProvider)
     {
+        /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter */
         $arpFilter = $this->_filterCommandFactory->create('AttributeReleasePolicy');
-        $arpFilter->setSpMetadata($spMetadata);
+        $arpFilter->setSpMetadata($serviceProvider);
         $arpFilter->setResponseAttributes($this->_responseAttributes);
         $arpFilter->execute();
         return $arpFilter->getResponseAttributes();
     }
 
-    public function hasStoredConsent($serviceProviderEntityId, $spMetadata)
+    public function hasStoredConsent($serviceProviderEntityId, ServiceProviderEntity $serviceProvider)
     {
         try {
-            $this->_filteredResponseAttributes = $this->applyArp($spMetadata);
+            $this->_filteredResponseAttributes = $this->applyArpFrom($serviceProvider);
 
             $dbh = $this->_getConsentDatabaseConnection();
             if (!$dbh) {
@@ -128,9 +131,9 @@ class EngineBlock_Corto_Model_Consent
         }
     }
 
-    public function storeConsent($serviceProviderEntityId, $spMetadata)
+    public function storeConsent($serviceProviderEntityId, ServiceProviderEntity $serviceProvider)
     {
-        $this->_filteredResponseAttributes = $this->applyArp($spMetadata);
+        $this->_filteredResponseAttributes = $this->applyArpFrom($serviceProvider);
 
         $dbh = $this->_getConsentDatabaseConnection();
         if (!$dbh) {
@@ -165,10 +168,10 @@ class EngineBlock_Corto_Model_Consent
         return true;
     }
 
-    public function countTotalConsent($response, $attributes)
+    public function countTotalConsent()
     {
         $dbh = $this->_getConsentDatabaseConnection();
-        $hashedUserId = sha1($this->_getConsentUid($response, $attributes));
+        $hashedUserId = sha1($this->_getConsentUid());
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
         $parameters = array($hashedUserId);
         $statement = $dbh->prepare($query);

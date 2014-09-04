@@ -25,11 +25,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
     public function execute()
     {
         // Provisioning of the user account
-        $subjectId = $this->_getProvisioning()->provisionUser(
-            $this->_responseAttributes,
-            $this->_spMetadata,
-            $this->_idpMetadata
-        );
+        $subjectId = $this->_getProvisioning()->provisionUser($this->_responseAttributes);
 
         $this->setCollabPersonId($subjectId);
 

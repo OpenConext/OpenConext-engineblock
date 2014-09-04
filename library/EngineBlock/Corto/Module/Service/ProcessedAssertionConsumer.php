@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
@@ -25,6 +27,7 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
         }
 
         if (!empty($remainingProcessingEntities)) { // Moar processing!
+            /** @var AbstractConfigurationEntity $nextProcessingEntity */
             $nextProcessingEntity = array_shift($remainingProcessingEntities);
 
             $this->_server->setProcessingMode();
@@ -33,8 +36,8 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
 
             // Change the destiny of the received response
             $newResponse->setId($response->getId());
-            $newResponse->setDestination($nextProcessingEntity['Location']);
-            $newResponse->setDeliverByBinding($nextProcessingEntity['Binding']);
+            $newResponse->setDestination($nextProcessingEntity->responseProcessingService->location);
+            $newResponse->setDeliverByBinding($nextProcessingEntity->responseProcessingService->binding);
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
             $this->_server->getBindingsModule()->send($newResponse, $nextProcessingEntity);

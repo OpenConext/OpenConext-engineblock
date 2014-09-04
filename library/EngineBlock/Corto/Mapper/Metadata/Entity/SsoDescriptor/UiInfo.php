@@ -1,10 +1,15 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo
 {
+    /**
+     * @var AbstractConfigurationEntity
+     */
     private $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractConfigurationEntity $entity)
     {
         $this->_entity = $entity;
     }

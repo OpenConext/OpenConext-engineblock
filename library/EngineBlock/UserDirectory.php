@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+
 /**
  * Access to the LDAP directory where all users are provisioned
  *
@@ -90,20 +92,20 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
-    public function registerUser(array $saml2attributes, array $idpEntityMetadata)
+    public function registerUser(array $saml2attributes)
     {
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
-        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata);
+        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes);
 
         $uid = $this->_getCollabPersonId($ldapAttributes);
         $users = $this->findUsersByIdentifier($uid);
         try {
             switch (count($users)) {
                 case 1:
-                    $user = $this->_updateUser($users[0], $ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                    $user = $this->_updateUser($users[0], $ldapAttributes);
                     break;
                 case 0:
-                    $user = $this->_addUser($ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                    $user = $this->_addUser($ldapAttributes);
                     break;
                 default:
                     $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
@@ -117,7 +119,7 @@ class EngineBlock_UserDirectory
             // add the user because it was already added...
             // So if a user has already been added we simply try again
             if ($e->getCode() === Zend_Ldap_Exception::LDAP_ALREADY_EXISTS) {
-                return $this->registerUser($saml2attributes, $idpEntityMetadata);
+                return $this->registerUser($saml2attributes);
             }
             else {
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
@@ -207,7 +209,7 @@ class EngineBlock_UserDirectory
         return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
     }
 
-    protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata)
+    protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes)
     {
         if (!isset($ldapAttributes['cn'])) {
             $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
@@ -219,12 +221,12 @@ class EngineBlock_UserDirectory
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
         }
         $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
-            $ldapAttributes, $saml2attributes, $idpEntityMetadata
+            $ldapAttributes, $saml2attributes
         )? 'TRUE' : 'FALSE');
         return $ldapAttributes;
     }
 
-    protected function _addUser($newAttributes, $saml2attributes, $idpEntityMetadata)
+    protected function _addUser($newAttributes)
     {
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
 
@@ -271,7 +273,7 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
-    protected function _updateUser($user, $newAttributes, $saml2attributes, $idpEntityMetadata)
+    protected function _updateUser($user, $newAttributes)
     {
         // Hackish, apparently LDAP gives us arrays even for single values?
         // So for now we assume arrays with only one value are single valued
@@ -332,10 +334,9 @@ class EngineBlock_UserDirectory
      *
      * @param array $attributes
      * @param array $saml2attributes
-     * @param array $idpEntityMetadata
      * @return bool
      */
-    protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
+    protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes)
     {
         $guestQualifier = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->addgueststatus->guestqualifier;
         return !isset($saml2attributes[self::URN_IS_MEMBER_OF]) || !in_array($guestQualifier, $saml2attributes[self::URN_IS_MEMBER_OF]);

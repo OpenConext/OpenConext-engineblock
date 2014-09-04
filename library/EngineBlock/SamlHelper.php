@@ -1,4 +1,7 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 /**
  * Temporary workaround
  *
@@ -7,11 +10,11 @@
 class EngineBlock_SamlHelper
 {
     /**
-     * @param array $sp
-     * @param array $idp
+     * @param ServiceProviderEntity $sp
+     * @param IdentityProviderEntity $idp
      * @return bool
      */
-    public static function doRemoteEntitiesRequireAdditionalLogging(array $sp, array $idp = null) {
-        return (!empty($sp['AdditionalLogging']) || !empty($idp['AdditionalLogging']));
+    public static function doRemoteEntitiesRequireAdditionalLogging(ServiceProviderEntity $sp, IdentityProviderEntity $idp = null) {
+        return $sp->additionalLogging || $idp->additionalLogging;
     }
 }

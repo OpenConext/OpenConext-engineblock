@@ -108,7 +108,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return EngineBlock_Corto_ServiceRegistry_JanusRestAdapter()
+     * @return \OpenConext\Component\EngineBlockMetadata\ServiceRegistry\AdapterInterface
      */
     public function getServiceRegistryAdapter()
     {
@@ -119,7 +119,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         $this[self::SERVICE_REGISTRY_ADAPTER] = function (EngineBlock_Application_DiContainer $container)
         {
-            return new EngineBlock_Corto_ServiceRegistry_JanusRestAdapter($container->getServiceRegistryClient());
+            $config = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('serviceRegistryAdapter');
+            if (!$config instanceof Zend_Config) {
+                throw new \RuntimeException('Service Registry Adapter config is not set or not multi-valued?');
+            }
+            $config = $config->toArray();
+
+            $factory = new \OpenConext\Component\EngineBlockMetadata\ServiceRegistry\AdapterFactory();
+            return $factory->createFromConfig($config, $container);
         };
     }
 

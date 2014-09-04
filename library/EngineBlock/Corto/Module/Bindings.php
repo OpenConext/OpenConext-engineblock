@@ -1,27 +1,7 @@
 <?php
-/**
- * SURFconext EngineBlock
- *
- * LICENSE
- *
- * Copyright 2011 SURFnet bv, The Netherlands
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- *
- * @category  SURFconext EngineBlock
- * @package
- * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- */
+
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -127,6 +107,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $ebRequest->getDestination()
         );
 
+        if (!$cortoSpMetadata instanceof ServiceProviderEntity) {
+            throw new EngineBlock_Corto_Module_Bindings_Exception(
+                "Requesting entity '$spEntityId' is not a Service Provider"
+            );
+        }
+
         // Load the metadata for this IdP in SimpleSAMLphp style
         $sspSpMetadata = SimpleSAML_Configuration::loadFromArray(
             $this->mapCortoEntityMetadataToSspEntityMetadata($cortoSpMetadata)
@@ -135,7 +121,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Determine if we should check the signature of the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
-            (isset($cortoSpMetadata['AuthnRequestsSigned']) && $cortoSpMetadata['AuthnRequestsSigned'])
+            $cortoSpMetadata->requestsMustBeSigned
             ||
             // Or we currently demand that all AuthnRequests are sent signed
             $this->_server->getConfig('WantsAuthnRequestsSigned')
@@ -287,7 +273,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Verify that we know this IdP and have metadata for it.
         $cortoIdpMetadata = $this->_verifyKnownMessageIssuer(
             $idpEntityId,
-            isset($message['_Destination']) ? $message['_Destination'] : ''
+            $sspResponse->getDestination()
         );
 
         // Load the metadata for this IdP in SimpleSAMLphp style
@@ -360,7 +346,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * throws a Corto_Module_Bindings_VerificationException.
      * @param string $messageIssuer
      * @param string $destination
-     * @return array Remote Entity that issued the message
+     * @return AbstractConfigurationEntity Remote Entity that issued the message
      * @throws EngineBlock_Corto_Exception_UnknownIssuer
      */
     protected function _verifyKnownMessageIssuer($messageIssuer, $destination = '')
@@ -379,7 +365,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     public function send(
         EngineBlock_Saml2_MessageAnnotationDecorator $message,
-        array $remoteEntity
+        AbstractConfigurationEntity $remoteEntity
     ) {
         $bindingUrn = $message->getDeliverByBinding();
         $sspMessage = $message->getSspMessage();
@@ -470,22 +456,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
     }
 
-    protected function shouldMessageBeSigned(SAML2_Message $sspMessage, array $remoteEntity)
+    protected function shouldMessageBeSigned(SAML2_Message $sspMessage, AbstractConfigurationEntity $remoteEntity)
     {
         if ($sspMessage instanceof SAML2_Response) {
             return true;
         }
 
-        if (!($sspMessage instanceof SAML2_AuthnRequest)) {
+        if (!$sspMessage instanceof SAML2_AuthnRequest) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Unsupported Message type: ' . get_class($sspMessage)
             );
         }
 
         // Determine if we should sign the message
-        $destinationWantsSignature = (isset($remoteEntity['AuthnRequestsSigned']) && $remoteEntity['AuthnRequestsSigned']);
-        $weRequireSignatureOnRequests = $this->_server->getConfig('WantsAuthnRequestsSigned');
-        return $destinationWantsSignature || $weRequireSignatureOnRequests;
+        return $remoteEntity->requestsMustBeSigned || $this->_server->getConfig('WantsAuthnRequestsSigned');
     }
 
     /**
@@ -535,16 +519,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * @param $cortoEntityMetadata
+     * @param ServiceProviderEntity $cortoEntityMetadata
      * @return array
      */
-    protected function mapCortoEntityMetadataToSspEntityMetadata($cortoEntityMetadata)
+    protected function mapCortoEntityMetadataToSspEntityMetadata(ServiceProviderEntity $cortoEntityMetadata)
     {
         /** @var EngineBlock_X509_Certificate[] $certificates */
-        $certificates = $cortoEntityMetadata['certificates'];
+        $certificates = $cortoEntityMetadata->certificates;
 
         $config = array(
-            'entityid'            => $cortoEntityMetadata['EntityID'],
+            'entityid'            => $cortoEntityMetadata->entityId,
             'keys'                => array(),
         );
         if (isset($cortoEntityMetadata['SingleSignOnService']['Location'])) {

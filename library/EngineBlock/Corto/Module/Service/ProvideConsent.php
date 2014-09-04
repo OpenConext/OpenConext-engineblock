@@ -1,4 +1,6 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
@@ -39,20 +41,20 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
 
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
-        $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
+        $serviceProvider = $this->_server->getRemoteEntity($serviceProviderEntityId);
 
         $identityProviderEntityId = $response->getOriginalIssuer();
-        $idpEntityMetadata = $this->_server->getRemoteEntity($identityProviderEntityId);
+        $identityProvider = $this->_server->getRemoteEntity($identityProviderEntityId);
 
         // Flush log if SP or IdP has additional logging enabled
         if (
             $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($spEntityMetadata, $idpEntityMetadata)
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($serviceProvider, $identityProvider)
         ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
-        if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
+        if ($this->isConsentDisabled($serviceProvider, $identityProvider, $serviceProviderEntityId))   {
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
 
             $response->setDestination($response->getReturn());
@@ -60,13 +62,13 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
             $this->_server->getBindingsModule()->send(
                 $response,
-                $spEntityMetadata
+                $serviceProvider
             );
             return;
         }
 
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
+        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $serviceProvider);
         if ($priorConsent) {
             $response->setConsent(SAML2_Const::CONSENT_PRIOR);
 
@@ -75,7 +77,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
             $this->_server->getBindingsModule()->send(
                 $response,
-                $spEntityMetadata
+                $serviceProvider
             );
             return;
         }
@@ -86,47 +88,25 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'action'    => $this->_server->getUrl('processConsentService'),
                 'ID'        => $response->getId(),
                 'attributes'=> $consent->getFilteredResponseAttributes(),
-                'sp'        => $spEntityMetadata,
-                'idp'       => $idpEntityMetadata,
+                'sp'        => $serviceProvider,
+                'idp'       => $identityProvider,
             ));
         $this->_server->sendOutput($html);
     }
 
     /**
-     * @param array $spEntityMetadata
-     * @param array $idpEntityMetadata
-     * @param $serviceProviderEntityId
+     * @param ServiceProviderEntity  $serviceProvider
+     * @param IdentityProviderEntity $identityProvider
+     * @param string                 $serviceProviderEntityId
      * @return bool
      */
-    private function isConsentDisabled(array $spEntityMetadata, array $idpEntityMetadata, $serviceProviderEntityId)
+    private function isConsentDisabled(ServiceProviderEntity $serviceProvider, IdentityProviderEntity $identityProvider, $serviceProviderEntityId)
     {
-        if ($this->isConsentGloballyDisabled($spEntityMetadata)
-            || $this->isConsentDisabledByIdpForCurrentSp($idpEntityMetadata, $serviceProviderEntityId) ) {
+        if ($serviceProvider->noConsentRequired) {
             return true;
         }
 
-        return false;
-    }
-
-    /**
-     * @param array $spEntityMetadata
-     * @return bool
-     */
-    private function isConsentGloballyDisabled(array $spEntityMetadata)
-    {
-        return isset($spEntityMetadata['NoConsentRequired'])
-            && $spEntityMetadata['NoConsentRequired'];
-    }
-
-    /**
-     * @param array $idpEntityMetadata
-     * @param $serviceProviderEntityId
-     * @return bool
-     */
-    private function isConsentDisabledByIdpForCurrentSp(array $idpEntityMetadata, $serviceProviderEntityId)
-    {
-        if (isset($idpEntityMetadata['SpsWithoutConsent'])
-            && in_array($serviceProviderEntityId, $idpEntityMetadata['SpsWithoutConsent'])) {
+        if (in_array($serviceProviderEntityId, $identityProvider->spsEntityIdsWithoutConsent)) {
             return true;
         }
 

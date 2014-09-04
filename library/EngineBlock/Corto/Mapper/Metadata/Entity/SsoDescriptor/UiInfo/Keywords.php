@@ -1,17 +1,29 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Keywords
 {
+    /**
+     * @var AbstractConfigurationEntity
+     */
     private $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractConfigurationEntity $entity)
     {
         $this->_entity = $entity;
     }
 
     public function mapTo(array $rootElement)
     {
-        if (!isset($this->_entity['Keywords'])) {
+        $keywords = array();
+        if ($this->_entity->keywordsEn) {
+            $keywords['en'] = $this->_entity->keywordsEn;
+        }
+        if ($this->_entity->keywordsNl) {
+            $keywords['nl'] = $this->_entity->keywordsNl;
+        }
+        if (empty($keywords)) {
             return $rootElement;
         }
         
@@ -22,17 +34,19 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Keywords
             $rootElement['md:Extensions']['mdui:UIInfo'] = array(0=>array());
         }
         $uiInfo = &$rootElement['md:Extensions']['mdui:UIInfo'][0];
-        foreach ($this->_entity['Keywords'] as $lang => $name) {
-            if (trim($name)==='') {
+        if (!isset($uiInfo['mdui:Keywords'])) {
+            $uiInfo['mdui:Keywords'] = array();
+        }
+
+        foreach ($keywords as $langCode => $value) {
+            if (trim($value)==='') {
                 continue;
             }
-            if (!isset($uiInfo['mdui:Keywords'])) {
-                $uiInfo['mdui:Keywords'] = array();
-            }
+
             $uiInfo['mdui:Keywords'][] = array(
                 array(
-                    '_xml:lang' => $lang,
-                    '__v' => $name,
+                    '_xml:lang' => $langCode,
+                    '__v' => $value,
                 ),
             );
         }

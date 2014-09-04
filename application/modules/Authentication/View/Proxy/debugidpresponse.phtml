@@ -1,9 +1,11 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+
 /**
  * Injected:
  * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
- * @var array $idp
+ * @var IdentityProviderEntity $idp
  * @var array $attributes
  * @var EngineBlock_View $this
  *
@@ -48,7 +50,7 @@ $attributesValidated = $validator->validate();
             Logo
         </th>
         <td>
-            <img src="<?= $idp['Logo']['URL'] ?>" />
+            <img src="<?= $idp->logo ? $idp->logo->url : '/media/idp-logo-not-found.png' ?>" />
         </td>
     </tr>
     <tr>
@@ -56,7 +58,7 @@ $attributesValidated = $validator->validate();
             <?= $this->t('name'); ?>
         </th>
         <td>
-            <?= $this->htmlSpecialCharsText($idp['Name']['en'], ENT_COMPAT, 'UTF-8') ?>
+            <?= $this->htmlSpecialCharsText($idp->nameEn, ENT_COMPAT, 'UTF-8') ?>
         </td>
     </tr>
     <tr>
@@ -64,15 +66,15 @@ $attributesValidated = $validator->validate();
             Entity ID
         </th>
         <td>
-            <?= $this->htmlSpecialCharsText($idp['EntityID']) ?>
+            <?= $this->htmlSpecialCharsText($idp->entityId) ?>
         </td>
     </tr>
     <tr>
         <th>
             Workflow Status
         </th>
-        <td <?php if ($idp['WorkflowState']==='production') { echo 'style="color: green"';} ?>>
-            <?= $this->htmlSpecialCharsText($idp['WorkflowState']) ?>
+        <td <?php if ($idp->workflowState === 'production') { echo 'style="color: green"';} ?>>
+            <?= $this->htmlSpecialCharsText($idp->workflowState) ?>
         </td>
     </tr>
 </table>

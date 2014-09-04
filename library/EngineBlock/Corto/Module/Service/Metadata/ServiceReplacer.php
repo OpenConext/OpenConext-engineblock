@@ -12,6 +12,8 @@
  */
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception as Exception;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
 {
@@ -34,11 +36,11 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
     private $supportedBindings;
 
     /**
-     * @param array $proxyEntity
+     * @param AbstractConfigurationEntity $proxyEntity
      * @param string $serviceName
      * @param bool $required (use either REQUIRED or OPTIONAL const)
      */
-    public function __construct(array $proxyEntity, $serviceName, $required)
+    public function __construct(AbstractConfigurationEntity $proxyEntity, $serviceName, $required)
     {
         $this->serviceName = $serviceName;
         $this->supportedBindings = $this->getSupportedBindingsFromProxy($proxyEntity, $required);
@@ -50,38 +52,37 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
      */
     public function replace(array &$entity, $location)
     {
-        $entity[$this->serviceName] = array();
+        $serviceName = $this->serviceName;
+        $entity->$serviceName = array();
         if (empty($this->supportedBindings)) {
             return;
         }
 
         foreach($this->supportedBindings as $binding) {
-            $entity[$this->serviceName][] = array(
-                'Location'=> $location,
-                'Binding' => $binding
-            );
+            $entity->$serviceName[] = new Service($location, $binding);
         }
     }
 
     /**
      * Builds a list of services supported by the proxy
      *
-     * @param array $proxyEntity
+     * @param AbstractConfigurationEntity $proxyEntity
      * @param bool $required
      * @return array
      * @throws Exception
      */
-    private function getSupportedBindingsFromProxy(array $proxyEntity, $required)
+    private function getSupportedBindingsFromProxy(AbstractConfigurationEntity $proxyEntity, $required)
     {
-        if (!isset($proxyEntity[$this->serviceName])) {
+        $serviceName = $this->serviceName;
+        if (!isset($proxyEntity->$serviceName)) {
             if ($required == self::OPTIONAL) {
                 return;
             }
 
-            throw new Exception("No service '$this->serviceName' is configured in EngineBlock metadata");
+            throw new Exception("No service '$serviceName' is configured in EngineBlock metadata");
         }
 
-        $services = $proxyEntity[$this->serviceName];
+        $services = $proxyEntity->$serviceName;
         if (!is_array($services)) {
             throw new Exception("Service '$this->serviceName' in EngineBlock metadata is not an array");
         }
@@ -89,15 +90,15 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
         $supportedBindings = $this->parseBindingsFromServices($services);
 
         if (count($supportedBindings) === 0 && $required == self::REQUIRED) {
-            throw new Exception("No '$this->serviceName' service bindings configured in EngineBlock metadata");
+            throw new Exception("No '$serviceName' service bindings configured in EngineBlock metadata");
         }
 
         return $supportedBindings;
     }
 
     /**
-     * @param array $services
-     * @return array
+     * @param Service[] $services
+     * @return string[]
      * @throws EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception
      */
     private function parseBindingsFromServices(array $services)

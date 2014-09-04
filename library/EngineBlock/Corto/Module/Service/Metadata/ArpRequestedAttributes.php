@@ -1,27 +1,31 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Configuration\RequestedAttribute;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 /**
  * Add the RequestedAttributes for the AttributeConsumingService section in the SPSSODescriptor based on the ARP of the SP
  */
 
 class EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes
 {
-
-    const URN_OASIS_NAMES_TC_SAML_2_0_ATTRNAME_FORMAT_URI = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-
-    public function addRequestAttributes($entity)
+    public function addRequestAttributes(AbstractConfigurationEntity $entity)
     {
-
-        $serviceRegistryAdapter = $this->_getServiceRegistryAdapter();
-        $arp = $serviceRegistryAdapter->getArp($entity['EntityID']);
-        if ($arp) {
-            foreach (array_keys($arp['attributes']) as $attributeType) {
-                $entity['RequestedAttributes'][] = array(
-                    'Name' => $attributeType,
-                    'NameFormat' => self::URN_OASIS_NAMES_TC_SAML_2_0_ATTRNAME_FORMAT_URI
-                );
-            }
-
+        if (!$entity instanceof ServiceProviderEntity) {
+            return $entity;
         }
+
+        if (!$entity->attributeReleasePolicy) {
+            return $entity;
+        }
+
+        $attributeNames = $entity->attributeReleasePolicy->getAttributeNames();
+
+        $entity->requestedAttributes = array();
+        foreach ($attributeNames as $attributeName) {
+            $entity->requestedAttributes[] = new RequestedAttribute($attributeName);
+        }
+
         return $entity;
     }
 
@@ -30,6 +34,4 @@ class EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
     }
-
-
 }

@@ -24,10 +24,10 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     {
         $errors = array();
 
-        if (isset($this->_idpMetadata['SchacHomeOrganization'])) {
+        if ($this->_idpMetadata->schacHomeOrganization) {
             // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
             $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
-                $this->_idpMetadata['SchacHomeOrganization']
+                $this->_idpMetadata->schacHomeOrganization
             );
         }
         else {
@@ -102,8 +102,8 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
         $schacHomeOrganizations = array();
         $remoteEntities = $this->_server->getRemoteEntities();
         foreach ($remoteEntities as $remoteEntity) {
-            if (isset($remoteEntity['SchacHomeOrganization'])) {
-                $schacHomeOrganizations[] = $remoteEntity['SchacHomeOrganization'];
+            if ($remoteEntity instanceof IdentityProviderEntity && $remoteEntity->schacHomeOrganization) {
+                $schacHomeOrganizations[] = $remoteEntity->schacHomeOrganization;
             }
         }
         return $schacHomeOrganizations;
