@@ -2,10 +2,6 @@
 
 class EngineBlock_Tracker
 {
-    public function __construct() 
-    {
-    }
-    
     public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext, $keyId)
     {
         $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();

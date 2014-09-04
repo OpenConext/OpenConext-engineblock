@@ -9,13 +9,7 @@ abstract class EngineBlock_Group_Provider_Decorator_Abstract
     protected $_provider;
 
     /**
-     * Factory method to create and configure a group provider from it's given configuration
-     *
-     * @static
-     * @abstract
-     * @param Zend_Config $config Configuration for this provider in it's specific format
-     * @param string      $userId UserId to provide group information for (required)
-     * @return EngineBlock_Group_Provider_Interface
+     * {@inheritdoc}
      */
     public static function createFromConfigs(Zend_Config $config, $userId)
     {

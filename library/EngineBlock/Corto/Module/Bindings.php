@@ -358,7 +358,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * Verify if a message has an issuer that is known to us. If not, it
      * throws a Corto_Module_Bindings_VerificationException.
-     * @param array $messageIssuer
+     * @param string $messageIssuer
      * @param string $destination
      * @return array Remote Entity that issued the message
      * @throws EngineBlock_Corto_Exception_UnknownIssuer
