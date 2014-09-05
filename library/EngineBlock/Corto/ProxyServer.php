@@ -497,7 +497,8 @@ class EngineBlock_Corto_ProxyServer
         // Unless of course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
         $serviceProvider = $this->getRemoteEntity($request->getIssuer());
-        if (!$this->isInProcessingMode() && !empty($serviceProvider['TransparentIssuer'])) {
+        $mustProxyTransparently = ($request->isTransparent() || !empty($serviceProvider['TransparentIssuer']));
+        if (!$this->isInProcessingMode() && $mustProxyTransparently) {
             $newResponse->setIssuer($newResponse->getOriginalIssuer());
             $newAssertion->setIssuer($newResponse->getOriginalIssuer());
         }
@@ -663,8 +664,17 @@ class EngineBlock_Corto_ProxyServer
     ) {
         $requestWasSigned    = $request->wasSigned();
 
-        // Custom ACS Location & ProtocolBinding goes first
         /** @var SAML2_AuthnRequest $request */
+
+        // Ignore requests for bindings we don't support for responses.
+        if ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST) {
+            $this->_server->getSessionLog()->notice(
+                "ProtocolBinding '{$request->getProtocolBinding()}' requested is not supported, ignoring..."
+            );
+            return false;
+        }
+
+        // Custom ACS Location & ProtocolBinding goes first
         if ($request->getAssertionConsumerServiceURL() && $request->getProtocolBinding()) {
             if ($requestWasSigned) {
                 $this->_server->getSessionLog()->info(

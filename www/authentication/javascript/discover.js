@@ -336,6 +336,8 @@ var Discover = function () {
          * @param results    array of idps
          */
         displayIdps: function (results) {
+            $('#organisationsContainer li').removeClass('selected');
+            this.selectSuggestion();
 
             //Display no results message if needed
             if (results.length == 0) {
@@ -383,13 +385,8 @@ var Discover = function () {
                 }
 
                 // Check whether this is a successful search and a selection has to be made
-                if (($('#searchBox').val() == '') || ($('#searchBox').val() == this.searchText)) {
-                    // no search, no selection, but fallback to the possible preselected idp
-                    $('#organisationsContainer li').removeClass('selected');
-                    this.selectSuggestion();
-                } else {
+                if ($('#searchBox').val() !== '' && $('#searchBox').val() !== this.searchText) {
                     // search, select first in list
-                    $('#organisationsContainer li').removeClass('selected');
                     $('#organisationsContainer li:first').addClass('selected', '');
                 }
 
