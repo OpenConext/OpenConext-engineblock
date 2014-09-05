@@ -552,7 +552,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function mapCortoEntityMetadataToSspEntityMetadata($cortoEntityMetadata)
     {
-        $publicPems = array($cortoEntityMetadata['certificates']['public']);
+        $publicPems = array();
+        if (isset($cortoEntityMetadata['certificates']['public'])) {
+            $publicPems[] = $cortoEntityMetadata['certificates']['public'];
+        }
         if (isset($cortoEntityMetadata['certificates']['public-fallback'])) {
             $publicPems[] = $cortoEntityMetadata['certificates']['public-fallback'];
         }
