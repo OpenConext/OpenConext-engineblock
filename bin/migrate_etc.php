@@ -62,7 +62,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
         // Make SimpleSAMLphp (used by Profile) use the file based public key.
         if ($sectionVarName === 'auth.simplesamlphp.idp.cert') {
-            $newLocalConfig .= "auth.simplesamlphp.idp.certificate = /etc/surfconext/engineblock.$defaultKeyId.pem.crt\n";
+            $newLocalConfig .= "auth.simplesamlphp.idp.certificate = /etc/surfconext/engineblock.crt\n";
             continue;
         }
 
