@@ -14,16 +14,16 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
 
     public function execute()
     {
-        if (!$this->_spMetadata->attributeReleasePolicy) {
+        if (!$this->_serviceProvider->attributeReleasePolicy) {
             return;
         }
 
-        $spEntityId = $this->_spMetadata->entityId;
+        $spEntityId = $this->_serviceProvider->entityId;
         EngineBlock_ApplicationSingleton::getLog()->info(
             "Applying attribute release policy for $spEntityId"
         );
         $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
-        $newAttributes = $enforcer->enforceArp($this->_spMetadata->attributeReleasePolicy, $this->_responseAttributes);
+        $newAttributes = $enforcer->enforceArp($this->_serviceProvider->attributeReleasePolicy, $this->_responseAttributes);
 
         $this->_responseAttributes = $newAttributes;
     }

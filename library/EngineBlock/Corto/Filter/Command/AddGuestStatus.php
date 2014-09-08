@@ -34,18 +34,18 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
      */
     protected function _addIsMemberOfSurfNlAttribute()
     {
-        if ($this->_idpMetadata->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_ALL) {
+        if ($this->_identityProvider->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_ALL) {
             // All users from this IdP are guests, so no need to add the isMemberOf
             return;
         }
 
-        if ($this->_idpMetadata->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_NONE) {
+        if ($this->_identityProvider->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_NONE) {
             $this->_setIsMember();
             return;
         }
 
         $log = EngineBlock_ApplicationSingleton::getLog();
-        if ($this->_idpMetadata->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_SOME) {
+        if ($this->_identityProvider->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_SOME) {
             if (isset($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0])) {
                 if ($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0] === 'member') {
                     $this->_setIsMember();
@@ -58,7 +58,7 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
                 }
             }
             else {
-                $log->attach($this->_idpMetadata, 'IDP')
+                $log->attach($this->_identityProvider, 'IDP')
                     ->attach($this->_responseAttributes, 'Attributes')
                     ->warn(
                         "Idp guestQualifier is set to 'Some' however, ".
@@ -70,10 +70,10 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
         }
 
         // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
-        $log->attach($this->_idpMetadata, 'IDP')
+        $log->attach($this->_identityProvider, 'IDP')
             ->attach($this->_responseAttributes, 'Attributes')
             ->warn(
-                "Idp guestQualifier is set to unknown value '{$this->_idpMetadata['GuestQualifier']}, idp metadata: "
+                "Idp guestQualifier is set to unknown value '{$this->_identityProvider['GuestQualifier']}, idp metadata: "
             );
     }
 

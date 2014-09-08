@@ -14,14 +14,18 @@
         "apache/shindig":"1094333",
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
+        "janus-ssp/serviceregistry": "dev-master",
         "kriswallsmith/assetic": "1.2.*@dev",
         "mrclay/minify": "~2.1",
-        "openconext/engineblock-fixtures": "*",
+        "openconext/engineblock-fixtures": "dev-master",
+        "openconext/engineblock-metadata": "dev-master",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
         "pimple/pimple": "~2.0",
         "simplesamlphp/saml2": "~0.4",
         "simplesamlphp/simplesamlphp": "~1.12",
-        "zendframework/zendframework1":"~1.12"
+        "zendframework/zendframework1":"~1.12",
+        "doctrine/migrations": "1.0.*@dev",
+        "ad7six/dsn": "dev-master#f3347baa588abed5c3d2fd5d0a057842d26c1a48 as 0.4.0"
     },
     "require-dev": {
         "behat/behat": "2.4.6",
@@ -29,7 +33,7 @@
         "behat/mink-extension": "1.1.4",
         "behat/mink-goutte-driver": "1.0.9",
         "phake/phake": "2.0.0-alpha2",
-        "phpunit/phpunit": "3.7.19"
+        "phpunit/phpunit": "~3.7.19"
     },
     "scripts": {
         "pre-autoload-dump": [
@@ -70,6 +74,18 @@
         {
             "type": "vcs",
             "url": "https://github.com/OpenConext/OpenConext-engineblock-fixtures"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/janus-ssp/ServiceRegistryLib"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/relaxnow/php-dsn"
         }
     ],
     "autoload": {

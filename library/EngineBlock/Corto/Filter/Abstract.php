@@ -64,8 +64,8 @@ abstract class EngineBlock_Corto_Filter_Abstract
         foreach ($commands as $command) {
             // Inject everything we have into the adapter
             $command->setProxyServer($this->_server);
-            $command->setIdpMetadata($identityProvider);
-            $command->setSpMetadata($serviceProvider);
+            $command->setIdentityProvider($identityProvider);
+            $command->setServiceProvider($serviceProvider);
             $command->setRequest($request);
             $command->setResponse($response);
             $command->setResponseAttributes($responseAttributes);

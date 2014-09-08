@@ -21,8 +21,8 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
 
         $command->setCollabPersonId('urn:collab:person:example.edu:mock1');
         $command->setRequest(new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new SAML2_AuthnRequest()));
-        $command->setIdpMetadata(array('EntityID' => 'http://idp.example.edu'));
-        $command->setSpMetadata(array('EntityID' => 'http://sp.example.edu'));
+        $command->setIdentityProvider(array('EntityID' => 'http://idp.example.edu'));
+        $command->setServiceProvider(array('EntityID' => 'http://sp.example.edu'));
         $command->setResponseAttributes(array());
         $this->_command = $command;
     }
@@ -103,7 +103,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
             'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
             'Value' => $response->getIntendedNameId(),
         );
-        $command->setSpMetadata(
+        $command->setServiceProvider(
             array_merge_recursive(
                 $command->getSpMetadata(),
                 array('NameIDFormat' => $nameId['Format'])
@@ -134,7 +134,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
             'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
             'Value' => $response->getIntendedNameId(),
         );
-        $command->setSpMetadata(
+        $command->setServiceProvider(
             array_merge_recursive(
                 $command->getSpMetadata(),
                 array('NameIDFormat' => $nameId['Format'])
@@ -167,7 +167,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
             'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
             'Value' => '',
         );
-        $command->setSpMetadata(
+        $command->setServiceProvider(
             array_merge_recursive(
                 $command->getSpMetadata(),
                 array('NameIDFormat' => $nameId['Format'])
@@ -211,7 +211,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
             'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
             'Value' => '',
         );
-        $command->setSpMetadata(
+        $command->setServiceProvider(
             array_merge_recursive(
                 $command->getSpMetadata(),
                 array('NameIDFormat' => $nameId['Format'])
@@ -247,7 +247,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
         );
 
         // Input
-        $command->setSpMetadata(array_merge($command->getSpMetadata(), array('EntityID' => 'https://sp2.example.edu')));
+        $command->setServiceProvider(array_merge($command->getSpMetadata(), array('EntityID' => 'https://sp2.example.edu')));
 
         // Run
         $command->execute();
@@ -293,7 +293,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdTest extends PHPUnit_Framew
             'Value' => '',
         );
 
-        $command->setSpMetadata(
+        $command->setServiceProvider(
             array_merge_recursive(
                 $command->getSpMetadata(),
                 array('NameIDFormat' => $nameId['Format'])

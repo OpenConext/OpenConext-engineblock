@@ -12,7 +12,7 @@ class EngineBlock_Test_Corto_Filter_Command_SetNameIdMock extends EngineBlock_Co
 
     public function getSpMetadata()
     {
-        return $this->_spMetadata;
+        return $this->_serviceProvider;
     }
 
     public function getCollabPersonId()

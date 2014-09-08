@@ -79,7 +79,7 @@ class EngineBlock_Corto_Model_Consent
     {
         /** @var EngineBlock_Corto_Filter_Command_AttributeReleasePolicy $arpFilter */
         $arpFilter = $this->_filterCommandFactory->create('AttributeReleasePolicy');
-        $arpFilter->setSpMetadata($serviceProvider);
+        $arpFilter->setServiceProvider($serviceProvider);
         $arpFilter->setResponseAttributes($this->_responseAttributes);
         $arpFilter->execute();
         return $arpFilter->getResponseAttributes();

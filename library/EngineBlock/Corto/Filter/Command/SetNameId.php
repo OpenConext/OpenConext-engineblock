@@ -40,7 +40,7 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
             $nameId = $this->_response->getCustomNameId();
         }
         else {
-            $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
+            $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_serviceProvider);
 
             $requireUnspecified =
                 (
@@ -55,12 +55,12 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
             } else if ($requireTransient) {
                 $nameIdValue = $this->_getTransientNameId(
-                    $this->_spMetadata->entityId, $this->_idpMetadata->entityId
+                    $this->_serviceProvider->entityId, $this->_identityProvider->entityId
                 );
             } else {
                 $nameIdValue = $this->_getPersistentNameId(
                     $this->_collabPersonId,
-                    $this->_spMetadata->entityId
+                    $this->_serviceProvider->entityId
                 );
 
             }

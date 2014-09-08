@@ -24,10 +24,10 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     {
         $errors = array();
 
-        if ($this->_idpMetadata->schacHomeOrganization) {
+        if ($this->_identityProvider->schacHomeOrganization) {
             // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
             $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
-                $this->_idpMetadata->schacHomeOrganization
+                $this->_identityProvider->schacHomeOrganization
             );
         }
         else {
