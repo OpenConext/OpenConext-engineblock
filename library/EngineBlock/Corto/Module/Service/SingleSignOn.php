@@ -423,7 +423,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     protected function _sendDebugMail(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
-        $layout = $this->_server->layout();
+        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
         $oldLayout = $layout->getLayout();
         $layout->setLayout('empty');
 

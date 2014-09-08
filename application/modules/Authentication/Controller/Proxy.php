@@ -29,9 +29,19 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             }
             $proxyServer->idPsMetadata();
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
+            $application->getLogInstance()->log(
+                "Unknown remote entity: " . $e->getEntityId(),
+                EngineBlock_Log::NOTICE,
+                EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
+            );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId()));
         } catch(Janus_Client_CacheProxy_Exception $e) {
+            $application->getLogInstance()->log(
+                "Unknown Service Provider?",
+                EngineBlock_Log::NOTICE,
+                EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
+            );
             $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId));
@@ -60,11 +70,21 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         try {
             $proxyServer->edugainMetadata($queryString);
         } catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
+            $application->getLogInstance()->log(
+                "Unknown Service Provider?",
+                EngineBlock_Log::NOTICE,
+                EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
+            );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId())
             );
         } catch(Janus_Client_CacheProxy_Exception $e) {
             $spEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
+            $application->getLogInstance()->log(
+                "Unknown Service Provider '$spEntityId'?",
+                EngineBlock_Log::NOTICE,
+                EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
+            );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($spEntityId)
             );
@@ -80,10 +100,20 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             $proxyServer->processedAssertionConsumer();
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
+            $application->getLogInstance()->log(
+                "VO membership required",
+                EngineBlock_Log::NOTICE,
+                EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
+            );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
+            $application->getLogInstance()->log(
+                "Custom attribute manipulator exception",
+                EngineBlock_Log::NOTICE,
+                EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
+            );
             $_SESSION['feedback_custom'] = $e->getFeedback();
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/custom');

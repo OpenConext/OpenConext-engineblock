@@ -18,6 +18,7 @@ See the NOTICE.txt file
     - memcache
     - ldap
     - libxml
+    - mcrypt
 * MySQL > 5.x with settings:
     - default-storage-engine=InnoDB (recommended)
     - default-collation=utf8_unicode_ci (recommended)

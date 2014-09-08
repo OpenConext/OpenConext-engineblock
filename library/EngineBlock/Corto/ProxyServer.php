@@ -516,7 +516,8 @@ class EngineBlock_Corto_ProxyServer
         if (!$serviceProvider instanceof ServiceProviderEntity) {
             throw new EngineBlock_Exception("Request Issuer is not a Service Provider?");
         }
-        if (!$this->isInProcessingMode() && !$serviceProvider->transparentIssuer) {
+        $mustProxyTransparently = ($request->isTransparent() || $serviceProvider->transparentIssuer);
+        if (!$this->isInProcessingMode() && $mustProxyTransparently) {
             $newResponse->setIssuer($newResponse->getOriginalIssuer());
             $newAssertion->setIssuer($newResponse->getOriginalIssuer());
         }
@@ -682,8 +683,17 @@ class EngineBlock_Corto_ProxyServer
     ) {
         $requestWasSigned    = $request->wasSigned();
 
-        // Custom ACS Location & ProtocolBinding goes first
         /** @var SAML2_AuthnRequest $request */
+
+        // Ignore requests for bindings we don't support for responses.
+        if ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST) {
+            $this->_server->getSessionLog()->notice(
+                "ProtocolBinding '{$request->getProtocolBinding()}' requested is not supported, ignoring..."
+            );
+            return false;
+        }
+
+        // Custom ACS Location & ProtocolBinding goes first
         if ($request->getAssertionConsumerServiceURL() && $request->getProtocolBinding()) {
             if ($requestWasSigned) {
                 $this->_server->getSessionLog()->info(
