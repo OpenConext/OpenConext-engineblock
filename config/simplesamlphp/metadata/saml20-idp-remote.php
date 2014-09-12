@@ -22,11 +22,5 @@ $metadata[$appConfig->auth->simplesamlphp->idp->entityId] = array(
             'Location' => $appConfig->auth->simplesamlphp->idp->location,
         ),
     ),
-    'keys' => array(
-        array(
-            'signing'=>true,
-            'type' => 'X509Certificate',
-            'X509Certificate' => $appConfig->auth->simplesamlphp->idp->cert,
-        )
-    ),
+    'certificate' => $appConfig->auth->simplesamlphp->idp->cert,
 );
