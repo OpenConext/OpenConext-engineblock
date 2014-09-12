@@ -8,7 +8,9 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
     public function serve($serviceName)
     {
         // Get the configuration for EngineBlock in it's IdP role.
-        $engineIdpEntity = $this->_server->getCurrentEntity('idpMetadataService');
+
+        $engineIdpEntityId = $this->_server->getUrl('idpMetadataService');
+        $engineIdpEntity = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineIdpEntityId);
 
         $edugainEntities = array();
 

@@ -3,7 +3,7 @@
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepositoryInterface;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
@@ -60,26 +60,12 @@ class EngineBlock_Corto_ProxyServer
     protected $_defaultCertificates = null;
     protected $_keyPairs = array();
 
-    /**
-     * @var array
-     *
-     * Remote are all SP's and IdP's except Engineblock itself. Metadata of engineblock as IdP and SP is stored
-     * separately in current entities. This is done EngineBlock can never remove it's own metadata by filtering etc.
-     * It is recommended to use getCurrentEntity() to get Engineblock metadata however using getRemoteEntity() is also possible
-     * since this will proxy current entity information
-     *
-     */
-    protected $_entities = array(
-        'current'=>array(),
-        'hosted'=>array(),
-        'remote'=>array(),
-    );
     protected $_modules = array();
     protected $_templateSource;
     protected $_processingMode = false;
 
     /**
-     * @var MetadataRepositoryInterface
+     * @var \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
      */
     private $_repository;
 
@@ -300,74 +286,8 @@ class EngineBlock_Corto_ProxyServer
         return $scheme . '://' . $host . $mappedUri;
     }
 
-    public function hasRemoteEntity($entityId)
-    {
-        return isset($this->_entities['remote'][$entityId]);
-    }
-
     /**
-     * @param $entityId
-     * @return null|AbstractConfigurationEntity
-     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
-     */
-    public function getRemoteEntity($entityId)
-    {
-        $entity = $this->getRepository()->findEntityByEntityId($entityId);
-        if ($entity) {
-            return $entity;
-        }
-
-        $entity = $this->findRemoteEntityInCurrentEntities($entityId);
-        if ($entity) {
-            return $entity;
-        }
-
-        throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
-    }
-
-    /**
-     * Gets current entity by name
-     *
-     * @param string $name spMetadataService|idpMetadataService
-     * @return AbstractConfigurationEntity
-     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
-     */
-    public function getCurrentEntity($name)
-    {
-        if (!isset($this->_entities['current'][$name])) {
-            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($name);
-        }
-        $entity = $this->_entities['current'][$name];
-        return $entity;
-    }
-
-    /**
-     * Tries to find the requested in the current entity list
-     *
-     * @param $entityId string
-     * @return null|AbstractConfigurationEntity
-     */
-    public function findRemoteEntityInCurrentEntities($entityId)
-    {
-        /** @var AbstractConfigurationEntity $currentEntity */
-        foreach($this->_entities['current'] as $currentEntity) {
-            if ($entityId === $currentEntity->entityId) {
-                return $currentEntity;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * @param AbstractConfigurationEntity[] $entities
-     */
-    public function setCurrentEntities(array $entities)
-    {
-        $this->_entities['current'] = $entities;
-    }
-
-    /**
-     * @param MetadataRepositoryInterface $repository
+     * @param \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface $repository
      * @return $this
      */
     public function setRepository(MetadataRepositoryInterface $repository)
@@ -377,7 +297,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @return MetadataRepositoryInterface
+     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
      */
     public function getRepository()
     {
@@ -446,8 +366,9 @@ class EngineBlock_Corto_ProxyServer
 
         $originalId = $request->getId();
 
-        $idpMetadata = $this->getRemoteEntity($idpEntityId);
-        $newRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($request, $idpMetadata, $this);
+        $identityProvider = $this->getRepository()->fetchIdentityProviderByEntityId($idpEntityId);
+
+        $newRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($request, $identityProvider, $this);
         $newId = $newRequest->getId();
 
         // Store the original Request
@@ -458,7 +379,7 @@ class EngineBlock_Corto_ProxyServer
         $_SESSION[$newId]['SAMLRequest'] = $request;
         $_SESSION[$newId]['_InResponseTo'] = $originalId;
 
-        $this->getBindingsModule()->send($newRequest, $this->getRemoteEntity($idpEntityId));
+        $this->getBindingsModule()->send($newRequest, $identityProvider);
     }
 
 //////// RESPONSE HANDLING ////////
@@ -512,11 +433,8 @@ class EngineBlock_Corto_ProxyServer
 
         // Unless of course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
-        $serviceProvider = $this->getRemoteEntity($request->getIssuer());
-        if (!$serviceProvider instanceof ServiceProviderEntity) {
-            throw new EngineBlock_Exception("Request Issuer is not a Service Provider?");
-        }
-        $mustProxyTransparently = ($request->isTransparent() || $serviceProvider->transparentIssuer);
+        $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        $mustProxyTransparently = ($request->isTransparent() || $serviceProvider->isTransparentIssuer);
         if (!$this->isInProcessingMode() && $mustProxyTransparently) {
             $newResponse->setIssuer($newResponse->getOriginalIssuer());
             $newAssertion->setIssuer($newResponse->getOriginalIssuer());
@@ -543,7 +461,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Confirm where we are sending it.
         $acs = $this->getRequestAssertionConsumer($request);
-        $subjectConfirmationData->Recipient = $acs['Location'];
+        $subjectConfirmationData->Recipient = $acs->location;
 
         // Confirm that this is in response to their AuthnRequest (unless, you know, it isn't).
         if (!$request->isUnsolicited()) {
@@ -636,7 +554,7 @@ class EngineBlock_Corto_ProxyServer
     public function getRequestAssertionConsumer(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         /** @var SAML2_AuthnRequest $request */
-        $serviceProvider = $this->getRemoteEntity($request->getIssuer());
+        $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
         // parse and validate custom ACS location
         $custom = $this->getCustomAssertionConsumer($request, $serviceProvider);
@@ -770,7 +688,7 @@ class EngineBlock_Corto_ProxyServer
     ) {
         /** @var SAML2_AuthnRequest $request */
         $requestIssuer = $request->getIssuer();
-        $serviceProvider = $this->getRemoteEntity($requestIssuer);
+        $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($requestIssuer);
 
         // Detect error responses and send them off without an assertion.
         /** @var SAML2_Response $response */
@@ -834,8 +752,8 @@ class EngineBlock_Corto_ProxyServer
             array(new EngineBlock_Corto_Filter_Input($this), 'filter'),
             $response,
             $request,
-            $this->getRemoteEntity($request->getIssuer()),
-            $this->getRemoteEntity($response->getIssuer())
+            $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()),
+            $this->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer())
         );
     }
 
@@ -847,8 +765,8 @@ class EngineBlock_Corto_ProxyServer
             array(new EngineBlock_Corto_Filter_Output($this), 'filter'),
             $response,
             $request,
-            $this->getRemoteEntity($request->getIssuer()),
-            $this->getRemoteEntity($response->getOriginalIssuer())
+            $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()),
+            $this->getRepository()->fetchIdentityProviderByEntityId($response->getOriginalIssuer())
         );
     }
 

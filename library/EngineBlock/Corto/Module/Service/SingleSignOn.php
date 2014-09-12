@@ -30,7 +30,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 $this->_server->sendOutput($this->_server->renderTemplate(
                     'debugidpresponse',
                     array(
-                        'idp'       => $this->_server->getRemoteEntity($response->getIssuer()),
+                        'idp'       => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()),
                         'response'  => $response,
                         'attributes'=> $attributes
                     )
@@ -52,7 +52,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // Flush log if SP or IdP has additional logging enabled
-        $sp = $this->_server->getRemoteEntity($request->getIssuer());
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
         if (
             $this->_server->getConfig('debug', false) ||
             EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)
@@ -367,7 +367,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // Post to the 'continueToIdp' service
         $action = $this->_server->getUrl('continueToIdP');
 
-        $serviceProvider = $this->_server->getRemoteEntity($request->getIssuer());
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
         $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest());
 
         $output = $this->_server->renderTemplate(
@@ -384,24 +384,20 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest)
     {
+        $identityProviders = $this->_server->getRepository()->fetchIdentityProvidersByEntityId($idpEntityIds);
+
         $wayfIdps = array();
-        foreach ($idpEntityIds as $idpEntityId) {
-            if ($idpEntityId === $this->_server->getUrl('idpMetadataService')) {
+        foreach ($identityProviders as $identityProvider) {
+            if ($identityProvider->entityId === $this->_server->getUrl('idpMetadataService')) {
                 // Skip ourselves as a valid Idp
                 continue;
-            }
-
-            $identityProvider = $this->_server->getRemoteEntity($idpEntityId);
-
-            if (!$identityProvider instanceof IdentityProviderEntity) {
-                throw new EngineBlock_Exception('Candidate IDPs contains an SP: ' . $idpEntityId);
             }
 
             if ($identityProvider->hidden) {
                 continue;
             }
 
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setIdp($idpEntityId);
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setIdp($identityProvider->entityId);
 
             $wayfIdp = array(
                 'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
@@ -409,8 +405,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/media/idp-logo-not-found.png',
                 'Keywords'  => $this->getKeywords($identityProvider),
                 'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
-                'ID'        => md5($idpEntityId),
-                'EntityID'  => $idpEntityId,
+                'ID'        => md5($identityProvider->entityId),
+                'EntityID'  => $identityProvider->entityId,
             );
             $wayfIdps[] = $wayfIdp;
         }
@@ -432,7 +428,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $layout->disableLayout();
         }
 
-        $identityProvider = $this->_server->getRemoteEntity($response->getIssuer());
+        $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer());
 
         $attributes = $response->getAssertion()->getAttributes();
         $output = $this->_server->renderTemplate(
@@ -470,7 +466,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $additionalLogInfo
         );
 
-        return 'Geen naam gevonden';
+        return $identityProvider->entityId;
     }
 
     private function getNameEn(IdentityProviderEntity $identityProvider, $additionalInfo)
@@ -488,7 +484,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $additionalInfo
         );
 
-        return 'No name found';
+        return $identityProvider->entityId;
     }
 
     private function getKeywords(IdentityProviderEntity $identityProvider)

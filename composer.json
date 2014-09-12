@@ -24,8 +24,7 @@
         "simplesamlphp/saml2": "~0.4",
         "simplesamlphp/simplesamlphp": "~1.12",
         "zendframework/zendframework1":"~1.12",
-        "doctrine/migrations": "1.0.*@dev",
-        "ad7six/dsn": "dev-master#f3347baa588abed5c3d2fd5d0a057842d26c1a48 as 0.4.0"
+        "doctrine/migrations": "1.0.*@dev"
     },
     "require-dev": {
         "behat/behat": "2.4.6",
@@ -82,10 +81,6 @@
         {
             "type": "vcs",
             "url": "https://github.com/janus-ssp/ServiceRegistryLib"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/relaxnow/php-dsn"
         }
     ],
     "autoload": {

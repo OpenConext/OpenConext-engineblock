@@ -35,14 +35,14 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
     {
         $this->_response->setIntendedNameId($this->_collabPersonId);
 
-        $entityId = ($this->_type === self::TYPE_IDP) ?
-            $this->_response->getIssuer() :
-            $this->_request->getIssuer();
+        $entity = ($this->_type === self::TYPE_IDP) ?
+            $this->_identityProvider :
+            $this->_serviceProvider;
 
         // Try entity specific file based manipulation from Service Registry
         $manipulator = new EngineBlock_Attributes_Manipulator_ServiceRegistry($this->_type);
         $manipulated = $manipulator->manipulate(
-            $entityId,
+            $entity,
             $this->_collabPersonId,
             $this->_responseAttributes,
             $this->_response,

@@ -1,6 +1,7 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 
 /**
@@ -102,12 +103,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer();
 
         // Verify that we know this SP and have metadata for it.
-        $cortoSpMetadata = $this->_verifyKnownMessageIssuer(
+        $serviceProvider = $this->_verifyKnownMessageIssuer(
             $spEntityId,
             $ebRequest->getDestination()
         );
 
-        if (!$cortoSpMetadata instanceof ServiceProviderEntity) {
+        if (!$serviceProvider instanceof ServiceProviderEntity) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 "Requesting entity '$spEntityId' is not a Service Provider"
             );
@@ -115,13 +116,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Load the metadata for this IdP in SimpleSAMLphp style
         $sspSpMetadata = SimpleSAML_Configuration::loadFromArray(
-            $this->mapCortoEntityMetadataToSspEntityMetadata($cortoSpMetadata)
+            $this->mapCortoEntityMetadataToSspEntityMetadata($serviceProvider)
         );
 
         // Determine if we should check the signature of the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
-            $cortoSpMetadata->requestsMustBeSigned
+            $serviceProvider->requestsMustBeSigned
             ||
             // Or we currently demand that all AuthnRequests are sent signed
             $this->_server->getConfig('WantsAuthnRequestsSigned')
@@ -141,7 +142,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $ebRequest->setWasSigned();
         }
 
-        $this->_annotateRequestWithVoContext($ebRequest, $cortoSpMetadata);
+        $this->_annotateRequestWithVoContext($ebRequest, $serviceProvider);
 
         $this->_annotateRequestWithKeyId($ebRequest);
 
@@ -156,15 +157,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _annotateRequestWithVoContext(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest,
-        array $cortoSpMetadata
+        ServiceProviderEntity $cortoSpMetadata
     ) {
         // Check if the request was received on a VO endpoint.
         $explicitVo = $this->_server->getVirtualOrganisationContext();
 
         // Check if the SP should always use a VO (implicit VO).
         $implicitVo = NULL;
-        if (isset($cortoSpMetadata['VoContext']) && $cortoSpMetadata['VoContext']) {
-            $implicitVo = $cortoSpMetadata['VoContext'];
+        if ($cortoSpMetadata->implicitVoId) {
+            $implicitVo = $cortoSpMetadata->implicitVoId;
         }
 
         // If we have neither, then we're done here
@@ -351,15 +352,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _verifyKnownMessageIssuer($messageIssuer, $destination = '')
     {
-        try {
-            $remoteEntity = $this->_server->getRemoteEntity($messageIssuer);
-        } catch (EngineBlock_Corto_ProxyServer_Exception $e) {
+        $remoteEntity = $this->_server->getRepository()->findEntityByEntityId($messageIssuer);
+
+        if (!$remoteEntity) {
             throw new EngineBlock_Corto_Exception_UnknownIssuer(
                 "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)",
                 $messageIssuer,
                 $destination
             );
         }
+
         return $remoteEntity;
     }
 
@@ -522,7 +524,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * @param ServiceProviderEntity $cortoEntityMetadata
      * @return array
      */
-    protected function mapCortoEntityMetadataToSspEntityMetadata(ServiceProviderEntity $cortoEntityMetadata)
+    protected function mapCortoEntityMetadataToSspEntityMetadata(AbstractConfigurationEntity $cortoEntityMetadata)
     {
         /** @var EngineBlock_X509_Certificate[] $certificates */
         $certificates = $cortoEntityMetadata->certificates;
@@ -531,11 +533,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             'entityid'            => $cortoEntityMetadata->entityId,
             'keys'                => array(),
         );
-        if (isset($cortoEntityMetadata['SingleSignOnService']['Location'])) {
-            $config['SingleSignOnService'] = $cortoEntityMetadata['SingleSignOnService']['Location'];
+        if ($cortoEntityMetadata instanceof IdentityProviderEntity) {
+            $config['SingleSignOnService'] = $cortoEntityMetadata->singleSignOnServices[0]->location;
         }
-        if (isset($cortoEntityMetadata['AssertionConsumerServices'][0]['Location'])) {
-            $config['AssertionConsumerService'] = $cortoEntityMetadata['AssertionConsumerServices'][0]['Location'];
+        if ($cortoEntityMetadata instanceof ServiceProviderEntity) {
+            $config['AssertionConsumerService'] = $cortoEntityMetadata->assertionConsumerServices[0]->location;
         }
         foreach ($certificates as $certificate) {
             $config['keys'][] = array(

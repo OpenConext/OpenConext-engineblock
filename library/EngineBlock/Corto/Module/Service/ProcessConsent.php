@@ -53,7 +53,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $attributes = $response->getAssertion()->getAttributes();
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
-        $serviceProvider = $this->_server->getRemoteEntity($serviceProviderEntityId);
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($serviceProviderEntityId);
         if (!$serviceProvider instanceof ServiceProviderEntity) {
             throw new EngineBlock_Exception(
                 'urn:org:openconext:corto:internal:sp-entity-id contained the entityID for an IdentityProvider: ' . $serviceProviderEntityId
@@ -76,7 +76,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 
         $this->_server->getBindingsModule()->send(
             $response,
-            $this->_server->getRemoteEntity($serviceProviderEntityId)
+            $this->_server->getRepository()->fetchServiceProviderByEntityId($serviceProviderEntityId)
         );
     }
 

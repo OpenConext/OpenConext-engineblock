@@ -1,5 +1,5 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Configuration\RequestedAttribute;
+use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 
@@ -15,11 +15,12 @@ class EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes
             return $entity;
         }
 
-        if (!$entity->attributeReleasePolicy) {
+        $arp = $this->getMetadataRepository()->fetchServiceProviderArp($entity);
+        if (!$arp) {
             return $entity;
         }
 
-        $attributeNames = $entity->attributeReleasePolicy->getAttributeNames();
+        $attributeNames = $arp->getAttributeNames();
 
         $entity->requestedAttributes = array();
         foreach ($attributeNames as $attributeName) {
@@ -30,7 +31,7 @@ class EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes
     }
 
 
-    protected function _getServiceRegistryAdapter()
+    protected function getMetadataRepository()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }

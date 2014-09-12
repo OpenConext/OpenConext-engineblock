@@ -1,13 +1,12 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Configuration\RequestedAttribute;
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\DisableDisallowedEntitiesInWayfFilter;
-use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\RemoveDisallowedIdentityProvidersFilter;
-use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\RemoveEntityByEntityId;
-use OpenConext\Component\EngineBlockMetadata\Entity\Repository\Filter\RemoveOtherWorkflowStatesFilter;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\AggregatedMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\DisableDisallowedEntitiesInWayfFilter;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\RemoveEntityByEntityId;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_Adapter
@@ -40,6 +39,8 @@ class EngineBlock_Corto_Adapter
 
     public function singleSignOn($idPProviderHash)
     {
+        $this->_initProxy();
+
         $this->_filterRemoteEntitiesByRequestSp();
         $this->_filterRemoteEntitiesByRequestSpWorkflowState();
         $this->_filterRemoteEntitiesByRequestScopingRequesterId();
@@ -49,6 +50,8 @@ class EngineBlock_Corto_Adapter
 
     public function unsolicitedSingleSignOn($idPProviderHash)
     {
+        $this->_initProxy();
+
         $this->_filterRemoteEntitiesByClaimedSp();
         $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
 
@@ -148,16 +151,23 @@ class EngineBlock_Corto_Adapter
      */
     protected function _filterRemoteEntitiesByRequestSp()
     {
-        $serviceProvider = $this->getMetadataRepository()->fetchServiceProviderByEntityId($this->_getIssuerSpEntityId());
+        $repository = $this->getMetadataRepository();
+        $serviceProvider = $repository->fetchServiceProviderByEntityId($this->_getIssuerSpEntityId());
 
         if ($serviceProvider->displayUnconnectedIdpsWayf) {
-            $this->getMetadataRepository()->filter(new DisableDisallowedEntitiesInWayfFilter(
+            $repository->filter(new DisableDisallowedEntitiesInWayfFilter(
+                $repository,
                 $serviceProvider
             ));
             return;
         }
 
-        $this->getMetadataRepository()->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
+        $repository->filter(
+            new RemoveDisallowedIdentityProvidersFilter(
+                $repository,
+                $serviceProvider
+            )
+        );
     }
 
     /**
@@ -174,7 +184,12 @@ class EngineBlock_Corto_Adapter
 
         $repository = $this->getMetadataRepository();
         $serviceProvider = $repository->fetchServiceProviderByEntityId($serviceProviderEntityId);
-        $repository->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
+        $repository->filter(
+            new RemoveDisallowedIdentityProvidersFilter(
+                $repository,
+                $serviceProvider
+            )
+        );
     }
 
     protected function _filterRemoteEntitiesByRequestScopingRequesterId()
@@ -186,7 +201,12 @@ class EngineBlock_Corto_Adapter
             $serviceProvider = $repository->findServiceProviderByEntityId($requesterId);
 
             if ($serviceProvider) {
-                $repository->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
+                $repository->filter(
+                    new RemoveDisallowedIdentityProvidersFilter(
+                        $repository,
+                        $serviceProvider
+                    )
+                );
             }
             else {
                 $this->_getSessionLog()->warn(
@@ -214,7 +234,12 @@ class EngineBlock_Corto_Adapter
             return;
         }
 
-        $this->getMetadataRepository()->filter(new RemoveDisallowedIdentityProvidersFilter($serviceProvider));
+        $this->getMetadataRepository()->filter(
+            new RemoveDisallowedIdentityProvidersFilter(
+                $repository,
+                $serviceProvider
+            )
+        );
     }
 
     /**
@@ -256,7 +281,8 @@ class EngineBlock_Corto_Adapter
     /**
      * @return array RequesterIDs in Request Scoping (if any, otherwise empty)
      */
-    protected function _getRequestScopingRequesterIds() {
+    protected function _getRequestScopingRequesterIds()
+    {
         $request = $this->_getRequestInstance();
         /** @var SAML2_AuthnRequest $request */
         return $request->getRequesterID();
@@ -265,14 +291,16 @@ class EngineBlock_Corto_Adapter
     /**
      * @return string $issuerSpEntityId
      */
-    protected function _getIssuerSpEntityId() {
+    protected function _getIssuerSpEntityId()
+    {
         return $this->_getRequestInstance()->getIssuer();
     }
 
     /**
      * @return $claimedSpEntityId
      */
-    protected function _getClaimedSpEntityId() {
+    protected function _getClaimedSpEntityId()
+    {
         $claimedSpEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
         return $claimedSpEntityId;
     }
@@ -283,8 +311,9 @@ class EngineBlock_Corto_Adapter
      * @param string $entityId
      * @return string $workflowState
      */
-    protected function _getEntityWorkFlowState($entityId) {
-        return $this->_proxyServer->getRemoteEntity($entityId)->workflowState;
+    protected function _getEntityWorkFlowState($entityId)
+    {
+        return $this->_proxyServer->getRepository()->fetchEntityByEntityId($entityId)->workflowState;
     }
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
@@ -331,70 +360,7 @@ class EngineBlock_Corto_Adapter
         /**
          * Augment our own IdP entry with stuff that can't be set via the Service Registry (yet)
          */
-        $idpEntityId = $proxyServer->getUrl('idpMetadataService');
-        $metadataRepository = $this->getMetadataRepository();
-        $engineIdentityProvider = $metadataRepository->findIdentityProviderByEntityId($idpEntityId);
-        if (!$engineIdentityProvider) {
-            $engineIdentityProvider = new IdentityProviderEntity();
-        }
-        $engineIdentityProvider->entityId = $idpEntityId;
-
-        $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
-
-        $engineIdentityProvider->certificates = array($keyPair->getCertificate());
-        $engineIdentityProvider->nameIdFormats = array(
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
-            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
-            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
-        );
-
-        /**
-         * Augment our own SP entry with stuff that can't be set via the Service Registry (yet)
-         */
-        $spEntityId = $proxyServer->getUrl('spMetadataService');
-        if (!isset($remoteEntities[$spEntityId])) {
-            $remoteEntities[$spEntityId] = new ServiceProviderEntity();
-        }
-        /** @var ServiceProviderEntity $engineServiceProvider */
-        $engineServiceProvider = $remoteEntities[$spEntityId];
-        $engineServiceProvider->entityId = $spEntityId;
-        $engineServiceProvider->certificates = array($keyPair->getCertificate());
-        $engineServiceProvider->nameIdFormats = array(
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
-            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
-            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
-        );
-        $engineServiceProvider->requestedAttributes = array(
-            new RequestedAttribute('urn:mace:dir:attribute-def:mail'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:displayName'),   // DisplayName (example: John Doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:sn'),            // Surname (example: Doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:givenName'),     // Given name (example: John)
-            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganization', true),
-            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganizationType', true),
-            new RequestedAttribute('urn:mace:dir:attribute-def:uid', true),     // UID (example: john.doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:cn'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonAffiliation'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonEntitlement'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
-        );
-        $engineServiceProvider->responseProcessingService = new Service(
-            $proxyServer->getUrl('provideConsentService'),
-            'INTERNAL'
-        );
-        $proxyServer->setConfig('Processing', array('Consent' => $engineServiceProvider));
-
-        // Store current entities separate from remote entities
-        $proxyServer->setCurrentEntities(array(
-            'spMetadataService' => $engineServiceProvider,
-            'idpMetadataService' => $engineIdentityProvider,
-        ));
-        $metadataRepository->filter(new RemoveEntityByEntityId($engineServiceProvider->entityId));
-        $metadataRepository->filter(new RemoveEntityByEntityId($engineIdentityProvider->entityId));
+        $metadataRepository = $this->_configureMetadataRepository($proxyServer, $application);
 
         $proxyServer->setRepository($metadataRepository);
 
@@ -442,6 +408,9 @@ class EngineBlock_Corto_Adapter
         return $this->_proxyServer;
     }
 
+    /**
+     * @return AggregatedMetadataRepository
+     */
     public function getMetadataRepository()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
@@ -545,5 +514,84 @@ class EngineBlock_Corto_Adapter
         }
 
         return $proxyServer->getSigningCertificates();
+    }
+
+    /**
+     * @param EngineBlock_Corto_ProxyServer $proxyServer
+     * @param EngineBlock_ApplicationSingleton $application
+     * @return AggregatedMetadataRepository
+     * @throws EngineBlock_Exception
+     */
+    protected function _configureMetadataRepository(
+        EngineBlock_Corto_ProxyServer $proxyServer,
+        EngineBlock_ApplicationSingleton $application
+    ) {
+        $idpEntityId = $proxyServer->getUrl('idpMetadataService');
+        $metadataRepository = $this->getMetadataRepository();
+        $engineIdentityProvider = $metadataRepository->findIdentityProviderByEntityId($idpEntityId);
+        if (!$engineIdentityProvider) {
+            throw new EngineBlock_Exception(
+                "Unable to find EngineBlock configured as Identity Provider. No '$idpEntityId' in repository!"
+            );
+        }
+
+        $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
+
+        $engineIdentityProvider->certificates = array($keyPair->getCertificate());
+        $engineIdentityProvider->nameIdFormats = array(
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
+            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
+            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
+        );
+
+        /**
+         * Augment our own SP entry with stuff that can't be set via the Service Registry (yet)
+         */
+        $spEntityId = $proxyServer->getUrl('spMetadataService');
+        $engineServiceProvider = $metadataRepository->findServiceProviderByEntityId($spEntityId);
+        if (!$engineServiceProvider) {
+            throw new EngineBlock_Exception(
+                "Unable to find EngineBlock configured as Service Provider. No '$spEntityId' in repository!"
+            );
+        }
+        $engineServiceProvider->certificates = array($keyPair->getCertificate());
+        $engineServiceProvider->nameIdFormats = array(
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
+            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
+            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
+        );
+        $engineServiceProvider->requestedAttributes = array(
+            new RequestedAttribute('urn:mace:dir:attribute-def:mail'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:displayName'), // DisplayName (example: John Doe)
+            new RequestedAttribute('urn:mace:dir:attribute-def:sn'), // Surname (example: Doe)
+            new RequestedAttribute('urn:mace:dir:attribute-def:givenName'), // Given name (example: John)
+            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganization', true),
+            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganizationType', true),
+            new RequestedAttribute('urn:mace:dir:attribute-def:uid', true), // UID (example: john.doe)
+            new RequestedAttribute('urn:mace:dir:attribute-def:cn'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonAffiliation'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonEntitlement'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
+            new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
+        );
+        $engineServiceProvider->responseProcessingService = new Service(
+            $proxyServer->getUrl('provideConsentService'),
+            'INTERNAL'
+        );
+        $proxyServer->setConfig('Processing', array('Consent' => $engineServiceProvider));
+
+        $metadataRepository->filter(new RemoveEntityByEntityId($engineServiceProvider->entityId));
+        $metadataRepository->filter(new RemoveEntityByEntityId($engineIdentityProvider->entityId));
+
+        $ownMetadataRepository = new InMemoryMetadataRepository(
+            array($engineIdentityProvider),
+            array($engineServiceProvider)
+        );
+        $metadataRepository->appendRepository($ownMetadataRepository);
+        return $metadataRepository;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Configuration\AttributeReleasePolicy;
+use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
 
 class EngineBlock_Arp_AttributeReleasePolicyEnforcer
 {

@@ -1,4 +1,5 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 use OpenConext\Component\EngineBlockMetadata\Legacy\EntityTranslator;
@@ -16,15 +17,15 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     }
 
     public function manipulate(
-        $entityId,
+        AbstractConfigurationEntity $entity,
         &$subjectId,
         array &$attributes,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$responseObj,
         IdentityProviderEntity $idpMetadata,
         ServiceProviderEntity $spMetadata
     ) {
-        $entity = $this->_getServiceRegistryAdapter()->fetchEntityByEntityId($entityId);
-        if (empty($entity->manipulationCode)) {
+        $manipulationCode = $this->_getMetadataRepository()->fetchEntityManipulation($entity);
+        if (empty($manipulationCode)) {
             return false;
         }
 
@@ -33,14 +34,13 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         $translator = new EngineBlock_Corto_Mapper_Legacy_ResponseTranslator();
         $response = $translator->fromNewFormat($responseObj);
 
-
         $metadataTranslator = new EntityTranslator();
         $idpMetadataLegacy = $metadataTranslator->translateIdentityProvider($idpMetadata);
         $spMetadataLegacy  = $metadataTranslator->translateServiceProvider($spMetadata);
 
         $this->_doManipulation(
-            $entity->manipulationCode,
-            $entityId,
+            $manipulationCode,
+            $entity->entityId,
             $subjectId,
             $attributes,
             $response,
@@ -118,9 +118,9 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepositoryInterface
+     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
      */
-    protected function _getServiceRegistryAdapter()
+    protected function _getMetadataRepository()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }

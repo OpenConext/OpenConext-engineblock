@@ -12,11 +12,12 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $spEntityId = $request->getQueryParameter('sp-entity-id');
         if ($spEntityId) {
             // See if an sp-entity-id was specified for which we need to use sp specific metadata
-            $spEntity = $this->_server->getRemoteEntity($spEntityId);
+            $spEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($spEntityId);
         }
 
         // Get the configuration for EngineBlock in it's IdP role.
-        $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
+        $engineIdpEntityId = $this->_server->getUrl('idpMetadataService');
+        $engineIdentityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineIdpEntityId);
 
         $idpEntities = array();
         // Note that Shibboleth likes to see it's self in the metadata, so if an sp-entity-id was passed along
@@ -25,11 +26,11 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             $idpEntities[] = $spEntity;
         }
 
-        $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
-        $slServiceReplacer  = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
+        $ssoServiceReplacer = new ServiceReplacer($engineIdentityProvider, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+        $slServiceReplacer  = new ServiceReplacer($engineIdentityProvider, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
         foreach ($this->_server->getRepository()->findIdentityProviders() as $entity) {
             // Don't add ourselves
-            if ($entity->entityId === $entityDetails->entityId) {
+            if ($entity->entityId === $engineIdentityProvider->entityId) {
                 continue;
             }
 
@@ -38,12 +39,12 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             }
 
             // Use EngineBlock certificates
-            $entity->certificates = $entityDetails->certificates;
+            $entity->certificates = $engineIdentityProvider->certificates;
 
             // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
             // NameIDs, so advertise that.
             unset($entity->nameIdFormat);
-            $entity->nameIdFormats = $entityDetails->nameIdFormats;
+            $entity->nameIdFormats = $engineIdentityProvider->nameIdFormats;
 
             // Replace service locations and bindings with those of EB
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity->entityId);
@@ -51,7 +52,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
             $slServiceReplacer->replace($entity, $transparentSlUrl);
 
-            $entity->contactPersons = $entityDetails->contactPersons;
+            $entity->contactPersons = $engineIdentityProvider->contactPersons;
 
             $idpEntities[] = $entity;
         }

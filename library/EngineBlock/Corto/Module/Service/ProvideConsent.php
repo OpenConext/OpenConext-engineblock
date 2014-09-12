@@ -41,10 +41,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
 
         unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
-        $serviceProvider = $this->_server->getRemoteEntity($serviceProviderEntityId);
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($serviceProviderEntityId);
 
         $identityProviderEntityId = $response->getOriginalIssuer();
-        $identityProvider = $this->_server->getRemoteEntity($identityProviderEntityId);
+        $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($identityProviderEntityId);
 
         // Flush log if SP or IdP has additional logging enabled
         if (
@@ -102,7 +102,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
      */
     private function isConsentDisabled(ServiceProviderEntity $serviceProvider, IdentityProviderEntity $identityProvider, $serviceProviderEntityId)
     {
-        if ($serviceProvider->noConsentRequired) {
+        if ($serviceProvider->isConsentRequired) {
             return true;
         }
 
