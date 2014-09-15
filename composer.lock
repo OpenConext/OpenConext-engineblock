@@ -4,52 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ae734c9d87b071e940de39bd01a7559a",
+    "hash": "d5fa8a206f1329fac4567732935272fc",
     "packages": [
-        {
-            "name": "ad7six/dsn",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/relaxnow/php-dsn.git",
-                "reference": "f3347baa588abed5c3d2fd5d0a057842d26c1a48"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/relaxnow/php-dsn/zipball/f3347baa588abed5c3d2fd5d0a057842d26c1a48",
-                "reference": "f3347baa588abed5c3d2fd5d0a057842d26c1a48",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "suggest": {
-                "josegonzalez/dotenv": "0.1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "AD7six\\Dsn\\": "src",
-                    "AD7six\\Dsn\\Test\\": "tests"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Andy Dawson",
-                    "email": "andydawson76@gmail.com",
-                    "homepage": "http://ad7six.com",
-                    "role": "Maintainer"
-                }
-            ],
-            "description": "A utility for parsing and generating service DSNs",
-            "support": {
-                "source": "https://github.com/relaxnow/php-dsn/tree/master"
-            },
-            "time": "2014-09-08 06:39:08"
-        },
         {
             "name": "apache/shindig",
             "version": "1094333",
@@ -695,12 +651,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "7c9639d93558c96ade44f60a4d201b29d68c4d7b"
+                "reference": "d3dd8d4c5ec855aa47939e3bac1d3b92b6d50df2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/7c9639d93558c96ade44f60a4d201b29d68c4d7b",
-                "reference": "7c9639d93558c96ade44f60a4d201b29d68c4d7b",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/d3dd8d4c5ec855aa47939e3bac1d3b92b6d50df2",
+                "reference": "d3dd8d4c5ec855aa47939e3bac1d3b92b6d50df2",
                 "shasum": ""
             },
             "require": {
@@ -761,7 +717,7 @@
                 "compression",
                 "minification"
             ],
-            "time": "2014-08-27 14:48:43"
+            "time": "2014-09-09 14:04:58"
         },
         {
             "name": "monolog/monolog",
@@ -910,22 +866,22 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ibuildingsnl/OpenConext-engineblock-metadata.git",
-                "reference": "21e4186519092108b6f07fa99238dadd14ad6370"
+                "reference": "bfaeb3b8229baddb4dbc06f708d920cddbdeb93a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-engineblock-metadata/zipball/21e4186519092108b6f07fa99238dadd14ad6370",
-                "reference": "21e4186519092108b6f07fa99238dadd14ad6370",
+                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-engineblock-metadata/zipball/bfaeb3b8229baddb4dbc06f708d920cddbdeb93a",
+                "reference": "bfaeb3b8229baddb4dbc06f708d920cddbdeb93a",
                 "shasum": ""
             },
             "require": {
-                "ad7six/dsn": "dev-master#f3347baa588abed5c3d2fd5d0a057842d26c1a48 as 0.4.0",
+                "openconext/stoker-metadata": "dev-master",
                 "php": ">=5.3.3"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "OpenConext\\Component\\EngineBlockMetadata\\": "src/"
+                    "OpenConext\\Component\\StokerMetadata\\": "src/"
                 }
             },
             "license": [
@@ -936,7 +892,38 @@
                 "source": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/tree/master",
                 "issues": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/issues"
             },
-            "time": "2014-09-08 07:24:47"
+            "time": "2014-09-15 12:00:35"
+        },
+        {
+            "name": "openconext/stoker-metadata",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:ibuildingsnl/OpenConext-stoker-metadata.git",
+                "reference": "621fe31d6376ec3d9a561bb1aa47291425e996d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-stoker-metadata/zipball/621fe31d6376ec3d9a561bb1aa47291425e996d6",
+                "reference": "621fe31d6376ec3d9a561bb1aa47291425e996d6",
+                "shasum": ""
+            },
+            "type": "library",
+            "license": [
+                "APACHE-2"
+            ],
+            "authors": [
+                {
+                    "name": "Boy Baukema",
+                    "email": "boy.baukema@flex.surfnet.nl"
+                }
+            ],
+            "description": "PHP library for accessing OpenConext stoker metadata",
+            "support": {
+                "source": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata/tree/master",
+                "issues": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata/issues"
+            },
+            "time": "2014-09-15 12:13:43"
         },
         {
             "name": "openid/php-openid",
@@ -3396,12 +3383,6 @@
             "alias_normalized": "2.2.2.0",
             "version": "9999999-dev",
             "package": "openid/php-openid"
-        },
-        {
-            "alias": "0.4.0",
-            "alias_normalized": "0.4.0.0",
-            "version": "9999999-dev",
-            "package": "ad7six/dsn"
         }
     ],
     "minimum-stability": "stable",
@@ -3410,9 +3391,9 @@
         "kriswallsmith/assetic": 20,
         "openconext/engineblock-fixtures": 20,
         "openconext/engineblock-metadata": 20,
+        "openconext/stoker-metadata": 20,
         "openid/php-openid": 20,
         "doctrine/migrations": 20,
-        "ad7six/dsn": 20,
         "phake/phake": 15
     },
     "prefer-stable": false,

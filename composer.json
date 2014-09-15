@@ -19,6 +19,7 @@
         "mrclay/minify": "~2.1",
         "openconext/engineblock-fixtures": "dev-master",
         "openconext/engineblock-metadata": "dev-master",
+        "openconext/stoker-metadata": "dev-master",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
         "pimple/pimple": "~2.0",
         "simplesamlphp/saml2": "~0.4",
@@ -38,8 +39,7 @@
         "pre-autoload-dump": [
             "bin/composer/dbpatch-post-install.sh",
             "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh",
-            "bin/composer/shindig-post-install.sh"
+            "bin/composer/zend-framework-post-install.sh"
         ]
     },
     "repositories": [
@@ -77,6 +77,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata"
         },
         {
             "type": "vcs",
