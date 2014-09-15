@@ -156,16 +156,16 @@ class EngineBlock_Corto_Adapter
 
         if ($serviceProvider->displayUnconnectedIdpsWayf) {
             $repository->filter(new DisableDisallowedEntitiesInWayfFilter(
-                $repository,
-                $serviceProvider
+                $serviceProvider->entityId,
+                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
             ));
             return;
         }
 
         $repository->filter(
             new RemoveDisallowedIdentityProvidersFilter(
-                $repository,
-                $serviceProvider
+                $serviceProvider->entityId,
+                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
             )
         );
     }
@@ -186,8 +186,8 @@ class EngineBlock_Corto_Adapter
         $serviceProvider = $repository->fetchServiceProviderByEntityId($serviceProviderEntityId);
         $repository->filter(
             new RemoveDisallowedIdentityProvidersFilter(
-                $repository,
-                $serviceProvider
+                $serviceProvider->entityId,
+                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
             )
         );
     }
@@ -203,8 +203,8 @@ class EngineBlock_Corto_Adapter
             if ($serviceProvider) {
                 $repository->filter(
                     new RemoveDisallowedIdentityProvidersFilter(
-                        $repository,
-                        $serviceProvider
+                        $serviceProvider->entityId,
+                        $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
                     )
                 );
             }
@@ -236,8 +236,8 @@ class EngineBlock_Corto_Adapter
 
         $this->getMetadataRepository()->filter(
             new RemoveDisallowedIdentityProvidersFilter(
-                $repository,
-                $serviceProvider
+                $serviceProvider->entityId,
+                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
             )
         );
     }
