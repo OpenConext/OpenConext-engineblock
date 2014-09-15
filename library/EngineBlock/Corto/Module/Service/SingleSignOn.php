@@ -88,7 +88,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // Get all registered Single Sign On Services
-        $candidateIDPs = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
+        $candidateIDPs = $this->_server->getRepository()->findAllowedIdpEntityIdsForSp($sp);
 
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {

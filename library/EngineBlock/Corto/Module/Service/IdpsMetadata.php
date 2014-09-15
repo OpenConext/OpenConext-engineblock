@@ -28,7 +28,19 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 
         $ssoServiceReplacer = new ServiceReplacer($engineIdentityProvider, 'SingleSignOnService', ServiceReplacer::REQUIRED);
         $slServiceReplacer  = new ServiceReplacer($engineIdentityProvider, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
-        foreach ($this->_server->getRepository()->findIdentityProviders() as $entity) {
+
+        if (isset($spEntity)) {
+            $identityProviders = $this->_server->getRepository()->fetchIdentityProvidersByEntityId(
+                $this->_server->getRepository()->findAllowedIdpEntityIdsForSp(
+                    $spEntity
+                )
+            );
+        }
+        else {
+            $identityProviders = $this->_server->getRepository()->findIdentityProviders();
+        }
+
+        foreach ($identityProviders as $entity) {
             // Don't add ourselves
             if ($entity->entityId === $engineIdentityProvider->entityId) {
                 continue;
