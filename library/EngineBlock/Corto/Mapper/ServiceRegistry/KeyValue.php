@@ -149,23 +149,7 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
 
         }
 
-        // In general
-        $cortoEntity['certificates'] = array();
-        if (isset($serviceRegistryEntity['certData']) && $serviceRegistryEntity['certData']) {
-            $cortoEntity['certificates']['public'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
-                $serviceRegistryEntity['certData']
-            );
-            if (isset($serviceRegistryEntity['certData2']) && $serviceRegistryEntity['certData2']) {
-                $cortoEntity['certificates']['public-fallback'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
-                    $serviceRegistryEntity['certData2']
-                );
-                if (isset($serviceRegistryEntity['certData3']) && $serviceRegistryEntity['certData3']) {
-                    $cortoEntity['certificates']['public-fallback2'] = EngineBlock_X509Certificate::getPublicPemCertFromCertData(
-                        $serviceRegistryEntity['certData3']
-                    );
-                }
-            }
-        }
+        $cortoEntity = $this->_mapCertificates($serviceRegistryEntity, $cortoEntity);
 
         $this->_multilang($cortoEntity, $serviceRegistryEntity, array(
             'name'          => 'Name',
@@ -255,6 +239,46 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
         if (isset($serviceRegistryEntity['workflowState'])) {
             $cortoEntity['WorkflowState'] = $serviceRegistryEntity['workflowState'];
         }
+
+        return $cortoEntity;
+    }
+
+    /**
+     * @param array $serviceRegistryEntity
+     * @param $cortoEntity
+     * @return array
+     */
+    private function _mapCertificates(array $serviceRegistryEntity, $cortoEntity)
+    {
+        $certificateFactory = new EngineBlock_X509_CertificateFactory();
+        $cortoEntity['certificates'] = array();
+
+        // certData
+        if (!isset($serviceRegistryEntity['certData']) || !$serviceRegistryEntity['certData']) {
+            return $cortoEntity;
+        }
+        $cortoEntity['certificates'][] = new EngineBlock_X509_CertificateLazyProxy(
+            $certificateFactory,
+            $serviceRegistryEntity['certData']
+        );
+
+        // certData2
+        if (!isset($serviceRegistryEntity['certData2']) || !$serviceRegistryEntity['certData2']) {
+            return $cortoEntity;
+        }
+        $cortoEntity['certificates'][] = new EngineBlock_X509_CertificateLazyProxy(
+            $certificateFactory,
+            $serviceRegistryEntity['certData2']
+        );
+
+        // certData3
+        if (!isset($serviceRegistryEntity['certData3']) || $serviceRegistryEntity['certData3']) {
+            return $cortoEntity;
+        }
+        $cortoEntity['certificates'][] = new EngineBlock_X509_CertificateLazyProxy(
+            $certificateFactory,
+            $serviceRegistryEntity['certData3']
+        );
 
         return $cortoEntity;
     }

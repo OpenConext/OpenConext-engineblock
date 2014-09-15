@@ -1,0 +1,14 @@
+---
+  - name: Install EngineBlock
+    include: main/install.yml
+
+  - name: Configure EngineBlock
+    ini_file:
+      dest: /etc/openconext/engineblock.ini
+      section: "local"
+      option: "{{ item.key }}"
+      value: "{{ item.value }}"
+    with_dict: engine_config
+
+  - name: Setup and Activate the new EngineBlock version
+    include: main/activate.yml

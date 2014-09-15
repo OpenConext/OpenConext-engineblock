@@ -1,0 +1,15 @@
+---
+  - name: SRC - Install Git repo
+    git:
+      accept_hostkey: yes
+      repo: "{{ engine_git_url }}"
+      dest: "{{ engine_release_dir }}"
+      version: "{{ engine_version }}"
+      remote: origin
+      update: yes
+
+  - name: SRC - Running Composer install
+    # Note that we prefer source (which is slower...) because of the GitHub API rate limiting :(
+    command: ./bin/composer.phar --prefer-source --no-interaction install
+    args:
+      chdir: "{{ engine_release_dir }}"

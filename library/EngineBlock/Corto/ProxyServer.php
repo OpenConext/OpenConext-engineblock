@@ -53,7 +53,7 @@ class EngineBlock_Corto_ProxyServer
     protected $_configs;
 
     protected $_defaultCertificates = null;
-    protected $_extraCertificates = array();
+    protected $_keyPairs = array();
 
     /**
      * @var array
@@ -217,28 +217,30 @@ class EngineBlock_Corto_ProxyServer
         return $this;
     }
 
-    public function setCertificates(array $defaultKeyPair, array $extraKeyPairs = array())
+    /**
+     * @param EngineBlock_X509_KeyPair[] $keyPairs
+     */
+    public function setKeyPairs(array $keyPairs = array())
     {
-        $this->_defaultCertificates = $defaultKeyPair;
-        $this->_extraCertificates = $extraKeyPairs;
+        $this->_keyPairs = $keyPairs;
     }
 
     /**
-     * @return array
+     * @return EngineBlock_X509_KeyPair
      * @throws EngineBlock_Corto_ProxyServer_Exception
      */
     public function getSigningCertificates()
     {
         if (!$this->_keyId) {
-            return $this->_defaultCertificates;
+            $this->_keyId = 'default';
         }
 
-        if (!isset($this->_extraCertificates[$this->_keyId])) {
+        if (!isset($this->_keyPairs[$this->_keyId])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 "Unknown key id '{$this->_keyId}'"
             );
         }
-        return $this->_extraCertificates[$this->_keyId];
+        return $this->_keyPairs[$this->_keyId];
     }
 
     public function getUrl($serviceName = "", $remoteEntityId = "", EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request = null)
@@ -925,7 +927,7 @@ class EngineBlock_Corto_ProxyServer
      */
     public function sign(array $element)
     {
-        $certificates = $this->getSigningCertificates();
+        $signingKeyPair = $this->getSigningCertificates();
 
         $signature = array(
             '__t' => 'ds:Signature',
@@ -967,7 +969,7 @@ class EngineBlock_Corto_ProxyServer
             'ds:KeyInfo' => array(
                 'ds:X509Data' => array(
                     'ds:X509Certificate' => array(
-                        '__v' => $this->getCertDataFromPem($certificates['public']),
+                        '__v' => $signingKeyPair->getCertificate()->toCertData(),
                     ),
                 ),
             ),
@@ -1001,11 +1003,8 @@ class EngineBlock_Corto_ProxyServer
         $canonicalXml2Dom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo']));
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
-        $privateKey = $this->getPrivateKeyFromCertificates($certificates);
-
         $signatureValue = null;
-        openssl_sign($canonicalXml2, $signatureValue, $privateKey);
-        openssl_free_key($privateKey);
+        $signatureValue = $signingKeyPair->getPrivateKey()->sign($canonicalXml2);
 
         $signature['ds:SignatureValue']['__v'] = base64_encode($signatureValue);
 
@@ -1013,12 +1012,6 @@ class EngineBlock_Corto_ProxyServer
         $element[EngineBlock_Corto_XmlToArray::PRIVATE_PFX]['Signed'] = true;
 
         return $element;
-    }
-
-    public function getCertDataFromPem($pemKey)
-    {
-        $mapper = new EngineBlock_Corto_Mapper_CertData_Pem($pemKey);
-        return $mapper->map();
     }
 
     /**

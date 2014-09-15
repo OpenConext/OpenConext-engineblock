@@ -1,27 +1,4 @@
 <?php
-/**
- * SURFconext EngineBlock
- *
- * LICENSE
- *
- * Copyright 2011 SURFnet bv, The Netherlands
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- *
- * @category  SURFconext EngineBlock
- * @package
- * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- */
 
 class EngineBlock_Corto_Adapter
 {
@@ -364,9 +341,9 @@ class EngineBlock_Corto_Adapter
         }
         $remoteEntities[$idpEntityId]['EntityID'] = $idpEntityId;
 
-        $certificates = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
+        $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
 
-        $remoteEntities[$idpEntityId]['certificates']['public']  = $certificates['public'];
+        $remoteEntities[$idpEntityId]['certificates'] = array($keyPair->getCertificate());
         $remoteEntities[$idpEntityId]['NameIDFormats'] = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
@@ -383,7 +360,7 @@ class EngineBlock_Corto_Adapter
             $remoteEntities[$spEntityId] = array();
         }
         $remoteEntities[$spEntityId]['EntityID'] = $spEntityId;
-        $remoteEntities[$spEntityId]['certificates']['public']  = $certificates['public'];
+        $remoteEntities[$spEntityId]['certificates'] = array($keyPair->getCertificate());
         $remoteEntities[$spEntityId]['NameIDFormats'] = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
@@ -605,24 +582,55 @@ class EngineBlock_Corto_Adapter
      *
      * @param EngineBlock_Corto_ProxyServer $proxyServer
      * @param Zend_Config $applicationConfiguration
-     * @return array
+     * @return EngineBlock_X509_KeyPair
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     * @throws EngineBlock_Exception
      */
     protected function configureProxyCertificates(
         EngineBlock_Corto_ProxyServer $proxyServer,
         Zend_Config $applicationConfiguration)
     {
-        /** @var Zend_Config $keyConfiguration */
-        $keyConfiguration = $applicationConfiguration->encryption;
-
-        /** @var Zend_Config $defaultKeyConfig */
-        $defaultKeyConfig = $keyConfiguration->key->toArray();
-
-        $extraKeysConfig = array();
-        if ($keyConfiguration->get('keys')) {
-            $extraKeysConfig = $keyConfiguration->keys->toArray();
+        if (!isset($applicationConfiguration->encryption) || !isset($applicationConfiguration->encryption->keys)) {
+            throw new EngineBlock_Corto_ProxyServer_Exception("No encryption/signing keys defined!");
         }
 
-        $proxyServer->setCertificates($defaultKeyConfig, $extraKeysConfig);
+        $keysConfig = $applicationConfiguration->encryption->keys->toArray();
+
+        if (empty($keysConfig)) {
+            throw new EngineBlock_Corto_ProxyServer_Exception("No encryption/signing keys defined!");
+        }
+
+        $publicKeyFactory = new EngineBlock_X509_CertificateFactory();
+        $keyPairs = array();
+        foreach ($keysConfig as $keyId => $keyConfig) {
+            if (!isset($keyConfig['privateFile'])) {
+                $this->_getSessionLog()->log(
+                    'Reference to private key file not found for key: ' . $keyId . ' skipping keypair.',
+                    Zend_Log::WARN
+                );
+                continue;
+            }
+            if (!isset($keyConfig['publicFile'])) {
+                $this->_getSessionLog()->log(
+                    'Reference to public key file not found for key: ' . $keyId,
+                    Zend_Log::WARN
+                );
+                continue;
+            }
+
+            $keyPairs[$keyId] = new EngineBlock_X509_KeyPair(
+                $publicKeyFactory->fromFile($keyConfig['publicFile']),
+                new EngineBlock_X509_PrivateKey($keyConfig['privateFile'])
+            );
+        }
+
+        if (empty($keyPairs)) {
+            throw new EngineBlock_Exception(
+                'No (valid) keypairs found in configuration! Please configure at least 1 keypair under encryption.keys'
+            );
+        }
+
+        $proxyServer->setKeyPairs($keyPairs);
 
         if ($this->_keyId !== null) {
             $proxyServer->setKeyId($this->_keyId);
