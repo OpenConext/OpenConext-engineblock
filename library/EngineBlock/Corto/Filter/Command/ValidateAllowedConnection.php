@@ -8,7 +8,8 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
     public function execute()
     {
         $metadataRepository = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
-        if (!$metadataRepository->isConnectionAllowed($this->_serviceProvider, $this->_identityProvider)) {
+        $allowedIdpEntityIds = $metadataRepository->findAllowedIdpEntityIdsForSp($this->_serviceProvider);
+        if (!in_array($this->_identityProvider->entityId, $allowedIdpEntityIds)) {
             throw new EngineBlock_Corto_Exception_InvalidConnection(
                 "Disallowed response by SP configuration. " .
                 "Response from IdP '{$this->_identityProvider->entityId}' to SP '{$this->_serviceProvider->entityId}'"
