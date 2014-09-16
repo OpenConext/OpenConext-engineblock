@@ -1,5 +1,6 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 
 /**
@@ -73,7 +74,7 @@ $attributesValidated = $validator->validate();
         <th>
             Workflow Status
         </th>
-        <td <?php if ($idp->workflowState === 'production') { echo 'style="color: green"';} ?>>
+        <td <?php if ($idp->workflowState === AbstractConfigurationEntity::WORKFLOW_STATE_PROD) { echo 'style="color: green"';} ?>>
             <?= $this->htmlSpecialCharsText($idp->workflowState) ?>
         </td>
     </tr>
