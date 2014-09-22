@@ -25,6 +25,9 @@
 
 class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var EngineBlock_Arp_AttributeReleasePolicyEnforcer
+     */
     protected $_arpEnforcer;
 
     public function setup()
