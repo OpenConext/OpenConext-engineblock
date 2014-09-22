@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d5fa8a206f1329fac4567732935272fc",
+    "hash": "e64d5c1af843cf11c84ab698cf1fcf72",
     "packages": [
         {
             "name": "apache/shindig",
@@ -866,12 +866,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ibuildingsnl/OpenConext-engineblock-metadata.git",
-                "reference": "bfaeb3b8229baddb4dbc06f708d920cddbdeb93a"
+                "reference": "7da359cb73582e1f86b31ef8e7b29fc06bb66579"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-engineblock-metadata/zipball/bfaeb3b8229baddb4dbc06f708d920cddbdeb93a",
-                "reference": "bfaeb3b8229baddb4dbc06f708d920cddbdeb93a",
+                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-engineblock-metadata/zipball/7da359cb73582e1f86b31ef8e7b29fc06bb66579",
+                "reference": "7da359cb73582e1f86b31ef8e7b29fc06bb66579",
                 "shasum": ""
             },
             "require": {
@@ -881,7 +881,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "OpenConext\\Component\\StokerMetadata\\": "src/"
+                    "OpenConext\\Component\\EngineBlockMetadata\\": "src/"
                 }
             },
             "license": [
@@ -892,7 +892,7 @@
                 "source": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/tree/master",
                 "issues": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/issues"
             },
-            "time": "2014-09-15 12:00:35"
+            "time": "2014-09-15 19:22:24"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -900,30 +900,32 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ibuildingsnl/OpenConext-stoker-metadata.git",
-                "reference": "621fe31d6376ec3d9a561bb1aa47291425e996d6"
+                "reference": "78b551a4834cbb9782b37c84208f772f853878ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-stoker-metadata/zipball/621fe31d6376ec3d9a561bb1aa47291425e996d6",
-                "reference": "621fe31d6376ec3d9a561bb1aa47291425e996d6",
+                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-stoker-metadata/zipball/78b551a4834cbb9782b37c84208f772f853878ab",
+                "reference": "78b551a4834cbb9782b37c84208f772f853878ab",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=5.3.3"
+            },
             "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenConext\\Component\\StokerMetadata\\": "src/"
+                }
+            },
             "license": [
                 "APACHE-2"
-            ],
-            "authors": [
-                {
-                    "name": "Boy Baukema",
-                    "email": "boy.baukema@flex.surfnet.nl"
-                }
             ],
             "description": "PHP library for accessing OpenConext stoker metadata",
             "support": {
                 "source": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata/tree/master",
                 "issues": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata/issues"
             },
-            "time": "2014-09-15 12:13:43"
+            "time": "2014-09-15 19:23:24"
         },
         {
             "name": "openid/php-openid",
