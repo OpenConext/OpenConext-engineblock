@@ -35,7 +35,7 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
      * @example /profile/group-oauth/consume/provider2?oauth_token=request-token
      *
      * @param string $providerId
-     * @return void
+     * @throws EngineBlock_Exception
      */
     public function consumeAction($providerId)
     {
@@ -87,17 +87,7 @@ class Profile_Controller_GroupOauth extends Default_Controller_LoggedIn
 
             $this->_redirectToUrl($_SESSION['return_url']);
         }
-
     }
-
-//    /**
-//     * Simply renders the Error.phtml
-//     *
-//     * @return void
-//     */
-//    public function errorAction()
-//    {
-//    }
 
     /**
      *
