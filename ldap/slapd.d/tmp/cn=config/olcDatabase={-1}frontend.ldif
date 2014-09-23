@@ -1,0 +1,22 @@
+dn: olcDatabase={-1}frontend
+objectClass: olcDatabaseConfig
+objectClass: olcFrontendConfig
+olcDatabase: {-1}frontend
+olcAccess: {0}to dn.base=""  by * read
+olcAccess: {1}to dn.base="cn=subschema"  by * read
+olcAccess: {2}to *  by self write  by dn.base="cn=engine,dc=surfconext,dc=nl" 
+ write  by users read  by anonymous auth
+olcAddContentAcl: FALSE
+olcLastMod: TRUE
+olcMaxDerefDepth: 0
+olcReadOnly: FALSE
+olcSchemaDN: cn=Subschema
+olcSyncUseSubentry: FALSE
+olcMonitoring: FALSE
+structuralObjectClass: olcDatabaseConfig
+entryUUID: c30d6d12-6e22-1033-81f3-3d9d33597797
+creatorsName: cn=config
+createTimestamp: 20140512131206Z
+entryCSN: 20140512131206.759048Z#000000#000#000000
+modifiersName: cn=config
+modifyTimestamp: 20140512131206Z

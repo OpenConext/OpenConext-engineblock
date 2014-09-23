@@ -6,7 +6,7 @@ class EngineBlock_Corto_Module_Service_Certificate extends EngineBlock_Corto_Mod
     {
         $filename = $_SERVER['SERVER_NAME'] . '.pem';
         $certificates = $this->_server->getSigningCertificates();
-        $publicCertContents = $certificates['public'];
+        $publicCertContents = $certificates->getCertificate()->toPem();
 
         header('Content-Type: application/x-pem-file');
         header('Content-Disposition: attachment; filename="' . $filename . '"');

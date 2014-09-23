@@ -1,0 +1,21 @@
+#!RESULT OK
+#!CONNECTION ldap://ldap.test.surfconext.nl:389
+#!DATE 2011-10-26T08:52:46.914
+dn: cn=collab,cn=schema,cn=config
+changetype: modify
+add: olcAttributeTypes
+olcAttributeTypes: {8}( 1.3.6.1.4.1.1076.20.40.40.9 NAME 'collabPersonUUID'
+ DESC 'UUID for person' EQUALITY UUIDMatch ORDERING UUIDOrderingMatch SYNTAX
+  1.3.6.1.1.16.1 SINGLE-VALUE )
+
+#!RESULT OK
+#!CONNECTION ldap://ldap.test.surfconext.nl:389
+#!DATE 2011-10-26T08:52:46.944
+dn: cn=collab,cn=schema,cn=config
+changetype: modify
+replace: olcObjectClasses
+olcObjectClasses: {0}( 1.3.6.1.4.1.1076.20.40.20.40 NAME 'collabPerson' DESC
+  'collabPerson - SURFnet COIN attributen' SUP eduPerson AUXILIARY MUST ( co
+ llabPersonId ) MAY ( collabPersonUUID $ collabPersonHash $ collabPersonRegi
+ stered $ collabPersonLastUpdated $ collabPersonLastAccessed $ collabPersonI
+ sGuest $ collabPersonFirstWarningSent $ collabPersonSecondWarningSent ) )

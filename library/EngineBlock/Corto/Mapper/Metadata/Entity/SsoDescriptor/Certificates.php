@@ -15,16 +15,16 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
             $this->_entity['certificates'] = array();
         }
 
-        $entityCertificates = $this->_entity['certificates'];
+        /** @var EngineBlock_X509_Certificate[] $certificates */
+        $certificates = $this->_entity['certificates'];
 
         // No primary certificate to add so no need to even add the KeyDescriptor element.
-        if (empty($entityCertificates['public'])) {
+        if (empty($certificates)) {
             return $rootElement;
         }
 
-        $rootElement['md:KeyDescriptor'] = $this->mapCertsToElement(
-            array('public', 'public-fallback', 'public-fallback2'),
-            $entityCertificates
+        $rootElement['md:KeyDescriptor'] = $this->mapCertificatesToElement(
+            $certificates
         );
 
         return $rootElement;
@@ -42,35 +42,29 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
      * the keyslug method (key:keyid in the metadata url), this will cause EB to use the new key as 'default' key.
      * Now both default and fallback are the same so metadata with the keyslug will only show the new key.
      *
-     * @param array $keyNames
-     * @param array $entityCertificates
+     * @param EngineBlock_X509_Certificate[] $certificates
      * @return array
      */
-    public function mapCertsToElement(array $keyNames, array $entityCertificates)
+    public function mapCertificatesToElement(array $certificates)
     {
         $element = array();
         $alreadyAdded = array();
 
-        foreach ($keyNames as $keyName) {
-            if (empty($entityCertificates[$keyName])) {
+        foreach ($certificates as $certificate) {
+            $certData = $certificate->toCertData();
+
+            if (in_array($certData, $alreadyAdded)) {
                 continue;
             }
 
-            $certData = $entityCertificates[$keyName];
-            $pem = $this->_mapPem($certData);
+            $element[] = $this->getSigningKeyMetadataForCert($certData);
 
-            if (in_array($pem, $alreadyAdded)) {
-                continue;
-            }
-
-            $element[] = $this->getSigningKeyMetadataForCert($pem);
-
-            $alreadyAdded[] = $pem;
+            $alreadyAdded[] = $certData;
         }
         return $element;
     }
 
-    protected function getSigningKeyMetadataForCert($pem)
+    protected function getSigningKeyMetadataForCert($certData)
     {
         return array(
             EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:ds' => 'http://www.w3.org/2000/09/xmldsig#',
@@ -78,16 +72,10 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
             'ds:KeyInfo' => array(
                 'ds:X509Data' => array(
                     'ds:X509Certificate' => array(
-                        EngineBlock_Corto_XmlToArray::VALUE_PFX => $pem,
+                        EngineBlock_Corto_XmlToArray::VALUE_PFX => $certData,
                     ),
                 ),
             ),
         );
-    }
-
-    protected function _mapPem($pemKey)
-    {
-        $mapper = new EngineBlock_Corto_Mapper_CertData_Pem($pemKey);
-        return $mapper->map();
     }
 }

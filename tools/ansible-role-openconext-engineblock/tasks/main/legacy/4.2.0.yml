@@ -1,0 +1,4 @@
+---
+  - include: 4.2.0/remove-profiled.yml
+  - include: 4.2.0/migrate-to-etc-openconext.yml
+  - include: 4.2.0/migrate-to-log-openconext.yml

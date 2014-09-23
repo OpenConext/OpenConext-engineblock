@@ -1,0 +1,6 @@
+---
+  - name: BUILD - Get the current release
+    get_url: url="{{ engine_download_url }}" dest="{{ engine_build_path }}"
+
+  - name: BUILD - Unarchive it
+    unarchive: src={{ engine_build_path }} dest={{ releases_dir }} copy=no
