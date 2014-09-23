@@ -76,23 +76,6 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
         Phake::verify(($consentMock))->storeConsent(Phake::anyParameters());
     }
 
-    public function testIntroductionMailIsSentOnFirstConsentIfEmailIsKnown() {
-        $processConsentService = $this->factoryService();
-
-        $consentMock = $this->mockConsent();
-        Phake::when($consentMock)
-            ->countTotalConsent(Phake::anyParameters())
-            ->thenReturn(1);
-
-        $configurationMock = new stdClass();
-        $configurationMock->email = new stdClass();
-        $configurationMock->email->sendWelcomeMail = true;
-
-        $processConsentService->serve(null);
-
-        Phake::verify($this->mailerMock)->sendMail(Phake::anyParameters());
-    }
-
     public function testResponseIsSent() {
         $processConsentService = $this->factoryService();
 
