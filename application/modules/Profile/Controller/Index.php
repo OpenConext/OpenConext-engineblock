@@ -20,7 +20,6 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->spAttributesList = $this->_getSpAttributeList($this->spList);
 
         $this->mailSend = isset($_GET["mailSend"]) ? $_GET["mailSend"] : null;
-
     }
 
     /**

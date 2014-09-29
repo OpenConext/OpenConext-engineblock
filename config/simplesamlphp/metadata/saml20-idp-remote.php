@@ -22,5 +22,5 @@ $metadata[$appConfig->auth->simplesamlphp->idp->entityId] = array(
             'Location' => $appConfig->auth->simplesamlphp->idp->location,
         ),
     ),
-    'certificate' => $appConfig->auth->simplesamlphp->idp->cert,
+    'certificate' => $appConfig->auth->simplesamlphp->idp->certificate,
 );
