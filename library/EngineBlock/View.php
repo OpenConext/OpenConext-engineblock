@@ -185,12 +185,12 @@ class EngineBlock_View
         return $query;
     }
 
-    public function htmlSpecialCharsText($content)
+    public static function htmlSpecialCharsText($content)
     {
         return htmlspecialchars($content, ENT_NOQUOTES, 'UTF-8');
     }
 
-    public function htmlSpecialCharsAttributeValue($content)
+    public static function htmlSpecialCharsAttributeValue($content)
     {
         return htmlspecialchars($content, ENT_COMPAT, 'UTF-8');
     }

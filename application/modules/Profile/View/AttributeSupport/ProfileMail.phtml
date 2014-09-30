@@ -11,18 +11,18 @@
     <?php foreach ($userAttributes as $attributeId => $attributeValues) { ?>
         <tr>
             <td>
-                <?=$this->htmlSpecialCharsText($attributeId)?>
+                <?=EngineBlock_View::htmlSpecialCharsText($attributeId)?>
             </td>
             <td>
-                <?=$this->htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
+                <?=EngineBlock_View::htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
             </td>
             <td>
                 <?php if (count($attributeValues)==1) { ?>
-                    <?=$this->htmlSpecialCharsText($attributeValues[0]);?>
+                    <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
                 <?php } else { ?>
                     <ul>
                         <?php foreach ($attributeValues as $value) { ?>
-                            <li><?=$this->htmlSpecialCharsText($value)?></li>
+                            <li><?=EngineBlock_View::htmlSpecialCharsText($value)?></li>
                         <?php } ?>
                     </ul>
                 <?php } ?>

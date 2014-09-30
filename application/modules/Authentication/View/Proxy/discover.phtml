@@ -80,10 +80,10 @@ if ($preselectedIdp) {
                 <ul class="nav">
                     <li id="help_nav"><a href="#" data-help-type="discover">HELP</a></li>
                     <li class="lang <?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?= EngineBlock_View::setLanguage('en'); ?>">EN</a>
+                        <a href="<?= EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
                     </li>
                     <li class="lang <?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?= EngineBlock_View::setLanguage('nl'); ?>">NL</a>
+                        <a href="<?= EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
                     </li>
                 </ul>
 
@@ -91,9 +91,9 @@ if ($preselectedIdp) {
 
                 <!-- Main content -->
                 <div id="content">
-                    <form id="IdpListForm" method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
+                    <form id="IdpListForm" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
                         <p>
-                            <input id="ID" type="hidden" name="ID" value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>" />
+                            <input id="ID" type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
                             <input id="Idp" type="hidden" name="idp" value="" />
                         </p>
                     </form>
@@ -104,12 +104,12 @@ if ($preselectedIdp) {
                     <!-- Preselected IdP -->
                     <div id="IdpSuggestion" class="suggestion">
                         <noscript>
-                            <form method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
+                            <form method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
                                 <p>
-                                    <input type="hidden" name="ID" value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>" />
-                                    <input type="hidden" name="idp" value="<?= $this->htmlSpecialCharsAttributeValue($preselectedIdp); ?>" />
+                                    <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+                                    <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdp); ?>" />
 
-                                    <input type="submit" value="<?= $this->htmlSpecialCharsAttributeValue($preselectedIdpName); ?>" />
+                                    <input type="submit" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpName); ?>" />
                                 </p>
                             </form>
                         </noscript>
@@ -130,9 +130,9 @@ if ($preselectedIdp) {
                                 <?php foreach ($idpList as $idp) : ?>
                                 <form method="post" action="<?= $action ?>">
                                     <p>
-                                        <input type="hidden" name="ID" value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>" />
-                                        <input type="hidden" name="idp" value="<?= $this->htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
-                                        <input type="submit" value="<?= $this->htmlSpecialCharsAttributeValue($idp['Name_en']); ?>" />
+                                        <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+                                        <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
+                                        <input type="submit" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_en']); ?>" />
                                     </p>
                                 </form>
                                 <?php endforeach; ?>

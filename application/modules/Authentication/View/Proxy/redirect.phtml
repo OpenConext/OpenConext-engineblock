@@ -10,7 +10,7 @@ $layout->setLayout('empty');
     </head>
     <body>
         <p>
-           <a href="<?= $this->htmlSpecialCharsAttributeValue($location); ?>">GO</a>
+           <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($location); ?>">GO</a>
         <p>
         <pre>
             <?php print_r($message, 1) ?>
