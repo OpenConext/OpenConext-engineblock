@@ -335,13 +335,24 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 $e
             );
         }
-        // General Response whackiness (like Destinations not matching)
         catch (Exception $e) {
-            throw new EngineBlock_Corto_Module_Bindings_VerificationException(
-                $e->getMessage(),
-                EngineBlock_Exception::CODE_NOTICE,
-                $e
-            );
+            // Signature could not be verified by SSP
+            if ($e->getMessage() === "Unable to validate Signature") {
+                throw new EngineBlock_Corto_Module_Bindings_SignatureVerificationException(
+                    $e->getMessage(),
+                    EngineBlock_Exception::CODE_WARNING,
+                    $e
+                );
+            }
+            else {
+                // General Response whackiness (like Destinations not matching)
+                throw new EngineBlock_Corto_Module_Bindings_VerificationException(
+                    $e->getMessage(),
+                    EngineBlock_Exception::CODE_NOTICE,
+                    $e
+                );
+            }
+
         }
 
         return new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);

@@ -80,6 +80,15 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/received-error-status-code',
                 $e->getFeedbackInfo());
+        } catch (EngineBlock_Corto_Module_Bindings_SignatureVerificationException $e) {
+            $application->getLogInstance()->log(
+                "Unable to verify signature, cert wrong?",
+                EngineBlock_Log::WARN,
+                EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
+            );
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/received-invalid-signed-response'
+            );
         } catch (EngineBlock_Corto_Module_Bindings_VerificationException $e) {
             $application->getLogInstance()->log(
                 "Unable to verify message",
