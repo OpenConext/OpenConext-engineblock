@@ -160,6 +160,9 @@ Make sure the ENGINEBLOCK_ENV is set.
 Make sure you have the following rewrite rules:
 
     RewriteEngine On
+    # We support only GET/POST/HEAD
+    RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
+    RewriteRule .* - [R=405,L]
     # If the requested url does not map to a file or directory, then forward it to index.php/URL.
     # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
