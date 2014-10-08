@@ -73,12 +73,12 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapTestDiContainer()
     {
-        if (defined('ENGINEBLOCK_ENV') && constant('ENGINEBLOCK_ENV') === 'testing') {
+        if ($this->_application->getConfigurationValue('testing', false)) {
             $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
             return;
         }
 
-        if (defined('ENGINEBLOCK_ENV') && constant('ENGINEBLOCK_ENV') === 'functionalTesting') {
+        if ($this->_application->getConfigurationValue('functionalTesting', false)) {
             $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
             return;
         }
