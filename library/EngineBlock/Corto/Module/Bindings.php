@@ -243,20 +243,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Detect the binding being used from the global variables (GET, POST, SERVER)
         $sspBinding = SAML2_Binding::getCurrentBinding();
 
-        // We only support HTTP-Post and HTTP-Redirect bindings
-        if (!($sspBinding instanceof SAML2_HTTPPost || $sspBinding instanceof SAML2_HTTPRedirect)) {
-            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
-                'Unsupported Binding used',
-                EngineBlock_Exception::CODE_NOTICE
-            );
-        }
-        /** @var SAML2_HTTPPost|SAML2_HTTPRedirect $sspBinding */
-
         // Receive a message from the binding
         $sspResponse = $sspBinding->receive();
         if (!($sspResponse instanceof SAML2_Response)) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Unsupported Message received',
+                'Unsupported Message received: ' . get_class($sspResponse),
                 EngineBlock_Exception::CODE_NOTICE
             );
         }
@@ -283,6 +274,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Remember idp for debugging
         $_SESSION['currentIdentityProvider'] = $idpEntityId;
+
+        // We only support HTTP-POST binding for Responses
+        if (!$sspBinding instanceof SAML2_HTTPPost) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
+                'Unsupported Binding used: ' . get_class($sspBinding),
+                EngineBlock_Exception::CODE_NOTICE
+            );
+        }
 
         // Verify that we know this IdP and have metadata for it.
         $cortoIdpMetadata = $this->_verifyKnownMessageIssuer(
