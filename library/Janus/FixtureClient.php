@@ -142,7 +142,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
      */
     public function getIdpList($keys = array(), $forSpEntityId = null)
     {
-        $spEntities = array();
+        $idpEntities = array();
         $entities = $this->_getEntities();
         foreach ($entities as $entityId => $entity) {
             // Skip if the entity is not an IDP
@@ -170,9 +170,9 @@ class Janus_FixtureClient implements Janus_Client_Interface
             }
 
             // Add this as a SP
-            $spEntities[$entityId] = $entity;
+            $idpEntities[$entityId] = $entity;
         }
-        return $spEntities;
+        return $idpEntities;
     }
 
     /**
