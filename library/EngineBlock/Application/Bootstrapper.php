@@ -64,6 +64,10 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapConfiguration()
     {
+        if ($this->_application->getConfiguration()) {
+            return;
+        }
+
         $configProxy = new EngineBlock_Config_CacheProxy(
             $this->_getAllConfigFiles(),
             $this->_application->getDiContainer()->getApplicationCache()
