@@ -2,12 +2,6 @@
 
 class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
 {
-    /**
-     *
-     *
-     * @param string $encodedIdPEntityId
-     * @return void
-     */
     public function idPsMetaDataAction()
     {
         $this->setNoRender();
