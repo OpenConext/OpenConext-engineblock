@@ -97,16 +97,15 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /**
      * @param ServiceProviderEntity  $serviceProvider
      * @param IdentityProviderEntity $identityProvider
-     * @param string                 $serviceProviderEntityId
      * @return bool
      */
-    private function isConsentDisabled(ServiceProviderEntity $serviceProvider, IdentityProviderEntity $identityProvider, $serviceProviderEntityId)
+    private function isConsentDisabled(ServiceProviderEntity $serviceProvider, IdentityProviderEntity $identityProvider)
     {
         if ($serviceProvider->isConsentRequired) {
             return true;
         }
 
-        if (in_array($serviceProviderEntityId, $identityProvider->spsEntityIdsWithoutConsent)) {
+        if (in_array($serviceProvider->entityId, $identityProvider->spsEntityIdsWithoutConsent)) {
             return true;
         }
 
