@@ -59,7 +59,7 @@ $attributesValidated = $validator->validate();
             <?= $this->t('name'); ?>
         </th>
         <td>
-            <?= $this->htmlSpecialCharsText($idp->nameEn, ENT_COMPAT, 'UTF-8') ?>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->nameEn, ENT_COMPAT, 'UTF-8') ?>
         </td>
     </tr>
     <tr>
@@ -67,7 +67,7 @@ $attributesValidated = $validator->validate();
             Entity ID
         </th>
         <td>
-            <?= $this->htmlSpecialCharsText($idp->entityId) ?>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->entityId) ?>
         </td>
     </tr>
     <tr>
@@ -75,7 +75,7 @@ $attributesValidated = $validator->validate();
             Workflow Status
         </th>
         <td <?php if ($idp->workflowState === AbstractConfigurationEntity::WORKFLOW_STATE_PROD) { echo 'style="color: green"';} ?>>
-            <?= $this->htmlSpecialCharsText($idp->workflowState) ?>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->workflowState) ?>
         </td>
     </tr>
 </table>
@@ -86,7 +86,7 @@ $attributesValidated = $validator->validate();
         <th>NameID</th>
 
         <td>
-            <?php $nameId = $response->getAssertion()->getNameId(); echo $this->htmlSpecialCharsText($nameId['Value']); ?>
+            <?php $nameId = $response->getAssertion()->getNameId(); echo EngineBlock_View::htmlSpecialCharsText($nameId['Value']); ?>
         </td>
     </tr>
 </table>
@@ -95,13 +95,13 @@ $attributesValidated = $validator->validate();
 <?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
     <p class="error">
         <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
-    echo $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
+    echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
     ?></p>
 <?php endforeach; ?>
 <?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
     <p class="warning">
         <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
-    echo $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
+    echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
     ?></p>
 <?php endforeach; ?>
 <table>
@@ -128,15 +128,15 @@ $attributesValidated = $validator->validate();
                 <?= $this->getAttributeName($attributeName, 'en', false) ?>
             </td>
             <td>
-                <?= $this->htmlSpecialCharsText($attributeName); ?>
+                <?= EngineBlock_View::htmlSpecialCharsText($attributeName); ?>
             </td>
             <td>
                 <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                <?= $this->htmlSpecialCharsText($attributeValues[0]);?>
+                <?= EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
                 <?php } /** Multiple attribute values */ else { ?>
                 <ul>
                     <?php foreach ($attributeValues as $value) { ?>
-                    <li><?= $this->htmlSpecialCharsText($value); ?></li>
+                    <li><?= EngineBlock_View::htmlSpecialCharsText($value); ?></li>
                     <?php } ?>
                 </ul>
                 <?php } ?>
@@ -148,13 +148,13 @@ $attributesValidated = $validator->validate();
                     foreach ($validator->getErrors($attributeName) as $error) {
                         echo '<p class="error">' .
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
-                                $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
+                                EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                             '</p>';
                     }
                     foreach ($validator->getWarnings($attributeName) as $warning) {
                         echo '<p class="warning">'.
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
-                                $this->htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
+                                EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
                             '</p>';
                     }
                 endif; ?>
@@ -165,9 +165,9 @@ $attributesValidated = $validator->validate();
 </table>
 <hr />
 <p>
-    <?= $this->htmlSpecialCharsText($this->t('idp_debugging_mail_explain')); ?>
+    <?= EngineBlock_View::htmlSpecialCharsText($this->t('idp_debugging_mail_explain')); ?>
 </p>
 <form method="post">
     <input type="hidden" name="mail" value="true" />
-    <input type="submit" value="<?= $this->htmlSpecialCharsAttributeValue($this->t('idp_debugging_mail_button')); ?>" />
+    <input type="submit" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($this->t('idp_debugging_mail_button')); ?>" />
 </form>
