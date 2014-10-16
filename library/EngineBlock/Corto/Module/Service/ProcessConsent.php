@@ -64,14 +64,16 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 
-        $attributes = $response->getAssertion()->getAttributes();
-        $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
-        unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
+        $request = $this->_server->getReceivedRequestFromResponse($response->getInResponseTo());
+        $spMetadata = $this->_server->getRemoteEntity($request->getIssuer());
+
+        $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata($spMetadata, $request, $this->_server);
 
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
             throw new EngineBlock_Corto_Exception_NoConsentProvided('No consent given...');
         }
 
+        $attributes = $response->getAssertion()->getAttributes();
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
         $consent->storeConsent($destinationMetadata);
         if ($consent->countTotalConsent($response, $attributes) === 1) {
@@ -84,7 +86,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 
         $this->_server->getBindingsModule()->send(
             $response,
-            $this->_server->getRemoteEntity($serviceProviderEntityId)
+            $spMetadata
         );
     }
 
