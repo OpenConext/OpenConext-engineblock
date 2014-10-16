@@ -19,7 +19,7 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
         $idp = $this->_server->getRemoteEntity($response->getOriginalIssuer());
         if (
             $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))
         ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }

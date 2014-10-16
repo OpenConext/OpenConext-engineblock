@@ -11,7 +11,12 @@ class EngineBlock_SamlHelper
      * @param array $idp
      * @return bool
      */
-    public static function doRemoteEntitiesRequireAdditionalLogging(array $sp, array $idp = null) {
-        return (!empty($sp['AdditionalLogging']) || !empty($idp['AdditionalLogging']));
+    public static function doRemoteEntitiesRequireAdditionalLogging(array $entities) {
+        foreach ($entities as $entity) {
+            if (!empty($entity['AdditionalLogging'])) {
+                return true;
+            }
+        }
+        return false;
     }
 }
