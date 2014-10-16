@@ -42,7 +42,6 @@ class EngineBlock_Corto_Model_Consent_Factory
             $proxyServer->getConfig('ConsentStoreValues', true),
             $response,
             $attributes,
-            $this->_filterCommandFactory,
             $this->_databaseConnectionFactory
         );
     }
