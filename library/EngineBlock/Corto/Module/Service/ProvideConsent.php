@@ -52,7 +52,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
-        if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
+        if ($this->isConsentDisabled($spMetadataChain, $idpEntityMetadata))   {
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
 
             $response->setDestination($response->getReturn());
@@ -66,7 +66,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         }
 
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
+        $priorConsent = $consent->hasStoredConsent($consentDestinationEntityMetadata);
         if ($priorConsent) {
             $response->setConsent(SAML2_Const::CONSENT_PRIOR);
 

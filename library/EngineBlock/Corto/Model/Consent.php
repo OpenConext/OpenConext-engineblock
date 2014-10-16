@@ -48,7 +48,7 @@ class EngineBlock_Corto_Model_Consent
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
     }
 
-    public function hasStoredConsent($serviceProviderEntityId, $spMetadata)
+    public function hasStoredConsent($spMetadata)
     {
         try {
             $dbh = $this->_getConsentDatabaseConnection();
@@ -62,7 +62,7 @@ class EngineBlock_Corto_Model_Consent
             $hashedUserId = sha1($this->_getConsentUid());
             $parameters = array(
                 $hashedUserId,
-                $serviceProviderEntityId,
+                $spMetadata['EntityID'],
                 $attributesHash
             );
 
@@ -80,7 +80,7 @@ class EngineBlock_Corto_Model_Consent
             $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ?");
             $statement->execute(array(
                 $hashedUserId,
-                $serviceProviderEntityId,
+                $spMetadata['EntityID'],
              ));
 
             return true;
@@ -92,7 +92,7 @@ class EngineBlock_Corto_Model_Consent
         }
     }
 
-    public function storeConsent($serviceProviderEntityId, $spMetadata)
+    public function storeConsent($spMetadata)
     {
         $dbh = $this->_getConsentDatabaseConnection();
         if (!$dbh) {
