@@ -36,39 +36,7 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
     public function execute()
     {
-        if ($this->_response->getCustomNameId()) {
-            $nameId = $this->_response->getCustomNameId();
-        }
-        else {
-            $nameIdFormat = $this->_getNameIdFormat($this->_request, $this->_spMetadata);
-
-            $requireUnspecified =
-                (
-                    $nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED
-                    || // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-                    $nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
-                );
-            $requireTransient = ($nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT);
-
-            if ($requireUnspecified) {
-                $nameIdValue = $this->_response->getIntendedNameId();
-
-            } else if ($requireTransient) {
-                $nameIdValue = $this->_getTransientNameId(
-                    $this->_spMetadata['EntityID'], $this->_idpMetadata['EntityID']
-                );
-            } else {
-                $nameIdValue = $this->_getPersistentNameId(
-                    $this->_collabPersonId,
-                    $this->_spMetadata['EntityID']
-                );
-
-            }
-            $nameId = array(
-                'Format' => $nameIdFormat,
-                'Value'  => $nameIdValue,
-            );
-        }
+        $nameId = $this->_getNameId();
 
         // Adjust the NameID in the NEW response, set the collab:person uid
         $this->_response->getAssertion()->setNameId($nameId);
@@ -81,6 +49,44 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         $this->_responseAttributes['urn:mace:dir:attribute-def:eduPersonTargetedID'] = array(
             $document->documentElement->childNodes
         );
+    }
+
+
+    /**
+     * @return array|string
+     */
+    private function _getNameId()
+    {
+        $customNameId = $this->_response->getCustomNameId();
+        if ($customNameId) {
+            return $customNameId;
+        }
+
+        $nameIdFormat = $this->_getNameIdFormat($this->_request, $destinationSpMetadata);
+
+        $requireUnspecified = ($nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED);
+        // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
+        $requireUnspecified |= $nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED;
+
+        $requireTransient = ($nameIdFormat === EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT);
+
+        if ($requireUnspecified) {
+            $nameIdValue = $this->_response->getIntendedNameId();
+        } else if ($requireTransient) {
+            $nameIdValue = $this->_getTransientNameId(
+                $destinationSpMetadata['EntityID'], $this->_idpMetadata['EntityID']
+            );
+        } else {
+            $nameIdValue = $this->_getPersistentNameId(
+                $this->_collabPersonId,
+                $destinationSpMetadata['EntityID']
+            );
+        }
+        $nameId = array(
+            'Format' => $nameIdFormat,
+            'Value' => $nameIdValue,
+        );
+        return $nameId;
     }
 
     /**
