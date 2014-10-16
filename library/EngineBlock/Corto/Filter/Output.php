@@ -35,6 +35,11 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
             ),
 
+            // Run custom attribute manipulations in case we are behind a proxy.
+            new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
+                EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_REQUESTER_SP
+            ),
+
             // Set the persistent Identifier for this user on this SP
             new EngineBlock_Corto_Filter_Command_SetNameId(),
 
