@@ -74,33 +74,32 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         if (count($candidateIDPs) === 0) {
             throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No Idps found');
         }
-        // Exactly 1 candidate found, send authentication request to the first one
-        else if (count($candidateIDPs) === 1) {
+
+        // Exactly 1 candidate found, send authentication request to the first one.
+        if (count($candidateIDPs) === 1) {
             $idp = array_shift($candidateIDPs);
             $log->info("SSO: Only 1 candidate IdP: $idp");
             $this->_server->sendAuthenticationRequest($request, $idp);
             return;
         }
-        // Multiple IdPs found...
-        else {
-            // > 1 IdPs found, but isPassive attribute given, unable to show WAYF
-            if ($request->getIsPassive()) {
-                $log->info("SSO: IsPassive with multiple IdPs!");
-                $response = $this->_server->createErrorResponse($request, 'NoPassive');
-                $this->_server->sendResponseToRequestIssuer($request, $response);
-                return;
-            }
-            else {
-                // Store the request in the session
-                $id = $request->getId();
-                $_SESSION[$id]['SAMLRequest'] = $request;
 
-                // Show WAYF
-                $this->_server->getSessionLog()->info("SSO: Showing WAYF");
-                $this->_showWayf($request, $candidateIDPs);
-                return;
-            }
+        // Multiple IdPs found...
+
+        // > 1 IdPs found, but isPassive attribute given, unable to show WAYF.
+        if ($request->getIsPassive()) {
+            $log->info("SSO: IsPassive with multiple IdPs!");
+            $response = $this->_server->createErrorResponse($request, 'NoPassive');
+            $this->_server->sendResponseToRequestIssuer($request, $response);
+            return;
         }
+
+        // Store the request in the session
+        $id = $request->getId();
+        $_SESSION[$id]['SAMLRequest'] = $request;
+
+        // Show WAYF
+        $this->_server->getSessionLog()->info("SSO: Showing WAYF");
+        $this->_showWayf($request, $candidateIDPs);
     }
 
     protected function _getRequest($serviceName)
