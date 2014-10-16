@@ -318,7 +318,6 @@ class EngineBlock_Corto_Adapter
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
             'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true),
-            'NoSupportedIDPError' => 'user',
             'rememberIdp' => '+3 months',
             'SigningAlgorithm' => '', // @todo Look this up
             'Processing' => array(

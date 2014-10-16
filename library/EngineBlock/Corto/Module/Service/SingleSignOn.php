@@ -104,17 +104,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $log->attach(array_values($candidateIDPs), 'Candidate IDPs (after scoping)');
 
-        // No IdPs found! Send an error response back.
+        // 0 IdPs found! Throw an exception.
         if (count($candidateIDPs) === 0) {
-            $log->info("SSO: No Supported Idps!");
-            if ($this->_server->getConfig('NoSupportedIDPError')!=='user') {
-                $response = $this->_server->createErrorResponse($request, 'NoSupportedIDP');
-                $this->_server->sendResponseToRequestIssuer($request, $response);
-                return;
-            }
-            else {
-                throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No Idps found');
-            }
+            throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No Idps found');
         }
         // Exactly 1 candidate found, send authentication request to the first one
         else if (count($candidateIDPs) === 1) {
