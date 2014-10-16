@@ -233,10 +233,7 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         $this->_getDb()->prepare(
             'INSERT INTO service_provider_uuid (uuid, service_provider_entity_id) VALUES (?,?)'
         )->execute(
-            array(
-                $uuid,
-                $spEntityId,
-            )
+            array($uuid, $spEntityId)
         );
     }
 
@@ -262,10 +259,11 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
 
     protected function _storePersistentId($persistentId, $serviceProviderUuid, $userUuid)
     {
-        $statement = $this->_getDb()->prepare(
+        $this->_getDb()->prepare(
             "INSERT INTO saml_persistent_id (persistent_id, service_provider_uuid, user_uuid) VALUES (?,?,?)"
+        )->execute(
+            array($persistentId, $serviceProviderUuid, $userUuid)
         );
-        $statement->execute(array($persistentId, $serviceProviderUuid, $userUuid));
     }
 
     protected function _getDb()
