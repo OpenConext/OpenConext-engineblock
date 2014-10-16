@@ -45,10 +45,6 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
             $response->setDeliverByBinding($_SESSION['Processing'][$receivedRequest->getId()]['OriginalBinding']);
             $response->setOriginalIssuer($_SESSION['Processing'][$receivedRequest->getId()]['OriginalIssuer']);
 
-            $attributes = $response->getAssertion()->getAttributes();
-            unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
-            $response->getAssertion()->setAttributes($attributes);
-
             $this->_server->unsetProcessingMode();
 
             // Cache the response

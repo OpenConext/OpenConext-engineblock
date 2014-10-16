@@ -55,10 +55,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse->setDeliverByBinding($firstProcessingEntity['Binding']);
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
-            $attributes = $newResponse->getAssertion()->getAttributes();
-            $attributes['urn:org:openconext:corto:internal:sp-entity-id'] = array($receivedRequest->getIssuer());
-            $newResponse->getAssertion()->setAttributes($attributes);
-
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
         }
         else {
