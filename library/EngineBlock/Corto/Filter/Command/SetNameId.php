@@ -62,6 +62,12 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
             return $customNameId;
         }
 
+        $destinationSpMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
+            $this->_spMetadata,
+            $this->_request,
+            $this->_server
+        );
+
         $nameIdFormat = $this->_getNameIdFormat($this->_request, $destinationSpMetadata);
 
         $requireUnspecified = ($nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED);
