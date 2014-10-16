@@ -28,7 +28,7 @@ class EngineBlock_Corto_Model_Consent_Factory
      * Creates a new Consent instance
      *
      * @param EngineBlock_Corto_ProxyServer $proxyServer
-     * @param array $response
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @param array $attributes
      * @return EngineBlock_Corto_Model_Consent
      */
