@@ -43,7 +43,7 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
 
         // Try entity specific file based manipulation from Service Registry
         $manipulator = new EngineBlock_Attributes_Manipulator_ServiceRegistry($this->_type);
-        $manipulated = $manipulator->manipulate(
+        $manipulator->manipulate(
             $entityId,
             $this->_collabPersonId,
             $this->_responseAttributes,
@@ -53,7 +53,5 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
         );
 
         $this->_response->setIntendedNameId($this->_collabPersonId);
-
-        return (bool)$manipulated;
     }
 }
