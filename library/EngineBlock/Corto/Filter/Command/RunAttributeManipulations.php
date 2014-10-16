@@ -12,7 +12,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
 
     function __construct($type = '')
     {
-        assert('in_array($type, array(self::TYPE_SP, self::TYPE_IDP, ""))');
+        if (!in_array($type, array(self::TYPE_SP, self::TYPE_IDP, self::TYPE_REQUESTER_SP))) {
+            throw new \EngineBlock_Exception("Invalid type for Attribute Manipulation: '$type'");
+        }
         $this->_type = $type;
     }
 
