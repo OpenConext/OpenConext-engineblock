@@ -184,7 +184,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     protected function _createUnsolicitedRequest()
     {
-        // Entity ID as requeted in GET parameters
+        // Entity ID as requested in GET parameters
         $entityId    = !empty($_GET['sp-entity-id']) ? $_GET['sp-entity-id']: null;
 
         // Request optional  acs-* parameters

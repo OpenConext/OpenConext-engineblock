@@ -3,8 +3,7 @@
 class EngineBlock_Application_Bootstrapper
 {
     const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
-    // @todo correct typo
-    const CONFIG_FILE_ENVIORNMENT   = '/etc/surfconext/engineblock.ini';
+    const CONFIG_FILE_ENVIRONMENT   = '/etc/surfconext/engineblock.ini';
     const P3P_HEADER = 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"';
 
     /**
@@ -64,6 +63,10 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapConfiguration()
     {
+        if ($this->_application->getConfiguration()) {
+            return;
+        }
+
         $configProxy = new EngineBlock_Config_CacheProxy(
             $this->_getAllConfigFiles(),
             $this->_application->getDiContainer()->getApplicationCache()
@@ -73,12 +76,12 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapTestDiContainer()
     {
-        if (defined('ENGINEBLOCK_ENV') && constant('ENGINEBLOCK_ENV') === 'testing') {
+        if ($this->_application->getConfigurationValue('testing', false)) {
             $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
             return;
         }
 
-        if (defined('ENGINEBLOCK_ENV') && constant('ENGINEBLOCK_ENV') === 'functionalTesting') {
+        if ($this->_application->getConfigurationValue('functionalTesting', false)) {
             $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
             return;
         }
@@ -110,7 +113,7 @@ class EngineBlock_Application_Bootstrapper
     {
         return array(
             ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
-            self::CONFIG_FILE_ENVIORNMENT,
+            self::CONFIG_FILE_ENVIRONMENT,
         );
     }
 
