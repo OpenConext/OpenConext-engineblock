@@ -12,6 +12,7 @@ class EngineBlock_Log_Message_AdditionalInfo
 
     public static function createFromException(EngineBlock_Exception $e)
     {
+        /** @var EngineBlock_Log_Message_AdditionalInfo $info */
         $info = new static();
         $info->_userId  = $e->userId;
         $info->_idp     = $e->idpEntityId;

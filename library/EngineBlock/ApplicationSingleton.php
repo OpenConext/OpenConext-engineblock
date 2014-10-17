@@ -33,7 +33,7 @@ class EngineBlock_ApplicationSingleton
     /**
      * @var Zend_Config
      */
-    protected $_configuration;
+    protected $_configuration = null;
 
     /**
      * @var Zend_Log
