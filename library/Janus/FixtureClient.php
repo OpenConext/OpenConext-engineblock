@@ -142,7 +142,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
      */
     public function getIdpList($keys = array(), $forSpEntityId = null)
     {
-        $spEntities = array();
+        $idpEntities = array();
         $entities = $this->_getEntities();
         foreach ($entities as $entityId => $entity) {
             // Skip if the entity is not an IDP
@@ -170,9 +170,9 @@ class Janus_FixtureClient implements Janus_Client_Interface
             }
 
             // Add this as a SP
-            $spEntities[$entityId] = $entity;
+            $idpEntities[$entityId] = $entity;
         }
-        return $spEntities;
+        return $idpEntities;
     }
 
     /**
@@ -202,12 +202,12 @@ class Janus_FixtureClient implements Janus_Client_Interface
      */
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
-        $blacklistedSpFile = self::DIR . 'blacklisted-' . md5($spEntityId);
-        $blacklistedIdpFile = self::DIR . 'blacklisted-' . md5($idpEntityId);
-        $eitherSideIsBlacklisted = (file_exists($blacklistedSpFile) || file_exists($blacklistedIdpFile));
-        if ($eitherSideIsBlacklisted) {
-            $connectionIsWhitelisted = file_exists(self::DIR . 'connection-allowed-' . md5($spEntityId) . '-' . md5($idpEntityId));
-            if ($connectionIsWhitelisted) {
+        $whiteListedSpFile  = self::DIR . 'whitelisted-' . md5($spEntityId);
+        $whiteListedIdpFile = self::DIR . 'whitelisted-' . md5($idpEntityId);
+        $eitherSideIsWhiteListed = (file_exists($whiteListedSpFile) || file_exists($whiteListedIdpFile));
+        if ($eitherSideIsWhiteListed) {
+            $connectionIsAllowed = file_exists(self::DIR . 'connection-allowed-' . md5($spEntityId) . '-' . md5($idpEntityId));
+            if ($connectionIsAllowed) {
                 return true;
             }
             else {

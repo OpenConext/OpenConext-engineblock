@@ -3,15 +3,14 @@
 $layout = $this->layout();
 $layout->setLayout('empty');
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
     <head>
         <title>EngineBLock Debugging - Redirecting to...</title>
     </head>
     <body>
         <p>
-           <a href="<?= $this->htmlSpecialCharsAttributeValue($location); ?>">GO</a>
+           <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($location); ?>">GO</a>
         <p>
         <pre>
             <?php print_r($message, 1) ?>
