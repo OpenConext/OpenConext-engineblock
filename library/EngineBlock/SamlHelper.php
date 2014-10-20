@@ -50,7 +50,7 @@ class EngineBlock_SamlHelper
 
         // Requester IDs are appended to as they pass through a proxy, so we always want the last RequesterID
         // Note that this is not specified in the spec, but this is what we do and what SSP does.
-        $requesterIds = $request->getSspRequest()->getRequesterID();
+        $requesterIds = $request->getRequesterIds();
         $lastRequesterEntityId = end($requesterIds);
 
         if ($lastRequesterEntityId && !$server->hasRemoteEntity($lastRequesterEntityId)) {

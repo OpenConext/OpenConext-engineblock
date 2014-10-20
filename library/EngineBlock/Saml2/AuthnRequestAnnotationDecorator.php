@@ -50,6 +50,14 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
         $this->sspMessage = $request;
     }
 
+    /**
+     * @return string[] EntityIds in Scoping > RequesterID element.
+     */
+    public function getRequesterIds()
+    {
+        return $this->sspMessage->getRequesterID();
+    }
+
     public function setDebugRequest()
     {
         $this->debug = true;
