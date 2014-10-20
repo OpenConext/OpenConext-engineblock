@@ -14,9 +14,10 @@ class EngineBlock_Log_Writer_Syslog_MessageSplitter
      * messages and logs them to parent::log(). Message size is determined
      * by EngineBlock_Log::MESSAGE_SPLIT_SIZE.
      *
-     * @param  string $prefix       Message prefix
-     * @param  string $message      Message to log
+     * @param string $prefix  Message prefix
+     * @param string $message Message to log
      * @return array
+     * @throws InvalidArgumentException
      */
     public function split($prefix, $message)
     {
