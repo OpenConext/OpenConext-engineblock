@@ -5,7 +5,7 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @var SAML2_AuthnRequest
      */
-    protected $sspRequest;
+    protected $sspMessage;
 
     /**
      * @var string
@@ -48,14 +48,6 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     public function __construct(SAML2_AuthnRequest $request)
     {
         $this->sspMessage = $request;
-    }
-
-    /**
-     * @return \SAML2_AuthnRequest
-     */
-    public function getSspRequest()
-    {
-        return $this->sspRequest;
     }
 
     public function setDebugRequest()
