@@ -7,17 +7,32 @@ class EngineBlock_Log_Writer_Syslog_MessageParser
      */
     public function parse(array $event)
     {
-        $message = isset($event['message'])
-            ? $this->_normalizeMessage($event['message']) : '';
+        $message = isset($event['message'])  ? $this->_normalizeMessage($event['message']) : '';
 
         preg_match_all(
-            '/([^\]]*\[[a-zA-Z0-9 ]+\]\[[a-zA-Z0-9 ]+\](\[DUMP[^\]]*\])?)( .*)/',
-            $message, $matches
+            '/' .
+                '('.
+                    '[^\]]*'. //  .... (anything but a ]), followed by:
+                    '\[[a-zA-Z0-9 ]+\]'. // [ ... ]
+                    '\[[a-zA-Z0-9 ]+\]'. // [ ... ]
+                    '(\[DUMP[^\]]*\])?'. // Optionally: [DUMP ...]
+                ')'.
+                '( .*)'. // Anything, starting with a space.
+                '/',
+            $message,
+            $matches
         );
 
+        if (!isset($matches[1][0]) || !isset($matches[3][0])) {
+            return array(
+                'prefix' => 'P[' . time() . '][' . rand(0, 1000000) . ']',
+                'message' => $message
+            );
+        }
+
         return array(
-            'prefix' => isset($matches[1][0]) ? $matches[1][0] : 'PREFIX REMOVED BY PARSER',
-            'message' => isset($matches[3][0]) ? $matches[3][0] : 'MESSAGE REMOVED BY PARSER',
+            'prefix'  => $matches[1][0],
+            'message' => $matches[3][0],
         );
     }
 
@@ -30,7 +45,7 @@ class EngineBlock_Log_Writer_Syslog_MessageParser
      * Serialized content is prepended with '!FORMAT_[type]', this
      * notation is parsed by logparse.sh
      *
-     * @param mixed data structure to dump
+     * @param string $message structure to dump
      * @return string
      */
     protected function _normalizeMessage($message)

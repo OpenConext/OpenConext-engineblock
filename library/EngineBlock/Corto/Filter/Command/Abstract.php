@@ -143,6 +143,5 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
                 'Missing collabPersonId'
             );
         }
-
     }
 }
