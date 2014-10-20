@@ -12,7 +12,18 @@ class EngineBlock_Test_Log_Writer_Syslog_MessageParserTest extends PHPUnit_Frame
     public function testMessageParsingIsCorrect(array $event, array $expectedResult)
     {
         $syslogMessageParser = new EngineBlock_Log_Writer_Syslog_MessageParser();
-        $this->assertEquals($expectedResult, $syslogMessageParser->parse($event));
+
+        $parsed = $syslogMessageParser->parse($event);
+
+        if (isset($expectedResult['prefixRegexp'])) {
+            $this->assertEquals($expectedResult, $parsed['prefix']);
+        }
+        if (isset($expectedResult['prefix'])) {
+            $this->assertEquals($expectedResult['prefix'], $parsed['prefix']);
+        }
+        if (isset($expectedResult['message'])) {
+            $this->assertEquals($expectedResult['message'], $parsed['message']);
+        }
     }
 
     public function eventProvider()
@@ -23,8 +34,16 @@ class EngineBlock_Test_Log_Writer_Syslog_MessageParserTest extends PHPUnit_Frame
                     'message' => 'non matching message'
                 ),
                 'expectedResult' => array(
-                    'prefix' => 'PREFIX REMOVED BY PARSER',
-                    'message' => 'MESSAGE REMOVED BY PARSER'
+                    'message' => 'non matching message'
+                )
+            ),
+            array(
+                array(
+                    'message' => 'EB[97hGRWquZ-jZx9SryjYBZ0ZCyLa][544130f62aa30] [Message INFO] FLUSHING 9 LOG MESSAGES IN SESSION QUEUE (error caught)'
+                ),
+                'expectedResult' => array(
+                    'prefix' => 'EB[97hGRWquZ-jZx9SryjYBZ0ZCyLa][544130f62aa30]',
+                    'message' => ' [Message INFO] FLUSHING 9 LOG MESSAGES IN SESSION QUEUE (error caught)',
                 )
             ),
             array(
