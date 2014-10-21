@@ -169,14 +169,14 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
      * @param array $customNameId
      * @return $this
      */
-    public function setCustomNameId($customNameId)
+    public function setCustomNameId(array $customNameId)
     {
         $this->customNameId = $customNameId;
         return $this;
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getCustomNameId()
     {
