@@ -20,10 +20,10 @@ class EngineBlock_Log_Writer_Syslog_MessageParser
         preg_match_all(
             '/' .
                 '('.
-                    '[^\]]*'. //  .... (anything but a ]), followed by:
-                    '\[[^\]]+\]'. // [ ... ]
-                    '\[[^\]]+\]'. // [ ... ]
-                    '(\[DUMP[^\]]*\])?'. // Optionally: [DUMP...]
+                    '.*?'. //  .... (anything but a ]), followed by:
+                    '\[.+?\]'. // [ ... ]
+                    '\[.+?\]'. // [ ... ]
+                    '(\[DUMP.*?\])?'. // Optionally: [DUMP...]
                 ')'.
                 '( .*)'. // Anything, starting with a space.
                 '/',
