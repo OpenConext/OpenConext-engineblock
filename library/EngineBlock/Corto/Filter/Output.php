@@ -27,9 +27,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
 
-            // Apply ARP before we add the OID variants
-            new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
-
             // Run custom attribute manipulations
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
