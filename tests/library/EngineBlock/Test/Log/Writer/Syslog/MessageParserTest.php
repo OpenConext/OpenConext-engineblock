@@ -15,15 +15,10 @@ class EngineBlock_Test_Log_Writer_Syslog_MessageParserTest extends PHPUnit_Frame
 
         $parsed = $syslogMessageParser->parse($event);
 
-        if (isset($expectedResult['prefixRegexp'])) {
-            $this->assertEquals($expectedResult, $parsed['prefix']);
-        }
         if (isset($expectedResult['prefix'])) {
             $this->assertEquals($expectedResult['prefix'], $parsed['prefix']);
         }
-        if (isset($expectedResult['message'])) {
-            $this->assertEquals($expectedResult['message'], $parsed['message']);
-        }
+        $this->assertEquals($expectedResult['message'], $parsed['message']);
     }
 
     public function eventProvider()
