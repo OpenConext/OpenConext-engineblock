@@ -295,6 +295,11 @@ class EngineBlock_Corto_ProxyServer
         return isset($this->_entities['remote'][$entityId]);
     }
 
+    /**
+     * @param string $entityId
+     * @return array
+     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
+     */
     public function getRemoteEntity($entityId)
     {
         if (!isset($this->_entities['remote'][$entityId])) {
@@ -504,7 +509,7 @@ class EngineBlock_Corto_ProxyServer
         }
 
         // Copy over the NameID for now...
-        // (further on in this filters we'll have more info and set this to something better)
+        // (further on in the filters we'll have more info and set this to something better)
         $sourceNameId = $sourceAssertion->getNameId();
         if (!empty($sourceNameId) && !empty($sourceNameId['Value']) && !empty($sourceNameId['Format'])) {
             $newAssertion->setNameId(

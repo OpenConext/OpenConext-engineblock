@@ -7,8 +7,9 @@
 class EngineBlock_SamlHelper
 {
     /**
-     * @param array $sp
-     * @param array $idp
+     * Do we need to enable additional logging for any of the specified entities (SP or IdP).
+     *
+     * @param array $entities
      * @return bool
      */
     public static function doRemoteEntitiesRequireAdditionalLogging(array $entities) {
@@ -20,6 +21,14 @@ class EngineBlock_SamlHelper
         return false;
     }
 
+    /**
+     * Get the 'chain' of SP requesters, if available. Furthest removed SP first.
+     *
+     * @param array $spEntityMetadata
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @return array
+     */
     public static function getSpRequesterChain(
         array $spEntityMetadata,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
@@ -35,6 +44,14 @@ class EngineBlock_SamlHelper
         return $chain;
     }
 
+    /**
+     * Get the 'Destination' SP metadata. Depending on the SP configuration, may be the SP metadata or it's requester.
+     *
+     * @param array $spEntityMetadata
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @return array
+     */
     public static function getDestinationSpMetadata(
         array $spEntityMetadata,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,

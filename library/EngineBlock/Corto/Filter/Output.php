@@ -35,7 +35,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
             ),
 
-            // Run custom attribute manipulations in case we are behind a proxy.
+            // Run custom attribute manipulations in case we are behind a trusted proxy.
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_REQUESTER_SP
             ),

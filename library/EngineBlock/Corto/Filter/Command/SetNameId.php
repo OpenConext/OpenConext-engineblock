@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * SetNameId command, sets the proper NameID for the Response.
+ *
+ * Note that because SAML2 Assertion Subject NameID elements are intended for the next hop only,
+ * we don't take SP proxies into account. Whatever OUR SP wants as a NameID is what it gets.
+ * If THEIR SP is known to us and wants a different NameID they'll just have to use the eduPersonTargettedId.
+ */
 class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filter_Command_Abstract
 {
     const PERSISTENT_NAMEID_SALT = 'COIN:';
