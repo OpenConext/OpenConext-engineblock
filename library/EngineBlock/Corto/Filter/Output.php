@@ -43,6 +43,9 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Set the persistent Identifier for this user on this SP
             new EngineBlock_Corto_Filter_Command_SetNameId(),
 
+            // Add the appropriate NameID to the 'eduPeronTargetedID'.
+            new EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId(),
+
             // Apply ARP to custom added attributes one last time for the eduPersonTargetedId
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
 
