@@ -47,13 +47,13 @@ class EngineBlock_UserDirectory
         $this->_ldapConfig = $ldapConfig;
     }
 
-    public function findUsersByIdentifier($identifier, $ldapAttributes = array())
     /**
      * Find a person by it's (collabPerson)Id
      *
      * @param $identifier
      * @return array[]
      */
+    public function findUsersByIdentifier($identifier)
     {
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
@@ -167,7 +167,7 @@ class EngineBlock_UserDirectory
         $newAttributes = array();
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING] = 'TRUE';
 
-        $user = $this->_updateUser($users[0], $newAttributes, array(), array());
+        $user = $this->_updateUser($users[0], $newAttributes);
 
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
@@ -193,7 +193,7 @@ class EngineBlock_UserDirectory
         $newAttributes = array();
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING] = 'TRUE';
 
-        $user = $this->_updateUser($users[0], $newAttributes, array(), array());
+        $user = $this->_updateUser($users[0], $newAttributes);
 
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
@@ -229,7 +229,7 @@ class EngineBlock_UserDirectory
         return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
     }
 
-    protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata)
+    protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes)
     {
         if (!isset($ldapAttributes['cn'])) {
             $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
@@ -246,7 +246,7 @@ class EngineBlock_UserDirectory
         return $ldapAttributes;
     }
 
-    protected function _addUser($newAttributes, $saml2attributes, $idpEntityMetadata)
+    protected function _addUser($newAttributes)
     {
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
 
@@ -293,7 +293,7 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
-    protected function _updateUser($user, $newAttributes, $saml2attributes, $idpEntityMetadata)
+    protected function _updateUser($user, $newAttributes)
     {
         // Hackish, apparently LDAP gives us arrays even for single values?
         // So for now we assume arrays with only one value are single valued
@@ -352,12 +352,10 @@ class EngineBlock_UserDirectory
     /**
      * Figure out of a person with given attributes is a guest user.
      *
-     * @param array $attributes
      * @param array $saml2attributes
-     * @param array $idpEntityMetadata
      * @return bool
      */
-    protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
+    protected function _getCollabPersonIsGuest(array $saml2attributes)
     {
         $guestQualifier = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->addgueststatus->guestqualifier;
         return !isset($saml2attributes[self::URN_IS_MEMBER_OF]) || !in_array($guestQualifier, $saml2attributes[self::URN_IS_MEMBER_OF]);
