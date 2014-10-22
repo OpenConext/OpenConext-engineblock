@@ -174,7 +174,7 @@ class EngineBlock_ApplicationSingleton
         $feedbackInfo['timestamp'] = $logEvent['timestamp'];
         $feedbackInfo['requestId'] = $logEvent['requestid'];
         $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
-        $feedbackInfo['ipAddress'] = $_SERVER['REMOTE_ADDR'];
+        $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
 
         // @todo  reset this when login is succesful
         // Find the current identity provider
@@ -189,6 +189,52 @@ class EngineBlock_ApplicationSingleton
         }
 
         return $feedbackInfo;
+    }
+
+    /**
+     * Get the IP address for the HTTP client (optionally taking into account proxies).
+     *
+     * See also: http://stackoverflow.com/a/7623231/4512
+     *
+     * @return string
+     * @throws EngineBlock_Exception
+     */
+    public function getClientIpAddress()
+    {
+        $trustedProxyIpAddresses = $this->getConfiguration()->get('trustedProxyIps', array());
+
+        $hasForwardedFor = isset($_SERVER['HTTP_X_FORWARDED_FOR']);
+        $hasClientIp     = isset($_SERVER['HTTP_CLIENT_IP']);
+        $hasRemoteAddr   = isset($_SERVER['REMOTE_ADDR']);
+        $isRemoteAddrTrusted = $hasRemoteAddr && in_array($_SERVER['REMOTE_ADDR'], $trustedProxyIpAddresses);
+
+        if ($hasForwardedFor AND $hasRemoteAddr AND $isRemoteAddrTrusted) {
+            // Use the forwarded IP address, typically set when the
+            // client is using a proxy server.
+            // Format: "X-Forwarded-For: client1, proxy1, proxy2"
+            $client_ips = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']);
+
+            return array_shift($client_ips);
+        }
+
+        if ($hasClientIp AND $hasRemoteAddr AND $isRemoteAddrTrusted)
+        {
+            // Use the forwarded IP address, typically set when the
+            // client is using a proxy server.
+            $client_ips = explode(',', $_SERVER['HTTP_CLIENT_IP']);
+
+            return array_shift($client_ips);
+        }
+
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            return $_SERVER['REMOTE_ADDR'];
+        }
+
+        if (php_sapi_name() == "cli") {
+            return '127.0.0.235';
+        }
+
+        throw new EngineBlock_Exception('Unable to determine IP address!');
     }
 
     /**
