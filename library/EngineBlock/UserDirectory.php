@@ -399,7 +399,7 @@ class EngineBlock_UserDirectory
      * @param  $client
      * @return EngineBlock_UserDirectory
      */
-    public function setLdapClient($client)
+    public function setLdapClient(Zend_Ldap $client)
     {
         $this->_ldapClient = $client;
         return $this;
