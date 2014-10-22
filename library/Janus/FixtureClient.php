@@ -239,7 +239,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
      */
     public function getArp($spEntityId)
     {
-        $file = self::DIR . 'arp-' . md5($spEntityId);
+        $file = self::DIR . 'arp-' . md5($spEntityId) . '.json';
         if (!file_exists($file)) {
             return null;
         }
