@@ -34,25 +34,25 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $_SESSION['consent'][$response->getId()]['response'] = $response;
 
-        $attributes = $response->getAssertion()->getAttributes();
-
-        $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
-
-        unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
-        $spEntityMetadata = $this->_server->getRemoteEntity($serviceProviderEntityId);
+        $request = $this->_server->getReceivedRequestFromResponse($response->getInResponseTo());
+        $spEntityMetadata = $this->_server->getRemoteEntity($request->getIssuer());
+        $spMetadataChain = EngineBlock_SamlHelper::getSpRequesterChain($spEntityMetadata, $request, $this->_server);
 
         $identityProviderEntityId = $response->getOriginalIssuer();
         $idpEntityMetadata = $this->_server->getRemoteEntity($identityProviderEntityId);
 
         // Flush log if SP or IdP has additional logging enabled
+        $requireAdditionalLogging = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
+            array_merge($spMetadataChain, array($idpEntityMetadata))
+        );
         if (
             $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($spEntityMetadata, $idpEntityMetadata)
+            $requireAdditionalLogging
         ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
-        if ($this->isConsentDisabled($spEntityMetadata, $idpEntityMetadata, $serviceProviderEntityId))   {
+        if ($this->isConsentDisabled($spMetadataChain, $idpEntityMetadata))   {
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
 
             $response->setDestination($response->getReturn());
@@ -65,8 +65,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
+        $consentDestinationEntityMetadata = $spMetadataChain[0];
+
+        $attributes = $response->getAssertion()->getAttributes();
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $spEntityMetadata);
+        $priorConsent = $consent->hasStoredConsent($consentDestinationEntityMetadata);
         if ($priorConsent) {
             $response->setConsent(SAML2_Const::CONSENT_PRIOR);
 
@@ -85,24 +88,28 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             array(
                 'action'    => $this->_server->getUrl('processConsentService'),
                 'ID'        => $response->getId(),
-                'attributes'=> $consent->getFilteredResponseAttributes(),
-                'sp'        => $spEntityMetadata,
+                'attributes'=> $attributes,
+                'sp'        => $consentDestinationEntityMetadata,
                 'idp'       => $idpEntityMetadata,
             ));
         $this->_server->sendOutput($html);
     }
 
     /**
-     * @param array $spEntityMetadata
+     * @param array[] $spEntities
      * @param array $idpEntityMetadata
-     * @param $serviceProviderEntityId
      * @return bool
      */
-    private function isConsentDisabled(array $spEntityMetadata, array $idpEntityMetadata, $serviceProviderEntityId)
+    private function isConsentDisabled(array $spEntities, array $idpEntityMetadata)
     {
-        if ($this->isConsentGloballyDisabled($spEntityMetadata)
-            || $this->isConsentDisabledByIdpForCurrentSp($idpEntityMetadata, $serviceProviderEntityId) ) {
-            return true;
+        foreach ($spEntities as $spEntityMetadata) {
+            if ($this->isConsentGloballyDisabled($spEntityMetadata)) {
+                return true;
+            }
+
+            if ($this->isConsentDisabledByIdpForCurrentSp($idpEntityMetadata, $spEntityMetadata['EntityID'])) {
+                return true;
+            }
         }
 
         return false;

@@ -18,11 +18,6 @@ class EngineBlock_Corto_ProxyServer
     const VO_CONTEXT_PFX          = 'voContext';
     const VO_CONTEXT_IMPLICIT     = 'VoContextImplicit';
 
-    /**
-     * @todo remove once https://github.com/simplesamlphp/saml2/pull/7 has been merged.
-     */
-    const NAMEFORMAT_URI = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
         'debugSingleSignOnService'          => '/authentication/sp/debug',
@@ -295,6 +290,11 @@ class EngineBlock_Corto_ProxyServer
         return isset($this->_entities['remote'][$entityId]);
     }
 
+    /**
+     * @param string $entityId
+     * @return array
+     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
+     */
     public function getRemoteEntity($entityId)
     {
         if (!isset($this->_entities['remote'][$entityId])) {
@@ -504,7 +504,7 @@ class EngineBlock_Corto_ProxyServer
         }
 
         // Copy over the NameID for now...
-        // (further on in this filters we'll have more info and set this to something better)
+        // (further on in the filters we'll have more info and set this to something better)
         $sourceNameId = $sourceAssertion->getNameId();
         if (!empty($sourceNameId) && !empty($sourceNameId['Value']) && !empty($sourceNameId['Format'])) {
             $newAssertion->setNameId(
@@ -572,7 +572,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Copy over the attributes
         $newAssertion->setAttributes($sourceAssertion->getAttributes());
-        $newAssertion->setAttributeNameFormat(static::NAMEFORMAT_URI);
+        $newAssertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_URI);
 
         return $newResponse;
     }

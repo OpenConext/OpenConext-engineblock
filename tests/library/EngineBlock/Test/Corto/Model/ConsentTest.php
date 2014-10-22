@@ -32,7 +32,7 @@ class EngineBlock_Test_Corto_Model_ConsentTest extends PHPUnit_Framework_TestCas
     {
         $serviceProviderEntityId = 'testSp';
         $spMetadata = array();
-        $this->assertFalse($this->consent->storeConsent($serviceProviderEntityId, $spMetadata));
+        $this->assertFalse($this->consent->storeConsent($spMetadata));
 
         Phake::verify($this->attributeReleasePolicyFilterMock)->execute();
     }
@@ -68,7 +68,6 @@ class EngineBlock_Test_Corto_Model_ConsentTest extends PHPUnit_Framework_TestCas
             $mustStoreValues,
             $response,
             $responseAttributes,
-            $diContainer[EngineBlock_Application_DiContainer::FILTER_COMMAND_FACTORY],
             $diContainer[EngineBlock_Application_DiContainer::DATABASE_CONNECTION_FACTORY]
         );
 

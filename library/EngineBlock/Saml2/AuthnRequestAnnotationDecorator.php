@@ -5,7 +5,7 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @var SAML2_AuthnRequest
      */
-    protected $sspRequest;
+    protected $sspMessage;
 
     /**
      * @var string
@@ -51,11 +51,11 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     }
 
     /**
-     * @return \SAML2_AuthnRequest
+     * @return string[] EntityIds in Scoping > RequesterID element.
      */
-    public function getSspRequest()
+    public function getRequesterIds()
     {
-        return $this->sspRequest;
+        return $this->sspMessage->getRequesterID();
     }
 
     public function setDebugRequest()

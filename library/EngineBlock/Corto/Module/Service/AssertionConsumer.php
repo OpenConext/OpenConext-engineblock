@@ -14,7 +14,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         $idp = $this->_server->getRemoteEntity($receivedResponse->getIssuer());
         if (
             $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))
         ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
@@ -54,10 +54,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse->setDestination($firstProcessingEntity['Location']);
             $newResponse->setDeliverByBinding($firstProcessingEntity['Binding']);
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
-
-            $attributes = $newResponse->getAssertion()->getAttributes();
-            $attributes['urn:org:openconext:corto:internal:sp-entity-id'] = array($receivedRequest->getIssuer());
-            $newResponse->getAssertion()->setAttributes($attributes);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
         }
