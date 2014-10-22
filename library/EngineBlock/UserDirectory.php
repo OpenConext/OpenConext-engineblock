@@ -241,7 +241,7 @@ class EngineBlock_UserDirectory
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
         }
         $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
-            $ldapAttributes, $saml2attributes, $idpEntityMetadata
+            $saml2attributes
         )? 'TRUE' : 'FALSE');
         return $ldapAttributes;
     }
