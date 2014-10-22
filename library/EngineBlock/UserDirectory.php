@@ -43,6 +43,7 @@ class EngineBlock_UserDirectory
     /**
      * @param Zend_Config $ldapConfig
      */
+    public function __construct(Zend_Config $ldapConfig)
     {
         $this->_ldapConfig = $ldapConfig;
     }
