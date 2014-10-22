@@ -29,7 +29,7 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
             $arp = $serviceRegistryAdapter->getArp($spEntityId);
 
             if (!$arp) {
-                return;
+                continue;
             }
 
             $logger->info("Applying attribute release policy {$arp['name']} for $spEntityId");

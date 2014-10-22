@@ -29,7 +29,6 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
         $nameId = $resolver->resolve(
             $this->_request,
             $this->_response,
-            $this->_idpMetadata,
             $destinationMetadata,
             $this->_collabPersonId
         );

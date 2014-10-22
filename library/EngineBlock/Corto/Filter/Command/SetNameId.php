@@ -28,7 +28,6 @@ class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filte
         $nameId = $resolver->resolve(
             $this->_request,
             $this->_response,
-            $this->_idpMetadata,
             $this->_spMetadata,
             $this->_collabPersonId
         );
