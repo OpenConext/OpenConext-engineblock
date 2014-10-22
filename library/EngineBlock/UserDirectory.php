@@ -30,16 +30,30 @@ class EngineBlock_UserDirectory
         'top',
     );
 
+    /**
+     * @var Zend_Ldap
+     */
     protected $_ldapClient = NULL;
 
+    /**
+     * @var Zend_Config
+     */
     protected $_ldapConfig = NULL;
 
-    public function __construct($ldapConfig)
+    /**
+     * @param Zend_Config $ldapConfig
+     */
     {
         $this->_ldapConfig = $ldapConfig;
     }
 
     public function findUsersByIdentifier($identifier, $ldapAttributes = array())
+    /**
+     * Find a person by it's (collabPerson)Id
+     *
+     * @param $identifier
+     * @return array[]
+     */
     {
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
@@ -90,6 +104,12 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
+    /**
+     * @param array $saml2attributes
+     * @param array $idpEntityMetadata
+     * @return string[]
+     * @throws EngineBlock_Exception
+     */
     public function registerUser(array $saml2attributes, array $idpEntityMetadata)
     {
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
@@ -129,8 +149,9 @@ class EngineBlock_UserDirectory
     /**
      * Set the first warning sent user attribute
      *
-     * @param string $uid
-     * @return string
+     * @param $uid
+     * @return mixed
+     * @throws EngineBlock_Exception
      */
     public function setUserFirstWarningSent($uid)
     {
@@ -152,7 +173,7 @@ class EngineBlock_UserDirectory
     }
 
     /**
-     * 
+     * Register that this user has a second warning (for automatic account deprovisioning) sent.
      *
      * @throws EngineBlock_Exception
      * @param string $uid
@@ -192,8 +213,9 @@ class EngineBlock_UserDirectory
     /**
      * Build the user dn based on the UID
      *
-     * @param  $uid
-     * @return null|string
+     * @param $uid
+     * @return string
+     * @throws EngineBlock_Exception
      */
     protected function _buildUserDn($uid)
     {
