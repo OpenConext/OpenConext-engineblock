@@ -122,7 +122,7 @@ class EngineBlock_UserDirectory
     }
 
     /**
-     * Set the first warning sent user attribute
+     * Register that this user has a first warning (for automatic account deprovisioning) sent.
      *
      * @param $uid
      * @return mixed
