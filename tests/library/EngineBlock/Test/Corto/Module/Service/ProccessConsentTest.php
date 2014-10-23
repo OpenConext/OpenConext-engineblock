@@ -22,9 +22,8 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
      */
     private $mailerMock;
 
-    public function setup() {
-        EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
-
+    public function setup()
+    {
         $this->proxyServerMock = $this->mockProxyServer();
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();

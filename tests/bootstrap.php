@@ -22,3 +22,4 @@ $config = new Zend_Config_Ini(
 );
 $config->testing = true;
 $application->setConfiguration($config);
+$application->bootstrap();

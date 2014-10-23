@@ -12,8 +12,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     private $consentMock;
 
     public function setup() {
-        EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
-
         $this->proxyServerMock = $this->mockProxyServer();
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
