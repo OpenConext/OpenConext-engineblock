@@ -16,6 +16,11 @@ set_include_path($includePath);
 class EngineBlock_ApplicationSingleton
 {
     /**
+     * Special fake IP address to use when we're running on the CLI.
+     */
+    const IP_ADDRESS_CLI = '127.0.0.235';
+
+    /**
      * @var EngineBlock_ApplicationSingleton
      */
     protected static $s_instance;
@@ -201,7 +206,17 @@ class EngineBlock_ApplicationSingleton
      */
     public function getClientIpAddress()
     {
-        $trustedProxyIpAddresses = $this->getConfiguration()->get('trustedProxyIps', array());
+        $trustedProxyIpAddresses = $this->getConfiguration()->get('trustedProxyIps');
+
+        if ($trustedProxyIpAddresses instanceof Zend_Config) {
+            $trustedProxyIpAddresses = $trustedProxyIpAddresses->toArray();
+        }
+        if (!$trustedProxyIpAddresses) {
+            $trustedProxyIpAddresses = array();
+        }
+        if (!is_array($trustedProxyIpAddresses)) {
+            throw new EngineBlock_Exception('Trusted IP addresses is not an array: ' . print_r($trustedProxyIpAddresses, true));
+        }
 
         $hasForwardedFor = isset($_SERVER['HTTP_X_FORWARDED_FOR']);
         $hasClientIp     = isset($_SERVER['HTTP_CLIENT_IP']);
@@ -231,7 +246,7 @@ class EngineBlock_ApplicationSingleton
         }
 
         if (php_sapi_name() == "cli") {
-            return '127.0.0.235';
+            return self::IP_ADDRESS_CLI;
         }
 
         throw new EngineBlock_Exception('Unable to determine IP address!');
