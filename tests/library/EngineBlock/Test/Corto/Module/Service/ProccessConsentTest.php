@@ -155,7 +155,23 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
         $assertion->setAttributes(array(
             'urn:mace:dir:attribute-def:mail' => 'test@test.test'
         ));
+
+        $spRequest = new SAML2_AuthnRequest();
+        $spRequest->setId('SPREQUEST');
+        $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
+
+        $ebRequest = new SAML2_AuthnRequest();
+        $ebRequest->setId('EBREQUEST');
+        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
+
+        $dummySessionLog = new EngineBlock_Log();
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummySessionLog);
+        $authnRequestRepository->store($spRequest);
+        $authnRequestRepository->store($ebRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
+
         $sspResponse = new SAML2_Response();
+        $sspResponse->setInResponseTo('EBREQUEST');
         $sspResponse->setAssertions(array($assertion));
         $_SESSION['consent']['test']['response'] = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
     }
