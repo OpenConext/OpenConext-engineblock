@@ -32,6 +32,4 @@ class Profile_Controller_AttributeSupport extends Default_Controller_LoggedIn
         $mailer->setBodyHtml($body);
         $mailer->send();
     }
-
-
 }

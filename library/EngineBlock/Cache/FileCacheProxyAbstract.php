@@ -1,4 +1,5 @@
 <?php
+
 abstract class EngineBlock_Cache_FileCacheProxyAbstract
 {
     /**

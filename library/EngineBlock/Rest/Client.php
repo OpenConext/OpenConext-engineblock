@@ -24,7 +24,9 @@
 class EngineBlock_Rest_Client extends Zend_Rest_Client
 {
     /**
-     * @return array|Zend_Rest_Client_Result
+     * @param array $args
+     * @return mixed|Zend_Rest_Client_Result
+     * @throws EngineBlock_Exception
      */
     public function get($args = array())
     {
