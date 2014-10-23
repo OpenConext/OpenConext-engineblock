@@ -2,16 +2,24 @@
 
 class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
 {
-    /** @var EngineBlock_Corto_ProxyServer */
+    /**
+     * @var EngineBlock_Corto_ProxyServer
+     */
     private $proxyServerMock;
 
-    /** @var EngineBlock_Corto_XmlToArray */
+    /**
+     * @var EngineBlock_Corto_XmlToArray
+     */
     private $xmlConverterMock;
 
-    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    /**
+     * @var EngineBlock_Corto_Model_Consent_Factory
+     */
     private $consentFactoryMock;
 
-    /** @var EngineBlock_Mail_Mailer */
+    /**
+     * @var EngineBlock_Mail_Mailer
+     */
     private $mailerMock;
 
     public function setup() {
@@ -154,7 +162,6 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
     }
 
     /**
-     * @param EngineBlock_Corto_Model_Consent_Factory $this->consentFactoryMock
      * @return EngineBlock_Corto_Model_Consent
      */
     private function mockConsent()

@@ -24,7 +24,7 @@ class EngineBlock_Saml2_NameIdResolver
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @param array $destinationMetadata
      * @param $collabPersonId
-     * @return array|string
+     * @return array
      */
     public function resolve(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,

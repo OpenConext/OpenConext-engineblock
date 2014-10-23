@@ -7,10 +7,10 @@
 class EngineBlock_Saml2_ResponseFactory
 {
     /**
-     * @todo make this generic
-     *
      * @param SAML2_AuthnRequest $authnRequest
      * @param SimpleSAML_Configuration $idpConfig
+     * @param $nameId
+     * @param $issuer
      * @param array $attributes
      * @return SAML2_Response
      */
@@ -63,7 +63,6 @@ class EngineBlock_Saml2_ResponseFactory
      */
     private function addSigns(SAML2_Response $response, SimpleSAML_Configuration $idpConfig)
     {
-        // @todo find out why multiple assertions can exist
         $assertions = $response->getAssertions();
         $className = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMessageUtilClassName();
         $className::addSign(
