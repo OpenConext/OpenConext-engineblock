@@ -437,7 +437,7 @@ class EngineBlock_Corto_ProxyServer
         // Store the original Request
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_sessionLog);
         $authnRequestRepository->store($spRequest);
-        $authnRequestRepository->link($spRequest, $ebRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
 
         $this->getBindingsModule()->send($ebRequest, $this->getRemoteEntity($idpEntityId));
     }
