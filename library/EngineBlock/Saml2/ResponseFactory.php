@@ -70,8 +70,6 @@ class EngineBlock_Saml2_ResponseFactory
             SimpleSAML_Configuration::loadFromArray(array()),
             $assertions[0]
         );
-        // Signing of message is not required so disabled for now
-        // sspmod_saml_Message::addSign($idpConfig, null, $response);
     }
 
     /**
