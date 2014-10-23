@@ -65,6 +65,17 @@ class EngineBlock_Saml2_ResponseFactory
     {
         $assertions = $response->getAssertions();
         $className = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMessageUtilClassName();
+
+        // Special case the 'normal' message verification class name so we have IDE support.
+        if ($className === 'sspmod_saml_Message') {
+            sspmod_saml_Message::addSign(
+                $idpConfig,
+                SimpleSAML_Configuration::loadFromArray(array()),
+                $assertions[0]
+            );
+            return;
+        }
+
         $className::addSign(
             $idpConfig,
             SimpleSAML_Configuration::loadFromArray(array()),
