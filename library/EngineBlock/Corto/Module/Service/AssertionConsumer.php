@@ -5,9 +5,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
     public function serve($serviceName)
     {
         $receivedResponse = $this-> _server->getBindingsModule()->receiveResponse();
-        $receivedRequest = $this->_server->getReceivedRequestFromResponse(
-            $receivedResponse->getInResponseTo()
-        );
+        $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
         // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRemoteEntity($receivedRequest->getIssuer());

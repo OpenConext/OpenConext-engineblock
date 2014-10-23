@@ -34,7 +34,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $response = $this->_server->getBindingsModule()->receiveResponse();
         $_SESSION['consent'][$response->getId()]['response'] = $response;
 
-        $request = $this->_server->getReceivedRequestFromResponse($response->getInResponseTo());
+        $request = $this->_server->getReceivedRequestFromResponse($response);
         $spEntityMetadata = $this->_server->getRemoteEntity($request->getIssuer());
         $spMetadataChain = EngineBlock_SamlHelper::getSpRequesterChain($spEntityMetadata, $request, $this->_server);
 

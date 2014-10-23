@@ -5,7 +5,7 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
     public function serve($serviceName)
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
-        $receivedRequest = $this->_server->getReceivedRequestFromResponse($response->getInResponseTo());
+        $receivedRequest = $this->_server->getReceivedRequestFromResponse($response);
 
         if ($receivedRequest->getKeyId()) {
             $this->_server->setKeyId($receivedRequest->getKeyId());

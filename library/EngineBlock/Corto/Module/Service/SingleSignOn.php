@@ -96,9 +96,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return;
         }
 
-        // Store the request in the session
-        $id = $request->getId();
-        $_SESSION[$id]['SAMLRequest'] = $request;
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_server->getSessionLog());
+        $authnRequestRepository->store($request);
 
         // Show WAYF
         $this->_server->getSessionLog()->info("SSO: Showing WAYF");

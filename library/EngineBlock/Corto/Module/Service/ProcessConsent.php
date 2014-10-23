@@ -64,7 +64,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 
-        $request = $this->_server->getReceivedRequestFromResponse($response->getInResponseTo());
+        $request = $this->_server->getReceivedRequestFromResponse($response);
         $spMetadata = $this->_server->getRemoteEntity($request->getIssuer());
 
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata($spMetadata, $request, $this->_server);
