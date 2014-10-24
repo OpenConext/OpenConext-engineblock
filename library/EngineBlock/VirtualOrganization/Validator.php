@@ -2,7 +2,6 @@
 
 class EngineBlock_VirtualOrganization_Validator
 {
-
     public function isMember($voId, $subjectId, $idp)
     {
         $virtualOrganization = new EngineBlock_VirtualOrganization($voId);

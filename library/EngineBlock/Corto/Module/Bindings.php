@@ -7,7 +7,6 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 /**
  * The bindings module for Corto, which implements support for various data
  * bindings.
- * @author Boy
  */
 class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstract
 {

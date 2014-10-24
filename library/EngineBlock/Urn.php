@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Collection of urn constants to prevent having them like brittle 'magic strings' in code
  */

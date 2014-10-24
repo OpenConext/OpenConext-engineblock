@@ -41,7 +41,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService->serve(null);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
-            ->send(Phake::capture($message), Phake::anyParameters());
+            ->send(Phake::capture($message), Phake::capture($metadata));
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:prior', $message->getConsent());
     }
 
@@ -60,7 +60,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService->serve(null);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
-            ->send(Phake::capture($message), Phake::anyParameters());
+            ->send(Phake::capture($message), Phake::capture($metadata));
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message->getConsent());
     }
 
@@ -81,7 +81,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService->serve(null);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
-            ->send(Phake::capture($message), Phake::anyParameters());
+            ->send(Phake::capture($message), Phake::capture($metadata));
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message->getConsent());
     }
 

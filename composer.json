@@ -1,34 +1,32 @@
 {
-    "name": "surfnet/openconextengineblock",
-    "description": "Surfnet OpenConext SAML proxy",
+    "name": "openconext/engineblock",
+    "description": "OpenConext SAML proxy",
     "type": "project",
-    "keywords": ["saml", "proxy", "openconext", "SURFnet"],
+    "keywords": ["saml", "proxy", "openconext"],
     "homepage": "http://www.openconext.org",
     "license": "Apache-2.0",
     "support": {
-        "email": "openconext-users@list.surfnet.nl",
+        "email": "info@openconext.org",
         "issues": "https://github.com/OpenConext/OpenConext-engineblock/issues",
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
     "require": {
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
-        "janus-ssp/serviceregistry": "dev-master",
-        "kriswallsmith/assetic": "1.2.*@dev",
-        "mrclay/minify": "~2.1",
-        "openconext/engineblock-fixtures": "dev-master",
+        "kriswallsmith/assetic": "~1.2.0",
+        "mrclay/minify": "~2.2",
+        "openconext/engineblock-fixtures": "~0.4",
         "openconext/engineblock-metadata": "dev-master",
         "openconext/stoker-metadata": "dev-master",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
-        "pimple/pimple": "~2.0",
-        "simplesamlphp/saml2": "~0.4",
-        "simplesamlphp/simplesamlphp": "~1.12",
-        "zendframework/zendframework1":"~1.12",
-        "doctrine/migrations": "1.0.*@dev"
+        "pimple/pimple": "~2.1",
+        "simplesamlphp/saml2": "~0.5",
+        "simplesamlphp/simplesamlphp": "~1.13",
+        "zendframework/zendframework1":"~1.12"
     },
     "require-dev": {
-        "phake/phake": "2.0.0-alpha2",
-        "phpunit/phpunit": "~3.7.19"
+        "phake/phake": "2.0.0-beta2",
+        "phpunit/phpunit": "~4.3"
     },
     "scripts": {
         "pre-autoload-dump": [
@@ -69,14 +67,11 @@
             "DbPatch_": "vendor/dbpatch/dbpatch/src/",
             "EngineBlock_": "library/",
             "EngineBlock_Test": "tests/library/",
-            "Grouper_": "library/",
             "Janus_": "library/",
-            "OpenSocial_": "library/",
             "SurfConext_": "library/",
             "Surfnet_": "library/",
             "Authentication_":"application/modules/",
             "Default_":"application/modules/",
-            "Dummy_":"application/modules/",
             "Logout_":"application/modules/",
             "Profile_":"application/modules/"
         }

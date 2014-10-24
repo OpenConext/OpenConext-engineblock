@@ -9,9 +9,6 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->userAttributes = $this->_normalizeAttributes();
 
         $this->metadata = new EngineBlock_Attributes_Metadata();
-        $this->aggregator = EngineBlock_Group_Provider_Aggregator_MemoryCacheProxy::createFromDatabaseFor(
-            $this->attributes['nameid'][0]
-        );
 
         $serviceRegistryClient = $this->_getServiceRegistryClient();
         $this->spList = $serviceRegistryClient->getSpList();

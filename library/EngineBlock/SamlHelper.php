@@ -1,14 +1,9 @@
 <?php
+
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 
-/**
- * Temporary workaround
- *
- * @todo move methods message and entity objects *
- */
 class EngineBlock_SamlHelper
 {
     /**
