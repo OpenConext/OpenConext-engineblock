@@ -135,6 +135,7 @@ class EngineBlock_Test_Corto_ServiceRegistry_AdapterTest extends PHPUnit_Framewo
                         'Location' => 'https://engine.surfconext.nl/logout'
                     )
                 ),
+                'TrustedProxy' => false,
             ),
             "https://ss.idp.ebdev.net/simplesaml/module.php/saml/sp/saml2-acs.php/default-sp" => array(
                 "SingleSignOnService" => array(

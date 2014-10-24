@@ -27,16 +27,21 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
 
-            // Apply ARP before we add the OID variants
-            new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
-
             // Run custom attribute manipulations
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
             ),
 
+            // Run custom attribute manipulations in case we are behind a trusted proxy.
+            new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
+                EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_REQUESTER_SP
+            ),
+
             // Set the persistent Identifier for this user on this SP
             new EngineBlock_Corto_Filter_Command_SetNameId(),
+
+            // Add the appropriate NameID to the 'eduPeronTargetedID'.
+            new EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId(),
 
             // Apply ARP to custom added attributes one last time for the eduPersonTargetedId
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),

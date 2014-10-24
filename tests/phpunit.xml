@@ -1,12 +1,15 @@
-<phpunit bootstrap="bootstrap.php" colors="true"
-	convertErrorsToExceptions="true"
-	convertNoticesToExceptions="false"
-	convertWarningsToExceptions="false">
-	<testsuites>
-		<!-- Declare a testsuite called All -->
-		<testsuite name="All">
-			<!-- Look for our unit tests in the following directory. They must end with Test.php -->
-			<directory suffix="Test.php">.</directory>
-		</testsuite>
-	</testsuites>
+<phpunit
+        backupGlobals="false"
+        bootstrap="bootstrap.php"
+        colors="true"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="false"
+        convertWarningsToExceptions="false">
+    <testsuites>
+        <!-- Declare a testsuite called All -->
+        <testsuite name="All">
+            <!-- Look for our unit tests in the following directory. They must end with Test.php -->
+            <directory suffix="Test.php">.</directory>
+        </testsuite>
+    </testsuites>
 </phpunit>

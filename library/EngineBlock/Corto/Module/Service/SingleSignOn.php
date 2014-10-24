@@ -10,59 +10,28 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     public function serve($serviceName)
     {
-        $isUnsolicited = ($serviceName === 'unsolicitedSingleSignOnService');
-
-        if ($isUnsolicited) {
-            // create unsolicited request object
-            $request = $this->_createUnsolicitedRequest();
+        $response = $this->_displayDebugResponse($serviceName);
+        if ($response) {
+            return;
         }
-        else if ($serviceName === 'debugSingleSignOnService') {
-            if (isset($_SESSION['debugIdpResponse']) && !isset($_POST['clear'])) {
-                /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
-                $response = $_SESSION['debugIdpResponse'];
 
-                if (isset($_POST['mail'])) {
-                    $this->_sendDebugMail($response);
-                }
-
-                $attributes = $response->getAssertion()->getAttributes();
-
-                $this->_server->sendOutput($this->_server->renderTemplate(
-                    'debugidpresponse',
-                    array(
-                        'idp'       => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()),
-                        'response'  => $response,
-                        'attributes'=> $attributes
-                    )
-                ));
-                return;
-            }
-            else {
-                unset($_SESSION['debugIdpResponse']);
-                $request = $this->_createDebugRequest();
-            }
-        } else {
-            // parse SAML request
-            $request = $this->_server->getBindingsModule()->receiveRequest();
-
-            // set transparent proxy mode
-            if ($this->_server->getConfig('TransparentProxy', false)) {
-                $request->setTransparent();
-            }
-        }
+        $request = $this->_getRequest($serviceName);
 
         // Flush log if SP or IdP has additional logging enabled
         $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
-        if (
-            $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp)
-        ) {
+
+        $isDebugModeEnabled = $this->_server->getConfig('debug', false);
+        $isAdditionalLoggingRequired = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
+            EngineBlock_SamlHelper::getSpRequesterChain($sp, $request, $this->_server->getRepository())
+        );
+
+        if ($isDebugModeEnabled || $isAdditionalLoggingRequired) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
         // validate custom acs-location (only for unsolicited, normal logins
         //  fall back to default ACS location instead of showing error page)
-        if ($isUnsolicited && !$this->_verifyAcsLocation($request, $sp)) {
+        if ($serviceName === 'unsolicitedSingleSignOnService' && !$this->_verifyAcsLocation($request, $sp)) {
             throw new EngineBlock_Corto_Exception_InvalidAcsLocation(
                 'Unknown or invalid ACS location requested'
             );
@@ -105,45 +74,58 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $log->attach(array_values($candidateIDPs), 'Candidate IDPs (after scoping)');
 
-        // No IdPs found! Send an error response back.
+        // 0 IdPs found! Throw an exception.
         if (count($candidateIDPs) === 0) {
-            $log->info("SSO: No Supported Idps!");
-            if ($this->_server->getConfig('NoSupportedIDPError')!=='user') {
-                $response = $this->_server->createErrorResponse($request, 'NoSupportedIDP');
-                $this->_server->sendResponseToRequestIssuer($request, $response);
-                return;
-            }
-            else {
-                throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No Idps found');
-            }
+            throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No Idps found');
         }
-        // Exactly 1 candidate found, send authentication request to the first one
-        else if (count($candidateIDPs) === 1) {
+
+        // Exactly 1 candidate found, send authentication request to the first one.
+        if (count($candidateIDPs) === 1) {
             $idp = array_shift($candidateIDPs);
             $log->info("SSO: Only 1 candidate IdP: $idp");
             $this->_server->sendAuthenticationRequest($request, $idp);
             return;
         }
-        // Multiple IdPs found...
-        else {
-            // > 1 IdPs found, but isPassive attribute given, unable to show WAYF
-            if ($request->getIsPassive()) {
-                $log->info("SSO: IsPassive with multiple IdPs!");
-                $response = $this->_server->createErrorResponse($request, 'NoPassive');
-                $this->_server->sendResponseToRequestIssuer($request, $response);
-                return;
-            }
-            else {
-                // Store the request in the session
-                $id = $request->getId();
-                $_SESSION[$id]['SAMLRequest'] = $request;
 
-                // Show WAYF
-                $this->_server->getSessionLog()->info("SSO: Showing WAYF");
-                $this->_showWayf($request, $candidateIDPs);
-                return;
-            }
+        // Multiple IdPs found...
+
+        // > 1 IdPs found, but isPassive attribute given, unable to show WAYF.
+        if ($request->getIsPassive()) {
+            $log->info("SSO: IsPassive with multiple IdPs!");
+            $response = $this->_server->createErrorResponse($request, 'NoPassive');
+            $this->_server->sendResponseToRequestIssuer($request, $response);
+            return;
         }
+
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_server->getSessionLog());
+        $authnRequestRepository->store($request);
+
+        // Show WAYF
+        $this->_server->getSessionLog()->info("SSO: Showing WAYF");
+        $this->_showWayf($request, $candidateIDPs);
+    }
+
+    protected function _getRequest($serviceName)
+    {
+        if ($serviceName === 'unsolicitedSingleSignOnService') {
+            // create unsolicited request object
+            return $this->_createUnsolicitedRequest();
+        }
+
+        if ($serviceName === 'debugSingleSignOnService') {
+            unset($_SESSION['debugIdpResponse']);
+            return $this->_createDebugRequest();
+        }
+
+        // parse SAML request
+        $request = $this->_server->getBindingsModule()->receiveRequest();
+
+        // set transparent proxy mode
+        if ($this->_server->getConfig('TransparentProxy', false)) {
+            $request->setTransparent();
+        }
+
+        return $request;
     }
 
     /**
@@ -498,5 +480,44 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         return 'Undefined';
+    }
+
+    /**
+     * @param $serviceName
+     * @return bool
+     */
+    private function _displayDebugResponse($serviceName)
+    {
+        if ($serviceName === 'debugSingleSignOnService') {
+            return false;
+        }
+
+        if (isset($_POST['clear'])) {
+            unset($_SESSION['debugIdpResponse']);
+            return false;
+        }
+
+        if (!isset($_SESSION['debugIdpResponse']) || !$_SESSION['debugIdpResponse']) {
+            return false;
+        }
+
+        /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
+        $response = $_SESSION['debugIdpResponse'];
+
+        if (isset($_POST['mail'])) {
+            $this->_sendDebugMail($response);
+        }
+
+        $attributes = $response->getAssertion()->getAttributes();
+
+        $this->_server->sendOutput($this->_server->renderTemplate(
+            'debugidpresponse',
+            array(
+                'idp' => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()),
+                'response' => $response,
+                'attributes' => $attributes
+            )
+        ));
+        return true;
     }
 }

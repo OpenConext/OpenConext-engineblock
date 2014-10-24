@@ -2,21 +2,28 @@
 
 class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
 {
-    /** @var EngineBlock_Corto_ProxyServer */
+    /**
+     * @var EngineBlock_Corto_ProxyServer
+     */
     private $proxyServerMock;
 
-    /** @var EngineBlock_Corto_XmlToArray */
+    /**
+     * @var EngineBlock_Corto_XmlToArray
+     */
     private $xmlConverterMock;
 
-    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    /**
+     * @var EngineBlock_Corto_Model_Consent_Factory
+     */
     private $consentFactoryMock;
 
-    /** @var EngineBlock_Mail_Mailer */
+    /**
+     * @var EngineBlock_Mail_Mailer
+     */
     private $mailerMock;
 
-    public function setup() {
-        EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
-
+    public function setup()
+    {
         $this->proxyServerMock = $this->mockProxyServer();
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -148,13 +155,28 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
         $assertion->setAttributes(array(
             'urn:mace:dir:attribute-def:mail' => 'test@test.test'
         ));
+
+        $spRequest = new SAML2_AuthnRequest();
+        $spRequest->setId('SPREQUEST');
+        $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
+
+        $ebRequest = new SAML2_AuthnRequest();
+        $ebRequest->setId('EBREQUEST');
+        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
+
+        $dummySessionLog = new EngineBlock_Log();
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummySessionLog);
+        $authnRequestRepository->store($spRequest);
+        $authnRequestRepository->store($ebRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
+
         $sspResponse = new SAML2_Response();
+        $sspResponse->setInResponseTo('EBREQUEST');
         $sspResponse->setAssertions(array($assertion));
         $_SESSION['consent']['test']['response'] = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
     }
 
     /**
-     * @param EngineBlock_Corto_Model_Consent_Factory $this->consentFactoryMock
      * @return EngineBlock_Corto_Model_Consent
      */
     private function mockConsent()

@@ -38,23 +38,26 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         $attributes = $response->getAssertion()->getAttributes();
 
-        $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
-
-        unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
-        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($serviceProviderEntityId);
+        $request = $this->_server->getReceivedRequestFromResponse($response);
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        $spMetadataChain = EngineBlock_SamlHelper::getSpRequesterChain(
+            $serviceProvider,
+            $request,
+            $this->_server->getRepository()
+        );
 
         $identityProviderEntityId = $response->getOriginalIssuer();
         $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($identityProviderEntityId);
 
         // Flush log if SP or IdP has additional logging enabled
-        if (
-            $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($serviceProvider, $identityProvider)
-        ) {
+        $requireAdditionalLogging = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
+            array_merge($spMetadataChain, array($identityProvider))
+        );
+        if ($this->_server->getConfig('debug', false) || $requireAdditionalLogging) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 
-        if ($this->isConsentDisabled($serviceProvider, $identityProvider, $serviceProviderEntityId))   {
+        if ($this->isConsentDisabled($spMetadataChain, $identityProvider))   {
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
 
             $response->setDestination($response->getReturn());
@@ -67,8 +70,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
+        $consentDestinationEntityMetadata = $spMetadataChain[0];
+
+        $attributes = $response->getAssertion()->getAttributes();
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $priorConsent = $consent->hasStoredConsent($serviceProviderEntityId, $serviceProvider);
+        $priorConsent = $consent->hasStoredConsent($consentDestinationEntityMetadata);
         if ($priorConsent) {
             $response->setConsent(SAML2_Const::CONSENT_PRIOR);
 
@@ -87,26 +93,28 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             array(
                 'action'    => $this->_server->getUrl('processConsentService'),
                 'ID'        => $response->getId(),
-                'attributes'=> $consent->getFilteredResponseAttributes(),
-                'sp'        => $serviceProvider,
+                'attributes'=> $attributes,
+                'sp'        => $consentDestinationEntityMetadata,
                 'idp'       => $identityProvider,
             ));
         $this->_server->sendOutput($html);
     }
 
     /**
-     * @param ServiceProviderEntity  $serviceProvider
+     * @param ServiceProviderEntity[] $serviceProviders
      * @param IdentityProviderEntity $identityProvider
      * @return bool
      */
-    private function isConsentDisabled(ServiceProviderEntity $serviceProvider, IdentityProviderEntity $identityProvider)
+    private function isConsentDisabled(array $serviceProviders, IdentityProviderEntity $identityProvider)
     {
-        if ($serviceProvider->isConsentRequired) {
-            return true;
-        }
+        foreach ($serviceProviders as $serviceProvider) {
+            if ($serviceProvider->isConsentRequired) {
+                return true;
+            }
 
-        if (in_array($serviceProvider->entityId, $identityProvider->spsEntityIdsWithoutConsent)) {
-            return true;
+            if (in_array($serviceProvider->entityId, $identityProvider->spsEntityIdsWithoutConsent)) {
+                return true;
+            }
         }
 
         return false;

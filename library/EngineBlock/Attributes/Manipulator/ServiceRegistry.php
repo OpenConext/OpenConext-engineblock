@@ -21,8 +21,8 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         &$subjectId,
         array &$attributes,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$responseObj,
-        IdentityProviderEntity $idpMetadata,
-        ServiceProviderEntity $spMetadata
+        IdentityProviderEntity $identityProvider,
+        ServiceProviderEntity $serviceProvider
     ) {
         $manipulationCode = $this->_getMetadataRepository()->fetchEntityManipulation($entity);
         if (empty($manipulationCode)) {
@@ -35,8 +35,8 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         $response = $translator->fromNewFormat($responseObj);
 
         $metadataTranslator = new EntityTranslator();
-        $idpMetadataLegacy = $metadataTranslator->translateIdentityProvider($idpMetadata);
-        $spMetadataLegacy  = $metadataTranslator->translateServiceProvider($spMetadata);
+        $idpMetadataLegacy = $metadataTranslator->translateIdentityProvider($identityProvider);
+        $spMetadataLegacy  = $metadataTranslator->translateServiceProvider($serviceProvider);
 
         $this->_doManipulation(
             $manipulationCode,

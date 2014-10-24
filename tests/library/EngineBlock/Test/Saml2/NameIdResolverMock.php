@@ -1,24 +1,9 @@
 <?php
 
-class EngineBlock_Test_Corto_Filter_Command_SetNameIdMock extends EngineBlock_Corto_Filter_Command_SetNameId
+class EngineBlock_Test_Saml2_NameIdResolverMock extends EngineBlock_Saml2_NameIdResolver
 {
     private $_serviceProviderUuids = array();
     private $_persistentIds = array();
-
-    public function getRequest()
-    {
-        return $this->_request;
-    }
-
-    public function getSpMetadata()
-    {
-        return $this->_serviceProvider;
-    }
-
-    public function getCollabPersonId()
-    {
-        return $this->_collabPersonId;
-    }
 
     protected function _getUserDirectory()
     {

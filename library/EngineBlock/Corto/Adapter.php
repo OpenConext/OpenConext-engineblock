@@ -351,7 +351,6 @@ class EngineBlock_Corto_Adapter
             'debug' => $application->getConfigurationValue('debug', false),
             'trace' => $application->getConfigurationValue('debug', false),
             'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true),
-            'NoSupportedIDPError' => 'user',
             'rememberIdp' => '+3 months',
             'SigningAlgorithm' => '',
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.

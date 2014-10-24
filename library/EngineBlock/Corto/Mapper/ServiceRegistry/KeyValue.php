@@ -42,6 +42,11 @@ class EngineBlock_Corto_Mapper_ServiceRegistry_KeyValue
                 $cortoEntity['VoContext'] = $serviceRegistryEntity['coin:implicit_vo_id'];
             }
 
+            $cortoEntity['TrustedProxy'] = FALSE;
+            if (isset($serviceRegistryEntity['coin:trusted_proxy'])) {
+                $cortoEntity['TrustedProxy'] = TRUE;
+            }
+
             // show all IdP's in the WAYF
             if (isset($serviceRegistryEntity['coin:display_unconnected_idps_wayf'])) {
                 $cortoEntity['DisplayUnconnectedIdpsWayf'] = $serviceRegistryEntity['coin:display_unconnected_idps_wayf'];

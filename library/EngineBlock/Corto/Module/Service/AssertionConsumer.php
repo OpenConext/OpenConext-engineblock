@@ -7,16 +7,14 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
     public function serve($serviceName)
     {
         $receivedResponse = $this-> _server->getBindingsModule()->receiveResponse();
-        $receivedRequest = $this->_server->getReceivedRequestFromResponse(
-            $receivedResponse->getInResponseTo()
-        );
+        $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
         // Flush log if SP or IdP has additional logging enabled
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
         if (
             $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging($sp, $idp)
+            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))
         ) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
@@ -57,10 +55,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse->setDestination($firstProcessingEntity->responseProcessingService->location);
             $newResponse->setDeliverByBinding($firstProcessingEntity->responseProcessingService->binding);
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
-
-            $attributes = $newResponse->getAssertion()->getAttributes();
-            $attributes['urn:org:openconext:corto:internal:sp-entity-id'] = array($receivedRequest->getIssuer());
-            $newResponse->getAssertion()->setAttributes($attributes);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
         }
