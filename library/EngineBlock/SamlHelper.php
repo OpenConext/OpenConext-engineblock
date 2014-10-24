@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Temporary workaround
  *

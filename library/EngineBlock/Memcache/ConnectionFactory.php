@@ -1,14 +1,7 @@
 <?php
 
-class EngineBlock_Memcache_SettingsException extends EngineBlock_Exception
+class EngineBlock_Memcache_ConnectionFactory
 {
-    public function __construct($message, $severity = self::CODE_ALERT, Exception $previous = null)
-    {
-        parent::__construct($message, $severity, $previous);
-    }
-}
-
-class EngineBlock_Memcache_ConnectionFactory {
     const DEFAULT_PORT                      = 11211;
     const DEFAULT_PERSISTENCE               = true;
     const DEFAULT_WEIGHT                    = 1;
