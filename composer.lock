@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0283e0a7c256eaed6eade0cb5a635ecc",
+    "hash": "48a2f86311f2e02f9fe4cb55c8e30d29",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -180,16 +180,16 @@
         },
         {
             "name": "openconext/engineblock-fixtures",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-fixtures.git",
-                "reference": "c0cdd2db1d2e46d841273b97602d535d5cb9ed14"
+                "reference": "07c3739acce58126491eb177d3304c17476f31fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-fixtures/zipball/c0cdd2db1d2e46d841273b97602d535d5cb9ed14",
-                "reference": "c0cdd2db1d2e46d841273b97602d535d5cb9ed14",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-fixtures/zipball/07c3739acce58126491eb177d3304c17476f31fb",
+                "reference": "07c3739acce58126491eb177d3304c17476f31fb",
                 "shasum": ""
             },
             "require": {
@@ -201,15 +201,12 @@
                     "OpenConext\\Component\\EngineBlockFixtures\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
             "description": "OpenConext Component for EngineBlock Fixtures",
-            "support": {
-                "source": "https://github.com/OpenConext/OpenConext-engineblock-fixtures/tree/0.3.0",
-                "issues": "https://github.com/OpenConext/OpenConext-engineblock-fixtures/issues"
-            },
-            "time": "2014-02-20 09:30:41"
+            "time": "2014-10-08 05:47:39"
         },
         {
             "name": "openid/php-openid",
