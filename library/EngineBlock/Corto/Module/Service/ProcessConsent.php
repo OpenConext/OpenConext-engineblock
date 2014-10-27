@@ -5,29 +5,45 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 {
     const INTRODUCTION_EMAIL = 'introduction_email';
 
-    /** @var \EngineBlock_Corto_ProxyServer */
+    /**
+     * @var \EngineBlock_Corto_ProxyServer
+     */
     protected $_server;
 
-    /** @var EngineBlock_Corto_XmlToArray */
+    /**
+     * @var \EngineBlock_Corto_XmlToArray
+     */
     protected $_xmlConverter;
 
-    /** @var EngineBlock_Corto_Model_Consent_Factory */
+    /**
+     * @var EngineBlock_Corto_Model_Consent_Factory
+     */
     private $_consentFactory;
 
-    /** @var EngineBlock_Mail_Mailer */
+    /**
+     * @var EngineBlock_Mail_Mailer
+     */
     private $_mailer;
 
-    /** @var EngineBlock_User_PreferredNameAttributeFilter */
+    /**
+     * @var EngineBlock_User_PreferredNameAttributeFilter
+     */
     private $_preferredNameAttributeFilter;
 
+    /**
+     * @param EngineBlock_Corto_ProxyServer $server
+     * @param EngineBlock_Corto_XmlToArray $xmlConverter
+     * @param EngineBlock_Corto_Model_Consent_Factory $consentFactory
+     * @param EngineBlock_Mail_Mailer $mailer
+     * @param EngineBlock_User_PreferredNameAttributeFilter $preferredNameAttributeFilter
+     */
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
         EngineBlock_Mail_Mailer $mailer,
         EngineBlock_User_PreferredNameAttributeFilter $preferredNameAttributeFilter
-    )
-    {
+    ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
@@ -48,16 +64,18 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 
-        $attributes = $response->getAssertion()->getAttributes();
-        $serviceProviderEntityId = $attributes['urn:org:openconext:corto:internal:sp-entity-id'][0];
-        unset($attributes['urn:org:openconext:corto:internal:sp-entity-id']);
+        $request = $this->_server->getReceivedRequestFromResponse($response);
+        $spMetadata = $this->_server->getRemoteEntity($request->getIssuer());
+
+        $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata($spMetadata, $request, $this->_server);
 
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
             throw new EngineBlock_Corto_Exception_NoConsentProvided('No consent given...');
         }
 
+        $attributes = $response->getAssertion()->getAttributes();
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $consent->storeConsent($serviceProviderEntityId, $this->_server->getRemoteEntity($serviceProviderEntityId));
+        $consent->storeConsent($destinationMetadata);
         if ($consent->countTotalConsent($response, $attributes) === 1) {
             $this->_sendIntroductionMail($response, $attributes);
         }
@@ -68,7 +86,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 
         $this->_server->getBindingsModule()->send(
             $response,
-            $this->_server->getRemoteEntity($serviceProviderEntityId)
+            $spMetadata
         );
     }
 

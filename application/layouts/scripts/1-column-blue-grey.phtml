@@ -1,4 +1,5 @@
 <?php
+/** @var Zend_View $this */
 define('PARTIAL_DIR', __DIR__ . '/partials/');
 require PARTIAL_DIR . 'header-start.php';
 ?>
@@ -26,10 +27,10 @@ require PARTIAL_DIR . 'header-start.php';
                 <!-- Language selection -->
                 <ul class="nav">
                     <li class="<?php if ($lang==='en'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('en'); ?>">EN</a>
+                        <a href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
                     </li>
                     <li class="<?php if ($lang==='nl'): ?>active<?php endif; ?>">
-                        <a href="<?php echo EngineBlock_View::setLanguage('nl'); ?>">NL</a>
+                        <a href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
                     </li>
                 </ul>
 

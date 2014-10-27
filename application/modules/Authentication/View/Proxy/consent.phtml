@@ -37,7 +37,7 @@ $layout->setLayout('consent');
 
 // Set Layout variables
 $layout->use_header = false;
-$layout->title      = $layout->title . ' - '. $this->t('consent_header', $this->htmlSpecialCharsText($spName));
+$layout->title      = $layout->title . ' - '. $this->t('consent_header', EngineBlock_View::htmlSpecialCharsText($spName));
 $layout->subheader  = $this->t('consent_subheader', $spName);
 $layout->footerText = $this->t('footer');
 
@@ -75,15 +75,15 @@ $inlineScriptHelper->appendScript('
         <?php if ($attributeName) : ?>
             <tr>
                 <td>
-                    <?=$this->htmlSpecialCharsText($attributeName) ?>
+                    <?=EngineBlock_View::htmlSpecialCharsText($attributeName) ?>
                 </td>
                 <td>
                     <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
-                        <?=$this->htmlSpecialCharsText($attributeValues[0]);?>
+                        <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
                     <?php /** Multiple attribute values */ else: ?>
                         <ul>
                             <?php foreach ($attributeValues as $value) : ?>
-                                <li><?=$this->htmlSpecialCharsText($value); ?></li>
+                                <li><?=EngineBlock_View::htmlSpecialCharsText($value); ?></li>
                             <?php endforeach ?>
                         </ul>
                     <?php endif ?>
@@ -102,8 +102,8 @@ $inlineScriptHelper->appendScript('
 
 <div id="approve">
 <!-- YES -->
-<form id="accept" method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
-        <input type="hidden" name="ID"      value="<?= $this->htmlSpecialCharsAttributeValue($ID); ?>">
+<form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+        <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
         <input type="hidden" name="consent" value="yes" />
 
         <input id="accept_terms_button"
@@ -114,8 +114,8 @@ $inlineScriptHelper->appendScript('
 </form>
 
 <!-- NO -->
-<form id="reject" method="post" action="<?= $this->htmlSpecialCharsAttributeValue($action); ?>">
-        <input type="hidden" name="ID"      value="<?=$this->htmlSpecialCharsAttributeValue($ID); ?>">
+<form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+        <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
         <input type="hidden" name="consent" value="no" />
 
         <a id="decline_terms_button" style="line-height: 40px;" href="javascript:;" onclick="document.getElementById('reject').submit();">

@@ -2,7 +2,6 @@
 
 class EngineBlock_VirtualOrganization_GroupValidator
 {
-
     const ACCESS_TOKEN_KEY = "EngineBlock_VirtualOrganization_GroupValidator_Access_Token_Key";
 
     public function isMember($subjectId, array $groups)

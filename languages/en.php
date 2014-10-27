@@ -36,7 +36,7 @@ return array(
     'error_header'              => 'Error',
 
     //Footer
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29">Terms of Service</a>',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29">Terms of Service</a>',
 
     //Help
     'help_header'           => 'Help',
@@ -182,11 +182,9 @@ If you have any questions about your privacy and the policy applied, please visi
     //Error screens
     'error_404'                         => '404 Page not found',
     'error_404_desc'                    => 'This page has not been found.',
-    'error_help_desc'               => '<p>
-        If this does not solve your problem, please visit
+    'error_help_desc'               => 'If this does not solve your problem, please visit
         <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-    </p>',
+        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.',
     'error_no_consent'              => 'Unable to continue to service',
     'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
 
@@ -251,7 +249,8 @@ If you want to use this application you have to:<br />
     'error_received_error_status_code_desc'=> '<p>
         Your Identity Provider sent an authentication response with an error status code.
     </p>',
-    'error_received_invalid_response'     => 'Error - Invalid Idp response',
+    'error_received_invalid_response'       => 'Error - Invalid Idp response',
+    'error_received_invalid_signed_response'=> 'Error - Invalid signature on Idp response',
     'error_received_status_code_desc'=> '<p>
         Your Identity Provider sent an authentication response that was invalid.
     </p>',

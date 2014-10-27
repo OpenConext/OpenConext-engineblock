@@ -15,8 +15,8 @@ $log->getQueueWriter()->flush('feedback page shown');
             }
         ?>
             <tr>
-                <td><strong><?= $this->htmlSpecialCharsText($this->t($name))?>:</strong></td>
-                <td><?= $this->htmlSpecialCharsText($value);?></td>
+                <td><strong><?= EngineBlock_View::htmlSpecialCharsText($this->t($name))?>:</strong></td>
+                <td><?= EngineBlock_View::htmlSpecialCharsText($value);?></td>
             </tr>
         <?php
         }

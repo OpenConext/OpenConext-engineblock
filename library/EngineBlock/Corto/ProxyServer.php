@@ -18,11 +18,6 @@ class EngineBlock_Corto_ProxyServer
     const VO_CONTEXT_PFX          = 'voContext';
     const VO_CONTEXT_IMPLICIT     = 'VoContextImplicit';
 
-    /**
-     * @todo remove once https://github.com/simplesamlphp/saml2/pull/7 has been merged.
-     */
-    const NAMEFORMAT_URI = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
-
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
         'debugSingleSignOnService'          => '/authentication/sp/debug',
@@ -295,6 +290,11 @@ class EngineBlock_Corto_ProxyServer
         return isset($this->_entities['remote'][$entityId]);
     }
 
+    /**
+     * @param string $entityId
+     * @return array
+     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
+     */
     public function getRemoteEntity($entityId)
     {
         if (!isset($this->_entities['remote'][$entityId])) {
@@ -419,7 +419,7 @@ class EngineBlock_Corto_ProxyServer
 ////////  REQUEST HANDLING /////////
 
     public function sendAuthenticationRequest(
-        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         $idpEntityId
     ) {
         $cookieExpiresStamp = null;
@@ -428,21 +428,18 @@ class EngineBlock_Corto_ProxyServer
         }
         $this->setCookie('selectedIdp', $idpEntityId, $cookieExpiresStamp);
 
-        $originalId = $request->getId();
+        $originalId = $spRequest->getId();
 
         $idpMetadata = $this->getRemoteEntity($idpEntityId);
-        $newRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($request, $idpMetadata, $this);
-        $newId = $newRequest->getId();
+        $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $idpMetadata, $this);
+        $newId = $ebRequest->getId();
 
         // Store the original Request
-        $_SESSION[$originalId]['SAMLRequest'] = $request;
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_sessionLog);
+        $authnRequestRepository->store($spRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
 
-        // Store the mapping from the new request ID to the original request ID
-        $_SESSION[$newId] = array();
-        $_SESSION[$newId]['SAMLRequest'] = $request;
-        $_SESSION[$newId]['_InResponseTo'] = $originalId;
-
-        $this->getBindingsModule()->send($newRequest, $this->getRemoteEntity($idpEntityId));
+        $this->getBindingsModule()->send($ebRequest, $this->getRemoteEntity($idpEntityId));
     }
 
 //////// RESPONSE HANDLING ////////
@@ -504,7 +501,7 @@ class EngineBlock_Corto_ProxyServer
         }
 
         // Copy over the NameID for now...
-        // (further on in this filters we'll have more info and set this to something better)
+        // (further on in the filters we'll have more info and set this to something better)
         $sourceNameId = $sourceAssertion->getNameId();
         if (!empty($sourceNameId) && !empty($sourceNameId['Value']) && !empty($sourceNameId['Format'])) {
             $newAssertion->setNameId(
@@ -572,7 +569,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Copy over the attributes
         $newAssertion->setAttributes($sourceAssertion->getAttributes());
-        $newAssertion->setAttributeNameFormat(static::NAMEFORMAT_URI);
+        $newAssertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_URI);
 
         return $newResponse;
     }
@@ -773,42 +770,43 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @param $id
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      * @throws EngineBlock_Corto_ProxyServer_Exception
+     * @throws EngineBlock_Exception
      * @throws EngineBlock_Corto_Module_Services_SessionLostException
      */
-    public function getReceivedRequestFromResponse($id)
+    public function getReceivedRequestFromResponse(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
-        // Check the session for a AuthnRequest with the given ID
-        // Expect to get back an AuthnRequest issued by EngineBlock and destined for the IdP
-        if (!$id || !isset($_SESSION[$id])) {
+        /** @var SAML2_Response $response */
+        $requestId = $response->getInResponseTo();
+        if (!$requestId) {
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                'Response without InResponseTo, e.g. unsollicited. We don\'t support this.',
+                EngineBlock_Exception::CODE_NOTICE
+            );
+        }
+
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->getSessionLog());
+
+        $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);
+        if (!$spRequestId) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
-                "Trying to find a AuthnRequest (we made and sent) with id '$id' but it is not known in this session? ".
+                "Trying to find a AuthnRequest (we made and sent) with id '$requestId' but it is not known in this session? ".
                 "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
             );
         }
 
-        // Get the ID of the original request (from the SP)
-        if (!isset($_SESSION[$id]['_InResponseTo'])) {
-            $log = $this->_server->getSessionLog();
-            $log->attach($_SESSION, 'SESSION');
-
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                "ID `$id` does not have a _InResponseTo?!?",
-                EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
-            );
-        }
-        $originalRequestId = $_SESSION[$id]['_InResponseTo'];
-
-        if (!isset($_SESSION[$originalRequestId]['SAMLRequest'])) {
+        $spRequest = $authnRequestRepository->findRequestById($spRequestId);
+        if (!$spRequest) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 'Response has no known Request',
                 EngineBlock_Corto_ProxyServer_Exception::CODE_NOTICE
             );
         }
-        return $_SESSION[$originalRequestId]['SAMLRequest'];
+
+        return $spRequest;
     }
 
 ////////  ATTRIBUTE FILTERING /////////

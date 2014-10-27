@@ -7,13 +7,6 @@ if (!isset($userAttributes)) {
 }
 
 /**
- * @var EngineBlock_Group_Provider_Aggregator $aggregator
- */
-if (!isset($aggregator)) {
-    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: aggregator");
-}
-
-/**
  * @var EngineBlock_Attributes_Metadata $metadata
  */
 if (!isset($metadata)) {
@@ -95,15 +88,15 @@ foreach ($spList as $spId => $sp) {
     <?php foreach ($userAttributes as $attributeId => $attributeValues) { ?>
         <tr>
             <td style="font-weight: bold;" title="<?= $attributeId?>">
-                <?=$this->htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
+                <?=EngineBlock_View::htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
             </td>
             <td>
                 <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                <?=$this->htmlSpecialCharsText($attributeValues[0])?>
+                <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0])?>
                 <?php } /** Multiple attribute values */ else { ?>
                 <ul>
                 <?php foreach ($attributeValues as $value) { ?>
-                    <li><?=$this->htmlSpecialCharsText($value)?></li>
+                    <li><?=EngineBlock_View::htmlSpecialCharsText($value)?></li>
                 <?php } ?>
                 </ul>
                 <?php } ?>
@@ -148,23 +141,23 @@ foreach ($spList as $spId => $sp) {
                     <td>
                         <a href="#" class="show-details">
                             <span class="ui-icon ui-icon-triangle-1-e left"></span>
-                            <?= $this->htmlSpecialCharsText($this->getDisplayName($sp)); ?>
+                            <?= EngineBlock_View::htmlSpecialCharsText($this->getDisplayName($sp)); ?>
                         </a>
                     </td>
                     <td>
                         <?php if ($sp['coin:eula']) : ?>
-                            <a href="<?= $this->htmlSpecialCharsAttributeValue($sp['coin:eula']); ?>"><?php
+                            <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['coin:eula']); ?>"><?php
 	                            echo $this->t('profile_eula_link');
 	                        ?></a>
                         <?php endif; ?>
                     </td>
                     <td>
                         <?php if (isset($sp['url:en']) && $sp['url:en'] != ''): ?>
-                            <a href="<?= $this->htmlSpecialCharsAttributeValue($sp['url:en']); ?>"><?php
+                            <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['url:en']); ?>"><?php
 	                            echo $this->t('profile_support_link');
 	                        ?></a>
                         <?php elseif (isset($sp['url:nl']) && $sp['url:nl'] != ''): ?>
-                            <a href="<?= $this->htmlSpecialCharsAttributeValue($sp['url:nl']); ?>"><?php
+                            <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['url:nl']); ?>"><?php
 	                            echo $this->t('profile_support_link');
 	                        ?></a>
                         <?php else: ?>
@@ -172,8 +165,8 @@ foreach ($spList as $spId => $sp) {
                     </td>
                     <td>
                         <?php if (isset($sp['supportContact'])) : ?>
-                            <a href="mailto:<?= $this->htmlSpecialCharsAttributeValue($sp['supportContact']['emailAddress']); ?>"><?php
-                                echo $this->htmlSpecialCharsText($sp['supportContact']['emailAddress']); ?>
+                            <a href="mailto:<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['supportContact']['emailAddress']); ?>"><?php
+                                echo EngineBlock_View::htmlSpecialCharsText($sp['supportContact']['emailAddress']); ?>
                             </a>
                         <?php endif; ?>
                     </td>
@@ -193,15 +186,15 @@ foreach ($spList as $spId => $sp) {
                                 <?php foreach ($spAttributesList[$spId] as $attributeId => $attributeValues) { ?>
                                     <tr>
                                         <td style="font-weight: bold;">
-                                            <?=$this->htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
+                                            <?=EngineBlock_View::htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
                                         </td>
                                         <td>
                                             <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                                            <?=$this->htmlSpecialCharsText($attributeValues[0]);?>
+                                            <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
                                             <?php } /** Multiple attribute values */ else { ?>
                                             <ul>
                                             <?php foreach ($attributeValues as $value) { ?>
-                                                <li><?=$this->htmlSpecialCharsText($value)?></li>
+                                                <li><?=EngineBlock_View::htmlSpecialCharsText($value)?></li>
                                             <?php } ?>
                                             </ul>
                                             <?php } ?>

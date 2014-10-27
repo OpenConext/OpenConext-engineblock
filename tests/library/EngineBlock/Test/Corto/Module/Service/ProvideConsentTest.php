@@ -12,8 +12,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     private $consentMock;
 
     public function setup() {
-        EngineBlock_ApplicationSingleton::getInstance()->bootstrap();
-
         $this->proxyServerMock = $this->mockProxyServer();
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -43,7 +41,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService->serve(null);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
-            ->send(Phake::capture($message), Phake::anyParameters());
+            ->send(Phake::capture($message), Phake::capture($metadata));
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:prior', $message->getConsent());
     }
 
@@ -62,7 +60,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService->serve(null);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
-            ->send(Phake::capture($message), Phake::anyParameters());
+            ->send(Phake::capture($message), Phake::capture($metadata));
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message->getConsent());
     }
 
@@ -83,25 +81,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService->serve(null);
 
         Phake::verify($this->proxyServerMock->getBindingsModule())
-            ->send(Phake::capture($message), Phake::anyParameters());
+            ->send(Phake::capture($message), Phake::capture($metadata));
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:consent:inapplicable', $message->getConsent());
-    }
-
-    public function testFilteredAttributesAreUsedToRenderTemplate()
-    {
-        $provideConsentService = $this->factoryService();
-
-        $expectedFilteredAttributes = array('foo');
-        Phake::when($this->consentMock)
-            ->getFilteredResponseAttributes(Phake::anyParameters())
-            ->thenReturn($expectedFilteredAttributes);
-
-        $provideConsentService->serve(null);
-
-        Phake::verify($this->proxyServerMock)
-            ->renderTemplate(Phake::capture($templateName), Phake::capture($vars));
-
-        $this->assertEquals($expectedFilteredAttributes, $vars['attributes']);
     }
 
     /**
@@ -115,10 +96,10 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
         Phake::when($proxyServerMock)
             ->getRemoteEntity('testSp')
-            ->thenReturn(array());
+            ->thenReturn(array( 'EntityID' => 'testSp' ));
         Phake::when($proxyServerMock)
             ->getRemoteEntity('testIdP')
-            ->thenReturn(array());
+            ->thenReturn(array( 'EntityID' => 'testIdP'));
 
         $bindingsModuleMock = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);
@@ -139,8 +120,21 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
      */
     private function mockBindingsModule()
     {
-        // Mock bindings module
-        $bindingsModuleMock = Phake::mock('EngineBlock_Corto_Module_Bindings');
+        $spRequest = new SAML2_AuthnRequest();
+        $spRequest->setId('SPREQUEST');
+        $spRequest->setIssuer('testSp');
+        $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
+
+        $ebRequest = new SAML2_AuthnRequest();
+        $ebRequest->setId('EBREQUEST');
+        $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
+        
+        $dummyLog = new EngineBlock_Log();
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
+        $authnRequestRepository->store($spRequest);
+        $authnRequestRepository->store($ebRequest);
+        $authnRequestRepository->link($ebRequest, $spRequest);
+
         $assertion = new SAML2_Assertion();
         $assertion->setAttributes(array(
             'urn:org:openconext:corto:internal:sp-entity-id' => array(
@@ -150,11 +144,16 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
                 null
             )
         ));
+
         $responseFixture = new SAML2_Response();
+        $responseFixture->setInResponseTo('EBREQUEST');
         $responseFixture->setAssertions(array($assertion));
         $responseFixture = new EngineBlock_Saml2_ResponseAnnotationDecorator($responseFixture);
         $responseFixture->setOriginalIssuer('testIdP');
 
+        // Mock bindings module
+        /** @var EngineBlock_Corto_Module_Bindings $bindingsModuleMock */
+        $bindingsModuleMock = Phake::mock('EngineBlock_Corto_Module_Bindings');
         Phake::when($bindingsModuleMock)
             ->receiveResponse()
             ->thenReturn($responseFixture);

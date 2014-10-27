@@ -35,7 +35,7 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp&nbsp&nbsp|&nbsp&nbsp&nbsp<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29">Gebruiksvoorwaarden</a>',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help_header'           => 'Help',
@@ -252,7 +252,8 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'error_received_error_status_code_desc'=> '<p>
         Uw Identity Provider stuurde een authenticatie respons met een fout code.
     </p>',
-    'error_received_invalid_response'     => 'Error - Ongeldig Idp antwoord',
+    'error_received_invalid_response'        => 'Error - Ongeldig Idp antwoord',
+    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op Idp antwoord',
     'error_received_status_code_desc'=> '<p>
         Uw Identity Provider stuurde een ongeldig authenticatie respons terug.
     </p>',

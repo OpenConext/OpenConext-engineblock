@@ -1,32 +1,8 @@
 <?php
-/**
- * SURFconext EngineBlock
- *
- * LICENSE
- *
- * Copyright 2011 SURFnet bv, The Netherlands
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and limitations under the License.
- *
- * @category  SURFconext EngineBlock
- * @package
- * @copyright Copyright © 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
- * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
- */
 
 /**
  * The bindings module for Corto, which implements support for various data
  * bindings.
- * @author Boy
  */
 class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstract
 {
@@ -243,20 +219,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // Detect the binding being used from the global variables (GET, POST, SERVER)
         $sspBinding = SAML2_Binding::getCurrentBinding();
 
-        // We only support HTTP-Post and HTTP-Redirect bindings
-        if (!($sspBinding instanceof SAML2_HTTPPost || $sspBinding instanceof SAML2_HTTPRedirect)) {
-            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
-                'Unsupported Binding used',
-                EngineBlock_Exception::CODE_NOTICE
-            );
-        }
-        /** @var SAML2_HTTPPost|SAML2_HTTPRedirect $sspBinding */
-
         // Receive a message from the binding
         $sspResponse = $sspBinding->receive();
         if (!($sspResponse instanceof SAML2_Response)) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Unsupported Message received',
+                'Unsupported Message received: ' . get_class($sspResponse),
                 EngineBlock_Exception::CODE_NOTICE
             );
         }
@@ -283,6 +250,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Remember idp for debugging
         $_SESSION['currentIdentityProvider'] = $idpEntityId;
+
+        // We only support HTTP-POST binding for Responses
+        if (!$sspBinding instanceof SAML2_HTTPPost) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
+                'Unsupported Binding used: ' . get_class($sspBinding),
+                EngineBlock_Exception::CODE_NOTICE
+            );
+        }
 
         // Verify that we know this IdP and have metadata for it.
         $cortoIdpMetadata = $this->_verifyKnownMessageIssuer(
@@ -335,13 +310,24 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 $e
             );
         }
-        // General Response whackiness (like Destinations not matching)
         catch (Exception $e) {
-            throw new EngineBlock_Corto_Module_Bindings_VerificationException(
-                $e->getMessage(),
-                EngineBlock_Exception::CODE_NOTICE,
-                $e
-            );
+            // Signature could not be verified by SSP
+            if ($e->getMessage() === "Unable to validate Signature") {
+                throw new EngineBlock_Corto_Module_Bindings_SignatureVerificationException(
+                    $e->getMessage(),
+                    EngineBlock_Exception::CODE_WARNING,
+                    $e
+                );
+            }
+            else {
+                // General Response whackiness (like Destinations not matching)
+                throw new EngineBlock_Corto_Module_Bindings_VerificationException(
+                    $e->getMessage(),
+                    EngineBlock_Exception::CODE_NOTICE,
+                    $e
+                );
+            }
+
         }
 
         return new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);
