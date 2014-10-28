@@ -217,12 +217,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:ibuildingsnl/OpenConext-engineblock-metadata.git",
-                "reference": "7fbe75a081d17ea91ae5139b77bf42b6d3827ab2"
+                "reference": "868120a6a2889a7a8a327e555d446a7be0633007"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-engineblock-metadata/zipball/7fbe75a081d17ea91ae5139b77bf42b6d3827ab2",
-                "reference": "7fbe75a081d17ea91ae5139b77bf42b6d3827ab2",
+                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-engineblock-metadata/zipball/868120a6a2889a7a8a327e555d446a7be0633007",
+                "reference": "868120a6a2889a7a8a327e555d446a7be0633007",
                 "shasum": ""
             },
             "require": {
@@ -243,7 +243,7 @@
                 "source": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/tree/master",
                 "issues": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/issues"
             },
-            "time": "2014-10-24 11:41:30"
+            "time": "2014-10-28 10:21:23"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -461,16 +461,16 @@
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v1.13.0",
+            "version": "v1.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/simplesamlphp.git",
-                "reference": "423bdf0bc97ad32467183e0994f72b20370194d6"
+                "reference": "22221f43bca0cb5d6cd2cd508ca60f97798bd9d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/423bdf0bc97ad32467183e0994f72b20370194d6",
-                "reference": "423bdf0bc97ad32467183e0994f72b20370194d6",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/22221f43bca0cb5d6cd2cd508ca60f97798bd9d7",
+                "reference": "22221f43bca0cb5d6cd2cd508ca60f97798bd9d7",
                 "shasum": ""
             },
             "require": {
@@ -513,7 +513,7 @@
                 "sp",
                 "ws-federation"
             ],
-            "time": "2014-09-25 12:16:14"
+            "time": "2014-10-27 15:17:22"
         },
         {
             "name": "simplesamlphp/xmlseclibs",
