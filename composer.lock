@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1731451c30e68fdb3d00b6cc403a9798",
+    "hash": "4758d936241dff94f7900621d6bcd75d",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -216,18 +216,23 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:ibuildingsnl/OpenConext-engineblock-metadata.git",
-                "reference": "868120a6a2889a7a8a327e555d446a7be0633007"
+                "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
+                "reference": "3fe1bb37dce4ecde000ba7e9009f797c8bffb03d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-engineblock-metadata/zipball/868120a6a2889a7a8a327e555d446a7be0633007",
-                "reference": "868120a6a2889a7a8a327e555d446a7be0633007",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/3fe1bb37dce4ecde000ba7e9009f797c8bffb03d",
+                "reference": "3fe1bb37dce4ecde000ba7e9009f797c8bffb03d",
                 "shasum": ""
             },
             "require": {
                 "openconext/stoker-metadata": "dev-master",
-                "php": ">=5.3.3"
+                "php": ">=5.3.3",
+                "simplesamlphp/saml2": "~0.5"
+            },
+            "require-dev": {
+                "ibuildings/qa-tools": "~1.1",
+                "sebastian/phpcpd": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -235,15 +240,12 @@
                     "OpenConext\\Component\\EngineBlockMetadata\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
-            "description": "OpenConext Component for EngineBlock Entity Metadata",
-            "support": {
-                "source": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/tree/master",
-                "issues": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata/issues"
-            },
-            "time": "2014-10-28 10:21:23"
+            "description": "OpenConext component for EngineBlock Entity Metadata",
+            "time": "2014-10-28 13:59:02"
         },
         {
             "name": "openconext/stoker-metadata",

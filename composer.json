@@ -44,22 +44,6 @@
                 "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
                 "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
             }
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/OpenConext/OpenConext-engineblock-fixtures"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ibuildingsnl/OpenConext-engineblock-metadata"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/janus-ssp/ServiceRegistryLib"
         }
     ],
     "autoload": {
