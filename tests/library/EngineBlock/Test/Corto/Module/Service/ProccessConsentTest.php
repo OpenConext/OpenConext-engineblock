@@ -106,6 +106,7 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
     {
         // Mock proxy server
         $_SERVER['HTTP_HOST'] = 'test-host';
+        /** @var EngineBlock_Corto_ProxyServer $proxyServerMock */
         $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer');
 
         $bindingsModuleMock = $this->mockBindingsModule();

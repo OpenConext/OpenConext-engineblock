@@ -39,6 +39,7 @@ class EngineBlock_Saml2_NameIdResolver
             return $customNameId;
         }
 
+        /** @var SAML2_AuthnRequest $request */
         $nameIdFormat = $this->_getNameIdFormat($request, $destinationMetadata);
 
         $requireUnspecified = ($nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED);
