@@ -47,8 +47,8 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
     }
 
     /**
-     * @param array &$entity
-     * @param string $location
+     * @param AbstractConfigurationEntity $entity
+     * @param $location
      */
     public function replace(AbstractConfigurationEntity $entity, $location)
     {
@@ -81,18 +81,24 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
                 return;
             }
 
-            throw new Exception("No service '$serviceName' is configured in EngineBlock metadata");
+            throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+                "No service '$serviceName' is configured in EngineBlock metadata"
+            );
         }
 
         $services = $proxyEntity->$serviceName;
         if (!is_array($services)) {
-            throw new Exception("Service '$this->serviceName' in EngineBlock metadata is not an array");
+            throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+                "Service '$this->serviceName' in EngineBlock metadata is not an array"
+            );
         }
 
         $supportedBindings = $this->parseBindingsFromServices($services);
 
         if (count($supportedBindings) === 0 && $required == self::REQUIRED) {
-            throw new Exception("No '$serviceName' service bindings configured in EngineBlock metadata");
+            throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+                "No '$serviceName' service bindings configured in EngineBlock metadata"
+            );
         }
 
         return $supportedBindings;
@@ -108,12 +114,16 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
         $supportedBindings = array();
         foreach($services as $serviceInfo) {
             if (!isset($serviceInfo->binding)) {
-                throw new Exception("Service '$this->serviceName' configured without a Binding in EngineBlock metadata");
+                throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+                    "Service '$this->serviceName' configured without a Binding in EngineBlock metadata"
+                );
             }
 
             $binding = $serviceInfo->binding;
             if (!in_array($binding, $this->knownBindings)) {
-                throw new Exception("Service '$this->serviceName' has an invalid binding '$binding' configured in EngineBlock metadata");
+                throw new EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception(
+                    "Service '$this->serviceName' has an invalid binding '$binding' configured in EngineBlock metadata"
+                );
             }
 
             $supportedBindings[] = $binding;
