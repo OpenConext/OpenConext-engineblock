@@ -168,7 +168,7 @@
             ],
             "authors": [
                 {
-                    "name": "Stephen Clay",
+                    "name": "Steve Clay",
                     "email": "steve@mrclay.org",
                     "homepage": "http://www.mrclay.org/",
                     "role": "Developer"
@@ -201,14 +201,11 @@
                     "OpenConext\\Component\\EngineBlockFixtures\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
             "description": "OpenConext Component for EngineBlock Fixtures",
-            "support": {
-                "source": "https://github.com/OpenConext/OpenConext-engineblock-fixtures/tree/0.4.0",
-                "issues": "https://github.com/OpenConext/OpenConext-engineblock-fixtures/issues"
-            },
             "time": "2014-10-08 05:47:39"
         },
         {
@@ -252,12 +249,12 @@
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:ibuildingsnl/OpenConext-stoker-metadata.git",
+                "url": "https://github.com/OpenConext/OpenConext-stoker-metadata.git",
                 "reference": "78b551a4834cbb9782b37c84208f772f853878ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ibuildingsnl/OpenConext-stoker-metadata/zipball/78b551a4834cbb9782b37c84208f772f853878ab",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-stoker-metadata/zipball/78b551a4834cbb9782b37c84208f772f853878ab",
                 "reference": "78b551a4834cbb9782b37c84208f772f853878ab",
                 "shasum": ""
             },
@@ -270,14 +267,11 @@
                     "OpenConext\\Component\\StokerMetadata\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "APACHE-2"
             ],
             "description": "PHP library for accessing OpenConext stoker metadata",
-            "support": {
-                "source": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata/tree/master",
-                "issues": "https://github.com/ibuildingsnl/OpenConext-stoker-metadata/issues"
-            },
             "time": "2014-09-15 19:23:24"
         },
         {
@@ -290,7 +284,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openid/php-openid/zipball/cb53da46b73baff46ae325eb799d91703acc3780",
+                "url": "https://api.github.com/repos/openid/php-openid/zipball/fff9217fb1acda132702730b66b10981ea9d4cac",
                 "reference": "a287b2d85e753c84b3b883ed8ee3ffe8692c8477",
                 "shasum": ""
             },
