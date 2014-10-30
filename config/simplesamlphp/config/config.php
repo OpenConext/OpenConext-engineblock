@@ -75,7 +75,7 @@ $config = array (
 	 * metadata listing and diagnostics pages.
 	 */
 	'auth.adminpassword'		=> $appConfig->auth->simplesamlphp->adminPassword,
-	'admin.protectindexpage'	=> false,
+	'admin.protectindexpage'	=> TRUE,
 	'admin.protectmetadata'		=> false,
 
 	/**
