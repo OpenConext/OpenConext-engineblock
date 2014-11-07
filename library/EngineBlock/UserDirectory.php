@@ -1,4 +1,27 @@
 <?php
+/**
+ * SURFconext EngineBlock
+ *
+ * LICENSE
+ *
+ * Copyright 2011 SURFnet bv, The Netherlands
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and limitations under the License.
+ *
+ * @category  SURFconext EngineBlock
+ * @package
+ * @copyright Copyright ¬© 2010-2011 SURFnet SURFnet bv, The Netherlands (http://www.surfnet.nl)
+ * @license   http://www.apache.org/licenses/LICENSE-2.0  Apache License 2.0
+ */
 
 /**
  * Access to the LDAP directory where all users are provisioned
@@ -20,6 +43,7 @@ class EngineBlock_UserDirectory
     const LDAP_ATTR_COLLAB_PERSON_IS_GUEST          = 'collabpersonisguest';
     const LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING     = 'collabpersonfirstwarningsent';
     const LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING    = 'collabpersonsecondwarningsent';
+    const LDAP_ATTR_COLLAB_PERSON_EPPN              = 'eduPersonPrincipalName';
 
     protected $LDAP_OBJECT_CLASSES = array(
         'collabPerson',
@@ -30,40 +54,91 @@ class EngineBlock_UserDirectory
         'top',
     );
 
-    /**
-     * @var Zend_Ldap
-     */
     protected $_ldapClient = NULL;
 
-    /**
-     * @var Zend_Config
-     */
     protected $_ldapConfig = NULL;
 
-    /**
-     * @param Zend_Config $ldapConfig
-     */
-    public function __construct(Zend_Config $ldapConfig)
+    protected $openConextIdentifierType = NULL;
+
+    public function __construct($ldapConfig)
     {
         $this->_ldapConfig = $ldapConfig;
+
+        // Supported values: collabpersonid, collabpersonuuid and edupersonprincipalname
+        $this->_openConextIdentifierType = $this->getOpenConextIdentifierTypeFromConfig();
     }
 
-    /**
-     * Find a person by it's (collabPerson)Id
-     *
-     * @param $identifier
-     * @return array[]
-     */
-    public function findUsersByIdentifier($identifier)
+    public function findUsersByIdentifier($identifier, $identifierType)
+    {
+        var_dump("<b>findUsersByIdentifier</b><br>");
+
+        switch ($identifierType) {
+            case "CollabPersonId":
+                return $this->findUserByCollabPersonId($identifier);
+                break;
+            case "CollabPersonUuid":
+                return $this->findUserByCollabPersonUuid($identifier);
+                break;
+            case "eduPersonPrincipalName":
+                return $this->findUserByEPPN($identifier);
+                break;
+            default:
+                $message = 'Whoa, an unknown identifierType was provided: "' . $identifierType . '"?!?!?  I only support: CollabPersonId, CollabPersonUuid and ePPN';
+                $e = new EngineBlock_Exception($message);
+                if (!empty($identifier)) {
+                    $e->userId = $identifier;
+                }
+                throw $e;
+        }
+    }
+
+    public function findUserByCollabPersonId($collabPersonId)
     {
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
-        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
+        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $collabPersonId . '))';
+        return $this->_fetchResultsForFilter($filter);
+    }
+
+    // ToDo: This funtion is NOT in use!
+    public function findUserByCollabPersonUuid($collabPersonUuid)
+    {
+        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_UUID . '=' . $collabPersonUuid . '))';
+        return $this->_fetchResultsForFilter($filter);
+    }
+
+    public function findUserByEPPN($ePPN)
+    {
+        var_dump("<b>findUserByEPPN</b><br>");
+
+        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_EPPN . '=' . $ePPN . '))';
+        return $this->_fetchResultsForFilter($filter);
+    }
+
+    public function fetchAll()
+    {
+        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+        return $this->_fetchResultsForFilter($filter);
+    }
+
+    protected function _fetchResultsForFilter($filter, $fields = array())
+    {
+        var_dump("<b>_fetchResultsForFilter</b><br>");
+        var_dump($filter);
+        var_dump("<hr>");
 
         $collection = $this->_getLdapClient()->search(
             $filter,
             null,
-            Zend_Ldap::SEARCH_SCOPE_SUB
+            Zend_Ldap::SEARCH_SCOPE_SUB,
+            $fields
         );
+
+        var_dump("<b>collection:</b><br>");
+        var_dump($collection);
+        var_dump("<hr>");
+
 
         // Convert the result from a Zend_Ldap object to a plain multi-dimensional array
         $result = array();
@@ -80,28 +155,52 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
-    /**
-     * @param array $saml2attributes
-     * @param array $idpEntityMetadata
-     * @return string[]
-     * @throws EngineBlock_Exception
-     */
     public function registerUser(array $saml2attributes, array $idpEntityMetadata)
     {
+
+        var_dump("<b>Entering registerUser</b>");
+
+        var_dump("<b>saml2attributes2</b>");
+        var_dump($saml2attributes);
+        var_dump("<hr>");
+
+
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
+
+        var_dump("<b>ldapAttributes</b>");
+        var_dump($ldapAttributes);
+        var_dump("<hr>");
+
         $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata);
 
-        $uid = $this->_getCollabPersonId($ldapAttributes);
-        $users = $this->findUsersByIdentifier($uid);
+        var_dump("<b>ldapAttributes</b>");
+        var_dump($ldapAttributes);
+        var_dump("<hr>");
+
+        //$uid = $this->_getCollabPersonId($ldapAttributes);
+
+        $uid = $this->_getCollabPersonById($ldapAttributes, $this->_openConextIdentifierType);
+
+        var_dump($uid);
+        var_dump("<hr>");
+        $users = $this->findUsersByIdentifier($uid, $this->_openConextIdentifierType);
+
+        var_dump($users);
+
+        //exit();
+
         try {
             switch (count($users)) {
                 case 1:
+                    var_dump("case 1: updateUser");
                     $user = $this->_updateUser($users[0], $ldapAttributes, $saml2attributes, $idpEntityMetadata);
                     break;
                 case 0:
+                    var_dump("case 0: _addUser");
                     $user = $this->_addUser($ldapAttributes, $saml2attributes, $idpEntityMetadata);
                     break;
                 default:
+                    var_dump("default: probleem!");
                     $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
                     $e = new EngineBlock_Exception($message);
                     $e->userId = $uid;
@@ -119,19 +218,21 @@ class EngineBlock_UserDirectory
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
             }
         }
+
+        //exit();
+
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
 
     /**
-     * Register that this user has a first warning (for automatic account deprovisioning) sent.
+     * Set the first warning sent user attribute
      *
-     * @param $uid
-     * @return mixed
-     * @throws EngineBlock_Exception
+     * @param string $uid
+     * @return string
      */
     public function setUserFirstWarningSent($uid)
     {
-        $users = $this->findUsersByIdentifier($uid);
+        $users = $this->findUsersByIdentifier($uid,$this->_openConextIdentifierType);
 
         // Only update a user
         if (count($users) > 1) {
@@ -143,13 +244,13 @@ class EngineBlock_UserDirectory
         $newAttributes = array();
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING] = 'TRUE';
 
-        $user = $this->_updateUser($users[0], $newAttributes);
+        $user = $this->_updateUser($users[0], $newAttributes, array(), array());
 
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
 
     /**
-     * Register that this user has a second warning (for automatic account deprovisioning) sent.
+     *
      *
      * @throws EngineBlock_Exception
      * @param string $uid
@@ -157,7 +258,7 @@ class EngineBlock_UserDirectory
      */
     public function setUserSecondWarningSent($uid)
     {
-        $users = $this->findUsersByIdentifier($uid);
+        $users = $this->findUsersByIdentifier($uid,$this->_openConextIdentifierType);
 
         // Only update a user
         if (count($users) > 1) {
@@ -169,7 +270,7 @@ class EngineBlock_UserDirectory
         $newAttributes = array();
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING] = 'TRUE';
 
-        $user = $this->_updateUser($users[0], $newAttributes);
+        $user = $this->_updateUser($users[0], $newAttributes, array(), array());
 
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
@@ -189,13 +290,12 @@ class EngineBlock_UserDirectory
     /**
      * Build the user dn based on the UID
      *
-     * @param $uid
-     * @return string
-     * @throws EngineBlock_Exception
+     * @param  $uid
+     * @return null|string
      */
     protected function _buildUserDn($uid)
     {
-        $users = $this->findUsersByIdentifier($uid);
+        $users = $this->findUserByCollabPersonId($uid);
         if (count($users) !== 1) {
             $e = new EngineBlock_Exception("Multiple or no users found for uid $uid?");
             $e->userId = $uid;
@@ -205,7 +305,7 @@ class EngineBlock_UserDirectory
         return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
     }
 
-    protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes)
+    protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata)
     {
         if (!isset($ldapAttributes['cn'])) {
             $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
@@ -217,30 +317,50 @@ class EngineBlock_UserDirectory
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
         }
         $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
-            $saml2attributes
+            $ldapAttributes, $saml2attributes, $idpEntityMetadata
         )? 'TRUE' : 'FALSE');
         return $ldapAttributes;
     }
 
-    protected function _addUser($newAttributes)
+    protected function _addUser($newAttributes, $saml2attributes, $idpEntityMetadata)
     {
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
 
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonId($newAttributes);
+        var_dump("<hr>");
+        var_dump("In addUser");
+        var_dump("<hr>");
+
+
+        var_dump($this->_getCollabPersonHash($newAttributes));
+        var_dump("<hr>");
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonById($newAttributes, $this->_openConextIdentifierType);
+
+        var_dump($newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]);
+        var_dump("<hr>");
+
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_UUID]          = $this->_getCollabPersonUuid($newAttributes);
 
         $now = date(DATE_RFC822);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_REGISTERED]    = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
-        
-        $newAttributes['objectClass'] = $this->LDAP_OBJECT_CLASSES;
 
+
+        $newAttributes['objectClass'] = $this->LDAP_OBJECT_CLASSES;
         $this->_addOrganization($newAttributes['o']);
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
+
+        var_dump("1");
+        var_dump("2");
+        var_dump($dn);
+        var_dump($newAttributes);
+        var_dump("3");
+        var_dump("4");
+
+
         $this->_getLdapClient()->add($dn, $newAttributes);
-        
+
         return $newAttributes;
     }
 
@@ -269,7 +389,7 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
-    protected function _updateUser($user, $newAttributes)
+    protected function _updateUser($user, $newAttributes, $saml2attributes, $idpEntityMetadata)
     {
         // Hackish, apparently LDAP gives us arrays even for single values?
         // So for now we assume arrays with only one value are single valued
@@ -296,19 +416,50 @@ class EngineBlock_UserDirectory
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
         $this->_getLdapClient()->update($dn, $newAttributes);
-        
+
         return $newAttributes;
     }
 
-    protected function _getCollabPersonId($attributes)
+    //protected function _getCollabPersonId($attributes)
+    //{
+    #$uid = str_replace('@', '_', $attributes['uid']);
+    #return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+    //    return $this->_getCollabPersonById($attributes, "CollabPersonId");
+    //}
+
+    protected function _getCollabPersonById($attributes, $identifierType)
     {
-        $uid = str_replace('@', '_', $attributes['uid']);
-        return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+        switch ($identifierType) {
+            case "CollabPersonId":
+                $uid = str_replace('@', '_', $attributes['uid']);
+                return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+                break;
+            case "CollabPersonUuid":
+                return (string)Surfnet_Zend_Uuid::generate();
+                break;
+            case "eduPersonPrincipalName":
+                return $attributes['eduPersonPrincipalName'];
+                break;
+            default:
+                $message = 'Whoa, an unknown identifierType was provided: "' . $identifierType . '"?!?!?  I only support: collabpersonid, collabpersonuuid and edupersonprincipalname';
+                $e = new EngineBlock_Exception($message);
+                if (!empty($identifier)) {
+                    $e->userId = $identifier;
+                }
+                throw $e;
+        }
+
     }
+
+    protected function _getCollabPersonEPPN($attributes)
+    {
+        return $this->_getCollabPersonById($attributes, "ePPN");
+    }
+
 
     protected function _getCollabPersonUuid($attributes)
     {
-        return (string)Surfnet_Zend_Uuid::generate();
+        return $this->_getCollabPersonById($attributes, "CollabPersonUuid");
     }
 
     protected function _getCollabPersonHash($attributes)
@@ -328,10 +479,12 @@ class EngineBlock_UserDirectory
     /**
      * Figure out of a person with given attributes is a guest user.
      *
+     * @param array $attributes
      * @param array $saml2attributes
+     * @param array $idpEntityMetadata
      * @return bool
      */
-    protected function _getCollabPersonIsGuest(array $saml2attributes)
+    protected function _getCollabPersonIsGuest(array $attributes, array $saml2attributes, array $idpEntityMetadata)
     {
         $guestQualifier = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->addgueststatus->guestqualifier;
         return !isset($saml2attributes[self::URN_IS_MEMBER_OF]) || !in_array($guestQualifier, $saml2attributes[self::URN_IS_MEMBER_OF]);
@@ -375,7 +528,7 @@ class EngineBlock_UserDirectory
      * @param  $client
      * @return EngineBlock_UserDirectory
      */
-    public function setLdapClient(Zend_Ldap $client)
+    public function setLdapClient($client)
     {
         $this->_ldapClient = $client;
         return $this;
@@ -407,5 +560,21 @@ class EngineBlock_UserDirectory
     protected function _getSaml2AttributesFieldMapper()
     {
         return new EngineBlock_Saml2Attributes_FieldMapper();
+    }
+
+    protected function getOpenConextIdentifierTypeFromConfig() {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfiguration('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
+
+        $allowValues = array(
+            self::LDAP_ATTR_COLLAB_PERSON_ID,
+            self::LDAP_ATTR_COLLAB_PERSON_UUID,
+            self::LDAP_ATTR_COLLAB_PERSON_EPPN
+        );
+        if (!in_array ($openConextIdentifierType, $allowValues )) {
+            return self::LDAP_ATTR_COLLAB_PERSON_ID;
+        }
+
+        return $openConextIdentifierType;
     }
 }
