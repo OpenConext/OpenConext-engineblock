@@ -65,7 +65,7 @@ class EngineBlock_UserDirectory
         $this->_ldapConfig = $ldapConfig;
 
         // Supported values: collabpersonid, collabpersonuuid and edupersonprincipalname
-        $this->_openConextIdentifierType = $this->getOpenConextIdentifierTypeFromConfig();
+        $this->_openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
     }
 
     public function findUsersByIdentifier($identifier, $identifierType)
@@ -562,7 +562,7 @@ class EngineBlock_UserDirectory
         return new EngineBlock_Saml2Attributes_FieldMapper();
     }
 
-    protected function getOpenConextIdentifierTypeFromConfig() {
+    protected function _getOpenConextIdentifierTypeFromConfig() {
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $openConextIdentifierType = $application->getConfiguration('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
 
