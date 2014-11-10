@@ -4,6 +4,8 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 
 class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    const URN_MACE_TERENA_SCHACHOMEORG = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
+
     /**
      * This command may modify the response attributes
      *
