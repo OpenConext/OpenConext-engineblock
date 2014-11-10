@@ -119,7 +119,22 @@ class EngineBlock_Saml2Attributes_FieldMapper
                 'Missing required SAML2 fields in attributes'
             );
         }
+
+        if ($openConextIdentifierType == self::LDAP_ATTR_COLLAB_PERSON_EPPN) {
+            if (!isset($ldapAttributes['o'])) {
+                $ldapAttributes['o'] = _getDomainFromEppn($ldapAttributes, 'none');
+            }
+        }
         return $ldapAttributes;
+    }
+
+    protected function _getDomainFromEppn($ldapAttributes, $defaultDomain) {
+        if (isset($ldapAttributes['eduPersonPrincipalName'])) {
+            if (strpos($ldapAttributes['eduPersonPrincipalName'],'@') !== false ) {
+                return array_pop(explode('@', $ldapAttributes['eduPersonPrincipalName']));
+            }
+        }
+        return $defaultDomain;
     }
 
     protected function _getOpenConextIdentifierTypeFromConfig() {
