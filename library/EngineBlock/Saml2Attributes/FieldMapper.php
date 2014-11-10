@@ -17,7 +17,7 @@ class EngineBlock_Saml2Attributes_FieldMapper
     );
 
     protected $_saml2RequiredEPPN = array(
-        'urn:mace:dir:attribute-def:eduPersonPrincipalName'             => 'eduPersonPrincipalName',
+        'urn:mace:dir:attribute-def:eduPersonPrincipalName',
     );
 
     /**
