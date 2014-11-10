@@ -6,9 +6,18 @@ class EngineBlock_Exception_MissingRequiredFields extends EngineBlock_Exception 
 
 class EngineBlock_Saml2Attributes_FieldMapper
 {
-    protected $_saml2Required = array(
+    const URN_MACE_TERENA_SCHACHOMEORG = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
+    const LDAP_ATTR_COLLAB_PERSON_ID                = 'collabpersonid';
+    const LDAP_ATTR_COLLAB_PERSON_UUID              = 'collabpersonuuid';
+    const LDAP_ATTR_COLLAB_PERSON_EPPN              = 'eduPersonPrincipalName';
+
+    protected $_saml2RequiredShoUid = array(
         'urn:mace:dir:attribute-def:uid',
         'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+    );
+
+    protected $_saml2RequiredEPPN = array(
+        'urn:mace:dir:attribute-def:eduPersonPrincipalName'             => 'eduPersonPrincipalName',
     );
 
     /**
@@ -74,7 +83,13 @@ class EngineBlock_Saml2Attributes_FieldMapper
     {
         $log = EngineBlock_ApplicationSingleton::getLog();
 
-        $required = $this->_saml2Required;
+        $openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
+
+        if ($openConextIdentifierType != self::LDAP_ATTR_COLLAB_PERSON_EPPN) {
+            $required = $this->_saml2RequiredShoUid;
+        } else {
+            $required = $this->_saml2RequiredEPPN;
+        }
         $ldapAttributes = array();
         foreach ($attributes as $saml2Name => $values) {
             // Map it to an LDAP attribute
@@ -105,5 +120,21 @@ class EngineBlock_Saml2Attributes_FieldMapper
             );
         }
         return $ldapAttributes;
+    }
+
+    protected function _getOpenConextIdentifierTypeFromConfig() {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
+
+        $allowValues = array(
+            self::LDAP_ATTR_COLLAB_PERSON_ID,
+            self::LDAP_ATTR_COLLAB_PERSON_UUID,
+            self::LDAP_ATTR_COLLAB_PERSON_EPPN
+        );
+        if (!in_array ($openConextIdentifierType, $allowValues )) {
+            return self::LDAP_ATTR_COLLAB_PERSON_ID;
+        }
+
+        return $openConextIdentifierType;
     }
 }
