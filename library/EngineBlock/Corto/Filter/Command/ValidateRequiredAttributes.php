@@ -4,11 +4,6 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 
 class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const URN_MACE_TERENA_SCHACHOMEORG = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
-    const LDAP_ATTR_COLLAB_PERSON_ID                = 'collabpersonid';
-    const LDAP_ATTR_COLLAB_PERSON_UUID              = 'collabpersonuuid';
-    const LDAP_ATTR_COLLAB_PERSON_EPPN              = 'eduPersonPrincipalName';
-
     /**
      * This command may modify the response attributes
      *
@@ -29,7 +24,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
 
         $openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
 
-        if ($openConextIdentifierType != self::LDAP_ATTR_COLLAB_PERSON_EPPN) {
+        if ($openConextIdentifierType != 'eduPersonPrincipalName') {
             if (isset($this->_idpMetadata['SchacHomeOrganization'])) {
                 // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
                 $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
@@ -178,15 +173,15 @@ urn:oid:1.3.6.1.4.1.5923.1.1.1.6
 
     protected function _getOpenConextIdentifierTypeFromConfig() {
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
 
         $allowValues = array(
-            self::LDAP_ATTR_COLLAB_PERSON_ID,
-            self::LDAP_ATTR_COLLAB_PERSON_UUID,
-            self::LDAP_ATTR_COLLAB_PERSON_EPPN
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
         );
         if (!in_array ($openConextIdentifierType, $allowValues )) {
-            return self::LDAP_ATTR_COLLAB_PERSON_ID;
+            return 'CollabPersonId';
         }
 
         return $openConextIdentifierType;

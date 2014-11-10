@@ -64,7 +64,7 @@ class EngineBlock_UserDirectory
     {
         $this->_ldapConfig = $ldapConfig;
 
-        // Supported values: collabpersonid, collabpersonuuid and edupersonprincipalname
+        // Supported values: CollabPersonId, CollabPersonUuid and eduPersonPrincipalName
         $this->_openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
     }
 
@@ -504,15 +504,15 @@ class EngineBlock_UserDirectory
 
     protected function _getOpenConextIdentifierTypeFromConfig() {
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType','CollabPersonId');
 
         $allowValues = array(
-            self::LDAP_ATTR_COLLAB_PERSON_ID,
-            self::LDAP_ATTR_COLLAB_PERSON_UUID,
-            self::LDAP_ATTR_COLLAB_PERSON_EPPN
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
         );
         if (!in_array ($openConextIdentifierType, $allowValues )) {
-            return self::LDAP_ATTR_COLLAB_PERSON_ID;
+            return 'CollabPersonId';
         }
 
         return $openConextIdentifierType;

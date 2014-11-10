@@ -6,11 +6,6 @@ class EngineBlock_Exception_MissingRequiredFields extends EngineBlock_Exception 
 
 class EngineBlock_Saml2Attributes_FieldMapper
 {
-    const URN_MACE_TERENA_SCHACHOMEORG = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
-    const LDAP_ATTR_COLLAB_PERSON_ID                = 'collabpersonid';
-    const LDAP_ATTR_COLLAB_PERSON_UUID              = 'collabpersonuuid';
-    const LDAP_ATTR_COLLAB_PERSON_EPPN              = 'eduPersonPrincipalName';
-
     protected $_saml2RequiredShoUid = array(
         'urn:mace:dir:attribute-def:uid',
         'urn:mace:terena.org:attribute-def:schacHomeOrganization',
@@ -85,7 +80,7 @@ class EngineBlock_Saml2Attributes_FieldMapper
 
         $openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
 
-        if ($openConextIdentifierType != self::LDAP_ATTR_COLLAB_PERSON_EPPN) {
+        if ($openConextIdentifierType != 'eduPersonPrincipalName') {
             $required = $this->_saml2RequiredShoUid;
         } else {
             $required = $this->_saml2RequiredEPPN;
@@ -139,15 +134,15 @@ class EngineBlock_Saml2Attributes_FieldMapper
 
     protected function _getOpenConextIdentifierTypeFromConfig() {
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
 
         $allowValues = array(
-            self::LDAP_ATTR_COLLAB_PERSON_ID,
-            self::LDAP_ATTR_COLLAB_PERSON_UUID,
-            self::LDAP_ATTR_COLLAB_PERSON_EPPN
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
         );
         if (!in_array ($openConextIdentifierType, $allowValues )) {
-            return self::LDAP_ATTR_COLLAB_PERSON_ID;
+            return 'CollabPersonId';
         }
 
         return $openConextIdentifierType;
