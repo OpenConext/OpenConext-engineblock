@@ -178,7 +178,7 @@ urn:oid:1.3.6.1.4.1.5923.1.1.1.6
 
     protected function _getOpenConextIdentifierTypeFromConfig() {
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        $openConextIdentifierType = $application->getConfiguration('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', self::LDAP_ATTR_COLLAB_PERSON_ID);
 
         $allowValues = array(
             self::LDAP_ATTR_COLLAB_PERSON_ID,
