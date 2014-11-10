@@ -122,7 +122,7 @@ class EngineBlock_Saml2Attributes_FieldMapper
 
         if ($openConextIdentifierType == self::LDAP_ATTR_COLLAB_PERSON_EPPN) {
             if (!isset($ldapAttributes['o'])) {
-                $ldapAttributes['o'] = _getDomainFromEppn($ldapAttributes, 'none');
+                $ldapAttributes['o'] = $this->_getDomainFromEppn($ldapAttributes, 'none');
             }
         }
         return $ldapAttributes;
