@@ -115,7 +115,7 @@ class EngineBlock_Saml2Attributes_FieldMapper
             );
         }
 
-        if ($openConextIdentifierType == self::LDAP_ATTR_COLLAB_PERSON_EPPN) {
+        if ($openConextIdentifierType == 'eduPersonPrincipalName') {
             if (!isset($ldapAttributes['o'])) {
                 $ldapAttributes['o'] = $this->_getDomainFromEppn($ldapAttributes, 'none');
             }
