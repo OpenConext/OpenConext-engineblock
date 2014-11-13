@@ -367,81 +367,83 @@ class EngineBlock_Corto_Adapter
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
-        $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:mail',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
 
-            // DisplayName (example: John Doe)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:displayName',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
+        $openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
+        if ($openConextIdentifierType != 'eduPersonPrincipalName') {
+            $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:mail',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // DisplayName (example: John Doe)
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:displayName',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // Surname (example: Doe)
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:sn',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // Given name (example: John)
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:givenName',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                ),
+                // SchachomeOrganization
+                array(
+                    'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    'Required' => true
+                ),
+                // SchachomeOrganizationType
+                array(
+                    'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganizationType',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // UID (example: john.doe)
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:uid',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    'Required' => true
+                ),
+                // Cn
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:cn',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // EduPersonAffiliation
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:eduPersonAffiliation',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // eduPersonEntitlement
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:eduPersonEntitlement',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // eduPersonPrincipalName
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:eduPersonPrincipalName',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                ),
+                // preferredLanguage
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:preferredLanguage',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
+                )
+            );
+        } else {
+            $remoteEntities[$spEntityId]['RequestedAttributes'] = array(
+                // eduPersonPrincipalName
+                array(
+                    'Name' => 'urn:mace:dir:attribute-def:eduPersonPrincipalName',
+                    'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+                    'Required' => true
+                )
+            );
 
-            // Surname (example: Doe)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:sn',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // Given name (example: John)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:givenName',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-            ),
-
-            // SchachomeOrganization
-            array(
-                'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true
-            ),
-
-            // SchachomeOrganizationType
-            array(
-                'Name' => 'urn:mace:terena.org:attribute-def:schacHomeOrganizationType',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-
-            // UID (example: john.doe)
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:uid',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-                'Required' => true
-            ),
-
-            // Cn
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:cn',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // EduPersonAffiliation
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:eduPersonAffiliation',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // eduPersonEntitlement
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:eduPersonEntitlement',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // eduPersonPrincipalName
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:eduPersonPrincipalName',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            ),
-
-            // preferredLanguage
-            array(
-                'Name' => 'urn:mace:dir:attribute-def:preferredLanguage',
-                'NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri'
-            )
-        );
+        }
 
         // Store current entities separate from remote entities
         $proxyServer->setCurrentEntities(array(
@@ -636,5 +638,21 @@ class EngineBlock_Corto_Adapter
         }
 
         return $proxyServer->getSigningCertificates();
+    }
+
+    protected function _getOpenConextIdentifierTypeFromConfig() {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
+
+        $allowValues = array(
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
+        );
+        if (!in_array ($openConextIdentifierType, $allowValues )) {
+            return 'CollabPersonId';
+        }
+
+        return $openConextIdentifierType;
     }
 }
