@@ -32,19 +32,18 @@ class EngineBlock_Log extends Zend_Log
     static public function encodeAttachments(array $attachments)
     {
         foreach ($attachments as $key => $attachment) {
-            if (!is_string($attachment['message'])) {
-                // allow more using memory to decode large objects
-                ini_set('memory_limit', '256M');
-
-                $attachment['message'] = print_r($attachment['message'], true);
-
-                if (strlen($attachment['message']) > 128*1024) {
-                    $attachment['message'] = substr($attachment['message'], 0, 128*1024)
-                                            . '... (message truncated to 128K)';
-                }
-                
-                $attachments[$key] = $attachment;
+            if (is_string($attachment['message'])) {
+                continue;
             }
+
+            $attachment['message'] = print_r($attachment['message'], true);
+
+            if (strlen($attachment['message']) > 128*1024) {
+                $attachment['message'] = substr($attachment['message'], 0, 128*1024)
+                                        . '... (message truncated to 128K)';
+            }
+
+            $attachments[$key] = $attachment;
         }
 
         return $attachments;
