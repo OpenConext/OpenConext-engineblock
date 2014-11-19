@@ -133,12 +133,12 @@ class EngineBlock_ApplicationSingleton
             $severity = EngineBlock_Log::ERR;
         }
 
-        $log->attach($this->getFormattedTrace($exception), 'trace');
+        $log->attach((string) $exception, 'trace');
 
         // attach previous exceptions
         $prevException = $exception;
         while ($prevException = $prevException->getPrevious()) {
-            $log->attach($this->getFormattedTrace($prevException), 'previous exception');
+            $log->attach((string) $prevException, 'previous exception');
         }
 
         $message = $exception->getMessage();
@@ -167,56 +167,6 @@ class EngineBlock_ApplicationSingleton
         $log->getQueueWriter()->flush('error caught');
 
         return true;
-    }
-
-    /**
-     * Get a formatted trace, almost like the native PHP format, but without method arguments.
-     *
-     * This is used to conserve memory as printing EB objects are very interdependent and printing them wil likely
-     * cause an Out Of Memory Exception.
-     * @see https://github.com/OpenConext/OpenConext-engineblock/issues/71
-     *
-     * @param Exception $e
-     * @return string
-     */
-    private function getFormattedTrace(Exception $e)
-    {
-        $traceLines = $e->getTrace();
-
-        $output = "";
-        $lineNumber = 0;
-
-        foreach ($traceLines as $lineNumber => $traceLine) {
-            // Start the output for this line with:
-            // #0 /opt/openconext/OpenConext-engineblock/library/EngineBlock/ApplicationSingleton.php (190)
-            $output .= "#$lineNumber {$traceLine['file']}({$traceLine['line']}): ";
-
-            // Append either the class, method dispatch type and function name:
-            // EngineBlock_ApplicationSingleton->getFormattedTrace
-            if (!empty($traceLine['class']) && !empty($traceLine['type']) && !empty($traceLine['function'])) {
-                $output .= $traceLine['class'] . $traceLine['type'] . $traceLine['function'];
-            }
-            // Or just the function call
-            else if (!empty($traceLine['function'])) {
-                $output .= $traceLine['function'];
-            }
-            else {
-                // Note that there is no specification for this format and I'm not entirely sure this
-                // gets all edge cases.
-                // So for now we output something greppable so we can fix this when we know more.
-                $output .= '{TRACE_UNKNOWN_TYPE}';
-            }
-
-            // End each line with a simple newline.
-            $output .= PHP_EOL;
-        }
-
-        // Append the last lineNumber to be {main} with another greppable identifier so a clue is given that while this
-        // may look like the normal getTraceAsString output, it certainly is not.
-        $lineNumber = $lineNumber + 1;
-        $output .= "#$lineNumber {main} -- OpenConext EngineBlock Error Logging";
-
-        return $output;
     }
 
     /**
