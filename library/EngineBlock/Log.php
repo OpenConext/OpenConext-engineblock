@@ -31,20 +31,14 @@ class EngineBlock_Log extends Zend_Log
      */
     static public function encodeAttachments(array $attachments)
     {
+        $messageLimit = 128 * 1024;
         foreach ($attachments as $key => $attachment) {
-            if (!is_string($attachment['message'])) {
-                // allow more using memory to decode large objects
-                ini_set('memory_limit', '256M');
-
-                $attachment['message'] = print_r($attachment['message'], true);
-
-                if (strlen($attachment['message']) > 128*1024) {
-                    $attachment['message'] = substr($attachment['message'], 0, 128*1024)
-                                            . '... (message truncated to 128K)';
-                }
-                
-                $attachments[$key] = $attachment;
+            if (strlen($attachment['message']) > $messageLimit) {
+                $attachment['message'] = substr($attachment['message'], 0, $messageLimit);
+                $attachment['message'] .= '... (message truncated to 128K)';
             }
+
+            $attachments[$key] = $attachment;
         }
 
         return $attachments;
@@ -218,18 +212,26 @@ class EngineBlock_Log extends Zend_Log
     }
 
     /**
-     * Add data to append serialized after next log message
-     *  - if log() is not called after attach(), data is discarded
+     * Add message to append serialized after next log message
      *
-     * @param mixed $data
+     * Note:
+     * - if log() is not called after attach(), data is discarded.
+     * - you MAY pass non-strings and attach, it will attempt to cast to string and finally do a json_encode.
+     *   if this doesn't fit your needs, please do serialization before calling attach.
+     *
+     * @param mixed $message
      * @param string $name
      * @return EngineBlock_Log
      */
-    public function attach($data, $name)
+    public function attach($message, $name)
     {
+        if (is_object($message) && method_exists($message, '__toString')) {
+            $message = (string) $message;
+        }
+
         $this->_attachments[] = array(
-            'name' => $name,
-            'message' => $data,
+            'name'      => $name,
+            'message'   => json_encode($message),
         );
 
         return $this;

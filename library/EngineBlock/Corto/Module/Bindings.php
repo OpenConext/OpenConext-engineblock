@@ -412,7 +412,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $action = $sspMessage->getDestination();
 
             $log = $this->_server->getSessionLog();
-            $log->attach($message, 'SAML message')
+            $log->attach($xml, 'SAML message')
                 ->info('HTTP-Post: Sending Message');
 
             $output = $this->_server->renderTemplate(

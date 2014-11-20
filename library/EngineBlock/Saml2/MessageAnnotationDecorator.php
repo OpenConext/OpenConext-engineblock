@@ -104,4 +104,16 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
         }
         throw new \RuntimeException('Unknown message type?!');
     }
+
+    /**
+     * Dump a string representation of this annotated message used for debugging.
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        $vars = get_object_vars($this);
+        $vars['sspMessage'] = $this->sspMessage->toUnsignedXML()->ownerDocument->saveXML();
+        return json_encode($vars);
+    }
 }
