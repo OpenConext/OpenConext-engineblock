@@ -36,13 +36,13 @@ return array(
     'error_header'              => 'Error',
 
     //Footer
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28EN%%29">Terms of Service</a>',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
 
     //Help
     'help_header'           => 'Help',
     'help_description'      => '<p>Check the FAQ below if you have any questions about this screen or about SURFconext.</p>
 
-    <p>For more detailed information, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
+    <p>For more detailed information, please visit <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a>
         or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
     'close_question'        =>      'Close',
@@ -63,7 +63,7 @@ return array(
 <br />
 Personal details are only provided to a service provider if these details are needed to use the service. Contractual agreements between your institution, SURFconext and the service provider guarantee that your personal details will be handled and processed with care.<br />
 <br />
-If you have any questions about your privacy and the policy applied, please visit <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a> for more information or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+If you have any questions about your privacy and the policy applied, please visit <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a> for more information or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
 
     	// consent help questions
@@ -183,7 +183,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'error_404'                         => '404 Page not found',
     'error_404_desc'                    => 'This page has not been found.',
     'error_help_desc'               => 'If this does not solve your problem, please visit
-        <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">the SURFconext support page</a>
+        <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a>
         or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.',
     'error_no_consent'              => 'Unable to continue to service',
     'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
@@ -286,5 +286,5 @@ If you want to use this application you have to:<br />
 
     // Logout
     'logout_description' => 'This application uses centralized log in, which provides single sign on for several applications. To be sure your log out is 100%% secure you should close your browser completely.',
-    'logout_information_link' => '<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Log+out+SURFconext">More information about secure log out</a>',
+    'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Log+out+SURFconext">More information about secure log out</a>',
 );
