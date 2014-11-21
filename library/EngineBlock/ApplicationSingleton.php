@@ -133,7 +133,7 @@ class EngineBlock_ApplicationSingleton
             $severity = EngineBlock_Log::ERR;
         }
 
-        $log->attach($exception->getTraceAsString(), 'trace');
+        $log->attach($exception, 'trace');
 
         // attach previous exceptions
         $prevException = $exception;
