@@ -35,13 +35,13 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Terms+of+Service+%%28NL%%29">Gebruiksvoorwaarden</a>',
+    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help_header'           => 'Help',
     'help_description'      => '<p>Heb je vragen over dit scherm of de SURFconext dienstverlening, bekijk dan de antwoorden bij de FAQ hieronder.</p>
 
-    <p>Staat je vraag er niet bij, of ben je niet tevreden met een antwoord? Bezoek dan <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a> of stuur een mail naar <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
+    <p>Staat je vraag er niet bij, of ben je niet tevreden met een antwoord? Bezoek dan <a href="https://wiki.surfnet.nl/display/conextsupport/">de SURFconext support pagina</a> of stuur een mail naar <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
     'close_question'        =>      'Sluit',
 
@@ -61,7 +61,7 @@ return array(
 <br />
 Persoonsgegevens worden alleen verstrekt aan een dienstaanbieder wanneer dat noodzakelijk is voor het gebruik van de dienst. Contractuele afspraken tussen jouw instelling, SURFnet en de dienstaanbieder waarborgen dat er zorgvuldig wordt omgegaan met jouw persoonsgegevens.<br />
 <br />
-Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lezen op <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de SURFconext support pagina</a>. Heb je vragen ten aanzien van het privacybeleid van SURFconext, mail deze dan naar de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lezen op <a href="https://wiki.surfnet.nl/display/conextsupport/">de SURFconext support pagina</a>. Heb je vragen ten aanzien van het privacybeleid van SURFconext, mail deze dan naar de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
 
     	// consent help questions
@@ -184,7 +184,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_404'                         => '404 Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',
     'error_help_desc'                   => '<p>
-        Bezoek <a href="https://wiki.surfnetlabs.nl/display/conextsupport/">de support pagina</a> als dit uw probleem niet oplost.
+        Bezoek <a href="https://wiki.surfnet.nl/display/conextsupport/">de support pagina</a> als dit uw probleem niet oplost.
         Op deze pagina vindt u meer informatie over de mogelijke oorzaken en hoe u contact kan opnemen met het support team.
     </p>',
     'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
@@ -289,5 +289,5 @@ Als u deze applicatie wilt gebruiken moet u:<br />
 
     // Logout
     'logout_description' => 'Deze applicatie maakt gebruik van centrale login. Hiermee is het mogelijk om met single sign on bij verschillende applicaties in te loggen. Om er 100%% zeker van te zijn dat je uitgelogd bent, moet je de browser helemaal afsluiten.',
-    'logout_information_link' => '<a href="https://wiki.surfnetlabs.nl/display/conextsupport/Uitloggen+SURFconext">Meer informatie over veilig uitloggen</a>',
+    'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Uitloggen+SURFconext">Meer informatie over veilig uitloggen</a>',
 );
