@@ -42,12 +42,17 @@ class EngineBlock_UserDirectory
      */
     protected $_ldapConfig = NULL;
 
+    protected $openConextIdentifierType = NULL;
+
     /**
      * @param Zend_Config $ldapConfig
      */
     public function __construct(Zend_Config $ldapConfig)
     {
         $this->_ldapConfig = $ldapConfig;
+
+        // Supported values: CollabPersonId, CollabPersonUuid and eduPersonPrincipalName
+        $this->_openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
     }
 
     /**
@@ -58,9 +63,29 @@ class EngineBlock_UserDirectory
      */
     public function findUsersByIdentifier($identifier)
     {
-        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
-        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
-
+        switch ($this->_openConextIdentifierType) {
+            case "CollabPersonId":
+                $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+                $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
+                break;
+            case "CollabPersonUuid":
+                $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+                $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_UUID . '=' . $identifier . '))';
+                break;
+            case "eduPersonPrincipalName":
+                $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+                $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_EPPN . '=' . $identifier . '))';
+                break;
+            default:
+                $message = 'Whoa, an unknown identifierType was provided: "' .
+                    $this->_openConextIdentifierType .
+                    '"?!?!?  I only support: CollabPersonId, CollabPersonUuid and ePPN';
+                $openConextIdentifierTypeError = new EngineBlock_Exception($message);
+                if (!empty($identifier)) {
+                    $openConextIdentifierTypeError->userId = $identifier;
+                }
+                throw $openConextIdentifierTypeError;
+        }
         $collection = $this->_getLdapClient()->search(
             $filter,
             null,
@@ -403,5 +428,22 @@ class EngineBlock_UserDirectory
     protected function _getSaml2AttributesFieldMapper()
     {
         return new EngineBlock_Saml2Attributes_FieldMapper();
+    }
+
+    protected function _getOpenConextIdentifierTypeFromConfig()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
+
+        $allowValues = array(
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
+        );
+        if (!in_array($openConextIdentifierType, $allowValues)) {
+            return 'CollabPersonId';
+        }
+
+        return $openConextIdentifierType;
     }
 }

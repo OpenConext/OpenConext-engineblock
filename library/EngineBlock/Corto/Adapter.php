@@ -563,20 +563,27 @@ class EngineBlock_Corto_Adapter
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
-        $engineServiceProvider->requestedAttributes = array(
-            new RequestedAttribute('urn:mace:dir:attribute-def:mail'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:displayName'), // DisplayName (example: John Doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:sn'), // Surname (example: Doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:givenName'), // Given name (example: John)
-            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganization', true),
-            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganizationType', true),
-            new RequestedAttribute('urn:mace:dir:attribute-def:uid', true), // UID (example: john.doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:cn'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonAffiliation'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonEntitlement'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
-        );
+        $openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
+        if ($openConextIdentifierType != 'eduPersonPrincipalName') {
+            $engineServiceProvider->requestedAttributes = array(
+                new RequestedAttribute('urn:mace:dir:attribute-def:mail'),
+                new RequestedAttribute('urn:mace:dir:attribute-def:displayName'), // DisplayName (example: John Doe)
+                new RequestedAttribute('urn:mace:dir:attribute-def:sn'), // Surname (example: Doe)
+                new RequestedAttribute('urn:mace:dir:attribute-def:givenName'), // Given name (example: John)
+                new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganization', true),
+                new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganizationType', true),
+                new RequestedAttribute('urn:mace:dir:attribute-def:uid', true), // UID (example: john.doe)
+                new RequestedAttribute('urn:mace:dir:attribute-def:cn'),
+                new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonAffiliation'),
+                new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonEntitlement'),
+                new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
+                new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
+            );
+        } else {
+            $engineServiceProvider->requestedAttributes = array(
+                new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonEntitlement', true),
+            );
+        }
         $engineServiceProvider->responseProcessingService = new Service(
             $proxyServer->getUrl('provideConsentService'),
             'INTERNAL'
@@ -592,5 +599,20 @@ class EngineBlock_Corto_Adapter
         );
         $metadataRepository->appendRepository($ownMetadataRepository);
         return $metadataRepository;
+    }
+    protected function _getOpenConextIdentifierTypeFromConfig() {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
+
+        $allowValues = array(
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
+        );
+        if (!in_array ($openConextIdentifierType, $allowValues )) {
+            return 'CollabPersonId';
+        }
+
+        return $openConextIdentifierType;
     }
 }

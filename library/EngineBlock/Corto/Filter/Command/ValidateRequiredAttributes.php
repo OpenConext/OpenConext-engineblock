@@ -24,23 +24,35 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     {
         $errors = array();
 
-        if ($this->_identityProvider->schacHomeOrganization) {
-            // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
-            $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
-                $this->_identityProvider->schacHomeOrganization
-            );
-        }
-        else {
-            $error = $this->_requireValidSchacHomeOrganization($this->_responseAttributes);
+        $openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
+
+        if ($openConextIdentifierType != 'eduPersonPrincipalName') {
+            if ($this->_identityProvider->schacHomeOrganization) {
+                // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
+                $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
+                    $this->_identityProvider->schacHomeOrganization
+                );
+            }
+            else {
+                $error = $this->_requireValidSchacHomeOrganization($this->_responseAttributes);
+                if ($error) {
+                    $errors[] = $error;
+                }
+            }
+
+            $error = $this->_requireValidUid($this->_responseAttributes);
+            if ($error) {
+                $errors[] = $error;
+            }
+        } else {
+            $error = $this->_requireValidEppn($this->_responseAttributes);
             if ($error) {
                 $errors[] = $error;
             }
         }
 
-        $error = $this->_requireValidUid($this->_responseAttributes);
-        if ($error) {
-            $errors[] = $error;
-        }
+
+
 
         if (!empty($errors)) {
             throw new EngineBlock_Corto_Exception_MissingRequiredFields(
@@ -119,5 +131,49 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
             return "urn:mace:dir:attribute-def:uid is more than 256 characters long!";
         }
         return false;
+    }
+    protected function _requireValidEppn($responseAttributes)
+    {
+        /*
+         * urn:mace:dir:attribute-def:eduPersonPrincipalName urn:oid:1.3.6.1.4.1.5923.1.1.1.6
+         */
+        if (!isset($responseAttributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'])) {
+            return "urn:mace:dir:attribute-def:eduPersonPrincipalNae missing in attributes!";
+        }
+
+        if (count($responseAttributes['urn:mace:dir:attribute-def:eduPersonPrincipalName']) === 0) {
+            return "urn:mace:dir:attribute-def:eduPersonPrincipalName has no values";
+        }
+
+        if (count($responseAttributes['urn:mace:dir:attribute-def:eduPersonPrincipalName']) > 1) {
+            return "urn:mace:dir:attribute-def:eduPersonPrincipalName has more than one value";
+        }
+
+        $eppn = $responseAttributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0];
+        // Length 128 taken from https://www.educause.edu/fidm/attributes
+        // Note that this is a bit naive as the spec states that this can be 128 characters
+        // of UTF-8, so in theory a person could have a uid of 100 kanji characters (which take up 3 bytes)
+        // and our check would fail, even though it is completely valid.
+        // But we'll cross that ブリッジ when we get to it.
+        if (strlen($eppn) > 128) {
+            return "urn:mace:dir:attribute-def:eduPersonPrincipalName is more than 128 characters long!";
+        }
+        return false;
+    }
+
+    protected function _getOpenConextIdentifierTypeFromConfig() {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
+
+        $allowValues = array(
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
+        );
+        if (!in_array ($openConextIdentifierType, $allowValues )) {
+            return 'CollabPersonId';
+        }
+
+        return $openConextIdentifierType;
     }
 }
