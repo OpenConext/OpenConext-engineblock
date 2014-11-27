@@ -36,6 +36,7 @@ if (!in_array($lang, array('nl','en'))) {
     $lang = 'en';
 }
 
+// @todo move to entity (see also duplicate in consent.phtml)
 if ($lang === 'nl') {
     if ($metaDataSP->nameNl) {
         $spDisplayName = $metaDataSP->nameNl;
@@ -72,7 +73,7 @@ if ($preselectedIdp) {
             $preselectedIdpData = $idp;
             $preselectedIdpName = $preselectedIdpData['Name_'.$lang];
             if (empty($preselectedIdpName)) {
-                $preselectedIdpName = $preselectedIdpData['Name'.$fallback_lang];
+                $preselectedIdpName = $preselectedIdpData['Name_en'];
             }
             break;
         }
