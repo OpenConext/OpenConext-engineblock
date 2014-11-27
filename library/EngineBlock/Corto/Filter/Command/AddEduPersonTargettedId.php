@@ -21,7 +21,7 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
             $this->_serviceProvider,
             $this->_request,
-            $this->_server
+            $this->_server->getRepository()
         );
 
         // Resolve what NameID we should send the destination.
