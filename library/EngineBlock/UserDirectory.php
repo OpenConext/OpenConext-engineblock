@@ -22,6 +22,7 @@ class EngineBlock_UserDirectory
     const LDAP_ATTR_COLLAB_PERSON_IS_GUEST          = 'collabpersonisguest';
     const LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING     = 'collabpersonfirstwarningsent';
     const LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING    = 'collabpersonsecondwarningsent';
+    const LDAP_ATTR_EDU_PERSON_EPPN              = 'eduPersonPrincipalName';
 
     protected $LDAP_OBJECT_CLASSES = array(
         'collabPerson',
@@ -74,7 +75,7 @@ class EngineBlock_UserDirectory
                 break;
             case "eduPersonPrincipalName":
                 $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
-                $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_EPPN . '=' . $identifier . '))';
+                $filter .= '(' . self::LDAP_ATTR_EDU_PERSON_EPPN . '=' . $identifier . '))';
                 break;
             default:
                 $message = 'Whoa, an unknown identifierType was provided: "' .
