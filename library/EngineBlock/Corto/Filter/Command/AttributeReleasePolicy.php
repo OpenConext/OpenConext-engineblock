@@ -19,11 +19,15 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
         $attributes = $this->_responseAttributes;
 
         // Get the Requester chain, which starts at the oldest (farthest away from us SP) and ends with our next hop.
-        $requesterChain = EngineBlock_SamlHelper::getSpRequesterChain($this->_serviceProvider, $this->_request, $this->_server);
+        $requesterChain = EngineBlock_SamlHelper::getSpRequesterChain(
+            $this->_serviceProvider,
+            $this->_request,
+            $this->_server->getRepository()
+        );
         // Note that though we should traverse in reverse ordering, it doesn't make a difference.
         // A then B filter or B then A filter are equivalent.
         foreach ($requesterChain as $spMetadata) {
-            $spEntityId = $spMetadata['EntityID'];
+            $spEntityId = $spMetadata->entityId;
 
             $arp = $this->getMetadataRepository()->fetchServiceProviderArp($this->_serviceProvider);
 

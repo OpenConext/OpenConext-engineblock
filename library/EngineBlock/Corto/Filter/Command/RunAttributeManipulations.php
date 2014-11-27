@@ -52,7 +52,7 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
                 $this->_request,
                 $this->_server->getRepository()
             );
-            if ($entity) {
+            if (!$entity) {
                 return;
             }
             $serviceProvider = $entity;

@@ -22,7 +22,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $isDebugModeEnabled = $this->_server->getConfig('debug', false);
         $isAdditionalLoggingRequired = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
-            EngineBlock_SamlHelper::getSpRequesterChain($sp, $request, $this->_server->getRepository())
+            EngineBlock_SamlHelper::getSpRequesterChain(
+                $sp,
+                $request,
+                $this->_server->getRepository()
+            )
         );
 
         if ($isDebugModeEnabled || $isAdditionalLoggingRequired) {
