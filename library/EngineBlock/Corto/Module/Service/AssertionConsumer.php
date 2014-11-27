@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
@@ -8,8 +10,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
         // Flush log if SP or IdP has additional logging enabled
-        $sp = $this->_server->getRemoteEntity($receivedRequest->getIssuer());
-        $idp = $this->_server->getRemoteEntity($receivedResponse->getIssuer());
+        $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+        $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
         if (
             $this->_server->getConfig('debug', false) ||
             EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))
@@ -36,8 +38,9 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
-        $processingEntities = $this->_getReceivedResponseProcessingEntities($receivedRequest);
+        $processingEntities = $this->_server->getConfig('Processing', array());
         if (!empty($processingEntities)) {
+            /** @var AbstractConfigurationEntity $firstProcessingEntity */
             $firstProcessingEntity = array_shift($processingEntities);
             $_SESSION['Processing'][$receivedRequest->getId()]['RemainingEntities']   = $processingEntities;
             $_SESSION['Processing'][$receivedRequest->getId()]['OriginalDestination'] = $receivedResponse->getDestination();
@@ -49,8 +52,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 
             // Change the destiny of the received response
             $newResponse->setInResponseTo($receivedResponse->getInResponseTo());
-            $newResponse->setDestination($firstProcessingEntity['Location']);
-            $newResponse->setDeliverByBinding($firstProcessingEntity['Binding']);
+            $newResponse->setDestination($firstProcessingEntity->responseProcessingService->location);
+            $newResponse->setDeliverByBinding($firstProcessingEntity->responseProcessingService->binding);
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
@@ -66,20 +69,5 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
             $this->_server->sendResponseToRequestIssuer($receivedRequest, $newResponse);
         }
-    }
-
-    protected function _getReceivedResponseProcessingEntities(
-        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest
-    ) {
-        $currentEntityProcessing = $this->_server->getConfig('Processing', array());
-
-        $remoteEntity = $this->_server->getRemoteEntity($receivedRequest->getIssuer());
-
-        $processing = $currentEntityProcessing;
-        if (isset($remoteEntity['Processing'])) {
-            $processing += $remoteEntity['Processing'];
-        }
-
-        return $processing;
     }
 }

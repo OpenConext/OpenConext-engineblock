@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Corto_Model_Consent
 {
     /**
@@ -48,7 +50,7 @@ class EngineBlock_Corto_Model_Consent
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
     }
 
-    public function hasStoredConsent($spMetadata)
+    public function hasStoredConsent(ServiceProviderEntity $serviceProvider)
     {
         try {
             $dbh = $this->_getConsentDatabaseConnection();
@@ -62,7 +64,7 @@ class EngineBlock_Corto_Model_Consent
             $hashedUserId = sha1($this->_getConsentUid());
             $parameters = array(
                 $hashedUserId,
-                $spMetadata['EntityID'],
+                $serviceProvider->entityId,
                 $attributesHash
             );
 
@@ -80,7 +82,7 @@ class EngineBlock_Corto_Model_Consent
             $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ?");
             $statement->execute(array(
                 $hashedUserId,
-                $spMetadata['EntityID'],
+                $serviceProvider->entityId,
              ));
 
             return true;
@@ -92,7 +94,7 @@ class EngineBlock_Corto_Model_Consent
         }
     }
 
-    public function storeConsent($spMetadata)
+    public function storeConsent(ServiceProviderEntity $serviceProvider)
     {
         $dbh = $this->_getConsentDatabaseConnection();
         if (!$dbh) {
@@ -104,7 +106,7 @@ class EngineBlock_Corto_Model_Consent
                   ON DUPLICATE KEY UPDATE usage_date=VALUES(usage_date), attribute=VALUES(attribute)";
         $parameters = array(
             sha1($this->_getConsentUid()),
-            $spMetadata['EntityID'],
+            $serviceProvider->entityId,
             $this->_getAttributesHash($this->_responseAttributes)
         );
 
@@ -127,10 +129,10 @@ class EngineBlock_Corto_Model_Consent
         return true;
     }
 
-    public function countTotalConsent($response, $attributes)
+    public function countTotalConsent()
     {
         $dbh = $this->_getConsentDatabaseConnection();
-        $hashedUserId = sha1($this->_getConsentUid($response, $attributes));
+        $hashedUserId = sha1($this->_getConsentUid());
         $query = "SELECT COUNT(*) FROM consent where hashed_user_id = ?";
         $parameters = array($hashedUserId);
         $statement = $dbh->prepare($query);

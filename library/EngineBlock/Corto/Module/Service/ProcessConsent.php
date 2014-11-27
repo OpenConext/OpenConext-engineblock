@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Corto_Module_Service_ProcessConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -65,9 +67,13 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
-        $spMetadata = $this->_server->getRemoteEntity($request->getIssuer());
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
-        $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata($spMetadata, $request, $this->_server);
+        $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
+            $serviceProvider,
+            $request,
+            $this->_server->getRepository()
+        );
 
         if (!isset($_POST['consent']) || $_POST['consent'] !== 'yes') {
             throw new EngineBlock_Corto_Exception_NoConsentProvided('No consent given...');
@@ -86,11 +92,11 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 
         $this->_server->getBindingsModule()->send(
             $response,
-            $spMetadata
+            $serviceProvider
         );
     }
 
-    protected function _sendIntroductionMail($response, $attributes)
+    protected function _sendIntroductionMail(array $attributes)
     {
         if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
             return;

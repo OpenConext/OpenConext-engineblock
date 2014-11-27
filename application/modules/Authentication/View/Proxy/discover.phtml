@@ -1,13 +1,15 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 /**
  * Injected variables;
- * @var $this EngineBlock_View
- * @var $metaDataSP array
- * @var $idpList array
- * @var $action string
- * @var $ID string
- * @var $preselectedIdp string
+ * @var EngineBlock_View        $this
+ * @var ServiceProviderEntity   $metaDataSP
+ * @var array                   $idpList
+ * @var string                  $action
+ * @var string                  $ID
+ * @var string                  $preselectedIdp
  */
 
 /**
@@ -19,31 +21,47 @@ $layout = $this->layout();
 $layout->setLayout('empty');
 
 // Determine the selected language, default to english
-$lang = 'en';
 if (isset($_GET['lang'])) {
     $lang = $_GET['lang'];
-} elseif (isset($_COOKIE['lang'])) {
+}
+else if (isset($_COOKIE['lang'])) {
     $lang = $_COOKIE['lang'];
 }
+else {
+    $lang = 'en';
+}
+
+// Guard against unsupported languages.
 if (!in_array($lang, array('nl','en'))) {
     $lang = 'en';
 }
-$fallback_lang = ($lang == 'en' ? 'nl' : 'en');
 
-$displayName = '';
-if (isset($metaDataSP['Name'][$lang])) {
-    $displayName = $metaDataSP['Name'][$lang];
-}
-else if (isset($metaDataSP['DisplayName'][$lang])) {
-    $displayName = $metaDataSP['DisplayName'][$lang];
-}
-if ($displayName == '') {
-
-    if (isset($metaDataSP['Name'][$fallback_lang])) {
-        $displayName = $metaDataSP['Name'][$fallback_lang];
+if ($lang === 'nl') {
+    if ($metaDataSP->nameNl) {
+        $spDisplayName = $metaDataSP->nameNl;
     }
-    else if (isset($metaDataSP['DisplayName'][$fallback_lang])) {
-        $displayName = $metaDataSP['DisplayName'][$fallback_lang];
+    else if ($metaDataSP->displayNameNl) {
+        $spDisplayName = $metaDataSP->displayNameNl;
+    }
+    else if ($metaDataSP->nameEn) {
+        $spDisplayName = $metaDataSP->nameEn;
+    }
+    else if ($metaDataSP->displayNameEn) {
+        $spDisplayName = $metaDataSP->displayNameEn;
+    }
+}
+else {
+    if ($metaDataSP->nameEn) {
+        $spDisplayName = $metaDataSP->nameEn;
+    }
+    else if ($metaDataSP->displayNameEn) {
+        $spDisplayName = $metaDataSP->displayNameEn;
+    }
+    else if ($metaDataSP->nameNl) {
+        $spDisplayName = $metaDataSP->nameNl;
+    }
+    else if ($metaDataSP->displayNameNl) {
+        $spDisplayName = $metaDataSP->displayNameNl;
     }
 }
 
@@ -98,7 +116,7 @@ if ($preselectedIdp) {
                         </p>
                     </form>
 
-                    <p><?= $this->t('idp_selection_desc', $displayName); ?></p>
+                    <p><?= $this->t('idp_selection_desc', $spDisplayName); ?></p>
 
                     <?php if ($preselectedIdp) : ?>
                     <!-- Preselected IdP -->
@@ -203,8 +221,8 @@ if ($preselectedIdp) {
             discoveryScreen.setLanguage('". $lang ."');
             discoveryScreen.setSearchText('". $this->t('search') ."');
             discoveryScreen.setIdpList(". json_encode($idpList) .");
-            discoveryScreen.setSpEntityId(". json_encode($metaDataSP['EntityID']) .");
-            discoveryScreen.setSpName(". json_encode($displayName) .");
+            discoveryScreen.setSpEntityId(". json_encode($metaDataSP->entityId) .");
+            discoveryScreen.setSpName(". json_encode($spDisplayName) .");
             ". $preselectedIdpJson ."
             discoveryScreen.show();"
 

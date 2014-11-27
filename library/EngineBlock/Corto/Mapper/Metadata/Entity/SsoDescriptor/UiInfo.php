@@ -1,10 +1,15 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo
 {
+    /**
+     * @var AbstractConfigurationEntity
+     */
     private $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractConfigurationEntity $entity)
     {
         $this->_entity = $entity;
     }
@@ -14,7 +19,6 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo
         $rootElement = $this->_mapDisplayName($rootElement);
         $rootElement = $this->_mapDescription($rootElement);
         $rootElement = $this->_mapLogo($rootElement);
-        $rootElement = $this->_mapGeoLocation($rootElement);
         $rootElement = $this->_mapKeywords($rootElement);
         return $rootElement;
     }
@@ -34,12 +38,6 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo
     protected function _mapLogo(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Logo($this->_entity);
-        return $mapper->mapTo($rootElement);
-    }
-
-    protected function _mapGeoLocation(array $rootElement)
-    {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_GeoLocation($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 

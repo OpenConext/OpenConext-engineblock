@@ -39,20 +39,23 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
         $this->_response->setIntendedNameId($this->_collabPersonId);
 
         if ($this->_type === self::TYPE_IDP) {
-            $entityId = $this->_response->getIssuer();
-            $spMetadata = $this->_spMetadata;
+            $entity          = $this->_identityProvider;
+            $serviceProvider = $this->_serviceProvider;
         }
         else if ($this->_type === self::TYPE_SP) {
-            $entityId = $this->_request->getIssuer();
-            $spMetadata = $this->_spMetadata;
+            $entity          = $this->_serviceProvider;
+            $serviceProvider = $entity;
         }
         else if ($this->_type === self::TYPE_REQUESTER_SP) {
-            $spMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata($this->_spMetadata, $this->_request, $this->_server);
-            if ($spMetadata['EntityID'] === $this->_spMetadata['EntityID']) {
+            $entity = EngineBlock_SamlHelper::findRequesterServiceProvider(
+                $this->_serviceProvider,
+                $this->_request,
+                $this->_server->getRepository()
+            );
+            if ($entity) {
                 return;
             }
-
-            $entityId = $spMetadata['EntityID'];
+            $serviceProvider = $entity;
         }
         else {
             throw new EngineBlock_Exception('Attribute Manipulator encountered an unexpected type: ' . $this->_type);
@@ -61,12 +64,12 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
         // Try entity specific file based manipulation from Service Registry
         $manipulator = new EngineBlock_Attributes_Manipulator_ServiceRegistry($this->_type);
         $manipulator->manipulate(
-            $entityId,
+            $entity,
             $this->_collabPersonId,
             $this->_responseAttributes,
             $this->_response,
-            $this->_idpMetadata,
-            $spMetadata
+            $this->_identityProvider,
+            $serviceProvider
         );
 
         $this->_response->setIntendedNameId($this->_collabPersonId);

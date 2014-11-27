@@ -1,4 +1,8 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Legacy\EntityTranslator;
 
 class EngineBlock_Attributes_Manipulator_ServiceRegistry
 {
@@ -13,15 +17,15 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     }
 
     public function manipulate(
-        $entityId,
+        AbstractConfigurationEntity $entity,
         &$subjectId,
         array &$attributes,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$responseObj,
-        array $idpMetadata,
-        array $spMetadata
+        IdentityProviderEntity $identityProvider,
+        ServiceProviderEntity $serviceProvider
     ) {
-        $entity = $this->_getServiceRegistryAdapter()->getEntity($entityId);
-        if (empty($entity['manipulation'])) {
+        $manipulationCode = $this->_getMetadataRepository()->fetchEntityManipulation($entity);
+        if (empty($manipulationCode)) {
             return false;
         }
 
@@ -30,15 +34,19 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         $translator = new EngineBlock_Corto_Mapper_Legacy_ResponseTranslator();
         $response = $translator->fromNewFormat($responseObj);
 
+        $metadataTranslator = new EntityTranslator();
+        $idpMetadataLegacy = $metadataTranslator->translateIdentityProvider($identityProvider);
+        $spMetadataLegacy  = $metadataTranslator->translateServiceProvider($serviceProvider);
+
         $this->_doManipulation(
-            $entity['manipulation'],
-            $entityId,
+            $manipulationCode,
+            $entity->entityId,
             $subjectId,
             $attributes,
             $response,
             $responseObj,
-            $idpMetadata,
-            $spMetadata
+            $idpMetadataLegacy,
+            $spMetadataLegacy
         );
 
         $responseObj = $translator->fromOldFormat($response);
@@ -109,8 +117,11 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         );
     }
 
-    protected function _getServiceRegistryAdapter()
+    /**
+     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
+     */
+    protected function _getMetadataRepository()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getServiceRegistryAdapter();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }
 }

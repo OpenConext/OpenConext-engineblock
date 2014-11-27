@@ -14,8 +14,11 @@ class Janus_Client implements Janus_Client_Interface
     /**
      * Get full information for a given entity.
      *
-     * @param $entityId
+     * Note that this will throw a EngineBlock_Exception if there is no entity for the given entityid.
+     *
+     * @param string $entityId
      * @return mixed
+     * @throws EngineBlock_Exception
      */
     public function getEntity($entityId)
     {

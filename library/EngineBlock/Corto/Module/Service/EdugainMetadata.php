@@ -1,49 +1,44 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 
 class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
     {
         // Get the configuration for EngineBlock in it's IdP role.
-        $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
+
+        $engineIdpEntityId = $this->_server->getUrl('idpMetadataService');
+        $engineIdpEntity = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineIdpEntityId);
 
         $edugainEntities = array();
 
-        $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
-        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
+        $ssoServiceReplacer = new ServiceReplacer($engineIdpEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+        $slServiceReplacer = new ServiceReplacer($engineIdpEntity, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
 
-        $remoteEntities = $this->_server->getRemoteEntities();
+        $remoteEntities = $this->_server->getRepository()->findEntitiesPublishableInEdugain();
 
         foreach ($remoteEntities as $entity) {
-            // Only add entities that have a SSO service registered
-            if (empty($entity['PublishInEdugain'])) {
-                continue;
-            }
-
             // Use EngineBlock certificates
-            $entity['certificates'] = $entityDetails['certificates'];
+            $entity->certificates = $engineIdpEntity->certificates;
 
             // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
             // NameIDs, so advertise that.
-            unset($entity['NameIDFormat']);
-            $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
+            unset($entity->nameIdFormat);
+            $entity->nameIdFormats = $engineIdpEntity->nameIdFormats;
 
             // For IdP's replace the SingleSignService with the one from EB
-            if (array_key_exists('SingleSignOnService', $entity)) {
+            if ($entity instanceof IdentityProviderEntity) {
                 // Replace service locations and bindings with those of EB
-                $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
+                $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity->entityId);
                 $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
+
                 $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
                 $slServiceReplacer->replace($entity, $transparentSlUrl);
             }
-            $entity['ContactPersons'] = $entityDetails['ContactPersons'];
+            $entity->contactPersons = $engineIdpEntity->contactPersons;
 
-            // Add the SP ARP attributes for the RequestedAttribute information in the AttributeConsumingService (only if ARp is set)
-            if (!array_key_exists('SingleSignOnService', $entity)) {
-
-            }
             $entity = $this->_addRequestAttributes($entity);
 
             $edugainEntities[] = $entity;

@@ -1,6 +1,7 @@
 <?php
 
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -17,11 +18,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $request = $this->_getRequest($serviceName);
 
         // Flush log if SP or IdP has additional logging enabled
-        $sp = $this->_server->getRemoteEntity($request->getIssuer());
+        $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
         $isDebugModeEnabled = $this->_server->getConfig('debug', false);
         $isAdditionalLoggingRequired = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
-            EngineBlock_SamlHelper::getSpRequesterChain($sp, $request, $this->_server)
+            EngineBlock_SamlHelper::getSpRequesterChain($sp, $request, $this->_server->getRepository())
         );
 
         if ($isDebugModeEnabled || $isAdditionalLoggingRequired) {
@@ -56,7 +57,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // Get all registered Single Sign On Services
-        $candidateIDPs = $this->_server->getIdpEntityIds();
+        $candidateIDPs = $this->_server->getRepository()->findAllowedIdpEntityIdsForSp($sp);
 
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
@@ -291,7 +292,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     protected function _pickCachedResponse(array $cachedResponses, $requestIssuerEntityId)
     {
         // Then we look for OUT responses for this sp
-        $idpEntityIds = $this->_server->getIdpEntityIds();
+        $idpEntityIds = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
         foreach ($cachedResponses as $cachedResponse) {
             if ($cachedResponse['type'] !== self::RESPONSE_CACHE_TYPE_OUT) {
                 continue;
@@ -343,13 +344,13 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return false;
     }
 
-    protected function _showWayf(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request, array $candidateIdPs)
+    protected function _showWayf(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request, array $candidateIdpEntityIds)
     {
         // Post to the 'continueToIdp' service
         $action = $this->_server->getUrl('continueToIdP');
 
-        $remoteEntity = $this->_server->getRemoteEntity($request->getIssuer());
-        $idpList = $this->_transformIdpsForWAYF($candidateIdPs, $request->isDebugRequest());
+        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest());
 
         $output = $this->_server->renderTemplate(
             'discover',
@@ -358,61 +359,36 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 'action'            => $action,
                 'ID'                => $request->getId(),
                 'idpList'           => $idpList,
-                'metaDataSP'        => $remoteEntity,
+                'metaDataSP'        => $serviceProvider,
             ));
         $this->_server->sendOutput($output);
     }
 
-    protected function _transformIdpsForWayf(array $idps, $isDebugRequest)
+    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest)
     {
+        $identityProviders = $this->_server->getRepository()->fetchIdentityProvidersByEntityId($idpEntityIds);
+
         $wayfIdps = array();
-        foreach ($idps as $idpEntityId) {
-            if ($idpEntityId === $this->_server->getUrl('idpMetadataService')) {
+        foreach ($identityProviders as $identityProvider) {
+            if ($identityProvider->entityId === $this->_server->getUrl('idpMetadataService')) {
                 // Skip ourselves as a valid Idp
                 continue;
             }
 
-            $remoteEntities = $this->_server->getRemoteEntities();
-            $metadata = ($remoteEntities[$idpEntityId]);
-
-            if ($metadata['isHidden']) {
+            if ($identityProvider->hidden) {
                 continue;
             }
 
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setIdp($idpEntityId);
-
-            if (isset($metadata['DisplayName']['nl'])) {
-                $nameNl = $metadata['DisplayName']['nl'];
-            }
-            else if (isset($metadata['Name']['nl'])) {
-                $nameNl = $metadata['Name']['nl'];
-            }
-            else {
-                $nameNl = 'Geen naam gevonden';
-                EngineBlock_ApplicationSingleton::getLog()->warn('No NL displayName and name found for idp: ' . $idpEntityId, $additionalInfo);
-            }
-
-            if (isset($metadata['DisplayName']['en'])) {
-                $nameEn = $metadata['DisplayName']['en'];
-            }
-            else if (isset($metadata['Name']['en'])) {
-                $nameEn = $metadata['Name']['en'];
-            }
-            else {
-                $nameEn = 'No name found';
-                EngineBlock_ApplicationSingleton::getLog()->warn('No EN displayName and name found for idp: ' . $idpEntityId, $additionalInfo);
-            }
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setIdp($identityProvider->entityId);
 
             $wayfIdp = array(
-                'Name_nl' => $nameNl,
-                'Name_en' => $nameEn,
-                'Logo' => isset($metadata['Logo']['URL']) ? $metadata['Logo']['URL']
-                    : '/media/idp-logo-not-found.png',
-                'Keywords' => isset($metadata['Keywords']['en']) ? explode(' ', $metadata ['Keywords']['en'])
-                    : isset($metadata['Keywords']['nl']) ? explode(' ', $metadata['Keywords']['nl']) : 'Undefined',
-                'Access' => ((isset($metadata['Access']) && $metadata['Access']) || $isDebugRequest ) ? '1' : '0',
-                'ID' => md5($idpEntityId),
-                'EntityID' => $idpEntityId,
+                'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
+                'Name_en'   => $this->getNameEn($identityProvider, $additionalInfo),
+                'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/media/idp-logo-not-found.png',
+                'Keywords'  => $this->getKeywords($identityProvider),
+                'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
+                'ID'        => md5($identityProvider->entityId),
+                'EntityID'  => $identityProvider->entityId,
             );
             $wayfIdps[] = $wayfIdp;
         }
@@ -434,13 +410,13 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $layout->disableLayout();
         }
 
-        $idp = $this->_server->getRemoteEntity($response->getIssuer());
+        $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer());
 
         $attributes = $response->getAssertion()->getAttributes();
         $output = $this->_server->renderTemplate(
             'debugidpmail',
             array(
-                'idp'       => $idp,
+                'idp'       => $identityProvider,
                 'response'  => $response,
                 'attributes'=> $attributes,
             )
@@ -450,11 +426,60 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $mailer = new Zend_Mail('UTF-8');
         $mailer->setFrom($emailConfiguration->from->address, $emailConfiguration->from->name);
         $mailer->addTo($emailConfiguration->to->address, $emailConfiguration->to->name);
-        $mailer->setSubject(sprintf($emailConfiguration->subject, $idp['Name']['en']));
+        $mailer->setSubject(sprintf($emailConfiguration->subject, $identityProvider->nameEn));
         $mailer->setBodyText($output);
         $mailer->send();
 
         $layout->setLayout($oldLayout);
+    }
+
+    private function getNameNl(IdentityProviderEntity $identityProvider, $additionalLogInfo)
+    {
+        if ($identityProvider->displayNameNl) {
+            return $identityProvider->displayNameNl;
+        }
+
+        if ($identityProvider->nameNl) {
+            return $identityProvider->nameNl;
+        }
+
+        EngineBlock_ApplicationSingleton::getLog()->warn(
+            'No NL displayName and name found for idp: ' . $identityProvider->entityId,
+            $additionalLogInfo
+        );
+
+        return $identityProvider->entityId;
+    }
+
+    private function getNameEn(IdentityProviderEntity $identityProvider, $additionalInfo)
+    {
+        if ($identityProvider->displayNameEn) {
+            return $identityProvider->displayNameEn;
+        }
+
+        if ($identityProvider->nameEn) {
+            return $identityProvider->nameEn;
+        }
+
+        EngineBlock_ApplicationSingleton::getLog()->warn(
+            'No EN displayName and name found for idp: ' . $identityProvider->entityId,
+            $additionalInfo
+        );
+
+        return $identityProvider->entityId;
+    }
+
+    private function getKeywords(IdentityProviderEntity $identityProvider)
+    {
+        if ($identityProvider->keywordsEn) {
+            return explode(' ', $identityProvider->keywordsEn);
+        }
+
+        if ($identityProvider->keywordsNl) {
+            return explode(' ', $identityProvider->keywordsNl);
+        }
+
+        return 'Undefined';
     }
 
     /**
@@ -488,7 +513,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $this->_server->sendOutput($this->_server->renderTemplate(
             'debugidpresponse',
             array(
-                'idp' => $this->_server->getRemoteEntity($response->getIssuer()),
+                'idp' => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()),
                 'response' => $response,
                 'attributes' => $attributes
             )

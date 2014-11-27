@@ -1,31 +1,41 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumingService_ServiceNames
 {
+    /**
+     * @var AbstractConfigurationEntity
+     */
     private $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractConfigurationEntity $entity)
     {
         $this->_entity = $entity;
     }
 
     public function mapTo(array $rootElement)
     {
-        if (!isset($this->_entity['Name'])) {
+        $names = array();
+        if ($this->_entity->nameNl) {
+            $names['nl'] = $this->_entity->nameNl;
+        }
+        if ($this->_entity->nameEn) {
+            $names['en'] = $this->_entity->nameEn;
+        }
+        if (empty($names)) {
             return $rootElement;
         }
 
-        foreach($this->_entity['Name'] as $descriptionLanguageCode => $descriptionName) {
-            if (empty($descriptionName)) {
+        $rootElement['md:ServiceName'] = array();
+        foreach($names as $languageCode => $value) {
+            if (empty($value)) {
                 continue;
             }
 
-            if (!isset($rootElement['md:ServiceName'])) {
-                $rootElement['md:ServiceName'] = array();
-            }
             $rootElement['md:ServiceName'][] = array(
-                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $descriptionLanguageCode,
-                EngineBlock_Corto_XmlToArray::VALUE_PFX => $descriptionName
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xml:lang' => $languageCode,
+                EngineBlock_Corto_XmlToArray::VALUE_PFX => $value
             );
         }
         return $rootElement;

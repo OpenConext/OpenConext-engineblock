@@ -1,18 +1,22 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumingService
 {
+    /**
+     * @var ServiceProviderEntity
+     */
     private $_entity;
 
-    public function __construct($entity)
+    public function __construct(ServiceProviderEntity $entity)
     {
         $this->_entity = $entity;
     }
 
     public function mapTo(array $rootElement)
     {
-        // Set consumer service on SP
-        if (empty($this->_entity['RequestedAttributes']) || empty($this->_entity['Name'])) {
+        if (empty($this->_entity->requestedAttributes) || empty($this->_entity->nameEn) || empty($this->_entity->nameEn)) {
             return $rootElement;
         }
         $rootElement['md:AttributeConsumingService'] = array(

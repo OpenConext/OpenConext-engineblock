@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Saml2_NameIdResolver
 {
     const PERSISTENT_NAMEID_SALT = 'COIN:';
@@ -22,14 +24,14 @@ class EngineBlock_Saml2_NameIdResolver
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
-     * @param array $destinationMetadata
+     * @param ServiceProviderEntity $destinationMetadata
      * @param $collabPersonId
      * @return array
      */
     public function resolve(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
-        array $destinationMetadata,
+        ServiceProviderEntity $destinationMetadata,
         $collabPersonId
     ) {
         $customNameId = $response->getCustomNameId();
@@ -37,6 +39,7 @@ class EngineBlock_Saml2_NameIdResolver
             return $customNameId;
         }
 
+        /** @var SAML2_AuthnRequest $request */
         $nameIdFormat = $this->_getNameIdFormat($request, $destinationMetadata);
 
         $requireUnspecified = ($nameIdFormat === EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED);
@@ -53,18 +56,13 @@ class EngineBlock_Saml2_NameIdResolver
         if ($requireTransient) {
             return array(
                 'Format' => $nameIdFormat,
-                'Value' => $this->_getTransientNameId(
-                        $destinationMetadata['EntityID'], $response->getOriginalIssuer()
-                 ),
+                'Value' => $this->_getTransientNameId($destinationMetadata->entityId, $response->getOriginalIssuer()),
             );
         }
 
         return array(
             'Format' => $nameIdFormat,
-            'Value' => $this->_getPersistentNameId(
-                $collabPersonId,
-                $destinationMetadata['EntityID']
-            ),
+            'Value' => $this->_getPersistentNameId($collabPersonId, $destinationMetadata->entityId),
         );
     }
 
@@ -104,11 +102,13 @@ class EngineBlock_Saml2_NameIdResolver
         $_SESSION[$spId][$idpId] = $nameId;
     }
 
-    protected function _getNameIdFormat($request, $spEntityMetadata)
-    {
+    protected function _getNameIdFormat(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        ServiceProviderEntity $spEntityMetadata
+    ) {
         // If a NameIDFormat was explicitly set in the ServiceRegistry, use that...
-        if (isset($spEntityMetadata['NameIDFormat'])) {
-            return $spEntityMetadata['NameIDFormat'];
+        if ($spEntityMetadata->nameIdFormat) {
+            return $spEntityMetadata->nameIdFormat;
         }
 
         // If the SP requests a specific NameIDFormat in their AuthnRequest
@@ -121,7 +121,7 @@ class EngineBlock_Saml2_NameIdResolver
             // Do we support the NameID Format that the SP requests?
             if (!in_array($requestedNameIdFormat, $this->SUPPORTED_NAMEID_FORMATS)) {
                 EngineBlock_ApplicationSingleton::getLog()->notice(
-                    "Whoa, SP '{$spEntityMetadata['EntityID']}' requested '{$requestedNameIdFormat}' " .
+                    "Whoa, SP '{$spEntityMetadata->entityId}' requested '{$requestedNameIdFormat}' " .
                     "however we don't support that format, opting to try something else it supports " .
                     "instead of sending an error. SP might not be happy with this violation of the spec " .
                     "but it's probably a lot happier with a valid Response than an Error Response"
@@ -130,10 +130,10 @@ class EngineBlock_Saml2_NameIdResolver
             }
 
             // Is this SP restricted to specific NameIDFormats?
-            if (isset($spEntityMetadata['NameIDFormats'])) {
-                if (!in_array($requestedNameIdFormat, $spEntityMetadata['NameIDFormats'])) {
+            if (!empty($spEntityMetadata->nameIdFormats)) {
+                if (!in_array($requestedNameIdFormat, $spEntityMetadata->nameIdFormats)) {
                     EngineBlock_ApplicationSingleton::getLog()->notice(
-                        "Whoa, SP '{$spEntityMetadata['EntityID']}' requested '{$requestedNameIdFormat}' " .
+                        "Whoa, SP '{$spEntityMetadata->entityId}' requested '{$requestedNameIdFormat}' " .
                         "opting to try something else it supports " .
                         "instead of sending an error. SP might not be happy with this violation of the spec " .
                         "but it's probably a lot happier with a valid Response than an Error Response"
@@ -151,16 +151,16 @@ class EngineBlock_Saml2_NameIdResolver
         // So neither a NameIDFormat is explicitly set in the metadata OR a (valid) NameIDPolicy is set in the AuthnRequest
         // so we check what the SP supports (or what JANUS claims that it supports) and
         // return the least privacy sensitive one.
-        if (!empty($spEntityMetadata['NameIDFormats'])) {
+        if (!empty($spEntityMetadata->nameIdFormats)) {
             foreach ($this->SUPPORTED_NAMEID_FORMATS as $supportedNameIdFormat) {
-                if (in_array($supportedNameIdFormat, $spEntityMetadata['NameIDFormats'])) {
+                if (in_array($supportedNameIdFormat, $spEntityMetadata->nameIdFormats)) {
                     return $supportedNameIdFormat;
                 }
             }
         }
 
         throw new EngineBlock_Exception(
-            "Whoa, SP '{$spEntityMetadata['EntityID']}' has no NameIDFormat set, did send a (valid) NameIDPolicy and has no supported NameIDFormats set... I give up..." ,
+            "Whoa, SP '{$spEntityMetadata->entityId}' has no NameIDFormat set, did send a (valid) NameIDPolicy and has no supported NameIDFormats set... I give up..." ,
             EngineBlock_Exception::CODE_NOTICE
         );
     }

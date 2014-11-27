@@ -19,7 +19,7 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
     {
         // Note that we try to service the final destination SP, if we know them and are allowed to do so.
         $destinationMetadata = EngineBlock_SamlHelper::getDestinationSpMetadata(
-            $this->_spMetadata,
+            $this->_serviceProvider,
             $this->_request,
             $this->_server
         );

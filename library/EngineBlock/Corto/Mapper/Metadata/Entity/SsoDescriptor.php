@@ -2,7 +2,7 @@
 
 abstract class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor
 {
-    protected $_entity = array();
+    protected $_entity;
 
     protected function _mapCertificates(array $rootElement)
     {

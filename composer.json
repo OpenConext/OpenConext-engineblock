@@ -16,6 +16,8 @@
         "kriswallsmith/assetic": "~1.2.0",
         "mrclay/minify": "~2.2",
         "openconext/engineblock-fixtures": "~0.4",
+        "openconext/engineblock-metadata": "dev-master",
+        "openconext/stoker-metadata": "dev-master",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
         "pimple/pimple": "~2.1",
         "simplesamlphp/saml2": "~0.5",

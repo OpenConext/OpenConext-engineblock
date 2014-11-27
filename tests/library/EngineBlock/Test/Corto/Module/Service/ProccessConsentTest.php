@@ -1,5 +1,8 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
 {
     /**
@@ -106,14 +109,14 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
     {
         // Mock proxy server
         $_SERVER['HTTP_HOST'] = 'test-host';
+        /** @var EngineBlock_Corto_ProxyServer $proxyServerMock */
         $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer');
-
-        $bindingsModuleMock = $this->mockBindingsModule();
-        $proxyServerMock->setBindingsModule($bindingsModuleMock);
-
-        Phake::when($proxyServerMock)
-            ->getRemoteEntity(Phake::anyParameters())
-            ->thenReturn(array());
+        $proxyServerMock
+            ->setRepository(new InMemoryMetadataRepository(
+                array(),
+                array(new ServiceProviderEntity('https://sp.example.edu'))
+            ))
+            ->setBindingsModule($this->mockBindingsModule());
 
         return $proxyServerMock;
     }
@@ -158,6 +161,7 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
 
         $spRequest = new SAML2_AuthnRequest();
         $spRequest->setId('SPREQUEST');
+        $spRequest->setIssuer('https://sp.example.edu');
         $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
 
         $ebRequest = new SAML2_AuthnRequest();

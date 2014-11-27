@@ -1,9 +1,17 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
 {
+    /**
+     * @var AbstractConfigurationEntity
+     */
     private $_entity;
 
+    /**
+     * @param AbstractConfigurationEntity $entity
+     */
     public function __construct($entity)
     {
         $this->_entity = $entity;
@@ -11,12 +19,8 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
 
     public function mapTo(array $rootElement)
     {
-        if (!isset($this->_entity['certificates'])) {
-            $this->_entity['certificates'] = array();
-        }
-
         /** @var EngineBlock_X509_Certificate[] $certificates */
-        $certificates = $this->_entity['certificates'];
+        $certificates = $this->_entity->certificates;
 
         // No primary certificate to add so no need to even add the KeyDescriptor element.
         if (empty($certificates)) {

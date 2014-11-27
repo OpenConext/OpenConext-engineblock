@@ -1,9 +1,12 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+
 /**
  * Injected:
  * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
- * @var array $idp
+ * @var IdentityProviderEntity $idp
  * @var array $attributes
  * @var EngineBlock_View $this
  *
@@ -48,7 +51,7 @@ $attributesValidated = $validator->validate();
             Logo
         </th>
         <td>
-            <img src="<?= $idp['Logo']['URL'] ?>" />
+            <img src="<?= $idp->logo ? $idp->logo->url : '/media/idp-logo-not-found.png' ?>" />
         </td>
     </tr>
     <tr>
@@ -56,7 +59,7 @@ $attributesValidated = $validator->validate();
             <?= $this->t('name'); ?>
         </th>
         <td>
-            <?= EngineBlock_View::htmlSpecialCharsText($idp['Name']['en'], ENT_COMPAT, 'UTF-8') ?>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->nameEn, ENT_COMPAT, 'UTF-8') ?>
         </td>
     </tr>
     <tr>
@@ -64,15 +67,15 @@ $attributesValidated = $validator->validate();
             Entity ID
         </th>
         <td>
-            <?= EngineBlock_View::htmlSpecialCharsText($idp['EntityID']) ?>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->entityId) ?>
         </td>
     </tr>
     <tr>
         <th>
             Workflow Status
         </th>
-        <td <?php if ($idp['WorkflowState']==='production') { echo 'style="color: green"';} ?>>
-            <?= EngineBlock_View::htmlSpecialCharsText($idp['WorkflowState']) ?>
+        <td <?php if ($idp->workflowState === AbstractConfigurationEntity::WORKFLOW_STATE_PROD) { echo 'style="color: green"';} ?>>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->workflowState) ?>
         </td>
     </tr>
 </table>
