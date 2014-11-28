@@ -141,7 +141,9 @@ class EngineBlock_UserDirectory
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
             }
         }
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+
+
+        return $collabPersonId;
     }
 
     /**
