@@ -82,8 +82,8 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $attributes = $response->getAssertion()->getAttributes();
         $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
         $consent->storeConsent($destinationMetadata);
-        if ($consent->countTotalConsent($response, $attributes) === 1) {
-            $this->_sendIntroductionMail($response, $attributes);
+        if ($consent->countTotalConsent() === 1) {
+            $this->_sendIntroductionMail($attributes);
         }
 
         $response->setConsent(SAML2_Const::CONSENT_OBTAINED);
