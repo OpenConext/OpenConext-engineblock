@@ -214,12 +214,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "fa18053c2242d63351bfdd92104ff67319d19a8f"
+                "reference": "c4f7b3d87db7ef3f9f5797e7cf1f25b9084a5c82"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/fa18053c2242d63351bfdd92104ff67319d19a8f",
-                "reference": "fa18053c2242d63351bfdd92104ff67319d19a8f",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/c4f7b3d87db7ef3f9f5797e7cf1f25b9084a5c82",
+                "reference": "c4f7b3d87db7ef3f9f5797e7cf1f25b9084a5c82",
                 "shasum": ""
             },
             "require": {
@@ -242,7 +242,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2014-10-28 15:08:48"
+            "time": "2014-11-27 13:29:00"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -338,12 +338,12 @@
             "version": "v2.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Pimple.git",
+                "url": "https://github.com/silexphp/Pimple.git",
                 "reference": "ea22fb2880faf7b7b0e17c9809c6fe25b071fd76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
                 "reference": "ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
                 "shasum": ""
             },

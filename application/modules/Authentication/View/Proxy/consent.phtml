@@ -3,6 +3,9 @@
 /**
  * See OpenConext-engineblock/library/EngineBlock/Corto/Module/Service/ProvideConsent.php#84
  */
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 if (!isset($action)) {
     throw new EngineBlock_View_Exception('No Consent action given to consent screen');
 }
@@ -12,20 +15,39 @@ if (!isset($ID)) {
 if (!isset($attributes)) {
     throw new EngineBlock_View_Exception('No Attributes given to consent screen');
 }
-if (!isset($sp)) {
+if (!isset($sp) || !$sp instanceof ServiceProviderEntity) {
     throw new EngineBlock_View_Exception('No SP information given to consent screen');
 }
-if (!isset($idp)) {
+if (!isset($idp) || !$idp instanceof IdentityProviderEntity) {
     throw new EngineBlock_View_Exception('No IdP information given to consent screen');
 }
 /** @var EngineBlock_View $this */
 
 // The current language
 $lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
-$fallback_lang = ($lang == 'en' ? 'nl' : 'en');
 
-$spName         = isset($sp['Name'][$lang])  ? $sp['Name'][$lang] : $sp['Name'][$fallback_lang];
-$idpName        = isset($idp['Name'][$lang]) ? $idp['Name'][$lang] : $idp['Name'][$fallback_lang];
+// @todo move to entity (see also duplicate in discover.phtml)
+$spName = '';
+if ($lang === 'nl') {
+    $spName = $sp->nameNl;
+}
+if (empty($spName)) {
+    $spName = $sp->nameEn;
+}
+if (empty($spName)) {
+    $spName = $sp->entityId;
+}
+
+$idpName = '';
+if ($lang === 'nl') {
+    $idpName = $idp->nameNl;
+}
+if (empty($idpName)) {
+    $idpName = $idp->nameEn;
+}
+if (empty($idpName)) {
+    $idpName = $idp->entityId;
+}
 
 /**
  * @var Zend_Layout $layout
@@ -126,7 +148,7 @@ $inlineScriptHelper->appendScript('
 
 <p class="grey"><?= $this->t('consent_notice'); ?></p>
 
-<?php if (isset($sp['Eula'])) : ?>
-    <?= $this->t('sp_terms_of_service', $spName, $sp['Eula']); ?>
+<?php if (isset($sp->eula)) : ?>
+    <?= $this->t('sp_terms_of_service', $spName, $sp->eula); ?>
 <?php endif; ?>
 
