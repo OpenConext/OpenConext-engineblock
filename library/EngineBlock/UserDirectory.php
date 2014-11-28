@@ -322,11 +322,29 @@ class EngineBlock_UserDirectory
         return $newAttributes;
     }
 
-    protected function _getCollabPersonId($attributes)
+    protected function _getCollabPersonById($attributes)
     {
-        $uid = str_replace('@', '_', $attributes['uid']);
-        return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+        switch ($this->_openConextIdentifierType) {
+            case "CollabPersonId":
+                $uid = str_replace('@', '_', $attributes['uid']);
+                return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+                break;
+            case "CollabPersonUuid":
+                return (string)Surfnet_Zend_Uuid::generate();
+                break;
+            case "eduPersonPrincipalName":
+                return $attributes['eduPersonPrincipalName'];
+                break;
+            default:
+                $message = 'Whoa, an unknown identifierType was provided: "' . $this->_openConextIdentifierType . '"?!?!?  I only support: collabpersonid, collabpersonuuid and edupersonprincipalname';
+                $e = new EngineBlock_Exception($message);
+                if (!empty($identifier)) {
+                    $e->userId = $identifier;
+                }
+                throw $e;
+        }
     }
+
 
     protected function _getCollabPersonUuid($attributes)
     {
