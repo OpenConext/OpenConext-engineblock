@@ -113,7 +113,7 @@ class EngineBlock_UserDirectory
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
         $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes);
 
-        $collabPersonId = $this->_getCollabPersonId($ldapAttributes);
+        $collabPersonId = $this->_getCollabPersonById($ldapAttributes);
         $users = $this->findUsersByIdentifier($collabPersonId);
         try {
             switch (count($users)) {
