@@ -1,8 +1,8 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Legacy\EntityTranslator;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\Disassembler\CortoDisassembler;
 
 class EngineBlock_Attributes_Manipulator_ServiceRegistry
 {
@@ -17,12 +17,12 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     }
 
     public function manipulate(
-        AbstractConfigurationEntity $entity,
+        AbstractRole $entity,
         &$subjectId,
         array &$attributes,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$responseObj,
-        IdentityProviderEntity $identityProvider,
-        ServiceProviderEntity $serviceProvider
+        IdentityProvider $identityProvider,
+        ServiceProvider $serviceProvider
     ) {
         $manipulationCode = $this->_getMetadataRepository()->fetchEntityManipulation($entity);
         if (empty($manipulationCode)) {
@@ -34,7 +34,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         $translator = new EngineBlock_Corto_Mapper_Legacy_ResponseTranslator();
         $response = $translator->fromNewFormat($responseObj);
 
-        $metadataTranslator = new EntityTranslator();
+        $metadataTranslator = new CortoDisassembler();
         $idpMetadataLegacy = $metadataTranslator->translateIdentityProvider($identityProvider);
         $spMetadataLegacy  = $metadataTranslator->translateServiceProvider($serviceProvider);
 
@@ -118,7 +118,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
+     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
      */
     protected function _getMetadataRepository()
     {

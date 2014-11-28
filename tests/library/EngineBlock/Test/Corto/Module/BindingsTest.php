@@ -1,5 +1,5 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 /**
  * @todo test all other functionalities of Bindings, currently tests a small part of redirection
@@ -31,7 +31,7 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
         $response = new EngineBlock_Saml2_ResponseAnnotationDecorator(new SAML2_Response());
         $response->setDeliverByBinding(SAML2_Const::BINDING_HTTP_REDIRECT);
 
-        $remoteEntity = new ServiceProviderEntity('https://sp.example.edu');
+        $remoteEntity = new ServiceProvider('https://sp.example.edu');
         $this->bindings->send($response, $remoteEntity);
     }
 

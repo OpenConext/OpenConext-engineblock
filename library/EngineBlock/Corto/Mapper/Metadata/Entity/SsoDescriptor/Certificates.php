@@ -1,16 +1,16 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_Certificates
 {
     /**
-     * @var AbstractConfigurationEntity
+     * @var AbstractRole
      */
     private $_entity;
 
     /**
-     * @param AbstractConfigurationEntity $entity
+     * @param AbstractRole $entity
      */
     public function __construct($entity)
     {

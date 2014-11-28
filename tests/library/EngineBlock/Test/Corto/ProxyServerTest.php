@@ -1,6 +1,6 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 
 /**
  * Note: this Test only tests setting of NameIDFormat, add other tests if required
@@ -65,7 +65,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         $proxyServer = new EngineBlock_Corto_ProxyServer();
 
         $proxyServer->setRepository(new InMemoryMetadataRepository(
-            array(new IdentityProviderEntity('testIdp')),
+            array(new IdentityProvider('testIdp')),
             array()
         ));
 

@@ -3,8 +3,8 @@
 /**
  * See OpenConext-engineblock/library/EngineBlock/Corto/Module/Service/ProvideConsent.php#84
  */
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 if (!isset($action)) {
     throw new EngineBlock_View_Exception('No Consent action given to consent screen');
@@ -15,10 +15,10 @@ if (!isset($ID)) {
 if (!isset($attributes)) {
     throw new EngineBlock_View_Exception('No Attributes given to consent screen');
 }
-if (!isset($sp) || !$sp instanceof ServiceProviderEntity) {
+if (!isset($sp) || !$sp instanceof ServiceProvider) {
     throw new EngineBlock_View_Exception('No SP information given to consent screen');
 }
-if (!isset($idp) || !$idp instanceof IdentityProviderEntity) {
+if (!isset($idp) || !$idp instanceof IdentityProvider) {
     throw new EngineBlock_View_Exception('No IdP information given to consent screen');
 }
 /** @var EngineBlock_View $this */

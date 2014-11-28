@@ -1,7 +1,7 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_Corto_Filter_Command_Interface
 {
@@ -31,12 +31,12 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     protected $_request;
 
     /**
-     * @var ServiceProviderEntity
+     * @var ServiceProvider
      */
     protected $_serviceProvider;
 
     /**
-     * @var IdentityProviderEntity
+     * @var IdentityProvider
      */
     protected $_identityProvider;
 
@@ -74,10 +74,10 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param IdentityProviderEntity $idpMetadata
+     * @param IdentityProvider $idpMetadata
      * @return $this
      */
-    public function setIdentityProvider(IdentityProviderEntity $idpMetadata)
+    public function setIdentityProvider(IdentityProvider $idpMetadata)
     {
         $this->_identityProvider = $idpMetadata;
         return $this;
@@ -114,10 +114,10 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     }
 
     /**
-     * @param ServiceProviderEntity $spMetadata
+     * @param ServiceProvider $spMetadata
      * @return $this
      */
-    public function setServiceProvider(ServiceProviderEntity $spMetadata)
+    public function setServiceProvider(ServiceProvider $spMetadata)
     {
         $this->_serviceProvider = $spMetadata;
         return $this;

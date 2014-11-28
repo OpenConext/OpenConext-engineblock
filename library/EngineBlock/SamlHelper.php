@@ -1,20 +1,20 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_SamlHelper
 {
     /**
      * Do we need to enable additional logging for any of the specified entities (SP or IdP).
      *
-     * @param AbstractConfigurationEntity[] $entities
+     * @param AbstractRole[] $entities
      * @return bool
      */
     public static function doRemoteEntitiesRequireAdditionalLogging(array $entities)
     {
-        return array_reduce($entities, function($carry, AbstractConfigurationEntity $entity) {
+        return array_reduce($entities, function($carry, AbstractRole $entity) {
             return $carry | $entity->additionalLogging;
         }, false);
     }
@@ -22,13 +22,13 @@ class EngineBlock_SamlHelper
     /**
      * Get the 'chain' of SP requesters, if available. Furthest removed SP first.
      *
-     * @param ServiceProviderEntity $serviceProvider
+     * @param ServiceProvider $serviceProvider
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param MetadataRepositoryInterface $repository
-     * @return ServiceProviderEntity[]
+     * @return ServiceProvider[]
      */
     public static function getSpRequesterChain(
-        ServiceProviderEntity $serviceProvider,
+        ServiceProvider $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         MetadataRepositoryInterface $repository
     ) {
@@ -45,13 +45,13 @@ class EngineBlock_SamlHelper
     /**
      * Get the 'Destination' SP metadata. Depending on the SP configuration, may be the SP metadata or it's requester.
      *
-     * @param ServiceProviderEntity $serviceProvider
+     * @param ServiceProvider $serviceProvider
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param MetadataRepositoryInterface $repository
-     * @return ServiceProviderEntity
+     * @return ServiceProvider
      */
     public static function getDestinationSpMetadata(
-        ServiceProviderEntity $serviceProvider,
+        ServiceProvider $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         MetadataRepositoryInterface $repository
     ) {
@@ -62,13 +62,13 @@ class EngineBlock_SamlHelper
     /**
      * Get the metadata for a requester, if allowed by the configuration.
      *
-     * @param ServiceProviderEntity $serviceProvider
+     * @param ServiceProvider $serviceProvider
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param MetadataRepositoryInterface $repository
-     * @return null|ServiceProviderEntity
+     * @return null|ServiceProvider
      */
     public static function findRequesterServiceProvider(
-        ServiceProviderEntity $serviceProvider,
+        ServiceProvider $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         MetadataRepositoryInterface $repository
     ) {

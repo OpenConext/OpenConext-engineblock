@@ -1,8 +1,8 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\InMemoryMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
 {
@@ -91,8 +91,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer');
 
         $proxyServerMock->setRepository(new InMemoryMetadataRepository(
-            array(new IdentityProviderEntity('testIdP')),
-            array(new ServiceProviderEntity('testSp'))
+            array(new IdentityProvider('testIdP')),
+            array(new ServiceProvider('testSp'))
         ));
 
         $bindingsModuleMock = $this->mockBindingsModule();

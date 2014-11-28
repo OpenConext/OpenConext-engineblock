@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Mapper_Metadata_Entities
 {
@@ -8,7 +8,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
     private $_eduGain;
 
     /**
-     * @param AbstractConfigurationEntity[] $entities
+     * @param AbstractRole[] $entities
      * @param boolean$eduGain
      */
     public function __construct(array $entities, $eduGain)
@@ -41,7 +41,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
         return $rootElement;
     }
 
-    protected function _mapEntity(AbstractConfigurationEntity $entity)
+    protected function _mapEntity(AbstractRole $entity)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($entity, $this->_eduGain);
         return $mapper->map();

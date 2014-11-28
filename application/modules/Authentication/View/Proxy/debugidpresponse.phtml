@@ -1,12 +1,12 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 /**
  * Injected:
  * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
- * @var IdentityProviderEntity $idp
+ * @var IdentityProvider $idp
  * @var array $attributes
  * @var EngineBlock_View $this
  *
@@ -74,7 +74,7 @@ $attributesValidated = $validator->validate();
         <th>
             Workflow Status
         </th>
-        <td <?php if ($idp->workflowState === AbstractConfigurationEntity::WORKFLOW_STATE_PROD) { echo 'style="color: green"';} ?>>
+        <td <?php if ($idp->workflowState === AbstractRole::WORKFLOW_STATE_PROD) { echo 'style="color: green"';} ?>>
             <?= EngineBlock_View::htmlSpecialCharsText($idp->workflowState) ?>
         </td>
     </tr>

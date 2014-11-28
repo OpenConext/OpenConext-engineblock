@@ -1,15 +1,15 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumingService_ServiceNames
 {
     /**
-     * @var AbstractConfigurationEntity
+     * @var AbstractRole
      */
     private $_entity;
 
-    public function __construct(AbstractConfigurationEntity $entity)
+    public function __construct(AbstractRole $entity)
     {
         $this->_entity = $entity;
     }

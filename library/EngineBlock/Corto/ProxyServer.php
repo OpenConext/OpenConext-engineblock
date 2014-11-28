@@ -1,10 +1,10 @@
 <?php
 
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_ProxyServer
@@ -60,7 +60,7 @@ class EngineBlock_Corto_ProxyServer
     protected $_processingMode = false;
 
     /**
-     * @var \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
+     * @var \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
      */
     private $_repository;
 
@@ -282,7 +282,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @param \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface $repository
+     * @param \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface $repository
      * @return $this
      */
     public function setRepository(MetadataRepositoryInterface $repository)
@@ -292,7 +292,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
+     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
      */
     public function getRepository()
     {
@@ -561,11 +561,11 @@ class EngineBlock_Corto_ProxyServer
     /**
      * Returns the default ACS location for given entity
      *
-     * @param ServiceProviderEntity $serviceProvider
+     * @param ServiceProvider $serviceProvider
      * @return Service
      * @throws EngineBlock_Corto_ProxyServer_Exception
      */
-    public function getDefaultAssertionConsumer(ServiceProviderEntity $serviceProvider)
+    public function getDefaultAssertionConsumer(ServiceProvider $serviceProvider)
     {
         // find first ACS URL that has a binding supported by EB
         foreach ($serviceProvider->assertionConsumerServices as $acs) {
@@ -589,7 +589,7 @@ class EngineBlock_Corto_ProxyServer
      */
     public function getCustomAssertionConsumer(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        ServiceProviderEntity $serviceProvider
+        ServiceProvider $serviceProvider
     ) {
         $requestWasSigned    = $request->wasSigned();
 
@@ -767,8 +767,8 @@ class EngineBlock_Corto_ProxyServer
         $callback,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        ServiceProviderEntity $spEntityMetadata,
-        IdentityProviderEntity $idpEntityMetadata
+        ServiceProvider $spEntityMetadata,
+        IdentityProvider $idpEntityMetadata
     ) {
         // Take em out
         $responseAttributes = $response->getAssertion()->getAttributes();

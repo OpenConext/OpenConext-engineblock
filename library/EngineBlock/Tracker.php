@@ -1,11 +1,11 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Tracker
 {
-    public function trackLogin(ServiceProviderEntity $spEntityMetadata, IdentityProviderEntity $idpEntityMetadata, $subjectId, $voContext, $keyId)
+    public function trackLogin(ServiceProvider $spEntityMetadata, IdentityProvider $idpEntityMetadata, $subjectId, $voContext, $keyId)
     {
         $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
         $db = $this->_getDbConnection();

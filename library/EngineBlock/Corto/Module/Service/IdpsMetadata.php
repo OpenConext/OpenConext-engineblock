@@ -1,7 +1,7 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {

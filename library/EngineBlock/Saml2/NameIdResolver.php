@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Saml2_NameIdResolver
 {
@@ -24,14 +24,14 @@ class EngineBlock_Saml2_NameIdResolver
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
-     * @param ServiceProviderEntity $destinationMetadata
+     * @param ServiceProvider $destinationMetadata
      * @param $collabPersonId
      * @return array
      */
     public function resolve(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
-        ServiceProviderEntity $destinationMetadata,
+        ServiceProvider $destinationMetadata,
         $collabPersonId
     ) {
         $customNameId = $response->getCustomNameId();
@@ -104,7 +104,7 @@ class EngineBlock_Saml2_NameIdResolver
 
     protected function _getNameIdFormat(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        ServiceProviderEntity $spEntityMetadata
+        ServiceProvider $spEntityMetadata
     ) {
         // If a NameIDFormat was explicitly set in the ServiceRegistry, use that...
         if ($spEntityMetadata->nameIdFormat) {

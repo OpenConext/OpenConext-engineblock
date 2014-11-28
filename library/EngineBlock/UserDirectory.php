@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 /**
  * Access to the LDAP directory where all users are provisioned

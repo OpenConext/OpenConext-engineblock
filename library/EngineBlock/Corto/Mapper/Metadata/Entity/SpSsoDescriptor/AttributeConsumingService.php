@@ -1,15 +1,15 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumingService
 {
     /**
-     * @var ServiceProviderEntity
+     * @var ServiceProvider
      */
     private $_entity;
 
-    public function __construct(ServiceProviderEntity $entity)
+    public function __construct(ServiceProvider $entity)
     {
         $this->_entity = $entity;
     }

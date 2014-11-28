@@ -1,12 +1,12 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\AggregatedMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\AggregatedMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\DisableDisallowedEntitiesInWayfFilter;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\RemoveEntityByEntityId;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\DisableDisallowedEntitiesInWayfFilter;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveEntityByEntityId;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_Adapter

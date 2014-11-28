@@ -12,7 +12,7 @@
  */
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception as Exception;
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
@@ -36,21 +36,21 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
     private $supportedBindings;
 
     /**
-     * @param AbstractConfigurationEntity $proxyEntity
+     * @param AbstractRole $proxyEntity
      * @param string $serviceName
      * @param bool $required (use either REQUIRED or OPTIONAL const)
      */
-    public function __construct(AbstractConfigurationEntity $proxyEntity, $serviceName, $required)
+    public function __construct(AbstractRole $proxyEntity, $serviceName, $required)
     {
         $this->serviceName = $serviceName;
         $this->supportedBindings = $this->getSupportedBindingsFromProxy($proxyEntity, $required);
     }
 
     /**
-     * @param AbstractConfigurationEntity $entity
+     * @param AbstractRole $entity
      * @param $location
      */
-    public function replace(AbstractConfigurationEntity $entity, $location)
+    public function replace(AbstractRole $entity, $location)
     {
         $serviceName = lcfirst($this->serviceName . 's');
 
@@ -67,12 +67,12 @@ class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
     /**
      * Builds a list of services supported by the proxy
      *
-     * @param AbstractConfigurationEntity $proxyEntity
+     * @param AbstractRole $proxyEntity
      * @param bool $required
      * @return array
      * @throws Exception
      */
-    private function getSupportedBindingsFromProxy(AbstractConfigurationEntity $proxyEntity, $required)
+    private function getSupportedBindingsFromProxy(AbstractRole $proxyEntity, $required)
     {
         $serviceName = lcfirst($this->serviceName . 's');
 

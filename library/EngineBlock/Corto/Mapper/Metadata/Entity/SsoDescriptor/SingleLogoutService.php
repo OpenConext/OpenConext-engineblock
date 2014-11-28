@@ -1,15 +1,15 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_SingleLogoutService
 {
     /**
-     * @var AbstractConfigurationEntity
+     * @var AbstractRole
      */
     private $_entity;
 
-    public function __construct(AbstractConfigurationEntity $entity)
+    public function __construct(AbstractRole $entity)
     {
         $this->_entity = $entity;
     }
@@ -22,21 +22,21 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_SingleLogoutService
      */
     public function mapTo(array $rootElement)
     {
-        if (empty($this->_entity->singleLogoutServices)) {
+        if (empty($this->_entity->singleLogoutService)) {
             return $rootElement;
         }
 
-        foreach ($this->_entity->singleLogoutServices as $service) {
-            if ($service->binding && $service->location) {
-                if (!isset($rootElement['md:SingleLogoutService'])) {
-                    $rootElement['md:SingleLogoutService'] = array();
-                }
+        $service = $this->_entity->singleLogoutService;
 
-                $rootElement['md:SingleLogoutService'][] = array(
-                    EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding'  => $service->binding,
-                    EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $service->location,
-                );
+        if ($service->binding && $service->location) {
+            if (!isset($rootElement['md:SingleLogoutService'])) {
+                $rootElement['md:SingleLogoutService'] = array();
             }
+
+            $rootElement['md:SingleLogoutService'][] = array(
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding'  => $service->binding,
+                EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $service->location,
+            );
         }
         return $rootElement;
     }

@@ -1,6 +1,7 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\AggregatedMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\InMemoryMetadataRepository;
+
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\AggregatedMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 
 class EngineBlock_Application_DiContainer extends Pimple
 {
@@ -112,7 +113,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\AggregatedMetadataRepository
+     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\AggregatedMetadataRepository
      */
     public function getMetadataRepository()
     {

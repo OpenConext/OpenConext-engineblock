@@ -1,5 +1,5 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 /**
  * Tests for EngineBlock_Log
@@ -29,7 +29,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
     private $collabPersonId;
 
     /**
-     * @var ServiceProviderEntity
+     * @var ServiceProvider
      */
     private $serviceProvider;
 
@@ -45,7 +45,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
         $response->setIntendedNameId('urn:collab:person:example.edu:mock1');
         $this->response = $response;
 
-        $this->serviceProvider  = new ServiceProviderEntity('http://sp.example.edu');
+        $this->serviceProvider  = new ServiceProvider('http://sp.example.edu');
         $this->collabPersonId = 'urn:collab:person:example.edu:mock1';
 
         $this->resolver = new EngineBlock_Test_Saml2_NameIdResolverMock();
@@ -191,7 +191,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
         );
 
         // Input
-        $this->serviceProvider = new ServiceProviderEntity('https://sp2.example.edu');
+        $this->serviceProvider = new ServiceProvider('https://sp2.example.edu');
         $this->serviceProvider->nameIdFormat = EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT;
 
         // Run

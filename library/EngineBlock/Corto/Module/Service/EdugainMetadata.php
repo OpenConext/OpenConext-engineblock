@@ -1,7 +1,7 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -29,7 +29,7 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
             $entity->nameIdFormats = $engineIdpEntity->nameIdFormats;
 
             // For IdP's replace the SingleSignService with the one from EB
-            if ($entity instanceof IdentityProviderEntity) {
+            if ($entity instanceof IdentityProvider) {
                 // Replace service locations and bindings with those of EB
                 $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity->entityId);
                 $ssoServiceReplacer->replace($entity, $transparentSsoUrl);

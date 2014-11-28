@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -27,7 +27,7 @@ class EngineBlock_Corto_Module_Service_ProcessedAssertionConsumer extends Engine
         }
 
         if (!empty($remainingProcessingEntities)) { // Moar processing!
-            /** @var AbstractConfigurationEntity $nextProcessingEntity */
+            /** @var AbstractRole $nextProcessingEntity */
             $nextProcessingEntity = array_shift($remainingProcessingEntities);
 
             $this->_server->setProcessingMode();

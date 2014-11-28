@@ -1,7 +1,7 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 abstract class EngineBlock_Corto_Filter_Abstract
 {
@@ -24,8 +24,8 @@ abstract class EngineBlock_Corto_Filter_Abstract
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator     $response
      * @param array                                             $responseAttributes
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
-     * @param ServiceProviderEntity                             $serviceProvider
-     * @param IdentityProviderEntity                            $identityProvider
+     * @param ServiceProvider                             $serviceProvider
+     * @param IdentityProvider                            $identityProvider
      * @throws EngineBlock_Exception
      * @throws Exception
      */
@@ -33,8 +33,8 @@ abstract class EngineBlock_Corto_Filter_Abstract
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array &$responseAttributes,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        ServiceProviderEntity $serviceProvider,
-        IdentityProviderEntity $identityProvider
+        ServiceProvider $serviceProvider,
+        IdentityProvider $identityProvider
     )
     {
         /** @var SAML2_AuthnRequest $request */

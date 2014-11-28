@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Corto_Model_Consent
 {
@@ -50,7 +50,7 @@ class EngineBlock_Corto_Model_Consent
         $this->_databaseConnectionFactory = $databaseConnectionFactory;
     }
 
-    public function hasStoredConsent(ServiceProviderEntity $serviceProvider)
+    public function hasStoredConsent(ServiceProvider $serviceProvider)
     {
         try {
             $dbh = $this->_getConsentDatabaseConnection();
@@ -94,7 +94,7 @@ class EngineBlock_Corto_Model_Consent
         }
     }
 
-    public function storeConsent(ServiceProviderEntity $serviceProvider)
+    public function storeConsent(ServiceProvider $serviceProvider)
     {
         $dbh = $this->_getConsentDatabaseConnection();
         if (!$dbh) {

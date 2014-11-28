@@ -1,8 +1,8 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -107,7 +107,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $ebRequest->getDestination()
         );
 
-        if (!$serviceProvider instanceof ServiceProviderEntity) {
+        if (!$serviceProvider instanceof ServiceProvider) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 "Requesting entity '$spEntityId' is not a Service Provider"
             );
@@ -156,7 +156,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected function _annotateRequestWithVoContext(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest,
-        ServiceProviderEntity $cortoSpMetadata
+        ServiceProvider $cortoSpMetadata
     ) {
         // Check if the request was received on a VO endpoint.
         $explicitVo = $this->_server->getVirtualOrganisationContext();
@@ -356,7 +356,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      * throws a Corto_Module_Bindings_VerificationException.
      * @param string $messageIssuer
      * @param string $destination
-     * @return AbstractConfigurationEntity Remote Entity that issued the message
+     * @return AbstractRole Remote Entity that issued the message
      * @throws EngineBlock_Corto_Exception_UnknownIssuer
      */
     protected function _verifyKnownMessageIssuer($messageIssuer, $destination = '')
@@ -376,7 +376,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
     public function send(
         EngineBlock_Saml2_MessageAnnotationDecorator $message,
-        AbstractConfigurationEntity $remoteEntity
+        AbstractRole $remoteEntity
     ) {
         $bindingUrn = $message->getDeliverByBinding();
         $sspMessage = $message->getSspMessage();
@@ -467,7 +467,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
     }
 
-    protected function shouldMessageBeSigned(SAML2_Message $sspMessage, AbstractConfigurationEntity $remoteEntity)
+    protected function shouldMessageBeSigned(SAML2_Message $sspMessage, AbstractRole $remoteEntity)
     {
         if ($sspMessage instanceof SAML2_Response) {
             return true;
@@ -530,10 +530,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * @param ServiceProviderEntity $cortoEntityMetadata
+     * @param ServiceProvider $cortoEntityMetadata
      * @return array
      */
-    protected function mapCortoEntityMetadataToSspEntityMetadata(AbstractConfigurationEntity $cortoEntityMetadata)
+    protected function mapCortoEntityMetadataToSspEntityMetadata(AbstractRole $cortoEntityMetadata)
     {
         /** @var EngineBlock_X509_Certificate[] $certificates */
         $certificates = $cortoEntityMetadata->certificates;
@@ -542,10 +542,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             'entityid'            => $cortoEntityMetadata->entityId,
             'keys'                => array(),
         );
-        if ($cortoEntityMetadata instanceof IdentityProviderEntity) {
+        if ($cortoEntityMetadata instanceof IdentityProvider) {
             $config['SingleSignOnService'] = $cortoEntityMetadata->singleSignOnServices[0]->location;
         }
-        if ($cortoEntityMetadata instanceof ServiceProviderEntity) {
+        if ($cortoEntityMetadata instanceof ServiceProvider) {
             $config['AssertionConsumerService'] = $cortoEntityMetadata->assertionConsumerServices[0]->location;
         }
         foreach ($certificates as $certificate) {

@@ -1,7 +1,7 @@
 <?php
 
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -437,7 +437,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $layout->setLayout($oldLayout);
     }
 
-    private function getNameNl(IdentityProviderEntity $identityProvider, $additionalLogInfo)
+    private function getNameNl(IdentityProvider $identityProvider, $additionalLogInfo)
     {
         if ($identityProvider->displayNameNl) {
             return $identityProvider->displayNameNl;
@@ -455,7 +455,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $identityProvider->entityId;
     }
 
-    private function getNameEn(IdentityProviderEntity $identityProvider, $additionalInfo)
+    private function getNameEn(IdentityProvider $identityProvider, $additionalInfo)
     {
         if ($identityProvider->displayNameEn) {
             return $identityProvider->displayNameEn;
@@ -473,7 +473,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $identityProvider->entityId;
     }
 
-    private function getKeywords(IdentityProviderEntity $identityProvider)
+    private function getKeywords(IdentityProvider $identityProvider)
     {
         if ($identityProvider->keywordsEn) {
             return explode(' ', $identityProvider->keywordsEn);

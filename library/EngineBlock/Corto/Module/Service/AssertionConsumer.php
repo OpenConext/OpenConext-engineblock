@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -40,7 +40,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 
         $processingEntities = $this->_server->getConfig('Processing', array());
         if (!empty($processingEntities)) {
-            /** @var AbstractConfigurationEntity $firstProcessingEntity */
+            /** @var AbstractRole $firstProcessingEntity */
             $firstProcessingEntity = array_shift($processingEntities);
             $_SESSION['Processing'][$receivedRequest->getId()]['RemainingEntities']   = $processingEntities;
             $_SESSION['Processing'][$receivedRequest->getId()]['OriginalDestination'] = $receivedResponse->getDestination();

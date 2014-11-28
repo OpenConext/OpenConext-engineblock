@@ -1,12 +1,12 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Saml2_AuthnRequestFactory
 {
     public static function createFromRequest(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $originalRequest,
-        IdentityProviderEntity $idpMetadata,
+        IdentityProvider $idpMetadata,
         EngineBlock_Corto_ProxyServer $server
     ) {
         $nameIdPolicy = array('AllowCreate' => 'true');

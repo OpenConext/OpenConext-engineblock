@@ -1,6 +1,6 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
@@ -99,11 +99,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     }
 
     /**
-     * @param ServiceProviderEntity[] $serviceProviders
-     * @param IdentityProviderEntity $identityProvider
+     * @param ServiceProvider[] $serviceProviders
+     * @param IdentityProvider $identityProvider
      * @return bool
      */
-    private function isConsentDisabled(array $serviceProviders, IdentityProviderEntity $identityProvider)
+    private function isConsentDisabled(array $serviceProviders, IdentityProvider $identityProvider)
     {
         foreach ($serviceProviders as $serviceProvider) {
             if (!$serviceProvider->isConsentRequired) {

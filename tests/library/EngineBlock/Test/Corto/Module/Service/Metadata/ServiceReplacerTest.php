@@ -1,28 +1,28 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Test_ServiceReplacerTest
     extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var IdentityProviderEntity
+     * @var IdentityProvider
      */
     private $entity;
 
     /**
-     * @var IdentityProviderEntity
+     * @var IdentityProvider
      */
     private $proxyEntity;
 
     public function setUp()
     {
-        $this->entity = new IdentityProviderEntity('https://sp.example.edu');
+        $this->entity = new IdentityProvider('https://sp.example.edu');
         $this->entity->singleSignOnServices[] = new Service(SAML2_Const::BINDING_HTTP_REDIRECT, 'redirectlocation');
 
-        $this->proxyEntity = new IdentityProviderEntity('https://proxy.example.edu');
+        $this->proxyEntity = new IdentityProvider('https://proxy.example.edu');
         $this->proxyEntity->singleSignOnServices[] = new Service('proxyRedirectLocation', SAML2_Const::BINDING_HTTP_REDIRECT);
         $this->proxyEntity->singleSignOnServices[] = new Service('proxyPostLocation', SAML2_Const::BINDING_HTTP_POST);
     }

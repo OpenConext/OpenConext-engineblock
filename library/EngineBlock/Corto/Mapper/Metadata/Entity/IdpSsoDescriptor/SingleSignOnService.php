@@ -1,15 +1,15 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor_SingleSignOnService
 {
     /**
-     * @var IdentityProviderEntity
+     * @var IdentityProvider
      */
     private $_entity;
 
-    public function __construct(IdentityProviderEntity $entity)
+    public function __construct(IdentityProvider $entity)
     {
         $this->_entity = $entity;
     }

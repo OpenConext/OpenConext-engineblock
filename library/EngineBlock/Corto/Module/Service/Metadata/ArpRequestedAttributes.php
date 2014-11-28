@@ -1,7 +1,7 @@
 <?php
 use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 /**
  * Add the RequestedAttributes for the AttributeConsumingService section in the SPSSODescriptor based on the ARP of the SP
@@ -9,9 +9,9 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
 
 class EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes
 {
-    public function addRequestAttributes(AbstractConfigurationEntity $entity)
+    public function addRequestAttributes(AbstractRole $entity)
     {
-        if (!$entity instanceof ServiceProviderEntity) {
+        if (!$entity instanceof ServiceProvider) {
             return $entity;
         }
 

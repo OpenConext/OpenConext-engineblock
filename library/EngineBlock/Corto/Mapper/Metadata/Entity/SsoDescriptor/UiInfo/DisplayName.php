@@ -1,18 +1,18 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_DisplayName
 {
     /**
-     * @var AbstractConfigurationEntity
+     * @var AbstractRole
      */
     private $_entity;
 
     /**
-     * @param AbstractConfigurationEntity $entity
+     * @param AbstractRole $entity
      */
-    public function __construct(AbstractConfigurationEntity $entity)
+    public function __construct(AbstractRole $entity)
     {
         $this->_entity = $entity;
     }

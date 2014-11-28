@@ -1,7 +1,7 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\InMemoryMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
 {
@@ -114,7 +114,7 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
         $proxyServerMock
             ->setRepository(new InMemoryMetadataRepository(
                 array(),
-                array(new ServiceProviderEntity('https://sp.example.edu'))
+                array(new ServiceProvider('https://sp.example.edu'))
             ))
             ->setBindingsModule($this->mockBindingsModule());
 
