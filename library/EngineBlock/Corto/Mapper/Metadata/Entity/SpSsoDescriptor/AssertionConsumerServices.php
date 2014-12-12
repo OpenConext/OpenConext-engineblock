@@ -27,7 +27,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AssertionConsumer
             $acsElement = array(
                 '_Binding'  => $acs->binding,
                 '_Location' => $acs->location,
-                '_index'    => $index,
+                '_index'    => $acs->serviceIndex,
             );
             if (is_bool($acs->isDefault)) {
                 $acsElement['_isDefault'] = $acs->isDefault;
