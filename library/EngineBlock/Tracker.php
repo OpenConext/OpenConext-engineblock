@@ -1,12 +1,11 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_Tracker
 {
-    public function __construct() 
-    {
-    }
-    
-    public function trackLogin($spEntityMetadata, $idpEntityMetadata, $subjectId, $voContext, $keyId)
+    public function trackLogin(ServiceProviderEntity $spEntityMetadata, IdentityProviderEntity $idpEntityMetadata, $subjectId, $voContext, $keyId)
     {
         $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
         $db = $this->_getDbConnection();
@@ -17,16 +16,16 @@ class EngineBlock_Tracker
             VALUES
               (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname, :keyid)"
         );
-        $spEntityName  = (!empty($spEntityMetadata['Name']['en'])
-            ? $spEntityMetadata['Name']['en']
-            : $spEntityMetadata['EntityID']);
-        $idpEntityName = (!empty($idpEntityMetadata['Name']['en'])
-            ? $idpEntityMetadata['Name']['en']
-            : $idpEntityMetadata['EntityID']);
+        $spEntityName  = (!empty($spEntityMetadata->displayNameEn)
+            ? $spEntityMetadata->displayNameEn
+            : $spEntityMetadata->entityId);
+        $idpEntityName = (!empty($idpEntityMetadata->displayNameEn)
+            ? $idpEntityMetadata->displayNameEn
+            : $idpEntityMetadata->entityId);
         $stmt->bindParam('userid'       , $subjectId);
-        $stmt->bindParam('spentityid'   , $spEntityMetadata['EntityID']);
+        $stmt->bindParam('spentityid'   , $spEntityMetadata->entityId);
         $stmt->bindParam('spentityname' , $spEntityName);
-        $stmt->bindParam('idpentityid'  , $idpEntityMetadata['EntityID']);
+        $stmt->bindParam('idpentityid'  , $idpEntityMetadata->entityId);
         $stmt->bindParam('idpentityname', $idpEntityName);
         $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
         $stmt->bindParam('voname'       , $voContext);

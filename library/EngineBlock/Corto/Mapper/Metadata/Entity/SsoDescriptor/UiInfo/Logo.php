@@ -1,23 +1,26 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Logo
 {
+    /**
+     * @var AbstractConfigurationEntity
+     */
     private $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractConfigurationEntity $entity)
     {
         $this->_entity = $entity;
     }
 
     public function mapTo(array $rootElement)
     {
-        if (!isset($this->_entity['Logo'])) {
+        if (!$this->_entity->logo) {
             return $rootElement;
         }
 
-        $hasLogoHeight = (isset($this->_entity['Logo']['Height']) && $this->_entity['Logo']['Height']);
-        $hasLogoWidth  = (isset($this->_entity['Logo']['Width'])  && $this->_entity['Logo']['Width']);
-        if (!$hasLogoHeight || !$hasLogoWidth) {
+        if (!$this->_entity->logo->height || !$this->_entity->logo->width) {
             // @todo warn here!
             return $rootElement;
         }
@@ -30,9 +33,9 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Logo
         }
         $rootElement['md:Extensions']['mdui:UIInfo'][0]['mdui:Logo'] = array(
             array(
-                '_height' => $this->_entity['Logo']['Height'],
-                '_width'  => $this->_entity['Logo']['Width'],
-                '__v'     => $this->_entity['Logo']['URL'],
+                '_height' => $this->_entity->logo->height,
+                '_width'  => $this->_entity->logo->width,
+                '__v'     => $this->_entity->logo->url,
             ),
         );
         return $rootElement;

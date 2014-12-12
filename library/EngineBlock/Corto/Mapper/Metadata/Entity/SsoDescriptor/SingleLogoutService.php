@@ -1,11 +1,15 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_SingleLogoutService
 {
-    /** @var  array */
+    /**
+     * @var AbstractConfigurationEntity
+     */
     private $_entity;
 
-    public function __construct(array $entity)
+    public function __construct(AbstractConfigurationEntity $entity)
     {
         $this->_entity = $entity;
     }
@@ -18,22 +22,22 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_SingleLogoutService
      */
     public function mapTo(array $rootElement)
     {
-
-        if (isset($this->_entity['SingleLogoutService'])) {
-            foreach ($this->_entity['SingleLogoutService'] as $service) {
-                if (isset($service['Binding']) && isset($service['Location'])) {
-                    if (!isset($rootElement['md:SingleLogoutService'])) {
-                        $rootElement['md:SingleLogoutService'] = array();
-                    }
-
-                    $rootElement['md:SingleLogoutService'][] = array(
-                        EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding' => $service['Binding'],
-                        EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $service['Location']
-                    );
-                }
-            }
+        if (empty($this->_entity->singleLogoutServices)) {
+            return $rootElement;
         }
 
+        foreach ($this->_entity->singleLogoutServices as $service) {
+            if ($service->binding && $service->location) {
+                if (!isset($rootElement['md:SingleLogoutService'])) {
+                    $rootElement['md:SingleLogoutService'] = array();
+                }
+
+                $rootElement['md:SingleLogoutService'][] = array(
+                    EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Binding'  => $service->binding,
+                    EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'Location' => $service->location,
+                );
+            }
+        }
         return $rootElement;
     }
 

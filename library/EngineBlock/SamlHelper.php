@@ -1,44 +1,41 @@
 <?php
 
-/**
- * Temporary workaround
- *
- * @todo move methods message and entity objects *
- */
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+
 class EngineBlock_SamlHelper
 {
     /**
      * Do we need to enable additional logging for any of the specified entities (SP or IdP).
      *
-     * @param array $entities
+     * @param AbstractConfigurationEntity[] $entities
      * @return bool
      */
-    public static function doRemoteEntitiesRequireAdditionalLogging(array $entities) {
-        foreach ($entities as $entity) {
-            if (!empty($entity['AdditionalLogging'])) {
-                return true;
-            }
-        }
-        return false;
+    public static function doRemoteEntitiesRequireAdditionalLogging(array $entities)
+    {
+        return array_reduce($entities, function($carry, AbstractConfigurationEntity $entity) {
+            return $carry | $entity->additionalLogging;
+        }, false);
     }
 
     /**
      * Get the 'chain' of SP requesters, if available. Furthest removed SP first.
      *
-     * @param array $spEntityMetadata
+     * @param ServiceProviderEntity $serviceProvider
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
-     * @param EngineBlock_Corto_ProxyServer $server
-     * @return array
+     * @param MetadataRepositoryInterface $repository
+     * @return ServiceProviderEntity[]
      */
     public static function getSpRequesterChain(
-        array $spEntityMetadata,
+        ServiceProviderEntity $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        EngineBlock_Corto_ProxyServer $server
+        MetadataRepositoryInterface $repository
     ) {
-        $chain = array($spEntityMetadata);
+        $chain = array($serviceProvider);
 
-        $destinationSpMetadata = self::getDestinationSpMetadata($spEntityMetadata, $request, $server);
-        if ($destinationSpMetadata !== $spEntityMetadata) {
+        $destinationSpMetadata = self::getDestinationSpMetadata($serviceProvider, $request, $repository);
+        if ($destinationSpMetadata !== $serviceProvider) {
             array_unshift($chain, $destinationSpMetadata);
         }
 
@@ -48,22 +45,39 @@ class EngineBlock_SamlHelper
     /**
      * Get the 'Destination' SP metadata. Depending on the SP configuration, may be the SP metadata or it's requester.
      *
-     * @param array $spEntityMetadata
+     * @param ServiceProviderEntity $serviceProvider
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
-     * @param EngineBlock_Corto_ProxyServer $server
-     * @return array
+     * @param MetadataRepositoryInterface $repository
+     * @return ServiceProviderEntity
      */
     public static function getDestinationSpMetadata(
-        array $spEntityMetadata,
+        ServiceProviderEntity $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        EngineBlock_Corto_ProxyServer $server
+        MetadataRepositoryInterface $repository
     ) {
-        if (!isset($spEntityMetadata['TrustedProxy']) || !$spEntityMetadata['TrustedProxy']) {
-            return $spEntityMetadata;
+        $requester = self::findRequesterServiceProvider($serviceProvider, $request, $repository);
+        return $requester ? $requester : $serviceProvider;
+    }
+
+    /**
+     * Get the metadata for a requester, if allowed by the configuration.
+     *
+     * @param ServiceProviderEntity $serviceProvider
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param MetadataRepositoryInterface $repository
+     * @return null|ServiceProviderEntity
+     */
+    public static function findRequesterServiceProvider(
+        ServiceProviderEntity $serviceProvider,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        MetadataRepositoryInterface $repository
+    ) {
+        if (!$serviceProvider->isTrustedProxy) {
+            return null;
         }
 
         if (!$request->wasSigned()) {
-            return $spEntityMetadata;
+            return null;
         }
 
         // Requester IDs are appended to as they pass through a proxy, so we always want the last RequesterID
@@ -71,10 +85,15 @@ class EngineBlock_SamlHelper
         $requesterIds = $request->getRequesterIds();
         $lastRequesterEntityId = end($requesterIds);
 
-        if ($lastRequesterEntityId && !$server->hasRemoteEntity($lastRequesterEntityId)) {
-            return $spEntityMetadata;
+        if (!$lastRequesterEntityId) {
+            return null;
         }
 
-        return $server->getRemoteEntity($lastRequesterEntityId);
+        $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId);
+        if (!$lastRequesterEntity) {
+            return null;
+        }
+
+        return $lastRequesterEntity;
     }
 }

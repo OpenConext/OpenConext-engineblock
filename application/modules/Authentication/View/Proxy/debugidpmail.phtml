@@ -1,9 +1,12 @@
 <?php
+
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+
 /**
  * Injected:
  *
  * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
- * @var array $idp
+ * @var IdentityProviderEntity $idp
  * @var array $attributes
  * @var EngineBlock_View $this
  */
@@ -14,9 +17,9 @@ $attributesValidated = $validator->validate();
 IdP
 ===
 <?php
-echo 'Name               ' . $idp['Name']['en'] . PHP_EOL;
-echo 'Entity ID          ' . $idp['EntityID'] . PHP_EOL;
-echo 'Workflow Status:   ' . $idp['WorkflowState'] . PHP_EOL;
+echo 'Name               ' . $idp->nameEn . PHP_EOL;
+echo 'Entity ID          ' . $idp->entityId . PHP_EOL;
+echo 'Workflow Status:   ' . $idp->workflowState . PHP_EOL;
 ?>
 
 

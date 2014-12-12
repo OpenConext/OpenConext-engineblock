@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+
 /**
  *
  */
@@ -24,7 +26,6 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
         $this->_addIsMemberOfSurfNlAttribute();
     }
 
-
     /**
      * Add the 'urn:collab:org:surf.nl' value to the isMemberOf attribute in case a user
      * is considered a 'full member' of the SURFfederation.
@@ -33,19 +34,18 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
      */
     protected function _addIsMemberOfSurfNlAttribute()
     {
-        $log = EngineBlock_ApplicationSingleton::getLog();
-
-        if (!isset($this->_idpMetadata['GuestQualifier'])) {
-            $log->attach($this->_idpMetadata, 'IDP')
-                ->warn('No GuestQualifier for IdP, setting it to "All" and continuing');
-
-            $this->_idpMetadata['GuestQualifier'] = 'All';
+        if ($this->_identityProvider->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_ALL) {
+            // All users from this IdP are guests, so no need to add the isMemberOf
+            return;
         }
 
-        if ($this->_idpMetadata['GuestQualifier'] === 'None') {
+        if ($this->_identityProvider->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_NONE) {
             $this->_setIsMember();
+            return;
         }
-        else if ($this->_idpMetadata['GuestQualifier'] === 'Some') {
+
+        $log = EngineBlock_ApplicationSingleton::getLog();
+        if ($this->_identityProvider->guestQualifier === IdentityProviderEntity::GUEST_QUALIFIER_SOME) {
             if (isset($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0])) {
                 if ($this->_responseAttributes[static::URN_SURF_PERSON_AFFILIATION][0] === 'member') {
                     $this->_setIsMember();
@@ -58,7 +58,7 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
                 }
             }
             else {
-                $log->attach($this->_idpMetadata, 'IDP')
+                $log->attach($this->_identityProvider, 'IDP')
                     ->attach($this->_responseAttributes, 'Attributes')
                     ->warn(
                         "Idp guestQualifier is set to 'Some' however, ".
@@ -66,18 +66,15 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
                         "not adding the isMemberOf for surf.nl"
                     );
             }
+            return;
         }
-        else if ($this->_idpMetadata['GuestQualifier'] === 'All') {
-            // All users from this IdP are guests, so no need to add the isMemberOf
-        }
-        else {
-            // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
-            $log->attach($this->_idpMetadata, 'IDP')
-                ->attach($this->_responseAttributes, 'Attributes')
-                ->warn(
-                    "Idp guestQualifier is set to unknown value '{$this->_idpMetadata['GuestQualifier']}, idp metadata: "
-                );
-        }
+
+        // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
+        $log->attach($this->_identityProvider, 'IDP')
+            ->attach($this->_responseAttributes, 'Attributes')
+            ->warn(
+                "Idp guestQualifier is set to unknown value '{$this->_identityProvider['GuestQualifier']}, idp metadata: "
+            );
     }
 
     protected function _setIsMember()
@@ -85,7 +82,8 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
         if (!isset($this->_responseAttributes[static::URN_IS_MEMBER_OF])) {
             $this->_responseAttributes[static::URN_IS_MEMBER_OF] = array();
         }
-        $this->_responseAttributes[static::URN_IS_MEMBER_OF][] =
-            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->addgueststatus->guestqualifier;
+
+        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        $this->_responseAttributes[static::URN_IS_MEMBER_OF][] =  $configuration->addgueststatus->guestqualifier;
     }
 }

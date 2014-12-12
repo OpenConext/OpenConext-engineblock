@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "48a2f86311f2e02f9fe4cb55c8e30d29",
+    "hash": "4758d936241dff94f7900621d6bcd75d",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -209,6 +209,82 @@
             "time": "2014-10-08 05:47:39"
         },
         {
+            "name": "openconext/engineblock-metadata",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
+                "reference": "c4f7b3d87db7ef3f9f5797e7cf1f25b9084a5c82"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/c4f7b3d87db7ef3f9f5797e7cf1f25b9084a5c82",
+                "reference": "c4f7b3d87db7ef3f9f5797e7cf1f25b9084a5c82",
+                "shasum": ""
+            },
+            "require": {
+                "openconext/stoker-metadata": "dev-master",
+                "php": ">=5.3.3",
+                "simplesamlphp/saml2": "~0.5"
+            },
+            "require-dev": {
+                "ibuildings/qa-tools": "~1.1",
+                "sebastian/phpcpd": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenConext\\Component\\EngineBlockMetadata\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "description": "OpenConext component for EngineBlock Entity Metadata",
+            "time": "2014-11-27 13:29:00"
+        },
+        {
+            "name": "openconext/stoker-metadata",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenConext/OpenConext-stoker-metadata.git",
+                "reference": "fd2df32c3763ffa1f7aa51ca7ed40c0882c8c53d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-stoker-metadata/zipball/fd2df32c3763ffa1f7aa51ca7ed40c0882c8c53d",
+                "reference": "fd2df32c3763ffa1f7aa51ca7ed40c0882c8c53d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "ibuildings/qa-tools": "~1.1",
+                "sebastian/phpcpd": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenConext\\Component\\StokerMetadata\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "APACHE-2"
+            ],
+            "authors": [
+                {
+                    "name": "Boy Baukema",
+                    "email": "boy.baukema@flex.surfnet.nl"
+                }
+            ],
+            "description": "PHP library for accessing OpenConext stoker metadata",
+            "time": "2014-11-20 15:22:19"
+        },
+        {
             "name": "openid/php-openid",
             "version": "dev-master",
             "source": {
@@ -262,12 +338,12 @@
             "version": "v2.1.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/fabpot/Pimple.git",
+                "url": "https://github.com/silexphp/Pimple.git",
                 "reference": "ea22fb2880faf7b7b0e17c9809c6fe25b071fd76"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Pimple/zipball/ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
+                "url": "https://api.github.com/repos/silexphp/Pimple/zipball/ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
                 "reference": "ea22fb2880faf7b7b0e17c9809c6fe25b071fd76",
                 "shasum": ""
             },
@@ -499,17 +575,17 @@
         },
         {
             "name": "symfony/process",
-            "version": "v2.5.6",
+            "version": "v2.5.7",
             "target-dir": "Symfony/Component/Process",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "9bbacbb3a7a27b17c0d51e2f126f59e0e588ad3a"
+                "reference": "ffe6e27a57e31262c3204a0955076c27c54c8e7e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/9bbacbb3a7a27b17c0d51e2f126f59e0e588ad3a",
-                "reference": "9bbacbb3a7a27b17c0d51e2f126f59e0e588ad3a",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/ffe6e27a57e31262c3204a0955076c27c54c8e7e",
+                "reference": "ffe6e27a57e31262c3204a0955076c27c54c8e7e",
                 "shasum": ""
             },
             "require": {
@@ -542,7 +618,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 05:50:18"
+            "time": "2014-11-03 19:48:45"
         },
         {
             "name": "zendframework/zendframework1",
@@ -1347,17 +1423,17 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.5.6",
+            "version": "v2.5.7",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "2d9f527449cabfa8543dd7fa3a466d6ae83d6726"
+                "reference": "900d38bc8f74a50343ce65dd1c1e9819658ee56b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/2d9f527449cabfa8543dd7fa3a466d6ae83d6726",
-                "reference": "2d9f527449cabfa8543dd7fa3a466d6ae83d6726",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/900d38bc8f74a50343ce65dd1c1e9819658ee56b",
+                "reference": "900d38bc8f74a50343ce65dd1c1e9819658ee56b",
                 "shasum": ""
             },
             "require": {
@@ -1390,7 +1466,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2014-10-01 05:50:18"
+            "time": "2014-11-20 13:22:25"
         }
     ],
     "aliases": [
@@ -1403,6 +1479,8 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "openconext/engineblock-metadata": 20,
+        "openconext/stoker-metadata": 20,
         "openid/php-openid": 20,
         "phake/phake": 10
     },

@@ -1,15 +1,17 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity
 {
     private $_entity;
     private $_eduGain;
 
     /**
-     * @param array $entity
+     * @param AbstractConfigurationEntity $entity
      * @param boolean $eduGain
      */
-    public function __construct($entity, $eduGain)
+    public function __construct(AbstractConfigurationEntity $entity, $eduGain)
     {
         $this->_entity = $entity;
         $this->_eduGain = $eduGain;
@@ -27,7 +29,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
             return $rootElement;
         }
 
-        $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID'] = $this->_entity['EntityID'];
+        $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'entityID'] = $this->_entity->entityId;
         $rootElement[EngineBlock_Corto_XmlToArray::TAG_NAME_PFX] = 'md:EntityDescriptor';
 
         if ($this->_eduGain) {
@@ -42,28 +44,24 @@ class EngineBlock_Corto_Mapper_Metadata_Entity
         return $rootElement;
     }
 
-    protected function _mapIdpSsoDescriptor($rootElement)
+    protected function _mapIdpSsoDescriptor(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 
-    protected function _mapSpSsoDescriptor($rootElement)
+    protected function _mapSpSsoDescriptor(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 
-    protected function _mapContactPersons($rootElement)
+    protected function _mapContactPersons(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_ContactPersons($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 
-    /**
-     * @param array $rootElement
-     * @return array
-     */
     protected function _mapOrganization(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization($this->_entity);

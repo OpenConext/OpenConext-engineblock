@@ -1,4 +1,7 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Organization;
+
 class EngineBlock_Test_Corto_Mapper_Metadata_Entity_OrganizationTest extends PHPUnit_Framework_TestCase
 {
     public function testOrganizationIsCorrectlyAddedToRootElement()
@@ -11,78 +14,47 @@ class EngineBlock_Test_Corto_Mapper_Metadata_Entity_OrganizationTest extends PHP
             'md:Organization' => array(
                 'md:OrganizationName' => array(
                     array(
-                        '_xml:lang' => 'en',
-                        '__v' => 'English name',
-                    ),
-                    array(
                         '_xml:lang' => 'nl',
                         '__v' => 'Nederlandse naam',
+                    ),
+                    array(
+                        '_xml:lang' => 'en',
+                        '__v' => 'English Name',
                     ),
                 ),
                 'md:OrganizationDisplayName' => array(
                     array(
+                        '_xml:lang' => 'nl',
+                        '__v' => 'Nederlandse weergavenaam',
+                    ),
+                    array(
                         '_xml:lang' => 'en',
                         '__v' => 'English displayname',
                     ),
-                    array(
-                        '_xml:lang' => 'nl',
-                        '__v' => 'Nederlandse weergavenaam',
-                    )
                 ),
                 'md:OrganizationURL' => array(
+                    array(
+                        '_xml:lang' => 'nl',
+                        '__v' => 'Nederlandse url',
+                    ),
                     array(
                         '_xml:lang' => 'en',
                         '__v' => 'English url',
                     ),
-                    array(
-                        '_xml:lang' => 'nl',
-                        '__v' => 'Nederlandse url',
-                    )
                 )
             )
         );
         $this->assertEquals($expectedRootElement, $organizationMapper->mapTo($rootElement));
     }
 
-    public function testOrganizationIsNotAddedToRootElementWhenRequiredChildElementIsNotPresent()
-    {
-        $entity = $this->factoryEntity();
-
-        $childElementNames = array_keys($entity['Organization']);
-        foreach($childElementNames as $childElementName) {
-            $entityCopy = $entity;
-            unset($entityCopy['Organization'][$childElementName]);
-
-            $organizationMapper = new EngineBlock_Corto_Mapper_Metadata_Entity_Organization($entityCopy);
-            $rootElement = array();
-            $this->assertEquals(array(), $organizationMapper->mapTo($rootElement));
-        }
-
-    }
-
     /**
-     * @return array
+     * @return IdentityProviderEntity
      */
     private function factoryEntity()
     {
-        $entity = array(
-            'Organization' => array(
-                'Name' => array(
-                    'en' => 'English name',
-                    'nl' => 'Nederlandse naam',
-
-                ),
-                'DisplayName' => array(
-                    'en' => 'English displayname',
-                    'nl' => 'Nederlandse weergavenaam',
-
-                ),
-                'URL' => array(
-                    'en' => 'English url',
-                    'nl' => 'Nederlandse url',
-                )
-            )
-        );
+        $entity = new IdentityProviderEntity('https://idp.example.edu');
+        $entity->organizationEn = new Organization('English Name', 'English displayname', 'English url');
+        $entity->organizationNl = new Organization('Nederlandse naam', 'Nederlandse weergavenaam', 'Nederlandse url');
 
         return $entity;
     }

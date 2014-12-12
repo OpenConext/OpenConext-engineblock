@@ -1,12 +1,14 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entities
 {
     private $_entities;
     private $_eduGain;
 
     /**
-     * @param array $entities
+     * @param AbstractConfigurationEntity[] $entities
      * @param boolean$eduGain
      */
     public function __construct(array $entities, $eduGain)
@@ -39,7 +41,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
         return $rootElement;
     }
 
-    protected function _mapEntity(array $entity)
+    protected function _mapEntity(AbstractConfigurationEntity $entity)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($entity, $this->_eduGain);
         return $mapper->map();
@@ -47,7 +49,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entities
 
     protected function _mapMdRpi(array $rootElement)
     {
-        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_PublicationInfo($this->_entity);
+        $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_PublicationInfo();
         return $mapper->mapTo($rootElement);
     }
 }

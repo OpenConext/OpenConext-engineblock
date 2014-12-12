@@ -1,10 +1,12 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+
 class EngineBlock_Saml2_AuthnRequestFactory
 {
     public static function createFromRequest(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $originalRequest,
-        array $idpMetadata,
+        IdentityProviderEntity $idpMetadata,
         EngineBlock_Corto_ProxyServer $server
     ) {
         $nameIdPolicy = array('AllowCreate' => 'true');
@@ -17,9 +19,8 @@ class EngineBlock_Saml2_AuthnRequestFactory
          * Note: Some IDP's like those using ADFS2 do not understand those, for these cases the format can be 'configured as empty
          * or set to an older version.
          */
-        // @todo check why it is empty
-        if (!empty($idpMetadata['NameIDFormat'])) {
-            $nameIdPolicy['Format'] = $idpMetadata['NameIDFormat'];
+        if (!empty($idpMetadata->nameIdFormat)) {
+            $nameIdPolicy['Format'] = $idpMetadata->nameIdFormat;
         }
 
         /** @var SAML2_AuthnRequest $originalRequest */
@@ -27,7 +28,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest = new SAML2_AuthnRequest();
         $sspRequest->setId($server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssueInstant(time());
-        $sspRequest->setDestination($idpMetadata['SingleSignOnService'][0]['Location']);
+        $sspRequest->setDestination($idpMetadata->singleSignOnServices[0]->location);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
         $sspRequest->setAssertionConsumerServiceURL($server->getUrl('assertionConsumerService'));
@@ -35,7 +36,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $sspRequest->setIssuer($server->getUrl('spMetadataService'));
         $sspRequest->setNameIdPolicy($nameIdPolicy);
 
-        if (empty($idpMetadata['DisableScoping'])) {
+        if (empty($idpMetadata->disableScoping)) {
             // Copy over the Idps that are allowed to answer this request.
             $sspRequest->setIDPList($originalRequest->getIDPList());
 
@@ -56,7 +57,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
 
         // Use the default binding even if more exist
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
-        $request->setDeliverByBinding($idpMetadata['SingleSignOnService'][0]['Binding']);
+        $request->setDeliverByBinding($idpMetadata->singleSignOnServices[0]->binding);
 
         return $request;
     }

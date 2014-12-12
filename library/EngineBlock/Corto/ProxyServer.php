@@ -1,6 +1,11 @@
 <?php
 
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_ProxyServer
 {
@@ -50,23 +55,14 @@ class EngineBlock_Corto_ProxyServer
     protected $_defaultCertificates = null;
     protected $_keyPairs = array();
 
-    /**
-     * @var array
-     *
-     * Remote are all SP's and IdP's except Engineblock itself. Metadata of engineblock as IdP and SP is stored
-     * separately in current entities. This is done EngineBlock can never remove it's own metadata by filtering etc.
-     * It is recommended to use getCurrentEntity() to get Engineblock metadata however using getRemoteEntity() is also possible
-     * since this will proxy current entity information
-     *
-     */
-    protected $_entities = array(
-        'current'=>array(),
-        'hosted'=>array(),
-        'remote'=>array(),
-    );
     protected $_modules = array();
     protected $_templateSource;
     protected $_processingMode = false;
+
+    /**
+     * @var \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
+     */
+    private $_repository;
 
     public function __construct()
     {
@@ -285,88 +281,22 @@ class EngineBlock_Corto_ProxyServer
         return $scheme . '://' . $host . $mappedUri;
     }
 
-    public function hasRemoteEntity($entityId)
+    /**
+     * @param \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface $repository
+     * @return $this
+     */
+    public function setRepository(MetadataRepositoryInterface $repository)
     {
-        return isset($this->_entities['remote'][$entityId]);
+        $this->_repository = $repository;
+        return $this;
     }
 
     /**
-     * @param string $entityId
-     * @return array
-     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
+     * @return \OpenConext\Component\EngineBlockMetadata\Entity\MetadataRepository\MetadataRepositoryInterface
      */
-    public function getRemoteEntity($entityId)
+    public function getRepository()
     {
-        if (!isset($this->_entities['remote'][$entityId])) {
-            $entity = $this->findRemoteEntityInCurrentEntities($entityId);
-            if (empty($entity)) {
-                throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($entityId);
-            }
-            return $entity;
-        }
-        $entity = $this->_entities['remote'][$entityId];
-        $entity['EntityID'] = $entityId;
-        return $entity;
-    }
-
-    public function getRemoteEntities()
-    {
-        return $this->_entities['remote'];
-    }
-
-    /**
-     * Gets current entity by name
-     *
-     * @param string $name spMetadataService|idpMetadataService
-     * @return array mixed
-     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
-     */
-    public function getCurrentEntity($name)
-    {
-        if (!isset($this->_entities['current'][$name])) {
-            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException($name);
-        }
-        $entity = $this->_entities['current'][$name];
-        return $entity;
-    }
-
-    /**
-     * Tries to find the requested in the current entity list
-     *
-     * @param $name string
-     * @return null|array
-     */
-    public function findRemoteEntityInCurrentEntities($name)
-    {
-        foreach($this->_entities['current'] as $currentEntity) {
-            if ($name == $currentEntity['EntityID']) {
-                return $currentEntity;
-            }
-        }
-    }
-
-    public function getIdpEntityIds()
-    {
-        $idps = array();
-        foreach ($this->_server->getRemoteEntities() as $remoteEntityId => $remoteEntity) {
-            if (isset($remoteEntity['SingleSignOnService'])) {
-                $idps[] = $remoteEntityId;
-            }
-        }
-        return $idps;
-    }
-
-    /**
-     * @param array $entities
-     */
-    public function setCurrentEntities(array $entities)
-    {
-        $this->_entities['current'] = $entities;
-    }
-
-    public function setRemoteEntities($entities)
-    {
-        $this->_entities['remote'] = $entities;
+        return $this->_repository;
     }
 
 //////// MAIN /////////
@@ -388,6 +318,7 @@ class EngineBlock_Corto_ProxyServer
     public function setRemoteIdpMd5($remoteIdPMd5)
     {
         $remoteEntityIds = array_keys($this->_entities['remote']);
+
         foreach ($remoteEntityIds as $remoteEntityId) {
             if (md5($remoteEntityId) === $remoteIdPMd5) {
                 $this->_configs['Idp'] = $remoteEntityId;
@@ -430,8 +361,9 @@ class EngineBlock_Corto_ProxyServer
 
         $originalId = $spRequest->getId();
 
-        $idpMetadata = $this->getRemoteEntity($idpEntityId);
-        $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $idpMetadata, $this);
+        $identityProvider = $this->getRepository()->fetchIdentityProviderByEntityId($idpEntityId);
+
+        $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $identityProvider, $this);
         $newId = $ebRequest->getId();
 
         // Store the original Request
@@ -439,7 +371,7 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
-        $this->getBindingsModule()->send($ebRequest, $this->getRemoteEntity($idpEntityId));
+        $this->getBindingsModule()->send($ebRequest, $identityProvider);
     }
 
 //////// RESPONSE HANDLING ////////
@@ -493,8 +425,8 @@ class EngineBlock_Corto_ProxyServer
 
         // Unless of course we are in 'stealth' / transparent mode, in which case,
         // pretend to be the Identity Provider.
-        $serviceProvider = $this->getRemoteEntity($request->getIssuer());
-        $mustProxyTransparently = ($request->isTransparent() || !empty($serviceProvider['TransparentIssuer']));
+        $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        $mustProxyTransparently = ($request->isTransparent() || $serviceProvider->isTransparentIssuer);
         if (!$this->isInProcessingMode() && $mustProxyTransparently) {
             $newResponse->setIssuer($newResponse->getOriginalIssuer());
             $newAssertion->setIssuer($newResponse->getOriginalIssuer());
@@ -521,7 +453,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Confirm where we are sending it.
         $acs = $this->getRequestAssertionConsumer($request);
-        $subjectConfirmationData->Recipient = $acs['Location'];
+        $subjectConfirmationData->Recipient = $acs->location;
 
         // Confirm that this is in response to their AuthnRequest (unless, you know, it isn't).
         if (!$request->isUnsolicited()) {
@@ -596,11 +528,11 @@ class EngineBlock_Corto_ProxyServer
         $response->setIssuer($this->getUrl('idpMetadataService', $request->getIssuer(), $request));
 
         $acs = $this->getRequestAssertionConsumer($request);
-        $response->setDestination($acs['Location']);
+        $response->setDestination($acs->location);
         $response->setStatus(array('Code' => SAML2_Const::STATUS_SUCCESS));
 
         $response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
-        $response->setDeliverByBinding($acs['Binding']);
+        $response->setDeliverByBinding($acs->binding);
         return $response;
     }
 
@@ -609,41 +541,41 @@ class EngineBlock_Corto_ProxyServer
      * or the default ACS location when omitted.
      *
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
-     * @return array|bool
+     * @return Service
      */
     public function getRequestAssertionConsumer(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         /** @var SAML2_AuthnRequest $request */
-        $remoteEntity = $this->getRemoteEntity($request->getIssuer());
+        $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
         // parse and validate custom ACS location
-        $custom = $this->getCustomAssertionConsumer($request, $remoteEntity);
-        if (is_array($custom)) {
+        $custom = $this->getCustomAssertionConsumer($request, $serviceProvider);
+        if ($custom) {
             return $custom;
         }
 
         // return default ACS or fail
-        return $this->getDefaultAssertionConsumer($remoteEntity);
+        return $this->getDefaultAssertionConsumer($serviceProvider);
     }
 
     /**
      * Returns the default ACS location for given entity
      *
-     * @param array $remoteEntity
-     * @return array
+     * @param ServiceProviderEntity $serviceProvider
+     * @return Service
      * @throws EngineBlock_Corto_ProxyServer_Exception
      */
-    public function getDefaultAssertionConsumer($remoteEntity)
+    public function getDefaultAssertionConsumer(ServiceProviderEntity $serviceProvider)
     {
         // find first ACS URL that has a binding supported by EB
-        foreach ($remoteEntity['AssertionConsumerServices'] as $acs) {
-            if ($this->getBindingsModule()->isSupportedBinding($acs['Binding'])) {
+        foreach ($serviceProvider->assertionConsumerServices as $acs) {
+            if ($this->getBindingsModule()->isSupportedBinding($acs->binding)) {
                 return $acs;
             }
         }
 
         $this->getSystemLog()
-            ->attach($remoteEntity['AssertionConsumerServices'], 'AssertionConsumerServices');
+            ->attach($serviceProvider->assertionConsumerServices, 'AssertionConsumerServices');
 
         throw new EngineBlock_Corto_ProxyServer_Exception('No supported binding found for ACS');
     }
@@ -653,11 +585,11 @@ class EngineBlock_Corto_ProxyServer
      * none is specified
      *
      * @param array $request
-     * @param array $remoteEntity
+     * @param array $serviceProvider
      */
     public function getCustomAssertionConsumer(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        array $remoteEntity
+        ServiceProviderEntity $serviceProvider
     ) {
         $requestWasSigned    = $request->wasSigned();
 
@@ -678,17 +610,14 @@ class EngineBlock_Corto_ProxyServer
                     "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
                         "and ProtocolBinding '{$request->getProtocolBinding()}' from signed request. "
                 );
-                return array(
-                    'Location' => $request->getAssertionConsumerServiceURL(),
-                    'Binding'  => $request->getProtocolBinding(),
-                );
+                return new Service($request->getAssertionConsumerServiceURL(), $request->getProtocolBinding());
             }
             else {
                 $requestAcsIsRegisteredInMetadata = false;
-                foreach ($remoteEntity['AssertionConsumerServices'] as $entityAcs) {
+                foreach ($serviceProvider->assertionConsumerServices as $entityAcs) {
                     $requestAcsIsRegisteredInMetadata = (
-                        $entityAcs['Location'] === $request->getAssertionConsumerServiceURL() &&
-                        $entityAcs['Binding']  === $request->getProtocolBinding()
+                        $entityAcs->location === $request->getAssertionConsumerServiceURL() &&
+                        $entityAcs->binding  === $request->getProtocolBinding()
                     );
                     if ($requestAcsIsRegisteredInMetadata) {
                         break;
@@ -700,10 +629,7 @@ class EngineBlock_Corto_ProxyServer
                             "and ProtocolBinding '{$request->getProtocolBinding()}' from unsigned request, " .
                             "it's okay though, the ACSLocation and Binding were registered in the metadata"
                     );
-                    return array(
-                        'Location' => $request->getAssertionConsumerServiceURL(),
-                        'Binding'  => $request->getProtocolBinding(),
-                    );
+                    return new Service($request->getAssertionConsumerServiceURL(),$request->getProtocolBinding());
                 }
                 else {
                     $this->_server->getSessionLog()->notice(
@@ -732,11 +658,11 @@ class EngineBlock_Corto_ProxyServer
 
         if ($request->getAssertionConsumerServiceIndex()) {
             $index = (int)$request->getAssertionConsumerServiceIndex();
-            if (isset($remoteEntity['AssertionConsumerServices'][$index])) {
+            if (isset($serviceProvider->assertionConsumerServices[$index])) {
                 $this->_server->getSessionLog()->info(
                     "Using AssertionConsumerServiceIndex '$index' from request"
                 );
-                return $remoteEntity['AssertionConsumerServices'][$index];
+                return $serviceProvider->assertionConsumerServices[$index];
             }
             else {
                 $this->_server->getSessionLog()->notice(
@@ -754,19 +680,19 @@ class EngineBlock_Corto_ProxyServer
     ) {
         /** @var SAML2_AuthnRequest $request */
         $requestIssuer = $request->getIssuer();
-        $sp = $this->getRemoteEntity($requestIssuer);
+        $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($requestIssuer);
 
         // Detect error responses and send them off without an assertion.
         /** @var SAML2_Response $response */
         $status = $response->getStatus();
         if ($status['Code'] !== 'urn:oasis:names:tc:SAML:2.0:status:Success') {
             $response->setAssertions(array());
-            $this->getBindingsModule()->send($response, $sp);
+            $this->getBindingsModule()->send($response, $serviceProvider);
             return;
         }
 
         $this->filterOutputAssertionAttributes($response, $request);
-        $this->getBindingsModule()->send($response, $sp);
+        $this->getBindingsModule()->send($response, $serviceProvider);
     }
 
     /**
@@ -819,8 +745,8 @@ class EngineBlock_Corto_ProxyServer
             array(new EngineBlock_Corto_Filter_Input($this), 'filter'),
             $response,
             $request,
-            $this->getRemoteEntity($request->getIssuer()),
-            $this->getRemoteEntity($response->getIssuer())
+            $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()),
+            $this->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer())
         );
     }
 
@@ -832,8 +758,8 @@ class EngineBlock_Corto_ProxyServer
             array(new EngineBlock_Corto_Filter_Output($this), 'filter'),
             $response,
             $request,
-            $this->getRemoteEntity($request->getIssuer()),
-            $this->getRemoteEntity($response->getOriginalIssuer())
+            $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer()),
+            $this->getRepository()->fetchIdentityProviderByEntityId($response->getOriginalIssuer())
         );
     }
 
@@ -841,8 +767,8 @@ class EngineBlock_Corto_ProxyServer
         $callback,
         EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        array $spEntityMetadata,
-        array $idpEntityMetadata
+        ServiceProviderEntity $spEntityMetadata,
+        IdentityProviderEntity $idpEntityMetadata
     ) {
         // Take em out
         $responseAttributes = $response->getAssertion()->getAttributes();

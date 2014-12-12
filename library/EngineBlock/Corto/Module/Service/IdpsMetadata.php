@@ -1,6 +1,7 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
 
 class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -11,11 +12,12 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $spEntityId = $request->getQueryParameter('sp-entity-id');
         if ($spEntityId) {
             // See if an sp-entity-id was specified for which we need to use sp specific metadata
-            $spEntity = $this->_server->getRemoteEntity($spEntityId);
+            $spEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($spEntityId);
         }
 
         // Get the configuration for EngineBlock in it's IdP role.
-        $entityDetails = $this->_server->getCurrentEntity('idpMetadataService');
+        $engineIdpEntityId = $this->_server->getUrl('idpMetadataService');
+        $engineIdentityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineIdpEntityId);
 
         $idpEntities = array();
         // Note that Shibboleth likes to see it's self in the metadata, so if an sp-entity-id was passed along
@@ -24,38 +26,45 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             $idpEntities[] = $spEntity;
         }
 
-        $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
-        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
-        foreach ($this->_server->getRemoteEntities() as $entityId => $entity) {
+        $ssoServiceReplacer = new ServiceReplacer($engineIdentityProvider, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+        $slServiceReplacer  = new ServiceReplacer($engineIdentityProvider, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
+
+        if (isset($spEntity)) {
+            $identityProviders = $this->_server->getRepository()->fetchIdentityProvidersByEntityId(
+                $this->_server->getRepository()->findAllowedIdpEntityIdsForSp(
+                    $spEntity
+                )
+            );
+        }
+        else {
+            $identityProviders = $this->_server->getRepository()->findIdentityProviders();
+        }
+
+        foreach ($identityProviders as $entity) {
             // Don't add ourselves
-            if ($entity['EntityID'] === $entityDetails['EntityID']) {
+            if ($entity->entityId === $engineIdentityProvider->entityId) {
                 continue;
             }
 
-            // Only add entities that have a SSO service registered
-            if (!isset($entity['SingleSignOnService'])) {
-                continue;
-            }
-
-            if ($entity['isHidden']) {
+            if ($entity->hidden) {
                 continue;
             }
 
             // Use EngineBlock certificates
-            $entity['certificates'] = $entityDetails['certificates'];
+            $entity->certificates = $engineIdentityProvider->certificates;
 
             // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
             // NameIDs, so advertise that.
-            unset($entity['NameIDFormat']);
-            $entity['NameIDFormats'] = $entityDetails['NameIDFormats'];
+            unset($entity->nameIdFormat);
+            $entity->nameIdFormats = $engineIdentityProvider->nameIdFormats;
 
             // Replace service locations and bindings with those of EB
-            $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity['EntityID']);
+            $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity->entityId);
             $ssoServiceReplacer->replace($entity, $transparentSsoUrl);
             $transparentSlUrl = $this->_server->getUrl('singleLogoutService');
             $slServiceReplacer->replace($entity, $transparentSlUrl);
 
-            $entity['ContactPersons'] = $entityDetails['ContactPersons'];
+            $entity->contactPersons = $engineIdentityProvider->contactPersons;
 
             $idpEntities[] = $entity;
         }

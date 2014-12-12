@@ -1,10 +1,15 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractConfigurationEntity;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor
 {
+    /**
+     * @var AbstractConfigurationEntity
+     */
     protected $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractConfigurationEntity $entity)
     {
         $this->_entity = $entity;
     }
@@ -26,17 +31,16 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlo
         $rootElement['md:SPSSODescriptor'] = $this->_mapAssertionConsumerServices($rootElement['md:SPSSODescriptor']);
         $rootElement['md:SPSSODescriptor'] = $this->_mapAttributeConsumingService($rootElement['md:SPSSODescriptor']);
 
-
         return $rootElement;
     }
 
-    protected function _mapAssertionConsumerServices($rootElement)
+    protected function _mapAssertionConsumerServices(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AssertionConsumerServices($this->_entity);
         return $mapper->mapTo($rootElement);
     }
 
-    protected function _mapAttributeConsumingService($rootElement)
+    protected function _mapAttributeConsumingService(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AttributeConsumingService($this->_entity);
         return $mapper->mapTo($rootElement);
