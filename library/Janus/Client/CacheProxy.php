@@ -35,13 +35,10 @@ class Janus_Client_CacheProxy
             );
 
             if ($httpClient->getLastResponse()) {
+                $response = $httpClient->getLastResponse();
                 $application->getLogInstance()->attach(
-                    $httpClient->getLastResponse()->getHeadersAsString(),
-                    'HTTP Response headers'
-                );
-                $application->getLogInstance()->attach(
-                    $httpClient->getLastResponse()->getBody(),
-                    'HTTP Response body'
+                    $response->getHeadersAsString() . PHP_EOL . $response->getBody(),
+                    'HTTP Response'
                 );
             }
 
