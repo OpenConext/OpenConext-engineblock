@@ -367,7 +367,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest)
     {
-        $identityProviders = $this->_server->getRepository()->fetchIdentityProvidersByEntityId($idpEntityIds);
+        $identityProviders = $this->_server->getRepository()->findIdentityProvidersByEntityId($idpEntityIds);
 
         $wayfIdps = array();
         foreach ($identityProviders as $identityProvider) {
