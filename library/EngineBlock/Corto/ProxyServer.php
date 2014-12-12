@@ -1,9 +1,7 @@
 <?php
 
-use \OpenConext\Component\EngineBlockFixtures\IdFrame;
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\IndexedService;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\Service;
@@ -61,7 +59,7 @@ class EngineBlock_Corto_ProxyServer
     protected $_processingMode = false;
 
     /**
-     * @var \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+     * @var MetadataRepositoryInterface
      */
     private $_repository;
 
@@ -284,7 +282,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @param \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface $repository
+     * @param MetadataRepositoryInterface $repository
      * @return $this
      */
     public function setRepository(MetadataRepositoryInterface $repository)
@@ -294,7 +292,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+     * @return MetadataRepositoryInterface
      */
     public function getRepository()
     {
