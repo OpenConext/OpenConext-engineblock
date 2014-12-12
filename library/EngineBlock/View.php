@@ -76,6 +76,11 @@ class EngineBlock_View
 
         $arguments = func_get_args();
         $arguments[0] = $translator->translate($from);
+
+        if (count($arguments) === 1) {
+            return $arguments[0];
+        }
+
         return call_user_func_array('sprintf', $arguments);
     }
 
