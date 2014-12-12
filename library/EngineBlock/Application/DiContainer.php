@@ -1,9 +1,13 @@
 <?php
 
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
+use OpenConext\Component\EngineBlockMetadata\Container\ContainerInterface;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 
-class EngineBlock_Application_DiContainer extends Pimple
+class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
     const XML_CONVERTER                 = 'xmlConverter';
     const CONSENT_FACTORY               = 'consentFactory';
@@ -18,6 +22,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     const SAML2_ID                      = 'id';
     const SUPER_GLOBAL_MANAGER          = 'superGlobalManager';
     const OWN_ENTITIES_REPOSITORY       = 'ownMetadataRepository';
+    const DOCTRINE_ENTITY_MANAGER       = 'entityManager';
 
     public function __construct()
     {
@@ -33,6 +38,7 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerTimeProvider();
         $this->registerSaml2IdGenerator();
         $this->registerSuperGlobalManager();
+        $this->registerEntityManager();
     }
 
     protected function registerXmlConverter()
@@ -222,5 +228,34 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getMessageUtilClassName()
     {
        return 'sspmod_saml_Message';
+    }
+
+    protected function registerEntityManager()
+    {
+        $this[self::DOCTRINE_ENTITY_MANAGER] = function () {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $logger = $application->getLogInstance();
+            $engineBlockConfig = $application->getConfiguration();
+            $mapper = new EngineBlock_Doctrine_ConfigMapper($logger);
+
+            $driverConfig = $mapper->map($engineBlockConfig);
+
+            // obtaining the entity manager
+            return EntityManager::create(
+                DriverManager::getConnection($driverConfig),
+                Setup::createAnnotationMetadataConfiguration(
+                    array(ENGINEBLOCK_FOLDER_VENDOR . "/openconext/engineblock-metadata/src"),
+                    true,
+                    null,
+                    null,
+                    false
+                )
+            );
+        };
+    }
+
+    public function getEntityManager()
+    {
+        return $this[self::DOCTRINE_ENTITY_MANAGER];
     }
 }
