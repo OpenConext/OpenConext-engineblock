@@ -3,6 +3,7 @@
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\IndexedService;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\Service;
@@ -658,11 +659,21 @@ class EngineBlock_Corto_ProxyServer
 
         if ($request->getAssertionConsumerServiceIndex()) {
             $index = (int)$request->getAssertionConsumerServiceIndex();
-            if (isset($serviceProvider->assertionConsumerServices[$index])) {
+
+            // Find the indexed ACS in the metadata.
+            $indexedAssertionConsumerService = null;
+            foreach ($serviceProvider->assertionConsumerServices as $assertionConsumerService) {
+                if ((int) $assertionConsumerService->serviceIndex === $index) {
+                    $indexedAssertionConsumerService = $assertionConsumerService;
+                    break;
+                }
+            }
+
+            if ($indexedAssertionConsumerService) {
                 $this->_server->getSessionLog()->info(
                     "Using AssertionConsumerServiceIndex '$index' from request"
                 );
-                return $serviceProvider->assertionConsumerServices[$index];
+                return $indexedAssertionConsumerService;
             }
             else {
                 $this->_server->getSessionLog()->notice(
