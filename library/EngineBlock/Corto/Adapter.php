@@ -1,8 +1,8 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
 use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\DisableDisallowedEntitiesInWayfFilter;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveEntityByEntityIdFilter;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
@@ -155,14 +155,14 @@ class EngineBlock_Corto_Adapter
         $serviceProvider = $repository->fetchServiceProviderByEntityId($this->_getIssuerSpEntityId());
 
         if ($serviceProvider->displayUnconnectedIdpsWayf) {
-            $repository->filter(new DisableDisallowedEntitiesInWayfFilter(
+            $repository->appendVisitor(new DisableDisallowedEntitiesInWayfVisitor(
                 $serviceProvider->entityId,
                 $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
             ));
             return;
         }
 
-        $repository->filter(
+        $repository->appendFilter(
             new RemoveDisallowedIdentityProvidersFilter(
                 $serviceProvider->entityId,
                 $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
@@ -184,7 +184,7 @@ class EngineBlock_Corto_Adapter
 
         $repository = $this->getMetadataRepository();
         $serviceProvider = $repository->fetchServiceProviderByEntityId($serviceProviderEntityId);
-        $repository->filter(
+        $repository->appendFilter(
             new RemoveDisallowedIdentityProvidersFilter(
                 $serviceProvider->entityId,
                 $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
@@ -201,7 +201,7 @@ class EngineBlock_Corto_Adapter
             $serviceProvider = $repository->findServiceProviderByEntityId($requesterId);
 
             if ($serviceProvider) {
-                $repository->filter(
+                $repository->appendFilter(
                     new RemoveDisallowedIdentityProvidersFilter(
                         $serviceProvider->entityId,
                         $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
@@ -234,7 +234,7 @@ class EngineBlock_Corto_Adapter
             return;
         }
 
-        $this->getMetadataRepository()->filter(
+        $this->getMetadataRepository()->appendFilter(
             new RemoveDisallowedIdentityProvidersFilter(
                 $serviceProvider->entityId,
                 $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
@@ -254,7 +254,7 @@ class EngineBlock_Corto_Adapter
         $repository = $this->getMetadataRepository();
         $serviceProvider = $repository->fetchServiceProviderByEntityId($spEntityId);
 
-        $repository->filter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
+        $repository->appendFilter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
     }
 
     /**
@@ -275,7 +275,7 @@ class EngineBlock_Corto_Adapter
             return;
         }
 
-        $repository->filter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
+        $repository->appendFilter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
     }
 
     /**
