@@ -63,7 +63,7 @@ class Janus_Client_CacheProxy implements RestClientInterface
      * @throws Janus_Client_Exception
      * @throws void
      */
-    private function __call($name, $arguments)
+    public function __call($name, $arguments)
     {
         $client = $this->_getClient();
 
