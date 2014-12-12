@@ -223,16 +223,17 @@ class EngineBlock_Corto_ProxyServer
      */
     public function getSigningCertificates()
     {
-        if (!$this->_keyId) {
-            $this->_keyId = 'default';
+        $keyId = $this->_keyId;
+        if (!$keyId) {
+            $keyId = 'default';
         }
 
-        if (!isset($this->_keyPairs[$this->_keyId])) {
+        if (!isset($this->_keyPairs[$keyId])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Unknown key id '{$this->_keyId}'"
+                "Unknown key id '{$keyId}'"
             );
         }
-        return $this->_keyPairs[$this->_keyId];
+        return $this->_keyPairs[$keyId];
     }
 
     public function getUrl($serviceName = "", $remoteEntityId = "", EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request = null)
