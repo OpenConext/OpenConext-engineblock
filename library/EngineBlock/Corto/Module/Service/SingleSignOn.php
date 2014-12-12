@@ -5,9 +5,6 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
-    const RESPONSE_CACHE_TYPE_IN  = 'in';
-    const RESPONSE_CACHE_TYPE_OUT = 'out';
-
     public function serve($serviceName)
     {
         $response = $this->_displayDebugResponse($serviceName);
@@ -278,7 +275,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
-        if ($cachedResponse['type'] === self::RESPONSE_CACHE_TYPE_OUT) {
+        if ($cachedResponse['type'] === EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT) {
             $this->_server->getSessionLog()->info("SSO: Cached response found for SP");
             $response = $this->_server->createEnhancedResponse($request, $cachedResponse['response']);
             $this->_server->sendResponseToRequestIssuer($request, $response);
@@ -298,7 +295,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // Then we look for OUT responses for this sp
         $idpEntityIds = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
         foreach ($cachedResponses as $cachedResponse) {
-            if ($cachedResponse['type'] !== self::RESPONSE_CACHE_TYPE_OUT) {
+            if ($cachedResponse['type'] !== EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT) {
                 continue;
             }
 
@@ -325,7 +322,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Then we look for IN responses for this sp
         foreach ($cachedResponses as $cachedResponse) {
-            if ($cachedResponse['type'] !== self::RESPONSE_CACHE_TYPE_IN) {
+            if ($cachedResponse['type'] !== EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN) {
                 continue;
             }
 
