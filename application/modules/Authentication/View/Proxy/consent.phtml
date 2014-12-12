@@ -148,7 +148,7 @@ $inlineScriptHelper->appendScript('
 
 <p class="grey"><?= $this->t('consent_notice'); ?></p>
 
-<?php if (isset($sp->eula)) : ?>
-    <?= $this->t('sp_terms_of_service', $spName, $sp->eula); ?>
+<?php if (isset($sp->termsOfServiceUrl)) : ?>
+    <?= $this->t('sp_terms_of_service', $spName, $sp->termsOfServiceUrl); ?>
 <?php endif; ?>
 

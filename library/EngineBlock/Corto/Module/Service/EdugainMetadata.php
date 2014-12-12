@@ -26,7 +26,7 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
             // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
             // NameIDs, so advertise that.
             unset($entity->nameIdFormat);
-            $entity->nameIdFormats = $engineIdpEntity->nameIdFormats;
+            $entity->supportedNameIdFormats = $engineIdpEntity->supportedNameIdFormats;
 
             // For IdP's replace the SingleSignService with the one from EB
             if ($entity instanceof IdentityProvider) {

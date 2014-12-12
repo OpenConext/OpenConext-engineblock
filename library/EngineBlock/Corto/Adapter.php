@@ -1,10 +1,10 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\AggregatedMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\DisableDisallowedEntitiesInWayfFilter;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveEntityByEntityId;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveEntityByEntityIdFilter;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Service;
@@ -408,7 +408,7 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @return AggregatedMetadataRepository
+     * @return CompositeMetadataRepository
      */
     public function getMetadataRepository()
     {
@@ -518,7 +518,7 @@ class EngineBlock_Corto_Adapter
     /**
      * @param EngineBlock_Corto_ProxyServer $proxyServer
      * @param EngineBlock_ApplicationSingleton $application
-     * @return AggregatedMetadataRepository
+     * @return CompositeMetadataRepository
      * @throws EngineBlock_Exception
      */
     protected function _configureMetadataRepository(
@@ -537,7 +537,7 @@ class EngineBlock_Corto_Adapter
         $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
 
         $engineIdentityProvider->certificates = array($keyPair->getCertificate());
-        $engineIdentityProvider->nameIdFormats = array(
+        $engineIdentityProvider->supportedNameIdFormats = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
@@ -556,7 +556,7 @@ class EngineBlock_Corto_Adapter
             );
         }
         $engineServiceProvider->certificates = array($keyPair->getCertificate());
-        $engineServiceProvider->nameIdFormats = array(
+        $engineServiceProvider->supportedNameIdFormats = array(
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
             EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
@@ -583,8 +583,8 @@ class EngineBlock_Corto_Adapter
         );
         $proxyServer->setConfig('Processing', array('Consent' => $engineServiceProvider));
 
-        $metadataRepository->filter(new RemoveEntityByEntityId($engineServiceProvider->entityId));
-        $metadataRepository->filter(new RemoveEntityByEntityId($engineIdentityProvider->entityId));
+        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineServiceProvider->entityId));
+        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineIdentityProvider->entityId));
 
         $ownMetadataRepository = new InMemoryMetadataRepository(
             array($engineIdentityProvider),

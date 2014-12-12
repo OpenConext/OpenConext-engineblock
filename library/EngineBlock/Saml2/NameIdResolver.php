@@ -130,8 +130,8 @@ class EngineBlock_Saml2_NameIdResolver
             }
 
             // Is this SP restricted to specific NameIDFormats?
-            if (!empty($spEntityMetadata->nameIdFormats)) {
-                if (!in_array($requestedNameIdFormat, $spEntityMetadata->nameIdFormats)) {
+            if (!empty($spEntityMetadata->supportedNameIdFormats)) {
+                if (!in_array($requestedNameIdFormat, $spEntityMetadata->supportedNameIdFormats)) {
                     EngineBlock_ApplicationSingleton::getLog()->notice(
                         "Whoa, SP '{$spEntityMetadata->entityId}' requested '{$requestedNameIdFormat}' " .
                         "opting to try something else it supports " .
@@ -151,9 +151,9 @@ class EngineBlock_Saml2_NameIdResolver
         // So neither a NameIDFormat is explicitly set in the metadata OR a (valid) NameIDPolicy is set in the AuthnRequest
         // so we check what the SP supports (or what JANUS claims that it supports) and
         // return the least privacy sensitive one.
-        if (!empty($spEntityMetadata->nameIdFormats)) {
+        if (!empty($spEntityMetadata->supportedNameIdFormats)) {
             foreach ($this->SUPPORTED_NAMEID_FORMATS as $supportedNameIdFormat) {
-                if (in_array($supportedNameIdFormat, $spEntityMetadata->nameIdFormats)) {
+                if (in_array($supportedNameIdFormat, $spEntityMetadata->supportedNameIdFormats)) {
                     return $supportedNameIdFormat;
                 }
             }

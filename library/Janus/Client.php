@@ -1,9 +1,10 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
 
 /**
  * Implementation of the Engine Block internal Service Registry interface.
  */
-class Janus_Client implements Janus_Client_Interface
+class Janus_Client implements Janus_Client_Interface, RestClientInterface
 {
     /**
      * The REST client used to communicate to the Janus service registry.

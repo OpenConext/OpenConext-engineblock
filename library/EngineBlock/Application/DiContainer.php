@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\AggregatedMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -113,7 +113,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\AggregatedMetadataRepository
+     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository
      */
     public function getMetadataRepository()
     {
@@ -149,7 +149,7 @@ class EngineBlock_Application_DiContainer extends Pimple
                 $processedRepositoriesConfig[] = $repositoryConfigs[$repositoryId];
             }
 
-            return AggregatedMetadataRepository::createFromConfig($processedRepositoriesConfig, $container);
+            return CompositeMetadataRepository::createFromConfig($processedRepositoriesConfig, $container);
         };
     }
 

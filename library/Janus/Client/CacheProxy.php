@@ -1,15 +1,69 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
+
 /**
  * A Caching Proxy for the Service Registry, will cache all function calls.
  *
  * Can even detect Service Registry problems and chug along on the (stale) cache.
  */
-class Janus_Client_CacheProxy
+class Janus_Client_CacheProxy implements RestClientInterface
 {
     const DEFAULT_LIFETIME = 5;
 
-    public function __call($name, $arguments)
+    /**
+     * @param $entityId
+     * @return string[]
+     */
+    public function getAllowedIdps($entityId)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param $entityId
+     * @return array
+     */
+    public function getEntity($entityId)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @return array
+     */
+    public function getIdpList()
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @return array
+     */
+    public function getSpList()
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param string $propertyName
+     * @param string $propertyValue
+     * @return array
+     */
+    public function findIdentifiersByMetadata($propertyName, $propertyValue)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     * @throws Janus_Client_CacheProxy_Exception
+     * @throws Janus_Client_Exception
+     * @throws void
+     */
+    private function __call($name, $arguments)
     {
         $client = $this->_getClient();
 

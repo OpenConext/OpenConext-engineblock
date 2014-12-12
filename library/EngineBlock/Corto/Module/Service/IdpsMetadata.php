@@ -30,7 +30,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $slServiceReplacer  = new ServiceReplacer($engineIdentityProvider, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
 
         if (isset($spEntity)) {
-            $identityProviders = $this->_server->getRepository()->fetchIdentityProvidersByEntityId(
+            $identityProviders = $this->_server->getRepository()->findIdentityProvidersByEntityId(
                 $this->_server->getRepository()->findAllowedIdpEntityIdsForSp(
                     $spEntity
                 )
@@ -56,7 +56,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
             // Ignore the NameIDFormats the IdP supports, any requests made on this endpoint will use EngineBlock
             // NameIDs, so advertise that.
             unset($entity->nameIdFormat);
-            $entity->nameIdFormats = $engineIdentityProvider->nameIdFormats;
+            $entity->supportedNameIdFormats = $engineIdentityProvider->supportedNameIdFormats;
 
             // Replace service locations and bindings with those of EB
             $transparentSsoUrl = $this->_server->getUrl('singleSignOnService', $entity->entityId);
