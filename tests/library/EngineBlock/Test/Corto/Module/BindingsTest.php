@@ -17,8 +17,8 @@ class EngineBlock_Test_Corto_Module_BindingsTest extends PHPUnit_Framework_TestC
         $log = Phake::mock('EngineBlock_Log');
         Phake::when($proxyServer)->getSessionLog()->thenReturn($log);
         Phake::when($proxyServer)->getSigningCertificates()->thenReturn(new EngineBlock_X509_KeyPair(
-            new EngineBlock_X509_Certificate(openssl_x509_read(file_get_contents(__DIR__ . '/../../X509/test.pem.crt'))),
-            new EngineBlock_X509_PrivateKey(__DIR__ . '/../../X509/test.pem.key')
+            new EngineBlock_X509_Certificate(openssl_x509_read(file_get_contents(__DIR__ . '/test.pem.crt'))),
+            new EngineBlock_X509_PrivateKey(__DIR__ . '/test.pem.key')
         ));
         $this->bindings = new EngineBlock_Corto_Module_Bindings($proxyServer);
     }
