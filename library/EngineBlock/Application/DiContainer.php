@@ -6,6 +6,7 @@ use Doctrine\ORM\Tools\Setup;
 use OpenConext\Component\EngineBlockMetadata\Container\ContainerInterface;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use RuntimeException;
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
@@ -119,7 +120,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository
+     * @return CompositeMetadataRepository
      */
     public function getMetadataRepository()
     {
@@ -134,12 +135,12 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
 
             $repositoryConfigs = $application->getConfigurationValue('metadataRepository');
             if (!$repositoryConfigs instanceof Zend_Config) {
-                throw new \RuntimeException('metadataRepository config is not set or not multi-valued?');
+                throw new RuntimeException('metadataRepository config is not set or not multi-valued?');
             }
 
             $repositoriesConfig = $application->getConfigurationValue('metadataRepositories');
             if (!$repositoriesConfig instanceof Zend_Config) {
-                throw new \RuntimeException('metadataRepositories config is not set or not multi-valued?');
+                throw new RuntimeException('metadataRepositories config is not set or not multi-valued?');
             }
 
             $repositoryConfigs  = $repositoryConfigs->toArray();
@@ -148,7 +149,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
             $processedRepositoriesConfig = array();
             foreach ($repositoriesConfig as $repositoryId) {
                 if (!isset($repositoryConfigs[$repositoryId])) {
-                    throw new \RuntimeException(
+                    throw new RuntimeException(
                         "metadataRepositories config mentions '$repositoryId', but no metadataRepository.$repositoryId found"
                     );
                 }
