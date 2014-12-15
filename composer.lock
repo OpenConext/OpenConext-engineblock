@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f5d28a9a687eb119467b8130aaf84081",
+    "hash": "01e305d218847eb9e412ac7be2b18900",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -753,21 +753,21 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "dev-feature/push-metadata-v2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "c163fdecf5a45ed92e3bda199c533ea5d1d3acbe"
+                "reference": "82b2b37ecac164b2fcff9ebc1c0c062e922b19d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/c163fdecf5a45ed92e3bda199c533ea5d1d3acbe",
-                "reference": "c163fdecf5a45ed92e3bda199c533ea5d1d3acbe",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/82b2b37ecac164b2fcff9ebc1c0c062e922b19d9",
+                "reference": "82b2b37ecac164b2fcff9ebc1c0c062e922b19d9",
                 "shasum": ""
             },
             "require": {
                 "doctrine/orm": "~2.3",
-                "openconext/stoker-metadata": "dev-master",
+                "openconext/stoker-metadata": "~0.1",
                 "php": ">=5.3.3",
                 "simplesamlphp/saml2": "~0.5"
             },
@@ -788,11 +788,11 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2014-12-15 08:42:07"
+            "time": "2014-12-15 09:56:44"
         },
         {
             "name": "openconext/stoker-metadata",
-            "version": "dev-master",
+            "version": "0.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-stoker-metadata.git",
@@ -2132,8 +2132,6 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "openconext/engineblock-metadata": 20,
-        "openconext/stoker-metadata": 20,
         "openid/php-openid": 20,
         "phake/phake": 10
     },
