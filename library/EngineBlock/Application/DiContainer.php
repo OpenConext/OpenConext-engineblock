@@ -254,6 +254,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         };
     }
 
+    /**
+     * @return EntityManager
+     */
     public function getEntityManager()
     {
         return $this[self::DOCTRINE_ENTITY_MANAGER];
