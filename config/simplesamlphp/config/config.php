@@ -13,33 +13,22 @@ $application->bootstrap();
 $appConfig = $application->getConfiguration();
 
 $config = array (
-
-        'default-sp' => array(
-            'saml:SP',
-
-            /*
-             * The entity ID of the IdP this should SP should contact.
-            * Can be NULL/unset, in which case the user will be shown a list of available IdPs.
-            */
-            'idp' => null,
-        ),
-
 	/**
 	 * Setup the following parameters to match the directory of your installation.
 	 * See the user manual for more details.
 	 */
-	'baseurlpath'           => $appConfig->auth->simplesamlphp->baseurlpath,
-	'certdir'               => 'cert/',
-	'loggingdir'            => 'log/',
-	'datadir'               => 'data/',
+	'baseurlpath'			=> $appConfig->auth->simplesamlphp->baseurlpath,
+	'certdir'				=> 'cert/',
+	'loggingdir'			=> 'log/',
+	'datadir'				=> 'data/',
 
 	/*
 	 * A directory where simpleSAMLphp can save temporary files.
 	 *
 	 * SimpleSAMLphp will attempt to create this directory if it doesn't exist.
 	 */
-	'tempdir'               => '/tmp/simplesaml',
-	
+	'tempdir'				=> '/tmp/simplesaml',
+
 
 	/*
 	 * If you enable this option, simpleSAMLphp will log all sent and received messages
@@ -53,7 +42,7 @@ $config = array (
 	'debug' => FALSE,
 
 
-	'showerrors'            =>	TRUE,
+	'showerrors'			=>	$appConfig->auth->simplesamlphp->showErrors,
 
 	/**
 	 * Custom error show function called from SimpleSAML_Error_Error::show.
@@ -76,7 +65,7 @@ $config = array (
 	 */
 	'auth.adminpassword'		=> $appConfig->auth->simplesamlphp->adminPassword,
 	'admin.protectindexpage'	=> TRUE,
-	'admin.protectmetadata'		=> false,
+	'admin.protectmetadata'		=> FALSE,
 
 	/**
 	 * This is a secret salt used by simpleSAMLphp when it needs to generate a secure hash
@@ -86,15 +75,15 @@ $config = array (
 	 * A possible way to generate a random salt is by running the following command from a unix shell:
 	 * tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
 	 */
-	'secretsalt' => 'f4afad5d6fisoaaif6s6ida4ii6o6fsf',
-	
+	'secretsalt' => $appConfig->auth->simplesamlphp->secretSalt,
+
 	/*
 	 * Some information about the technical persons running this installation.
 	 * The email address will be used as the recipient address for error reports, and
 	 * also as the technical contact in generated metadata.
 	 */
-        'technicalcontact_name'     => 'SURFconext Beheer',
-	'technicalcontact_email'    => 'coin-beheer@surfnet.nl',
+	'technicalcontact_name'	 	=> $appConfig->auth->simplesamlphp->technicalContactName,
+	'technicalcontact_email'	=> $appConfig->auth->simplesamlphp->technicalContactEmail,
 
 	/*
 	 * The timezone of the server. This option should be set to the timezone you want
@@ -103,7 +92,7 @@ $config = array (
 	 *
 	 * See this page for a list of valid timezones: http://php.net/manual/en/timezones.php
 	 */
-	'timezone' => 'Europe/Amsterdam',
+	'timezone' => $appConfig->phpSettings->date->timezone,
 
 	/*
 	 * Logging.
@@ -120,8 +109,8 @@ $config = array (
 	 * Options: [syslog,file,errorlog]
 	 * 
 	 */
-	'logging.level'         => LOG_NOTICE,
-	'logging.handler'       => 'syslog',
+	'logging.level'		 => SimpleSAML_Logger::NOTICE,
+	'logging.handler'	 => 'syslog',
 
 	/*
 	 * Choose which facility should be used when logging with syslog.
@@ -145,8 +134,8 @@ $config = array (
 	/* Logging: file - Logfilename in the loggingdir from above.
 	 */
 	'logging.logfile'		=> 'simplesamlphp.log',
-	
-	
+
+
 
 	/*
 	 * Enable
@@ -159,7 +148,7 @@ $config = array (
 	'enable.shib13-idp'		=> false,
 	'enable.adfs-idp'		=> false,
 	'enable.wsfed-sp'		=> false,
-	'enable.authmemcookie' => false,
+	'enable.authmemcookie'	=> false,
 
 	/* 
 	 * This value is the duration of the session in seconds. Make sure that the time duration of
@@ -174,7 +163,7 @@ $config = array (
 	 * The default is 4 hours (4*60*60) seconds, which should be more than enough for these operations.
 	 */
 	'session.datastore.timeout' => (4*60*60), // 4 hours
-	
+
 
 	/*
 	 * Expiration time for the session cookie, in seconds.
@@ -219,8 +208,8 @@ $config = array (
 	 * Options to override the default settings for php sessions.
 	 */
 	'session.phpsession.cookiename'  => null,
-	'session.phpsession.savepath'    => null,
-	'session.phpsession.httponly'    => TRUE,
+	'session.phpsession.savepath'	=> null,
+	'session.phpsession.httponly'	=> TRUE,
 
 	/*
 	 * Option to override the default settings for the auth token cookie
@@ -230,7 +219,7 @@ $config = array (
 	/*
 	 * Languages available and what language is default
 	 */
-	'language.available'	=> array('en', 'no', 'nn', 'se', 'da', 'de', 'sv', 'fi', 'es', 'fr', 'it', 'nl', 'lb', 'cs', 'sl', 'lt', 'hr', 'hu', 'pl', 'pt', 'pt-BR', 'tr', 'ja', 'zh-tw'),
+	'language.available'	=> array('en'),
 	'language.default'		=> 'en',
 
 	/*
@@ -243,14 +232,14 @@ $config = array (
 	 * The dictionary should look something like:
 	 *
 	 * {
-	 *     "firstattribute": {
-	 *         "en": "English name",
-	 *         "no": "Norwegian name"
-	 *     },
-	 *     "secondattribute": {
-	 *         "en": "English name",
-	 *         "no": "Norwegian name"
-	 *     }
+	 *	 "firstattribute": {
+	 *		 "en": "English name",
+	 *		 "no": "Norwegian name"
+	 *	 },
+	 *	 "secondattribute": {
+	 *		 "en": "English name",
+	 *		 "no": "Norwegian name"
+	 *	 }
 	 * }
 	 *
 	 * Note that all attribute names in the dictionary must in lowercase.
@@ -264,7 +253,7 @@ $config = array (
 	 */
 	'theme.use' 		=> 'default',
 
-	
+
 	/*
 	 * Default IdP for WS-Fed.
 	 */
@@ -275,11 +264,11 @@ $config = array (
 	 */
 	'idpdisco.enableremember' => TRUE,
 	'idpdisco.rememberchecked' => TRUE,
-	
+
 	// Disco service only accepts entities it knows.
 	'idpdisco.validate' => TRUE,
-	
-	'idpdisco.extDiscoveryStorage' => NULL, 
+
+	'idpdisco.extDiscoveryStorage' => NULL,
 
 	/*
 	 * IdP Discovery service look configuration. 
@@ -303,9 +292,9 @@ $config = array (
 	 * same name to the metadata of the SP.
 	 */
 	'shib13.signresponse' => TRUE,
-	
-	
-	
+
+
+
 	/*
 	 * Authentication processing filters that will be executed for all IdPs
 	 * Both Shibboleth and SAML 2.0
@@ -315,13 +304,13 @@ $config = array (
  		10 => array(
  			'class' => 'core:AttributeMap', 'addurnprefix'
  		), */
- 		/* Enable the authproc filter below to automatically generated eduPersonTargetedID. 
- 		20 => 'core:TargetedID',
- 		*/
+		/* Enable the authproc filter below to automatically generated eduPersonTargetedID.
+         20 => 'core:TargetedID',
+         */
 
 		// Adopts language from attribute to use in UI
- 		30 => 'core:LanguageAdaptor',
- 		
+		30 => 'core:LanguageAdaptor',
+
 		/* Add a realm attribute from edupersonprincipalname
 		40 => 'core:AttributeRealm',
 		 */
@@ -334,7 +323,7 @@ $config = array (
 		/* When called without parameters, it will fallback to filter attributes ‹the old way›
 		 * by checking the 'attributes' parameter in metadata on IdP hosted and SP remote.
 		 */
-		50 => 'core:AttributeLimit', 
+		50 => 'core:AttributeLimit',
 
 		/* 
 		 * Search attribute "distinguishedName" for pattern and replaces if found
@@ -359,7 +348,7 @@ $config = array (
 		),
 		 */
 		// If language is set in Consent module it will be added as an attribute.
- 		99 => 'core:LanguageAdaptor',
+		99 => 'core:LanguageAdaptor',
 	),
 	/*
 	 * Authentication processing filters that will be executed for all IdPs
@@ -375,12 +364,12 @@ $config = array (
 		/* When called without parameters, it will fallback to filter attributes ‹the old way›
 		 * by checking the 'attributes' parameter in metadata on SP hosted and IdP remote.
 		 */
-		50 => 'core:AttributeLimit', 
+		50 => 'core:AttributeLimit',
 		// Adopts language from attribute to use in UI
- 		90 => 'core:LanguageAdaptor',
+		90 => 'core:LanguageAdaptor',
 
 	),
-	
+
 
 	/*
 	 * This option configures the metadata sources. The metadata sources is given as an array with
@@ -394,8 +383,8 @@ $config = array (
 	 * Flat file metadata handler:
 	 * - 'type': This is always 'flatfile'.
 	 * - 'directory': The directory we will load the metadata files from. The default value for
-	 *                this option is the value of the 'metadatadir' configuration option, or
-	 *                'metadata/' if that option is unset.
+	 *				this option is the value of the 'metadatadir' configuration option, or
+	 *				'metadata/' if that option is unset.
 	 *
 	 * XML metadata handler:
 	 * This metadata handler parses an XML file with either an EntityDescriptor element or an
@@ -413,21 +402,21 @@ $config = array (
 	 * is a metadata directory with autogenerated metadata files.
 	 *
 	 * 'metadata.sources' => array(
-	 *     array('type' => 'flatfile'),
-	 *     array('type' => 'flatfile', 'directory' => 'metadata-generated'),
-	 *     ),
+	 *	 array('type' => 'flatfile'),
+	 *	 array('type' => 'flatfile', 'directory' => 'metadata-generated'),
+	 *	 ),
 	 *
 	 * This example defines a flatfile source and an XML source.
 	 * 'metadata.sources' => array(
-	 *     array('type' => 'flatfile'),
-	 *     array('type' => 'xml', 'file' => 'idp.example.org-idpMeta.xml'),
-	 *     ),
+	 *	 array('type' => 'flatfile'),
+	 *	 array('type' => 'xml', 'file' => 'idp.example.org-idpMeta.xml'),
+	 *	 ),
 	 *
 	 *
 	 * Default:
 	 * 'metadata.sources' => array(
-	 *     array('type' => 'flatfile')
-	 *     ),
+	 *	 array('type' => 'flatfile')
+	 *	 ),
 	 */
 	'metadata.sources' => array(
 		array('type' => 'flatfile'),
@@ -481,15 +470,15 @@ $config = array (
 	 * Each server is an array of parameters for the server. The following
 	 * options are available:
 	 *  - 'hostname': This is the hostname or ip address where the
-	 *    memcache server runs. This is the only required option.
+	 *	memcache server runs. This is the only required option.
 	 *  - 'port': This is the port number of the memcache server. If this
-	 *    option isn't set, then we will use the 'memcache.default_port'
-	 *    ini setting. This is 11211 by default.
+	 *	option isn't set, then we will use the 'memcache.default_port'
+	 *	ini setting. This is 11211 by default.
 	 *  - 'weight': This sets the weight of this server in this server
-	 *    group. http://php.net/manual/en/function.Memcache-addServer.php
-	 *    contains more information about the weight option.
+	 *	group. http://php.net/manual/en/function.Memcache-addServer.php
+	 *	contains more information about the weight option.
 	 *  - 'timeout': The timeout for this server. By default, the timeout
-	 *    is 3 seconds.
+	 *	is 3 seconds.
 	 *
 	 * Example of redudant configuration with load balancing:
 	 * This configuration makes it possible to lose both servers in the
@@ -498,14 +487,14 @@ $config = array (
 	 * a-group and the b-group.
 	 *
 	 * 'memcache_store.servers' => array(
-	 *     array(
-	 *         array('hostname' => 'mc_a1'),
-	 *         array('hostname' => 'mc_a2'),
-	 *     ),
-	 *     array(
-	 *         array('hostname' => 'mc_b1'),
-	 *         array('hostname' => 'mc_b2'),
-	 *     ),
+	 *	 array(
+	 *		 array('hostname' => 'mc_a1'),
+	 *		 array('hostname' => 'mc_a2'),
+	 *	 ),
+	 *	 array(
+	 *		 array('hostname' => 'mc_b1'),
+	 *		 array('hostname' => 'mc_b2'),
+	 *	 ),
 	 * ),
 	 *
 	 * Example of simple configuration with only one memcache server,
@@ -513,9 +502,9 @@ $config = array (
 	 * Note that all sessions will be lost if the memcache server crashes.
 	 *
 	 * 'memcache_store.servers' => array(
-	 *     array(
-	 *         array('hostname' => 'localhost'),
-	 *     ),
+	 *	 array(
+	 *		 array('hostname' => 'localhost'),
+	 *	 ),
 	 * ),
 	 *
 	 */
@@ -575,4 +564,26 @@ $config = array (
 	 */
 	'proxy' => NULL,
 
+	/**
+	 * Array of domains that are allowed when generating links or redirections
+	 * to URLs. simpleSAMLphp will use this option to determine whether to
+	 * to consider a given URL valid or not, but you should always validate
+	 * URLs obtained from the input on your own (i.e. ReturnTo or RelayState
+	 * parameters obtained from the $_REQUEST array).
+	 *
+	 * Set to NULL to disable checking of URLs.
+	 *
+	 * simpleSAMLphp will automatically add your own domain (either by checking
+	 * it dinamically, or by using the domain defined in the 'baseurlpath'
+	 * directive, the latter having precedence) to the list of trusted domains,
+	 * in case this option is NOT set to NULL. In that case, you are explicitly
+	 * telling simpleSAMLphp to verify URLs.
+	 *
+	 * Set to an empty array to disallow ALL redirections or links pointing to
+	 * an external URL other than your own domain.
+	 *
+	 * Example:
+	 *   'trusted.url.domains' => array('sp.example.com', 'app.example.com'),
+	 */
+	'trusted.url.domains' => array(),
 );
