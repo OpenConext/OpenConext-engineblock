@@ -253,6 +253,29 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
+     * Get the hostname that EngineBlock is hosted on and should use in absolute URLs.
+     *
+     * @return string
+     * @throws EngineBlock_Exception
+     */
+    public function getHostname()
+    {
+        $configHostname = $this->getConfiguration()->get('hostname');
+
+        if (is_string($configHostname) && !empty($configHostname)) {
+            return $configHostname;
+        }
+
+        $httpRequestHostname = $_SERVER['HTTP_HOST'];
+        $validator = new Zend_Validate_Hostname();
+        if ($validator->isValid($httpRequestHostname)) {
+            return $httpRequestHostname;
+        }
+
+        throw new EngineBlock_Exception('No hostname configured and Host header is invalid.');
+    }
+
+    /**
      * Logs exception and redirects user to feedback page
      *
      * @param Exception $exception

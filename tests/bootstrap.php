@@ -21,5 +21,6 @@ $config = new Zend_Config_Ini(
     array('allowModifications' => true)
 );
 $config->testing = true;
+$config->hostname = 'engine.demo.openconext.org';
 $application->setConfiguration($config);
 $application->bootstrap();
