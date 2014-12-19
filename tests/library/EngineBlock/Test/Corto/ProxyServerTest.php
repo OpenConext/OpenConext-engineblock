@@ -4,16 +4,10 @@
  */
 class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 {
-    public function setup()
-    {
-        // Mock Global server object which for obvious reasons does not exist in a CLI environment
-        global $_SERVER;
-        $_SERVER['HTTP_HOST'] = null;
-    }
-
     public function testNameIDFormatIsNotSetByDefault()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->setHostName('test-host');
 
         $remoteEntities = $this->factoryRemoteEntities();
         $proxyServer->setRemoteEntities($remoteEntities);
@@ -33,6 +27,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
     public function testNameIDFormatIsSetFromRemoteMetaData()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->setHostName('test-host');
 
         $remoteEntities = $this->factoryRemoteEntities();
         $remoteEntities['testIdp']['NameIDFormat'] = 'fooFormat';
@@ -54,6 +49,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
     public function testGettingCurrentEntityIsProxiedViaGetRemoteEntity()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->setHostName('test-host');
         $currentEntity = array('EntityID' => 'testEntity');
         $proxyServer->setCurrentEntities(array($currentEntity));
 
