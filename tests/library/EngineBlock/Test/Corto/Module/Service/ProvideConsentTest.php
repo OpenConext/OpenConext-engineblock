@@ -11,6 +11,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     /** @var EngineBlock_Corto_Model_Consent */
     private $consentMock;
 
+    /** @var  EngineBlock_Corto_ProxyServer */
+    private $proxyServerMock;
+
     public function setup() {
         $this->proxyServerMock = $this->mockProxyServer();
 
@@ -91,8 +94,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     private function mockProxyServer()
     {
         // Mock proxy server
-        $_SERVER['HTTP_HOST'] = 'test-host';
         $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer');
+        $proxyServerMock->setHostname('test-host');
 
         Phake::when($proxyServerMock)
             ->getRemoteEntity('testSp')

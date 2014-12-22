@@ -67,6 +67,7 @@ class EngineBlock_Corto_ProxyServer
     protected $_modules = array();
     protected $_templateSource;
     protected $_processingMode = false;
+    private $_hostName;
 
     public function __construct()
     {
@@ -131,6 +132,14 @@ class EngineBlock_Corto_ProxyServer
     public function isInProcessingMode()
     {
         return $this->_processingMode;
+    }
+
+    /**
+     * @param mixed $hostName
+     */
+    public function setHostName($hostName)
+    {
+        $this->_hostName = $hostName;
     }
 
     /**
@@ -252,7 +261,10 @@ class EngineBlock_Corto_ProxyServer
             $scheme = 'https';
         }
 
-        $host = $_SERVER['HTTP_HOST'];
+        $host = $this->_hostName;
+        if (!$host) {
+            throw new EngineBlock_Corto_ProxyServer_Exception('No hostname set on building URL');
+        }
 
         $mappedUri = $this->_serviceToControllerMapping[$serviceName];
 
