@@ -40,10 +40,10 @@ $config = array (
 	 * Setup the following parameters to match the directory of your installation.
 	 * See the user manual for more details.
 	 */
-	'baseurlpath'			=> $baseUrlPath,
-	'certdir'				=> 'cert/',
-	'loggingdir'			=> 'log/',
-	'datadir'				=> 'data/',
+	'baseurlpath'           => $baseUrlPath,
+	'certdir'               => 'cert/',
+	'loggingdir'            => 'log/',
+	'datadir'               => 'data/',
 
 	/*
 	 * A directory where simpleSAMLphp can save temporary files.
