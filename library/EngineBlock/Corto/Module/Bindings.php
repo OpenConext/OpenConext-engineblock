@@ -274,6 +274,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         try {
             // 'Process' the response, verify the signature, verify the timings.
             $className = $this->_sspmodSamlMessageClassName;
+
+            if ($this->hasEncryptedAssertion($sspResponse) && !$sspResponse->isMessageConstructedWithSignature()) {
+                /** @see https://github.com/OpenConext/OpenConext-engineblock/issues/116 */
+                throw new EngineBlock_Corto_Module_Bindings_Exception(
+                    'Response signing required for use with encrypted assertions.',
+                    EngineBlock_Exception::CODE_NOTICE
+                );
+            }
+
             $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
 
             // We only support 1 assertion
@@ -574,5 +583,23 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             )
         );
         return $spMetadata;
+    }
+
+    /**
+     * Determines if a Response carries an encrypted assertion.
+     *
+     * @param SAML2_Response $sspResponse
+     * @return bool
+     */
+    private function hasEncryptedAssertion(SAML2_Response $sspResponse)
+    {
+        $hasEncryptedAssertion = false;
+        foreach ($sspResponse->getAssertions() as $assertion) {
+            if ($assertion instanceof SAML2_EncryptedAssertion) {
+                $hasEncryptedAssertion = true;
+                break;
+            }
+        }
+        return $hasEncryptedAssertion;
     }
 }
