@@ -16,11 +16,12 @@ $appConfig = $application->getConfiguration();
  * Hack because both Engine and Profile use the baseurlpath.
  * @see https://github.com/OpenConext/OpenConext-engineblock/issues/89
  */
-if (substr($_SERVER['SERVER_NAME'], 0, 7) === 'profile') {
-	$baseUrlPath = $appConfig->auth->simplesamlphp->baseurlpath;
+$hostMatch = $appConfig->profile->simplesamlphp->hostMatch;
+if (substr($_SERVER['SERVER_NAME'], 0, strlen($hostMatch)) === $hostMatch) {
+	$baseUrlPath = $appConfig->profile->simplesamlphp->baseurlpath;
 }
 else {
-	$baseUrlPath = $appConfig->simplesamlphp->baseurlpath;
+	$baseUrlPath = $appConfig->engine->simplesamlphp->baseurlpath;
 }
 
 $config = array (
