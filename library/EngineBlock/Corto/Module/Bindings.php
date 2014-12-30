@@ -233,13 +233,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $log->attach($sspResponse->toUnsignedXML()->ownerDocument->saveXML(), 'Response')
             ->info('Received response');
 
-        // This message MUST be a SAML2 response, we don't want a AuthnRequest, LogoutResponse, etc.
-        if (!($sspResponse instanceof SAML2_Response)) {
-            throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Invalid message received to AssertionConsumerService endpoint.'
-            );
-        }
-
         // Make sure the response from the idp has an Issuer
         $idpEntityId = $sspResponse->getIssuer();
         if ($idpEntityId === NULL) {
