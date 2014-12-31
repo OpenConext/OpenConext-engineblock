@@ -12,12 +12,24 @@ $application = EngineBlock_ApplicationSingleton::getInstance();
 $application->bootstrap();
 $appConfig = $application->getConfiguration();
 
+/**
+ * Hack because both Engine and Profile use the baseurlpath.
+ * @see https://github.com/OpenConext/OpenConext-engineblock/issues/89
+ */
+$hostMatch = $appConfig->profile->simplesamlphp->hostMatch;
+if (substr($_SERVER['SERVER_NAME'], 0, strlen($hostMatch)) === $hostMatch) {
+	$baseUrlPath = $appConfig->profile->simplesamlphp->baseurlpath;
+}
+else {
+	$baseUrlPath = $appConfig->engine->simplesamlphp->baseurlpath;
+}
+
 $config = array (
 	/**
 	 * Setup the following parameters to match the directory of your installation.
 	 * See the user manual for more details.
 	 */
-	'baseurlpath'			=> $appConfig->auth->simplesamlphp->baseurlpath,
+	'baseurlpath'			=> $baseUrlPath,
 	'certdir'				=> 'cert/',
 	'loggingdir'			=> 'log/',
 	'datadir'				=> 'data/',
