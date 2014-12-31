@@ -7,16 +7,12 @@ class EngineBlock_Corto_Filter_Command_ValidateAllowedConnection extends EngineB
 {
     public function execute()
     {
-        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $serviceRegistryAdapter = $diContainer->getServiceRegistryAdapter();
-        $isConnectionAllowed = $serviceRegistryAdapter->isConnectionAllowed(
-            $this->_spMetadata['EntityID'],
-            $this->_idpMetadata['EntityID']
-        );
-
-        if (!$isConnectionAllowed) {
+        $metadataRepository = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
+        $allowedIdpEntityIds = $metadataRepository->findAllowedIdpEntityIdsForSp($this->_serviceProvider);
+        if (!in_array($this->_identityProvider->entityId, $allowedIdpEntityIds)) {
             throw new EngineBlock_Corto_Exception_InvalidConnection(
-                "Received a response from an IDP that is not allowed to connect to the requesting SP"
+                "Disallowed response by SP configuration. " .
+                "Response from IdP '{$this->_identityProvider->entityId}' to SP '{$this->_serviceProvider->entityId}'"
             );
         }
     }

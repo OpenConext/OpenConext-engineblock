@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends EngineBlock_Corto_Filter_Command_Abstract
 {
@@ -24,10 +24,10 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
     {
         $errors = array();
 
-        if (isset($this->_idpMetadata['SchacHomeOrganization'])) {
+        if ($this->_identityProvider->schacHomeOrganization) {
             // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
             $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
-                $this->_idpMetadata['SchacHomeOrganization']
+                $this->_identityProvider->schacHomeOrganization
             );
         }
         else {
@@ -93,20 +93,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
      */
     protected function _isReservedSchacHomeOrganization($schacHomeOrganization)
     {
-        $reservedSchacHomeOrganizations = $this->_getReservedSchacHomeOrganizations();
-        return in_array($schacHomeOrganization, $reservedSchacHomeOrganizations);
-    }
-
-    protected function _getReservedSchacHomeOrganizations()
-    {
-        $schacHomeOrganizations = array();
-        $remoteEntities = $this->_server->getRemoteEntities();
-        foreach ($remoteEntities as $remoteEntity) {
-            if (isset($remoteEntity['SchacHomeOrganization'])) {
-                $schacHomeOrganizations[] = $remoteEntity['SchacHomeOrganization'];
-            }
-        }
-        return $schacHomeOrganizations;
+        return in_array($schacHomeOrganization, $this->_server->getRepository()->findReservedSchacHomeOrganizations());
     }
 
     protected function _requireValidUid($responseAttributes)

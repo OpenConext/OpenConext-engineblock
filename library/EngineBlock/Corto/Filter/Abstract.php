@@ -1,5 +1,8 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+
 abstract class EngineBlock_Corto_Filter_Abstract
 {
     protected $_server;
@@ -18,26 +21,27 @@ abstract class EngineBlock_Corto_Filter_Abstract
     /**
      * Filter the response.
      *
-     * @param array $response
-     * @param array $responseAttributes
-     * @param array $request
-     * @param array $spEntityMetadata
-     * @param array $idpEntityMetadata
-     * @return void
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator     $response
+     * @param array                                             $responseAttributes
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param ServiceProvider                             $serviceProvider
+     * @param IdentityProvider                            $identityProvider
+     * @throws EngineBlock_Exception
+     * @throws Exception
      */
     public function filter(
         EngineBlock_Saml2_ResponseAnnotationDecorator $response,
         array &$responseAttributes,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        array $spEntityMetadata,
-        array $idpEntityMetadata
+        ServiceProvider $serviceProvider,
+        IdentityProvider $identityProvider
     )
     {
         /** @var SAML2_AuthnRequest $request */
         // Note that IDs are only unique per SP... we hope...
         $responseNameId = $response->getAssertion()->getNameId();
 
-        $sessionKey = $spEntityMetadata['EntityID'] . '>' . $request->getId();
+        $sessionKey = $serviceProvider->entityId . '>' . $request->getId();
         if (isset($_SESSION[$sessionKey]['collabPersonId'])) {
             $collabPersonId = $_SESSION[$sessionKey]['collabPersonId'];
         }
@@ -60,8 +64,8 @@ abstract class EngineBlock_Corto_Filter_Abstract
         foreach ($commands as $command) {
             // Inject everything we have into the adapter
             $command->setProxyServer($this->_server);
-            $command->setIdpMetadata($idpEntityMetadata);
-            $command->setSpMetadata($spEntityMetadata);
+            $command->setIdentityProvider($identityProvider);
+            $command->setServiceProvider($serviceProvider);
             $command->setRequest($request);
             $command->setResponse($response);
             $command->setResponseAttributes($responseAttributes);
@@ -71,8 +75,8 @@ abstract class EngineBlock_Corto_Filter_Abstract
             try {
                 $command->execute();
             } catch (EngineBlock_Exception $e) {
-                $e->idpEntityId = $idpEntityMetadata['EntityID'];
-                $e->spEntityId  = $spEntityMetadata['EntityID'];
+                $e->idpEntityId = $identityProvider->entityId;
+                $e->spEntityId  = $serviceProvider->entityId;
                 $e->userId      = $collabPersonId;
                 throw $e;
             }

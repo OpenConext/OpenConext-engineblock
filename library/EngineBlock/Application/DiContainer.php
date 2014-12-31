@@ -1,18 +1,28 @@
 <?php
-class EngineBlock_Application_DiContainer extends Pimple
+
+use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Tools\Setup;
+use OpenConext\Component\EngineBlockMetadata\Container\ContainerInterface;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+
+class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const XML_CONVERTER = 'xmlConverter';
-    const CONSENT_FACTORY = 'consentFactory';
-    const MAILER = 'mailer';
-    const FILTER_COMMAND_FACTORY = 'filterCommandFactory';
-    const DATABASE_CONNECTION_FACTORY = 'databaseConnectionFactory';
-    const APPLICATION_CACHE = 'applicationCache';
-    const SERVICE_REGISTRY_CLIENT = 'serviceRegistryClient';
-    const SERVICE_REGISTRY_ADAPTER = 'serviceRegistryAdapter';
-    const ASSET_MANAGER = 'assetManager';
-    const TIME = 'dateTime';
-    const SAML2_ID = 'id';
-    const SUPER_GLOBAL_MANAGER = 'superGlobalManager';
+    const XML_CONVERTER                 = 'xmlConverter';
+    const CONSENT_FACTORY               = 'consentFactory';
+    const MAILER                        = 'mailer';
+    const FILTER_COMMAND_FACTORY        = 'filterCommandFactory';
+    const DATABASE_CONNECTION_FACTORY   = 'databaseConnectionFactory';
+    const APPLICATION_CACHE             = 'applicationCache';
+    const SERVICE_REGISTRY_CLIENT       = 'serviceRegistryClient';
+    const METADATA_REPOSITORY           = 'metadataRepository';
+    const ASSET_MANAGER                 = 'assetManager';
+    const TIME                          = 'dateTime';
+    const SAML2_ID                      = 'id';
+    const SUPER_GLOBAL_MANAGER          = 'superGlobalManager';
+    const OWN_ENTITIES_REPOSITORY       = 'ownMetadataRepository';
+    const DOCTRINE_ENTITY_MANAGER       = 'entityManager';
 
     public function __construct()
     {
@@ -23,11 +33,12 @@ class EngineBlock_Application_DiContainer extends Pimple
         $this->registerDatabaseConnectionFactory();
         $this->registerApplicationCache();
         $this->registerServiceRegistryClient();
-        $this->registerServiceRegistryAdapter();
+        $this->registerMetadataRepository();
         $this->registerAssetManager();
         $this->registerTimeProvider();
         $this->registerSaml2IdGenerator();
         $this->registerSuperGlobalManager();
+        $this->registerEntityManager();
     }
 
     protected function registerXmlConverter()
@@ -108,18 +119,43 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return EngineBlock_Corto_ServiceRegistry_JanusRestAdapter()
+     * @return CompositeMetadataRepository
      */
-    public function getServiceRegistryAdapter()
+    public function getMetadataRepository()
     {
-        return $this[self::SERVICE_REGISTRY_ADAPTER];
+        return $this[self::METADATA_REPOSITORY];
     }
 
-    protected function registerServiceRegistryAdapter()
+    protected function registerMetadataRepository()
     {
-        $this[self::SERVICE_REGISTRY_ADAPTER] = function (EngineBlock_Application_DiContainer $container)
+        $this[self::METADATA_REPOSITORY] = function (EngineBlock_Application_DiContainer $container)
         {
-            return new EngineBlock_Corto_ServiceRegistry_JanusRestAdapter($container->getServiceRegistryClient());
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+
+            $repositoryConfigs = $application->getConfigurationValue('metadataRepository');
+            if (!$repositoryConfigs instanceof Zend_Config) {
+                throw new RuntimeException('metadataRepository config is not set or not multi-valued?');
+            }
+
+            $repositoriesConfig = $application->getConfigurationValue('metadataRepositories');
+            if (!$repositoriesConfig instanceof Zend_Config) {
+                throw new RuntimeException('metadataRepositories config is not set or not multi-valued?');
+            }
+
+            $repositoryConfigs  = $repositoryConfigs->toArray();
+            $repositoriesConfig = $repositoriesConfig->toArray();
+
+            $processedRepositoriesConfig = array();
+            foreach ($repositoriesConfig as $repositoryId) {
+                if (!isset($repositoryConfigs[$repositoryId])) {
+                    throw new RuntimeException(
+                        "metadataRepositories config mentions '$repositoryId', but no metadataRepository.$repositoryId found"
+                    );
+                }
+                $processedRepositoriesConfig[] = $repositoryConfigs[$repositoryId];
+            }
+
+            return CompositeMetadataRepository::createFromConfig($processedRepositoriesConfig, $container);
         };
     }
 
@@ -192,5 +228,37 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getMessageUtilClassName()
     {
        return 'sspmod_saml_Message';
+    }
+
+    protected function registerEntityManager()
+    {
+        $this[self::DOCTRINE_ENTITY_MANAGER] = function () {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $logger = $application->getLogInstance();
+            $engineBlockConfig = $application->getConfiguration();
+            $mapper = new EngineBlock_Doctrine_ConfigMapper($logger);
+
+            $driverConfig = $mapper->map($engineBlockConfig);
+
+            // obtaining the entity manager
+            return EntityManager::create(
+                DriverManager::getConnection($driverConfig),
+                Setup::createAnnotationMetadataConfiguration(
+                    array(ENGINEBLOCK_FOLDER_VENDOR . "/openconext/engineblock-metadata/src"),
+                    true,
+                    null,
+                    null,
+                    false
+                )
+            );
+        };
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager()
+    {
+        return $this[self::DOCTRINE_ENTITY_MANAGER];
     }
 }

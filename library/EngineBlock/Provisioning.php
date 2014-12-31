@@ -8,14 +8,12 @@ class EngineBlock_Provisioning
     protected $_userDirectory = NULL;
 
     /**
-     * @param  $saml2Attributes
+     * @param array $saml2Attributes
      * @return string User Id of provisioned user.
      */
-    public function provisionUser(array $saml2Attributes, array $spEntityMetadata, array $idpEntityMetadata)
+    public function provisionUser(array $saml2Attributes)
     {
-        $userId = $this->_getUserDirectory()->registerUser($saml2Attributes, $idpEntityMetadata);
-
-        return $userId;
+        return $this->_getUserDirectory()->registerUser($saml2Attributes);
     }
 
     protected function _getUserDirectory()
