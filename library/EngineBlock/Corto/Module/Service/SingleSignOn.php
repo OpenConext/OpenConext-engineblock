@@ -489,7 +489,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     private function _displayDebugResponse($serviceName)
     {
-        if ($serviceName === 'debugSingleSignOnService') {
+        if ($serviceName !== 'debugSingleSignOnService') {
             return false;
         }
 

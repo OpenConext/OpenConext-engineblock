@@ -45,7 +45,10 @@ class EngineBlock_VirtualOrganization_GroupValidator
                 return $this->_validateGroupMembership($subjectId, $groups, true);
             }
             else {
-                EngineBlock_ApplicationSingleton::getLog()->attach($response->asString(), 'API Response');
+                EngineBlock_ApplicationSingleton::getLog()->attach(
+                    $response->getHeadersAsString() . PHP_EOL . $response->getBody(),
+                    'API Response'
+                );
                 throw new EngineBlock_Exception(
                     'Non-200 from API trying to get the group memberships'
                 );

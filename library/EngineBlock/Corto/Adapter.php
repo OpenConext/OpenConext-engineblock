@@ -346,6 +346,7 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setSessionLogDefault($this->_getSessionLog());
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
+        $proxyServer->setHostName($application->getHostname());
 
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),

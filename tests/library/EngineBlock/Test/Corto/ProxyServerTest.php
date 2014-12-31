@@ -7,16 +7,12 @@ use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadata
  */
 class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 {
-    public function setup()
-    {
-        // Mock Global server object which for obvious reasons does not exist in a CLI environment
-        global $_SERVER;
-        $_SERVER['HTTP_HOST'] = null;
-    }
-
     public function testNameIDFormatIsNotSetByDefault()
     {
         $proxyServer = $this->factoryProxyServer();
+
+        $remoteEntities = $this->factoryRemoteEntities();
+        $proxyServer->setRemoteEntities($remoteEntities);
 
         $originalRequest = $this->factoryOriginalRequest();
         $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
@@ -49,6 +45,16 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($nameIdPolicy['Format'], 'fooFormat');
     }
 
+    public function testGettingCurrentEntityIsProxiedViaGetRemoteEntity()
+    {
+        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->setHostName('test-host');
+        $currentEntity = array('EntityID' => 'testEntity');
+        $proxyServer->setCurrentEntities(array($currentEntity));
+
+        $this->assertEquals($currentEntity, $proxyServer->getRemoteEntity('testEntity'));
+    }
+
     /**
      * @return array
      */
@@ -63,6 +69,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
     private function factoryProxyServer()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->setHostName('test-host');
 
         $proxyServer->setRepository(new InMemoryMetadataRepository(
             array(new IdentityProvider('testIdp')),
