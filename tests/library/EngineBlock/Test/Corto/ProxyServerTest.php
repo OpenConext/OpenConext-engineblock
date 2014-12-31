@@ -11,9 +11,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
     {
         $proxyServer = $this->factoryProxyServer();
 
-        $remoteEntities = $this->factoryRemoteEntities();
-        $proxyServer->setRemoteEntities($remoteEntities);
-
         $originalRequest = $this->factoryOriginalRequest();
         $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
         /** @var SAML2_AuthnRequest $enhancedRequest */
@@ -43,16 +40,6 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
         $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
         $this->assertEquals($nameIdPolicy['Format'], 'fooFormat');
-    }
-
-    public function testGettingCurrentEntityIsProxiedViaGetRemoteEntity()
-    {
-        $proxyServer = new EngineBlock_Corto_ProxyServer();
-        $proxyServer->setHostName('test-host');
-        $currentEntity = array('EntityID' => 'testEntity');
-        $proxyServer->setCurrentEntities(array($currentEntity));
-
-        $this->assertEquals($currentEntity, $proxyServer->getRemoteEntity('testEntity'));
     }
 
     /**
