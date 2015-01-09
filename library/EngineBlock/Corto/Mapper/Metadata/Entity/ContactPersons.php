@@ -16,7 +16,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_ContactPersons
     
     public function mapTo(array $rootElement)
     {
-        if (!empty($this->_entity->contactPersons)) {
+        if (empty($this->_entity->contactPersons)) {
             return $rootElement;
         }
 
