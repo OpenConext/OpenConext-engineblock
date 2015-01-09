@@ -17,7 +17,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor_SingleSignOnServ
     public function mapTo(array $rootElement)
     {
         // Set SSO on IDP
-        if (!isset($this->_entity->singleSignOnServices)) {
+        if (empty($this->_entity->singleSignOnServices)) {
             return $rootElement;
         }
 
