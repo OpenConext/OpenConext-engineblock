@@ -6,9 +6,13 @@ class EngineBlock_Exception_MissingRequiredFields extends EngineBlock_Exception 
 
 class EngineBlock_Saml2Attributes_FieldMapper
 {
-    protected $_saml2Required = array(
+    protected $_saml2RequiredShoUid = array(
         'urn:mace:dir:attribute-def:uid',
         'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+    );
+
+    protected $_saml2RequiredEPPN = array(
+        'urn:mace:dir:attribute-def:eduPersonPrincipalName',
     );
 
     /**
@@ -74,7 +78,13 @@ class EngineBlock_Saml2Attributes_FieldMapper
     {
         $log = EngineBlock_ApplicationSingleton::getLog();
 
-        $required = $this->_saml2Required;
+        $openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
+
+        if ($openConextIdentifierType != 'eduPersonPrincipalName') {
+            $required = $this->_saml2RequiredShoUid;
+        } else {
+            $required = $this->_saml2RequiredEPPN;
+        }
         $ldapAttributes = array();
         foreach ($attributes as $saml2Name => $values) {
             // Map it to an LDAP attribute
@@ -104,6 +114,37 @@ class EngineBlock_Saml2Attributes_FieldMapper
                 'Missing required SAML2 fields in attributes'
             );
         }
+
+        if ($openConextIdentifierType == 'eduPersonPrincipalName') {
+            if (!isset($ldapAttributes['o'])) {
+                $ldapAttributes['o'] = $this->_getDomainFromEppn($ldapAttributes, 'none');
+            }
+        }
         return $ldapAttributes;
+    }
+
+    protected function _getDomainFromEppn($ldapAttributes, $defaultDomain) {
+        if (isset($ldapAttributes['eduPersonPrincipalName'])) {
+            if (strpos($ldapAttributes['eduPersonPrincipalName'],'@') !== false ) {
+                return array_pop(explode('@', $ldapAttributes['eduPersonPrincipalName']));
+            }
+        }
+        return $defaultDomain;
+    }
+
+    protected function _getOpenConextIdentifierTypeFromConfig() {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
+
+        $allowValues = array(
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
+        );
+        if (!in_array ($openConextIdentifierType, $allowValues )) {
+            return 'CollabPersonId';
+        }
+
+        return $openConextIdentifierType;
     }
 }

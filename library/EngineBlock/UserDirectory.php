@@ -22,6 +22,7 @@ class EngineBlock_UserDirectory
     const LDAP_ATTR_COLLAB_PERSON_IS_GUEST          = 'collabpersonisguest';
     const LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING     = 'collabpersonfirstwarningsent';
     const LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING    = 'collabpersonsecondwarningsent';
+    const LDAP_ATTR_EDU_PERSON_EPPN              = 'eduPersonPrincipalName';
 
     protected $LDAP_OBJECT_CLASSES = array(
         'collabPerson',
@@ -42,12 +43,17 @@ class EngineBlock_UserDirectory
      */
     protected $_ldapConfig = NULL;
 
+    protected $openConextIdentifierType = NULL;
+
     /**
      * @param Zend_Config $ldapConfig
      */
     public function __construct(Zend_Config $ldapConfig)
     {
         $this->_ldapConfig = $ldapConfig;
+
+        // Supported values: CollabPersonId, CollabPersonUuid and eduPersonPrincipalName
+        $this->_openConextIdentifierType = $this->_getOpenConextIdentifierTypeFromConfig();
     }
 
     /**
@@ -58,9 +64,29 @@ class EngineBlock_UserDirectory
      */
     public function findUsersByIdentifier($identifier)
     {
-        $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
-        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
-
+        switch ($this->_openConextIdentifierType) {
+            case "CollabPersonId":
+                $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+                $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
+                break;
+            case "CollabPersonUuid":
+                $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+                $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_UUID . '=' . $identifier . '))';
+                break;
+            case "eduPersonPrincipalName":
+                $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
+                $filter .= '(' . self::LDAP_ATTR_EDU_PERSON_EPPN . '=' . $identifier . '))';
+                break;
+            default:
+                $message = 'Whoa, an unknown identifierType was provided: "' .
+                    $this->_openConextIdentifierType .
+                    '"?!?!?  I only support: CollabPersonId, CollabPersonUuid and ePPN';
+                $openConextIdentifierTypeError = new EngineBlock_Exception($message);
+                if (!empty($identifier)) {
+                    $openConextIdentifierTypeError->userId = $identifier;
+                }
+                throw $openConextIdentifierTypeError;
+        }
         $collection = $this->_getLdapClient()->search(
             $filter,
             null,
@@ -87,7 +113,7 @@ class EngineBlock_UserDirectory
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
         $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes);
 
-        $collabPersonId = $this->_getCollabPersonId($ldapAttributes);
+        $collabPersonId = $this->_getCollabPersonById($ldapAttributes);
         $users = $this->findUsersByIdentifier($collabPersonId);
         try {
             switch (count($users)) {
@@ -115,7 +141,9 @@ class EngineBlock_UserDirectory
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
             }
         }
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+
+
+        return $collabPersonId;
     }
 
     /**
@@ -222,7 +250,7 @@ class EngineBlock_UserDirectory
     {
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
 
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonId($newAttributes);
+        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonById($newAttributes);
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_UUID]          = $this->_getCollabPersonUuid($newAttributes);
 
         $now = date(DATE_RFC822);
@@ -296,11 +324,29 @@ class EngineBlock_UserDirectory
         return $newAttributes;
     }
 
-    protected function _getCollabPersonId($attributes)
+    protected function _getCollabPersonById($attributes)
     {
-        $uid = str_replace('@', '_', $attributes['uid']);
-        return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+        switch ($this->_openConextIdentifierType) {
+            case "CollabPersonId":
+                $uid = str_replace('@', '_', $attributes['uid']);
+                return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+                break;
+            case "CollabPersonUuid":
+                return (string)Surfnet_Zend_Uuid::generate();
+                break;
+            case "eduPersonPrincipalName":
+                return $attributes['eduPersonPrincipalName'];
+                break;
+            default:
+                $message = 'Whoa, an unknown identifierType was provided: "' . $this->_openConextIdentifierType . '"?!?!?  I only support: collabpersonid, collabpersonuuid and edupersonprincipalname';
+                $e = new EngineBlock_Exception($message);
+                if (!empty($identifier)) {
+                    $e->userId = $identifier;
+                }
+                throw $e;
+        }
     }
+
 
     protected function _getCollabPersonUuid($attributes)
     {
@@ -403,5 +449,22 @@ class EngineBlock_UserDirectory
     protected function _getSaml2AttributesFieldMapper()
     {
         return new EngineBlock_Saml2Attributes_FieldMapper();
+    }
+
+    protected function _getOpenConextIdentifierTypeFromConfig()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $openConextIdentifierType = $application->getConfigurationValue('openConextIdentifierType', 'CollabPersonId');
+
+        $allowValues = array(
+            'CollabPersonId',
+            'CollabPersonUuid',
+            'eduPersonPrincipalName'
+        );
+        if (!in_array($openConextIdentifierType, $allowValues)) {
+            return 'CollabPersonId';
+        }
+
+        return $openConextIdentifierType;
     }
 }
