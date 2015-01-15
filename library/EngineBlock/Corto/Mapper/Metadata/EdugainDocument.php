@@ -24,6 +24,7 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 
     public function map()
     {
+        $rootElement = array();
         $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = $this->_getTermsOfUse();
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md'] = 'urn:oasis:names:tc:SAML:2.0:metadata';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
