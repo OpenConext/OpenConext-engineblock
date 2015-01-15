@@ -20,8 +20,6 @@ class EngineBlock_UserDirectory
     const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED     = 'collabpersonlastaccessed';
     const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED      = 'collabpersonlastupdated';
     const LDAP_ATTR_COLLAB_PERSON_IS_GUEST          = 'collabpersonisguest';
-    const LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING     = 'collabpersonfirstwarningsent';
-    const LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING    = 'collabpersonsecondwarningsent';
 
     protected $LDAP_OBJECT_CLASSES = array(
         'collabPerson',
@@ -115,58 +113,6 @@ class EngineBlock_UserDirectory
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
             }
         }
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
-    }
-
-    /**
-     * Register that this user has a first warning (for automatic account deprovisioning) sent.
-     *
-     * @param string $uid
-     * @return string collabPersonId
-     * @throws EngineBlock_Exception
-     */
-    public function setUserFirstWarningSent($uid)
-    {
-        $users = $this->findUsersByIdentifier($uid);
-
-        // Only update a user
-        if (count($users) > 1) {
-            $e = new EngineBlock_Exception("Multiple users found for UID: '$uid''?!");
-            $e->userId = $uid;
-            throw $e;
-        }
-
-        $newAttributes = array();
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING] = 'TRUE';
-
-        $user = $this->_updateUser($users[0], $newAttributes);
-
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
-    }
-
-    /**
-     * Register that this user has a second warning (for automatic account deprovisioning) sent.
-     *
-     * @throws EngineBlock_Exception
-     * @param string $collabPersonId
-     * @return string collabPersonId
-     */
-    public function setUserSecondWarningSent($collabPersonId)
-    {
-        $users = $this->findUsersByIdentifier($collabPersonId);
-
-        // Only update a user
-        if (count($users) > 1) {
-            $e = new EngineBlock_Exception("Multiple users found for UID: $collabPersonId?!");
-            $e->userId = $collabPersonId;
-            throw $e;
-        }
-
-        $newAttributes = array();
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING] = 'TRUE';
-
-        $user = $this->_updateUser($users[0], $newAttributes);
-
         return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
     }
 
