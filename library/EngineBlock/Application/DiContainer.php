@@ -23,6 +23,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
     const OWN_ENTITIES_REPOSITORY               = 'ownMetadataRepository';
     const DOCTRINE_ENTITY_MANAGER               = 'entityManager';
+    const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
 
     public function __construct()
@@ -41,6 +42,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->registerSuperGlobalManager();
         $this->registerEntityManager();
         $this->registerDenormalizedAttributeDefinitions();
+        $this->registerAttributeMetadata();
     }
 
     protected function registerXmlConverter()
@@ -283,5 +285,23 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getDenormalizedAttributeDefinitions()
     {
         return $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED];
+    }
+
+    private function registerAttributeMetadata()
+    {
+        $this[self::ATTRIBUTE_METADATA] = function(EngineBlock_Application_DiContainer $container) {
+            return new EngineBlock_Attributes_Metadata(
+                $container->getDenormalizedAttributeDefinitions(),
+                EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()
+            );
+        };
+    }
+
+    /**
+     * @return EngineBlock_Attributes_Metadata
+     */
+    public function getAttributeMetadata()
+    {
+        return $this[self::ATTRIBUTE_METADATA];
     }
 }

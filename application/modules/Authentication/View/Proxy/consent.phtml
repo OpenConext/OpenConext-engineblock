@@ -90,10 +90,10 @@ $inlineScriptHelper->appendScript('
 </p>
 
 <div>
-    <?php $this->sortConsentDisplayOrder($attributes) ?>
+    <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
     <table>
     <?php foreach ($attributes as $uid => $attributeValues) : ?>
-        <?php $attributeName = $this->getAttributeName($uid, $lang, false)?>
+        <?php $attributeName = $this->getAttributeName($uid, $lang)?>
         <?php if ($attributeName) : ?>
             <tr>
                 <td>

@@ -125,7 +125,7 @@ $attributesValidated = $validator->validate();
         <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
         <tr>
             <td>
-                <?= $this->getAttributeName($attributeName, 'en', false) ?>
+                <?= $this->getAttributeName($attributeName, 'en') ?>
             </td>
             <td>
                 <?= EngineBlock_View::htmlSpecialCharsText($attributeName); ?>

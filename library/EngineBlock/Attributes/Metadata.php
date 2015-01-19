@@ -1,150 +1,162 @@
 <?php
 
+/**
+ * Metadata for (known) attributes.
+ */
 class EngineBlock_Attributes_Metadata
 {
-    protected $_definitions;
-    protected $_logger;
+    /**
+     * @var Zend_Log
+     */
+    private $logger;
 
-    public function getDisplayName($attributeId, $ietfLanguageTag = 'en')
+    /**
+     * @var array
+     */
+    private $definitions;
+
+    /**
+     * @param $definitions
+     * @param Zend_Log $logger
+     */
+    public function __construct(array $definitions, Zend_Log $logger)
     {
-        $this->_loadAttributeDefinitions();
-
-        $name = $this->_getDataType($attributeId, 'Name', $ietfLanguageTag);
-        if ($this->_definitions[$attributeId]['DisplayConsent']) {
-            return $name;
-        }
-        return null;
+        $this->definitions = $definitions;
+        $this->logger = $logger;
     }
 
-    public function sortConsentDisplayOrder(&$attributes)
+    /**
+     * Get the (short) name for the attribute.
+     *
+     * @param string $attributeId
+     * @param string $ietfLanguageTag
+     * @return string
+     */
+    public function getName($attributeId, $ietfLanguageTag = 'en')
     {
-        $this->_loadAttributeDefinitions();
-
-        uksort($attributes, array("EngineBlock_Attributes_Metadata", "sortCallback"));
+        return $this->getTypeForLang($attributeId, 'Name', $ietfLanguageTag);
     }
 
-    public function sortCallback($a, $b) {
-        $orderA = -1;
-        $orderB = -1;
-        if (isset($this->_definitions[$a]['DisplayOrder'])) {
-            $orderA = $this->_definitions[$a]['DisplayOrder'];
-        }
-        if (isset($this->_definitions[$b]['DisplayOrder'])) {
-            $orderB = $this->_definitions[$b]['DisplayOrder'];
-        }
-        return $orderA - $orderB;
-    }
-
-    public function getName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
+    /**
+     * Get the name if possible, fall back to the attribute ID if not.
+     *
+     * @param string $attributeId
+     * @param string $ietfLanguageTag
+     * @return string
+     */
+    public function getNameWithFallback($attributeId, $ietfLanguageTag = 'en')
     {
-        $this->_loadAttributeDefinitions();
+        $name = $this->getName($attributeId, $ietfLanguageTag);
 
-        $name = $this->_getDataType($attributeId, 'Name', $ietfLanguageTag);
-        if (!$name && $fallbackToId) {
+        if (empty($name)) {
             $name = $attributeId;
         }
+
         return $name;
     }
 
+    /**
+     * Get the name of the attribute for purposes of showing to the end-user in the consent screen.
+     *
+     * @param string $attributeId
+     * @param string $ietfLanguageTag
+     * @return string
+     */
+    public function getNameForConsent($attributeId, $ietfLanguageTag = 'en')
+    {
+        $name = $this->getName($attributeId, $ietfLanguageTag);
+
+        if ($this->definitions[$attributeId]['DisplayConsent']) {
+            return $name;
+        }
+
+        return '';
+    }
+
+    /**
+     * @param string $attributeId
+     * @param string $ietfLanguageTag
+     * @return string
+     */
     public function getDescription($attributeId, $ietfLanguageTag = 'en')
     {
-        $this->_loadAttributeDefinitions();
-
-        $description = $this->_getDataType($attributeId, 'Description', $ietfLanguageTag, $fallbackToId = true);
-        if (!$description && $fallbackToId) {
-            $description = '';
-        }
-        return $description;
+        return $this->getTypeForLang($attributeId, 'Description', $ietfLanguageTag);
     }
 
-    protected function _getDataType($id, $type, $ietfLanguageTag = 'en')
+    /**
+     * @param $attributes
+     * @return mixed
+     */
+    public function sortByDisplayOrder(array $attributes)
     {
-        $this->_loadLogger();
-
-        if (isset($this->_definitions[$id][$type][$ietfLanguageTag])) {
-            return $this->_definitions[$id][$type][$ietfLanguageTag];
-        }
-        $this->_logger->log(
-            "Attribute lookup failure '$id' has no '$type' for language '$ietfLanguageTag'", EngineBlock_Log::NOTICE
-        );
-        return $id;
+        $definitions = $this->definitions;
+        uksort($attributes, function ($a, $b) use ($definitions) {
+            $orderA = -1;
+            $orderB = -1;
+            if (isset($definitions[$a]['DisplayOrder'])) {
+                $orderA = $definitions[$a]['DisplayOrder'];
+            }
+            if (isset($definitions[$b]['DisplayOrder'])) {
+                $orderB = $definitions[$b]['DisplayOrder'];
+            }
+            return $orderA - $orderB;
+        });
+        return $attributes;
     }
 
-    protected function _loadAttributeDefinitions()
+    /**
+     * @return string[]
+     */
+    public function findRequestedAttributeIds()
     {
-        static $s_defaultDefinitions;
-
-        // Definitions loading default
-        if (isset($this->_definitions)) {
-            return $this->_definitions;
-        }
-
-        if (isset($s_defaultDefinitions)) {
-            $this->_definitions = $s_defaultDefinitions;
-            return $this->_definitions;
-        }
-
-        $s_defaultDefinitions = json_decode(
-            file_get_contents(
-                EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
-                    'attributeDefinitionFile',
-                    ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
-                )
-            ),
-            true
-        );
-        $this->_definitions = $s_defaultDefinitions;
-        $this->_denormalizeDefinitions();
-        return $this->_definitions;
+        return $this->findAttributeIdsWithMinConditionForType('warning');
     }
 
-    protected function _denormalizeDefinitions()
+    /**
+     * @return string[]
+     */
+    public function findRequiredAttributeIds()
     {
-        foreach ($this->_definitions as $attributeName => $definition) {
-            if (is_array($definition)) {
+        return $this->findAttributeIdsWithMinConditionForType('error');
+    }
+
+    /**
+     * Find all attribute ids with a 'min' (or required) condition of a given type ('warning' / 'error').
+     *
+     * @param string $type
+     * @return array
+     */
+    private function findAttributeIdsWithMinConditionForType($type)
+    {
+        $attributeIds = array();
+        foreach ($this->definitions as $attributeId => $attributeDefinition) {
+            if (empty($attributeDefinition['Conditions'][$type]['min'])) {
                 continue;
             }
 
-            $aliases = array($attributeName);
-            while (!is_array($definition)) {
-                $attributeName = $this->_definitions[$attributeName];
-
-                if (empty($this->_definitions[$attributeName])) {
-                    // @todo log
-                    break;
-                }
-                $definition = $this->_definitions[$attributeName];
-                $aliases[] = $attributeName;
+            if ((int) $attributeDefinition['Conditions'][$type]['min'] <= 1) {
+                continue;
             }
 
-            foreach ($aliases as $alias) {
-                $this->_definitions[$alias] = $definition;
-                if ($attributeName !== $alias && is_array($this->_definitions[$alias])) {
-                    $this->_definitions[$alias]['__original__'] = $attributeName;
-                }
-            }
+            $attributeIds[] = $attributeId;
         }
-        return true;
+        return $attributeIds;
     }
 
-    public function setDefinition($definitions)
+    /**
+     * @param string $id
+     * @param string $type
+     * @param string $ietfLanguageTag
+     * @return string
+     */
+    private function getTypeForLang($id, $type, $ietfLanguageTag = 'en')
     {
-        $this->_definitions = $definitions;
-        return $this;
-    }
-
-    public function setLogger(Zend_Log $logger)
-    {
-        $this->_logger = $logger;
-        return $this;
-    }
-
-    protected function _loadLogger()
-    {
-        if (!isset($this->_logger)) {
-            $this->setLogger(EngineBlock_ApplicationSingleton::getLog());
+        if (isset($this->definitions[$id][$type][$ietfLanguageTag])) {
+            return $this->definitions[$id][$type][$ietfLanguageTag];
         }
-        return $this->_logger;
+        $this->logger->log(
+            "Attribute lookup failure '$id' has no '$type' for language '$ietfLanguageTag'", EngineBlock_Log::NOTICE
+        );
+        return '';
     }
-
 }
