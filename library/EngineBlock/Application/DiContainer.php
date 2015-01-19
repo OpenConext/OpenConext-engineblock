@@ -9,20 +9,20 @@ use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadata
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const XML_CONVERTER                 = 'xmlConverter';
-    const CONSENT_FACTORY               = 'consentFactory';
-    const MAILER                        = 'mailer';
-    const FILTER_COMMAND_FACTORY        = 'filterCommandFactory';
-    const DATABASE_CONNECTION_FACTORY   = 'databaseConnectionFactory';
-    const APPLICATION_CACHE             = 'applicationCache';
-    const SERVICE_REGISTRY_CLIENT       = 'serviceRegistryClient';
-    const METADATA_REPOSITORY           = 'metadataRepository';
-    const ASSET_MANAGER                 = 'assetManager';
-    const TIME                          = 'dateTime';
-    const SAML2_ID                      = 'id';
-    const SUPER_GLOBAL_MANAGER          = 'superGlobalManager';
-    const OWN_ENTITIES_REPOSITORY       = 'ownMetadataRepository';
-    const DOCTRINE_ENTITY_MANAGER       = 'entityManager';
+    const XML_CONVERTER                         = 'xmlConverter';
+    const CONSENT_FACTORY                       = 'consentFactory';
+    const MAILER                                = 'mailer';
+    const FILTER_COMMAND_FACTORY                = 'filterCommandFactory';
+    const DATABASE_CONNECTION_FACTORY           = 'databaseConnectionFactory';
+    const APPLICATION_CACHE                     = 'applicationCache';
+    const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
+    const METADATA_REPOSITORY                   = 'metadataRepository';
+    const ASSET_MANAGER                         = 'assetManager';
+    const TIME                                  = 'dateTime';
+    const SAML2_ID                              = 'id';
+    const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
+    const OWN_ENTITIES_REPOSITORY               = 'ownMetadataRepository';
+    const DOCTRINE_ENTITY_MANAGER               = 'entityManager';
 
     public function __construct()
     {
