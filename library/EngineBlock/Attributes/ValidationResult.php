@@ -85,7 +85,7 @@ class EngineBlock_Attributes_ValidationResult
 
     public function hasErrors($attributeName = null)
     {
-        return empty($attributeName) ? empty($this->errors) : empty($this->errors[$attributeName]);
+        return empty($attributeName) ? !empty($this->errors) : !empty($this->errors[$attributeName]);
     }
 
     public function getErrors($attributeName = null)
