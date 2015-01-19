@@ -24,31 +24,10 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
     public function execute()
     {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        /** @var Zend_Config $ldapConfig */
-        $ldapConfig = $application->getConfigurationValue('ldap', null);
-
-        if (empty($ldapConfig)) {
-            throw new EngineBlock_Exception('No LDAP config');
-        }
-
-        $ldapOptions = array(
-            'host'                 => $ldapConfig->host,
-            'useSsl'               => $ldapConfig->useSsl,
-            'username'             => $ldapConfig->userName,
-            'password'             => $ldapConfig->password,
-            'bindRequiresDn'       => $ldapConfig->bindRequiresDn,
-            'accountDomainName'    => $ldapConfig->accountDomainName,
-            'baseDn'               => $ldapConfig->baseDn
-        );
-
-        $ldapClient = new Zend_Ldap($ldapOptions);
-        $ldapClient->bind();
-        
-        $userDirectory = new EngineBlock_UserDirectory($ldapClient);
+        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
         $user = $userDirectory->registerUser($this->_responseAttributes);
 
-        $subjectIdField = $application->getConfigurationValue(
+        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
             'subjectIdAttribute',
             EngineBlock_UserDirectory::LDAP_ATTR_COLLAB_PERSON_ID
         );
@@ -69,10 +48,5 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
             'Value' => $subjectId,
             'Format' => SAML2_Const::NAMEID_PERSISTENT,
         ));
-    }
-
-    protected function _getProvisioning()
-    {
-        return new EngineBlock_Provisioning();
     }
 }

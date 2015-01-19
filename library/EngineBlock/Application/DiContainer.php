@@ -26,6 +26,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
     const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
+    const USER_DIRECTORY                        = 'userDirectory';
 
     public function __construct()
     {
@@ -45,6 +46,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->registerDenormalizedAttributeDefinitions();
         $this->registerAttributeMetadata();
         $this->registerAttributeValidator();
+        $this->registerUserDirectory();
     }
 
     protected function registerXmlConverter()
@@ -323,5 +325,40 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getAttributeValidator()
     {
         return $this[self::ATTRIBUTE_VALIDATOR];
+    }
+
+    private function registerUserDirectory()
+    {
+        $this[self::USER_DIRECTORY] = function() {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            /** @var Zend_Config $ldapConfig */
+            $ldapConfig = $application->getConfigurationValue('ldap', null);
+
+            if (empty($ldapConfig)) {
+                throw new EngineBlock_Exception('No LDAP config');
+            }
+
+            $ldapOptions = array(
+                'host' => $ldapConfig->host,
+                'useSsl' => $ldapConfig->useSsl,
+                'username' => $ldapConfig->userName,
+                'password' => $ldapConfig->password,
+                'bindRequiresDn' => $ldapConfig->bindRequiresDn,
+                'accountDomainName' => $ldapConfig->accountDomainName,
+                'baseDn' => $ldapConfig->baseDn
+            );
+
+            $ldapClient = new Zend_Ldap($ldapOptions);
+            $ldapClient->bind();
+            return new EngineBlock_UserDirectory($ldapClient);
+        };
+    }
+
+    /**
+     * @return EngineBlock_UserDirectory
+     */
+    public function getUserDirectory()
+    {
+        return $this[self::USER_DIRECTORY];
     }
 }

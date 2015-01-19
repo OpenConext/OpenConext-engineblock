@@ -260,7 +260,7 @@ class EngineBlock_Saml2_NameIdResolver
 
     protected function _getUserUuid($collabPersonId)
     {
-        $userDirectory = $this->_getUserDirectory();
+        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
         $users = $userDirectory->findUsersByIdentifier($collabPersonId);
         if (count($users) > 1) {
             throw new EngineBlock_Exception('Multiple users found for collabPersonId: ' . $collabPersonId);
@@ -271,12 +271,5 @@ class EngineBlock_Saml2_NameIdResolver
         }
 
         return $users[0]['collabpersonuuid'];
-    }
-
-    protected function _getUserDirectory()
-    {
-        return new EngineBlock_UserDirectory(
-            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->ldap
-        );
     }
 }
