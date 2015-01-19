@@ -309,9 +309,7 @@
                     "urn:mace:terena.org:schac:homeOrganizationType:int:NRENAffiliate",
                     "urn:mace:terena.org:schac:homeOrganizationType:int:other"
                 ],
-                "max": "1"
-            },
-            "error": {
+                "max": "1",
                 "min": "1"
             }
         }
@@ -408,7 +406,6 @@
     },
     "urn:oid:1.3.6.1.4.1.5923.1.1.1.4": "urn:mace:dir:attribute-def:eduPersonOrgUnitDN",
     "urn:mace:dir:attribute-def:eduPersonOrgUnitDN": {
-
     },
     "urn:oid:1.3.6.1.4.1.5923.1.1.1.5": "urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation",
     "urn:mace:dir:attribute-def:eduPersonPrimaryAffiliation": {
