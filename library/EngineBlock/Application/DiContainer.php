@@ -25,6 +25,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     const DOCTRINE_ENTITY_MANAGER               = 'entityManager';
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
+    const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
 
     public function __construct()
     {
@@ -43,6 +44,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->registerEntityManager();
         $this->registerDenormalizedAttributeDefinitions();
         $this->registerAttributeMetadata();
+        $this->registerAttributeValidator();
     }
 
     protected function registerXmlConverter()
@@ -303,5 +305,23 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getAttributeMetadata()
     {
         return $this[self::ATTRIBUTE_METADATA];
+    }
+
+    public function registerAttributeValidator()
+    {
+        $this[self::ATTRIBUTE_VALIDATOR] = function(EngineBlock_Application_DiContainer $container) {
+            return new EngineBlock_Attributes_Validator(
+                $container->getDenormalizedAttributeDefinitions(),
+                new EngineBlock_Attributes_Validator_Factory()
+            );
+        };
+    }
+
+    /**
+     * @return EngineBlock_Attributes_Validator
+     */
+    public function getAttributeValidator()
+    {
+        return $this[self::ATTRIBUTE_VALIDATOR];
     }
 }

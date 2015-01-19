@@ -21,15 +21,17 @@ $layout->header     = $layout->title;
 $layout->subheader  = $this->t('idp_debugging_title');
 $layout->footerText = $this->t('footer');
 
-$validator = new EngineBlock_Attributes_Validator($attributes);
-$attributesValidated = $validator->validate();
+$validationResult = EngineBlock_ApplicationSingleton::getInstance()
+    ->getDiContainer()
+    ->getAttributeValidator()
+    ->validate($attributes);
 ?>
 
-<?php if ($attributesValidated) : ?>
+<?php if ($validationResult->isValid()) : ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="" />
 <?= $this->t('attributes_validation_succeeded'); ?>
 <?php else: ?>
-    <?php if (count($validator->getErrors()) > 0): ?>
+    <?php if (count($validationResult->getErrors()) > 0): ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="" style="vertical-align: bottom" />
     <?php else: ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="" style="vertical-align: bottom" />
@@ -92,13 +94,13 @@ $attributesValidated = $validator->validate();
 </table>
 <hr />
 <h2><?= $this->t('attributes') ?></h2>
-<?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
+<?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
     <p class="error">
         <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
     echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
     ?></p>
 <?php endforeach; ?>
-<?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
+<?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
     <p class="warning">
         <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
     echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
@@ -142,16 +144,16 @@ $attributesValidated = $validator->validate();
                 <?php } ?>
             </td>
             <td>
-                <?php if ($validator->isValid($attributeName)): ?>
+                <?php if ($validationResult->isValid($attributeName)): ?>
                 <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="valid" />
                 <?php else:
-                    foreach ($validator->getErrors($attributeName) as $error) {
+                    foreach ($validationResult->getErrors($attributeName) as $error) {
                         echo '<p class="error">' .
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
                                 EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                             '</p>';
                     }
-                    foreach ($validator->getWarnings($attributeName) as $warning) {
+                    foreach ($validationResult->getWarnings($attributeName) as $warning) {
                         echo '<p class="warning">'.
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
                                 EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .

@@ -10,7 +10,10 @@
             "nl": "Volledige persoonsnaam"
         },
         "DisplayOrder" : 2,
-        "DisplayConsent" : true
+        "DisplayConsent" : true,
+        "warning": {
+            "min": "1"
+        }
     },
     "urn:oid:2.16.840.1.113730.3.1.241": "urn:mace:dir:attribute-def:displayName",
     "urn:mace:dir:attribute-def:displayName": {
@@ -26,6 +29,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1"
             }
         }
@@ -45,6 +49,7 @@
         "Conditions": {
             "caseInsensitive": true,
             "warning": {
+                "min": "1",
                 "allowed": [
                     "affiliate",
                     "alum",
@@ -69,7 +74,8 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
-                "type": "URN"
+                "type": "URN",
+                "min": "1"
             }
         }
     },
@@ -87,6 +93,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1",
                 "regex": "\/[\\S]+@[\\S]+\/"
             },
@@ -107,6 +114,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1"
             }
         }
@@ -126,7 +134,8 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
-                "type": "EmailAddress"
+                "type": "EmailAddress",
+                "min": 1
             }
         }
     },
@@ -144,6 +153,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1"
             }
         }
@@ -162,6 +172,7 @@
         "DisplayConsent" : true,
         "Conditions": {
             "warning": {
+                "min": "1",
                 "max": "1"
             }
         }
@@ -299,6 +310,9 @@
                     "urn:mace:terena.org:schac:homeOrganizationType:int:other"
                 ],
                 "max": "1"
+            },
+            "error": {
+                "min": "1"
             }
         }
     },
