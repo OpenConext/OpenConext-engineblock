@@ -24,8 +24,40 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
     public function execute()
     {
-        // Provisioning of the user account
-        $subjectId = $this->_getProvisioning()->provisionUser($this->_responseAttributes);
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        /** @var Zend_Config $ldapConfig */
+        $ldapConfig = $application->getConfigurationValue('ldap', null);
+
+        if (empty($ldapConfig)) {
+            throw new EngineBlock_Exception('No LDAP config');
+        }
+
+        $ldapOptions = array(
+            'host'                 => $ldapConfig->host,
+            'useSsl'               => $ldapConfig->useSsl,
+            'username'             => $ldapConfig->userName,
+            'password'             => $ldapConfig->password,
+            'bindRequiresDn'       => $ldapConfig->bindRequiresDn,
+            'accountDomainName'    => $ldapConfig->accountDomainName,
+            'baseDn'               => $ldapConfig->baseDn
+        );
+
+        $ldapClient = new Zend_Ldap($ldapOptions);
+        $ldapClient->bind();
+        
+        $userDirectory = new EngineBlock_UserDirectory($ldapClient);
+        $user = $userDirectory->registerUser($this->_responseAttributes);
+
+        $subjectIdField = $application->getConfigurationValue(
+            'subjectIdAttribute',
+            EngineBlock_UserDirectory::LDAP_ATTR_COLLAB_PERSON_ID
+        );
+        if (empty($user[$subjectIdField])) {
+            throw new EngineBlock_Exception(
+                "SubjectIdField '$subjectIdField' does not contain data for user: " . var_export($user, true)
+            );
+        }
+        $subjectId = $user[$subjectIdField];
 
         $this->setCollabPersonId($subjectId);
 

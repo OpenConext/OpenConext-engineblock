@@ -36,16 +36,11 @@ class EngineBlock_UserDirectory
     protected $_ldapClient = NULL;
 
     /**
-     * @var Zend_Config
+     * @param Zend_Ldap $ldapClient
      */
-    protected $_ldapConfig = NULL;
-
-    /**
-     * @param Zend_Config $ldapConfig
-     */
-    public function __construct(Zend_Config $ldapConfig)
+    public function __construct(Zend_Ldap $ldapClient)
     {
-        $this->_ldapConfig = $ldapConfig;
+        $this->_ldapClient = $ldapClient;
     }
 
     /**
@@ -59,7 +54,7 @@ class EngineBlock_UserDirectory
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
 
-        $collection = $this->_getLdapClient()->search(
+        $collection = $this->_ldapClient->search(
             $filter,
             null,
             Zend_Ldap::SEARCH_SCOPE_SUB
@@ -80,6 +75,12 @@ class EngineBlock_UserDirectory
         return $result;
     }
 
+    /**
+     * @param array $saml2attributes
+     * @return array
+     * @throws EngineBlock_Exception
+     * @throws EngineBlock_Exception_MissingRequiredFields
+     */
     public function registerUser(array $saml2attributes)
     {
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
@@ -113,7 +114,7 @@ class EngineBlock_UserDirectory
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
             }
         }
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+        return $user;
     }
 
     /**
@@ -125,7 +126,7 @@ class EngineBlock_UserDirectory
     public function deleteUser($collabPersonId)
     {
         $dn = $this->_buildUserDn($collabPersonId);
-        $this->_getLdapClient()->delete($dn, false);
+        $this->_ldapClient->delete($dn, false);
     }
 
     /**
@@ -144,19 +145,31 @@ class EngineBlock_UserDirectory
             throw $e;
         }
         $user = $users[0];
-        return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
+        return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapClient->getBaseDn();
     }
 
     protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes)
     {
+        // cn is required by inetOrgPerson LDAP schema
         if (!isset($ldapAttributes['cn'])) {
             $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
         }
         if (!isset($ldapAttributes['displayName'])) {
             $ldapAttributes['displayName'] = $ldapAttributes['cn'];
         }
+        // sn is required by inetOrgPerson LDAP schema
         if (!isset($ldapAttributes['sn'])) {
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
+        }
+        // Note that in the default configuration of EngineBlock the following will never trigger
+        // because uid and SchacHomeOrganization (which gets mapped to o) are required.
+        // @see https://github.com/OpenConext/OpenConext-engineblock/issues/98
+        if (!isset($ldapAttributes['uid']) && isset($ldapAttributes['eduPersonPrincipalName'])) {
+            list($ldapAttributes['uid']) = explode('@', $ldapAttributes['eduPersonPrincipalName']);
+        }
+        // @see https://github.com/OpenConext/OpenConext-engineblock/issues/98
+        if (!isset($ldapAttributes['o']) && isset($ldapAttributes['eduPersonPrincipalName'])) {
+            list(,$ldapAttributes['o']) = explode('@', $ldapAttributes['eduPersonPrincipalName']);
         }
         $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
             $saml2attributes
@@ -181,7 +194,7 @@ class EngineBlock_UserDirectory
         $this->_addOrganization($newAttributes['o']);
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
-        $this->_getLdapClient()->add($dn, $newAttributes);
+        $this->_ldapClient->add($dn, $newAttributes);
         
         return $newAttributes;
     }
@@ -201,9 +214,9 @@ class EngineBlock_UserDirectory
                 'top'
             )
         );
-        $dn = 'o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
-        if (!$this->_getLdapClient()->exists($dn)) {
-            $result = $this->_getLdapClient()->add($dn, $info);
+        $dn = 'o=' . $organization . ',' . $this->_ldapClient->getBaseDn();
+        if (!$this->_ldapClient->exists($dn)) {
+            $result = $this->_ldapClient->add($dn, $info);
             $result = ($result instanceof Zend_Ldap);
         } else {
             $result = TRUE;
@@ -237,7 +250,7 @@ class EngineBlock_UserDirectory
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
-        $this->_getLdapClient()->update($dn, $newAttributes);
+        $this->_ldapClient->update($dn, $newAttributes);
         
         return $newAttributes;
     }
@@ -281,7 +294,7 @@ class EngineBlock_UserDirectory
 
     protected function _getDnForLdapAttributes($attributes)
     {
-        return 'uid=' . $attributes['uid'] . ',o=' . $attributes['o'] . ',' . $this->_getLdapClient()->getBaseDn();
+        return 'uid=' . $attributes['uid'] . ',o=' . $attributes['o'] . ',' . $this->_ldapClient->getBaseDn();
     }
 
     protected function _getCommonNameFromAttributes($attributes)
@@ -311,39 +324,6 @@ class EngineBlock_UserDirectory
         }
 
         return "";
-    }
-
-    /**
-     * @param  $client
-     * @return EngineBlock_UserDirectory
-     */
-    public function setLdapClient(Zend_Ldap $client)
-    {
-        $this->_ldapClient = $client;
-        return $this;
-    }
-
-    /**
-     * @return Zend_Ldap The ldap client
-     */
-    protected function _getLdapClient()
-    {
-        if ($this->_ldapClient == NULL) {
-
-            $ldapOptions = array(
-                'host'                 => $this->_ldapConfig->host,
-                'useSsl'               => $this->_ldapConfig->useSsl,
-                'username'             => $this->_ldapConfig->userName,
-                'password'             => $this->_ldapConfig->password,
-                'bindRequiresDn'       => $this->_ldapConfig->bindRequiresDn,
-                'accountDomainName'    => $this->_ldapConfig->accountDomainName,
-                'baseDn'               => $this->_ldapConfig->baseDn
-            );
-
-            $this->_ldapClient = new Zend_Ldap($ldapOptions);
-            $this->_ldapClient->bind();
-        }
-        return $this->_ldapClient;
     }
 
     protected function _getSaml2AttributesFieldMapper()
