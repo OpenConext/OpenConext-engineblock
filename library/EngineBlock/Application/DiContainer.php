@@ -23,6 +23,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
     const OWN_ENTITIES_REPOSITORY               = 'ownMetadataRepository';
     const DOCTRINE_ENTITY_MANAGER               = 'entityManager';
+    const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
 
     public function __construct()
     {
@@ -39,6 +40,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->registerSaml2IdGenerator();
         $this->registerSuperGlobalManager();
         $this->registerEntityManager();
+        $this->registerDenormalizedAttributeDefinitions();
     }
 
     protected function registerXmlConverter()
@@ -260,5 +262,26 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getEntityManager()
     {
         return $this[self::DOCTRINE_ENTITY_MANAGER];
+    }
+
+    private function registerDenormalizedAttributeDefinitions()
+    {
+        $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED] = function() {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $definitionFile = $application->getConfigurationValue(
+                'attributeDefinitionFile',
+                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
+            );
+            $definitionFileContent = file_get_contents($definitionFile);
+            $definitions = json_decode($definitionFileContent, true);
+
+            $denormalizer = new EngineBlock_Attributes_Definition_Denormalizer();
+            return $denormalizer->denormalize($definitions);
+        };
+    }
+
+    public function getDenormalizedAttributeDefinitions()
+    {
+        return $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED];
     }
 }
