@@ -576,6 +576,10 @@ class EngineBlock_Corto_Adapter
         }
 
         $engineServiceProvider->requestedAttributes = $requestedAttributes;
+
+        // Allow all Identity Providers for EngineBlock.
+        $engineServiceProvider->allowedIdpEntityIds = $metadataRepository->findAllIdentityProviderEntityIds();
+
         $engineServiceProvider->responseProcessingService = new Service(
             $proxyServer->getUrl('provideConsentService'),
             'INTERNAL'

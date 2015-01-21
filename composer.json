@@ -54,6 +54,7 @@
             "Janus_": "library/",
             "SurfConext_": "library/",
             "Surfnet_": "library/",
+            "Api_":"application/modules/",
             "Authentication_":"application/modules/",
             "Default_":"application/modules/",
             "Logout_":"application/modules/",
