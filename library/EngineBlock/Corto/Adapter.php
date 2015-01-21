@@ -576,6 +576,8 @@ class EngineBlock_Corto_Adapter
             new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
             new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
         );
+        $engineServiceProvider->allowedIdpEntityIds = $metadataRepository->findAllIdentityProviderEntityIds();
+
         $engineServiceProvider->responseProcessingService = new Service(
             $proxyServer->getUrl('provideConsentService'),
             'INTERNAL'
