@@ -8,7 +8,9 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
     {
         $this->userAttributes = $this->_normalizeAttributes();
 
-        $this->metadata = new EngineBlock_Attributes_Metadata();
+        $this->metadata = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeMetadata();
 
         $serviceRegistryClient = $this->_getServiceRegistryClient();
         $this->spList = $serviceRegistryClient->getSpList();

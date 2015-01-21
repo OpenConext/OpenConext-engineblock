@@ -18,7 +18,9 @@ class Profile_Controller_AttributeSupport extends Default_Controller_LoggedIn
         $view = $this->_getView();
         $view->setData(
             array(
-                'metadata' => new EngineBlock_Attributes_Metadata(),
+                'metadata' => EngineBlock_ApplicationSingleton::getInstance()
+                    ->getDiContainer()
+                    ->getAttributeMetadata(),
                 'userAttributes' => $normalizedAttributes,
                 'lang' => $view->language()
             )

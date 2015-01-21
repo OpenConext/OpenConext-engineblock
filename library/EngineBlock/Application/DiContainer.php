@@ -9,20 +9,24 @@ use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadata
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const XML_CONVERTER                 = 'xmlConverter';
-    const CONSENT_FACTORY               = 'consentFactory';
-    const MAILER                        = 'mailer';
-    const FILTER_COMMAND_FACTORY        = 'filterCommandFactory';
-    const DATABASE_CONNECTION_FACTORY   = 'databaseConnectionFactory';
-    const APPLICATION_CACHE             = 'applicationCache';
-    const SERVICE_REGISTRY_CLIENT       = 'serviceRegistryClient';
-    const METADATA_REPOSITORY           = 'metadataRepository';
-    const ASSET_MANAGER                 = 'assetManager';
-    const TIME                          = 'dateTime';
-    const SAML2_ID                      = 'id';
-    const SUPER_GLOBAL_MANAGER          = 'superGlobalManager';
-    const OWN_ENTITIES_REPOSITORY       = 'ownMetadataRepository';
-    const DOCTRINE_ENTITY_MANAGER       = 'entityManager';
+    const XML_CONVERTER                         = 'xmlConverter';
+    const CONSENT_FACTORY                       = 'consentFactory';
+    const MAILER                                = 'mailer';
+    const FILTER_COMMAND_FACTORY                = 'filterCommandFactory';
+    const DATABASE_CONNECTION_FACTORY           = 'databaseConnectionFactory';
+    const APPLICATION_CACHE                     = 'applicationCache';
+    const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
+    const METADATA_REPOSITORY                   = 'metadataRepository';
+    const ASSET_MANAGER                         = 'assetManager';
+    const TIME                                  = 'dateTime';
+    const SAML2_ID                              = 'id';
+    const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
+    const OWN_ENTITIES_REPOSITORY               = 'ownMetadataRepository';
+    const DOCTRINE_ENTITY_MANAGER               = 'entityManager';
+    const ATTRIBUTE_METADATA                    = 'attributeMetadata';
+    const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
+    const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
+    const USER_DIRECTORY                        = 'userDirectory';
 
     public function __construct()
     {
@@ -39,6 +43,10 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->registerSaml2IdGenerator();
         $this->registerSuperGlobalManager();
         $this->registerEntityManager();
+        $this->registerDenormalizedAttributeDefinitions();
+        $this->registerAttributeMetadata();
+        $this->registerAttributeValidator();
+        $this->registerUserDirectory();
     }
 
     protected function registerXmlConverter()
@@ -260,5 +268,97 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getEntityManager()
     {
         return $this[self::DOCTRINE_ENTITY_MANAGER];
+    }
+
+    private function registerDenormalizedAttributeDefinitions()
+    {
+        $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED] = function() {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $definitionFile = $application->getConfigurationValue(
+                'attributeDefinitionFile',
+                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
+            );
+            $definitionFileContent = file_get_contents($definitionFile);
+            $definitions = json_decode($definitionFileContent, true);
+
+            $denormalizer = new EngineBlock_Attributes_Definition_Denormalizer();
+            return $denormalizer->denormalize($definitions);
+        };
+    }
+
+    public function getDenormalizedAttributeDefinitions()
+    {
+        return $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED];
+    }
+
+    private function registerAttributeMetadata()
+    {
+        $this[self::ATTRIBUTE_METADATA] = function(EngineBlock_Application_DiContainer $container) {
+            return new EngineBlock_Attributes_Metadata(
+                $container->getDenormalizedAttributeDefinitions(),
+                EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()
+            );
+        };
+    }
+
+    /**
+     * @return EngineBlock_Attributes_Metadata
+     */
+    public function getAttributeMetadata()
+    {
+        return $this[self::ATTRIBUTE_METADATA];
+    }
+
+    public function registerAttributeValidator()
+    {
+        $this[self::ATTRIBUTE_VALIDATOR] = function(EngineBlock_Application_DiContainer $container) {
+            return new EngineBlock_Attributes_Validator(
+                $container->getDenormalizedAttributeDefinitions(),
+                new EngineBlock_Attributes_Validator_Factory()
+            );
+        };
+    }
+
+    /**
+     * @return EngineBlock_Attributes_Validator
+     */
+    public function getAttributeValidator()
+    {
+        return $this[self::ATTRIBUTE_VALIDATOR];
+    }
+
+    private function registerUserDirectory()
+    {
+        $this[self::USER_DIRECTORY] = function() {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            /** @var Zend_Config $ldapConfig */
+            $ldapConfig = $application->getConfigurationValue('ldap', null);
+
+            if (empty($ldapConfig)) {
+                throw new EngineBlock_Exception('No LDAP config');
+            }
+
+            $ldapOptions = array(
+                'host' => $ldapConfig->host,
+                'useSsl' => $ldapConfig->useSsl,
+                'username' => $ldapConfig->userName,
+                'password' => $ldapConfig->password,
+                'bindRequiresDn' => $ldapConfig->bindRequiresDn,
+                'accountDomainName' => $ldapConfig->accountDomainName,
+                'baseDn' => $ldapConfig->baseDn
+            );
+
+            $ldapClient = new Zend_Ldap($ldapOptions);
+            $ldapClient->bind();
+            return new EngineBlock_UserDirectory($ldapClient);
+        };
+    }
+
+    /**
+     * @return EngineBlock_UserDirectory
+     */
+    public function getUserDirectory()
+    {
+        return $this[self::USER_DIRECTORY];
     }
 }

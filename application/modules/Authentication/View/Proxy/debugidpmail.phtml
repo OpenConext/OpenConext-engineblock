@@ -11,8 +11,10 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
  * @var EngineBlock_View $this
  */
 
-$validator = new EngineBlock_Attributes_Validator($attributes);
-$attributesValidated = $validator->validate();
+$validationResult = EngineBlock_ApplicationSingleton::getInstance()
+    ->getDiContainer()
+    ->getAttributeValidator()
+    ->validate($attributes);
 ?>
 IdP
 ===
@@ -33,10 +35,10 @@ echo 'NameID             ' . $nameId['Value'] ?>
 
 Attributes
 ==========
-<?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
+<?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
 Error: <?= call_user_func_array('sprintf', $error); ?>
 <?php endforeach; ?>
-<?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
+<?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
 Warning: <?= call_user_func_array('sprintf', $warning); ?>
 <?php endforeach; ?>
 
@@ -44,17 +46,17 @@ Warning: <?= call_user_func_array('sprintf', $warning); ?>
 <?php foreach ($attributes as $attributeName => $attributeValues): ?>
 "<?= $attributeName ?>"
 ----------------------------------------------------------
-Name: <?= $this->getAttributeName($attributeName, 'en', false) ?>
+Name: <?= $this->getAttributeName($attributeName, 'en') ?>
 
 Values:
 <?php   foreach ($attributeValues as $attributeValue): ?>
 * "<?= $attributeValue ?>"
 <?php   endforeach; ?>
-<?php   foreach ($validator->getErrors($attributeName) as $error): ?>
+<?php   foreach ($validationResult->getErrors($attributeName) as $error): ?>
 Error: <?= call_user_func_array(array($this, 'translate'), $error); ?>
 
 <?php   endforeach; ?>
-<?php   foreach ($validator->getWarnings($attributeName) as $warning): ?>
+<?php   foreach ($validationResult->getWarnings($attributeName) as $warning): ?>
 Warning: <?= call_user_func_array(array($this, 'translate'), $warning); ?>
 
 <?php   endforeach; ?>

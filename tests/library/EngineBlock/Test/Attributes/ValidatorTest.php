@@ -4,21 +4,24 @@ class EngineBlock_Test_Attributes_ValidatorTest extends \PHPUnit_Framework_TestC
 {
     public function testValidator()
     {
-        $validator = new EngineBlock_Attributes_Validator(array(
-        ));
-        $validator->setDefinitions(array(
-            'a' => array(
-                'Conditions' => array(
-                    'warning' => array(
-                        'min' => 1,
-                    ),
-                )
+        $validator = new EngineBlock_Attributes_Validator(
+            array(
+                'a' => array(
+                    'Conditions' => array(
+                        'warning' => array(
+                            'min' => 1,
+                        ),
+                    )
+                ),
             ),
-        ));
+            new EngineBlock_Attributes_Validator_Factory()
+        );
 
-        $this->assertFalse($validator->validate(), "Min is 1 for non-existing attribute, attribute set is invalid");
-        $this->assertFalse($validator->isValid('a'), "Min is 1 for non-existing attribute, attribute is invalid");
-        $this->assertEmpty($validator->getErrors(), 'Triggering a warning does not also trigger an error');
-        $this->assertNotEmpty($validator->getWarnings(), 'Min is 1 for non-existing attribute triggers a warning');
+        $validationResult = $validator->validate(array());
+
+        $this->assertFalse($validationResult->isValid(), "Min is 1 for non-existing attribute, attribute set is invalid");
+        $this->assertFalse($validationResult->isValid('a'), "Min is 1 for non-existing attribute, attribute is invalid");
+        $this->assertEmpty($validationResult->getErrors(), 'Triggering a warning does not also trigger an error');
+        $this->assertNotEmpty($validationResult->getWarnings(), 'Min is 1 for non-existing attribute triggers a warning');
     }
 }

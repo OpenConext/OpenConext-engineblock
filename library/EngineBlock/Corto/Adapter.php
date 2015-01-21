@@ -562,20 +562,22 @@ class EngineBlock_Corto_Adapter
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
-        $engineServiceProvider->requestedAttributes = array(
-            new RequestedAttribute('urn:mace:dir:attribute-def:mail'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:displayName'), // DisplayName (example: John Doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:sn'), // Surname (example: Doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:givenName'), // Given name (example: John)
-            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganization', true),
-            new RequestedAttribute('urn:mace:terena.org:attribute-def:schacHomeOrganizationType', true),
-            new RequestedAttribute('urn:mace:dir:attribute-def:uid', true), // UID (example: john.doe)
-            new RequestedAttribute('urn:mace:dir:attribute-def:cn'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonAffiliation'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonEntitlement'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:eduPersonPrincipalName'),
-            new RequestedAttribute('urn:mace:dir:attribute-def:preferredLanguage'),
-        );
+
+        $metadata = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();
+        $requestedAttributeIds = $metadata->findRequestedAttributeIds();
+        $requiredAttributeIds = $metadata->findRequiredAttributeIds();
+
+        $requestedAttributes = array();
+        foreach ($requestedAttributeIds as $requestedAttributeId) {
+            $requestedAttributes[] = new RequestedAttribute($requestedAttributeId);
+        }
+        foreach ($requiredAttributeIds as $requiredAttributeId) {
+            $requestedAttributes[] = new RequestedAttribute($requiredAttributeId, true);
+        }
+
+        $engineServiceProvider->requestedAttributes = $requestedAttributes;
+
+        // Allow all Identity Providers for EngineBlock.
         $engineServiceProvider->allowedIdpEntityIds = $metadataRepository->findAllIdentityProviderEntityIds();
 
         $engineServiceProvider->responseProcessingService = new Service(

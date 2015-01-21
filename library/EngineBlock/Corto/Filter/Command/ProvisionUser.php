@@ -24,8 +24,19 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
     public function execute()
     {
-        // Provisioning of the user account
-        $subjectId = $this->_getProvisioning()->provisionUser($this->_responseAttributes);
+        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
+        $user = $userDirectory->registerUser($this->_responseAttributes);
+
+        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
+            'subjectIdAttribute',
+            EngineBlock_UserDirectory::LDAP_ATTR_COLLAB_PERSON_ID
+        );
+        if (empty($user[$subjectIdField])) {
+            throw new EngineBlock_Exception(
+                "SubjectIdField '$subjectIdField' does not contain data for user: " . var_export($user, true)
+            );
+        }
+        $subjectId = $user[$subjectIdField];
 
         $this->setCollabPersonId($subjectId);
 
@@ -37,10 +48,5 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
             'Value' => $subjectId,
             'Format' => SAML2_Const::NAMEID_PERSISTENT,
         ));
-    }
-
-    protected function _getProvisioning()
-    {
-        return new EngineBlock_Provisioning();
     }
 }

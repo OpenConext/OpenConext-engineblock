@@ -4,8 +4,7 @@ class EngineBlock_Test_Attributes_MetadataTest extends PHPUnit_Framework_TestCas
 {
     public function testGetName()
     {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        $metadata->setDefinition(
+        $metadata = new EngineBlock_Attributes_Metadata(
             array(
                 'a' => array(
                     'Name' => array(
@@ -17,7 +16,8 @@ class EngineBlock_Test_Attributes_MetadataTest extends PHPUnit_Framework_TestCas
                         'nl' => 'De a omsch',
                     )
                 )
-            )
+            ),
+            new Zend_Log()
         );
         $this->assertEquals($metadata->getName('a')       , 'The a name', 'Get Name');
         $this->assertEquals($metadata->getDescription('a'), 'The a desc', 'Get Name');

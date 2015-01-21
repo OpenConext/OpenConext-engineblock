@@ -104,16 +104,12 @@ class EngineBlock_View
         return "Unknown (meta-data incomplete)";
     }
 
-    public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
+    public function getAttributeName($attributeId, $ietfLanguageTag = 'en')
     {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->getName($attributeId, $ietfLanguageTag, $fallbackToId);
-    }
-
-    public function getAttributeDescription($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
-    {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->getDescription($attributeId, $ietfLanguageTag);
+        return EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeMetadata()
+            ->getName($attributeId, $ietfLanguageTag);
     }
 
     /**
@@ -200,10 +196,12 @@ class EngineBlock_View
         return htmlspecialchars($content, ENT_COMPAT, 'UTF-8');
     }
 
-    public function sortConsentDisplayOrder(&$attributes)
+    public function sortByDisplayOrder($attributes)
     {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        $metadata->sortConsentDisplayOrder($attributes);
+        return EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeMetadata()
+            ->sortByDisplayOrder($attributes);
     }
 
     /**

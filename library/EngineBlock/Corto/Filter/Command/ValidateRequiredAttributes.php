@@ -13,39 +13,32 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
      */
     public function getResponseAttributes()
     {
-     	return $this->_responseAttributes;
+        return $this->_responseAttributes;
     }
 
     /**
      * @throws EngineBlock_Corto_Exception_MissingRequiredFields
-     * @todo refactor this to use EngineBlock_Attributes_Validator
      */
     public function execute()
     {
-        $errors = array();
-
+        // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
+        $excluded = array();
         if ($this->_identityProvider->schacHomeOrganization) {
-            // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
             $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
                 $this->_identityProvider->schacHomeOrganization
             );
-        }
-        else {
-            $error = $this->_requireValidSchacHomeOrganization($this->_responseAttributes);
-            if ($error) {
-                $errors[] = $error;
-            }
+            $excluded[] = static::URN_MACE_TERENA_SCHACHOMEORG;
         }
 
-        $error = $this->_requireValidUid($this->_responseAttributes);
-        if ($error) {
-            $errors[] = $error;
-        }
+        $validationResult = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeValidator()
+            ->validate($this->_responseAttributes, $excluded);
 
-        if (!empty($errors)) {
+        if ($validationResult->hasErrors()) {
             throw new EngineBlock_Corto_Exception_MissingRequiredFields(
                 'Errors validating attributes' .
-                    ' errors: '     . print_r($errors, true) .
+                    ' errors: '     . print_r($validationResult->getErrors(), true) .
                     ' attributes: ' . print_r($this->_responseAttributes, true)
             );
         }
@@ -79,6 +72,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
             $uri = Zend_Uri_Http::fromString('http://' . $schacHomeOrganization);
             $validHostName = $uri->validateHost($schacHomeOrganization);
         } catch(Zend_Validate_Exception $e) {}
+
         if (!$validHostName) {
             return self::URN_MACE_TERENA_SCHACHOMEORG . " is not a valid hostname!";
         }
