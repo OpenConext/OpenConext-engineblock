@@ -63,9 +63,6 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header', EngineB
 $layout->subheader  = $this->t('consent_subheader', $spName);
 $layout->footerText = $this->t('footer');
 
-// Set profile page Url
-$profileUrl = EngineBlock_View::profileUrl();
-
 /** @var $view Zend_View */
 $view = $layout->getView();
 /** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
