@@ -1,12 +1,16 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
+
 class Profile_Controller_Index extends Default_Controller_LoggedIn
 {
     public function indexAction()
     {
         $this->userAttributes = $this->_normalizeAttributes();
 
-        $this->metadata = new EngineBlock_Attributes_Metadata();
+        $this->metadata = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeMetadata();
 
         $serviceRegistryClient = $this->_getServiceRegistryClient();
         $this->spList = $serviceRegistryClient->getSpList();
@@ -34,7 +38,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
         foreach ($spList as $spId => $sp) {
             $arp = $serviceRegistryClient->getArp($spId);
-            $results[$spId] = $enforcer->enforceArp($arp, $attributes);
+            $results[$spId] = $enforcer->enforceArp(new AttributeReleasePolicy($arp), $attributes);
         }
 
         return $results;

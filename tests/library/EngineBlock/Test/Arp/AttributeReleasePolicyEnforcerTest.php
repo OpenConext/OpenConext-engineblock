@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
+
 class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framework_TestCase
 {
     /**
@@ -23,19 +25,17 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framew
 
     public function testEnforceEmptyArp()
     {
-        $arp = array(
-            "attributes" => array()
-        );
+        $arp = array();
+
         $newAttributes = $this->_doEnforceArp($arp);
-        $this->assertTrue(empty($newAttributes));
+
+        $this->assertEmpty($newAttributes, 'An empty ARP blocks all attributes');
     }
 
     public function testEnforceNotExactMatchArp()
     {
         $arp = array(
-            "attributes" => array(
-                'name' => array('Laura Wilkins')
-            )
+            'name' => array('Laura Wilkins')
         );
         $newAttributes = $this->_doEnforceArp($arp);
         $this->assertTrue(empty($newAttributes));
@@ -44,9 +44,7 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framew
     public function testEnforceExactMatchArp()
     {
         $arp = array(
-            "attributes" => array(
-                'name' => array('John Doe')
-            )
+            'name' => array('John Doe')
         );
         $newAttributes = $this->_doEnforceArp($arp);
         $this->assertEquals(count($newAttributes['name']), 1);
@@ -56,9 +54,7 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framew
     public function testEnforceNotPrefixMatchArp()
     {
         $arp = array(
-            "attributes" => array(
-                'name' => array('Laura*')
-            )
+            'name' => array('Laura*')
         );
         $newAttributes = $this->_doEnforceArp($arp);
         $this->assertTrue(empty($newAttributes));
@@ -67,9 +63,7 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framew
     public function testEnforcePrefixMatchArp()
     {
         $arp = array(
-            "attributes" => array(
-                'name' => array('John*')
-            )
+            'name' => array('John*')
         );
         $newAttributes = $this->_doEnforceArp($arp);
         $this->assertEquals(count($newAttributes['name']), 1);
@@ -79,9 +73,7 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framew
     public function testEnforceWildcardMatchArpMultipleValues()
     {
         $arp = array(
-            "attributes" => array(
-                'name' => array('*')
-            )
+            'name' => array('*')
         );
         $responseAttributes = array(
             'name' => array('John Doe', 'Mark Benson')
@@ -93,10 +85,8 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framew
     public function testEnforcePrefixMatchArpMultipleValues()
     {
         $arp = array(
-            "attributes" => array(
-                'name' => array('John*'),
-                'organization' => array('Surf*')
-            )
+            'name' => array('John*'),
+            'organization' => array('Surf*')
         );
         $responseAttributes = array(
             'name' => array('John Doe', 'John Johnson'),
@@ -112,7 +102,10 @@ class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framew
     protected function _doEnforceArp($arp, $responseAttributes = array())
     {
         $responseAttributes = empty($responseAttributes) ? $this->_responseAttributes() : $responseAttributes;
-        return $this->_arpEnforcer->enforceArp($arp, $responseAttributes);
+        return $this->_arpEnforcer->enforceArp(
+            $arp === null ? null : new AttributeReleasePolicy($arp),
+            $responseAttributes
+        );
     }
 
     protected function _responseAttributes()

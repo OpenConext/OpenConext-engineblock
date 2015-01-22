@@ -3,6 +3,9 @@
 /**
  * See OpenConext-engineblock/library/EngineBlock/Corto/Module/Service/ProvideConsent.php#84
  */
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+
 if (!isset($action)) {
     throw new EngineBlock_View_Exception('No Consent action given to consent screen');
 }
@@ -12,20 +15,39 @@ if (!isset($ID)) {
 if (!isset($attributes)) {
     throw new EngineBlock_View_Exception('No Attributes given to consent screen');
 }
-if (!isset($sp)) {
+if (!isset($sp) || !$sp instanceof ServiceProvider) {
     throw new EngineBlock_View_Exception('No SP information given to consent screen');
 }
-if (!isset($idp)) {
+if (!isset($idp) || !$idp instanceof IdentityProvider) {
     throw new EngineBlock_View_Exception('No IdP information given to consent screen');
 }
 /** @var EngineBlock_View $this */
 
 // The current language
 $lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
-$fallback_lang = ($lang == 'en' ? 'nl' : 'en');
 
-$spName         = isset($sp['Name'][$lang])  ? $sp['Name'][$lang] : $sp['Name'][$fallback_lang];
-$idpName        = isset($idp['Name'][$lang]) ? $idp['Name'][$lang] : $idp['Name'][$fallback_lang];
+// @todo move to entity (see also duplicate in discover.phtml)
+$spName = '';
+if ($lang === 'nl') {
+    $spName = $sp->nameNl;
+}
+if (empty($spName)) {
+    $spName = $sp->nameEn;
+}
+if (empty($spName)) {
+    $spName = $sp->entityId;
+}
+
+$idpName = '';
+if ($lang === 'nl') {
+    $idpName = $idp->nameNl;
+}
+if (empty($idpName)) {
+    $idpName = $idp->nameEn;
+}
+if (empty($idpName)) {
+    $idpName = $idp->entityId;
+}
 
 /**
  * @var Zend_Layout $layout
@@ -40,9 +62,6 @@ $layout->use_header = false;
 $layout->title      = $layout->title . ' - '. $this->t('consent_header', EngineBlock_View::htmlSpecialCharsText($spName));
 $layout->subheader  = $this->t('consent_subheader', $spName);
 $layout->footerText = $this->t('footer');
-
-// Set profile page Url
-$profileUrl = EngineBlock_View::profileUrl();
 
 /** @var $view Zend_View */
 $view = $layout->getView();
@@ -68,10 +87,10 @@ $inlineScriptHelper->appendScript('
 </p>
 
 <div>
-    <?php $this->sortConsentDisplayOrder($attributes) ?>
+    <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
     <table>
     <?php foreach ($attributes as $uid => $attributeValues) : ?>
-        <?php $attributeName = $this->getAttributeName($uid, $lang, false)?>
+        <?php $attributeName = $this->getAttributeName($uid, $lang)?>
         <?php if ($attributeName) : ?>
             <tr>
                 <td>
@@ -126,7 +145,7 @@ $inlineScriptHelper->appendScript('
 
 <p class="grey"><?= $this->t('consent_notice'); ?></p>
 
-<?php if (isset($sp['Eula'])) : ?>
-    <?= $this->t('sp_terms_of_service', $spName, $sp['Eula']); ?>
+<?php if (isset($sp->termsOfServiceUrl)) : ?>
+    <?= $this->t('sp_terms_of_service', $spName, $sp->termsOfServiceUrl); ?>
 <?php endif; ?>
 

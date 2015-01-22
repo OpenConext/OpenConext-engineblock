@@ -1,0 +1,1 @@
+doctrine/cli-config.php

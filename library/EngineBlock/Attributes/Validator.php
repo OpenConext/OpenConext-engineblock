@@ -2,47 +2,86 @@
 
 class EngineBlock_Attributes_Validator
 {
-    protected $_attributes;
-    protected $_definitions;
+    /**
+     * @var array
+     */
+    private $definitions;
 
-    protected $_validAttributes = array();
-    protected $_warnings = array();
-    protected $_errors   = array();
+    /**
+     * @var EngineBlock_Attributes_Validator_Factory
+     */
+    private $validatorFactory;
 
-    public function __construct(array $attributes)
+    /**
+     * @var array
+     */
+    private $attributes;
+
+    /**
+     * @var array
+     */
+    private $validAttributes;
+
+    /**
+     * @var array
+     */
+    private $warnings;
+
+    /**
+     * @var array
+     */
+    private $errors;
+
+    public function __construct(array $definitions, EngineBlock_Attributes_Validator_Factory $validatorFactory)
     {
-        $this->_attributes = $attributes;
+        $this->definitions = $definitions;
+        $this->validatorFactory = $validatorFactory;
     }
 
-    public function validate()
+    public function validate(array $attributes, $excluded = array())
     {
-        $this->_loadAttributeDefinitions();
-        $this->_denormalizeDefinitions();
+        $this->attributes = $attributes;
+        $this->validAttributes = array();
+        $this->warnings = array();
+        $this->errors = array();
 
         $validAttributeSet = true;
-        foreach ($this->_definitions as $attributeName => $definition) {
-            $validAttribute = $this->_validateAttribute($attributeName, $definition);
+        foreach ($this->definitions as $attributeName => $definition) {
+            if (in_array($attributeName, $excluded)) {
+                $this->validAttributes[] = $attributeName;
+                continue;
+            }
+
+            $validAttribute = $this->validateAttribute($attributeName, $definition);
+
             if ($validAttribute) {
-                $this->_validAttributes[] = $attributeName;
+                $this->validAttributes[] = $attributeName;
+                continue;
             }
-            else {
-                $validAttributeSet = false;
-            }
+
+            $validAttributeSet = false;
         }
 
-        $attributesNotInDefinitions = array_diff(array_keys($this->_attributes), array_keys($this->_definitions));
+        $attributesNotInDefinitions = array_diff(array_keys($attributes), array_keys($this->definitions));
         if (!empty($attributesNotInDefinitions)) {
             foreach ($attributesNotInDefinitions as $attributeName) {
-                $this->_warnings[$attributeName] = array(array(
+                $this->warnings[$attributeName] = array(array(
                     'error_attribute_validator_not_in_definitions',
                     $attributeName,
                 ));
             }
             $validAttributeSet = false;
         }
-        return $validAttributeSet;
-    }
 
+        return new EngineBlock_Attributes_ValidationResult(
+            $attributes,
+            $this->definitions,
+            $validAttributeSet,
+            $this->validAttributes,
+            $this->warnings,
+            $this->errors
+        );
+    }
 
     /**
      *
@@ -56,198 +95,94 @@ class EngineBlock_Attributes_Validator
      * @param $definition
      * @return bool
      */
-    protected function _validateAttribute($attributeName, $definition)
+    private function validateAttribute($attributeName, $definition)
     {
         if (empty($definition['Conditions'])) {
             return true;
         }
 
         // Excludes for Situation 1, 2 and 3 (see example in docBlock)
-        $isInAttributeSet = !empty($this->_attributes[$attributeName]);
+        $isInAttributeSet = !empty($this->attributes[$attributeName]);
         $isAnAlias = !empty($definition['__original__']);
         if (!$isInAttributeSet && $isAnAlias) {
             return true;
         }
 
         $validAttribute = true;
-        if (!empty($definition['Conditions']['warning'])) {
-            foreach ($definition['Conditions']['warning'] as $validatorName => $validatorOptions) {
-                $validator = $this->_getValidator($validatorName, $attributeName, $validatorOptions, true);
-                if (!$validator) {
-                    continue;
-                }
-
-                if (isset($definition['__original__'])) {
-                    $validator->setAttributeAlias($definition['__original__']);
-                }
-
-                $validationResult = $validator->validate($this->_attributes);
-
-                if (!$validationResult) {
-                    $validAttribute = false;
-                    $this->_warnings[$attributeName] = $validator->getMessages();
-                }
-            }
-        }
-
-        if (!empty($definition['Conditions']['error'])) {
-            foreach ($definition['Conditions']['error'] as $validatorName => $validatorOptions) {
-                $validator = $this->_getValidator($validatorName, $attributeName, $validatorOptions);
-                if (!$validator) {
-                    continue;
-                }
-
-                if (isset($definition['__original__'])) {
-                    $validator->setAttributeAlias($definition['__original__']);
-                }
-
-                $validationResult = $validator->validate($this->_attributes);
-
-                if (!$validationResult) {
-                    $validAttribute    = false;
-                    $this->_errors[$attributeName] = $validator->getMessages();
-                }
-            }
-        }
+        $validAttribute = $validAttribute && $this->validateAttributeWarnings($attributeName, $definition);
+        $validAttribute = $validAttribute && $this->validateAttributeErrors($attributeName, $definition);
         return $validAttribute;
     }
 
-    public function isValid($attributeName)
+    /**
+     * @param $attributeName
+     * @param $definition
+     * @return array
+     * @throws EngineBlock_Exception
+     */
+    private function validateAttributeWarnings($attributeName, $definition)
     {
-        return in_array($attributeName, $this->_validAttributes);
-    }
-
-    public function getWarnings($attributeName = null)
-    {
-        if (is_null($attributeName)) {
-            return $this->_warnings;
+        if (empty($definition['Conditions']['warning'])) {
+            return true;
         }
 
-        if (empty($this->_warnings[$attributeName])) {
-            return array();
-        }
-
-        return $this->_warnings[$attributeName];
-    }
-
-    public function getWarningsForMissingAttributes()
-    {
-        $warnings = array();
-        $attributesInWarning = array_keys($this->_warnings);
-        foreach ($attributesInWarning as $attributeInWarning) {
-            if (!isset($this->_attributes[$attributeInWarning])) {
-                $warnings = array_merge($warnings, $this->_warnings[$attributeInWarning]);
-            }
-        }
-        return $warnings;
-    }
-
-    public function getErrors($attributeName = null)
-    {
-        if (is_null($attributeName)) {
-            return $this->_errors;
-        }
-        if (empty($this->_errors[$attributeName])) {
-            return array();
-        }
-        return $this->_errors[$attributeName];
-    }
-
-    public function getErrorsForMissingAttributes()
-    {
-        $errors = array();
-        $attributesInError = array_keys($this->_errors);
-        foreach ($attributesInError as $attributeInError) {
-            // Skip aliases for missing attributes
-            if (!empty($this->_definitions[$attributeInError]['__original__'])) {
+        $validAttribute = true;
+        foreach ($definition['Conditions']['warning'] as $validatorName => $validatorOptions) {
+            $validator = $this->validatorFactory->create(
+                $validatorName,
+                $attributeName,
+                $validatorOptions
+            );
+            if (!$validator) {
                 continue;
             }
 
-            if (!isset($this->_attributes[$attributeInError])) {
-                $errors = array_merge($errors, $this->_errors[$attributeInError]);
+            if (isset($definition['__original__'])) {
+                $validator->setAttributeAlias($definition['__original__']);
+            }
+
+            $validationResult = $validator->validate($this->attributes);
+
+            if ($validationResult === false) {
+                $validAttribute = false;
+                $this->warnings[$attributeName] = $validator->getMessages();
             }
         }
-        return $errors;
+        return $validAttribute;
+
     }
 
-    public function setDefinitions(array $definitions)
+    /**
+     * @param $attributeName
+     * @param $definition
+     * @return bool
+     * @throws EngineBlock_Exception
+     */
+    private function validateAttributeErrors($attributeName, $definition)
     {
-        $this->_definitions = $definitions;
-        return $this;
-    }
-
-    protected function _loadAttributeDefinitions()
-    {
-        if (isset($this->_definitions)) {
-            return $this->_definitions;
+        if (empty($definition['Conditions']['error'])) {
+            return true;
         }
 
-        $this->_definitions = json_decode(
-            file_get_contents(
-                EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
-                    'attributeDefinitionFile',
-                    ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
-                )
-            ),
-            true
-        );
+        $validAttribute = true;
+        foreach ($definition['Conditions']['error'] as $validatorName => $validatorOptions) {
+            $validator = $this->validatorFactory->createWithExceptions(
+                $validatorName,
+                $attributeName,
+                $validatorOptions
+            );
 
-        return $this->_definitions;
-    }
-
-    protected function _denormalizeDefinitions()
-    {
-        foreach ($this->_definitions as $attributeName => $definition) {
-            if (is_array($definition)) {
-                continue;
+            if (isset($definition['__original__'])) {
+                $validator->setAttributeAlias($definition['__original__']);
             }
 
-            $aliases = array($attributeName);
-            while (!is_array($definition)) {
-                $attributeName = $this->_definitions[$attributeName];
+            $validationResult = $validator->validate($this->attributes);
 
-                if (empty($this->_definitions[$attributeName])) {
-                    // @todo log
-                    break;
-                }
-                $definition = $this->_definitions[$attributeName];
-                $aliases[] = $attributeName;
-            }
-
-            foreach ($aliases as $alias) {
-                $this->_definitions[$alias] = $definition;
-                if ($attributeName !== $alias) {
-                    $this->_definitions[$alias]['__original__'] = $attributeName;
-                }
+            if (!$validationResult) {
+                $validAttribute = false;
+                $this->errors[$attributeName] = $validator->getMessages();
             }
         }
-        return true;
-    }
-
-    protected function _getValidator($validatorName, $attributeName, $validatorOptions, $continueOnError = false)
-    {
-        $className = 'EngineBlock_Attributes_Validator_' . ucfirst($validatorName);
-        if (!class_exists($className)) {
-            if ($continueOnError) {
-                // @todo log
-                return false;
-            }
-            else {
-                throw new EngineBlock_Exception("Unable to find $className");
-            }
-        }
-
-        $validator = new $className($attributeName, $validatorOptions);
-
-        if (!($validator instanceof EngineBlock_Attributes_Validator_Interface)) {
-            if ($continueOnError) {
-                // @todo log
-                return false;
-            }
-            else {
-                throw new EngineBlock_Exception("Validator $className does not match interface!");
-            }
-        }
-        return $validator;
+        return $validAttribute;
     }
 }

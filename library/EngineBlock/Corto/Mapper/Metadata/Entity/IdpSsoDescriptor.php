@@ -1,17 +1,23 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor extends EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor
 {
+    /**
+     * @var AbstractRole
+     */
     protected $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractRole $entity)
     {
         $this->_entity = $entity;
     }
 
     public function mapTo(array $rootElement)
     {
-        if (!array_key_exists('SingleSignOnService', $this->_entity)) {
+        if (!$this->_entity instanceof IdentityProvider) {
             return $rootElement;
         }
 

@@ -1,29 +1,22 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+
 /**
  * Note: this Test only tests setting of NameIDFormat, add other tests if required
  */
 class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 {
-    public function setup()
-    {
-        // Mock Global server object which for obvious reasons does not exist in a CLI environment
-        global $_SERVER;
-        $_SERVER['HTTP_HOST'] = null;
-    }
-
     public function testNameIDFormatIsNotSetByDefault()
     {
-        $proxyServer = new EngineBlock_Corto_ProxyServer();
-
-        $remoteEntities = $this->factoryRemoteEntities();
-        $proxyServer->setRemoteEntities($remoteEntities);
+        $proxyServer = $this->factoryProxyServer();
 
         $originalRequest = $this->factoryOriginalRequest();
-        $idpEntityId = 'testIdp';
+        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
         /** @var SAML2_AuthnRequest $enhancedRequest */
         $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $originalRequest,
-            $proxyServer->getRemoteEntity($idpEntityId),
+            $identityProvider,
             $proxyServer
         );
 
@@ -32,32 +25,21 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
     public function testNameIDFormatIsSetFromRemoteMetaData()
     {
-        $proxyServer = new EngineBlock_Corto_ProxyServer();
-
-        $remoteEntities = $this->factoryRemoteEntities();
-        $remoteEntities['testIdp']['NameIDFormat'] = 'fooFormat';
-        $proxyServer->setRemoteEntities($remoteEntities);
-
+        $proxyServer = $this->factoryProxyServer();
         $originalRequest = $this->factoryOriginalRequest();
-        $idpEntityId = 'testIdp';
+
+        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
+        $identityProvider->nameIdFormat = 'fooFormat';
+
         /** @var SAML2_AuthnRequest $enhancedRequest */
         $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $originalRequest,
-            $proxyServer->getRemoteEntity($idpEntityId),
+            $identityProvider,
             $proxyServer
         );
 
         $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
         $this->assertEquals($nameIdPolicy['Format'], 'fooFormat');
-    }
-
-    public function testGettingCurrentEntityIsProxiedViaGetRemoteEntity()
-    {
-        $proxyServer = new EngineBlock_Corto_ProxyServer();
-        $currentEntity = array('EntityID' => 'testEntity');
-        $proxyServer->setCurrentEntities(array($currentEntity));
-
-        $this->assertEquals($currentEntity, $proxyServer->getRemoteEntity('testEntity'));
     }
 
     /**
@@ -70,20 +52,17 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         return $originalRequest;
     }
 
-    /**
-     * @return array
-     */
-    private function factoryRemoteEntities()
-    {
-        $remoteEntities = array(
-            'testIdp' => array(
-                'SingleSignOnService' => array(
-                    'Binding' => null,
-                    'Location' => null
-                )
-            )
-        );
 
-        return $remoteEntities;
+    private function factoryProxyServer()
+    {
+        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->setHostName('test-host');
+
+        $proxyServer->setRepository(new InMemoryMetadataRepository(
+            array(new IdentityProvider('testIdp')),
+            array()
+        ));
+
+        return $proxyServer;
     }
 }

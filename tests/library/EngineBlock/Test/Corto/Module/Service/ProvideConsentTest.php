@@ -1,5 +1,9 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
 {
     /** @var EngineBlock_Corto_XmlToArray */
@@ -10,6 +14,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
     /** @var EngineBlock_Corto_Model_Consent */
     private $consentMock;
+
+    /** @var  EngineBlock_Corto_ProxyServer */
+    private $proxyServerMock;
 
     public function setup() {
         $this->proxyServerMock = $this->mockProxyServer();
@@ -47,15 +54,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
     public function testConsentIsSkippedWhenGloballyDisabled()
     {
-        $provideConsentService = $this->factoryService();
+        $this->proxyServerMock->getRepository()->fetchServiceProviderByEntityId('testSp')->isConsentRequired = false;
 
-        Phake::when($this->proxyServerMock)
-            ->getRemoteEntity('testSp')
-            ->thenReturn(
-                array(
-                    'NoConsentRequired' => true
-                )
-            );
+        $provideConsentService = $this->factoryService();
 
         $provideConsentService->serve(null);
 
@@ -66,17 +67,9 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
     public function testConsentIsSkippedWhenDisabledPerSp()
     {
-        $provideConsentService = $this->factoryService();
+        $this->proxyServerMock->getRepository()->fetchIdentityProviderByEntityId('testIdP')->spsEntityIdsWithoutConsent[] = 'testSp';
 
-        Phake::when($this->proxyServerMock)
-            ->getRemoteEntity('testIdP')
-            ->thenReturn(
-                array(
-                    'SpsWithoutConsent' => array(
-                        'testSp'
-                    )
-                )
-            );
+        $provideConsentService = $this->factoryService();
 
         $provideConsentService->serve(null);
 
@@ -91,15 +84,14 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     private function mockProxyServer()
     {
         // Mock proxy server
-        $_SERVER['HTTP_HOST'] = 'test-host';
+        /** @var EngineBlock_Corto_ProxyServer $proxyServerMock */
         $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer');
+        $proxyServerMock->setHostname('test-host');
 
-        Phake::when($proxyServerMock)
-            ->getRemoteEntity('testSp')
-            ->thenReturn(array( 'EntityID' => 'testSp' ));
-        Phake::when($proxyServerMock)
-            ->getRemoteEntity('testIdP')
-            ->thenReturn(array( 'EntityID' => 'testIdP'));
+        $proxyServerMock->setRepository(new InMemoryMetadataRepository(
+            array(new IdentityProvider('testIdP')),
+            array(new ServiceProvider('testSp'))
+        ));
 
         $bindingsModuleMock = $this->mockBindingsModule();
         $proxyServerMock->setBindingsModule($bindingsModuleMock);

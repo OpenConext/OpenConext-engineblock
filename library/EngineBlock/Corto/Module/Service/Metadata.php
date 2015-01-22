@@ -7,20 +7,20 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
     public function serve($serviceName)
     {
         // Get the configuration for EngineBlock in it's IdP / SP role.
-        $entityDetails = $this->_server->getCurrentEntity($serviceName);
+        $engineEntityId = $this->_server->getUrl($serviceName);
+        $engineEntity = $this->_server->getRepository()->fetchEntityByEntityId($engineEntityId);
 
         // Override the EntityID and SSO location to optionally append VO id
         if ($serviceName === 'idpMetadataService') {
-            $entityDetails['EntityID'] = $this->_server->getUrl($serviceName);
-            $ssoServiceReplacer = new ServiceReplacer($entityDetails, 'SingleSignOnService', ServiceReplacer::REQUIRED);
+            $ssoServiceReplacer = new ServiceReplacer($engineEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
             $ssoLocation = $this->_server->getUrl('singleSignOnService');
-            $ssoServiceReplacer->replace($entityDetails, $ssoLocation);
+            $ssoServiceReplacer->replace($engineEntity, $ssoLocation);
         }
 
         // Override Single Logout Service Location with generated url
-        $slServiceReplacer = new ServiceReplacer($entityDetails, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
+        $slServiceReplacer = new ServiceReplacer($engineEntity, 'SingleLogoutService', ServiceReplacer::OPTIONAL);
         $slLocation = $this->_server->getUrl('singleLogoutService');
-        $slServiceReplacer->replace($entityDetails, $slLocation);
+        $slServiceReplacer->replace($engineEntity, $slLocation);
 
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
@@ -28,7 +28,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
             $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
             false
         );
-        $document = $mapper->setEntity($entityDetails)->map();
+        $document = $mapper->setEntity($engineEntity)->map();
 
         // Sign the document
         $document = $this->_server->sign($document);

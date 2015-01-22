@@ -1,14 +1,88 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
+
 /**
  * A Caching Proxy for the Service Registry, will cache all function calls.
  *
  * Can even detect Service Registry problems and chug along on the (stale) cache.
  */
-class Janus_Client_CacheProxy
+class Janus_Client_CacheProxy implements RestClientInterface
 {
     const DEFAULT_LIFETIME = 5;
 
+    /**
+     * Retrieve the allowed IDPs for an SP. The SP is only
+     * allowed to make connections to the retrieved IDP's.
+     *
+     * @param string $spEntityId the URN of the SP entity.
+     * @return array containing the URN's of the IDP's that this SP is allowed to make a connection to.
+     */
+    public function getAllowedIdps($spEntityId)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Get full information for a given entity.
+     *
+     * @param $entityId
+     * @return array
+     */
+    public function getEntity($entityId)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Retrieve a list of metadata values of all available
+     * IDP entities.
+     * @param array $keys An array of keys to retrieve. Retrieves
+     *                    all available keys if omited or empty
+     * @param String $forSpEntityId An optional identifier of an SP
+     *               If present, idplist will return a list of only the
+     *               idps that this sp is allowed to authenticate against.
+     * @return array An associative array of values, indexed by IDP
+     *               identifier. Each value is another associative
+     *               array with key/value pairs containing the metadata.
+     */
+    public function getIdpList($keys = array(), $forSpEntityId = null)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * Retrieve a list of metadata values of all available
+     * SP entities.
+     * @param array $keys An array of keys to retrieve. Retrieves
+     *                    all available keys if omited or empty
+     * @return array An associative array of values, indexed by SP
+     *               identifier. Each value is another associative
+     *               array with key/value pairs containing the metadata.
+     */
+    public function getSpList($keys = array())
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param string $propertyName
+     * @param string $propertyValue
+     * @return array
+     */
+    public function findIdentifiersByMetadata($propertyName, $propertyValue)
+    {
+        return $this->__call(__FUNCTION__, func_get_args());
+    }
+
+    /**
+     * @param $name
+     * @param $arguments
+     * @return mixed
+     * @throws Janus_Client_CacheProxy_Exception
+     * @throws Janus_Client_Exception
+     * @throws void
+     */
     public function __call($name, $arguments)
     {
         $client = $this->_getClient();
