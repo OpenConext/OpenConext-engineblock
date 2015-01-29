@@ -15,7 +15,7 @@ $rows = $db->fetchAll("SELECT id FROM group_provider WHERE classname=?", 'Engine
 if (count($rows) !== 1) {
     echo "No Grouper group providers, nothing to convert." . PHP_EOL;
     var_dump($rows);
-    exit(0);
+    return;
 }
 $groupProviderId = $rows[0]['id'];
 
