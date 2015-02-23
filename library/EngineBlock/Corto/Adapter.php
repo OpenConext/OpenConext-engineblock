@@ -156,7 +156,6 @@ class EngineBlock_Corto_Adapter
 
         if ($serviceProvider->displayUnconnectedIdpsWayf) {
             $repository->appendVisitor(new DisableDisallowedEntitiesInWayfVisitor(
-                $serviceProvider->entityId,
                 $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
             ));
             return;
