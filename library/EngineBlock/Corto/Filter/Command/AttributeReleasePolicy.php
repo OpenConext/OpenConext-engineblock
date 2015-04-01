@@ -35,7 +35,7 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
                 return;
             }
 
-            $logger->info("Applying attribute release policy {$arp['name']} for $spEntityId");
+            $logger->info("Applying attribute release policy for $spEntityId");
             $attributes = $enforcer->enforceArp($arp, $attributes);
         }
 
