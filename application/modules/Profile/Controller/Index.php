@@ -12,7 +12,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $this->spList = $serviceRegistryClient->getSpList();
 
         $this->consent = $this->user->getConsent();
-        $this->spAttributesList = $this->_getSpAttributeList($this->spList);
+        $this->spAttributesList = $this->_getSpAttributeList($this->consent);
 
         $this->mailSend = isset($_GET["mailSend"]) ? $_GET["mailSend"] : null;
     }
@@ -32,7 +32,7 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $results = array();
         $serviceRegistryClient = $this->_getServiceRegistryClient();
         $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
-        foreach ($spList as $spId => $sp) {
+        foreach ($spList as $spId) {
             $arp = $serviceRegistryClient->getArp($spId);
             $results[$spId] = $enforcer->enforceArp($arp, $attributes);
         }
