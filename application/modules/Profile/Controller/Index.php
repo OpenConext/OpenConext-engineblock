@@ -33,6 +33,10 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $serviceRegistryClient = $this->_getServiceRegistryClient();
         $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
         foreach ($spList as $spId) {
+            if (!isset($this->spList[$spId])) {
+                continue;
+            }
+
             $arp = $serviceRegistryClient->getArp($spId);
             $results[$spId] = $enforcer->enforceArp($arp, $attributes);
         }
