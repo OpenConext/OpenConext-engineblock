@@ -1,20 +1,22 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+
 class EngineBlock_Corto_Mapper_Metadata_Entity_Organization
 {
+    /**
+     * @var AbstractRole
+     */
     private $_entity;
 
-    public function __construct($entity)
+    public function __construct(AbstractRole $entity)
     {
         $this->_entity = $entity;
     }
 
     public function mapTo(array $rootElement)
     {
-        // All Child elements are required so element will be rendered only if all of then are filled in
-        if (empty($this->_entity['Organization']['Name']) ||
-            empty($this->_entity['Organization']['DisplayName']) ||
-            empty($this->_entity['Organization']['URL'])) {
+        if (!$this->_entity->organizationEn && !$this->_entity->organizationNl) {
             return $rootElement;
         }
         $rootElement['md:Organization'] = array();

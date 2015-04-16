@@ -1,18 +1,22 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
+
 class Profile_Controller_Index extends Default_Controller_LoggedIn
 {
     public function indexAction()
     {
         $this->userAttributes = $this->_normalizeAttributes();
 
-        $this->metadata = new EngineBlock_Attributes_Metadata();
+        $this->metadata = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeMetadata();
 
         $serviceRegistryClient = $this->_getServiceRegistryClient();
         $this->spList = $serviceRegistryClient->getSpList();
 
         $this->consent = $this->user->getConsent();
-        $this->spAttributesList = $this->_getSpAttributeList($this->spList);
+        $this->spAttributesList = $this->_getSpAttributeList($this->consent);
 
         $this->mailSend = isset($_GET["mailSend"]) ? $_GET["mailSend"] : null;
     }
@@ -32,9 +36,21 @@ class Profile_Controller_Index extends Default_Controller_LoggedIn
         $results = array();
         $serviceRegistryClient = $this->_getServiceRegistryClient();
         $enforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
-        foreach ($spList as $spId => $sp) {
+        foreach ($spList as $spId) {
+            if (!isset($this->spList[$spId])) {
+                continue;
+            }
+
             $arp = $serviceRegistryClient->getArp($spId);
-            $results[$spId] = $enforcer->enforceArp($arp, $attributes);
+
+            if (empty($arp)) {
+                continue;
+            }
+
+            $results[$spId] = $enforcer->enforceArp(
+                new AttributeReleasePolicy($arp['attributes']),
+                $attributes
+            );
         }
 
         return $results;

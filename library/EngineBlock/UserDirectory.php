@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+
 /**
  * Access to the LDAP directory where all users are provisioned
  *
@@ -18,8 +20,6 @@ class EngineBlock_UserDirectory
     const LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED     = 'collabpersonlastaccessed';
     const LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED      = 'collabpersonlastupdated';
     const LDAP_ATTR_COLLAB_PERSON_IS_GUEST          = 'collabpersonisguest';
-    const LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING     = 'collabpersonfirstwarningsent';
-    const LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING    = 'collabpersonsecondwarningsent';
 
     protected $LDAP_OBJECT_CLASSES = array(
         'collabPerson',
@@ -36,16 +36,11 @@ class EngineBlock_UserDirectory
     protected $_ldapClient = NULL;
 
     /**
-     * @var Zend_Config
+     * @param Zend_Ldap $ldapClient
      */
-    protected $_ldapConfig = NULL;
-
-    /**
-     * @param Zend_Config $ldapConfig
-     */
-    public function __construct(Zend_Config $ldapConfig)
+    public function __construct(Zend_Ldap $ldapClient)
     {
-        $this->_ldapConfig = $ldapConfig;
+        $this->_ldapClient = $ldapClient;
     }
 
     /**
@@ -59,7 +54,7 @@ class EngineBlock_UserDirectory
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
 
-        $collection = $this->_getLdapClient()->search(
+        $collection = $this->_ldapClient->search(
             $filter,
             null,
             Zend_Ldap::SEARCH_SCOPE_SUB
@@ -82,29 +77,29 @@ class EngineBlock_UserDirectory
 
     /**
      * @param array $saml2attributes
-     * @param array $idpEntityMetadata
-     * @return string[]
+     * @return array
      * @throws EngineBlock_Exception
+     * @throws EngineBlock_Exception_MissingRequiredFields
      */
-    public function registerUser(array $saml2attributes, array $idpEntityMetadata)
+    public function registerUser(array $saml2attributes)
     {
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
-        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes, $idpEntityMetadata);
+        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes);
 
-        $uid = $this->_getCollabPersonId($ldapAttributes);
-        $users = $this->findUsersByIdentifier($uid);
+        $collabPersonId = $this->_getCollabPersonId($ldapAttributes);
+        $users = $this->findUsersByIdentifier($collabPersonId);
         try {
             switch (count($users)) {
                 case 1:
-                    $user = $this->_updateUser($users[0], $ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                    $user = $this->_updateUser($users[0], $ldapAttributes);
                     break;
                 case 0:
-                    $user = $this->_addUser($ldapAttributes, $saml2attributes, $idpEntityMetadata);
+                    $user = $this->_addUser($ldapAttributes);
                     break;
                 default:
-                    $message = 'Whoa, multiple users for the same UID: "' . $uid . '"?!?!?';
+                    $message = 'Whoa, multiple users for the same UID: "' . $collabPersonId . '"?!?!?';
                     $e = new EngineBlock_Exception($message);
-                    $e->userId = $uid;
+                    $e->userId = $collabPersonId;
                     throw $e;
             }
         } catch (Zend_Ldap_Exception $e) {
@@ -113,108 +108,68 @@ class EngineBlock_UserDirectory
             // add the user because it was already added...
             // So if a user has already been added we simply try again
             if ($e->getCode() === Zend_Ldap_Exception::LDAP_ALREADY_EXISTS) {
-                return $this->registerUser($saml2attributes, $idpEntityMetadata);
+                return $this->registerUser($saml2attributes);
             }
             else {
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
             }
         }
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
-    }
-
-    /**
-     * Register that this user has a first warning (for automatic account deprovisioning) sent.
-     *
-     * @param $uid
-     * @return mixed
-     * @throws EngineBlock_Exception
-     */
-    public function setUserFirstWarningSent($uid)
-    {
-        $users = $this->findUsersByIdentifier($uid);
-
-        // Only update a user
-        if (count($users) > 1) {
-            $e = new EngineBlock_Exception("Multiple users found for UID: '$uid''?!");
-            $e->userId = $uid;
-            throw $e;
-        }
-
-        $newAttributes = array();
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_FIRST_WARNING] = 'TRUE';
-
-        $user = $this->_updateUser($users[0], $newAttributes);
-
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
-    }
-
-    /**
-     * Register that this user has a second warning (for automatic account deprovisioning) sent.
-     *
-     * @throws EngineBlock_Exception
-     * @param string $uid
-     * @return string
-     */
-    public function setUserSecondWarningSent($uid)
-    {
-        $users = $this->findUsersByIdentifier($uid);
-
-        // Only update a user
-        if (count($users) > 1) {
-            $e = new EngineBlock_Exception("Multiple users found for UID: $uid?!");
-            $e->userId = $uid;
-            throw $e;
-        }
-
-        $newAttributes = array();
-        $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_SECOND_WARNING] = 'TRUE';
-
-        $user = $this->_updateUser($users[0], $newAttributes);
-
-        return $user[self::LDAP_ATTR_COLLAB_PERSON_ID];
+        return $user;
     }
 
     /**
      * Delete a user from the LDAP if he/she wants to be removed from the SURFconext platform
      *
-     * @param  $uid
+     * @param string $collabPersonId
      * @return void
      */
-    public function deleteUser($uid)
+    public function deleteUser($collabPersonId)
     {
-        $dn = $this->_buildUserDn($uid);
-        $this->_getLdapClient()->delete($dn, false);
+        $dn = $this->_buildUserDn($collabPersonId);
+        $this->_ldapClient->delete($dn, false);
     }
 
     /**
      * Build the user dn based on the UID
      *
-     * @param $uid
+     * @param string $collabPersonId
      * @return string
      * @throws EngineBlock_Exception
      */
-    protected function _buildUserDn($uid)
+    protected function _buildUserDn($collabPersonId)
     {
-        $users = $this->findUsersByIdentifier($uid);
+        $users = $this->findUsersByIdentifier($collabPersonId);
         if (count($users) !== 1) {
-            $e = new EngineBlock_Exception("Multiple or no users found for uid $uid?");
-            $e->userId = $uid;
+            $e = new EngineBlock_Exception("Multiple or no users found for uid $collabPersonId?");
+            $e->userId = $collabPersonId;
             throw $e;
         }
         $user = $users[0];
-        return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapConfig->baseDn;
+        return 'uid='. $user['uid'] .',o='. $user['o'] .','. $this->_ldapClient->getBaseDn();
     }
 
     protected function _enrichLdapAttributes($ldapAttributes, $saml2attributes)
     {
+        // cn is required by inetOrgPerson LDAP schema
         if (!isset($ldapAttributes['cn'])) {
             $ldapAttributes['cn'] = $this->_getCommonNameFromAttributes($ldapAttributes);
         }
         if (!isset($ldapAttributes['displayName'])) {
             $ldapAttributes['displayName'] = $ldapAttributes['cn'];
         }
+        // sn is required by inetOrgPerson LDAP schema
         if (!isset($ldapAttributes['sn'])) {
             $ldapAttributes['sn'] = $ldapAttributes['cn'];
+        }
+        // Note that in the default configuration of EngineBlock the following will never trigger
+        // because uid and SchacHomeOrganization (which gets mapped to o) are required.
+        // @see https://github.com/OpenConext/OpenConext-engineblock/issues/98
+        if (!isset($ldapAttributes['uid']) && isset($ldapAttributes['eduPersonPrincipalName'])) {
+            list($ldapAttributes['uid']) = explode('@', $ldapAttributes['eduPersonPrincipalName']);
+        }
+        // @see https://github.com/OpenConext/OpenConext-engineblock/issues/98
+        if (!isset($ldapAttributes['o']) && isset($ldapAttributes['eduPersonPrincipalName'])) {
+            list(,$ldapAttributes['o']) = explode('@', $ldapAttributes['eduPersonPrincipalName']);
         }
         $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_IS_GUEST]      = ($this->_getCollabPersonIsGuest(
             $saml2attributes
@@ -239,7 +194,7 @@ class EngineBlock_UserDirectory
         $this->_addOrganization($newAttributes['o']);
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
-        $this->_getLdapClient()->add($dn, $newAttributes);
+        $this->_ldapClient->add($dn, $newAttributes);
         
         return $newAttributes;
     }
@@ -259,9 +214,9 @@ class EngineBlock_UserDirectory
                 'top'
             )
         );
-        $dn = 'o=' . $organization . ',' . $this->_getLdapClient()->getBaseDn();
-        if (!$this->_getLdapClient()->exists($dn)) {
-            $result = $this->_getLdapClient()->add($dn, $info);
+        $dn = 'o=' . $organization . ',' . $this->_ldapClient->getBaseDn();
+        if (!$this->_ldapClient->exists($dn)) {
+            $result = $this->_ldapClient->add($dn, $info);
             $result = ($result instanceof Zend_Ldap);
         } else {
             $result = TRUE;
@@ -295,7 +250,7 @@ class EngineBlock_UserDirectory
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
-        $this->_getLdapClient()->update($dn, $newAttributes);
+        $this->_ldapClient->update($dn, $newAttributes);
         
         return $newAttributes;
     }
@@ -339,7 +294,7 @@ class EngineBlock_UserDirectory
 
     protected function _getDnForLdapAttributes($attributes)
     {
-        return 'uid=' . $attributes['uid'] . ',o=' . $attributes['o'] . ',' . $this->_getLdapClient()->getBaseDn();
+        return 'uid=' . $attributes['uid'] . ',o=' . $attributes['o'] . ',' . $this->_ldapClient->getBaseDn();
     }
 
     protected function _getCommonNameFromAttributes($attributes)
@@ -369,39 +324,6 @@ class EngineBlock_UserDirectory
         }
 
         return "";
-    }
-
-    /**
-     * @param  $client
-     * @return EngineBlock_UserDirectory
-     */
-    public function setLdapClient(Zend_Ldap $client)
-    {
-        $this->_ldapClient = $client;
-        return $this;
-    }
-
-    /**
-     * @return Zend_Ldap The ldap client
-     */
-    protected function _getLdapClient()
-    {
-        if ($this->_ldapClient == NULL) {
-
-            $ldapOptions = array(
-                'host'                 => $this->_ldapConfig->host,
-                'useSsl'               => $this->_ldapConfig->useSsl,
-                'username'             => $this->_ldapConfig->userName,
-                'password'             => $this->_ldapConfig->password,
-                'bindRequiresDn'       => $this->_ldapConfig->bindRequiresDn,
-                'accountDomainName'    => $this->_ldapConfig->accountDomainName,
-                'baseDn'               => $this->_ldapConfig->baseDn
-            );
-
-            $this->_ldapClient = new Zend_Ldap($ldapOptions);
-            $this->_ldapClient->bind();
-        }
-        return $this->_ldapClient;
     }
 
     protected function _getSaml2AttributesFieldMapper()

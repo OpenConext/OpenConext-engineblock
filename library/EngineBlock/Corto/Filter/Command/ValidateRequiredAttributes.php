@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProviderEntity;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends EngineBlock_Corto_Filter_Command_Abstract
 {
@@ -13,39 +13,32 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
      */
     public function getResponseAttributes()
     {
-     	return $this->_responseAttributes;
+        return $this->_responseAttributes;
     }
 
     /**
      * @throws EngineBlock_Corto_Exception_MissingRequiredFields
-     * @todo refactor this to use EngineBlock_Attributes_Validator
      */
     public function execute()
     {
-        $errors = array();
-
-        if (isset($this->_idpMetadata['SchacHomeOrganization'])) {
-            // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
+        // ServiceRegistry override of SchacHomeOrganization, set it and skip validation
+        $excluded = array();
+        if ($this->_identityProvider->schacHomeOrganization) {
             $this->_responseAttributes[self::URN_MACE_TERENA_SCHACHOMEORG] = array(
-                $this->_idpMetadata['SchacHomeOrganization']
+                $this->_identityProvider->schacHomeOrganization
             );
-        }
-        else {
-            $error = $this->_requireValidSchacHomeOrganization($this->_responseAttributes);
-            if ($error) {
-                $errors[] = $error;
-            }
+            $excluded[] = static::URN_MACE_TERENA_SCHACHOMEORG;
         }
 
-        $error = $this->_requireValidUid($this->_responseAttributes);
-        if ($error) {
-            $errors[] = $error;
-        }
+        $validationResult = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeValidator()
+            ->validate($this->_responseAttributes, $excluded);
 
-        if (!empty($errors)) {
+        if ($validationResult->hasErrors()) {
             throw new EngineBlock_Corto_Exception_MissingRequiredFields(
                 'Errors validating attributes' .
-                    ' errors: '     . print_r($errors, true) .
+                    ' errors: '     . print_r($validationResult->getErrors(), true) .
                     ' attributes: ' . print_r($this->_responseAttributes, true)
             );
         }
@@ -79,6 +72,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
             $uri = Zend_Uri_Http::fromString('http://' . $schacHomeOrganization);
             $validHostName = $uri->validateHost($schacHomeOrganization);
         } catch(Zend_Validate_Exception $e) {}
+
         if (!$validHostName) {
             return self::URN_MACE_TERENA_SCHACHOMEORG . " is not a valid hostname!";
         }
@@ -93,20 +87,7 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
      */
     protected function _isReservedSchacHomeOrganization($schacHomeOrganization)
     {
-        $reservedSchacHomeOrganizations = $this->_getReservedSchacHomeOrganizations();
-        return in_array($schacHomeOrganization, $reservedSchacHomeOrganizations);
-    }
-
-    protected function _getReservedSchacHomeOrganizations()
-    {
-        $schacHomeOrganizations = array();
-        $remoteEntities = $this->_server->getRemoteEntities();
-        foreach ($remoteEntities as $remoteEntity) {
-            if (isset($remoteEntity['SchacHomeOrganization'])) {
-                $schacHomeOrganizations[] = $remoteEntity['SchacHomeOrganization'];
-            }
-        }
-        return $schacHomeOrganizations;
+        return in_array($schacHomeOrganization, $this->_server->getRepository()->findReservedSchacHomeOrganizations());
     }
 
     protected function _requireValidUid($responseAttributes)

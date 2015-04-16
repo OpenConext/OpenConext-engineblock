@@ -88,7 +88,7 @@ foreach ($spList as $spId => $sp) {
     <?php foreach ($userAttributes as $attributeId => $attributeValues) { ?>
         <tr>
             <td style="font-weight: bold;" title="<?= $attributeId?>">
-                <?=EngineBlock_View::htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
+                <?=EngineBlock_View::htmlSpecialCharsText($metadata->getNameWithFallback($attributeId, $lang))?>
             </td>
             <td>
                 <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
@@ -186,7 +186,7 @@ foreach ($spList as $spId => $sp) {
                                 <?php foreach ($spAttributesList[$spId] as $attributeId => $attributeValues) { ?>
                                     <tr>
                                         <td style="font-weight: bold;">
-                                            <?=EngineBlock_View::htmlSpecialCharsText($metadata->getName($attributeId, $lang))?>
+                                            <?=EngineBlock_View::htmlSpecialCharsText($metadata->getNameWithFallback($attributeId, $lang))?>
                                         </td>
                                         <td>
                                             <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>

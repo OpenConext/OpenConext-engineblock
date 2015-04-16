@@ -1,9 +1,12 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+
 /**
  * Injected:
  * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
- * @var array $idp
+ * @var IdentityProvider $idp
  * @var array $attributes
  * @var EngineBlock_View $this
  *
@@ -18,15 +21,17 @@ $layout->header     = $layout->title;
 $layout->subheader  = $this->t('idp_debugging_title');
 $layout->footerText = $this->t('footer');
 
-$validator = new EngineBlock_Attributes_Validator($attributes);
-$attributesValidated = $validator->validate();
+$validationResult = EngineBlock_ApplicationSingleton::getInstance()
+    ->getDiContainer()
+    ->getAttributeValidator()
+    ->validate($attributes);
 ?>
 
-<?php if ($attributesValidated) : ?>
+<?php if ($validationResult->isValid()) : ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="" />
 <?= $this->t('attributes_validation_succeeded'); ?>
 <?php else: ?>
-    <?php if (count($validator->getErrors()) > 0): ?>
+    <?php if (count($validationResult->getErrors()) > 0): ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="" style="vertical-align: bottom" />
     <?php else: ?>
 <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="" style="vertical-align: bottom" />
@@ -48,7 +53,7 @@ $attributesValidated = $validator->validate();
             Logo
         </th>
         <td>
-            <img src="<?= $idp['Logo']['URL'] ?>" />
+            <img src="<?= $idp->logo ? $idp->logo->url : '/media/idp-logo-not-found.png' ?>" />
         </td>
     </tr>
     <tr>
@@ -56,7 +61,7 @@ $attributesValidated = $validator->validate();
             <?= $this->t('name'); ?>
         </th>
         <td>
-            <?= EngineBlock_View::htmlSpecialCharsText($idp['Name']['en'], ENT_COMPAT, 'UTF-8') ?>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->nameEn, ENT_COMPAT, 'UTF-8') ?>
         </td>
     </tr>
     <tr>
@@ -64,15 +69,15 @@ $attributesValidated = $validator->validate();
             Entity ID
         </th>
         <td>
-            <?= EngineBlock_View::htmlSpecialCharsText($idp['EntityID']) ?>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->entityId) ?>
         </td>
     </tr>
     <tr>
         <th>
             Workflow Status
         </th>
-        <td <?php if ($idp['WorkflowState']==='production') { echo 'style="color: green"';} ?>>
-            <?= EngineBlock_View::htmlSpecialCharsText($idp['WorkflowState']) ?>
+        <td <?php if ($idp->workflowState === AbstractRole::WORKFLOW_STATE_PROD) { echo 'style="color: green"';} ?>>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->workflowState) ?>
         </td>
     </tr>
 </table>
@@ -89,13 +94,13 @@ $attributesValidated = $validator->validate();
 </table>
 <hr />
 <h2><?= $this->t('attributes') ?></h2>
-<?php foreach ($validator->getErrorsForMissingAttributes() as $error): ?>
+<?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
     <p class="error">
         <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
     echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
     ?></p>
 <?php endforeach; ?>
-<?php foreach ($validator->getWarningsForMissingAttributes() as $warning): ?>
+<?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
     <p class="warning">
         <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
     echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
@@ -122,7 +127,7 @@ $attributesValidated = $validator->validate();
         <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
         <tr>
             <td>
-                <?= $this->getAttributeName($attributeName, 'en', false) ?>
+                <?= $this->getAttributeName($attributeName, 'en') ?>
             </td>
             <td>
                 <?= EngineBlock_View::htmlSpecialCharsText($attributeName); ?>
@@ -139,16 +144,16 @@ $attributesValidated = $validator->validate();
                 <?php } ?>
             </td>
             <td>
-                <?php if ($validator->isValid($attributeName)): ?>
+                <?php if ($validationResult->isValid($attributeName)): ?>
                 <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="valid" />
                 <?php else:
-                    foreach ($validator->getErrors($attributeName) as $error) {
+                    foreach ($validationResult->getErrors($attributeName) as $error) {
                         echo '<p class="error">' .
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
                                 EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                             '</p>';
                     }
-                    foreach ($validator->getWarnings($attributeName) as $warning) {
+                    foreach ($validationResult->getWarnings($attributeName) as $warning) {
                         echo '<p class="warning">'.
                                 '<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
                                 EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .

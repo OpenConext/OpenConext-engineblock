@@ -3,6 +3,11 @@
 abstract class Default_Controller_LoggedIn extends EngineBlock_Controller_Abstract
 {
     /**
+     * @var EngineBlock_User
+     */
+    protected $user;
+
+    /**
      * The attributes to filter from the federative attributes provided by SimpleSaml
      *
      * @var array

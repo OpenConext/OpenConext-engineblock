@@ -44,7 +44,7 @@ cd ${PROJECT_DIR} &&
 git checkout ${TAG} &&
 
 echo "Running Composer Install";
-php ./bin/composer.phar install --no-dev --prefer-dist &&
+php ./bin/composer.phar install --no-dev --prefer-dist -o &&
 
 echo "Tagging the release in RELEASE file" &&
 COMMITHASH=`git rev-parse HEAD` &&

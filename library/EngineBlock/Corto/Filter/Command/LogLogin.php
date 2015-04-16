@@ -19,8 +19,8 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
 
         $tracker = new EngineBlock_Tracker();
         $tracker->trackLogin(
-            $this->_spMetadata,
-            $this->_idpMetadata,
+            $this->_serviceProvider,
+            $this->_identityProvider,
             $this->_collabPersonId,
             $voContext,
             $this->_request->getKeyId()

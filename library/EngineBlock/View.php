@@ -104,16 +104,12 @@ class EngineBlock_View
         return "Unknown (meta-data incomplete)";
     }
 
-    public function getAttributeName($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
+    public function getAttributeName($attributeId, $ietfLanguageTag = 'en')
     {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->getName($attributeId, $ietfLanguageTag, $fallbackToId);
-    }
-
-    public function getAttributeDescription($attributeId, $ietfLanguageTag = 'en', $fallbackToId = true)
-    {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        return $metadata->getDescription($attributeId, $ietfLanguageTag);
+        return EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeMetadata()
+            ->getName($attributeId, $ietfLanguageTag);
     }
 
     /**
@@ -127,20 +123,6 @@ class EngineBlock_View
     {
         $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
         return $translator->getLocale();
-    }
-
-    /**
-     * Return the url of the Profile vhost
-     *
-     * @example <?php echo $this->profileUrl(); ?>
-     *
-     * @return string
-     */
-    public static function profileUrl($path = "")
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $settings = $application->getConfiguration();
-        return $settings->profile->protocol . '://'. $settings->profile->host . $path;
     }
 
     /**
@@ -159,7 +141,7 @@ class EngineBlock_View
      *
      * @example <?php echo $this->setLanguage('en'); ?>
      *
-     * @param $lang the language to set
+     * @param string $lang the language to set
      * @return string the new query string
      */
     public static function setLanguage($lang)
@@ -200,10 +182,12 @@ class EngineBlock_View
         return htmlspecialchars($content, ENT_COMPAT, 'UTF-8');
     }
 
-    public function sortConsentDisplayOrder(&$attributes)
+    public function sortByDisplayOrder($attributes)
     {
-        $metadata = new EngineBlock_Attributes_Metadata();
-        $metadata->sortConsentDisplayOrder($attributes);
+        return EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeMetadata()
+            ->sortByDisplayOrder($attributes);
     }
 
     /**

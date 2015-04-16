@@ -138,7 +138,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_support_link'              => 'Support pages',
     'profile_mail_text'                 => 'SURFconext support may ask you to share the above data. This information can help them to answer your support question.',
     'profile_mail_attributes'           => 'Mail data to help@surfconext.nl',
-    'profile_mail_send_success'         => 'The mail with your information has been successfully send.',
+    'profile_mail_send_success'         => 'The mail with your information has been successfully sent.',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'SURFconext Apps',
@@ -272,6 +272,8 @@ If you want to use this application you have to:<br />
     'error_attribute_validator_max'                 => '%1$s may have no more than %2$d values (%3d given)',
     'error_attribute_validator_regex'               => '\'%3$s\' does not match the expected format of this attribute (%2$s)',
     'error_attribute_validator_not_in_definitions'  => '%1$s is not known in the SURFconext schema',
+    'error_attribute_validator_allowed'             => '\'%3$s\' is not an allowed value for this attribute',
+    'error_attribute_validator_availability'        => '\'%3$s\' is a reserved SchacHomeOrganization for another Identity Provider',
 
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',

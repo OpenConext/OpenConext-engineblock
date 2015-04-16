@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+
 class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 {
     private $_id;
@@ -22,6 +24,7 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 
     public function map()
     {
+        $rootElement = array();
         $rootElement[EngineBlock_Corto_XmlToArray::COMMENT_PFX] = $this->_getTermsOfUse();
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:md'] = 'urn:oasis:names:tc:SAML:2.0:metadata';
         $rootElement[EngineBlock_Corto_XmlToArray::ATTRIBUTE_PFX . 'xmlns:mdui'] = 'urn:oasis:names:tc:SAML:metadata:ui';
@@ -47,25 +50,29 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
         return $rootElement;
     }
 
-    protected function _mapEntities($rootElement)
+    protected function _mapEntities(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entities($this->_entities, $this->_eduGain);
         return $mapper->mapTo($rootElement);
     }
 
-    protected function _mapEntity($rootElement)
+    protected function _mapEntity(array $rootElement)
     {
         $mapper = new EngineBlock_Corto_Mapper_Metadata_Entity($this->_entity, $this->_eduGain);
         return $mapper->mapTo($rootElement);
     }
 
-    public function setEntities($entities)
+    /**
+     * @param AbstractRole[] $entities
+     * @return $this
+     */
+    public function setEntities(array $entities)
     {
         $this->_entities = $entities;
         return $this;
     }
 
-    public function setEntity($entity)
+    public function setEntity(AbstractRole $entity)
     {
         $this->_entity = $entity;
         return $this;

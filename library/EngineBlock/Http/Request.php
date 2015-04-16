@@ -137,6 +137,16 @@ class EngineBlock_Http_Request
     }
 
     /**
+     * Get the raw post body.
+     *
+     * @return string
+     */
+    public function getRawBody()
+    {
+        return file_get_contents('php://input');
+    }
+
+    /**
      * Get a specific cookie name
      *
      * @param $name the cookie name to retrieve
