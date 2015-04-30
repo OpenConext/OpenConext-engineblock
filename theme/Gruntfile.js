@@ -71,7 +71,12 @@ module.exports = function(grunt) {
                     '../application/modules/Default/View',
                     '../application/modules/Logout/View',
                     '../application/modules/Profile/View',
-                    '../www/authentication/media'
+                    '../www/authentication/media',
+                    '../www/authentication/css',
+                    '../www/authentication/javascript',
+                    '../www/profile/media',
+                    '../www/profile/css',
+                    '../www/profile/javascript'
                 ]
             },
             material: {
@@ -81,7 +86,12 @@ module.exports = function(grunt) {
                     '../application/modules/Default/View',
                     '../application/modules/Logout/View',
                     '../application/modules/Profile/View',
-                    '../www/authentication/images'
+                    '../www/authentication/images',
+                    '../www/authentication/javascripts',
+                    '../www/authentication/stylesheets',
+                    '../www/profile/images',
+                    '../www/profile/javascripts',
+                    '../www/profile/stylesheets'
                 ]
             }
         },
