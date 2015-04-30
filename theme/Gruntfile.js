@@ -13,14 +13,27 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         config: config,
 
+        symlink: {
+            classic: {
+                files: [
+                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['css'], dest: '../www/profile' },
+                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['javascript'], dest: '../www/profile' },
+                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['media'], dest: '../www/profile' }
+                ]
+            },
+            material: {
+                files: [
+                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['stylesheets'], dest: '../www/profile' },
+                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['javascripts'], dest: '../www/profile' },
+                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['images'], dest: '../www/profile' }
+                ]
+            }
+        },
         uglify: {
             classic: {
 
             },
             material: {
-
-            },
-            dist: {
                 files: {
                     '../www/authentication/javascripts/application.js': [
                         '<%= config.theme %>/javascripts/application.js'
@@ -33,13 +46,10 @@ module.exports = function(grunt) {
 
             },
             material: {
-
-            },
-            dist: {
                 options: {
-                    sassDir: '<%= config.theme %>/stylesheets',
+                    sassDir: 'material/stylesheets',
                     cssDir: '../www/authentication/stylesheets',
-                    imagesDir: '<%= config.theme %>/images',
+                    imagesDir: 'material/images',
                     raw: 'preferred_syntax = :sass\n'
                 }
             }
@@ -49,7 +59,9 @@ module.exports = function(grunt) {
                 files: [
                     { expand: true, cwd: 'classic/templates/layouts/', src: ['**'], dest: '../application/layouts' },
                     { expand: true, cwd: 'classic/templates/modules/', src: ['**'], dest: '../application/modules' },
-                    { expand: true, cwd: 'classic/media/', src: ['**'], dest: '../www/authentication/media' }
+                    { expand: true, cwd: 'classic/media/', src: ['**'], dest: '../www/authentication/media' },
+                    { expand: true, cwd: 'classic/css/', src: ['**'], dest: '../www/authentication/css' },
+                    { expand: true, cwd: 'classic/javascript/', src: ['**'], dest: '../www/authentication/javascript' }
                 ]
             },
             material: {
@@ -129,6 +141,9 @@ module.exports = function(grunt) {
                 [
                     'clean:' + themeConfig.current,
                     'copy:' + theme,
+                    'uglify:' + theme,
+                    'compass:' + theme,
+                    'symlink:' + theme,
                     'string-replace:layoutconfig'
                 ]
             );
