@@ -85,10 +85,7 @@ module.exports = function(grunt) {
                     '../application/modules/Profile/View',
                     '../www/authentication/media',
                     '../www/authentication/css',
-                    '../www/authentication/javascript',
-                    '../www/profile/media',
-                    '../www/profile/css',
-                    '../www/profile/javascript'
+                    '../www/authentication/javascript'
                 ]
             },
             material: {
@@ -100,11 +97,24 @@ module.exports = function(grunt) {
                     '../application/modules/Profile/View',
                     '../www/authentication/images',
                     '../www/authentication/javascripts',
-                    '../www/authentication/stylesheets',
-                    '../www/profile/images',
-                    '../www/profile/javascripts',
-                    '../www/profile/stylesheets'
+                    '../www/authentication/stylesheets'
                 ]
+            }
+        },
+        shell: {
+            classic: {
+                command: [
+                    'rm ../www/profile/media',
+                    'rm ../www/profile/css',
+                    'rm ../www/profile/javascript'
+                ].join('&&')
+            },
+            material: {
+                command: [
+                    'rm ../www/profile/images',
+                    'rm ../www/profile/javascripts',
+                    'rm ../www/profile/stylesheets'
+                ].join('&&')
             }
         },
         'string-replace': {
@@ -140,6 +150,7 @@ module.exports = function(grunt) {
             grunt.task.run(
                 [
                     'clean:' + themeConfig.current,
+                    'shell:' + themeConfig.current,
                     'copy:' + theme,
                     'uglify:' + theme,
                     'compass:' + theme,
