@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+h1 {
+    font-size: 12px;
+    margin: 0 0 15px 0;
+    padding: 8px 0 0 0;
+    color: #fff;
+}
+
+div.wrapper {
+    margin: 0 auto;
+    width: 478px;
+}
+
+div.header {
+    background: url(../../media/headerBck.gif) no-repeat left bottom;
+    padding: 15px 0 34px 22px;
+    margin-bottom: 10px;
+}
+
+div.main {
+    background: url(../../media/contentBck.gif) no-repeat left top;
+    padding: 4px 14px 0px 14px;
+    margin-bottom: 20px;
+    position: relative; /*height: 472px;*/
+}
+
+div.bottom {
+    background: url(../../media/contentBtm.gif) no-repeat left bottom;
+    width: 451px;
+    padding: 8px 14px 10px 14px;
+    position: relative;
+    bottom: 0;
+    left: 0;
+    margin-left: -14px;
+}

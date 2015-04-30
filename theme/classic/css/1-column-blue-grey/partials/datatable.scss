@@ -1,0 +1,28 @@
+table.datatable, table.datatable tr, table.datatable th, table.datatable td {
+  border: 0 none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 11px;
+  margin: 0;
+  padding: 0;
+}
+
+table.datatable th {
+  border: 1px solid #C1C1BD;
+  color: black;
+  font-weight: bold;
+  text-align: left;
+}
+
+table.datatable th, table.datatable td {
+  padding: 5px;
+  vertical-align: top;
+}
+
+table.datatable td {
+  border: 1px solid #C1C1BD;
+}
+div.datatable_footer {
+  font-size: 10px;
+  font-style: italic;
+}

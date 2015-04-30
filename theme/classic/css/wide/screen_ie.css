@@ -1,0 +1,9 @@
+hr {margin:0 0 5px 0; }
+
+ul.nav li.active a {
+    position:relative; /* Ensure background image lines us at the bottom */
+}
+
+input {
+    /*padding-top: 7px;*/ /* Vertically center text in input field */
+}

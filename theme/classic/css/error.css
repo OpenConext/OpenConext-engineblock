@@ -1,0 +1,14 @@
+.error-icon {
+    background: url(../media/error.png) no-repeat;
+    height: 32px;
+    width: 32px;
+    float: left;
+}
+
+.error-text {
+    padding-left: 42px;
+}
+
+.stop-text {
+    padding-left: 58px;
+}
