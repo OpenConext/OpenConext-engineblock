@@ -1,0 +1,36 @@
+.mod-content
+  padding: 2rem
+
+  h1, h2, h3
+    margin-bottom: .5rem
+
+  h1
+    @extend %h1
+
+  h2
+    @extend %h2
+
+  h3
+    @extend %h3
+
+  ul, ol, p
+    margin-bottom: 1rem
+
+  table
+    width: 100%
+    margin-bottom: 1rem
+
+    th, td
+      padding: .75rem 0
+      border-bottom: 1px solid $border
+
+    thead
+      th, td
+        border-bottom: 2px solid $border
+        @extend %h3
+
+  @for $i from 1 through 20
+    .percent_#{$i * 5}
+      width: #{$i * 5%}
+
+

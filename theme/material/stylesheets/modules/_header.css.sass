@@ -1,0 +1,68 @@
+.mod-header
+  +pie-clearfix
+  padding: 1rem
+  background: #fff
+  box-shadow: 1px 1px $br rgba(black,.2)
+  border-bottom: 2px solid $blue
+
+  +min-width($medium)
+    padding: 2rem
+    margin-bottom: 3rem
+
+  // Main app title
+  .title
+    @extend %h2
+    color: $medium-grey
+
+    strong
+      color: $blue
+
+    +max-width($medium)
+      margin-bottom: 1rem
+
+    +min-width($medium)
+      float: left
+
+  // Meta = right aligned stuff
+  +min-width($medium)
+    .meta
+      float: right
+
+  // Styling for elements
+  a
+    text-decoration: none
+
+    &:hover
+      text-decoration: underline
+
+  .language,
+  .links
+    float: left
+    line-height: 30px
+
+    li
+      float: left
+      list-style: none
+
+    a
+      display: block
+      padding: 0 14px
+      border-right: 1px solid $light-grey
+
+    li:last-child a
+      border: 0
+
+  // EN / NL language switch
+  .language
+    overflow: hidden
+    border-radius: $br
+    margin-right: 2rem
+
+    a
+      background: $light-grey
+      border-color: #fff
+
+      &:hover,
+      &.selected
+        background: $blue
+        color: #fff

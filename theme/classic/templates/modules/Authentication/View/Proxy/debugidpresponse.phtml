@@ -1,0 +1,175 @@
+<?php
+
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+
+/**
+ * Injected:
+ * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
+ * @var IdentityProvider $idp
+ * @var array $attributes
+ * @var EngineBlock_View $this
+ *
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey-narrow');
+
+// Set Layout properties
+$layout->title      = $layout->title . ' - ' . $this->t('idp_debugging_title');
+$layout->header     = $layout->title;
+$layout->subheader  = $this->t('idp_debugging_title');
+$layout->footerText = $this->t('footer');
+
+$validationResult = EngineBlock_ApplicationSingleton::getInstance()
+    ->getDiContainer()
+    ->getAttributeValidator()
+    ->validate($attributes);
+?>
+
+<?php if ($validationResult->isValid()) : ?>
+<img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="" />
+<?= $this->t('attributes_validation_succeeded'); ?>
+<?php else: ?>
+    <?php if (count($validationResult->getErrors()) > 0): ?>
+<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="" style="vertical-align: bottom" />
+    <?php else: ?>
+<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="" style="vertical-align: bottom" />
+    <?php endif; ?>
+
+<?= $this->t('attributes_validation_failed'); ?>
+<?php endif; ?>
+
+<form method="post" style="float: right">
+    <input type="hidden" name="clear" value="true" />
+    <input type="submit" value="Retry" />
+</form>
+<hr style="clear: both" />
+
+<h2>Identity Provider</h2>
+<table>
+    <tr>
+        <th>
+            Logo
+        </th>
+        <td>
+            <img src="<?= $idp->logo ? $idp->logo->url : '/media/idp-logo-not-found.png' ?>" />
+        </td>
+    </tr>
+    <tr>
+        <th>
+            <?= $this->t('name'); ?>
+        </th>
+        <td>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->nameEn, ENT_COMPAT, 'UTF-8') ?>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Entity ID
+        </th>
+        <td>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->entityId) ?>
+        </td>
+    </tr>
+    <tr>
+        <th>
+            Workflow Status
+        </th>
+        <td <?php if ($idp->workflowState === AbstractRole::WORKFLOW_STATE_PROD) { echo 'style="color: green"';} ?>>
+            <?= EngineBlock_View::htmlSpecialCharsText($idp->workflowState) ?>
+        </td>
+    </tr>
+</table>
+<hr />
+<h2>SAML2 Subject</h2>
+<table>
+    <tr>
+        <th>NameID</th>
+
+        <td>
+            <?php $nameId = $response->getAssertion()->getNameId(); echo EngineBlock_View::htmlSpecialCharsText($nameId['Value']); ?>
+        </td>
+    </tr>
+</table>
+<hr />
+<h2><?= $this->t('attributes') ?></h2>
+<?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
+    <p class="error">
+        <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
+    echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
+    ?></p>
+<?php endforeach; ?>
+<?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
+    <p class="warning">
+        <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
+    echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
+    ?></p>
+<?php endforeach; ?>
+<table>
+    <thead>
+        <tr>
+            <th>
+                SURFconext Display Name
+            </th>
+            <th>
+                <?= $this->t('name'); ?>
+            </th>
+            <th>
+                <?= $this->t('value'); ?>
+            </th>
+            <th>
+                <?= $this->t('validation'); ?>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
+        <tr>
+            <td>
+                <?= $this->getAttributeName($attributeName, 'en') ?>
+            </td>
+            <td>
+                <?= EngineBlock_View::htmlSpecialCharsText($attributeName); ?>
+            </td>
+            <td>
+                <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?= EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+                <?php } /** Multiple attribute values */ else { ?>
+                <ul>
+                    <?php foreach ($attributeValues as $value) { ?>
+                    <li><?= EngineBlock_View::htmlSpecialCharsText($value); ?></li>
+                    <?php } ?>
+                </ul>
+                <?php } ?>
+            </td>
+            <td>
+                <?php if ($validationResult->isValid($attributeName)): ?>
+                <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="valid" />
+                <?php else:
+                    foreach ($validationResult->getErrors($attributeName) as $error) {
+                        echo '<p class="error">' .
+                                '<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
+                                EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
+                            '</p>';
+                    }
+                    foreach ($validationResult->getWarnings($attributeName) as $warning) {
+                        echo '<p class="warning">'.
+                                '<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
+                                EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
+                            '</p>';
+                    }
+                endif; ?>
+            </td>
+        </tr>
+        <?php } ?>
+    </tbody>
+</table>
+<hr />
+<p>
+    <?= EngineBlock_View::htmlSpecialCharsText($this->t('idp_debugging_mail_explain')); ?>
+</p>
+<form method="post">
+    <input type="hidden" name="mail" value="true" />
+    <input type="submit" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($this->t('idp_debugging_mail_button')); ?>" />
+</form>

@@ -1,0 +1,55 @@
+.mod-search
+
+  h1
+    @extend %h2
+    margin-bottom: 15px
+
+  fieldset
+    border: 0
+    padding: 0
+    margin: 0
+
+  button
+    display: none
+
+  input
+    display: block
+    border: 0
+    border-radius: $br
+    width: 100%
+    padding: .5rem 1rem .5rem 2.75rem
+    line-height: 40px
+    font-size: 20px
+    border-bottom: 1px solid $border
+    background: #fff image_url("icons/magnifying-glass-1.svg") no-repeat 1.25rem center
+      size: 1rem auto
+
+    &:focus
+      outline: none
+
+      & + .results
+        display: block
+
+  a
+    display: flex
+    padding: 1rem
+    align-items: center
+    text-decoration: none
+
+    +hocus
+      outline: none
+      background: lighten($blue, 40)
+
+    &:focus
+
+      .c-button
+        display: inline-block
+
+    img
+      max-width: 2rem
+      margin-right: 1rem
+
+    .c-button
+      margin-left: auto
+      display: none
+

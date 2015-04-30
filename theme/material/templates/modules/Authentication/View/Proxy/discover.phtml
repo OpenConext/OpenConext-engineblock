@@ -1,0 +1,234 @@
+<?php
+
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+
+/**
+ * Injected variables;
+ * @var EngineBlock_View $this
+ * @var ServiceProvider $metaDataSP
+ * @var array $idpList
+ * @var string $action
+ * @var string $ID
+ * @var string $preselectedIdp
+ */
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set different layout
+$layout->setLayout('empty');
+
+// Determine the selected language, default to english
+if (isset($_GET['lang'])) {
+    $lang = $_GET['lang'];
+}
+else if (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+}
+else {
+    $lang = 'en';
+}
+
+// Guard against unsupported languages.
+if (!in_array($lang, array('nl','en'))) {
+    $lang = 'en';
+}
+
+// @todo move to entity (see also duplicate in consent.phtml)
+if ($lang === 'nl') {
+    if ($metaDataSP->nameNl) {
+        $spDisplayName = $metaDataSP->nameNl;
+    }
+    else if ($metaDataSP->displayNameNl) {
+        $spDisplayName = $metaDataSP->displayNameNl;
+    }
+    else if ($metaDataSP->nameEn) {
+        $spDisplayName = $metaDataSP->nameEn;
+    }
+    else if ($metaDataSP->displayNameEn) {
+        $spDisplayName = $metaDataSP->displayNameEn;
+    }
+}
+else {
+    if ($metaDataSP->nameEn) {
+        $spDisplayName = $metaDataSP->nameEn;
+    }
+    else if ($metaDataSP->displayNameEn) {
+        $spDisplayName = $metaDataSP->displayNameEn;
+    }
+    else if ($metaDataSP->nameNl) {
+        $spDisplayName = $metaDataSP->nameNl;
+    }
+    else if ($metaDataSP->displayNameNl) {
+        $spDisplayName = $metaDataSP->displayNameNl;
+    }
+}
+
+$preselectedIdpData = array();
+if ($preselectedIdp) {
+    foreach ($idpList as $idp) {
+        if ($idp['EntityID'] === $preselectedIdp) {
+            $preselectedIdpData = $idp;
+            $preselectedIdpName = $preselectedIdpData['Name_'.$lang];
+            if (empty($preselectedIdpName)) {
+                $preselectedIdpName = $preselectedIdpData['Name_en'];
+            }
+            break;
+        }
+    }
+}
+
+?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="robots" content="noindex, nofollow"/>
+        <meta name="viewport" content = "width=device-width, initial-scale=1, minimum-scale=0.1, maximum-scale=1" />
+
+        <title><?= $this->layout()->title; ?></title>
+
+        <?= EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
+    </head>
+    <body class="index">
+        <div id="wrapper">
+            <div id="main">
+                <!-- Language selection -->
+                <ul class="nav">
+                    <li id="help_nav"><a href="#" data-help-type="discover">HELP</a></li>
+                    <li class="lang <?php if ($lang==='en'): ?>active<?php endif; ?>">
+                        <a href="<?= EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
+                    </li>
+                    <li class="lang <?php if ($lang==='nl'): ?>active<?php endif; ?>">
+                        <a href="<?= EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+                    </li>
+                </ul>
+
+                <h1><?= $this->t('idp_selection_subheader'); ?></h1>
+
+                <!-- Main content -->
+                <div id="content">
+                    <form id="IdpListForm" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+                        <p>
+                            <input id="ID" type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+                            <input id="Idp" type="hidden" name="idp" value="" />
+                        </p>
+                    </form>
+
+                    <p><?= $this->t('idp_selection_desc', $spDisplayName); ?></p>
+
+                    <?php if ($preselectedIdp) : ?>
+                    <!-- Preselected IdP -->
+                    <div id="IdpSuggestion" class="suggestion">
+                        <noscript>
+                            <form method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+                                <p>
+                                    <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+                                    <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdp); ?>" />
+
+                                    <input type="submit" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpName); ?>" />
+                                </p>
+                            </form>
+                        </noscript>
+                    </div>
+                    <?php endif; ?>
+
+                    <!-- Search -->
+                    <input type="search" class="search" id="searchBox" placeholder="<?= $this->t('search'); ?>" />
+
+                    <!-- Results -->
+                    <div class="results">
+                        <div id="noResultsMessage" style="display:none">
+                            <p class="noresults"><?= $this->t('no_results'); ?></p>
+                        </div>
+
+                        <noscript>
+                            <div style="width: 451px; height: 250px; overflow: scroll">
+                                <?php foreach ($idpList as $idp) : ?>
+                                <form method="post" action="<?= $action ?>">
+                                    <p>
+                                        <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+                                        <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
+                                        <input type="submit" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_en']); ?>" />
+                                    </p>
+                                </form>
+                                <?php endforeach; ?>
+                            </div>
+                        </noscript>
+
+                        <div id="scrollViewport" class="consent">
+                            <ul class="thumbs clearfix" id="organisationsContainer"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HELP -->
+                <div id="help">
+                </div>
+
+                <!-- Request Access -->
+                <div id="requestAccess">
+                </div>
+
+                <div class="bottom">
+                    <hr />
+                    <p>
+                        <?= $this->t('footer'); ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <script id="idpListTemplate" type="text/x-jquery-tmpl">
+            <li id="c${ID}" class="${NoAccessClass}">
+                <a alt="${Alt}" href="#">
+                    <img src="${Logo}" />
+                    <span>${Name}</span>
+                    <em>${NoAccess}</em>
+                </a>
+            </li>
+        </script>
+
+        <script id="idpListTemplateMobile" type="text/x-jquery-tmpl">
+            <li id="c${ID}" class="${NoAccessClass}">
+                <a alt="${Alt}" href="#">
+                    <span>${Name}</span>
+                    <em>${NoAccess}</em>
+                </a>
+            </li>
+        </script>
+
+        <script id="idpListSuggestionTemplate" type="text/x-jquery-tmpl">
+            <p>
+            <p>${Suggestion}</p>
+            <div class="suggestion-box">
+                <a id="SuggestionLink" alt="${Alt}" class="${NoAccessClass}" href="#">
+                    <img class="logo" alt="" src="${Logo}" />
+                    <span class="title">${Name} ${NoAccess}</span>
+                </a>
+            </div>
+            </p>
+        </script>
+        <?= EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
+
+        <script>
+        <?php
+            $preselectedIdpJson = isset($preselectedIdp) ? 'discoveryScreen.setSelectedEntityId('.json_encode($preselectedIdp).');' : '';
+
+            echo "
+            var discoveryScreen = new Discover();
+            discoveryScreen.setLanguage('". $lang ."');
+            discoveryScreen.setSearchText('". $this->t('search') ."');
+            discoveryScreen.setIdpList(". json_encode($idpList) .");
+            discoveryScreen.setSpEntityId(". json_encode($metaDataSP->entityId) .");
+            discoveryScreen.setSpName(". json_encode($spDisplayName) .");
+            ". $preselectedIdpJson ."
+            discoveryScreen.show();"
+
+        ?>
+
+        </script>
+    </body>
+</html>

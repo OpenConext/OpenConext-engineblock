@@ -1,0 +1,71 @@
+<html>
+<head></head>
+<body>
+<table>
+  <tbody>
+  <tr>
+    <th>Date</th>
+    <td><?php echo date("d-m-Y", time()); ?></td>
+  </tr>
+  <tr>
+    <th>Time</th>
+    <td><?php echo date('H:i:s', time()); ?></td>
+  </tr>
+  <tr>
+    <th>Server</th>
+    <td><?php echo gethostname(); ?></td>
+  </tr>
+  <tr>
+    <th>Component</th>
+    <td>EngineBlock</td>
+  </tr>
+  <tr>
+      <th>Severity</th>
+      <td><?php
+          echo isset($this->severity) ?
+              htmlentities($this->severity) :
+              isset($this->priorityName) ?
+                  htmlentities($this->priorityName) :
+                  "UNKNOWN"; ?></td>
+  </tr>
+  <tr>
+      <th>SessionID</th>
+      <td><?php echo isset($this->sessionid) ? htmlentities($this->sessionid) : htmlentities(session_id()); ?></td>
+  </tr>
+  <tr>
+      <th>RequestID</th>
+      <td><?php echo isset($this->requestid) ? htmlentities($this->requestid) : htmlentities(uniqid('404')); ?></td>
+  </tr>
+  <tr>
+    <th>Userid</th>
+    <td><?php echo isset($this->userId) ? htmlentities($this->userId) : "UNKNOWN"; ?></td>
+  </tr>
+  <tr>
+    <th>IDP</th>
+    <td><?php echo isset($this->idp) ? htmlentities($this->idp) : "UNKNOWN"; ?></td>
+  </tr>
+  <tr>
+    <th>SP</th>
+    <td><?php echo isset($this->sp) ? htmlentities($this->sp) : "UNKNOWN"; ?></td>
+  </tr>
+  <tr>
+    <th>Message</th>
+    <td><pre><?php echo isset($this->message) ? htmlentities($this->message) : "UNKNOWN"; ?></pre></td>
+  </tr>
+  <tr>
+    <th>Location</th>
+    <td><?php echo isset($this->location) ? htmlentities($this->location) : htmlentities($_SERVER['SCRIPT_FILENAME']); ?></td>
+  </tr>
+  <tr>
+    <th>Details</th>
+    <td><pre><?php echo isset($this->details) ? htmlentities($this->details) : "UNKNOWN"; ?></pre></td>
+  </tr>
+  <?php foreach (array_reverse($this->attachments, true) as $key => $attachment): ?>
+    <tr>
+        <th valign="top"><?php echo htmlentities($attachment['name']); ?></th>
+        <td><pre><?php echo htmlentities($attachment['message']) ?></pre></td>
+    </tr>
+  <?php endforeach ?>
+  </tbody>
+</body>
+</html>

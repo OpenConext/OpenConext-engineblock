@@ -1,0 +1,34 @@
+<?php
+define('PARTIAL_DIR', __DIR__ . '/partials/');
+require PARTIAL_DIR . 'header-start.php';
+?>
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getCss(); ?>
+        <?php echo $this->headStyle(); ?>
+        <?php echo $this->headScript(); ?>
+    </head>
+    <body class="index">
+        <div id="wrapper">
+            <div id="header"><h4><?php echo htmlentities($this->layout()->header, 0, "UTF-8"); ?></h4></div>
+            <div id="main">
+
+                <?php require PARTIAL_DIR . 'nav.php'; ?>
+
+                <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+
+                <?php echo $this->layout()->content; ?>
+
+                <div class="bottom">
+                    <hr />
+                    <p>
+                        <?php echo $this->layout()->footerText; ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <?php echo EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAssetManager()->getJs(); ?>
+        <?php echo $this->inlineScript() ?>
+    </body>
+</html>

@@ -27,6 +27,8 @@ See the NOTICE.txt file
 * Service Registry
 * wget
 * Memcached (optional)
+* NPM (optional for theme deployment)
+* Grunt-cli (optional for theme deployment)
 
 **NOTE**
 While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,
@@ -282,3 +284,12 @@ If you are using this pattern, an update can be done with the following:
     *NOTE* Please use the same recommended practice for the static content as for engineblock. So, create a new
     directory for every tag you check out and change the symlink to make that version the 'current' version used by
     Apache.
+
+
+## Applying a new theme ##
+
+When applying a theme for the first time you can enter the theme directory and run `npm install` to load the required
+theme modules.
+
+Themes can be deployed using a Grunt task, from the theme directory run `grunt theme:mythemename`, this will initiate 
+the appropriate tasks for cleaning the previous theme and deploying the new theme on your installation.
