@@ -16,16 +16,16 @@ module.exports = function(grunt) {
         symlink: {
             classic: {
                 files: [
-                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['css'], dest: '../www/profile' },
-                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['javascript'], dest: '../www/profile' },
-                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['media'], dest: '../www/profile' }
+                    { expand: false, overwrite: false, src: ['../www/authentication/css'], dest: '../www/profile/css' },
+                    { expand: false, overwrite: false, src: ['../www/authentication/javascript'], dest: '../www/profile/javascript' },
+                    { expand: false, overwrite: false, src: ['../www/authentication/media'], dest: '../www/profile/media' }
                 ]
             },
             material: {
                 files: [
-                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['stylesheets'], dest: '../www/profile' },
-                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['javascripts'], dest: '../www/profile' },
-                    { expand: false, overwrite: false, cwd: '../www/authentication/', src: ['images'], dest: '../www/profile' }
+                    { expand: false, overwrite: false, src: ['../www/authentication/stylesheets'], dest: '../www/profile/stylesheets' },
+                    { expand: false, overwrite: false, src: ['../www/authentication/javascripts'], dest: '../www/profile/javascripts' },
+                    { expand: false, overwrite: false, src: ['../www/authentication/images'], dest: '../www/profile/images' }
                 ]
             }
         },
