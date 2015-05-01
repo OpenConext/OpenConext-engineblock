@@ -131,6 +131,16 @@ module.exports = function(grunt) {
                     ]
                 }
             }
+        },
+        watch: {
+            classic: {
+                files: 'classic/**',
+                tasks: ['theme:classic']
+            },
+            material: {
+                files: 'material/**',
+                tasks: ['theme:material']
+            }
         }
     });
 
