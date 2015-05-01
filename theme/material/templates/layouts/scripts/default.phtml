@@ -5,7 +5,7 @@
 <!--[if IE 9]> <html class="no-js lt-ie10 lt-ie9" lang="en-us"> <![endif]-->
 <!--[if lt IE 10]> <html class="no-js lt-ie10" lang="en-us"> <![endif]-->
 <!--[if !IE]> > <![endif]-->
-<html class='no-js' lang='en'>
+<html class='no-js' lang='<?php echo $lang; ?>'>
 <!-- <![endif] -->
 <head>
   <title><?php echo htmlentities($this->layout()->title, 0, 'UTF-8'); ?></title>
@@ -30,13 +30,6 @@
     <strong>Service Provider Name</strong>
   </h1>
   <div class='meta'>
-    <ul class="links">
-      <?php if ($this->layout()->tabs): ?>
-        <?php foreach ($this->layout()->tabs as $id => $tab) { ?>
-          <li><a href="#<?php echo $id; ?>"><?php echo $tab; ?></a></li>
-        <?php } ?>
-      <?php endif; ?>
-    </ul>
     <ul class='language'>
       <li>
         <a<?php if ($lang==='en'): ?> class='selected'<?php endif; ?> href='<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>'>EN</a>
@@ -58,10 +51,9 @@
   </div>
 </div>
 <div class='l-container'>
-  <div class='mod-content'>
-    <h1><?php echo $this->layout()->subheader; ?></h1>
+<!--  @todo delete this when views are done -->
+<!--    <h1>--><?php //echo $this->layout()->subheader; ?><!--</h1>-->
     <?php echo $this->layout()->content; ?>
-  </div>
 </div>
 <script src="/javascripts/application.js" type="text/javascript"></script>
 </body>

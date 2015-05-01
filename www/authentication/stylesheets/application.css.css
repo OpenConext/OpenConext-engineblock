@@ -594,3 +594,12 @@ a:hover {
   border-bottom: 1px solid #4DB3CF;
   margin-bottom: -1px;
 }
+
+/* line 18, ../../../theme/material/stylesheets/modules/_tabs.css.sass */
+.mod-tabpanel {
+  display: none;
+}
+/* line 21, ../../../theme/material/stylesheets/modules/_tabs.css.sass */
+.mod-tabpanel.active {
+  display: block;
+}
