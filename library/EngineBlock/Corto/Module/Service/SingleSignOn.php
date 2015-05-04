@@ -66,14 +66,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         $log = $this->_server->getSessionLog();
-        $log->attach(array_values($candidateIDPs), 'Candidate IDPs');
+        $log->info('Candidate IDPs before scoping', array('idps' => array_values($candidateIDPs)));
 
         // If we have scoping, filter out every non-scoped IdP
         if (count($scopedIdps) > 0) {
             $candidateIDPs = array_intersect($scopedIdps, $candidateIDPs);
         }
 
-        $log->attach(array_values($candidateIDPs), 'Candidate IDPs (after scoping)');
+        $log->info('Candidate IDPs after scoping', array('idps' => array_values($candidateIDPs)));
 
         // 0 IdPs found! Throw an exception.
         if (count($candidateIDPs) === 0) {
@@ -197,7 +197,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $request->setUnsolicited();
 
         $log = $this->_server->getSessionLog();
-        $log->attach($request, 'Unsollicited Request');
+        $log->info('Created unsollicited request', array('saml_request' => json_decode((string) $request)));
 
         return $request;
     }
@@ -215,7 +215,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $request->setDebug();
 
         $log = $this->_server->getSessionLog();
-        $log->attach($request, 'Debug request');
+        $log->info('Created debug request', array('debug_request' => json_decode((string) $request)));
 
         return $request;
     }
@@ -227,17 +227,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         /** @var SAML2_AuthnRequest $request */
         $scopedIdPs = $request->getIDPList();
-        // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
-        if (!empty($scopedIdPs)) {
-            $log->attach($scopedIdPs, 'Scoped IDPs');
+        $presetIdP  = $this->_server->getConfig('Idp');
+
+        if ($presetIdP) {
+            // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
+            $log->info(
+                'Supplying pre-configured scoped IdP over scoped IdPs listed by request',
+                array('configured_idp' => $presetIdP, 'request_idps' => $scopedIdPs)
+            );
+
+            return array($presetIdP);
         }
 
-        // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
-        $presetIdP  = $this->_server->getConfig('Idp');
-        if ($presetIdP) {
-            $scopedIdPs = array($presetIdP);
-            $log->attach($scopedIdPs[0], 'Scoped IDP');
-        }
+        // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
+        $log->info('Supplying scoped IdPs listed by request', array('request_idps' => $scopedIdPs));
+
         return $scopedIdPs;
     }
 

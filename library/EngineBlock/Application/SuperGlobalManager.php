@@ -33,9 +33,10 @@ class EngineBlock_Application_SuperGlobalManager
             $global = &$$superGlobalName;
 
             foreach ($values as $name => $value) {
-                $this->_logger->notice('Overwriting $_' . $superGlobalName . '[' . $name . ']');
-                $this->_logger->attach($_SERVER[$name], 'FROM');
-                $this->_logger->attach($value, 'TO');
+                $this->_logger->notice(
+                    sprintf('Overwriting $%s[%s]', $superGlobalName, $name),
+                    ['super_global' => ['from' => $global[$name], 'to' => $value]]
+                );
 
                 $global[$name] = $value;
             }

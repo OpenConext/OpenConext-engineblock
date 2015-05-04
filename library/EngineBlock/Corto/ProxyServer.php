@@ -586,8 +586,10 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        $this->getSystemLog()
-            ->attach($serviceProvider->assertionConsumerServices, 'AssertionConsumerServices');
+        $this->getSystemLog()->error(
+            'No supported binding found for ACS',
+            array('acs' => $serviceProvider->assertionConsumerServices)
+        );
 
         throw new EngineBlock_Corto_ProxyServer_Exception('No supported binding found for ACS');
     }

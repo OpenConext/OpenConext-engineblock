@@ -37,15 +37,11 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
         $data = array_slice($args, 1) + $this->_data;
 
         $response = $this->restGet($args[0], $data);
-        $this->_logRequest();
 
         $this->_data = array();//Initializes for next Rest method.
 
         if ($response->getStatus() !== 200) {
-            EngineBlock_ApplicationSingleton::getLog()->attach(
-                $response->getHeadersAsString() . PHP_EOL . $response->getBody(),
-                'Response'
-            );
+            $this->_logRequest('Received response to REST request with a status code other than 200');
 
             throw new EngineBlock_Exception(
                 'Response status !== 200', EngineBlock_Exception::CODE_WARNING
@@ -59,10 +55,7 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
                 return new Zend_Rest_Client_Result($response->getBody());
             }
             catch (Zend_Rest_Client_Result_Exception $e) {
-                EngineBlock_ApplicationSingleton::getLog()->attach(
-                    $response->getHeadersAsString() . PHP_EOL . $response->getBody(),
-                    'Response'
-                );
+                $this->_logRequest('An error occurred while parsing the response to REST request');
 
                 throw new EngineBlock_Exception(
                     'Error parsing response', null, $e
@@ -71,17 +64,22 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
         }
     }
 
-    protected function _logRequest()
+    /**
+     * @param string $message
+     */
+    protected function _logRequest($message)
     {
         /**
          * @var Zend_Http_Client $httpClient
          */
         $httpClient = $this->getHttpClient();
-        $log = EngineBlock_ApplicationSingleton::getLog();
 
-        $log->attach($httpClient->getLastRequest(), 'REST Request');
+        $logContext = array(
+            'http_request' => $httpClient->getLastRequest(),
+        );
 
-        $originalBody = $httpClient->getLastResponse()->getBody();
+        $response = $httpClient->getLastResponse();
+        $originalBody = $response->getBody();
         $body = substr($originalBody, 0, 1024);
         if ($body !== $originalBody) {
             $body .= '...';
@@ -90,12 +88,11 @@ class EngineBlock_Rest_Client extends Zend_Rest_Client
         // If able to decode as JSON, show parsed result
         $decoded = json_decode($body);
         if ($decoded) {
-            $body = $decoded;
-            $logType = 'original response below';
-        } else {
-            $logType = 'decoded JSON body below';
+            $logContext['json_response'] = $decoded;
         }
 
-        $log->attach($body, "REST Response ($logType)");
+        $logContext['http_response'] = $response->getHeadersAsString() . PHP_EOL . $response->getBody();
+
+        EngineBlock_ApplicationSingleton::getLog()->error($message, $logContext);
     }
 }

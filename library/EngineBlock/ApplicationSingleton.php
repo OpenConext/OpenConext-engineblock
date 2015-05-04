@@ -125,20 +125,25 @@ class EngineBlock_ApplicationSingleton
             return false;
         }
 
+        $logContext = array('exception' => $exception);
+
         if ($exception instanceof EngineBlock_Exception) {
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
             $severity = $exception->getSeverity();
+
+            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
+            $logContext['additional_info'] = $additionalInfo->toArray();
         } else {
-            $additionalInfo = null;
             $severity = EngineBlock_Log::ERR;
         }
 
-        $log->attach($exception, 'trace');
-
-        // attach previous exceptions
+        // add previous exceptions to log context
         $prevException = $exception;
         while ($prevException = $prevException->getPrevious()) {
-            $log->attach($prevException, 'previous exception');
+            if (!isset($logContext['previous_exceptions'])) {
+                $logContext['previous_exceptions'] = array();
+            }
+
+            $logContext['previous_exceptions'][] = (string) $prevException;
         }
 
         $message = $exception->getMessage();
@@ -165,7 +170,7 @@ class EngineBlock_ApplicationSingleton
                 $level = Psr\Log\LogLevel::INFO;
                 break;
         }
-        $log->log($level, $message, $additionalInfo);
+        $log->log($level, $message, $logContext);
 
         // Note that it it is possible that the event is not logged for various reasons
         // Getting the last event this way bypasses the queue which is possibly empty
