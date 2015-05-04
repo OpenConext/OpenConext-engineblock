@@ -134,13 +134,12 @@ class EngineBlock_Application_Bootstrapper
     protected function _bootstrapHttpCommunication()
     {
         $httpRequest = EngineBlock_Http_Request::createFromEnvironment();
-        $this->_application->getLogInstance()->log(
+        $this->_application->getLogInstance()->info(
             sprintf(
                 'Handling incoming request: %s %s',
                 $httpRequest->getMethod(),
                 $httpRequest->getUri()
-            ),
-            Zend_Log::INFO
+            )
         );
         $this->_application->setHttpRequest($httpRequest);
 

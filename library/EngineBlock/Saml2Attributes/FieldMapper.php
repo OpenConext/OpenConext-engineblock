@@ -81,10 +81,7 @@ class EngineBlock_Saml2Attributes_FieldMapper
             if (isset($this->_s2lMap[$saml2Name])) {
                 if (count($values)>1) {
                     $log->attach($values, "Values for $saml2Name")
-                        ->log(
-                            "Ignoring everything but first value of $saml2Name",
-                            Zend_Log::NOTICE
-                        );
+                        ->notice("Ignoring everything but first value of $saml2Name");
                 }
 
                 $ldapAttributes[$this->_s2lMap[$saml2Name]] = $values[0];

@@ -68,7 +68,7 @@ class EngineBlock_Doctrine_ConfigMapper
         }
 
         if (count($masters) > 1) {
-            $this->logger->log('More than 1 master detected, using first', EngineBlock_Log::WARN);
+            $this->logger->warning('More than 1 master detected, using first');
         }
 
         $masterId = $masters->current();
@@ -96,16 +96,13 @@ class EngineBlock_Doctrine_ConfigMapper
         foreach ($slaves as $slaveId) {
             $slaveConfig = $databaseConfig->get($slaveId);
             if (!$slaveConfig || !$slaveConfig instanceof Zend_Config) {
-                $this->logger->log('Slave specified that has no configuration. Skipping.', EngineBlock_Log::WARN);
+                $this->logger->warning('Slave specified that has no configuration. Skipping.');
                 continue;
             }
 
             $slaveParams = $this->getParamsFromConfig($slaveConfig);
             if ($slavesParams['driver'] !== $masterParams['driver']) {
-                $this->logger->log(
-                    'Slave specified with different driver from master. Unsupported. Skipping.',
-                    EngineBlock_Log::WARN
-                );
+                $this->logger->warning('Slave specified with different driver from master. Unsupported. Skipping.');
                 continue;
             }
 
@@ -113,7 +110,7 @@ class EngineBlock_Doctrine_ConfigMapper
         }
 
         if (empty($slavesParams)) {
-            $this->logger->log('No usable slaves configured, using master as slave', EngineBlock_Log::WARN);
+            $this->logger->warning('No usable slaves configured, using master as slave');
             $slavesParams[] = $masterParams;
         }
 

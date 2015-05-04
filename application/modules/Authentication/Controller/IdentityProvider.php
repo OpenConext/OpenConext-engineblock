@@ -61,36 +61,32 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $proxyServer->$service($idPEntityId);
         }
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
-            $application->getLogInstance()->log(
+            $application->getLogInstance()->notice(
                 "Unable to receive message",
-                EngineBlock_Log::NOTICE,
                 EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
             );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unable-to-receive-message');
         }
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
-            $application->getLogInstance()->log(
+            $application->getLogInstance()->notice(
                 "User is not a member",
-                EngineBlock_Log::NOTICE,
                 EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
             );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
-            $application->getLogInstance()->log(
+            $application->getLogInstance()->notice(
                 "Session lost",
-                EngineBlock_Log::NOTICE,
                 EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
             );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/session-lost');
         }
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
-            $application->getLogInstance()->log(
+            $application->getLogInstance()->notice(
                 "Unknown Issuer",
-                EngineBlock_Log::NOTICE,
                 EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
             );
             $application->handleExceptionWithFeedback($e,
@@ -99,9 +95,8 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             );
         }
         catch (EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException $e) {
-            $application->getLogInstance()->log(
+            $application->getLogInstance()->notice(
                 "No Identity Providers",
-                EngineBlock_Log::NOTICE,
                 EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
             );
             $application->handleExceptionWithFeedback($e,
@@ -109,9 +104,8 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             );
         }
         catch (EngineBlock_Corto_Exception_InvalidAcsLocation $e) {
-            $application->getLogInstance()->log(
+            $application->getLogInstance()->notice(
                 "Invalid ACS location",
-                EngineBlock_Log::NOTICE,
                 EngineBlock_Log_Message_AdditionalInfo::createFromException($e)
             );
             $application->handleExceptionWithFeedback($e,

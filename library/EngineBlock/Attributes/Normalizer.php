@@ -43,7 +43,7 @@ class EngineBlock_Attributes_Normalizer
             while (isset($this->_definitions[$attributeName]) && !is_array($this->_definitions[$attributeName])) {
                 // Circular dependency check (Topological sorting)
                 if (in_array($this->_definitions[$attributeName], $attributesSeen)) {
-                    $this->_logger->err(
+                    $this->_logger->error(
                         "Circular dependency detected in tree: " . implode(' => ', $attributesSeen) . ' => ' . $this->_definitions[$attributeName] .
                             " reverting back to original '$originalAttributeName'"
                     );
@@ -63,10 +63,9 @@ class EngineBlock_Attributes_Normalizer
 
             // Whoa, a resolved alias that doesn't have a definition?
             if (!isset($this->_definitions[$attributeName])) {
-                $this->_logger->err(
+                $this->_logger->error(
                     "Attribute Normalization: Attribute '$originalAttributeName' resolved to '$attributeName'".
-                        " but this does not have a definition? Skipping this attribute and it's values",
-                    Zend_Log::ERR
+                        " but this does not have a definition? Skipping this attribute and it's values"
                 );
             }
 

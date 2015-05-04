@@ -79,8 +79,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Log the request we received for troubleshooting
         $log = $this->_server->getSessionLog();
-        $log->attach($requestXml, 'Request')
-            ->info('Received request');
+        $log->info('Received request', array('saml_request' => $requestXml));
 
         if (!($sspRequest instanceof SAML2_AuthnRequest)) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(

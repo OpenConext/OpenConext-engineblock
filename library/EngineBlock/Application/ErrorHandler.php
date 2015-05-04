@@ -103,7 +103,7 @@ class EngineBlock_Application_ErrorHandler
 
         // dump PHP error to log
         $log = $this->_application->getLogInstance();
-        $log->attach($lastError, 'error');
+        $log->error($lastError['message'], array('error' => $lastError));
 
         $this->_application->reportError(
             $exception

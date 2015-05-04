@@ -154,9 +154,7 @@ class EngineBlock_Attributes_Metadata
         if (isset($this->definitions[$id][$type][$ietfLanguageTag])) {
             return $this->definitions[$id][$type][$ietfLanguageTag];
         }
-        $this->logger->log(
-            "Attribute lookup failure '$id' has no '$type' for language '$ietfLanguageTag'", EngineBlock_Log::NOTICE
-        );
+        $this->logger->notice("Attribute lookup failure '$id' has no '$type' for language '$ietfLanguageTag'");
         return '';
     }
 }

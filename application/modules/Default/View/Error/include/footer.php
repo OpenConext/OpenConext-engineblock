@@ -1,6 +1,6 @@
 <?php
 $log = EngineBlock_ApplicationSingleton::getInstance()->getLog();
-$log->log('Showing feedback page with message: ' . $layout->title, EngineBlock_Log::INFO);
+$log->info('Showing feedback page with message: ' . $layout->title);
 $log->getQueueWriter()->flush('feedback page shown');
 ?>
 
