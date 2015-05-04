@@ -370,7 +370,7 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     protected function _getSystemLog()
     {
@@ -378,7 +378,7 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     protected function _getSessionLog()
     {

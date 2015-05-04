@@ -3,14 +3,14 @@
 class EngineBlock_Doctrine_ConfigMapper
 {
     /**
-     * @var EngineBlock_Log
+     * @var Psr\Log\LoggerInterface
      */
     private $logger;
 
     /**
-     * @param EngineBlock_Log $log
+     * @param Psr\Log\LoggerInterface $log
      */
-    public function __construct(EngineBlock_Log $log)
+    public function __construct(Psr\Log\LoggerInterface $log)
     {
         $this->logger = $log;
     }
@@ -59,7 +59,6 @@ class EngineBlock_Doctrine_ConfigMapper
     /**
      * @param $databaseConfig
      * @return array
-     * @throws Zend_Log_Exception
      */
     private function mapMasterConfig(Zend_Config $databaseConfig)
     {
@@ -85,7 +84,6 @@ class EngineBlock_Doctrine_ConfigMapper
      * @param $databaseConfig
      * @param $masterParams
      * @return array
-     * @throws Zend_Log_Exception
      */
     private function mapSlavesConfig(Zend_Config $databaseConfig, $masterParams)
     {

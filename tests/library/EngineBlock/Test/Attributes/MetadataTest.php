@@ -17,7 +17,7 @@ class EngineBlock_Test_Attributes_MetadataTest extends PHPUnit_Framework_TestCas
                     )
                 )
             ),
-            new Zend_Log()
+            new Psr\Log\NullLogger()
         );
         $this->assertEquals($metadata->getName('a')       , 'The a name', 'Get Name');
         $this->assertEquals($metadata->getDescription('a'), 'The a desc', 'Get Name');

@@ -22,7 +22,8 @@
         "pimple/pimple": "~2.1",
         "simplesamlphp/saml2": "~0.6",
         "simplesamlphp/simplesamlphp": "~1.13",
-        "zendframework/zendframework1":"~1.12"
+        "zendframework/zendframework1":"~1.12",
+        "monolog/monolog": "~1.13"
     },
     "require-dev": {
         "phake/phake": "2.0.0-beta2",

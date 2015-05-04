@@ -41,7 +41,7 @@ class EngineBlock_ApplicationSingleton
     protected $_configuration = null;
 
     /**
-     * @var Zend_Log
+     * @var Psr\Log\LoggerInterface
      */
     protected $_log;
 
@@ -95,7 +95,7 @@ class EngineBlock_ApplicationSingleton
      * Get THE Log instance.
      *
      * @static
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     public static function getLog()
     {
@@ -403,7 +403,7 @@ class EngineBlock_ApplicationSingleton
     //////////// LOGGING
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     public function getLogInstance()
     {
@@ -411,10 +411,10 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @param Zend_Log $log
+     * @param Psr\Log\LoggerInterface $log
      * @return EngineBlock_ApplicationSingleton
      */
-    public function setLogInstance(Zend_Log $log)
+    public function setLogInstance(Psr\Log\LoggerInterface $log)
     {
         $this->_log = $log;
         return $this;

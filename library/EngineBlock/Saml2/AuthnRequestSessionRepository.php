@@ -6,7 +6,7 @@
 class EngineBlock_Saml2_AuthnRequestSessionRepository
 {
     /**
-     * @var EngineBlock_Log
+     * @var Psr\Log\LoggerInterface
      */
     private $sessionLog;
 
@@ -21,9 +21,9 @@ class EngineBlock_Saml2_AuthnRequestSessionRepository
     private $linkStorage;
 
     /**
-     * @param EngineBlock_Log $sessionLog
+     * @param Psr\Log\LoggerInterface $sessionLog
      */
-    public function __construct(EngineBlock_Log $sessionLog)
+    public function __construct(Psr\Log\LoggerInterface $sessionLog)
     {
         if (!isset($_SESSION['SAMLRequest'])) {
             $_SESSION['SAMLRequest'] = array();

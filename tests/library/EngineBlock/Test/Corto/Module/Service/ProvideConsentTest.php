@@ -121,7 +121,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
         
-        $dummyLog = new EngineBlock_Log();
+        $dummyLog = new Psr\Log\NullLogger();
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->store($ebRequest);

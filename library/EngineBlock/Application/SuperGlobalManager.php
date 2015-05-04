@@ -8,7 +8,7 @@ class EngineBlock_Application_SuperGlobalManager
     const FILE = '/tmp/eb-fixtures/superglobals.json';
 
     /**
-     * @var EngineBlock_Log
+     * @var Psr\Log\LoggerInterface
      */
     private $_logger;
 

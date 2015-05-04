@@ -1031,7 +1031,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     public function getSystemLog()
     {
@@ -1057,7 +1057,7 @@ class EngineBlock_Corto_ProxyServer
         return $this->_sessionLog;
     }
 
-    public function setSystemLog(EngineBlock_Log $log)
+    public function setSystemLog(Psr\Log\LoggerInterface $log)
     {
         $this->_systemLog = $log;
     }

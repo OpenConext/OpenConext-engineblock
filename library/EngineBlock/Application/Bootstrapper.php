@@ -127,7 +127,7 @@ class EngineBlock_Application_Bootstrapper
         }
 
         $this->_application->setLogInstance(
-            EngineBlock_Log::factory($this->_application->getConfiguration()->logs)
+            new Monolog\Logger('eb', array(new Monolog\Handler\SyslogHandler('EBLOG')))
         );
     }
 

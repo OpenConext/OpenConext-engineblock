@@ -2,7 +2,7 @@
 
 class EngineBlock_Attributes_Normalizer
 {
-    /** @var Zend_Log */
+    /** @var Psr\Log\LoggerInterface */
     protected $_logger;
 
     /** @var array */
@@ -155,7 +155,7 @@ class EngineBlock_Attributes_Normalizer
         return $this->_definitions;
     }
 
-    public function setLogger(Zend_Log $logger)
+    public function setLogger(Psr\Log\LoggerInterface $logger)
     {
         $this->_logger = $logger;
     }

@@ -6,7 +6,7 @@
 class EngineBlock_Attributes_Metadata
 {
     /**
-     * @var Zend_Log
+     * @var Psr\Log\LoggerInterface
      */
     private $logger;
 
@@ -17,9 +17,9 @@ class EngineBlock_Attributes_Metadata
 
     /**
      * @param $definitions
-     * @param Zend_Log $logger
+     * @param Psr\Log\LoggerInterface $logger
      */
-    public function __construct(array $definitions, Zend_Log $logger)
+    public function __construct(array $definitions, Psr\Log\LoggerInterface $logger)
     {
         $this->definitions = $definitions;
         $this->logger = $logger;
