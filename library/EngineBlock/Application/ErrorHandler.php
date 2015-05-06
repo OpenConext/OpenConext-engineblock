@@ -108,9 +108,6 @@ class EngineBlock_Application_ErrorHandler
         $this->_application->reportError(
             $exception
         );
-        // Call destruct manually, see also "When will __destruct not be called in PHP"
-        // http://stackoverflow.com/a/2385581/4512
-        $log->__destruct();
 
         if (ini_get('display_errors')) {
             echo "<br />" . PHP_EOL;
@@ -118,6 +115,6 @@ class EngineBlock_Application_ErrorHandler
         $message = 'A very serious error occurred, it has been logged and sent to the administrator.';
         $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
         $message .= '<br /><strong style="color: red"><pre>' . var_export($lastError, true) . '</pre></strong>';
-        die($message);
+        echo($message);
     }
 }
