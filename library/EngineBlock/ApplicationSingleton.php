@@ -133,7 +133,7 @@ class EngineBlock_ApplicationSingleton
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
             $logContext['additional_info'] = $additionalInfo->toArray();
         } else {
-            $severity = EngineBlock_Log::ERR;
+            $severity = EngineBlock_Exception::CODE_ERROR;
         }
 
         // add previous exceptions to log context
@@ -155,22 +155,7 @@ class EngineBlock_ApplicationSingleton
             $message .= ' | ' . $messageSuffix;
         }
 
-        // log exception
-        switch ($severity) {
-            case LOG_DEBUG:   $level = Psr\Log\LogLevel::DEBUG;     break;
-            case LOG_INFO:    $level = Psr\Log\LogLevel::INFO;      break;
-            case LOG_NOTICE:  $level = Psr\Log\LogLevel::NOTICE;    break;
-            case LOG_WARNING: $level = Psr\Log\LogLevel::WARNING;   break;
-            case LOG_ERR:     $level = Psr\Log\LogLevel::ERROR;     break;
-            case LOG_CRIT:    $level = Psr\Log\LogLevel::CRITICAL;  break;
-            case LOG_ALERT:   $level = Psr\Log\LogLevel::ALERT;     break;
-            case LOG_EMERG:   $level = Psr\Log\LogLevel::EMERGENCY; break;
-            default:
-                $log->warning(sprintf("Unknown exception severity '%d', logging on INFO level", $severity));
-                $level = Psr\Log\LogLevel::INFO;
-                break;
-        }
-        $log->log($level, $message, $logContext);
+        $log->log($severity, $message, $logContext);
 
         // Note that it it is possible that the event is not logged for various reasons
         // Getting the last event this way bypasses the queue which is possibly empty
