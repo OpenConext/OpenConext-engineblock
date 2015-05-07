@@ -1,0 +1,15 @@
+{
+  "name": "openconextthemes",
+  "version": "4.4.1",
+  "description": "Themes for openconext",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~1.11.3"
+  }
+}
