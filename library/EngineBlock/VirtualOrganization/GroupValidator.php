@@ -26,15 +26,15 @@ class EngineBlock_VirtualOrganization_GroupValidator
                 ->request('GET');
             if ($response->getStatus() === 200) {
                 $groupsOfUser = json_decode($response->getBody(), true);
-                $memberShips = array();
+                $memberships = array();
                 foreach ($groupsOfUser as $group) {
-                    $memberShips[] = $group['id'];
+                    $memberships[] = $group['id'];
                     if (in_array($group['id'], $groups)) {
                         return true;
                     }
                 }
                 EngineBlock_ApplicationSingleton::getLog()->info(
-                    "No valid group membership for $subjectId (" . implode(',', $groups) . "). Group memberships returned: " . implode(',', $memberShips)
+                    "No valid group membership for $subjectId (" . implode(',', $groups) . "). Group memberships returned: " . implode(',', $memberships)
                 );
             } else if (!$requireNew && $response->getStatus() === 400) {
                 EngineBlock_ApplicationSingleton::getLog()->info(
