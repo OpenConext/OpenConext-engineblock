@@ -36,7 +36,9 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
 
     public function execute()
     {
-        $this->_response->setIntendedNameId($this->_collabPersonId);
+        if (!$this->_response->getIntendedNameId()) {
+            $this->_response->setIntendedNameId($this->_collabPersonId);
+        }
 
         if ($this->_type === self::TYPE_IDP) {
             $entity          = $this->_identityProvider;
