@@ -33,4 +33,5 @@ node_modules
 .sass-cache
 *.css.map
 
-
+### Bower components
+bower_components
