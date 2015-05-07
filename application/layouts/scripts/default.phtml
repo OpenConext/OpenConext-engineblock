@@ -1,4 +1,17 @@
-<?php require __DIR__ . '/partials/lang.php'; ?><!DOCTYPE html>
+<?php
+// Determine the selected language, default to english
+$lang = 'en';
+if (isset($_GET['lang'])) {
+  $lang = $_GET['lang'];
+} elseif (isset($_POST['lang'])) {
+  $lang = $_POST['lang'];
+} elseif (isset($_COOKIE['lang'])) {
+  $lang = $_COOKIE['lang'];
+}
+if (!in_array($lang, array('nl','en'))) {
+  $lang = 'en';
+}
+?><!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="en-us"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8" lang="en-us"> <![endif]-->
 <!--[if IE 8]> <html class="no-js lt-ie10 lt-ie9" lang="en-us"> <![endif]-->
@@ -26,8 +39,10 @@
 <body class='index'>
 <div class='mod-header'>
   <h1 class='title'>
-    Log in to
-    <strong>Service Provider Name</strong>
+    <?php echo $this->layout()->subheader; ?>
+    <?php if (isset($this->layout()->greenHeader)): ?>
+      <strong><?php echo $this->layout()->greenHeader; ?></strong>
+    <?php endif; ?>
   </h1>
   <div class='meta'>
     <ul class='language'>
@@ -39,9 +54,14 @@
       </li>
     </ul>
     <ul class='links'>
+      <?php if (isset($this->layout()->helpLink)): ?>
+        <li>
+          <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank">help</a>
+        </li>
+      <?php endif; ?>
       <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
       <li>
-        <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">Help</a>
+        <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">help</a>
       </li>
       <?php endif; ?>
       <li>
@@ -51,10 +71,18 @@
   </div>
 </div>
 <div class='l-container'>
-<!--  @todo delete this when views are done -->
-<!--    <h1>--><?php //echo $this->layout()->subheader; ?><!--</h1>-->
     <?php echo $this->layout()->content; ?>
 </div>
+
+<div class="l-footer">
+  <nav class="mod-footer">
+    <ul>
+      <li><a href="#">SURFconext</a></li>
+      <li><a href="#">Help</a></li>
+    </ul>
+  </nav>
+</div>
+
 <script src="/javascripts/application.js" type="text/javascript"></script>
 </body>
 </html>

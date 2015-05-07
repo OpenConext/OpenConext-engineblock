@@ -39,15 +39,3 @@ $log->getQueueWriter()->flush('feedback page shown');
             <span class="btn-wrap-right">&nbsp;</span>
         </a>
     </div>
-
-   </div>
-</div>
-
-   <?php if (isset($exception)) { ?>
-    <strong><?= $exception->getMessage();?></strong>
-    <pre>
-    <?php var_dump($exception); ?>
-</pre>
-
-    <?php if (isset($exception->xdebug_message)) { echo $exception->xdebug_message; } ?>
-<?php } ?>

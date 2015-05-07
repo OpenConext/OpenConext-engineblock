@@ -1,4 +1,3 @@
-
 <?php
 
 class Logout_Controller_Index extends EngineBlock_Controller_Abstract
