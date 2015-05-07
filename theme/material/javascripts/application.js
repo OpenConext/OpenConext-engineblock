@@ -68,6 +68,12 @@ OpenConext.Discover = function() {
         filterList($(this).val());
     });
 
+    var searchValue = $('input[type=search]').val();
+    console.log(searchValue);
+    if (searchValue !== '') {
+        filterList(searchValue);
+    }
+
     $('.results a').on('click', function selectIdp(){
        var selectedIdp = $(this).attr('data-idp');
         $('#form-idp').val(selectedIdp);
