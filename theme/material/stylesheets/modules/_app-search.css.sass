@@ -21,7 +21,7 @@
     line-height: 40px
     font-size: 20px
     border-bottom: 1px solid $border
-    background: #fff image_url("icons/magnifying-glass-1.svg") no-repeat 1.25rem center
+    background: #fff inline_image("icons/magnifying-glass-1.svg") no-repeat 1.25rem center
       size: 1rem auto
 
     &:focus
@@ -29,6 +29,12 @@
 
       & + .results
         display: block
+
+  h2
+    @extend %h-uppercase
+    background: rgba($border,.5)
+    padding: .5rem 1rem
+    color: $medium-grey
 
   a
     display: flex
@@ -38,7 +44,8 @@
 
     +hocus
       outline: none
-      background: lighten($blue, 40)
+      background: $blue
+      color: #fff
 
     &:focus
 
@@ -53,3 +60,8 @@
       margin-left: auto
       display: none
 
+  .hidden
+    display: none
+
+  .active
+    display: flex

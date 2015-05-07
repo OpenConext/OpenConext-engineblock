@@ -75,10 +75,11 @@ var Discover = function () {
             }
         },
 
+// help moved to template
         linkHelp: function () {
             library.initLinks();
         },
-
+// help moved to template
         showHelp: function () {
             library.showHelp();
         }
@@ -101,7 +102,7 @@ var Discover = function () {
             }
             return null;
         },
-
+// help moved to template
         initLinks: function () {
             $("#help_nav a").on("click", function () {
                 library.showHelp();
@@ -136,7 +137,7 @@ var Discover = function () {
             });
         },
 
-
+// help moved to template
         showHelp: function () {
             var speed = 'fast';
             if ($('#help:visible').length > 0 && $.trim($('#help:visible').html()) !== "") {
@@ -155,6 +156,7 @@ var Discover = function () {
             });
         },
 
+// help moved to template
         prepareFaq: function () {
             //Attach click handler to open and close help items
             $("#faq li").click(function (e) {

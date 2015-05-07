@@ -16,16 +16,16 @@ module.exports = function(grunt) {
         symlink: {
             classic: {
                 files: [
-                    { expand: false, overwrite: false, src: ['../www/authentication/css'], dest: '../www/profile/css' },
-                    { expand: false, overwrite: false, src: ['../www/authentication/javascript'], dest: '../www/profile/javascript' },
-                    { expand: false, overwrite: false, src: ['../www/authentication/media'], dest: '../www/profile/media' }
+                    { expand: false, overwrite: true, src: ['../www/authentication/css'], dest: '../www/profile/css' },
+                    { expand: false, overwrite: true, src: ['../www/authentication/javascript'], dest: '../www/profile/javascript' },
+                    { expand: false, overwrite: true, src: ['../www/authentication/media'], dest: '../www/profile/media' }
                 ]
             },
             material: {
                 files: [
-                    { expand: false, overwrite: false, src: ['../www/authentication/stylesheets'], dest: '../www/profile/stylesheets' },
-                    { expand: false, overwrite: false, src: ['../www/authentication/javascripts'], dest: '../www/profile/javascripts' },
-                    { expand: false, overwrite: false, src: ['../www/authentication/images'], dest: '../www/profile/images' }
+                    { expand: false, overwrite: true, src: ['../www/authentication/stylesheets'], dest: '../www/profile/stylesheets' },
+                    { expand: false, overwrite: true, src: ['../www/authentication/javascripts'], dest: '../www/profile/javascripts' },
+                    { expand: false, overwrite: true, src: ['../www/authentication/images'], dest: '../www/profile/images' }
                 ]
             }
         },
@@ -36,6 +36,7 @@ module.exports = function(grunt) {
             material: {
                 files: {
                     '../www/authentication/javascripts/application.js': [
+                        'bower_components/jquery/dist/jquery.min.js',
                         '<%= config.theme %>/javascripts/application.js'
                     ]
                 }
@@ -50,6 +51,7 @@ module.exports = function(grunt) {
                     sassDir: 'material/stylesheets',
                     cssDir: '../www/authentication/stylesheets',
                     imagesDir: 'material/images',
+                    outputStyle: 'compressed',
                     raw: 'preferred_syntax = :sass\n'
                 }
             }

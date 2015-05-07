@@ -11,7 +11,7 @@ $description = !empty($_SESSION['feedback_custom']['description'][$this->languag
     $this->t('error_generic_desc');
 
 $layout = $this->layout();
-$layout->setLayout('1-column-blue-grey-narrow');
+//$layout->setLayout('1-column-blue-grey-narrow');
 
 // Set Layout properties
 $layout->title = $layout->title. ' - ' . $title;
@@ -20,9 +20,12 @@ $layout->subheader = $title;
 $layout->footerText = $this->t('footer');
 
 ?>
+<div class="mod-content">
+<h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
 <div class="error-wrapper">
     <div class="error-icon"></div>
     <div class="error-text">
         <?= $description;
 
-        require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');
+        require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');?>
+</div>
