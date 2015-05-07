@@ -51,7 +51,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $requireAdditionalLogging = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
             array_merge($spMetadataChain, array($identityProvider))
         );
-        if ($this->_server->getConfig('debug', false) || $requireAdditionalLogging) {
+        if ($requireAdditionalLogging) {
             EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
         }
 

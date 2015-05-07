@@ -119,16 +119,23 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapLogging()
     {
-        if (!isset($this->_application->getConfiguration()->logs)) {
+        $configuration = $this->_application->getConfiguration();
+
+        if (!isset($configuration->logger)) {
             throw new EngineBlock_Exception(
-                "No logs defined! Logging is required, please set logs. in your application.ini",
+                "No logger configuration defined! Logging is required, please configure the logger under the logger " .
+                "key in your application.ini. See EngineBlock_Log_MonologLoggerFactory's docblock for more details.",
                 EngineBlock_Exception::CODE_ALERT
             );
         }
 
-        $this->_application->setLogInstance(
-            new Monolog\Logger('eb', array(new Monolog\Handler\SyslogHandler('EBLOG')))
-        );
+        $loggerConfiguration = $configuration->logger->toArray();
+
+        /** @var EngineBlock_Log_LoggerFactory $loggerFactory */
+        $loggerFactory = $loggerConfiguration['factory'];
+        $logger = $loggerFactory::factory($loggerConfiguration['conf'], $configuration->debug);
+
+        $this->_application->setLogInstance($logger);
     }
 
     protected function _bootstrapHttpCommunication()
