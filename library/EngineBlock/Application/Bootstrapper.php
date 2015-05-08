@@ -47,6 +47,7 @@ class EngineBlock_Application_Bootstrapper
 
         $this->_bootstrapSuperGlobalOverrides();
         $this->_bootstrapHttpCommunication();
+        $this->_bootstrapSaml2();
 
         $this->_bootstrapLayout();
         $this->_bootstrapTranslations();
@@ -155,6 +156,12 @@ class EngineBlock_Application_Bootstrapper
         // workaround, P3P is needed to support iframes like iframe gadgets in portals
         $response->setHeader('P3P', self::P3P_HEADER);
         $this->_application->setHttpResponse($response);
+    }
+
+    private function _bootstrapSaml2()
+    {
+        $container = new EngineBlock_Saml2_Container($this->_application->getLogInstance());
+        SAML2_Compat_ContainerSingleton::setContainer($container);
     }
 
     protected function _bootstrapPhpSettings()
