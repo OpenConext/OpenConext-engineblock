@@ -43,7 +43,14 @@ final class EngineBlock_Log_MonologLoggerFactory implements EngineBlock_Log_Logg
             $handlerNames
         );
 
-        return new Logger($config['name'], $handlers);
+        $processors = array_map(
+            function (array $config) {
+                return $config['factory']::factory($config['conf']);
+            },
+            $config['processor']
+        );
+
+        return new Logger($config['name'], $handlers, $processors);
     }
 
     /**
@@ -80,40 +87,55 @@ final class EngineBlock_Log_MonologLoggerFactory implements EngineBlock_Log_Logg
         }
 
         foreach ($config['handler'] as $name => $handlerConfig) {
-            $config['handler'][$name] = self::validateAndNormaliseHandlerConfig($name, $handlerConfig);
+            $config['handler'][$name] = self::validateAndNormaliseSubTypeConfig('handler', $name, $handlerConfig);
+        }
+
+        if (!isset($config['processor'])) {
+            $config['processor'] = array();
+        } elseif (!is_array($config['processor'])) {
+            throw InvalidConfigurationException::invalidType(
+                'processor',
+                $config['processor'],
+                'array of processor configurations'
+            );
+        }
+
+        foreach ($config['processor'] as $name => $processorConfig) {
+            $config['processor'][$name] = self::validateAndNormaliseSubTypeConfig('processor', $name, $processorConfig);
         }
 
         return $config;
     }
 
     /**
+     * @param string $typeKey
      * @param string $name
-     * @param mixed  $handlerConfig
+     * @param mixed  $config
      * @return array
-     * @throws InvalidConfigurationException
+     * @throws EngineBlock_Log_InvalidConfigurationException
      */
-    private static function validateAndNormaliseHandlerConfig($name, $handlerConfig)
+    private static function validateAndNormaliseSubTypeConfig($typeKey, $name, $config)
     {
-        if (!is_array($handlerConfig)) {
-            throw InvalidConfigurationException::invalidType("handler.$name", $handlerConfig, 'array');
+        if (!is_array($config)) {
+            throw InvalidConfigurationException::invalidType("$typeKey.$name", $config, 'array');
         }
 
-        if (!isset($handlerConfig['factory'])) {
-            throw InvalidConfigurationException::missing("handler.$name.factory", 'string');
-        } elseif (!is_string($handlerConfig['factory'])) {
+        if (!isset($config['factory'])) {
+            throw InvalidConfigurationException::missing("$typeKey.$name.factory", 'string');
+        } elseif (!is_string($config['factory'])) {
             throw InvalidConfigurationException::invalidType(
-                "handler.$name.factory",
-                $handlerConfig['factory'],
+                "$typeKey.$name.factory",
+                $config['factory'],
                 'string'
             );
         }
 
-        if (!isset($handlerConfig['conf'])) {
-            $handlerConfig = array();
-        } elseif (!is_array($handlerConfig['conf'])) {
-            throw InvalidConfigurationException::invalidType("handler.$name.conf", $handlerConfig['factory'], 'array');
+        if (!isset($config['conf'])) {
+            $config['conf'] = array();
+        } elseif (!is_array($config['conf'])) {
+            throw InvalidConfigurationException::invalidType("$typeKey.$name.conf", $config['factory'], 'array');
         }
 
-        return $handlerConfig;
+        return $config;
     }
 }
