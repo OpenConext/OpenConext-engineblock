@@ -78,6 +78,8 @@ class Api_Controller_Connections extends EngineBlock_Controller_Abstract
         );
         $result = $doctrineRepository->synchronize($roles);
 
+        //
+
         echo json_encode($result);
     }
 }
