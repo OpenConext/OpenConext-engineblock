@@ -103,6 +103,25 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
+     * Flushes any currently buffered log messages and causes any subsequent messages to be directly written to their
+     * destination.
+     *
+     * @param string $reason The message that will be logged after the currently buffered messages have been flushed.
+     */
+    public function flushLog($reason)
+    {
+        $activationStrategy = EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory::getManufacturedStrategy();
+        $logger = $this->getLog();
+
+        if ($activationStrategy) {
+            $activationStrategy->activate();
+            $logger->notice($reason);
+        } else {
+            $logger->warning(sprintf("Unable to flush the log buffer (given reason to flush: '%s')", $reason));
+        }
+    }
+
+    /**
      *
      */
     public function bootstrap()
@@ -165,7 +184,7 @@ class EngineBlock_ApplicationSingleton
         $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
 
         // flush all messages in queue, something went wrong!
-        $log->getQueueWriter()->flush('error caught');
+        $this->flushLog('An error was caught');
 
         return true;
     }

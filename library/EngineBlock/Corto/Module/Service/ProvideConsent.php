@@ -52,7 +52,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             array_merge($spMetadataChain, array($identityProvider))
         );
         if ($requireAdditionalLogging) {
-            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
+            EngineBlock_ApplicationSingleton::getInstance()->flushLog(
+                'Activated additional logging for one or more SPs in the SP requester chain, or the IdP'
+            );
         }
 
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider))   {

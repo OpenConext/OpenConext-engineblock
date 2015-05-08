@@ -10,15 +10,39 @@ final class EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelAct
     ActivationStrategyFactory
 {
     /**
+     * @var ManualOrDecoratedActivationStrategy|null
+     */
+    private static $strategy;
+
+    /**
      * @param array $config
      * @return ManualOrDecoratedActivationStrategy
      * @throws InvalidConfigurationException
      */
     public static function factory(array $config)
     {
+        if (isset(self::$strategy)) {
+            throw new RuntimeException(
+                "Cannot manufacture a second instance of this strategy, as the current instance is required for " .
+                "explicit flushing of the log message buffer"
+            );
+        }
+
         $config = self::validateAndNormaliseConfig($config);
 
-        return new ManualOrDecoratedActivationStrategy(new ErrorLevelActivationStrategy($config['action_level']));
+        self::$strategy = new ManualOrDecoratedActivationStrategy(
+            new ErrorLevelActivationStrategy($config['action_level'])
+        );
+
+        return self::$strategy;
+    }
+
+    /**
+     * @return ManualOrDecoratedActivationStrategy|null
+     */
+    public static function getManufacturedStrategy()
+    {
+        return self::$strategy;
     }
 
     /**
