@@ -26,7 +26,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
             $application->getLogInstance()->notice(
                 "Unknown remote entity: " . $e->getEntityId(),
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-service-provider?entity-id=' . urlencode($e->getEntityId()));
@@ -34,7 +34,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         catch(Janus_Client_CacheProxy_Exception $e) {
             $application->getLogInstance()->notice(
                 "Unknown Service Provider?",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $spEntityId = $application->getHttpRequest()->getQueryParameter('sp-entity-id');
             $application->handleExceptionWithFeedback($e,
@@ -67,7 +67,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         catch(EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException $e) {
             $application->getLogInstance()->notice(
                 "Unknown Service Provider?",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -78,7 +78,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             $spEntityId = $application->getHttpRequest()->getQueryParameter('sp-entity-id');
             $application->getLogInstance()->notice(
                 "Unknown Service Provider '$spEntityId'?",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -98,7 +98,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
             $application->getLogInstance()->notice(
                 "VO membership required",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -108,7 +108,7 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
             $application->getLogInstance()->notice(
                 "Custom attribute manipulator exception",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $_SESSION['feedback_custom'] = $e->getFeedback();
             $application->handleExceptionWithFeedback(

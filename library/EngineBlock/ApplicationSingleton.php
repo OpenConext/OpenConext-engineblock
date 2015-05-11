@@ -155,9 +155,6 @@ class EngineBlock_ApplicationSingleton
 
         if ($exception instanceof EngineBlock_Exception) {
             $severity = $exception->getSeverity();
-
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
-            $logContext['additional_info'] = $additionalInfo->toArray();
         } else {
             $severity = EngineBlock_Exception::CODE_ERROR;
         }

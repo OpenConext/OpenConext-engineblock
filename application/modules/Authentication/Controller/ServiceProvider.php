@@ -15,7 +15,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
             $application->getLogInstance()->notice(
                 "VO membership required",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -25,7 +25,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->notice(
                 "Session Lost",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -35,7 +35,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->getLogInstance()->notice(
                 "Unable to receive message",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -45,7 +45,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Exception_UnknownIssuer $e) {
             $application->getLogInstance()->notice(
                 "Unknown Issuer",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unknown-issuer?entity-id=' . urlencode($e->getEntityId()) .
@@ -55,7 +55,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Exception_MissingRequiredFields $e) {
             $application->getLogInstance()->notice(
                 "Missing Required Fields",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -72,7 +72,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Module_Bindings_UnsupportedBindingException $e) {
             $application->getLogInstance()->notice(
                 "Unsupported Binding",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -82,7 +82,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             // Add extra feedback info
             $application->getLogInstance()->notice(
                 "Received Error Status Code",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -93,7 +93,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Module_Bindings_SignatureVerificationException $e) {
             $application->getLogInstance()->warning(
                 "Unable to verify signature, cert wrong?",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
@@ -103,7 +103,7 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Module_Bindings_VerificationException $e) {
             $application->getLogInstance()->notice(
                 "Unable to verify message",
-                array('additional_info' => EngineBlock_Log_Message_AdditionalInfo::createFromException($e)->toArray())
+                array('exception' => $e)
             );
             $application->handleExceptionWithFeedback(
                 $e,
