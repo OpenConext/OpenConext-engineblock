@@ -12,9 +12,9 @@ class EngineBlock_VirtualOrganization_GroupValidator
     protected function _validateGroupMembership($subjectId, array $groups, $requireNew = false)
     {
         //here we make a call to API to determine if the VO membership is valid
-        $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->api->vovalidate;
+        $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->voot;
 
-        $url = $this->_getVoValidationUrl($conf->baseUrl, $subjectId);
+        $url = $this->_getVoValidationUrl($conf->serviceUrl, $subjectId);
 
         $client = new Zend_Http_Client($url);
         $client->setConfig(array('timeout' => 15));
@@ -25,19 +25,17 @@ class EngineBlock_VirtualOrganization_GroupValidator
                 ->setHeaders('Authorization', 'Bearer ' . $accessToken)
                 ->request('GET');
             if ($response->getStatus() === 200) {
-                $result = json_decode($response->getBody(), true);
-                if (isset($result['entry'])) {
-                    $memberShips = array();
-                    foreach ($result['entry'] as $group) {
-                        $memberShips[] = $group['id'];
-                        if (in_array($group['id'], $groups)) {
-                            return true;
-                        }
+                $groupsOfUser = json_decode($response->getBody(), true);
+                $memberships = array();
+                foreach ($groupsOfUser as $group) {
+                    $memberships[] = $group['id'];
+                    if (in_array($group['id'], $groups)) {
+                        return true;
                     }
-                    EngineBlock_ApplicationSingleton::getLog()->info(
-                        "No valid group membership for $subjectId (" . implode(',', $groups) . "). Group memberships returned: " . implode(',', $memberShips)
-                    );
                 }
+                EngineBlock_ApplicationSingleton::getLog()->info(
+                    "No valid group membership for $subjectId (" . implode(',', $groups) . "). Group memberships returned: " . implode(',', $memberships)
+                );
             } else if (!$requireNew && $response->getStatus() === 400) {
                 EngineBlock_ApplicationSingleton::getLog()->info(
                     "Possible expired accessToken $accessToken. Trying to obtain new accessToken"
@@ -47,10 +45,10 @@ class EngineBlock_VirtualOrganization_GroupValidator
             else {
                 EngineBlock_ApplicationSingleton::getLog()->attach(
                     $response->getHeadersAsString() . PHP_EOL . $response->getBody(),
-                    'API Response'
+                    'VOOT Response'
                 );
                 throw new EngineBlock_Exception(
-                    'Non-200 from API trying to get the group memberships'
+                    'Non-200 from VOOT trying to get the group memberships'
                 );
             }
             return false;
@@ -65,9 +63,9 @@ class EngineBlock_VirtualOrganization_GroupValidator
 
     protected function _getVoValidationUrl($baseUrl, $subjectId)
     {
-        // For example https://api.dev.surfconext.nl/v1/social/rest/groups/urn
+        // For example https://voot.dev.surfconext.nl/internal/groups/urn:collab:person:surfnet.nl:john.doe
         $baseUrl = $this->_ensureTrailingSlash($baseUrl);
-        $baseUrl .= 'v1/social/rest/groups/';
+        $baseUrl .= 'internal/groups/';
         $baseUrl .= $subjectId;
         return $baseUrl;
     }
@@ -82,14 +80,13 @@ class EngineBlock_VirtualOrganization_GroupValidator
                 return $accessToken;
             }
         }
-        // for example https://api.dev.surfconext.nl/v1/oauth2/token
-        $baseUrl = $this->_ensureTrailingSlash($conf->baseUrl) . 'v1/oauth2/token';
-        $client = new Zend_Http_Client($baseUrl);
+        $client = new Zend_Http_Client($conf->accessTokenUri);
         try {
             $response = $client->setConfig(array('timeout' => 15))
                 ->setHeaders(Zend_Http_Client::CONTENT_TYPE, Zend_Http_Client::ENC_URLENCODED)
-                ->setAuth($conf->key, $conf->secret)
+                ->setAuth($conf->clientId, $conf->clientSecret)
                 ->setParameterPost('grant_type', 'client_credentials')
+                ->setParameterPost('scope', $conf->scope)
                 ->request(Zend_Http_Client::POST);
             $result = json_decode($response->getBody(), true);
 
@@ -101,15 +98,15 @@ class EngineBlock_VirtualOrganization_GroupValidator
                 return $accessToken;
             }
             throw new EngineBlock_VirtualOrganization_AccessTokenNotGrantedException(
-                'AccessToken not granted for EB as SP. Check SR and the Group Provider endpoint log.'
+                'AccessToken not granted for EB as SP. Check SR and the Authorization Server endpoint log.'
             );
         } catch (Exception $exception) {
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
                 ->setUserId($subjectId)
                 ->setDetails($exception->getTraceAsString());
-            EngineBlock_ApplicationSingleton::getLog()->err("Error in connecting to API(s) for access token grant" . $exception->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->err("Error in connecting to Authorization Server for access token grant" . $exception->getMessage(), $additionalInfo);
             throw new EngineBlock_VirtualOrganization_AccessTokenNotGrantedException(
-                'AccessToken not granted for EB as SP. Check SR and the Group Provider endpoint log',
+                'AccessToken not granted for EB as SP. Check SR and the Authorization Server endpoint log',
                 EngineBlock_Exception::CODE_ALERT,
                 $exception
             );
