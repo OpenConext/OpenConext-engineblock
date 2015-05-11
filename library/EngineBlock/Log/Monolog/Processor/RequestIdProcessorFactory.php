@@ -7,6 +7,6 @@ final class EngineBlock_Log_Monolog_Processor_RequestIdProcessorFactory implemen
 {
     public static function factory(array $config)
     {
-        return RequestIdProcessor::fromUniqid();
+        return new EngineBlock_Log_Monolog_Processor_RequestIdProcessor();
     }
 }

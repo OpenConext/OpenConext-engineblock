@@ -137,6 +137,7 @@ class EngineBlock_Application_Bootstrapper
         $logger = $loggerFactory::factory($loggerConfiguration['conf'], $configuration->debug);
 
         $this->_application->setLogInstance($logger);
+        $this->_application->setLogRequestId(uniqid());
     }
 
     protected function _bootstrapHttpCommunication()

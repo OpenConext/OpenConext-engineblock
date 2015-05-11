@@ -46,6 +46,13 @@ class EngineBlock_ApplicationSingleton
     protected $_log;
 
     /**
+     * The ID that allows one to track all log messages that belong together.
+     *
+     * @var string|null
+     */
+    protected $_logRequestId;
+
+    /**
      * @var Zend_Translate
      */
     protected $_translator;
@@ -176,12 +183,8 @@ class EngineBlock_ApplicationSingleton
 
         $log->log($severity, $message, $logContext);
 
-        // Note that it it is possible that the event is not logged for various reasons
-        // Getting the last event this way bypasses the queue which is possibly empty
-        $lastEvent = $log->getLastEvent();
-
         // Store some valuable debug info in session so it can be displayed on feedback pages
-        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
+        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo();
 
         // flush all messages in queue, something went wrong!
         $this->flushLog('An error was caught');
@@ -190,14 +193,13 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @param array $logEvent
      * @return array
      */
-    private function collectFeedbackInfo(array $logEvent)
+    private function collectFeedbackInfo()
     {
         $feedbackInfo = array();
-        $feedbackInfo['timestamp'] = $logEvent['timestamp'];
-        $feedbackInfo['requestId'] = $logEvent['requestid'];
+        $feedbackInfo['timestamp'] = date('c');
+        $feedbackInfo['requestId'] = $this->getLogRequestId() ?: 'N/A';
         $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
 
@@ -437,6 +439,30 @@ class EngineBlock_ApplicationSingleton
     public function setLogInstance(Psr\Log\LoggerInterface $log)
     {
         $this->_log = $log;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLogRequestId()
+    {
+        return $this->_logRequestId;
+    }
+
+    /**
+     * @param string $id
+     * @return EngineBlock_ApplicationSingleton
+     */
+    public function setLogRequestId($id)
+    {
+        if (!is_string($id)) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid log request ID specified: expected string, but got '%s'", gettype($id))
+            );
+        }
+
+        $this->_logRequestId = $id;
         return $this;
     }
 
