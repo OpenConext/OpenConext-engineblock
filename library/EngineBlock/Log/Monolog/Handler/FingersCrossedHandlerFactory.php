@@ -4,6 +4,7 @@ use EngineBlock_Log_Monolog_Handler_HandlerFactory as HandlerFactory;
 use EngineBlock_Log_InvalidConfigurationException as InvalidConfigurationException;
 use EngineBlock_Log_LogLevel as LogLevel;
 use Monolog\Handler\FingersCrossedHandler;
+use Monolog\Logger;
 
 /**
  * Creates a FingersCrossedHandler.
@@ -38,7 +39,7 @@ final class EngineBlock_Log_Monolog_Handler_FingersCrossedHandlerFactory impleme
             0,
             true,
             true,
-            $config['passthru_level']
+            Logger::toMonologLevel($config['passthru_level'])
         );
     }
 
