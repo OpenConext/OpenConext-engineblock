@@ -22,10 +22,10 @@ class EngineBlock_Log_Message_AdditionalInfo
             $info->_details = $e->description . PHP_EOL;
         }
 
-        $traces = array($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+        $traces = array(get_class($e) . ': ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
         $prev = $e;
         while ($prev = $prev->getPrevious()) {
-            $traces[] = $prev->getMessage() . PHP_EOL . $prev->getTraceAsString();
+            $traces[] = get_class($prev) . ': ' . $prev->getMessage() . PHP_EOL . $prev->getTraceAsString();
         }
         $info->_details .= implode(PHP_EOL . PHP_EOL, $traces);
 

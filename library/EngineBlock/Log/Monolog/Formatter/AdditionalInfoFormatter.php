@@ -38,10 +38,11 @@ final class EngineBlock_Log_Monolog_Formatter_AdditionalInfoFormatter implements
      */
     private function addAdditionalInfo(array $record)
     {
-        $hasEngineBlockException = isset($record['context']['exception']) && $record['context']['exception'] instanceof EngineBlock_Exception;
+        $hasEngineBlockException =
+            isset($record['context']['exception']) && $record['context']['exception'] instanceof EngineBlock_Exception;
 
-        if ($hasEngineBlockException && !isset($record['context']['additional_info'])) {
-            $record['context']['additional_info'] =
+        if ($hasEngineBlockException) {
+            $record['context']['exception'] =
                 EngineBlock_Log_Message_AdditionalInfo::createFromException($record['context']['exception'])->toArray();
         }
 

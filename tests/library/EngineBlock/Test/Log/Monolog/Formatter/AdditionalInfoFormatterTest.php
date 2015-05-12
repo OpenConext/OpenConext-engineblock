@@ -7,16 +7,15 @@ final class EngineBlock_Test_Log_Monolog_Formatter_AdditionalInfoFormatterTest e
 {
     public function testItAddsAdditionalInfoWhenAnExceptionIsPresent()
     {
-        $exception = new EngineBlock_Exception('message');
+        $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_EMERGENCY);
 
         /** @var MockObject|FormatterInterface $decoratedFormatter */
         $decoratedFormatter = $this->getMockBuilder('Monolog\Formatter\FormatterInterface')->getMock();
         $decoratedFormatter->expects($this->once())
             ->method('format')
-            ->with($this->callback(function ($record) use ($exception) {
-                return $record['context']['exception'] === $exception
-                    && isset($record['context']['additional_info'])
-                    && is_array($record['context']['additional_info']);
+            ->with($this->callback(function ($record) {
+                return is_array($record['context']['exception'])
+                    && $record['context']['exception']['severity'] === 'EMERG';
             }))
             ->willReturnArgument(0);
 
@@ -32,10 +31,9 @@ final class EngineBlock_Test_Log_Monolog_Formatter_AdditionalInfoFormatterTest e
         $decoratedFormatter = $this->getMockBuilder('Monolog\Formatter\FormatterInterface')->getMock();
         $decoratedFormatter->expects($this->once())
             ->method('formatBatch')
-            ->with($this->callback(function ($records) use ($exception) {
-                return $records[0]['context']['exception'] === $exception
-                    && isset($records[0]['context']['additional_info'])
-                    && is_array($records[0]['context']['additional_info']);
+            ->with($this->callback(function ($records) {
+                return is_array($records[0]['context']['exception'])
+                    && $records[0]['context']['exception']['severity'] === 'ERROR';
             }))
             ->willReturnArgument(0);
 
@@ -52,30 +50,11 @@ final class EngineBlock_Test_Log_Monolog_Formatter_AdditionalInfoFormatterTest e
         $decoratedFormatter->expects($this->once())
             ->method('format')
             ->with($this->callback(function ($record) use ($exception) {
-                return $record['context']['exception'] === $exception
-                    && !isset($record['context']['additional_info']);
+                return $record['context']['exception'] === $exception;
             }))
             ->willReturnArgument(0);
 
         $formatter = new EngineBlock_Log_Monolog_Formatter_AdditionalInfoFormatter($decoratedFormatter);
         $formatter->format(array('context' => array('exception' => $exception)));
-    }
-
-    public function testItDoesntOverwriteTheAdditionalInfoWhenAlreadyPresent()
-    {
-        $exception = new Exception('message');
-
-        /** @var MockObject|FormatterInterface $decoratedFormatter */
-        $decoratedFormatter = $this->getMockBuilder('Monolog\Formatter\FormatterInterface')->getMock();
-        $decoratedFormatter->expects($this->once())
-            ->method('format')
-            ->with($this->callback(function ($record) use ($exception) {
-                return $record['context']['exception'] === $exception
-                    && $record['context']['additional_info'] === 3;
-            }))
-            ->willReturnArgument(0);
-
-        $formatter = new EngineBlock_Log_Monolog_Formatter_AdditionalInfoFormatter($decoratedFormatter);
-        $formatter->format(array('context' => array('exception' => $exception, 'additional_info' => 3)));
     }
 }
