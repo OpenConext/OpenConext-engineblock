@@ -123,8 +123,10 @@ class EngineBlock_ApplicationSingleton
         if ($activationStrategy) {
             $activationStrategy->activate();
             $logger->notice($reason);
+        } elseif ($this->getConfiguration()->debug) {
+            $logger->notice(sprintf("No log buffer to flush. Reason given for flushing: '%s'.", $reason));
         } else {
-            $logger->warning(sprintf("Unable to flush the log buffer (given reason to flush: '%s')", $reason));
+            $logger->warning(sprintf("Unable to flush the log buffer. Reason given for flushing: '%s'.", $reason));
         }
     }
 
