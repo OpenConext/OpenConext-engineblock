@@ -25,9 +25,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         );
 
         if ($isAdditionalLoggingRequired) {
-            EngineBlock_ApplicationSingleton::getInstance()->flushLog(
-                'Activated additional logging for one or more SPs in the SP requester chain'
-            );
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $application->flushLog('Activated additional logging for one or more SPs in the SP requester chain');
+
+            $logger = $application->getLogInstance();
+            $logger->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
 
         // validate custom acs-location (only for unsolicited, normal logins

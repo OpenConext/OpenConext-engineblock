@@ -41,7 +41,11 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($selectedIdp);
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
-            EngineBlock_ApplicationSingleton::getInstance()->flushLog('Activated additional logging for the SP or IdP');
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $application->flushLog('Activated additional logging for the SP or IdP');
+
+            $log = $application->getLogInstance();
+            $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
 
         $this->_server->sendAuthenticationRequest($request, $selectedIdp);
