@@ -101,7 +101,7 @@ class EngineBlock_Doctrine_ConfigMapper
             }
 
             $slaveParams = $this->getParamsFromConfig($slaveConfig);
-            if ($slavesParams['driver'] !== $masterParams['driver']) {
+            if ($slaveParams['driver'] !== $masterParams['driver']) {
                 $this->logger->warning('Slave specified with different driver from master. Unsupported. Skipping.');
                 continue;
             }
