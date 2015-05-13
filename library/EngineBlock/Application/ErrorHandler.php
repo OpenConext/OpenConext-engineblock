@@ -92,7 +92,7 @@ class EngineBlock_Application_ErrorHandler
         $lastError = error_get_last();
         if ($lastError['type'] !== E_ERROR && $lastError['type'] !== E_USER_ERROR) {
             // Not a fatal error, probably a normal shutdown
-            return false;
+            return;
         }
 
         $exception = new EngineBlock_Exception('PHP Fatal error', EngineBlock_Exception::CODE_ERROR);
