@@ -75,11 +75,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Receive the request.
         $sspRequest = $sspBinding->receive();
-        $requestXml = $sspRequest->toUnsignedXML()->ownerDocument->saveXML();
-
-        // Log the request we received for troubleshooting
-        $log = $this->_server->getSessionLog();
-        $log->info('Received request', array('saml_request' => $requestXml));
 
         if (!($sspRequest instanceof SAML2_AuthnRequest)) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(

@@ -320,11 +320,17 @@ class EngineBlock_Corto_ProxyServer
         }
 
         $this->startSession();
-        $this->getSessionLog()->info("Started request with parameters: ". var_export(func_get_args(), true));
+        $logger = $this->getSessionLog();
 
-        $this->getSessionLog()->info("Calling service '$serviceName'");
+        if (empty($remoteIdpMd5)) {
+            $logger->info("Calling service '$serviceName'");
+        } else {
+            $logger->info("Calling service '$serviceName' for specific remote IdP '$remoteIdpMd5'");
+        }
+
         $this->getServicesModule()->serve($serviceName);
-        $this->getSessionLog()->info("Done calling service '$serviceName'");
+
+        $logger->info("Done calling service '$serviceName'");
     }
 
     public function setRemoteIdpMd5($remoteIdPMd5)
