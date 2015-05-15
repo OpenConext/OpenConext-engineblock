@@ -12,6 +12,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return;
         }
 
+        /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator|SAML2_AuthnRequest $request */
         $request = $this->_getRequest($serviceName);
 
         // Flush log if an SP in the requester chain has additional logging enabled
@@ -50,8 +51,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
-        /** @var SAML2_AuthnRequest $request */
-
         if ($request->getProxyCount() === 0) {
             $this->_server->getSessionLog()->info("SSO: Proxy count exceeded!");
             $response = $this->_server->createErrorResponse($request, 'ProxyCountExceeded');
