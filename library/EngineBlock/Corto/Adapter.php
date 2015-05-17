@@ -208,7 +208,7 @@ class EngineBlock_Corto_Adapter
                 );
             }
             else {
-                $this->_getSessionLog()->warn(
+                $this->_getSessionLog()->warning(
                     "Unable to apply RequesterID '$requesterId' to sub-scope the available IdPs as we don't know this SP!"
                 );
             }

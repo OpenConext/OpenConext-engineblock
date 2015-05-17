@@ -28,7 +28,7 @@ class EngineBlock_Database_ConnectionFactory
             }
             catch (Exception $e) {
                 $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setDetails($e->getTraceAsString());
-                EngineBlock_ApplicationSingleton::getLog()->err(
+                EngineBlock_ApplicationSingleton::getLog()->error(
                     "Unable to create a Read connection, trying to create a write connection, exception: " . print_r($e, true),
                     array('additional_info' => $additionalInfo->toArray())
                 );

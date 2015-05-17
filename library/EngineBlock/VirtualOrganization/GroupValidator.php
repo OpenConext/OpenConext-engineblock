@@ -58,7 +58,7 @@ class EngineBlock_VirtualOrganization_GroupValidator
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
                 ->setUserId($subjectId)
                 ->setDetails($exception->getTraceAsString());
-            EngineBlock_ApplicationSingleton::getLog()->err(
+            EngineBlock_ApplicationSingleton::getLog()->error(
                 "Could not connect to API for VO validation" . $exception->getMessage(),
                 array('additional_info' => $additionalInfo->toArray())
             );
@@ -110,7 +110,7 @@ class EngineBlock_VirtualOrganization_GroupValidator
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
                 ->setUserId($subjectId)
                 ->setDetails($exception->getTraceAsString());
-            EngineBlock_ApplicationSingleton::getLog()->err(
+            EngineBlock_ApplicationSingleton::getLog()->error(
                 "Error in connecting to API(s) for access token grant" . $exception->getMessage(),
                 array('additional_info' => $additionalInfo->toArray())
             );

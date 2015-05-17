@@ -359,7 +359,7 @@ class EngineBlock_Corto_ProxyServer
         }
         // Patch Migration BACKLOG-915 End
         if (!isset($this->_configs['Idp'])) {
-            $this->getSessionLog()->warn("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
+            $this->getSessionLog()->warning("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
         }
 
         return $this;

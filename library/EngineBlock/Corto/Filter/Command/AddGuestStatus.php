@@ -58,7 +58,7 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
                 }
             }
             else {
-                $log->warn(
+                $log->warning(
                     "Idp guestQualifier is set to 'Some' however, ".
                     "the surfPersonAffiliation attribute was not provided, " .
                     "not adding the isMemberOf for surf.nl",
@@ -72,7 +72,7 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
         }
 
         // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
-        $log->warn(
+        $log->warning(
             "Idp guestQualifier is set to unknown value '{$this->_identityProvider['GuestQualifier']}",
             array(
                 'idp' => $this->_identityProvider,

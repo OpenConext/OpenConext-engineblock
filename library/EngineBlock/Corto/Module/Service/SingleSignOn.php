@@ -191,7 +191,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $protocolBinding = $request->getProtocolBinding();
 
         if ($acsUrl XOR $protocolBinding) {
-            $this->_server->getSessionLog()->err(
+            $this->_server->getSessionLog()->error(
                 "Incomplete ACS location found in request (missing URL or binding)"
             );
 
@@ -492,7 +492,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return $identityProvider->nameNl;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->warn(
+        EngineBlock_ApplicationSingleton::getLog()->warning(
             'No NL displayName and name found for idp: ' . $identityProvider->entityId,
             array('additional_info' => $additionalLogInfo->toArray())
         );
@@ -512,7 +512,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return $identityProvider->nameEn;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->warn(
+        EngineBlock_ApplicationSingleton::getLog()->warning(
             'No EN displayName and name found for idp: ' . $identityProvider->entityId,
             array('additional_info' => $additionalInfo->toArray())
         );
