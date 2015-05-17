@@ -29,7 +29,7 @@ final class EngineBlock_Saml2_Container extends SAML2_Compat_AbstractContainer
 
     public function debugMessage($message, $type)
     {
-        SimpleSAML_Utilities::debugMessage($message, $type);
+        $this->getLogger()->debug("SAML2 library debug message ($type)", array('message' => $message));
     }
 
     public function redirect($url, $data = array())
