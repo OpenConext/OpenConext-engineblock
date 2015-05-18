@@ -1,20 +1,39 @@
 .mod-results
-  overflow: hidden
+  @extend %box
+
+  header
+    // @extend %h-uppercase
+    background: rgba($border,.5)
+    padding: .75rem 1.5rem
+    color: $medium-grey
+    border-bottom: 1px solid $border
 
   a
     display: flex
-    padding: 20px
+    padding: 1rem 1.5rem
     align-items: center
     text-decoration: none
+    @extend %h2
+    border-bottom: 1px solid $border
 
-    &:hover
-      background: lighten($blue, 40)
+    +hocus
+      outline: none
+      background: $blue
+      color: #fff
+
+    &:focus
+
+      .c-button
+        display: inline-block
 
     img
-      max-height: 30px
-      margin-right: 20px
+      max-width: 3rem
+      margin-right: 2rem
 
     .c-button
       margin-left: auto
       display: none
 
+  .no-access
+    .c-button
+      display: block

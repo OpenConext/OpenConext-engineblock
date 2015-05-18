@@ -1,64 +1,31 @@
 .mod-search
-
-  h1
-    @extend %h2
-    margin-bottom: 15px
+  @extend %box
+  margin-bottom: 2rem
+  +max-width($medium)
+    margin-bottom: 1rem
 
   fieldset
     border: 0
     padding: 0
     margin: 0
 
-  button
-    display: none
-
   input
+    @extend %h2
     display: block
     border: 0
     border-radius: $br
     width: 100%
-    padding: .5rem 1rem .5rem 2.75rem
+    padding: .5rem 1rem
     line-height: 40px
-    font-size: 20px
-    border-bottom: 1px solid $border
-    background: #fff inline_image("icons/magnifying-glass-1.svg") no-repeat 1.25rem center
+    background: #fff inline_image("icons/magnifying-glass-1.svg") no-repeat right center
       size: 1rem auto
+    background-origin: content-box
 
     &:focus
       outline: none
 
       & + .results
         display: block
-
-  h2
-    @extend %h-uppercase
-    background: rgba($border,.5)
-    padding: .5rem 1rem
-    color: $medium-grey
-
-  a
-    display: flex
-    padding: 1rem
-    align-items: center
-    text-decoration: none
-
-    +hocus
-      outline: none
-      background: $blue
-      color: #fff
-
-    &:focus
-
-      .c-button
-        display: inline-block
-
-    img
-      max-width: 2rem
-      margin-right: 1rem
-
-    .c-button
-      margin-left: auto
-      display: none
 
   .hidden
     display: none

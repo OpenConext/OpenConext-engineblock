@@ -81,27 +81,50 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 
 <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
   <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" autofocus="autofocus" class="mod-search-input active nav-el">
-  <div class="results">
+  <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+  <input type="hidden" id="form-idp" name="idp" value="" />
+</form>
 
-    <?php if (count($preselectedIdpData)): ?>
-    <h2>Last time you chose</h2>
-    <a class="result active nav-el" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-      <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
-      <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-      <div class="c-button outline narrow">Press enter to select</div>
-    </a>
+<div class="mod-results">
+  <?php if (count($preselectedIdpData)): ?>
+    <header>
+      <h2>Your most recent choice</h2>
+    </header>
+    <div class="list">
+      <a class="result active nav-el" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
+        <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
+        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
+        <div class="c-button white narrow">Press enter to select</div>
+      </a>
+    </div>
+  <?php endif; ?>
 
-    <h2>Other results</h2>
-    <?php endif; ?>
+  <header>
+    <h2>IDP's with access</h2>
+  </header>
+  <div class="list">
     <?php foreach ($idpList as $idp) : ?>
       <a class="result active nav-el" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
         <img class="logo" src="<?= $idp['Logo'] ?>" />
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <div class="c-button outline narrow">Press enter to select</div>
+        <div class="c-button white narrow">Press enter to select</div>
       </a>
     <?php endforeach; ?>
-
   </div>
-  <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
-  <input type="hidden" id="form-idp" name="idp" value="" />
-</form>
+
+
+  <header>
+    <h2>IDP's without access</h2>
+  </header>
+  <div class='list no-access'>
+    <?php
+    // @TODO Implement this feature
+    $preselectedIdpData = $idpList[0];
+    ?>
+    <a class="result active nav-el" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
+      <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
+      <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
+      <div class="c-button white narrow">Press enter to select</div>
+    </a>
+  </div>
+</div>

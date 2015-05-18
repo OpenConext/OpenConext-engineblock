@@ -4,15 +4,18 @@
   background: #fff
   box-shadow: 1px 1px $br rgba(black,.2)
   border-bottom: 2px solid $blue
+  line-height: 30px
 
   +min-width($medium)
-    padding: 2rem
+    padding: 1.5rem 2rem
     margin-bottom: 3rem
 
   // Main app title
   .title
-    @extend %h2
     color: $medium-grey
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
 
     strong
       color: $blue
@@ -38,7 +41,6 @@
   .language,
   .links
     float: left
-    line-height: 30px
 
     li
       float: left
