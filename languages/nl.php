@@ -30,9 +30,13 @@ return array(
     'search'                    => 'of zoek een instelling',
     'idp_selection_desc'        => 'Selecteer jouw instelling en log in voor <i>%s</i>',
     'our_suggestion'            => 'Onze suggestie:',
+    'idps_with_access'          => 'IDP\'s met toegang',
+    'idps_without_access'       => 'IDP\'s zonder toegang',
     'no_access'                 => 'Geen toegang.',
     'no_access_more_info'       => 'Geen toegang. &raquo;',
     'no_results'                => 'Geen resultaten gevonden',
+    'log_in_to'                 => 'Inloggen bij',
+    'press_enter_to_select'     => 'Druk op enter om te selecteren',
 
     //Footer
     'service_by'            => 'Deze dienst word aangeboden door',

@@ -30,10 +30,14 @@ return array(
     'search'                    => 'or search for an institution',
     'idp_selection_desc'        => 'Select your institution and continue to login to <i>%s</i>',
     'our_suggestion'            => 'Our suggestion:',
+    'idps_with_access'          => 'IDP\'s with access',
+    'idps_without_access'       => 'IDP\'s without access',
     'no_access'                 => 'No access',
     'no_access_more_info'       => 'No access. &raquo;',
     'no_results'                => 'No results found',
     'error_header'              => 'Error',
+    'log_in_to'                 => 'Log in to',
+    'press_enter_to_select'     => 'Press enter to select',
 
     //Footer
     'service_by'            => 'This is a service by',

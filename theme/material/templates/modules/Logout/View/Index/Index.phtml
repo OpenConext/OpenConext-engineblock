@@ -3,9 +3,9 @@
 $layout = $this->layout();
 
 // Set Layout properties
-$layout->title = $layout->title. ' - Logout';
+$layout->title = $layout->title. ' - ' . ucfirst($this->t('logout'));
 $layout->header = $layout->title;
-$layout->subheader = 'Logout';
+$layout->subheader = ucfirst($this->t('logout'));
 $layout->footerText = $this->t('footer');
 ?>
 <div class="mod-content">

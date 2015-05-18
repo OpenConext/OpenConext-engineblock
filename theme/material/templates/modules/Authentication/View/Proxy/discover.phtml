@@ -16,7 +16,7 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
  * @var Zend_Layout $layout
  */
 $layout = $this->layout();
-$layout->assign('subheader', 'Log in to ');
+$layout->assign('subheader', $this->t('log_in_to'));
 
 // Determine the selected language, default to english
 if (isset($_GET['lang'])) {
@@ -88,33 +88,33 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 <div class="mod-results">
   <?php if (count($preselectedIdpData)): ?>
     <header>
-      <h2>Your most recent choice</h2>
+      <h2><?php echo $this->t('our_suggestion'); ?></h2>
     </header>
     <div class="list">
       <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
         <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-        <div class="c-button white narrow">Press enter to select</div>
+        <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
     </div>
   <?php endif; ?>
 
   <header>
-    <h2>IDP's with access</h2>
+    <h2><?php echo $this->t('idps_with_access'); ?></h2>
   </header>
   <div class="list">
     <?php foreach ($idpList as $idp) : ?>
       <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
         <img class="logo" src="<?= $idp['Logo'] ?>" />
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <div class="c-button white narrow">Press enter to select</div>
+        <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
     <?php endforeach; ?>
   </div>
 
 
   <header>
-    <h2>IDP's without access</h2>
+    <h2><?php echo $this->t('idps_without_access'); ?></h2>
   </header>
   <div class='list no-access'>
     <?php
@@ -124,7 +124,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
       <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
       <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-      <div class="c-button white narrow">Press enter to select</div>
+      <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
     </a>
   </div>
 </div>
