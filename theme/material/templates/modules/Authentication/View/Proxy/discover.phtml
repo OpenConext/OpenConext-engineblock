@@ -92,7 +92,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     </header>
     <div class="list">
       <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-        <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
+        <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
         <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
@@ -105,7 +105,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   <div class="list">
     <?php foreach ($idpList as $idp) : ?>
       <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
-        <img class="logo" src="<?= $idp['Logo'] ?>" />
+        <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
         <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
@@ -122,7 +122,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     $preselectedIdpData = $idpList[0];
     ?>
     <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-      <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
+      <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
       <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
       <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
     </a>

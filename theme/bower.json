@@ -11,5 +11,8 @@
   ],
   "devDependencies": {
     "jquery": "~1.11.3"
+  },
+  "dependencies": {
+    "jquery.lazyload": "~1.9.5"
   }
 }

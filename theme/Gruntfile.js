@@ -37,6 +37,7 @@ module.exports = function(grunt) {
                 files: {
                     '../www/authentication/javascripts/application.js': [
                         'bower_components/jquery/dist/jquery.min.js',
+                        'bower_components/jquery.lazyload/jquery.lazyload.js',
                         '<%= config.theme %>/javascripts/application.js'
                     ]
                 }

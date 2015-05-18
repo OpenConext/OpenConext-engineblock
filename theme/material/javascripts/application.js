@@ -81,6 +81,7 @@ OpenConext.Discover = function() {
     });
 
     $('body').on('keydown', keyNavigation);
+    $('img.logo').lazyload();
 };
 
 OpenConext.Tabs = function() {
