@@ -21,14 +21,11 @@
       size: 1rem auto
     background-origin: content-box
 
+    &::-webkit-search-cancel-button
+      -webkit-appearance: none
+
     &:focus
       outline: none
 
       & + .results
         display: block
-
-  .hidden
-    display: none
-
-  .active
-    display: flex
