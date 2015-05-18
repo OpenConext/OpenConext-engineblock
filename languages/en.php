@@ -36,9 +36,12 @@ return array(
     'error_header'              => 'Error',
 
     //Footer
+    'service_by'            => 'This is a service by',
+    'serviceprovider_link'  => '<a href="#">SURFconext</a>',
     'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
 
     //Help
+    'help'                  => 'help',
     'help_header'           => 'Help',
     'help_description'      => '<p>Check the FAQ below if you have any questions about this screen or about SURFconext.</p>
 
@@ -287,6 +290,7 @@ If you want to use this application you have to:<br />
     'idp_debugging_mail_button' => 'Mail to surfconext-beheer',
 
     // Logout
+    'logout' => 'logout',
     'logout_description' => 'This application uses centralized log in, which provides single sign on for several applications. To be sure your log out is 100%% secure you should close your browser completely.',
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Log+out+SURFconext">More information about secure log out</a>',
 );

@@ -1,18 +1,20 @@
 <?php
-// Determine the selected language, default to english
-$locale = new Zend_Locale();
-$lang = $locale->getLanguage() || 'en';
-$lang = 'en';
-if (isset($_GET['lang'])) {
-  $lang = $_GET['lang'];
-} elseif (isset($_POST['lang'])) {
-  $lang = $_POST['lang'];
-} elseif (isset($_COOKIE['lang'])) {
-  $lang = $_COOKIE['lang'];
-}
-if (!in_array($lang, array('nl','en'))) {
+  // Determine the selected language, default to english
+  $locale = new Zend_Locale();
+  $lang = $locale->getLanguage() || 'en';
   $lang = 'en';
-}
+  if (isset($_GET['lang'])) {
+    $lang = $_GET['lang'];
+  } elseif (isset($_POST['lang'])) {
+    $lang = $_POST['lang'];
+  } elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+  }
+  if (!in_array($lang, array('nl','en'))) {
+    $lang = 'en';
+  }
+
+  $view = new EngineBlock_View();
 ?><!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="en-us"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8" lang="en-us"> <![endif]-->
@@ -58,16 +60,16 @@ if (!in_array($lang, array('nl','en'))) {
       <ul class='links'>
         <?php if (isset($this->layout()->helpLink)): ?>
           <li>
-            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $this->t('help'); ?></a>
+            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
           </li>
         <?php endif; ?>
         <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
         <li>
-          <?php echo $this->t('help_link'); ?>
+          <?php echo $view->t('help_link'); ?>
         </li>
         <?php endif; ?>
         <li>
-          <a href='#'><?php echo ucfirst($this->t('logout')) ?></a>
+          <a href='#'><?php echo ucfirst($view->t('logout')) ?></a>
         </li>
       </ul>
     </div>
@@ -79,10 +81,10 @@ if (!in_array($lang, array('nl','en'))) {
   <div class="l-footer">
     <nav class="mod-footer">
       <ul>
-        <li><?php echo $this->t('service_by'); ?> <?php echo $this->t('serviceprovider_link'); ?></li>
+        <li><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></li>
         <li>
           <?php if (isset($this->layout()->helpLink)): ?>
-            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $this->t('help'); ?></a>
+            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
           <?php endif; ?>
         </li>
       </ul>

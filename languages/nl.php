@@ -35,9 +35,12 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
+    'service_by'            => 'Deze dienst word aangeboden door',
+    'serviceprovider_link'  => '<a href="#">SURFconext</a>',
     'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
     //Help
+    'help'                  => 'help',
     'help_header'           => 'Help',
     'help_description'      => '<p>Heb je vragen over dit scherm of de SURFconext dienstverlening, bekijk dan de antwoorden bij de FAQ hieronder.</p>
 
@@ -290,6 +293,7 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'idp_debugging_mail_button' => 'Mail naar surfconext-beheer',
 
     // Logout
+    'logout' => 'uitloggen',
     'logout_description' => 'Deze applicatie maakt gebruik van centrale login. Hiermee is het mogelijk om met single sign on bij verschillende applicaties in te loggen. Om er 100%% zeker van te zijn dat je uitgelogd bent, moet je de browser helemaal afsluiten.',
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Uitloggen+SURFconext">Meer informatie over veilig uitloggen</a>',
 );
