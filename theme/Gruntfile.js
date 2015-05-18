@@ -109,14 +109,14 @@ module.exports = function(grunt) {
                     'rm ../www/profile/media',
                     'rm ../www/profile/css',
                     'rm ../www/profile/javascript'
-                ].join('&&')
+                ].join('&&') + ' || true'
             },
             material: {
                 command: [
                     'rm ../www/profile/images',
                     'rm ../www/profile/javascripts',
                     'rm ../www/profile/stylesheets'
-                ].join('&&')
+                ].join('&&') + ' || true'
             }
         },
         'string-replace': {
