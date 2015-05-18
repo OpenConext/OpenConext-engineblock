@@ -1,5 +1,7 @@
 <?php
 // Determine the selected language, default to english
+$locale = new Zend_Locale();
+$lang = $locale->getLanguage() || 'en';
 $lang = 'en';
 if (isset($_GET['lang'])) {
   $lang = $_GET['lang'];
