@@ -58,16 +58,16 @@ if (!in_array($lang, array('nl','en'))) {
       <ul class='links'>
         <?php if (isset($this->layout()->helpLink)): ?>
           <li>
-            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank">help</a>
+            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $this->t('help'); ?></a>
           </li>
         <?php endif; ?>
         <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
         <li>
-          <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">help</a>
+          <?php echo $this->t('help_link'); ?>
         </li>
         <?php endif; ?>
         <li>
-          <a href='#'>Logout</a>
+          <a href='#'><?php echo ucfirst($this->t('logout')) ?></a>
         </li>
       </ul>
     </div>
@@ -79,8 +79,12 @@ if (!in_array($lang, array('nl','en'))) {
   <div class="l-footer">
     <nav class="mod-footer">
       <ul>
-        <li>This is a service by <a href="#">SURFconext</a></li>
-        <li><a href="#">Help</a></li>
+        <li><?php echo $this->t('service_by'); ?> <?php echo $this->t('serviceprovider_link'); ?></li>
+        <li>
+          <?php if (isset($this->layout()->helpLink)): ?>
+            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $this->t('help'); ?></a>
+          <?php endif; ?>
+        </li>
       </ul>
     </nav>
   </div>
