@@ -1,7 +1,6 @@
-'use strict';
-
 var OpenConext = {};
 OpenConext.Discover = function() {
+    'use strict';
     this.searchBar = $('.mod-search-input');
 
     function hasDiscovery() {
@@ -9,15 +8,16 @@ OpenConext.Discover = function() {
     }
 
     function filterList(filterValue) {
-        var filterElements = $('.results a'),
+        var filterElements = $('.mod-results a'),
+            searchHeader = $('.mod-results header'),
             i, result, title;
 
         filterValue = filterValue.toLowerCase();
 
         if (filterValue !== '') {
-            $('.mod-search h2').hide();
+            searchHeader.hide();
         } else {
-            $('.mod-search h2').show();
+            searchHeader.show();
         }
 
         for (i = 0; i < filterElements.length; i++) {
@@ -40,8 +40,8 @@ OpenConext.Discover = function() {
 
         // Press down
         if (e.which === 40) {
-            if (currentElement.closest('.active').next().attr('class') === 'results') {
-                nextElement = currentElement.closest('.active').next().find('.active');
+            if (currentElement.closest('.active').next().attr('type') === 'hidden') {
+                nextElement = $('.list').find('.active:first');
                 if (nextElement.length > 0) {
                     nextElement[0].focus();
                 }
@@ -74,7 +74,7 @@ OpenConext.Discover = function() {
         filterList(searchValue);
     }
 
-    $('.results a').on('click', function selectIdp(){
+    $('.mod-results a').on('click', function selectIdp(){
        var selectedIdp = $(this).attr('data-idp');
         $('#form-idp').val(selectedIdp);
         $('form.mod-search').submit();
@@ -84,6 +84,7 @@ OpenConext.Discover = function() {
 };
 
 OpenConext.Tabs = function() {
+    'use strict';
     this.activeTab = '';
 
     function hasTabs() {
