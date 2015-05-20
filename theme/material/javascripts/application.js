@@ -32,6 +32,8 @@ OpenConext.Discover = function() {
                 result.removeClass('active');
             }
         }
+        // trigger the resize event to lazyload images
+        $(window).trigger('resize');
     }
 
     function keyNavigation(e){
