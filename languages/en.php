@@ -297,4 +297,7 @@ If you want to use this application you have to:<br />
     'logout' => 'logout',
     'logout_description' => 'This application uses centralized log in, which provides single sign on for several applications. To be sure your log out is 100%% secure you should close your browser completely.',
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Log+out+SURFconext">More information about secure log out</a>',
+
+    // Internal
+    'info_mail_link' => '<a href="info@surfnet.nl">info@surfnet.nl</a>',
 );
