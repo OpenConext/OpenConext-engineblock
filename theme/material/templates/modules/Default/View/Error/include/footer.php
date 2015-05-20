@@ -34,7 +34,7 @@ $log->getQueueWriter()->flush('feedback page shown');
     // @todo make the number of steps in history that the back button makes dynamic, it is not always 2
     ?>
     <div class="button-row">
-        <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
+        <a href="#" id="GoBack"  class="c-button" onclick="history.back(-2); return false;">
             <?= $this->t('go_back'); ?>
             <span class="btn-wrap-right">&nbsp;</span>
         </a>

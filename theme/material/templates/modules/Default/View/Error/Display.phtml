@@ -13,19 +13,22 @@ $layout->subheader = $this->t('error_generic');
 $layout->footerText = $this->t('footer');
 
 ?>
-<div class="mod-content">
-  <h1><?php echo htmlentities($this->t('error_generic'), 0, "UTF-8"); ?></h1>
-  <div class="error-wrapper">
-      <div class="error-icon"></div>
-      <div class="error-text">
-        <?= $this->t('error_generic_desc'); ?>
-        <?php require_once __DIR__ . '/include/footer.php'; ?>
-      </div>
-  </div>
 
-  <?php if (isset($exception)) { ?>
-    <strong><?= $exception->getMessage();?></strong>
-    <pre><?php var_dump($exception); ?></pre>
-    <?php if (isset($exception->xdebug_message)) { echo $exception->xdebug_message; } ?>
-  <?php } ?>
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo htmlentities($this->t('error_generic'), 0, "UTF-8"); ?></h1>
+    <div class="error-wrapper">
+        <div class="error-icon"></div>
+        <div class="error-text">
+          <?= $this->t('error_generic_desc'); ?>
+          <?php require_once __DIR__ . '/include/footer.php'; ?>
+        </div>
+    </div>
+
+    <?php if (isset($exception)) { ?>
+      <strong><?= $exception->getMessage();?></strong>
+      <pre><?php var_dump($exception); ?></pre>
+      <?php if (isset($exception->xdebug_message)) { echo $exception->xdebug_message; } ?>
+    <?php } ?>
+  </div>
 </div>

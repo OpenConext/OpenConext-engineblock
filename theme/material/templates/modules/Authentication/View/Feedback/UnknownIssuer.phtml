@@ -12,20 +12,22 @@ $layout->subheader = $this->t('error_unknown_issuer');
 $layout->footerText = $this->t('footer');
 
 ?>
-<div class="mod-content">
-  <h1><?php echo $this->t('error_unknown_issuer'); ?></h1>
-  <div class="error-wrapper">
-      <div class="error-icon"></div>
-      <div class="error-text">
-          <?= $this->t('error_unknown_issuer_desc');
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo $this->t('error_unknown_issuer'); ?></h1>
+    <div class="error-wrapper">
+        <div class="error-icon"></div>
+        <div class="error-text">
+            <?= $this->t('error_unknown_issuer_desc');
 
-  // Add feedback info from url
-  $customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
-  $customFeedbackInfo['Destination'] = $this->_data['destination'];
-  if (!isset($_SESSION['feedbackInfo'])) {
-      $_SESSION['feedbackInfo'] = array();
-  }
-  $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
+    // Add feedback info from url
+    $customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
+    $customFeedbackInfo['Destination'] = $this->_data['destination'];
+    if (!isset($_SESSION['feedbackInfo'])) {
+        $_SESSION['feedbackInfo'] = array();
+    }
+    $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
 
-  require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
+    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
+  </div>
 </div>

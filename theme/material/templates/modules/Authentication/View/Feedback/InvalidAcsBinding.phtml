@@ -13,13 +13,15 @@ $layout->subheader = $this->t('error_invalid_acs_binding');
 $layout->footerText = $this->t('footer');
 
 ?>
-<div class="mod-content">
-  <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
-  <div class="error-wrapper">
-      <div class="error-icon"></div>
-      <div class="error-text">
-          <?= $this->t('error_invalid_acs_binding_desc');
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+    <div class="error-wrapper">
+        <div class="error-icon"></div>
+        <div class="error-text">
+            <?= $this->t('error_invalid_acs_binding_desc');
 
-          require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');
-          ?>
+            require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');
+            ?>
+  </div>
 </div>
