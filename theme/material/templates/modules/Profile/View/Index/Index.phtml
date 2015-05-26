@@ -46,11 +46,6 @@ $layout->subheader  = $this->t('profile_subheader');
 $layout->header     = $this->t('profile_header') . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
-$layout->getView()->inlineScript()->appendFile('/javascript/profile.js');
-$layout->getView()->inlineScript()->appendScript("
-    var profile = new Profile();
-    profile.init();");
-
 foreach ($spList as $spId => $sp) {
     foreach ($sp as $fieldName => $fieldValue) {
         $matches = array();

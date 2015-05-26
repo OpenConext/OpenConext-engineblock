@@ -108,7 +108,7 @@ OpenConext.Tabs = function() {
         if (currentHash !== '') {
             activeTab = currentHash;
         } else if (null !== firstTab) {
-            activeTab = firstTab.attr('href');
+            activeTab = $(firstTab).attr('href');
         } else {
             activeTab = '';
         }
