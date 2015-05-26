@@ -16,13 +16,28 @@
   ul, ol, p
     margin-bottom: 1rem
 
+  ul
+    list-style: square
+
+  ol
+    list-style: decimal
+
+  ul,
+  ol
+    margin-left: 1.5rem
+
+  .overflow
+    overflow-x: auto
+    +scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px)
+
   table
     width: 100%
     margin-bottom: 1rem
 
     th, td
-      padding: .75rem 0
+      padding: .75rem 1rem .75rem 0
       border-bottom: 1px solid $border
+      white-space: nowrap
 
     thead
       th, td
@@ -32,5 +47,6 @@
   @for $i from 1 through 20
     .percent_#{$i * 5}
       width: #{$i * 5%}
+
 
 

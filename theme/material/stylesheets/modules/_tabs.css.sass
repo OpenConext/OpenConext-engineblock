@@ -1,17 +1,33 @@
 .mod-tabs
-  ul
-    display: flex
-    border-bottom: 1px solid $border
-    padding: 0 1rem
-
-  li
-    margin: 0 1rem
 
   a
-    padding: 1rem 0
+    text-decoration: none
+    color: $medium-grey
     display: block
 
     &:hover,
     &.active
-      border-bottom: 1px solid $blue
-      margin-bottom: -1px
+      color: $blue
+
+  +min-width($medium)
+    ul
+      display: flex
+      border-bottom: 1px solid $border
+      padding: 0 1rem
+
+    li
+      margin: 0 1rem
+
+    a
+      padding: 1.5rem 0
+
+      &:hover,
+      &.active
+        border-bottom: 1px solid $blue
+        margin-bottom: -1px
+
+  +max-width($medium - 1px)
+    a
+      display: block
+      padding: 1rem 2rem
+      border-bottom: 1px solid $border

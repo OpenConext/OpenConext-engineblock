@@ -1,7 +1,11 @@
 .l-container
   max-width: $container-width
-  margin: 1rem
+  padding: 1rem
 
   +min-width($medium)
     margin: 0 auto 3rem
+
+.l-overflow
+  overflow-x: auto
+  +scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px)
 

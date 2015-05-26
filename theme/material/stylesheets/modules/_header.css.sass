@@ -20,51 +20,17 @@
     strong
       color: $blue
 
-    +max-width($medium)
-      margin-bottom: 1rem
+  .comp-language
+    margin-left: auto
 
-    +min-width($medium)
-      float: left
-
-  // Meta = right aligned stuff
   +min-width($medium)
-    .meta
-      float: right
+    .comp-links
+      display: flex
 
-  // Styling for elements
-  a
-    text-decoration: none
+      li
+        margin-left: 1rem
 
-    &:hover
-      text-decoration: underline
-
-  .language,
-  .links
-    float: left
-
-    li
-      float: left
-      list-style: none
-
-    a
-      display: block
-      padding: 0 14px
-      border-right: 1px solid $light-grey
-
-    li:last-child a
-      border: 0
-
-  // EN / NL language switch
-  .language
-    overflow: hidden
-    border-radius: $br
-    margin-right: 2rem
-
-    a
-      background: $light-grey
-      border-color: #fff
-
-      &:hover,
-      &.selected
-        background: $blue
-        color: #fff
+  +max-width($large)
+    .comp-links,
+    .comp-language
+      display: none

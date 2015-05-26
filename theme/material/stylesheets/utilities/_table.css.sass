@@ -1,52 +1,20 @@
-%table
-
-  table
-    width: 100%
+.comp-table
+  width: 100%
+  margin-bottom: 1rem
 
   th, td
+    padding: .75rem 1rem .75rem 0
     border-bottom: 1px solid $border
-    line-height: 20px
-    padding: 20px
+    white-space: nowrap
 
-    &:first-child
-      padding-left: 30px
+  thead
+    th, td
+      border-bottom: 2px solid $border
+      @extend %h3
 
-    &:last-child
-      padding-right: 30px
-
-  tbody
-    tr:last-child
-      td,
-      th
-        border: 0
-
-  th
-    @extend %h3
-    padding: 15px 20px
-
-  // Font awesome
-  .fa
-    color: $medium-grey
-    margin: 0 15px
-
-    &.fa-caret-down,
-    &.fa-caret-up
-      color: $blue
-
-  // For dates, numbers or last cols
-  .date,
-  .number,
-  .right
-    text-align: right
-
-  // Yes or no stuff :)
-  .yes
-    color: $green
-
-  .no
-    color: $red
-
-  // Size classes:
   @for $i from 1 through 20
     .percent_#{$i * 5}
       width: #{$i * 5%}
+
+
+

@@ -1,6 +1,7 @@
 .mod-search
-  @extend %box
+  position: relative
   margin-bottom: 2rem
+
   +max-width($medium)
     margin-bottom: 1rem
 
@@ -11,21 +12,27 @@
 
   input
     @extend %h2
+    @extend %box
     display: block
     border: 0
     border-radius: $br
     width: 100%
-    padding: .5rem 1rem
-    line-height: 40px
-    background: #fff inline_image("icons/magnifying-glass-1.svg") no-repeat right center
-      size: 1rem auto
+    padding: 0 4rem 0 1rem
+    line-height: 4rem
+    background: #fff
     background-origin: content-box
 
-    &::-webkit-search-cancel-button
-      -webkit-appearance: none
-
-    &:focus
+    +hocus
       outline: none
+      box-shadow: 0 1px $br rgba(black,.4)
 
-      & + .results
-        display: block
+  button
+    position: absolute
+    top: 0
+    right: 0
+    text-indent: -9999rem
+    width: 4rem
+    height: 4rem
+    border: none
+    background: image_url("search.svg") no-repeat center center
+      size: 1rem auto

@@ -42,5 +42,28 @@
   &:focus
     @content
 
+@mixin input
+  input[type=text],
+  input[type=email],
+  input[type=number],
+  input[type=date],
+  input[type=time],
+  textarea,
+  select
+    @content
+
 @mixin margin-bottom
   margin-bottom: 30px
+
+@mixin scrollbar($size, $foreground-color, $br-thumb:"0", $background-color:"none", $br-track:"0")
+  &::-webkit-scrollbar
+    width: $size
+    height: $size
+
+  &::-webkit-scrollbar-thumb
+    background: $foreground-color
+    border-radius: $br-thumb
+
+  &::-webkit-scrollbar-track
+    background: $background-color
+    border-radius: $br-track
