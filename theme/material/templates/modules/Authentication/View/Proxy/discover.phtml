@@ -86,8 +86,8 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   <button>Search</button>
 </form>
 
+<?php if (count($preselectedIdpData)): ?>
 <div class="mod-results">
-  <?php if (count($preselectedIdpData)): ?>
     <header>
       <h2><?php echo $this->t('our_suggestion'); ?></h2>
     </header>
@@ -100,13 +100,23 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
         <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
     </div>
-  <?php endif; ?>
+</div>
+<?php endif; ?>
 
+<div class="mod-results">
   <header>
     <h2><?php echo $this->t('idps_with_access'); ?></h2>
   </header>
   <div class="list">
-    <?php foreach ($idpList as $idp) : ?>
+
+    <div class="loading hidden">
+      <div class="logo">
+        <img src="/images/spinner.svg">
+      </div>
+      <?=$this->t('loading_idps');?>
+    </div>
+
+    <?php foreach ($idpList as $key => $idp) : ?>
       <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
         <div class="logo">
           <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
@@ -116,8 +126,9 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
       </a>
     <?php endforeach; ?>
   </div>
+</div>
 
-
+<div class="mod-results">
   <header>
     <h2><?php echo $this->t('idps_without_access'); ?></h2>
   </header>

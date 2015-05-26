@@ -10,7 +10,10 @@ OpenConext.Discover = function() {
     function filterList(filterValue) {
         var filterElements = $('.mod-results a'),
             searchHeader = $('.mod-results header'),
+            spinner = $('.mod-results .loading'),
             i, result, title;
+
+        spinner.removeClass('hidden');
 
         filterValue = filterValue.toLowerCase();
 
@@ -32,6 +35,9 @@ OpenConext.Discover = function() {
                 result.removeClass('active');
             }
         }
+
+        spinner.addClass('hidden');
+
         // trigger the resize event to lazyload images
         $(window).trigger('resize');
     }
