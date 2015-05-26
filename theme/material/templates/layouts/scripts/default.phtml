@@ -28,60 +28,63 @@
   <title><?php echo htmlentities($this->layout()->title, 0, 'UTF-8'); ?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="robots" content="noindex, nofollow"/>
-  <meta content='ie=edge,chrome=1' http-equiv='x-ua-compatible'>
-  <meta content='initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width' name='viewport'>
-  <meta content='initial-scale=1.0,user-scalable=no,maximum-scale=1' media='(device-height: 568px)' name='viewport'>
-  <meta content='yes' name='apple-mobile-web-app-capable'>
-  <meta content='translucent-black' name='apple-mobile-web-app-status-bar-style'>
-  <link href='/images/favicon.ico' rel='shortcut icon'>
-  <link href='/images/apple-touch-icon-precomposed.png' rel='apple-touch-icon-precomposed'>
-  <link href='/images/apple-touch-icon-57x57-precomposed.png' rel='apple-touch-icon-precomposed' sizes='57x57'>
-  <link href='/images/apple-touch-icon-72x72-precomposed.png' rel='apple-touch-icon-precomposed' sizes='72x72'>
-  <link href='/images/apple-touch-icon-114x114-precomposed.png' rel='apple-touch-icon-precomposed' sizes='114x114'>
+  <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
+  <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+  <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" name="viewport">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+  <link href="/favicon.ico" rel="shortcut icon">
   <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
 </head>
-<body class='index'>
-  <div class='mod-header'>
-    <h1 class='title'>
+<body class="index">
+  <div class="mod-header">
+    <h1 class="title">
       <?php echo $this->layout()->subheader; ?>
       <?php if (isset($this->layout()->greenHeader)): ?>
         <strong><?php echo $this->layout()->greenHeader; ?></strong>
       <?php endif; ?>
     </h1>
-    <div class='meta'>
-      <ul class='language'>
+    <ul class="comp-language">
+      <li>
+        <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
+      </li>
+      <li>
+        <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+      </li>
+    </ul>
+    <ul class="comp-links">
+      <?php if (isset($this->layout()->helpLink)): ?>
         <li>
-          <a<?php if ($lang==='en'): ?> class='selected'<?php endif; ?> href='<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>'>EN</a>
+          <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
         </li>
-        <li>
-          <a<?php if ($lang==='nl'): ?> class='selected'<?php endif; ?> href='<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>'>NL</a>
-        </li>
-      </ul>
-      <ul class='links'>
-        <?php if (isset($this->layout()->helpLink)): ?>
-          <li>
-            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
-          </li>
-        <?php endif; ?>
-        <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
-        <li>
-          <?php echo $view->t('help_link'); ?>
-        </li>
-        <?php endif; ?>
-        <li>
-          <a href='#'><?php echo ucfirst($view->t('logout')) ?></a>
-        </li>
-      </ul>
-    </div>
+      <?php endif; ?>
+      <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
+      <li>
+        <?php echo $view->t('help_link'); ?>
+      </li>
+      <?php endif; ?>
+      <li>
+        <a href=""><?php echo ucfirst($view->t('logout')) ?></a>
+      </li>
+    </ul>
   </div>
-  <div class='l-container'>
+
+  <div class="l-container">
       <?php echo $this->layout()->content; ?>
   </div>
 
   <div class="l-footer">
     <nav class="mod-footer">
-      <ul>
-        <li><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></li>
+      <p><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></p>
+      <ul class="comp-language">
+        <li>
+          <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
+        </li>
+        <li>
+          <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+        </li>
+      </ul>
+      <ul class="comp-links">
         <li>
           <?php if (isset($this->layout()->helpLink)): ?>
             <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>

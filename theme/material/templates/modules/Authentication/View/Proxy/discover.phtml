@@ -83,6 +83,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" autofocus="autofocus" class="mod-search-input active">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
   <input type="hidden" id="form-idp" name="idp" value="" />
+  <button>Search</button>
 </form>
 
 <div class="mod-results">
@@ -92,9 +93,11 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     </header>
     <div class="list">
       <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-        <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
+        <div class="logo">
+          <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
+        </div>
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-        <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
+        <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
     </div>
   <?php endif; ?>
@@ -105,9 +108,11 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   <div class="list">
     <?php foreach ($idpList as $idp) : ?>
       <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
-        <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+        <div class="logo">
+          <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+        </div>
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
+        <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
     <?php endforeach; ?>
   </div>
@@ -122,9 +127,11 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     $preselectedIdpData = $idpList[0];
     ?>
     <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-      <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
+      <div class="logo">
+        <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
+      </div>
       <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-      <div class="c-button white narrow"><?php echo $this->t('press_enter_to_select'); ?></div>
+      <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
     </a>
   </div>
 </div>
