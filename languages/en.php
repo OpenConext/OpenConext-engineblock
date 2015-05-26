@@ -288,6 +288,7 @@ If you want to use this application you have to:<br />
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',
     'idp_debugging_title'             => 'Show Response from Identity Provider',
+    'retry'                           => 'Retry',
 
     'attributes' => 'Attributes',
     'validation' => 'Validation',

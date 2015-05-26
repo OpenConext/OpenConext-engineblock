@@ -75,10 +75,13 @@ if ($preselectedIdp) {
     }
 }
 
+if (!$noAccessIdpData) {
+  $noAccessIdpData = array();
+}
+
 $layout->assign('greenHeader', $spDisplayName);
 $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 ?>
-
 <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
   <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" autofocus="autofocus" class="mod-search-input active">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
@@ -125,16 +128,26 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
         <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
       </a>
     <?php endforeach; ?>
+    <?php if (count($idpList) === 0): ?>
+      <div class="loading">
+        <div class="logo">
+          <div class="letter">??</div>
+        </div>
+        <?php // @TODO fix access request form ?>
+        <p>Can't find your IDP? &nbsp;<a href="form/">Request access</a>&nbsp;or try tweaking your search.</p>
+      </div>
+    <?php endif; ?>
   </div>
 </div>
 
+<?php // @TODO Implement this feature ?>
+<?php if (count($noAccessIdpData)): ?>
 <div class="mod-results">
   <header>
     <h2><?php echo $this->t('idps_without_access'); ?></h2>
   </header>
   <div class='list no-access'>
     <?php
-    // @TODO Implement this feature
     $preselectedIdpData = $idpList[0];
     ?>
     <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
@@ -146,3 +159,4 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     </a>
   </div>
 </div>
+<?php endif; ?>

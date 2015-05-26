@@ -84,7 +84,7 @@ $inlineScriptHelper->appendScript('
         <?= $this->t('consent_sp_idp_info', $spName, $idpName); ?>
     </p>
 
-    <div>
+    <div class="l-overflow">
         <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
         <table>
         <?php foreach ($attributes as $uid => $attributeValues) : ?>
@@ -112,27 +112,30 @@ $inlineScriptHelper->appendScript('
     </div>
 
     <div id="approve">
-    <!-- YES -->
-    <form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-            <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
-            <input type="hidden" name="consent" value="yes" />
+      <!-- YES -->
+      <form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+          <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+          <input type="hidden" name="consent" value="yes" />
 
-            <input id="accept_terms_button"
-                   class="submit bigbutton"
-                   type="submit"
-                   value="<?= $this->t('consent_accept'); ?>"
-                   />
-    </form>
+        <p>
+          <input id="accept_terms_button"
+                 class="submit c-button"
+                 type="submit"
+                 value="<?= $this->t('consent_accept'); ?>"
+                 />
+        </p>
+      </form>
 
-    <!-- NO -->
-    <form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-            <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
-            <input type="hidden" name="consent" value="no" />
-
-            <a id="decline_terms_button" style="line-height: 40px;" href="javascript:;" onclick="document.getElementById('reject').submit();">
-                <?= $this->t('consent_decline'); ?>
-            </a>
-    </form>
+      <!-- NO -->
+      <form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+              <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+              <input type="hidden" name="consent" value="no" />
+        <p>
+              <a id="decline_terms_button" class="c-button outline" href="javascript:;" onclick="document.getElementById('reject').submit();">
+                  <?= $this->t('consent_decline'); ?>
+              </a>
+        </p>
+      </form>
     </div>
 
     <p class="grey"><?= $this->t('consent_notice'); ?></p>

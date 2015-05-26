@@ -4,7 +4,7 @@ OpenConext.Discover = function() {
     this.searchBar = $('.mod-search-input');
 
     function hasDiscovery() {
-        return null !== typeof $('.mod-search-input');
+        return 0 !== $('.mod-search-input').length;
     }
 
     function filterList(filterValue) {
@@ -77,7 +77,7 @@ OpenConext.Discover = function() {
     });
 
     var searchValue = $('input[type=search]').val();
-    console.log(searchValue);
+
     if (searchValue !== '') {
         filterList(searchValue);
     }
@@ -97,18 +97,18 @@ OpenConext.Tabs = function() {
     this.activeTab = '';
 
     function hasTabs() {
-        return null !== typeof document.querySelector('.mod-tabs');
+      return 0 !== $('.mod-tabs').length;
     }
 
     function getActiveTab() {
-        var firstTab = document.querySelector('.mod-tabs .tab-target'),
+        var firstTab = $('.mod-tabs .tab-target')[0],
             currentHash = window.location.hash,
             activeTab;
 
         if (currentHash !== '') {
             activeTab = currentHash;
         } else if (null !== firstTab) {
-            activeTab = firstTab.getAttribute('href');
+            activeTab = firstTab.attr('href');
         } else {
             activeTab = '';
         }
@@ -117,22 +117,21 @@ OpenConext.Tabs = function() {
     }
 
     function setTab(activeTabId) {
-        var tabPanels = document.querySelectorAll('.mod-tabpanel'),
-            panel, panelId, panelClass, i;
+        var tabPanels = $('.mod-tabpanel'),
+            panel, panelId, i;
 
         for (i = 0; i < tabPanels.length; i++) {
-            panel = tabPanels[i];
-            panelId = panel.getAttribute('id');
-            panelClass = panel.getAttribute('class');
+            panel = $(tabPanels[i]);
+            panelId = panel.attr('id');
 
             if (panelId === activeTabId) {
-                panelClass = panelClass.replace('mod-tabpanel', 'mod-tabpanel active');
+                panel.addClass('active');
             } else {
-                panelClass = panelClass.replace('active', '');
+                panel.removeClass('active');
             }
-
-            panel.setAttribute('class', panelClass);
         }
+        $('.tab-target').removeClass('active');
+        $('.tab-target[href="#'+activeTabId+'"]').addClass('active');
     }
 
     if (!hasTabs()) {

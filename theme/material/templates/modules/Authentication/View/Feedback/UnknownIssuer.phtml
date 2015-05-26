@@ -15,10 +15,7 @@ $layout->footerText = $this->t('footer');
 <div class="box">
   <div class="mod-content">
     <h1><?php echo $this->t('error_unknown_issuer'); ?></h1>
-    <div class="error-wrapper">
-        <div class="error-icon"></div>
-        <div class="error-text">
-            <?= $this->t('error_unknown_issuer_desc');
+    <?= $this->t('error_unknown_issuer_desc');
 
     // Add feedback info from url
     $customFeedbackInfo['EntityID'] = $this->_data['entity-id'];

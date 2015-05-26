@@ -15,18 +15,10 @@ $layout->footerText = $this->t('footer');
 <div class="box">
   <div class="mod-content">
     <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
-    <div class="error-wrapper">
-        <div class="error-icon"></div>
-        <div class="error-text">
-            <?= $this->t('error_404_desc'); ?>
-            <br /><br />
-            <div class="button-row">
-                <a href="#" id="GoBack"  class="submit button-tertiary" onclick="history.back(-2); return false;">
-                    <?= $this->t('go_back'); ?>
-                    <span class="btn-wrap-right">&nbsp;</span>
-                </a>
-            </div>
-        </div>
-    </div>
+    <?= $this->t('error_404_desc'); ?>
+    <br /><br />
+    <a href="#" id="GoBack"  class="c-button" onclick="history.back(-2); return false;">
+        <?= $this->t('go_back'); ?>
+    </a>
   </div>
 </div>

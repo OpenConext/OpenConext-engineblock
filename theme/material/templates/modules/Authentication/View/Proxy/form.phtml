@@ -25,13 +25,14 @@ $layout->title = $layout->title. ' - '. $this->t('post_data');
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex, nofollow"/>
         <title><?= $layout->title; ?></title>
+        <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
     </head>
     <body class="index" <?php if (!$trace): ?>onload="document.forms[0].submit()"<?php endif; ?>>
       <div class="mod-redirect">
         <img src="/images/spinner.svg" />
         <h1><?= $this->t('processing'); ?></h1>
         <p><?= $this->t('processing_waiting'); ?></p>
-        <p>Taking too long? <a href="../"><?= $this->t('go_back'); ?></a>.</p>
+        <p>Taking too long? <a href="javascript:history.back(-2)"><?= $this->t('go_back'); ?></a>.</p>
         <noscript>
           <p>
             <strong><?= $this->t('note'); ?>:</strong>

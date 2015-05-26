@@ -46,7 +46,6 @@ $layout->subheader  = $this->t('profile_subheader');
 $layout->header     = $this->t('profile_header') . ' - ' . $layout->subheader;
 $layout->footerText = $this->t('footer');
 
-$layout->getView()->inlineScript()->appendFile('/javascript/screen.js');
 $layout->getView()->inlineScript()->appendFile('/javascript/profile.js');
 $layout->getView()->inlineScript()->appendScript("
     var profile = new Profile();
@@ -87,10 +86,8 @@ foreach ($spList as $spId => $sp) {
     <h1><?php echo $this->t('profile_subheader'); ?></h1>
 
     <div id="MyProfile" class="mod-tabpanel">
-        <p>
-            <?= $this->t('profile_store_info'); ?>
-        </p>
-        <br />
+      <p><?= $this->t('profile_store_info'); ?></p>
+      <div class="l-overflow">
         <table>
             <thead>
                 <tr>
@@ -117,10 +114,9 @@ foreach ($spList as $spId => $sp) {
             </tr>
         <?php } ?>
         </table>
+        </div>
 
-        <p>
-            <?= $this->t('profile_mail_text'); ?>
-        </p>
+        <p><?= $this->t('profile_mail_text'); ?></p>
 
         <?php if (!empty($mailSend)) : ?>
             <p><?= $this->t('profile_mail_send_success'); ?></p>
@@ -128,13 +124,14 @@ foreach ($spList as $spId => $sp) {
 
         <form method="post" action="/profile/attribute-support">
             <input type="hidden" name="mail" value="true">
-            <input type="submit" value="<?= $this->t('profile_mail_attributes'); ?>">
+            <input type="submit" class="c-button" value="<?= $this->t('profile_mail_attributes'); ?>">
         </form>
     </div>
 
     <div id="MyApps" class="mod-tabpanel">
-        <p><?= $this->t('profile_apps_connected_aps'); ?></p>
-        <p><?= $this->t('profile_apps_share'); ?></p>
+      <p><?= $this->t('profile_apps_connected_aps'); ?></p>
+      <p><?= $this->t('profile_apps_share'); ?></p>
+      <div class="l-overflow">
         <table id="MyAppsTable" class="no-layout-fix">
             <thead>
                 <tr>
@@ -220,14 +217,15 @@ foreach ($spList as $spId => $sp) {
             <?php endforeach; ?>
             </tbody>
         </table>
+      </div>
     </div>
 
     <div id="Exit" class="mod-tabpanel">
         <p><?= $this->t('profile_leave_surfconext_desc'); ?></p>
         <form id="delete-confirmation-form" method="post" action="/profile/delete-user">
-            <input id="delete-confirmation-text"
-                   type="submit" value="<?= $this->t('profile_leave_surfconext_link'); ?>"
-                   data-confirmation-text="<?= $this->t('profile_leave_surfconext_conf'); ?>" >
+            <p><input id="delete-confirmation-text"
+                   type="submit" class="c-button" value="<?= $this->t('profile_leave_surfconext_link'); ?>"
+                   data-confirmation-text="<?= $this->t('profile_leave_surfconext_conf'); ?>" ></p>
         </form>
 
         <div class="exit-disclaimer">

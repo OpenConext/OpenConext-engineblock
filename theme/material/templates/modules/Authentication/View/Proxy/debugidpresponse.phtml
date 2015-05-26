@@ -30,13 +30,13 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
   <div class="mod-content">
     <h1><?php echo $this->t('idp_debugging_title'); ?></h1>
     <?php if ($validationResult->isValid()) : ?>
-    <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="" />
+    <img src="/images/tick.png" alt="" />
     <?= $this->t('attributes_validation_succeeded'); ?>
     <?php else: ?>
         <?php if (count($validationResult->getErrors()) > 0): ?>
-    <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="" style="vertical-align: bottom" />
+    <img src="/images/exclamation.png" alt="" style="vertical-align: bottom" />
         <?php else: ?>
-    <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="" style="vertical-align: bottom" />
+    <img src="/images/error.png" alt="" style="vertical-align: bottom" />
         <?php endif; ?>
 
     <?= $this->t('attributes_validation_failed'); ?>
@@ -44,7 +44,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
 
     <form method="post" style="float: right">
         <input type="hidden" name="clear" value="true" />
-        <input type="submit" value="Retry" />
+        <input type="submit" class="c-button" value="<?=$this->t('retry');?>" />
     </form>
     <hr style="clear: both" />
 
@@ -55,7 +55,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
                 Logo
             </th>
             <td>
-                <img src="<?= $idp->logo ? $idp->logo->url : '/media/idp-logo-not-found.png' ?>" />
+                <img class="logo" src="<?= $idp->logo ? $idp->logo->url : '/images/placeholder.png' ?>" />
             </td>
         </tr>
         <tr>
@@ -98,82 +98,84 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
     <h2><?= $this->t('attributes') ?></h2>
     <?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
         <p class="error">
-            <img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
+            <img src="/images/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
         ?></p>
     <?php endforeach; ?>
     <?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
         <p class="warning">
-            <img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
+            <img src="/images/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
         ?></p>
     <?php endforeach; ?>
-    <table>
-        <thead>
-            <tr>
-                <th>
-                    SURFconext Display Name
-                </th>
-                <th>
-                    <?= $this->t('name'); ?>
-                </th>
-                <th>
-                    <?= $this->t('value'); ?>
-                </th>
-                <th>
-                    <?= $this->t('validation'); ?>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
-            <tr>
-                <td>
-                    <?= $this->getAttributeName($attributeName, 'en') ?>
-                </td>
-                <td>
-                    <?= EngineBlock_View::htmlSpecialCharsText($attributeName); ?>
-                </td>
-                <td>
-                    <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
-                    <?= EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
-                    <?php } /** Multiple attribute values */ else { ?>
-                    <ul>
-                        <?php foreach ($attributeValues as $value) { ?>
-                        <li><?= EngineBlock_View::htmlSpecialCharsText($value); ?></li>
-                        <?php } ?>
-                    </ul>
-                    <?php } ?>
-                </td>
-                <td>
-                    <?php if ($validationResult->isValid($attributeName)): ?>
-                    <img src="/media/famfamfam_silk_icons_v013/icons/tick.png" alt="valid" />
-                    <?php else:
-                        foreach ($validationResult->getErrors($attributeName) as $error) {
-                            echo '<p class="error">' .
-                                    '<img src="/media/famfamfam_silk_icons_v013/icons/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
-                                    EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
-                                '</p>';
-                        }
-                        foreach ($validationResult->getWarnings($attributeName) as $warning) {
-                            echo '<p class="warning">'.
-                                    '<img src="/media/famfamfam_silk_icons_v013/icons/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
-                                    EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
-                                '</p>';
-                        }
-                    endif; ?>
-                </td>
-            </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+    <div class="l-overflow">
+      <table>
+          <thead>
+              <tr>
+                  <th>
+                      SURFconext Display Name
+                  </th>
+                  <th>
+                      <?= $this->t('name'); ?>
+                  </th>
+                  <th>
+                      <?= $this->t('value'); ?>
+                  </th>
+                  <th>
+                      <?= $this->t('validation'); ?>
+                  </th>
+              </tr>
+          </thead>
+          <tbody>
+              <?php foreach ($attributes as $attributeName => $attributeValues) { ?>
+              <tr>
+                  <td>
+                      <?= $this->getAttributeName($attributeName, 'en') ?>
+                  </td>
+                  <td>
+                      <?= EngineBlock_View::htmlSpecialCharsText($attributeName); ?>
+                  </td>
+                  <td>
+                      <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                      <?= EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+                      <?php } /** Multiple attribute values */ else { ?>
+                      <ul>
+                          <?php foreach ($attributeValues as $value) { ?>
+                          <li><?= EngineBlock_View::htmlSpecialCharsText($value); ?></li>
+                          <?php } ?>
+                      </ul>
+                      <?php } ?>
+                  </td>
+                  <td>
+                      <?php if ($validationResult->isValid($attributeName)): ?>
+                      <img src="/images/tick.png" alt="valid" />
+                      <?php else:
+                          foreach ($validationResult->getErrors($attributeName) as $error) {
+                              echo '<p class="error">' .
+                                      '<img src="/images/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
+                                      EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
+                                  '</p>';
+                          }
+                          foreach ($validationResult->getWarnings($attributeName) as $warning) {
+                              echo '<p class="warning">'.
+                                      '<img src="/images/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
+                                      EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
+                                  '</p>';
+                          }
+                      endif; ?>
+                  </td>
+              </tr>
+              <?php } ?>
+          </tbody>
+      </table>
+    </div>
     <hr />
     <p>
         <?= EngineBlock_View::htmlSpecialCharsText($this->t('idp_debugging_mail_explain')); ?>
     </p>
     <form method="post">
         <input type="hidden" name="mail" value="true" />
-        <input type="submit" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($this->t('idp_debugging_mail_button')); ?>" />
+        <input type="submit" class="c-button" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($this->t('idp_debugging_mail_button')); ?>" />
     </form>
   </div>
 </div>

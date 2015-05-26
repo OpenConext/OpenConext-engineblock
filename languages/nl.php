@@ -291,6 +291,7 @@ Als u deze applicatie wilt gebruiken moet u:<br />
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen falen validatie',
     'idp_debugging_title'             => 'Toon verkregen Response van Identity Provider',
+    'retry'                           => 'Opnieuw',
 
     'attributes' => 'Attributen',
     'validation' => 'Validatie',
