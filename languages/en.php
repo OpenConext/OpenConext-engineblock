@@ -40,6 +40,7 @@ return array(
     'error_header'              => 'Error',
     'log_in_to'                 => 'Log in to',
     'press_enter_to_select'     => 'Press enter to select',
+    'loading_idps'              => 'Loading identity providers …',
 
     //Footer
     'service_by'            => 'This is a service by',

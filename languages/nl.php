@@ -39,6 +39,7 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
     'log_in_to'                 => 'Inloggen bij',
     'press_enter_to_select'     => 'Druk op enter om te selecteren',
+    'loading_idps'              => 'Identity providers worden geladen …',
 
     //Footer
     'service_by'            => 'Deze dienst word aangeboden door',
