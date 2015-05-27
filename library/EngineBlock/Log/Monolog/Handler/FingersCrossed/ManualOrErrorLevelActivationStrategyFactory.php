@@ -54,7 +54,9 @@ final class EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelAct
     {
         if (!isset($config['action_level'])) {
             throw InvalidConfigurationException::missing('action_level', 'string');
-        } elseif (!is_string($config['action_level'])) {
+        }
+
+        if (!is_string($config['action_level'])) {
             throw InvalidConfigurationException::invalidType('action_level', $config['action_level'], 'string');
         }
 

@@ -52,7 +52,9 @@ final class EngineBlock_Log_Monolog_Handler_FingersCrossedHandlerFactory impleme
     {
         if (!isset($config['handler'])) {
             throw InvalidConfigurationException::missing('handler', 'string');
-        } elseif (!is_string($config['handler'])) {
+        }
+
+        if (!is_string($config['handler'])) {
             throw InvalidConfigurationException::invalidType('handler', $config['ident'], 'string');
         }
 
@@ -72,7 +74,9 @@ final class EngineBlock_Log_Monolog_Handler_FingersCrossedHandlerFactory impleme
 
         if (!isset($config['activation_strategy']['factory'])) {
             throw InvalidConfigurationException::missing("activation_strategy.factory", 'string');
-        } elseif (!is_string($config['activation_strategy']['factory'])) {
+        }
+
+        if (!is_string($config['activation_strategy']['factory'])) {
             throw InvalidConfigurationException::invalidType(
                 "activation_strategy.factory",
                 $config['activation_strategy']['factory'],

@@ -36,7 +36,9 @@ final class EngineBlock_Log_Monolog_Handler_SyslogHandlerFactory implements Hand
     {
         if (!isset($config['ident'])) {
             throw InvalidConfigurationException::missing('ident', 'string');
-        } elseif (!is_string($config['ident'])) {
+        }
+
+        if (!is_string($config['ident'])) {
             throw InvalidConfigurationException::invalidType('ident', $config['ident'], 'string');
         }
 
@@ -56,7 +58,9 @@ final class EngineBlock_Log_Monolog_Handler_SyslogHandlerFactory implements Hand
 
         if (!isset($config['formatter']['factory'])) {
             throw InvalidConfigurationException::missing("formatter.factory", 'string');
-        } elseif (!is_string($config['formatter']['factory'])) {
+        }
+
+        if (!is_string($config['formatter']['factory'])) {
             throw InvalidConfigurationException::invalidType(
                 "formatter.factory",
                 $config['formatter']['factory'],

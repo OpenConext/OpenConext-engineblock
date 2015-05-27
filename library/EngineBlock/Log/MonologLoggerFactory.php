@@ -62,13 +62,17 @@ final class EngineBlock_Log_MonologLoggerFactory implements EngineBlock_Log_Logg
     {
         if (!isset($config['name'])) {
             throw InvalidConfigurationException::missing('name', 'string');
-        } elseif (!is_string($config['name'])) {
+        }
+
+        if (!is_string($config['name'])) {
             throw InvalidConfigurationException::invalidType('name', $config['name'], 'string');
         }
 
         if (!isset($config['handlers'])) {
             throw InvalidConfigurationException::missing('handlers', 'string');
-        } elseif (!is_string($config['handlers'])) {
+        }
+
+        if (!is_string($config['handlers'])) {
             throw InvalidConfigurationException::invalidType(
                 'handlers',
                 $config['handlers'],
