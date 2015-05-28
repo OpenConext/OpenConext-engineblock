@@ -81,23 +81,23 @@ OpenConext.Discover = function() {
         return this;
     }
 
-    var selectedIdps = JSON.parse(Cookies.get('selectedidps')) || [],
-        hasSuggested = false,
-        listedIdp;
+    //var selectedIdps = JSON.parse(Cookies.get('selectedidps')) || [],
+    //    hasSuggested = false,
+    //    listedIdp;
+    //
+    //if (selectedIdps.length > 0) {
+    //  for (var j = 0; j < selectedIdps.length; j++) {
+    //    listedIdp = $('#selection a[data-idp=\'' + selectedIdps[j] + '\']');
+    //    if (listedIdp) {
+    //      $('#preselection .list').append(listedIdp);
+    //      hasSuggested = true;
+    //    }
+    //  }
+    //}
 
-    if (selectedIdps.length > 0) {
-      for (var j = 0; j < selectedIdps.length; j++) {
-        listedIdp = $('#selection a[data-idp=\'' + selectedIdps[j] + '\']');
-        if (listedIdp) {
-          $('#preselection .list').append(listedIdp);
-          hasSuggested = true;
-        }
-      }
-    }
-
-    if (hasSuggested === true) {
-      $('#preselection').removeClass('hidden');
-    }
+    //if (hasSuggested === true) {
+    //  $('#preselection').removeClass('hidden');
+    //}
 
     Cookies.set('selectedidps', JSON.stringify(['http://federation.hanze.nl/adfs/services/trust', 'http://federatie.graafschapcollege.nl/adfs/services/trust']));
 

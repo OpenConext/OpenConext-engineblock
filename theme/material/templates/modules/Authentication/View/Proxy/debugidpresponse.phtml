@@ -30,13 +30,13 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
   <div class="mod-content">
     <h1><?php echo $this->t('idp_debugging_title'); ?></h1>
     <?php if ($validationResult->isValid()) : ?>
-    <img src="/images/tick.png" alt="" />
+      <img src="/images/checkmark.svg" class="c-icon" />
     <?= $this->t('attributes_validation_succeeded'); ?>
     <?php else: ?>
         <?php if (count($validationResult->getErrors()) > 0): ?>
-    <img src="/images/exclamation.png" alt="" style="vertical-align: bottom" />
+    <img src="/images/warning.svg" class="c-icon" />
         <?php else: ?>
-    <img src="/images/error.png" alt="" style="vertical-align: bottom" />
+    <img src="/images/warning.svg" class="c-icon" />
         <?php endif; ?>
 
     <?= $this->t('attributes_validation_failed'); ?>
@@ -98,13 +98,13 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
     <h2><?= $this->t('attributes') ?></h2>
     <?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
         <p class="error">
-            <img src="/images/exclamation.png" alt="[error]" style="vertical-align: bottom" /> <?php
+          <img src="/images/warning.svg" class="c-icon" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
         ?></p>
     <?php endforeach; ?>
     <?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
         <p class="warning">
-            <img src="/images/error.png" alt="[error]" style="vertical-align: bottom" /> <?php
+          <img src="/images/warning.svg" class="c-icon" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
         ?></p>
     <?php endforeach; ?>
@@ -148,17 +148,17 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
                   </td>
                   <td>
                       <?php if ($validationResult->isValid($attributeName)): ?>
-                      <img src="/images/tick.png" alt="valid" />
+                        <img src="/images/checkmark.svg" class="c-icon" />
                       <?php else:
                           foreach ($validationResult->getErrors($attributeName) as $error) {
                               echo '<p class="error">' .
-                                      '<img src="/images/exclamation.png" alt="[error]" style="vertical-align: bottom" /> ' .
+                                      '<img src="/images/warning.svg" class="c-icon" /> ' .
                                       EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                                   '</p>';
                           }
                           foreach ($validationResult->getWarnings($attributeName) as $warning) {
                               echo '<p class="warning">'.
-                                      '<img src="/images/error.png" alt="[error]" style="vertical-align: bottom" /> ' .
+                                      '<img src="/images/warning.svg" class="c-icon" /> ' .
                                       EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
                                   '</p>';
                           }
