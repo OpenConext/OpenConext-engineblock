@@ -10,7 +10,8 @@
     "tests"
   ],
   "devDependencies": {
-    "jquery": "~1.11.3"
+    "jquery": "~1.11.3",
+    "js-cookie": "~1.5.1"
   },
   "dependencies": {
     "jquery.lazyload": "~1.9.5"

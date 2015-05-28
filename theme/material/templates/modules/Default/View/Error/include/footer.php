@@ -4,7 +4,6 @@ $log->log('Showing feedback page with message: ' . $layout->title, EngineBlock_L
 $log->getQueueWriter()->flush('feedback page shown');
 ?>
 
-    <hr />
     <div class="l-overflow">
       <table>
       <?php
@@ -24,7 +23,6 @@ $log->getQueueWriter()->flush('feedback page shown');
       ?>
       </table>
     </div>
-    <hr />
 
     <p><?= $this->t('error_help_desc'); ?></p>
 

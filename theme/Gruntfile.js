@@ -38,6 +38,7 @@ module.exports = function(grunt) {
                     '../www/authentication/javascripts/application.js': [
                         'bower_components/jquery/dist/jquery.min.js',
                         'bower_components/jquery.lazyload/jquery.lazyload.js',
+                        'bower_components/js-cookie/src/js.cookie.js',
                         '<%= config.theme %>/javascripts/application.js'
                     ]
                 }

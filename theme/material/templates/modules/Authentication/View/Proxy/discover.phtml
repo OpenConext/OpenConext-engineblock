@@ -65,16 +65,6 @@ else {
     }
 }
 
-$preselectedIdpData = array();
-if ($preselectedIdp) {
-    foreach ($idpList as $idp) {
-        if ($idp['EntityID'] === $preselectedIdp) {
-            $preselectedIdpData = $idp;
-            break;
-        }
-    }
-}
-
 if (!$noAccessIdpData) {
   $noAccessIdpData = array();
 }
@@ -89,24 +79,17 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   <button>Search</button>
 </form>
 
-<?php if (count($preselectedIdpData)): ?>
-<div class="mod-results">
+
+<div id="preselection" class="mod-results hidden">
     <header>
       <h2><?php echo $this->t('our_suggestion'); ?></h2>
     </header>
     <div class="list">
-      <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-        <div class="logo">
-          <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
-        </div>
-        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-        <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
-      </a>
+
     </div>
 </div>
-<?php endif; ?>
 
-<div class="mod-results">
+<div id="selection" class="mod-results">
   <header>
     <h2><?php echo $this->t('idps_with_access'); ?></h2>
   </header>
@@ -131,7 +114,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     <?php if (count($idpList) === 0): ?>
       <div class="loading">
         <div class="logo">
-          <div class="letter">??</div>
+          <img class="logo" src="/images/placeholder.png" />
         </div>
         <?php // @TODO fix access request form ?>
         <p>Can't find your IDP? &nbsp;<a href="form/">Request access</a>&nbsp;or try tweaking your search.</p>
@@ -142,7 +125,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 
 <?php // @TODO Implement this feature ?>
 <?php if (count($noAccessIdpData)): ?>
-<div class="mod-results">
+<div id="noselection" class="mod-results">
   <header>
     <h2><?php echo $this->t('idps_without_access'); ?></h2>
   </header>

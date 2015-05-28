@@ -69,7 +69,7 @@
     </ul>
   </div>
 
-  <div class="l-container">
+  <div class="l-container<?php if ($this->layout()->wide === true):?> wide<? endif; ?>">
       <?php echo $this->layout()->content; ?>
   </div>
 

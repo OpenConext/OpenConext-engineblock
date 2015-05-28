@@ -9,7 +9,6 @@ OpenConext.Discover = function() {
 
     function filterList(filterValue) {
         var filterElements = $('.mod-results a'),
-            searchHeader = $('.mod-results header'),
             spinner = $('.mod-results .loading'),
             i, result, title;
 
@@ -41,13 +40,19 @@ OpenConext.Discover = function() {
             list = $('.list'),
             nextElement;
 
-        // Press enter
+        // Press enter in searchbox
         if (
           e.which === 13 &&
           currentElement.hasClass('mod-search-input') &&
           list.find('.active:first').length > 0
         ) {
           list.find('.active:first').focus().trigger('click');
+        }
+
+        // Press enter on result
+        if (e.which === 13 && currentElement.attr('href') === '#') {
+          e.preventDefault();
+          currentElement.trigger('click');
         }
 
         // Press down
@@ -76,6 +81,27 @@ OpenConext.Discover = function() {
         return this;
     }
 
+    var selectedIdps = JSON.parse(Cookies.get('selectedidps')) || [],
+        hasSuggested = false,
+        listedIdp;
+
+    if (selectedIdps.length > 0) {
+      for (var j = 0; j < selectedIdps.length; j++) {
+        listedIdp = $('#selection a[data-idp=\'' + selectedIdps[j] + '\']');
+        if (listedIdp) {
+          $('#preselection .list').append(listedIdp);
+          hasSuggested = true;
+        }
+      }
+    }
+
+    if (hasSuggested === true) {
+      $('#preselection').removeClass('hidden');
+    }
+
+    Cookies.set('selectedidps', JSON.stringify(['http://federation.hanze.nl/adfs/services/trust', 'http://federatie.graafschapcollege.nl/adfs/services/trust']));
+
+
     this.searchBar.on('input', function inputDetected(){
         filterList($(this).val());
     });
@@ -87,9 +113,10 @@ OpenConext.Discover = function() {
     }
 
     $('.mod-results a').on('click', function selectIdp(){
-       var selectedIdp = $(this).attr('data-idp');
-        $('#form-idp').val(selectedIdp);
-        $('form.mod-search').submit();
+      var selectedIdp = $(this).attr('data-idp');
+
+      $('#form-idp').val(selectedIdp);
+      $('form.mod-search').submit();
     });
 
     $('body').on('keydown', keyNavigation);
