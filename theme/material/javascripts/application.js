@@ -17,12 +17,6 @@ OpenConext.Discover = function() {
 
         filterValue = filterValue.toLowerCase();
 
-        if (filterValue !== '') {
-            searchHeader.hide();
-        } else {
-            searchHeader.show();
-        }
-
         for (i = 0; i < filterElements.length; i++) {
             result = $(filterElements[i]);
             title = $(result).find('h3').text().toLowerCase();
@@ -53,13 +47,13 @@ OpenConext.Discover = function() {
           currentElement.hasClass('mod-search-input') &&
           list.find('.active:first').length > 0
         ) {
-          $('.list').find('.active:first').focus().trigger('click');
+          list.find('.active:first').focus().trigger('click');
         }
 
         // Press down
         if (e.which === 40) {
             if (currentElement.closest('.active').next().attr('type') === 'hidden') {
-                nextElement = $('.list').find('.active:first');
+                nextElement = list.find('.active:first');
                 if (nextElement.length > 0) {
                     nextElement[0].focus();
                 }
