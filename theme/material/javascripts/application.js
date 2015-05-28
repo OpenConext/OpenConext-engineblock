@@ -44,7 +44,17 @@ OpenConext.Discover = function() {
 
     function keyNavigation(e){
         var currentElement = $(document.activeElement),
+            list = $('.list'),
             nextElement;
+
+        // Press enter
+        if (
+          e.which === 13 &&
+          currentElement.hasClass('mod-search-input') &&
+          list.find('.active:first').length > 0
+        ) {
+          $('.list').find('.active:first').focus().trigger('click');
+        }
 
         // Press down
         if (e.which === 40) {
