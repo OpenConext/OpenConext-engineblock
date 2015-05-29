@@ -7,20 +7,35 @@ OpenConext.Discover = function () {
     return 0 !== $('.mod-search-input').length;
   }
 
-  function checkSuggestedVisible() {
-    var preselection = $('#preselection'),
-      suggestedBox = $('#preselection .list');
+  function checkListVisible(listContainer) {
+    var list = listContainer.find('.list:first');
 
-    if (suggestedBox.children().length === 0 || suggestedBox.find('.active').length === 0) {
-      preselection.addClass('hidden');
+    if (list.children().length === 0 || list.find('.active').length === 0) {
+      listContainer.addClass('hidden');
     } else {
-      preselection.removeClass('hidden');
+      listContainer.removeClass('hidden');
+    }
+
+  }
+
+  function checkVisible() {
+    checkListVisible($('#preselection'));
+    checkListVisible($('#noselection'));
+  }
+
+  function checkNoResults() {
+    var noResultsContainer = $('#selection .noresults');
+
+    if ($('#selection .list a.active').length === 0) {
+      noResultsContainer.removeClass('hidden');
+    } else {
+      noResultsContainer.addClass('hidden');
     }
   }
 
   function filterList(filterValue) {
-    var filterElements = $('.mod-results a'),
-      spinner = $('.mod-results .loading'),
+    var filterElements = $('.mod-results a.result'),
+      spinner = $('.mod-results .spinner'),
       i, result, title;
 
     spinner.removeClass('hidden');
@@ -40,7 +55,8 @@ OpenConext.Discover = function () {
       }
     }
 
-    checkSuggestedVisible();
+    checkVisible();
+    checkNoResults();
     spinner.addClass('hidden');
 
     // trigger the resize event to lazyload images
@@ -138,7 +154,8 @@ OpenConext.Discover = function () {
     }
   }
 
-  checkSuggestedVisible();
+  checkVisible();
+  checkNoResults();
 
   this.searchBar.on('input', function inputDetected() {
     filterList($(this).val());
@@ -207,7 +224,7 @@ OpenConext.Discover = function () {
         selectedIdps.splice(saveIndex, 1);
         $(this).slideUp('fast', function() {
           $(this).remove();
-          checkSuggestedVisible();
+          checkVisible();
         });
       }
     } else {

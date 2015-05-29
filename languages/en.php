@@ -44,6 +44,7 @@ return array(
     'edit'                      => 'Edit',
     'done'                      => 'Done',
     'remove'                    => 'Remove',
+    'request_access'            => 'Request access',
 
     //Footer
     'service_by'            => 'This is a service by',

@@ -65,8 +65,17 @@ else {
     }
 }
 
-if (!$noAccessIdpData) {
-  $noAccessIdpData = array();
+
+$noAccessIdpData = array();
+
+// @todo remove testcode
+$idpList[0]['Access'] = '0';
+
+foreach ($idpList as $key => $idp) {
+  if ($idp['Access'] === '0') {
+    array_push($noAccessIdpData, $idp);
+    unset($idpList[$key]);
+  }
 }
 
 $layout->assign('greenHeader', $spDisplayName);
@@ -95,7 +104,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   </header>
   <div class="list">
 
-    <div class="loading hidden">
+    <div class="loading spinner hidden">
       <div class="logo">
         <img src="/images/spinner.svg">
       </div>
@@ -111,35 +120,29 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
         <button class="c-button white action" data-toggle-text="<?= $this->t('remove'); ?>"><?php echo $this->t('press_enter_to_select'); ?></button>
       </a>
     <?php endforeach; ?>
-    <?php if (count($idpList) === 0): ?>
-      <div class="loading">
-        <div class="logo">
-          <img class="logo" src="/images/placeholder.png" />
-        </div>
-        <?php // @TODO fix access request form ?>
-        <p>Can't find your IDP? &nbsp;<a href="form/">Request access</a>&nbsp;or try tweaking your search.</p>
+    <div class="loading<?php if (count($idpList) !== 0): ?> hidden<?php endif; ?> noresults">
+      <div class="logo">
+        <div class="letter">??</div>
       </div>
-    <?php endif; ?>
+      <?php // @TODO fix access request form ?>
+      <p>Can't find your IDP? &nbsp;<a href="form/">Request access</a>&nbsp;or try tweaking your search.</p>
+    </div>
   </div>
 </div>
 
-<?php // @TODO Implement this feature ?>
-<?php if (count($noAccessIdpData)): ?>
-<div id="noselection" class="mod-results">
+<div id="noselection" class="mod-results hidden">
   <header>
     <h2><?php echo $this->t('idps_without_access'); ?></h2>
   </header>
-  <div class='list no-access'>
-    <?php
-    $preselectedIdpData = $idpList[0];
-    ?>
-    <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-      <div class="logo">
-        <img class="logo" src="/images/placeholder.png" data-original="<?= $preselectedIdpData['Logo'] ?>" />
-      </div>
-      <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-      <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
-    </a>
+  <div class='list show-buttons no-access'>
+    <?php foreach ($noAccessIdpData as $key => $idp) : ?>
+      <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+        <div class="logo">
+          <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+        </div>
+        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
+        <div class="c-button white action"><?php echo $this->t('request_access'); ?></div>
+      </a>
+    <?php endforeach; ?>
   </div>
 </div>
-<?php endif; ?>

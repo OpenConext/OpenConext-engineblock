@@ -43,6 +43,7 @@ return array(
     'edit'                      => 'Bewerken',
     'done'                      => 'Klaar',
     'remove'                    => 'Verwijderen',
+    'request_access'            => 'Toegang aanvragen',
 
     //Footer
     'service_by'            => 'Deze dienst wordt aangeboden door',
