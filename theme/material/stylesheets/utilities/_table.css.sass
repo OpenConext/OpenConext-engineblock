@@ -1,15 +1,22 @@
 .comp-table
   width: 100%
-  margin-bottom: 1rem
+  margin-bottom: 2rem
 
   th, td
     padding: .75rem 1rem .75rem 0
     border-bottom: 1px solid $border
     white-space: nowrap
 
-  thead
+  tr:first-child
     th, td
-      border-bottom: 2px solid $border
+      border-top: 1px solid $border
+
+  thead
+    tr:first-child
+      th, td
+        border-top: 0
+    th, td
+      border-bottom: 1px solid $border
       @extend %h3
 
   @for $i from 1 through 20

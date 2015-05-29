@@ -1,14 +1,15 @@
 .mod-header
   +pie-clearfix
-  padding: 1rem
+  padding: 1rem 1rem
   background: #fff
   box-shadow: 1px 1px $br rgba(black,.2)
   border-bottom: 2px solid $blue
   line-height: 30px
   display: flex
+  align-items: center
 
   +min-width($medium)
-    padding: 1.5rem 2rem
+    padding: 1rem 2rem
     margin-bottom: 3rem
 
   // Main app title
@@ -17,21 +18,32 @@
     text-overflow: ellipsis
     overflow: hidden
     white-space: nowrap
+    padding-right: 1rem
 
     strong
       color: $blue
 
-  .comp-language
+  .meta
+    display: flex
+    align-items: center
     margin-left: auto
 
-  +min-width($medium)
-    .comp-links
-      display: flex
+  .burger
+    display: none
+    align-items: center
+    margin-left: auto
 
-      li
-        margin-left: 1rem
+    img
+      max-width: 0.8rem
 
-  +max-width($large)
-    .comp-links,
-    .comp-language
+  .burger,
+  .comp-language,
+  .comp-links
+    flex-wrap: nowrap
+
+  +max-width($medium)
+    .burger
+      display: block
+
+    .meta
       display: none

@@ -11,14 +11,14 @@
     margin: 0
 
   input
-    @extend %h2
+    font-size: 1rem
     @extend %box
     display: block
     border: 0
     border-radius: $br
     width: 100%
-    padding: 0 4rem 0 1rem
-    line-height: 4rem
+    padding: 0.75rem 3.5rem 0.75rem 1rem
+    line-height: 2rem
     background: #fff
     background-origin: content-box
 
@@ -28,11 +28,12 @@
 
   button
     position: absolute
+    pointer-events: none
     top: 0
     right: 0
     text-indent: -9999rem
-    width: 4rem
-    height: 4rem
+    width: 3.5rem
+    height: 3.5rem
     border: none
     background: inline-image("search.svg") no-repeat center center
       size: 1rem auto

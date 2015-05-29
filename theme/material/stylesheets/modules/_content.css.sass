@@ -26,27 +26,19 @@
   ol
     margin-left: 1.5rem
 
-  .overflow
-    overflow-x: auto
-    +scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px)
-
-  table
-    width: 100%
-    margin-bottom: 1rem
-
-    th, td
-      padding: .75rem 1rem .75rem 0
-      border-bottom: 1px solid $border
-      white-space: nowrap
-
-    thead
-      th, td
-        border-bottom: 2px solid $border
-        @extend %h3
-
   @for $i from 1 through 20
     .percent_#{$i * 5}
       width: #{$i * 5%}
 
+  header
+    display: flex
+    align-items: center
+    margin-bottom: 0.5rem
 
+    h1
+      margin-bottom: 0
 
+    img
+      max-height: 1.7rem
+      width: auto
+      margin-right: 1rem

@@ -141,7 +141,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
           <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
         </div>
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <div class="c-button white action"><?php echo $this->t('request_access'); ?></div>
+        <div class="c-button outline action"><?php echo $this->t('request_access'); ?></div>
       </a>
     <?php endforeach; ?>
   </div>

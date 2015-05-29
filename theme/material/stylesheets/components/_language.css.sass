@@ -1,24 +1,28 @@
 .comp-language
-  overflow: hidden
-  margin-right: 2rem
-  line-height: 2rem
+  margin-right: 1rem
+  line-height: 1.75rem
+  display: flex
+  justify-content: center
+  flex-wrap: nowrap
 
   li
-    float: left
     list-style: none
 
     &:first-child
       a
         border-radius: $br 0 0 $br
+
     &:last-child
       a
         border-radius: 0 $br $br 0
 
   a
     display: block
-    padding: 0 14px
+    padding: 0 0.5rem
+    font-size: 0.8rem
     background: rgba($blue,.1)
     margin-right: 1px
+    text-decoration: none
 
     &:hover,
     &.selected

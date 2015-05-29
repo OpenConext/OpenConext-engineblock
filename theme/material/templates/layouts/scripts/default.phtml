@@ -44,29 +44,31 @@
         <strong><?php echo $this->layout()->greenHeader; ?></strong>
       <?php endif; ?>
     </h1>
-    <ul class="comp-language">
-      <li>
-        <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
-      </li>
-      <li>
-        <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
-      </li>
-    </ul>
-    <ul class="comp-links">
-      <?php if (isset($this->layout()->helpLink)): ?>
+    <div class="meta">
+      <ul class="comp-language">
         <li>
-          <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
+          <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
         </li>
-      <?php endif; ?>
-      <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
-      <li>
-        <?php echo $view->t('help_link'); ?>
-      </li>
-      <?php endif; ?>
-      <li>
-        <a href=""><?php echo ucfirst($view->t('logout')) ?></a>
-      </li>
-    </ul>
+        <li>
+          <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+        </li>
+      </ul>
+      <ul class="comp-links">
+        <?php if (isset($this->layout()->helpLink)): ?>
+          <li>
+            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
+          </li>
+        <?php endif; ?>
+        <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
+        <li>
+          <?php echo $view->t('help_link'); ?>
+        </li>
+        <?php endif; ?>
+        <li>
+          <a href=""><?php echo ucfirst($view->t('logout')) ?></a>
+        </li>
+      </ul>
+    </div>
   </div>
 
   <div class="l-container<?php if ($this->layout()->wide === true):?> wide<? endif; ?>">
