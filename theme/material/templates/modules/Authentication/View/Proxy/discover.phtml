@@ -82,7 +82,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 
 <div id="preselection" class="mod-results hidden">
     <header>
-      <h2><?php echo $this->t('our_suggestion'); ?></h2>
+      <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
     </header>
     <div class="list">
 
@@ -108,7 +108,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
           <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
         </div>
         <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <div class="c-button white action"><?php echo $this->t('press_enter_to_select'); ?></div>
+        <button class="c-button white action" data-toggle-text="<?= $this->t('remove'); ?>"><?php echo $this->t('press_enter_to_select'); ?></button>
       </a>
     <?php endforeach; ?>
     <?php if (count($idpList) === 0): ?>
