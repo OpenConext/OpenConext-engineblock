@@ -11,7 +11,7 @@ OpenConext.Discover = function () {
     var preselection = $('#preselection'),
       suggestedBox = $('#preselection .list');
 
-    if (suggestedBox.children().length === 0) {
+    if (suggestedBox.children().length === 0 || suggestedBox.find('.active').length === 0) {
       preselection.addClass('hidden');
     } else {
       preselection.removeClass('hidden');
@@ -40,6 +40,7 @@ OpenConext.Discover = function () {
       }
     }
 
+    checkSuggestedVisible();
     spinner.addClass('hidden');
 
     // trigger the resize event to lazyload images
@@ -49,43 +50,75 @@ OpenConext.Discover = function () {
   function keyNavigation(e) {
     var currentElement = $(document.activeElement),
       list = $('.list'),
-      nextElement;
+      key = e.which;
 
-    // Press enter in searchbox
-    if (
-      e.which === 13 &&
-      currentElement.hasClass('mod-search-input') &&
-      list.find('.active:first').length > 0
-    ) {
-      list.find('.active:first').focus().trigger('click');
+    function pressEnter() {
+
+      if (currentElement.hasClass('mod-search-input') && list.find('.active:first').length > 0) {
+        list.find('.active:first').focus().trigger('click');
+      }
+
+      // Press enter on result
+      if (currentElement.attr('href') === '#') {
+        e.preventDefault();
+        currentElement.trigger('click');
+      }
     }
 
-    // Press enter on result
-    if (e.which === 13 && currentElement.attr('href') === '#') {
-      e.preventDefault();
-      currentElement.trigger('click');
-    }
-
-    // Press down
-    if (e.which === 40) {
+    function pressDownArrow() {
+      // moving from the searchbox
       if (currentElement.closest('.active').next().attr('type') === 'hidden') {
-        nextElement = list.find('.active:first');
+        var nextElement = list.find('.active:first');
+
         if (nextElement.length > 0) {
           nextElement[0].focus();
         }
-      } else if (currentElement.nextAll('.active:first')) {
+        return;
+      }
+
+      // moving in a list
+      if (currentElement.nextAll('.active:first').length > 0) {
         currentElement.nextAll('.active:first').focus();
+        return;
+      }
+
+      // moving to next list
+      if (currentElement.parent().parent().next().find('.active:first').length > 0) {
+        currentElement.parent().parent().next().find('.active:first').focus();
       }
     }
 
-    // Press up
-    if (e.which === 38) {
+    function pressUpArrow() {
+      // move up in list
+      if (currentElement.prevAll('.active:first').length > 0) {
+        currentElement.prevAll('.active:first').focus();
+        return;
+      }
+
+      // move up in previous list
+      if (currentElement.parent().parent().prev().find('.active:last').length > 0) {
+        currentElement.parent().parent().prev().find('.active:last').focus();
+        return;
+      }
+
+      // move up to search
       if (currentElement.prevAll('.active:first').length === 0) {
         $('input[type=search]').focus();
-      } else if (currentElement.prevAll('.active:first')) {
-        currentElement.prevAll('.active:first').focus();
       }
     }
+
+    switch (key) {
+      case 13:
+        pressEnter();
+        break;
+      case 40:
+        pressDownArrow();
+        break;
+      case 38:
+        pressUpArrow();
+        break;
+    }
+
   }
 
   if (!hasDiscovery()) {
