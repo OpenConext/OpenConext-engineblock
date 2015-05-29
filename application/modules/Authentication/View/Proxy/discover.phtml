@@ -68,9 +68,6 @@ else {
 
 $noAccessIdpData = array();
 
-// @todo remove testcode
-$idpList[0]['Access'] = '0';
-
 foreach ($idpList as $key => $idp) {
   if ($idp['Access'] === '0') {
     array_push($noAccessIdpData, $idp);
@@ -124,7 +121,6 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
       <div class="logo">
         <div class="letter">??</div>
       </div>
-      <?php // @TODO fix access request form ?>
       <p>Can't find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.</p>
     </div>
   </div>
@@ -155,4 +151,4 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   }
 </script>
 
-<div id="request-access">Boo!</div>
+<div id="request-access"></div>
