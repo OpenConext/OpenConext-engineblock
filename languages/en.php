@@ -41,6 +41,9 @@ return array(
     'log_in_to'                 => 'Log in to',
     'press_enter_to_select'     => 'Press enter to select',
     'loading_idps'              => 'Loading identity providers …',
+    'edit'                      => 'Edit',
+    'done'                      => 'Done',
+    'remove'                    => 'Remove',
 
     //Footer
     'service_by'            => 'This is a service by',

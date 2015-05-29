@@ -40,9 +40,12 @@ return array(
     'log_in_to'                 => 'Inloggen bij',
     'press_enter_to_select'     => 'Druk op enter om te selecteren',
     'loading_idps'              => 'Identity providers worden geladen …',
+    'edit'                      => 'Bewerken',
+    'done'                      => 'Klaar',
+    'remove'                    => 'Verwijderen',
 
     //Footer
-    'service_by'            => 'Deze dienst word aangeboden door',
+    'service_by'            => 'Deze dienst wordt aangeboden door',
     'serviceprovider_link'  => '<a href="#">SURFconext</a>',
     'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
