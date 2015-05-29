@@ -16,7 +16,7 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
  * @var Zend_Layout $layout
  */
 $layout = $this->layout();
-$layout->assign('subheader', 'Log in to ');
+$layout->assign('subheader', $this->t('log_in_to'));
 
 // Determine the selected language, default to english
 if (isset($_GET['lang'])) {
@@ -65,43 +65,94 @@ else {
     }
 }
 
-$preselectedIdpData = array();
-if ($preselectedIdp) {
-    foreach ($idpList as $idp) {
-        if ($idp['EntityID'] === $preselectedIdp) {
-            $preselectedIdpData = $idp;
-            break;
-        }
-    }
+
+$noAccessIdpData = array();
+
+// @todo remove testcode
+$idpList[0]['Access'] = '0';
+
+foreach ($idpList as $key => $idp) {
+  if ($idp['Access'] === '0') {
+    array_push($noAccessIdpData, $idp);
+    unset($idpList[$key]);
+  }
 }
 
 $layout->assign('greenHeader', $spDisplayName);
 $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 ?>
-
 <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-  <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" autofocus="autofocus" class="mod-search-input active nav-el">
-  <div class="results">
-
-    <?php if (count($preselectedIdpData)): ?>
-    <h2>Last time you chose</h2>
-    <a class="result active nav-el" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['EntityID']); ?>">
-      <img class="logo" src="<?= $preselectedIdpData['Logo'] ?>" />
-      <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($preselectedIdpData['Name_' . $lang]); ?></h3>
-      <div class="c-button outline narrow">Press enter to select</div>
-    </a>
-
-    <h2>Other results</h2>
-    <?php endif; ?>
-    <?php foreach ($idpList as $idp) : ?>
-      <a class="result active nav-el" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
-        <img class="logo" src="<?= $idp['Logo'] ?>" />
-        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <div class="c-button outline narrow">Press enter to select</div>
-      </a>
-    <?php endforeach; ?>
-
-  </div>
+  <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" autofocus="autofocus" class="mod-search-input active">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
   <input type="hidden" id="form-idp" name="idp" value="" />
+  <button>Search</button>
 </form>
+
+
+<div id="preselection" class="mod-results hidden">
+    <header>
+      <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
+    </header>
+    <div class="list">
+
+    </div>
+</div>
+
+<div id="selection" class="mod-results">
+  <header>
+    <h2><?php echo $this->t('idps_with_access'); ?></h2>
+  </header>
+  <div class="list">
+
+    <div class="loading spinner hidden">
+      <div class="logo">
+        <img src="/images/spinner.svg">
+      </div>
+      <?=$this->t('loading_idps');?>
+    </div>
+
+    <?php foreach ($idpList as $key => $idp) : ?>
+      <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+        <div class="logo">
+          <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+        </div>
+        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
+        <button class="c-button white action" data-toggle-text="<?= $this->t('remove'); ?>"><?php echo $this->t('press_enter_to_select'); ?></button>
+      </a>
+    <?php endforeach; ?>
+    <div class="loading<?php if (count($idpList) !== 0): ?> hidden<?php endif; ?> noresults">
+      <div class="logo">
+        <div class="letter">??</div>
+      </div>
+      <?php // @TODO fix access request form ?>
+      <p>Can't find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.</p>
+    </div>
+  </div>
+</div>
+
+<div id="noselection" class="mod-results hidden">
+  <header>
+    <h2><?php echo $this->t('idps_without_access'); ?></h2>
+  </header>
+  <div class='list show-buttons no-access'>
+    <?php foreach ($noAccessIdpData as $key => $idp) : ?>
+      <a class="result active noaccess" href="#no-access" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+        <div class="logo">
+          <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+        </div>
+        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
+        <div class="c-button outline action"><?php echo $this->t('request_access'); ?></div>
+      </a>
+    <?php endforeach; ?>
+  </div>
+</div>
+
+<script type="text/javascript">
+  var discover = {
+    lang: "<?=$lang?>",
+    spEntityId: "<?=$metaDataSP->entityId?>",
+    spName: "<?=$spDisplayName?>"
+  }
+</script>
+
+<div id="request-access">Boo!</div>

@@ -1,16 +1,20 @@
 <?php
-// Determine the selected language, default to english
-$lang = 'en';
-if (isset($_GET['lang'])) {
-  $lang = $_GET['lang'];
-} elseif (isset($_POST['lang'])) {
-  $lang = $_POST['lang'];
-} elseif (isset($_COOKIE['lang'])) {
-  $lang = $_COOKIE['lang'];
-}
-if (!in_array($lang, array('nl','en'))) {
+  // Determine the selected language, default to english
+  $locale = new Zend_Locale();
+  $lang = $locale->getLanguage() || 'en';
   $lang = 'en';
-}
+  if (isset($_GET['lang'])) {
+    $lang = $_GET['lang'];
+  } elseif (isset($_POST['lang'])) {
+    $lang = $_POST['lang'];
+  } elseif (isset($_COOKIE['lang'])) {
+    $lang = $_COOKIE['lang'];
+  }
+  if (!in_array($lang, array('nl','en'))) {
+    $lang = 'en';
+  }
+
+  $view = new EngineBlock_View();
 ?><!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="en-us"> <![endif]-->
 <!--[if IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8" lang="en-us"> <![endif]-->
@@ -24,65 +28,74 @@ if (!in_array($lang, array('nl','en'))) {
   <title><?php echo htmlentities($this->layout()->title, 0, 'UTF-8'); ?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="robots" content="noindex, nofollow"/>
-  <meta content='ie=edge,chrome=1' http-equiv='x-ua-compatible'>
-  <meta content='initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width' name='viewport'>
-  <meta content='initial-scale=1.0,user-scalable=no,maximum-scale=1' media='(device-height: 568px)' name='viewport'>
-  <meta content='yes' name='apple-mobile-web-app-capable'>
-  <meta content='translucent-black' name='apple-mobile-web-app-status-bar-style'>
-  <link href='/images/favicon.ico' rel='shortcut icon'>
-  <link href='/images/apple-touch-icon-precomposed.png' rel='apple-touch-icon-precomposed'>
-  <link href='/images/apple-touch-icon-57x57-precomposed.png' rel='apple-touch-icon-precomposed' sizes='57x57'>
-  <link href='/images/apple-touch-icon-72x72-precomposed.png' rel='apple-touch-icon-precomposed' sizes='72x72'>
-  <link href='/images/apple-touch-icon-114x114-precomposed.png' rel='apple-touch-icon-precomposed' sizes='114x114'>
-  <link href="/stylesheets/application.css.css" rel="stylesheet" type="text/css" />
+  <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
+  <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+  <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1" media="(device-height: 568px)" name="viewport">
+  <meta content="yes" name="apple-mobile-web-app-capable">
+  <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+  <link href="/favicon.ico" rel="shortcut icon">
+  <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
 </head>
-<body class='index'>
-<div class='mod-header'>
-  <h1 class='title'>
-    <?php echo $this->layout()->subheader; ?>
-    <?php if (isset($this->layout()->greenHeader)): ?>
-      <strong><?php echo $this->layout()->greenHeader; ?></strong>
-    <?php endif; ?>
-  </h1>
-  <div class='meta'>
-    <ul class='language'>
-      <li>
-        <a<?php if ($lang==='en'): ?> class='selected'<?php endif; ?> href='<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>'>EN</a>
-      </li>
-      <li>
-        <a<?php if ($lang==='nl'): ?> class='selected'<?php endif; ?> href='<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>'>NL</a>
-      </li>
-    </ul>
-    <ul class='links'>
-      <?php if (isset($this->layout()->helpLink)): ?>
+<body class="index">
+  <div class="mod-header">
+    <h1 class="title">
+      <?php echo $this->layout()->subheader; ?>
+      <?php if (isset($this->layout()->greenHeader)): ?>
+        <strong><?php echo $this->layout()->greenHeader; ?></strong>
+      <?php endif; ?>
+    </h1>
+    <div class="meta">
+      <ul class="comp-language">
         <li>
-          <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank">help</a>
+          <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
         </li>
-      <?php endif; ?>
-      <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
-      <li>
-        <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">help</a>
-      </li>
-      <?php endif; ?>
-      <li>
-        <a href='#'>Logout</a>
-      </li>
-    </ul>
+        <li>
+          <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+        </li>
+      </ul>
+      <ul class="comp-links">
+        <?php if (isset($this->layout()->helpLink)): ?>
+          <li>
+            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
+          </li>
+        <?php endif; ?>
+        <?php if (EngineBlock_View::moduleName() == 'profile'): ?>
+        <li>
+          <?php echo $view->t('help_link'); ?>
+        </li>
+        <?php endif; ?>
+        <li>
+          <a href=""><?php echo ucfirst($view->t('logout')) ?></a>
+        </li>
+      </ul>
+    </div>
   </div>
-</div>
-<div class='l-container'>
-    <?php echo $this->layout()->content; ?>
-</div>
 
-<div class="l-footer">
-  <nav class="mod-footer">
-    <ul>
-      <li><a href="#">SURFconext</a></li>
-      <li><a href="#">Help</a></li>
-    </ul>
-  </nav>
-</div>
+  <div class="l-container<?php if ($this->layout()->wide === true):?> wide<? endif; ?>">
+      <?php echo $this->layout()->content; ?>
+  </div>
 
-<script src="/javascripts/application.js" type="text/javascript"></script>
+  <div class="l-footer">
+    <nav class="mod-footer">
+      <p><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></p>
+      <ul class="comp-language">
+        <li>
+          <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
+        </li>
+        <li>
+          <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+        </li>
+      </ul>
+      <ul class="comp-links">
+        <li>
+          <?php if (isset($this->layout()->helpLink)): ?>
+            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
+          <?php endif; ?>
+        </li>
+      </ul>
+    </nav>
+  </div>
+
+  <script src="/javascripts/application.js" type="text/javascript"></script>
 </body>
 </html>
