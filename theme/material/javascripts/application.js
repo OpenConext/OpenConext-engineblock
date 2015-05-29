@@ -154,8 +154,33 @@ OpenConext.Discover = function () {
     }
   }
 
+  function initModal(modal) {
+    $('.close-modal').on('click', function closeModal(e) {
+      e.preventDefault();
+      $('#request-access').trigger('closeModal');
+    });
+    $('#name').focus();
+
+    $('#request_access_submit').on('click', function (e) {
+      e.preventDefault();
+      var formData = $('#request_access_form').serialize();
+      $.post('/authentication/idp/performRequestAccess', formData)
+        .done(function (data) {
+          $("#request-access").html(data);
+          initModal(modal);
+        });
+    });
+  }
+
   checkVisible();
   checkNoResults();
+  $('#request-access').easyModal({
+    onOpen: initModal,
+    onClose: function() {
+      $('#request-access').html('');
+      $('input[type=search]').focus();
+    }
+  });
 
   this.searchBar.on('input', function inputDetected() {
     filterList($(this).val());
@@ -170,12 +195,13 @@ OpenConext.Discover = function () {
   $('.mod-results a.edit').on('click', function editPreselection(e) {
     var mode = $(this).attr('data-toggle'),
       removeables = $('#preselection .c-button'),
+      list = $('#preselection .list'),
       item, x, swapText;
 
     e.preventDefault();
 
     if (mode === 'view') {
-      $('#preselection .list').addClass('show-buttons');
+      list.addClass('show-buttons');
 
       swapText = $(this).attr('data-toggle-text');
       $(this).attr('data-toggle-text', $(this).text());
@@ -193,7 +219,7 @@ OpenConext.Discover = function () {
       }
       $(this).attr('data-toggle', 'edit');
     } else {
-      $('#preselection .list').removeClass('show-buttons');
+      list.removeClass('show-buttons');
 
       swapText = $(this).attr('data-toggle-text');
       $(this).attr('data-toggle-text', $(this).text());
@@ -214,8 +240,26 @@ OpenConext.Discover = function () {
     }
   });
 
+  $('a.noaccess').on('click', function requestAccess(e) {
+    e.preventDefault();
+    var idpEntityId = $(this).attr('data-idp') || 'unknown',
+      idpName = $(this).text(),
+      params = {
+        lang: discover.lang,
+        idpEntityId: idpEntityId,
+        idpName: idpName,
+        spEntityId: discover.spEntityId,
+        spName: discover.spName
+      };
 
-  $('.mod-results a.result').on('click', function handleIdpAction(e) {
+    $.get('/authentication/idp/requestAccess?' + $.param(params), function (data) {
+      var requestAccess = $('#request-access');
+      requestAccess.html(data);
+      requestAccess.trigger('openModal');
+    });
+  });
+
+  $('.mod-results a.result.access').on('click', function handleIdpAction(e) {
     var selectedIdp = $(this).attr('data-idp');
 
     if ($(e.target).hasClass('deleteable')) {

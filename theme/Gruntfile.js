@@ -39,6 +39,7 @@ module.exports = function(grunt) {
                         'bower_components/jquery/dist/jquery.min.js',
                         'bower_components/jquery.lazyload/jquery.lazyload.js',
                         'bower_components/js-cookie/src/js.cookie.js',
+                        'bower_components/easyModal.js/jquery.easyModal.js',
                         '<%= config.theme %>/javascripts/application.js'
                     ]
                 }

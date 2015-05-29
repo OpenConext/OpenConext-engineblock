@@ -112,7 +112,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     </div>
 
     <?php foreach ($idpList as $key => $idp) : ?>
-      <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+      <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
         <div class="logo">
           <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
         </div>
@@ -125,7 +125,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
         <div class="letter">??</div>
       </div>
       <?php // @TODO fix access request form ?>
-      <p>Can't find your IDP? &nbsp;<a href="form/">Request access</a>&nbsp;or try tweaking your search.</p>
+      <p>Can't find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.</p>
     </div>
   </div>
 </div>
@@ -136,7 +136,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   </header>
   <div class='list show-buttons no-access'>
     <?php foreach ($noAccessIdpData as $key => $idp) : ?>
-      <a class="result active" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+      <a class="result active noaccess" href="#no-access" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
         <div class="logo">
           <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
         </div>
@@ -146,3 +146,13 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     <?php endforeach; ?>
   </div>
 </div>
+
+<script type="text/javascript">
+  var discover = {
+    lang: "<?=$lang?>",
+    spEntityId: "<?=$metaDataSP->entityId?>",
+    spName: "<?=$spDisplayName?>"
+  }
+</script>
+
+<div id="request-access">Boo!</div>
