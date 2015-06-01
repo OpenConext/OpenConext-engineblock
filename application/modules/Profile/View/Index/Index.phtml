@@ -141,8 +141,8 @@ foreach ($spList as $spId => $sp) {
                 <?php if (in_array($spId, $consent)) : ?>
                     <tr>
                         <td>
-                            <a href="#" class="show-details">
-                                <span class="ui-icon ui-icon-triangle-1-e left"></span>
+                            <a href="#" class="expand">
+                                <img src="images/triangle.svg">
                                 <?= EngineBlock_View::htmlSpecialCharsText($this->getDisplayName($sp)); ?>
                             </a>
                         </td>

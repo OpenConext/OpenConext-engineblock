@@ -18,14 +18,23 @@
     .percent_#{$i * 5}
       width: #{$i * 5%}
 
+  .expand
+    text-decoration: none
+
+    img
+      max-height: .7rem
+
+    span
+      text-decoration: underline
+
 .comp-small-table
   font-size: $f-small
-  border-top: 1px solid $border
 
   tr:last-child
     th, td
       border-bottom: 0
+
   th, td
-    padding: .5rem 1.5rem .5rem 0
-
-
+    padding: .5rem 1rem
+    background: mix($border,#fff)
+    border-bottom: 1px solid #fff
