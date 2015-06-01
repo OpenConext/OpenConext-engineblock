@@ -9,6 +9,7 @@
   display: inline-block
   border: 1px solid transparent
   cursor: pointer
+  white-space: nowrap
 
   &:hover
     background: darken($blue,10)
@@ -33,3 +34,14 @@
 
   &.ml
     margin-right: 1rem
+
+  &.img
+    padding-left: 0
+    padding-right: 0
+    width: 2rem
+    text-align: center
+    border-radius: 1rem
+
+    img
+      max-width: 0.6rem
+      vertical-align: middle
