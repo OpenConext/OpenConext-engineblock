@@ -82,73 +82,76 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" autofocus="autofocus" class="mod-search-input active">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
   <input type="hidden" id="form-idp" name="idp" value="" />
-  <button>Search</button>
-</form>
+  <button class="search">Search</button>
 
 
-<div id="preselection" class="mod-results hidden">
+  <div id="preselection" class="mod-results hidden">
+      <header>
+        <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
+      </header>
+      <div class="list">
+
+      </div>
+  </div>
+
+  <div id="selection" class="mod-results">
     <header>
-      <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
+      <h2><?php echo $this->t('idps_with_access'); ?></h2>
     </header>
     <div class="list">
 
-    </div>
-</div>
-
-<div id="selection" class="mod-results">
-  <header>
-    <h2><?php echo $this->t('idps_with_access'); ?></h2>
-  </header>
-  <div class="list">
-
-    <div class="loading spinner hidden">
-      <div class="logo">
-        <img src="/images/spinner.svg">
-      </div>
-      <?=$this->t('loading_idps');?>
-    </div>
-
-    <?php foreach ($idpList as $key => $idp) : ?>
-      <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+      <div class="loading spinner hidden">
         <div class="logo">
-          <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+          <img src="/images/spinner.svg">
         </div>
-        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <button class="c-button white action" data-toggle-text="<?= $this->t('remove'); ?>"><?php echo $this->t('press_enter_to_select'); ?></button>
-      </a>
-    <?php endforeach; ?>
-    <div class="loading<?php if (count($idpList) !== 0): ?> hidden<?php endif; ?> noresults">
-      <div class="logo">
-        <div class="letter">??</div>
+        <?=$this->t('loading_idps');?>
       </div>
-      <p>Can't find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.</p>
+
+      <?php foreach ($idpList as $key => $idp) : ?>
+        <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+          <div class="logo">
+            <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+          </div>
+          <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
+          <button class="c-button white action" data-toggle-text="<?= $this->t('remove'); ?>"><?php echo $this->t('press_enter_to_select'); ?></button>
+          <noscript>
+            <button type="submit" class="c-button white" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">Login</button>
+          </noscript>
+        </a>
+      <?php endforeach; ?>
+      <div class="loading<?php if (count($idpList) !== 0): ?> hidden<?php endif; ?> noresults">
+        <div class="logo">
+          <div class="letter">??</div>
+        </div>
+        <p>Can't find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.</p>
+      </div>
     </div>
   </div>
-</div>
 
-<div id="noselection" class="mod-results hidden">
-  <header>
-    <h2><?php echo $this->t('idps_without_access'); ?></h2>
-  </header>
-  <div class='list show-buttons no-access'>
-    <?php foreach ($noAccessIdpData as $key => $idp) : ?>
-      <a class="result active noaccess" href="#no-access" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
-        <div class="logo">
-          <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
-        </div>
-        <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-        <div class="c-button outline action"><?php echo $this->t('request_access'); ?></div>
-      </a>
-    <?php endforeach; ?>
+  <div id="noselection" class="mod-results hidden">
+    <header>
+      <h2><?php echo $this->t('idps_without_access'); ?></h2>
+    </header>
+    <div class='list show-buttons no-access'>
+      <?php foreach ($noAccessIdpData as $key => $idp) : ?>
+        <a class="result active noaccess" href="#no-access" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+          <div class="logo">
+            <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+          </div>
+          <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
+          <div class="c-button outline action"><?php echo $this->t('request_access'); ?></div>
+        </a>
+      <?php endforeach; ?>
+    </div>
   </div>
-</div>
 
-<script type="text/javascript">
-  var discover = {
-    lang: "<?=$lang?>",
-    spEntityId: "<?=$metaDataSP->entityId?>",
-    spName: "<?=$spDisplayName?>"
-  }
-</script>
+  <script type="text/javascript">
+    var discover = {
+      lang: "<?=$lang?>",
+      spEntityId: "<?=$metaDataSP->entityId?>",
+      spName: "<?=$spDisplayName?>"
+    }
+  </script>
 
-<div id="request-access"></div>
+  <div id="request-access"></div>
+</form>
