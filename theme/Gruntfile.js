@@ -45,6 +45,19 @@ module.exports = function(grunt) {
                 }
             }
         },
+        postcss: {
+          options: {
+            map: true,
+            processors: [
+              require('autoprefixer-core')({browsers: 'last 3 versions'}),
+              require('csswring')
+            ]
+          },
+          classic: {},
+          material: {
+            src: '../www/authentication/stylesheets/*.css'
+          }
+        },
         compass: {
             classic: {
 
@@ -167,8 +180,9 @@ module.exports = function(grunt) {
                     'clean:' + themeConfig.current,
                     'shell:' + themeConfig.current,
                     'copy:' + theme,
-                    'uglify:' + theme,
                     'compass:' + theme,
+                    'postcss:' + theme,
+                    'uglify:' + theme,
                     'symlink:' + theme,
                     'string-replace:layoutconfig'
                 ]
