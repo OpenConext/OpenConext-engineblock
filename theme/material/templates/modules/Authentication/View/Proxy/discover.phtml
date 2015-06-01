@@ -18,6 +18,8 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 $layout = $this->layout();
 $layout->assign('subheader', $this->t('log_in_to'));
 
+$layout->backLink = true;
+
 // Determine the selected language, default to english
 if (isset($_GET['lang'])) {
     $lang = $_GET['lang'];

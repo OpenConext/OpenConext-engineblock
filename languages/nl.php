@@ -45,6 +45,7 @@ return array(
     'remove'                    => 'Verwijderen',
     'request_access'            => 'Toegang aanvragen',
     'no_idp_results'            => 'Kun je je IDP niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
+    'return_to_sp'              => 'Return to Service Provider',
 
     //Footer
     'service_by'            => 'Deze dienst is verbonden via',
