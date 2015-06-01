@@ -9,20 +9,20 @@ return array(
     'value'                 => 'Waarde',
     'post_data'             => 'POST Data',
     'processing'            => 'Verbinden met de dienst',
-    'processing_waiting'    => 'Wachten op een reactie van de gekozen dienst.',
+    'processing_waiting'    => 'Wachten op een reactie van de dienst.',
     'processing_long'       => 'Duurt het te lang?',
     'note'                  => 'Mededeling',
-    'note_no_script'        => 'Uw browser ondersteunt geen javascript. U moet op de onderstaande knop drukken om door te gaan.',
+    'note_no_script'        => 'Uw browser ondersteunt geen JavaScript. U moet op de onderstaande knop drukken om door te gaan.',
     'go_back'               => '&lt;&lt; Ga terug',
     'authentication_urls'   => 'Authenticatie URLs',
     'timestamp'             => 'Timestamp',
 
      // Feedback
-    'requestId'             => 'Uniek Request Id',
+    'requestId'             => 'Uniek Request ID',
     'identityProvider'      => 'Identity Provider',
     'serviceProvider'       => 'Service Provider',
     'userAgent'             => 'User Agent',
-    'ipAddress'             => 'Ip Adres',
+    'ipAddress'             => 'IP Adres',
     'statusCode'            => 'Status Code',
     'statusMessage'         => 'Status Bericht',
 
@@ -30,23 +30,23 @@ return array(
     'idp_selection_title'       => 'Identity Provider Selectie - %s',
     'idp_selection_subheader'   => 'Login via je eigen instelling',
     'search'                    => 'of zoek een instelling',
-    'idp_selection_desc'        => 'Selecteer jouw instelling en log in voor <i>%s</i>',
-    'our_suggestion'            => 'Onze suggestie:',
-    'idps_with_access'          => 'IDP\'s met toegang',
-    'idps_without_access'       => 'IDP\'s zonder toegang',
+    'idp_selection_desc'        => 'Selecteer jouw instelling en log in bij <i>%s</i>',
+    'our_suggestion'            => 'Eerdere keuze(s):',
+    'idps_with_access'          => 'Instellingen met toegang',
+    'idps_without_access'       => 'Instellingen zonder toegang',
     'no_access'                 => 'Geen toegang.',
     'no_access_more_info'       => 'Geen toegang. &raquo;',
     'no_results'                => 'Geen resultaten gevonden',
     'log_in_to'                 => 'Inloggen bij',
     'press_enter_to_select'     => 'Druk op enter om te selecteren',
-    'loading_idps'              => 'Identity providers worden geladen …',
+    'loading_idps'              => 'Instellingen worden geladen ...',
     'edit'                      => 'Bewerken',
     'done'                      => 'Klaar',
     'remove'                    => 'Verwijderen',
     'request_access'            => 'Toegang aanvragen',
 
     //Footer
-    'service_by'            => 'Deze dienst wordt aangeboden door',
+    'service_by'            => 'Deze dienst is verbonden via',
     'serviceprovider_link'  => '<a href="#">SURFconext</a>',
     'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
@@ -102,12 +102,12 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     //Form
     'sorry'                 => 'Helaas,',
-    'form_description'      => 'heeft nog geen toegang tot deze dienst. Wat nu?</h2>
+    'form_description'      => 'heeft geen toegang tot deze dienst. Wat nu?</h2>
             <p>Wil je toch graag toegang tot deze dienst, vul dan
-      onderstaand formulier in. Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>',
+      het onderstaande formulier in. Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>',
     'name'                  => 'Naam',
     'name_error'            => 'Vul je naam in',
-    'email'                 => 'Email',
+    'email'                 => 'E-mail',
     'email_error'           => 'Vul je (juiste) e-mailadres in',
     'comment'               => 'Toelichting',
     'comment_error'         => 'Vul een toelichting in',
@@ -123,41 +123,41 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     //Profile
     'profile_header'                    => 'SURFconext',
-    'profile_subheader'                 => 'Profiel Overzicht',
+    'profile_subheader'                 => 'Uw Profiel Overzicht',
     'profile_header_my_profile'         => 'Mijn Profiel',
     'profile_header_my_groups'          => 'Mijn Groepen',
-    'profile_header_my_apps'            => 'Mijn Applicaties',
-    'profile_header_exit'               => 'Uitgang',
-    'profile_header_surfteams'          => 'SURFteams',
+    'profile_header_my_apps'            => 'Mijn Diensten',
+    'profile_header_exit'               => 'Exit',
+    'profile_header_surfteams'          => 'SURFconext Teams',
     'profile_header_auth_needed'        => 'Authenticatie vereist',
     'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat een subset van deze gegevens worden verstrekt aan diensten die je via SURFconext benadert.',
+    'profile_store_info'                => 'Van uw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat een subset van deze gegevens worden verstrekt aan diensten die je via SURFconext benadert.',
 
     'profile_group_membership_desc'     => 'U bent lid van de volgende groepen.',
     'profile_no_groups'                 => 'Geen Groepen',
     'profile_extra_groups_desc'         => 'Om uw instellingsgroepen te zien moet u het gebruik hiervoor binnen SURFconext autoriseren.',
-    'profile_leave_surfconext_desc'     => 'Je gebruikt SURFconext om met je instellingsaccount in te loggen op een of meerdere applicaties. Je kan je SURFconext profiel verwijderen door op onderstaande knop te drukken.',
+    'profile_leave_surfconext_desc'     => 'U gebruikt SURFconext om met je instellingsaccount in te loggen op een of meerdere applicaties. Je kan je SURFconext profiel verwijderen door op onderstaande knop te drukken.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
     'profile_leave_surfconext_disclaim' => 'Let op:
                                             <ul>
                                                 <li>Alleen de informatie welke in SURFconext wordt opgeslagen zal verwijderd worden.</li>
-                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens hier nog opgeslagen zijn.</li>
+                                                <li>Diensten waar u met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat uw persoonlijke gegevens hier nog opgeslagen zijn.</li>
                                                 <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel worden aangemaakt.</li>
                                              </ul>
                                              <br>Meer informatie over welke informatie er wordt opgeslagen door SURFconext kan je vinden op de <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">SURFconext supportpagina\'s</a>.',
     'profile_leave_surfconext_link_add' => '(sluit je browser na deze actie om de deprovisioning procedure te voltooien)',
     'profile_revoke_access'             => 'Trek toegang in',
-    'profile_leave_surfconext_conf'     => 'Weet je zeker dat je je profiel wilt verwijderen? Je zult je browser moeten afsluiten om deze actie te voltooien',
+    'profile_leave_surfconext_conf'     => 'Weet u zeker dat u uw profiel wilt verwijderen? U zult uw browser moeten afsluiten om deze actie te voltooien',
     'profile_eula_link'                 => 'Gebruikersvoorwaarden',
     'profile_support_link'              => 'Ondersteunings pagina\'s',
-    'profile_mail_text'                 => 'SURFconext support kan je vragen om bovenstaande informatie te delen. Deze informatie kan hen helpen om jouw supportvraag te beantwoorden.',
+    'profile_mail_text'                 => 'SURFconext support kan u vragen om bovenstaande informatie te delen. Deze informatie kan hen helpen om uw supportvraag te beantwoorden.',
     'profile_mail_attributes'           => 'Mail data naar help@surfconext.nl',
     'profile_mail_send_success'         => 'De mail met bovenstaande informatie is succesvol verstuurd.',
 
     //Profile MyApps
-    'profile_apps_connected_aps'        => 'SURFconext Apps',
-    'profile_apps_share'                => 'Je hebt toestemming gegeven om profielinformatie te delen met de volgende diensten:',
-    'profile_apps_service_th'           => 'Service/Applicatie',
+    'profile_apps_connected_aps'        => 'SURFconext Diensten',
+    'profile_apps_share'                => 'U heeft toestemming gegeven om uw informatie te delen met de volgende diensten:',
+    'profile_apps_service_th'           => 'Dienst/Applicatie',
     'profile_apps_eula_th'              => 'EULA',
     'profile_apps_support_name_th'      => 'Support contact',
     'profile_apps_support_url_th'       => 'Support URL',
@@ -198,7 +198,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_404'                         => '404 Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',
     'error_help_desc'                   => '<p>
-        Bezoek <a href="https://wiki.surfnet.nl/display/conextsupport/">de support pagina</a> als dit uw probleem niet oplost.
+        Bezoek <a href="https://support.surfconext.nl/">de support pagina</a> als dit uw probleem niet oplost.
         Op deze pagina vindt u meer informatie over de mogelijke oorzaken en hoe u contact kan opnemen met het support team.
     </p>',
     'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
@@ -208,20 +208,20 @@ Als u deze applicatie wilt gebruiken moet u:<br />
 <ul><li>de browser herstarten</li>
 <li>opnieuw inloggen</li>
 <li>uw informatie delen</li></ul>',
-    'error_no_idps'                     => 'Error - Geen Identity Providers gevonden',
+    'error_no_idps'                     => 'Error - Geen instellingen gevonden',
     'error_no_idps_desc'                => '<p>
-        De application die u probeert te benaderen (uw &lsquo;Service Provider&rsquo;) is niet toegankelijk via de SURFconext infrastructuur.
+        De dienst die u probeert te benaderen (uw &lsquo;Service Provider&rsquo;) is niet toegankelijk via de SURFconext infrastructuur.
         Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de helpdesk van SURFconext via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br /><br />
     </p>',
-    'error_session_lost'                => 'Error - Uw sessie is verloren gegaan..',
+    'error_session_lost'                => 'Error - Uw sessie is verloren gegaan',
     'error_session_lost_desc'           => '<p>
         Uw sessie is ergens verloren gegaan.<br />
         Waarschijnlijk mocht de cookie niet worden gezet door de strikte privacy configuratie van uw browser?<br />
         Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
-    'error_no_message'                  => 'Error - Geen bericht ontvangen..',
+    'error_no_message'                  => 'Error - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
     'error_invalid_acs_binding'        => 'Onjuist ACS Binding Type',
@@ -231,17 +231,17 @@ Als u deze applicatie wilt gebruiken moet u:<br />
         Er kon geen Service Provider worden gevonden met het opgegeven EntityID. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
-    'error_unknown_issuer'              => 'Error - Onbekende applicatie..',
+    'error_unknown_issuer'              => 'Error - Onbekende applicatie',
     'error_unknown_issuer_desc'     => '<p>
-        Deze applicatie is niet beschikbaar voor SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
+        Deze applicatie is niet beschikbaar via SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
     </p>',
     'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
     'error_vo_membership_required_desc' => 'U bent succesvol ingelogd bij uw Identity Provider, maar om gebruik te kunnen maken van deze dienst moet u ook lid zijn van een Virtuele Organisatie.',
-    'error_generic'                     => 'Error - Foutmelding..',
+    'error_generic'                     => 'Error - Foutmelding',
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeert u het alstublieft opnieuw.
     </p>',
-    'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken..',
+    'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken',
     'error_missing_required_fields_desc'=> '<p>
         Uw instelling geeft niet de benodigde informatie vrij, daarom kunt u deze applicatie niet gebruiken.
     </p>
@@ -255,21 +255,21 @@ Als u deze applicatie wilt gebruiken moet u:<br />
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
-    'error_group_oauth'            =>  'Error - Group autorisatie is mislukt..',
+    'error_group_oauth'            =>  'Error - Group autorisatie is mislukt',
     'error_group_oauth_desc'       => '<p>
         De extere groep provider <b>%s</b> retourneerde een fout.<br />
         Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br />
     </p>',
 
-    'error_received_error_status_code'     => 'Error - Idp fout',
+    'error_received_error_status_code'     => 'Error - Instellingsfout',
     'error_received_error_status_code_desc'=> '<p>
-        Uw Identity Provider stuurde een authenticatie respons met een fout code.
+        Uw instelling stuurde een authenticatie respons met een fout code.
     </p>',
-    'error_received_invalid_response'        => 'Error - Ongeldig Idp antwoord',
-    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op Idp antwoord',
+    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van instelling',
+    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op instellingsantwoord',
     'error_received_status_code_desc'=> '<p>
-        Uw Identity Provider stuurde een ongeldig authenticatie respons terug.
+        Uw instelling stuurde een ongeldig authenticatie respons terug.
     </p>',
 
     /**
@@ -299,14 +299,14 @@ Als u deze applicatie wilt gebruiken moet u:<br />
 
     'attributes' => 'Attributen',
     'validation' => 'Validatie',
-    'idp_debugging_mail_explain' => 'Indien gevraagd door SURFconext beheer,
-                                        gebruik de "Mail naar surfconext-beheer" knop hieronder
+    'idp_debugging_mail_explain' => 'Indien gevraagd door SURFconext,
+                                        gebruik de "Mail naar SURFconext" knop hieronder
                                         om de informatie op dit scherm naar SURFconext beheer te e-mailen.',
-    'idp_debugging_mail_button' => 'Mail naar surfconext-beheer',
+    'idp_debugging_mail_button' => 'Mail naar SURFconext',
 
     // Logout
     'logout' => 'uitloggen',
-    'logout_description' => 'Deze applicatie maakt gebruik van centrale login. Hiermee is het mogelijk om met single sign on bij verschillende applicaties in te loggen. Om er 100%% zeker van te zijn dat je uitgelogd bent, moet je de browser helemaal afsluiten.',
+    'logout_description' => 'Deze applicatie maakt gebruik van centrale login. Hiermee is het mogelijk om met single sign on bij verschillende applicaties in te loggen. Om er 100%% zeker van te zijn dat u uitgelogd bent, moet u de browser helemaal afsluiten.',
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Uitloggen+SURFconext">Meer informatie over veilig uitloggen</a>',
 
     // Internal

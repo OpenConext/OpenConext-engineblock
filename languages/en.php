@@ -9,7 +9,7 @@ return array(
     'value'                 => 'Value',
     'post_data'             => 'POST Data',
     'processing'            => 'Connecting to the service',
-    'processing_waiting'    => 'Waiting for a response from the chosen service.',
+    'processing_waiting'    => 'Waiting for a response from the service.',
     'processing_long'       => 'Taking too long?',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below once to proceed.',
@@ -18,11 +18,11 @@ return array(
     'timestamp'             => 'Timestamp',
 
     // Feedback
-    'requestId'             => 'Unique Request Id',
+    'requestId'             => 'Unique Request ID',
     'identityProvider'      => 'Identity Provider',
     'serviceProvider'       => 'Service Provider',
     'userAgent'             => 'User Agent',
-    'ipAddress'             => 'Ip Address',
+    'ipAddress'             => 'IP Address',
     'statusCode'            => 'Status Code',
     'statusMessage'         => 'Status Message',
 
@@ -31,32 +31,32 @@ return array(
     'idp_selection_subheader'   => 'Login via your institution',
     'search'                    => 'or search for an institution',
     'idp_selection_desc'        => 'Select your institution and continue to login to <i>%s</i>',
-    'our_suggestion'            => 'Our suggestion:',
-    'idps_with_access'          => 'IDP\'s with access',
-    'idps_without_access'       => 'IDP\'s without access',
+    'our_suggestion'            => 'Previous choice(s):',
+    'idps_with_access'          => 'Identity Providers with access',
+    'idps_without_access'       => 'Identity Providers without access',
     'no_access'                 => 'No access',
     'no_access_more_info'       => 'No access. &raquo;',
     'no_results'                => 'No results found',
     'error_header'              => 'Error',
     'log_in_to'                 => 'Log in to',
     'press_enter_to_select'     => 'Press enter to select',
-    'loading_idps'              => 'Loading identity providers …',
+    'loading_idps'              => 'Loading Identity Providers ...',
     'edit'                      => 'Edit',
     'done'                      => 'Done',
     'remove'                    => 'Remove',
     'request_access'            => 'Request access',
 
     //Footer
-    'service_by'            => 'This is a service by',
-    'serviceprovider_link'  => '<a href="#">SURFconext</a>',
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
+    'service_by'            => 'This is a service connected through',
+    'serviceprovider_link'  => '<a href="http://www.surfconext.nl/" target="_blank">SURFconext</a>',
+    'footer'                => '<a href="http://www.surfconext.nl/" target="_blank">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
 
     //Help
     'help'                  => 'help',
     'help_header'           => 'Help',
     'help_description'      => '<p>Check the FAQ below if you have any questions about this screen or about SURFconext.</p>
 
-    <p>For more detailed information, please visit <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a>
+    <p>For more detailed information, please visit <a href="https://support.surfconext.nl/">the SURFconext support page</a>
         or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
     'close_question'        =>      'Close',
@@ -80,15 +80,15 @@ Personal details are only provided to a service provider if these details are ne
 If you have any questions about your privacy and the policy applied, please visit <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a> for more information or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
 
-    	// consent help questions
-    'question_consentscreen'           	=>      'Why this screen?',
-    'answer_consentscreen'             	=>      '<p>To be able to use this service it is necessary to share some of your personal information with this service.</p>',
-    'question_consentinfo'           	=>      'What happens with my information?',
-	'answer_consentinfo'             	=>      '<p>When you agree to share your information with the service the information shown will be provided to the service. The service provider will use and possibly store this information in order to ensure a proper functioning service. On this screen there is a link to the "Terms of Service" of the service and of SURFconext which will give you more information on how the personal data is handled.</p>',
-    'question_consentno'           		=>      'What happens when i don\'t want to share my information?',
-    'answer_consentno'             		=>      '<p>When you don\'t agree to share your information with the service you cannot use the service. In this case, the information shown will not be shared with the service.</p>',
-    'question_consentagain'           	=>      'I\'ve previously shared my information with the service, but why do i get the same question again?',
-    'answer_consentagain'             	=>      '<p>When your information previously provided to the service has changed, you will be asked again if you allow the sharing of your information.</p>',
+    // consent help questions
+    'question_consentscreen'            =>      'Why this screen?',
+    'answer_consentscreen'              =>      '<p>To be able to use this service it is necessary to share some of your personal information with this service.</p>',
+    'question_consentinfo'              =>      'What happens with my information?',
+    'answer_consentinfo'                =>      '<p>When you agree to share your information with the service the information shown will be provided to the service. The service provider will use and possibly store this information in order to ensure a proper functioning service. On this screen there is a link to the "Terms of Service" of the service and of SURFconext which will give you more information on how the personal data is handled.</p>',
+    'question_consentno'                =>      'What happens when i don\'t want to share my information?',
+    'answer_consentno'                  =>      '<p>When you don\'t agree to share your information with the service you cannot use the service. In this case, the information shown will not be shared with the service.</p>',
+    'question_consentagain'             =>      'I\'ve previously shared my information with the service, but why do i get the same question again?',
+    'answer_consentagain'               =>      '<p>When your information previously provided to the service has changed, you will be asked again if you allow the sharing of your information.</p>',
 
 		// WAYF help questions
     'question_screen'                   =>      'Why this screen?',
@@ -104,8 +104,8 @@ If you have any questions about your privacy and the policy applied, please visi
 
     //Form
     'sorry'                 => 'Unfortunately,',
-    'form_description'      => 'does not yet have access to this service. What should you do?</h2>
-            <p>If you want to access this service, please fill in the form below. We will then forward your request to the person responsible for the services portfolio management at your institution.</p>',
+    'form_description'      => 'does not have access to this service. What can you do?</h2>
+            <p>If you want to access this service, please fill out the form below. We will then forward your request to the person responsible for the services portfolio management at your institution.</p>',
     'name'                  => 'Name',
     'name_error'            => 'Enter your name',
     'email'                 => 'Email',
@@ -124,11 +124,11 @@ If you have any questions about your privacy and the policy applied, please visi
 
     //Profile
     'profile_header'                    => 'SURFconext',
-    'profile_subheader'                 => 'Profile Overview',
+    'profile_subheader'                 => 'Your profile overview',
     'profile_header_my_profile'         => 'My Profile',
-    'profile_header_my_apps'            => 'My Apps',
+    'profile_header_my_apps'            => 'My Services',
     'profile_header_my_groups'          => 'My Groups',
-    'profile_header_surfteams'          => 'SURFteams',
+    'profile_header_surfteams'          => 'SURFconext Teams',
     'profile_header_exit'               => 'Exit',
     'profile_header_auth_needed'        => 'Authentication required',
     'profile_header_leave_surfconext'   => 'Leave SURFconext',
@@ -155,8 +155,8 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_mail_send_success'         => 'The mail with your information has been successfully sent.',
 
     //Profile MyApps
-    'profile_apps_connected_aps'        => 'SURFconext Apps',
-    'profile_apps_share'                => 'You have given permission to share profile information with the following services:',
+    'profile_apps_connected_aps'        => 'Services accessed through SURFconext',
+    'profile_apps_share'                => 'You have given permission to share your information with the following services:',
     'profile_apps_service_th'           => 'Service/App',
     'profile_apps_eula_th'              => 'EULA',
     'profile_apps_support_name_th'      => 'Support person name',
@@ -208,19 +208,19 @@ If you want to use this application you have to:<br />
 <li>share your information</li></ul>',
     'error_no_idps'                 => 'Error - No Identity Providers found',
     'error_no_idps_desc'            => '<p>
-        The application you came from (your &lsquo;Service Provider&rsquo;) is not allowed to connect with any IdP.
+        The application you came from (your &lsquo;Service Provider&rsquo;) is not allowed to connect with any Identity Provider.
         Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
         this service.
         <br /><br />
     </p>',
-    'error_session_lost'            => 'Error - your session was lost..',
+    'error_session_lost'            => 'Error - your session was lost',
     'error_session_lost_desc'       => '<p>
         Somewhere along the way, your session with us was lost. <br />
         Most likely your browser privacy or security settings prevented the cookie to be set? <br />
         Please go back and try again.
         <br /><br />
     </p>',
-    'error_no_message'              => 'Error - No message received..',
+    'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
     'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
@@ -230,17 +230,17 @@ If you want to use this application you have to:<br />
         A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
-    'error_unknown_issuer'          => 'Error - Unknown application..',
+    'error_unknown_issuer'          => 'Error - Unknown application',
     'error_unknown_issuer_desc'     => '<p>
-        This application is not available using SURFconext. Please notify the provider of this service and provide them with the following information:
+        This application is not available within SURFconext. Please notify the provider of this service and provide them with the following information:
     </p>',
     'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
     'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation.',
-    'error_generic'                     => 'Error - An error occurred.',
+    'error_generic'                     => 'Error - An error occurred',
     'error_generic_desc'                => '<p>
         It is not possible to sign in. Please try again.
     </p>',
-    'error_missing_required_fields'     => 'Error - Missing required fields..',
+    'error_missing_required_fields'     => 'Error - Missing required fields',
     'error_missing_required_fields_desc'=> '<p>
         You can not use this application because your institution is not providing the needed information.
     </p>
@@ -254,17 +254,17 @@ If you want to use this application you have to:<br />
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
-    'error_group_oauth'            =>  'Error - Group authorization failed..',
+    'error_group_oauth'            =>  'Error - Group authorization failed',
     'error_group_oauth_desc'       => '<p>
         The external group provider <b>%s</b> reported an error. </p>
         <p>Please contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
        </p>',
-    'error_received_error_status_code'     => 'Error - Idp error',
+    'error_received_error_status_code'     => 'Error - Identity Provider error',
     'error_received_error_status_code_desc'=> '<p>
         Your Identity Provider sent an authentication response with an error status code.
     </p>',
-    'error_received_invalid_response'       => 'Error - Invalid Idp response',
-    'error_received_invalid_signed_response'=> 'Error - Invalid signature on Idp response',
+    'error_received_invalid_response'       => 'Error - Invalid Identity Provider response',
+    'error_received_invalid_signed_response'=> 'Error - Invalid signature on Identity Provider response',
     'error_received_status_code_desc'=> '<p>
         Your Identity Provider sent an authentication response that was invalid.
     </p>',
@@ -296,10 +296,10 @@ If you want to use this application you have to:<br />
 
     'attributes' => 'Attributes',
     'validation' => 'Validation',
-    'idp_debugging_mail_explain' => 'When requested to do so by surfconext-beheer,
-                                        use the "Mail to surfconext-beheer" button below
+    'idp_debugging_mail_explain' => 'When requestedby SURFconext,
+                                        use the "Mail to SURFconext" button below
                                         to mail the information in this screen.',
-    'idp_debugging_mail_button' => 'Mail to surfconext-beheer',
+    'idp_debugging_mail_button' => 'Mail to SURFconext',
 
     // Logout
     'logout' => 'logout',
