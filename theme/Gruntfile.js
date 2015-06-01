@@ -40,6 +40,7 @@ module.exports = function(grunt) {
                         'bower_components/jquery.lazyload/jquery.lazyload.js',
                         'bower_components/js-cookie/src/js.cookie.js',
                         'bower_components/easyModal.js/jquery.easyModal.js',
+                        'bower_components/fastclick/lib/fastclick.js',
                         '<%= config.theme %>/javascripts/application.js'
                     ]
                 }
@@ -53,7 +54,6 @@ module.exports = function(grunt) {
               require('csswring')
             ]
           },
-          classic: {},
           material: {
             src: '../www/authentication/stylesheets/*.css'
           }
@@ -173,20 +173,24 @@ module.exports = function(grunt) {
         if (config.themes.indexOf(theme) > -1) {
             // start tasks
             config.theme = theme;
-            var themeConfig = JSON.parse(grunt.file.read('./config/theme.json'));
+            var themeConfig = JSON.parse(grunt.file.read('./config/theme.json')),
+                tasks = [
+                  'clean:' + themeConfig.current,
+                  'shell:' + themeConfig.current,
+                  'copy:' + theme,
+                  'compass:' + theme
+                ];
 
-            grunt.task.run(
-                [
-                    'clean:' + themeConfig.current,
-                    'shell:' + themeConfig.current,
-                    'copy:' + theme,
-                    'compass:' + theme,
-                    'postcss:' + theme,
-                    'uglify:' + theme,
-                    'symlink:' + theme,
-                    'string-replace:layoutconfig'
-                ]
-            );
+            if (theme !== 'classic') {
+              tasks.push('postcss:' + theme);
+            }
+
+            tasks.push('uglify:' + theme);
+            tasks.push('symlink:' + theme);
+            tasks.push('string-replace:layoutconfig');
+
+
+            grunt.task.run(tasks);
 
             themeConfig.current = theme;
             grunt.file.write('./config/theme.json', JSON.stringify(themeConfig));
