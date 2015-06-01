@@ -123,7 +123,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
         <div class="logo">
           <div class="letter">??</div>
         </div>
-        <p>Can't find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.</p>
+        <p><?php echo $this->t('no_idp_results'); ?></p>
       </div>
     </div>
   </div>

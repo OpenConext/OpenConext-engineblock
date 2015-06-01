@@ -45,6 +45,7 @@ return array(
     'done'                      => 'Done',
     'remove'                    => 'Remove',
     'request_access'            => 'Request access',
+    'no_idp_results'            => 'Can\'t find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
 
     //Footer
     'service_by'            => 'This is a service connected through',
