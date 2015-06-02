@@ -55,4 +55,14 @@ final class EngineBlock_Log_InvalidConfigurationException extends EngineBlock_Ex
             );
         }
     }
+
+    /**
+     * @param string $message
+     * @param string $severity Defaults to EngineBlock_Exception::ALERT.
+     * @param Exception|null $previous
+     */
+    public function __construct($message, $severity = EngineBlock_Exception::CODE_ALERT, Exception $previous = null)
+    {
+        parent::__construct($message, $severity, $previous);
+    }
 }
