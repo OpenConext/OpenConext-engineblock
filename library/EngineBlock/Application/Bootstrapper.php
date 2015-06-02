@@ -132,8 +132,12 @@ class EngineBlock_Application_Bootstrapper
 
         $loggerConfiguration = $configuration->logger->toArray();
 
-        /** @var EngineBlock_Log_LoggerFactory $loggerFactory */
+        /** @var string|EngineBlock_Log_LoggerFactory $loggerFactory */
         $loggerFactory = $loggerConfiguration['factory'];
+        EngineBlock_Log_InvalidConfigurationException::assertIsValidFactory(
+            $loggerFactory,
+            'EngineBlock_Log_LoggerFactory'
+        );
         $logger = $loggerFactory::factory($loggerConfiguration['conf'], $configuration->debug);
 
         $this->_application->setLogInstance($logger);

@@ -1,8 +1,8 @@
 <?php
 
-use EngineBlock_Log_Monolog_Handler_HandlerFactory as HandlerFactory;
 use EngineBlock_Log_InvalidConfigurationException as InvalidConfigurationException;
 use EngineBlock_Log_LogLevel as LogLevel;
+use EngineBlock_Log_Monolog_Handler_HandlerFactory as HandlerFactory;
 use Monolog\Handler\SyslogHandler;
 use Psr\Log\LogLevel as PsrLogLevel;
 
@@ -67,6 +67,11 @@ final class EngineBlock_Log_Monolog_Handler_SyslogHandlerFactory implements Hand
                 'string'
             );
         }
+
+        InvalidConfigurationException::assertIsValidFactory(
+            $config['formatter']['factory'],
+            'EngineBlock_Log_Monolog_Formatter_FormatterFactory'
+        );
 
         if (!isset($config['formatter']['conf'])) {
             $config['formatter']['conf'] = array();

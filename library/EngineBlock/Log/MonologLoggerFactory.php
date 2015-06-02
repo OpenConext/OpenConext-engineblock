@@ -92,6 +92,10 @@ final class EngineBlock_Log_MonologLoggerFactory implements EngineBlock_Log_Logg
 
         foreach ($config['handler'] as $name => $handlerConfig) {
             $config['handler'][$name] = self::validateAndNormaliseSubTypeConfig('handler', $name, $handlerConfig);
+            InvalidConfigurationException::assertIsValidFactory(
+                $config['handler'][$name]['factory'],
+                'EngineBlock_Log_Monolog_Handler_HandlerFactory'
+            );
         }
 
         if (!isset($config['processor'])) {
@@ -106,6 +110,10 @@ final class EngineBlock_Log_MonologLoggerFactory implements EngineBlock_Log_Logg
 
         foreach ($config['processor'] as $name => $processorConfig) {
             $config['processor'][$name] = self::validateAndNormaliseSubTypeConfig('processor', $name, $processorConfig);
+            InvalidConfigurationException::assertIsValidFactory(
+                $config['processor'][$name]['factory'],
+                'EngineBlock_Log_Monolog_Processor_ProcessorFactory'
+            );
         }
 
         return $config;

@@ -84,6 +84,11 @@ final class EngineBlock_Log_Monolog_Handler_FingersCrossedHandlerFactory impleme
             );
         }
 
+        InvalidConfigurationException::assertIsValidFactory(
+            $config['activation_strategy']['factory'],
+            'EngineBlock_Log_Monolog_Handler_FingersCrossed_ActivationStrategyFactory'
+        );
+
         if (!isset($config['activation_strategy']['conf'])) {
             $config['activation_strategy']['conf'] = array();
         } elseif (!is_array($config['activation_strategy']['conf'])) {

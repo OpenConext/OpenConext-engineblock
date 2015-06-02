@@ -35,4 +35,24 @@ final class EngineBlock_Log_InvalidConfigurationException extends EngineBlock_Ex
             )
         );
     }
+
+    /**
+     * @param string $className
+     * @param string $interfaceName
+     * @throws EngineBlock_Log_InvalidConfigurationException
+     */
+    public static function assertIsValidFactory($className, $interfaceName)
+    {
+        if (!class_exists($className)) {
+            throw new self(
+                sprintf('Factory class "%s" does not exist or is not autoloadable', $className)
+            );
+        }
+
+        if (!in_array($interfaceName, class_implements($className), true)) {
+            throw new self(
+                sprintf('Factory "%s" is invalid: it must implement "%s"', $className, $interfaceName)
+            );
+        }
+    }
 }
