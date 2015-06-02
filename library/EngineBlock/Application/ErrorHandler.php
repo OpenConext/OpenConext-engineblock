@@ -49,7 +49,7 @@ class EngineBlock_Application_ErrorHandler
 
         $this->_application->reportError($e);
 
-        $message = 'A exceptional condition occurred, it has been logged and sent to the administrator.';
+        $message = 'An exceptional condition occurred, it has been logged and sent to the administrator.';
         if ($this->_application->getConfiguration()->debug) {
             $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
             $message .= '<br /><strong style="color: red"><pre>' . var_export($e, true) . '</pre></strong>';
