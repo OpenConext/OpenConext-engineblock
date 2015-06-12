@@ -1,6 +1,8 @@
 var OpenConext = {};
 OpenConext.Discover = function () {
   'use strict';
+  var lastMouseX = null,
+    lastMouseY = null;
   this.searchBar = $('.mod-search-input');
 
   function hasDiscovery() {
@@ -24,9 +26,10 @@ OpenConext.Discover = function () {
   }
 
   function checkNoResults() {
-    var noResultsContainer = $('#selection .noresults');
+    var selectionContainer = $('#selection'),
+      noResultsContainer = selectionContainer.find('.noresults');
 
-    if ($('#selection .list a.active').length === 0) {
+    if (selectionContainer.find('.list a.active').length === 0) {
       noResultsContainer.removeClass('hidden');
     } else {
       noResultsContainer.addClass('hidden');
@@ -64,11 +67,30 @@ OpenConext.Discover = function () {
     $(window).trigger('resize');
   }
 
+  function mouseNavigation(e) {
+    removeFocusClass();
+
+    if (
+      (lastMouseX === null && lastMouseY === null) ||
+      (lastMouseX === e.clientX && lastMouseY === e.clientY)
+    ) {
+      lastMouseX = e.clientX;
+      lastMouseY = e.clientY;
+      return;
+    }
+
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
+
+    $('.mod-results').addClass('mouse-nav');
+  }
+
   function keyNavigation(e) {
     var currentElement = $(document.activeElement),
       list = $('.list'),
       key = e.which;
 
+    $('.mod-results').removeClass('mouse-nav');
     function pressEnter() {
       e.preventDefault();
       // Press enter on searchbox
@@ -92,6 +114,7 @@ OpenConext.Discover = function () {
 
         if (nextElement.length > 0) {
           nextElement[0].focus();
+          removeFocusClass();
         }
         return;
       }
@@ -99,12 +122,14 @@ OpenConext.Discover = function () {
       // moving in a list
       if (currentElement.nextAll('.active:first').length > 0) {
         currentElement.nextAll('.active:first').focus();
+        removeFocusClass();
         return;
       }
 
       // moving to next list
       if (currentElement.parent().parent().next().find('.active:first').length > 0) {
         currentElement.parent().parent().next().find('.active:first').focus();
+        removeFocusClass();
       }
     }
 
@@ -112,12 +137,14 @@ OpenConext.Discover = function () {
       // move up in list
       if (currentElement.prevAll('.active:first').length > 0) {
         currentElement.prevAll('.active:first').focus();
+        removeFocusClass();
         return;
       }
 
       // move up in previous list
       if (currentElement.parent().parent().prev().find('.active:last').length > 0) {
         currentElement.parent().parent().prev().find('.active:last').focus();
+        removeFocusClass();
         return;
       }
 
@@ -307,7 +334,7 @@ OpenConext.Discover = function () {
   });
 
   $('body').on('keydown', keyNavigation);
-  $('.mod-results').on('mousemove', removeFocusClass);
+  $('.mod-results').on('mousemove', mouseNavigation);
   $('img.logo').lazyload();
 };
 

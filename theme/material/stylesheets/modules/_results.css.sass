@@ -1,3 +1,12 @@
+.mod-results.mouse-nav
+  a.result
+    &:active,
+    &:hover
+      outline: none
+      background: $blue
+      color: #fff
+      border-bottom: 1px solid $blue
+
 .mod-results
   @extend %box
   overflow: hidden
@@ -29,7 +38,7 @@
       color: #fff
       border-bottom: 1px solid $blue
 
-    +hocus
+    &:focus
       outline: none
       background: $blue
       color: #fff
@@ -43,7 +52,8 @@
     // Display buttonon focus
     +min-width($medium)
       &:focus,
-      &.focus
+      &.focus,
+      &.focussed
         .action
           display: inline-block
 
