@@ -56,8 +56,12 @@ class EngineBlock_UserDirectory
      */
     public function findUsersByIdentifier($identifier)
     {
+        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
+            'subjectIdAttribute',
+            self::LDAP_ATTR_COLLAB_PERSON_ID
+        );
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
-        $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
+        $filter .= '(' . $subjectIdField . '=' . $identifier . '))';
 
         $collection = $this->_getLdapClient()->search(
             $filter,
@@ -302,8 +306,16 @@ class EngineBlock_UserDirectory
 
     protected function _getCollabPersonId($attributes)
     {
-        $uid = str_replace('@', '_', $attributes['uid']);
-        return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
+            'subjectIdAttribute',
+            EngineBlock_UserDirectory::LDAP_ATTR_COLLAB_PERSON_ID
+        );
+        if ($subjectIdField == EngineBlock_UserDirectory::LDAP_ATTR_COLLAB_PERSON_ID) {
+            $uid = str_replace('@', '_', $attributes['uid']);
+            return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
+        } else {
+            return $attributes[$subjectIdField];
+        }
     }
 
     protected function _getCollabPersonUuid($attributes)
