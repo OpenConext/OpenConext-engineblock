@@ -44,7 +44,8 @@ return array(
     'done'                      => 'Klaar',
     'remove'                    => 'Verwijderen',
     'request_access'            => 'Toegang aanvragen',
-    'no_idp_results'            => 'Kun je je IDP niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
+    'no_idp_results'            => 'Geen resultaten. Je zoekterm heeft geen resultaten opgeleverd.',
+    'no_idp_results_request_access' => 'Kun je je IDP niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
     'return_to_sp'              => 'Return to Service Provider',
 
     //Footer

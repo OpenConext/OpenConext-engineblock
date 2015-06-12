@@ -45,7 +45,8 @@ return array(
     'done'                      => 'Done',
     'remove'                    => 'Remove',
     'request_access'            => 'Request access',
-    'no_idp_results'            => 'Can\'t find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
+    'no_idp_results'            => 'No results. Your search did not return any results.',
+    'no_idp_results_request_access' => 'Can\'t find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
     'return_to_sp'              => 'Return to Service Provider',
 
     //Footer
