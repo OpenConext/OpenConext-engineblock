@@ -70,14 +70,17 @@ OpenConext.Discover = function () {
       key = e.which;
 
     function pressEnter() {
-
+      e.preventDefault();
+      // Press enter on searchbox
       if (currentElement.hasClass('mod-search-input') && list.find('.active:first').length > 0) {
-        list.find('.active:first').focus().trigger('click');
+        var firstEl = list.find('.active:first');
+        if (firstEl.length > 0) {
+          firstEl.focus().trigger('click');
+        }
       }
 
       // Press enter on result
       if (currentElement.attr('href') === '#') {
-        e.preventDefault();
         currentElement.trigger('click');
       }
     }
@@ -304,7 +307,7 @@ OpenConext.Discover = function () {
   });
 
   $('body').on('keydown', keyNavigation);
-  $('body').on('mousemove', removeFocusClass);
+  $('.mod-results').on('mousemove', removeFocusClass);
   $('img.logo').lazyload();
 };
 
