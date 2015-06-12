@@ -334,7 +334,7 @@ OpenConext.Discover = function () {
       $('form.mod-search').submit();
     }
 
-    Cookies.set('selectedidps', JSON.stringify(selectedIdps));
+    Cookies.set('selectedidps', JSON.stringify(selectedIdps), { expires: 365, path: '/' });
   });
 
   $('body').on('keydown', keyNavigation);
