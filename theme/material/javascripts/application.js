@@ -314,6 +314,10 @@ OpenConext.Discover = function () {
 
     if ($(e.target).hasClass('deleteable')) {
       var saveIndex = $.inArray(selectedIdp, selectedIdps);
+
+      e.stopPropagation();
+      e.preventDefault();
+
       if (saveIndex > -1) {
         selectedIdps.splice(saveIndex, 1);
         $(this).slideUp('fast', function() {
@@ -336,6 +340,12 @@ OpenConext.Discover = function () {
   $('body').on('keydown', keyNavigation);
   $('.mod-results').on('mousemove', mouseNavigation);
   $('img.logo').lazyload();
+  $('.mod-search-input').on('focus', function() {
+    var SearchInput = $('.mod-search-input'),
+      strLength= SearchInput.val().length;
+
+    SearchInput[0].setSelectionRange(strLength, strLength);
+  });
 };
 
 OpenConext.Tabs = function () {
