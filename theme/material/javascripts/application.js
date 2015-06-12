@@ -97,7 +97,7 @@ OpenConext.Discover = function () {
       if (currentElement.hasClass('mod-search-input') && list.find('.active:first').length > 0) {
         var firstEl = list.find('.active:first');
         if (firstEl.length > 0) {
-          firstEl.focus().trigger('click');
+          $(firstEl[0]).focus().trigger('click');
         }
       }
 
@@ -345,6 +345,7 @@ OpenConext.Discover = function () {
       strLength= SearchInput.val().length;
 
     SearchInput[0].setSelectionRange(strLength, strLength);
+    setFocusClass();
   });
 };
 
