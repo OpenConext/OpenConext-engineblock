@@ -57,6 +57,7 @@ OpenConext.Discover = function () {
 
     checkVisible();
     checkNoResults();
+    setFocusClass();
     spinner.addClass('hidden');
 
     // trigger the resize event to lazyload images
@@ -137,6 +138,19 @@ OpenConext.Discover = function () {
 
   }
 
+  function setFocusClass() {
+    var focussedElement = $('.result.focussed'),
+      firstActive = $('.result.active:first');
+
+    if (focussedElement.length > 0) {
+      focussedElement.removeClass('focussed');
+    }
+
+    if (firstActive.length > 0) {
+      firstActive.addClass('focussed');
+    }
+  }
+
   if (!hasDiscovery()) {
     return this;
   }
@@ -174,6 +188,7 @@ OpenConext.Discover = function () {
 
   checkVisible();
   checkNoResults();
+  setFocusClass();
   $('#request-access').easyModal({
     onOpen: initModal,
     onClose: function() {
