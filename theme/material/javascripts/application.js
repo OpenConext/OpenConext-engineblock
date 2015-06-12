@@ -138,13 +138,18 @@ OpenConext.Discover = function () {
 
   }
 
-  function setFocusClass() {
-    var focussedElement = $('.result.focussed'),
-      firstActive = $('.result.active:first');
+  function removeFocusClass() {
+    var focussedElement = $('.result.focussed');
 
     if (focussedElement.length > 0) {
       focussedElement.removeClass('focussed');
     }
+  }
+
+  function setFocusClass() {
+    var firstActive = $('.result.active:first');
+
+    removeFocusClass();
 
     if (firstActive.length > 0) {
       firstActive.addClass('focussed');
@@ -299,6 +304,7 @@ OpenConext.Discover = function () {
   });
 
   $('body').on('keydown', keyNavigation);
+  $('body').on('mousemove', removeFocusClass);
   $('img.logo').lazyload();
 };
 
