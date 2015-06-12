@@ -18,8 +18,13 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 $layout = $this->layout();
 $layout->assign('subheader', $this->t('log_in_to'));
 $layout->assign('footerText', '<div id="request-access"></div>');
+$back = (bool) EngineBlock_ApplicationSingleton::getInstance()
+    ->getConfiguration()
+    ->ui
+    ->return_to_sp_link
+    ->active;
 
-$layout->backLink = true;
+$layout->assign('backLink', $back);
 
 // Determine the selected language, default to english
 if (isset($_GET['lang'])) {
