@@ -969,16 +969,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v0.6.2",
+            "version": "v0.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "32fb4d416d065aa5c84505e274055de331ef286e"
+                "reference": "2289ddc4e4cb30d95ded1ebb70312be300716151"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/32fb4d416d065aa5c84505e274055de331ef286e",
-                "reference": "32fb4d416d065aa5c84505e274055de331ef286e",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/2289ddc4e4cb30d95ded1ebb70312be300716151",
+                "reference": "2289ddc4e4cb30d95ded1ebb70312be300716151",
                 "shasum": ""
             },
             "require": {
@@ -987,7 +987,7 @@
                 "ext-openssl": "*",
                 "php": ">=5.3.3",
                 "psr/log": "~1.0",
-                "simplesamlphp/xmlseclibs": "~1.3.1"
+                "robrichards/xmlseclibs": "^1.3"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9",
@@ -1015,7 +1015,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2014-12-22 09:42:36"
+            "time": "2015-05-27 13:03:01"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
