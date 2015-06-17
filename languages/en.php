@@ -118,7 +118,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_header_exit'               => 'Exit',
     'profile_header_auth_needed'        => 'Authentication required',
     'profile_header_leave_surfconext'   => 'Leave SURFconext',
-    'profile_store_info'                => 'The following profile data have been provided by your home institution. This profile will be stored in (and used by) SURFconext. It is also possible that a subset of this information is provided to services that you accessed via SURFconext.',
+    'profile_store_info'                => 'The following profile data have been provided by your home institution. This profile will be stored in (and used by) SURFconext. A subset of this information has been provided to services that you accessed via SURFconext.',
     'profile_group_membership_desc'     => 'You are a member of the following groups.',
     'profile_no_groups'                 => 'No Groups',
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',

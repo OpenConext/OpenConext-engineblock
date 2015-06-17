@@ -117,7 +117,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_header_surfteams'          => 'SURFteams',
     'profile_header_auth_needed'        => 'Authenticatie vereist',
     'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Tevens is het mogelijk dat een subset van deze gegevens worden verstrekt aan diensten die je via SURFconext benadert.',
+    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Tevens is een subset van deze gegevens verstrekt aan diensten die je via SURFconext hebt benaderd.',
 
     'profile_group_membership_desc'     => 'U bent lid van de volgende groepen.',
     'profile_no_groups'                 => 'Geen Groepen',
