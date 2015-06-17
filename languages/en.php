@@ -128,7 +128,7 @@ If you have any questions about your privacy and the policy applied, please visi
                                             <ul>
                                                 <li>Only information stored in the SURFconext service will be deleted.</li>
                                                 <li>Applications accessed with SURFconext will not be notified. It is possible your personal data is still stored in these applications.</li>
-                                                <li>After a new SURFconext login automatically a new profile is created.</li>
+                                                <li>After a new SURFconext login a new profile will be created automatically.</li>
                                              </ul>
                                              <br>More information about what information is stored by SURFconext can be found on <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">the SURFconext support pages</a>',
     'profile_leave_surfconext_link_add' => '(close your browser after this action to finalize the deprovisioning procedure)',

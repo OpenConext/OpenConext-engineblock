@@ -126,8 +126,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
     'profile_leave_surfconext_disclaim' => 'Let op:
                                             <ul>
-                                                <li>Alleen de informatie welke in SURFconext wordt opgeslagen zal verwijderd worden.</li>
-                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens hier nog opgeslagen zijn.</li>
+                                                <li>Alleen de informatie die in SURFconext wordt opgeslagen zal verwijderd worden.</li>
+                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens daar nog opgeslagen zijn.</li>
                                                 <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel worden aangemaakt.</li>
                                              </ul>
                                              <br>Meer informatie over welke informatie er wordt opgeslagen door SURFconext kan je vinden op de <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">SURFconext supportpagina\'s</a>.',

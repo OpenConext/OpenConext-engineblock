@@ -19,7 +19,7 @@
     "urn:mace:dir:attribute-def:displayName": {
         "Description": {
             "en": "display name as shown in applications",
-            "nl": "weergave naam zoals getoond in applicaties"
+            "nl": "weergavenaam zoals getoond in applicaties"
         },
         "Name": {
             "en": "Display Name",
@@ -87,7 +87,7 @@
         },
         "Name": {
             "en": "Institution user ID",
-            "nl": "Instellings gebruikers ID"
+            "nl": "Instellings gebruikers-ID"
         },
         "DisplayOrder" : 10,
         "DisplayConsent" : true,
@@ -123,11 +123,11 @@
     "urn:mace:dir:attribute-def:mail": {
         "_Comment": "Values SHOULD match RFC2821",
         "Description": {
-            "en": "your e-mailaddress as known within your organization",
+            "en": "your email address as known within your organization",
             "nl": "jouw e-mailadres zoals bekend binnen jouw instelling"
         },
         "Name": {
-            "en": "E-mailaddress",
+            "en": "Email address",
             "nl": "E-mailadres"
         },
         "DisplayOrder" : 6,
@@ -143,7 +143,7 @@
     "urn:mace:dir:attribute-def:preferredLanguage": {
         "Description": {
             "en": "a two letter abbreviation according to ISO 639; no subcodes",
-            "nl": "een tweeletterige afkorting van de voorkeurstaal volgens de ISO 639 taalafkortings codetabel; geen subcodes"
+            "nl": "een tweeletterige afkorting van de voorkeurstaal volgens de ISO 639 taalafkortings-codetabel; geen subcodes"
         },
         "Name": {
             "en": "Preferred Language",
@@ -185,7 +185,7 @@
         },
         "Name": {
             "en": "User ID",
-            "nl": "Gebruikers ID"
+            "nl": "Gebruikers-ID"
         },
         "DisplayOrder" : 1,
         "DisplayConsent" : true,
@@ -199,8 +199,8 @@
     },
     "urn:mace:surffederatie.nl:attribute-def:nlDigitalAuthorIdentifier": {
         "Description": {
-            "en": "Digital Author Identifier (DAI) as described at: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480",
-            "nl": "Digital Author Identifier (DAI) zoals beschreven op: http:\/\/www.surffoundation.nl\/smartsite.dws?ch=eng&id=13480"
+            "en": "Digital Author Identifier (DAI)",
+            "nl": "Digital Author Identifier (DAI)"
         },
         "Name": {
             "en": "DAI",
@@ -219,7 +219,7 @@
         },
         "Name": {
             "en": "Display name of Organization",
-            "nl": "Weergavenaam van de Instelling"
+            "nl": "Weergavenaam van de instelling"
         },
         "Conditions": {
             "warning": {
@@ -242,8 +242,8 @@
     "urn:mace:surffederatie.nl:attribute-def:nlEduPersonStudyBranch": {
         "_Comment": "CROHO code",
         "Description": {
-            "en": "study branch; numeric string which contains the CROHOcode. can be empty if the branch is unknown",
-            "nl": "opleiding; numerieke string die de CROHOcode bevat. leeg als het een niet reguliere opleiding betreft"
+            "en": "study branch; numeric string which contains the CROHOcode. Can be empty if the branch is unknown",
+            "nl": "opleiding; numerieke string die de CROHOcode bevat. Leeg als het een niet-reguliere opleiding betreft"
         },
         "Name": {
             "en": "Study Branch",
@@ -272,7 +272,7 @@
     "urn:mace:terena.org:attribute-def:schacHomeOrganization": {
         "_Comment": "Note that urn:oid:1.3.6.1.4.1.1466.115.121.1.15 is a non-conforming version that is deprecated",
         "Description": {
-            "en": "name for the organization, making use of the domain name of the  organization conform RFC 1035",
+            "en": "name for the organization, making use of the domain name of the organization conform RFC 1035",
             "nl": "aanduiding voor de organisatie van een persoon gebruikmakend van de domeinnaam van de organisatie; syntax conform RFC 1035"
         },
         "Name": {
@@ -317,7 +317,7 @@
     "urn:nl.surfconext.licenseInfo": {
         "Description": {
             "en": "License information for the current service",
-            "nl": "Licentie informatie voor de huidige dienst"
+            "nl": "Licentieinformatie voor de huidige dienst"
         },
         "Name": {
             "en": "License information",
@@ -331,7 +331,7 @@
         },
         "Name": {
             "en": "SURFconext status",
-            "nl": "SURFconext status"
+            "nl": "SURFconext-status"
         },
         "DisplayOrder" : 13,
         "DisplayConsent" : true
@@ -348,8 +348,8 @@
     },
     "urn:oid:1.3.6.1.4.1.1076.20.40.40.1": {
         "Description": {
-            "en": "Status of this account in SURFconext",
-            "nl": "Status van deze account in SURFconext"
+            "en": "Unique identifier of this user within SURFconext",
+            "nl": "Unieke identificatie van deze gebruiker binnen SURFconext"
         },
         "Name": {
             "en": "Identifier",
@@ -359,8 +359,8 @@
     "urn:oid:1.3.6.1.4.1.5923.1.1.1.10": "urn:mace:dir:attribute-def:eduPersonTargetedID",
     "urn:mace:dir:attribute-def:eduPersonTargetedID": {
         "Description": {
-            "en": "Status of this account in SURFconext",
-            "nl": "Status van deze account in SURFconext"
+            "en": "Unique identifier of this user",
+            "nl": "Unieke identificatie van deze gebruiker"
         },
         "Name": {
             "en": "Identifier",
@@ -375,15 +375,15 @@
         },
         "Name": {
             "en": "Member of organization",
-            "nl": "Organisatie lidmaatschap "
+            "nl": "Organisatie-lidmaatschap"
         },
         "DisplayOrder" : 11,
         "DisplayConsent" : true
     },
     "nameid": {
         "Description": {
-            "en": "Status of this account in SURFconext",
-            "nl": "Status van deze account in SURFconext"
+            "en": "Unique identifier of this user",
+            "nl": "Unieke identificatie van deze gebruiker"
         },
         "Name": {
             "en": "Identifier",
