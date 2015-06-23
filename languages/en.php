@@ -118,7 +118,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_header_exit'               => 'Exit',
     'profile_header_auth_needed'        => 'Authentication required',
     'profile_header_leave_surfconext'   => 'Leave SURFconext',
-    'profile_store_info'                => 'The following profile data have been provided by your home institution. This profile will be stored in (and used by) SURFconext. It is also possible that a subset of this information is provided to services that you accessed via SURFconext.',
+    'profile_store_info'                => 'The following profile data have been provided by your home institution. This profile will be stored in (and used by) SURFconext. A subset of this information has been provided to services that you accessed via SURFconext.',
     'profile_group_membership_desc'     => 'You are a member of the following groups.',
     'profile_no_groups'                 => 'No Groups',
     'profile_extra_groups_desc'         => 'In order to get extra groups you need to authorize their use.',
@@ -128,7 +128,7 @@ If you have any questions about your privacy and the policy applied, please visi
                                             <ul>
                                                 <li>Only information stored in the SURFconext service will be deleted.</li>
                                                 <li>Applications accessed with SURFconext will not be notified. It is possible your personal data is still stored in these applications.</li>
-                                                <li>After a new SURFconext login automatically a new profile is created.</li>
+                                                <li>After a new SURFconext login a new profile will be created automatically.</li>
                                              </ul>
                                              <br>More information about what information is stored by SURFconext can be found on <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">the SURFconext support pages</a>',
     'profile_leave_surfconext_link_add' => '(close your browser after this action to finalize the deprovisioning procedure)',
@@ -268,8 +268,8 @@ If you want to use this application you have to:<br />
     'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is not a valid email address',
     'error_attribute_validator_minlength'           => '\'%3$s\' is not long enough (minimum is %2$d characters)',
     'error_attribute_validator_maxlength'           => '\'%3$s\' is too long (maximum is %2$d characters)',
-    'error_attribute_validator_min'                 => '%1$s requires at least %2$d values (%3d given)',
-    'error_attribute_validator_max'                 => '%1$s may have no more than %2$d values (%3d given)',
+    'error_attribute_validator_min'                 => '%1$s requires at least %2$d values (%3$d given)',
+    'error_attribute_validator_max'                 => '%1$s may have no more than %2$d values (%3$d given)',
     'error_attribute_validator_regex'               => '\'%3$s\' does not match the expected format of this attribute (%2$s)',
     'error_attribute_validator_not_in_definitions'  => '%1$s is not known in the SURFconext schema',
     'error_attribute_validator_allowed'             => '\'%3$s\' is not an allowed value for this attribute',
