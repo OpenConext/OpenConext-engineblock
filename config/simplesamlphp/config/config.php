@@ -53,9 +53,6 @@ $config = array (
 	 */
 	'debug' => FALSE,
 
-
-	'showerrors'			=>	$appConfig->auth->simplesamlphp->showErrors,
-
 	/**
 	 * Custom error show function called from SimpleSAML_Error_Error::show.
 	 * See docs/simplesamlphp-errorhandling.txt for function code example.
