@@ -757,16 +757,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "1.1.5",
+            "version": "1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "5ebf43454aea9fc2f5dc78eb97c0c8d9ef1845a7"
+                "reference": "416db85447d1ccdc05044aba4c9d8c30caddf6aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/5ebf43454aea9fc2f5dc78eb97c0c8d9ef1845a7",
-                "reference": "5ebf43454aea9fc2f5dc78eb97c0c8d9ef1845a7",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/416db85447d1ccdc05044aba4c9d8c30caddf6aa",
+                "reference": "416db85447d1ccdc05044aba4c9d8c30caddf6aa",
                 "shasum": ""
             },
             "require": {
@@ -792,7 +792,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2015-07-07 10:30:00"
+            "time": "2015-07-09 07:52:26"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -1010,7 +1010,7 @@
             ],
             "authors": [
                 {
-                    "name": "Andreas Åkre Solberg",
+                    "name": "Andreas \u00c5kre Solberg",
                     "email": "andreas.solberg@uninett.no"
                 }
             ],
@@ -1056,7 +1056,7 @@
                     "email": "olav.morken@uninett.no"
                 },
                 {
-                    "name": "Andreas Åkre Solberg",
+                    "name": "Andreas \u00c5kre Solberg",
                     "email": "andreas.solberg@uninett.no"
                 }
             ],
