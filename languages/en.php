@@ -156,6 +156,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_mail_text'                 => 'SURFconext support may ask you to share the abovementioned data. This information can help them to answer your support question.',
     'profile_mail_attributes'           => 'Mail data to help@surfconext.nl',
     'profile_mail_send_success'         => 'The mail with your information has been successfully sent.',
+    'profile_helplink'                  => 'https://wiki.surfnet.nl/display/conextsupport/Profile+page',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'My services accessed through SURFconext',

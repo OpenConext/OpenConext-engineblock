@@ -156,6 +156,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_mail_text'                 => 'SURFconext support kan je vragen om bovenstaande informatie te delen. Deze informatie kan hen helpen om de supportvraag te beantwoorden.',
     'profile_mail_attributes'           => 'Mail data naar help@surfconext.nl',
     'profile_mail_send_success'         => 'De mail met bovenstaande informatie is succesvol verstuurd.',
+    'profile_helplink'                  => 'https://wiki.surfnet.nl/display/conextsupport/Profile+page',
 
     //Profile MyApps
     'profile_apps_connected_aps'        => 'Mijn diensten via SURFconext',

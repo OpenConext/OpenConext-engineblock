@@ -74,7 +74,7 @@
 
   <div class="l-footer">
     <nav class="mod-footer">
-      <p><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></p>
+      <p class="over-center"><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></p>
       <div class="center-footer">
         <ul class="comp-language">
           <li>
@@ -85,7 +85,7 @@
           </li>
         </ul>
       </div>
-      <ul class="comp-links">
+      <ul class="comp-links over-center">
         <li>
           <?php if (isset($this->layout()->helpLink)): ?>
             <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
@@ -93,9 +93,10 @@
         </li>
       </ul>
     </nav>
+    <nav class="footer-line">
+      <?php echo $this->layout()->footerText; ?>
+    </>
   </div>
-
-  <?php echo $this->layout()->footerText; ?>
 
   <script src="/javascripts/application.js" type="text/javascript"></script>
 </body>
