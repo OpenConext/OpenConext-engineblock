@@ -66,13 +66,14 @@
         <?php endif; ?>
       </ul>
     </div>
+    <a class="burger" href="#footer"><img src="/images/burger.svg"></a>
   </div>
 
   <div class="l-container<?php if ($this->layout()->wide === true):?> wide<? endif; ?>">
       <?php echo $this->layout()->content; ?>
   </div>
 
-  <div class="l-footer">
+  <div id="footer" class="l-footer">
     <nav class="mod-footer">
       <p class="over-center"><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></p>
       <div class="center-footer">
