@@ -37,6 +37,8 @@ else {
     $lang = 'en';
 }
 
+$_GET['lang'] = $lang;
+
 // Guard against unsupported languages.
 if (!in_array($lang, array('nl','en'))) {
     $lang = 'en';
@@ -85,6 +87,13 @@ if ($showRequestAccess === true) {
     }
   }
 }
+
+function nameSort($a, $b) {
+  $lang = $_GET['lang'];
+  return strtolower($a['Name_' . $lang]) > strtolower($b['Name_' . $lang]);
+}
+usort($idpList, 'nameSort');
+
 $layout->assign('greenHeader', $spDisplayName);
 $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 ?>
@@ -123,7 +132,6 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
             <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
           </div>
           <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-          <?php //@todo: https://github.com/SURFconext/SURFconext-designs/commit/0a4fa2e3a29ae85419f502501f20fa32f58c416b ?>
           <button class="c-button white action" data-toggle-text="<img src='/images/cross.svg'>"><?php echo $this->t('press_enter_to_select'); ?></button>
           <noscript>
             <button type="submit" class="c-button white" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">Login</button>
