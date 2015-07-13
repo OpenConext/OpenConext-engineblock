@@ -410,4 +410,5 @@ OpenConext.Tabs = function () {
 $(function init() {
   new OpenConext.Tabs();
   new OpenConext.Discover();
+  FastClick.attach(document.body);
 });
