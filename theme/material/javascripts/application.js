@@ -391,6 +391,11 @@ OpenConext.Tabs = function () {
     }
     $('.tab-target').removeClass('active');
     $('.tab-target[href="#' + activeTabId + '"]').addClass('active');
+    $('.comp-language a').each(function(){
+      var val = $(this).attr('href'),
+        newVal = val.split('#')[0];
+      $(this).attr('href', newVal + '#' + activeTabId);
+    });
   }
 
   if (!hasTabs()) {

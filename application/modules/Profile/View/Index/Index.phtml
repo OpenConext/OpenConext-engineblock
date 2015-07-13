@@ -41,6 +41,7 @@ $layout = $this->layout();
 // The current language
 $lang = $this->language();
 
+$layout->wide       = true;
 $layout->title      = $layout->title . ' - ' . $layout->subheader;
 $layout->subheader  = $this->t('profile_subheader');
 $layout->header     = $this->t('profile_header') . ' - ' . $layout->subheader;
@@ -79,9 +80,9 @@ foreach ($spList as $spId => $sp) {
     </ul>
   </nav>
   <div class='mod-content'>
-    <h1><?php echo $this->t('profile_subheader'); ?></h1>
 
     <div id="MyProfile" class="mod-tabpanel">
+      <h1><?php echo $this->t('profile_header_my_profile'); ?></h1>
       <p><?= $this->t('profile_store_info'); ?></p>
       <div class="l-overflow">
         <table class="comp-table">
@@ -125,6 +126,7 @@ foreach ($spList as $spId => $sp) {
     </div>
 
     <div id="MyApps" class="mod-tabpanel">
+      <h1><?php echo $this->t('profile_header_my_apps'); ?></h1>
       <p><?= $this->t('profile_apps_connected_aps'); ?></p>
       <p><?= $this->t('profile_apps_share'); ?></p>
       <div class="l-overflow">
@@ -217,6 +219,7 @@ foreach ($spList as $spId => $sp) {
     </div>
 
     <div id="Exit" class="mod-tabpanel">
+        <h1><?php echo $this->t('profile_header_exit'); ?></h1>
         <p><?= $this->t('profile_leave_surfconext_desc'); ?></p>
         <form id="delete-confirmation-form" method="post" action="/profile/delete-user">
             <p><input id="delete-confirmation-text"
