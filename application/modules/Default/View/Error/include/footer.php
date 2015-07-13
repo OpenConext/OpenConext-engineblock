@@ -5,7 +5,7 @@ $log->getQueueWriter()->flush('feedback page shown');
 ?>
 
     <div class="l-overflow">
-      <table>
+      <table class="comp-table">
       <?php
       if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])) {
           foreach($_SESSION['feedbackInfo'] as $name => $value) {
