@@ -75,14 +75,16 @@
   <div class="l-footer">
     <nav class="mod-footer">
       <p><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></p>
-      <ul class="comp-language">
-        <li>
-          <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
-        </li>
-        <li>
-          <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
-        </li>
-      </ul>
+      <div class="center-footer">
+        <ul class="comp-language">
+          <li>
+            <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
+          </li>
+          <li>
+            <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+          </li>
+        </ul>
+      </div>
       <ul class="comp-links">
         <li>
           <?php if (isset($this->layout()->helpLink)): ?>
