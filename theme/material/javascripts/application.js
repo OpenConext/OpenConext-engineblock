@@ -254,36 +254,38 @@ OpenConext.Discover = function () {
       list.addClass('show-buttons');
 
       swapText = $(this).attr('data-toggle-text');
-      $(this).attr('data-toggle-text', $(this).text());
-      $(this).text(swapText);
+      $(this).attr('data-toggle-text', $(this).html());
+      $(this).html(swapText);
 
       for (x = 0; x < removeables.length; x++) {
         item = $(removeables[x]);
         item.removeClass('white');
         item.addClass('outline');
         item.addClass('deleteable');
+        item.addClass('img');
 
         swapText = item.attr('data-toggle-text');
-        item.attr('data-toggle-text', item.text());
-        item.text(swapText);
+        item.attr('data-toggle-text', item.html());
+        item.html(swapText);
       }
       $(this).attr('data-toggle', 'edit');
     } else {
       list.removeClass('show-buttons');
 
       swapText = $(this).attr('data-toggle-text');
-      $(this).attr('data-toggle-text', $(this).text());
-      $(this).text(swapText);
+      $(this).attr('data-toggle-text', $(this).html());
+      $(this).html(swapText);
 
       for (x = 0; x < removeables.length; x++) {
         item = $(removeables[x]);
         item.removeClass('outline');
         item.removeClass('deleteable');
+        item.removeClass('img');
         item.addClass('white');
 
         swapText = item.attr('data-toggle-text');
-        item.attr('data-toggle-text', item.text());
-        item.text(swapText);
+        item.attr('data-toggle-text', item.html());
+        item.html(swapText);
       }
 
       $(this).attr('data-toggle', 'view');
