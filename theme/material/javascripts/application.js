@@ -416,7 +416,7 @@ $(function init() {
   new OpenConext.Tabs();
   new OpenConext.Discover();
   FastClick.attach(document.body);
-  if ($('#engine-main-page')) {
+  if ($('#engine-main-page') && $('#engine-main-page').length > 0) {
       // hack to remove i18n nav
       $('.comp-language').remove();
       $('.mod-footer').hide();
