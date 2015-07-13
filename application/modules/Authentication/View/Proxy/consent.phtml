@@ -86,7 +86,7 @@ $inlineScriptHelper->appendScript('
 
     <div class="l-overflow">
         <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
-        <table>
+        <table class="comp-table">
         <?php foreach ($attributes as $uid => $attributeValues) : ?>
             <?php $attributeName = $this->getAttributeName($uid, $lang)?>
             <?php if ($attributeName) : ?>

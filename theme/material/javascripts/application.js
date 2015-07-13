@@ -343,10 +343,12 @@ OpenConext.Discover = function () {
   $('.mod-results').on('mousemove', mouseNavigation);
   $('img.logo').lazyload();
   $('.mod-search-input').on('focus', function() {
-    var SearchInput = $('.mod-search-input'),
-      strLength= SearchInput.val().length;
-
-    SearchInput[0].setSelectionRange(strLength, strLength);
+    var val = this.value;
+    var $this = $(this);
+    $this.val("");
+    setTimeout(function () {
+      $this.val(val);
+    }, 1);
     setFocusClass();
   });
 };
