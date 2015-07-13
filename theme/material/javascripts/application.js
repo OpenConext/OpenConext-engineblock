@@ -416,4 +416,16 @@ $(function init() {
   new OpenConext.Tabs();
   new OpenConext.Discover();
   FastClick.attach(document.body);
+  if ($('#engine-main-page')) {
+      // hack to remove i18n nav
+      $('.comp-language').remove();
+      $('.mod-footer').hide();
+
+      // set absolute URLs of anchors as display text
+      $('dl.metadata-certificates-list a').not('a[data-external-link=true]').each(function(){
+        $(this).text(
+          window.location.protocol + '//' + window.location.hostname + $(this).attr('href')
+        );
+      });
+  }
 });

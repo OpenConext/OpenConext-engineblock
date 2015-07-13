@@ -4,24 +4,12 @@ $layout = $this->layout();
 $layout->setLayout('default');
 
 // Set Layout properties
+$layout->wide       = true;
 $layout->title = $layout->title. ' - Metadata &amp; Certificates';
 $layout->header = $layout->title;
 $layout->subheader = 'IdP Certificate and Metadata';
 $layout->footerText = $this->t('footer');
-$layout->getView()->inlineScript('script', <<<JS
-  $(function(){
-    // hack to remove i18n nav
-    $('.comp-language').remove();
 
-    // set absolute URLs of anchors as display text
-    $('dl.metadata-certificates-list a').not('a[data-external-link=true]').each(function(){
-      $(this).text(
-        window.location.protocol + '//' + window.location.hostname + $(this).attr('href')
-      );
-    });
-  });
-JS
-);
 /** @var Zend_Config $keyPairs */
 $keyPairs = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->encryption->keys;
 $keyPairIds = array();
@@ -29,7 +17,7 @@ if ($keyPairs) {
     $keyPairIds = array_keys($keyPairs->toArray());
 }
 ?>
-<div class="box">
+<div id="engine-main-page" class="box">
   <div class="mod-content">
 
     <div class="main">
@@ -69,8 +57,8 @@ if ($keyPairs) {
                 </ul>
             </dd>
             <dt>
-                <strong>Metadata below is only relevant for key rollover or in
-                    case you want a custom WAYF for your SP</strong>
+                <p class="strong">Metadata below is only relevant for key rollover or in
+                case you want a custom WAYF for your SP</p>
             </dt>
             <dt>
                 The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy for SP
