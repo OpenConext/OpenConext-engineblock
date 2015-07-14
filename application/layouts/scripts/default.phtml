@@ -75,28 +75,34 @@
 
   <div id="footer" class="l-footer">
     <nav class="mod-footer">
-      <p class="over-center"><?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?></p>
-      <div class="center-footer">
-        <ul class="comp-language">
-          <li>
-            <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
-          </li>
-          <li>
-            <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
-          </li>
-        </ul>
-      </div>
-      <ul class="comp-links over-center">
-        <li>
-          <?php if (isset($this->layout()->helpLink)): ?>
-            <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
-          <?php endif; ?>
+      <ul class="footer-menu">
+        <li class="nav-row left">
+          <?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?>
+        </li>
+        <li class="nav-row">
+          <ul class="comp-language">
+            <li>
+              <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
+            </li>
+            <li>
+              <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+            </li>
+          </ul>
+        </li>
+        <li class="nav-row right">
+          <ul class="comp-links">
+            <li>
+              <?php if (isset($this->layout()->helpLink)): ?>
+                <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
+              <?php endif; ?>
+            </li>
+          </ul>
         </li>
       </ul>
     </nav>
     <nav class="footer-line">
       <?php echo $this->layout()->footerText; ?>
-    </>
+    </nav>
   </div>
 
   <script src="/javascripts/application.js" type="text/javascript"></script>

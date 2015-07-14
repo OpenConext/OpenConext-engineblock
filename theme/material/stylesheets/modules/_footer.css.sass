@@ -9,6 +9,25 @@
     justify-content: space-between
     align-items: center
 
+
+  .footer-menu
+    display: inherit
+    width: 100%
+
+  .footer-menu li.nav-row
+    display: block
+
+    +min-width($medium)
+      width: 33%
+
+    &.left
+      +min-width($medium)
+        text-align: left
+
+    &.right
+      +min-width($medium)
+        text-align: right
+
   .center-footer
     position: absolute
     width: 100%
