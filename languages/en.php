@@ -295,6 +295,7 @@ If you want to use this application you have to:<br />
 
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',
+    'attributes_data_mailed'          => 'Attribute data has been mailed',
     'idp_debugging_title'             => 'Show response from Identity Provider',
     'retry'                           => 'Retry',
 

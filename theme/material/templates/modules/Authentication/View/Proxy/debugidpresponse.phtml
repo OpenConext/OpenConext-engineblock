@@ -29,6 +29,14 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
 ?>
 <div class="box">
   <div class="mod-content">
+    <?php if (isset($_POST['mail']) && $_POST['mail'] === 'true'):?>
+      <table class="comp-table">
+        <tr>
+          <td><img src="/images/checkmark.svg" class="c-icon" /><?= $this->t('attributes_data_mailed'); ?></td>
+        </tr>
+      </table>
+    <?php endif; ?>
+
     <h1><?php echo $this->t('idp_debugging_title'); ?></h1>
     <p>
       <?php if ($validationResult->isValid()) : ?>
