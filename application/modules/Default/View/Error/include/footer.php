@@ -6,21 +6,24 @@ $log->getQueueWriter()->flush('feedback page shown');
 
     <div class="l-overflow">
       <table class="comp-table">
-      <?php
-      if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])) {
-          foreach($_SESSION['feedbackInfo'] as $name => $value) {
-              if (empty($value)) {
-                  continue;
-              }
-          ?>
-          <tr>
-              <td><strong><?= EngineBlock_View::htmlSpecialCharsText($this->t($name))?>:</strong></td>
-              <td><?= EngineBlock_View::htmlSpecialCharsText($value);?></td>
-          </tr>
-          <?php
-          }
-      }
-      ?>
+        <thead></thead>
+        <tbody>
+        <?php
+        if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])) {
+            foreach($_SESSION['feedbackInfo'] as $name => $value) {
+                if (empty($value)) {
+                    continue;
+                }
+            ?>
+            <tr>
+                <td style="font-weight: bold;"><?= EngineBlock_View::htmlSpecialCharsText($this->t($name))?>:</td>
+                <td style="font-size: 10px;"><?= EngineBlock_View::htmlSpecialCharsText($value);?></td>
+            </tr>
+            <?php
+            }
+        }
+        ?>
+        </tbody>
       </table>
     </div>
 
