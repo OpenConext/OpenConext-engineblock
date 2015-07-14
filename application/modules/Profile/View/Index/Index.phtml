@@ -94,7 +94,7 @@ foreach ($spList as $spId => $sp) {
             </thead>
         <?php foreach ($userAttributes as $attributeId => $attributeValues) { ?>
             <tr>
-                <td style="font-weight: bold;" title="<?= $attributeId?>">
+                <td class="strong" title="<?= $attributeId?>">
                     <?=EngineBlock_View::htmlSpecialCharsText($metadata->getNameWithFallback($attributeId, $lang))?>
                 </td>
                 <td>
@@ -190,7 +190,7 @@ foreach ($spList as $spId => $sp) {
                                         </thead>
                                     <?php foreach ($spAttributesList[$spId] as $attributeId => $attributeValues) { ?>
                                         <tr>
-                                            <td style="font-weight: bold;">
+                                            <td class="strong">
                                                 <?=EngineBlock_View::htmlSpecialCharsText($metadata->getNameWithFallback($attributeId, $lang))?>
                                             </td>
                                             <td>
