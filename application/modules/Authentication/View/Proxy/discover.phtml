@@ -132,7 +132,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
             <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
           </div>
           <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-          <button class="c-button white action" data-toggle-text="<img src='/images/cross.svg'>"><?php echo $this->t('press_enter_to_select'); ?></button>
+          <button class="c-button white action" data-toggle-text="<img class='deleteable' src='/images/cross.svg'>"><?php echo $this->t('press_enter_to_select'); ?></button>
           <noscript>
             <button type="submit" class="c-button white" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">Login</button>
           </noscript>
