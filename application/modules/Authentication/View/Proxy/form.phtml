@@ -29,7 +29,7 @@ $layout->title = $layout->title. ' - '. $this->t('post_data');
     </head>
     <body class="index" <?php if (!$trace): ?>onload="document.forms[0].submit()"<?php endif; ?>>
       <div class="mod-redirect">
-        <img src="/images/spinner.svg" />
+        <img class="rotate-img" src="/images/spinner.svg" />
         <h1><?= $this->t('processing'); ?></h1>
         <p><?= $this->t('processing_waiting'); ?></p>
         <p>Taking too long? <a href="javascript:history.back(-2)"><?= $this->t('go_back'); ?></a>.</p>

@@ -435,4 +435,9 @@ $(function init() {
         );
       });
   }
+
+
+  $('#delete-confirmation-form').submit(function() {
+    return confirm($('#delete-confirmation-text').attr('data-confirmation-text'));
+  });
 });
