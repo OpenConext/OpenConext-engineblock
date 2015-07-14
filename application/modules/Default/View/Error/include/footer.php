@@ -17,7 +17,7 @@ $log->getQueueWriter()->flush('feedback page shown');
             ?>
             <tr>
                 <td style="font-weight: bold;"><?= EngineBlock_View::htmlSpecialCharsText($this->t($name))?>:</td>
-                <td style="font-size: 10px;"><?= EngineBlock_View::htmlSpecialCharsText($value);?></td>
+                <td style="font-size: 0.8em;"><?= EngineBlock_View::htmlSpecialCharsText($value);?></td>
             </tr>
             <?php
             }

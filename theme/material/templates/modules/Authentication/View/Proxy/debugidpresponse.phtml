@@ -30,20 +30,22 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
 <div class="box">
   <div class="mod-content">
     <h1><?php echo $this->t('idp_debugging_title'); ?></h1>
-    <?php if ($validationResult->isValid()) : ?>
-      <img src="/images/checkmark.svg" class="c-icon" />
-    <?= $this->t('attributes_validation_succeeded'); ?>
-    <?php else: ?>
-        <?php if (count($validationResult->getErrors()) > 0): ?>
-    <img src="/images/warning.svg" class="c-icon" />
-        <?php else: ?>
-    <img src="/images/warning.svg" class="c-icon" />
-        <?php endif; ?>
+    <p>
+      <?php if ($validationResult->isValid()) : ?>
+          <img src="/images/checkmark.svg" class="c-icon" />
+          <?= $this->t('attributes_validation_succeeded'); ?>
+      <?php else: ?>
+          <?php if (count($validationResult->getErrors()) > 0): ?>
+            <img src="/images/warning.svg" class="c-icon" />
+          <?php else: ?>
+            <img src="/images/warning.svg" class="c-icon" />
+          <?php endif; ?>
 
-    <?= $this->t('attributes_validation_failed'); ?>
-    <?php endif; ?>
+          <?= $this->t('attributes_validation_failed'); ?>
+      <?php endif; ?>
+    </p>
 
-    <form method="post" style="float: right">
+    <form method="post">
         <input type="hidden" name="clear" value="true" />
         <input type="submit" class="c-button" value="<?=$this->t('retry');?>" />
     </form>
