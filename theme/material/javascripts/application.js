@@ -342,7 +342,7 @@ OpenConext.Discover = function () {
   $('body').on('keydown', keyNavigation);
   $('.mod-results').on('mousemove', mouseNavigation);
   $('img.logo').lazyload();
-  $('.mod-search-input').on('focus', function() {
+  this.searchBar.on('focus', function() {
     var val = this.value;
     var $this = $(this);
     $this.val("");
@@ -351,6 +351,11 @@ OpenConext.Discover = function () {
     }, 1);
     setFocusClass();
   });
+
+  // on desktop devices set the focus
+  if (window.innerWidth > 800) {
+    this.searchBar.focus();
+  }
 };
 
 OpenConext.Tabs = function () {
