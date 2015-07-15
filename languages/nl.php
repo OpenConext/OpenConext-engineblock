@@ -35,7 +35,7 @@ return array(
     'no_results'                => 'Geen resultaten gevonden',
 
     //Footer
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
+    'footer'                => '<a href="https://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help_header'           => 'Help',

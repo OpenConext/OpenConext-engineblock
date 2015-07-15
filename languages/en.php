@@ -36,7 +36,7 @@ return array(
     'error_header'              => 'Error',
 
     //Footer
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
+    'footer'                => '<a href="https://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
 
     //Help
     'help_header'           => 'Help',
