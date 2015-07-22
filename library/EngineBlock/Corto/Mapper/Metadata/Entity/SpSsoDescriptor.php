@@ -1,6 +1,7 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor
 {
@@ -16,7 +17,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor extends EngineBlo
 
     public function mapTo(array $rootElement)
     {
-        if (!array_key_exists('AssertionConsumerServices', $this->_entity)) {
+        if (!$this->_entity instanceof ServiceProvider) {
             return $rootElement;
         }
 
