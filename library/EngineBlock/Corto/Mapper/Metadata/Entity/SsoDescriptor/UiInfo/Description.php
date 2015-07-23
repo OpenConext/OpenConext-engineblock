@@ -17,10 +17,10 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor_UiInfo_Description
     public function mapTo(array $rootElement)
     {
         $descriptions = array();
-        if (!empty($this->_entity->descriptionEn)) {
-            $descriptions['nl'] = $this->_entity->descriptionEn;
-        }
         if (!empty($this->_entity->descriptionNl)) {
+            $descriptions['nl'] = $this->_entity->descriptionNl;
+        }
+        if (!empty($this->_entity->descriptionEn)) {
             $descriptions['en'] = $this->_entity->descriptionEn;
         }
         if (empty($descriptions)) {
