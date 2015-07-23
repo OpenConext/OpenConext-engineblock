@@ -130,11 +130,15 @@ class EngineBlock_Attributes_Metadata
     {
         $attributeIds = array();
         foreach ($this->definitions as $attributeId => $attributeDefinition) {
-            if (empty($attributeDefinition['Conditions'][$type]['min'])) {
+            if (isset($attributeDefinition['__original__'])) {
                 continue;
             }
 
-            if ((int) $attributeDefinition['Conditions'][$type]['min'] <= 1) {
+            if (!isset($attributeDefinition['Conditions'][$type]['min'])) {
+                continue;
+            }
+
+            if ((int) $attributeDefinition['Conditions'][$type]['min'] < 1) {
                 continue;
             }
 
