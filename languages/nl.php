@@ -50,8 +50,8 @@ return array(
 
     //Footer
     'service_by'            => 'Deze dienst is verbonden via',
-    'serviceprovider_link'  => '<a href="http://www.surfconext.nl/">SURFconext</a>',
-    'footer'                => '<a href="http://www.surfconext.nl/">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
+    'serviceprovider_link'  => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>',
+    'footer'                => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help'                  => 'Help',
@@ -134,7 +134,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_header_surfteams'          => 'SURFconext Teams',
     'profile_header_auth_needed'        => 'Authenticatie vereist',
     'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Een subset van deze gegevens wordt verstrekt aan diensten die je via SURFconext benadert.',
+    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Een subset van deze gegevens wordt verstrekt aan diensten die je via SURFconext benadert.',
 
     'profile_group_membership_desc'     => 'Je bent lid van de volgende groepen.',
     'profile_no_groups'                 => 'Geen groepen',
@@ -143,9 +143,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
     'profile_leave_surfconext_disclaim' => 'Let op:
                                             <ul>
-                                                <li>Alleen de informatie die in SURFconext wordt opgeslagen zal worden verwijderd.</li>
-                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens daar nog zijn opgeslagen.</li>
-                                                <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel voor jou worden aangemaakt.</li>
+                                                <li>Alleen de informatie die in SURFconext wordt opgeslagen zal verwijderd worden.</li>
+                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens daar nog opgeslagen zijn.</li>
+                                                <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel worden aangemaakt.</li>
                                              </ul>
                                              <br>Meer informatie over welke informatie er wordt opgeslagen door SURFconext kan je vinden op de <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">SURFconext supportpagina\'s</a>.',
     'profile_leave_surfconext_link_add' => '(Sluit je browser na deze actie om de deprovisioning procedure te voltooien.)',

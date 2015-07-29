@@ -18,7 +18,7 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_SpSsoDescriptor_AssertionConsumer
     public function mapTo(array $rootElement)
     {
         // Set consumer service on SP
-        if (!empty($this->_entity->assertionConsumerServices)) {
+        if (empty($this->_entity->assertionConsumerServices)) {
             return $rootElement;
         }
 

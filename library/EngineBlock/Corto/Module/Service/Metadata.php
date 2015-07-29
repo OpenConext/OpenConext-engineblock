@@ -1,16 +1,23 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+use OpenConext\Component\EngineBlockFixtures\IdFrame;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
     public function serve($serviceName)
     {
-        // Get the configuration for EngineBlock in it's IdP / SP role.
+        // Get the configuration for EngineBlock in it's IdP / SP role without the VO.
+        $this->_server->setProcessingMode();
         $engineEntityId = $this->_server->getUrl($serviceName);
+        $this->_server->unsetProcessingMode();
+
         $engineEntity = $this->_server->getRepository()->fetchEntityByEntityId($engineEntityId);
 
         // Override the EntityID and SSO location to optionally append VO id
+        $externalEngineEntityId = $this->_server->getUrl($serviceName);
+        $engineEntity->entityId = $externalEngineEntityId;
+
         if ($serviceName === 'idpMetadataService') {
             $ssoServiceReplacer = new ServiceReplacer($engineEntity, 'SingleSignOnService', ServiceReplacer::REQUIRED);
             $ssoLocation = $this->_server->getUrl('singleSignOnService');
@@ -24,7 +31,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
 
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
-            $this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_METADATA),
+            $this->_server->getNewId(IdFrame::ID_USAGE_SAML2_METADATA),
             $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
             false
         );
