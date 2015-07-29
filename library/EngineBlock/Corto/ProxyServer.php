@@ -335,7 +335,7 @@ class EngineBlock_Corto_ProxyServer
             if (md5($remoteEntityId) === $remoteIdPMd5) {
                 $this->_configs['Idp'] = $remoteEntityId;
                 $this->_configs['TransparentProxy'] = true;
-                $this->getSessionLog()->info("Detected pre-selection of $remoteEntityId as IdP, switching to transparant mode");
+                $this->getSessionLog()->info("Detected pre-selection of $remoteEntityId as IdP, switching to transparent mode");
                 break;
             }
         }
