@@ -38,25 +38,21 @@ OpenConext.Discover = function () {
 
   function filterList(filterValue) {
     var filterElements = $('.mod-results a.result'),
-      spinner = $('.mod-results .spinner'),
-      i, result, title;
+        spinner = $('.mod-results .spinner');
 
     spinner.removeClass('hidden');
 
     filterValue = filterValue.toLowerCase();
 
-    for (i = 0; i < filterElements.length; i++) {
-      result = $(filterElements[i]);
-      title = $(result).find('h3').text().toLowerCase();
+    filterElements.each(function () {
+      var result = $(this),
+          title = result.find('h3').text().toLowerCase(),
+          match = title.indexOf(filterValue) !== -1;
 
-      if (title.toString().indexOf(filterValue.toString()) > -1) {
-        result.addClass('active');
-        result.removeClass('hidden');
-      } else {
-        result.addClass('hidden');
-        result.removeClass('active');
-      }
-    }
+      result
+          .toggleClass('active', match)
+          .toggleClass('hidden', !match);
+    });
 
     checkVisible();
     checkNoResults();
