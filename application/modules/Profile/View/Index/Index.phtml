@@ -157,11 +157,11 @@ foreach ($spList as $spId => $sp) {
                             <?php endif; ?>
                         </td>
                         <td>
-                            <?php if (isset($sp['url:en']) && $sp['url:en'] != ''): ?>
+                            <?php if (!empty($sp['url:en'])): ?>
                                 <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['url:en']); ?>"><?php
                                   echo $this->t('profile_support_link');
                               ?></a>
-                            <?php elseif (isset($sp['url:nl']) && $sp['url:nl'] != ''): ?>
+                            <?php elseif (!empty($sp['url:nl'])): ?>
                                 <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['url:nl']); ?>"><?php
                                   echo $this->t('profile_support_link');
                               ?></a>
