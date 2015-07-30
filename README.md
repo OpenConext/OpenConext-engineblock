@@ -288,8 +288,8 @@ If you are using this pattern, an update can be done with the following:
 
 ## Applying a new theme ##
 
-When applying a theme for the first time you can enter the theme directory and run `npm install` to load the required
-theme modules.
+When applying a theme for the first time you can enter the theme directory and run `npm install` and `bower install` to
+load the required theme modules.
 
 Themes can be deployed using a Grunt task, from the theme directory run `grunt theme:mythemename`, this will initiate 
 the appropriate tasks for cleaning the previous theme and deploying the new theme on your installation.
