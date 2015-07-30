@@ -9,15 +9,19 @@
     list-style: none
 
     &:first-child
-      a
+      a, button
         border-radius: $br 0 0 $br
 
     &:last-child
-      a
+      a, button
         border-radius: 0 $br $br 0
 
-  a
+  a, button
+    border: 0
+    color: $blue
+    cursor: pointer
     display: block
+    line-height: 1.75rem
     padding: 0 0.5rem
     font-size: 0.8rem
     background: rgba($blue,.1)

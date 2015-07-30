@@ -52,14 +52,33 @@
       <?php endif; ?>
     </h1>
     <div class="meta">
-      <ul class="comp-language">
-        <li>
-          <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
-        </li>
-        <li>
-          <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
-        </li>
-      </ul>
+      <?php function compLanguage($currentLanguage) { ?>
+        <?php if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'): ?>
+          <form method="post" action="">
+            <?php foreach ($_POST as $key => $value): ?>
+              <input type="hidden" name="<?= EngineBlock_View::htmlSpecialCharsText($key) ?>" value="<?= EngineBlock_View::htmlSpecialCharsText($value) ?>">
+            <?php endforeach ?>
+            <ul class="comp-language">
+              <li>
+                <button type="submit" name="lang" value="en"<?php if ($currentLanguage==='en'): ?> class="selected"<?php endif; ?>>EN</button>
+              </li>
+              <li>
+                <button type="submit" name="lang" value="nl"<?php if ($currentLanguage==='nl'): ?> class="selected"<?php endif; ?>>NL</button>
+              </li>
+            </ul>
+          </form>
+        <?php else: ?>
+          <ul class="comp-language">
+            <li>
+              <a<?php if ($currentLanguage==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
+            </li>
+            <li>
+              <a<?php if ($currentLanguage==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
+            </li>
+          </ul>
+        <?php endif ?>
+      <?php } ?>
+      <?php compLanguage($lang); ?>
       <ul class="comp-links">
         <?php if (isset($this->layout()->backLink) && $this->layout()->backLink === true): ?>
         <li>
@@ -87,14 +106,7 @@
           <?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?>
         </li>
         <li class="nav-row">
-          <ul class="comp-language">
-            <li>
-              <a<?php if ($lang==='en'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('en')); ?>">EN</a>
-            </li>
-            <li>
-              <a<?php if ($lang==='nl'): ?> class="selected"<?php endif; ?> href="<?php echo EngineBlock_View::htmlSpecialCharsText(EngineBlock_View::setLanguage('nl')); ?>">NL</a>
-            </li>
-          </ul>
+          <?php compLanguage($lang); ?>
         </li>
         <li class="nav-row right">
           <ul class="comp-links">
