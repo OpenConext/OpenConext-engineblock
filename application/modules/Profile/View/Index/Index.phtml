@@ -151,7 +151,7 @@ foreach ($spList as $spId => $sp) {
                         </td>
                         <td>
                             <?php if ($sp['coin:eula']) : ?>
-                                <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['coin:eula']); ?>"><?php
+                                <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['coin:eula']); ?>" target="_blank"><?php
                                   echo $this->t('profile_eula_link');
                               ?></a>
                             <?php endif; ?>
