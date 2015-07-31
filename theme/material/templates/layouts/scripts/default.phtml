@@ -115,6 +115,11 @@
                 <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
               <?php endif; ?>
             </li>
+            <?php if (isset($this->layout()->backLink) && $this->layout()->backLink === true): ?>
+              <li>
+                <a href="javascript:window.history.back(-2)"><?php echo ucfirst($view->t('return_to_sp')) ?></a>
+              </li>
+            <?php endif; ?>
             <li>
               <?= $view->t('terms_of_service_link') ?>
             </li>
