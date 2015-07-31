@@ -91,14 +91,12 @@ OpenConext.Discover = function () {
       key = e.which;
 
     $('.mod-results').removeClass('mouse-nav');
+
     function pressEnter() {
       e.preventDefault();
       // Press enter on searchbox
-      if (currentElement.hasClass('mod-search-input') && list.find('.active:first').length > 0) {
-        var firstEl = list.find('.active:first');
-        if (firstEl.length > 0) {
-          $(firstEl[0]).focus().trigger('click');
-        }
+      if (currentElement.hasClass('mod-search-input')) {
+        list.find('.active:first').first().focus().trigger('click');
       }
 
       // Press enter on result
@@ -169,11 +167,7 @@ OpenConext.Discover = function () {
   }
 
   function removeFocusClass() {
-    var focussedElement = $('.result.focussed');
-
-    if (focussedElement.length > 0) {
-      focussedElement.removeClass('focussed');
-    }
+    $('.result.focussed').removeClass('focussed');
   }
 
   function setFocusClass() {
@@ -181,9 +175,7 @@ OpenConext.Discover = function () {
 
     removeFocusClass();
 
-    if (firstActive.length > 0) {
-      firstActive.addClass('focussed');
-    }
+    firstActive.addClass('focussed');
   }
 
   if (!hasDiscovery()) {
@@ -194,13 +186,9 @@ OpenConext.Discover = function () {
     selectedIdps = JSON.parse(cookieIdps) || [],
     listedIdp;
 
-  if (selectedIdps.length > 0) {
-    for (var j = 0; j < selectedIdps.length; j++) {
-      listedIdp = $('#selection a[data-idp=\'' + selectedIdps[j] + '\']');
-      if (listedIdp) {
-        $('#preselection .list').append(listedIdp);
-      }
-    }
+  for (var j = 0; j < selectedIdps.length; j++) {
+    listedIdp = $('#selection a[data-idp=\'' + selectedIdps[j] + '\']');
+    $('#preselection .list').append(listedIdp);
   }
 
   function initModal(modal) {
@@ -272,7 +260,8 @@ OpenConext.Discover = function () {
   }
 
   $('.mod-results a.edit').on('click', function editPreselection(e) {
-    var mode = $(this).attr('data-toggle'),
+    var editLink = $(this),
+      mode = editLink.attr('data-toggle'),
       removeables = $('#preselection .c-button'),
       list = $('#preselection .list'),
       item, x, swapText;
@@ -282,49 +271,46 @@ OpenConext.Discover = function () {
     if (mode === 'view') {
       list.addClass('show-buttons');
 
-      swapText = $(this).attr('data-toggle-text');
-      $(this).attr('data-toggle-text', $(this).html());
-      $(this).html(swapText);
+      swapText = editLink.attr('data-toggle-text');
+      editLink.attr('data-toggle-text', editLink.html());
+      editLink.html(swapText);
 
       for (x = 0; x < removeables.length; x++) {
-        item = $(removeables[x]);
-        item.removeClass('white');
-        item.addClass('outline');
-        item.addClass('deleteable');
-        item.addClass('img');
+        item = $(removeables[x])
+          .removeClass('white')
+          .addClass('outline deleteable img');
 
         swapText = item.attr('data-toggle-text');
         item.attr('data-toggle-text', item.html());
         item.html(swapText);
       }
-      $(this).attr('data-toggle', 'edit');
+      editLink.attr('data-toggle', 'edit');
     } else {
       list.removeClass('show-buttons');
 
-      swapText = $(this).attr('data-toggle-text');
-      $(this).attr('data-toggle-text', $(this).html());
-      $(this).html(swapText);
+      swapText = editLink.attr('data-toggle-text');
+      editLink.attr('data-toggle-text', editLink.html());
+      editLink.html(swapText);
 
       for (x = 0; x < removeables.length; x++) {
-        item = $(removeables[x]);
-        item.removeClass('outline');
-        item.removeClass('deleteable');
-        item.removeClass('img');
-        item.addClass('white');
+        item = $(removeables[x])
+          .removeClass('outline deleteable img')
+          .addClass('white');
 
         swapText = item.attr('data-toggle-text');
         item.attr('data-toggle-text', item.html());
         item.html(swapText);
       }
 
-      $(this).attr('data-toggle', 'view');
+      editLink.attr('data-toggle', 'view');
     }
   });
 
   $('a.noaccess').on('click', function requestAccess(e) {
     e.preventDefault();
-    var idpEntityId = $(this).attr('data-idp') || 'unknown',
-      idpName = $(this).text(),
+    var noAccessLink = $(this),
+      idpEntityId = noAccessLink.attr('data-idp') || 'unknown',
+      idpName = noAccessLink.text(),
       params = {
         lang: discover.lang,
         idpEntityId: idpEntityId,
@@ -334,14 +320,13 @@ OpenConext.Discover = function () {
       };
 
     $.get('/authentication/idp/requestAccess?' + $.param(params), function (data) {
-      var requestAccess = $('#request-access');
-      requestAccess.html(data);
-      requestAccess.trigger('openModal');
+      $('#request-access').html(data).trigger('openModal');
     });
   });
 
   $('.mod-results a.result.access').on('click', function handleIdpAction(e) {
-    var selectedIdp = $(this).attr('data-idp');
+    var accessLink = $(this),
+      selectedIdp = accessLink.attr('data-idp');
 
     if ($(e.target).hasClass('deleteable')) {
       var saveIndex = $.inArray(selectedIdp, selectedIdps);
@@ -351,8 +336,8 @@ OpenConext.Discover = function () {
 
       if (saveIndex > -1) {
         selectedIdps.splice(saveIndex, 1);
-        $(this).slideUp('fast', function() {
-          $(this).remove();
+        accessLink.slideUp('fast', function() {
+          accessLink.remove();
           checkVisible();
         });
       }
@@ -465,7 +450,8 @@ $(function init() {
   new OpenConext.Discover();
   new OpenConext.Profile();
   FastClick.attach(document.body);
-  if ($('#engine-main-page') && $('#engine-main-page').length > 0) {
+
+  if ($('#engine-main-page').length > 0) {
       // hack to remove i18n nav
       $('.comp-language').remove();
       $('.mod-footer').hide();
@@ -477,7 +463,6 @@ $(function init() {
         );
       });
   }
-
 
   $('#delete-confirmation-form').submit(function() {
     return confirm($('#delete-confirmation-text').attr('data-confirmation-text'));
