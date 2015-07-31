@@ -453,7 +453,9 @@ OpenConext.Profile = function () {
   });
 };
 
+$('html').removeClass('no-js');
 $(function init() {
+
   new OpenConext.Tabs();
   new OpenConext.Discover();
   new OpenConext.Profile();
