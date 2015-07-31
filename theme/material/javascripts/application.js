@@ -262,7 +262,7 @@ OpenConext.Discover = function () {
 
   var searchValue = $('input[type=search]').val();
 
-  if (searchValue !== '') {
+  if (searchValue) {
     filterList(searchValue);
   }
 
