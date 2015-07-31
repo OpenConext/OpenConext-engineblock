@@ -61,7 +61,6 @@ $layout->setLayout('default');
 $layout->use_header = false;
 $layout->title      = $layout->title . ' - '. $this->t('consent_header', EngineBlock_View::htmlSpecialCharsText($spName));
 $layout->subheader  = $this->t('consent_subheader', $spName);
-$layout->footerText = $this->t('footer');
 
 /** @var $view Zend_View */
 $view = $layout->getView();

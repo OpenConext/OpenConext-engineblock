@@ -17,7 +17,7 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
  */
 $layout = $this->layout();
 $layout->assign('subheader', $this->t('log_in_to'));
-$layout->assign('footerText', '<div id="request-access"></div>');
+$layout->assign('beforeScriptHtml', '<div id="request-access"></div>');
 $back = (bool) EngineBlock_ApplicationSingleton::getInstance()
     ->getConfiguration()
     ->ui

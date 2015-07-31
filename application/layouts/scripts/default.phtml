@@ -115,14 +115,16 @@
                 <a href="<?php echo $this->layout()->helpLink; ?>" target="_blank"><?php echo $view->t('help'); ?></a>
               <?php endif; ?>
             </li>
+            <li>
+              <?= $view->t('terms_of_service_link') ?>
+            </li>
           </ul>
         </li>
       </ul>
     </nav>
-    <nav class="footer-line">
-      <?php echo $this->layout()->footerText; ?>
-    </nav>
   </div>
+
+  <?= $this->layout()->beforeScriptHtml ?>
 
   <script src="/javascripts/application.js" type="text/javascript"></script>
 </body>

@@ -8,7 +8,6 @@ $layout->wide       = true;
 $layout->title = $layout->title. ' - Metadata &amp; Certificates';
 $layout->header = $layout->title;
 $layout->subheader = 'IdP Certificate and Metadata';
-$layout->footerText = $this->t('footer');
 
 /** @var Zend_Config $keyPairs */
 $keyPairs = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->encryption->keys;
