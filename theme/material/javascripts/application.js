@@ -150,7 +150,7 @@ OpenConext.Discover = function () {
 
       // move up to search
       if (currentElement.prevAll('.active:first').length === 0) {
-        $('input[type=search]').focus();
+        $('input.mod-search-input').focus();
       }
     }
 
@@ -252,7 +252,7 @@ OpenConext.Discover = function () {
     onOpen: initModal,
     onClose: function() {
       $('#request-access').html('');
-      $('input[type=search]').focus();
+      $('input.mod-search-input').focus();
     }
   });
 
@@ -260,7 +260,7 @@ OpenConext.Discover = function () {
     filterList($(this).val());
   });
 
-  var searchValue = $('input[type=search]').val();
+  var searchValue = $('input.mod-search-input').val();
 
   if (searchValue) {
     filterList(searchValue);
