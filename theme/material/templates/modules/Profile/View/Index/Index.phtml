@@ -142,11 +142,11 @@ foreach ($spList as $spId => $sp) {
             <tbody class="apps">
             <?php foreach ($spList as $spId => $sp) : ?>
                 <?php if (in_array($spId, $consent)) : ?>
-                    <tr>
+                    <tr class="sp-row">
                         <td>
-                            <a href="#" class="expand">
-                                <img src="images/triangle.svg">
-                                <?= EngineBlock_View::htmlSpecialCharsText($this->getDisplayName($sp)); ?>
+                            <a href="#" class="sp-display-name <?php if (array_key_exists($spId, $spAttributesList)): ?>expand<?php endif ?>">
+                                <img src="/images/triangle.svg" class="c-icon c-icon-triangle">
+                                <span><?= EngineBlock_View::htmlSpecialCharsText($this->getDisplayName($sp)); ?></span>
                             </a>
                         </td>
                         <td>
@@ -177,9 +177,9 @@ foreach ($spList as $spId => $sp) {
                         </td>
                     </tr>
                     <?php if (array_key_exists($spId, $spAttributesList)) : ?>
-                        <tr class="detail-row hide">
+                        <tr class="attribute-table-row">
                             <td colspan="5">
-                                <div class="attribute-table-wrapper" style="display: none;">
+                                <div class="attribute-table-wrapper">
                                     <?= $this->t('profile_attribute_release'); ?>
                                     <table class="comp-small-table">
                                         <thead>
