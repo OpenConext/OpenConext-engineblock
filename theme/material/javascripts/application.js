@@ -187,7 +187,9 @@ OpenConext.Discover = function () {
     listedIdp;
 
   for (var j = 0; j < selectedIdps.length; j++) {
-    listedIdp = $('#selection a[data-idp=\'' + selectedIdps[j] + '\']');
+    listedIdp = $('#selection a[data-idp]').filter(function () {
+      return $(this).data('idp') === selectedIdps[j];
+    });
     $('#preselection .list').append(listedIdp);
   }
 
