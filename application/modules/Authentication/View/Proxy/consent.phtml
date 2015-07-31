@@ -134,7 +134,7 @@ $inlineScriptHelper->appendScript('
               <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
               <input type="hidden" name="consent" value="no" />
         <p>
-              <a id="decline_terms_button" href="#" onclick="document.getElementById('reject').submit();">
+              <a id="decline_terms_button" class="c-button c-button-link" href="#" onclick="document.getElementById('reject').submit();">
                   <?= $this->t('consent_decline'); ?>
               </a>
         </p>
