@@ -49,6 +49,10 @@ OpenConext.Discover = function () {
           title = result.find('h3').text().toLowerCase(),
           match = title.indexOf(filterValue) !== -1;
 
+      if (!match) {
+        match = match || arraySome(result.data('keywords'), predicateContainsString(filterValue));
+      }
+
       result
           .toggleClass('active', match)
           .toggleClass('hidden', !match);
@@ -216,6 +220,30 @@ OpenConext.Discover = function () {
         });
     });
   }
+
+  var arraySome = Array.prototype.some
+    ? function arraySome(array, predicate) {
+      return array.some(predicate);
+    }
+    : function arraySome(array, predicate) {
+      for (var i = array.length - 1; i >= 0; i--) {
+        if (predicate(array[i])) {
+          return true;
+        }
+      }
+
+      return false;
+    };
+
+  function predicateContainsString(equalTo) {
+    return function (value) {
+      return value === value.toString() && value.indexOf(equalTo) !== -1;
+    }
+  }
+
+  var isArray = Array.isArray || function isArray(array) {
+    return Object.prototype.toString(array) === '[object Array]'
+  };
 
   checkVisible();
   checkNoResults();
@@ -437,3 +465,4 @@ $(function init() {
     return confirm($('#delete-confirmation-text').attr('data-confirmation-text'));
   });
 });
+

@@ -127,7 +127,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
       </div>
 
       <?php foreach ($idpList as $key => $idp) : ?>
-        <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
+        <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" data-keywords="<?= EngineBlock_View::htmlSpecialCharsAttributeValue(json_encode($idp['Keywords'])); ?>">
           <div class="logo">
             <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
           </div>
