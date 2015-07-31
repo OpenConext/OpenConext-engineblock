@@ -18,7 +18,10 @@
     display: block
 
     +min-width($medium)
-      width: 33%
+      width: 20%
+    &.left, &.right
+      +min-width($medium)
+        width: 40%
 
     &.left
       +min-width($medium)
