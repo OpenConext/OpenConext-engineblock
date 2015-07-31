@@ -42,7 +42,7 @@ OpenConext.Discover = function () {
 
     spinner.removeClass('hidden');
 
-    filterValue = filterValue.toLowerCase();
+    filterValue = filterValue.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '').toLowerCase();
 
     filterElements.each(function () {
       var result = $(this),
@@ -256,8 +256,13 @@ OpenConext.Discover = function () {
     }
   });
 
-  this.searchBar.on('input', function inputDetected() {
-    filterList($(this).val());
+  // Listening to multiple events: 'input' for changes in input text, except for IE, which does not register character
+  // deletions; 'keyup' for character deletions in IE; 'mouseup' for clicks on IE's native input clear button. The
+  // 0-millisecond timeout is there to retrieve the input value after 'mouseup' events.
+  this.searchBar.on('input keyup mouseup', function inputDetected(event) {
+    setTimeout(function () {
+      filterList($(event.target).val());
+    }, 0);
   });
 
   var searchValue = $('input.mod-search-input').val();
