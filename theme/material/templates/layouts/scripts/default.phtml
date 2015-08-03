@@ -16,7 +16,7 @@
 
   $view = new EngineBlock_View();
 
-  $uaSafari = preg_match('~Version/5[\\.\d]+ Safari/~', $_SERVER['HTTP_USER_AGENT']) ? 'safari5' : '';
+  $uaSafari = preg_match('~Version/(\d)[\\.\d]+ Safari/~', $_SERVER['HTTP_USER_AGENT'], $matches) ? 'safari' . $matches[1] : '';
 ?><!DOCTYPE html>
 <!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="<?php echo $lang; ?>"> <![endif]-->
 <!--[if IE 7]> <html class="no-js ie7 lt-ie10 lt-ie9 lt-ie8" lang="<?php echo $lang; ?>"> <![endif]-->
