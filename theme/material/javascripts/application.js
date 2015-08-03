@@ -454,10 +454,6 @@ $(function init() {
   FastClick.attach(document.body);
 
   if ($('#engine-main-page').length > 0) {
-      // hack to remove i18n nav
-      $('.comp-language').remove();
-      $('.mod-footer').hide();
-
       // set absolute URLs of anchors as display text
       $('dl.metadata-certificates-list a').not('a[data-external-link=true]').each(function(){
         $(this).text(
