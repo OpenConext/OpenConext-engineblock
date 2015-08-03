@@ -86,7 +86,8 @@ module.exports = function(grunt) {
                 files: [
                     { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../application/layouts' },
                     { expand: true, cwd: 'material/templates/modules/', src: ['**'], dest: '../application/modules' },
-                    { expand: true, cwd: 'material/images/', src: ['**'], dest: '../www/authentication/images' }
+                    { expand: true, cwd: 'material/images/', src: ['**'], dest: '../www/authentication/images' },
+                    { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['html5shiv.min.js'], dest: '../www/authentication/javascripts' }
                 ]
             }
         },

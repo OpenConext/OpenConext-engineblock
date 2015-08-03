@@ -14,7 +14,8 @@
     "js-cookie": "~1.5.1",
     "jquery.lazyload": "~1.9.5",
     "easyModal.js": "*",
-    "fastclick": "~1.0.6"
+    "fastclick": "~1.0.6",
+    "html5shiv": "^3.7.3"
   },
   "dependencies": {}
 }

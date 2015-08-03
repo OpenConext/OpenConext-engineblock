@@ -98,6 +98,7 @@ $layout->assign('greenHeader', $spDisplayName);
 $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 ?>
 <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+  <h2 class="search-institutions"><?= $this->t('search'); ?></h2>
   <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" class="mod-search-input active">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
   <input type="hidden" id="form-idp" name="idp" value="" />
