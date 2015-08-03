@@ -32,6 +32,9 @@
     text-decoration: none
     border-bottom: 1px solid $border
 
+    .ie9 &
+      display: block
+
     &.focussed
       outline: none
       background: $blue
@@ -57,6 +60,9 @@
         .action
           display: inline-block
 
+    .ie9 & h3
+      display: inline
+
   .loading
     display: flex
     padding: 0.75rem 1.25rem
@@ -73,6 +79,10 @@
     height: 3rem
     margin-right: 1.5rem
     display: inline-flex
+
+    .ie9 &
+      display: inline
+      vertical-align: middle
 
     img
       margin: 0
