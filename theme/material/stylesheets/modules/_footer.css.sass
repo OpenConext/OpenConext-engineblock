@@ -3,9 +3,13 @@
   border-top: 1px solid $border-dark
   margin: 0 auto
   text-align: center
+  .lt-ie9 &
+    padding: 2em
 
-  .ie9 &, .ie9 & .footer-menu li.nav-row.right
-    text-align: left
+  .lt-ie10 & .footer-menu li.nav-row
+    &, &.left, &.right
+      text-align: center
+      width: auto
 
   +min-width($medium)
     display: flex

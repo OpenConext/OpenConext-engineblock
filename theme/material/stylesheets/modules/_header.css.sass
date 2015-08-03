@@ -7,10 +7,15 @@
   line-height: 30px
   display: flex
   align-items: center
+  .lt-ie9 &
+    padding: 1em 1em
 
   +min-width($medium)
     padding: 1rem 2rem
     margin-bottom: 3rem
+    .lt-ie9 &
+      padding: 1em 2em
+      margin-bottom: 3em
 
   // Main app title
   .title
@@ -19,6 +24,8 @@
     overflow: hidden
     white-space: nowrap
     padding-right: 1rem
+    .lt-ie9 &
+      padding-right: 1em
 
     strong
       color: $blue
@@ -35,6 +42,8 @@
 
     img
       max-width: 0.8rem
+      .lt-ie9 &
+        max-width: 0.8em
 
   .burger,
   .comp-language,

@@ -14,12 +14,18 @@
       display: flex
       border-bottom: 1px solid $border
       padding: 0 1rem
+      .lt-ie9 &
+        padding: 0 1em
 
     li
       margin: 0 1rem
+      .lt-ie9 &
+        margin: 0 1em
 
     a
       padding: 1.5rem 0
+      .lt-ie9 &
+        padding: 1.5em 0
 
       &:hover,
       &.active
@@ -31,3 +37,5 @@
       display: block
       padding: 1rem 2rem
       border-bottom: 1px solid $border
+      .lt-ie9 &
+        padding: 1em 2em

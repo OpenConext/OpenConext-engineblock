@@ -1,9 +1,13 @@
 .mod-search
   position: relative
   margin-bottom: 2rem
+  .lt-ie9 &
+    margin-bottom: 2em
 
   +max-width($medium)
     margin-bottom: 1rem
+    .lt-ie9 &
+      margin-bottom: 1em
 
   fieldset
     border: 0
@@ -23,6 +27,11 @@
     background-origin: content-box
     -webkit-appearance: none
     margin-bottom: 2rem
+    .lt-ie9 &
+      font-size: 1em
+      padding: 0.75em 3.5em 0.75em 1em
+      line-height: 2em
+      margin-bottom: 2em
 
     &.mod-search-input
       min-height: 56px
@@ -42,3 +51,18 @@
     border: none
     background: inline-image("search.svg") no-repeat center center
       size: 1rem auto
+    .lt-ie9 &
+      text-indent: -9999em
+      width: 3.5em
+      height: 3.5em
+    .lt-ie10 &
+      top: 0.5em*2
+      margin-top: 40px
+
+  .search-institutions
+    display: none
+    .lt-ie10 &
+      display: block
+      margin: 0.5em 0
+      font-size: 24px
+      line-height: 40px
