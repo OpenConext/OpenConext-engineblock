@@ -77,11 +77,12 @@ class EngineBlock_UserDirectory
 
     /**
      * @param array $saml2attributes
+     * @param bool $retry
      * @return array
      * @throws EngineBlock_Exception
      * @throws EngineBlock_Exception_MissingRequiredFields
      */
-    public function registerUser(array $saml2attributes)
+    public function registerUser(array $saml2attributes, $retry = true)
     {
         $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
         $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes);
@@ -107,8 +108,8 @@ class EngineBlock_UserDirectory
             // not returning a user, then another process registering the user, then the current process failing to
             // add the user because it was already added...
             // So if a user has already been added we simply try again
-            if ($e->getCode() === Zend_Ldap_Exception::LDAP_ALREADY_EXISTS) {
-                return $this->registerUser($saml2attributes);
+            if ($retry && $e->getCode() === Zend_Ldap_Exception::LDAP_ALREADY_EXISTS) {
+                return $this->registerUser($saml2attributes, false);
             }
             else {
                 throw new EngineBlock_Exception("LDAP failure", EngineBlock_Exception::CODE_ALERT, $e);
