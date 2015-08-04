@@ -77,16 +77,9 @@ else {
     }
 }
 
-
-$noAccessIdpData = array();
-if ($showRequestAccess === true) {
-  foreach ($idpList as $key => $idp) {
-    if ($idp['Access'] === '0') {
-      array_push($noAccessIdpData, $idp);
-      unset($idpList[$key]);
-    }
-  }
-}
+$idpList = array_filter($idpList, function (array $idp) {
+  return $idp['Access'] === '1';
+});
 
 function nameSort($a, $b) {
   $lang = $_GET['lang'];
