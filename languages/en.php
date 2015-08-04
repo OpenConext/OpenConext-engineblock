@@ -109,6 +109,11 @@ If you have any questions about your privacy and the policy applied, please visi
     'sorry'                 => 'Unfortunately,',
     'form_description'      => 'does not have access to this service. What can you do?</h2>
             <p>If you want to access this service, please fill out the form below. We will then forward your request to the person responsible for the services portfolio management at your institution.</p>',
+    'request_access_instructions' => '<h2>Unfortunately, you do not have access to the service you are looking for.
+                                   What can you do?</h2>
+                                <p>If you want to access this service, please fill out the form below.
+                                   We will then forward your request to the person responsible for the services
+                                   portfolio management at your institution.</p>',
     'name'                  => 'Name',
     'name_error'            => 'Enter your name',
     'email'                 => 'Email',

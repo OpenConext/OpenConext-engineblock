@@ -108,6 +108,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'form_description'      => 'heeft geen toegang tot deze dienst. Wat nu?</h2>
             <p>Wil je toch graag toegang tot deze dienst, vul dan
       het onderstaande formulier in. Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>',
+    'request_access_instructions' => '<h2>Helaas, je hebt geen toegang tot de dienst die je zoekt. Wat nu?</h2>
+                                <p>Wil je toch graag toegang tot deze dienst, vul dan het onderstaande formulier in.
+                                   Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>',
     'name'                  => 'Naam',
     'name_error'            => 'Vul je naam in',
     'email'                 => 'E-mail',

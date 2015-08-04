@@ -4,7 +4,7 @@ $layout = $this->layout();
 $layout->setLayout('empty');
 ?>
 <div class="mod-form">
-  <h2><?= $this->t('sorry'); ?>&nbsp;<i><?= $queryParameters['idpName']; ?></i> <?= $this->t('form_description'); ?>
+  <?= $this->t('request_access_instructions') ?>
 
   <form id="request_access_form" action="#" method="post" class="apply clearfix">
     <input name="idpName" type="hidden" value="<?= $queryParameters['idpName']; ?>">
