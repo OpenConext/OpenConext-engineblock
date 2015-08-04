@@ -80,7 +80,9 @@
           </ul>
         <?php endif ?>
       <?php } ?>
-      <?php compLanguage($lang); ?>
+      <?php if (!isset($this->layout()->displayLanguageSwitcher) || $this->layout()->displayLanguageSwitcher === true): ?>
+        <?php compLanguage($lang); ?>
+      <?php endif ?>
       <ul class="comp-links">
         <?php if (isset($this->layout()->backLink) && $this->layout()->backLink === true): ?>
         <li>
@@ -108,7 +110,9 @@
           <?php echo $view->t('service_by'); ?> <?php echo $view->t('serviceprovider_link'); ?>
         </li>
         <li class="nav-row">
-          <?php compLanguage($lang); ?>
+          <?php if (!isset($this->layout()->displayLanguageSwitcher) || $this->layout()->displayLanguageSwitcher === true): ?>
+            <?php compLanguage($lang); ?>
+          <?php endif ?>
         </li>
         <li class="nav-row right">
           <ul class="comp-links">

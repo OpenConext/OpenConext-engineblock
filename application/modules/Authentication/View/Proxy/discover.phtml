@@ -79,7 +79,7 @@ else {
 }
 
 $idpList = array_filter($idpList, function (array $idp) {
-    return $idp['Access'] === '1';
+  return $idp['Access'] === '1';
 });
 
 function nameSort($a, $b) {
