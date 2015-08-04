@@ -339,7 +339,7 @@ class EngineBlock_Corto_ProxyServer
             $this->_configs['Idp'] = $idpEntityId;
             $this->_configs['TransparentProxy'] = true;
             $this->getSessionLog()->info(
-                "Detected pre-selection of $idpEntityId as IdP, switching to transparant mode"
+                "Detected pre-selection of $idpEntityId as IdP, switching to transparent mode"
             );
             break;
         }
