@@ -329,17 +329,19 @@ class EngineBlock_Corto_ProxyServer
 
     public function setRemoteIdpMd5($remoteIdPMd5)
     {
-        $remoteEntityIds = array_keys($this->_entities['remote']);
+        $idpEntityIds = $this->_repository->findAllIdentityProviderEntityIds();
 
-        foreach ($remoteEntityIds as $remoteEntityId) {
-            if (md5($remoteEntityId) === $remoteIdPMd5) {
-                $this->_configs['Idp'] = $remoteEntityId;
-                $this->_configs['TransparentProxy'] = true;
-                $this->getSessionLog()->info("Detected pre-selection of $remoteEntityId as IdP, switching to transparant mode");
-                break;
+        foreach ($idpEntityIds as $idpEntityId) {
+            if (md5($idpEntityId) !== $remoteIdPMd5) {
+                continue;
             }
-        }
-            }
+
+            $this->_configs['Idp'] = $idpEntityId;
+            $this->_configs['TransparentProxy'] = true;
+            $this->getSessionLog()->info(
+                "Detected pre-selection of $idpEntityId as IdP, switching to transparant mode"
+            );
+            break;
         }
         if (!isset($this->_configs['Idp'])) {
             $this->getSessionLog()->warn("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
