@@ -160,6 +160,28 @@ module.exports = function(grunt) {
                 files: 'material/**',
                 tasks: ['theme:material']
             }
+        },
+        add_comment: {
+            material: {
+                options: {
+                    comments: ["This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory."],
+                    syntaxes: {
+                        '.phtml': ['<?php /*', '*/ ?>'],
+                        '.css': ['/*', '*/']
+                    }
+                },
+                files: [{
+                    expand: true,
+                    cwd: __dirname + '/..',
+                    src: [
+                        'application/layouts/**/*.phtml',
+                        'application/modules/**/*.phtml',
+                        'www/authentication/javascripts/**/*.js',
+                        'www/authentication/stylesheets/**/*.css'
+                    ],
+                    dest: __dirname + '/..'
+                }]
+            }
         }
     });
 
@@ -187,6 +209,7 @@ module.exports = function(grunt) {
             }
 
             tasks.push('uglify:' + theme);
+            tasks.push('add_comment:' + theme);
             tasks.push('symlink:' + theme);
             tasks.push('string-replace:layoutconfig');
 
