@@ -121,6 +121,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'comment_error'         => 'Vul een toelichting in',
     'cancel'                => 'Annuleren',
     'send'                  => 'Verstuur',
+    'close'                 => 'Sluiten',
 
     'send_confirm'          => 'Je verzoek is verzonden',
     'send_confirm_desc'     => '<p>SURFnet stuurt je verzoek door aan de juiste persoon binnen jouw instelling. Het is aan deze persoon om actie te ondernemen op basis van jouw verzoek. Het kan zijn dat er nog afspraken gemaakt moeten worden tussen jouw instelling en de dienstaanbieder.</p>

@@ -124,6 +124,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'comment_error'         => 'Enter a comment',
     'cancel'                => 'Cancel',
     'send'                  => 'Send',
+    'close'                 => 'Close',
 
     'send_confirm'          => 'Your request has been sent',
     'send_confirm_desc'     => '<p>Your request has been forwarded to your institution. Further settlement and decisions on the availability of this service will be taken by the ICT staff of your institution.</p>
