@@ -180,6 +180,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_no_consent'                => 'Not granted yet',
     'profile_consent'                   => 'Granted consent',
     'profile_attribute_release'         => 'The following attributes are released to this Service Provider:',
+    'profile_attribute_release_all'     => 'This service receives all attributes provided by your institution.',
 
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',

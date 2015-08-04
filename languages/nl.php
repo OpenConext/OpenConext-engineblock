@@ -178,6 +178,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_no_consent'                => 'Nog niet uitgedeeld',
     'profile_consent'                   => 'Consent gegeven',
     'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
+    'profile_attribute_release_all'     => 'Deze dienst ontvangt alle attributen die door jouw instelling worden geleverd.',
 
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',

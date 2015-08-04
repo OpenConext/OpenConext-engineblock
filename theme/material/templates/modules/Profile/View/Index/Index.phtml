@@ -150,7 +150,7 @@ foreach ($spList as $spId => $sp) {
                 <?php if (in_array($spId, $consent)) : ?>
                     <tr class="sp-row">
                         <td>
-                            <a href="#" class="sp-display-name <?php if (array_key_exists($spId, $spAttributesList)): ?>expand<?php endif ?>">
+                            <a href="#" class="sp-display-name expand">
                                 <img src="/images/triangle.svg" class="c-icon c-icon-triangle">
                                 <span><?= EngineBlock_View::htmlSpecialCharsText($this->getDisplayName($sp)); ?></span>
                             </a>
@@ -182,10 +182,10 @@ foreach ($spList as $spId => $sp) {
                             <?php endif; ?>
                         </td>
                     </tr>
-                    <?php if (array_key_exists($spId, $spAttributesList)) : ?>
-                        <tr class="attribute-table-row">
-                            <td colspan="5">
-                                <div class="attribute-table-wrapper">
+                    <tr class="attribute-table-row">
+                        <td colspan="5">
+                            <div class="attribute-table-wrapper">
+                                <?php if (array_key_exists($spId, $spAttributesList)): ?>
                                     <?= $this->t('profile_attribute_release'); ?>
                                     <table class="comp-small-table">
                                         <thead>
@@ -213,10 +213,12 @@ foreach ($spList as $spId => $sp) {
                                         </tr>
                                     <?php } ?>
                                     </table>
-                                </div>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
+                                <?php else: ?>
+                                    <?= $this->t('profile_attribute_release_all'); ?>
+                                <?php endif ?>
+                            </div>
+                        </td>
+                    </tr>
                 <?php endif; ?>
             <?php endforeach; ?>
             </tbody>
