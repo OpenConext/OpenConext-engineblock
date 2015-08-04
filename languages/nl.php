@@ -115,6 +115,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'name_error'            => 'Vul je naam in',
     'email'                 => 'E-mail',
     'email_error'           => 'Vul je (juiste) e-mailadres in',
+    'institution'           => 'Instituut',
+    'institution_error'     => 'Vul een instituut in',
     'comment'               => 'Toelichting',
     'comment_error'         => 'Vul een toelichting in',
     'cancel'                => 'Annuleren',

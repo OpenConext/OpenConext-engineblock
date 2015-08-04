@@ -7,12 +7,10 @@ $layout->setLayout('empty');
   <?= $this->t('request_access_instructions') ?>
 
   <form id="request_access_form" action="#" method="post" class="apply clearfix">
-    <input name="idpName" type="hidden" value="<?= $queryParameters['idpName']; ?>">
-    <input name="idpEntityId" type="hidden" value="<?= $queryParameters['idpEntityId']; ?>">
     <input name="spName" type="hidden" value="<?= $queryParameters['spName']; ?>">
     <input name="spEntityId" type="hidden" value="<?=  $queryParameters['spEntityId']; ?>">
 
-    <?php if (isset($nameError) || isset($emailError) || isset($commentError)): ?>
+    <?php if (isset($nameError) || isset($emailError) || isset($institutionError) || isset($commentError)): ?>
       <div class="errors">
         <ul>
         <?php if (isset($nameError)) : ?>
@@ -21,6 +19,10 @@ $layout->setLayout('empty');
 
         <?php if (isset($emailError)) : ?>
           <li><?= $this->t('email_error'); ?></li>
+        <?php endif; ?>
+
+        <?php if (isset($institutionError)) : ?>
+          <li><?= $this->t('institution_error'); ?></li>
         <?php endif; ?>
 
         <?php if (isset($commentError)) : ?>
@@ -39,6 +41,11 @@ $layout->setLayout('empty');
       <div class="input">
         <label for="email"><?= $this->t('email'); ?>:</label>
         <input name="email" type="email" id="email" value="<?= $queryParameters['email']; ?>" />
+      </div>
+
+      <div class="input">
+        <label for="institution"><?= $this->t('institution'); ?>:</label>
+        <input name="institution" type="text" id="institution" value="<?= $queryParameters['institution']; ?>" />
       </div>
 
       <div class="input">
