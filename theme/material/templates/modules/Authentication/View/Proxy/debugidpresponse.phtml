@@ -94,7 +94,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
           </tr>
       </table>
     </div>
-    <hr />
+
     <h2>SAML2 Subject</h2>
     <div class="l-overflow">
       <table class="comp-table">
@@ -107,7 +107,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
           </tr>
       </table>
     </div>
-    <hr />
+
     <h2><?= $this->t('attributes') ?></h2>
     <?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
         <p class="error">
@@ -182,7 +182,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
           </tbody>
       </table>
     </div>
-    <hr />
+
     <p>
         <?= EngineBlock_View::htmlSpecialCharsText($this->t('idp_debugging_mail_explain')); ?>
     </p>
