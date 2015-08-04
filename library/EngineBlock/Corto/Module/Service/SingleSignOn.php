@@ -2,6 +2,7 @@
 
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -133,12 +134,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
-     * @param array $remoteEntity
+     * @param ServiceProvider $remoteEntity
      * @return bool
      */
     protected function _verifyAcsLocation(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        array $remoteEntity
+        ServiceProvider $remoteEntity
     ) {
         /** @var SAML2_AuthnRequest $request */
         // show error when acl is given without binding or vice versa

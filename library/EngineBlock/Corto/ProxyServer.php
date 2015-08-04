@@ -587,8 +587,9 @@ class EngineBlock_Corto_ProxyServer
      * Returns a custom ACS location from request or false when
      * none is specified
      *
-     * @param array $request
-     * @param array $serviceProvider
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param ServiceProvider $serviceProvider
+     * @return null|\OpenConext\Component\EngineBlockMetadata\IndexedService
      */
     public function getCustomAssertionConsumer(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
