@@ -59,7 +59,7 @@ $layout->setLayout('default');
 
 // Set Layout variables
 $layout->use_header = false;
-$layout->title      = $layout->title . ' - '. $this->t('consent_header', EngineBlock_View::htmlSpecialCharsText($spName));
+$layout->title      = $layout->title . ' - '. $this->t('consent_header', $spName);
 $layout->subheader  = $this->t('consent_subheader', $spName);
 
 /** @var $view Zend_View */
