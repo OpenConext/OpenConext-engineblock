@@ -15,8 +15,8 @@ $layout->wide = true;
 <div class="box">
   <div class="mod-content">
     <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
-    <?= $this->t('error_vo_membership_required_desc');
+    <p><?= $this->t('error_vo_membership_required_desc') ?></p>
 
-    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
+    <?php require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php') ?>
   </div>
 </div>
