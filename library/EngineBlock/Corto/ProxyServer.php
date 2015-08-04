@@ -339,19 +339,8 @@ class EngineBlock_Corto_ProxyServer
                 break;
             }
         }
-        // Patch Migration BACKLOG-915 Begin
-        foreach ($remoteEntityIds as $remoteEntityId) {
-            if (substr($remoteEntityId, -8) == "/migrate") {
-
-                if (md5(substr($remoteEntityId, 0, -8)) === $remoteIdPMd5) {
-                    $this->_configs['Idp'] = $remoteEntityId;
-                    $this->_configs['TransparentProxy'] = true;
-                    $this->getSessionLog()->info("Re detected pre-selection of $remoteEntityId as IdP, switching to IdP EntityID with Alias");
-                    break;
-                }
             }
         }
-        // Patch Migration BACKLOG-915 End
         if (!isset($this->_configs['Idp'])) {
             $this->getSessionLog()->warn("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
         }
