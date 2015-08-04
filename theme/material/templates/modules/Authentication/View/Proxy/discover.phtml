@@ -152,23 +152,6 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     </div>
   </div>
 
-  <div id="noselection" class="mod-results hidden">
-    <header>
-      <h2><?php echo $this->t('idps_without_access'); ?></h2>
-    </header>
-    <div class='list show-buttons no-access'>
-      <?php foreach ($noAccessIdpData as $key => $idp) : ?>
-        <a class="result active noaccess" href="#no-access" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">
-          <div class="logo">
-            <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
-          </div>
-          <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-          <div class="c-button outline action"><?php echo $this->t('request_access'); ?></div>
-        </a>
-      <?php endforeach; ?>
-    </div>
-  </div>
-
   <script type="text/javascript">
     var discover = {
       lang: "<?=$lang?>",

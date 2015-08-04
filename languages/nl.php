@@ -33,7 +33,6 @@ return array(
     'idp_selection_desc'        => 'Selecteer een instelling en login bij <i>%s</i>',
     'our_suggestion'            => 'Eerdere gekozen:',
     'idps_with_access'          => 'Instellingen met toegang',
-    'idps_without_access'       => 'Instellingen zonder toegang',
     'no_access'                 => 'Geen toegang.',
     'no_access_more_info'       => 'Geen toegang. &raquo;',
     'no_results'                => 'Geen resultaten gevonden.',
