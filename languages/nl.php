@@ -195,7 +195,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     //New Consent
     'consent_header_info'               => 'Verzoek voor vrijgeven informatie',
-    'consent_sp_idp_info'               => 'Om gebruik te kunnen maken van <strong>%s</strong> is het nodig om de volgende informatie, verkregen van <strong>%s</strong>, te delen:',
+    'consent_sp_idp_info'               => 'Om gebruik te kunnen maken van <strong class="service-provider">%s</strong> is het nodig om de volgende informatie, verkregen van <strong class="identity-provider">%s</strong>, te delen:',
     'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
     'name_id'                           => 'SURFconext gebruikers ID',
 

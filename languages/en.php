@@ -194,7 +194,7 @@ If you have any questions about your privacy and the policy applied, please visi
 
     //New Consent
     'consent_header_info'               => 'Request for information release',
-    'consent_sp_idp_info'               => 'To be able to use <strong>%s</strong>, you must share the following information provided by <strong>%s</strong>:',
+    'consent_sp_idp_info'               => 'To be able to use <strong class="service-provider">%s</strong>, you must share the following information provided by <strong class="identity-provider">%s</strong>:',
     'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
     'name_id'                           => 'SURFconext user ID',
 
