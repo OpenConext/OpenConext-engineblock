@@ -152,6 +152,19 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     </div>
   </div>
 
+  <?php if ($showRequestAccess === true && count($idpList) > 0): ?>
+  <div id="noselection" class="mod-results">
+    <div class='list no-access'>
+      <div class="loading noresults">
+        <div class="logo">
+          <div class="letter">??</div>
+        </div>
+        <p><?php echo $this->t('no_idp_results_request_access'); ?></p>
+      </div>
+    </div>
+  </div>
+  <?php endif ?>
+
   <script type="text/javascript">
     var discover = {
       lang: "<?=$lang?>",

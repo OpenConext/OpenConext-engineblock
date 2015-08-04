@@ -22,7 +22,6 @@ OpenConext.Discover = function () {
 
   function checkVisible() {
     checkListVisible($('#preselection'));
-    checkListVisible($('#noselection'));
   }
 
   function checkNoResults() {
@@ -31,6 +30,7 @@ OpenConext.Discover = function () {
       hasActiveResults = selectionContainer.find('.list a.active').length > 0;
 
     noResultsContainer.toggleClass('hidden', hasActiveResults);
+    $('#noselection .noresults').toggleClass('hidden', !hasActiveResults);
   }
 
   function filterList(filterValue) {
