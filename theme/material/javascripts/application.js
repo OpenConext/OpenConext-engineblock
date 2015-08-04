@@ -27,13 +27,10 @@ OpenConext.Discover = function () {
 
   function checkNoResults() {
     var selectionContainer = $('#selection'),
-      noResultsContainer = selectionContainer.find('.noresults');
+      noResultsContainer = selectionContainer.find('.noresults'),
+      hasActiveResults = selectionContainer.find('.list a.active').length > 0;
 
-    if (selectionContainer.find('.list a.active').length === 0) {
-      noResultsContainer.removeClass('hidden');
-    } else {
-      noResultsContainer.addClass('hidden');
-    }
+    noResultsContainer.toggleClass('hidden', hasActiveResults);
   }
 
   function filterList(filterValue) {
