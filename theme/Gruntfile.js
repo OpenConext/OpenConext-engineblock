@@ -41,6 +41,7 @@ module.exports = function(grunt) {
                         'bower_components/js-cookie/src/js.cookie.js',
                         'bower_components/easyModal.js/jquery.easyModal.js',
                         'bower_components/fastclick/lib/fastclick.js',
+                        'bower_components/underscore/underscore.js',
                         '<%= config.theme %>/javascripts/application.js'
                     ]
                 }
