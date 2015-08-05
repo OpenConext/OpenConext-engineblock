@@ -179,16 +179,36 @@ OpenConext.Discover = function () {
     return this;
   }
 
-  var cookieIdps = Cookies.get('selectedidps') || '[]',
-    selectedIdps = JSON.parse(cookieIdps) || [],
-    listedIdp;
+  var selectedIdps = JSON.parse(Cookies.get('selectedidps') || '[]') || [];
 
-  for (var j = 0; j < selectedIdps.length; j++) {
-    listedIdp = $('#selection a[data-idp]').filter(function () {
-      return $(this).data('idp') === selectedIdps[j];
-    });
-    $('#preselection .list').append(listedIdp);
+  if (selectedIdps.length > 0 && selectedIdps[0].idp === void 0) {
+    // Clear the array if it does not yet use the new format which includes the count.
+    selectedIdps = [];
   }
+
+  // Transforms [100, 2, 40] => [2, 40, 100] => { 2: 0, 40: 1, 100: 2 }
+  var normalisedIdpCounts = _.chain(selectedIdps).pluck('count').uniq().sort().invert().value();
+
+  selectedIdps = _.map(selectedIdps, function (idp) {
+    // Enables IdPs to more easily take over the top position (most-used), ie. they can't get too far apart.
+    return { idp: idp.idp, count: parseInt(normalisedIdpCounts[idp.count]) + 1 };
+  });
+
+  var selectedIdpElements = _.chain(selectedIdps)
+      .map(function (selectedIdp) {
+        return {
+          idp: $('#selection a[data-idp]').filter(function () {
+            return $(this).data('idp') === selectedIdp.idp;
+          }),
+          count: selectedIdp.count
+        };
+      })
+      .sortBy('count')
+      .reverse()
+      .pluck('idp')
+      .each(function (idpElement) {
+        $('#preselection .list').append(idpElement);
+      });
 
   function initModal(modal) {
     $('.close-modal').on('click', function closeModal(e) {
@@ -307,15 +327,16 @@ OpenConext.Discover = function () {
 
   $('.mod-results a.result.access').on('click', function handleIdpAction(e) {
     var accessLink = $(this),
-      selectedIdp = accessLink.attr('data-idp');
+      idp = accessLink.attr('data-idp'),
+      saveIndex = _.findIndex(selectedIdps, function (selectedIdp) {
+        return selectedIdp.idp === idp;
+      });
 
     if ($(e.target).hasClass('deleteable')) {
-      var saveIndex = $.inArray(selectedIdp, selectedIdps);
-
       e.stopPropagation();
       e.preventDefault();
 
-      if (saveIndex > -1) {
+      if (saveIndex !== -1) {
         selectedIdps.splice(saveIndex, 1);
         accessLink.slideUp('fast', function() {
           accessLink.remove();
@@ -323,11 +344,13 @@ OpenConext.Discover = function () {
         });
       }
     } else {
-      $('#form-idp').val(selectedIdp);
-
-      if ($.inArray(selectedIdp, selectedIdps) === -1) {
-        selectedIdps.push(selectedIdp);
+      if (saveIndex === -1) {
+        selectedIdps.push({idp: idp, count: 1});
+      } else {
+        ++selectedIdps[saveIndex].count;
       }
+
+      $('#form-idp').val(idp);
       $('form.mod-search').submit();
     }
 
