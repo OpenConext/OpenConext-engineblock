@@ -24,8 +24,13 @@ $layout->title = $layout->title. ' - '. $this->t('post_data');
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="robots" content="noindex, nofollow"/>
-        <title><?= $layout->title; ?></title>
+        <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
+        <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+        <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+        <link href="/favicon.ico" rel="shortcut icon">
+        <!--[if lte IE 8]><script src="/javascripts/html5shiv.min.js"></script><![endif]-->
         <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
+        <title><?= $layout->title; ?></title>
     </head>
     <body class="index" <?php if (!$trace): ?>onload="document.forms[0].submit()"<?php endif; ?>>
       <div class="mod-redirect">
