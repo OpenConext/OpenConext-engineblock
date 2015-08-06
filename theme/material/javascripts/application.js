@@ -210,10 +210,14 @@ OpenConext.Discover = function () {
         $('#preselection .list').append(idpElement);
       });
 
-  function initModal(modal) {
+  function initRequestAccessModal(html) {
+    $('#request-access').html(html);
+    $(document.body).css({ overflowY: 'hidden'});
+    $('#request-access-scroller').show().data('opened', true);
+
     $('.close-modal').on('click', function closeModal(e) {
       e.preventDefault();
-      $('#request-access').trigger('closeModal');
+      deinitRequestAccessModal();
     });
     $('#name').focus();
 
@@ -222,11 +226,29 @@ OpenConext.Discover = function () {
       var formData = $('#request_access_form').serialize();
       $.post('/authentication/idp/performRequestAccess', formData)
         .done(function (data) {
-          $("#request-access").html(data);
-          initModal(modal);
+          initRequestAccessModal(data);
         });
     });
   }
+
+  function deinitRequestAccessModal() {
+    $('#request-access-scroller').hide();
+    $(document.body).css({ overflowY: 'auto'});
+    $('#request-access').html('');
+    $('input.mod-search-input').focus();
+  }
+
+  $(document.body).on('click', '#request-access-scroller, #request-access-container', function (e) {
+    if (e.target !== this) return;
+
+    deinitRequestAccessModal();
+  });
+  $(document.body).on('keydown', function (e) {
+    if (e.which !== 27 || e.altKey || e.ctrlKey || e.metaKey) return;
+    if ($('#request-access-scroller').data('opened') === false) return;
+
+    deinitRequestAccessModal();
+  });
 
   function predicateContainsString(equalTo) {
     return function (value) {
@@ -237,13 +259,6 @@ OpenConext.Discover = function () {
   checkVisible();
   checkNoResults();
   setFocusClass();
-  $('#request-access').easyModal({
-    onOpen: initModal,
-    onClose: function() {
-      $('#request-access').html('');
-      $('input.mod-search-input').focus();
-    }
-  });
 
   // Listening to multiple events: 'input' for changes in input text, except for IE, which does not register character
   // deletions; 'keyup' for character deletions in IE; 'mouseup' for clicks on IE's native input clear button. The
@@ -321,7 +336,7 @@ OpenConext.Discover = function () {
       };
 
     $.get('/authentication/idp/requestAccess?' + $.param(params), function (data) {
-      $('#request-access').html(data).trigger('openModal');
+      initRequestAccessModal(data);
     });
   });
 
