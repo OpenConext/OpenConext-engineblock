@@ -3,7 +3,7 @@
 return array(
     'english'               => 'English',
 
-    //General
+    // General
     'back'                  => 'back',
     'attribute'             => 'Attribute',
     'value'                 => 'Value',
@@ -26,7 +26,7 @@ return array(
     'statusCode'            => 'Status Code',
     'statusMessage'         => 'Status Message',
 
-    //WAYF
+    // WAYF
     'idp_selection_title'       => 'Identity Provider Selection - %s',
     'idp_selection_subheader'   => 'Login via your institution',
     'search'                    => 'Search for an institution...',
@@ -44,17 +44,17 @@ return array(
     'done'                      => 'Done',
     'remove'                    => 'Remove',
     'request_access'            => 'Request access',
-    'no_idp_results'            => 'No results. Your search did not return any results.',
-    'no_idp_results_request_access' => 'Can\'t find your IDP? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
+    'no_idp_results'            => 'Your search did not return any results.',
+    'no_idp_results_request_access' => 'Can\'t find your institution? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
     'return_to_sp'              => 'Return to Service Provider',
 
-    //Footer
+    // Footer
     'service_by'            => 'This is a service connected through',
     'serviceprovider_link'  => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>',
     'terms_of_service_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
     'footer'                => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
 
-    //Help
+    // Help
     'help'                  => 'Help',
     'help_header'           => 'Help',
     'help_description'      => '<p>Check the FAQ below if you have any questions about this screen or about SURFconext.</p>
@@ -64,7 +64,7 @@ return array(
 
     'close_question'        =>      'Close',
 
-    //Help questions
+    // Help questions
     // general help questions
     'question_surfconext'               =>      'What is SURFconext?',
     'answer_surfconext'                 =>      '<p>SURFconext is a next generation collaboration infrastructure that creates new opportunities to collaborate online based on a combination of federation technology, group management, concepts from social networking and applications from different providers. SURFconext allows you to access online services with the username and password issued to you by your own institution.</p>',
@@ -116,8 +116,8 @@ If you have any questions about your privacy and the policy applied, please visi
                                    portfolio management at your institution.</p>',
     'name'                  => 'Name',
     'name_error'            => 'Enter your name',
-    'email'                 => 'Email',
-    'email_error'           => 'Enter your (correct) email address',
+    'email'                 => 'E-mail',
+    'email_error'           => 'Enter your (correct) e-mail address',
     'institution'           => 'Institution',
     'institution_error'     => 'Enter an institution',
     'comment'               => 'Comment',
@@ -135,7 +135,7 @@ If you have any questions about your privacy and the policy applied, please visi
 
     //Profile
     'profile_header'                    => 'SURFconext',
-    'profile_subheader'                 => 'Overview of your SURFconext profile',
+    'profile_subheader'                 => 'Overview of your SURFconext profile.',
     'profile_header_my_profile'         => 'My Profile',
     'profile_header_my_apps'            => 'My Services',
     'profile_header_my_groups'          => 'My Groups',
@@ -147,7 +147,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'profile_group_membership_desc'     => 'You are a member of the following groups.',
     'profile_no_groups'                 => 'No groups',
     'profile_extra_groups_desc'         => 'In order to get extra groups you must authorize their use.',
-    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more applications with your institutional account. It is possible to delete your SURFconext profile by pressing the button below.',
+    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more services with your institutional account. It is possible to delete your SURFconext profile by pressing the button below.',
     'profile_leave_surfconext_link'     => 'Delete my SURFconext account!',
     'profile_leave_surfconext_disclaim' => 'Note:
                                             <ul>
