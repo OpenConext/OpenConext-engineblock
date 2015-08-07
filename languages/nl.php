@@ -322,5 +322,5 @@ Als je deze applicatie wilt gebruiken moet je:<br />
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Uitloggen+SURFconext">Meer informatie over veilig uitloggen</a>',
 
     // Internal
-    'info_mail_link' => '<a href="info@surfnet.nl">info@surfnet.nl</a>',
+    'info_mail_link' => '<a href="support@surfconext.nl">support@surfconext.nl</a>',
 );

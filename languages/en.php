@@ -321,5 +321,5 @@ If you want to use this application you have to:<br />
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Log+out+SURFconext">More information about secure log out</a>',
 
     // Internal
-    'info_mail_link' => '<a href="info@surfnet.nl">info@surfnet.nl</a>',
+    'info_mail_link' => '<a href="support@surfconext.nl">support@surfconext.nl</a>',
 );
