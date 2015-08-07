@@ -1,0 +1,151 @@
+<?php
+
+/**
+ * See OpenConext-engineblock/library/EngineBlock/Corto/Module/Service/ProvideConsent.php#84
+ */
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+
+if (!isset($action)) {
+    throw new EngineBlock_View_Exception('No Consent action given to consent screen');
+}
+if (!isset($ID)) {
+    throw new EngineBlock_View_Exception('No ID given to consent screen');
+}
+if (!isset($attributes)) {
+    throw new EngineBlock_View_Exception('No Attributes given to consent screen');
+}
+if (!isset($sp) || !$sp instanceof ServiceProvider) {
+    throw new EngineBlock_View_Exception('No SP information given to consent screen');
+}
+if (!isset($idp) || !$idp instanceof IdentityProvider) {
+    throw new EngineBlock_View_Exception('No IdP information given to consent screen');
+}
+/** @var EngineBlock_View $this */
+
+// The current language
+$lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
+
+// @todo move to entity (see also duplicate in discover.phtml)
+$spName = '';
+if ($lang === 'nl') {
+    $spName = $sp->nameNl;
+}
+if (empty($spName)) {
+    $spName = $sp->nameEn;
+}
+if (empty($spName)) {
+    $spName = $sp->entityId;
+}
+
+$idpName = '';
+if ($lang === 'nl') {
+    $idpName = $idp->nameNl;
+}
+if (empty($idpName)) {
+    $idpName = $idp->nameEn;
+}
+if (empty($idpName)) {
+    $idpName = $idp->entityId;
+}
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set different layout
+$layout->setLayout('consent');
+
+// Set Layout variables
+$layout->use_header = false;
+$layout->title      = $layout->title . ' - '. $this->t('consent_header', EngineBlock_View::htmlSpecialCharsText($spName));
+$layout->subheader  = $this->t('consent_subheader', $spName);
+$layout->footerText = $this->t('footer');
+
+/** @var $view Zend_View */
+$view = $layout->getView();
+/** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
+$inlineScriptHelper = $view->getHelper('InlineScript');
+$inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
+$inlineScriptHelper->appendScript('
+(function() {
+    var d = new Discover();
+    d.linkHelp();
+' . (isset($_POST['show-help']) && $_POST['show-help'] === 'yes' ? 'd.showHelp(0)' : '') .
+' })();');
+?>
+<style>
+    table {
+        width: 100%;
+    }
+</style>
+<h2><?= $this->t('consent_header_info'); ?></h2>
+
+<p>
+    <?= $this->t('consent_sp_idp_info', $spName, $idpName); ?>
+</p>
+
+<div>
+    <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
+    <table>
+    <?php foreach ($attributes as $uid => $attributeValues) : ?>
+        <?php $attributeName = $this->getAttributeName($uid, $lang)?>
+        <?php if ($attributeName) : ?>
+            <tr>
+                <td>
+                    <?=EngineBlock_View::htmlSpecialCharsText($attributeName) ?>
+                </td>
+                <td>
+                    <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
+                        <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+                    <?php /** Multiple attribute values */ else: ?>
+                        <ul>
+                            <?php foreach ($attributeValues as $value) : ?>
+                                <li><?=EngineBlock_View::htmlSpecialCharsText($value); ?></li>
+                            <?php endforeach ?>
+                        </ul>
+                    <?php endif ?>
+                </td>
+            </tr>
+        <?php endif; ?>
+    <?php endforeach ?>
+    </table>
+</div>
+
+<style>
+    input.submit {
+        height: 3em;
+    }
+</style>
+
+<div id="approve">
+<!-- YES -->
+<form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+        <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+        <input type="hidden" name="consent" value="yes" />
+
+        <input id="accept_terms_button"
+               class="submit bigbutton"
+               type="submit"
+               value="<?= $this->t('consent_accept'); ?>"
+               />
+</form>
+
+<!-- NO -->
+<form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+        <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+        <input type="hidden" name="consent" value="no" />
+
+        <a id="decline_terms_button" style="line-height: 40px;" href="javascript:;" onclick="document.getElementById('reject').submit();">
+            <?= $this->t('consent_decline'); ?>
+        </a>
+</form>
+</div>
+
+<p class="grey"><?= $this->t('consent_notice'); ?></p>
+
+<?php if (isset($sp->termsOfServiceUrl)) : ?>
+    <?= $this->t('sp_terms_of_service', $spName, $sp->termsOfServiceUrl); ?>
+<?php endif; ?>
+

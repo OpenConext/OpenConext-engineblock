@@ -1,0 +1,69 @@
+@mixin hide
+  left: -9999px
+  position: absolute
+
+@mixin hide-text
+  text-indent: -100em
+  overflow: hidden
+
+@mixin retina
+  @media (min--moz-device-pixel-ratio: 1.5), (-o-min-device-pixel-ratio: 3/2), (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx)
+    @content
+
+@mixin data-uri-bg($image, $properties: no-repeat)
+  background: inline($image) $properties
+
+@mixin max-width($width)
+  @media (max-width: $width)
+    @content
+
+@mixin min-width($width)
+  @media (min-width: $width)
+    @content
+
+@mixin max-height($height)
+  @media (max-height: $height)
+    @content
+
+@mixin min-height($height)
+  @media (min-height: $height)
+    @content
+
+@mixin calc($property, $expression)
+  #{$property}: -webkit-calc(#{$expression})
+  #{$property}: calc(#{$expression})
+
+@mixin font-weight($weight)
+  font-weight: if(variable-exists(font-weights), map-get($font-weights, $weight), 400)
+
+@mixin hocus
+  &:active,
+  &:hover,
+  &:focus
+    @content
+
+@mixin input
+  input[type=text],
+  input[type=email],
+  input[type=number],
+  input[type=date],
+  input[type=time],
+  textarea,
+  select
+    @content
+
+@mixin margin-bottom
+  margin-bottom: 30px
+
+@mixin scrollbar($size, $foreground-color, $br-thumb:"0", $background-color:"none", $br-track:"0")
+  &::-webkit-scrollbar
+    width: $size
+    height: $size
+
+  &::-webkit-scrollbar-thumb
+    background: $foreground-color
+    border-radius: $br-thumb
+
+  &::-webkit-scrollbar-track
+    background: $background-color
+    border-radius: $br-track

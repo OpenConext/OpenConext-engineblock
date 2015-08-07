@@ -1,0 +1,23 @@
+<?php
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set Layout properties
+$layout->title = $layout->title. ' - ' .$this->t('error_404');
+$layout->header = $layout->title;
+$layout->subheader = $this->t('error_404');
+
+?>
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+    <?= $this->t('error_404_desc'); ?>
+    <br /><br />
+    <a href="#" id="GoBack"  class="c-button" onclick="history.back(-2); return false;">
+        <?= $this->t('go_back'); ?>
+    </a>
+  </div>
+</div>

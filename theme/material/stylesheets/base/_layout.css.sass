@@ -1,0 +1,23 @@
+.l-container
+  max-width: $container-width
+  padding: 1rem
+  .lt-ie9 &
+    max-width: $container-width-em
+    padding: 1em
+
+  +min-width($medium)
+    margin: 0 auto 3rem
+    padding: 0 2rem
+  .lt-ie9 &
+    margin: 0 auto 3em
+    padding: 0 2em
+
+  &.wide
+    max-width: $container-width*1.5
+    .lt-ie9 &
+      max-width: $container-width-em*1.5
+
+.l-overflow
+  overflow-x: auto
+  +scrollbar(8px, rgba(black,.4), 4px, rgba(black,.1), 4px)
+

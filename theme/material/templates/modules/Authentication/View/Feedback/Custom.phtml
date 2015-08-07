@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @var EngineBlock_View $this
+ */
+$title = !empty($_SESSION['feedback_custom']['title'][$this->language()]) ?
+            $_SESSION['feedback_custom']['title'][$this->language()] :
+            $this->t('error_generic');
+$description = !empty($_SESSION['feedback_custom']['description'][$this->language()]) ?
+    $this->htmlSpecialCharsText($_SESSION['feedback_custom']['description'][$this->language()]) :
+    $this->t('error_generic_desc');
+
+$layout = $this->layout();
+
+// Set Layout properties
+$layout->title = $layout->title. ' - ' . $title;
+$layout->header = $layout->title;
+$layout->subheader = $title;
+$layout->wide = true;
+
+?>
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+    <?= $description;
+    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');?>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+.c-button
+  font-size: $f-normal
+  background: $blue
+  padding: .5em 1rem
+  line-height: 1rem
+  border-radius: 10rem
+  color: #fff
+  text-decoration: none
+  display: inline-block
+  border: 1px solid transparent
+  cursor: pointer
+  white-space: nowrap
+  .lt-ie9 &
+    padding: .5em 1em
+    line-height: 1em
+    border-radius: 10em
+
+  &:hover
+    background: darken($blue,10)
+
+  &.outline
+    border: 1px solid $border-dark
+    color: $blue
+    background: #fff
+
+  &.white
+    background: #fff
+    color: $blue
+
+  &.remove
+    width: 1rem
+    height: 1rem
+    padding: 1rem
+    line-height: 1rem
+    .lt-ie9 &
+      width: 1em
+      height: 1em
+      padding: 1em
+      line-height: 1em
+
+  &.mr
+    margin-right: 1rem
+    .lt-ie9 &
+      margin-right: 1em
+
+  &.ml
+    margin-right: 1rem
+    .lt-ie9 &
+      margin-right: 1em
+
+  &.longtext
+    white-space: normal
+
+  &.img
+    padding-left: 0
+    padding-right: 0
+    width: 2rem
+    text-align: center
+    border-radius: 1rem
+    .lt-ie9 &
+      width: 2em
+      border-radius: 1em
+
+    img
+      width: 0.6rem
+      height: 0.6rem
+      vertical-align: middle
+      .lt-ie9 &
+        width: 0.6em
+        height: 0.6em
+
+  &.c-button-link
+    background: transparent
+    color: darken($blue,10)

@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set Layout properties
+$layout->title = $layout->title. ' - Error';
+$layout->header = $layout->title;
+$layout->subheader = $this->t('error_unknown_service_provider', $this->_data['entity-id']);
+$layout->wide = true;
+?>
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+    <?= $this->t('error_unknown_service_provider_desc');
+
+    // Add feedback info from url
+    $customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
+    if (!isset($_SESSION['feedbackInfo'])) {
+        $_SESSION['feedbackInfo'] = array();
+    }
+    $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
+
+    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<?php
+
+if (!isset($action)) {
+    throw new EngineBlock_View_Exception('No action given to HTTP Post screen');
+}
+if (!isset($name)) {
+    throw new EngineBlock_View_Exception('No message type (SAMLRequest or SAMLResponse) given to HTTP Post screen');
+}
+if (!isset($message)) {
+    throw new EngineBlock_View_Exception('No message given to HTTP Post screen');
+}
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('empty');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - '. $this->t('post_data');
+?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="robots" content="noindex, nofollow"/>
+        <title><?= $layout->title; ?></title>
+        <style type="text/css">
+        body {
+            color:#333;
+            font: 12px/17px Arial, Helvetica, sans-serif;
+            padding: 0;
+            margin: 0;
+            background: #e7e7e7;
+        }
+        p {
+            padding: 0;
+            margin: 10px 0 0 10px;
+        }
+        </style>
+    </head>
+    <body <?php if (!$trace): ?>onload="document.forms[0].submit()"<?php endif; ?>>
+        <noscript>
+            <p>
+                <strong><?= $this->t('note'); ?>:</strong>
+                    <?= $this->t('note_no_script'); ?>
+            </p>
+        </noscript>
+        <p><?= $this->t('processing'); ?></p>
+        <form id="ProcessForm" method="post" action="<?= $action ?>">
+            <input type="hidden" name="<?= $name ?>" value="<?= $message ?>" />
+
+            <?= $xtra ?>
+
+            <noscript><input type="submit" value="Submit" /></noscript>
+
+            <?php if ($trace): ?>
+            <input id="submitbutton" type="submit" value="Submit" />
+            <pre>
+                <?= $trace ?>
+            </pre>
+            <script type="text/javascript">
+                document.getElementById('submitbutton').focus();
+            </script>
+            <?php endif; ?>
+
+        </form>
+    </body>
+</html>

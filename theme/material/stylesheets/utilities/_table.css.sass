@@ -1,0 +1,37 @@
+.comp-table
+  width: 100%
+  margin-bottom: 2rem
+  border-radius: 4px
+  border: 1px solid $border
+  .lt-ie9 &
+    margin-bottom: 2em
+
+  th, td
+    padding: .75rem 1rem
+    border-bottom: 1px solid $border
+    white-space: nowrap
+    .lt-ie9 &
+      padding: 0.75em 1em
+
+  thead
+    th, td
+      border-bottom: 1px solid $border
+      @extend %h3
+
+  @for $i from 1 through 20
+    .percent_#{$i * 5}
+      width: #{$i * 5%}
+
+.comp-small-table
+  font-size: $f-small
+
+  tr:last-child
+    th, td
+      border-bottom: 0
+
+  th, td
+    padding: .5rem 1rem
+    background: mix($border,#fff)
+    border-bottom: 1px solid #fff
+    .lt-ie9 &
+      padding: 0.5em 1em

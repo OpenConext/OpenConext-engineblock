@@ -1,3 +1,4 @@
+<?php /* This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory. */ ?>
 <?php
 
 /**
@@ -55,13 +56,12 @@ if (empty($idpName)) {
 $layout = $this->layout();
 
 // Set different layout
-$layout->setLayout('consent');
+$layout->setLayout('default');
 
 // Set Layout variables
 $layout->use_header = false;
-$layout->title      = $layout->title . ' - '. $this->t('consent_header', EngineBlock_View::htmlSpecialCharsText($spName));
+$layout->title      = $layout->title . ' - '. $this->t('consent_header', $spName);
 $layout->subheader  = $this->t('consent_subheader', $spName);
-$layout->footerText = $this->t('footer');
 
 /** @var $view Zend_View */
 $view = $layout->getView();
@@ -75,77 +75,76 @@ $inlineScriptHelper->appendScript('
 ' . (isset($_POST['show-help']) && $_POST['show-help'] === 'yes' ? 'd.showHelp(0)' : '') .
 ' })();');
 ?>
-<style>
-    table {
-        width: 100%;
-    }
-</style>
-<h2><?= $this->t('consent_header_info'); ?></h2>
 
-<p>
-    <?= $this->t('consent_sp_idp_info', $spName, $idpName); ?>
-</p>
+<div class="box">
+  <div class="mod-content">
+    <header>
+      <img src="/images/user.svg" alt="user">
+      <h1><?= $this->t('consent_header_info'); ?></h1>
+    </header>
 
-<div>
-    <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
-    <table>
-    <?php foreach ($attributes as $uid => $attributeValues) : ?>
-        <?php $attributeName = $this->getAttributeName($uid, $lang)?>
-        <?php if ($attributeName) : ?>
-            <tr>
-                <td>
-                    <?=EngineBlock_View::htmlSpecialCharsText($attributeName) ?>
-                </td>
-                <td>
-                    <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
-                        <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
-                    <?php /** Multiple attribute values */ else: ?>
-                        <ul>
-                            <?php foreach ($attributeValues as $value) : ?>
-                                <li><?=EngineBlock_View::htmlSpecialCharsText($value); ?></li>
-                            <?php endforeach ?>
-                        </ul>
-                    <?php endif ?>
-                </td>
-            </tr>
-        <?php endif; ?>
-    <?php endforeach ?>
-    </table>
+    <p>
+        <?= $this->t('consent_sp_idp_info', $spName, $idpName); ?>
+    </p>
+
+    <div class="l-overflow">
+        <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
+        <table class="comp-table">
+        <?php foreach ($attributes as $uid => $attributeValues) : ?>
+            <?php $attributeName = $this->getAttributeName($uid, $lang)?>
+            <?php if ($attributeName) : ?>
+                <tr>
+                    <td class="strong">
+                        <?=EngineBlock_View::htmlSpecialCharsText($attributeName) ?>
+                    </td>
+                    <td>
+                        <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
+                            <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+                        <?php /** Multiple attribute values */ else: ?>
+                            <ul>
+                                <?php foreach ($attributeValues as $value) : ?>
+                                    <li><?=EngineBlock_View::htmlSpecialCharsText($value); ?></li>
+                                <?php endforeach ?>
+                            </ul>
+                        <?php endif ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        <?php endforeach ?>
+        </table>
+    </div>
+
+    <div id="approve">
+      <!-- YES -->
+      <form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+          <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+          <input type="hidden" name="consent" value="yes" />
+
+        <p>
+          <input id="accept_terms_button"
+                 class="submit c-button"
+                 type="submit"
+                 value="<?= $this->t('consent_accept'); ?>"
+                 />
+        </p>
+      </form>
+
+      <!-- NO -->
+      <form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+              <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+              <input type="hidden" name="consent" value="no" />
+        <p>
+              <a id="decline_terms_button" class="c-button c-button-link" href="#" onclick="document.getElementById('reject').submit();">
+                  <?= $this->t('consent_decline'); ?>
+              </a>
+        </p>
+      </form>
+    </div>
+
+    <p class="grey"><?= $this->t('consent_notice'); ?></p>
+
+    <?php if (isset($sp->termsOfServiceUrl)) : ?>
+        <?= $this->t('sp_terms_of_service', $spName, $sp->termsOfServiceUrl); ?>
+    <?php endif; ?>
+  </div>
 </div>
-
-<style>
-    input.submit {
-        height: 3em;
-    }
-</style>
-
-<div id="approve">
-<!-- YES -->
-<form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-        <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
-        <input type="hidden" name="consent" value="yes" />
-
-        <input id="accept_terms_button"
-               class="submit bigbutton"
-               type="submit"
-               value="<?= $this->t('consent_accept'); ?>"
-               />
-</form>
-
-<!-- NO -->
-<form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-        <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
-        <input type="hidden" name="consent" value="no" />
-
-        <a id="decline_terms_button" style="line-height: 40px;" href="javascript:;" onclick="document.getElementById('reject').submit();">
-            <?= $this->t('consent_decline'); ?>
-        </a>
-</form>
-</div>
-
-<p class="grey"><?= $this->t('consent_notice'); ?></p>
-
-<?php if (isset($sp->termsOfServiceUrl)) : ?>
-    <?= $this->t('sp_terms_of_service', $spName, $sp->termsOfServiceUrl); ?>
-<?php endif; ?>
-

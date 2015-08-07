@@ -1,56 +1,51 @@
+<?php /* This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory. */ ?>
 <?php
-
-/** @var Zend_Layout $layout */
+/**
+ * @var Zend_Layout $layout
+ */
 $layout = $this->layout();
-$layout->setLayout('empty');
+$layout->assign('subheader', $this->t('help_header'));
 ?>
-<p class="back"><a id="back_link" href="#"><?= $this->t('back'); ?></a>
-</p>
-<h2><?= $this->t('help_header'); ?></h2>
-<p><?= $this->t('help_description'); ?></p>
-<div class="results">
-    <div id="scrollViewportHelp">
-        <ul id="faq" class="faq">
-            <li class="open">
-                <h3><?= $this->t('question_screen'); ?></h3>
-                <?= $this->t('answer_screen'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_surfconext'); ?></h3>
-                <?= $this->t('answer_surfconext'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_log_in'); ?></h3>
-                <?= $this->t('answer_log_in'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_security'); ?></h3>
-                <?= $this->t('answer_security'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_institution_not_listed'); ?></h3>
-                <?= $this->t('answer_institution_not_listed'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_institution_no_access'); ?></h3>
-                <?= $this->t('answer_institution_no_access'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_asked_institution_access'); ?></h3>
-                <?= $this->t('answer_asked_institution_access'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_cannot_select'); ?></h3>
-                <?= $this->t('answer_cannot_select'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-        </ul>
+<div class="box">
+  <div class="mod-content">
+    <h1><?=$this->t('help_header')?></h1>
+    <p><?= $this->t('help_description'); ?></p>
+    <div class="results">
+      <ul id="faq" class="faq">
+          <li class="open">
+              <h3><?= $this->t('question_screen'); ?></h3>
+              <?= $this->t('answer_screen'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_surfconext'); ?></h3>
+              <?= $this->t('answer_surfconext'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_log_in'); ?></h3>
+              <?= $this->t('answer_log_in'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_security'); ?></h3>
+              <?= $this->t('answer_security'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_institution_not_listed'); ?></h3>
+              <?= $this->t('answer_institution_not_listed'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_institution_no_access'); ?></h3>
+              <?= $this->t('answer_institution_no_access'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_asked_institution_access'); ?></h3>
+              <?= $this->t('answer_asked_institution_access'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_cannot_select'); ?></h3>
+              <?= $this->t('answer_cannot_select'); ?>
+          </li>
+      </ul>
     </div>
+
+  </div>
 </div>

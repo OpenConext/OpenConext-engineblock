@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+
+// Set Layout properties
+$layout->title = $layout->title. ' - ' .$this->t('error_missing_required_fields');
+$layout->header = $layout->title;
+$layout->subheader = $this->t('error_missing_required_fields');
+$layout->wide = true;
+
+?>
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+    <?= $this->t('error_missing_required_fields_desc');
+    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
+  </div>
+</div>

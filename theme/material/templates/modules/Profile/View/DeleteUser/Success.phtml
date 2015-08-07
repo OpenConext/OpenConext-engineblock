@@ -1,0 +1,16 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+
+// Set Layout variables
+$layout->header = $this->t('deleteuser_success_header');
+$layout->title = $layout->title. ' - ' .$layout->header;
+$layout->subheader = $this->t('deleteuser_success_subheader');
+
+?>
+<div class="box">
+  <div class="mod-content">
+      <h1><?php echo $this->t('deleteuser_success_subheader');?></h1>
+      <p><?= $this->t('deleteuser_success_desc'); ?></p>
+  </div>
+</div>

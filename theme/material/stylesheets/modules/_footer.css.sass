@@ -1,0 +1,49 @@
+.mod-footer
+  padding: 2rem
+  border-top: 1px solid $border-dark
+  margin: 0 auto
+  text-align: center
+  .lt-ie9 &
+    padding: 2em
+
+  .lt-ie10 &, .safari5 &, .safari6 &
+    .footer-menu li.nav-row
+      &, &.left, &.right
+        text-align: center
+        width: auto
+
+  +min-width($medium)
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+
+  .footer-menu
+    display: inherit
+    width: 100%
+
+  .footer-menu li.nav-row
+    display: block
+
+    +min-width($medium)
+      width: 20%
+    &.left, &.right
+      +min-width($medium)
+        width: 40%
+
+    &.left
+      +min-width($medium)
+        text-align: left
+
+    &.right
+      +min-width($medium)
+        text-align: right
+
+  .center-footer
+    position: absolute
+    width: 100%
+    left: 0
+    margin-top: 5px
+
+  .over-center
+    z-index: 100

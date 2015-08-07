@@ -1,0 +1,14 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - Logout';
+$layout->header = $layout->title;
+$layout->subheader = 'Logout';
+$layout->footerText = $this->t('footer');
+?>
+    <?= $this->t('logout_description');?>
+    <br />
+    <?= $this->t('logout_information_link'); ?>

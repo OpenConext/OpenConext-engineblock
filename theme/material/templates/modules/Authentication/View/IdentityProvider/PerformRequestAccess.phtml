@@ -1,0 +1,13 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+$layout->setLayout('empty');
+?>
+<div class="mod-form">
+  <h1><?= $this->t('send_confirm'); ?></h1>
+  <?= $this->t('send_confirm_desc'); ?>
+
+  <div class="close-modal-container">
+    <button type="button" class="c-button close-modal"><?= $this->t('close') ?></button>
+  </div>
+</div>

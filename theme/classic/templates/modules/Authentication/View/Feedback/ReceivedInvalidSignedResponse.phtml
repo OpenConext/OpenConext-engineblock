@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey-narrow');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - ' .$this->t('error_received_invalid_signed_response');
+$layout->header = $layout->title;
+$layout->subheader = $this->t('error_received_invalid_signed_response');
+$layout->footerText = $this->t('footer');
+?>
+<div class="error-wrapper">
+    <div class="error-icon"></div>
+    <div class="error-text">
+
+    <?php require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');

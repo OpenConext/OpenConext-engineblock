@@ -1,0 +1,65 @@
+.mod-content
+  padding: 2rem
+  .lt-ie9 &
+    padding: 2em
+
+  h1, h2, h3
+    margin-bottom: .5rem
+    .lt-ie9 &
+      margin-bottom: .5em
+
+  h1
+    @extend %h1
+
+  h2
+    @extend %h2
+
+  h3
+    @extend %h3
+
+  ul, ol, p
+    margin-bottom: 1rem
+    .lt-ie9 &
+      margin-bottom: 1em
+
+  ul
+    list-style: square
+
+  ol
+    list-style: decimal
+
+  ul,
+  ol
+    margin-left: 1.5rem
+    .lt-ie9 &
+      margin-left: 1.5em
+
+  @for $i from 1 through 20
+    .percent_#{$i * 5}
+      width: #{$i * 5%}
+
+  header
+    display: flex
+    align-items: center
+    margin-bottom: 0.5rem
+    .lt-ie9 &
+      margin-bottom: 0.5em
+
+    h1
+      margin-bottom: 0
+
+    img
+      max-height: 1.7rem
+      width: auto
+      margin-right: 1rem
+      .lt-ie9 &
+        max-height: 1.7em
+        margin-right: 1em
+
+    .lt-ie10 &, .safari5 &, .safari6 &
+      h1, img
+        display: inline-block
+        vertical-align: middle
+    .lt-ie9 &
+      img[src$=".svg"]
+        display: none
