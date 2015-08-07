@@ -1,0 +1,22 @@
+.attribute-table-row
+  display: none
+
+  &.attribute-table-row-expanded
+    display: table-row
+
+#MyAppsTable
+  .sp-display-name
+    cursor: default
+    &.expand
+      cursor: pointer
+
+    text-decoration: none
+
+    img
+      max-height: .7rem
+      margin: 0
+      .lt-ie9 &
+        max-height: 0.7em
+
+    span
+      text-decoration: underline

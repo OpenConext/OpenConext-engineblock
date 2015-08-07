@@ -1,0 +1,16 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+
+// Set Layout properties
+$layout->title = $layout->title. ' - ' . ucfirst($this->t('logout'));
+$layout->header = $layout->title;
+$layout->subheader = ucfirst($this->t('logout'));
+?>
+<div class="box">
+  <div class="mod-content">
+    <h1>Logout</h1>
+    <p><?= $this->t('logout_description');?></p>
+    <p><?= $this->t('logout_information_link'); ?></p>
+  </div>
+</div>

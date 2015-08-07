@@ -1,0 +1,24 @@
+#request-access-scroller
+  display: none
+  position: fixed
+  top: 0
+  left: 0
+  bottom: 0
+  right: 0
+  overflow-x: hidden
+  overflow-y: auto
+  background: rgba(0, 0, 0, 0.15)
+
+#request-access-container
+  margin: 1rem
+  .lt-ie9 &
+    margin: 1em
+
+#request-access
+  @extend %box
+  margin: auto
+  padding: 0.5rem
+  max-width: $container-width
+  .lt-ie9 &
+    padding: 0.5em
+    max-width: $container-width-em

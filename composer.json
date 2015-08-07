@@ -22,6 +22,7 @@
         "pimple/pimple": "~2.1",
         "simplesamlphp/saml2": "~0.6",
         "simplesamlphp/simplesamlphp": "~1.13",
+        "sybio/image-workshop": "~2.0.7",
         "zendframework/zendframework1":"~1.12"
     },
     "require-dev": {

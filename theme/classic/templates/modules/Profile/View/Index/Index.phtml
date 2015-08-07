@@ -1,0 +1,228 @@
+<?php
+/**
+ * @var array $userAttributes
+ */
+if (!isset($userAttributes)) {
+    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: userAttributes");
+}
+
+/**
+ * @var EngineBlock_Attributes_Metadata $metadata
+ */
+if (!isset($metadata)) {
+    throw new EngineBlock_View_Exception("Missing required parameter for view /profile/index: metadata");
+}
+
+/**
+ * @var EngineBlock_View $this
+ * @var string $entityId
+ * @var array $groupOauth
+ * @var array $consent
+ * @var array $spAttributesList
+ * @var array|null $spOauthList
+ * @var array $spList
+ */
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey-tabs');
+
+// The tabs
+$layout->tabs = array(
+    'MyProfile' => $this->t('profile_header_my_profile'),
+    'MyApps' => $this->t('profile_header_my_apps'),
+    'Exit' => $this->t('profile_header_exit'),
+);
+
+// The current language
+$lang = $this->language();
+
+$layout->title      = $layout->title . ' - ' . $layout->subheader;
+$layout->subheader  = $this->t('profile_subheader');
+$layout->header     = $this->t('profile_header') . ' - ' . $layout->subheader;
+$layout->footerText = $this->t('footer');
+
+$layout->getView()->inlineScript()->appendFile('/javascript/screen.js');
+$layout->getView()->inlineScript()->appendFile('/javascript/profile.js');
+$layout->getView()->inlineScript()->appendScript("
+    var profile = new Profile();
+    profile.init();");
+
+foreach ($spList as $spId => $sp) {
+    foreach ($sp as $fieldName => $fieldValue) {
+        $matches = array();
+        if (!preg_match('|contacts:(\d+):contactType|', $fieldName, $matches)) {
+            continue;
+        }
+        $contactNumber = $matches[1];
+
+        if ($fieldValue !== 'support') {
+            continue;
+        }
+
+        $spList[$spId]['supportContact'] = array(
+            'givenName'         => $sp["contacts:$contactNumber:givenName"],
+            'surName'           => $sp["contacts:$contactNumber:surName"],
+            'emailAddress'      => $sp["contacts:$contactNumber:emailAddress"],
+            'telephoneNumber'   => isset($sp["contacts:$contactNumber:telephoneNumber"]) ?
+                                        $sp["contacts:$contactNumber:telephoneNumber"] :
+                                        '',
+        );
+    }
+}
+?>
+<div id="MyProfile">
+    <p>
+        <?= $this->t('profile_store_info'); ?>
+    </p>
+    <br />
+    <table>
+        <thead>
+            <tr>
+                <th><?= $this->t('attribute'); ?></th>
+                <th><?= $this->t('value'); ?></th>
+            </tr>
+        </thead>
+    <?php foreach ($userAttributes as $attributeId => $attributeValues) { ?>
+        <tr>
+            <td style="font-weight: bold;" title="<?= $attributeId?>">
+                <?=EngineBlock_View::htmlSpecialCharsText($metadata->getNameWithFallback($attributeId, $lang))?>
+            </td>
+            <td>
+                <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0])?>
+                <?php } /** Multiple attribute values */ else { ?>
+                <ul>
+                <?php foreach ($attributeValues as $value) { ?>
+                    <li><?=EngineBlock_View::htmlSpecialCharsText($value)?></li>
+                <?php } ?>
+                </ul>
+                <?php } ?>
+            </td>
+        </tr>
+    <?php } ?>
+    </table>
+
+    <p>
+        <?= $this->t('profile_mail_text'); ?>
+    </p>
+
+    <?php if (!empty($mailSend)) : ?>
+        <p><?= $this->t('profile_mail_send_success'); ?></p>
+    <?php endif; ?>
+
+    <form method="post" action="/profile/attribute-support">
+        <input type="hidden" name="mail" value="true">
+        <input type="submit" value="<?= $this->t('profile_mail_attributes'); ?>">
+    </form>
+</div>
+
+<div id="MyApps">
+    <p><?= $this->t('profile_apps_connected_aps'); ?></p>
+    <p>
+        <?= $this->t('profile_apps_share'); ?>
+
+    </p>
+    <table id="MyAppsTable" class="no-layout-fix">
+        <thead>
+            <tr>
+                <th><?= $this->t('profile_apps_service_th'); ?></th>
+                <th><?= $this->t('profile_apps_eula_th'); ?></th>
+                <th><?= $this->t('profile_apps_support_url_th'); ?></th>
+                <th><?= $this->t('profile_apps_support_email_th'); ?></th>
+            </tr>
+        </thead>
+        <tbody class="apps">
+        <?php foreach ($spList as $spId => $sp) : ?>
+            <?php if (in_array($spId, $consent)) : ?>
+                <tr>
+                    <td>
+                        <a href="#" class="show-details">
+                            <span class="ui-icon ui-icon-triangle-1-e left"></span>
+                            <?= EngineBlock_View::htmlSpecialCharsText($this->getDisplayName($sp)); ?>
+                        </a>
+                    </td>
+                    <td>
+                        <?php if ($sp['coin:eula']) : ?>
+                            <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['coin:eula']); ?>"><?php
+	                            echo $this->t('profile_eula_link');
+	                        ?></a>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if (isset($sp['url:en']) && $sp['url:en'] != ''): ?>
+                            <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['url:en']); ?>"><?php
+	                            echo $this->t('profile_support_link');
+	                        ?></a>
+                        <?php elseif (isset($sp['url:nl']) && $sp['url:nl'] != ''): ?>
+                            <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['url:nl']); ?>"><?php
+	                            echo $this->t('profile_support_link');
+	                        ?></a>
+                        <?php else: ?>
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if (isset($sp['supportContact'])) : ?>
+                            <a href="mailto:<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp['supportContact']['emailAddress']); ?>"><?php
+                                echo EngineBlock_View::htmlSpecialCharsText($sp['supportContact']['emailAddress']); ?>
+                            </a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+                <?php if (array_key_exists($spId, $spAttributesList)) : ?>
+                    <tr class="detail-row hide">
+                        <td colspan="5">
+                            <div class="attribute-table-wrapper" style="display: none;">
+                                <?= $this->t('profile_attribute_release'); ?>
+                                <table class="attribute-table">
+                                    <thead>
+                                        <tr>
+                                            <th><?= $this->t('attribute'); ?></th>
+                                            <th><?= $this->t('value'); ?></th>
+                                        </tr>
+                                    </thead>
+                                <?php foreach ($spAttributesList[$spId] as $attributeId => $attributeValues) { ?>
+                                    <tr>
+                                        <td style="font-weight: bold;">
+                                            <?=EngineBlock_View::htmlSpecialCharsText($metadata->getNameWithFallback($attributeId, $lang))?>
+                                        </td>
+                                        <td>
+                                            <?php /** Single attribute value */ if (count($attributeValues)==1) { ?>
+                                            <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+                                            <?php } /** Multiple attribute values */ else { ?>
+                                            <ul>
+                                            <?php foreach ($attributeValues as $value) { ?>
+                                                <li><?=EngineBlock_View::htmlSpecialCharsText($value)?></li>
+                                            <?php } ?>
+                                            </ul>
+                                            <?php } ?>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+
+</div>
+<div id="Exit">
+    <p>
+        <?= $this->t('profile_leave_surfconext_desc'); ?><br />
+        <form id="delete-confirmation-form" method="post" action="/profile/delete-user">
+            <input id="delete-confirmation-text"
+                   type="submit" value="<?= $this->t('profile_leave_surfconext_link'); ?>"
+                   data-confirmation-text="<?= $this->t('profile_leave_surfconext_conf'); ?>" >
+        </form>
+
+        <div class="exit-disclaimer"/>
+            <?= $this->t('profile_leave_surfconext_disclaim'); ?><br />
+        </div>
+    </p>
+</div>

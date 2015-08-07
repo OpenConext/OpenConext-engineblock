@@ -1,0 +1,45 @@
+<?php
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->assign('subheader', $this->t('help_header'));
+?>
+<div class="box">
+  <div class="mod-content">
+    <h1><?=$this->t('help_header')?></h1>
+    <p><?= $this->t('help_description'); ?></p>
+    <div class="results">
+      <ul id="faq" class="faq">
+          <li class="open">
+              <h3><?= $this->t('question_consentscreen'); ?></h3>
+              <?= $this->t('answer_consentscreen'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_consentinfo'); ?></h3>
+              <?= $this->t('answer_consentinfo'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_consentno'); ?></h3>
+              <?= $this->t('answer_consentno'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_consentagain'); ?></h3>
+              <?= $this->t('answer_consentagain'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_surfconext'); ?></h3>
+              <?= $this->t('answer_surfconext'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_log_in'); ?></h3>
+              <?= $this->t('answer_log_in'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_security'); ?></h3>
+              <?= $this->t('answer_security'); ?>
+          </li>
+      </ul>
+    </div>
+  </div>
+</div>

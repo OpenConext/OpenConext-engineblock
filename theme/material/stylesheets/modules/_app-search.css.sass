@@ -1,0 +1,68 @@
+.mod-search
+  position: relative
+  margin-bottom: 2rem
+  .lt-ie9 &
+    margin-bottom: 2em
+
+  +max-width($medium)
+    margin-bottom: 1rem
+    .lt-ie9 &
+      margin-bottom: 1em
+
+  fieldset
+    border: 0
+    padding: 0
+    margin: 0
+
+  input
+    font-size: 1rem
+    @extend %box
+    display: block
+    border: 0
+    border-radius: $br
+    width: 100%
+    padding: 0.75rem 3.5rem 0.75rem 1rem
+    line-height: 2rem
+    background: #fff
+    background-origin: content-box
+    -webkit-appearance: none
+    margin-bottom: 2rem
+    .lt-ie9 &
+      font-size: 1em
+      padding: 0.75em 3.5em 0.75em 1em
+      line-height: 2em
+      margin-bottom: 2em
+
+    &.mod-search-input
+      min-height: 56px
+
+    +hocus
+      outline: none
+      box-shadow: 0 1px $br rgba(black,.4)
+
+  button.search
+    position: absolute
+    pointer-events: none
+    top: 0
+    right: 0
+    text-indent: -9999rem
+    width: 3.5rem
+    height: 3.5rem
+    border: none
+    background: inline-image("search.svg") no-repeat center center
+      size: 1rem auto
+    .lt-ie9 &
+      text-indent: -9999em
+      width: 3.5em
+      height: 3.5em
+    .lt-ie10 &
+      top: 0.5em*2
+      margin-top: 40px
+
+  .search-institutions
+    display: none
+    .lt-ie10 &
+      display: block
+      margin: 0.5em 0
+      font-size: 24px
+      line-height: 40px

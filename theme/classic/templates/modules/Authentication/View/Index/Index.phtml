@@ -1,0 +1,155 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+$layout->setLayout('1-column-blue-grey');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - Metadata & Certificates';
+$layout->header = $layout->title;
+$layout->subheader = 'IdP Certificate and Metadata';
+$layout->footerText = $this->t('footer');
+$layout->getView()->inlineScript('script', <<<JS
+  $(function(){
+    // hack to remove i18n nav
+    $('ul.nav').remove();
+
+    // set absolute URLs of anchors as display text
+    $('dl.metadata-certificates-list a').not('a[data-external-link=true]').each(function(){
+      $(this).text(
+        window.location.protocol + '//' + window.location.hostname + $(this).attr('href')
+      );
+    });
+  });
+JS
+);
+/** @var Zend_Config $keyPairs */
+$keyPairs = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->encryption->keys;
+$keyPairIds = array();
+if ($keyPairs) {
+    $keyPairIds = array_keys($keyPairs->toArray());
+}
+?>
+    <dl class="metadata-certificates-list">
+        <dt>
+            The Public SAML Signing certificate of the SURFconext IdP
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/idp/certificate">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                <li><a href="/authentication/idp/certificate/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/idp/metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/idp/metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entities descriptor) for all the SURFconext IdPs
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/proxy/idps-metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/proxy/idps-metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+        <dt>
+            <strong>Metadata below is only relevant for key rollover or in
+                case you want a custom WAYF for your SP</strong>
+        </dt>
+        <dt>
+            The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy for SP
+            with entityID "urn:example.org". Please replace "urn:example.org" with the entityID
+            of your own SP before testing this metadata request. The resulting metadata will include
+            the public key specific to your Service Provider, which, in the case of key rollover,
+            MAY be different from the regular public key.
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/idp/metadata?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/idp/metadata/key:<?=$keyId?>?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entities descriptor) of the SURFconext IdPs which allow
+            access to SP with entityID "urn:example.org". Please replace "urn:example.org" with
+            the entityID of your own SP before testing. The resulting metadata will include all
+            SURFconext IdPs that allow access to the service, as well as the SP metadata, if
+            configured for SURFconext. Please note this information is generated dynamically, so
+            the number of available IdPs may change over time.
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/proxy/idps-metadata?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/proxy/idps-metadata/key:<?=$keyId?>?sp-entity-id=urn:example.org">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+
+        </dd>
+    </dl>
+    <div class="bottom"></div>
+</div>
+<div class="main">
+    <h1>SP Certificate and Metadata</h1>
+    <dl class="metadata-certificates-list">
+        <dt>
+            Test authentication with an identity provider.
+        </dt>
+        <dd>
+            <a href="/authentication/sp/debug">&raquo; open link</a>
+        </dd>
+        <dt>
+            The Public SAML Signing certificate of the SURFconext SP
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/sp/certificate">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/sp/certificate/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+        <dt>
+            The Public SAML metadata (the entity descriptor) of the SURFconext SP Proxy
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/sp/metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/sp/metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+    </dl>
+    <div class="bottom"></div>
+</div>
+<div class="main">
+    <h1>eduGAIN Metadata</h1>
+    <dl class="metadata-certificates-list">
+        <dt>
+            The SURFconext eduGain SAML metadata consists out of all IdPs and SPs that are included of
+            the <a href="http://mds.edugain.org/" data-external-link="true" target="_blank">eduGain metadata</a>.
+        </dt>
+        <dd>
+            <ul>
+                <li><a href="/authentication/proxy/edugain-metadata">&raquo; open link</a></li>
+                <?php foreach ($keyPairIds as $keyId): ?>
+                    <li><a href="/authentication/proxy/edugain-metadata/key:<?=$keyId?>">&raquo; open link</a></li>
+                <?php endforeach; ?>
+            </ul>
+        </dd>
+
+    </dl>

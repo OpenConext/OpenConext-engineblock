@@ -210,16 +210,23 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
     public function performRequestAccessAction()
     {
-        if (!$this->_requiredDataValid(array("name", "email", "comment"))) {
-            $this->queryParameters = $_POST;
-            $this->renderAction("RequestAccess");
-        } else {
+        if (!isset($_POST['institution']) && $this->_requiredDataValid(array("name", "email", "comment"))) {
             $this->_sendRequestAccessMail(
                 urldecode($_POST['idpEntityId']),
                 urldecode($_POST['spEntityId']),
                 $_POST['name'],
                 $_POST['email'],
                 $_POST['comment'] );
+        } elseif ($this->_requiredDataValid(array("name", "email", "institution", "comment"))) {
+            $this->_sendManualInstitutionRequestAccessMail(
+                urldecode($_POST['spEntityId']),
+                $_POST['name'],
+                $_POST['email'],
+                $_POST['institution'],
+                $_POST['comment'] );
+        } else {
+            $this->queryParameters = $_POST;
+            $this->renderAction("RequestAccess");
         }
     }
 
@@ -270,6 +277,25 @@ EOT;
         $mailer->setFrom($_POST['email']);
         $mailer->addTo(EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->help);
         $mailer->setSubject(sprintf("Request for IdP access (%s)", gethostname()));
+        $mailer->setBodyText($body);
+        $mailer->send();
+    }
+
+    protected function _sendManualInstitutionRequestAccessMail($sp, $name, $email, $institution, $comment) {
+        $body = <<<EOT
+There has been a request to allow access for institution '$institution' to SP '$sp'. The request was made by:
+
+$name <$email>
+
+The comment was:
+
+$comment
+
+EOT;
+        $mailer = new Zend_Mail('UTF-8');
+        $mailer->setFrom($_POST['email']);
+        $mailer->addTo(EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('email')->help);
+        $mailer->setSubject(sprintf("Request for institution access (%s)", gethostname()));
         $mailer->setBodyText($body);
         $mailer->send();
     }

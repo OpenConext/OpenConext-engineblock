@@ -1,0 +1,65 @@
+.mod-header
+  +pie-clearfix
+  padding: 1rem 1rem
+  background: #fff
+  box-shadow: 1px 1px $br rgba(black,.2)
+  border-bottom: 2px solid $blue
+  line-height: 30px
+  display: flex
+  align-items: center
+  .lt-ie9 &
+    padding: 1em 1em
+
+  +min-width($medium)
+    padding: 1rem 2rem
+    margin-bottom: 3rem
+    .lt-ie9 &
+      padding: 1em 2em
+      margin-bottom: 3em
+
+  // Main app title
+  .title
+    color: $medium-grey
+    text-overflow: ellipsis
+    overflow: hidden
+    white-space: nowrap
+    padding-right: 1rem
+    .lt-ie9 &
+      padding-right: 1em
+
+    strong
+      color: $blue
+
+  +max-width($medium)
+    padding: 0.7rem 1rem
+    .title
+      line-height: 1.3rem
+      strong
+        display: block
+
+  .meta
+    display: flex
+    align-items: center
+    margin-left: auto
+
+  .burger
+    display: none
+    align-items: center
+    margin-left: auto
+
+    img
+      max-width: 0.8rem
+      .lt-ie9 &
+        max-width: 0.8em
+
+  .burger,
+  .comp-language,
+  .comp-links
+    flex-wrap: nowrap
+
+  +max-width($medium)
+    .burger
+      display: block
+
+    .meta
+      display: none

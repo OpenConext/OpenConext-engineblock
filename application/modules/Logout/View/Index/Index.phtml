@@ -1,14 +1,17 @@
+<?php /* This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory. */ ?>
 <?php
 /** @var Zend_Layout $layout */
 $layout = $this->layout();
-$layout->setLayout('1-column-blue-grey');
 
 // Set Layout properties
-$layout->title = $layout->title. ' - Logout';
+$layout->title = $layout->title. ' - ' . ucfirst($this->t('logout'));
 $layout->header = $layout->title;
-$layout->subheader = 'Logout';
-$layout->footerText = $this->t('footer');
+$layout->subheader = ucfirst($this->t('logout'));
 ?>
-    <?= $this->t('logout_description');?>
-    <br />
-    <?= $this->t('logout_information_link'); ?>
+<div class="box">
+  <div class="mod-content">
+    <h1>Logout</h1>
+    <p><?= $this->t('logout_description');?></p>
+    <p><?= $this->t('logout_information_link'); ?></p>
+  </div>
+</div>

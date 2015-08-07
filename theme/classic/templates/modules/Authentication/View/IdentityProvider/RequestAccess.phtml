@@ -1,0 +1,37 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+$layout->setLayout('empty');
+?>
+<p class="back"><a id="back_request_access" href="#"><?= $this->t('back'); ?></a></p>
+<h2><?= $this->t('sorry'); ?>&nbsp;<i><?= $queryParameters['idpName']; ?></i> <?= $this->t('form_description'); ?>
+
+<form id="request_access_form" action="#" method="post" class="apply clearfix">
+    <input name="idpName" type="hidden" value="<?= $queryParameters['idpName']; ?>">
+    <input name="idpEntityId" type="hidden" value="<?= $queryParameters['idpEntityId']; ?>">
+    <input name="spName" type="hidden" value="<?= $queryParameters['spName']; ?>">
+    <input name="spEntityId" type="hidden" value="<?=  $queryParameters['spEntityId']; ?>">
+
+    <?php if (isset($nameError)) : ?>
+        <div><label class="error"> <?= $this->t('name_error'); ?></label></div>
+    <?php endif; ?>
+    <label for="name"><?= $this->t('name'); ?>:</label>
+    <input name="name" id="name" value="<?= $queryParameters['name']; ?>">
+
+    <?php if (isset($emailError)) : ?>
+        <div><label class="error"> <?= $this->t('email_error'); ?></label></div>
+    <?php endif; ?>
+    <label for="email"><?= $this->t('email'); ?>:</label>
+    <input name="email" id="email" value="<?= $queryParameters['email']; ?>" />
+
+    <?php if (isset($commentError)) : ?>
+        <div><label class="error"> <?= $this->t('comment_error'); ?></label></div>
+    <?php endif; ?>
+    <label for="comment" class="top"><?= $this->t('comment'); ?>:</label>
+    <textarea name="comment" id="comment"><?= $queryParameters['comment']; ?></textarea>
+
+    <div class="right">
+        <a id="cancel_request_access" class="cancel" href="#"><?= $this->t('cancel'); ?></a>
+        <input id="request_access_submit" name="Submit" type="submit" value="<?= $this->t('send'); ?>"/>
+    <div>
+</form>

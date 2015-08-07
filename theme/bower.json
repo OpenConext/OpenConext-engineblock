@@ -1,0 +1,21 @@
+{
+  "name": "openconextthemes",
+  "version": "4.4.1",
+  "description": "Themes for openconext",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "jquery": "~1.11.3",
+    "js-cookie": "~1.5.1",
+    "jquery.lazyload": "~1.9.5",
+    "fastclick": "~1.0.6",
+    "html5shiv": "^3.7.3",
+    "underscore": "~1.8.3"
+  },
+  "dependencies": {}
+}

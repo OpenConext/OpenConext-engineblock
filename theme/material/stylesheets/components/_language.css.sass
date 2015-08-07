@@ -1,0 +1,52 @@
+.comp-language
+  margin-right: 1rem
+  line-height: 1.75rem
+  display: flex
+  justify-content: center
+  flex-wrap: nowrap
+  .lt-ie9 &
+    margin-right: 1em
+    line-height: 1.75em
+
+  li
+    list-style: none
+
+    &:first-child
+      a, button
+        border-radius: $br 0 0 $br
+
+    &:last-child
+      a, button
+        border-radius: 0 $br $br 0
+
+  a, button
+    border: 0
+    color: $blue
+    cursor: pointer
+    display: block
+    line-height: 1.75rem
+    padding: 0 0.5rem
+    font-size: 0.8rem
+    background: rgba($blue,.1)
+    margin-right: 1px
+    text-decoration: none
+    .lt-ie9 &
+      line-height: 1.75em
+      padding: 0.5em
+      font-size: .8em
+
+    &:hover,
+    &.selected
+      background: $blue
+      color: #fff
+
+  +max-width($medium)
+    margin: 1rem 0
+    .lt-ie9 &
+      margin: 1em 0
+
+  .ie9 &, .safari5 &, .safari6 &
+    &, li, li a, li button
+      display: inline-block
+  .lt-ie9 &, .lt-ie9 & li, .lt-ie9 & li a, .lt-ie9 & li button
+    display: inline

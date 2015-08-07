@@ -1,0 +1,19 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+$layout->setLayout('empty');
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>EngineBLock Debugging - Redirecting to...</title>
+    </head>
+    <body>
+        <p>
+           <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($location); ?>">GO</a>
+        <p>
+        <pre>
+            <?php print_r($message, 1) ?>
+        </pre>
+    </body>
+</html>

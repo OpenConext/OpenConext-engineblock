@@ -1,0 +1,127 @@
+.mod-form
+  padding: 1rem
+  .lt-ie9 &
+    padding: 1em
+
+  h1, h2, h3
+    margin-bottom: .5rem
+    .lt-ie9 &
+      margin-bottom: 0.5em
+
+  h1
+    @extend %h1
+
+  h2
+    @extend %h2
+
+  h3
+    @extend %h3
+
+  ul, ol, p
+    margin-bottom: 1rem
+    .lt-ie9 &
+      margin-bottom: 1em
+
+  ul
+    list-style: square
+  ol
+    list-style: decimal
+
+  ul,
+  ol
+    margin-left: 1.5rem
+    .lt-ie9 &
+      margin-left: 1.5em
+
+  // Form stuff
+  label
+    display: block
+    font-weight: bold
+    margin-bottom: 0.25rem
+    .lt-ie9 &
+      margin-bottom: 0.25em
+
+    .hint
+      opacity: .8
+      font-weight: normal
+      font-size: 0.8em
+      display: block
+
+  +input
+    display: block
+    width: 100%
+    padding: 0.5rem 0.75rem
+    font-size: 1rem
+    font-family: $font
+    border-radius: $br
+    border: 1px solid $border
+    .lt-ie9 &
+      padding: 0.5em 0.75em
+      font-size: 1em
+    +hocus
+      outline: none
+      border-color: mix(white,$blue)
+      box-shadow: 0 0 4px rgba($blue,.5)
+
+  // All divs
+  .input,
+  .radios,
+  .checkboxes,
+  .textarea
+    margin-bottom: 1rem
+    .lt-ie9 &
+      margin-bottom: 1em
+
+  .checkboxes,
+  .radios
+    line-height: 1.5rem
+    margin-bottom: 1.5rem
+    .lt-ie9 &
+      line-height: 1.5em
+      margin-bottom: 1.5em
+
+    .options
+      label
+        font-weight: normal
+
+    input
+      vertical-align: middle
+      margin: -3px 0.5rem 0 0
+      .lt-ie9 &
+        margin: -3px 0.5em 0 0
+
+  // Fieldset
+  fieldset
+    padding-top: 1.5rem
+    margin-top: 1.5rem
+    border-top: 1px solid $border
+    .lt-ie9 &
+      padding-top: 1.5em
+      margin-top: 1.5em
+
+  .actions
+    .c-button + .c-button
+      float: right
+  .close-modal-container
+    text-align: right
+
+  // Errors
+  .errors
+    background: $red-light
+    padding: 1rem 1.5rem
+    border-radius: $br
+    color: $red
+    .lt-ie9 &
+      padding: 1em 1.5em
+
+    ul
+      margin-bottom: 0
+
+  .has-error
+    > label
+      color: $red
+    +input
+      border-color: $red
+      +hocus
+        box-shadow: 0 0 4px rgba($red,.5)
+

@@ -1,0 +1,18 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+
+// Set Layout variables
+$layout->header = $this->t('deleteuser_success_header');
+$layout->title = $layout->title. ' - ' .$layout->header;
+$layout->subheader = $this->t('deleteuser_success_subheader');
+$layout->footerText = $this->t('footer');
+
+$layout->getView()->inlineScript()->appendFile('/javascript/screen.js');
+
+?>
+<div>
+    <p>
+        <?= $this->t('deleteuser_success_desc'); ?>
+    </p>
+</div>

@@ -1,51 +1,46 @@
+<?php /* This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory. */ ?>
 <?php
-
-/** @var Zend_Layout $layout */
+/**
+ * @var Zend_Layout $layout
+ */
 $layout = $this->layout();
-$layout->setLayout('empty');
+$layout->assign('subheader', $this->t('help_header'));
 ?>
-<p class="back"><a id="back_link" href="#"><?= $this->t('back'); ?></a>
-</p>
-<h2><?= $this->t('help_header'); ?></h2>
-<p><?= $this->t('help_description'); ?></p>
-<div class="results">
-    <div id="scrollViewportHelp">
-        <ul id="faq" class="faq">
-            <li class="open">
-                <h3><?= $this->t('question_consentscreen'); ?></h3>
-                <?= $this->t('answer_consentscreen'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_consentinfo'); ?></h3>
-                <?= $this->t('answer_consentinfo'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_consentno'); ?></h3>
-                <?= $this->t('answer_consentno'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_consentagain'); ?></h3>
-                <?= $this->t('answer_consentagain'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_surfconext'); ?></h3>
-                <?= $this->t('answer_surfconext'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_log_in'); ?></h3>
-                <?= $this->t('answer_log_in'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-            <li>
-                <h3><?= $this->t('question_security'); ?></h3>
-                <?= $this->t('answer_security'); ?>
-                <span class="openClose"><?= $this->t('close_question'); ?></span>
-            </li>
-        </ul>
+<div class="box">
+  <div class="mod-content">
+    <h1><?=$this->t('help_header')?></h1>
+    <p><?= $this->t('help_description'); ?></p>
+    <div class="results">
+      <ul id="faq" class="faq">
+          <li class="open">
+              <h3><?= $this->t('question_consentscreen'); ?></h3>
+              <?= $this->t('answer_consentscreen'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_consentinfo'); ?></h3>
+              <?= $this->t('answer_consentinfo'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_consentno'); ?></h3>
+              <?= $this->t('answer_consentno'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_consentagain'); ?></h3>
+              <?= $this->t('answer_consentagain'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_surfconext'); ?></h3>
+              <?= $this->t('answer_surfconext'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_log_in'); ?></h3>
+              <?= $this->t('answer_log_in'); ?>
+          </li>
+          <li>
+              <h3><?= $this->t('question_security'); ?></h3>
+              <?= $this->t('answer_security'); ?>
+          </li>
+      </ul>
     </div>
+  </div>
 </div>

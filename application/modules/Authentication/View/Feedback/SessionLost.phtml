@@ -1,21 +1,23 @@
+<?php /* This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory. */ ?>
 <?php
 
 /**
  * @var Zend_Layout $layout
  */
 $layout = $this->layout();
-$layout->setLayout('1-column-blue-grey-narrow');
 
 // Set Layout properties
 $layout->title = $layout->title. ' - ' .$this->t('error_session_lost');
 $layout->header = $layout->title;
 $layout->subheader = $this->t('error_session_lost');
-$layout->footerText = $this->t('footer');
+$layout->wide = true;
 
 ?>
-<div class="error-wrapper">
-    <div class="error-icon"></div>
-    <div class="error-text">
-        <?= $this->t('error_session_lost_desc');
+<div class="box">
+  <div class="mod-content">
+    <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+    <?= $this->t('error_session_lost_desc');
 
-        require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php');
+    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<?php
+
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+
+/**
+ * Injected:
+ *
+ * @var EngineBlock_Saml2_ResponseAnnotationDecorator $response
+ * @var IdentityProvider $idp
+ * @var array $attributes
+ * @var EngineBlock_View $this
+ */
+
+$validationResult = EngineBlock_ApplicationSingleton::getInstance()
+    ->getDiContainer()
+    ->getAttributeValidator()
+    ->validate($attributes);
+?>
+IdP
+===
+<?php
+echo 'Name               ' . $idp->nameEn . PHP_EOL;
+echo 'Entity ID          ' . $idp->entityId . PHP_EOL;
+echo 'Workflow Status:   ' . $idp->workflowState . PHP_EOL;
+?>
+
+
+SAML2 Subject
+=============
+<?php
+$nameId = $response->getAssertion()->getNameId();
+echo 'NameID             ' . $nameId['Value'] ?>
+
+
+
+Attributes
+==========
+<?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
+Error: <?= call_user_func_array('sprintf', $error); ?>
+<?php endforeach; ?>
+<?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
+Warning: <?= call_user_func_array('sprintf', $warning); ?>
+<?php endforeach; ?>
+
+
+<?php foreach ($attributes as $attributeName => $attributeValues): ?>
+"<?= $attributeName ?>"
+----------------------------------------------------------
+Name: <?= $this->getAttributeName($attributeName, 'en') ?>
+
+Values:
+<?php   foreach ($attributeValues as $attributeValue): ?>
+* "<?= $attributeValue ?>"
+<?php   endforeach; ?>
+<?php   foreach ($validationResult->getErrors($attributeName) as $error): ?>
+Error: <?= call_user_func_array(array($this, 'translate'), $error); ?>
+
+<?php   endforeach; ?>
+<?php   foreach ($validationResult->getWarnings($attributeName) as $warning): ?>
+Warning: <?= call_user_func_array(array($this, 'translate'), $warning); ?>
+
+<?php   endforeach; ?>
+
+
+<?php endforeach; ?>
+
+
+Raw data
+========
+
+Entity.php
+----------------------------------------------------------
+<?php var_export($idp) ?>
+
+
+Response.php
+----------------------------------------------------------
+<?php var_export($response) ?>
