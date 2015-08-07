@@ -22,16 +22,16 @@ return array(
     'identityProvider'      => 'Identity Provider',
     'serviceProvider'       => 'Service Provider',
     'userAgent'             => 'User Agent',
-    'ipAddress'             => 'IP Adres',
-    'statusCode'            => 'Status Code',
-    'statusMessage'         => 'Status Bericht',
+    'ipAddress'             => 'IP-adres',
+    'statusCode'            => 'Statuscode',
+    'statusMessage'         => 'Statusbericht',
 
     //WAYF
     'idp_selection_title'       => 'Identity Provider Selectie - %s',
     'idp_selection_subheader'   => 'Login via je eigen instelling',
     'search'                    => 'Zoek een instelling...',
     'idp_selection_desc'        => 'Selecteer een instelling en login bij <i>%s</i>',
-    'our_suggestion'            => 'Eerdere gekozen:',
+    'our_suggestion'            => 'Eerder gekozen:',
     'idps_with_access'          => 'Instellingen met toegang',
     'no_access'                 => 'Geen toegang.',
     'no_access_more_info'       => 'Geen toegang. &raquo;',
@@ -43,9 +43,9 @@ return array(
     'done'                      => 'Klaar',
     'remove'                    => 'Verwijderen',
     'request_access'            => 'Toegang aanvragen',
-    'no_idp_results'            => 'Geen resultaten. Je zoekterm heeft geen resultaten opgeleverd.',
-    'no_idp_results_request_access' => 'Kun je je IDP niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
-    'return_to_sp'              => 'Terugkeren naar Service Provider',
+    'no_idp_results'            => 'Je zoekterm heeft geen resultaten opgeleverd.',
+    'no_idp_results_request_access' => 'Kun je je instelling niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
+    'return_to_sp'              => 'Keer terug naar Service Provider',
 
     //Footer
     'service_by'            => 'Deze dienst is verbonden via',
@@ -103,7 +103,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'question_cannot_select'            =>      'Ik kan in mijn browser mijn instelling niet selecteren, wat nu?',
     'answer_cannot_select'              =>      '<p>Het keuzescherm van SURFconext is te gebruiken in de meest gangbare browsers waaronder, Internet Explorer, Firefox, Chrome en Safari. Andere browsers worden mogelijk niet ondersteund. Verder moet je browser het gebruik van cookies en javascript toestaan.</p>',
 
-    //Form
+    // Request Access Form
     'sorry'                 => 'Helaas,',
     'form_description'      => 'heeft geen toegang tot deze dienst. Wat nu?</h2>
             <p>Wil je toch graag toegang tot deze dienst, vul dan
@@ -114,9 +114,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'name'                  => 'Naam',
     'name_error'            => 'Vul je naam in',
     'email'                 => 'E-mail',
-    'email_error'           => 'Vul je (juiste) e-mailadres in',
-    'institution'           => 'Instituut',
-    'institution_error'     => 'Vul een instituut in',
+    'email_error'           => 'Vul je (correcte) e-mailadres in',
+    'institution'           => 'Instelling',
+    'institution_error'     => 'Vul jouw instelling in',
     'comment'               => 'Toelichting',
     'comment_error'         => 'Vul een toelichting in',
     'cancel'                => 'Annuleren',
@@ -130,9 +130,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
-    //Profile
+    // Profile
     'profile_header'                    => 'SURFconext',
-    'profile_subheader'                 => 'Overzicht van jouw profiel',
+    'profile_subheader'                 => 'Overzicht van jouw SURFconext-profiel.',
     'profile_header_my_profile'         => 'Mijn Profiel',
     'profile_header_my_groups'          => 'Mijn Groepen',
     'profile_header_my_apps'            => 'Mijn Diensten',
@@ -145,16 +145,16 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_group_membership_desc'     => 'Je bent lid van de volgende groepen.',
     'profile_no_groups'                 => 'Geen groepen',
     'profile_extra_groups_desc'         => 'Om jouw instellingsgroepen te zien moet je het gebruik hiervoor binnen SURFconext autoriseren.',
-    'profile_leave_surfconext_desc'     => 'Je gebruikt SURFconext om met je instellingsaccount in te loggen op een of meerdere applicaties. Je kan jouw SURFconext profiel verwijderen door op onderstaande knop te drukken.',
+    'profile_leave_surfconext_desc'     => 'Je gebruikt SURFconext om met je instellingsaccount in te loggen op een of meerdere diensten. Je kan jouw SURFconext profiel verwijderen door op onderstaande knop te drukken.',
     'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
     'profile_leave_surfconext_disclaim' => 'Let op:
                                             <ul>
-                                                <li>Alleen de informatie die in SURFconext wordt opgeslagen zal verwijderd worden.</li>
+                                                <li>Alleen de informatie die in SURFconext wordt opgeslagen zal worden verwijderd.</li>
                                                 <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens daar nog opgeslagen zijn.</li>
                                                 <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel worden aangemaakt.</li>
                                              </ul>
                                              <br>Meer informatie over welke informatie er wordt opgeslagen door SURFconext kan je vinden op de <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">SURFconext supportpagina\'s</a>.',
-    'profile_leave_surfconext_link_add' => '(Sluit je browser na deze actie om de deprovisioning procedure te voltooien.)',
+    'profile_leave_surfconext_link_add' => '(Sluit je browser na deze actie om de verwijderprocedure te voltooien.)',
     'profile_revoke_access'             => 'Trek toegang in',
     'profile_leave_surfconext_conf'     => 'Weet je zeker dat je jouw profiel wilt verwijderen? Je zult de browser moeten afsluiten om deze actie te voltooien',
     'profile_eula_link'                 => 'Gebruikersvoorwaarden',
@@ -164,7 +164,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_mail_send_success'         => 'De mail met bovenstaande informatie is succesvol verstuurd.',
     'profile_helplink'                  => 'https://wiki.surfnet.nl/display/conextsupport/Profile+page',
 
-    //Profile MyApps
+    // Profile MyApps
     'profile_apps_connected_aps'        => 'Mijn diensten via SURFconext',
     'profile_apps_share'                => 'Je hebt toestemming gegeven om jouw informatie te delen met de volgende diensten:',
     'profile_apps_service_th'           => 'Dienst/Applicatie',
@@ -180,13 +180,13 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
     'profile_attribute_release_all'     => 'Deze dienst ontvangt alle attributen die door jouw instelling worden geleverd.',
 
-    //Delete User
+    // Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'U bent bijna klaar...',
     'deleteuser_success_desc'           => '<strong>Belangrijk!</strong> Om de exit procedure succesvol af te ronden, moet je nu de browser afsluiten.',
 
 
-    //Consent
+    // Consent
     'external_link'                     => 'opent in een nieuw venster',
     'consent_header'                    => '%s verzoekt jouw informatie',
     'consent_subheader'                 => '%s verzoekt jouw informatie',
@@ -199,13 +199,13 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_decline'                   => 'Nee, ik wil geen gebruik maken van deze dienst',
     'consent_notice'                    => '(We zullen dit nogmaals vragen als jouw informatie wijzigt)',
 
-    //New Consent
+    // New Consent
     'consent_header_info'               => 'Verzoek voor vrijgeven informatie',
     'consent_sp_idp_info'               => 'Om gebruik te kunnen maken van <strong class="service-provider">%s</strong> is het nodig om de volgende informatie, verkregen van <strong class="identity-provider">%s</strong>, te delen:',
     'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
     'name_id'                           => 'SURFconext gebruikers ID',
 
-    //Error screens
+    // Error screens
     'error_404'                         => '404 - Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',
     'error_help_desc'                   => '<p>
@@ -266,9 +266,9 @@ Als je deze applicatie wilt gebruiken moet je:<br />
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
-    'error_group_oauth'            =>  'Error - Group autorisatie is mislukt',
+    'error_group_oauth'            =>  'Error - Groepautorisatie is mislukt',
     'error_group_oauth_desc'       => '<p>
-        De extere groep provider <b>%s</b> retourneerde een fout.<br />
+        De extere groepprovider <b>%s</b> retourneerde een fout.<br />
         Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br />
     </p>',
