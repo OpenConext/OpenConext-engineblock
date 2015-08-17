@@ -51,11 +51,6 @@ COMMITHASH=`git rev-parse HEAD` &&
 echo "Tag: ${TAG}" > ${PROJECT_DIR}/RELEASE &&
 echo "Commit: ${COMMITHASH}" >> ${PROJECT_DIR}/RELEASE &&
 
-echo "Generating assets" &&
-cd ${PROJECT_DIR}/bin &&
-rm -fr ${PROJECT_DIR}/www/authentication/generated &&
-php ./assets_pipelines.php &&
-
 echo "Cleaning build of dev files" &&
 rm -rf ${PROJECT_DIR}/.idea &&
 rm -rf ${PROJECT_DIR}/.git &&
