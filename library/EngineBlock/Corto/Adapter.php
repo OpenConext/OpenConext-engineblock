@@ -1,6 +1,10 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
 use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
@@ -90,15 +94,21 @@ class EngineBlock_Corto_Adapter
 
     public function edugainMetadata()
     {
+        $this->_initProxy();
+
         $this->_filterRemoteEntitiesBySpQueryParam();
         $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
+
         $this->_callCortoServiceUri('edugainMetadataService');
     }
 
     public function idPsMetadata()
     {
+        $this->_initProxy();
+
         $this->_filterRemoteEntitiesBySpQueryParam();
         $this->_filterRemoteEntitiesByClaimedSpWorkflowState();
+
         $this->_callCortoServiceUri('idpsMetadataService');
     }
 
@@ -164,7 +174,7 @@ class EngineBlock_Corto_Adapter
         $repository->appendFilter(
             new RemoveDisallowedIdentityProvidersFilter(
                 $serviceProvider->entityId,
-                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
+                $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
             )
         );
     }
@@ -186,7 +196,7 @@ class EngineBlock_Corto_Adapter
         $repository->appendFilter(
             new RemoveDisallowedIdentityProvidersFilter(
                 $serviceProvider->entityId,
-                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
+                $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
             )
         );
     }
@@ -203,7 +213,7 @@ class EngineBlock_Corto_Adapter
                 $repository->appendFilter(
                     new RemoveDisallowedIdentityProvidersFilter(
                         $serviceProvider->entityId,
-                        $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
+                        $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
                     )
                 );
             }
@@ -236,7 +246,7 @@ class EngineBlock_Corto_Adapter
         $this->getMetadataRepository()->appendFilter(
             new RemoveDisallowedIdentityProvidersFilter(
                 $serviceProvider->entityId,
-                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
+                $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
             )
         );
     }
@@ -275,6 +285,16 @@ class EngineBlock_Corto_Adapter
         }
 
         $repository->appendFilter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
+    }
+
+    /**
+     * @param ServiceProvider $serviceProvider
+     */
+    private function _findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
+    {
+        $entityIds = $this->getMetadataRepository()->findAllowedIdpEntityIdsForSp($serviceProvider);
+        $entityIds[] = $this->_proxyServer->getUrl('idpMetadataService');
+        return $entityIds;
     }
 
     /**
@@ -525,14 +545,48 @@ class EngineBlock_Corto_Adapter
     ) {
         $idpEntityId = $proxyServer->getUrl('idpMetadataService');
         $metadataRepository = $this->getMetadataRepository();
+        $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
+
+        $engineIdentityProvider = $this->getEngineIdpRole($metadataRepository, $keyPair, $idpEntityId);
+        $engineServiceProvider  = $this->getEngineSpRole($metadataRepository, $keyPair, $proxyServer);
+
+        $proxyServer->setConfig('Processing', array('Consent' => $engineServiceProvider));
+
+        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineServiceProvider->entityId));
+        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineIdentityProvider->entityId));
+
+        $engineServiceProviderAlternateWorkflow = clone $engineServiceProvider;
+        $engineServiceProviderAlternateWorkflow->toggleWorkflowState();
+
+        $engineIdentityProviderAlternateWorkflow = clone $engineIdentityProvider;
+        $engineIdentityProviderAlternateWorkflow->toggleWorkflowState();
+
+        $ownMetadataRepository = new InMemoryMetadataRepository(
+            array($engineIdentityProvider, $engineIdentityProviderAlternateWorkflow),
+            array($engineServiceProvider, $engineServiceProviderAlternateWorkflow)
+        );
+        $metadataRepository->appendRepository($ownMetadataRepository);
+        return $metadataRepository;
+    }
+
+    /**
+     * @param MetadataRepositoryInterface $metadataRepository
+     * @param EngineBlock_X509_KeyPair $keyPair
+     * @param $idpEntityId
+     * @return IdentityProvider
+     * @throws EngineBlock_Exception
+     */
+    protected function getEngineIdpRole(
+        MetadataRepositoryInterface $metadataRepository,
+        EngineBlock_X509_KeyPair $keyPair,
+        $idpEntityId
+    ) {
         $engineIdentityProvider = $metadataRepository->findIdentityProviderByEntityId($idpEntityId);
         if (!$engineIdentityProvider) {
             throw new EngineBlock_Exception(
                 "Unable to find EngineBlock configured as Identity Provider. No '$idpEntityId' in repository!"
             );
         }
-
-        $keyPair = $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
 
         $engineIdentityProvider->certificates = array($keyPair->getCertificate());
         $engineIdentityProvider->supportedNameIdFormats = array(
@@ -542,7 +596,22 @@ class EngineBlock_Corto_Adapter
             // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
             EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
         );
+        return $engineIdentityProvider;
+    }
 
+    /**
+     * @param MetadataRepositoryInterface $metadataRepository
+     * @param EngineBlock_X509_KeyPair $keyPair
+     * @param EngineBlock_Corto_ProxyServer $proxyServer
+     * @return ServiceProvider
+     * @throws EngineBlock_Corto_ProxyServer_Exception
+     * @throws EngineBlock_Exception
+     */
+    protected function getEngineSpRole(
+        MetadataRepositoryInterface $metadataRepository,
+        EngineBlock_X509_KeyPair $keyPair,
+        EngineBlock_Corto_ProxyServer $proxyServer
+    ) {
         /**
          * Augment our own SP entry with stuff that can't be set via the Service Registry (yet)
          */
@@ -583,16 +652,6 @@ class EngineBlock_Corto_Adapter
             $proxyServer->getUrl('provideConsentService'),
             'INTERNAL'
         );
-        $proxyServer->setConfig('Processing', array('Consent' => $engineServiceProvider));
-
-        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineServiceProvider->entityId));
-        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineIdentityProvider->entityId));
-
-        $ownMetadataRepository = new InMemoryMetadataRepository(
-            array($engineIdentityProvider),
-            array($engineServiceProvider)
-        );
-        $metadataRepository->appendRepository($ownMetadataRepository);
-        return $metadataRepository;
+        return $engineServiceProvider;
     }
 }
