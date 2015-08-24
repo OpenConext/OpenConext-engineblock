@@ -202,7 +202,7 @@ If you have any questions about your privacy and the policy applied, please visi
 
     //New Consent
     'consent_header_info'               => 'Request for release of your information',
-    'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%1$s</strong> using your institutional account, <strong class="identity-provider">%2$s</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%2$s</strong> shares certain information with <strong class="service-provider">%1$s</strong>. For this, your permission is required. The service needs the following information:',
+    'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%1$s</strong> using your institutional account, <strong class="identity-provider">%2$s</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%2$s</strong> shares certain information with this service. For this, your permission is required. The service needs the following information:',
     'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
     'name_id'                           => 'SURFconext user ID',
 

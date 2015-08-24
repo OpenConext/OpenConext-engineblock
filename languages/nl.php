@@ -201,7 +201,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     // New Consent
     'consent_header_info'               => 'Verzoek voor doorgeven van jouw informatie',
-    'consent_sp_idp_info'               => 'Om met je instellingsaccount in te kunnen loggen op de dienst <strong class="service-provider">%1$s</strong> maakt <strong class="identity-provider">%2$s</strong> gebruik van SURFconext. Voor het functioneren van deze dienst is het noodzakelijk dat <strong class="identity-provider">%1$s</strong> een aantal gegevens via SURFconext deelt met <strong class="service-provider">%2$s</strong>. Hiervoor is jouw toestemming nodig. Het gaat om de volgende gegevens:',
+    'consent_sp_idp_info'               => 'Om met je instellingsaccount in te kunnen loggen op de dienst <strong class="service-provider">%1$s</strong> maakt <strong class="identity-provider">%2$s</strong> gebruik van SURFconext. Voor het functioneren van deze dienst is het noodzakelijk dat <strong class="identity-provider">%2$s</strong> een aantal gegevens via SURFconext deelt met deze dienst. Hiervoor is jouw toestemming nodig. Het gaat om de volgende gegevens:',
     'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
     'name_id'                           => 'SURFconext gebruikers ID',
 
