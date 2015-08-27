@@ -242,9 +242,9 @@ Als je deze applicatie wilt gebruiken moet je:<br />
         Er kon geen Service Provider worden gevonden met het opgegeven EntityID. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
-    'error_unknown_issuer'              => 'Error - Onbekende applicatie',
+    'error_unknown_issuer'              => 'Error - Onbekende dienst',
     'error_unknown_issuer_desc'     => '<p>
-        Deze applicatie is niet beschikbaar via SURFconext. Breng alstublieft de aanbieder van deze dienst op de hoogte. Geef hierbij de volgende informatie door:
+        De dienst waarop je probeert in te loggen is niet bekend bij SURFconext. Mogelijk heeft jouw instelling de toegang tot deze dienst nooit aangevraagd. Neem contact op met de helpdesk van je instelling en geef daarbij de volgende informatie door:
     </p>',
     'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
     'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij jouw instelling, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie.',

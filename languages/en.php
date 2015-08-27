@@ -243,9 +243,9 @@ If you want to use this application you have to:<br />
         A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
-    'error_unknown_issuer'          => 'Error - Unknown application',
+    'error_unknown_issuer'          => 'Error - Unknown service',
     'error_unknown_issuer_desc'     => '<p>
-        This application is not available through SURFconext. Please notify the provider of this service and provide them with the following information:
+        The service you are trying to log in to is unknown to SURFconext. Possibly your institution has never enabled access to this service. Please contact the helpdesk of your institution and provide them with the following information:
     </p>',
     'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
     'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation.',
