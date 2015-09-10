@@ -757,16 +757,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "1.2.2",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "f467f86bbd62cb578560997943e94f78a0945183"
+                "reference": "c56d0907a5296d192ccc39d2655d8109178e6dce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/f467f86bbd62cb578560997943e94f78a0945183",
-                "reference": "f467f86bbd62cb578560997943e94f78a0945183",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/c56d0907a5296d192ccc39d2655d8109178e6dce",
+                "reference": "c56d0907a5296d192ccc39d2655d8109178e6dce",
                 "shasum": ""
             },
             "require": {
@@ -792,7 +792,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2015-09-10 15:07:05"
+            "time": "2015-09-10 20:20:25"
         },
         {
             "name": "openconext/stoker-metadata",
