@@ -6,3 +6,6 @@
 /vendor/
 /www/authentication/generated/
 bin/ignore_me.php
+/web/bundles
+/web/app_dev.php
+/app/cache

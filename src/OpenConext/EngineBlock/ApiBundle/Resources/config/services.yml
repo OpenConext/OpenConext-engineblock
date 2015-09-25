@@ -1,0 +1,4 @@
+services:
+#    open_conext_engine_block_api.example:
+#        class: OpenConext\EngineBlock\ApiBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

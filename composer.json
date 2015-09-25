@@ -24,17 +24,36 @@
         "simplesamlphp/saml2": "~0.6",
         "simplesamlphp/simplesamlphp": "~1.13",
         "sybio/image-workshop": "~2.0.7",
-        "zendframework/zendframework1":"~1.12"
+        "zendframework/zendframework1":"~1.12",
+        "symfony/symfony": "2.7.*",
+        "sensio/distribution-bundle": "~4.0",
+        "sensio/framework-extra-bundle": "^3.0.2",
+        "incenteev/composer-parameter-handler": "~2.0"
     },
     "require-dev": {
         "phake/phake": "2.0.0-beta2",
-        "phpunit/phpunit": "~4.3"
+        "phpunit/phpunit": "~4.3",
+        "sensio/generator-bundle": "~2.3"
     },
     "scripts": {
         "pre-autoload-dump": [
             "bin/composer/dbpatch-post-install.sh",
             "bin/composer/simplesamlphp-post-install.sh",
             "bin/composer/zend-framework-post-install.sh"
+        ],
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
+            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ]
     },
     "repositories": [
@@ -61,6 +80,16 @@
             "Default_":"application/modules/",
             "Logout_":"application/modules/",
             "Profile_":"application/modules/"
+        },
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-web-dir": "web",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
         }
     }
 }
