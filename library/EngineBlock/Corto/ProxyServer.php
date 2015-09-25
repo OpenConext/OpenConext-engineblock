@@ -517,14 +517,14 @@ class EngineBlock_Corto_ProxyServer
         if ($keyId = $request->getKeyId()) {
             $this->setKeyId($keyId);
         }
-        $requestWasUnsollicited = $request->isUnsolicited();
+        $requestWasUnsolicited = $request->isUnsolicited();
 
         $response = new SAML2_Response();
         /** @var SAML2_AuthnRequest $request */
         $response->setRelayState($request->getRelayState());
         $response->setId($this->getNewId(IdFrame::ID_USAGE_SAML2_RESPONSE));
         $response->setIssueInstant(time());
-        if (!$requestWasUnsollicited) {
+        if (!$requestWasUnsolicited) {
             $response->setInResponseTo($request->getId());
         }
         $response->setDestination($request->getIssuer());
@@ -722,7 +722,7 @@ class EngineBlock_Corto_ProxyServer
         $requestId = $response->getInResponseTo();
         if (!$requestId) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
-                'Response without InResponseTo, e.g. unsollicited. We don\'t support this.',
+                'Response without InResponseTo, e.g. unsolicited. We don\'t support this.',
                 EngineBlock_Exception::CODE_NOTICE
             );
         }

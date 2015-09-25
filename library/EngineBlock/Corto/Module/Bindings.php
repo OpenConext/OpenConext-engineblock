@@ -273,11 +273,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $this->mapCortoEntityMetadataToSspEntityMetadata($cortoIdpMetadata)
         );
 
-        // Make sure it has a InResponseTo (Unsollicited is not supported) but don't actually check that what it's
+        // Make sure it has a InResponseTo (Unsolicited is not supported) but don't actually check that what it's
         // in response to is actually a message we sent quite yet.
         if (!$sspResponse->getInResponseTo()) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Unsollicited assertion (no InResponseTo in message) not supported!'
+                'Unsolicited assertion (no InResponseTo in message) not supported!'
             );
         }
 

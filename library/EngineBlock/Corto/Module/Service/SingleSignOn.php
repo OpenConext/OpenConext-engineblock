@@ -200,7 +200,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $request->setUnsolicited();
 
         $log = $this->_server->getSessionLog();
-        $log->attach($request, 'Unsollicited Request');
+        $log->attach($request, 'Unsolicited Request');
 
         return $request;
     }
