@@ -1,0 +1,68 @@
+<?php /* This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory. */ ?>
+<?php
+
+if (!isset($action)) {
+    throw new EngineBlock_View_Exception('No action given to HTTP Post screen');
+}
+if (!isset($name)) {
+    throw new EngineBlock_View_Exception('No message type (SAMLRequest or SAMLResponse) given to HTTP Post screen');
+}
+if (!isset($message)) {
+    throw new EngineBlock_View_Exception('No message given to HTTP Post screen');
+}
+
+/**
+ * @var Zend_Layout $layout
+ */
+$layout = $this->layout();
+$layout->setLayout('empty');
+
+// Set Layout properties
+$layout->title = $layout->title. ' - '. $this->t('post_data');
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="robots" content="noindex, nofollow"/>
+        <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
+        <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+        <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+        <link href="/favicon.ico" rel="shortcut icon">
+        <!--[if lte IE 8]><script src="/javascripts/html5shiv.min.js"></script><![endif]-->
+        <link href="/stylesheets/application.css" rel="stylesheet" type="text/css" />
+        <title><?= $layout->title; ?></title>
+    </head>
+    <body class="index" <?php if (!$trace): ?>onload="document.forms[0].submit()"<?php endif; ?>>
+      <div class="mod-redirect">
+        <img class="rotate-img" src="/images/spinner.svg" />
+        <h1><?= $this->t('processing'); ?></h1>
+        <p><?= $this->t('processing_waiting'); ?></p>
+        <p><?= $this->t('processing_long'); ?> <a href="javascript:history.back(-2)"><?= $this->t('go_back'); ?></a>.</p>
+        <noscript>
+          <p>
+            <strong><?= $this->t('note'); ?>:</strong>
+            <?= $this->t('note_no_script'); ?>
+          </p>
+        </noscript>
+      </div>
+        <form id="ProcessForm" method="post" action="<?= $action ?>">
+            <input type="hidden" name="<?= $name ?>" value="<?= $message ?>" />
+
+            <?= $xtra ?>
+
+            <noscript><input type="submit" value="Submit" /></noscript>
+
+            <?php if ($trace): ?>
+            <input id="submitbutton" type="submit" value="Submit" />
+            <pre>
+                <?= $trace ?>
+            </pre>
+            <script type="text/javascript">
+                document.getElementById('submitbutton').focus();
+            </script>
+            <?php endif; ?>
+
+        </form>
+    </body>
+</html>

@@ -13,29 +13,29 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         config: config,
 
-        symlink: {
-            classic: {
-                files: [
-                    { expand: false, overwrite: true, src: ['../www/authentication/css'], dest: '../www/profile/css' },
-                    { expand: false, overwrite: true, src: ['../www/authentication/javascript'], dest: '../www/profile/javascript' },
-                    { expand: false, overwrite: true, src: ['../www/authentication/media'], dest: '../www/profile/media' }
-                ]
-            },
-            material: {
-                files: [
-                    { expand: false, overwrite: true, src: ['../www/authentication/stylesheets'], dest: '../www/profile/stylesheets' },
-                    { expand: false, overwrite: true, src: ['../www/authentication/javascripts'], dest: '../www/profile/javascripts' },
-                    { expand: false, overwrite: true, src: ['../www/authentication/images'], dest: '../www/profile/images' }
-                ]
-            }
-        },
+        //symlink: {
+        //    classic: {
+        //        files: [
+        //            { expand: false, overwrite: true, src: ['../www/authentication/css'], dest: '../www/profile/css' },
+        //            { expand: false, overwrite: true, src: ['../www/authentication/javascript'], dest: '../www/profile/javascript' },
+        //            { expand: false, overwrite: true, src: ['../www/authentication/media'], dest: '../www/profile/media' }
+        //        ]
+        //    },
+        //    material: {
+        //        files: [
+        //            { expand: false, overwrite: true, src: ['../www/authentication/stylesheets'], dest: '../www/profile/stylesheets' },
+        //            { expand: false, overwrite: true, src: ['../www/authentication/javascripts'], dest: '../www/profile/javascripts' },
+        //            { expand: false, overwrite: true, src: ['../www/authentication/images'], dest: '../www/profile/images' }
+        //        ]
+        //    }
+        //},
         uglify: {
             classic: {
 
             },
             material: {
                 files: {
-                    '../www/authentication/javascripts/application.js': [
+                    '../web/javascripts/application.js': [
                         'bower_components/jquery/dist/jquery.min.js',
                         'bower_components/jquery.lazyload/jquery.lazyload.js',
                         'bower_components/js-cookie/src/js.cookie.js',
@@ -56,7 +56,7 @@ module.exports = function(grunt) {
             ]
           },
           material: {
-            src: '../www/authentication/stylesheets/*.css'
+            src: '../web/stylesheets/*.css'
           }
         },
         compass: {
@@ -66,7 +66,7 @@ module.exports = function(grunt) {
             material: {
                 options: {
                     sassDir: 'material/stylesheets',
-                    cssDir: '../www/authentication/stylesheets',
+                    cssDir: '../web/stylesheets',
                     imagesDir: 'material/images',
                     outputStyle: 'compressed',
                     raw: 'preferred_syntax = :sass\n'
@@ -76,19 +76,19 @@ module.exports = function(grunt) {
         copy: {
             classic: {
                 files: [
-                    { expand: true, cwd: 'classic/templates/layouts/', src: ['**'], dest: '../application/layouts' },
-                    { expand: true, cwd: 'classic/templates/modules/', src: ['**'], dest: '../application/modules' },
-                    { expand: true, cwd: 'classic/media/', src: ['**'], dest: '../www/authentication/media' },
-                    { expand: true, cwd: 'classic/css/', src: ['**'], dest: '../www/authentication/css' },
-                    { expand: true, cwd: 'classic/javascript/', src: ['**'], dest: '../www/authentication/javascript' }
+                    { expand: true, cwd: 'classic/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
+                    { expand: true, cwd: 'classic/templates/modules/', src: ['**'], dest: '../app/Resources/views/modules' },
+                    { expand: true, cwd: 'classic/media/', src: ['**'], dest: '../web/media' },
+                    { expand: true, cwd: 'classic/css/', src: ['**'], dest: '../web/css' },
+                    { expand: true, cwd: 'classic/javascript/', src: ['**'], dest: '../web/javascript' }
                 ]
             },
             material: {
                 files: [
-                    { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../application/layouts' },
-                    { expand: true, cwd: 'material/templates/modules/', src: ['**'], dest: '../application/modules' },
-                    { expand: true, cwd: 'material/images/', src: ['**'], dest: '../www/authentication/images' },
-                    { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['html5shiv.min.js'], dest: '../www/authentication/javascripts' }
+                    { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
+                    { expand: true, cwd: 'material/templates/modules/', src: ['**'], dest: '../app/Resources/views/modules' },
+                    { expand: true, cwd: 'material/images/', src: ['**'], dest: '../web/images' },
+                    { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['html5shiv.min.js'], dest: '../web/javascripts' }
                 ]
             }
         },
@@ -98,45 +98,45 @@ module.exports = function(grunt) {
             },
             classic: {
                 src: [
-                    '../application/layouts',
-                    '../application/modules/Authentication/View',
-                    '../application/modules/Default/View',
-                    '../application/modules/Logout/View',
-                    '../application/modules/Profile/View',
-                    '../www/authentication/media/**/*',
-                    '../www/authentication/css/**/*',
-                    '../www/authentication/javascript/**/*'
+                    '../app/Resources/views/layouts',
+                    '../app/Resources/views/modules/Authentication/View',
+                    '../app/Resources/views/modules/Default/View',
+                    '../app/Resources/views/modules/Logout/View',
+                    '../app/Resources/views/modules/Profile/View',
+                    '../web/media/**/*',
+                    '../web/css/**/*',
+                    '../web/javascript/**/*'
                 ]
             },
             material: {
                 src: [
-                    '../application/layouts',
-                    '../application/modules/Authentication/View',
-                    '../application/modules/Default/View',
-                    '../application/modules/Logout/View',
-                    '../application/modules/Profile/View',
-                    '../www/authentication/images/**/*',
-                    '../www/authentication/javascripts/**/*',
-                    '../www/authentication/stylesheets/**/*'
+                    '../app/Resources/views/layouts',
+                    '../app/Resources/views/modules/Authentication/View',
+                    '../app/Resources/views/modules/Default/View',
+                    '../app/Resources/views/modules/Logout/View',
+                    '../app/Resources/views/modules/Profile/View',
+                    '../web/images/**/*',
+                    '../web/javascripts/**/*',
+                    '../web/stylesheets/**/*'
                 ]
             }
         },
-        shell: {
-            classic: {
-                command: [
-                    'rm ../www/profile/media',
-                    'rm ../www/profile/css',
-                    'rm ../www/profile/javascript'
-                ].join('&&') + ' || true'
-            },
-            material: {
-                command: [
-                    'rm ../www/profile/images',
-                    'rm ../www/profile/javascripts',
-                    'rm ../www/profile/stylesheets'
-                ].join('&&') + ' || true'
-            }
-        },
+        //shell: {
+        //    classic: {
+        //        command: [
+        //            'rm ../www/profile/media',
+        //            'rm ../www/profile/css',
+        //            'rm ../www/profile/javascript'
+        //        ].join('&&') + ' || true'
+        //    },
+        //    material: {
+        //        command: [
+        //            'rm ../www/profile/images',
+        //            'rm ../www/profile/javascripts',
+        //            'rm ../www/profile/stylesheets'
+        //        ].join('&&') + ' || true'
+        //    }
+        //},
         'string-replace': {
             layoutconfig: {
                 files: {
@@ -175,10 +175,10 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: __dirname + '/..',
                     src: [
-                        'application/layouts/**/*.phtml',
-                        'application/modules/**/*.phtml',
-                        'www/authentication/javascripts/**/*.js',
-                        'www/authentication/stylesheets/**/*.css'
+                        'app/Resources/views/layouts/**/*.phtml',
+                        'app/Resources/views/modules/**/*.phtml',
+                        'web/javascripts/**/*.js',
+                        'wev/stylesheets/**/*.css'
                     ],
                     dest: __dirname + '/..'
                 }]
@@ -200,7 +200,7 @@ module.exports = function(grunt) {
             var themeConfig = JSON.parse(grunt.file.read('./config/theme.json')),
                 tasks = [
                   'clean:' + themeConfig.current,
-                  'shell:' + themeConfig.current,
+                  //'shell:' + themeConfig.current,
                   'copy:' + theme,
                   'compass:' + theme
                 ];
@@ -211,7 +211,7 @@ module.exports = function(grunt) {
 
             tasks.push('uglify:' + theme);
             tasks.push('add_comment:' + theme);
-            tasks.push('symlink:' + theme);
+            //tasks.push('symlink:' + theme);
             tasks.push('string-replace:layoutconfig');
 
 
