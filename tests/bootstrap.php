@@ -11,9 +11,7 @@ require_once $rootDir . '/vendor/autoload.php';
 
 $application = EngineBlock_ApplicationSingleton::getInstance();
 
-$log = new Zend_Log();
-$log->addWriter(new Zend_Log_Writer_Null());
-$application->setLogInstance($log);
+$application->setLogInstance(new Psr\Log\NullLogger());
 
 $config = new Zend_Config_Ini(
     ENGINEBLOCK_FOLDER_APPLICATION . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,

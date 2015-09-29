@@ -14,6 +14,7 @@
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
         "kriswallsmith/assetic": "~1.2.0",
+        "monolog/monolog": "~1.13",
         "mrclay/minify": "~2.2",
         "openconext/engineblock-fixtures": "~0.4",
         "openconext/engineblock-metadata": "~1.0",

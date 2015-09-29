@@ -5,6 +5,11 @@ class EngineBlock_Application_ErrorHandler
     protected $_application;
     protected $_exitHandlers = array();
 
+    /**
+     * @var EngineBlock_Application_Error|null
+     */
+    private $lastErrorHandled;
+
     public function __construct(EngineBlock_ApplicationSingleton $application)
     {
         $this->_application = $application;
@@ -44,7 +49,7 @@ class EngineBlock_Application_ErrorHandler
 
         $this->_application->reportError($e);
 
-        $message = 'A exceptional condition occurred, it has been logged and sent to the administrator.';
+        $message = 'An exceptional condition occurred, it has been logged and sent to the administrator.';
         if ($this->_application->getConfiguration()->debug) {
             $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
             $message .= '<br /><strong style="color: red"><pre>' . var_export($e, true) . '</pre></strong>';
@@ -60,24 +65,20 @@ class EngineBlock_Application_ErrorHandler
             return false;
         }
 
-        $errorMessage = $errorMessage . " [$errorFile:$errorLine]";
-        $exception = new EngineBlock_Exception($errorMessage, EngineBlock_Exception::CODE_ERROR);
+        $this->lastErrorHandled = null;
+        $error = new EngineBlock_Application_Error($errorNumber, $errorMessage, $errorFile, $errorLine);
+
+        $exception = new EngineBlock_Exception(
+            sprintf('%s [%s:%d]', $error->getMessage(), $error->getFile(), $error->getLine()),
+            EngineBlock_Exception::CODE_ERROR
+        );
         try {
             foreach ($this->_exitHandlers as $exitHandler) {
-                $exitHandler(
-                    $exception,
-                    array(
-                        'type'   => $errorNumber,
-                        'message'=> $errorMessage,
-                        'file'   => $errorFile,
-                        'line'   => $errorLine,
-                    )
-                );
+                $exitHandler($exception, $error->toArray());
             }
 
-            $this->_application->reportError(
-                $exception
-            );
+            $this->_application->reportError($exception);
+            $this->lastErrorHandled = $error;
         }
         catch (Exception $e) {
             // Unable to report an error, panic!
@@ -89,35 +90,31 @@ class EngineBlock_Application_ErrorHandler
 
     public function shutdown()
     {
-        $lastError = error_get_last();
-        if ($lastError['type'] !== E_ERROR && $lastError['type'] !== E_USER_ERROR) {
+        $lastError = EngineBlock_Application_Error::fromLast();
+        if (!$lastError || $lastError->getType() !== E_ERROR && $lastError->getType() !== E_USER_ERROR) {
             // Not a fatal error, probably a normal shutdown
-            return false;
+            return;
         }
 
-        $exception = new EngineBlock_Exception('PHP Fatal error', EngineBlock_Exception::CODE_ERROR);
+        if (!$this->lastErrorHandled || !$lastError->equals($this->lastErrorHandled)) {
+            $exception = new EngineBlock_Exception(
+                sprintf('%s [%s:%d]', $lastError->getMessage(), $lastError->getFile(), $lastError->getLine()),
+                EngineBlock_Exception::CODE_ERROR
+            );
 
-        foreach ($this->_exitHandlers as $exitHandler) {
-            $exitHandler($exception, $lastError);
+            foreach ($this->_exitHandlers as $exitHandler) {
+                $exitHandler($exception, $lastError->toArray());
+            }
+
+            $this->_application->reportError($exception);
         }
-
-        // dump PHP error to log
-        $log = $this->_application->getLogInstance();
-        $log->attach($lastError, 'error');
-
-        $this->_application->reportError(
-            $exception
-        );
-        // Call destruct manually, see also "When will __destruct not be called in PHP"
-        // http://stackoverflow.com/a/2385581/4512
-        $log->__destruct();
 
         if (ini_get('display_errors')) {
             echo "<br />" . PHP_EOL;
         }
         $message = 'A very serious error occurred, it has been logged and sent to the administrator.';
-        $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL;
-        $message .= '<br /><strong style="color: red"><pre>' . var_export($lastError, true) . '</pre></strong>';
-        die($message);
+        $message .= PHP_EOL . '<br /><br /> ERROR: ' . PHP_EOL . '<br />';
+        $message .= '<strong style="color: red"><pre>' . var_export($lastError->toArray(), true) . '</pre></strong>';
+        echo($message);
     }
 }

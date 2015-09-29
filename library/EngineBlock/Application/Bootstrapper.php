@@ -47,6 +47,7 @@ class EngineBlock_Application_Bootstrapper
 
         $this->_bootstrapSuperGlobalOverrides();
         $this->_bootstrapHttpCommunication();
+        $this->_bootstrapSaml2();
 
         $this->_bootstrapLayout();
         $this->_bootstrapTranslations();
@@ -119,28 +120,39 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapLogging()
     {
-        if (!isset($this->_application->getConfiguration()->logs)) {
+        $configuration = $this->_application->getConfiguration();
+
+        if (!isset($configuration->logger)) {
             throw new EngineBlock_Exception(
-                "No logs defined! Logging is required, please set logs. in your application.ini",
+                "No logger configuration defined! Logging is required, please configure the logger under the logger " .
+                "key in your application.ini. See EngineBlock_Log_MonologLoggerFactory's docblock for more details.",
                 EngineBlock_Exception::CODE_ALERT
             );
         }
 
-        $this->_application->setLogInstance(
-            EngineBlock_Log::factory($this->_application->getConfiguration()->logs)
+        $loggerConfiguration = $configuration->logger->toArray();
+
+        /** @var string|EngineBlock_Log_LoggerFactory $loggerFactory */
+        $loggerFactory = $loggerConfiguration['factory'];
+        EngineBlock_Log_InvalidConfigurationException::assertIsValidFactory(
+            $loggerFactory,
+            'EngineBlock_Log_LoggerFactory'
         );
+        $logger = $loggerFactory::factory($loggerConfiguration['conf'], $configuration->debug);
+
+        $this->_application->setLogInstance($logger);
+        $this->_application->setLogRequestId(uniqid());
     }
 
     protected function _bootstrapHttpCommunication()
     {
         $httpRequest = EngineBlock_Http_Request::createFromEnvironment();
-        $this->_application->getLogInstance()->log(
+        $this->_application->getLogInstance()->info(
             sprintf(
                 'Handling incoming request: %s %s',
                 $httpRequest->getMethod(),
                 $httpRequest->getUri()
-            ),
-            Zend_Log::INFO
+            )
         );
         $this->_application->setHttpRequest($httpRequest);
 
@@ -149,6 +161,12 @@ class EngineBlock_Application_Bootstrapper
         // workaround, P3P is needed to support iframes like iframe gadgets in portals
         $response->setHeader('P3P', self::P3P_HEADER);
         $this->_application->setHttpResponse($response);
+    }
+
+    private function _bootstrapSaml2()
+    {
+        $container = new EngineBlock_Saml2_Container($this->_application->getLogInstance());
+        SAML2_Compat_ContainerSingleton::setContainer($container);
     }
 
     protected function _bootstrapPhpSettings()

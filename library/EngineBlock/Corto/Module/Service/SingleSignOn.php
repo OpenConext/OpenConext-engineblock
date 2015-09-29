@@ -8,17 +8,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 {
     public function serve($serviceName)
     {
+        $log = $this->_server->getSessionLog();
+
         $response = $this->_displayDebugResponse($serviceName);
         if ($response) {
             return;
         }
 
+        /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator|SAML2_AuthnRequest $request */
         $request = $this->_getRequest($serviceName);
 
-        // Flush log if SP or IdP has additional logging enabled
+        $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
         $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
-        $isDebugModeEnabled = $this->_server->getConfig('debug', false);
+        // Flush log if an SP in the requester chain has additional logging enabled
+        $log->info("Determining whether service provider in chain requires additional logging");
         $isAdditionalLoggingRequired = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
             EngineBlock_SamlHelper::getSpRequesterChain(
                 $sp,
@@ -27,16 +31,26 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             )
         );
 
-        if ($isDebugModeEnabled || $isAdditionalLoggingRequired) {
-            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
+        if ($isAdditionalLoggingRequired) {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $application->flushLog('Activated additional logging for one or more SPs in the SP requester chain');
+
+            $logger = $application->getLogInstance();
+            $logger->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
+        } else {
+            $log->info("No additional logging required");
         }
 
         // validate custom acs-location (only for unsolicited, normal logins
         //  fall back to default ACS location instead of showing error page)
-        if ($serviceName === 'unsolicitedSingleSignOnService' && !$this->_verifyAcsLocation($request, $sp)) {
-            throw new EngineBlock_Corto_Exception_InvalidAcsLocation(
-                'Unknown or invalid ACS location requested'
-            );
+        if ($serviceName === 'unsolicitedSingleSignOnService') {
+            if (!$this->_verifyAcsLocation($request, $sp)) {
+                throw new EngineBlock_Corto_Exception_InvalidAcsLocation(
+                    'Unsolicited sign-on service called, but unknown or invalid ACS location requested'
+                );
+            }
+
+            $log->info('Unsolicited sign-on ACS location verified.');
         }
 
         // The request may specify it ONLY wants a response from specific IdPs
@@ -49,10 +63,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
-        /** @var SAML2_AuthnRequest $request */
-
         if ($request->getProxyCount() === 0) {
-            $this->_server->getSessionLog()->info("SSO: Proxy count exceeded!");
+            $log->info("Request does not allow any further proxying, responding with 'ProxyCountExceeded' status");
             $response = $this->_server->createErrorResponse($request, 'ProxyCountExceeded');
             $this->_server->sendResponseToRequestIssuer($request, $response);
             return;
@@ -65,28 +77,41 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
+            $log->notice("Removed ourselves from the candidate IdP list");
             unset($candidateIDPs[$posOfOwnIdp]);
         }
 
-        $log = $this->_server->getSessionLog();
-        $log->attach(array_values($candidateIDPs), 'Candidate IDPs');
 
         // If we have scoping, filter out every non-scoped IdP
         if (count($scopedIdps) > 0) {
+            $log->info(
+                sprintf('%d candidate IdPs before scoping', count($candidateIDPs)),
+                array('idps' => array_values($candidateIDPs))
+            );
+
             $candidateIDPs = array_intersect($scopedIdps, $candidateIDPs);
+
+            $log->info(
+                sprintf('%d candidate IdPs after scoping', count($candidateIDPs)),
+                array('idps' => array_values($candidateIDPs))
+            );
+        } else {
+            $log->info(
+                sprintf('No IdP scoping required, %d candidate IdPs', count($candidateIDPs)),
+                array('idps' => array_values($candidateIDPs))
+            );
         }
 
-        $log->attach(array_values($candidateIDPs), 'Candidate IDPs (after scoping)');
 
         // 0 IdPs found! Throw an exception.
         if (count($candidateIDPs) === 0) {
-            throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No Idps found');
+            throw new EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException('No candidate IdPs found');
         }
 
         // Exactly 1 candidate found, send authentication request to the first one.
         if (count($candidateIDPs) === 1) {
             $idp = array_shift($candidateIDPs);
-            $log->info("SSO: Only 1 candidate IdP: $idp");
+            $log->info("Only 1 candidate IdP ('$idp'): omitting WAYF, sending authentication request");
             $this->_server->sendAuthenticationRequest($request, $idp);
             return;
         }
@@ -95,39 +120,60 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // > 1 IdPs found, but isPassive attribute given, unable to show WAYF.
         if ($request->getIsPassive()) {
-            $log->info("SSO: IsPassive with multiple IdPs!");
+            $log->info('Request is passive, but can be handled by more than one IdP: responding with NoPassive status');
             $response = $this->_server->createErrorResponse($request, 'NoPassive');
             $this->_server->sendResponseToRequestIssuer($request, $response);
             return;
         }
 
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_server->getSessionLog());
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($log);
         $authnRequestRepository->store($request);
 
         // Show WAYF
-        $this->_server->getSessionLog()->info("SSO: Showing WAYF");
+        $log->info("Multiple candidate IdPs: redirecting to WAYF");
         $this->_showWayf($request, $candidateIDPs);
     }
 
+    /**
+     * @param string $serviceName
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
+     * @throws EngineBlock_Corto_Module_Bindings_VerificationException
+     */
     protected function _getRequest($serviceName)
     {
+        $logger = $this->_server->getSessionLog();
+        $logger->info('Getting request...');
+
         if ($serviceName === 'unsolicitedSingleSignOnService') {
             // create unsolicited request object
-            return $this->_createUnsolicitedRequest();
-        }
-
-        if ($serviceName === 'debugSingleSignOnService') {
+            $request = $this->_createUnsolicitedRequest();
+            $logMessage = 'Created unsolicited SAML request';
+        } elseif ($serviceName === 'debugSingleSignOnService') {
             unset($_SESSION['debugIdpResponse']);
-            return $this->_createDebugRequest();
+
+            $request = $this->_createDebugRequest();
+            $logMessage = 'Created debug SAML request';
+        } else {
+            // parse SAML request
+            $request = $this->_server->getBindingsModule()->receiveRequest();
+
+            // set transparent proxy mode
+            if ($this->_server->getConfig('TransparentProxy', false)) {
+                $request->setTransparent();
+            }
+
+            $logMessage = sprintf(
+                "Binding received %s from '%s'",
+                $request->wasSigned() ? 'signed SAML request' : 'unsigned SAML request',
+                $request->getIssuer()
+            );
         }
 
-        // parse SAML request
-        $request = $this->_server->getBindingsModule()->receiveRequest();
-
-        // set transparent proxy mode
-        if ($this->_server->getConfig('TransparentProxy', false)) {
-            $request->setTransparent();
-        }
+        // For lack of a better summary, add an equivalent XML representation of the received request to the log message
+        $requestXml = $request->toUnsignedXML()->ownerDocument->saveXML();
+        $logger->info($logMessage, array('saml_request' => $requestXml));
 
         return $request;
     }
@@ -148,7 +194,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $protocolBinding = $request->getProtocolBinding();
 
         if ($acsUrl XOR $protocolBinding) {
-            $this->_server->getSessionLog()->err(
+            $this->_server->getSessionLog()->error(
                 "Incomplete ACS location found in request (missing URL or binding)"
             );
 
@@ -168,6 +214,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     /**
      * Process unsolicited requests
+     *
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      */
     protected function _createUnsolicitedRequest()
     {
@@ -199,14 +247,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
         $request->setUnsolicited();
 
-        $log = $this->_server->getSessionLog();
-        $log->attach($request, 'Unsolicited Request');
-
         return $request;
     }
 
     /**
-     * Process unsolicited requests
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      */
     protected function _createDebugRequest()
     {
@@ -216,9 +261,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
         $request->setDebug();
-
-        $log = $this->_server->getSessionLog();
-        $log->attach($request, 'Debug request');
 
         return $request;
     }
@@ -230,17 +272,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         /** @var SAML2_AuthnRequest $request */
         $scopedIdPs = $request->getIDPList();
-        // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
-        if (!empty($scopedIdPs)) {
-            $log->attach($scopedIdPs, 'Scoped IDPs');
+        $presetIdP  = $this->_server->getConfig('Idp');
+
+        if ($presetIdP) {
+            // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
+            $log->info(
+                'An IdP scope has been configured, choosing it over any IdPs listed in the request',
+                array('configured_idp' => $presetIdP, 'request_idps' => $scopedIdPs)
+            );
+
+            return array($presetIdP);
         }
 
-        // If we have ONE specific IdP pre-configured then we scope to ONLY that Idp
-        $presetIdP  = $this->_server->getConfig('Idp');
-        if ($presetIdP) {
-            $scopedIdPs = array($presetIdP);
-            $log->attach($scopedIdPs[0], 'Scoped IDP');
-        }
+        // Add scoped IdPs (allowed IDPs for reply) from request to allowed IdPs for responding
+        $log->info('Request lists scoped IdPs', array('request_idps' => $scopedIdPs));
+
         return $scopedIdPs;
     }
 
@@ -279,12 +325,12 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         if ($cachedResponse['type'] === EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT) {
-            $this->_server->getSessionLog()->info("SSO: Cached response found for SP");
+            $this->_server->getSessionLog()->info("Cached response found for SP");
             $response = $this->_server->createEnhancedResponse($request, $cachedResponse['response']);
             $this->_server->sendResponseToRequestIssuer($request, $response);
         }
         else {
-            $this->_server->getSessionLog()->info("SSO: Cached response found from Idp");
+            $this->_server->getSessionLog()->info("Cached response found from Idp");
             // Note that we would like to repurpose the response,
             // but that's tricky as it is probably no longer valid (lifetime is usually something like 5 minutes)
             // so instead we scope the request to that Idp and trust the Idp to do the remembering.
@@ -437,8 +483,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $layout->setLayout($oldLayout);
     }
 
-    private function getNameNl(IdentityProvider $identityProvider, $additionalLogInfo)
-    {
+    private function getNameNl(
+        IdentityProvider $identityProvider,
+        EngineBlock_Log_Message_AdditionalInfo $additionalLogInfo
+    ) {
         if ($identityProvider->displayNameNl) {
             return $identityProvider->displayNameNl;
         }
@@ -447,16 +495,18 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return $identityProvider->nameNl;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->warn(
+        EngineBlock_ApplicationSingleton::getLog()->warning(
             'No NL displayName and name found for idp: ' . $identityProvider->entityId,
-            $additionalLogInfo
+            array('additional_info' => $additionalLogInfo->toArray())
         );
 
         return $identityProvider->entityId;
     }
 
-    private function getNameEn(IdentityProvider $identityProvider, $additionalInfo)
-    {
+    private function getNameEn(
+        IdentityProvider $identityProvider,
+        EngineBlock_Log_Message_AdditionalInfo $additionalInfo
+    ) {
         if ($identityProvider->displayNameEn) {
             return $identityProvider->displayNameEn;
         }
@@ -465,9 +515,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return $identityProvider->nameEn;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->warn(
+        EngineBlock_ApplicationSingleton::getLog()->warning(
             'No EN displayName and name found for idp: ' . $identityProvider->entityId,
-            $additionalInfo
+            array('additional_info' => $additionalInfo->toArray())
         );
 
         return $identityProvider->entityId;

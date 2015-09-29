@@ -22,24 +22,22 @@ class EngineBlock_Log_Message_AdditionalInfo
             $info->_details = $e->description . PHP_EOL;
         }
 
-        $traces = array($e->getMessage() . PHP_EOL . $e->getTraceAsString());
+        $traces = array(get_class($e) . ': ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
         $prev = $e;
         while ($prev = $prev->getPrevious()) {
-            $traces[] = $prev->getMessage() . PHP_EOL . $prev->getTraceAsString();
+            $traces[] = get_class($prev) . ': ' . $prev->getMessage() . PHP_EOL . $prev->getTraceAsString();
         }
         $info->_details .= implode(PHP_EOL . PHP_EOL, $traces);
 
         $info->_location= $e->getFile() . ':' . $e->getLine();
-        switch ($e->getCode()) {
-            case LOG_EMERG:     $info->_severity = 'EMERG'; break;
-            case LOG_ALERT:     $info->_severity = 'ALERT'; break;
-            case LOG_CRIT:      $info->_severity = 'CRITICAL'; break;
-            case LOG_ERR:       $info->_severity = 'ERROR'; break;
-            case LOG_WARNING:   $info->_severity = 'WARNING'; break;
-            case LOG_NOTICE:    $info->_severity = 'NOTICE'; break;
-            case LOG_INFO:      $info->_severity = 'INFO'; break;
-            case LOG_DEBUG:     $info->_severity = 'DEBUG'; break;
-            default:            $info->_severity = 'ERROR';
+        switch ($e->getSeverity()) {
+            case EngineBlock_Exception::CODE_EMERGENCY: $info->_severity = 'EMERG'; break;
+            case EngineBlock_Exception::CODE_ALERT:     $info->_severity = 'ALERT'; break;
+            case EngineBlock_Exception::CODE_CRITICAL:  $info->_severity = 'CRITICAL'; break;
+            case EngineBlock_Exception::CODE_ERROR:     $info->_severity = 'ERROR'; break;
+            case EngineBlock_Exception::CODE_WARNING:   $info->_severity = 'WARNING'; break;
+            case EngineBlock_Exception::CODE_NOTICE:    $info->_severity = 'NOTICE'; break;
+            default: $info->_severity = 'ERROR';
         }
         return $info;
     }
