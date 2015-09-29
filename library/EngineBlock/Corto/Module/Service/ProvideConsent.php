@@ -51,8 +51,14 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $requireAdditionalLogging = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
             array_merge($spMetadataChain, array($identityProvider))
         );
-        if ($this->_server->getConfig('debug', false) || $requireAdditionalLogging) {
-            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
+        if ($requireAdditionalLogging) {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $application->flushLog(
+                'Activated additional logging for one or more SPs in the SP requester chain, or the IdP'
+            );
+
+            $log = $application->getLogInstance();
+            $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
 
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider))   {

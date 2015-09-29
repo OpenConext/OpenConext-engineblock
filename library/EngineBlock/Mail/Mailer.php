@@ -20,7 +20,7 @@ class EngineBlock_Mail_Mailer
         $statement->execute($parameters);
         $rows = $statement->fetchAll();
         if (count($rows) !== 1) {
-            EngineBlock_ApplicationSingleton::getLog()->err(
+            EngineBlock_ApplicationSingleton::getLog()->error(
                 "Unable to send mail because of missing email configuration: " . $emailType
             );
             return;
