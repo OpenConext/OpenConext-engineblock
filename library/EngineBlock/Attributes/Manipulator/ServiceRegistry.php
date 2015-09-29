@@ -93,17 +93,19 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
                     $idpMetadata,
                     $spMetadata
             ) {
-                EngineBlock_ApplicationSingleton::getLog()->attach(
+                EngineBlock_ApplicationSingleton::getLog()->error(
+                    'An error occurred while running service registry manipulation code',
                     array(
-                        'EntityID'          => $entityId,
-                        'Manipulation code' => $manipulationCode,
-                        'Subject NameID'    => $subjectId,
-                        'Attributes'        => $attributes,
-                        'Response'          => $response,
-                        'IdPMetadata'       => $idpMetadata,
-                        'SPMetadata'        => $spMetadata,
-                    ),
-                    'manipulation data'
+                        'manipulation_code' => array(
+                            'EntityID'          => $entityId,
+                            'Manipulation code' => $manipulationCode,
+                            'Subject NameID'    => $subjectId,
+                            'Attributes'        => $attributes,
+                            'Response'          => $response,
+                            'IdPMetadata'       => $idpMetadata,
+                            'SPMetadata'        => $spMetadata,
+                        )
+                    )
                 );
                 if ($entityType === 'sp') {
                     $exception->spEntityId = $entityId;

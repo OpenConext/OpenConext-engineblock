@@ -3,6 +3,7 @@
 class EngineBlock_Http_Request 
 {
     protected $_method;
+    protected $_httpProtocol;
 
     protected $_protocol;
     protected $_hostName;
@@ -14,6 +15,7 @@ class EngineBlock_Http_Request
     protected $_postParameters;
 
     protected $_headers;
+    protected $_rawBody;
 
     public static function createFromEnvironment()
     {
@@ -21,6 +23,7 @@ class EngineBlock_Http_Request
 
         $request->setProtocol((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS']==='on'));
         $request->setMethod($_SERVER['REQUEST_METHOD']);
+        $request->setHttpProtocol($_SERVER['SERVER_PROTOCOL']);
         $request->setHostName($_SERVER['HTTP_HOST']);
 
         $queryStart = strpos($_SERVER['REQUEST_URI'], '?');
@@ -55,6 +58,24 @@ class EngineBlock_Http_Request
     public function getMethod()
     {
         return $this->_method;
+    }
+
+    /**
+     * @param string $httpProtocol
+     * @return EngineBlock_Http_Request
+     */
+    public function setHttpProtocol($httpProtocol)
+    {
+        $this->_httpProtocol = $httpProtocol;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHttpProtocol()
+    {
+        return $this->_httpProtocol;
     }
 
     public function setUri($uri)
@@ -143,7 +164,16 @@ class EngineBlock_Http_Request
      */
     public function getRawBody()
     {
-        return file_get_contents('php://input');
+        // php://input can be read from only once until PHP 5.6. By storing the data in a temporary stream, we can read
+        // from it as many times as we like.
+        if ($this->_rawBody === null) {
+            $this->_rawBody = fopen('php://temp', 'w+');
+            $input = fopen('php://input', 'r');
+            stream_copy_to_stream($input, $this->_rawBody);
+            fclose($input);
+        }
+
+        return stream_get_contents($this->_rawBody, -1, 0);
     }
 
     /**
@@ -208,5 +238,30 @@ class EngineBlock_Http_Request
     {
         $this->_headers[$name] = $value;
         return $this;
+    }
+
+    /**
+     * Returns the request as a string.
+     *
+     * @return string The request
+     */
+    public function __toString()
+    {
+        $queryString = $this->getQueryString();
+
+        $headersString = '';
+        foreach ($this->getHeaders() as $name => $value) {
+            $headersString .= "$name: $value\r\n";
+        }
+
+        return sprintf(
+            "%s %s%s %s\r\n%s\r\n%s",
+            $this->getMethod(),
+            $this->getUri(),
+            $queryString ? "?$queryString" : '',
+            $this->getHttpProtocol(),
+            $headersString,
+            $this->getRawBody()
+        );
     }
 }

@@ -320,11 +320,17 @@ class EngineBlock_Corto_ProxyServer
         }
 
         $this->startSession();
-        $this->getSessionLog()->info("Started request with parameters: ". var_export(func_get_args(), true));
+        $logger = $this->getSessionLog();
 
-        $this->getSessionLog()->info("Calling service '$serviceName'");
+        if (empty($remoteIdpMd5)) {
+            $logger->info("Calling service '$serviceName'");
+        } else {
+            $logger->info("Calling service '$serviceName' for specific remote IdP '$remoteIdpMd5'");
+        }
+
         $this->getServicesModule()->serve($serviceName);
-        $this->getSessionLog()->info("Done calling service '$serviceName'");
+
+        $logger->info("Done calling service '$serviceName'");
     }
 
     public function setRemoteIdpMd5($remoteIdPMd5)
@@ -344,7 +350,7 @@ class EngineBlock_Corto_ProxyServer
             break;
         }
         if (!isset($this->_configs['Idp'])) {
-            $this->getSessionLog()->warn("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
+            $this->getSessionLog()->warning("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
         }
 
         return $this;
@@ -577,8 +583,10 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        $this->getSystemLog()
-            ->attach($serviceProvider->assertionConsumerServices, 'AssertionConsumerServices');
+        $this->getSystemLog()->error(
+            'No supported binding found for ACS',
+            array('acs' => $serviceProvider->assertionConsumerServices)
+        );
 
         throw new EngineBlock_Corto_ProxyServer_Exception('No supported binding found for ACS');
     }
@@ -1023,7 +1031,7 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     public function getSystemLog()
     {
@@ -1049,7 +1057,7 @@ class EngineBlock_Corto_ProxyServer
         return $this->_sessionLog;
     }
 
-    public function setSystemLog(EngineBlock_Log $log)
+    public function setSystemLog(Psr\Log\LoggerInterface $log)
     {
         $this->_systemLog = $log;
     }

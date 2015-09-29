@@ -218,7 +218,7 @@ class EngineBlock_Corto_Adapter
                 );
             }
             else {
-                $this->_getSessionLog()->warn(
+                $this->_getSessionLog()->warning(
                     "Unable to apply RequesterID '$requesterId' to sub-scope the available IdPs as we don't know this SP!"
                 );
             }
@@ -390,7 +390,7 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     protected function _getSystemLog()
     {
@@ -398,7 +398,7 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     protected function _getSessionLog()
     {
@@ -498,17 +498,13 @@ class EngineBlock_Corto_Adapter
         $keyPairs = array();
         foreach ($keysConfig as $keyId => $keyConfig) {
             if (!isset($keyConfig['privateFile'])) {
-                $this->_getSessionLog()->log(
-                    'Reference to private key file not found for key: ' . $keyId . ' skipping keypair.',
-                    Zend_Log::WARN
+                $this->_getSessionLog()->warning(
+                    'Reference to private key file not found for key: ' . $keyId . ' skipping keypair.'
                 );
                 continue;
             }
             if (!isset($keyConfig['publicFile'])) {
-                $this->_getSessionLog()->log(
-                    'Reference to public key file not found for key: ' . $keyId,
-                    Zend_Log::WARN
-                );
+                $this->_getSessionLog()->warning('Reference to public key file not found for key: ' . $keyId);
                 continue;
             }
 

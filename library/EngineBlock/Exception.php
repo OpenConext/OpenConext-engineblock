@@ -10,7 +10,7 @@ class EngineBlock_Exception extends Exception
      *
      * Examples: Can't reach database / critical third party system.
      */
-    const CODE_EMERGENCY = 0;
+    const CODE_EMERGENCY = 'emergency';
 
     /**
      * Alert: action must be taken immediately.
@@ -18,7 +18,7 @@ class EngineBlock_Exception extends Exception
      * Should be corrected immediately, therefore notify staff who can fix the problem.
      * An example would be the loss of a primary ISP connection.
      */
-    const CODE_ALERT = 1;
+    const CODE_ALERT = 'alert';
 
     /**
      * Critical: critical conditions
@@ -28,7 +28,7 @@ class EngineBlock_Exception extends Exception
      *
      * Examples: can't contact external group provider
      */
-    const CODE_CRITICAL = 2;
+    const CODE_CRITICAL = 'critical';
 
     /**
      * Error: error conditions
@@ -38,7 +38,7 @@ class EngineBlock_Exception extends Exception
      *
      * Examples: configuration failure
      */
-    const CODE_ERROR = 3;
+    const CODE_ERROR = 'error';
 
     /**
      * Warning: warning conditions
@@ -48,7 +48,7 @@ class EngineBlock_Exception extends Exception
      *
      * Examples: misconfiguration of entities
      */
-    const CODE_WARNING = 4;
+    const CODE_WARNING = 'warning';
 
     /**
      * Notice: normal but significant condition
@@ -58,7 +58,7 @@ class EngineBlock_Exception extends Exception
      *
      * Examples: 404s, user or IdP / SP input that is incorrect
      */
-    const CODE_NOTICE = 5;
+    const CODE_NOTICE = 'notice';
 
     protected $_severity;
 

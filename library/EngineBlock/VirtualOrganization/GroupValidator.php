@@ -45,9 +45,9 @@ class EngineBlock_VirtualOrganization_GroupValidator
                 return $this->_validateGroupMembership($subjectId, $groups, true);
             }
             else {
-                EngineBlock_ApplicationSingleton::getLog()->attach(
-                    $response->getHeadersAsString() . PHP_EOL . $response->getBody(),
-                    'API Response'
+                EngineBlock_ApplicationSingleton::getLog()->error(
+                    'Received non-200 response from API trying to get the group memberships',
+                    array('http_response' => $response->getHeadersAsString() . PHP_EOL . $response->getBody())
                 );
                 throw new EngineBlock_Exception(
                     'Non-200 from API trying to get the group memberships'
@@ -58,7 +58,10 @@ class EngineBlock_VirtualOrganization_GroupValidator
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
                 ->setUserId($subjectId)
                 ->setDetails($exception->getTraceAsString());
-            EngineBlock_ApplicationSingleton::getLog()->err("Could not connect to API for VO validation" . $exception->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->error(
+                "Could not connect to API for VO validation" . $exception->getMessage(),
+                array('additional_info' => $additionalInfo->toArray())
+            );
             return false;
         }
     }
@@ -107,7 +110,10 @@ class EngineBlock_VirtualOrganization_GroupValidator
             $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
                 ->setUserId($subjectId)
                 ->setDetails($exception->getTraceAsString());
-            EngineBlock_ApplicationSingleton::getLog()->err("Error in connecting to API(s) for access token grant" . $exception->getMessage(), $additionalInfo);
+            EngineBlock_ApplicationSingleton::getLog()->error(
+                "Error in connecting to API(s) for access token grant" . $exception->getMessage(),
+                array('additional_info' => $additionalInfo->toArray())
+            );
             throw new EngineBlock_VirtualOrganization_AccessTokenNotGrantedException(
                 'AccessToken not granted for EB as SP. Check SR and the Group Provider endpoint log',
                 EngineBlock_Exception::CODE_ALERT,
