@@ -58,23 +58,27 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
                 }
             }
             else {
-                $log->attach($this->_identityProvider, 'IDP')
-                    ->attach($this->_responseAttributes, 'Attributes')
-                    ->warn(
-                        "Idp guestQualifier is set to 'Some' however, ".
-                        "the surfPersonAffiliation attribute was not provided, " .
-                        "not adding the isMemberOf for surf.nl"
-                    );
+                $log->warning(
+                    "Idp guestQualifier is set to 'Some' however, ".
+                    "the surfPersonAffiliation attribute was not provided, " .
+                    "not adding the isMemberOf for surf.nl",
+                    array(
+                        'idp' => $this->_identityProvider,
+                        'response_attributes' => $this->_responseAttributes,
+                    )
+                );
             }
             return;
         }
 
         // Unknown policy for handling guests? Treat the user as a guest, but issue a warning in the logs
-        $log->attach($this->_identityProvider, 'IDP')
-            ->attach($this->_responseAttributes, 'Attributes')
-            ->warn(
-                "Idp guestQualifier is set to unknown value '{$this->_identityProvider['GuestQualifier']}, idp metadata: "
-            );
+        $log->warning(
+            "Idp guestQualifier is set to unknown value '{$this->_identityProvider['GuestQualifier']}",
+            array(
+                'idp' => $this->_identityProvider,
+                'response_attributes' => $this->_responseAttributes,
+            )
+        );
     }
 
     protected function _setIsMember()

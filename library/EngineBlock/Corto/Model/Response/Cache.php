@@ -3,14 +3,13 @@
 class EngineBlock_Corto_Model_Response_Cache
 {
     const RESPONSE_CACHE_TYPE_IN  = 'in';
-    const RESPONSE_CACHE_TYPE_OUT = 'out';
 
     public static function cacheResponse(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $receivedRequest,
         EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse,
         $type
     ) {
-        if (!in_array($type, array(self::RESPONSE_CACHE_TYPE_IN, self::RESPONSE_CACHE_TYPE_OUT))) {
+        if ($type !== self::RESPONSE_CACHE_TYPE_IN) {
             throw new EngineBlock_Exception('Unknown response type');
         }
 

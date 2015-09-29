@@ -100,21 +100,17 @@ class Janus_Client_CacheProxy implements RestClientInterface
             return $cache->call(array($client, $name), $arguments);
 
         } catch(Exception $e) { // Whoa, something went wrong, maybe the SR is down? Trying to use stale cache...
+
             $httpClient = $client->getRestClient()->getHttpClient();
+            $logContext = array('http_request' => $httpClient->getLastRequest());
+
+            $response = $httpClient->getLastResponse();
+            if ($response) {
+                $logContext['http_response'] = $response->getHeadersAsString() . PHP_EOL . $response->getBody();
+            }
 
             $application = EngineBlock_ApplicationSingleton::getInstance();
-            $application->getLogInstance()->attach(
-                $httpClient->getLastRequest(),
-                'HTTP Request'
-            );
-
-            if ($httpClient->getLastResponse()) {
-                $response = $httpClient->getLastResponse();
-                $application->getLogInstance()->attach(
-                    $response->getHeadersAsString() . PHP_EOL . $response->getBody(),
-                    'HTTP Response'
-                );
-            }
+            $application->getLogInstance()->warning('Error while accessing Janus', $logContext);
 
             $e = new Janus_Client_CacheProxy_Exception(
                 "Unable to access JANUS?!? Using stale cache",

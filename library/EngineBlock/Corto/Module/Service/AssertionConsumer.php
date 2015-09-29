@@ -12,11 +12,12 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         // Flush log if SP or IdP has additional logging enabled
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
-        if (
-            $this->_server->getConfig('debug', false) ||
-            EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))
-        ) {
-            EngineBlock_ApplicationSingleton::getInstance()->getLogInstance()->flushQueue();
+        if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $application->flushLog('Activated additional logging for the SP or IdP');
+
+            $log = $application->getLogInstance();
+            $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
 
         if ($receivedRequest->isDebugRequest()) {
@@ -59,13 +60,6 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
         }
         else {
-            // Cache the response
-            EngineBlock_Corto_Model_Response_Cache::cacheResponse(
-                $receivedRequest,
-                $receivedResponse,
-                EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT
-            );
-
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
             $this->_server->sendResponseToRequestIssuer($receivedRequest, $newResponse);
         }

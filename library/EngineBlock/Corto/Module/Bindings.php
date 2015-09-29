@@ -75,12 +75,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Receive the request.
         $sspRequest = $sspBinding->receive();
-        $requestXml = $sspRequest->toUnsignedXML()->ownerDocument->saveXML();
-
-        // Log the request we received for troubleshooting
-        $log = $this->_server->getSessionLog();
-        $log->attach($requestXml, 'Request')
-            ->info('Received request');
 
         if (!($sspRequest instanceof SAML2_AuthnRequest)) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
@@ -240,8 +234,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Log the response we received for troubleshooting
         $log = $this->_server->getSessionLog();
-        $log->attach($sspResponse->toUnsignedXML()->ownerDocument->saveXML(), 'Response')
-            ->info('Received response');
+        $log->info(
+            'Received response',
+            array('saml_response' => $sspResponse->toUnsignedXML()->ownerDocument->saveXML())
+        );
 
         // Make sure the response from the idp has an Issuer
         $idpEntityId = $sspResponse->getIssuer();
@@ -273,11 +269,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $this->mapCortoEntityMetadataToSspEntityMetadata($cortoIdpMetadata)
         );
 
-        // Make sure it has a InResponseTo (Unsollicited is not supported) but don't actually check that what it's
+        // Make sure it has a InResponseTo (Unsolicited is not supported) but don't actually check that what it's
         // in response to is actually a message we sent quite yet.
         if (!$sspResponse->getInResponseTo()) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
-                'Unsollicited assertion (no InResponseTo in message) not supported!'
+                'Unsolicited assertion (no InResponseTo in message) not supported!'
             );
         }
 
@@ -308,11 +304,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         // This misnamed exception is only thrown when the Response status code is not Success
         // If so, let the Corto Output Filters handle it.
         catch (sspmod_saml_Error $e) {
-            $log->attach($e->getMessage(), 'exception message')
-                ->attach($e->getStatus(), 'status')
-                ->attach($e->getSubStatus(), 'substatus')
-                ->attach($e->getStatusMessage(), 'status message')
-                ->notice('Received an Error Response');
+            $log->notice(
+                'Received an Error Response',
+                array(
+                    'exception_message' => $e->getMessage(),
+                    'status'            => $e->getStatus(),
+                    'substatus'         => $e->getSubStatus(),
+                    'status_message'    => $e->getStatusMessage(),
+                )
+            );
         }
         // Thrown when timings are out of whack or other some such verification exceptions.
         catch (SimpleSAML_Error_Exception $e) {
@@ -425,8 +425,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $action = $sspMessage->getDestination();
 
             $log = $this->_server->getSessionLog();
-            $log->attach($xml, 'SAML message')
-                ->info('HTTP-Post: Sending Message');
+            $log->info('HTTP-Post: Sending Message', array('saml_message' => $xml));
 
             $output = $this->_server->renderTemplate(
                 'form',
@@ -510,8 +509,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         $log = $this->_server->getSessionLog();
-        $log->attach($parameters, 'URL Params')
-            ->info("Using internal binding for destination: $destinationLocation, resulting in parameters:");
+        $log->info("Using internal binding for destination $destinationLocation", array('url_params' => $parameters));
 
         $serviceName = $parameters['ServiceName'];
 

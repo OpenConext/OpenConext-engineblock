@@ -93,7 +93,7 @@ class EngineBlock_Test_Attributes_NormalizerTest extends \PHPUnit_Framework_Test
             $normalized,
             'An attribute with a broken aliasing will not be omitted'
         );
-        $this->assertNotEmpty($this->_logWriter->events, 'Broken aliasing sets a log event');
+        $this->assertNotEmpty($this->_messageRecorder->messages, 'Broken aliasing sets a log event');
     }
 
     public function testNormalizeWarnOnConflict()
@@ -131,7 +131,7 @@ class EngineBlock_Test_Attributes_NormalizerTest extends \PHPUnit_Framework_Test
             $normalized['urn:mace:dir:attribute-def:cn'],
             'Last attribute value wins in normalization'
         );
-        $this->assertNotEmpty($this->_logWriter->events, "Conflict in attribute normalization leads to a log event");
+        $this->assertNotEmpty($this->_messageRecorder->messages, "Conflict in attribute normalization leads to a log event");
     }
 
     public function testNormalizationCircularDependency()
@@ -149,7 +149,7 @@ class EngineBlock_Test_Attributes_NormalizerTest extends \PHPUnit_Framework_Test
         $normalized = $this->_normalize($attributes, $definition);
 
         $this->assertEquals($attributes, $normalized, "Don't normalize on circular dependency");
-        $this->assertNotEmpty($this->_logWriter->events, "Log an event on a circular dependency");
+        $this->assertNotEmpty($this->_messageRecorder->messages, "Log an event on a circular dependency");
     }
 
     public function testDenormalizeUnnecessary()
@@ -262,30 +262,26 @@ class EngineBlock_Test_Attributes_NormalizerTest extends \PHPUnit_Framework_Test
     }
 
     /**
-     * @var Zend_Log_Writer_Mock
+     * @var EngineBlock_Test_Attributes_MessageRecorder
      */
-    protected $_logWriter;
+    protected $_messageRecorder;
 
     protected function _normalize(array $input, array $definition)
     {
-        $this->_logWriter = new Zend_Log_Writer_Mock();
-        $logger = new Zend_Log();
-        $logger->addWriter($this->_logWriter);
+        $this->_messageRecorder = new EngineBlock_Test_Attributes_MessageRecorder();
 
         $normalizer = new EngineBlock_Attributes_Normalizer($input);
-        $normalizer->setLogger($logger);
+        $normalizer->setLogger($this->_messageRecorder);
         $normalizer->setDefinition($definition);
         return $normalizer->normalize();
     }
 
     protected function _denormalize(array $input, array $definition)
     {
-        $this->_logWriter = new Zend_Log_Writer_Mock();
-        $logger = new Zend_Log();
-        $logger->addWriter($this->_logWriter);
+        $this->_messageRecorder = new EngineBlock_Test_Attributes_MessageRecorder();
 
         $normalizer = new EngineBlock_Attributes_Normalizer($input);
-        $normalizer->setLogger($logger);
+        $normalizer->setLogger($this->_messageRecorder);
         $normalizer->setDefinition($definition);
         return $normalizer->denormalize();
     }

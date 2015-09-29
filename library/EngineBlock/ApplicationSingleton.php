@@ -41,9 +41,16 @@ class EngineBlock_ApplicationSingleton
     protected $_configuration = null;
 
     /**
-     * @var Zend_Log
+     * @var Psr\Log\LoggerInterface
      */
     protected $_log;
+
+    /**
+     * The ID that allows one to track all log messages that belong together.
+     *
+     * @var string|null
+     */
+    protected $_logRequestId;
 
     /**
      * @var Zend_Translate
@@ -95,11 +102,32 @@ class EngineBlock_ApplicationSingleton
      * Get THE Log instance.
      *
      * @static
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     public static function getLog()
     {
         return self::getInstance()->getLogInstance();
+    }
+
+    /**
+     * Flushes any currently buffered log messages and causes any subsequent messages to be directly written to their
+     * destination.
+     *
+     * @param string $reason The message that will be logged after the currently buffered messages have been flushed.
+     */
+    public function flushLog($reason)
+    {
+        $activationStrategy = EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory::getManufacturedStrategy();
+        $logger = $this->getLog();
+
+        if ($activationStrategy) {
+            $activationStrategy->activate();
+            $logger->notice($reason);
+        } elseif ($this->getConfiguration()->debug) {
+            $logger->notice(sprintf("No log buffer to flush. Reason given for flushing: '%s'.", $reason));
+        } else {
+            $logger->warning(sprintf("Unable to flush the log buffer. Reason given for flushing: '%s'.", $reason));
+        }
     }
 
     /**
@@ -125,20 +153,22 @@ class EngineBlock_ApplicationSingleton
             return false;
         }
 
+        $logContext = array('exception' => $exception);
+
         if ($exception instanceof EngineBlock_Exception) {
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::createFromException($exception);
             $severity = $exception->getSeverity();
         } else {
-            $additionalInfo = null;
-            $severity = EngineBlock_Log::ERR;
+            $severity = EngineBlock_Exception::CODE_ERROR;
         }
 
-        $log->attach($exception, 'trace');
-
-        // attach previous exceptions
+        // add previous exceptions to log context
         $prevException = $exception;
         while ($prevException = $prevException->getPrevious()) {
-            $log->attach($prevException, 'previous exception');
+            if (!isset($logContext['previous_exceptions'])) {
+                $logContext['previous_exceptions'] = array();
+            }
+
+            $logContext['previous_exceptions'][] = (string) $prevException;
         }
 
         $message = $exception->getMessage();
@@ -150,34 +180,25 @@ class EngineBlock_ApplicationSingleton
             $message .= ' | ' . $messageSuffix;
         }
 
-        // log exception
-        $log->log(
-            $message,
-            $severity,
-            $additionalInfo
-        );
-        // Note that it it is possible that the event is not logged for various reasons
-        // Getting the last event this way bypasses the queue which is possibly empty
-        $lastEvent = $log->getLastEvent();
+        $log->log($severity, $message, $logContext);
 
         // Store some valuable debug info in session so it can be displayed on feedback pages
-        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo($lastEvent);
+        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo();
 
         // flush all messages in queue, something went wrong!
-        $log->getQueueWriter()->flush('error caught');
+        $this->flushLog('An error was caught');
 
         return true;
     }
 
     /**
-     * @param array $logEvent
      * @return array
      */
-    private function collectFeedbackInfo(array $logEvent)
+    private function collectFeedbackInfo()
     {
         $feedbackInfo = array();
-        $feedbackInfo['timestamp'] = $logEvent['timestamp'];
-        $feedbackInfo['requestId'] = $logEvent['requestid'];
+        $feedbackInfo['timestamp'] = date('c');
+        $feedbackInfo['requestId'] = $this->getLogRequestId() ?: 'N/A';
         $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
 
@@ -403,7 +424,7 @@ class EngineBlock_ApplicationSingleton
     //////////// LOGGING
 
     /**
-     * @return EngineBlock_Log
+     * @return Psr\Log\LoggerInterface
      */
     public function getLogInstance()
     {
@@ -411,12 +432,36 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @param Zend_Log $log
+     * @param Psr\Log\LoggerInterface $log
      * @return EngineBlock_ApplicationSingleton
      */
-    public function setLogInstance(Zend_Log $log)
+    public function setLogInstance(Psr\Log\LoggerInterface $log)
     {
         $this->_log = $log;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLogRequestId()
+    {
+        return $this->_logRequestId;
+    }
+
+    /**
+     * @param string $id
+     * @return EngineBlock_ApplicationSingleton
+     */
+    public function setLogRequestId($id)
+    {
+        if (!is_string($id)) {
+            throw new InvalidArgumentException(
+                sprintf("Invalid log request ID specified: expected string, but got '%s'", gettype($id))
+            );
+        }
+
+        $this->_logRequestId = $id;
         return $this;
     }
 

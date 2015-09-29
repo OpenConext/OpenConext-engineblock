@@ -8,7 +8,7 @@ class EngineBlock_Application_SuperGlobalManager
     const FILE = '/tmp/eb-fixtures/superglobals.json';
 
     /**
-     * @var EngineBlock_Log
+     * @var Psr\Log\LoggerInterface
      */
     private $_logger;
 
@@ -33,9 +33,10 @@ class EngineBlock_Application_SuperGlobalManager
             $global = &$$superGlobalName;
 
             foreach ($values as $name => $value) {
-                $this->_logger->log('Overwriting $_' . $superGlobalName . '[' . $name . ']', EngineBlock_Log::NOTICE);
-                $this->_logger->attach($_SERVER[$name], 'FROM');
-                $this->_logger->attach($value, 'TO');
+                $this->_logger->notice(
+                    sprintf('Overwriting $%s[%s]', $superGlobalName, $name),
+                    ['super_global' => ['from' => $global[$name], 'to' => $value]]
+                );
 
                 $global[$name] = $value;
             }
