@@ -319,57 +319,23 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
-        $cachedResponse = $this->_pickCachedResponse($cachedResponses, $requestIssuerEntityId);
+        $cachedResponse = $this->_pickCachedResponse($cachedResponses);
         if (!$cachedResponse) {
             return false;
         }
 
-        if ($cachedResponse['type'] === EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT) {
-            $this->_server->getSessionLog()->info("Cached response found for SP");
-            $response = $this->_server->createEnhancedResponse($request, $cachedResponse['response']);
-            $this->_server->sendResponseToRequestIssuer($request, $response);
-        }
-        else {
-            $this->_server->getSessionLog()->info("Cached response found from Idp");
-            // Note that we would like to repurpose the response,
-            // but that's tricky as it is probably no longer valid (lifetime is usually something like 5 minutes)
-            // so instead we scope the request to that Idp and trust the Idp to do the remembering.
-            $this->_server->sendAuthenticationRequest($request, $cachedResponse['idp']);
-        }
+        $this->_server->getSessionLog()->info("Cached response found from Idp");
+        // Note that we would like to repurpose the response,
+        // but that's tricky as it is probably no longer valid (lifetime is usually something like 5 minutes)
+        // so instead we scope the request to that Idp and trust the Idp to do the remembering.
+        $this->_server->sendAuthenticationRequest($request, $cachedResponse['idp']);
         return true;
     }
 
-    protected function _pickCachedResponse(array $cachedResponses, $requestIssuerEntityId)
+    protected function _pickCachedResponse(array $cachedResponses)
     {
-        // Then we look for OUT responses for this sp
         $idpEntityIds = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
-        foreach ($cachedResponses as $cachedResponse) {
-            if ($cachedResponse['type'] !== EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_OUT) {
-                continue;
-            }
 
-            // Check if it is for the requester
-            if ($cachedResponse['sp'] !== $requestIssuerEntityId) {
-                continue;
-            }
-
-            // Check if it is for a valid idp
-            if (!in_array($cachedResponse['idp'], $idpEntityIds)) {
-                continue;
-            }
-
-            if (isset($cachedResponse['vo'])) {
-                $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
-            }
-
-            if (isset($cachedResponse['key'])) {
-                $this->_server->setKeyId($cachedResponse['key']);
-            }
-
-            return $cachedResponse;
-        }
-
-        // Then we look for IN responses for this sp
         foreach ($cachedResponses as $cachedResponse) {
             if ($cachedResponse['type'] !== EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN) {
                 continue;
