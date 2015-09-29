@@ -45,7 +45,9 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
                         return false;
                     }
                 }
-                break;            case 'URL':
+                break;
+
+            case 'URL':
                 foreach ($attributeValues as $attributeValue) {
                     if (!Zend_Uri::check($attributeValue)) {
                         $this->_messages[] = array(
