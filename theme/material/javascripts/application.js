@@ -47,7 +47,7 @@ OpenConext.Discover = function () {
           match = title.indexOf(filterValue) !== -1;
 
       if (!match) {
-        match = match || _.some(result.data('keywords'), predicateContainsString(filterValue));
+        match = match || _.some(result.data('keywords'), containsCaseInsensitiveStringPredicate(filterValue));
       }
 
       result
@@ -250,9 +250,21 @@ OpenConext.Discover = function () {
     deinitRequestAccessModal();
   });
 
-  function predicateContainsString(equalTo) {
-    return function (value) {
-      return value === value.toString() && value.indexOf(equalTo) !== -1;
+  /**
+   * @param {String} equalTo
+   * @return {ContainsCaseInsensitiveStringPredicate}
+   */
+  function containsCaseInsensitiveStringPredicate(equalTo) {
+    equalTo = equalTo.toLowerCase();
+
+    /**
+     * @name ContainsCaseInsensitiveStringPredicate
+     * @function
+     * @param {String} string
+     * @return {Boolean}
+     */
+    return function (string) {
+      return string.toLowerCase().indexOf(equalTo) !== -1;
     }
   }
 
