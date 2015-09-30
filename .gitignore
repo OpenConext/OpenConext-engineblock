@@ -9,3 +9,5 @@ bin/ignore_me.php
 /web/bundles
 /web/app_dev.php
 /app/cache
+/app/SymfonyRequirements.php
+/app/check.php
