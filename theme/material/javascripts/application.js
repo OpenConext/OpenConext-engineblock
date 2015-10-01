@@ -35,11 +35,15 @@ OpenConext.Discover = function () {
 
   function filterList(filterValue) {
     var filterElements = $('.mod-results a.result'),
-        spinner = $('.mod-results .spinner');
+        spinner = $('.mod-results .spinner'),
+        containsFilterValue;
 
     spinner.removeClass('hidden');
 
     filterValue = filterValue.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '').toLowerCase();
+    containsFilterValue = function (keyword) {
+      return keyword.toLowerCase().indexOf(filterValue) !== -1;
+    };
 
     filterElements.each(function () {
       var result = $(this),
@@ -47,7 +51,7 @@ OpenConext.Discover = function () {
           match = title.indexOf(filterValue) !== -1;
 
       if (!match) {
-        match = match || _.some(result.data('keywords'), containsCaseInsensitiveStringPredicate(filterValue));
+        match = match || _.some(result.data('keywords'), containsFilterValue);
       }
 
       result
@@ -249,24 +253,6 @@ OpenConext.Discover = function () {
 
     deinitRequestAccessModal();
   });
-
-  /**
-   * @param {String} equalTo
-   * @return {ContainsCaseInsensitiveStringPredicate}
-   */
-  function containsCaseInsensitiveStringPredicate(equalTo) {
-    equalTo = equalTo.toLowerCase();
-
-    /**
-     * @name ContainsCaseInsensitiveStringPredicate
-     * @function
-     * @param {String} string
-     * @return {Boolean}
-     */
-    return function (string) {
-      return string.toLowerCase().indexOf(equalTo) !== -1;
-    }
-  }
 
   checkVisible();
   checkNoResults();
