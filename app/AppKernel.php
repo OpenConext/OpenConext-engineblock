@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
+            new OpenConext\EngineBlock\CompatibilityBundle\OpenConextEngineBlockCompatibilityBundle(),
             new OpenConext\EngineBlock\ApiBundle\OpenConextEngineBlockApiBundle(),
             new OpenConext\EngineBlock\AuthenticationBundle\OpenConextEngineBlockAuthenticationBundle(),
             new OpenConext\EngineBlock\ProfileBundle\OpenConextEngineBlockProfileBundle(),
