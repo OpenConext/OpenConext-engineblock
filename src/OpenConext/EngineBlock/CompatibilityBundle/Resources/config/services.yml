@@ -1,0 +1,34 @@
+services:
+    eb.compat.application:
+        class: EngineBlock_ApplicationSingleton
+        factory:  [EngineBlock_ApplicationSingleton, getInstance]
+
+    eb.compat.config:
+        class: Zend_Config
+        factory: ["@eb.compat.application", getConfiguration]
+
+    eb.compat.view:
+        class: EngineBlock_View
+        calls:
+            - ['setLayout', [@eb.compat.layout]]
+
+    eb.compat.logger:
+        class: Monolog\Logger
+        factory:  [EngineBlock_ApplicationSingleton, getLog]
+
+    eb.compat.layout:
+        public: false
+        class: Zend_Layout
+        calls:
+            - ['setLayout',         ["@=service('eb.compat.config').defaults.layout"]]
+            - ['setLayoutPath',     ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
+            - ['setViewBasePath', ["%kernel.root_dir%/Resources/views/modules/"]]
+        properties:
+            title: "@=service('eb.compat.config').defaults.title"
+            header: "@=service('eb.compat.config').defaults.header"
+
+    eb.bridge.error_reporter:
+        class: OpenConext\EngineBlock\CompatibilityBundle\Bridge\ErrorReporter
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.logger
