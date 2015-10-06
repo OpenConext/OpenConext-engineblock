@@ -1,0 +1,165 @@
+authentication_sp_consumeassertion:
+    path:     /authentication/Sp/
+    methods:  [POST]
+    defaults:
+        _controller: engineblock.controller.authentication.service_provider:consumeAssertionAction
+
+authentication_idp_sso:
+    path:     '/authentication/idp/single-sign-on'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        virtualOrganization: null,
+        idpHash: null,
+        keyId: null
+
+authentication_idp_sso_vo:
+    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        idpHash: null,
+        keyId: null
+    requirements:
+        virtualOrganization: .+
+
+authentication_idp_sso_vo_keyid:
+    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/key:{keyId}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        idpHash: null
+    requirements:
+        virtualOrganization: .+
+        keyId: .+
+
+authentication_idp_sso_vo_idphash:
+    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/{idpHash}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        keyId: null
+    requirements:
+        virtualOrganization: .+
+        idpHash: .+
+
+authentication_idp_sso_vo_keyid_idphash:
+    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/key:{keyId}/{idpHash}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction }
+    requirements:
+        virtualOrganization: .+
+        keyId: .+
+        idpHash: .+
+
+authentication_idp_sso_vo_idphash_keyid:
+    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/{idpHash}/key:{keyId}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction }
+    requirements:
+        virtualOrganization: .+
+        keyId: .+
+        idpHash: .+
+
+authentication_idp_sso_keyid:
+    path:     '/authentication/idp/single-sign-on/key:{keyId}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        virtualOrganization: null,
+        idpHash: null
+    requirements:
+        virtualOrganization: .+
+        idpHash: .+
+
+authentication_idp_sso_keyid_vo:
+    path:     '/authentication/idp/single-sign-on/key:{keyId}/vo:{virtualOrganization}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        idpHash: null,
+    requirements:
+        keyId: .+
+        virtualOrganization: .+
+
+authentication_idp_sso_keyid_vo_idphash:
+    path:     '/authentication/idp/single-sign-on/key:{keyId}/vo:{virtualOrganization}/{idpHash}'
+    methods:  [GET] # @todo handle POST as well
+    defaults: { _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction }
+    requirements:
+        keyId: .+
+        virtualOrganization: .+
+        idpHash: .+,
+
+authentication_idp_sso_keyid_idphash:
+    path:     '/authentication/idp/single-sign-on/key:{keyId}/{idpHash}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        virtualOrganization: null,
+    requirements:
+       keyId: .+
+       idpHash: .+
+
+authentication_idp_sso_keyid_idphash_vo:
+    path:     '/authentication/idp/single-sign-on/key:{keyId}/{idpHash}/vo:{virtualOrganization}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+    requirements:
+        keyId: .+
+        virtualOrganization: .+
+        idpHash: .+,
+
+authentication_idp_sso_idphash:
+    path:     '/authentication/idp/single-sign-on/{idpHash}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        virtualOrganization: null,
+        keyId: null
+    requirements:
+        idpHash: .+
+
+authentication_idp_sso_idphash_vo:
+    path:     '/authentication/idp/single-sign-on/{idpHash}/vo:{virtualOrganization}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        keyId: null
+    requirements:
+        idpHash: .+
+        virtualOrganization: .+,
+
+
+authentication_idp_sso_idphash_vo_keyid:
+    path:     '/authentication/idp/single-sign-on/{idpHash}/vo:{virtualOrganization}/key:{keyId}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+    requirements:
+        idpHash: .+
+        virtualOrganization: .+,
+        keyId: .+
+
+authentication_idp_sso_idphash_keyid:
+    path:     '/authentication/idp/single-sign-on/{idpHash}/key:{keyId}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
+        virtualOrganization: null
+    requirements:
+        keyId: .+
+        idpHash: .+,
+
+authentication_idp_sso_idphash_keyid_vo:
+    path:     '/authentication/idp/single-sign-on/{idpHash}/key:{keyId}/vo:{virtualOrganization}'
+    methods:  [GET] # @todo handle POST as well
+    defaults:
+        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction }
+    requirements:
+        keyId: .+
+        virtualOrganization: .+
+        idpHash: .+,

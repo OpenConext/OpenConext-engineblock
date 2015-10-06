@@ -1,0 +1,32 @@
+services:
+    engineblock.controller.authentication.service_provider:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\ServiceProviderController
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.view
+
+    engineblock.controller.authentication.identity_provider:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\IdentityProviderController
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.view
+            - @eb.compat.logger
+
+    engineblock.controller.authentication.index:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\IndexController
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.view
+
+    engineblock.controller.authentication.feedback:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\FeedbackController
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.view
+            - @eb.compat.logger
+
+    engineblock.controller.authentication.metadata:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\MetadataController
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.view

@@ -1,3 +1,13 @@
 open_conext_engine_block_authentication_homepage:
     path:     /
-    defaults: { _controller: OpenConextEngineBlockAuthenticationBundle:Default:index }
+    defaults: { _controller: engineblock.controller.authentication.index:indexAction }
+
+sso:
+    resource: routing_sso.yml
+
+feedback:
+    resource: routing_feedback.yml
+    prefix:   /authentication/feedback
+
+metadata:
+    resource: routing_metadata.yml

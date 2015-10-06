@@ -1,0 +1,70 @@
+authentication_feedback_unable_to_receive_message:
+    path:       '/unable-to-receive-message'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unableToReceiveMessageAction }
+
+authentication_feedback_vo_membership_required:
+    path:       '/vomembershiprequired'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:voMembershipRequiredAction }
+
+authentication_feedback_session_lost:
+    path:       '/session-lost'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:sessionLostAction }
+
+authentication_feedback_unknown_issuer:
+    path:       '/unknown-issuer'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIssuerAction }
+
+authentication_feedback_no_idps:
+    path:       '/no-idps'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIssuerAction }
+
+authentication_feedback_invalid_acs_location:
+    path:       '/invalidAcsLocation'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAcsLocationAction }
+
+authentication_feedback_unknown_service_provider:
+    path:       '/unknown-service-provider'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAcsLocationAction }
+#
+#authentication_feedback_missing_required_fields:
+#    path:
+#    methods:
+#    defaults:
+#
+#authentication_feedback_no_consent:
+#    path:
+#    methods:
+#    defaults:
+#
+#authentication_feedback_custom:
+#    path:
+#    methods:
+#    defaults:
+
+#
+#authentication_feedback_invalid_acs_binding:
+#    path:
+#    methods:
+#    defaults:
+#
+#authentication_feedback_received_error_status_code:
+#    path:
+#    methods:
+#    defaults:
+#
+#authentication_feedback_received_invalid_response:
+#    path:
+#    methods:
+#    defaults:
+#
+#authentication_feedback_received_invalid_signed_response:
+#    path:
+#    methods:
+#    defaults:

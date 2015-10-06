@@ -1,0 +1,43 @@
+metadata_idp:
+    path:       '/authentication/idp/metadata'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+        virtualOrganisation: null
+        keyId: null
+
+metadata_idp_vo:
+    path:       '/authentication/idp/metadata/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+        keyId: null
+    requirements:
+        virtualOrganisation: .+
+
+metadata_idp_vo_key:
+    path:       '/authentication/idp/metadata/vo:{virtualOrganization}/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+    requirements:
+        virtualOrganisation: .+
+        keyId: .+
+
+metadata_idp_key:
+    path:       '/authentication/idp/metadata/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+        virtualOrganisation: null
+    requirements:
+        keyId: .+
+
+metadata_idp_key_vo:
+    path:       '/authentication/idp/metadata/key:{keyId}/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+    requirements:
+        keyId: .+
+        virtualOrganisation: .+
