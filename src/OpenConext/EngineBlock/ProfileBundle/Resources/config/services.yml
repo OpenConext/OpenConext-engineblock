@@ -1,4 +1,3 @@
 services:
-#    open_conext_engine_block_profile.example:
-#        class: OpenConext\EngineBlock\ProfileBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    profile.attribute_filter:
+        class: OpenConext\EngineBlock\ProfileBundle\Service\AttributeFilter

@@ -1,0 +1,7 @@
+services:
+    profile.controller.index:
+        class: OpenConext\EngineBlock\ProfileBundle\Controller\IndexController
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.view
+            - @profile.attribute_filter
