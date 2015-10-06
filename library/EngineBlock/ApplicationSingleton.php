@@ -194,7 +194,7 @@ class EngineBlock_ApplicationSingleton
     /**
      * @return array
      */
-    private function collectFeedbackInfo()
+    public function collectFeedbackInfo()
     {
         $feedbackInfo = array();
         $feedbackInfo['timestamp'] = date('c');
