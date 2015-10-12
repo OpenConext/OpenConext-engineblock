@@ -48,6 +48,11 @@ services:
             - @eb.compat.application
             - @eb.compat.view
 
+    engineblock.controller.authentication.proxy:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\ProxyController
+        arguments:
+            - @eb.compat.application
+
     engineblock.service.request_access_mailer:
         class: OpenConext\EngineBlock\AuthenticationBundle\Service\RequestAccessMailer
         arguments:
