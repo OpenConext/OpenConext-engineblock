@@ -87,4 +87,22 @@ class MetadataController
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
+
+    public function edugainMetadataAction($keyId = null, Request $request)
+    {
+        $proxyServer = new EngineBlock_Corto_Adapter();
+
+        if ($keyId !== null) {
+            $proxyServer->setKeyId($keyId);
+        }
+
+        try {
+            $proxyServer->edugainMetadata($request->getQueryString());
+        } catch (Janus_Client_CacheProxy_Exception $exception) {
+            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException(
+                $request->query->get('sp-entity-id'),
+                $exception
+            );
+        }
+    }
 }
