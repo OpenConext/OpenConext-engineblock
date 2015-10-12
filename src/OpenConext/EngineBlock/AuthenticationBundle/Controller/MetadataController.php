@@ -43,4 +43,21 @@ class MetadataController
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
+
+    public function spMetadataAction($virtualOrganization = null, $keyId = null)
+    {
+        $proxyServer = new EngineBlock_Corto_Adapter();
+
+        if ($virtualOrganization) {
+            $proxyServer->setVirtualOrganisationContext($virtualOrganization);
+        }
+
+        if ($keyId) {
+            $proxyServer->setKeyId($keyId);
+        }
+
+        $proxyServer->sPMetadata();
+
+        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+    }
 }

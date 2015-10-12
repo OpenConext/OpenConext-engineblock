@@ -19,14 +19,20 @@
 namespace OpenConext\EngineBlock\AuthenticationBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
+use EngineBlock_Attributes_Manipulator_CustomException;
 use EngineBlock_Corto_Exception_InvalidAcsLocation;
+use EngineBlock_Corto_Exception_MissingRequiredFields;
+use EngineBlock_Corto_Exception_NoConsentProvided;
+use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UserNotMember;
+use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
+use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
+use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException;
-use Exception;
 use OpenConext\EngineBlock\CompatibilityBundle\Bridge\ErrorReporter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -39,6 +45,7 @@ class RedirectToFeedbackpageExceptionListener
      * @var EngineBlock_ApplicationSingleton
      */
     private $engineBlockApplicationSingleton;
+
     /**
      * @var LoggerInterface
      */
@@ -97,6 +104,30 @@ class RedirectToFeedbackpageExceptionListener
             $message         = 'Unknown Remote Entity';
             $redirectToRoute = 'authentication_feedback_unknown_service_provider';
             $redirectParams  = array('entity-id' => $exception->getEntityId());
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_MissingRequiredFields) {
+            $message         = 'Missing Required Fields';
+            $redirectToRoute = 'authentication_feedback_missing_required_fields';
+        } elseif ($exception instanceof EngineBlock_Attributes_Manipulator_CustomException) {
+            // @todo this must be done differently, for now don't see how as state is managed by EB.
+            $_SESSION['feedback_custom'] = $exception->getFeedback();
+
+            $message         = 'Custom Exception thrown from Attribute Manipulator';
+            $redirectToRoute = 'authentication_feedback_custom';
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_UnsupportedBindingException) {
+            $message         = 'Unsupported Binding';
+            $redirectToRoute = 'authentication_feedback_invalid_acs_binding';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
+            $message         = 'Received Error Status Code';
+            $redirectToRoute = 'authentication_feedback_received_error_status_code';
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_SignatureVerificationException) {
+            $message         = 'Unable to verify signature, cert wrong?';
+            $redirectToRoute = 'authentication_feedback_signature_verification_failed';
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_VerificationException) {
+            $message         = 'Unable to verify message';
+            $redirectToRoute = 'authentication_feedback_verification_failed';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_NoConsentProvided) {
+            $message         = 'No Consent Provided';
+            $redirectToRoute = 'authentication_feedback_no_consent';
         } else {
             return;
         }
@@ -112,8 +143,11 @@ class RedirectToFeedbackpageExceptionListener
 
         $this->errorReporter->reportError($exception, '-> Redirecting to feedback page');
 
+
+        $parameters = array('domain' => $event->getRequest()->getHost()) + $redirectParams;
+
         $event->setResponse(new RedirectResponse(
-            $this->urlGenerator->generate($redirectToRoute, $redirectParams)
+            $this->urlGenerator->generate($redirectToRoute, $parameters)
         ));
     }
 }

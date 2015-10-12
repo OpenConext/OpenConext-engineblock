@@ -11,6 +11,7 @@ services:
             - @eb.compat.application
             - @eb.compat.view
             - @eb.compat.logger
+            - @engineblock.service.request_access_mailer
 
     engineblock.controller.authentication.index:
         class: OpenConext\EngineBlock\AuthenticationBundle\Controller\IndexController
@@ -30,3 +31,24 @@ services:
         arguments:
             - @eb.compat.application
             - @eb.compat.view
+
+    engineblock.controller.authentication.certificate:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\CertificateController
+        arguments:
+            - @eb.compat.application
+
+    engineblock.controller.authentication.debug:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\DebugController
+        arguments:
+            - @eb.compat.application
+
+    engineblock.controller.authentication.wayf:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Controller\WayfController
+        arguments:
+            - @eb.compat.application
+            - @eb.compat.view
+
+    engineblock.service.request_access_mailer:
+        class: OpenConext\EngineBlock\AuthenticationBundle\Service\RequestAccessMailer
+        arguments:
+            - @eb.bridge.mailer

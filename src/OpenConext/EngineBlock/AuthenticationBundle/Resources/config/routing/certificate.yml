@@ -1,0 +1,64 @@
+### IdP
+
+certificate_idp:
+    path:       '/authentication/idp/certificate'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.certificate:idpSigningCertificateAction
+        virtualOrganisation: ~
+        keyId: ~
+
+certificate_idp_key:
+    path:       '/authentication/idp/certificate/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.certificate:idpSigningCertificateAction
+        virtualOrganisation: ~
+    requirements:
+        keyId: .+
+
+## Sp
+
+certificate_sp:
+    path:       '/authentication/sp/certificate'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.certificate:spSigningCertificateAction
+        virtualOrganisation: ~
+        keyId: ~
+
+certificate_sp_vo:
+    path:       '/authentication/sp/certificate/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.certificate:spSigningCertificateAction
+        keyId: ~
+    requirements:
+        virtualOrganisation: .+
+
+certificate_sp_vo_key:
+    path:       '/authentication/sp/certificate/vo:{virtualOrganization}/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.certificate:spSigningCertificateAction
+    requirements:
+        virtualOrganisation: .+
+        keyId: .+
+
+certificate_sp_key:
+    path:       '/authentication/sp/certificate/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.certificate:spSigningCertificateAction
+        virtualOrganisation: ~
+    requirements:
+        keyId: .+
+
+certificate_sp_key_vo:
+    path:       '/authentication/sp/certificate/key:{keyId}/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.certificate:spSigningCertificateAction
+    requirements:
+        keyId: .+
+        virtualOrganisation: .+

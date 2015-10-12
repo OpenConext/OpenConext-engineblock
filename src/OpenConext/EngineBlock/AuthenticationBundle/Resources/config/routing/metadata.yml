@@ -1,0 +1,91 @@
+### Idp
+
+metadata_idp:
+    path:       '/authentication/idp/metadata'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+        virtualOrganisation: null
+        keyId: null
+
+metadata_idp_vo:
+    path:       '/authentication/idp/metadata/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+        keyId: null
+    requirements:
+        virtualOrganisation: .+
+
+metadata_idp_vo_key:
+    path:       '/authentication/idp/metadata/vo:{virtualOrganization}/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+    requirements:
+        virtualOrganisation: .+
+        keyId: .+
+
+metadata_idp_key:
+    path:       '/authentication/idp/metadata/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+        virtualOrganisation: null
+    requirements:
+        keyId: .+
+
+metadata_idp_key_vo:
+    path:       '/authentication/idp/metadata/key:{keyId}/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:idpMetadataAction
+    requirements:
+        keyId: .+
+        virtualOrganisation: .+
+
+### Sp
+
+metadata_sp:
+    path:       '/authentication/sp/metadata'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:spMetadataAction
+        virtualOrganisation: null
+        keyId: null
+
+metadata_sp_vo:
+    path:       '/authentication/sp/metadata/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:spMetadataAction
+        keyId: null
+    requirements:
+        virtualOrganisation: .+
+
+metadata_sp_vo_key:
+    path:       '/authentication/sp/metadata/vo:{virtualOrganization}/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:spMetadataAction
+    requirements:
+        virtualOrganisation: .+
+        keyId: .+
+
+metadata_sp_key:
+    path:       '/authentication/sp/metadata/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:spMetadataAction
+        virtualOrganisation: null
+    requirements:
+        keyId: .+
+
+metadata_sp_key_vo:
+    path:       '/authentication/sp/metadata/key:{keyId}/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:spMetadataAction
+    requirements:
+        keyId: .+
+        virtualOrganisation: .+

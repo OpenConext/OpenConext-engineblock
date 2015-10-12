@@ -1,0 +1,11 @@
+authentication_wayf_process_wayf:
+    path:   /authentication/idp/process-way
+    methods: [GET,POST] # verify GET?
+    defaults:
+        _controller: engineblock.controller.authentication.wayf:processWayfAction
+
+authentication_wayf_help_discover:
+    path:   /authentication/idp/process-way
+    methods: [GET] # verify GET?
+    defaults:
+        _controller: engineblock.controller.authentication.wayf:helpDiscoverAction

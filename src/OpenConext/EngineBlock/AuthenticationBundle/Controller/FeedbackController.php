@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlock\AuthenticationBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
+use EngineBlock_Corto_ProxyServer;
 use EngineBlock_View;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -93,41 +94,55 @@ class FeedbackController
 
         return new Response($body, 400);
     }
-//
-//    public function missingRequiredFieldsAction()
-//    {
-//        $this->_getResponse()->setStatus(400, 'Bad Request');
-//    }
-//
-//    public function noConsentAction()
-//    {
-//
-//    }
-//
-//    public function customAction()
-//    {
-//        $proxyServer = new EngineBlock_Corto_ProxyServer();
-//        $proxyServer->startSession();
-//    }
 
-//
-//    public function invalidAcsBindingAction()
-//    {
-//        // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
-//    }
-//
-//    public function receivedErrorStatusCodeAction()
-//    {
-//        // @todo Send 4xx or 5xx header?
-//    }
-//
-//    public function receivedInvalidResponseAction()
-//    {
-//        // @todo Send 4xx or 5xx header?
-//    }
-//
-//    public function receivedInvalidSignedResponseAction()
-//    {
-//        // @todo Send 4xx or 5xx header?
-//    }
+    public function missingRequiredFieldsAction()
+    {
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/MissingRequiredFields.phtml'),
+            400
+        );
+    }
+
+    public function customAction()
+    {
+        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->startSession();
+
+        return new Response($this->engineBlockView->render('Authentication/View/Feedback/Custom.phtml'));
+    }
+
+    public function invalidAcsBindingAction()
+    {
+        // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
+        return new Response($this->engineBlockView->render('Authentication/View/Feedback/InvalidAcsBinding.phtml'));
+    }
+
+    public function receivedErrorStatusCodeAction()
+    {
+        // @todo Send 4xx or 5xx header?
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/ReceivedErrorStatusCode.phtml')
+        );
+    }
+
+    public function signatureVerificationFailedAction()
+    {
+        // @todo Send 4xx or 5xx header?
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/ReceivedInvalidSignedResponse.phtml')
+        );
+    }
+
+    public function receivedInvalidResponseAction()
+    {
+        // @todo Send 4xx or 5xx header?
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/ReceivedInvalidResponse.phtml')
+        );
+    }
+
+    public function noConsentAction()
+    {
+        return new Response($this->engineBlockView->render('Authentication/View/Feedback/NoConsent.phtml'));
+    }
 }

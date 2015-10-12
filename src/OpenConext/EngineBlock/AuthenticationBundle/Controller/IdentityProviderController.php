@@ -22,8 +22,11 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use EngineBlock_View;
 use Exception;
+use OpenConext\EngineBlock\AuthenticationBundle\Service\RequestAccessMailer;
 use OpenConext\EngineBlock\CompatibilityBundle\Bridge\ResponseFactory;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class IdentityProviderController
 {
@@ -42,14 +45,21 @@ class IdentityProviderController
      */
     private $logger;
 
+    /**
+     * @var RequestAccessMailer
+     */
+    private $requestAccessMailer;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         EngineBlock_View $engineBlockView,
-        LoggerInterface $loggerInterface
+        LoggerInterface $loggerInterface,
+        RequestAccessMailer $requestAccessMailer
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->engineBlockView                 = $engineBlockView;
         $this->logger                          = $loggerInterface;
+        $this->requestAccessMailer = $requestAccessMailer;
     }
 
     /**
@@ -85,8 +95,121 @@ class IdentityProviderController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
-    public function unsolicitedSingleSignOnAction($virtualOrganization = null, $keyRollover = null, $idpHash = null)
+    /**
+     * @param null $virtualOrganization
+     * @param null $keyId
+     * @param null $idpHash
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws Exception
+     */
+    public function unsolicitedSingleSignOnAction($virtualOrganization = null, $keyId = null, $idpHash = null)
     {
+        $cortoAdapter = new EngineBlock_Corto_Adapter();
 
+        if ($virtualOrganization !== null) {
+            $cortoAdapter->setVirtualOrganisationContext($virtualOrganization);
+        }
+
+        if ($keyId !== null) {
+            $cortoAdapter->setKeyId($keyId);
+        }
+
+        $cortoAdapter->singleSignOn($idpHash);
+
+        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+    }
+
+    public function processConsentAction()
+    {
+        $proxyServer = new EngineBlock_Corto_Adapter();
+        $proxyServer->processConsent();
+
+        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+    }
+
+    public function requestAccessAction(Request $request)
+    {
+        $body = $this->engineBlockView
+            ->setData($request->query->all())
+            ->render('Authentication/View/IdentityProvider/RequestAccess.phtml');
+
+        return new Response($body);
+    }
+
+    public function performRequestAccessAction(Request $request)
+    {
+        $invalid = $this->validateRequest($request);
+
+        if (count($invalid)) {
+            $viewData = array();
+            foreach ($invalid as $name) {
+                $viewData[$name . 'Error'] = true;
+            }
+
+            $viewData['queryParameters'] = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+            $body = $this->engineBlockView
+                ->setData($viewData)
+                ->render('Authentication/View/IdentityProvider/RequestAccess.phtml');
+
+            return new Response($body);
+        }
+
+        $postedVariables = $request->request;
+        if ($postedVariables->get('institution', false) !== false) {
+            $this->requestAccessMailer->sendRequestAccessToInstitutionEmail(
+                $postedVariables->get('spEntityId'),
+                $postedVariables->get('name'),
+                $postedVariables->get('email'),
+                $postedVariables->get('institution'),
+                $postedVariables->get('comment')
+            );
+        } else {
+            $this->requestAccessMailer->sendRequestAccessEmail(
+                $postedVariables->get('idpEntityId'),
+                $postedVariables->get('spEntityId'),
+                $postedVariables->get('name'),
+                $postedVariables->get('email'),
+                $postedVariables->get('comment')
+            );
+        }
+
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/IdentityProvider/PerformRequestAccess.phtml')
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    private function validateRequest(Request $request)
+    {
+        $invalid = array();
+        foreach ($request->request->all() as $key => $value) {
+            // institution is optional ...
+            if ($key === 'institution'
+                && !empty($value)
+                && $value !== filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)
+            ) {
+                $invalid[] = $key;
+
+                continue;
+            }
+
+            // ... the rest is not
+            if (empty($value)) {
+                $invalid[] = $key;
+
+                continue;
+            }
+
+            // email has additional validation
+            if ($key === 'email' && filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
+                $invalid[] = $key;
+            }
+        }
+
+        return $invalid;
     }
 }
