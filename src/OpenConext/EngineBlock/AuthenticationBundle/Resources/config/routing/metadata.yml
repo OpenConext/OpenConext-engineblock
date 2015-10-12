@@ -88,4 +88,49 @@ metadata_sp_key_vo:
         _controller: engineblock.controller.authentication.metadata:spMetadataAction
     requirements:
         keyId: .+
-        virtualOrganisation: .+
+        virtualOrganization: .+
+
+### IdPs
+metadata_all_idps:
+    path:       '/authentication/proxy/idps-metadata'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:allIdpsMetadataAction
+        virtualOrganization: ~
+        keyId: ~
+
+metadata_all_idps_vo:
+    path:       '/authentication/proxy/idps-metadata/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:allIdpsMetadataAction
+        keyId: ~
+    requirements:
+        virtualOrganization: .+
+
+metadata_all_idps_vo_key:
+    path:       '/authentication/proxy/idps-metadata/vo:{virtualOrganization}/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:allIdpsMetadataAction
+    requirements:
+        virtualOrganization: .+
+        keyId: .+
+
+metadata_all_idps_key:
+    path:       '/authentication/proxy/idps-metadata/key:{keyId}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:allIdpsMetadataAction
+        virtualOrganization: ~
+    requirements:
+        keyId: .+
+
+metadata_all_idps_key_vo:
+    path:       '/authentication/proxy/idps-metadata/key:{keyId}/vo:{virtualOrganization}'
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.metadata:allIdpsMetadataAction
+    requirements:
+        keyId: .+
+        virtualOrganization: .+

@@ -4,8 +4,11 @@ namespace OpenConext\EngineBlock\AuthenticationBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
+use EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException;
 use EngineBlock_View;
+use Janus_Client_CacheProxy_Exception;
 use OpenConext\EngineBlock\CompatibilityBundle\Bridge\ResponseFactory;
+use Symfony\Component\HttpFoundation\Request;
 
 class MetadataController
 {
@@ -57,6 +60,30 @@ class MetadataController
         }
 
         $proxyServer->sPMetadata();
+
+        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
+    }
+
+    public function allIdpsMetadataAction($virtualOrganization = null, $keyId = null, Request $request)
+    {
+        $proxyServer = new EngineBlock_Corto_Adapter();
+
+        if ($virtualOrganization !== null) {
+            $proxyServer->setVirtualOrganisationContext($virtualOrganization);
+        }
+
+        if ($keyId !== null) {
+            $proxyServer->setKeyId($keyId);
+        }
+
+        try {
+            $proxyServer->idPsMetadata();
+        } catch (Janus_Client_CacheProxy_Exception $exception) {
+            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException(
+                $request->query->get('sp-entity-id'),
+                $exception
+            );
+        }
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
