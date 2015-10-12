@@ -20,15 +20,23 @@ services:
         public: false
         class: Zend_Layout
         calls:
-            - ['setLayout',         ["@=service('eb.compat.config').defaults.layout"]]
-            - ['setLayoutPath',     ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
+            - ['setLayout',       ["@=service('eb.compat.config').defaults.layout"]]
+            - ['setLayoutPath',   ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
             - ['setViewBasePath', ["%kernel.root_dir%/Resources/views/modules/"]]
         properties:
             title: "@=service('eb.compat.config').defaults.title"
             header: "@=service('eb.compat.config').defaults.header"
 
+### Bridge classes
+
     eb.bridge.error_reporter:
         class: OpenConext\EngineBlock\CompatibilityBundle\Bridge\ErrorReporter
         arguments:
             - @eb.compat.application
+            - @eb.compat.logger
+
+    eb.bridge.mailer:
+        class: OpenConext\EngineBlock\CompatibilityBundle\Bridge\ZendMailSender
+        arguments:
+            - "@=service('eb.compat.config').email.help"
             - @eb.compat.logger
