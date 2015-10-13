@@ -38,6 +38,20 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
+    protected function prepareContainer(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    {
+        parent::prepareContainer($container);
+
+        $container->setParameter('domain', $this->engineBlockSingleton->getConfiguration()->get('base_domain'));
+
+        $trustedProxies = $this->engineBlockSingleton->getConfiguration()->get('trustedProxyIps', array());
+
+        if (!is_array($trustedProxies)) {
+            $trustedProxies = array();
+        }
+        $container->setParameter('trusted_proxies', $trustedProxies);
+    }
+
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
         $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');

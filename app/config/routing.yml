@@ -4,6 +4,8 @@ open_conext_engine_block_profile:
     requirements:
         domain: ".*"
     prefix:   /
+    defaults:
+        domain: "%domain%"
 
 open_conext_engine_block_authentication:
     resource: "@OpenConextEngineBlockAuthenticationBundle/Resources/config/routing.yml"
@@ -11,6 +13,8 @@ open_conext_engine_block_authentication:
     requirements:
         domain: ".*"
     prefix:   /
+    defaults:
+        domain: "%domain%"
 
 open_conext_engine_block_api:
     resource: "@OpenConextEngineBlockApiBundle/Resources/config/routing.yml"
@@ -18,3 +22,5 @@ open_conext_engine_block_api:
     requirements:
         domain: ".*"
     prefix:   /
+    defaults:
+        domain: "%domain%"
