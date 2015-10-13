@@ -21,7 +21,7 @@ authentication_feedback_unknown_issuer:
 authentication_feedback_no_idps:
     path:       '/no-idps'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownIssuerAction }
+    defaults:   { _controller: engineblock.controller.authentication.feedback:noIdpsAction }
 
 authentication_feedback_invalid_acs_location:
     path:       '/invalidAcsLocation'
