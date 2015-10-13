@@ -29,3 +29,6 @@ certificate:
 feedback:
     resource: routing/feedback.yml
     prefix:   '/authentication/feedback'
+
+wayf:
+    resource: routing/wayf.yml
