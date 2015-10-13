@@ -143,11 +143,8 @@ class RedirectToFeedbackpageExceptionListener
 
         $this->errorReporter->reportError($exception, '-> Redirecting to feedback page');
 
-
-        $parameters = array('domain' => $event->getRequest()->getHost()) + $redirectParams;
-
         $event->setResponse(new RedirectResponse(
-            $this->urlGenerator->generate($redirectToRoute, $parameters)
+            $this->urlGenerator->generate($redirectToRoute, $redirectParams, UrlGeneratorInterface::ABSOLUTE_PATH)
         ));
     }
 }
