@@ -26,6 +26,10 @@ class IndexController
         $this->engineBlockView                 = $engineBlockView;
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function indexAction()
     {
         return new Response($this->engineBlockView->render('Authentication/View/Index/Index.phtml'));

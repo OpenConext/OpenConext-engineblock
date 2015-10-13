@@ -18,6 +18,10 @@ class CertificateController
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
     }
 
+    /**
+     * @param null|string $keyId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function idpSigningCertificateAction($keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -31,6 +35,11 @@ class CertificateController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @param null|string $virtualOrganization
+     * @param null|string $keyId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function spSigningCertificateAction($virtualOrganization = null, $keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();

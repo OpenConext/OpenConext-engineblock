@@ -30,6 +30,11 @@ class MetadataController
         $this->engineBlockView                 = $engineBlockView;
     }
 
+    /**
+     * @param null|string $virtualOrganization
+     * @param null|string $keyId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function idpMetadataAction($virtualOrganization = null, $keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -47,6 +52,11 @@ class MetadataController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @param null|string $virtualOrganization
+     * @param null|string $keyId
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function spMetadataAction($virtualOrganization = null, $keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -64,6 +74,13 @@ class MetadataController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @param null|string $virtualOrganization
+     * @param null|string $keyId
+     * @param Request     $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
+     */
     public function allIdpsMetadataAction($virtualOrganization = null, $keyId = null, Request $request)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -88,6 +105,11 @@ class MetadataController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @param null|string $keyId
+     * @param Request     $request
+     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
+     */
     public function edugainMetadataAction($keyId = null, Request $request)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();

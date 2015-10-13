@@ -31,6 +31,9 @@ class WayfController
         $this->engineBlockView = $engineBlockView;
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
     public function processWayfAction()
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -39,6 +42,10 @@ class WayfController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function helpDiscoverAction()
     {
         return new Response($this->engineBlockView->render('Authentication/View/IdentityProvider/HelpDiscover.phtml'));

@@ -63,9 +63,9 @@ class IdentityProviderController
     }
 
     /**
-     * @param null $virtualOrganization
-     * @param null $keyId
-     * @param null $idpHash
+     * @param null|string $virtualOrganization
+     * @param null|string $keyId
+     * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws Exception
      */
@@ -81,16 +81,7 @@ class IdentityProviderController
             $cortoAdapter->setKeyId($keyId);
         }
 
-        try {
-            $cortoAdapter->singleSignOn($idpHash);
-        } catch (Exception $e) {
-            $this->logger->critical(sprintf(
-                'Could not process Single Sign On Request, exception "%s[%d]" thrown'
-            ));
-
-            // we let the exception handler pick it up from here
-            throw $e;
-        }
+        $cortoAdapter->singleSignOn($idpHash);
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
@@ -119,6 +110,9 @@ class IdentityProviderController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response
+     */
     public function processConsentAction()
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -127,6 +121,11 @@ class IdentityProviderController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function requestAccessAction(Request $request)
     {
         $body = $this->engineBlockView
@@ -136,6 +135,11 @@ class IdentityProviderController
         return new Response($body);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function performRequestAccessAction(Request $request)
     {
         $invalid = $this->validateRequest($request);
@@ -180,6 +184,10 @@ class IdentityProviderController
     }
 
     /**
+     * Rudimentary validation, ported from
+     * https://github.com/OpenConext/OpenConext-engineblock/blob/b1ee14b96fff6a0dc203ad3c8a707a8661e9a402/
+     *                      application/modules/Authentication/Controller/IdentityProvider.php#L246
+     *
      * @param Request $request
      * @return array
      */
@@ -187,24 +195,12 @@ class IdentityProviderController
     {
         $invalid = array();
         foreach ($request->request->all() as $key => $value) {
-            // institution is optional ...
-            if ($key === 'institution'
-                && !empty($value)
-                && $value !== filter_var($value, FILTER_SANITIZE_FULL_SPECIAL_CHARS)
-            ) {
-                $invalid[] = $key;
-
-                continue;
-            }
-
-            // ... the rest is not
             if (empty($value)) {
                 $invalid[] = $key;
 
                 continue;
             }
 
-            // email has additional validation
             if ($key === 'email' && filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
                 $invalid[] = $key;
             }

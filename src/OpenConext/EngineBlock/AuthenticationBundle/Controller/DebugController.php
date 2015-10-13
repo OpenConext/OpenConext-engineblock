@@ -18,6 +18,9 @@ class DebugController
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function debugSpConnectionAction()
     {
         $proxyServer = new EngineBlock_Corto_Adapter();

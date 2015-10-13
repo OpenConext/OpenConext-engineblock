@@ -43,6 +43,9 @@ class ServiceProviderController
         $this->engineBlockView = $engineBlockView;
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function consumeAssertionAction()
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
@@ -51,6 +54,9 @@ class ServiceProviderController
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function processConsentAction()
     {
         $proxyServer = new EngineBlock_Corto_Adapter();

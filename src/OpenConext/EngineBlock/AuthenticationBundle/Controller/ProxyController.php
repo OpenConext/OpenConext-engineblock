@@ -21,6 +21,9 @@ class ProxyController
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
     }
 
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     */
     public function processedAssertionAction()
     {
         $proxyServer = new EngineBlock_Corto_Adapter();

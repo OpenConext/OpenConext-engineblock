@@ -34,6 +34,10 @@ class FeedbackController
         $this->logger = $logger;
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function unableToReceiveMessageAction()
     {
         return new Response(
@@ -42,6 +46,10 @@ class FeedbackController
         );
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function voMembershipRequiredAction()
     {
         return new Response(
@@ -50,11 +58,20 @@ class FeedbackController
         );
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function sessionLostAction()
     {
         return new Response($this->engineBlockView->render('Authentication/View/Feedback/SessionLost.phtml'), 400);
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function unknownIssuerAction(Request $request)
     {
         $viewData = array(
@@ -67,15 +84,21 @@ class FeedbackController
         return new Response($body, 404);
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function noIdpsAction()
     {
-        // from: https://github.com/OpenConext/OpenConext-engineblock/blob/b1ee14b96fff6a0dc203ad3c8a707a8661e9a402/
-        //              application/modules/Authentication/Controller/Feedback.php#L76
         // @todo Send 4xx or 5xx header?
 
         return new Response($this->engineBlockView->render('Authentication/View/Feedback/NoIdps.phtml'));
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function invalidAcsLocationAction()
     {
         return new Response(
@@ -84,6 +107,11 @@ class FeedbackController
         );
     }
 
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function unknownServiceProviderAction(Request $request)
     {
         $viewData = array('entity-id' => $request->get('entity-id'));
@@ -95,6 +123,10 @@ class FeedbackController
         return new Response($body, 400);
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function missingRequiredFieldsAction()
     {
         return new Response(
@@ -103,6 +135,10 @@ class FeedbackController
         );
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function customAction()
     {
         $proxyServer = new EngineBlock_Corto_ProxyServer();
@@ -111,12 +147,20 @@ class FeedbackController
         return new Response($this->engineBlockView->render('Authentication/View/Feedback/Custom.phtml'));
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function invalidAcsBindingAction()
     {
         // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
         return new Response($this->engineBlockView->render('Authentication/View/Feedback/InvalidAcsBinding.phtml'));
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function receivedErrorStatusCodeAction()
     {
         // @todo Send 4xx or 5xx header?
@@ -125,6 +169,10 @@ class FeedbackController
         );
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function signatureVerificationFailedAction()
     {
         // @todo Send 4xx or 5xx header?
@@ -133,6 +181,10 @@ class FeedbackController
         );
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function receivedInvalidResponseAction()
     {
         // @todo Send 4xx or 5xx header?
@@ -141,6 +193,10 @@ class FeedbackController
         );
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function noConsentAction()
     {
         return new Response($this->engineBlockView->render('Authentication/View/Feedback/NoConsent.phtml'));
