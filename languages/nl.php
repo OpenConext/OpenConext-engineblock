@@ -13,7 +13,6 @@ return array(
     'processing_long'       => 'Wees a.u.b. geduldig, het kan even duren...',
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
-    'go_back'               => '&lt;&lt; Ga terug',
     'authentication_urls'   => 'Authenticatie URLs',
     'timestamp'             => 'Timestamp',
 

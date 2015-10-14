@@ -13,7 +13,6 @@ return array(
     'processing_long'       => 'Please be patient, it may take a while...',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
-    'go_back'               => '&lt;&lt; Go back',
     'authentication_urls'   => 'Authentication URLs',
     'timestamp'             => 'Timestamp',
 
