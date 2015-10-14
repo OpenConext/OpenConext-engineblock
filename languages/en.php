@@ -10,7 +10,7 @@ return array(
     'post_data'             => 'POST Data',
     'processing'            => 'Connecting to the service',
     'processing_waiting'    => 'Waiting for a response from the service.',
-    'processing_long'       => 'Taking too long?',
+    'processing_long'       => 'Please be patient, it may take a while...',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
     'go_back'               => '&lt;&lt; Go back',

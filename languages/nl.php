@@ -10,7 +10,7 @@ return array(
     'post_data'             => 'POST Data',
     'processing'            => 'Verbinden met de dienst',
     'processing_waiting'    => 'Wachten op een reactie van de dienst.',
-    'processing_long'       => 'Duurt het te lang?',
+    'processing_long'       => 'Wees a.u.b. geduldig, het kan even duren...',
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
     'go_back'               => '&lt;&lt; Ga terug',
