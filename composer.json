@@ -54,6 +54,7 @@
             "EngineBlock_": "library/",
             "EngineBlock_Test": "tests/library/",
             "Janus_": "library/",
+            "Pdp": "library/",
             "SurfConext_": "library/",
             "Surfnet_": "library/",
             "Api_":"application/modules/",
