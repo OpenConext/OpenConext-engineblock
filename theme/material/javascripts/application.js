@@ -343,18 +343,38 @@ OpenConext.Discover = function () {
       idp = accessLink.attr('data-idp'),
       saveIndex = _.findIndex(selectedIdps, function (selectedIdp) {
         return selectedIdp.idp === idp;
-      });
+      }),
+      selectionInsertionPoint,
+      accessLinkIdpName;
 
     if ($(e.target).hasClass('deleteable')) {
       e.stopPropagation();
       e.preventDefault();
 
       if (saveIndex !== -1) {
+        // Remove the previously selected IdP from the entity ID list.
         selectedIdps.splice(saveIndex, 1);
-        accessLink.slideUp('fast', function() {
-          accessLink.remove();
-          checkVisible();
-        });
+        // We find out where to move the IdP in the "normal" IdP list by comparing names...
+        accessLinkIdpName = accessLink.find('h3').text();
+        selectionInsertionPoint = $('#selection .list .result h3')
+          .filter(function () {
+            return $(this).text() < accessLinkIdpName;
+          })
+          .last()
+          .parents('.result').first();
+        if (selectionInsertionPoint.length === 0) {
+          selectionInsertionPoint = $('#selection .list .spinner');
+        }
+        // ... and move the IdP there, swapping the delete button for its "Press enter to select" button.
+        accessLink
+          .insertAfter(selectionInsertionPoint)
+          .each(function () {
+            var accessLink = $(this);
+            var swapText = accessLink.attr('data-toggle-text');
+            accessLink.attr('data-toggle-text', accessLink.html());
+            accessLink.html(swapText);
+          });
+        checkVisible();
       }
     } else {
       if (saveIndex === -1) {
