@@ -198,7 +198,8 @@ OpenConext.Discover = function () {
     return { idp: idp.idp, count: parseInt(normalisedIdpCounts[idp.count]) + 1 };
   });
 
-  var selectedIdpElements = _.chain(selectedIdps)
+  // Populate list of previously chosen IdPs based on "selectedidps" cookie.
+  _.chain(selectedIdps)
       .map(function (selectedIdp) {
         return {
           idp: $('#selection a[data-idp]').filter(function () {
