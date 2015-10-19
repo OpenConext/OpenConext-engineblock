@@ -28,7 +28,6 @@ class Pdp_PolicyResponse
         {
             $this->AssociatedAdvice = $response->AssociatedAdvice;
         }
-
     }
 
     /**
@@ -38,5 +37,56 @@ class Pdp_PolicyResponse
     public function hasAccess()
     {
         return ('permit' === strtolower(trim($this->Decision)));
+    }
+
+    /**
+     * Status message from PDP
+     *
+     * Format:
+     * array( language => message);
+     * Example:
+     *   array( 'en' => 'Not authorized' );
+     */
+    public function getMessage()
+    {
+        $message = NULL;
+
+        switch (strtolower(trim($this->Decision)))
+        {
+            case "deny":
+                $message = $this->getAssociatedAdvice();
+                break;
+            case "indeterminate":
+                // @todo Determine the correct language.
+                $message = array('en' => $this->Status->StatusMessage);
+                break;
+        }
+        return $message;
+    }
+
+    /**
+     * Return message (multi language) from PDP.
+     */
+    private function getAssociatedAdvice()
+    {
+        $advice = array();
+        foreach ($this->AssociatedAdvice as $AssociatedAdvice)
+        {
+            foreach ($AssociatedAdvice->AttributeAssignment as $AttributeAssignment)
+            {
+                $lang = $this->getLanguageFromAttributeId($AttributeAssignment->AttributeId);
+                $advice[$lang] = $AttributeAssignment->Value;
+            }
+        }
+        return $advice;
+    }
+
+    /**
+     * Returns the language of the message.
+     */
+    private function getLanguageFromAttributeId($id)
+    {
+        $id_array = explode(':', $id, 2);
+        return array_pop($id_array);
     }
 }

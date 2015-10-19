@@ -4,9 +4,15 @@ class EngineBlock_VirtualOrganization_GroupValidator
 {
     const ACCESS_TOKEN_KEY = "EngineBlock_VirtualOrganization_GroupValidator_Access_Token_Key";
 
+    /**
+     * @var Pdp_Client
+     */
+    protected $pdpClient;
+
     public function isMember($subjectId, array $groups)
     {
-        return $this->_validateGroupMembership($subjectId, $groups);
+        return $this->_pepValidator($subjectId, $groups);
+        // return $this->_validateGroupMembership($subjectId, $groups);
     }
 
     protected function _validateGroupMembership($subjectId, array $groups, $requireNew = false)
@@ -129,4 +135,51 @@ class EngineBlock_VirtualOrganization_GroupValidator
         return $configuredUrl;
     }
 
+    /**
+     * Policy Enforcement Point.
+     * Ask PDP if the user has access to the service.
+     *
+     * @param string $subjectId
+     * @param string $groups
+     *
+     * @return bool
+     */
+    protected function _pepValidator($subjectId, $groups)
+    {
+        return $this->policyDecisionPoint()->hasAccess();
+    }
+
+    /**
+     * @return \Pdp_PolicyRequest
+     */
+    private function buildPolicyRequest()
+    {
+        $policy_request = new Pdp_PolicyRequest();
+        $policy_request->addResourceAttribute("SPentityID", "avans_sp");
+        $policy_request->addResourceAttribute("IDPentityID", "avans_idp");
+
+        $policy_request->addAccessSubject("urn:mace:terena.org:attribute-def:schacHomeOrganization", "surfnet.nl");
+        $policy_request->addAccessSubject("urn:mace:terena.org:attribute-def:edu", "what");
+        $policy_request->addAccessSubject("urn:mace:terena.org:attribute-def:different", "surfnet.nl");
+        $policy_request->addAccessSubject("urn:mace:terena.org:attribute-def:eduPersonAffiliation", "employee");
+
+        return $policy_request;
+    }
+
+    /**
+     * The PDP client.
+     * @return \Pdp_Client
+     */
+    protected function policyDecisionPoint()
+    {
+        if (!is_object($this->pdpClient) OR !($this->pdpClient instanceof Pdp_Client))
+        {
+            // @todo Service registry with DI?
+            $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+            $policy_request = $this->buildPolicyRequest();
+
+            $this->pdpClient = new Pdp_Client($conf, $policy_request);
+        }
+        return $this->pdpClient;
+    }
 }
