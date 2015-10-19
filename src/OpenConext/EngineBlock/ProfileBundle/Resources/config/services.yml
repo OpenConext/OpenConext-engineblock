@@ -1,3 +1,0 @@
-services:
-    profile.attribute_filter:
-        class: OpenConext\EngineBlock\ProfileBundle\Service\AttributeFilter

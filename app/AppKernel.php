@@ -25,7 +25,6 @@ class AppKernel extends Kernel
             new OpenConext\EngineBlock\CompatibilityBundle\OpenConextEngineBlockCompatibilityBundle(),
             new OpenConext\EngineBlock\ApiBundle\OpenConextEngineBlockApiBundle(),
             new OpenConext\EngineBlock\AuthenticationBundle\OpenConextEngineBlockAuthenticationBundle(),
-            new OpenConext\EngineBlock\ProfileBundle\OpenConextEngineBlockProfileBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
