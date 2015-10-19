@@ -9,9 +9,9 @@ class EngineBlock_VirtualOrganization_GroupValidator
      */
     protected $pdpClient;
 
-    public function isMember($subjectId, array $groups)
+    public function isMember($subjectId, array $groups, $idp)
     {
-        return $this->_pepValidator($subjectId, $groups);
+        return $this->_pepValidator($subjectId, $groups, $idp);
         // return $this->_validateGroupMembership($subjectId, $groups);
     }
 
@@ -144,19 +144,20 @@ class EngineBlock_VirtualOrganization_GroupValidator
      *
      * @return bool
      */
-    protected function _pepValidator($subjectId, $groups)
+    protected function _pepValidator($subjectId, $groups, $idp)
     {
-        return $this->policyDecisionPoint()->hasAccess();
+        $policy_request = $this->buildPolicyRequest($idp);
+        return $this->policyDecisionPoint($policy_request)->hasAccess();
     }
 
     /**
-     * @return \Pdp_PolicyRequest
+     * Build the policy request object.
      */
-    private function buildPolicyRequest()
+    private function buildPolicyRequest($idp)
     {
         $policy_request = new Pdp_PolicyRequest();
         $policy_request->addResourceAttribute("SPentityID", "avans_sp");
-        $policy_request->addResourceAttribute("IDPentityID", "avans_idp");
+        $policy_request->addResourceAttribute("IDPentityID", $idp);
 
         $policy_request->addAccessSubject("urn:mace:terena.org:attribute-def:schacHomeOrganization", "surfnet.nl");
         $policy_request->addAccessSubject("urn:mace:terena.org:attribute-def:edu", "what");
@@ -168,16 +169,17 @@ class EngineBlock_VirtualOrganization_GroupValidator
 
     /**
      * The PDP client.
-     * @return \Pdp_Client
+     *
+     * @param Pdp_PolicyRequest $policy_request
+     *
+     * @return Pdp_Client
      */
-    protected function policyDecisionPoint()
+    protected function policyDecisionPoint(Pdp_PolicyRequest $policy_request)
     {
         if (!is_object($this->pdpClient) OR !($this->pdpClient instanceof Pdp_Client))
         {
             // @todo Service registry with DI?
             $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-            $policy_request = $this->buildPolicyRequest();
-
             $this->pdpClient = new Pdp_Client($conf, $policy_request);
         }
         return $this->pdpClient;
