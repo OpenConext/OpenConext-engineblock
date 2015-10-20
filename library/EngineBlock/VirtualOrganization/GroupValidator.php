@@ -9,9 +9,9 @@ class EngineBlock_VirtualOrganization_GroupValidator
      */
     protected $pdpClient;
 
-    public function isMember($subjectId, array $groups, $idp)
+    public function isMember($subjectId, array $groups, $idp, $sp)
     {
-        return $this->_pepValidator($subjectId, $groups, $idp);
+        return $this->_pepValidator($subjectId, $groups, $idp, $sp);
         // return $this->_validateGroupMembership($subjectId, $groups);
     }
 
@@ -144,19 +144,19 @@ class EngineBlock_VirtualOrganization_GroupValidator
      *
      * @return bool
      */
-    protected function _pepValidator($subjectId, $groups, $idp)
+    protected function _pepValidator($subjectId, $groups, $idp, $sp)
     {
-        $policy_request = $this->buildPolicyRequest($idp);
+        $policy_request = $this->buildPolicyRequest($idp, $sp);
         return $this->policyDecisionPoint($policy_request)->hasAccess();
     }
 
     /**
      * Build the policy request object.
      */
-    private function buildPolicyRequest($idp)
+    private function buildPolicyRequest($idp, $sp)
     {
         $policy_request = new Pdp_PolicyRequest();
-        $policy_request->addResourceAttribute("SPentityID", "avans_sp");
+        $policy_request->addResourceAttribute("SPentityID", $sp);
         $policy_request->addResourceAttribute("IDPentityID", $idp);
 
         $policy_request->addAccessSubject("urn:mace:terena.org:attribute-def:schacHomeOrganization", "surfnet.nl");

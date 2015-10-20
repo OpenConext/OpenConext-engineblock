@@ -2,7 +2,7 @@
 
 class EngineBlock_VirtualOrganization_Validator
 {
-    public function isMember($voId, $subjectId, $idp)
+    public function isMember($voId, $subjectId, $idp, $sp)
     {
         $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
         $voType = $virtualOrganization->getType();
@@ -12,7 +12,7 @@ class EngineBlock_VirtualOrganization_Validator
                 if ($this->_isMemberOfIdps($virtualOrganization, $idp)) {
                     return true;
                 }
-                else if ($this->_isMemberOfGroups($virtualOrganization, $subjectId, $idp)) {
+                else if ($this->_isMemberOfGroups($virtualOrganization, $subjectId, $idp, $sp)) {
                     return true;
                 }
                 else {
@@ -20,7 +20,7 @@ class EngineBlock_VirtualOrganization_Validator
                 }
 
             case 'GROUP':
-                if ($this->_isMemberOfGroups($virtualOrganization, $subjectId, $idp)) {
+                if ($this->_isMemberOfGroups($virtualOrganization, $subjectId, $idp, $sp)) {
                     return true;
                 }
                 else {
@@ -40,11 +40,11 @@ class EngineBlock_VirtualOrganization_Validator
         }
     }
 
-    protected function _isMemberOfGroups(EngineBlock_VirtualOrganization $virtualOrganization, $subjectId, $idp)
+    protected function _isMemberOfGroups(EngineBlock_VirtualOrganization $virtualOrganization, $subjectId, $idp, $sp)
     {
         $groups = $virtualOrganization->getGroupsIdentifiers();
         $groupValidator = new EngineBlock_VirtualOrganization_GroupValidator();
-        return $groupValidator->isMember($subjectId, $groups, $idp);
+        return $groupValidator->isMember($subjectId, $groups, $idp, $sp);
     }
 
     protected function _isMemberOfIdps(EngineBlock_VirtualOrganization $virtualOrganization, $idp)
