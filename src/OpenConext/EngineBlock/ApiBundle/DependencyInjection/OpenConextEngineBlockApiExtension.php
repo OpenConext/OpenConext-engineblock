@@ -18,6 +18,7 @@ class OpenConextEngineBlockApiExtension extends Extension
         $this->processConfiguration($configuration, $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('controllers.yml');
         $loader->load('services.yml');
     }
 }

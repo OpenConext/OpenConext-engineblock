@@ -1,3 +1,10 @@
-open_conext_engine_block_api_homepage:
+api_heartbeat:
     path:     /
-    defaults: { _controller: OpenConextEngineBlockApiBundle:Default:index }
+    defaults:
+        _controller: openconext.api.controller.heartbeat:itWorksAction
+
+api_connections:
+    path:     /api/connections
+    methods:    [POST]
+    defaults:
+        _controller: openconext.api.controller.connections:pushConnectionsAction

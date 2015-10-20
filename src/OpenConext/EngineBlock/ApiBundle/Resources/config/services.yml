@@ -1,4 +1,5 @@
 services:
-#    open_conext_engine_block_api.example:
-#        class: OpenConext\EngineBlock\ApiBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    api.security.http_basic_entry_point:
+        class: OpenConext\EngineBlock\ApiBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
+        arguments:
+            - "engine-api.%domain%"

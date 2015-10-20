@@ -1,26 +1,28 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
 security:
-
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
         in_memory:
-            memory: ~
+            memory:
+                users:
+                    "%engine_api_client_user%":
+                        password: %engine_api_client_password%
+                        roles: 'ROLE_API_CLIENT'
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            pattern: ^/(_(profiler|wdt)|css|stylesheets|images|js|javascripts)/
             security: false
             stateless: true
+
+        api:
+            host: ^engine-api\..+
+            http_basic: ~
+            entry_point: api.security.http_basic_entry_point
+            stateless: true
+            pattern: ^/.+
 
         main:
             anonymous: ~
             stateless:  true
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html

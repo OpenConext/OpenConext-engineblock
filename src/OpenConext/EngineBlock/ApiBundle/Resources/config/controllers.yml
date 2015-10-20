@@ -1,0 +1,8 @@
+services:
+    openconext.api.controller.connections:
+        class: OpenConext\EngineBlock\ApiBundle\Controller\ConnectionsController
+        arguments:
+            - @eb.compat.application
+
+    openconext.api.controller.heartbeat:
+        class: OpenConext\EngineBlock\ApiBundle\Controller\HeartbeatController

@@ -1,5 +1,6 @@
 <?php
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -37,18 +38,21 @@ class AppKernel extends Kernel
         return $bundles;
     }
 
-    protected function prepareContainer(\Symfony\Component\DependencyInjection\ContainerBuilder $container)
+    protected function prepareContainer(ContainerBuilder $container)
     {
         parent::prepareContainer($container);
 
         $container->setParameter('domain', $this->engineBlockSingleton->getConfiguration()->get('base_domain'));
 
         $trustedProxies = $this->engineBlockSingleton->getConfiguration()->get('trustedProxyIps', array());
-
         if (!is_array($trustedProxies)) {
             $trustedProxies = array();
         }
         $container->setParameter('trusted_proxies', $trustedProxies);
+
+        $apiCredentials = $this->engineBlockSingleton->getConfigurationValue('engineApi');
+        $container->setParameter('engine_api_client_user', $apiCredentials->get('user'));
+        $container->setParameter('engine_api_client_password', $apiCredentials->get('password'));
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
