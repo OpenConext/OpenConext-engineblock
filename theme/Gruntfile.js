@@ -13,22 +13,6 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         config: config,
 
-        //symlink: {
-        //    classic: {
-        //        files: [
-        //            { expand: false, overwrite: true, src: ['../www/authentication/css'], dest: '../www/profile/css' },
-        //            { expand: false, overwrite: true, src: ['../www/authentication/javascript'], dest: '../www/profile/javascript' },
-        //            { expand: false, overwrite: true, src: ['../www/authentication/media'], dest: '../www/profile/media' }
-        //        ]
-        //    },
-        //    material: {
-        //        files: [
-        //            { expand: false, overwrite: true, src: ['../www/authentication/stylesheets'], dest: '../www/profile/stylesheets' },
-        //            { expand: false, overwrite: true, src: ['../www/authentication/javascripts'], dest: '../www/profile/javascripts' },
-        //            { expand: false, overwrite: true, src: ['../www/authentication/images'], dest: '../www/profile/images' }
-        //        ]
-        //    }
-        //},
         uglify: {
             classic: {
 
@@ -121,22 +105,6 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        //shell: {
-        //    classic: {
-        //        command: [
-        //            'rm ../www/profile/media',
-        //            'rm ../www/profile/css',
-        //            'rm ../www/profile/javascript'
-        //        ].join('&&') + ' || true'
-        //    },
-        //    material: {
-        //        command: [
-        //            'rm ../www/profile/images',
-        //            'rm ../www/profile/javascripts',
-        //            'rm ../www/profile/stylesheets'
-        //        ].join('&&') + ' || true'
-        //    }
-        //},
         'string-replace': {
             layoutconfig: {
                 files: {
@@ -200,7 +168,6 @@ module.exports = function(grunt) {
             var themeConfig = JSON.parse(grunt.file.read('./config/theme.json')),
                 tasks = [
                   'clean:' + themeConfig.current,
-                  //'shell:' + themeConfig.current,
                   'copy:' + theme,
                   'compass:' + theme
                 ];
