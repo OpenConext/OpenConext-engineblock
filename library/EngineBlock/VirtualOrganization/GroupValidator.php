@@ -3,11 +3,8 @@
 class EngineBlock_VirtualOrganization_GroupValidator
 {
     const ACCESS_TOKEN_KEY = "EngineBlock_VirtualOrganization_GroupValidator_Access_Token_Key";
-
-    /**
-     * @var Pdp_Client
-     */
-    protected $pdpClient;
+    private $message;
+    private $lang = 'en';
 
     public function isMember($subjectId, array $groups, $idp, $sp)
     {
@@ -147,7 +144,37 @@ class EngineBlock_VirtualOrganization_GroupValidator
     protected function _pepValidator($subjectId, $groups, $idp, $sp)
     {
         $policy_request = $this->buildPolicyRequest($idp, $sp);
-        return $this->policyDecisionPoint($policy_request)->hasAccess();
+        $pdp = $this->policyDecisionPoint($policy_request);
+        $hasAccess = $pdp->hasAccess();
+
+        if (!$hasAccess)
+        {
+            $this->message = $pdp->getReason();
+        }
+
+        return $hasAccess;
+    }
+
+    /**
+     * @param string $lang
+     *
+     * @return EngineBlock_VirtualOrganization_GroupValidator
+     */
+    public function setLang($lang) {
+        $this->lang = $lang;
+        return $this;
+    }
+
+    /**
+     * Get the response message when subject has no access.
+     */
+    public function getMessage()
+    {
+        if (isset($this->message[$this->lang]))
+        {
+            return $this->message[$this->lang];
+        }
+        return NULL;
     }
 
     /**
@@ -174,14 +201,10 @@ class EngineBlock_VirtualOrganization_GroupValidator
      *
      * @return Pdp_Client
      */
-    protected function policyDecisionPoint(Pdp_PolicyRequest $policy_request)
+    protected function policyDecisionPoint(Pdp_PolicyRequest $policy_request = NULL)
     {
-        if (!is_object($this->pdpClient) OR !($this->pdpClient instanceof Pdp_Client))
-        {
-            // @todo Service registry with DI?
-            $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-            $this->pdpClient = new Pdp_Client($conf, $policy_request);
-        }
-        return $this->pdpClient;
+        // @todo Service registry with DI?
+        $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
+        return new Pdp_Client($conf, $policy_request);
     }
 }

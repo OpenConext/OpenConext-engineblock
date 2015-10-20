@@ -2,6 +2,8 @@
 
 class EngineBlock_VirtualOrganization_Validator
 {
+    private $message;
+
     public function isMember($voId, $subjectId, $idp, $sp)
     {
         $virtualOrganization = new EngineBlock_VirtualOrganization($voId);
@@ -44,7 +46,16 @@ class EngineBlock_VirtualOrganization_Validator
     {
         $groups = $virtualOrganization->getGroupsIdentifiers();
         $groupValidator = new EngineBlock_VirtualOrganization_GroupValidator();
-        return $groupValidator->isMember($subjectId, $groups, $idp, $sp);
+        $isMember = $groupValidator->isMember($subjectId, $groups, $idp, $sp);
+
+        // No access? Get the message.
+        if (!$isMember)
+        {
+            $this->message = $groupValidator
+              ->setLang('en')
+              ->getMessage();
+        }
+        return $isMember;
     }
 
     protected function _isMemberOfIdps(EngineBlock_VirtualOrganization $virtualOrganization, $idp)
@@ -58,4 +69,11 @@ class EngineBlock_VirtualOrganization_Validator
         return false;
     }
 
+    /**
+     * Get the reason/message when user has no access.
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 }

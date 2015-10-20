@@ -86,4 +86,16 @@ class Pdp_Client
     {
         return $this->requestAccess()->hasAccess();
     }
+
+    /**
+     * Return the status message from PDP.
+     */
+    public function getReason()
+    {
+        if ($this->policyResponse instanceof Pdp_PolicyResponse)
+        {
+            return $this->policyResponse->getMessage();
+        }
+        return NULL;
+    }
 }
