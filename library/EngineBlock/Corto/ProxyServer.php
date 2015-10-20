@@ -811,7 +811,10 @@ class EngineBlock_Corto_ProxyServer
 
         $templateFileName = ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/' . $templateName . '.phtml';
 
+        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
         $view = new EngineBlock_View();
+
+        $view->setLayout($layout);
         $view->setData($vars);
         return $view->render($templateFileName);
     }

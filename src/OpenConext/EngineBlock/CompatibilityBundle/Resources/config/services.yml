@@ -17,7 +17,6 @@ services:
         factory:  [EngineBlock_ApplicationSingleton, getLog]
 
     eb.compat.layout:
-        public: false
         class: Zend_Layout
         calls:
             - ['setLayout',       ["@=service('eb.compat.config').defaults.layout"]]

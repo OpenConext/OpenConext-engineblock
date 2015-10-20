@@ -3,7 +3,7 @@
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
-define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
+define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_ROOT . 'app/Resources/views/modules/');
 define('ENGINEBLOCK_FOLDER_VENDOR'    , ENGINEBLOCK_FOLDER_ROOT . 'vendor/');
 
 require_once ENGINEBLOCK_FOLDER_VENDOR . 'autoload.php';
