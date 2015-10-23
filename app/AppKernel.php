@@ -64,21 +64,35 @@ class AppKernel extends Kernel
         return $this->getHttpKernel()->handle($request, $type, $catch);
     }
 
+    /**
+     * Before building the container, the container is prepared. After the default preparations are done
+     * we set some additional parameters with values defined in the ini configuration, as parsed by
+     * the EngineBlock_ApplicationSingleton class. This allows for having parameters that are not configured
+     * in the symfony configuration (yet).
+     *
+     * @param ContainerBuilder $container
+     */
     protected function prepareContainer(ContainerBuilder $container)
     {
         parent::prepareContainer($container);
+        $iniConfiguration = $this->engineBlockSingleton->getConfiguration();
 
-        $container->setParameter('domain', $this->engineBlockSingleton->getConfiguration()->get('base_domain'));
+        $container->setParameter('domain', $iniConfiguration->get('base_domain'));
 
-        $trustedProxies = $this->engineBlockSingleton->getConfiguration()->get('trustedProxyIps', array());
+        $trustedProxies = $iniConfiguration->get('trustedProxyIps', array());
         if (!is_array($trustedProxies)) {
             $trustedProxies = array();
         }
         $container->setParameter('trusted_proxies', $trustedProxies);
 
-        $apiCredentials = $this->engineBlockSingleton->getConfigurationValue('engineApi');
-        $container->setParameter('engine_api_client_user', $apiCredentials->get('user'));
-        $container->setParameter('engine_api_client_password', $apiCredentials->get('password'));
+        $apiConfiguration = $iniConfiguration->get('engineApi');
+
+        $features = $apiConfiguration->get('features');
+        $container->setParameter('api.features.metadata_push.enabled', (bool) $features->get('metadataPush'));
+
+        $apiJanusCredentials = $apiConfiguration->get('users')->get('janus');
+        $container->setParameter('api.users.janus.username', $apiJanusCredentials->get('username'));
+        $container->setParameter('api.users.janus.password', $apiJanusCredentials->get('password'));
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

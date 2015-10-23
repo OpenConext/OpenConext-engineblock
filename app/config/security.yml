@@ -3,9 +3,9 @@ security:
         in_memory:
             memory:
                 users:
-                    "%engine_api_client_user%":
-                        password: %engine_api_client_password%
-                        roles: 'ROLE_API_CLIENT'
+                    "%api.users.janus.username%":
+                        password: %api.users.janus.password%
+                        roles: 'ROLE_API_USER_JANUS'
 
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext

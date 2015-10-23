@@ -3,3 +3,8 @@ services:
         class: OpenConext\EngineBlock\ApiBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
         arguments:
             - "engine-api.%domain%"
+
+    api.service.features:
+        class: OpenConext\EngineBlock\ApiBundle\Service\FeaturesService
+        arguments:
+            - %api.features.metadata_push.enabled%

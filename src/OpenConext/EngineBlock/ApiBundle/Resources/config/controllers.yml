@@ -3,6 +3,8 @@ services:
         class: OpenConext\EngineBlock\ApiBundle\Controller\ConnectionsController
         arguments:
             - @eb.compat.application
+            - @security.authorization_checker
+            - @api.service.features
 
     openconext.api.controller.heartbeat:
         class: OpenConext\EngineBlock\ApiBundle\Controller\HeartbeatController
