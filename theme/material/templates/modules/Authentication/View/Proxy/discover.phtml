@@ -115,7 +115,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 
       <div class="loading spinner hidden">
         <div class="logo">
-          <img class="rotate-img" src="/images/spinner.svg">
+          <img class="rotate-img" src="/images/spinner.svg" alt="" />
         </div>
         <?=$this->t('loading_idps');?>
       </div>
@@ -124,10 +124,10 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
         <?php $idpKeywords = $idp['Keywords'] === 'Undefined' ? array() : array_values((array) $idp['Keywords']) ?>
         <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" data-keywords="<?= EngineBlock_View::htmlSpecialCharsAttributeValue(json_encode($idpKeywords)); ?>">
           <div class="logo">
-            <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" />
+            <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" alt="" />
           </div>
           <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-          <span class="c-button white action" data-toggle-text="<img class='deleteable' src='/images/cross.svg'>"><?php echo $this->t('press_enter_to_select'); ?></span>
+          <span class="c-button white action" data-toggle-text="<img class='deleteable' src='/images/cross.svg' alt='delete' />"><?php echo $this->t('press_enter_to_select'); ?></span>
           <noscript>
             <button type="submit" class="c-button white" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">Login</button>
           </noscript>

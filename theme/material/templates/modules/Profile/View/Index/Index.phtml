@@ -82,7 +82,7 @@ foreach ($spList as $spId => $sp) {
     <?php if (!empty($_GET['mailSend'])): ?>
       <table class="comp-table">
         <tr>
-          <td><img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" /><?= $this->t('attributes_data_mailed'); ?></td>
+          <td><img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;" /><?= $this->t('attributes_data_mailed'); ?></td>
         </tr>
       </table>
     <?php endif ?>
@@ -151,7 +151,7 @@ foreach ($spList as $spId => $sp) {
                     <tr class="sp-row">
                         <td>
                             <a href="#" class="sp-display-name expand">
-                                <img src="/images/triangle.svg" class="c-icon c-icon-triangle">
+                                <img src="/images/triangle.svg" class="c-icon c-icon-triangle" alt="" />
                                 <span><?= EngineBlock_View::htmlSpecialCharsText($this->getDisplayName($sp)); ?></span>
                             </a>
                         </td>
