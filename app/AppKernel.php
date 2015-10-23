@@ -88,11 +88,11 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return '/var/cache/engineblock';
+        return $this->engineBlockSingleton->getConfiguration()->get('symfony')->get('cachePath');
     }
 
     public function getLogDir()
     {
-        return '/var/log/engineblock';
+        return $this->engineBlockSingleton->getConfiguration()->get('symfony')->get('logPath');
     }
 }
