@@ -178,9 +178,7 @@ module.exports = function(grunt) {
 
             tasks.push('uglify:' + theme);
             tasks.push('add_comment:' + theme);
-            //tasks.push('symlink:' + theme);
             tasks.push('string-replace:layoutconfig');
-
 
             grunt.task.run(tasks);
 
