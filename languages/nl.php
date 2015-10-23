@@ -273,14 +273,14 @@ Als je deze applicatie wilt gebruiken moet je:<br />
         <br />
     </p>',
 
-    'error_received_error_status_code'     => 'Error - Instellingsfout',
+    'error_received_error_status_code'     => 'Error - Identity Provider-fout',
     'error_received_error_status_code_desc'=> '<p>
-        Jouw instelling stuurde een authenticatie respons met een fout code.
+        Jouw instelling stuurde een authenticatierespons met een foutcode.
     </p>',
-    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van instelling',
-    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op instellingsantwoord',
+    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van identity provider',
+    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op identity provider-antwoord',
     'error_received_status_code_desc'=> '<p>
-        Jouw instelling stuurde een ongeldig authenticatie respons terug.
+        Jouw instelling stuurde een ongeldig authenticatierespons terug.
     </p>',
 
     /**
