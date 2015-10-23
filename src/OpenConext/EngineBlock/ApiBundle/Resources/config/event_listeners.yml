@@ -1,0 +1,8 @@
+services:
+    api.listener.api_http_exception_listener:
+        class: OpenConext\EngineBlock\ApiBundle\EventListener\ApiHttpExceptionListener
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+        arguments:
+            - @eb.compat.logger
+            - @eb.bridge.error_reporter
