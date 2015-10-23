@@ -173,8 +173,6 @@ class EngineBlock_Application_Bootstrapper
     {
         $settings = $this->_application->getConfiguration()->phpSettings->toArray();
         $this->_setIniSettings($settings);
-        // prevent any XXE attacks when processing XML
-//        libxml_disable_entity_loader();
     }
 
     protected function _setIniSettings($settings, $prefix = '')

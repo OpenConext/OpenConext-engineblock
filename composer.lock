@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "93442408be078555b20d6c785081407f",
-    "content-hash": "d6c043815f97521a7c0d1472203c62f5",
+    "hash": "32d9d34e634c0cd47badce6b40cb8722",
+    "content-hash": "c6ac05b1aa59cb1ebec68de6ca219488",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -1256,21 +1256,20 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v0.6.4",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "2289ddc4e4cb30d95ded1ebb70312be300716151"
+                "reference": "f89856e2afe6ab6758c7f34c1fbe4ed8c952a623"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/2289ddc4e4cb30d95ded1ebb70312be300716151",
-                "reference": "2289ddc4e4cb30d95ded1ebb70312be300716151",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/f89856e2afe6ab6758c7f34c1fbe4ed8c952a623",
+                "reference": "f89856e2afe6ab6758c7f34c1fbe4ed8c952a623",
                 "shasum": ""
             },
             "require": {
                 "ext-dom": "*",
-                "ext-mcrypt": "*",
                 "ext-openssl": "*",
                 "php": ">=5.3.3",
                 "psr/log": "~1.0",
@@ -1302,7 +1301,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2015-05-27 13:03:01"
+            "time": "2015-10-06 09:55:13"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
@@ -2715,6 +2714,12 @@
             "alias_normalized": "2.2.2.0",
             "version": "9999999-dev",
             "package": "openid/php-openid"
+        },
+        {
+            "alias": "0.6",
+            "alias_normalized": "0.6.0.0",
+            "version": "1.7.0.0",
+            "package": "simplesamlphp/saml2"
         }
     ],
     "minimum-stability": "stable",
