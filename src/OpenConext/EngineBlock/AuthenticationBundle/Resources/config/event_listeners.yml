@@ -1,6 +1,6 @@
 services:
     engineblock.listener.single_sign_on_exception:
-        class: OpenConext\EngineBlock\AuthenticationBundle\EventListener\RedirectToFeedbackpageExceptionListener
+        class: OpenConext\EngineBlock\AuthenticationBundle\EventListener\RedirectToFeedbackPageExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
         arguments:
