@@ -136,6 +136,13 @@
   .action
     display: none
     margin-left: auto
+
+    // Let clicks fall through to underlying a.result
+    pointer-events: none
+    // ... unless the user doesn't have JavaScript, in which case the button must submit the form.
+    html.no-js &
+      pointer-events: auto
+
     .lt-ie9 &.deleteable
       background: $blue
       &:after
