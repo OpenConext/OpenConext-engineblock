@@ -55,7 +55,10 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
      */
     private function requirePep()
     {
-        return true;
+        if ($this->_serviceProvider == "http://mock-sp") {
+            return true;
+        }
+        return false;
     }
 
 }
