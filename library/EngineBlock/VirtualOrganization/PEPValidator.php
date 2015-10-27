@@ -1,29 +1,18 @@
 <?php
 
-class EngineBlock_VirtualOrganization_GroupValidator
+class EngineBlock_VirtualOrganization_PEPValidator
 {
-    const ACCESS_TOKEN_KEY = "EngineBlock_VirtualOrganization_GroupValidator_Access_Token_Key";
     private $message;
     private $lang = 'en';
 
-    public function isMember($subjectId, $idp, $sp, $responseAttributes)
-    {
-        return $this->_pepValidator($subjectId, $idp, $sp, $responseAttributes);
-    }
-
     /**
-     * Policy Enforcement Point.
-     * Ask PDP if the user has access to the service.
-     *
-     * @param string $subjectId
+     * @param $subjectId
      * @param $idp
      * @param $sp
      * @param $responseAttributes
      * @return bool
-     * @internal param string $groups
-     *
      */
-    protected function _pepValidator($subjectId, $idp, $sp, $responseAttributes)
+    public function hasAccess($subjectId, $idp, $sp, $responseAttributes)
     {
         $policy_request = $this->buildPolicyRequest($subjectId, $idp, $sp, $responseAttributes);
         $pdp = $this->policyDecisionPoint($policy_request);
@@ -40,7 +29,7 @@ class EngineBlock_VirtualOrganization_GroupValidator
     /**
      * @param string $lang
      *
-     * @return EngineBlock_VirtualOrganization_GroupValidator
+     * @return EngineBlock_VirtualOrganization_PEPValidator
      */
     public function setLang($lang) {
         $this->lang = $lang;
@@ -61,6 +50,11 @@ class EngineBlock_VirtualOrganization_GroupValidator
 
     /**
      * Build the policy request object.
+     * @param string $subjectId
+     * @param string $idp
+     * @param string $sp
+     * @param array $responseAttributes
+     * @return Pdp_PolicyRequest
      */
     private function buildPolicyRequest($subjectId, $idp, $sp, $responseAttributes)
     {
@@ -88,7 +82,6 @@ class EngineBlock_VirtualOrganization_GroupValidator
      */
     protected function policyDecisionPoint(Pdp_PolicyRequest $policy_request = NULL)
     {
-        // @todo Service registry with DI?
         $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
         return new Pdp_Client($conf, $policy_request);
     }

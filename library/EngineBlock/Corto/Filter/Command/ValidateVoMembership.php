@@ -19,22 +19,22 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
         // @todo determine if we need to go to PEP/PDP
         if ($this->requirePep())
         {
-            EngineBlock_ApplicationSingleton::getLog()->debug("Executing PEP decision.");
+            EngineBlock_ApplicationSingleton::getLog()->debug("Executing PEP.");
 
             $validator = $this->_getValidator();
-            $isMember = $validator->isMember(
+            $hasAccess = $validator->hasAccess(
                 $this->_collabPersonId,
                 $this->_identityProvider->entityId,
                 $this->_serviceProvider->entityId,
                 $this->_responseAttributes
             );
-            if (!$isMember) {
+            if (!$hasAccess) {
                 $message = "PDP: Access denied.";
                 if ($validator->getMessage())
                 {
                     $message = $validator->getMessage();
                 }
-                throw new EngineBlock_Corto_Exception_UserNotMember($message);
+                throw new EngineBlock_Corto_Exception_PEPNoAccess($message);
             }
         }
     }

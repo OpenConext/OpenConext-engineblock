@@ -4,19 +4,26 @@ class EngineBlock_VirtualOrganization_Validator
 {
     private $message;
 
-    public function isMember($subjectId, $idp, $sp, $responseAttributes)
+    /**
+     * @param string    $subjectId
+     * @param string    $idp
+     * @param string    $sp
+     * @param array     $responseAttributes
+     * @return bool
+     */
+    public function hasAccess($subjectId, $idp, $sp, $responseAttributes)
     {
-        $groupValidator = new EngineBlock_VirtualOrganization_GroupValidator();
-        $isMember = $groupValidator->isMember($subjectId, $idp, $sp, $responseAttributes);
+        $groupValidator = new EngineBlock_VirtualOrganization_PEPValidator();
+        $hasAccess = $groupValidator->hasAccess($subjectId, $idp, $sp, $responseAttributes);
 
         // No access? Get the message.
-        if (!$isMember)
+        if (!$hasAccess)
         {
             $this->message = $groupValidator
                 ->setLang('en')
                 ->getMessage();
         }
-        return $isMember;
+        return $hasAccess;
     }
 
     /**
