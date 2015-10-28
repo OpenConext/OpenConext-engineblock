@@ -1,9 +1,7 @@
 <?php
 
-class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_PolicyDecisionPoint extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const VO_NAME_ATTRIBUTE         = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
-
     /**
      * This command may modify the response attributes
      *
@@ -16,11 +14,13 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
 
     public function execute()
     {
-        // @todo determine if we need to go to PEP/PDP
-        if ($this->requirePep())
-        {
-            EngineBlock_ApplicationSingleton::getLog()->debug("Executing PEP.");
 
+        $requirePep = $this->requirePep();
+
+        EngineBlock_ApplicationSingleton::getLog()->debug("Policy Enforcement Point consult " . $requirePep);
+
+        if ($requirePep)
+        {
             $validator = $this->_getValidator();
             $hasAccess = $validator->hasAccess(
                 $this->_collabPersonId,
@@ -29,36 +29,32 @@ class EngineBlock_Corto_Filter_Command_ValidateVoMembership extends EngineBlock_
                 $this->_responseAttributes
             );
             if (!$hasAccess) {
-                $message = "PDP: Access denied.";
+                $message = "Policy Decision Point: access denied.";
                 if ($validator->getMessage())
                 {
                     $message = $validator->getMessage();
                 }
+                EngineBlock_ApplicationSingleton::getLog()->debug("Policy Enforcement Point access denied: " . $message);
                 throw new EngineBlock_Corto_Exception_PEPNoAccess($message);
             }
         }
     }
 
     /**
-     * @return EngineBlock_VirtualOrganization_Validator
+     * @return EngineBlock_PolicyDecisionPoint_Validator
      */
     protected function _getValidator()
     {
-        return new EngineBlock_VirtualOrganization_Validator();
+        return new EngineBlock_PolicyDecisionPoint_Validator();
     }
 
     /**
-     * @todo Metadata field from SP check !!!!
-     *   coin:policy_enforcement_decision_required
      *
      * @return bool
      */
     private function requirePep()
     {
-        if ($this->_serviceProvider == "http://mock-sp") {
-            return true;
-        }
-        return false;
+        return $this->_serviceProvider->policyEnforcementDecisionRequired ? true : false;
     }
 
 }

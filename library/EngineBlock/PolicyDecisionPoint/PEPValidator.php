@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_VirtualOrganization_PEPValidator
+class EngineBlock_PolicyDecisionPoint_PEPValidator
 {
     private $message;
     private $lang = 'en';
@@ -29,7 +29,7 @@ class EngineBlock_VirtualOrganization_PEPValidator
     /**
      * @param string $lang
      *
-     * @return EngineBlock_VirtualOrganization_PEPValidator
+     * @return EngineBlock_PolicyDecisionPoint_PEPValidator
      */
     public function setLang($lang) {
         $this->lang = $lang;

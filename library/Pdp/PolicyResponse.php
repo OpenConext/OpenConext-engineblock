@@ -36,7 +36,8 @@ class Pdp_PolicyResponse
      */
     public function hasAccess()
     {
-        return ('permit' === strtolower(trim($this->Decision)));
+        $decision = strtolower(trim($this->Decision));
+        return ('permit' === $decision || 'notapplicable' === $decision);
     }
 
     /**
@@ -57,7 +58,6 @@ class Pdp_PolicyResponse
                 $message = $this->getAssociatedAdvice();
                 break;
             case "indeterminate":
-                // @todo Determine the correct language.
                 $message = array('en' => $this->Status->StatusMessage);
                 break;
         }

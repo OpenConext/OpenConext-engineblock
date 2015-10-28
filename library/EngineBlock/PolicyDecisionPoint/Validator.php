@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_VirtualOrganization_Validator
+class EngineBlock_PolicyDecisionPoint_Validator
 {
     private $message;
 
@@ -13,7 +13,7 @@ class EngineBlock_VirtualOrganization_Validator
      */
     public function hasAccess($subjectId, $idp, $sp, $responseAttributes)
     {
-        $groupValidator = new EngineBlock_VirtualOrganization_PEPValidator();
+        $groupValidator = new EngineBlock_PolicyDecisionPoint_PEPValidator();
         $hasAccess = $groupValidator->hasAccess($subjectId, $idp, $sp, $responseAttributes);
 
         // No access? Get the message.
