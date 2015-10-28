@@ -834,16 +834,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "1.2.6",
+            "version": "1.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "c56d0907a5296d192ccc39d2655d8109178e6dce"
+                "reference": "25662ed3ede9c0de405cf3af1408cddb6b84e30f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/c56d0907a5296d192ccc39d2655d8109178e6dce",
-                "reference": "c56d0907a5296d192ccc39d2655d8109178e6dce",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/25662ed3ede9c0de405cf3af1408cddb6b84e30f",
+                "reference": "25662ed3ede9c0de405cf3af1408cddb6b84e30f",
                 "shasum": ""
             },
             "require": {
@@ -869,7 +869,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2015-09-10 20:20:25"
+            "time": "2015-10-28 10:24:37"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -1267,12 +1267,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "0e5e18ae09d3f5c06367759be940e9ed3f568359"
+                "reference": "042107bc202845086739414339e551fbe81293d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/0e5e18ae09d3f5c06367759be940e9ed3f568359",
-                "reference": "0e5e18ae09d3f5c06367759be940e9ed3f568359",
+                "url": "https://api.github.com/repos/symfony/console/zipball/042107bc202845086739414339e551fbe81293d7",
+                "reference": "042107bc202845086739414339e551fbe81293d7",
                 "shasum": ""
             },
             "require": {
