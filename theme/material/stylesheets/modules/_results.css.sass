@@ -139,8 +139,9 @@
 
     // Let clicks fall through to underlying a.result
     pointer-events: none
-    // ... unless the user doesn't have JavaScript, in which case the button must submit the form.
-    html.no-js &
+    // ... unless the user doesn't have JavaScript, in which case the button must submit the form,
+    // or it concerns the IdP preference removal button.
+    html.no-js &, &.deleteable
       pointer-events: auto
 
     .lt-ie9 &.deleteable
