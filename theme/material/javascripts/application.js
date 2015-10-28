@@ -1,31 +1,25 @@
 var OpenConext = {};
 OpenConext.Discover = function () {
   'use strict';
-  var lastMouseX = null,
-    lastMouseY = null;
-  this.searchBar = $('.mod-search-input');
+  var $results = $('.mod-results');
+  var $searchBar = $('.mod-search-input');
+  var $previousIdpChoices = $('#preselection');
+  var $idpChoices = $('#selection');
 
   function hasDiscovery() {
-    return 0 !== $('.mod-search-input').length;
+    return $searchBar.length !== 0;
   }
 
   function checkListVisible(listContainer) {
-    var list = listContainer.find('.list:first');
-
-    if (list.children().length === 0 || list.find('.active').length === 0) {
-      listContainer.addClass('hidden');
-    } else {
-      listContainer.removeClass('hidden');
-    }
-
+    listContainer.toggleClass('hidden', listContainer.find('.list .active').length === 0);
   }
 
   function checkVisible() {
-    checkListVisible($('#preselection'));
+    checkListVisible($previousIdpChoices);
   }
 
   function checkNoResults() {
-    var selectionContainer = $('#selection'),
+    var selectionContainer = $idpChoices,
       noResultsContainer = selectionContainer.find('.noresults'),
       hasActiveResults = selectionContainer.find('.list a.active').length > 0;
 
@@ -34,12 +28,18 @@ OpenConext.Discover = function () {
   }
 
   function filterList(filterValue) {
+    fakeFocusFirstIdP();
+
     var filterElements = $('.mod-results a.result'),
-        spinner = $('.mod-results .spinner');
+        spinner = $('.mod-results .spinner'),
+        containsFilterValue;
 
     spinner.removeClass('hidden');
 
     filterValue = filterValue.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '').toLowerCase();
+    containsFilterValue = function (keyword) {
+      return keyword.toLowerCase().indexOf(filterValue) !== -1;
+    };
 
     filterElements.each(function () {
       var result = $(this),
@@ -47,7 +47,7 @@ OpenConext.Discover = function () {
           match = title.indexOf(filterValue) !== -1;
 
       if (!match) {
-        match = match || _.some(result.data('keywords'), predicateContainsString(filterValue));
+        match = match || _.some(result.data('keywords'), containsFilterValue);
       }
 
       result
@@ -57,29 +57,10 @@ OpenConext.Discover = function () {
 
     checkVisible();
     checkNoResults();
-    setFocusClass();
     spinner.addClass('hidden');
 
     // trigger the resize event to lazyload images
     $(window).trigger('resize');
-  }
-
-  function mouseNavigation(e) {
-    removeFocusClass();
-
-    if (
-      (lastMouseX === null && lastMouseY === null) ||
-      (lastMouseX === e.clientX && lastMouseY === e.clientY)
-    ) {
-      lastMouseX = e.clientX;
-      lastMouseY = e.clientY;
-      return;
-    }
-
-    lastMouseX = e.clientX;
-    lastMouseY = e.clientY;
-
-    $('.mod-results').addClass('mouse-nav');
   }
 
   function keyNavigation(e) {
@@ -87,7 +68,7 @@ OpenConext.Discover = function () {
       list = $('.list'),
       key = e.which;
 
-    $('.mod-results').removeClass('mouse-nav');
+    $results.removeClass('mouse-nav');
 
     function pressEnter() {
       e.preventDefault();
@@ -103,13 +84,14 @@ OpenConext.Discover = function () {
     }
 
     function pressDownArrow() {
+      removeFakeFocusFirstIdP();
+
       // moving from the searchbox
       if (currentElement.closest('.active').next().attr('type') === 'hidden') {
         var nextElement = list.find('.active:first');
 
         if (nextElement.length > 0) {
           nextElement[0].focus();
-          removeFocusClass();
         }
         return;
       }
@@ -117,14 +99,12 @@ OpenConext.Discover = function () {
       // moving in a list
       if (currentElement.nextAll('.active:first').length > 0) {
         currentElement.nextAll('.active:first').focus();
-        removeFocusClass();
         return;
       }
 
       // moving to next list
       if (currentElement.parent().parent().next().find('.active:first').length > 0) {
         currentElement.parent().parent().next().find('.active:first').focus();
-        removeFocusClass();
       }
     }
 
@@ -132,14 +112,12 @@ OpenConext.Discover = function () {
       // move up in list
       if (currentElement.prevAll('.active:first').length > 0) {
         currentElement.prevAll('.active:first').focus();
-        removeFocusClass();
         return;
       }
 
       // move up in previous list
       if (currentElement.parent().parent().prev().find('.active:last').length > 0) {
         currentElement.parent().parent().prev().find('.active:last').focus();
-        removeFocusClass();
         return;
       }
 
@@ -163,16 +141,12 @@ OpenConext.Discover = function () {
 
   }
 
-  function removeFocusClass() {
-    $('.result.focussed').removeClass('focussed');
+  function fakeFocusFirstIdP() {
+    removeFakeFocusFirstIdP();
+    $('.result.active').first().addClass('focussed');
   }
-
-  function setFocusClass() {
-    var firstActive = $('.result.active:first');
-
-    removeFocusClass();
-
-    firstActive.addClass('focussed');
+  function removeFakeFocusFirstIdP() {
+    $('.result').removeClass('focussed');
   }
 
   if (!hasDiscovery()) {
@@ -194,7 +168,8 @@ OpenConext.Discover = function () {
     return { idp: idp.idp, count: parseInt(normalisedIdpCounts[idp.count]) + 1 };
   });
 
-  var selectedIdpElements = _.chain(selectedIdps)
+  // Populate list of previously chosen IdPs based on "selectedidps" cookie.
+  _.chain(selectedIdps)
       .map(function (selectedIdp) {
         return {
           idp: $('#selection a[data-idp]').filter(function () {
@@ -250,20 +225,13 @@ OpenConext.Discover = function () {
     deinitRequestAccessModal();
   });
 
-  function predicateContainsString(equalTo) {
-    return function (value) {
-      return value === value.toString() && value.indexOf(equalTo) !== -1;
-    }
-  }
-
   checkVisible();
   checkNoResults();
-  setFocusClass();
 
   // Listening to multiple events: 'input' for changes in input text, except for IE, which does not register character
   // deletions; 'keyup' for character deletions in IE; 'mouseup' for clicks on IE's native input clear button. The
   // 0-millisecond timeout is there to retrieve the input value after 'mouseup' events.
-  this.searchBar.on('input keyup mouseup', function inputDetected(event) {
+  $searchBar.on('input keyup mouseup', function inputDetected(event) {
     setTimeout(function () {
       filterList($(event.target).val());
     }, 0);
@@ -345,18 +313,38 @@ OpenConext.Discover = function () {
       idp = accessLink.attr('data-idp'),
       saveIndex = _.findIndex(selectedIdps, function (selectedIdp) {
         return selectedIdp.idp === idp;
-      });
+      }),
+      selectionInsertionPoint,
+      accessLinkIdpName;
 
     if ($(e.target).hasClass('deleteable')) {
       e.stopPropagation();
       e.preventDefault();
 
       if (saveIndex !== -1) {
+        // Remove the previously selected IdP from the entity ID list.
         selectedIdps.splice(saveIndex, 1);
-        accessLink.slideUp('fast', function() {
-          accessLink.remove();
-          checkVisible();
-        });
+        // We find out where to move the IdP in the "normal" IdP list by comparing names...
+        accessLinkIdpName = accessLink.find('h3').text();
+        selectionInsertionPoint = $('#selection .list .result h3')
+          .filter(function () {
+            return $(this).text() < accessLinkIdpName;
+          })
+          .last()
+          .parents('.result').first();
+        if (selectionInsertionPoint.length === 0) {
+          selectionInsertionPoint = $('#selection .list .spinner');
+        }
+        // ... and move the IdP there, swapping the delete button for its "Press enter to select" button.
+        accessLink
+          .insertAfter(selectionInsertionPoint)
+          .each(function () {
+            var accessLink = $(this);
+            var swapText = accessLink.attr('data-toggle-text');
+            accessLink.attr('data-toggle-text', accessLink.html());
+            accessLink.html(swapText);
+          });
+        checkVisible();
       }
     } else {
       if (saveIndex === -1) {
@@ -373,21 +361,25 @@ OpenConext.Discover = function () {
   });
 
   $('body').on('keydown', keyNavigation);
-  $('.mod-results').on('mousemove', mouseNavigation);
+  $results.on('mouseenter mouseleave', '.result', function () {
+    $(document.activeElement).filter('.result').blur();
+    removeFakeFocusFirstIdP();
+  });
   $('img.logo').lazyload();
-  this.searchBar.on('focus', function() {
+  $searchBar.on('focus', function() {
     var val = this.value;
     var $this = $(this);
     $this.val("");
     setTimeout(function () {
       $this.val(val);
     }, 1);
-    setFocusClass();
+
+    fakeFocusFirstIdP();
   });
 
   // on desktop devices set the focus
   if (window.innerWidth > 800) {
-    this.searchBar.focus();
+    $searchBar.focus();
   }
 };
 

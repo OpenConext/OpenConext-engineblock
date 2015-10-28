@@ -10,7 +10,7 @@ return array(
     'post_data'             => 'POST Data',
     'processing'            => 'Verbinden met de dienst',
     'processing_waiting'    => 'Wachten op een reactie van de dienst.',
-    'processing_long'       => 'Duurt het te lang?',
+    'processing_long'       => 'Wees a.u.b. geduldig, het kan even duren...',
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
     'go_back'               => '&lt;&lt; Ga terug',
@@ -50,7 +50,7 @@ return array(
     //Footer
     'service_by'            => 'Deze dienst is verbonden via',
     'serviceprovider_link'  => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>',
-    'terms_of_service_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
+    'terms_of_service_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29" target="_blank">Gebruiksvoorwaarden</a>',
     'footer'                => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
     //Help
@@ -273,14 +273,14 @@ Als je deze applicatie wilt gebruiken moet je:<br />
         <br />
     </p>',
 
-    'error_received_error_status_code'     => 'Error - Instellingsfout',
+    'error_received_error_status_code'     => 'Error - Identity Provider-fout',
     'error_received_error_status_code_desc'=> '<p>
-        Jouw instelling stuurde een authenticatie respons met een fout code.
+        Jouw instelling stuurde een authenticatierespons met een foutcode.
     </p>',
-    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van instelling',
-    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op instellingsantwoord',
+    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van identity provider',
+    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op identity provider-antwoord',
     'error_received_status_code_desc'=> '<p>
-        Jouw instelling stuurde een ongeldig authenticatie respons terug.
+        Jouw instelling stuurde een ongeldig authenticatierespons terug.
     </p>',
 
     /**

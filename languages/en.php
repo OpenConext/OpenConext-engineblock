@@ -10,7 +10,7 @@ return array(
     'post_data'             => 'POST Data',
     'processing'            => 'Connecting to the service',
     'processing_waiting'    => 'Waiting for a response from the service.',
-    'processing_long'       => 'Taking too long?',
+    'processing_long'       => 'Please be patient, it may take a while...',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
     'go_back'               => '&lt;&lt; Go back',
@@ -51,7 +51,7 @@ return array(
     // Footer
     'service_by'            => 'This is a service connected through',
     'serviceprovider_link'  => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>',
-    'terms_of_service_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
+    'terms_of_service_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29" target="_blank">Terms of Service</a>',
     'footer'                => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
 
     // Help
