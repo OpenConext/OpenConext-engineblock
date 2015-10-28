@@ -19,7 +19,8 @@ class EngineBlock_Corto_Filter_Command_PolicyDecisionPoint extends EngineBlock_C
 
         EngineBlock_ApplicationSingleton::getLog()->debug("Policy Enforcement Point consult " . $requirePep);
 
-        if ($requirePep)
+        //TODO ensure we only go to the PEP when it is required
+        if (true || $requirePep)
         {
             $validator = $this->_getValidator();
             $hasAccess = $validator->hasAccess(

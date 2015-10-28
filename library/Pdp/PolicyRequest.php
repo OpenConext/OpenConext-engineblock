@@ -5,6 +5,7 @@
  */
 class Pdp_PolicyRequest
 {
+    protected $Request;
     protected $ReturnPolicyIdList = true;
     protected $CombinedDecision = false;
     protected $AccessSubject;
@@ -13,6 +14,7 @@ class Pdp_PolicyRequest
     public function __construct()
     {
         // Initialize Resource.
+        $this->Request = new stdClass();
         $this->Resource = new stdClass();
         $this->Resource->Attribute = array();
 
@@ -30,10 +32,11 @@ class Pdp_PolicyRequest
     {
         // Mind that we export protected properties!
         $object = new stdClass();
-        $object->ReturnPolicyIdList = $this->ReturnPolicyIdList;
-        $object->CombinedDecision = $this->CombinedDecision;
-        $object->AccessSubject = $this->AccessSubject;
-        $object->Resource = $this->Resource;
+        $object->Request = $this->Request;
+        $object->Request->ReturnPolicyIdList = $this->ReturnPolicyIdList;
+        $object->Request->CombinedDecision = $this->CombinedDecision;
+        $object->Request->AccessSubject = $this->AccessSubject;
+        $object->Request->Resource = $this->Resource;
 
         return json_encode($object);
     }
