@@ -1,4 +1,4 @@
-.mod-results.mouse-nav
+.mod-results
   a.result
     &:active,
     &:hover
@@ -42,6 +42,8 @@
 
     .lt-ie10 &, .safari5 &, .safari6 &
       display: block
+      &.hidden
+        display: none
 
     &.focussed
       outline: none
@@ -134,6 +136,14 @@
   .action
     display: none
     margin-left: auto
+
+    // Let clicks fall through to underlying a.result
+    pointer-events: none
+    // ... unless the user doesn't have JavaScript, in which case the button must submit the form,
+    // or it concerns the IdP preference removal button.
+    html.no-js &, &.deleteable
+      pointer-events: auto
+
     .lt-ie9 &.deleteable
       background: $blue
       &:after

@@ -77,7 +77,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
-            $log->notice("Removed ourselves from the candidate IdP list");
+            $log->info("Removed ourselves from the candidate IdP list");
             unset($candidateIDPs[$posOfOwnIdp]);
         }
 
