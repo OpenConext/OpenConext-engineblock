@@ -22,6 +22,14 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
                 '/authentication/feedback/vomembershiprequired'
             );
         }
+        catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
+            $application->getLogInstance()->notice(
+                "PEP authorization rule violation",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/authorization-policy-violation?message=' . urlencode($e->getMessage()));
+        }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->notice(
                 "Session Lost",

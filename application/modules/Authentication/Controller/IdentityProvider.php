@@ -185,12 +185,6 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/no-consent');
         }
-        catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
-            $feedback = array();
-            array_push($feedback, $e->getMessage());
-            $application->handleExceptionWithFeedback($e,
-                '/authentication/feedback/authorization-policy-violation', $feedback);
-        }
     }
 
     public function helpConsentAction($argument = null)
