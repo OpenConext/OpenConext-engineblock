@@ -37,7 +37,8 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
 
     public function authorizationPolicyViolationAction()
     {
-
+        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->startSession();
     }
 
     public function noConsentAction()
