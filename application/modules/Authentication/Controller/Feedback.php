@@ -35,6 +35,11 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         $this->_getResponse()->setStatus(400, 'Bad Request');
     }
 
+    public function authorizationPolicyViolation()
+    {
+
+    }
+
     public function noConsentAction()
     {
 

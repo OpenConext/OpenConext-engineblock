@@ -232,6 +232,11 @@ Als je deze applicatie wilt gebruiken moet je:<br />
         Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
+    'error_authorization_policy_violation'            => 'Autorisatie regel overtreden',
+    'error_authorization_policy_violation_desc'       => '<p>
+        Je bent succesvol ingelogd bij jouw instelling, maar je kan geen gebruik maken van deze dienst omdat er een Autorisatie regel is overtreden
+        <br /><br />
+    </p>',
     'error_no_message'                  => 'Error - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
