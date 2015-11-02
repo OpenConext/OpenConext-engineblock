@@ -235,9 +235,10 @@ If you want to use this application you have to:<br />
     </p>',
     'error_authorization_policy_violation'            => 'Authorization Policy Violation',
     'error_authorization_policy_violation_desc'       => '<p>
-        You have successfully authenticated at your Identity Provider, however access is however denied based on a violation of an Authorization Policy Violation
+        You have successfully authenticated at your Identity Provider, however access is denied based on a violation of an Authorization Policy Violation
         <br /><br />
     </p>',
+    'error_authorization_policy_violation_name'       => 'Message',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',

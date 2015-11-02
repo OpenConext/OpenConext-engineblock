@@ -28,7 +28,8 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
                 array('exception' => $e)
             );
             $application->handleExceptionWithFeedback($e,
-                '/authentication/feedback/authorization-policy-violation?message=' . urlencode($e->getMessage()));
+                '/authentication/feedback/authorization-policy-violation',
+                array("error_authorization_policy_violation_name",$e->getMessage()));
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->notice(
