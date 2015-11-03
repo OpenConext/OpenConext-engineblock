@@ -93,6 +93,10 @@ class AppKernel extends Kernel
         $apiJanusCredentials = $apiConfiguration->get('users')->get('janus');
         $container->setParameter('api.users.janus.username', $apiJanusCredentials->get('username'));
         $container->setParameter('api.users.janus.password', $apiJanusCredentials->get('password'));
+
+        $apiProfileCredentials = $apiConfiguration->get('users')->get('profile');
+        $container->setParameter('api.users.profile.username', $apiProfileCredentials->get('username'));
+        $container->setParameter('api.users.profile.password', $apiProfileCredentials->get('password'));
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
