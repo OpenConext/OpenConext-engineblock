@@ -49,7 +49,7 @@ class ConnectionsController
     public function pushConnectionsAction(Request $request)
     {
         if (!$this->featuresService->metadataPushIsEnabled()) {
-            return new Response(404);
+            return new JsonResponse(null, 404);
         }
 
         if (!$this->authorizationChecker->isGranted(array('ROLE_API_USER_JANUS'))) {
