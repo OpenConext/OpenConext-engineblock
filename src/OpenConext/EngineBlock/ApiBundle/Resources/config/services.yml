@@ -8,3 +8,4 @@ services:
         class: OpenConext\EngineBlock\ApiBundle\Service\FeaturesService
         arguments:
             - %api.features.metadata_push.enabled%
+            - %api.features.consent_listing.enabled%

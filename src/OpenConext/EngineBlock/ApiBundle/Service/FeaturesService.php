@@ -12,15 +12,26 @@ class FeaturesService
     private $metadataPushEnabled;
 
     /**
-     * @param bool $metadataPushEnabled
+     * @var bool
      */
-    public function __construct($metadataPushEnabled)
+    private $consentListingEnabled;
+
+    /**
+     * @param bool $metadataPushEnabled
+     * @param bool $consentListingEnabled
+     */
+    public function __construct($metadataPushEnabled, $consentListingEnabled)
     {
         if (!is_bool($metadataPushEnabled)) {
             throw InvalidArgumentException::invalidType('bool', 'metadataPushEnabled', $metadataPushEnabled);
         }
 
+        if (!is_bool($consentListingEnabled)) {
+            throw InvalidArgumentException::invalidType('bool', 'consentListingEnabled', $consentListingEnabled);
+        }
+
         $this->metadataPushEnabled = $metadataPushEnabled;
+        $this->consentListingEnabled = $consentListingEnabled;
     }
 
     /**
@@ -29,5 +40,13 @@ class FeaturesService
     public function metadataPushIsEnabled()
     {
         return $this->metadataPushEnabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function consentListingIsEnabled()
+    {
+        return $this->consentListingEnabled;
     }
 }
