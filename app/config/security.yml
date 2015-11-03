@@ -1,0 +1,28 @@
+security:
+    providers:
+        in_memory:
+            memory:
+                users:
+                    "%api.users.janus.username%":
+                        password: %api.users.janus.password%
+                        roles: 'ROLE_API_USER_JANUS'
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|stylesheets|images|js|javascripts)/
+            security: false
+            stateless: true
+
+        api:
+            host: ^engine-api\..+
+            http_basic: ~
+            entry_point: api.security.http_basic_entry_point
+            stateless: true
+            pattern: ^/.+
+
+        main:
+            anonymous: ~
+            stateless:  true

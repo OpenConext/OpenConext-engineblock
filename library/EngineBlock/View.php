@@ -4,6 +4,11 @@ class EngineBlock_View
 {
     protected $_data = array();
 
+    /**
+     * @var Zend_Layout
+     */
+    private $layout;
+
     public function __construct()
     {
     }
@@ -17,7 +22,16 @@ class EngineBlock_View
     public function render($viewScriptPath, $useLayout = true)
     {
         if (!file_exists($viewScriptPath)) {
-            throw new EngineBlock_Exception("View $viewScriptPath does not exist");
+            $symfonyPath = $this->layout()->getViewBasePath() . $viewScriptPath;
+            if (!file_exists($symfonyPath)) {
+                throw new EngineBlock_Exception(sprintf(
+                    'View script "%s" does not exist as a file itself and also not as a file at "%s"',
+                    $viewScriptPath,
+                    $symfonyPath
+                ));
+            }
+
+            $viewScriptPath = $symfonyPath;
         }
 
         extract($this->_data);
@@ -38,8 +52,21 @@ class EngineBlock_View
         return $renderedPage;
     }
 
+    /**
+     * Allows for injection as used in the CompatibilityBundle services.xml, without having to change the constructor
+     * @param Zend_Layout $layout
+     */
+    public function setLayout(Zend_Layout $layout)
+    {
+        $this->layout = $layout;
+    }
+
     public function layout()
     {
+        if ($this->layout) {
+            return $this->layout;
+        }
+
         return EngineBlock_ApplicationSingleton::getInstance()->getLayout();
     }
 

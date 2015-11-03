@@ -1,0 +1,34 @@
+open_conext_engine_block_authentication_homepage:
+    path:     /
+    defaults: { _controller: engineblock.controller.authentication.index:indexAction }
+
+authentication_sp_debug:
+    path:       /authentication/sp/debug
+    methods:    [GET]
+    defaults:
+        _controller: engineblock.controller.authentication.debug:debugSpConnectionAction
+
+authentication_proxy_processed_assertion:
+    path:       /authentication/proxy/processed-assertion
+    methods:    [GET,POST]
+    defaults:
+        _controller: engineblock.controller.authentication.proxy:processedAssertionAction
+
+identity_provider:
+    resource: routing/identity_provider.yml
+
+service_provider:
+    resource: routing/service_provider.yml
+
+metadata:
+    resource: routing/metadata.yml
+
+certificate:
+    resource: routing/certificate.yml
+
+feedback:
+    resource: routing/feedback.yml
+    prefix:   '/authentication/feedback'
+
+wayf:
+    resource: routing/wayf.yml

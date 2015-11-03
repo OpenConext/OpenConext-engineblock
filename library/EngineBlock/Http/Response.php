@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Http_Response 
+class EngineBlock_Http_Response
 {
     const HTTP_HEADER_RESPONSE_LOCATION = 'Location';
 
@@ -35,9 +35,36 @@ class EngineBlock_Http_Response
         }
     }
 
+    /**
+     * @param $body
+     */
     public function setBody($body)
     {
         $this->_body = $body;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders()
+    {
+        return $this->_headers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBody()
+    {
+        return $this->_body;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStatusCode()
+    {
+        return $this->_statusCode;
     }
 
     public function send()

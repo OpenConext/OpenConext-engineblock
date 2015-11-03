@@ -153,26 +153,34 @@ EngineBlock requires database settings, without it the install script will not f
 Configure 2 HTTPS virtual hosts, one that points to the authentication interface, which handles authentication and
 proxying thereof. The second one should point to the profile interface.
 
-Make sure the ENGINEBLOCK_ENV is set.
+Make sure the `ENGINEBLOCK_ENV` is set.
+Make sure the `SYMFONY_ENV` is set, this can be mapped from `ENGINEBLOCK_ENV` as:
+| `ENGINEBLOCK_ENV` | `SYMFONY_ENV` |
+| --- | --- |
+| production | prod |
+| acceptance | acc |
+| test | test |
+| vm | dev |
 
 **EXAMPLE**
 
     SetEnv ENGINEBLOCK_ENV !!ENV!!
+    SetEnv SYMFONY_ENV !!SF_ENV!!
 
-Make sure you have the following rewrite rules:
+Make sure you have the following rewrite rules (replace `app.php` with `app_dev.php` for development):
 
     RewriteEngine On
     # We support only GET/POST/HEAD
     RewriteCond %{REQUEST_METHOD} !^(POST|GET|HEAD)$
     RewriteRule .* - [R=405,L]
     # If the requested url does not map to a file or directory, then forward it to index.php/URL.
-    # Note that it MUST be index.php/URL because Corto uses the PATH_INFO server variable
+    # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
     RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /index.php/$1 [L] # Send the query string to index.php
+    RewriteRule ^(.*)$ /app.php/$1 [L] # Send the query string to index.php
 
     # Requests to the domain (no query string)
-    RewriteRule ^$ index.php/ [L]
+    RewriteRule ^$ app.php/ [L]
 
 Note that EngineBlock SHOULD run on HTTPS, you can redirect users from HTTP to HTTPS
 with the following Apache rewrite rules on a *:80 VirtualHost:
@@ -181,15 +189,15 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
     RewriteCond     %{SERVER_PORT} ^80$
     RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
 
-For all virtual hosts you should specify a different *DocumentRoot*.
+For all virtual hosts you should specify the same *DocumentRoot*.
 
 1st virtual host:
 
-    DocumentRoot    /opt/www/engineblock/www/authentication
+    DocumentRoot    /opt/www/engineblock/web
 
 2nd virtual host:
 
-    DocumentRoot    /opt/www/engineblock/www/profile
+    DocumentRoot    /opt/www/engineblock/web
 
 Also for the 2nd virtual host (profile interface) you should specify an extra *RewriteCond*.
 Add it behind the last *RewriteCond* descriptive (but before the *RewriteRule* descriptive) in your virtual host
@@ -288,8 +296,18 @@ If you are using this pattern, an update can be done with the following:
 
 ## Applying a new theme ##
 
+Before being able to use the new theming system, you must install the following:
+
+- [Node.JS][1]
+- [Bower][2] (requires Node.JS)
+- [Compass][3]
+
 When applying a theme for the first time you can enter the theme directory and run `npm install` and `bower install` to
 load the required theme modules.
 
-Themes can be deployed using a Grunt task, from the theme directory run `grunt theme:mythemename`, this will initiate 
+Themes can be deployed using a Grunt task, from the theme directory run `grunt theme:mythemename`, this will initiate
 the appropriate tasks for cleaning the previous theme and deploying the new theme on your installation.
+
+[1]: https://nodejs.org/en/
+[2]: http://bower.io/
+[3]: http://compass-style.org/

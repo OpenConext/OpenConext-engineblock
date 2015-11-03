@@ -1,0 +1,10 @@
+api_heartbeat:
+    path:     /
+    defaults:
+        _controller: openconext.api.controller.heartbeat:itWorksAction
+
+api_connections:
+    path:     /api/connections
+    methods:    [POST]
+    defaults:
+        _controller: openconext.api.controller.connections:pushConnectionsAction
