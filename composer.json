@@ -13,6 +13,7 @@
     "require": {
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
+        "doctrine/orm": "~2.3",
         "kriswallsmith/assetic": "~1.2.0",
         "monolog/monolog": "~1.13",
         "mrclay/minify": "~2.2",

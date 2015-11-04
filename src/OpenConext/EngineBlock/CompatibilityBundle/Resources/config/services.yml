@@ -7,6 +7,21 @@ services:
         class: Zend_Config
         factory: ["@eb.compat.application", getConfiguration]
 
+    eb.compat.di_container:
+        public: false
+        class: EngineBlock_Application_DiContainer
+        factory: ["@eb.compat.application", getDiContainer]
+
+    eb.compat.doctrine.entity_manager:
+        public: false
+        class: Doctrine\ORM\EntityManager
+        factory: [@eb.compat.di_container, getEntityManager]
+
+    eb.compat.doctrine.dbal_connection:
+        public: false
+        class: Doctrine\DBAL\Connection
+        factory: [@eb.compat.doctrine.entity_manager, getConnection]
+
     eb.compat.view:
         class: EngineBlock_View
         calls:
