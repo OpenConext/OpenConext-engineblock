@@ -9,10 +9,9 @@ class EngineBlock_Database_ConnectionFactory
      * Create a new Database connection, for a given mode self::MODE_READ and self::MODE_WRITE,
      * defaults to write mode.
      *
-     * @static
+     * @param  string|null $mode
+     * @return PDO A PDO instance with exception mode error handling
      * @throws EngineBlock_Exception
-     * @param  $mode
-     * @return PDO
      */
     public function create($mode = null)
     {
@@ -22,7 +21,7 @@ class EngineBlock_Database_ConnectionFactory
 
         $databaseSettings = $this->_getDatabaseSettings();
 
-        if      ($mode === self::MODE_READ) {
+        if ($mode === self::MODE_READ) {
             try {
                 return $this->_createReadConnection($databaseSettings);
             }
@@ -44,7 +43,9 @@ class EngineBlock_Database_ConnectionFactory
     }
 
     /**
-     * @return PDO
+     * @param Zend_Config $databaseSettings
+     * @return PDO A PDO instance with exception mode error handling
+     * @throws EngineBlock_Database_Exception
      */
     protected function _createWriteConnection($databaseSettings)
     {
@@ -56,7 +57,9 @@ class EngineBlock_Database_ConnectionFactory
     }
 
     /**
-     * @return PDO
+     * @param Zend_Config $databaseSettings
+     * @return PDO A PDO instance with exception mode error handling
+     * @throws EngineBlock_Database_Exception
      */
     protected function _createReadConnection($databaseSettings)
     {
@@ -67,6 +70,12 @@ class EngineBlock_Database_ConnectionFactory
         return $this->_createServerConnection($databaseSettings->slaves->toArray(), $databaseSettings);
     }
 
+    /**
+     * @param array[] servers
+     * @param Zend_Config $databaseSettings
+     * @return PDO A PDO instance with exception mode error handling
+     * @throws EngineBlock_Database_Exception
+     */
     protected function _createServerConnection($servers, $databaseSettings)
     {
         $randomServerKey = array_rand($servers);
@@ -91,14 +100,22 @@ class EngineBlock_Database_ConnectionFactory
             )
         );
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
         return $dbh;
     }
 
+    /**
+     * @return Zend_Config
+     */
     protected function _getConfiguration()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
     }
 
+    /**
+     * @return Zend_Config
+     * @throws EngineBlock_Database_Exception
+     */
     protected function _getDatabaseSettings()
     {
         $configuration = $this->_getConfiguration();
