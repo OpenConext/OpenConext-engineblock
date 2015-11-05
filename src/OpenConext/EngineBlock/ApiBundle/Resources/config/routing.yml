@@ -10,7 +10,7 @@ api_connections:
         _controller: openconext.api.controller.connections:pushConnectionsAction
 
 api_consent_user:
-    path:    /api/consent/{userId}
+    path:    /consent/{userId}
     methods: [GET]
     requirements:
         userId: .+
