@@ -79,6 +79,6 @@ final class ConsentService
             return null;
         }
 
-        return Consent::fromConsentAndServiceProvider($consent, $serviceProvider);
+        return new Consent($consent, $serviceProvider);
     }
 }
