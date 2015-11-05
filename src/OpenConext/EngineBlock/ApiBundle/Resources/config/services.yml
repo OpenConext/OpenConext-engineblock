@@ -9,3 +9,10 @@ services:
         arguments:
             - %api.features.metadata_push.enabled%
             - %api.features.consent_listing.enabled%
+
+    api.service.consent:
+        class: OpenConext\EngineBlock\ApiBundle\Service\ConsentService
+        arguments:
+            - @engineblock.repository.consent
+            - @eb.compat.repository.metadata
+            - @eb.compat.logger

@@ -17,5 +17,6 @@ class OpenConextEngineBlockAuthenticationExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('controllers.yml');
         $loader->load('event_listeners.yml');
+        $loader->load('repositories.yml');
     }
 }

@@ -8,3 +8,11 @@ api_connections:
     methods:    [POST]
     defaults:
         _controller: openconext.api.controller.connections:pushConnectionsAction
+
+api_consent_user:
+    path:    /consent/{userId}
+    methods: [GET]
+    requirements:
+        userId: .+
+    defaults:
+        _controller: openconext.api.controller.consent:userAction
