@@ -10,6 +10,8 @@ services:
         class: OpenConext\EngineBlock\ApiBundle\Controller\ConsentController
         arguments:
             - @api.service.consent
+            - @api.service.features
+            - @security.authorization_checker
 
     openconext.api.controller.heartbeat:
         class: OpenConext\EngineBlock\ApiBundle\Controller\HeartbeatController
