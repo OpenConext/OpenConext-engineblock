@@ -43,10 +43,10 @@ final class ConsentService
      * @param string $userId
      * @return ConsentList
      */
-    public function findAll($userId)
+    public function findAllFor($userId)
     {
         try {
-            $consents = $this->consentRepository->findAll($userId);
+            $consents = $this->consentRepository->findAllFor($userId);
         } catch (DBALException $e) {
             throw new RuntimeException(
                 sprintf('An exception occurred while fetching consents the user has given ("%s")', $e->getMessage()),

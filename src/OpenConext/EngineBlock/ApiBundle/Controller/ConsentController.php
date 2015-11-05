@@ -52,7 +52,7 @@ final class ConsentController
         }
 
         try {
-            $consentList = $this->consentService->findAll($userId)->jsonSerialize();
+            $consentList = $this->consentService->findAllFor($userId)->jsonSerialize();
         } catch (RuntimeException $e) {
             throw new ApiInternalServerErrorHttpException(
                 sprintf(

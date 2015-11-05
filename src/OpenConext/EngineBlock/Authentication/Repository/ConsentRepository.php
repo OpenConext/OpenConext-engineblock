@@ -28,7 +28,7 @@ final class ConsentRepository
      * @return Consent[]
      * @throws DBALException
      */
-    public function findAll($userId)
+    public function findAllFor($userId)
     {
         $sql       = 'SELECT service_id, consent_date, usage_date FROM consent WHERE hashed_user_id=:hashed_user_id';
         $statement = $this->connection->executeQuery($sql, array('hashed_user_id' => sha1($userId)));
