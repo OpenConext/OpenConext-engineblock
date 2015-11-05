@@ -6,5 +6,10 @@ services:
             - @security.authorization_checker
             - @api.service.features
 
+    openconext.api.controller.consent:
+        class: OpenConext\EngineBlock\ApiBundle\Controller\ConsentController
+        arguments:
+            - @api.service.consent
+
     openconext.api.controller.heartbeat:
         class: OpenConext\EngineBlock\ApiBundle\Controller\HeartbeatController

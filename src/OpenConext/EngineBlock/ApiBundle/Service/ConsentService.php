@@ -2,10 +2,12 @@
 
 namespace OpenConext\EngineBlock\ApiBundle\Service;
 
+use Doctrine\DBAL\DBALException;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\ApiBundle\Dto\Consent;
 use OpenConext\EngineBlock\ApiBundle\Dto\ConsentList;
+use OpenConext\EngineBlock\ApiBundle\Exception\RuntimeException;
 use OpenConext\EngineBlock\Authentication\Entity\Consent as ConsentEntity;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use Psr\Log\LoggerInterface;
@@ -43,7 +45,15 @@ final class ConsentService
      */
     public function findAll($userId)
     {
-        $consents = $this->consentRepository->findAll($userId);
+        try {
+            $consents = $this->consentRepository->findAll($userId);
+        } catch (DBALException $e) {
+            throw new RuntimeException(
+                sprintf('An exception occurred while fetching consents the user has given ("%s")', $e->getMessage()),
+                0,
+                $e
+            );
+        }
 
         return new ConsentList(array_filter(array_map(array($this, 'createConsentDtoFromConsentEntity'), $consents)));
     }
