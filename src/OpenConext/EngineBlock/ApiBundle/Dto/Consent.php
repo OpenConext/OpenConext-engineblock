@@ -57,7 +57,6 @@ final class Consent
                 'nl' => $this->serviceProvider->displayNameNl,
             ),
             'eula_url' => $this->serviceProvider->termsOfServiceUrl,
-            'support_url' => null,
             'support_email' => $supportEmail,
         );
 
