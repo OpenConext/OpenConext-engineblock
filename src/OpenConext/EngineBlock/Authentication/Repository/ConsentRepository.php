@@ -30,7 +30,7 @@ final class ConsentRepository
      */
     public function findAll($userId)
     {
-        $sql       = 'SELECT service_id, consent_date, usage_date WHERE hashed_user_id=:hashed_user_id';
+        $sql       = 'SELECT service_id, consent_date, usage_date FROM consent WHERE hashed_user_id=:hashed_user_id';
         $statement = $this->connection->executeQuery($sql, array('hashed_user_id' => sha1($userId)));
         $rows      = $statement->fetchAll(PDO::FETCH_ASSOC);
 
