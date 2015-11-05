@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlock\Authentication\Repository;
 
+use DateTime;
 use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\DBALException;
 use OpenConext\EngineBlock\Authentication\Entity\Consent;
@@ -35,7 +36,12 @@ final class ConsentRepository
 
         return array_map(
             function (array $row) use ($userId) {
-                return new Consent($userId, $row['service_id'], $row['consent_date'], $row['usage_date']);
+                return new Consent(
+                    $userId,
+                    $row['service_id'],
+                    new DateTime($row['consent_date']),
+                    new DateTime($row['usage_date'])
+                );
             },
             $rows
         );
