@@ -19,37 +19,63 @@ final class Consent
      *
      * @var string
      */
-    private $serviceId;
+    private $serviceProviderEntityId;
 
     /**
      * @var DateTime
      */
-    private $consentDate;
+    private $consentGivenOn;
 
     /**
      * @var DateTime
      */
-    private $usageDate;
+    private $lastUsedOn;
 
     /**
      * @param string   $userId
-     * @param string   $serviceId
-     * @param DateTime $consentDate
-     * @param DateTime $usageDate
+     * @param string   $serviceProviderEntityId
+     * @param DateTime $consentGivenOn
+     * @param DateTime $lastUsedOn
      */
-    public function __construct($userId, $serviceId, DateTime $consentDate, DateTime $usageDate)
+    public function __construct($userId, $serviceProviderEntityId, DateTime $consentGivenOn, DateTime $lastUsedOn)
     {
         if (!is_string($userId)) {
             throw InvalidArgumentException::invalidType('string', 'userId', $userId);
         }
 
-        if (!is_string($serviceId)) {
-            throw InvalidArgumentException::invalidType('string', 'serviceId', $serviceId);
+        if (!is_string($serviceProviderEntityId)) {
+            throw InvalidArgumentException::invalidType('string', 'serviceProviderEntityId', $serviceProviderEntityId);
         }
 
-        $this->userId      = $userId;
-        $this->serviceId   = $serviceId;
-        $this->consentDate = $consentDate;
-        $this->usageDate   = $usageDate;
+        $this->userId                  = $userId;
+        $this->serviceProviderEntityId = $serviceProviderEntityId;
+        $this->consentGivenOn          = $consentGivenOn;
+        $this->lastUsedOn              = $lastUsedOn;
+    }
+
+    /**
+     * The entity ID of the service.
+     *
+     * @return string
+     */
+    public function getServiceProviderEntityId()
+    {
+        return $this->serviceProviderEntityId;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDateConsentWasGivenOn()
+    {
+        return clone $this->consentGivenOn;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getDateLastUsedOn()
+    {
+        return clone $this->lastUsedOn;
     }
 }

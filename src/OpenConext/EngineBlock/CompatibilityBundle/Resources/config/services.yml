@@ -12,6 +12,11 @@ services:
         class: EngineBlock_Application_DiContainer
         factory: ["@eb.compat.application", getDiContainer]
 
+    eb.compat.repository.metadata:
+        public: false
+        class: OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+        factory: [@eb.compat.di_container, getMetadataRepository]
+
     eb.compat.doctrine.entity_manager:
         public: false
         class: Doctrine\ORM\EntityManager
