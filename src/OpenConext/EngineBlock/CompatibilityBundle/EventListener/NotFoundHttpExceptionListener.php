@@ -12,9 +12,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * When there was nothing to dispatch to, the dispatcher invoked a 404 page. This mimics that behaviour. When
  * refactoring phasing out corto, this listener should be converted to use Symfony style custom error pages.
- *
+ * @see https://www.pivotaltracker.com/story/show/107565968
  */
-class NotFoundHttpListener
+class NotFoundHttpExceptionListener
 {
     /**
      * @var EngineBlock_View

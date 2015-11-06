@@ -1,6 +1,6 @@
 services:
     eb.compat.event_listener.not_found_http_exception:
-        class: OpenConext\EngineBlock\CompatibilityBundle\EventListener\NotFoundHttpListener
+        class: OpenConext\EngineBlock\CompatibilityBundle\EventListener\NotFoundHttpExceptionListener
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 25 }
         arguments:

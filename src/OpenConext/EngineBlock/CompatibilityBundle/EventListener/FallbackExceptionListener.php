@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
  * The Dispatcher in the old code wrapped everything in a try/catch to allow for graceful recovery.
  * This listener mimics that behaviour. When phasing out corto, this listener should be replaced by
  * Symfony style custom error pages
+ * @see https://www.pivotaltracker.com/story/show/107565968
  */
 class FallbackExceptionListener
 {
