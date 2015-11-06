@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlock\AuthenticationBundle\EventListener;
+namespace OpenConext\EngineBlock\CompatibilityBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_View;
@@ -9,6 +9,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * When there was nothing to dispatch to, the dispatcher invoked a 404 page. This mimics that behaviour. When
+ * refactoring phasing out corto, this listener should be converted to use Symfony style custom error pages.
+ *
+ */
 class NotFoundHttpListener
 {
     /**
