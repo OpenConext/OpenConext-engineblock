@@ -586,11 +586,9 @@ class EngineBlock_Corto_Adapter
 
         $engineIdentityProvider->certificates = array($keyPair->getCertificate());
         $engineIdentityProvider->supportedNameIdFormats = array(
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
-            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
-            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
+            SAML2_Const::NAMEID_PERSISTENT,
+            SAML2_Const::NAMEID_TRANSIENT,
+            SAML2_Const::NAMEID_UNSPECIFIED,
         );
         return $engineIdentityProvider;
     }
@@ -620,11 +618,9 @@ class EngineBlock_Corto_Adapter
         }
         $engineServiceProvider->certificates = array($keyPair->getCertificate());
         $engineServiceProvider->supportedNameIdFormats = array(
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
-            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
-            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
+            SAML2_Const::NAMEID_PERSISTENT,
+            SAML2_Const::NAMEID_TRANSIENT,
+            SAML2_Const::NAMEID_UNSPECIFIED,
         );
 
         $metadata = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();
