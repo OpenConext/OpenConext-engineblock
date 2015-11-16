@@ -26,7 +26,7 @@ class Pdp_Client
     protected $policyResponse;
 
     /**
-     * @var Pdp_PolicyRequest|null
+     * @var Pdp_PolicyRequest
      */
     protected $policyRequest;
 

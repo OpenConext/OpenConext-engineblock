@@ -33,8 +33,11 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
 
     /**
      * Get the response message when subject has no access.
+     * 
+     * @param string|null $lang
+     * @return string|null
      */
-    public function getMessage($lang = NULL)
+    public function getMessage($lang = null)
     {
         $lang = !empty($lang) ? $lang : static::DEFAULT_LANG;
 
