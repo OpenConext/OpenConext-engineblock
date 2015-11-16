@@ -139,6 +139,15 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/vomembershiprequired');
         }
+        catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
+            $application->getLogInstance()->notice(
+                "PEP authorization rule violation",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/authorization-policy-violation',
+                array("error_authorization_policy_violation_name" => $e->getMessage()));
+        }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
             $_SESSION['feedback_custom'] = $e->getFeedback();
             $application->handleExceptionWithFeedback($e,
