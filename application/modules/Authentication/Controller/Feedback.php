@@ -17,6 +17,11 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         $this->_getResponse()->setStatus(400, 'Bad Request');
     }
 
+    public function dissimilarWorkflowStatesAction()
+    {
+        $this->_getResponse()->setStatus(400, 'Bad Request');
+    }
+
     public function unknownIssuerAction()
     {
         $this->_getResponse()->setStatus(404, 'Not Found');

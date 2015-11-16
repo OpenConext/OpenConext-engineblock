@@ -119,6 +119,16 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
                 '/authentication/feedback/received-invalid-response'
             );
         }
+        catch (EngineBlock_Exception_DissimilarServiceProviderWorkflowStates $e) {
+            $application->getLogInstance()->notice(
+                "Dissimilar Service Provider workflowstates in request chain (transparant proxying)",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback(
+                $e,
+                '/authentication/feedback/dissimilar-workflow-states'
+            );
+        }
     }
 
     public function processConsentAction()

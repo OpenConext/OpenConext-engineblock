@@ -227,11 +227,17 @@ Als je deze applicatie wilt gebruiken moet je:<br />
     </p>',
     'error_session_lost'                => 'Error - Sessie is verloren gegaan',
     'error_session_lost_desc'           => '<p>
-        Jouw sessie is ergens verloren gegaan.<br />
+        Je sessie is ergens verloren gegaan.<br />
         Waarschijnlijk mocht de cookie niet worden gezet door de strikte privacy configuratie van jouw browser?<br />
         Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
+    'error_dissimilar_workflow_state'       => 'Error - Verschillende productie statussen',
+    'error_dissimilar_workflow_state_desc'  => '<p>
+De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is nog niet beschikbaar via de SURFconext infrastructuur.
+Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de helpdesk van SURFconext via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+<br /><br />
+</p>',
     'error_authorization_policy_violation'            => 'Autorisatie regel overtreden',
     'error_authorization_policy_violation_desc'       => '<p>
         Je bent succesvol ingelogd bij jouw instelling, maar je kan geen gebruik maken van deze dienst omdat er een autorisatie regel is overtreden

@@ -233,6 +233,13 @@ If you want to use this application you have to:<br />
         Please go back and try again.
         <br /><br />
     </p>',
+    'error_dissimilar_workflow_state'       => 'Error - Dissimilar workflow states',
+    'error_dissimilar_workflow_state_desc'  => '<p>
+The application you came from (your &lsquo;Service Provider&rsquo;) is not available on the SURFconext infrastructure yet.
+Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
+this service.
+<br /><br />
+</p>',
     'error_authorization_policy_violation'            => 'Authorization Policy Violation',
     'error_authorization_policy_violation_desc'       => '<p>
         You have successfully authenticated at your Identity Provider, however access is denied based on a violation of an Authorization Policy Violation

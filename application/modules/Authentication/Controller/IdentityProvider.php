@@ -99,7 +99,8 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 "No Identity Providers",
                 array('exception' => $e)
             );
-            $application->handleExceptionWithFeedback($e,
+            $application->handleExceptionWithFeedback(
+                $e,
                 '/authentication/feedback/no-idps'
             );
         }
@@ -108,8 +109,19 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 "Invalid ACS location",
                 array('exception' => $e)
             );
-            $application->handleExceptionWithFeedback($e,
+            $application->handleExceptionWithFeedback(
+                $e,
                 '/authentication/feedback/invalidAcsLocation'
+            );
+        }
+        catch (EngineBlock_Exception_DissimilarServiceProviderWorkflowStates $e) {
+            $application->getLogInstance()->notice(
+                "Dissimilar Service Provider workflowstates in request chain (transparant proxying)",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback(
+                $e,
+                '/authentication/feedback/dissimilar-workflow-states'
             );
         }
     }
