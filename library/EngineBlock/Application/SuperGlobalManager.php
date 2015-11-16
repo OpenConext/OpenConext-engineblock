@@ -35,7 +35,7 @@ class EngineBlock_Application_SuperGlobalManager
             foreach ($values as $name => $value) {
                 $this->_logger->notice(
                     sprintf('Overwriting $%s[%s]', $superGlobalName, $name),
-                    ['super_global' => ['from' => $global[$name], 'to' => $value]]
+                    array('super_global' => array('from' => $global[$name], 'to' => $value))
                 );
 
                 $global[$name] = $value;

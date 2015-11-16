@@ -91,12 +91,13 @@ $layout->assign('greenHeader', $spDisplayName);
 $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 ?>
 <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-  <h2 class="search-institutions"><?= $this->t('search'); ?></h2>
-  <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" class="mod-search-input active">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
   <input type="hidden" id="form-idp" name="idp" value="" />
-  <button class="search">Search</button>
 
+  <h2 class="search-institutions"><?= $this->t('search'); ?></h2>
+  <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" class="mod-search-input active">
+
+  <button class="search">Search</button>
 
   <div id="preselection" class="mod-results hidden">
       <header>
@@ -122,14 +123,31 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 
       <?php foreach ($idpList as $key => $idp) : ?>
         <?php $idpKeywords = $idp['Keywords'] === 'Undefined' ? array() : array_values((array) $idp['Keywords']) ?>
-        <a class="result active access" href="#" tabindex="-1" data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" data-keywords="<?= EngineBlock_View::htmlSpecialCharsAttributeValue(json_encode($idpKeywords)); ?>">
+        <a class="result active access"
+           href="#"
+           tabindex="-1"
+           data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>"
+           data-keywords="<?= EngineBlock_View::htmlSpecialCharsAttributeValue(json_encode($idpKeywords)); ?>">
           <div class="logo">
             <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" alt="" />
           </div>
           <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-          <span class="c-button white action" data-toggle-text="<img class='deleteable' src='/images/cross.svg' alt='delete' />"><?php echo $this->t('press_enter_to_select'); ?></span>
+          <span class="c-button white action"
+                data-toggle-text="<img class='deleteable' src='/images/cross.svg' alt='delete' />"
+            ><?php echo $this->t('press_enter_to_select'); ?></span>
           <noscript>
-            <button type="submit" class="c-button white" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>">Login</button>
+              <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+                <input type="hidden"
+                       name="ID"
+                       value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+                <input type="hidden"
+                       name="idp"
+                       value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
+                <input type="submit"
+                       data-entityid="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>"
+                       class="c-button white"
+                       value="Login" />
+              </form>
           </noscript>
         </a>
       <?php endforeach; ?>

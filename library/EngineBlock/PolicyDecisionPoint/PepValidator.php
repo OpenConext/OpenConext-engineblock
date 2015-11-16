@@ -33,7 +33,7 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
 
     /**
      * Get the response message when subject has no access.
-     * 
+     *
      * @param string|null $lang
      * @return string|null
      */
