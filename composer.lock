@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "577aa1243ea222e422166e91c1e165a8",
-    "content-hash": "4e5cdd769b74dac179565f1f0f05227d",
+    "hash": "e8a48ab7b0aea42dcdbd29fbe4ecfe4d",
+    "content-hash": "c779cfa29ae549deae00ed5a6cc8f4b1",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -834,16 +834,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "1.2.7",
+            "version": "dev-feature-pep",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "25662ed3ede9c0de405cf3af1408cddb6b84e30f"
+                "reference": "24fffb0902aeea15d71efedaa060384dcb38d7b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/25662ed3ede9c0de405cf3af1408cddb6b84e30f",
-                "reference": "25662ed3ede9c0de405cf3af1408cddb6b84e30f",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/24fffb0902aeea15d71efedaa060384dcb38d7b6",
+                "reference": "24fffb0902aeea15d71efedaa060384dcb38d7b6",
                 "shasum": ""
             },
             "require": {
@@ -869,7 +869,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2015-10-28 10:24:37"
+            "time": "2015-11-02 08:31:10"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -1267,12 +1267,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "042107bc202845086739414339e551fbe81293d7"
+                "reference": "0e5e18ae09d3f5c06367759be940e9ed3f568359"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/042107bc202845086739414339e551fbe81293d7",
-                "reference": "042107bc202845086739414339e551fbe81293d7",
+                "url": "https://api.github.com/repos/symfony/console/zipball/0e5e18ae09d3f5c06367759be940e9ed3f568359",
+                "reference": "0e5e18ae09d3f5c06367759be940e9ed3f568359",
                 "shasum": ""
             },
             "require": {
@@ -2436,6 +2436,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "openconext/engineblock-metadata": 20,
         "openid/php-openid": 20,
         "phake/phake": 10
     },

@@ -35,6 +35,12 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         $this->_getResponse()->setStatus(400, 'Bad Request');
     }
 
+    public function authorizationPolicyViolationAction()
+    {
+        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $proxyServer->startSession();
+    }
+
     public function noConsentAction()
     {
 
