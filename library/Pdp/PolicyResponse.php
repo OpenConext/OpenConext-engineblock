@@ -17,15 +17,25 @@ class Pdp_PolicyResponse
     public function __construct($rawJsonResponse)
     {
         $this->rawJsonResponse = $rawJsonResponse;
+
         $json_object = json_decode($rawJsonResponse);
+        if (!$json_object) {
+            throw new RuntimeException(
+                "PDP: Invalid JSON: " . $rawJsonResponse
+            );
+        }
+        if (!isset($json_object->Response[0])) {
+            throw new RuntimeException(
+                "PDP: Missing ->Response[0]: " . var_export($json_object, true)
+            );
+        }
         $response = $json_object->Response[0];
 
         $this->Status           = $response->Status;
         $this->Decision         = $response->Decision;
         $this->PolicyIdentifier = $response->PolicyIdentifier;
 
-        if (!empty($response->AssociatedAdvice))
-        {
+        if (!empty($response->AssociatedAdvice)) {
             $this->AssociatedAdvice = $response->AssociatedAdvice;
         }
     }
@@ -50,18 +60,17 @@ class Pdp_PolicyResponse
      */
     public function getMessage()
     {
-        $message = NULL;
-
-        switch (strtolower(trim($this->Decision)))
-        {
+        switch (strtolower(trim($this->Decision))) {
             case "deny":
-                $message = $this->getAssociatedAdvice();
+                return $this->getAssociatedAdvice();
                 break;
+
             case "indeterminate":
-                $message = array('en' => $this->Status->StatusMessage);
+                return array('en' => $this->Status->StatusMessage);
                 break;
         }
-        return $message;
+
+        return null;
     }
 
     /**

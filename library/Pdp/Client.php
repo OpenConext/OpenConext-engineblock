@@ -9,20 +9,24 @@ class Pdp_Client
      * @var string
      */
     protected $baseUrl;
+
     /**
      * @var string
      */
     protected $username;
+
     /**
      * @var string
      */
     protected $password;
+
     /**
      * @var Pdp_PolicyResponse
      */
     protected $policyResponse;
+
     /**
-     * @var Pdp_PolicyRequest
+     * @var Pdp_PolicyRequest|null
      */
     protected $policyRequest;
 
@@ -36,7 +40,7 @@ class Pdp_Client
               . 'Please change the PDP section in the application.ini');
         }
 
-        $this->baseUrl = $conf->pdp->baseUrl;
+        $this->baseUrl  = $conf->pdp->baseUrl;
         $this->username = $conf->pdp->username;
         $this->password = $conf->pdp->password;
 
@@ -92,10 +96,10 @@ class Pdp_Client
      */
     public function getReason()
     {
-        if ($this->policyResponse instanceof Pdp_PolicyResponse)
-        {
-            return $this->policyResponse->getMessage();
+        if (!$this->policyResponse instanceof Pdp_PolicyResponse) {
+            return null;
         }
-        return NULL;
+
+        return $this->policyResponse->getMessage();
     }
 }

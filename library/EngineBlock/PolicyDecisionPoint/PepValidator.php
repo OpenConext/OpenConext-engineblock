@@ -1,66 +1,64 @@
 <?php
 
-class EngineBlock_PolicyDecisionPoint_PEPValidator
+class EngineBlock_PolicyDecisionPoint_PepValidator
 {
-    private $message;
-    private $lang = 'en';
+    const DEFAULT_LANG = self::LANGUAGE_EN;
+    const LANGUAGE_EN = 'en';
 
     /**
-     * @param $subjectId
-     * @param $idp
-     * @param $sp
-     * @param $responseAttributes
+     * @var array<string,string>
+     */
+    private $messages;
+
+    /**
+     * @param string $subjectId
+     * @param string $idp
+     * @param string $sp
+     * @param array $responseAttributes
      * @return bool
      */
-    public function hasAccess($subjectId, $idp, $sp, $responseAttributes)
+    public function hasAccess($subjectId, $idp, $sp, array $responseAttributes)
     {
         $policy_request = $this->buildPolicyRequest($subjectId, $idp, $sp, $responseAttributes);
-        $pdp = $this->policyDecisionPoint($policy_request);
+
+        $pdp = $this->createPdpClient($policy_request);
         $hasAccess = $pdp->hasAccess();
 
-        if (!$hasAccess)
-        {
-            $this->message = $pdp->getReason();
+        if (!$hasAccess) {
+            $this->messages = $pdp->getReason();
         }
 
         return $hasAccess;
     }
 
     /**
-     * @param string $lang
-     *
-     * @return EngineBlock_PolicyDecisionPoint_PEPValidator
-     */
-    public function setLang($lang) {
-        $this->lang = $lang;
-        return $this;
-    }
-
-    /**
      * Get the response message when subject has no access.
      */
-    public function getMessage()
+    public function getMessage($lang = NULL)
     {
-        if (isset($this->message[$this->lang]))
-        {
-            return $this->message[$this->lang];
+        $lang = !empty($lang) ? $lang : static::DEFAULT_LANG;
+
+        if (isset($this->messages[$lang])) {
+            return $this->messages[$lang];
         }
+
         return NULL;
     }
 
     /**
      * Build the policy request object.
+     *
      * @param string $subjectId
      * @param string $idp
      * @param string $sp
      * @param array $responseAttributes
      * @return Pdp_PolicyRequest
      */
-    private function buildPolicyRequest($subjectId, $idp, $sp, $responseAttributes)
+    private function buildPolicyRequest($subjectId, $idp, $sp, array $responseAttributes)
     {
         $policy_request = new Pdp_PolicyRequest();
-        $policy_request->addResourceAttribute("SPentityID", $sp);
-        $policy_request->addResourceAttribute("IDPentityID", $idp);
+        $policy_request->addResourceAttribute('SPentityID', $sp);
+        $policy_request->addResourceAttribute('IDPentityID', $idp);
 
         $policy_request->addAccessSubject('urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', $subjectId);
 
@@ -80,7 +78,7 @@ class EngineBlock_PolicyDecisionPoint_PEPValidator
      *
      * @return Pdp_Client
      */
-    protected function policyDecisionPoint(Pdp_PolicyRequest $policy_request = NULL)
+    protected function createPdpClient(Pdp_PolicyRequest $policy_request)
     {
         $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
         return new Pdp_Client($conf, $policy_request);
