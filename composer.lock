@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "187335c0334a48641eeee90a4d3fb80d",
-    "content-hash": "a80bbeed9c9cd45671d8b4b11fbd8cc6",
+    "hash": "ce1b83f65cc2e91f2e36d29ca688608f",
+    "content-hash": "5b64aef4f6214cd769edff645801462f",
     "packages": [
         {
             "name": "dbpatch/dbpatch",
@@ -700,16 +700,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "1.3.0",
+            "version": "1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "8b6efa9d641b5c57f77023589aef50c041ffa596"
+                "reference": "e14618e7bacd160d1cace7e3cf15ed6ae07a5b92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/8b6efa9d641b5c57f77023589aef50c041ffa596",
-                "reference": "8b6efa9d641b5c57f77023589aef50c041ffa596",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/e14618e7bacd160d1cace7e3cf15ed6ae07a5b92",
+                "reference": "e14618e7bacd160d1cace7e3cf15ed6ae07a5b92",
                 "shasum": ""
             },
             "require": {
@@ -735,7 +735,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2015-11-16 08:42:27"
+            "time": "2015-11-18 14:22:01"
         },
         {
             "name": "openconext/stoker-metadata",
