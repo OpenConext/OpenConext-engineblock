@@ -43,9 +43,10 @@ try {
     } catch (Exception $e) {
         var_dump($e);
         var_dump($restClient->getHttpClient()->getLastRequest());
-        var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
-        var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
-
+        if ($restClient->getHttpClient()->getLastResponse()) {
+            var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
+            var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
+        }
     }
 } catch (Exception $e) {
     var_dump($e);
