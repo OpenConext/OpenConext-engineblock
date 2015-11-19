@@ -1,12 +1,10 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 
 class EngineBlock_Corto_Model_Consent
 {
-    const EXPLICIT = 'explicit';
-    const IMPLICIT = 'implicit';
-
     /**
      * @var string
      */
@@ -54,21 +52,21 @@ class EngineBlock_Corto_Model_Consent
     }
 
     public function explicitConsentWasGivenFor(ServiceProvider $serviceProvider) {
-        return $this->_hasStoredConsent($serviceProvider, self::EXPLICIT);
+        return $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
     public function implicitConsentWasGivenFor(ServiceProvider $serviceProvider) {
-        return $this->_hasStoredConsent($serviceProvider, self::IMPLICIT);
+        return $this->_hasStoredConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
     public function giveExplicitConsentFor(ServiceProvider $serviceProvider)
     {
-        return $this->_storeConsent($serviceProvider, self::EXPLICIT);
+        return $this->_storeConsent($serviceProvider, ConsentType::TYPE_EXPLICIT);
     }
 
     public function giveImplicitConsentFor(ServiceProvider $serviceProvider)
     {
-        return $this->_storeConsent($serviceProvider, self::IMPLICIT);
+        return $this->_storeConsent($serviceProvider, ConsentType::TYPE_IMPLICIT);
     }
 
     public function countTotalConsent()
