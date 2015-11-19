@@ -124,6 +124,16 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
                 '/authentication/feedback/dissimilar-workflow-states'
             );
         }
+        catch (EngineBlock_Corto_Exception_UnknownPreselectedIdp $e) {
+            $application->getLogInstance()->notice(
+                $e->getMessage(),
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback(
+                $e,
+                '/authentication/feedback/unknown-preselected-idp?idp-hash=' . $e->getRemoteIdpMd5Hash()
+            );
+        }
     }
 
     public function processWayfAction()

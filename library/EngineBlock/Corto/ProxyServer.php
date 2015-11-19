@@ -350,7 +350,10 @@ class EngineBlock_Corto_ProxyServer
             break;
         }
         if (!isset($this->_configs['Idp'])) {
-            $this->getSessionLog()->warning("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
+            throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
+                "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
+                $remoteIdPMd5
+            );
         }
 
         return $this;

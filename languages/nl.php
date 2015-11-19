@@ -248,9 +248,15 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
     'error_invalid_acs_binding'        => 'Onjuist ACS Binding Type',
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
+    'error_unknown_preselected_idp' => 'Error - Onbekende voorgeselecteerde Identity Provider',
+    'error_unknown_preselected_idp_desc' => '<p>
+        Je Service Provider heeft een onbekende Identity Provider geselecteerd of heeft nog geen toegang.
+        Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+    </p>',
     'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        Er kon geen Service Provider worden gevonden met het opgegeven EntityID. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        Er kon geen Service Provider worden gevonden met het opgegeven EntityID.
+        Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
     'error_unknown_issuer'              => 'Error - Onbekende dienst',

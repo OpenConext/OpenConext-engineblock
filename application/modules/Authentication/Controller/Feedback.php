@@ -41,6 +41,13 @@ class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
         session_start();
     }
 
+    public function unknownPreselectedIdpAction()
+    {
+        $this->_getResponse()->setStatus(400, 'Bad Request');
+        $this->__set('idp-hash', $this->_getRequest()->getQueryParameter('idp-hash'));
+        session_start();
+    }
+
     public function missingRequiredFieldsAction()
     {
         $this->_getResponse()->setStatus(400, 'Bad Request');

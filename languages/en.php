@@ -250,9 +250,17 @@ this service.
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
     'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
+    'error_unknown_preselected_idp' => 'Error - Unknown preselected Identity Provider',
+    'error_unknown_preselected_idp_desc' => '<p>
+        Your Service Provider selected an unknown or disallowed Identity Provider.
+        If you feel this is an error please contact the SURFconext helpdesk at
+        <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+    </p>',
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        A Service Provider with the EntityID you have provided could not be found.
+        If you feel this is an error please contact the SURFconext helpdesk at
+        <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
     'error_unknown_issuer'          => 'Error - Unknown service',
