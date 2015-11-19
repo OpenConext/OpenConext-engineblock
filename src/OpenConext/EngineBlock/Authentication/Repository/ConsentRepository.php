@@ -6,6 +6,7 @@ use DateTime;
 use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\DBALException;
 use OpenConext\EngineBlock\Authentication\Entity\Consent;
+use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use PDO;
 
 final class ConsentRepository
@@ -30,7 +31,18 @@ final class ConsentRepository
      */
     public function findAllFor($userId)
     {
-        $sql       = 'SELECT service_id, consent_date, usage_date FROM consent WHERE hashed_user_id=:hashed_user_id';
+        $sql       = '
+            SELECT
+                service_id
+            ,   consent_date
+            ,   usage_date
+            ,   consent_type
+            FROM
+                consent
+            WHERE
+                hashed_user_id=:hashed_user_id
+        ';
+
         $statement = $this->connection->executeQuery($sql, array('hashed_user_id' => sha1($userId)));
         $rows      = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -40,7 +52,8 @@ final class ConsentRepository
                     $userId,
                     $row['service_id'],
                     new DateTime($row['consent_date']),
-                    new DateTime($row['usage_date'])
+                    new DateTime($row['usage_date']),
+                    new ConsentType($row['consent_type'])
                 );
             },
             $rows
