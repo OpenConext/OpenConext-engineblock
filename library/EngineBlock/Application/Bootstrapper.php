@@ -39,6 +39,7 @@ class EngineBlock_Application_Bootstrapper
 
         $this->_bootstrapDefaultDiContainer();
         $this->_bootstrapConfiguration();
+        $this->_bootstrapSessionConfiguration();
         $this->_bootstrapTestDiContainer();
 
         $this->_bootstrapPhpSettings();
@@ -73,6 +74,18 @@ class EngineBlock_Application_Bootstrapper
             $this->_application->getDiContainer()->getApplicationCache()
         );
         $this->_application->setConfiguration($configProxy->load());
+    }
+
+    protected function _bootstrapSessionConfiguration()
+    {
+        session_set_cookie_params(
+            0,
+            $this->_application->getConfigurationValue('cookie_path', '/'),
+            '',
+            $this->_application->getConfigurationValue('use_secure_cookies', true),
+            true
+        );
+        session_name('main');
     }
 
     protected function _bootstrapTestDiContainer()

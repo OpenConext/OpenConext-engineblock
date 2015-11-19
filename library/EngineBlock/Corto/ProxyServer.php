@@ -1016,17 +1016,6 @@ class EngineBlock_Corto_ProxyServer
 
     public function startSession()
     {
-        session_set_cookie_params(0, $this->getConfig('cookie_path', '/'), '', $this->getConfig('use_secure_cookies', true), true);
-        session_name('main');
-        session_start();
-    }
-
-    public function restartSession($newId, $newName)
-    {
-        session_write_close();
-
-        session_id($newId);
-        session_name($newName);
         session_start();
     }
 
