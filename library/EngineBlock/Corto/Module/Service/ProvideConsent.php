@@ -60,10 +60,17 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $log = $application->getLogInstance();
             $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
+        $serviceProviderMetadata = $spMetadataChain[0];
 
-        if ($this->isConsentDisabled($spMetadataChain, $identityProvider))   {
+        $attributes = $response->getAssertion()->getAttributes();
+        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
+
+        if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
+            if (!$consent->implicitConsentWasGivenFor($serviceProviderMetadata)) {
+                $consent->giveImplicitConsentFor($serviceProviderMetadata);
+            }
+
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
-
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
 
@@ -74,11 +81,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
-        $consentDestinationEntityMetadata = $spMetadataChain[0];
-
-        $attributes = $response->getAssertion()->getAttributes();
-        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $priorConsent = $consent->hasStoredConsent($consentDestinationEntityMetadata);
+        $priorConsent = $consent->explicitConsentWasGivenFor($serviceProviderMetadata);
         if ($priorConsent) {
             $response->setConsent(SAML2_Const::CONSENT_PRIOR);
 
@@ -98,7 +101,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'action'    => $this->_server->getUrl('processConsentService'),
                 'ID'        => $response->getId(),
                 'attributes'=> $attributes,
-                'sp'        => $consentDestinationEntityMetadata,
+                'sp'        => $serviceProviderMetadata,
                 'idp'       => $identityProvider,
             ));
         $this->_server->sendOutput($html);
