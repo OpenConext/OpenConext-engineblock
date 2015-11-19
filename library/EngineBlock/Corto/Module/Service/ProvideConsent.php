@@ -63,11 +63,11 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $serviceProviderMetadata = $spMetadataChain[0];
 
         $attributes = $response->getAssertion()->getAttributes();
-        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
+        $consentRepository = $this->_consentFactory->create($this->_server, $response, $attributes);
 
         if ($this->isConsentDisabled($spMetadataChain, $identityProvider)) {
-            if (!$consent->implicitConsentWasGivenFor($serviceProviderMetadata)) {
-                $consent->giveImplicitConsentFor($serviceProviderMetadata);
+            if (!$consentRepository->implicitConsentWasGivenFor($serviceProviderMetadata)) {
+                $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
             }
 
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
@@ -81,7 +81,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
-        $priorConsent = $consent->explicitConsentWasGivenFor($serviceProviderMetadata);
+        $priorConsent = $consentRepository->explicitConsentWasGivenFor($serviceProviderMetadata);
         if ($priorConsent) {
             $response->setConsent(SAML2_Const::CONSENT_PRIOR);
 
