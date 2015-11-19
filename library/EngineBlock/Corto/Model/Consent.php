@@ -61,52 +61,6 @@ class EngineBlock_Corto_Model_Consent
         return $this->_hasStoredConsent($serviceProvider, self::IMPLICIT);
     }
 
-    private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType)
-    {
-        try {
-            $dbh = $this->_getConsentDatabaseConnection();
-            if (!$dbh) {
-                return false;
-            }
-
-            $attributesHash = $this->_getAttributesHash($this->_responseAttributes);
-
-            $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ? AND consent_type = ?";
-            $hashedUserId = sha1($this->_getConsentUid());
-            $parameters = array(
-                $hashedUserId,
-                $serviceProvider->entityId,
-                $attributesHash,
-                $consentType,
-            );
-
-            /** @var $statement PDOStatement */
-            $statement = $dbh->prepare($query);
-            $statement->execute($parameters);
-            $rows = $statement->fetchAll();
-
-            if (count($rows) < 1) {
-                // No stored consent found
-                return false;
-            }
-
-            // Update usage date
-            $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ? AND consent_type = ?");
-            $statement->execute(array(
-                $hashedUserId,
-                $serviceProvider->entityId,
-                $consentType
-             ));
-
-            return true;
-        } catch (PDOException $e) {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                "Consent retrieval failed! Error: " . $e->getMessage(),
-                EngineBlock_Exception::CODE_ALERT
-            );
-        }
-    }
-
     public function giveExplicitConsentFor(ServiceProvider $serviceProvider)
     {
         return $this->_storeConsent($serviceProvider, self::EXPLICIT);
@@ -196,5 +150,51 @@ class EngineBlock_Corto_Model_Consent
         }
 
         return true;
+    }
+
+    private function _hasStoredConsent(ServiceProvider $serviceProvider, $consentType)
+    {
+        try {
+            $dbh = $this->_getConsentDatabaseConnection();
+            if (!$dbh) {
+                return false;
+            }
+
+            $attributesHash = $this->_getAttributesHash($this->_responseAttributes);
+
+            $query = "SELECT * FROM {$this->_tableName} WHERE hashed_user_id = ? AND service_id = ? AND attribute = ? AND consent_type = ?";
+            $hashedUserId = sha1($this->_getConsentUid());
+            $parameters = array(
+                $hashedUserId,
+                $serviceProvider->entityId,
+                $attributesHash,
+                $consentType,
+            );
+
+            /** @var $statement PDOStatement */
+            $statement = $dbh->prepare($query);
+            $statement->execute($parameters);
+            $rows = $statement->fetchAll();
+
+            if (count($rows) < 1) {
+                // No stored consent found
+                return false;
+            }
+
+            // Update usage date
+            $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ? AND consent_type = ?");
+            $statement->execute(array(
+                $hashedUserId,
+                $serviceProvider->entityId,
+                $consentType
+            ));
+
+            return true;
+        } catch (PDOException $e) {
+            throw new EngineBlock_Corto_ProxyServer_Exception(
+                "Consent retrieval failed! Error: " . $e->getMessage(),
+                EngineBlock_Exception::CODE_ALERT
+            );
+        }
     }
 }
