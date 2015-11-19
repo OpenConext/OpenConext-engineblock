@@ -14,7 +14,17 @@ class EngineBlock_Corto_Filter_Command_PolicyDecisionPoint extends EngineBlock_C
 
     public function execute()
     {
-        if (!$this->_serviceProvider->policyEnforcementDecisionRequired) {
+        $serviceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
+            $this->_serviceProvider,
+            $this->_request,
+            $this->_server->getRepository()
+        );
+
+        if (!$serviceProvider) {
+            $serviceProvider = $this->_serviceProvider;
+        }
+
+        if (!$serviceProvider->policyEnforcementDecisionRequired) {
             return;
         }
 
@@ -26,7 +36,7 @@ class EngineBlock_Corto_Filter_Command_PolicyDecisionPoint extends EngineBlock_C
         $hasAccess = $validator->hasAccess(
             $this->_collabPersonId,
             $this->_identityProvider->entityId,
-            $this->_serviceProvider->entityId,
+            $serviceProvider->entityId,
             $this->_responseAttributes
         );
 
