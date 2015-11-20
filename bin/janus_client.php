@@ -11,6 +11,11 @@ if (!isset($argv[1])) {
         'Example: ./bin/janus_client.php getMetadata "entityid=https://example.edu&keys=certData"' . PHP_EOL
     );
 }
+
+ini_set('xdebug.var_display_max_children', -1);
+ini_set('xdebug.var_display_max_data', -1);
+ini_set('xdebug.var_display_max_depth', -1);
+
 try {
 
     require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
