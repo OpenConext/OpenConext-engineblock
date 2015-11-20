@@ -293,3 +293,8 @@ load the required theme modules.
 
 Themes can be deployed using a Grunt task, from the theme directory run `grunt theme:mythemename`, this will initiate 
 the appropriate tasks for cleaning the previous theme and deploying the new theme on your installation.
+
+The following commandline may give you all the needed dependencies and run grunt to update the installed files after changing a theme:
+```
+(cd theme && npm install && sudo npm install -g bower && bower install && grunt)
+```

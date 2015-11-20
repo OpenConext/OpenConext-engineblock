@@ -27,11 +27,6 @@ class EngineBlock_Corto_Adapter
     protected $_proxyServer;
 
     /**
-     * @var String the name of the Virtual Organisation context (if any)
-     */
-    protected $_voContext = NULL;
-
-    /**
      * @var null
      */
     protected $_keyId = NULL;
@@ -129,7 +124,10 @@ class EngineBlock_Corto_Adapter
 
     public function setVirtualOrganisationContext($virtualOrganisation)
     {
-        $this->_voContext = $virtualOrganisation;
+        throw new EngineBlock_Corto_Exception_UseOfDeprecatedVo(
+            'Deprecated Virtual Organization functionality used with vo: ' . $virtualOrganisation,
+            $virtualOrganisation
+        );
     }
 
     public function setKeyId($filter)
@@ -383,10 +381,6 @@ class EngineBlock_Corto_Adapter
 
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
-
-        if ($this->_voContext!=null) {
-            $proxyServer->setVirtualOrganisationContext($this->_voContext);
-        }
     }
 
     /**
@@ -586,11 +580,9 @@ class EngineBlock_Corto_Adapter
 
         $engineIdentityProvider->certificates = array($keyPair->getCertificate());
         $engineIdentityProvider->supportedNameIdFormats = array(
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
-            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
-            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
+            SAML2_Const::NAMEID_PERSISTENT,
+            SAML2_Const::NAMEID_TRANSIENT,
+            SAML2_Const::NAMEID_UNSPECIFIED,
         );
         return $engineIdentityProvider;
     }
@@ -620,11 +612,9 @@ class EngineBlock_Corto_Adapter
         }
         $engineServiceProvider->certificates = array($keyPair->getCertificate());
         $engineServiceProvider->supportedNameIdFormats = array(
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_PERSISTENT,
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_TRANSIENT,
-            EngineBlock_Urn::SAML1_1_NAMEID_FORMAT_UNSPECIFIED,
-            // @todo remove this as soon as it's no longer required to be supported for backwards compatibility
-            EngineBlock_Urn::SAML2_0_NAMEID_FORMAT_UNSPECIFIED
+            SAML2_Const::NAMEID_PERSISTENT,
+            SAML2_Const::NAMEID_TRANSIENT,
+            SAML2_Const::NAMEID_UNSPECIFIED,
         );
 
         $metadata = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();

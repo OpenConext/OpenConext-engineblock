@@ -233,22 +233,40 @@ If you want to use this application you have to:<br />
         Please go back and try again.
         <br /><br />
     </p>',
+    'error_dissimilar_workflow_state'       => 'Error - Dissimilar workflow states',
+    'error_dissimilar_workflow_state_desc'  => '<p>
+The application you came from (your &lsquo;Service Provider&rsquo;) is not available on the SURFconext infrastructure yet.
+Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
+this service.
+<br /><br />
+</p>',
+    'error_authorization_policy_violation'            => 'Authorization Policy Violation',
+    'error_authorization_policy_violation_desc'       => '<p>
+        You have successfully authenticated at your Identity Provider, however access is denied based on a violation of an Authorization Policy Violation
+    </p>',
+    'error_authorization_policy_violation_name'       => 'Policy message',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
     'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
+    'error_unknown_preselected_idp' => 'Error - Unknown preselected Identity Provider',
+    'error_unknown_preselected_idp_desc' => '<p>
+        Your Service Provider selected an unknown or disallowed Identity Provider.
+        If you feel this is an error please contact the SURFconext helpdesk at
+        <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+    </p>',
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        A Service Provider with the EntityID you have provided could not be found.
+        If you feel this is an error please contact the SURFconext helpdesk at
+        <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
     'error_unknown_issuer'          => 'Error - Unknown service',
     'error_unknown_issuer_desc'     => '<p>
         The service you are trying to log in to is unknown to SURFconext. Possibly your institution has never enabled access to this service. Please contact the helpdesk of your institution and provide them with the following information:
     </p>',
-    'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
-    'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation.',
     'error_generic'                     => 'Error - An error occurred',
     'error_generic_desc'                => '<p>
         It is not possible to sign in. Please try again.

@@ -227,27 +227,42 @@ Als je deze applicatie wilt gebruiken moet je:<br />
     </p>',
     'error_session_lost'                => 'Error - Sessie is verloren gegaan',
     'error_session_lost_desc'           => '<p>
-        Jouw sessie is ergens verloren gegaan.<br />
+        Je sessie is ergens verloren gegaan.<br />
         Waarschijnlijk mocht de cookie niet worden gezet door de strikte privacy configuratie van jouw browser?<br />
         Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
+    'error_dissimilar_workflow_state'       => 'Error - Verschillende productie statussen',
+    'error_dissimilar_workflow_state_desc'  => '<p>
+De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is nog niet beschikbaar via de SURFconext infrastructuur.
+Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de helpdesk van SURFconext via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+<br /><br />
+</p>',
+    'error_authorization_policy_violation'            => 'Autorisatie regel overtreden',
+    'error_authorization_policy_violation_desc'       => '<p>
+        Je bent succesvol ingelogd bij jouw instelling, maar je kan geen gebruik maken van deze dienst omdat er een autorisatie regel is overtreden
+    </p>',
+    'error_authorization_policy_violation_name'       => 'Omschrijving overtreding',
     'error_no_message'                  => 'Error - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
     'error_invalid_acs_binding'        => 'Onjuist ACS Binding Type',
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
+    'error_unknown_preselected_idp' => 'Error - Onbekende voorgeselecteerde Identity Provider',
+    'error_unknown_preselected_idp_desc' => '<p>
+        Je Service Provider heeft een onbekende Identity Provider geselecteerd of heeft nog geen toegang.
+        Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+    </p>',
     'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        Er kon geen Service Provider worden gevonden met het opgegeven EntityID. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        Er kon geen Service Provider worden gevonden met het opgegeven EntityID.
+        Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
     'error_unknown_issuer'              => 'Error - Onbekende dienst',
     'error_unknown_issuer_desc'     => '<p>
         De dienst waarop je probeert in te loggen is niet bekend bij SURFconext. Mogelijk heeft jouw instelling de toegang tot deze dienst nooit aangevraagd. Neem contact op met de helpdesk van je instelling en geef daarbij de volgende informatie door:
     </p>',
-    'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
-    'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij jouw instelling, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie.',
     'error_generic'                     => 'Error - Foutmelding',
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeer het alstublieft opnieuw.

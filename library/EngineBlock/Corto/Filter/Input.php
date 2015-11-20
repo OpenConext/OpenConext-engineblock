@@ -23,9 +23,9 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Convert all OID attributes to URN and remove the OID variant
             new EngineBlock_Corto_Filter_Command_NormalizeAttributes(),
 
-            // The IdP is not allowed to set the isMemberOf attribute with VO groups
+            // The IdP is not allowed to set the isMemberOf attribute with urn:collab:org groups
             // so we make sure to remove them
-            new EngineBlock_Corto_Filter_Command_RemoveVoGroups(),
+            new EngineBlock_Corto_Filter_Command_FilterReservedMemberOfValues(),
 
             // Run custom attribute manipulations
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(

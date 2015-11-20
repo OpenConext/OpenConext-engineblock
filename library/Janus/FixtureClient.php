@@ -1,6 +1,8 @@
 <?php
 
-class Janus_FixtureClient implements Janus_Client_Interface
+use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
+
+class Janus_FixtureClient  implements Janus_Client_Interface, RestClientInterface
 {
     const DIR = '/tmp/eb-fixtures/janus/';
 

@@ -23,6 +23,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Flush log if an SP in the requester chain has additional logging enabled
         $log->info("Determining whether service provider in chain requires additional logging");
+
         $isAdditionalLoggingRequired = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
             EngineBlock_SamlHelper::getSpRequesterChain(
                 $sp,
@@ -344,10 +345,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             // Check if it is for a valid idp
             if (!in_array($cachedResponse['idp'], $idpEntityIds)) {
                 continue;
-            }
-
-            if (isset($cachedResponse['vo'])) {
-                $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
             }
 
             if (isset($cachedResponse['key'])) {

@@ -7,14 +7,14 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
 {
     public function serve($serviceName)
     {
-        // Get the configuration for EngineBlock in it's IdP / SP role without the VO.
+        // Get the configuration for EngineBlock in it's IdP / SP role without the key (canonical form).
         $this->_server->setProcessingMode();
         $engineEntityId = $this->_server->getUrl($serviceName);
         $this->_server->unsetProcessingMode();
 
         $engineEntity = $this->_server->getRepository()->fetchEntityByEntityId($engineEntityId);
 
-        // Override the EntityID and SSO location to optionally append VO id
+        // Override the EntityID and SSO location to optionally append a key
         $externalEngineEntityId = $this->_server->getUrl($serviceName);
         $engineEntity->entityId = $externalEngineEntityId;
 
