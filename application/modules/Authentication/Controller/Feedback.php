@@ -2,12 +2,6 @@
 
 class Authentication_Controller_Feedback extends EngineBlock_Controller_Abstract
 {
-    public function vomembershiprequiredAction()
-    {
-        $this->_getResponse()->setStatus(403, 'Forbidden');
-        session_start();
-    }
-
     public function unableToReceiveMessageAction()
     {
         $this->_getResponse()->setStatus(400, 'Bad Request');

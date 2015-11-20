@@ -19,9 +19,6 @@ class EngineBlock_Corto_ProxyServer
     const MESSAGE_TYPE_REQUEST  = 'SAMLRequest';
     const MESSAGE_TYPE_RESPONSE = 'SAMLResponse';
 
-    const VO_CONTEXT_PFX          = 'voContext';
-    const VO_CONTEXT_IMPLICIT     = 'VoContextImplicit';
-
     protected $_serviceToControllerMapping = array(
         'singleSignOnService'               => '/authentication/idp/single-sign-on',
         'debugSingleSignOnService'          => '/authentication/sp/debug',
@@ -41,7 +38,6 @@ class EngineBlock_Corto_ProxyServer
     protected $_headers = array();
     protected $_output;
 
-    protected $_voContext = null;
     protected $_keyId = null;
 
     protected $_server;
@@ -74,12 +70,10 @@ class EngineBlock_Corto_ProxyServer
 
     public function setVirtualOrganisationContext($voContext)
     {
-        $this->_voContext = $voContext;
-    }
-
-    public function getVirtualOrganisationContext()
-    {
-        return $this->_voContext;
+        throw new EngineBlock_Corto_Exception_UseOfDeprecatedVo(
+            'Deprecated Virtual Organization functionality used with vo: ' . $voContext,
+            $voContext
+        );
     }
 
     public function setKeyId($keyId)
@@ -263,20 +257,7 @@ class EngineBlock_Corto_ProxyServer
 
         $mappedUri = $this->_serviceToControllerMapping[$serviceName];
 
-        $voContext = false;
-        if ($request && $request->getVoContext()  && $request->isVoContextExplicit()) {
-            $voContext = $request->getVoContext();
-        }
-        else if ($this->_voContext) {
-            $voContext = $this->_voContext;
-        }
-
         if (!$this->_processingMode) {
-            // Append the (explicit) VO context from the request
-            if ($voContext && $serviceName !== 'spMetadataService') {
-                $mappedUri .= '/vo:' . $voContext;
-            }
-
             // Append the key identifier
             if ($this->_keyId && $serviceName === 'singleSignOnService') {
                 $mappedUri .= '/key:' . $this->_keyId;
@@ -496,15 +477,6 @@ class EngineBlock_Corto_ProxyServer
         }
 
         // Copy over the Authenticating Authorities and add the EntityId of the Source Response Issuer.
-        // Note that because EB generates multiple responses, this will likely result in:
-        // "https://engine/../idp/metadata" !== "https://original-idp/../idpmetadata" => true, gets added
-        // "https://engine/../idp/metadata" !== "https://engine/../idp/metadata" => false, does not get added
-        // "https://engine/../idp/metadata" !== "https://engine/../idp/metadata" => false, does not get added
-        // UNLESS the Response is destined for an SP in VO mode, in which case the flow will be:
-        // "https://engine/../idp/metadata" !== "https://original-idp/../idpmetadata" => true, gets added
-        // "https://engine/../idp/metadata" !== "https://engine/../idp/metadata" => false, does not get added
-        // "https://engine/../idp/metadata/vo:void" !== "https://engine/../idp/metadata" => TRUE, gets added!
-        // This is a 'bug'/'feature' that we're keeping in for BWC reasons.
         $authenticatingAuthorities = $sourceAssertion->getAuthenticatingAuthority();
         if ($this->getUrl('idpMetadataService') !== $sourceResponse->getIssuer()) {
             $authenticatingAuthorities[] = $sourceResponse->getIssuer();
@@ -520,16 +492,15 @@ class EngineBlock_Corto_ProxyServer
 
     protected function _createBaseResponse(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
-        if ($request->getVoContext() && $request->isVoContextExplicit()) {
-            $this->setVirtualOrganisationContext($request->getVoContext());
-        }
         if ($keyId = $request->getKeyId()) {
             $this->setKeyId($keyId);
         }
         $requestWasUnsolicited = $request->isUnsolicited();
 
         $response = new SAML2_Response();
+
         /** @var SAML2_AuthnRequest $request */
+
         $response->setRelayState($request->getRelayState());
         $response->setId($this->getNewId(IdFrame::ID_USAGE_SAML2_RESPONSE));
         $response->setIssueInstant(time());
@@ -538,6 +509,8 @@ class EngineBlock_Corto_ProxyServer
         }
         $response->setDestination($request->getIssuer());
         $response->setIssuer($this->getUrl('idpMetadataService', $request->getIssuer(), $request));
+
+        /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request */
 
         $acs = $this->getRequestAssertionConsumer($request);
         $response->setDestination($acs->location);
