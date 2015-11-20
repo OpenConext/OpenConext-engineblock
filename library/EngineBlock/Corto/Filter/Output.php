@@ -22,7 +22,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_RejectProcessingMode(),
 
             // Check if the Policy Decision Point needs to be consulted for this request
-            new EngineBlock_Corto_Filter_Command_PolicyDecisionPoint(),
+            new EngineBlock_Corto_Filter_Command_EnforcePolicy(),
 
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),

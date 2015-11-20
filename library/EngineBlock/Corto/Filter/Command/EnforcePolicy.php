@@ -1,17 +1,7 @@
 <?php
 
-class EngineBlock_Corto_Filter_Command_PolicyDecisionPoint extends EngineBlock_Corto_Filter_Command_Abstract
+class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    /**
-     * This command may modify the response attributes
-     *
-     * @return array
-     */
-    public function getResponseAttributes()
-    {
-        return $this->_responseAttributes;
-    }
-
     public function execute()
     {
         $serviceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
