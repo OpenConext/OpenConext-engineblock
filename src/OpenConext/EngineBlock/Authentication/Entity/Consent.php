@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlock\Authentication\Entity;
 
 use DateTime;
 use OpenConext\EngineBlock\Authentication\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 
 final class Consent
 {
@@ -32,13 +33,24 @@ final class Consent
     private $lastUsedOn;
 
     /**
-     * @param string   $userId
-     * @param string   $serviceProviderEntityId
+     * @var ConsentType
+     */
+    private $consentType;
+
+    /**
+     * @param string $userId
+     * @param string $serviceProviderEntityId
      * @param DateTime $consentGivenOn
      * @param DateTime $lastUsedOn
+     * @param ConsentType $consentType
      */
-    public function __construct($userId, $serviceProviderEntityId, DateTime $consentGivenOn, DateTime $lastUsedOn)
-    {
+    public function __construct(
+        $userId,
+        $serviceProviderEntityId,
+        DateTime $consentGivenOn,
+        DateTime $lastUsedOn,
+        ConsentType $consentType
+    ) {
         if (!is_string($userId)) {
             throw InvalidArgumentException::invalidType('string', 'userId', $userId);
         }
@@ -51,6 +63,7 @@ final class Consent
         $this->serviceProviderEntityId = $serviceProviderEntityId;
         $this->consentGivenOn          = $consentGivenOn;
         $this->lastUsedOn              = $lastUsedOn;
+        $this->consentType             = $consentType;
     }
 
     /**
@@ -77,5 +90,13 @@ final class Consent
     public function getDateLastUsedOn()
     {
         return clone $this->lastUsedOn;
+    }
+
+    /**
+     * @return ConsentType
+     */
+    public function getConsentType()
+    {
+        return $this->consentType;
     }
 }

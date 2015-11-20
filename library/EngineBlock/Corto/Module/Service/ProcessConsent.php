@@ -1,7 +1,5 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-
 class EngineBlock_Corto_Module_Service_ProcessConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -80,9 +78,9 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         }
 
         $attributes = $response->getAssertion()->getAttributes();
-        $consent = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $consent->storeConsent($destinationMetadata);
-        if ($consent->countTotalConsent() === 1) {
+        $consentRepository = $this->_consentFactory->create($this->_server, $response, $attributes);
+        $consentRepository->giveExplicitConsentFor($destinationMetadata);
+        if ($consentRepository->countTotalConsent() === 1) {
             $this->_sendIntroductionMail($attributes);
         }
 
