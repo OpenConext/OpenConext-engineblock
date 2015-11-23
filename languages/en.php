@@ -267,6 +267,8 @@ this service.
     'error_unknown_issuer_desc'     => '<p>
         The service you are trying to log in to is unknown to SURFconext. Possibly your institution has never enabled access to this service. Please contact the helpdesk of your institution and provide them with the following information:
     </p>',
+    'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
+    'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation.',
     'error_generic'                     => 'Error - An error occurred',
     'error_generic_desc'                => '<p>
         It is not possible to sign in. Please try again.

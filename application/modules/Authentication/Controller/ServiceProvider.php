@@ -12,6 +12,16 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         try {
             $proxyServer->consumeAssertion();
         }
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
+            $application->getLogInstance()->notice(
+                "VO membership required",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback(
+                $e,
+                '/authentication/feedback/vomembershiprequired'
+            );
+        }
         catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
             $application->getLogInstance()->notice(
                 "PEP authorization rule violation",
@@ -134,6 +144,10 @@ class Authentication_Controller_ServiceProvider extends EngineBlock_Controller_A
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/session-lost');
+        }
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
             $application->getLogInstance()->notice(
