@@ -21,6 +21,7 @@ class EngineBlock_Corto_Model_Response_Cache
             'idp'           => $receivedResponse->getIssuer(),
             'type'          => $type,
             'response'      => $receivedResponse,
+            'vo'            => $receivedRequest->getVoContext(),
             'key'           => $receivedRequest->getKeyId(),
         );
     }

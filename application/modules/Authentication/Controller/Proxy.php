@@ -95,6 +95,16 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
             $proxyServer = new EngineBlock_Corto_Adapter();
             $proxyServer->processedAssertionConsumer();
         }
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
+            $application->getLogInstance()->notice(
+                "VO membership required",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback(
+                $e,
+                '/authentication/feedback/vomembershiprequired'
+            );
+        }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
             $application->getLogInstance()->notice(
                 "Custom attribute manipulator exception",

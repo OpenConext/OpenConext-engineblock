@@ -10,7 +10,17 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     /**
      * @var string
      */
+    protected $voContext;
+
+    /**
+     * @var string
+     */
     protected $keyId;
+
+    /**
+     * @var bool
+     */
+    protected $explicitVoContext = true;
 
     /**
      * @var bool
@@ -59,6 +69,21 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
         return $this->debug;
     }
 
+    public function hasVoContext()
+    {
+        return !empty($this->voContext);
+    }
+
+    public function getVoContext()
+    {
+        return $this->voContext;
+    }
+
+    public function isVoContextExplicit()
+    {
+        return $this->explicitVoContext;
+    }
+
     public function getKeyId()
     {
         return $this->keyId;
@@ -71,6 +96,20 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     public function setKeyId($keyId)
     {
         $this->keyId = $keyId;
+        return $this;
+    }
+
+    public function setExplicitVoContext($voContext)
+    {
+        $this->voContext = $voContext;
+        $this->explicitVoContext = true;
+        return $this;
+    }
+
+    public function setImplicitVoContext($voContext)
+    {
+        $this->voContext = $voContext;
+        $this->explicitVoContext = false;
         return $this;
     }
 

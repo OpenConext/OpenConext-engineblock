@@ -36,8 +36,8 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
 
             $idPEntityId = NULL;
 
-            // Optionally allow /single-sign-on/remoteIdPHash or
-            // /single-sign-on/remoteIdPHash/key:20140420
+            // Optionally allow /single-sign-on/vo:myVoId/remoteIdPHash or
+            // /single-sign-on/remoteIdPHash/vo:myVoId/key:20140420
             foreach ($arguments as $argument) {
                 if (substr($argument, 0, 3) == 'vo:') {
                     $proxyServer->setVirtualOrganisationContext(substr($argument, 3));
@@ -67,6 +67,14 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             );
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unable-to-receive-message');
+        }
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
+            $application->getLogInstance()->notice(
+                "User is not a member",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->notice(
@@ -175,6 +183,10 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         catch (EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException $e) {
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/unable-to-receive-message');
+        }
+        catch (EngineBlock_Corto_Exception_UserNotMember $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/vomembershiprequired');
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->handleExceptionWithFeedback($e,

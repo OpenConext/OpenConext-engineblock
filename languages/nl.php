@@ -263,6 +263,8 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_unknown_issuer_desc'     => '<p>
         De dienst waarop je probeert in te loggen is niet bekend bij SURFconext. Mogelijk heeft jouw instelling de toegang tot deze dienst nooit aangevraagd. Neem contact op met de helpdesk van je instelling en geef daarbij de volgende informatie door:
     </p>',
+    'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
+    'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij jouw instelling, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie.',
     'error_generic'                     => 'Error - Foutmelding',
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeer het alstublieft opnieuw.

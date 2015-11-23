@@ -57,9 +57,9 @@ $layout->title = $layout->title.' - '.$this->t('post_data');
 
         <?php if ($trace): ?>
             <input id="submitbutton" type="submit" value="Submit" class="c-button" />
-            <pre>
+            <pre style="text-align: left; margin: 0 auto; width: 500px; height: 800px;">
             <?= $trace ?>
-        </pre>
+            </pre>
             <script type="text/javascript">
                 document.getElementById('submitbutton').focus();
             </script>
