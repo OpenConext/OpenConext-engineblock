@@ -434,7 +434,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     'message' => $encodedMessage,
                     'xtra' => $extra,
                     'name' => $message->getMessageType(),
-                    'trace' => $this->_server->getConfig('debug', false) ? htmlentities($xml) : '',
+                    'trace' => $this->getTraceHtml($xml),
                 )
             );
             $this->_server->sendOutput($output);
@@ -608,5 +608,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
         }
         return $hasEncryptedAssertion;
+    }
+
+    private function getTraceHtml($xml)
+    {
+        if (!$this->_server->getConfig('debug', false)) {
+            return '';
+        }
+
+        $doc = new DOMDocument();
+        $doc->preserveWhiteSpace = false;
+        $doc->formatOutput = true;
+        $doc->loadXML($xml);
+        $xml = $doc->saveXML();
+
+        return htmlentities(trim($xml));
     }
 }
