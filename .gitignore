@@ -1,2 +1,4 @@
 /build
 /vendor/
+.idea/
+application/.DS_Store
