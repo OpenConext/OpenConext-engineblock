@@ -11,9 +11,9 @@ return array(
     'processing'            => 'Connecting to the service',
     'processing_waiting'    => 'Waiting for a response from the service.',
     'processing_long'       => 'Please be patient, it may take a while...',
+    'go_back'               => '&lt;&lt; Go back',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
-    'go_back'               => '&lt;&lt; Go back',
     'authentication_urls'   => 'Authentication URLs',
     'timestamp'             => 'Timestamp',
 
@@ -240,21 +240,19 @@ Please <a href="javascript:history.back();">go back</a> and contact the administ
 this service.
 <br /><br />
 </p>',
-    'error_authorization_policy_violation'            => 'Authorization Policy Violation',
+    'error_authorization_policy_violation'            => 'Error - No access',
     'error_authorization_policy_violation_desc'       => '<p>
-        You have successfully authenticated at your Identity Provider, however access is denied based on a violation of an Authorization Policy Violation
+        You have successfully logged in at your institution, but unfortunately you can not use this service because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you feel you should be allowed access to this service.
     </p>',
-    'error_authorization_policy_violation_name'       => 'Policy message',
+    'error_authorization_policy_violation_name'       => 'Authorization policy message',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
     'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
-    'error_unknown_preselected_idp' => 'Error - Unknown preselected Identity Provider',
+    'error_unknown_preselected_idp' => 'Error - No connection between institution and service',
     'error_unknown_preselected_idp_desc' => '<p>
-        Your Service Provider selected an unknown or disallowed Identity Provider.
-        If you feel this is an error please contact the SURFconext helpdesk at
-        <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        The institution that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through SURFconext. Please contact your institution\'s helpdesk to request access to this service.
     </p>',
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>

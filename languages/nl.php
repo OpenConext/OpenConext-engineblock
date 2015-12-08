@@ -11,9 +11,9 @@ return array(
     'processing'            => 'Verbinden met de dienst',
     'processing_waiting'    => 'Wachten op een reactie van de dienst.',
     'processing_long'       => 'Wees a.u.b. geduldig, het kan even duren...',
+    'go_back'               => '&lt;&lt; Ga terug',
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
-    'go_back'               => '&lt;&lt; Ga terug',
     'authentication_urls'   => 'Authenticatie URLs',
     'timestamp'             => 'Timestamp',
 
@@ -238,20 +238,19 @@ De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is no
 Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de helpdesk van SURFconext via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 <br /><br />
 </p>',
-    'error_authorization_policy_violation'            => 'Autorisatie regel overtreden',
+    'error_authorization_policy_violation'            => 'Error - Geen toegang',
     'error_authorization_policy_violation_desc'       => '<p>
-        Je bent succesvol ingelogd bij jouw instelling, maar je kan geen gebruik maken van deze dienst omdat er een autorisatie regel is overtreden
+        Je bent succesvol ingelogd bij jouw instelling, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst heeft jouw instelling met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de helpdesk van je instelling als je vindt dat je wel toegang moet hebben.
     </p>',
-    'error_authorization_policy_violation_name'       => 'Omschrijving overtreding',
+    'error_authorization_policy_violation_name'       => 'Omschrijving autorisatieregels',
     'error_no_message'                  => 'Error - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
     'error_invalid_acs_binding'        => 'Onjuist ACS Binding Type',
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
-    'error_unknown_preselected_idp' => 'Error - Onbekende voorgeselecteerde Identity Provider',
+    'error_unknown_preselected_idp' => 'Error - Instelling is niet gekoppeld aan dienst',
     'error_unknown_preselected_idp_desc' => '<p>
-        Je Service Provider heeft een onbekende Identity Provider geselecteerd of heeft nog geen toegang.
-        Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        De instelling waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via SURFconext. Neem contact op met de helpdesk van jouw instelling als je toegang wilt krijgen tot deze dienst.
     </p>',
     'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
