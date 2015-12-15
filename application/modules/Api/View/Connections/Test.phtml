@@ -1,0 +1,21 @@
+<div style="text-align: center; margin-bottom: 1rem">
+  <button class="submit c-button" style="padding: 1em">PUSH</button>
+</div>
+
+<label for="connections-json" style="font-size: large; font-weight: bolder; display: block">JSON:</label>
+<textarea id="connections-json" rows="50" cols="120"></textarea>
+
+<div style="text-align: center; margin-top: 1rem">
+  <button class="submit c-button" style="padding: 1em">PUSH</button>
+</div>
+
+<script>
+  window.setTimeout(
+    function() {
+      $('button').on('click', function() {
+        $.post('index', $('textarea').val());
+      });
+    },
+    3000
+  );
+</script>
