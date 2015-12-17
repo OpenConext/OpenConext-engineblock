@@ -922,7 +922,7 @@ class EngineBlock_Corto_ProxyServer
         );
 
         // Convert the XMl object to actual XML and get a reference to what we're about to sign
-        $canonicalXmlDom = new DOMDocument();
+        $canonicalXmlDom = SAML2_DOMDocumentFactory::create();
         $canonicalXmlDom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($element));
 
         // Note that the current element may not be the first or last, because we might include comments, so look for
@@ -945,8 +945,9 @@ class EngineBlock_Corto_ProxyServer
 
         // Now we start the actual signing, instead of signing the entire (possibly large) document,
         // we only sign the 'SignedInfo' which includes the 'Reference' hash
-        $canonicalXml2Dom = new DOMDocument();
-        $canonicalXml2Dom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo']));
+        $canonicalXml2Dom = SAML2_DOMDocumentFactory::fromString(
+          EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo'])
+        );
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
         $signatureValue = null;

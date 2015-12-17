@@ -80,7 +80,7 @@ class EngineBlock_Saml2Attributes_FieldMapper
             // Map it to an LDAP attribute
             if (isset($this->_s2lMap[$saml2Name])) {
                 if (count($values)>1) {
-                    $log->notice(
+                    $log->info(
                         "Ignoring everything but first value of $saml2Name",
                         array('attribute_values' => $values)
                     );
