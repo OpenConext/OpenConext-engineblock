@@ -34,8 +34,7 @@ class EngineBlock_Xml_Validator
 
         $schemaXml = $this->_absolutizeSchemaLocations($schemaXml, $this->_schemaLocation);
 
-        $dom = new DOMDocument();
-        $dom->loadXML($xml);
+        $dom = SAML2_DOMDocumentFactory::fromString($xml);
         if (!@$dom->schemaValidateSource($schemaXml)) {
             $errorInfo = error_get_last();
             $errorMessage = $errorInfo['message'];

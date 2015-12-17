@@ -1,10 +1,7 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\Assembler\JanusPushMetadataAssembler;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\Service\JanusPushMetadataSynchronizer;
 
 class Api_Controller_Connections extends EngineBlock_Controller_Abstract
 {
@@ -12,36 +9,7 @@ class Api_Controller_Connections extends EngineBlock_Controller_Abstract
     {
         $this->setNoRender();
 
-        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('engineApi');
-
-        if (!$configuration) {
-            throw new EngineBlock_Exception('API access disabled');
-        }
-
-        if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
-            header('WWW-Authenticate: Basic realm="EngineBlock API"');
-            header('HTTP/1.1 401 Unauthorized');
-            echo json_encode('Unauthenticated');
-            exit;
-        }
-
-        if ($_SERVER['PHP_AUTH_USER'] !== $configuration->user) {
-            header('WWW-Authenticate: Basic realm="EngineBlock API"');
-            header('HTTP/1.1 401 Unauthorized');
-            echo json_encode('Invalid credentials');
-            exit;
-        }
-
-        if ($_SERVER['PHP_AUTH_PW'] !== $configuration->password) {
-            header('WWW-Authenticate: Basic realm="EngineBlock API"');
-            header('HTTP/1.1 401 Unauthorized');
-            echo json_encode('Invalid credentials');
-            exit;
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            header('HTTP/1.1 400 Bad Request');
-            echo json_encode('Not a POST request');
+        if (!$this->requireApiAuth()) {
             return;
         }
 
@@ -58,15 +26,19 @@ class Api_Controller_Connections extends EngineBlock_Controller_Abstract
         $connections = json_decode($body);
 
         if (!$connections) {
-            header('HTTP/1.1 400 Bad Request');
-            echo json_encode('Unable to decode body as JSON');
-            exit;
+            $this->_getResponse()->setStatus(400, 'Bad Request');
+            $this->_getResponse()->setBody(
+              json_encode('Unable to decode body as JSON')
+            );
+            return;
         }
 
         if (!is_object($connections) || !isset($connections->connections) && !is_object($connections->connections)) {
-            header('HTTP/1.1 400 Bad Request');
-            echo json_encode('Unrecognized structure for JSON');
-            exit;
+            $this->_getResponse()->setStatus(400, 'Bad Request');
+            $this->_getResponse()->setBody(
+              json_encode('Unrecognized structure for JSON')
+            );
+            return;
         }
 
         $assembler = new JanusPushMetadataAssembler();
@@ -78,6 +50,57 @@ class Api_Controller_Connections extends EngineBlock_Controller_Abstract
         );
         $result = $doctrineRepository->synchronize($roles);
 
-        echo json_encode($result);
+        $this->_getResponse()->setBody(json_encode($result));
+    }
+
+    public function testAction()
+    {
+        if (!$this->requireApiAuth()) {
+            return;
+        }
+    }
+
+    private function requireApiAuth()
+    {
+        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('engineApi');
+
+        if (!$configuration) {
+            throw new EngineBlock_Exception('API access disabled');
+        }
+
+        if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+            $this->setNoRender();
+            $this->_getResponse()->setHeader(
+              'WWW-Authenticate',
+              'Basic realm="EngineBlock API'
+            );
+            $this->_getResponse()->setStatus(401, 'Unauthorized');
+            $this->_getResponse()->setBody(json_encode('Unauthenticated'));
+            return false;
+        }
+
+        if ($_SERVER['PHP_AUTH_USER'] !== $configuration->user) {
+            $this->setNoRender();
+            $this->_getResponse()->setHeader(
+              'WWW-Authenticate',
+              'Basic realm="EngineBlock API'
+            );
+            $this->_getResponse()->setStatus(401, 'Unauthorized');
+            $this->_getResponse()->setBody(json_encode('Invalid credentials'));
+            return false;
+        }
+
+        if ($_SERVER['PHP_AUTH_PW'] !== $configuration->password) {
+            $this->setNoRender();
+            $this->_getResponse()->setHeader(
+              'WWW-Authenticate',
+              'Basic realm="EngineBlock API'
+            );
+            $this->_getResponse()->setStatus(401, 'Unauthorized');
+            $this->_getResponse()->setBody(json_encode('Invalid credentials'));
+            return false;
+        }
+
+        return true;
     }
 }
