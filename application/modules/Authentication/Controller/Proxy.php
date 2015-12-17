@@ -105,6 +105,15 @@ class Authentication_Controller_Proxy extends EngineBlock_Controller_Abstract
                 '/authentication/feedback/vomembershiprequired'
             );
         }
+        catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
+            $application->getLogInstance()->notice(
+                "PEP authorization rule violation",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/authorization-policy-violation',
+                array("error_authorization_policy_violation_name" => $e->getMessage()));
+        }
         catch (EngineBlock_Attributes_Manipulator_CustomException $e) {
             $application->getLogInstance()->notice(
                 "Custom attribute manipulator exception",

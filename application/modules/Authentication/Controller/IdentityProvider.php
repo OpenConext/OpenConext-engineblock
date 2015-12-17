@@ -76,6 +76,15 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/vomembershiprequired');
         }
+        catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
+            $application->getLogInstance()->notice(
+                "PEP authorization rule violation",
+                array('exception' => $e)
+            );
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/authorization-policy-violation',
+                array("error_authorization_policy_violation_name" => $e->getMessage()));
+        }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->getLogInstance()->notice(
                 "Session lost",
@@ -187,6 +196,11 @@ class Authentication_Controller_IdentityProvider extends EngineBlock_Controller_
         catch (EngineBlock_Corto_Exception_UserNotMember $e) {
             $application->handleExceptionWithFeedback($e,
                 '/authentication/feedback/vomembershiprequired');
+        }
+        catch (EngineBlock_Corto_Exception_PEPNoAccess $e) {
+            $application->handleExceptionWithFeedback($e,
+                '/authentication/feedback/authorization-policy-violation',
+                array("error_authorization_policy_violation_name" => $e->getMessage()));
         }
         catch (EngineBlock_Corto_Module_Services_SessionLostException $e) {
             $application->handleExceptionWithFeedback($e,
