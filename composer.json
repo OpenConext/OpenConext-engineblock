@@ -21,7 +21,7 @@
         "openconext/stoker-metadata": "~0.1",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
         "pimple/pimple": "~2.1",
-        "simplesamlphp/saml2": "~0.8",
+        "simplesamlphp/saml2": "1.7.1 as 0.8.1",
         "simplesamlphp/simplesamlphp": "~1.13",
         "sybio/image-workshop": "~2.0.7",
         "zendframework/zendframework1":"~1.12"
