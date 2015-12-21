@@ -47,6 +47,7 @@
             "caseInsensitive": true,
             "warning": {
                 "allowed": [
+                    "affiliate",
                     "employee",
                     "member",
                     "student",
