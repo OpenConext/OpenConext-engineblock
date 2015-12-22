@@ -24,9 +24,9 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganis
 
     public function execute()
     {
-        $this->logger->notice('Verifying if schacHomeOrganization is allowed by configured IdP shibmd:scopes');
-        $scopes = $this->_identityProvider->shibMdScopes;
+        $this->logger->info('Verifying if schacHomeOrganization is allowed by configured IdP shibmd:scopes');
 
+        $scopes = $this->_identityProvider->shibMdScopes;
         if (empty($scopes)) {
             $this->logger->notice('No shibmd:scope found in the IdP metadata, not verifying schacHomeOrganization');
 

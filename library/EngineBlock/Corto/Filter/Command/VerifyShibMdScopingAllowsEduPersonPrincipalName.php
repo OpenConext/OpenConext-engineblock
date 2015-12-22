@@ -24,7 +24,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
 
     public function execute()
     {
-        $this->logger->notice('Verifying if eduPersonPrincipalName is allowed by configured IdP shibmd:scopes');
+        $this->logger->info('Verifying if eduPersonPrincipalName is allowed by configured IdP shibmd:scopes');
 
         $scopes = $this->_identityProvider->shibMdScopes;
         if (empty($scopes)) {
