@@ -93,12 +93,10 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
                 }
 
                 if (!RegularExpression::isValidRegularExpression($scope->allowed)) {
-                    $self->logger->warning(
-                        sprintf(
-                            'Ignoring scope "%s" as it is not a valid regular expression',
-                            $scope->allowed
-                        )
-                    );
+                    $self->logger->warning(sprintf(
+                        'Ignoring scope "%s" as it is not a valid regular expression',
+                        $scope->allowed
+                    ));
                 }
 
                 return ShibbolethMetadataScope::regexp($scope->allowed);
