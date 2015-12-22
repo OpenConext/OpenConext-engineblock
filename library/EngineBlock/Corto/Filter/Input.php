@@ -16,6 +16,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
      */
     protected function _getCommands()
     {
+        $logger = $this->_server->getSystemLog();
         return array(
             // Show an error if we get responses that do not have the Success status code
             new EngineBlock_Corto_Filter_Command_ValidateSuccessfulResponse(),
@@ -31,6 +32,10 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_IDP
             ),
+
+            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($logger),
+
+            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($logger),
 
             // Check whether this IdP is allowed to send a response to the destination SP
             new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(),
