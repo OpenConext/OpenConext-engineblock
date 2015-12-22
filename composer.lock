@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "75d3a6bfee1bea410aa2359786443653",
-    "content-hash": "a78076192d006d50fbef92729bfc0ac3",
+    "hash": "47dcaa79c5bf570e74fd6ee385b30593",
+    "content-hash": "25eab9c48a9224446ab79e45f39d5dfa",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -921,6 +921,46 @@
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
             "time": "2015-09-10 20:20:25"
+        },
+        {
+            "name": "openconext/saml-value-object",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/OpenConext/SamlValueObject.git",
+                "reference": "042cc054b3fde057fcada217770f32136eb81fb5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/042cc054b3fde057fcada217770f32136eb81fb5",
+                "reference": "042cc054b3fde057fcada217770f32136eb81fb5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.9,<8.0-dev"
+            },
+            "require-dev": {
+                "ibuildings/qa-tools": "^1.1",
+                "liip/rmt": "~1.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "OpenConext\\Value\\": "src/OpenConext/Value"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "DRvanR",
+                    "email": "dvrenterghem@ibuildings.nl"
+                }
+            ],
+            "description": "Set of value objects for usage with SAML2",
+            "time": "2015-12-21 16:27:43"
         },
         {
             "name": "openconext/stoker-metadata",

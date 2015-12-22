@@ -29,7 +29,8 @@
         "symfony/symfony": "2.7.*",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "incenteev/composer-parameter-handler": "~2.0"
+        "incenteev/composer-parameter-handler": "~2.0",
+        "openconext/saml-value-object": "^1.0"
     },
     "require-dev": {
         "phake/phake": "2.0.0-beta2",
