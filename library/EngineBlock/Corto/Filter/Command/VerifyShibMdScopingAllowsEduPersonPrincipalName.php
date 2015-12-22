@@ -34,7 +34,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
         }
 
         $eduPersonPrincipalName = $this->resolveEduPersonPrincipalName();
-        if ($eduPersonPrincipalName === null) {
+        if ($eduPersonPrincipalName === false) {
             $this->logger->notice('No eduPersonPrincipalName found in response, not verifying');
 
             return;
@@ -57,6 +57,9 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
         }
     }
 
+    /**
+     * @return string|false
+     */
     private function resolveEduPersonPrincipalName()
     {
         $attributes = $this->_response->getAssertion()->getAttributes();
@@ -73,7 +76,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
             $this->logger->debug('No eduPersonPrincipleName attribute found using urn:oid');
         }
 
-        return null;
+        return false;
     }
 
     /**

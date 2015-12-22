@@ -34,7 +34,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganis
         }
 
         $schacHomeOrganization = $this->resolveSchacHomeOrganization();
-        if ($schacHomeOrganization === null) {
+        if ($schacHomeOrganization === false) {
             $this->logger->notice('No schacHomeOrganization found in response, not verifying');
 
             return;
@@ -51,7 +51,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganis
     }
 
     /**
-     * @return string|null
+     * @return string|false
      */
     private function resolveSchacHomeOrganization()
     {
@@ -69,7 +69,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganis
             $this->logger->debug('No schacHomeOrganization attribute found using urn:oid');
         }
 
-        return null;
+        return false;
     }
 
     /**
