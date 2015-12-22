@@ -93,7 +93,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
                 }
 
                 if (!RegularExpression::isValidRegularExpression($scope->allowed)) {
-                    $this->logger->warning(
+                    $self->logger->warning(
                         sprintf(
                             'Ignoring scope "%s" as it is not a valid regular expression',
                             $scope->allowed
