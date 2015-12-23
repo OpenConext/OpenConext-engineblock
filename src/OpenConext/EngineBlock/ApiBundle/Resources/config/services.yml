@@ -14,7 +14,7 @@ services:
         class: OpenConext\EngineBlock\ApiBundle\Service\ConsentService
         arguments:
             - @engineblock.repository.consent
-            - @eb.compat.repository.metadata
+            - @api.service.metadata
             - @eb.compat.logger
 
     api.service.metadata:
