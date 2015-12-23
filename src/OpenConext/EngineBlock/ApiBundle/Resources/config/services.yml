@@ -16,3 +16,9 @@ services:
             - @engineblock.repository.consent
             - @eb.compat.repository.metadata
             - @eb.compat.logger
+
+    api.service.metadata:
+        class: OpenConext\EngineBlock\ApiBundle\Service\MetadataService
+        arguments:
+            - @eb.compat.repository.metadata
+            - @eb.compat.logger
