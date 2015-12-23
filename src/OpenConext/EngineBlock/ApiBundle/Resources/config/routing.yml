@@ -16,3 +16,9 @@ api_consent_user:
         userId: .+
     defaults:
         _controller: openconext.api.controller.consent:userAction
+
+api_metadata_idp:
+    path:    /metadata/idp
+    methods: [GET]
+    defaults:
+        _controller: openconext.api.controller.metadata:idpAction
