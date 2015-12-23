@@ -9,6 +9,7 @@ services:
         arguments:
             - %api.features.metadata_push.enabled%
             - %api.features.consent_listing.enabled%
+            - %api.features.metadata_api.enabled%
 
     api.service.consent:
         class: OpenConext\EngineBlock\ApiBundle\Service\ConsentService

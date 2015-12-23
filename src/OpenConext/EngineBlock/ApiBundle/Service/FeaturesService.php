@@ -17,10 +17,16 @@ class FeaturesService
     private $consentListingEnabled;
 
     /**
+     * @var bool
+     */
+    private $metadataApiEnabled;
+
+    /**
      * @param bool $metadataPushEnabled
      * @param bool $consentListingEnabled
+     * @param bool $metadataApiEnabled
      */
-    public function __construct($metadataPushEnabled, $consentListingEnabled)
+    public function __construct($metadataPushEnabled, $consentListingEnabled, $metadataApiEnabled)
     {
         if (!is_bool($metadataPushEnabled)) {
             throw InvalidArgumentException::invalidType('bool', 'metadataPushEnabled', $metadataPushEnabled);
@@ -30,8 +36,13 @@ class FeaturesService
             throw InvalidArgumentException::invalidType('bool', 'consentListingEnabled', $consentListingEnabled);
         }
 
-        $this->metadataPushEnabled = $metadataPushEnabled;
+        if (!is_bool($metadataApiEnabled)) {
+            throw InvalidArgumentException::invalidType('bool', 'metadataApiEnabled', $metadataApiEnabled);
+        }
+
+        $this->metadataPushEnabled   = $metadataPushEnabled;
         $this->consentListingEnabled = $consentListingEnabled;
+        $this->metadataApiEnabled    = $metadataApiEnabled;
     }
 
     /**
@@ -48,5 +59,13 @@ class FeaturesService
     public function consentListingIsEnabled()
     {
         return $this->consentListingEnabled;
+    }
+
+    /**
+     * @return bool
+     */
+    public function metadataApiIsEnabled()
+    {
+        return $this->metadataApiEnabled;
     }
 }
