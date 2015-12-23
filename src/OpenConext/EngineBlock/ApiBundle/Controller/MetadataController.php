@@ -43,7 +43,7 @@ final class MetadataController
 
     public function idpAction(Request $request)
     {
-        $entityIdValue = $request->query->get('entity_id');
+        $entityIdValue = $request->query->get('entity-id');
 
         if (!$this->featuresService->metadataApiIsEnabled()) {
             throw new NotFoundHttpException('Metadata API is disabled');
