@@ -27,16 +27,16 @@ final class ConsentController
     /**
      * @var AuthorizationCheckerInterface
      */
-    private $authorisationChecker;
+    private $authorizationChecker;
 
     public function __construct(
         ConsentService $consentService,
         FeaturesService $featuresService,
-        AuthorizationCheckerInterface $authorisationChecker
+        AuthorizationCheckerInterface $authorizationChecker
     ) {
         $this->consentService       = $consentService;
         $this->featuresService      = $featuresService;
-        $this->authorisationChecker = $authorisationChecker;
+        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function userAction($userId)
@@ -45,7 +45,7 @@ final class ConsentController
             throw new NotFoundHttpException('Consent listing API is disabled');
         }
 
-        if (!$this->authorisationChecker->isGranted('ROLE_API_USER_PROFILE')) {
+        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
             throw new ApiAccessDeniedHttpException(
                 'Access to the content listing API requires the role ROLE_API_USER_PROFILE'
             );
