@@ -3,13 +3,12 @@
 namespace OpenConext\EngineBlock\ApiBundle\Service;
 
 use Doctrine\DBAL\DBALException;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\EntityNotFoundException;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\ApiBundle\Dto\Consent;
 use OpenConext\EngineBlock\ApiBundle\Dto\ConsentList;
 use OpenConext\EngineBlock\ApiBundle\Exception\RuntimeException;
 use OpenConext\EngineBlock\Authentication\Entity\Consent as ConsentEntity;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
+use OpenConext\Value\Saml\EntityId;
 use Psr\Log\LoggerInterface;
 
 final class ConsentService
@@ -20,9 +19,9 @@ final class ConsentService
     private $consentRepository;
 
     /**
-     * @var MetadataRepositoryInterface
+     * @var MetadataService
      */
-    private $metadataRepository;
+    private $metadataService;
 
     /**
      * @var LoggerInterface
@@ -31,12 +30,12 @@ final class ConsentService
 
     public function __construct(
         ConsentRepository $consentRepository,
-        MetadataRepositoryInterface $metadataRepository,
+        MetadataService $metadataService,
         LoggerInterface $logger
     ) {
-        $this->consentRepository  = $consentRepository;
-        $this->metadataRepository = $metadataRepository;
-        $this->logger             = $logger;
+        $this->consentRepository = $consentRepository;
+        $this->metadataService   = $metadataService;
+        $this->logger            = $logger;
     }
 
     /**
@@ -64,18 +63,10 @@ final class ConsentService
      */
     private function createConsentDtoFromConsentEntity(ConsentEntity $consent)
     {
-        $entityId = $consent->getServiceProviderEntityId();
+        $entityId        = $consent->getServiceProviderEntityId();
+        $serviceProvider = $this->metadataService->findServiceProvider(new EntityId($entityId));
 
-        try {
-            $serviceProvider = $this->metadataRepository->fetchServiceProviderByEntityId($entityId);
-        } catch (EntityNotFoundException $e) {
-            $this->logger->warning(
-                sprintf(
-                    'Metadata for service provider "%s" could not be retrieved for inclusion with consent API result',
-                    $entityId
-                )
-            );
-
+        if ($serviceProvider === null) {
             return null;
         }
 

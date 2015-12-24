@@ -15,3 +15,10 @@ services:
 
     openconext.api.controller.heartbeat:
         class: OpenConext\EngineBlock\ApiBundle\Controller\HeartbeatController
+
+    openconext.api.controller.metadata:
+        class: OpenConext\EngineBlock\ApiBundle\Controller\MetadataController
+        arguments:
+            - @api.service.metadata
+            - @api.service.features
+            - @security.authorization_checker

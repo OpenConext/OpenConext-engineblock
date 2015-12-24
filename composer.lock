@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "47dcaa79c5bf570e74fd6ee385b30593",
-    "content-hash": "25eab9c48a9224446ab79e45f39d5dfa",
+    "hash": "a11a3005e31068bafc152333b13bb337",
+    "content-hash": "52120c889e2b9cf4bba9c7a9a0fef256",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -924,16 +924,16 @@
         },
         {
             "name": "openconext/saml-value-object",
-            "version": "1.0.0",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/SamlValueObject.git",
-                "reference": "042cc054b3fde057fcada217770f32136eb81fb5"
+                "reference": "c13332bdd4b318e0cdc3220aa0eed7b1439293f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/042cc054b3fde057fcada217770f32136eb81fb5",
-                "reference": "042cc054b3fde057fcada217770f32136eb81fb5",
+                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/c13332bdd4b318e0cdc3220aa0eed7b1439293f0",
+                "reference": "c13332bdd4b318e0cdc3220aa0eed7b1439293f0",
                 "shasum": ""
             },
             "require": {
@@ -960,7 +960,7 @@
                 }
             ],
             "description": "Set of value objects for usage with SAML2",
-            "time": "2015-12-21 16:27:43"
+            "time": "2015-12-23 10:58:41"
         },
         {
             "name": "openconext/stoker-metadata",
