@@ -63,7 +63,7 @@ final class JsonHelper
                 'shib_md_scopes'          => array_map(
                     function (ShibMdScope $shibMdScope) {
                         return array(
-                            'regexp'  => (bool)$shibMdScope->regexp,
+                            'regexp'  => (bool) $shibMdScope->regexp,
                             'allowed' => $shibMdScope->allowed,
                         );
                     },
