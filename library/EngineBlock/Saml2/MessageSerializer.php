@@ -28,8 +28,7 @@ class EngineBlock_Saml2_MessageSerializer
     public function deserialize($samlMessageXml, $class)
     {
         $elementName = $this->getElementForClass($class);
-        $document = new DOMDocument();
-        $document->loadXML($samlMessageXml);
+        $document = SAML2_DOMDocumentFactory::fromString($samlMessageXml);
         $messageDomElement = $document->getElementsByTagNameNs('urn:oasis:names:tc:SAML:2.0:protocol', $elementName)->item(0);
         if ($class === 'SAML2_AuthnRequest') {
             return SAML2_AuthnRequest::fromXML($messageDomElement);
