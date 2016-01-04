@@ -520,8 +520,7 @@ $config = array (
 	 * ),
 	 *
 	 */
-	'memcache_store.servers' => array(
-	),
+	'memcache_store.servers' => array(),
 
 
 	/*
