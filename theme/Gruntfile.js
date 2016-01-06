@@ -86,7 +86,6 @@ module.exports = function(grunt) {
                     '../app/Resources/views/modules/Authentication/View',
                     '../app/Resources/views/modules/Default/View',
                     '../app/Resources/views/modules/Logout/View',
-                    '../app/Resources/views/modules/Profile/View',
                     '../web/media/**/*',
                     '../web/css/**/*',
                     '../web/javascript/**/*'
@@ -98,7 +97,6 @@ module.exports = function(grunt) {
                     '../app/Resources/views/modules/Authentication/View',
                     '../app/Resources/views/modules/Default/View',
                     '../app/Resources/views/modules/Logout/View',
-                    '../app/Resources/views/modules/Profile/View',
                     '../web/images/**/*',
                     '../web/javascripts/**/*',
                     '../web/stylesheets/**/*'

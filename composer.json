@@ -80,8 +80,7 @@
             "Api_":"application/modules/",
             "Authentication_":"application/modules/",
             "Default_":"application/modules/",
-            "Logout_":"application/modules/",
-            "Profile_":"application/modules/"
+            "Logout_":"application/modules/"
         },
         "psr-4": {
             "": "src/"
