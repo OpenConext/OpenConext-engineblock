@@ -56,6 +56,10 @@ final class Consent
                 'en' => $this->serviceProvider->displayNameEn,
                 'nl' => $this->serviceProvider->displayNameNl,
             ),
+            'support_url' => array(
+                'en' => $this->serviceProvider->supportUrlEn,
+                'nl' => $this->serviceProvider->supportUrlNl,
+            ),
             'eula_url' => $this->serviceProvider->termsOfServiceUrl,
             'support_email' => $supportEmail,
         );
