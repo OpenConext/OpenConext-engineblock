@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "379b15f76504307f8736f345fde8ea3e",
-    "content-hash": "ebbbc4072626677a037ae26714d25646",
+    "hash": "096cc2091f51a9abcca16be0aa9dfdcc",
+    "content-hash": "0e6a929875f72895d3a53441a2366bdd",
     "packages": [
         {
             "name": "dbpatch/dbpatch",
