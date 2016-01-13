@@ -427,6 +427,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $log = $this->_server->getSessionLog();
             $log->info('HTTP-Post: Sending Message', array('saml_message' => $xml));
 
+            $samlMessage = SAML2_Message::fromXML($messageElement);
+            if ($samlMessage instanceof SAML2_AuthnRequest && $samlMessage->isMessageConstructedWithSignature()) {
+                $log->notice(sprintf(
+                    'Sending signed AuthnRequest to Destination "%s" with signature method algorithm "%s"',
+                    $samlMessage->getDestination(),
+                    $samlMessage->getSignatureMethod()
+                ));
+            }
+
             $output = $this->_server->renderTemplate(
                 'form',
                 array(
