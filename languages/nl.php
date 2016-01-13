@@ -130,56 +130,6 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
-    // Profile
-    'profile_header'                    => 'SURFconext',
-    'profile_subheader'                 => 'Overzicht van jouw SURFconext-profiel.',
-    'profile_header_my_profile'         => 'Mijn Profiel',
-    'profile_header_my_groups'          => 'Mijn Groepen',
-    'profile_header_my_apps'            => 'Mijn Diensten',
-    'profile_header_exit'               => 'Exit',
-    'profile_header_surfteams'          => 'SURFconext Teams',
-    'profile_header_auth_needed'        => 'Authenticatie vereist',
-    'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Een subset van deze gegevens wordt verstrekt aan diensten die je via SURFconext benadert.',
-
-    'profile_group_membership_desc'     => 'Je bent lid van de volgende groepen.',
-    'profile_no_groups'                 => 'Geen groepen',
-    'profile_extra_groups_desc'         => 'Om jouw instellingsgroepen te zien moet je het gebruik hiervoor binnen SURFconext autoriseren.',
-    'profile_leave_surfconext_desc'     => 'Je gebruikt SURFconext om met je instellingsaccount in te loggen op een of meerdere diensten. Je kan jouw SURFconext profiel verwijderen door op onderstaande knop te drukken.',
-    'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
-    'profile_leave_surfconext_disclaim' => 'Let op:
-                                            <ul>
-                                                <li>Alleen de informatie die in SURFconext wordt opgeslagen zal worden verwijderd.</li>
-                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens daar nog opgeslagen zijn.</li>
-                                                <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel worden aangemaakt.</li>
-                                             </ul>
-                                             <br>Meer informatie over welke informatie er wordt opgeslagen door SURFconext kan je vinden op de <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">SURFconext supportpagina\'s</a>.',
-    'profile_leave_surfconext_link_add' => '(Sluit je browser na deze actie om de verwijderprocedure te voltooien.)',
-    'profile_revoke_access'             => 'Trek toegang in',
-    'profile_leave_surfconext_conf'     => 'Weet je zeker dat je jouw profiel wilt verwijderen? Je zult de browser moeten afsluiten om deze actie te voltooien',
-    'profile_eula_link'                 => 'Gebruiksvoorwaarden',
-    'profile_support_link'              => 'Help URL',
-    'profile_mail_text'                 => 'SURFconext support kan je vragen om bovenstaande informatie te delen. Deze informatie kan hen helpen om de supportvraag te beantwoorden.',
-    'profile_mail_attributes'           => 'Mail data naar help@surfconext.nl',
-    'profile_mail_send_success'         => 'De mail met bovenstaande informatie is succesvol verstuurd.',
-    'profile_helplink'                  => 'https://wiki.surfnet.nl/display/conextsupport/Profile+page',
-
-    // Profile MyApps
-    'profile_apps_connected_aps'        => 'Mijn diensten via SURFconext',
-    'profile_apps_share'                => 'Je hebt toestemming gegeven om jouw informatie te delen met de volgende diensten:',
-    'profile_apps_service_th'           => 'Dienst/Applicatie',
-    'profile_apps_eula_th'              => 'EULA',
-    'profile_apps_support_name_th'      => 'Support contact',
-    'profile_apps_support_url_th'       => 'Support URL',
-    'profile_apps_support_email_th'	    => 'Support email',
-    'profile_apps_support_phone_th'     => 'Support telefoon',
-    'profile_apps_consent_th'           => 'Consent groep informatie',
-    'profile_revoke_consent'            => 'Consent intrekken',
-    'profile_no_consent'                => 'Nog niet uitgedeeld',
-    'profile_consent'                   => 'Consent gegeven',
-    'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
-    'profile_attribute_release_all'     => 'Deze dienst ontvangt alle attributen die door jouw instelling worden geleverd.',
-
     // Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'U bent bijna klaar...',
