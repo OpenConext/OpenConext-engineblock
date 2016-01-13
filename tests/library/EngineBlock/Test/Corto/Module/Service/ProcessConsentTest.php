@@ -3,7 +3,7 @@
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
-class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var EngineBlock_Corto_ProxyServer
@@ -78,12 +78,12 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
 
         $consentMock = $this->mockConsent();
         Phake::when($consentMock)
-            ->storeConsent(Phake::anyParameters())
+            ->giveExplicitConsentFor(Phake::anyParameters())
             ->thenReturn(true);
 
         $processConsentService->serve(null);
 
-        Phake::verify(($consentMock))->storeConsent(Phake::anyParameters());
+        Phake::verify(($consentMock))->giveExplicitConsentFor(Phake::anyParameters());
     }
 
     public function testResponseIsSent() {
@@ -187,7 +187,7 @@ class EngineBlock_Test_Corto_Module_Service_ProccessConsentTest extends PHPUnit_
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
+            ->explicitConsentWasGivenFor(Phake::anyParameters())
             ->thenReturn(false);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
