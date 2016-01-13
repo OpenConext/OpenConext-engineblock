@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 
     var config = {
-        themes: ['classic', 'material'],
+        themes: ['material'],
         theme: 'material',
         outputDir: '../'
     };
@@ -14,9 +14,6 @@ module.exports = function(grunt) {
         config: config,
 
         uglify: {
-            classic: {
-
-            },
             material: {
                 files: {
                     '../web/javascripts/application.js': [
@@ -44,9 +41,6 @@ module.exports = function(grunt) {
           }
         },
         compass: {
-            classic: {
-
-            },
             material: {
                 options: {
                     sassDir: 'material/stylesheets',
@@ -58,15 +52,6 @@ module.exports = function(grunt) {
             }
         },
         copy: {
-            classic: {
-                files: [
-                    { expand: true, cwd: 'classic/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
-                    { expand: true, cwd: 'classic/templates/modules/', src: ['**'], dest: '../app/Resources/views/modules' },
-                    { expand: true, cwd: 'classic/media/', src: ['**'], dest: '../web/media' },
-                    { expand: true, cwd: 'classic/css/', src: ['**'], dest: '../web/css' },
-                    { expand: true, cwd: 'classic/javascript/', src: ['**'], dest: '../web/javascript' }
-                ]
-            },
             material: {
                 files: [
                     { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
@@ -79,18 +64,6 @@ module.exports = function(grunt) {
         clean: {
             options: {
                 force: true
-            },
-            classic: {
-                src: [
-                    '../app/Resources/views/layouts',
-                    '../app/Resources/views/modules/Authentication/View',
-                    '../app/Resources/views/modules/Default/View',
-                    '../app/Resources/views/modules/Logout/View',
-                    '../app/Resources/views/modules/Profile/View',
-                    '../web/media/**/*',
-                    '../web/css/**/*',
-                    '../web/javascript/**/*'
-                ]
             },
             material: {
                 src: [
@@ -121,10 +94,6 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            classic: {
-                files: 'classic/**',
-                tasks: ['theme:classic']
-            },
             material: {
                 files: 'material/**',
                 tasks: ['theme:material']
@@ -172,10 +141,7 @@ module.exports = function(grunt) {
                   'compass:' + theme
                 ];
 
-            if (theme !== 'classic') {
-              tasks.push('postcss:' + theme);
-            }
-
+            tasks.push('postcss:' + theme);
             tasks.push('uglify:' + theme);
             tasks.push('add_comment:' + theme);
             tasks.push('string-replace:layoutconfig');
