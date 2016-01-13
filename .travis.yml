@@ -1,0 +1,28 @@
+language: php
+
+php:
+  - 7.0
+  - 5.6
+
+matrix:
+  allow_failures:
+  - php: 7.0
+
+env:
+  global:
+    - SYMFONY_ENV=test
+
+cache:
+  directories:
+    - ~/.composer
+
+before_script:
+  - phpenv config-add .travis.php.ini
+
+script:
+  - ant
+
+branches:
+  only:
+    - 5.x-dev
+    - 5.x-refactor
