@@ -83,6 +83,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
+        if ($sspRequest->isMessageConstructedWithSignature()) {
+            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $log = $application->getLogInstance();
+
+            $log->notice(sprintf(
+                'Received signed AuthnRequest from Issuer "%s" with signature method algorithm "%s"',
+                $sspRequest->getIssuer(),
+                $sspRequest->getSignatureMethod()
+            ));
+        }
+
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
         // Make sure the request from the sp has an Issuer
