@@ -42,7 +42,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService = $this->factoryService();
 
         Phake::when($this->consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
+            ->explicitConsentWasGivenFor(Phake::anyParameters())
             ->thenReturn(true);
 
         $provideConsentService->serve(null);
@@ -183,7 +183,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
+            ->explicitConsentWasGivenFor(Phake::anyParameters())
             ->thenReturn(false);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())
