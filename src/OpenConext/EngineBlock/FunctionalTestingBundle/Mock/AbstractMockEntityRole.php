@@ -154,6 +154,11 @@ abstract class AbstractMockEntityRole
             return $fullFilePath;
         }
 
+        $pathFromRoot = ENGINEBLOCK_FOLDER_ROOT . $filePath;
+        if (file_exists($pathFromRoot)) {
+            return $pathFromRoot;
+        }
+
         throw new \RuntimeException('Unable to find file: ' . $filePath . " ($fullFilePath)");
     }
 }
