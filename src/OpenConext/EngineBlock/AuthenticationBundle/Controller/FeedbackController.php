@@ -32,6 +32,9 @@ class FeedbackController
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->engineBlockView = $engineBlockView;
         $this->logger = $logger;
+
+        // we have to start the old session in order to be able to retrieve the feedback info
+        $server = new EngineBlock_Corto_ProxyServer();
     }
 
     /**
@@ -141,9 +144,6 @@ class FeedbackController
      */
     public function customAction()
     {
-        $proxyServer = new EngineBlock_Corto_ProxyServer();
-        $proxyServer->startSession();
-
         return new Response($this->engineBlockView->render('Authentication/View/Feedback/Custom.phtml'));
     }
 
