@@ -130,6 +130,9 @@ class MockIdentityProvider extends AbstractMockEntityRole
     public function useEncryptionCert($certFilePath)
     {
         $this->descriptor->Extensions['EncryptionCert'] = $certFilePath;
+        // an encrypted response must be signed
+        $this->useResponseSigning();
+
         return $this;
     }
 
