@@ -28,7 +28,7 @@ Feature:
       And I pass through the SP
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Idp response"
+     Then I should see "Invalid Identity Provider response"
 
   Scenario: EngineBlock rejects Shared Key Encrypted Responses
     Given the SP uses the HTTP POST Binding
