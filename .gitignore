@@ -12,3 +12,5 @@ bin/ignore_me.php
 /app/SymfonyRequirements.php
 /app/check.php
 /tmp/
+/app/config/functional_testing.yml
+/app/config/parameters.yml
