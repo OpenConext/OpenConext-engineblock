@@ -2,7 +2,7 @@ default:
     paths:
         features: src/OpenConext/EngineBlock/FunctionalTestingBundle/Features
     formatter:
-        name: pretty
+        name: progress
     filters:
         tags: "~@replay"
     extensions:
