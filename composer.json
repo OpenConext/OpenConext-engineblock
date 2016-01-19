@@ -18,7 +18,6 @@
         "kriswallsmith/assetic": "~1.2.0",
         "monolog/monolog": "~1.13",
         "mrclay/minify": "~2.2",
-        "openconext/engineblock-fixtures": "~0.4",
         "openconext/engineblock-metadata": "~1.4",
         "openconext/stoker-metadata": "~0.1",
         "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
@@ -37,7 +36,13 @@
     "require-dev": {
         "phake/phake": "2.0.0-beta2",
         "phpunit/phpunit": "~4.3",
-        "sensio/generator-bundle": "~2.3"
+        "sensio/generator-bundle": "~2.3",
+        "behat/behat": "~2.5",
+        "behat/mink": "~1.5",
+        "behat/mink-extension": "~1.3",
+        "behat/mink-goutte-driver": "~1.0",
+        "behat/symfony2-extension": "~1.1",
+        "openconext/engineblock-fixtures": "^0.5.2"
     },
     "scripts": {
         "pre-autoload-dump": [

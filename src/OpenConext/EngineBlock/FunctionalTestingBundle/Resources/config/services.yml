@@ -1,0 +1,90 @@
+parameters:
+    engineblock.functional_testing.id_data_store.file:               "%kernel.root_dir%/../tmp/eb-fixtures/saml2/id"
+    engineblock.functional_testing.time_data_store.file:             "%kernel.root_dir%/../tmp/eb-fixtures/saml2/time"
+    engineblock.functional_testing.super_globals_data_store.file:    "%kernel.root_dir%/../tmp/eb-fixtures/superglobals.json"
+    engineblock.functional_testing.service_registry_data_store.dir:  "%kernel.root_dir%/../tmp/eb-fixtures/janus/"
+    engineblock.functional_testing.service_registry_data_store.file: "%kernel.root_dir%/../tmp/eb-fixtures/janus/entities"
+
+services:
+    engineblock.functional_testing.service.engine_block:
+        class: OpenConext\EngineBlock\FunctionalTestingBundle\Service\EngineBlock
+        arguments:
+            - '%engineblock_url%'
+            - '@engineblock.functional_testing.fixture.time'
+            - '@engineblock.functional_testing.fixture.super_globals'
+            - '@engineblock.functional_testing.fixture.id'
+
+    #region Behat Contexts
+    engineblock.functional_testing.behat_context.mink:
+        class: OpenConext\EngineBlock\FunctionalTestingBundle\Features\Context\MinkContext
+
+    engineblock.functional_testing.behat_context.engine_block:
+        class: OpenConext\EngineBlock\FunctionalTestingBundle\Features\Context\EngineBlockContext
+        arguments:
+            - '@engineblock.functional_testing.fixture.service_registry'
+            - '@engineblock.functional_testing.service.engine_block'
+            - '@engineblock.mock_entities.idp_registry'
+            - '%sps_config_url%'
+            - '%idps_config_url%'
+
+    engineblock.functional_testing.behat_context.mock_idp:
+        class: OpenConext\EngineBlock\FunctionalTestingBundle\Features\Context\MockIdpContext
+        arguments:
+            - '@engineblock.functional_testing.fixture.service_registry'
+            - '@engineblock.functional_testing.service.engine_block'
+            - '@engineblock.mock_entities.idp_factory'
+            - '@engineblock.mock_entities.idp_registry'
+            - '@engineblock.mock_entities.sp_registry'
+
+    engineblock.functional_testing.behat_context.mock_sp:
+        class: OpenConext\EngineBlock\FunctionalTestingBundle\Features\Context\MockSpContext
+        arguments:
+            - '@engineblock.functional_testing.fixture.service_registry'
+            - '@engineblock.functional_testing.service.engine_block'
+            - '@engineblock.mock_entities.sp_factory'
+            - '@engineblock.mock_entities.sp_registry'
+            - '@engineblock.mock_entities.idp_registry'
+    #endregion Behat Contexts
+
+    #region Fixtures
+    engineblock.functional_testing.fixture.service_registry:
+        class: OpenConext\Component\EngineBlockFixtures\ServiceRegistryFixture
+        arguments:
+            - '@engineblock.functional_testing.data_store.service_registry'
+            - '@engineblock.functional_testing.data_store.service_registry_flags'
+            - '%engineblock.functional_testing.service_registry_data_store.dir%'
+
+    engineblock.functional_testing.fixture.id:
+        class: OpenConext\Component\EngineBlockFixtures\IdFixture
+        arguments: ['@engineblock.functional_testing.data_store.id']
+
+    engineblock.functional_testing.fixture.time:
+        class: OpenConext\Component\EngineBlockFixtures\TimeFixture
+        arguments: ['@engineblock.functional_testing.data_store.time']
+
+    engineblock.functional_testing.fixture.super_globals:
+        class: OpenConext\Component\EngineBlockFixtures\SuperGlobalsFixture
+        arguments: ['@engineblock.functional_testing.data_store.super_globals']
+    #endregion Fixtures
+
+    #region Data Stores
+    engineblock.functional_testing.data_store.service_registry:
+        class: OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.service_registry_data_store.file%']
+
+    engineblock.functional_testing.data_store.service_registry_flags:
+        class: OpenConext\Component\EngineBlockFixtures\DataStore\FileFlags
+        arguments: ['%engineblock.functional_testing.service_registry_data_store.dir%']
+
+    engineblock.functional_testing.data_store.id:
+        class: OpenConext\Component\EngineBlockFixtures\DataStore\SerializedDataStore
+        arguments: ['%engineblock.functional_testing.id_data_store.file%']
+
+    engineblock.functional_testing.data_store.time:
+        class: OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.time_data_store.file%']
+
+    engineblock.functional_testing.data_store.super_globals:
+        class: OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.super_globals_data_store.file%']
+    #endregion Data Stores

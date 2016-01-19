@@ -2,7 +2,7 @@
 
 class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGenerator_Interface
 {
-    const FIXTURE_FILE = '/tmp/eb-fixtures/saml2/id';
+    const FIXTURE_FILE = 'tmp/eb-fixtures/saml2/id';
 
     /**
      * @var \OpenConext\Component\EngineBlockFixtures\IdFrame
@@ -16,7 +16,7 @@ class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGener
 
     public function generate($prefix = 'EB', $usage = \OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_OTHER)
     {
-        if (!file_exists(self::FIXTURE_FILE)) {
+        if (!file_exists(ENGINEBLOCK_FOLDER_ROOT . self::FIXTURE_FILE)) {
             $defaultGenerator = new EngineBlock_Saml2_IdGenerator_Default();
             return $defaultGenerator->generate($prefix);
         }
@@ -39,7 +39,7 @@ class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGener
     {
         $fixture = new \OpenConext\Component\EngineBlockFixtures\IdFixture(
             new \OpenConext\Component\EngineBlockFixtures\DataStore\SerializedDataStore(
-                self::FIXTURE_FILE
+                ENGINEBLOCK_FOLDER_ROOT . self::FIXTURE_FILE
             )
         );
         $this->frame = $fixture->shiftFrame();

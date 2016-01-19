@@ -36,6 +36,9 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+
+            // own bundles
+            $bundles[] = new OpenConext\EngineBlock\FunctionalTestingBundle\OpenConextEngineBlockFunctionalTestingBundle();
         }
 
         return $bundles;
@@ -111,6 +114,13 @@ class AppKernel extends Kernel
             'logger.syslog.ident',
             $loggerConfiguration->get('handler')->get('syslog')->get('conf')->get('ident')
         );
+
+        if(in_array($this->getEnvironment(), array('dev', 'test'))) {
+            $container->setParameter(
+                'engineblock_url',
+                sprintf('https://engine.%s', $container->getParameter('domain'))
+            );
+        }
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)
