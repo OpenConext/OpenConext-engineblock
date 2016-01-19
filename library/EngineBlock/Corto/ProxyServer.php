@@ -67,6 +67,7 @@ class EngineBlock_Corto_ProxyServer
     public function __construct()
     {
         $this->_server = $this;
+        $this->startSession();
     }
 
 //////// GETTERS / SETTERS /////////
@@ -319,7 +320,6 @@ class EngineBlock_Corto_ProxyServer
             $this->setRemoteIdpMd5($remoteIdpMd5);
         }
 
-        $this->startSession();
         $logger = $this->getSessionLog();
 
         if (empty($remoteIdpMd5)) {
