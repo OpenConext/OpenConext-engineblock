@@ -37,4 +37,4 @@ Feature:
       And I pass through the SP
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Idp response"
+     Then I should see "Invalid Identity Provider response"
