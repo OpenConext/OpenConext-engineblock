@@ -1,4 +1,5 @@
 imports:
+    - { resource: functional_testing.yml }
     - { resource: config_dev.yml }
 
 framework:
