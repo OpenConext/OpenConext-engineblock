@@ -11,3 +11,4 @@ bin/ignore_me.php
 /app/cache
 /app/SymfonyRequirements.php
 /app/check.php
+/tmp/
