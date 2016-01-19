@@ -59,7 +59,19 @@ class ErrorReporter
         $this->logger->log($severity, $message, $logContext);
 
         // Store some valuable debug info in session so it can be displayed on feedback pages
-        $_SESSION['feedbackInfo'] = $this->engineBlockApplicationSingleton->collectFeedbackInfo();
+        $feedback = $_SESSION['feedbackInfo'];
+        if (empty($feedback)) {
+            $feedback = array();
+        }
+
+        if ($exception instanceof \EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
+            $feedback = array_merge($feedback, $exception->getFeedbackInfo());
+        }
+
+        $_SESSION['feedbackInfo'] = array_merge(
+            $feedback,
+            $this->engineBlockApplicationSingleton->collectFeedbackInfo()
+        );
 
         // flush all messages in queue, something went wrong!
         $this->engineBlockApplicationSingleton->flushLog('An error was caught');
