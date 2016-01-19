@@ -11,6 +11,7 @@
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
     "require": {
+        "php": ">=5.3.9",
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
         "doctrine/orm": "~2.3",
@@ -85,6 +86,11 @@
         },
         "psr-4": {
             "": "src/"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "5.3.9"
         }
     },
     "extra": {
