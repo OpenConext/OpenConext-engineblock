@@ -46,7 +46,7 @@ final class EngineBlockConfiguration
             return $value->get(join('.', $subPaths), $default);
         }
 
-        if (is_string($value) || is_array($value)) {
+        if (is_string($value)) {
             return str_replace('%%', '%', $value);
         }
 

@@ -37,6 +37,7 @@ final class EngineBlockIniFileLoader
             return $this->map(array(array_pop($keys) => $value), $keys, $mappedValues);
         }
 
+        // In order to prevent Symfony parsing percent signs as parameter references, they are escaped
         $valueWithoutParameters = str_replace('%', '%%', $value);
 
         return array_replace_recursive($mappedValues, array($keys[0] => $valueWithoutParameters));
