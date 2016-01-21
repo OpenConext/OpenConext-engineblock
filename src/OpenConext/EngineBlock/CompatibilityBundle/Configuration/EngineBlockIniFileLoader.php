@@ -53,18 +53,18 @@ final class EngineBlockIniFileLoader
             throw InvalidArgumentException::invalidType('non-empty string', 'file', $file);
         }
 
-        if (!stream_is_local($file)) {
-            throw new InvalidArgumentException(sprintf('This is not a local file "%s"', $file));
-        }
-
         if (!file_exists($file)) {
             throw new InvalidArgumentException(sprintf('File "%s" does not exist', $file));
         }
 
+        if (!is_readable($file)) {
+            throw new InvalidArgumentException(sprintf('File "%s" is not readable', $file));
+        }
+
         $parsedFile = parse_ini_file($file, true);
 
-        if ($parsedFile === false || $parsedFile === array()) {
-            throw new InvalidArgumentException(sprintf('The "%s" file is not valid', $file));
+        if ($parsedFile === false) {
+            throw new InvalidArgumentException(sprintf('File "%s" is not valid', $file));
         }
 
         return $parsedFile;
