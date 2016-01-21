@@ -191,16 +191,9 @@ class EngineBlockContext extends AbstractSubContext
             );
         }
 
-        $selector = 'input[type="submit"][data-entityid="' . $mockIdp->entityId() . '"]';
+        $mink = $this->getMainContext()->getMinkContext();
 
-        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
-        $button = $mink->find('css', $selector);
-
-        if (!$button) {
-            throw new \RuntimeException(
-                "Unable to find button with selector '$selector'"
-            );
-        }
-        $button->click();
+        $mink->getSession()->getPage()->find('css', 'input[id="form-idp"]')->setValue($mockIdp->entityId());
+        $mink->pressButton($mockIdp->entityId());
     }
 }
