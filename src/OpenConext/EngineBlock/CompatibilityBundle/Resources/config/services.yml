@@ -7,6 +7,11 @@ services:
         class: Zend_Config
         factory: ["@eb.compat.application", getConfiguration]
 
+    eb.compat.engineblock_config:
+        class: OpenConext\EngineBlock\CompatibilityBundle\Configuration\EngineBlockConfiguration
+        arguments:
+            - ~ # engineblock configuration array
+
     eb.compat.di_container:
         public: false
         class: EngineBlock_Application_DiContainer
