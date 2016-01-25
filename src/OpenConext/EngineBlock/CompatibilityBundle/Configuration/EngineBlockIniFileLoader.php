@@ -18,7 +18,7 @@ final class EngineBlockIniFileLoader
         }
 
         $mappedValues = array();
-        foreach($parsedValues as $keys => $value) {
+        foreach ($parsedValues as $keys => $value) {
             $mappedValues = $this->map($value, explode('.', $keys), $mappedValues);
         }
 
@@ -49,7 +49,7 @@ final class EngineBlockIniFileLoader
      */
     private function parseIniFile($file)
     {
-        if (!is_string($file) || trim($file) === '' ) {
+        if (!is_string($file) || trim($file) === '') {
             throw InvalidArgumentException::invalidType('non-empty string', 'file', $file);
         }
 
@@ -79,4 +79,3 @@ final class EngineBlockIniFileLoader
         return $parsedFile;
     }
 }
-
