@@ -39,6 +39,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+ * @SuppressWarnings(PHPMD.Superglobals)
+ *
+ * All due to this being a catch all; will be refactored, see https://www.pivotaltracker.com/story/show/107565968
+ */
 class RedirectToFeedbackPageExceptionListener
 {
     /**

@@ -9,6 +9,10 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) Mimics the previous methodology, will be refactored
+ *  see https://www.pivotaltracker.com/story/show/107565968
+ */
 class FeedbackController
 {
     /**
@@ -34,7 +38,7 @@ class FeedbackController
         $this->logger = $logger;
 
         // we have to start the old session in order to be able to retrieve the feedback info
-        $server = new EngineBlock_Corto_ProxyServer();
+        new EngineBlock_Corto_ProxyServer();
     }
 
     /**

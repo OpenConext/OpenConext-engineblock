@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Response;
 use OpenConext\EngineBlock\FunctionalTestingBundle\Saml2\ResponseFactory;
 use OpenConext\EngineBlock\FunctionalTestingBundle\Saml2\Compat\Container;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) just does a lot of manual lifting :(
+ */
 class IdentityProviderController extends Controller
 {
     /**

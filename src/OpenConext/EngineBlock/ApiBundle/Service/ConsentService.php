@@ -60,6 +60,8 @@ final class ConsentService
     /**
      * @param ConsentEntity $consent
      * @return Consent|null
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) it is used as callable in the findForAll() method
      */
     private function createConsentDtoFromConsentEntity(ConsentEntity $consent)
     {

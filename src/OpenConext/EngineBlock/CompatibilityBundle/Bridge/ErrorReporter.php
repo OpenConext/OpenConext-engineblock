@@ -26,6 +26,12 @@ class ErrorReporter
         $this->logger = $logger;
     }
 
+    /**
+     * @param Exception $exception
+     * @param string    $messageSuffix
+     *
+     * @SuppressWarnings(PHPMD.Superglobals) This is required to mimic the existing functionality
+     */
     public function reportError(Exception $exception, $messageSuffix)
     {
         $logContext = array('exception' => $exception);

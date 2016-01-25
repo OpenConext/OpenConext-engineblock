@@ -7,8 +7,7 @@ use OpenConext\EngineBlock\FunctionalTestingBundle\Saml2\Response;
 use XMLSecurityKey;
 
 /**
- * Class MockIdentityProvider
- * @package OpenConext\EngineBlock\FunctionalTestingBundle\Mock
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) Allows for better control
  */
 class MockIdentityProvider extends AbstractMockEntityRole
 {

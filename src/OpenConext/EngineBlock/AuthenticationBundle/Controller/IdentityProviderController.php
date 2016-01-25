@@ -28,6 +28,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the compatibility requirements
+ */
 class IdentityProviderController
 {
     /**
