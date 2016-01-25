@@ -120,8 +120,7 @@ class Container extends \SAML2_Compat_AbstractContainer
             $responseDebug = '<pre id="responseDebug">' . htmlentities($responseXml, ENT_QUOTES, 'utf-8')  . '</pre>';
         }
 
-        $this->response = new Response(
-<<<HTML
+        $this->response = new Response(<<<HTML
 <html>
     <head>
         <title>Redirecting...</title>

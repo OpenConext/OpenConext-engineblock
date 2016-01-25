@@ -81,8 +81,7 @@ class MockIdentityProviderFactory extends AbstractMockEntityFactory
         $nameId = 'ETS-MOCK-IDP-' . time();
 
         $document = new \DOMDocument();
-        $document->loadXML(
-<<<RESPONSE
+        $document->loadXML(<<<RESPONSE
 <samlp:Response
   xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
   xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"

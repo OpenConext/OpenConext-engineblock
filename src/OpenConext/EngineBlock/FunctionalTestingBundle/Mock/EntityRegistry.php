@@ -10,7 +10,7 @@ class EntityRegistry extends ParameterBag
     /**
      * @var SerializedDataStore
      */
-    private   $dataStore;
+    private $dataStore;
 
     /**
      * @param SerializedDataStore $dataStore

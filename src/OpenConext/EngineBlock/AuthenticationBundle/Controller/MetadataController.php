@@ -81,7 +81,7 @@ class MetadataController
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
      */
-    public function allIdpsMetadataAction($virtualOrganization = null, $keyId = null, Request $request)
+    public function allIdpsMetadataAction(Request $request, $virtualOrganization = null, $keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
 
@@ -110,7 +110,7 @@ class MetadataController
      * @param Request     $request
      * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
      */
-    public function edugainMetadataAction($keyId = null, Request $request)
+    public function edugainMetadataAction(Request $request, $keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
 
