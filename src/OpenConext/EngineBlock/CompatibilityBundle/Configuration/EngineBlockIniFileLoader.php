@@ -54,17 +54,26 @@ final class EngineBlockIniFileLoader
         }
 
         if (!file_exists($file)) {
-            throw new InvalidArgumentException(sprintf('File "%s" does not exist', $file));
+            throw new InvalidArgumentException(sprintf(
+                'Could not parse given ini file: file "%s" does not exist',
+                $file
+            ));
         }
 
         if (!is_readable($file)) {
-            throw new InvalidArgumentException(sprintf('File "%s" is not readable', $file));
+            throw new InvalidArgumentException(sprintf(
+                'Could not parse given ini file: file "%s" is not readable',
+                $file
+            ));
         }
 
         $parsedFile = parse_ini_file($file, true);
 
         if ($parsedFile === false) {
-            throw new InvalidArgumentException(sprintf('File "%s" is not valid', $file));
+            throw new InvalidArgumentException(sprintf(
+                'Could not parse given ini file: file "%s" is not valid',
+                $file
+            ));
         }
 
         return $parsedFile;
