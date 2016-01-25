@@ -184,6 +184,13 @@ If you want to use this application you have to:<br />
         Please go back and try again.
         <br /><br />
     </p>',
+    'error_dissimilar_workflow_state'      => 'Error - Dissimilar workflow states',
+    'error_dissimilar_workflow_state_desc' => '<p>
+The application you came from (your &lsquo;Service Provider&rsquo;) is not available on the SURFconext infrastructure yet.
+Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
+this service.
+<br /><br />
+</p>',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',

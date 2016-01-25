@@ -128,6 +128,9 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_NoConsentProvided) {
             $message         = 'No Consent Provided';
             $redirectToRoute = 'authentication_feedback_no_consent';
+        } elseif ($exception instanceof \EngineBlock_Exception_DissimilarServiceProviderWorkflowStates) {
+            $message         = 'Dissimilar Service Provider workflowstates in request chain (transparant proxying)';
+            $redirectToRoute = 'authentication_feedback_dissimilar_workflow_states';
         } else {
             return;
         }

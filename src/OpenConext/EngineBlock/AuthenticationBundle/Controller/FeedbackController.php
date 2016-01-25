@@ -201,4 +201,16 @@ class FeedbackController
     {
         return new Response($this->engineBlockView->render('Authentication/View/Feedback/NoConsent.phtml'));
     }
+
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
+    public function dissimilarWorkflowStates()
+    {
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/DissimilarWorkflowStates.phtml'),
+            400
+        );
+    }
 }
