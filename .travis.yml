@@ -28,10 +28,10 @@ cache:
 
 before_script:
   - phpenv config-add .travis.php.ini
-  - composer install --prefer-dist -n -o
   - sudo ln -s "$(pwd)"/ci/travis/files/ /etc/openconext
   - if [[ "$COMMAND" == "functional-tests" ]]; then ./ci/travis/install-apache.sh fi
   - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
+  - composer install --prefer-dist -n -o
 
 script:
   - ant $COMMAND
