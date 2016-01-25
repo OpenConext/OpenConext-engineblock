@@ -12,11 +12,11 @@
             <antcall target="pdepend" />
         </parallel>
     </target>
- 
+
     <target name="clean">
         <delete dir="${basedir}/build" />
     </target>
- 
+
     <target name="prepare">
         <mkdir dir="${basedir}/build/logs" />
         <mkdir dir="${basedir}/build/logs/tests" />
@@ -53,8 +53,7 @@
     <target name="composer">
         <!-- install vendor code -->
         <exec dir="${basedir}" executable="bin/composer.phar" failonerror="true">
-            <arg line="install
-                --dev --prefer-source" />
+            <arg line="install -o --ignore-platform-reqs --prefer-source" />
         </exec>
     </target>
 
@@ -66,19 +65,19 @@
                        ." />
         </exec>
     </target>
-    
+
     <target name="phpcs">
         <exec dir="${basedir}" executable="phpcs" failonerror="false" output="/dev/null">
             <arg line="--extensions=php --ignore=build,tests,library/Zend,library/Corto --standard=Zend --tab-width=4 --report=checkstyle --report-file=${basedir}/build/logs/checkstyle.xml ." />
         </exec>
     </target>
- 
+
     <target name="phpmd">
         <exec dir="${basedir}" executable="phpmd" failonerror="false">
             <arg line=". xml codesize --reportfile ${basedir}/build/logs/pmd.xml" />
         </exec>
     </target>
- 
+
     <target name="phpcpd">
         <exec dir="${basedir}" executable="phpcpd" failonerror="false">
             <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml --exclude build --exclude tests --exclude library/Zend --exclude library/Corto ." />
@@ -87,7 +86,7 @@
             <arg line="${basedir}/ci/cpd.xsl ${basedir}/build/logs/pmd-cpd.xml" />
         </exec>
     </target>
- 
+
     <target name="pdepend">
         <exec dir="${basedir}" executable="pdepend" failonerror="false">
             <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
