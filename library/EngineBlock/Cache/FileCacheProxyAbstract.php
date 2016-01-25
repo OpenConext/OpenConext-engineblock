@@ -32,8 +32,7 @@ abstract class EngineBlock_Cache_FileCacheProxyAbstract
     public function load()
     {
         $timestamp = $this->_getTimestampFromFiles($this->_files);
-//        $data = $this->_loadFromCache($timestamp);
-        $data = null;
+        $data = $this->_loadFromCache($timestamp);
 
         if (!$data) {
             $data = $this->_loadFromFiles($this->_files);
