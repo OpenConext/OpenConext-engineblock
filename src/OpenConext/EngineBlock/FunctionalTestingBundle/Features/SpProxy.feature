@@ -215,5 +215,4 @@ Feature:
       And SP "Step Up" does not require consent
       And SP "Step Up" uses the Unspecified NameID format
      When I log in at "Step Up"
-      And print last response
      Then I should see "Dissimilar workflow states"
