@@ -29,6 +29,8 @@ cache:
 before_script:
   - phpenv config-add .travis.php.ini
   - sudo ln -s "$(pwd)"/ci/travis/files/ /etc/openconext
+  - mkdir -p /tmp/engineblock/cache/test
+  - mkdir -p /tmp/engineblock/logs/test
   - sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi
   # enable php-fpm

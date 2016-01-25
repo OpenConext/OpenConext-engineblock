@@ -27,6 +27,9 @@
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/cpd" />
         <mkdir dir="${basedir}/build/dependencies" />
+        <mkdir dir="/tmp/engineblock" />
+        <mkdir dir="/tmp/engineblock/cache" />
+        <mkdir dir="/tmp/engineblock/logs" />
         <antcall target="composer" />
     </target>
 
