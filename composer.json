@@ -42,7 +42,10 @@
         "behat/mink-extension": "~1.3",
         "behat/mink-goutte-driver": "~1.0",
         "behat/symfony2-extension": "~1.1",
-        "openconext/engineblock-fixtures": "^0.5.2"
+        "openconext/engineblock-fixtures": "^0.5.2",
+        "phpmd/phpmd": "^2.3",
+        "squizlabs/php_codesniffer": "^2.5",
+        "sebastian/phpcpd": "^2.0"
     },
     "scripts": {
         "pre-autoload-dump": [

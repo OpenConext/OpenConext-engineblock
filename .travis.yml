@@ -11,11 +11,16 @@ matrix:
   allow_failures:
   - php: 7.0
 
-sudo: false
+sudo: true # sudo is required for behat
 
 env:
+  matrix:
+    - COMMAND="travis-functional-tests"
+    - COMMAND="travis"
   global:
-    - SYMFONY_ENV=test
+    - SYMFONY_ENV=test  #
+    - ENGINEBLOCK_ENV=test
+    - ANT_OPTS=-Xmx256m # ensure we got enough memory for ant
 
 cache:
   directories:
@@ -23,9 +28,13 @@ cache:
 
 before_script:
   - phpenv config-add .travis.php.ini
+  - composer install --prefer-dist -n -o
+  - sudo ln -s "$(pwd)"/ci/travis/files/ /etc/openconext
+  - if [[ "$COMMAND" == "functional-tests" ]]; then ./ci/travis/install-apache.sh fi
+  - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
 
 script:
-  - ant
+  - ant $COMMAND
 
 branches:
   only:

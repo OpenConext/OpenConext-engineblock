@@ -1,0 +1,34 @@
+<VirtualHost *:80>
+    ServerName engine.vm.openconext.org
+
+    SetEnv ENGINEBLOCK_ENV vm
+    SetEnv SYMFONY_ENV test
+    SetEnv HTTPS off
+
+    DocumentRoot %TRAVIS_BUILD_DIR%/web
+
+    <Directory "%TRAVIS_BUILD_DIR%/web">
+        Options FollowSymLinks MultiViews ExecCGI
+        AllowOverride All
+        Order deny,allow
+        Allow from all
+    </Directory>
+
+    # Wire up Apache to use Travis CI's php-fpm.
+    <IfModule mod_fastcgi.c>
+        AddHandler php5-fcgi .php
+        Action php5-fcgi /php5-fcgi
+        Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi
+        FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -host 127.0.0.1:9000 -pass-header Authorization
+    </IfModule>
+
+    RewriteEngine On
+    # If the requested url does not map to a file or directory, then forward it to index.php/URL.
+    # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /app.php/$1 [L] # Send the query string to app(_dev).php
+    # Requests to the domain (no query string)
+    RewriteRule ^$ /app.php/ [L]
+
+</VirtualHost>

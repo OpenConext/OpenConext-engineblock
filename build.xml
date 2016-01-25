@@ -3,6 +3,9 @@
     <target name="acceptance" depends="clean,prepare,behat" />
     <target name="report" depends="clean,prepare,parallel" />
 
+    <target name="travis-functional-tests" depends="behat-travis" />
+    <target name="travis" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpcpd-travis,phpunit-travis"/>
+
     <target name="parallel">
         <parallel>
             <antcall target="phpcs" />
@@ -53,7 +56,7 @@
     <target name="composer">
         <!-- install vendor code -->
         <exec dir="${basedir}" executable="bin/composer.phar" failonerror="true">
-            <arg line="install -o --ignore-platform-reqs --prefer-source" />
+            <arg line="install -o -n --prefer-source" />
         </exec>
     </target>
 
@@ -99,10 +102,96 @@
             <arg line="${basedir}/ci/dependencies.html index.html" />
         </exec>
     </target>
- 
+
     <target name="phpcb">
         <exec dir="${basedir}" executable="phpcb" failonerror="false">
             <arg line="--log ${basedir}/build/logs --source ${basedir} --output ${basedir}/build/codebrowser" />
+        </exec>
+    </target>
+
+<!--                               -->
+<!-- Travis Specific configuration -->
+<!--                               -->
+    <target name="get-changeset.php.raw"
+            description="creates a list of changed php files separated by newline">
+        <pathconvert property="changeset.php.raw" pathsep="${line.separator}">
+            <fileset dir="src">
+                <include name="**/*.php"/>
+                <modified/>
+            </fileset>
+        </pathconvert>
+
+        <!--Check if files are modified-->
+        <condition property="changeset.php.notempty">
+            <not>
+                <equals arg1="${changeset.php.raw}" arg2="" trim="true"/>
+            </not>
+        </condition>
+    </target>
+
+    <target name="get-changeset.php.spacesep" depends="get-changeset.php.raw" if="changeset.php.notempty"
+            description="Creates a quoted list of changed php files separated by spaces">
+        <loadresource property="changeset.php.spacesep">
+            <propertyresource name="changeset.php.raw"/>
+            <filterchain>
+                <tokenfilter delimoutput=" ">
+                    <linetokenizer/>
+                    <replaceregex pattern="^" replace='"'/>
+                    <replaceregex pattern="$" replace='"'/>
+                </tokenfilter>
+            </filterchain>
+        </loadresource>
+    </target>
+
+    <target name="php-lint-travis" depends="get-changeset.php.spacesep" if="changeset.php.notempty"
+            description="Perform syntax check of sourcecode files in parallel">
+        <exec executable="sh" failonerror="true">
+            <arg value="-c"/>
+            <arg value="echo '${changeset.php.spacesep}' | xargs -n 1 -P 4 php -l 1>/dev/null"/>
+        </exec>
+        <echo message="OK"/>
+    </target>
+
+    <target name="phpmd-travis"
+            description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+        <exec executable="vendor/bin/phpmd" failonerror="true">
+            <arg path="src"/>
+            <arg value="text"/>
+            <arg value="ci/travis/phpmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="*/Tests/*"/>
+        </exec>
+    </target>
+
+    <target name="phpcs-travis"
+            description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+        <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
+            <arg value="--report=full" />
+            <arg value="--standard=ci/travis/phpcs.xml" />
+            <arg value="--warning-severity=0" />
+            <arg value="--extensions=php" />
+            <arg path="src" />
+        </exec>
+    </target>
+
+    <target name="phpcpd-travis" description="Find duplicate code using PHPCPD">
+        <exec executable="vendor/bin/phpcpd" failonerror="false">
+            <arg value="--exclude"/>
+            <arg value="*/Tests/*"/>
+            <arg path="src"/>
+        </exec>
+    </target>
+
+    <target name="phpunit-travis" description="Run unit tests with PHPUnit">
+        <exec executable="vendor/bin/phpunit" failonerror="true">
+            <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
+            <arg line="--coverage-text"/>
+        </exec>
+    </target>
+
+    <target name="behat-travis">
+        <exec executable="vendor/bin/behat" failonerror="true">
+            <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
         </exec>
     </target>
 </project>

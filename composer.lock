@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "54f60bbbc3b9f1feade0672afc1d8f9f",
-    "content-hash": "212c9473feaca3bb383e6e1c1ce2b8f5",
+    "hash": "a39d776e1c91f88a7cf4e7efe7b865ac",
+    "content-hash": "755014cd660504c76a853df7a2205d3e",
     "packages": [
         {
             "name": "cssmin/cssmin",
@@ -2512,6 +2512,46 @@
             "time": "2016-01-19 10:03:57"
         },
         {
+            "name": "pdepend/pdepend",
+            "version": "2.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pdepend/pdepend.git",
+                "reference": "d3ae0d084d526cdc6c3f1b858fb7148de77b41c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pdepend/pdepend/zipball/d3ae0d084d526cdc6c3f1b858fb7148de77b41c5",
+                "reference": "d3ae0d084d526cdc6c3f1b858fb7148de77b41c5",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.7",
+                "symfony/config": "^2.3.0",
+                "symfony/dependency-injection": "^2.3.0",
+                "symfony/filesystem": "^2.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0.0,<4.8",
+                "squizlabs/php_codesniffer": "^2.0.0"
+            },
+            "bin": [
+                "src/bin/pdepend"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PDepend\\": "src/main/php/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Official version of pdepend to be handled with Composer",
+            "time": "2015-10-16 08:49:58"
+        },
+        {
             "name": "phake/phake",
             "version": "v2.0.0-beta2",
             "source": {
@@ -2615,6 +2655,71 @@
                 }
             ],
             "time": "2015-02-03 12:10:50"
+        },
+        {
+            "name": "phpmd/phpmd",
+            "version": "2.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpmd/phpmd.git",
+                "reference": "08b5bcd454a7148579b68931fc500d824afd3bb5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/08b5bcd454a7148579b68931fc500d824afd3bb5",
+                "reference": "08b5bcd454a7148579b68931fc500d824afd3bb5",
+                "shasum": ""
+            },
+            "require": {
+                "pdepend/pdepend": "~2.0",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.0",
+                "squizlabs/php_codesniffer": "^2.0"
+            },
+            "bin": [
+                "src/bin/phpmd"
+            ],
+            "type": "project",
+            "autoload": {
+                "psr-0": {
+                    "PHPMD\\": "src/main/php"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Manuel Pichler",
+                    "email": "github@manuel-pichler.de",
+                    "homepage": "https://github.com/manuelpichler",
+                    "role": "Project Founder"
+                },
+                {
+                    "name": "Other contributors",
+                    "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
+                    "role": "Contributors"
+                },
+                {
+                    "name": "Marc Würth",
+                    "email": "ravage@bluewin.ch",
+                    "homepage": "https://github.com/ravage84",
+                    "role": "Project Maintainer"
+                }
+            ],
+            "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
+            "homepage": "http://phpmd.org/",
+            "keywords": [
+                "mess detection",
+                "mess detector",
+                "pdepend",
+                "phpmd",
+                "pmd"
+            ],
+            "time": "2015-09-24 14:37:49"
         },
         {
             "name": "phpspec/prophecy",
@@ -3277,6 +3382,45 @@
             "time": "2015-06-21 07:55:53"
         },
         {
+            "name": "sebastian/finder-facade",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/finder-facade.git",
+                "reference": "a520dcc3dd39160eea480daa3426f4fd419a327b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/finder-facade/zipball/a520dcc3dd39160eea480daa3426f4fd419a327b",
+                "reference": "a520dcc3dd39160eea480daa3426f4fd419a327b",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/finder": "~2.3",
+                "theseer/fdomdocument": "~1.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
+            "homepage": "https://github.com/sebastianbergmann/finder-facade",
+            "time": "2015-06-04 08:11:58"
+        },
+        {
             "name": "sebastian/global-state",
             "version": "1.0.0",
             "source": {
@@ -3326,6 +3470,57 @@
                 "global state"
             ],
             "time": "2014-10-06 09:23:50"
+        },
+        {
+            "name": "sebastian/phpcpd",
+            "version": "2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/phpcpd.git",
+                "reference": "d3ad100fdf15805495f6ff19f473f4314c99390c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpcpd/zipball/d3ad100fdf15805495f6ff19f473f4314c99390c",
+                "reference": "d3ad100fdf15805495f6ff19f473f4314c99390c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "phpunit/php-timer": "~1.0",
+                "sebastian/finder-facade": "~1.1",
+                "sebastian/version": "~1.0",
+                "symfony/console": "~2.2",
+                "theseer/fdomdocument": "~1.4"
+            },
+            "bin": [
+                "phpcpd"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "Copy/Paste Detector (CPD) for PHP code.",
+            "homepage": "https://github.com/sebastianbergmann/phpcpd",
+            "time": "2015-03-26 14:47:38"
         },
         {
             "name": "sebastian/recursion-context",
@@ -3462,6 +3657,123 @@
             ],
             "description": "This bundle generates code for you",
             "time": "2015-03-17 06:36:52"
+        },
+        {
+            "name": "squizlabs/php_codesniffer",
+            "version": "2.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
+                "reference": "6731851d6aaf1d0d6c58feff1065227b7fda3ba8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/6731851d6aaf1d0d6c58feff1065227b7fda3ba8",
+                "reference": "6731851d6aaf1d0d6c58feff1065227b7fda3ba8",
+                "shasum": ""
+            },
+            "require": {
+                "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
+                "php": ">=5.1.2"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "bin": [
+                "scripts/phpcs",
+                "scripts/phpcbf"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "CodeSniffer.php",
+                    "CodeSniffer/CLI.php",
+                    "CodeSniffer/Exception.php",
+                    "CodeSniffer/File.php",
+                    "CodeSniffer/Fixer.php",
+                    "CodeSniffer/Report.php",
+                    "CodeSniffer/Reporting.php",
+                    "CodeSniffer/Sniff.php",
+                    "CodeSniffer/Tokens.php",
+                    "CodeSniffer/Reports/",
+                    "CodeSniffer/Tokenizers/",
+                    "CodeSniffer/DocGenerators/",
+                    "CodeSniffer/Standards/AbstractPatternSniff.php",
+                    "CodeSniffer/Standards/AbstractScopeSniff.php",
+                    "CodeSniffer/Standards/AbstractVariableSniff.php",
+                    "CodeSniffer/Standards/IncorrectPatternException.php",
+                    "CodeSniffer/Standards/Generic/Sniffs/",
+                    "CodeSniffer/Standards/MySource/Sniffs/",
+                    "CodeSniffer/Standards/PEAR/Sniffs/",
+                    "CodeSniffer/Standards/PSR1/Sniffs/",
+                    "CodeSniffer/Standards/PSR2/Sniffs/",
+                    "CodeSniffer/Standards/Squiz/Sniffs/",
+                    "CodeSniffer/Standards/Zend/Sniffs/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Greg Sherwood",
+                    "role": "lead"
+                }
+            ],
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "homepage": "http://www.squizlabs.com/php-codesniffer",
+            "keywords": [
+                "phpcs",
+                "standards"
+            ],
+            "time": "2016-01-19 23:39:10"
+        },
+        {
+            "name": "theseer/fdomdocument",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/theseer/fDOMDocument.git",
+                "reference": "d9ad139d6c2e8edf5e313ffbe37ff13344cf0684"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/d9ad139d6c2e8edf5e313ffbe37ff13344cf0684",
+                "reference": "d9ad139d6c2e8edf5e313ffbe37ff13344cf0684",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "lib-libxml": "*",
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Arne Blankerts",
+                    "email": "arne@blankerts.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
+            "homepage": "https://github.com/theseer/fDOMDocument",
+            "time": "2015-05-27 22:58:02"
         }
     ],
     "aliases": [
