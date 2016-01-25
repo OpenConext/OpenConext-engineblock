@@ -1,4 +1,4 @@
-<VirtualHost *:80>
+<VirtualHost *:443>
     ServerName engine.vm.openconext.org
 
     SetEnv ENGINEBLOCK_ENV vm
@@ -31,4 +31,7 @@
     # Requests to the domain (no query string)
     RewriteRule ^$ /app.php/ [L]
 
+    SSLEngine on
+    SSLCertificateFile      /etc/openconext/engineblock.crt
+    SSLCertificateKeyFile   /etc/openconext/engineblock.key
 </VirtualHost>
