@@ -25,7 +25,8 @@ class OpenConextEngineBlockCompatibilityExtension extends Extension
 
         $engineBlockLoader = new EngineBlockIniFileLoader;
         $engineBlockConfig = $engineBlockLoader->load(array(
-            $container->getParameter('kernel.root_dir') . '/../application/' . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
+            $container->getParameter('kernel.root_dir') .
+            '/../application/' . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
             EngineBlock_Application_Bootstrapper::CONFIG_FILE_ENVIRONMENT,
         ));
 
