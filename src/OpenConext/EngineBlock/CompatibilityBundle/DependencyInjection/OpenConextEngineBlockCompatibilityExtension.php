@@ -24,13 +24,13 @@ class OpenConextEngineBlockCompatibilityExtension extends Extension
         $loader->load('event_listeners.yml');
 
         $engineBlockLoader = new EngineBlockIniFileLoader;
-        $engineblockConfig = $engineBlockLoader->load(array(
-            ENGINEBLOCK_FOLDER_APPLICATION . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
+        $engineBlockConfig = $engineBlockLoader->load(array(
+            $container->getParameter('kernel.root_dir') . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
             EngineBlock_Application_Bootstrapper::CONFIG_FILE_ENVIRONMENT,
         ));
 
         $container
             ->getDefinition('eb.compat.engineblock_config')
-            ->replaceArgument(0, $engineblockConfig);
+            ->replaceArgument(0, $engineBlockConfig);
     }
 }
