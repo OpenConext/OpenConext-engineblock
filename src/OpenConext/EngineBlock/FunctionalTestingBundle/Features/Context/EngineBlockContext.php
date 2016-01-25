@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlock\FunctionalTestingBundle\Features\Context;
 
+use Behat\Mink\Element\NodeElement;
 use OpenConext\Component\EngineBlockFixtures\IdFixture;
 use OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\EngineBlock\FunctionalTestingBundle\Parser\LogChunkParser;
@@ -193,7 +194,12 @@ class EngineBlockContext extends AbstractSubContext
 
         $mink = $this->getMainContext()->getMinkContext();
 
-        $mink->getSession()->getPage()->find('css', 'input[id="form-idp"]')->setValue($mockIdp->entityId());
+        $hiddenInput = $mink->getSession()->getPage()->find('css', 'input[id="form-idp"]');
+
+        if ($hiddenInput instanceof NodeElement) {
+            $hiddenInput->setValue($mockIdp->entityId());
+        }
+
         $mink->pressButton($mockIdp->entityId());
     }
 }
