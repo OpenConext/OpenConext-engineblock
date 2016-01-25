@@ -42,7 +42,8 @@ before_script:
   - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
   - sudo service apache2 restart
-  - if [[ "$COMMAND" == "functional-tests" ]]; then sed -i '/router.request_context.scheme: https/c\router.request_context.scheme: http' "$(pwd)"/app/config/functional_testing.yml.dist; fi
+  - if [[ "$COMMAND" == "functional-tests" ]]; then sed -i "s/https/http/g" app/config/functional_testing.yml.dist; fi
+  - if [[ "$COMMAND" == "functional-tests" ]]; then sed -i "s/https/http/g" src/OpenConext/EngineBlock/FunctionalTestingBundle/Features/Context/EngineBlockContext.php; fi
   - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
   - composer install --prefer-dist -n -o
 
