@@ -196,10 +196,17 @@ class EngineBlock_ApplicationSingleton
      */
     public function collectFeedbackInfo()
     {
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        } else {
+            $userAgent = 'not supplied';
+        }
+
+
         $feedbackInfo = array();
         $feedbackInfo['timestamp'] = date('c');
         $feedbackInfo['requestId'] = $this->getLogRequestId() ?: 'N/A';
-        $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        $feedbackInfo['userAgent'] = $userAgent;
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
 
         // @todo  reset this when login is succesful
