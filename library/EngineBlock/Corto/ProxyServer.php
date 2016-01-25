@@ -67,7 +67,6 @@ class EngineBlock_Corto_ProxyServer
     public function __construct()
     {
         $this->_server = $this;
-        $this->startSession();
     }
 
 //////// GETTERS / SETTERS /////////

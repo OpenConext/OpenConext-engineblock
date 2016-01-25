@@ -38,7 +38,8 @@ class FeedbackController
         $this->logger = $logger;
 
         // we have to start the old session in order to be able to retrieve the feedback info
-        new EngineBlock_Corto_ProxyServer();
+        $server = new EngineBlock_Corto_ProxyServer();
+        $server->startSession();
     }
 
     /**
