@@ -32,3 +32,16 @@ framework:
         handler_id:  ~
     fragments:       ~
     http_method_override: true
+
+monolog:
+    channels: [%logger.channel%]
+    handlers:
+        main:
+            type: fingers_crossed
+            activation_strategy: eb.compat.log.manual_or_error_activation_strategy
+            passthru_level: %logger.fingers_crossed.passthru_level%
+            handler: syslog
+        syslog:
+            type:      syslog
+            ident:     %logger.syslog.ident%
+            formatter: eb.compat.log.additional_info_formatter

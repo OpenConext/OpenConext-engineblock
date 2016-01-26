@@ -33,5 +33,9 @@ class OpenConextEngineBlockCompatibilityExtension extends Extension
         $container
             ->getDefinition('eb.compat.engineblock_config')
             ->replaceArgument(0, $engineBlockConfig);
+
+        // Alias logger to log to configured channel
+        $container->removeAlias('logger');
+        $container->setAlias('logger', 'monolog.logger.' . $container->getParameter('logger.channel'));
     }
 }
