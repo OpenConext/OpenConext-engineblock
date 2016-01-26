@@ -10,6 +10,11 @@
         "issues": "https://github.com/OpenConext/OpenConext-engineblock/issues",
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
+    "config": {
+        "platform": {
+            "php": "5.3.9"
+        }
+    },
     "require": {
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
@@ -30,7 +35,8 @@
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "openconext/saml-value-object": "^1.1"
+        "openconext/saml-value-object": "^1.1",
+        "symfony/monolog-bundle": "~2.4"
     },
     "require-dev": {
         "phake/phake": "2.0.0-beta2",
