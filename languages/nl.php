@@ -209,8 +209,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_404'                         => '404 - Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',
     'error_help_desc'                   => '<p>
-        Bezoek <a href="https://support.surfconext.nl/">de support pagina</a> als dit je probleem niet oplost.
-        Op deze pagina vind je meer informatie over de mogelijke oorzaken en hoe je contact kan opnemen met het supportteam.
+        Bezoek <a href="https://support.surfconext.nl/" target="_blank">de SURFconext support pagina\'s</a> voor ondersteuning bij deze foutmelding. Hier kun je ook vinden hoe je contact kunt opnemen met het supportteam als de fout aanblijft.
     </p>',
     'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
     'error_no_consent_desc'             => 'Deze applicatie kan enkel worden gebruikt wanneer de vermelde informatie wordt gedeeld.<br /><br />
@@ -289,12 +288,12 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
         <br />
     </p>',
 
-    'error_received_error_status_code'     => 'Error - Identity Provider-fout',
+    'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
     'error_received_error_status_code_desc'=> '<p>
         Jouw instelling stuurde een authenticatierespons met een foutcode.
     </p>',
-    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van identity provider',
-    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op identity provider-antwoord',
+    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van Identity Provider',
+    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op antwoord Identity Provider',
     'error_received_status_code_desc'=> '<p>
         Jouw instelling stuurde een ongeldig authenticatierespons terug.
     </p>',

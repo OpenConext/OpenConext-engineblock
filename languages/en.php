@@ -209,9 +209,9 @@ If you have any questions about your privacy and the policy applied, please visi
     //Error screens
     'error_404'                         => '404 - Page not found',
     'error_404_desc'                    => 'This page has not been found.',
-    'error_help_desc'               => 'If this does not solve your problem, please visit
-        <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.',
+    'error_help_desc'               => '<p>
+        Please visit <a href="https://support.surfconext.nl/" target="_blank">the SURFconext support pages</a> for help solving this problem. These pages also contain contact information for the support team if the problem persists.
+    </p>',
     'error_no_consent'              => 'Unable to continue to service',
     'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
 
