@@ -39,8 +39,8 @@ before_script:
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
   - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default-ssl
   - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default-ssl
-  - sudo service apache2 restart
   - sudo a2ensite default-ssl
+  - sudo service apache2 restart
   - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
   - composer install --prefer-dist -n -o
 
