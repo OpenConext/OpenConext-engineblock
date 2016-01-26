@@ -1,7 +1,7 @@
 <VirtualHost *:443>
     ServerName engine.vm.openconext.org
 
-    SetEnv ENGINEBLOCK_ENV vm
+    SetEnv ENGINEBLOCK_ENV test
     SetEnv SYMFONY_ENV test
     SetEnv HTTPS off
 
@@ -10,8 +10,19 @@
     <Directory "%TRAVIS_BUILD_DIR%/web">
         Options FollowSymLinks MultiViews ExecCGI
         AllowOverride All
-        Order deny,allow
+        Order Allow,Deny
         Allow from all
+
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+            # If the requested url does not map to a file or directory, then forward it to app.php/URL.
+            # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
+            RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
+            RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
+            RewriteRule ^(.*)$ /app.php/$1 [L] # Send the query string to app(_dev).php
+            # Requests to the domain (no query string)
+            RewriteRule ^$ /app.php/ [L]
+        </IfModule>
     </Directory>
 
     # Wire up Apache to use Travis CI's php-fpm.
@@ -22,16 +33,11 @@
         FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -host 127.0.0.1:9000 -pass-header Authorization
     </IfModule>
 
-    RewriteEngine On
-    # If the requested url does not map to a file or directory, then forward it to index.php/URL.
-    # Note that the requested URL MUST be appended because Corto uses the PATH_INFO server variable
-    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-f
-    RewriteCond %{DOCUMENT_ROOT}%{REQUEST_FILENAME} !-d
-    RewriteRule ^(.*)$ /app.php/$1 [L] # Send the query string to app(_dev).php
-    # Requests to the domain (no query string)
-    RewriteRule ^$ /app.php/ [L]
-
     SSLEngine on
-    SSLCertificateFile      /etc/openconext/engineblock.crt
-    SSLCertificateKeyFile   /etc/openconext/engineblock.key
+
+    SSLCertificateFile      /etc/openconext/star.vm.opemconext.org.pem
+    SSLCertificateKeyFile   /etc/openconext/star.vm.openconext.org.key
+
+    SSLCACertificateFile    /etc/openconext/star.vm.opemconext.org_ca.pem
+    SSLUseStapling          on
 </VirtualHost>

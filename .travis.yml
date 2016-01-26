@@ -37,8 +37,8 @@ before_script:
   - sudo a2enmod rewrite actions fastcgi alias ssl
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-  - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default
-  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default
+  - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default-ssl
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default-ssl
   - sudo service apache2 restart
   - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
   - composer install --prefer-dist -n -o
