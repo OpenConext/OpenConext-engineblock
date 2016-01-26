@@ -35,9 +35,6 @@
 
     SSLEngine on
 
-    SSLCertificateFile      /etc/openconext/star.vm.opemconext.org.pem
-    SSLCertificateKeyFile   /etc/openconext/star.vm.openconext.org.key
-
-    SSLCACertificateFile    /etc/openconext/star.vm.opemconext.org_ca.pem
-    SSLUseStapling          on
+    SSLCertificateFile      /etc/openconext/engine.vm.openconext.org.crt
+    SSLCertificateKeyFile   /etc/openconext/engine.vm.openconext.org.key
 </VirtualHost>
