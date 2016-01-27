@@ -24,6 +24,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new OpenConext\EngineBlock\CompatibilityBundle\OpenConextEngineBlockCompatibilityBundle(),
             new OpenConext\EngineBlock\ApiBundle\OpenConextEngineBlockApiBundle(),
@@ -99,6 +100,17 @@ class AppKernel extends Kernel
         $apiProfileCredentials = $apiConfiguration->get('users')->get('profile');
         $container->setParameter('api.users.profile.username', $apiProfileCredentials->get('username'));
         $container->setParameter('api.users.profile.password', $apiProfileCredentials->get('password'));
+
+        $loggerConfiguration = $iniConfiguration->get('logger')->get('conf');
+        $container->setParameter('logger.channel', $loggerConfiguration->get('name'));
+        $container->setParameter(
+            'logger.fingers_crossed.passthru_level',
+            $loggerConfiguration->get('handler')->get('fingers_crossed')->get('conf')->get('passthru_level')
+        );
+        $container->setParameter(
+            'logger.syslog.ident',
+            $loggerConfiguration->get('handler')->get('syslog')->get('conf')->get('ident')
+        );
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

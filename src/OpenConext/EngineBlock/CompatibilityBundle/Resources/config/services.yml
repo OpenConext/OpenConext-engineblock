@@ -37,6 +37,36 @@ services:
         calls:
             - ['setLayout', [@eb.compat.layout]]
 
+    eb.compat.log.error_level_activation_strategy:
+        class: Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy
+        arguments:
+            - "@=service('eb.compat.config').logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level"
+
+    eb.compat.log.manual_or_error_activation_strategy:
+        class: EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
+        arguments:
+            - @eb.compat.log.error_level_activation_strategy
+
+    eb.compat.log.line_formatter:
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "@=service('eb.compat.config').logger.conf.handler.syslog.conf.formatter.conf.format"
+
+    eb.compat.log.additional_info_formatter:
+        class: EngineBlock_Log_Monolog_Formatter_AdditionalInfoFormatter
+        arguments:
+            - @eb.compat.log.line_formatter
+
+    eb.compat.log.session_id_processor:
+        class: EngineBlock_Log_Monolog_Processor_SessionIdProcessor
+        tags:
+            - { name: monolog.processor }
+
+    eb.compat.log.request_id_processor:
+        class: EngineBlock_Log_Monolog_Processor_RequestIdProcessor
+        tags:
+            - { name: monolog.processor }
+
     eb.compat.logger:
         class: Monolog\Logger
         factory:  [EngineBlock_ApplicationSingleton, getLog]
