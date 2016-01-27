@@ -3,6 +3,7 @@
     <target name="acceptance" depends="clean,prepare,behat" />
     <target name="report" depends="clean,prepare,parallel" />
 
+    <target name="pre-commit" depends="travis" />
     <target name="travis-functional-tests" depends="behat-travis" />
     <target name="travis" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpcpd-travis,phpunit-travis"/>
 
