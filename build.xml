@@ -194,8 +194,10 @@
     </target>
 
     <target name="behat-travis">
+        <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
         <exec executable="vendor/bin/behat" failonerror="true">
             <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
         </exec>
+        <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
     </target>
 </project>
