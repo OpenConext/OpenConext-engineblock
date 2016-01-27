@@ -353,6 +353,7 @@ class EngineBlock_Corto_Adapter
         }
 
         $proxyServer = $this->_getCoreProxy();
+        $proxyServer->startSession();
 
         $this->_configureProxyServer($proxyServer);
 

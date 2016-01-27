@@ -9,8 +9,16 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         $receivedResponse = $this-> _server->getBindingsModule()->receiveResponse();
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
 
-        // Flush log if SP or IdP has additional logging enabled
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
+
+        // Verify the SP requester chain.
+        EngineBlock_SamlHelper::getSpRequesterChain(
+            $sp,
+            $receivedRequest,
+            $this->_server->getRepository()
+        );
+
+         // Flush log if SP or IdP has additional logging enabled
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
             $application = EngineBlock_ApplicationSingleton::getInstance();

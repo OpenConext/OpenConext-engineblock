@@ -1,0 +1,11 @@
+parameters:
+    router.request_context.host:   "engine.%domain%"
+    router.request_context.scheme: "https"
+
+    # Where can we find the JANUS JSON export for IDPs and SPs?
+    idps_config_url:    "/tmp/saml20-sp-remote.json"
+    sps_config_url:     "/tmp/saml20-sp-remote.json"
+
+    # Where must we store the writable state of the Mock IdP and Mock SP?
+    idp_fixture_file:   "%kernel.root_dir%/../src/OpenConext/EngineBlock/FunctionalTestingBundle/Resources/fixtures/db/idp.states.php.serialized"
+    sp_fixture_file:    "%kernel.root_dir%/../src/OpenConext/EngineBlock/FunctionalTestingBundle/Resources/fixtures/db/sp.states.php.serialized"

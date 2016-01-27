@@ -1,0 +1,12 @@
+services:
+    engineblock.functional_test.controller.identity_provider:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\IdentityProviderController
+        arguments:
+            - "@engineblock.mock_entities.idp_registry"
+            - "@engineblock.mock_entities.saml_response_factory"
+
+    engineblock.functional_test.controller.service_provider:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Controllers\ServiceProviderController
+        arguments:
+            - "@engineblock.mock_entities.sp_registry"
+            - "@engineblock.functional_testing.service.engine_block"

@@ -1,0 +1,47 @@
+services:
+    engineblock.compat.application:
+        class: EngineBlock_ApplicationSingleton
+        factory:  [EngineBlock_ApplicationSingleton, getInstance]
+
+    engineblock.compat.config:
+        class: Zend_Config
+        factory: ["@engineblock.compat.application", getConfiguration]
+
+    engineblock.compat.di_container:
+        public: false
+        class: EngineBlock_Application_DiContainer
+        factory: ["@engineblock.compat.application", getDiContainer]
+
+    engineblock.compat.repository.metadata:
+        public: false
+        class: OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+        factory: [@engineblock.compat.di_container, getMetadataRepository]
+
+    engineblock.compat.doctrine.entity_manager:
+        public: false
+        class: Doctrine\ORM\EntityManager
+        factory: [@engineblock.compat.di_container, getEntityManager]
+
+    engineblock.compat.doctrine.dbal_connection:
+        public: false
+        class: Doctrine\DBAL\Connection
+        factory: [@engineblock.compat.doctrine.entity_manager, getConnection]
+
+    engineblock.compat.view:
+        class: EngineBlock_View
+        calls:
+            - ['setLayout', [@engineblock.compat.layout]]
+
+    engineblock.compat.layout:
+        class: Zend_Layout
+        calls:
+            - ['setLayout',       ["@=service('engineblock.compat.config').defaults.layout"]]
+            - ['setLayoutPath',   ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
+            - ['setViewBasePath', ["%kernel.root_dir%/Resources/views/modules/"]]
+        properties:
+            title: "@=service('engineblock.compat.config').defaults.title"
+            header: "@=service('engineblock.compat.config').defaults.header"
+
+    engineblock.compat.logger:
+        class: Monolog\Logger
+        factory:  [EngineBlock_ApplicationSingleton, getLog]

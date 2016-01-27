@@ -5,7 +5,7 @@ class EngineBlock_Application_SuperGlobalManager
     /**
      * File where.
      */
-    const FILE = '/tmp/eb-fixtures/superglobals.json';
+    const FILE = 'tmp/eb-fixtures/superglobals.json';
 
     /**
      * @var Psr\Log\LoggerInterface
@@ -21,7 +21,7 @@ class EngineBlock_Application_SuperGlobalManager
     {
         $fixture = new \OpenConext\Component\EngineBlockFixtures\SuperGlobalsFixture(
             new \OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore(
-                self::FILE
+                ENGINEBLOCK_FOLDER_ROOT . self::FILE
             )
         );
         $overrides = $fixture->getAll();
@@ -35,7 +35,7 @@ class EngineBlock_Application_SuperGlobalManager
             foreach ($values as $name => $value) {
                 $this->_logger->notice(
                     sprintf('Overwriting $%s[%s]', $superGlobalName, $name),
-                    ['super_global' => ['from' => $global[$name], 'to' => $value]]
+                    array('super_global' => array('from' => $global[$name], 'to' => $value))
                 );
 
                 $global[$name] = $value;

@@ -15,7 +15,6 @@ See the NOTICE.txt file
 * Apache with modules:
     - mod_php
 * PHP 5.3.x with modules:
-    - memcache
     - ldap
     - libxml
     - mcrypt
@@ -26,7 +25,6 @@ See the NOTICE.txt file
 * Internet2 Grouper
 * Service Registry
 * wget
-* Memcached (optional)
 * NPM (optional for theme deployment)
 * Grunt-cli (optional for theme deployment)
 

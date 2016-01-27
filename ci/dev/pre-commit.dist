@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+cleanup ()
+{
+    echo -e "\n\033[01;32mCleanup...\033[00m"
+
+    # do some cleanup
+    rm -f phpcs-full.tmp
+
+    echo -e "\033[01;32mDone\033[00m"
+    return $?
+}
+
+# run if user hits control-c
+control_c ()
+{
+    cleanup
+    exit $?
+}
+
+# We need tog grab the keyboard because git hooks normally run non-interactively
+keyboard_grab ()
+{
+    # Allows us to read user input below, assigns stdin to keyboard
+    exec < /dev/tty
+}
+
+keyboard_release ()
+{
+    exec <&-
+}
+
+# Trap signals like ctrl-c. Execute cleanup
+trap 'control_c' HUP INT QUIT TERM
+
+# Get a diff between the staged changes and HEAD
+DIFF=$(git diff --cached --name-only)
+
+# If the diff is empty, we do nothing
+if [[ -z "$DIFF" ]]
+then
+    echo -e "\n\033[01;32mNothing to commit; not running qa-tools\033[00m"
+    exit 0;
+fi
+
+UNSTAGED=$(git diff --name-status)
+UNTRACKED=$(git ls-files -o --exclude-standard)
+
+# If there are unstaged changes, we ask to confirm
+if [[ -n "$UNSTAGED"  || -n "$UNTRACKED" ]]
+then
+    echo -e "\n\033[01;32mThere are unstaged or untracked changes:\033[00m"
+    if [[ -n "$UNSTAGED" ]]
+    then
+        echo -e "\nUNSTAGED:"
+        echo -e "\n$UNSTAGED\n"
+    fi
+    if [[ -n "$UNTRACKED" ]]
+    then
+        echo -e "\nUNTRACKED:"
+        echo -e "\n$UNTRACKED\n"
+    fi
+
+    keyboard_grab
+    read -r -p "Do you want to continue? [Y/n] " response
+    if [[ $response =~ ^([nN][oO]|[nN])$ ]]
+    then
+        exit 1;
+    fi
+    keyboard_release
+fi
+
+# Find baseDir
+BASEDIR=$(git rev-parse --show-toplevel)
+
+# Run the pre-commit build
+echo -e "\n\033[01;32mStarting build...\033[00m\n"
+ant pre-commit
+exitCode=$?
+
+# If exit code is not 0 then there was a failure
+if [[ 0 -ne $exitCode ]]
+then
+    echo -e "\n\033[01;31mCommit aborted: build failed\033[00m"
+    echo -e "\nIf you want to commit anyway, use --no-verify"
+    exitCode=1
+fi
+
+# Doing cleanup
+cleanup
+
+exit $exitCode

@@ -1,0 +1,17 @@
+#
+# Limited Parsing Expression Grammar for PHP print_r
+#
+# This ONLY works because it's designed to parse OpenConext SAML responses out of a print_r.
+# Print_r isn't designed to be parsed and can't be reliably parsed for all cases.
+# ... but it can in our case :).
+#
+# Since there is no 'official' notation for PEGs we're basing this on Wikipedia:
+# http://en.wikipedia.org/wiki/Parsing_expression_grammar
+
+ARRAY        <- 'Array' NEWLINE SPACE* '(' ARRAYCONTENT SPACE* ')'
+ARRAYCONTENT <- ARRAYKEY '=>' ARRAYVALUE
+ARRAYKEY     <- NEWLINE SPACE+ '[' STRING ']'
+ARRAYVALUE   <- ARRAY / MLSTRING / EMPTY
+MLSTRING     <- STRING (NEWLINE SPACE* STRING)*
+STRING       <- \S+
+NEWLINE      <- \n

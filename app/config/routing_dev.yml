@@ -14,5 +14,8 @@ _errors:
     resource: "@TwigBundle/Resources/config/routing/errors.xml"
     prefix:   /_error
 
+_functional_testing:
+    resource: routing_test.yml
+
 _main:
     resource: routing.yml
