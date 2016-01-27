@@ -23,8 +23,10 @@ use EngineBlock_Attributes_Manipulator_CustomException;
 use EngineBlock_Corto_Exception_InvalidAcsLocation;
 use EngineBlock_Corto_Exception_MissingRequiredFields;
 use EngineBlock_Corto_Exception_NoConsentProvided;
+use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
+use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Exception_UserNotMember;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
@@ -33,6 +35,7 @@ use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException;
+use EngineBlock_Exception_DissimilarServiceProviderWorkflowStates;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -97,6 +100,7 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownIssuer) {
             $message         = 'Unknown Issuer';
             $redirectToRoute = 'authentication_feedback_unknown_issuer';
+
             $redirectParams  = array(
                 'entity-id'   => $exception->getEntityId(),
                 'destination' => $exception->getDestination()
@@ -105,11 +109,12 @@ class RedirectToFeedbackPageExceptionListener
             $message         = 'No Identity Provider';
             $redirectToRoute = 'authentication_feedback_no_idps';
         } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidAcsLocation) {
-            $message = 'Invalid ACS location';
+            $message         = 'Invalid ACS location';
             $redirectToRoute = 'authentication_feedback_invalid_acs_location';
         } elseif ($exception instanceof EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException) {
             $message         = 'Unknown Remote Entity';
             $redirectToRoute = 'authentication_feedback_unknown_service_provider';
+
             $redirectParams  = array('entity-id' => $exception->getEntityId());
         } elseif ($exception instanceof EngineBlock_Corto_Exception_MissingRequiredFields) {
             $message         = 'Missing Required Fields';
@@ -135,9 +140,17 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_NoConsentProvided) {
             $message         = 'No Consent Provided';
             $redirectToRoute = 'authentication_feedback_no_consent';
-        } elseif ($exception instanceof \EngineBlock_Exception_DissimilarServiceProviderWorkflowStates) {
+        } elseif ($exception instanceof EngineBlock_Exception_DissimilarServiceProviderWorkflowStates) {
             $message         = 'Dissimilar Service Provider workflowstates in request chain (transparant proxying)';
             $redirectToRoute = 'authentication_feedback_dissimilar_workflow_states';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
+            $message         = 'PEP authorization rule violation';
+            $redirectToRoute = 'authentication_feedback_pep_violation';
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_UnknownPreselectedIdp) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_unknown_preselected_idp';
+
+            $redirectParams = array('idp-hash' => $exception->getRemoteIdpMd5Hash());
         } else {
             return;
         }

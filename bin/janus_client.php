@@ -11,6 +11,11 @@ if (!isset($argv[1])) {
         'Example: ./bin/janus_client.php getMetadata "entityid=https://example.edu&keys=certData"' . PHP_EOL
     );
 }
+
+ini_set('xdebug.var_display_max_children', -1);
+ini_set('xdebug.var_display_max_data', -1);
+ini_set('xdebug.var_display_max_depth', -1);
+
 try {
 
     require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
@@ -43,9 +48,10 @@ try {
     } catch (Exception $e) {
         var_dump($e);
         var_dump($restClient->getHttpClient()->getLastRequest());
-        var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
-        var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
-
+        if ($restClient->getHttpClient()->getLastResponse()) {
+            var_dump($restClient->getHttpClient()->getLastResponse()->getHeadersAsString());
+            var_dump($restClient->getHttpClient()->getLastResponse()->getBody());
+        }
     }
 } catch (Exception $e) {
     var_dump($e);

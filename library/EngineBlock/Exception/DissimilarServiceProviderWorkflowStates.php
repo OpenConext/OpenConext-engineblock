@@ -1,4 +1,5 @@
 <?php
+
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Exception_DissimilarServiceProviderWorkflowStates extends \Exception
@@ -7,6 +8,7 @@ class EngineBlock_Exception_DissimilarServiceProviderWorkflowStates extends \Exc
      * @var ServiceProvider
      */
     private $trustedProxyServiceProvider;
+
     /**
      * @var string
      */

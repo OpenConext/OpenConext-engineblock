@@ -211,10 +211,30 @@ class FeedbackController
      * @return Response
      * @throws \EngineBlock_Exception
      */
-    public function dissimilarWorkflowStates()
+    public function dissimilarWorkflowStatesAction()
     {
         return new Response(
             $this->engineBlockView->render('Authentication/View/Feedback/DissimilarWorkflowStates.phtml'),
+            400
+        );
+    }
+
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
+    public function authorizationPolicyViolationAction()
+    {
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/AuthorizationPolicyViolation.phtml'),
+            400
+        );
+    }
+
+    public function unknownPreselectedIdpAction()
+    {
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/UnknownPreselectedIdP.phtml'),
             400
         );
     }

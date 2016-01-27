@@ -20,9 +20,9 @@
         "mrclay/minify": "~2.2",
         "openconext/engineblock-metadata": "~1.4",
         "openconext/stoker-metadata": "~0.1",
-        "openid/php-openid": "dev-master#a287b2d85e753c84b3b883ed8ee3ffe8692c8477 as 2.2.2",
+        "openid/php-openid": "dev-master#ee669c6a9d4d95b58ecd9b6945627276807694fb as 2.2.2",
         "pimple/pimple": "~2.1",
-        "simplesamlphp/saml2": "1.7.1 as 0.6",
+        "simplesamlphp/saml2": "1.7.2 as 0.8.1",
         "simplesamlphp/simplesamlphp": "~1.13",
         "sybio/image-workshop": "~2.0.7",
         "zendframework/zendframework1":"~1.12",
@@ -34,7 +34,7 @@
         "symfony/monolog-bundle": "~2.4"
     },
     "require-dev": {
-        "phake/phake": "2.0.0-beta2",
+        "phake/phake": "2.1",
         "phpunit/phpunit": "~4.3",
         "sensio/generator-bundle": "~2.3",
         "behat/behat": "~2.5",
@@ -68,23 +68,13 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
         ]
     },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "cssmin/cssmin",
-                "version": "3.0.1",
-                "dist": { "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php", "type": "file" },
-                "autoload": { "classmap": [ "cssmin-v3.0.1.php" ] }
-            }
-        }
-    ],
     "autoload": {
         "psr-0": {
             "DbPatch_": "vendor/dbpatch/dbpatch/src/",
             "EngineBlock_": "library/",
             "EngineBlock_Test": "tests/library/",
             "Janus_": "library/",
+            "Pdp_": "library/",
             "SurfConext_": "library/",
             "Surfnet_": "library/",
             "Api_":"application/modules/",

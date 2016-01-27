@@ -23,6 +23,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         // Flush log if an SP in the requester chain has additional logging enabled
         $log->info("Determining whether service provider in chain requires additional logging");
+
         $isAdditionalLoggingRequired = EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(
             EngineBlock_SamlHelper::getSpRequesterChain(
                 $sp,
@@ -77,7 +78,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
-            $log->notice("Removed ourselves from the candidate IdP list");
+            $log->info("Removed ourselves from the candidate IdP list");
             unset($candidateIDPs[$posOfOwnIdp]);
         }
 

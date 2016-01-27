@@ -6,8 +6,17 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 {
     public function serve($serviceName)
     {
-        $receivedResponse = $this-> _server->getBindingsModule()->receiveResponse();
+        $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
         $receivedRequest = $this->_server->getReceivedRequestFromResponse($receivedResponse);
+
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $log = $application->getLogInstance();
+
+        $log->notice(sprintf(
+            'Received Assertion from Issuer "%s" with signature method algorithm "%s"',
+            $receivedResponse->getIssuer(),
+            $receivedResponse->getAssertion()->getSignatureMethod()
+        ));
 
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
 
@@ -18,13 +27,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $this->_server->getRepository()
         );
 
-         // Flush log if SP or IdP has additional logging enabled
+        // Flush log if SP or IdP has additional logging enabled
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
             $application->flushLog('Activated additional logging for the SP or IdP');
-
-            $log = $application->getLogInstance();
             $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
         }
 

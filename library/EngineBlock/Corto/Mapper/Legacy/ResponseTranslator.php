@@ -43,8 +43,7 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
         $legacyResponse = EngineBlock_Corto_XmlToArray::registerNamespaces($legacyResponse);
         $xml = EngineBlock_Corto_XmlToArray::array2xml($legacyResponse);
 
-        $document = new DOMDocument();
-        $document->loadXML($xml);
+        $document = SAML2_DOMDocumentFactory::fromString($xml);
 
         $response = new SAML2_Response($document->firstChild);
         $annotatedResponse = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);

@@ -339,10 +339,10 @@ OpenConext.Discover = function () {
         accessLink
           .insertAfter(selectionInsertionPoint)
           .each(function () {
-            var accessLink = $(this);
-            var swapText = accessLink.attr('data-toggle-text');
-            accessLink.attr('data-toggle-text', accessLink.html());
-            accessLink.html(swapText);
+            var action = $(this).find('.action');
+            var swapText = action.attr('data-toggle-text');
+            action.attr('data-toggle-text', action.html());
+            action.html(swapText).removeClass('outline deleteable img').addClass('white');
           });
         checkVisible();
       }
