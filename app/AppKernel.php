@@ -26,9 +26,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new OpenConext\EngineBlock\CompatibilityBundle\OpenConextEngineBlockCompatibilityBundle(),
-            new OpenConext\EngineBlock\ApiBundle\OpenConextEngineBlockApiBundle(),
-            new OpenConext\EngineBlock\AuthenticationBundle\OpenConextEngineBlockAuthenticationBundle(),
+            new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -38,7 +36,7 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
 
             // own bundles
-            $bundles[] = new OpenConext\EngineBlock\FunctionalTestingBundle\OpenConextEngineBlockFunctionalTestingBundle();
+            $bundles[] = new OpenConext\EngineBlockFunctionalTestingBundle\OpenConextEngineBlockFunctionalTestingBundle();
         }
 
         return $bundles;
@@ -63,7 +61,7 @@ class AppKernel extends Kernel
         }
 
         // set the configured layout on the application singleton
-        $this->engineBlockSingleton->setLayout($this->container->get('eb.compat.layout'));
+        $this->engineBlockSingleton->setLayout($this->container->get('engineblock.compat.layout'));
 
         return $this->getHttpKernel()->handle($request, $type, $catch);
     }

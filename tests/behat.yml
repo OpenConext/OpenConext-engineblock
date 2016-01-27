@@ -1,6 +1,6 @@
 default:
     paths:
-        features: ../src/OpenConext/EngineBlock/FunctionalTestingBundle/Features
+        features: ../src/OpenConext/EngineBlockFunctionalTestingBundle/Features
     formatter:
         name: progress
     filters:

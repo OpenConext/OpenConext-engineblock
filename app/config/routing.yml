@@ -1,5 +1,5 @@
-open_conext_engine_block_authentication:
-    resource: "@OpenConextEngineBlockAuthenticationBundle/Resources/config/routing.yml"
+openconext_engineblock_authentication:
+    resource: "@OpenConextEngineBlockBundle/Resources/config/routing.yml"
     host:     "engine.{domain}"
     requirements:
         domain: ".*"
@@ -7,8 +7,8 @@ open_conext_engine_block_authentication:
     defaults:
         domain: "%domain%"
 
-open_conext_engine_block_api:
-    resource: "@OpenConextEngineBlockApiBundle/Resources/config/routing.yml"
+openconext_engineblock_api:
+    resource: "@OpenConextEngineBlockBundle/Resources/config/routing_api.yml"
     host:     "engine-api.{domain}"
     requirements:
         domain: ".*"

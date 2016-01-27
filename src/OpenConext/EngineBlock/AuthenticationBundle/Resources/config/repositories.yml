@@ -1,6 +1,0 @@
-services:
-    engineblock.repository.consent:
-        public: false
-        class: OpenConext\EngineBlock\Authentication\Repository\ConsentRepository
-        arguments:
-            - @eb.compat.doctrine.dbal_connection
