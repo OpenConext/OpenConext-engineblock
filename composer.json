@@ -10,11 +10,6 @@
         "issues": "https://github.com/OpenConext/OpenConext-engineblock/issues",
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
-    "config": {
-        "platform": {
-            "php": "5.3.9"
-        }
-    },
     "require": {
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
