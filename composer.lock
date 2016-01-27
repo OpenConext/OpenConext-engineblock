@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a39d776e1c91f88a7cf4e7efe7b865ac",
-    "content-hash": "755014cd660504c76a853df7a2205d3e",
+    "hash": "00eed6aa0862f7fc62a455c58502bc09",
+    "content-hash": "494ad85b015b59fe04b3139f2c44f234",
     "packages": [
         {
             "name": "cssmin/cssmin",
