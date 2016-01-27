@@ -144,6 +144,20 @@ Feature:
       And I pass through the IdP
      Then I should not see "Request for release of your information"
 
+  Scenario: User logs in via trusted proxy and attribute release policy for destination is executed
+    Given SP "Step Up" is authenticating for SP "Loa SP"
+    And SP "Step Up" is a trusted proxy
+    And SP "Step Up" signs it's requests
+    And SP "Step Up" does not require consent
+    And SP "Loa SP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I log in at "Step Up"
+    And I select "AlwaysAuth" on the WAYF
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I pass through EngineBlock
+    Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+
   Scenario: User logs in via trusted proxy and attribute manipulation for proxy and destination are executed
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
