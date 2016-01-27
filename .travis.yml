@@ -15,10 +15,10 @@ sudo: true # sudo is required for behat
 
 env:
   matrix:
-    - COMMAND="travis-functional-tests"
-    - COMMAND="travis"
+    - COMMAND="functional-tests"
+    - COMMAND="code-quality"
   global:
-    - SYMFONY_ENV=test  #
+    - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
     - ANT_OPTS=-Xmx256m # ensure we got enough memory for ant
 

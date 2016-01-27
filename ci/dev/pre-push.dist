@@ -65,7 +65,7 @@ BASEDIR=$(git rev-parse --show-toplevel)
 
 # Run the pre-push build
 echo -e "\n\033[01;32mStarting build...\033[00m\n"
-ant travis-functional-tests
+ant pre-push
 exitCode=$?
 
 # If exit code is not 0 then there was a failure
