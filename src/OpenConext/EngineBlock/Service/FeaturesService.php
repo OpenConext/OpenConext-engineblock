@@ -1,8 +1,8 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Service;
+namespace OpenConext\EngineBlock\Service;
 
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 class FeaturesService
 {

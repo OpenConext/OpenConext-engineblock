@@ -3,8 +3,8 @@
 namespace OpenConext\EngineBlockBridge\Mail;
 
 use Exception;
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException;
-use OpenConext\EngineBlockBundle\Exception\RuntimeException;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 use Zend_Mail;
 

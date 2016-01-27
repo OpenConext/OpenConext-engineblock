@@ -2,11 +2,11 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
-use OpenConext\EngineBlockBundle\Exception\RuntimeException;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
-use OpenConext\EngineBlockBundle\Service\ConsentService;
-use OpenConext\EngineBlockBundle\Service\FeaturesService;
+use OpenConext\EngineBlock\Service\ConsentService;
+use OpenConext\EngineBlock\Service\FeaturesService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;

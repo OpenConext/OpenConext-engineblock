@@ -8,7 +8,7 @@ use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadata
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
-use OpenConext\EngineBlockBundle\Service\FeaturesService;
+use OpenConext\EngineBlock\Service\FeaturesService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;

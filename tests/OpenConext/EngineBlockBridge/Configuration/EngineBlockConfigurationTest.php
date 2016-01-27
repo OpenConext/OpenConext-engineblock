@@ -3,7 +3,7 @@
 namespace OpenConext\EngineBlockBridge\Tests;
 
 use OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration;
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase as TestCase;
 use stdClass;
 

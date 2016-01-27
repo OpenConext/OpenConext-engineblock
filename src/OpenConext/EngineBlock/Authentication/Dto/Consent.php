@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Dto;
+namespace OpenConext\EngineBlock\Authentication\Dto;
 
 use DateTime;
 use OpenConext\Component\EngineBlockMetadata\ContactPerson;

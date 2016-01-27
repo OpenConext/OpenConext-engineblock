@@ -54,6 +54,6 @@ services:
             - @engineblock.compat.application
 
     engineblock.service.request_access_mailer:
-        class: OpenConext\EngineBlockBundle\Service\RequestAccessMailer
+        class: OpenConext\EngineBlock\Service\RequestAccessMailer
         arguments:
             - @engineblock.bridge.mailer

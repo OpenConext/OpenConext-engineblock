@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Dto;
+namespace OpenConext\EngineBlock\Authentication\Dto;
 
 final class ConsentList
 {

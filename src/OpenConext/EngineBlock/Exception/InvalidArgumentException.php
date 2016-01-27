@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Exception;
+namespace OpenConext\EngineBlock\Exception;
 
 use InvalidArgumentException as CoreInvalidArgumentException;
 

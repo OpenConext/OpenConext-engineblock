@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockBridge\Mail;
 
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 class MailMessage
 {

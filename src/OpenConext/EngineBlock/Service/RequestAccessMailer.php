@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Service;
+namespace OpenConext\EngineBlock\Service;
 
 use OpenConext\EngineBlockBridge\Mail\MailMessage;
 use OpenConext\EngineBlockBridge\Mail\MailSenderInterface;

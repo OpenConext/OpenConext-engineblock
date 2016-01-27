@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Service;
+namespace OpenConext\EngineBlock\Service;
 
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;

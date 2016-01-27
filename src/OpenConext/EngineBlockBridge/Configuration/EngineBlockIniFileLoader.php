@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockBridge\Configuration;
 
-use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 final class EngineBlockIniFileLoader
 {

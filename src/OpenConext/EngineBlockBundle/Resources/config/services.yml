@@ -5,21 +5,21 @@ services:
             - "engine-api.%domain%"
 
     engineblock.service.features:
-        class: OpenConext\EngineBlockBundle\Service\FeaturesService
+        class: OpenConext\EngineBlock\Service\FeaturesService
         arguments:
             - %api.features.metadata_push.enabled%
             - %api.features.consent_listing.enabled%
             - %api.features.metadata_api.enabled%
 
     engineblock.service.consent:
-        class: OpenConext\EngineBlockBundle\Service\ConsentService
+        class: OpenConext\EngineBlock\Service\ConsentService
         arguments:
             - @engineblock.repository.consent
             - @engineblock.service.metadata
             - @engineblock.compat.logger
 
     engineblock.service.metadata:
-        class: OpenConext\EngineBlockBundle\Service\MetadataService
+        class: OpenConext\EngineBlock\Service\MetadataService
         arguments:
             - @engineblock.compat.repository.metadata
             - @engineblock.compat.logger

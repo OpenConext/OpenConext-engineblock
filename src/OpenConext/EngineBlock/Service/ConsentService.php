@@ -1,11 +1,11 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Service;
+namespace OpenConext\EngineBlock\Service;
 
 use Doctrine\DBAL\DBALException;
-use OpenConext\EngineBlockBundle\Dto\Consent;
-use OpenConext\EngineBlockBundle\Dto\ConsentList;
-use OpenConext\EngineBlockBundle\Exception\RuntimeException;
+use OpenConext\EngineBlock\Authentication\Dto\Consent;
+use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Authentication\Entity\Consent as ConsentEntity;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\Value\Saml\EntityId;

@@ -22,7 +22,7 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use EngineBlock_View;
 use Exception;
-use OpenConext\EngineBlockBundle\Service\RequestAccessMailer;
+use OpenConext\EngineBlock\Service\RequestAccessMailer;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
