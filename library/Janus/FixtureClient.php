@@ -1,8 +1,10 @@
 <?php
 
-class Janus_FixtureClient implements Janus_Client_Interface
+use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
+
+class Janus_FixtureClient implements Janus_Client_Interface, RestClientInterface
 {
-    const DIR = '/tmp/eb-fixtures/janus/';
+    const DIR = 'tmp/eb-fixtures/janus/';
 
     /**
      * Get full information for a given entity.
@@ -64,7 +66,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
 
     protected function _getEntities()
     {
-        $file = self::DIR . 'entities';
+        $file = ENGINEBLOCK_FOLDER_ROOT . self::DIR . 'entities';
         if (!file_exists($file)) {
             throw new RuntimeException("Missing Janus entities file: " . $file);
         }
@@ -202,11 +204,13 @@ class Janus_FixtureClient implements Janus_Client_Interface
      */
     public function isConnectionAllowed($spEntityId, $idpEntityId)
     {
-        $whiteListedSpFile  = self::DIR . 'whitelisted-' . md5($spEntityId);
-        $whiteListedIdpFile = self::DIR . 'whitelisted-' . md5($idpEntityId);
+        $directoryLocation = ENGINEBLOCK_FOLDER_ROOT . self::DIR;
+
+        $whiteListedSpFile  = $directoryLocation . 'whitelisted-' . md5($spEntityId);
+        $whiteListedIdpFile = $directoryLocation . 'whitelisted-' . md5($idpEntityId);
         $eitherSideIsWhiteListed = (file_exists($whiteListedSpFile) || file_exists($whiteListedIdpFile));
         if ($eitherSideIsWhiteListed) {
-            $connectionIsAllowed = file_exists(self::DIR . 'connection-allowed-' . md5($spEntityId) . '-' . md5($idpEntityId));
+            $connectionIsAllowed = file_exists($directoryLocation . 'connection-allowed-' . md5($spEntityId) . '-' . md5($idpEntityId));
             if ($connectionIsAllowed) {
                 return true;
             }
@@ -215,8 +219,8 @@ class Janus_FixtureClient implements Janus_Client_Interface
             }
         }
         else {
-            $file1 = self::DIR . 'connection-forbidden-' . md5($spEntityId) . '-' . md5($idpEntityId);
-            $file2 = self::DIR . 'connection-forbidden-' . md5($idpEntityId) . '-' . md5($spEntityId);
+            $file1 = $directoryLocation . 'connection-forbidden-' . md5($spEntityId) . '-' . md5($idpEntityId);
+            $file2 = $directoryLocation . 'connection-forbidden-' . md5($idpEntityId) . '-' . md5($spEntityId);
             if (file_exists($file1) || file_exists($file2)) {
                 return false;
             }
@@ -239,7 +243,7 @@ class Janus_FixtureClient implements Janus_Client_Interface
      */
     public function getArp($spEntityId)
     {
-        $file = self::DIR . 'arp-' . md5($spEntityId) . '.json';
+        $file = ENGINEBLOCK_FOLDER_ROOT . self::DIR . 'arp-' . md5($spEntityId) . '.json';
         if (!file_exists($file)) {
             return null;
         }

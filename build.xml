@@ -1,109 +1,102 @@
-<project name="COIN EngineBlock" default="build">
-    <target name="build" depends="clean,prepare,lint,phpunit" />
-    <target name="acceptance" depends="clean,prepare,behat" />
-    <target name="report" depends="clean,prepare,parallel" />
+<project name="OpenConext EngineBlock" default="build">
 
-    <target name="parallel">
-        <parallel>
-            <antcall target="phpcs" />
-            <antcall target="phpmd" />
-            <antcall target="phpcb" />
-            <antcall target="phpcpd" />
-            <antcall target="pdepend" />
-        </parallel>
-    </target>
- 
-    <target name="clean">
-        <delete dir="${basedir}/build" />
-    </target>
- 
-    <target name="prepare">
-        <mkdir dir="${basedir}/build/logs" />
-        <mkdir dir="${basedir}/build/logs/tests" />
-        <mkdir dir="${basedir}/build/codebrowser" />
-        <mkdir dir="${basedir}/build/coverage" />
-        <mkdir dir="${basedir}/build/cpd" />
-        <mkdir dir="${basedir}/build/dependencies" />
-        <antcall target="composer" />
+    <target name="build" depends="code-quality,functional-tests" />
+    <target name="pre-commit" depends="code-quality" />
+    <target name="pre-push" depends="code-quality,functional-tests" />
+    <target name="functional-tests" depends="behat-travis" />
+    <target name="code-quality" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpcpd-travis,phpunit-travis"/>
+
+    <target name="install-git-hooks"
+            description="installs the pre-commit and pre-push hooks for git">
+        <copy file="${basedir}/ci/dev/pre-commit.dist" tofile="${basedir}/.git/hooks/pre-commit"/>
+        <copy file="${basedir}/ci/dev/pre-push.dist" tofile="${basedir}/.git/hooks/pre-push"/>
+        <chmod file="${basedir}/.git/hooks/pre-commit" perm="a+x,g-w"/>
+        <chmod file="${basedir}/.git/hooks/pre-push" perm="a+x,g-w"/>
     </target>
 
-    <target name="lint" description="Run syntax check for all classes" >
-        <apply dir="${basedir}" executable="php" failonerror="true">
-            <arg value="-l" />
-            <fileset dir="${basedir}">
+    <target name="get-changeset.php.raw"
+            description="creates a list of changed php files separated by newline">
+        <pathconvert property="changeset.php.raw" pathsep="${line.separator}">
+            <fileset dir="src">
                 <include name="**/*.php"/>
-                <include name="**/*.html"/>
-                <include name="**/*.phtml"/>
-                <exclude name="vendor/**"/>
+                <modified/>
             </fileset>
-        </apply>
+        </pathconvert>
+
+        <!--Check if files are modified-->
+        <condition property="changeset.php.notempty">
+            <not>
+                <equals arg1="${changeset.php.raw}" arg2="" trim="true"/>
+            </not>
+        </condition>
     </target>
 
-    <target name="behat" description="BDD Acceptance tests with Behat">
-        <!-- First we do it so that we get jUnit XML for bamboo-->
-        <exec dir="${basedir}" executable="vendor/bin/behat">
-            <arg line="-f junit --out ${basedir}/build/logs/tests/" />
-        </exec>
-        <!-- Then we run it again, only this time we want output
-        for in the logs and an exit code so Bamboo can fail the build if necessary -->
-        <exec dir="${basedir}" executable="vendor/bin/behat" failonerror="true" />
-
+    <target name="get-changeset.php.spacesep" depends="get-changeset.php.raw" if="changeset.php.notempty"
+            description="Creates a quoted list of changed php files separated by spaces">
+        <loadresource property="changeset.php.spacesep">
+            <propertyresource name="changeset.php.raw"/>
+            <filterchain>
+                <tokenfilter delimoutput=" ">
+                    <linetokenizer/>
+                    <replaceregex pattern="^" replace='"'/>
+                    <replaceregex pattern="$" replace='"'/>
+                </tokenfilter>
+            </filterchain>
+        </loadresource>
     </target>
 
-    <target name="composer">
-        <!-- install vendor code -->
-        <exec dir="${basedir}" executable="bin/composer.phar" failonerror="true">
-            <arg line="install
-                --dev --prefer-source" />
+    <target name="php-lint-travis" depends="get-changeset.php.spacesep" if="changeset.php.notempty"
+            description="Perform syntax check of sourcecode files in parallel">
+        <exec executable="sh" failonerror="true">
+            <arg value="-c"/>
+            <arg value="echo '${changeset.php.spacesep}' | xargs -n 1 -P 4 php -l 1>/dev/null"/>
+        </exec>
+        <echo message="OK"/>
+    </target>
+
+    <target name="phpmd-travis"
+            description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+        <exec executable="vendor/bin/phpmd" failonerror="true">
+            <arg path="src"/>
+            <arg value="text"/>
+            <arg value="ci/travis/phpmd.xml"/>
+            <arg value="--exclude"/>
+            <arg value="*/Tests/*"/>
         </exec>
     </target>
 
-    <target name="phpunit">
-        <exec dir="${basedir}/tests" executable="../vendor/bin/phpunit" failonerror="true">
-            <arg line="--log-junit ${basedir}/build/logs/tests/phpunit.xml
-                       --coverage-clover ${basedir}/build/logs/clover.xml
-                       --coverage-html ${basedir}/build/coverage
-                       ." />
+    <target name="phpcs-travis"
+            description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+        <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
+            <arg value="--report=full" />
+            <arg value="--standard=ci/travis/phpcs.xml" />
+            <arg value="--warning-severity=0" />
+            <arg value="--extensions=php" />
+            <arg path="src" />
         </exec>
     </target>
-    
-    <target name="phpcs">
-        <exec dir="${basedir}" executable="phpcs" failonerror="false" output="/dev/null">
-            <arg line="--extensions=php --ignore=build,tests,library/Zend,library/Corto --standard=Zend --tab-width=4 --report=checkstyle --report-file=${basedir}/build/logs/checkstyle.xml ." />
+
+    <target name="phpcpd-travis" description="Find duplicate code using PHPCPD">
+        <exec executable="vendor/bin/phpcpd" failonerror="false">
+            <arg value="--exclude"/>
+            <arg value="*/Tests/*"/>
+            <arg path="src"/>
         </exec>
     </target>
- 
-    <target name="phpmd">
-        <exec dir="${basedir}" executable="phpmd" failonerror="false">
-            <arg line=". xml codesize --reportfile ${basedir}/build/logs/pmd.xml" />
+
+    <target name="phpunit-travis" description="Run unit tests with PHPUnit">
+        <exec executable="vendor/bin/phpunit" failonerror="true">
+            <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
+            <arg line="--coverage-text"/>
         </exec>
     </target>
- 
-    <target name="phpcpd">
-        <exec dir="${basedir}" executable="phpcpd" failonerror="false">
-            <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml --exclude build --exclude tests --exclude library/Zend --exclude library/Corto ." />
+
+    <target name="behat-travis"
+            description="Run the functional testing suite">
+        <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
+        <exec executable="vendor/bin/behat" failonerror="true">
+            <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
         </exec>
-        <exec dir="${basedir}/build/logs" executable="xsltproc" failonerror="false" output="${basedir}/build/cpd/index.html">
-            <arg line="${basedir}/ci/cpd.xsl ${basedir}/build/logs/pmd-cpd.xml" />
-        </exec>
-    </target>
- 
-    <target name="pdepend">
-        <exec dir="${basedir}" executable="pdepend" failonerror="false">
-            <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
-                       --jdepend-chart=${basedir}/build/dependencies/jdepend.svg
-                       --overview-pyramid=${basedir}/build/dependencies/pyramid.svg
-                       --exclude=build,tests,library/Zend,library/Corto
-                       ." />
-        </exec>
-        <exec dir="${basedir}/build/dependencies" executable="cp" failonerror="false">
-            <arg line="${basedir}/ci/dependencies.html index.html" />
-        </exec>
-    </target>
- 
-    <target name="phpcb">
-        <exec dir="${basedir}" executable="phpcb" failonerror="false">
-            <arg line="--log ${basedir}/build/logs --source ${basedir} --output ${basedir}/build/codebrowser" />
-        </exec>
+        <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
     </target>
 </project>

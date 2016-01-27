@@ -91,7 +91,10 @@ class EngineBlock_SamlHelper
 
         $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId);
         if (!$lastRequesterEntity) {
-            return null;
+            throw new EngineBlock_Exception_DissimilarServiceProviderWorkflowStates(
+                $serviceProvider,
+                $lastRequesterEntityId
+            );
         }
 
         return $lastRequesterEntity;

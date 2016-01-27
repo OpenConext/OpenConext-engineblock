@@ -1,0 +1,3 @@
+imports:
+    - { resource: controllers/authentication.yml }
+    - { resource: controllers/api.yml }

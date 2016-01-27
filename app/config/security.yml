@@ -22,7 +22,7 @@ security:
         api:
             host: ^engine-api\..+
             http_basic: ~
-            entry_point: api.security.http_basic_entry_point
+            entry_point: engineblock.security.http_basic_entry_point
             stateless: true
             pattern: ^/.+
 

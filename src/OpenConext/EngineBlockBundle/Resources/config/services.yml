@@ -1,0 +1,25 @@
+services:
+    engineblock.security.http_basic_entry_point:
+        class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
+        arguments:
+            - "engine-api.%domain%"
+
+    engineblock.service.features:
+        class: OpenConext\EngineBlock\Service\FeaturesService
+        arguments:
+            - %api.features.metadata_push.enabled%
+            - %api.features.consent_listing.enabled%
+            - %api.features.metadata_api.enabled%
+
+    engineblock.service.consent:
+        class: OpenConext\EngineBlock\Service\ConsentService
+        arguments:
+            - @engineblock.repository.consent
+            - @engineblock.service.metadata
+            - @engineblock.compat.logger
+
+    engineblock.service.metadata:
+        class: OpenConext\EngineBlock\Service\MetadataService
+        arguments:
+            - @engineblock.compat.repository.metadata
+            - @engineblock.compat.logger

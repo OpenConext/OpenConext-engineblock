@@ -1,21 +1,26 @@
 language: php
 
 php:
-  - 7.0
-  - 5.6
-  - 5.5
-  - 5.4
   - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7.0
 
 matrix:
   allow_failures:
   - php: 7.0
 
-sudo: false
+sudo: true # sudo is required for behat
 
 env:
+  matrix:
+    - COMMAND="functional-tests"
+    - COMMAND="code-quality"
   global:
     - SYMFONY_ENV=test
+    - ENGINEBLOCK_ENV=test
+    - ANT_OPTS=-Xmx256m # ensure we got enough memory for ant
 
 cache:
   directories:
@@ -23,11 +28,31 @@ cache:
 
 before_script:
   - phpenv config-add .travis.php.ini
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then printf "\n" | pecl install apcu-4.0.10; fi
+  - sudo ln -s "$(pwd)"/ci/travis/files/ /etc/openconext
+  - mkdir -p /tmp/engineblock/cache/test
+  - mkdir -p /tmp/engineblock/logs/test
+  - sudo apt-get update
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias ssl
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default-ssl
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default-ssl
+  - sudo a2ensite default-ssl
+  - sudo service apache2 restart
+  - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
+  - composer install --prefer-dist -n -o
 
 script:
-  - ant
+  - ant $COMMAND
 
 branches:
   only:
     - 5.x-dev
     - 5.x-refactor
+
+addons:
+  hosts:
+    - engine.vm.openconext.org

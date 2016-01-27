@@ -26,9 +26,7 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new OpenConext\EngineBlock\CompatibilityBundle\OpenConextEngineBlockCompatibilityBundle(),
-            new OpenConext\EngineBlock\ApiBundle\OpenConextEngineBlockApiBundle(),
-            new OpenConext\EngineBlock\AuthenticationBundle\OpenConextEngineBlockAuthenticationBundle(),
+            new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -36,6 +34,9 @@ class AppKernel extends Kernel
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
+
+            // own bundles
+            $bundles[] = new OpenConext\EngineBlockFunctionalTestingBundle\OpenConextEngineBlockFunctionalTestingBundle();
         }
 
         return $bundles;
@@ -60,7 +61,7 @@ class AppKernel extends Kernel
         }
 
         // set the configured layout on the application singleton
-        $this->engineBlockSingleton->setLayout($this->container->get('eb.compat.layout'));
+        $this->engineBlockSingleton->setLayout($this->container->get('engineblock.compat.layout'));
 
         return $this->getHttpKernel()->handle($request, $type, $catch);
     }
@@ -111,6 +112,13 @@ class AppKernel extends Kernel
             'logger.syslog.ident',
             $loggerConfiguration->get('handler')->get('syslog')->get('conf')->get('ident')
         );
+
+        if(in_array($this->getEnvironment(), array('dev', 'test'))) {
+            $container->setParameter(
+                'engineblock_url',
+                sprintf('https://engine.%s', $container->getParameter('domain'))
+            );
+        }
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

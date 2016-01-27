@@ -1,0 +1,34 @@
+default:
+    paths:
+        features: ../src/OpenConext/EngineBlockFunctionalTestingBundle/Features
+    formatter:
+        name: progress
+    filters:
+        tags: "~@replay"
+    extensions:
+        Behat\Symfony2Extension\Extension:
+            mink_driver: true
+            kernel:
+                env: test
+                debug: true
+        Behat\MinkExtension\Extension:
+            goutte:
+                guzzle_parameters:
+                    ssl.certificate_authority: false
+
+# FIX SO THAT ONLY REPLAY RUNS
+#replay:
+#    filters:
+#        tags: "@replay"
+#    extensions:
+#        Behat\Symfony2Extension\Extension:
+#            bundle: LogReplayBundle
+#        Behat\MinkExtension\Extension:
+#            goutte:
+#                guzzle_parameters:
+#                    ssl.certificate_authority: false
+#                    request.options.connect_timeout: 0
+#                    curl.options:
+#                      13: 0 #CURLOPT_TIMEOUT
+#                      78: 0 #CURLOPT_CONNECTTIMEOUT
+
