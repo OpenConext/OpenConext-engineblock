@@ -11,7 +11,7 @@ class EngineBlockConfigurationTest extends TestCase
 {
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function configuration_can_be_created_from_multidimensional_array()
     {
@@ -34,7 +34,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      *
      * @dataProvider nonOrEmptyStringProvider
      * @expectedException InvalidArgumentException
@@ -50,7 +50,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function default_value_is_retrieved_when_configuration_path_cannot_be_found()
     {
@@ -64,7 +64,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function default_value_is_retrieved_when_nested_configuration_path_cannot_be_found()
     {
@@ -78,7 +78,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      *
      * @dataProvider scalarOrNullProvider
      *
@@ -95,7 +95,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function sub_configuration_can_be_retrieved_by_path()
     {
@@ -113,7 +113,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function nested_value_can_be_retrieved_by_path()
     {
@@ -126,6 +126,39 @@ class EngineBlockConfigurationTest extends TestCase
         $configuration   = new EngineBlockConfiguration($nestedConfig);
 
         $retrievedValue = $configuration->get('path.sub_path');
+
+        $this->assertEquals($configuredValue, $retrievedValue);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockConfiguration
+     */
+    public function value_can_be_retrieved_by_magic_getter()
+    {
+        $configuredValue = 'some_configured_value';
+        $configuration   = new EngineBlockConfiguration(array('path' => $configuredValue));
+
+        $retrievedValue = $configuration->path;
+
+        $this->assertEquals($configuredValue, $retrievedValue);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockConfiguration
+     */
+    public function nested_value_can_be_retrieved_by_magic_getter()
+    {
+        $configuredValue = 'some_configured_value';
+        $nestedConfig    = array(
+            'path' => array(
+                'sub_path' => $configuredValue
+            )
+        );
+        $configuration   = new EngineBlockConfiguration($nestedConfig);
+
+        $retrievedValue = $configuration->path->sub_path;
 
         $this->assertEquals($configuredValue, $retrievedValue);
     }
