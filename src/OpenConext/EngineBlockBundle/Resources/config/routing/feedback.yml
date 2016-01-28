@@ -71,4 +71,14 @@ authentication_feedback_no_consent:
 authentication_feedback_dissimilar_workflow_states:
     path:       '/dissimilar-workflow-states'
     methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:dissimilarWorkflowStates }
+    defaults:   { _controller: engineblock.controller.authentication.feedback:dissimilarWorkflowStatesAction }
+
+authentication_feedback_pep_violation:
+    path:       '/authorization-policy-violation'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:authorizationPolicyViolationAction }
+
+authentication_feedback_unknown_preselected_idp:
+    path:       '/unknown-preselected-idp'
+    methods:    [GET]
+

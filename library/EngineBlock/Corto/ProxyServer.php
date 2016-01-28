@@ -349,7 +349,10 @@ class EngineBlock_Corto_ProxyServer
             break;
         }
         if (!isset($this->_configs['Idp'])) {
-            $this->getSessionLog()->warning("Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!");
+            throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
+                "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
+                $remoteIdPMd5
+            );
         }
 
         return $this;
@@ -924,7 +927,7 @@ class EngineBlock_Corto_ProxyServer
         );
 
         // Convert the XMl object to actual XML and get a reference to what we're about to sign
-        $canonicalXmlDom = new DOMDocument();
+        $canonicalXmlDom = SAML2_DOMDocumentFactory::create();
         $canonicalXmlDom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($element));
 
         // Note that the current element may not be the first or last, because we might include comments, so look for
@@ -947,8 +950,9 @@ class EngineBlock_Corto_ProxyServer
 
         // Now we start the actual signing, instead of signing the entire (possibly large) document,
         // we only sign the 'SignedInfo' which includes the 'Reference' hash
-        $canonicalXml2Dom = new DOMDocument();
-        $canonicalXml2Dom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo']));
+        $canonicalXml2Dom = SAML2_DOMDocumentFactory::fromString(
+          EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo'])
+        );
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
         $signatureValue = null;
@@ -1018,17 +1022,6 @@ class EngineBlock_Corto_ProxyServer
 
     public function startSession()
     {
-        session_set_cookie_params(0, $this->getConfig('cookie_path', '/'), '', $this->getConfig('use_secure_cookies', true), true);
-        session_name('main');
-        session_start();
-    }
-
-    public function restartSession($newId, $newName)
-    {
-        session_write_close();
-
-        session_id($newId);
-        session_name($newName);
         session_start();
     }
 

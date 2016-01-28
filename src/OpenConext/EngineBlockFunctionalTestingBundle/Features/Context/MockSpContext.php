@@ -384,6 +384,19 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" allows no attributes$/
+     */
+    public function spAllowsNoAttributes($spName)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->allowNoAttributeValues($sp->entityId())
+            ->save();
+    }
+
+    /**
      * @Given /^SP "([^"]*)" allows an attribute named "([^"]*)"$/
      */
     public function spAllowsAnAttributeNamed($spName, $arpAttribute)
@@ -393,6 +406,19 @@ class MockSpContext extends AbstractSubContext
 
         $this->serviceRegistryFixture
             ->allowAttributeValue($sp->entityId(), $arpAttribute, "*")
+            ->save();
+    }
+
+    /**
+     * @Given /^SP "([^"]*)" allows an attribute named "([^"]*)" with value "([^"]*)"$/
+     **/
+    public function spAllowsAnAttributeNamedWithValue($spName, $arpAttribute, $arpAttributeValue)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->allowAttributeValue($sp->entityId(), $arpAttribute, $arpAttributeValue)
             ->save();
     }
 

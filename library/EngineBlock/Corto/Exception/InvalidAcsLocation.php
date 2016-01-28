@@ -6,5 +6,4 @@ class EngineBlock_Corto_Exception_InvalidAcsLocation extends EngineBlock_Excepti
     {
         parent::__construct($message, $severity, $previous);
     }
-
 }

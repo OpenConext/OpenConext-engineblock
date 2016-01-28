@@ -34,8 +34,7 @@ class EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId extends EngineBlo
         );
 
         // EPTID requires us to embed the <saml:NameID> element instead of just the value, so we generate that here.
-        $document = new DOMDocument();
-        $document->loadXML('<base />');
+        $document = SAML2_DOMDocumentFactory::fromString('<base />');
         SAML2_Utils::addNameId($document->documentElement, $nameId);
 
         // Add the eduPersonTargetedId attribute.

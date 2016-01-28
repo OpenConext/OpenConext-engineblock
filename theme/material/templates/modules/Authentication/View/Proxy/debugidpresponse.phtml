@@ -31,7 +31,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
     <?php if (isset($_POST['mail']) && $_POST['mail'] === 'true'):?>
       <table class="comp-table">
         <tr>
-          <td><img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" /><?= $this->t('attributes_data_mailed'); ?></td>
+          <td><img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;" /><?= $this->t('attributes_data_mailed'); ?></td>
         </tr>
       </table>
     <?php endif; ?>
@@ -39,13 +39,13 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
     <h1><?php echo $this->t('idp_debugging_title'); ?></h1>
     <p>
       <?php if ($validationResult->isValid()) : ?>
-          <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" />
+          <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;" />
           <?= $this->t('attributes_validation_succeeded'); ?>
       <?php else: ?>
           <?php if (count($validationResult->getErrors()) > 0): ?>
-            <img src="/images/warning.svg" class="c-icon c-icon-warning" />
+            <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" />
           <?php else: ?>
-            <img src="/images/warning.svg" class="c-icon c-icon-warning" />
+            <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" />
           <?php endif; ?>
 
           <?= $this->t('attributes_validation_failed'); ?>
@@ -65,7 +65,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
                   Logo
               </th>
               <td>
-                  <img class="logo" src="<?= $idp->logo ? $idp->logo->url : '/images/placeholder.png' ?>" />
+                  <img class="logo" src="<?= $idp->logo ? $idp->logo->url : '/images/placeholder.png' ?>" alt="IdP logo" />
               </td>
           </tr>
           <tr>
@@ -111,13 +111,13 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
     <h2><?= $this->t('attributes') ?></h2>
     <?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
         <p class="error">
-          <img src="/images/warning.svg" class="c-icon c-icon-warning" /> <?php
+          <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
         ?></p>
     <?php endforeach; ?>
     <?php foreach ($validationResult->getWarningsForMissingAttributes() as $warning): ?>
         <p class="warning">
-          <img src="/images/warning.svg" class="c-icon c-icon-warning" /> <?php
+          <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning));
         ?></p>
     <?php endforeach; ?>
@@ -161,17 +161,17 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
                   </td>
                   <td>
                       <?php if ($validationResult->isValid($attributeName)): ?>
-                        <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" />
+                        <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;" />
                       <?php else:
                           foreach ($validationResult->getErrors($attributeName) as $error) {
                               echo '<p class="error">' .
-                                      '<img src="/images/warning.svg" class="c-icon c-icon-warning" /> ' .
+                                      '<img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" /> ' .
                                       EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                                   '</p>';
                           }
                           foreach ($validationResult->getWarnings($attributeName) as $warning) {
                               echo '<p class="warning">'.
-                                      '<img src="/images/warning.svg" class="c-icon c-icon-warning" /> ' .
+                                      '<img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" /> ' .
                                       EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $warning)) .
                                   '</p>';
                           }

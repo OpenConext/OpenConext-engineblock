@@ -83,6 +83,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
+        if ($sspRequest->isMessageConstructedWithSignature()) {
+            $log = $this->_server->getSessionLog();
+
+            $log->notice(sprintf(
+                'Received signed AuthnRequest from Issuer "%s" with signature method algorithm "%s"',
+                $sspRequest->getIssuer(),
+                $sspRequest->getSignatureMethod()
+            ));
+        }
+
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
         // Make sure the request from the sp has an Issuer
@@ -434,7 +444,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     'message' => $encodedMessage,
                     'xtra' => $extra,
                     'name' => $message->getMessageType(),
-                    'trace' => $this->_server->getConfig('debug', false) ? htmlentities($xml) : '',
+                    'trace' => $this->getTraceHtml($xml),
                 )
             );
             $this->_server->sendOutput($output);
@@ -460,8 +470,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-protocol-2.0.xsd';
         if ($this->_server->getConfig('debug') && ini_get('allow_url_fopen') && file_exists($schemaUrl)) {
-            $dom = new DOMDocument();
-            $dom->loadXML($xml);
+            $dom = SAML2_DOMDocumentFactory::fromString($xml);
             if (!$dom->schemaValidate($schemaUrl)) {
                 throw new Exception('Message XML doesnt validate against XSD at Oasis-open.org?!');
             }
@@ -608,5 +617,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
         }
         return $hasEncryptedAssertion;
+    }
+
+    private function getTraceHtml($xml)
+    {
+        if (!$this->_server->getConfig('debug', false)) {
+            return '';
+        }
+
+        $doc = new DOMDocument();
+        $doc->preserveWhiteSpace = false;
+        $doc->formatOutput = true;
+        $doc->loadXML($xml);
+        $xml = $doc->saveXML();
+
+        return htmlentities(trim($xml));
     }
 }

@@ -11,9 +11,9 @@ return array(
     'processing'            => 'Connecting to the service',
     'processing_waiting'    => 'Waiting for a response from the service.',
     'processing_long'       => 'Please be patient, it may take a while...',
+    'go_back'               => '&lt;&lt; Go back',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
-    'go_back'               => '&lt;&lt; Go back',
     'authentication_urls'   => 'Authentication URLs',
     'timestamp'             => 'Timestamp',
 
@@ -160,9 +160,9 @@ If you have any questions about your privacy and the policy applied, please visi
     //Error screens
     'error_404'                         => '404 - Page not found',
     'error_404_desc'                    => 'This page has not been found.',
-    'error_help_desc'               => 'If this does not solve your problem, please visit
-        <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.',
+    'error_help_desc'               => '<p>
+        Please visit <a href="https://support.surfconext.nl/" target="_blank">the SURFconext support pages</a> for help solving this problem. These pages also contain contact information for the support team if the problem persists.
+    </p>',
     'error_no_consent'              => 'Unable to continue to service',
     'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
 
@@ -184,21 +184,32 @@ If you want to use this application you have to:<br />
         Please go back and try again.
         <br /><br />
     </p>',
-    'error_dissimilar_workflow_state'      => 'Error - Dissimilar workflow states',
-    'error_dissimilar_workflow_state_desc' => '<p>
+    'error_dissimilar_workflow_state'       => 'Error - Dissimilar workflow states',
+    'error_dissimilar_workflow_state_desc'  => '<p>
 The application you came from (your &lsquo;Service Provider&rsquo;) is not available on the SURFconext infrastructure yet.
 Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
 this service.
 <br /><br />
 </p>',
+    'error_authorization_policy_violation'            => 'Error - No access',
+    'error_authorization_policy_violation_desc'       => '<p>
+        You have successfully logged in at your institution, but unfortunately you can not use this service because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you feel you should be allowed access to this service.
+    </p>',
+    'error_authorization_policy_violation_name'       => 'Authorization policy message',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
     'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
+    'error_unknown_preselected_idp' => 'Error - No connection between institution and service',
+    'error_unknown_preselected_idp_desc' => '<p>
+        The institution that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through SURFconext. Please contact your institution\'s helpdesk to request access to this service.
+    </p>',
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        A Service Provider with the EntityID you have provided could not be found. If you feel this is an error please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        A Service Provider with the EntityID you have provided could not be found.
+        If you feel this is an error please contact the SURFconext helpdesk at
+        <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
     </p>',
 
     'error_unknown_issuer'          => 'Error - Unknown service',

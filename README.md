@@ -41,41 +41,6 @@ if not, then that would be step 1 for the installation.
 If you have an installed copy and your server meets all the requirements above, then please follow the steps below
 to start your installation.
 
-
-### What you NEED to know about EngineBlock ###
-
-EngineBlock was designed to be deployed on multiple environments, sometimes multiple times on the same machine.
-As such EngineBlock has a mechanism called 'Environments' to differentiate between... well... environments.
-
-So a normal setup would be something like this:
-
-    | Server 1      |   | Server 2   |  |  Server 3  |
-    |               |   |            |  |            |
-    | development   |   | staging    |  | production |
-    | testing       |   |            |  |            |
-
-In this scenario, Server 2 would have an */etc/surfconext/engineblock.ini* that starts with:
-
-    [staging : base]
-
-and in the Apache Virtual Host would be the following:
-
-    SetEnv ENGINEBLOCK_ENV staging
-
-So whenever a request comes in for EngineBlock, Apache would tell EngineBlock to load up the 'staging'
-configuration values.
-
-This is a big help for Server 1, which can have the following in it's configuration file:
-
-    [development : base]
-     .... Lots of configuration values ...
-
-     [testing : base]
-     .... Different configuration values ...
-
-With that out of the way, let's get started!
-
-
 ### First, create an empty database ###
 
 **EXAMPLE**
@@ -104,36 +69,6 @@ with their default value in *application/configs/application.ini*.
 
 Note that EngineBlock requires you to set a path to a logfile, but you have to make sure that this file
 is writable by your webserver user.
-
-
-### Next, configure environment ###
-
-Edit */etc/profile* (as root or with sudo) and add:
-
-    export ENGINEBLOCK_ENV="!!ENV!!"
-
-Where "!!ENV!!" MUST be replace by your environment of choice.
-Then open a new terminal to make sure you have the new environment.
-
-    echo $ENGINEBLOCK_ENV
-
-This is done so shell scripts (like the database update) can also know which configuration to use.
-
-If you have multiple EngineBlock instances on one machine and don't want to keep setting ENGINEBLOCK_ENV
-you can also NOT set the ENGINEBLOCK_ENV variable, but instead make EngineBlock auto-detect what
-environment to use with the following configuration settings:
-
-    env.host = "myserver"
-    env.path = "/var/www/engineblock-1"
-
-Or any combination of those 2.
-
-The *env.host* configuration will make EngineBlock autodetect which settings to use
-for a particulair host (usefull if you are sharing a configuration file for multiple instances on multiple servers)
-based on the hostname (you can check which hostname it uses with *hostname -f*).
-
-The *env.path* configuration will make EngineBlock autodetect which settings to use
-for a particulair path that EngineBlock is installed in.
 
 
 ### Install database schema ###
@@ -207,53 +142,16 @@ Also set an alias for simplesaml for the third virtual host:
 
     Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
 
-### Virtual host for static files ###
-
-Engineblock needs a fourth virtual host for media, style and script files, below an example virtual host configuration
-is given.
-
-**Note** Please make the virtual host an https virtual host because otherwise Internet Explorer will give you messages
-about some content not coming from a secure connection.
-
-Fill the DocumentRoot of the static virtual host with the contents of:
-
-    https://svn.surfnet.nl/svn/coin-eb/static/tags/!!VERSION!!
-
-Take the same version of the static content as you have checked out of Engineblock.
-
-**EXAMPLE**
-
-    <Virtualhost *:443>
-       DocumentRoot "/opt/www/static
-       ServerName static.example.com
-
-        ErrorLog                logs/static_error_log
-        TransferLog             logs/static_access_log
-
-        SSLEngine on
-
-        SSLProtocol -ALL +SSLv3 +TLSv1
-        SSLCipherSuite ALL:!aNULL:!ADH:!eNULL:!LOW:!EXP:!RC4-MD5:RC4+RSA:+HIGH:+MEDIUM
-
-        SSLCertificateFile      /etc/httpd/keys/static.example.com.pem
-        SSLCertificateKeyFile   /etc/httpd/keys/static.example.com.key
-        SSLCACertificateFile    /etc/httpd/keys/static.example.com_cabundle.pem
-
-    </VirtualHost>
-
 ### Finally, test your EngineBlock instance ###
 
 Use these URLs to test your Engineblock instance:
-[http://engineblock.example.com][]
-[https://engineblock.example.com][]
-[https://engineblock.example.com/authentication/idp/metadata][]
-[https://engineblock.example.com/authentication/sp/metadata][]
-[https://engineblock.dev.coin.surf.net/authentication/proxy/idps-metadata][]
-[http://engineblock-internal.example.com][]
-[https://engineblock-internal.example.com][]
-[https://engineblock-internal.example.com/social/][]
-[https://static.example.com][]
-
+[http://engine.example.com]
+[https://engine.example.com]
+[https://engine.example.com/authentication/idp/metadata]
+[https://engine.example.com/authentication/sp/metadata]
+[https://engine.example.com/authentication/proxy/idps-metadata]
+[https://engine-api.example.com]
+[https://profile.example.com]
 
 ## Updating ##
 
@@ -281,17 +179,6 @@ If you are using this pattern, an update can be done with the following:
 
     cd bin/ && ./migrate && cd ..
 
-5. Install new Static content for engineblock.
-
-    Check out the corresponding version of the static content. The content can be found at:
-
-        https://svn.surfnet.nl/svn/coin-eb/static/tags/!!VERSION!!
-
-    *NOTE* Please use the same recommended practice for the static content as for engineblock. So, create a new
-    directory for every tag you check out and change the symlink to make that version the 'current' version used by
-    Apache.
-
-
 ## Applying a new theme ##
 
 Before being able to use the new theming system, you must install the following:
@@ -299,6 +186,11 @@ Before being able to use the new theming system, you must install the following:
 - [Node.JS][1]
 - [Bower][2] (requires Node.JS)
 - [Compass][3]
+
+After installing the above tools, the following commandline may give you all the needed dependencies and run grunt to update the installed files after changing a theme:
+```
+(cd theme && npm install && sudo npm install -g bower && bower install && grunt)
+```
 
 When applying a theme for the first time you can enter the theme directory and run `npm install` and `bower install` to
 load the required theme modules.
