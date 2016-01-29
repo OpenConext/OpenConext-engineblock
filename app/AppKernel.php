@@ -8,14 +8,9 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 
 class AppKernel extends Kernel
 {
-    private $engineBlockSingleton;
-
     public function __construct($environment, $debug)
     {
         parent::__construct($environment, $debug);
-
-        $this->engineBlockSingleton = EngineBlock_ApplicationSingleton::getInstance();
-        $this->engineBlockSingleton->bootstrap();
     }
 
     public function registerBundles()
@@ -60,30 +55,7 @@ class AppKernel extends Kernel
             $this->boot();
         }
 
-        // set the configured layout on the application singleton
-        $this->engineBlockSingleton->setLayout($this->container->get('engineblock.compat.layout'));
-
         return $this->getHttpKernel()->handle($request, $type, $catch);
-    }
-
-    /**
-     * Before building the container, the container is prepared. After the default preparations are done
-     * we set some additional parameters with values defined in the ini configuration, as parsed by
-     * the EngineBlock_ApplicationSingleton class. This allows for having parameters that are not configured
-     * in the symfony configuration (yet).
-     *
-     * @param ContainerBuilder $container
-     */
-    protected function prepareContainer(ContainerBuilder $container)
-    {
-        parent::prepareContainer($container);
-
-        if(in_array($this->getEnvironment(), array('dev', 'test'))) {
-            $container->setParameter(
-                'engineblock_url',
-                sprintf('https://engine.%s', 'vm.openconext.org')
-            );
-        }
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader)

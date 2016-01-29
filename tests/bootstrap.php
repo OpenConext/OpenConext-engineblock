@@ -21,4 +21,4 @@ $config = new Zend_Config_Ini(
 $config->testing = true;
 $config->hostname = 'engine.demo.openconext.org';
 $application->setConfiguration($config);
-$application->bootstrap();
+$application->bootstrap(new Psr\Log\NullLogger(), 'requestId');

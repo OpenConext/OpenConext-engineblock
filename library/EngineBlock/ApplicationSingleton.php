@@ -1,5 +1,7 @@
 <?php
 
+use Psr\Log\LoggerInterface;
+
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
@@ -133,11 +135,15 @@ class EngineBlock_ApplicationSingleton
     /**
      *
      */
-    public function bootstrap()
+    public function bootstrap(LoggerInterface $logger, $requestId)
     {
+        $this->setLogInstance($logger);
+        $this->setLogRequestId($requestId);
+
         if (!isset($this->_bootstrapper)) {
             $this->_bootstrapper = new EngineBlock_Application_Bootstrapper($this);
         }
+
         $this->_bootstrapper->bootstrap();
     }
 
