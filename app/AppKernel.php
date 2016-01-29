@@ -89,11 +89,6 @@ class AppKernel extends Kernel
 
         $apiConfiguration = $iniConfiguration->get('engineApi');
 
-        $features = $apiConfiguration->get('features');
-        $container->setParameter('api.features.metadata_push.enabled', (bool) $features->get('metadataPush'));
-        $container->setParameter('api.features.consent_listing.enabled', (bool) $features->get('consentListing'));
-        $container->setParameter('api.features.metadata_api.enabled', (bool) $features->get('metadataApi'));
-
         $apiJanusCredentials = $apiConfiguration->get('users')->get('janus');
         $container->setParameter('api.users.janus.username', $apiJanusCredentials->get('username'));
         $container->setParameter('api.users.janus.password', $apiJanusCredentials->get('password'));

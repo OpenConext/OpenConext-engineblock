@@ -7,9 +7,9 @@ services:
     engineblock.service.features:
         class: OpenConext\EngineBlock\Service\FeaturesService
         arguments:
-            - %api.features.metadata_push.enabled%
-            - %api.features.consent_listing.enabled%
-            - %api.features.metadata_api.enabled%
+            - "@=service('engineblock.bridge.config').engineApi.features.metadataPush == true"
+            - "@=service('engineblock.bridge.config').engineApi.features.consentListing == true"
+            - "@=service('engineblock.bridge.config').engineApi.features.metadataApi == true"
 
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
