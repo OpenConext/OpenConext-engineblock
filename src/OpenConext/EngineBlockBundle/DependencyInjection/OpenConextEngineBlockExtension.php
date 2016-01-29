@@ -43,7 +43,7 @@ class OpenConextEngineBlockExtension extends Extension
         );
 
         $container
-            ->getDefinition('engineblock.bridge.engineblock_config')
+            ->getDefinition('engineblock.bridge.config')
             ->replaceArgument(0, $engineBlockConfig);
     }
 
