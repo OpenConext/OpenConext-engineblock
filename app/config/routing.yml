@@ -5,7 +5,7 @@ openconext_engineblock_authentication:
         domain: ".*"
     prefix:   /
     defaults:
-        domain: "%domain%"
+        domain: "vm.openconext.org"
 
 openconext_engineblock_api:
     resource: "@OpenConextEngineBlockBundle/Resources/config/routing_api.yml"
@@ -14,4 +14,4 @@ openconext_engineblock_api:
         domain: ".*"
     prefix:   /
     defaults:
-        domain: "%domain%"
+        domain: "vm.openconext.org"

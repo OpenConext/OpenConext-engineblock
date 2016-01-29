@@ -53,6 +53,6 @@ class OpenConextEngineBlockExtension extends Extension
     private function overwriteDefaultLogger(ContainerBuilder $container)
     {
         $container->removeAlias('logger');
-        $container->setAlias('logger', 'monolog.logger.' . $container->getParameter('logger.channel'));
+        $container->setAlias('logger', 'monolog.logger.engineblock');
     }
 }

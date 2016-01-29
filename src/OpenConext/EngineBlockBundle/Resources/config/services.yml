@@ -2,7 +2,7 @@ services:
     engineblock.security.http_basic_entry_point:
         class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
         arguments:
-            - "engine-api.%domain%"
+            - "engine-api.vm.openconext.org"
 
     engineblock.service.features:
         class: OpenConext\EngineBlock\Service\FeaturesService

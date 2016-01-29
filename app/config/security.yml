@@ -3,11 +3,11 @@ security:
         in_memory:
             memory:
                 users:
-                    "%api.users.janus.username%":
-                        password: %api.users.janus.password%
+                    serviceregistry:
+                        password: secret
                         roles: 'ROLE_API_USER_JANUS'
-                    "%api.users.profile.username%":
-                        password: %api.users.profile.password%
+                    profile:
+                        password: secret
                         roles: 'ROLE_API_USER_PROFILE'
 
     encoders:

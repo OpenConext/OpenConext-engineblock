@@ -1,5 +1,5 @@
 parameters:
-    router.request_context.host:   "engine.%domain%"
+    router.request_context.host:   "engine.vm.openconext.org"
     router.request_context.scheme: "https"
 
     # Where can we find the JANUS JSON export for IDPs and SPs?

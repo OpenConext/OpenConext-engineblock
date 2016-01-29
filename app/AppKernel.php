@@ -77,41 +77,11 @@ class AppKernel extends Kernel
     protected function prepareContainer(ContainerBuilder $container)
     {
         parent::prepareContainer($container);
-        $iniConfiguration = $this->engineBlockSingleton->getConfiguration();
-
-        $container->setParameter('domain', $iniConfiguration->get('base_domain'));
-
-        $trustedProxies = $iniConfiguration->get('trustedProxyIps', array());
-        if (!is_array($trustedProxies)) {
-            $trustedProxies = array();
-        }
-        $container->setParameter('trusted_proxies', $trustedProxies);
-
-        $apiConfiguration = $iniConfiguration->get('engineApi');
-
-        $apiJanusCredentials = $apiConfiguration->get('users')->get('janus');
-        $container->setParameter('api.users.janus.username', $apiJanusCredentials->get('username'));
-        $container->setParameter('api.users.janus.password', $apiJanusCredentials->get('password'));
-
-        $apiProfileCredentials = $apiConfiguration->get('users')->get('profile');
-        $container->setParameter('api.users.profile.username', $apiProfileCredentials->get('username'));
-        $container->setParameter('api.users.profile.password', $apiProfileCredentials->get('password'));
-
-        $loggerConfiguration = $iniConfiguration->get('logger')->get('conf');
-        $container->setParameter('logger.channel', $loggerConfiguration->get('name'));
-        $container->setParameter(
-            'logger.fingers_crossed.passthru_level',
-            $loggerConfiguration->get('handler')->get('fingers_crossed')->get('conf')->get('passthru_level')
-        );
-        $container->setParameter(
-            'logger.syslog.ident',
-            $loggerConfiguration->get('handler')->get('syslog')->get('conf')->get('ident')
-        );
 
         if(in_array($this->getEnvironment(), array('dev', 'test'))) {
             $container->setParameter(
                 'engineblock_url',
-                sprintf('https://engine.%s', $container->getParameter('domain'))
+                sprintf('https://engine.%s', 'vm.openconext.org')
             );
         }
     }
@@ -123,11 +93,11 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return $this->engineBlockSingleton->getConfiguration()->get('symfony')->get('cachePath');
+        return '/tmp/engineblock/cache';
     }
 
     public function getLogDir()
     {
-        return $this->engineBlockSingleton->getConfiguration()->get('symfony')->get('logPath');
+        return '/tmp/engineblock/logs';
     }
 }
