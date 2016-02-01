@@ -69,7 +69,6 @@ rm -rf ${PROJECT_DIR}/behat.yml &&
 rm -rf ${PROJECT_DIR}/build.xml &&
 rm -rf ${PROJECT_DIR}/tests &&
 rm -rf ${PROJECT_DIR}/ci &&
-rm -rf ${PROJECT_DIR}/theme &&
 rm -rf ${PROJECT_DIR}/.travis.yml &&
 
 echo "Create tarball" &&
