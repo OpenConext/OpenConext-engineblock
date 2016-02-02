@@ -133,7 +133,8 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     *
+     * @param LoggerInterface $logger
+     * @param $requestId
      */
     public function bootstrap(LoggerInterface $logger, $requestId)
     {
