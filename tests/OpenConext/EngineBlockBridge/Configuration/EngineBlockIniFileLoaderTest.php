@@ -4,15 +4,26 @@ namespace OpenConext\EngineBlockBridge\Configuration;
 
 use PHPUnit_Framework_TestCase as TestCase;
 
-class EngineBlockIniFileParserTest extends TestCase
+class EngineBlockIniFileLoaderTest extends TestCase
 {
     /**
      * @test
-     * @group Loader
+     * @group EngineBlockIniFileLoader
+     */
+    public function ignore_sections()
+    {
+        $fileLoader = new EngineBlockIniFileLoader();
+        $result = $fileLoader->load(array(__DIR__ . '/fixtures/default_configuration.ini'));
+        $this->assertArrayNotHasKey('base', $result);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockIniFileLoader
      */
     public function load_and_parse_an_ini_file()
     {
-        $legacyIniLoader = new EngineBlockIniFileLoader();
+        $fileLoader = new EngineBlockIniFileLoader();
 
         $expectedResult = array(
             'keep_boolean'                 => '',
@@ -24,23 +35,24 @@ class EngineBlockIniFileParserTest extends TestCase
             'overwrite_config_with_string' => 'x',
             'overwrite_string_with_config' => array('should_this_exist' => '1'),
             'nested'                       => array(
-                'keep'      => array('path' => 'foo'),
-                'overwrite' => array('path' => 'change_this'),
+                'keep'      => array('path'   => 'foo'),
+                'overwrite' => array('path'   => 'change_this'),
+                'escaped'   => array('string' => '%%escape%%.%%this%%')
             ),
         );
 
-        $result = $legacyIniLoader->load(array(__DIR__ . '/fixtures/default_configuration.ini'));
+        $result = $fileLoader->load(array(__DIR__ . '/fixtures/default_configuration.ini'));
 
         $this->assertEquals($expectedResult, $result);
     }
 
     /**
      * @test
-     * @group Loader
+     * @group EngineBlockIniFileLoader
      */
     public function load_and_parse_multiple_ini_files_where_last_defined_has_precedence_over_first_defined()
     {
-        $legacyIniLoader = new EngineBlockIniFileLoader();
+        $fileLoader = new EngineBlockIniFileLoader();
 
         $expectedResult = array(
             'keep_boolean'                 => '',
@@ -52,13 +64,14 @@ class EngineBlockIniFileParserTest extends TestCase
             'overwrite_config_with_string' => 'x',
             'overwrite_string_with_config' => array('should_this_exist' => '1'),
             'nested'                       => array(
-                'keep'      => array('path' => 'foo'),
-                'overwrite' => array('path' => 'changed'),
-                'added'     => array('path' => 'new')
+                'keep'      => array('path'   => 'foo'),
+                'overwrite' => array('path'   => 'changed'),
+                'escaped'   => array('string' => '%%escape%%.%%this%%'),
+                'added'     => array('path'   => 'new')
             ),
         );
 
-        $result = $legacyIniLoader->load(
+        $result = $fileLoader->load(
             array(
                 __DIR__ . '/fixtures/default_configuration.ini',
                 __DIR__ . '/fixtures/specific_configuration.ini'
