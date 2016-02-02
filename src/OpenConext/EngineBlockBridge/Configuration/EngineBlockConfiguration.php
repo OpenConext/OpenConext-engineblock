@@ -52,4 +52,32 @@ final class EngineBlockConfiguration
 
         return $value;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $result = array();
+
+        foreach ($this->configuration as $key => $value) {
+            if ($value instanceof EngineBlockConfiguration) {
+                $result[$key] = $value->toArray();
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Magic function so that $obj->value and related expression language will work
+     * @param string $name
+     * @return mixed|null|EngineBlockConfiguration
+     */
+    public function __get($name)
+    {
+        return $this->get($name);
+    }
 }
