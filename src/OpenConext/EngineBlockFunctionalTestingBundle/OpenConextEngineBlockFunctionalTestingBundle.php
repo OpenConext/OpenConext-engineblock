@@ -9,6 +9,6 @@ class OpenConextEngineBlockFunctionalTestingBundle extends Bundle
 {
     public function boot()
     {
-        SAML2_Compat_ContainerSingleton::setContainer(new Container());
+        \SAML2_Compat_ContainerSingleton::setContainer(new Container());
     }
 }
