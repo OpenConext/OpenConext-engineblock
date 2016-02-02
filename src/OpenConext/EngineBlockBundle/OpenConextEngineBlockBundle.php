@@ -12,7 +12,7 @@ class OpenConextEngineBlockBundle extends Bundle
         parent::boot();
 
         $eb = EngineBlock_ApplicationSingleton::getInstance();
-        $eb->bootstrap();
+        $eb->bootstrap($this->container->get('logger'), uniqid());
 
         // set the configured layout on the application singleton
         $eb->setLayout($this->container->get('engineblock.compat.layout'));
