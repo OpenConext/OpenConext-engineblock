@@ -7,7 +7,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OpenConextEngineBlockFunctionalTestingBundle extends Bundle
 {
+    public function boot()
+    {
+        SAML2_Compat_ContainerSingleton::setContainer(new Container());
+    }
 }
-
-// HACK Doesn't belong here, should be moved somewhere better
-\SAML2_Compat_ContainerSingleton::setContainer(new Container());
