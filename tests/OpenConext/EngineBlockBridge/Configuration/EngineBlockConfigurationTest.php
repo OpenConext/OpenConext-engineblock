@@ -163,6 +163,39 @@ class EngineBlockConfigurationTest extends TestCase
         $this->assertEquals($configuredValue, $retrievedValue);
     }
 
+    /**
+     * @test
+     * @group EngineBlockConfiguration
+     */
+    public function configuration_can_be_converted_to_array()
+    {
+        $configArray = array('key_a' => 'value_a', 'key_b' => 'value_b');
+
+        $configuration          = new EngineBlockConfiguration($configArray);
+        $arrayFromConfiguration = $configuration->toArray();
+
+        $this->assertEquals($configArray, $arrayFromConfiguration);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockConfiguration
+     */
+    public function nested_configuration_can_be_converted_to_array()
+    {
+        $configArray = array(
+            'key_a' => 'value_a',
+            'key_b' => array(
+                'nested_key' => 'nested_value'
+            )
+        );
+
+        $configuration          = new EngineBlockConfiguration($configArray);
+        $arrayFromConfiguration = $configuration->toArray();
+
+        $this->assertEquals($configArray, $arrayFromConfiguration);
+    }
+
     public function nonOrEmptyStringProvider()
     {
         return array(
