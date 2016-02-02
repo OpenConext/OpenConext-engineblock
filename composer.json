@@ -54,7 +54,7 @@
             "bin/composer/zend-framework-post-install.sh"
         ],
         "post-autoload-dump": [
-            "bin/composer/dump-required-ini-params.php"
+            "bin/composer/dump-required-ini-params.sh"
         ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
