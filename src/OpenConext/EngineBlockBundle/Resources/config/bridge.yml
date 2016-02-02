@@ -1,5 +1,5 @@
 services:
-    engineblock.bridge.engineblock_config:
+    engineblock.bridge.config:
         class: OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration
         arguments:
             - ~ # engineblock configuration array
@@ -13,14 +13,14 @@ services:
     engineblock.bridge.mailer:
         class: OpenConext\EngineBlockBridge\Mail\ZendMailSender
         arguments:
-            - "@=service('engineblock.compat.config').email.help"
+            - "@=service('engineblock.bridge.config').email.help"
             - @engineblock.compat.logger
 
     engineblock.bridge.log.error_level_activation_strategy:
         public: false
         class:  Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy
         arguments:
-            - "@=service('engineblock.compat.config').logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level"
+            - "@=service('engineblock.bridge.config').logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level"
 
     engineblock.bridge.log.manual_or_error_activation_strategy:
         class: EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
@@ -31,7 +31,7 @@ services:
         public: false
         class: Monolog\Formatter\LineFormatter
         arguments:
-            - "@=service('engineblock.compat.config').logger.conf.handler.syslog.conf.formatter.conf.format"
+            - "@=service('engineblock.bridge.config').logger.conf.handler.syslog.conf.formatter.conf.format"
 
     engineblock.bridge.log.additional_info_formatter:
         class: EngineBlock_Log_Monolog_Formatter_AdditionalInfoFormatter

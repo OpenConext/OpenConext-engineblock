@@ -26,6 +26,7 @@ class OpenConextEngineBlockExtension extends Extension
 
         $this->parseIniConfigurationFiles($container);
         $this->overwriteDefaultLogger($container);
+        $this->setUrlParameterBasedOnEnv($container);
     }
 
     /**
@@ -43,7 +44,7 @@ class OpenConextEngineBlockExtension extends Extension
         );
 
         $container
-            ->getDefinition('engineblock.bridge.engineblock_config')
+            ->getDefinition('engineblock.bridge.config')
             ->replaceArgument(0, $engineBlockConfig);
     }
 
@@ -54,5 +55,18 @@ class OpenConextEngineBlockExtension extends Extension
     {
         $container->removeAlias('logger');
         $container->setAlias('logger', 'monolog.logger.' . $container->getParameter('logger.channel'));
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     */
+    private function setUrlParameterBasedOnEnv(ContainerBuilder $container)
+    {
+        if (in_array($container->getParameter('kernel.environment'), array('dev', 'test'))) {
+            $container->setParameter(
+                'engineblock_url',
+                sprintf('https://engine.%s', $container->getParameter('domain'))
+            );
+        }
     }
 }
