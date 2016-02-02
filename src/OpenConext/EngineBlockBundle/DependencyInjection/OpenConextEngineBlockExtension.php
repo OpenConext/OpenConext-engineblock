@@ -54,7 +54,7 @@ class OpenConextEngineBlockExtension extends Extension
     private function overwriteDefaultLogger(ContainerBuilder $container)
     {
         $container->removeAlias('logger');
-        $container->setAlias('logger', 'monolog.logger.engineblock');
+        $container->setAlias('logger', 'monolog.logger.' . $container->getParameter('logger.channel'));
     }
 
     /**
@@ -65,7 +65,7 @@ class OpenConextEngineBlockExtension extends Extension
         if (in_array($container->getParameter('kernel.environment'), array('dev', 'test'))) {
             $container->setParameter(
                 'engineblock_url',
-                sprintf('https://engine.%s', 'vm.openconext.org')
+                sprintf('https://engine.%s', $container->getParameter('domain'))
             );
         }
     }

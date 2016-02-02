@@ -27,7 +27,7 @@ framework:
         #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
-    trusted_proxies: [192.168.1.1, 10.0.0.1]
+    trusted_proxies: "%trusted_proxies%"
     session:
         # handler_id set to null will use default session handler from php.ini
         handler_id:  ~
@@ -35,14 +35,14 @@ framework:
     http_method_override: true
 
 monolog:
-    channels: [engineblock]
+    channels: ["%logger.channel%"]
     handlers:
         main:
             type: fingers_crossed
             activation_strategy: engineblock.bridge.log.manual_or_error_activation_strategy
-            passthru_level: NOTICE
+            passthru_level: "%logger.fingers_crossed.passthru_level%"
             handler: syslog
         syslog:
             type:      syslog
-            ident:     EBLOG
+            ident:     "%logger.syslog.ident%"
             formatter: engineblock.bridge.log.additional_info_formatter

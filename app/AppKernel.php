@@ -1,6 +1,5 @@
 <?php
 
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Kernel;
@@ -65,11 +64,19 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        return '/tmp/engineblock/cache';
+        if ($this->environment === 'dev') {
+            return '/tmp/engineblock/symfony-cache';
+        }
+
+        return $this->rootDir . '/cache/' . $this->environment;
     }
 
     public function getLogDir()
     {
-        return '/tmp/engineblock/logs';
+        if ($this->environment === 'dev') {
+            return '/var/log/engineblock';
+        }
+
+        return $this->rootDir . '/logs/' . $this->environment;
     }
 }
