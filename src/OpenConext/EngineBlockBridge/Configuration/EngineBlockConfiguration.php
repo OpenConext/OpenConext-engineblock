@@ -61,7 +61,7 @@ final class EngineBlockConfiguration
         $result = array();
 
         foreach ($this->configuration as $key => $value) {
-            if ($value instanceof self) {
+            if ($value instanceof EngineBlockConfiguration) {
                 $result[$key] = $value->toArray();
             } else {
                 $result[$key] = $value;
