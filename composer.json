@@ -53,6 +53,9 @@
             "bin/composer/simplesamlphp-post-install.sh",
             "bin/composer/zend-framework-post-install.sh"
         ],
+        "post-autoload-dump": [
+            "bin/composer/dump-required-ini-params.php"
+        ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",

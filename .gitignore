@@ -10,3 +10,4 @@ bin/ignore_me.php
 /tmp/
 /app/config/functional_testing.yml
 /app/config/parameters.yml
+/app/config/ini_parameters.yml
