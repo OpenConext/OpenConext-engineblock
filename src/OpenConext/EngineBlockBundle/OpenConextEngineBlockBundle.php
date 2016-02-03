@@ -9,8 +9,6 @@ class OpenConextEngineBlockBundle extends Bundle
 {
     public function boot()
     {
-        parent::boot();
-
         $eb = EngineBlock_ApplicationSingleton::getInstance();
         $eb->bootstrap($this->container->get('logger'), uniqid());
 
