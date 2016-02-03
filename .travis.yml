@@ -47,7 +47,7 @@ before_script:
   - sudo service apache2 restart
   - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
   - composer install --prefer-dist -n -o
-  - ./bin/dbpatch update --debug
+  - ./bin/dbpatch.php update --debug
 
 script:
   - ant $COMMAND
