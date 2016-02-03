@@ -18,10 +18,14 @@ ini_set('xdebug.var_display_max_depth', -1);
 
 try {
 
-    require __DIR__ . '/../library/EngineBlock/ApplicationSingleton.php';
+    require_once __DIR__ . '/../app/bootstrap.php.cache';
+    require_once __DIR__ . '/../app/AppKernel.php';
+
+    $symfonyEnvironment = getenv('SYMFONY_ENV') ?: 'prod';
+    $kernel = new AppKernel($symfonyEnvironment, false);
+    $kernel->boot();
 
     $application = EngineBlock_ApplicationSingleton::getInstance();
-    $application->bootstrap();
 
     $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->serviceRegistry;
     $restClient = new Janus_Rest_Client($config->location, $config->user, $config->user_secret);

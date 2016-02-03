@@ -41,9 +41,8 @@ class FakeUserDirectory extends UserDirectory
         $ldapAttributes['objectClass']                               = $this->LDAP_OBJECT_CLASSES;
 
         $collabPersonId = $this->_getCollabPersonId($ldapAttributes);
-        $this->_addOrganization($ldapAttributes['o']);
 
-        $this->users[$collabPersonId] = $collabPersonId;
+        return $this->users[$collabPersonId] = $ldapAttributes;
     }
 
     public function deleteUser($collabPersonId)

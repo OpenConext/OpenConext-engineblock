@@ -26,6 +26,9 @@ cache:
   directories:
     - ~/.composer/cache/files
 
+before_install:
+  - mysql -e "create database IF NOT EXISTS engineblock;" -uroot
+
 before_script:
   - phpenv config-add .travis.php.ini
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then printf "\n" | pecl install apcu-4.0.10; fi
@@ -44,6 +47,7 @@ before_script:
   - sudo service apache2 restart
   - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
   - composer install --prefer-dist -n -o
+  - ./bin/dbpatch update --debug
 
 script:
   - ant $COMMAND
@@ -56,3 +60,6 @@ branches:
 addons:
   hosts:
     - engine.vm.openconext.org
+
+services:
+  - mysql
