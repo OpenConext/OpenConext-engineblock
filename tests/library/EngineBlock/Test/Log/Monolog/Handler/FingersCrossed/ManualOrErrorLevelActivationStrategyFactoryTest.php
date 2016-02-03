@@ -11,15 +11,6 @@ final class EngineBlock_Test_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLev
         ManualOrErrorLevelActivationStrategyFactory::factory(array('action_level' => 'INFO'));
     }
 
-    /**
-     * @expectedException RuntimeException
-     */
-    public function testItCannotBeCreatedTwice()
-    {
-        ManualOrErrorLevelActivationStrategyFactory::factory(array('action_level' => 'INFO'));
-        ManualOrErrorLevelActivationStrategyFactory::factory(array('action_level' => 'INFO'));
-    }
-
     public function configurationTests()
     {
         return array(

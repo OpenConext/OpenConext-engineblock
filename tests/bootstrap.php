@@ -14,4 +14,10 @@ $config = new Zend_Config_Ini(
 $config->testing = true;
 
 $application->setConfiguration($config);
-$application->bootstrap(new Psr\Log\NullLogger(), 'requestId');
+$application->bootstrap(
+    new Psr\Log\NullLogger(),
+    EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory::factory(
+        array('action_level' => 'ERROR')
+    ),
+    'requestId'
+);

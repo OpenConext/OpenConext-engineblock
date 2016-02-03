@@ -9,10 +9,14 @@ class OpenConextEngineBlockBundle extends Bundle
 {
     public function boot()
     {
-        $eb = EngineBlock_ApplicationSingleton::getInstance();
-        $eb->bootstrap($this->container->get('logger'), uniqid());
+        $engineBlockApplicationSingleton = EngineBlock_ApplicationSingleton::getInstance();
+        $engineBlockApplicationSingleton->bootstrap(
+            $this->container->get('logger'),
+            $this->container->get('engineblock.bridge.log.manual_or_error_activation_strategy'),
+            uniqid()
+        );
 
         // set the configured layout on the application singleton
-        $eb->setLayout($this->container->get('engineblock.compat.layout'));
+        $engineBlockApplicationSingleton->setLayout($this->container->get('engineblock.compat.layout'));
     }
 }

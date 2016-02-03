@@ -16,16 +16,11 @@ services:
             - "@=service('engineblock.bridge.config').get('email.help')"
             - @engineblock.compat.logger
 
-    engineblock.bridge.log.error_level_activation_strategy:
-        public: false
-        class:  Monolog\Handler\FingersCrossed\ErrorLevelActivationStrategy
-        arguments:
-            - "@=service('engineblock.bridge.config').get('logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level')"
-
     engineblock.bridge.log.manual_or_error_activation_strategy:
         class: EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
+        factory: [EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory, factory]
         arguments:
-            - @engineblock.bridge.log.error_level_activation_strategy
+            - { action_level: "@=service('engineblock.bridge.config').get('logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level')" }
 
     engineblock.bridge.log.line_formatter:
         public: false

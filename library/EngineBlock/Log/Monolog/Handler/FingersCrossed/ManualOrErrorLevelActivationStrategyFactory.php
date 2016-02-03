@@ -21,28 +21,11 @@ final class EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelAct
      */
     public static function factory(array $config)
     {
-        if (isset(self::$strategy)) {
-            throw new RuntimeException(
-                "Cannot manufacture a second instance of this strategy, as the current instance is required for " .
-                "explicit flushing of the log message buffer"
-            );
-        }
-
         $config = self::validateAndNormaliseConfig($config);
 
-        self::$strategy = new ManualOrDecoratedActivationStrategy(
+        return new ManualOrDecoratedActivationStrategy(
             new ErrorLevelActivationStrategy($config['action_level'])
         );
-
-        return self::$strategy;
-    }
-
-    /**
-     * @return ManualOrDecoratedActivationStrategy|null
-     */
-    public static function getManufacturedStrategy()
-    {
-        return self::$strategy;
     }
 
     /**

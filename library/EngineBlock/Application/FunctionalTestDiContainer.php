@@ -39,4 +39,10 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
     {
         return 'EngineBlock_Ssp_sspmod_saml_Message';
     }
+
+    public function getUserDirectory()
+    {
+        return new \OpenConext\EngineBlockFunctionalTestingBundle\Mock\FakeUserDirectory();
+    }
+
 }
