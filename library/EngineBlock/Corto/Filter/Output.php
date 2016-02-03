@@ -24,9 +24,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Check if the request was for a VO, if it was, validate that the user is a member of that vo
             new EngineBlock_Corto_Filter_Command_ValidateVoMembership(),
 
-            // Check if the Policy Decision Point needs to be consulted for this request
-            new EngineBlock_Corto_Filter_Command_EnforcePolicy(),
-
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
 
