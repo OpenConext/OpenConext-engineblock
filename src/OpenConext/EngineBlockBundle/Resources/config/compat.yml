@@ -35,12 +35,12 @@ services:
     engineblock.compat.layout:
         class: Zend_Layout
         calls:
-            - ['setLayout',       ["@=service('engineblock.bridge.config').defaults.layout"]]
+            - ['setLayout',       ["@=service('engineblock.bridge.config').get('defaults.layout')"]]
             - ['setLayoutPath',   ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
             - ['setViewBasePath', ["%kernel.root_dir%/Resources/views/modules/"]]
         properties:
-            title: "@=service('engineblock.bridge.config').defaults.title"
-            header: "@=service('engineblock.bridge.config').defaults.header"
+            title: "@=service('engineblock.bridge.config').get('defaults.title')"
+            header: "@=service('engineblock.bridge.config').get('defaults.header')"
 
     engineblock.compat.logger:
         class: Monolog\Logger

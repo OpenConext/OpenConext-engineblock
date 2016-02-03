@@ -134,39 +134,6 @@ class EngineBlockConfigurationTest extends TestCase
      * @test
      * @group EngineBlockConfiguration
      */
-    public function value_can_be_retrieved_by_magic_getter()
-    {
-        $configuredValue = 'some_configured_value';
-        $configuration   = new EngineBlockConfiguration(array('path' => $configuredValue));
-
-        $retrievedValue = $configuration->path;
-
-        $this->assertEquals($configuredValue, $retrievedValue);
-    }
-
-    /**
-     * @test
-     * @group EngineBlockConfiguration
-     */
-    public function nested_value_can_be_retrieved_by_magic_getter()
-    {
-        $configuredValue = 'some_configured_value';
-        $nestedConfig    = array(
-            'path' => array(
-                'sub_path' => $configuredValue
-            )
-        );
-        $configuration   = new EngineBlockConfiguration($nestedConfig);
-
-        $retrievedValue = $configuration->path->sub_path;
-
-        $this->assertEquals($configuredValue, $retrievedValue);
-    }
-
-    /**
-     * @test
-     * @group EngineBlockConfiguration
-     */
     public function configuration_can_be_converted_to_array()
     {
         $configArray = array('key_a' => 'value_a', 'key_b' => 'value_b');

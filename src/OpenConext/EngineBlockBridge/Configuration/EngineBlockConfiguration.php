@@ -70,14 +70,4 @@ final class EngineBlockConfiguration
 
         return $result;
     }
-
-    /**
-     * Magic function so that $obj->value and related expression language will work
-     * @param string $name
-     * @return mixed|null|EngineBlockConfiguration
-     */
-    public function __get($name)
-    {
-        return $this->get($name);
-    }
 }
