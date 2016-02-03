@@ -3,12 +3,15 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat\Container;
+use SAML2_Compat_ContainerSingleton as ContainerSingleton;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OpenConextEngineBlockFunctionalTestingBundle extends Bundle
 {
     public function boot()
     {
-        \SAML2_Compat_ContainerSingleton::setContainer(new Container());
+        // A container is set with additional functionality for functional testing purposes,
+        // such as mocking IdPs and SPs
+        ContainerSingleton::setContainer(new Container());
     }
 }
