@@ -3,16 +3,50 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use EngineBlock_UserDirectory as UserDirectory;
+use OpenConext\EngineBlock\Exception\RuntimeException;
+use Symfony\Component\Filesystem\Filesystem;
 
 class FakeUserDirectory extends UserDirectory
 {
+    /**
+     * @var array
+     */
     private $users = array();
 
     /**
-     * overriding constructor so we can instantiate without arguments
+     * @var Filesystem
      */
-    public function __construct()
+    private $filesystem;
+
+    /**
+     * @var string
+     */
+    private static $directory = '/tmp/eb-fixtures/';
+
+    /**
+     * @var string
+     */
+    private static $fileName = 'user_directory.json';
+
+    /**
+     * overriding constructor so we can instantiate without arguments and load a possible cached
+     * userdirectory
+     */
+    public function __construct(Filesystem $filesystem)
     {
+        $this->filesystem = $filesystem;
+
+        $filePath = self::$directory . self::$fileName;
+        if (!$this->filesystem->exists($filePath) || !is_readable($filePath)) {
+            return;
+        }
+
+        $content = file_get_contents($filePath);
+        if ($content === false) {
+            throw new RuntimeException(sprintf('Cannot read UserDirectory dump from "%s"', $filePath));
+        }
+
+        $this->users = json_decode($content, true);
     }
 
     public function findUsersByIdentifier($identifier)
@@ -21,7 +55,7 @@ class FakeUserDirectory extends UserDirectory
             return array();
         }
 
-        return $this->users[$identifier];
+        return array($this->users[$identifier]);
     }
 
     public function registerUser(array $saml2attributes, $retry = true)
@@ -42,11 +76,31 @@ class FakeUserDirectory extends UserDirectory
 
         $collabPersonId = $this->_getCollabPersonId($ldapAttributes);
 
-        return $this->users[$collabPersonId] = $ldapAttributes;
+        $this->users[$collabPersonId] = $ldapAttributes;
+
+        $this->saveToDisk();
+
+        return $this->users[$collabPersonId];
     }
 
     public function deleteUser($collabPersonId)
     {
         unset($this->users[$collabPersonId]);
+
+        $this->saveToDisk();
+    }
+
+    /**
+     * Write the user directory so it can be reused when visiting consent etc.
+     */
+    private function saveToDisk()
+    {
+        if (!$this->filesystem->exists(self::$directory)) {
+            $this->filesystem->mkdir(self::$directory);
+        }
+
+        $filePath = self::$directory . self::$fileName;
+
+        $this->filesystem->dumpFile($filePath, json_encode($this->users), 0664);
     }
 }
