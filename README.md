@@ -1,5 +1,13 @@
 # OpenConext EngineBlock #
 
+Build Status:
+
+| Branch  | Status |
+| ------- | ------ |
+| 5.x-dev | [![Build Status](https://travis-ci.org/OpenConext/OpenConext-engineblock.svg?branch=5.x-dev)](https://travis-ci.org/OpenConext/OpenConext-engineblock) |
+| master  | [![Build Status](https://travis-ci.org/OpenConext/OpenConext-engineblock.svg?branch=master)](https://travis-ci.org/OpenConext/OpenConext-engineblock) |
+
+
 ## License
 
 See the LICENSE-2.0.txt file
