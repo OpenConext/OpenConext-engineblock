@@ -19,6 +19,9 @@ final class EngineBlockIniFileLoader
 
         $mappedValues = array();
         foreach ($parsedValues as $keys => $value) {
+            // In order to prevent Symfony parsing percent signs as parameter references, they are escaped
+            $value = str_replace('%', '%%', $value);
+
             $mappedValues = $this->map($value, explode('.', $keys), $mappedValues);
         }
 
@@ -37,10 +40,7 @@ final class EngineBlockIniFileLoader
             return $this->map(array(array_pop($keys) => $value), $keys, $mappedValues);
         }
 
-        // In order to prevent Symfony parsing percent signs as parameter references, they are escaped
-        $valueWithoutParameters = str_replace('%', '%%', $value);
-
-        return array_replace_recursive($mappedValues, array($keys[0] => $valueWithoutParameters));
+        return array_replace_recursive($mappedValues, array($keys[0] => $value));
     }
 
     /**
@@ -67,7 +67,7 @@ final class EngineBlockIniFileLoader
             ));
         }
 
-        $parsedFile = parse_ini_file($file, true);
+        $parsedFile = parse_ini_file($file);
 
         if ($parsedFile === false) {
             throw new InvalidArgumentException(sprintf(

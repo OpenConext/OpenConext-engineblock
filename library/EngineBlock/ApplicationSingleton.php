@@ -1,5 +1,7 @@
 <?php
 
+use Psr\Log\LoggerInterface;
+
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
@@ -78,6 +80,11 @@ class EngineBlock_ApplicationSingleton
     protected $_diContainer;
 
     /**
+     * @var EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
+     */
+    private   $_activationStrategy;
+
+    /**
      *
      */
     protected function __construct()
@@ -117,11 +124,10 @@ class EngineBlock_ApplicationSingleton
      */
     public function flushLog($reason)
     {
-        $activationStrategy = EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory::getManufacturedStrategy();
         $logger = $this->getLog();
 
-        if ($activationStrategy) {
-            $activationStrategy->activate();
+        if ($this->_activationStrategy) {
+            $this->_activationStrategy->activate();
             $logger->notice($reason);
         } elseif ($this->getConfiguration()->debug) {
             $logger->notice(sprintf("No log buffer to flush. Reason given for flushing: '%s'.", $reason));
@@ -131,13 +137,23 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     *
+     * @param LoggerInterface                                                                    $logger
+     * @param EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy $activationStrategy
+     * @param string                                                                             $requestId
      */
-    public function bootstrap()
-    {
+    public function bootstrap(
+        LoggerInterface $logger,
+        EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy $activationStrategy,
+        $requestId
+    ) {
+        $this->setLogInstance($logger);
+        $this->_activationStrategy = $activationStrategy;
+        $this->setLogRequestId($requestId);
+
         if (!isset($this->_bootstrapper)) {
             $this->_bootstrapper = new EngineBlock_Application_Bootstrapper($this);
         }
+
         $this->_bootstrapper->bootstrap();
     }
 

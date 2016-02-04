@@ -8,7 +8,7 @@
 
 require_once __DIR__ . '/../../../../library/EngineBlock/ApplicationSingleton.php';
 $application = EngineBlock_ApplicationSingleton::getInstance();
-$application->bootstrap();
+
 $appConfig = $application->getConfiguration();
 if (!isset($appConfig->auth->simplesamlphp->idp->entityId) || !$appConfig->auth->simplesamlphp->idp->entityId) {
 	throw new EngineBlock_Exception('No entityId for Idp to use?');

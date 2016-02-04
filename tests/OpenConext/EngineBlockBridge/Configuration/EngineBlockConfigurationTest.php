@@ -11,7 +11,7 @@ class EngineBlockConfigurationTest extends TestCase
 {
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function configuration_can_be_created_from_multidimensional_array()
     {
@@ -34,7 +34,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      *
      * @dataProvider nonOrEmptyStringProvider
      * @expectedException InvalidArgumentException
@@ -50,7 +50,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function default_value_is_retrieved_when_configuration_path_cannot_be_found()
     {
@@ -64,7 +64,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function default_value_is_retrieved_when_nested_configuration_path_cannot_be_found()
     {
@@ -78,7 +78,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      *
      * @dataProvider scalarOrNullProvider
      *
@@ -95,7 +95,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function sub_configuration_can_be_retrieved_by_path()
     {
@@ -113,7 +113,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group Configuration
+     * @group EngineBlockConfiguration
      */
     public function nested_value_can_be_retrieved_by_path()
     {
@@ -128,6 +128,39 @@ class EngineBlockConfigurationTest extends TestCase
         $retrievedValue = $configuration->get('path.sub_path');
 
         $this->assertEquals($configuredValue, $retrievedValue);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockConfiguration
+     */
+    public function configuration_can_be_converted_to_array()
+    {
+        $configArray = array('key_a' => 'value_a', 'key_b' => 'value_b');
+
+        $configuration          = new EngineBlockConfiguration($configArray);
+        $arrayFromConfiguration = $configuration->toArray();
+
+        $this->assertEquals($configArray, $arrayFromConfiguration);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockConfiguration
+     */
+    public function nested_configuration_can_be_converted_to_array()
+    {
+        $configArray = array(
+            'key_a' => 'value_a',
+            'key_b' => array(
+                'nested_key' => 'nested_value'
+            )
+        );
+
+        $configuration          = new EngineBlockConfiguration($configArray);
+        $arrayFromConfiguration = $configuration->toArray();
+
+        $this->assertEquals($configArray, $arrayFromConfiguration);
     }
 
     public function nonOrEmptyStringProvider()

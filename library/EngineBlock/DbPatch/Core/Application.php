@@ -10,9 +10,15 @@ class EngineBlock_DbPatch_Core_Application extends DbPatch_Core_Application
 {
     protected function getConfig($filename = null)
     {
+        require_once dirname(__FILE__) . '/../../../../app/bootstrap.php.cache';
+        require_once dirname(__FILE__) . '/../../../../app/AppKernel.php';
+
+        $symfonyEnvironment = getenv('SYMFONY_ENV') ?: 'prod';
+        $kernel = new AppKernel($symfonyEnvironment, false);
+        $kernel->boot();
+
         try {
             $engineBlock = EngineBlock_ApplicationSingleton::getInstance();
-            $engineBlock->bootstrap();
 
             $ebConfig = $engineBlock->getConfiguration();
             $masterDbConfigName = $ebConfig->database->masters->get(0);

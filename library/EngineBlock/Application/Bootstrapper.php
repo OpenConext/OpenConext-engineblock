@@ -44,7 +44,6 @@ class EngineBlock_Application_Bootstrapper
 
         $this->_bootstrapPhpSettings();
         $this->_bootstrapErrorReporting();
-        $this->_bootstrapLogging();
 
         $this->_bootstrapSuperGlobalOverrides();
         $this->_bootstrapHttpCommunication();
@@ -129,32 +128,6 @@ class EngineBlock_Application_Bootstrapper
             ENGINEBLOCK_FOLDER_APPLICATION . self::CONFIG_FILE_DEFAULT,
             self::CONFIG_FILE_ENVIRONMENT,
         );
-    }
-
-    protected function _bootstrapLogging()
-    {
-        $configuration = $this->_application->getConfiguration();
-
-        if (!isset($configuration->logger)) {
-            throw new EngineBlock_Exception(
-                "No logger configuration defined! Logging is required, please configure the logger under the logger " .
-                "key in your application.ini. See EngineBlock_Log_MonologLoggerFactory's docblock for more details.",
-                EngineBlock_Exception::CODE_ALERT
-            );
-        }
-
-        $loggerConfiguration = $configuration->logger->toArray();
-
-        /** @var string|EngineBlock_Log_LoggerFactory $loggerFactory */
-        $loggerFactory = $loggerConfiguration['factory'];
-        EngineBlock_Log_InvalidConfigurationException::assertIsValidFactory(
-            $loggerFactory,
-            'EngineBlock_Log_LoggerFactory'
-        );
-        $logger = $loggerFactory::factory($loggerConfiguration['conf'], $configuration->debug);
-
-        $this->_application->setLogInstance($logger);
-        $this->_application->setLogRequestId(uniqid());
     }
 
     protected function _bootstrapHttpCommunication()

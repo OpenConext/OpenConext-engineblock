@@ -15,7 +15,7 @@ class PrintRParserTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEmpty($parsed);
 
-        $this->markTestIncomplete('Parser should be able to output what came in');
+        $this->markTestIncomplete('Comparison between input and output should be fixed');
 
 //        $reprinted = print_r($parsed, true);
 //        $reprinted = substr($reprinted, 0, strlen($reprinted) - 1);

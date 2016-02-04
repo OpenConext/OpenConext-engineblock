@@ -1,4 +1,8 @@
 <?php
+
+use OpenConext\EngineBlockFunctionalTestingBundle\Mock\FakeUserDirectory;
+use Symfony\Component\Filesystem\Filesystem;
+
 /**
  * Creates mocked versions of dependencies for functional testing
  */
@@ -39,4 +43,10 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
     {
         return 'EngineBlock_Ssp_sspmod_saml_Message';
     }
+
+    public function getUserDirectory()
+    {
+        return new FakeUserDirectory(new Filesystem());
+    }
+
 }

@@ -52,4 +52,22 @@ final class EngineBlockConfiguration
 
         return $value;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        $result = array();
+
+        foreach ($this->configuration as $key => $value) {
+            if ($value instanceof EngineBlockConfiguration) {
+                $result[$key] = $value->toArray();
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
+    }
 }
