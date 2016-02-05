@@ -4,7 +4,7 @@ namespace OpenConext\EngineBlock\Exception;
 
 use InvalidArgumentException as CoreInvalidArgumentException;
 
-class InvalidArgumentException extends CoreInvalidArgumentException
+class InvalidArgumentException extends CoreInvalidArgumentException implements Exception
 {
     /**
      * @param string $expected  description of expected type
