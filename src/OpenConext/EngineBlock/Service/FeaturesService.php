@@ -28,10 +28,10 @@ class FeaturesService
      */
     public function __construct($metadataPushEnabled, $consentListingEnabled, $metadataApiEnabled)
     {
-        $message = 'Expected boolean for value for "%s", "%s" given';
-        Assertion::boolean($metadataPushEnabled, sprintf($message, 'metadataPushEnabled'));
-        Assertion::boolean($consentListingEnabled, sprintf($message, 'consentListingEnabled'));
-        Assertion::boolean($metadataApiEnabled, sprintf($message, 'metadataApiEnabled'));
+        $message = 'Expected boolean for value for "%s"';
+        Assertion::boolean($metadataPushEnabled, sprintf($message, 'metadataPushEnabled') . ', "%s" given');
+        Assertion::boolean($consentListingEnabled, sprintf($message, 'consentListingEnabled') . ', "%s" given');
+        Assertion::boolean($metadataApiEnabled, sprintf($message, 'metadataApiEnabled') . ', "%s" given');
 
         $this->metadataPushEnabled   = $metadataPushEnabled;
         $this->consentListingEnabled = $consentListingEnabled;

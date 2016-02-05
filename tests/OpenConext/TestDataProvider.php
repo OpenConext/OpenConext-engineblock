@@ -50,4 +50,18 @@ class TestDataProvider
             array('null' => array(null))
         );
     }
+
+    public static function notBoolean()
+    {
+        return array(
+            'integer'      => array(1),
+            'float'        => array(1.234),
+            'array'        => array(array()),
+            'object'       => array(new stdClass()),
+            'null'         => array(null),
+            'empty string' => array(''),
+            'string'       => array('some string'),
+            'nullbyte'     => array(chr(0)),
+        );
+    }
 }
