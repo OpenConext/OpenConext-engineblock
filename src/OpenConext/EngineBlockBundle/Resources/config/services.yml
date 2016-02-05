@@ -1,4 +1,42 @@
 services:
+    engineblock.request.request_id_generator:
+        public: false
+        class: OpenConext\EngineBlock\Request\RequestIdGenerator\UniqidGenerator
+
+    engineblock.request.request_id:
+        class: OpenConext\EngineBlock\Request\RequestId
+        arguments:
+            - @engineblock.request.request_id_generator
+
+    engineblock.logger.additional_info_formatter:
+        class: OpenConext\EngineBlock\Logger\Formatter\AdditionalInfoFormatter
+        arguments:
+            - @engineblock.logger.line_formatter
+
+    engineblock.logger.line_formatter:
+        public: false
+        class: Monolog\Formatter\LineFormatter
+        arguments:
+            - "@=service('engineblock.bridge.config').get('logger.conf.handler.syslog.conf.formatter.conf.format')"
+
+    engineblock.logger.manual_or_error_activation_strategy:
+        class: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
+        factory: [OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrErrorLevelActivationStrategyFactory, createActivationStrategy]
+        arguments:
+            - { action_level: "@=service('engineblock.bridge.config').get('logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level')" }
+
+    engineblock.logger.processor.request_id_processor:
+        class: OpenConext\EngineBlock\Logger\Processor\RequestIdProcessor
+        arguments:
+            - @engineblock.request.request_id
+        tags:
+            - { name: monolog.processor, method: processRecord }
+
+    engineblock.logger.processor.session_id_processor:
+        class: OpenConext\EngineBlock\Logger\Processor\SessionIdProcessor
+        tags:
+            - { name: monolog.processor, method: processRecord }
+
     engineblock.security.http_basic_entry_point:
         class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
         arguments:
