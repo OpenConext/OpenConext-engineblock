@@ -46,7 +46,8 @@
         "openconext/engineblock-fixtures": "^0.5.2",
         "phpmd/phpmd": "^2.3",
         "squizlabs/php_codesniffer": "^2.5",
-        "sebastian/phpcpd": "^2.0"
+        "sebastian/phpcpd": "^2.0",
+        "mockery/mockery": "0.9.4"
     },
     "scripts": {
         "pre-autoload-dump": [
@@ -80,11 +81,7 @@
             "Janus_": "library/",
             "Pdp_": "library/",
             "SurfConext_": "library/",
-            "Surfnet_": "library/",
-            "Api_":"application/modules/",
-            "Authentication_":"application/modules/",
-            "Default_":"application/modules/",
-            "Logout_":"application/modules/"
+            "Surfnet_": "library/"
         },
         "psr-4": {
             "": "src/"
