@@ -90,6 +90,11 @@
             "": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "OpenConext\\": "tests/OpenConext/"
+        }
+    },
     "config": {
         "platform": {
             "php": "5.3.9"
