@@ -80,11 +80,7 @@
             "Janus_": "library/",
             "Pdp_": "library/",
             "SurfConext_": "library/",
-            "Surfnet_": "library/",
-            "Api_":"application/modules/",
-            "Authentication_":"application/modules/",
-            "Default_":"application/modules/",
-            "Logout_":"application/modules/"
+            "Surfnet_": "library/"
         },
         "psr-4": {
             "": "src/"
