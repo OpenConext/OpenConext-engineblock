@@ -9,12 +9,14 @@ class ConsentTypeTest extends TestCase
 {
     /**
      * @test
+     * @group EngineBlock
      * @group Authentication
-     * @group Consent
      * @group Value
      *
-     * @dataProvider invalidConsentTypeProvider
-     * @expectedException \OpenConext\EngineBlock\Authentication\Exception\InvalidArgumentException
+     * @dataProvider      \OpenConext\TestDataProvider::notStringOrEmptyString
+     * @expectedException \OpenConext\EngineBlock\Exception\InvalidArgumentException
+     *
+     * @param mixed $invalid
      */
     public function cannot_be_other_than_implicit_or_explicit($invalid)
     {
@@ -23,8 +25,8 @@ class ConsentTypeTest extends TestCase
 
     /**
      * @test
+     * @group EngineBlock
      * @group Authentication
-     * @group Consent
      * @group Value
      */
     public function different_consent_types_are_not_equal()
@@ -38,8 +40,8 @@ class ConsentTypeTest extends TestCase
 
     /**
      * @test
+     * @group EngineBlock
      * @group Authentication
-     * @group Consent
      * @group Value
      */
     public function same_type_of_consent_types_are_equal()
@@ -49,17 +51,5 @@ class ConsentTypeTest extends TestCase
 
         $this->assertTrue($explicit->equals(ConsentType::explicit()));
         $this->assertTrue($implicit->equals(ConsentType::implicit()));
-    }
-
-    public function invalidConsentTypeProvider()
-    {
-        return array(
-            'invalid string'    => array('invalid'),
-            'empty string'      => array(''),
-            'integer'           => array(1),
-            'null'              => array(null),
-            'array'             => array(array()),
-            'boolean'           => array(true)
-        );
     }
 }

@@ -2,26 +2,19 @@
 
 namespace OpenConext\EngineBlock\Exception;
 
-use InvalidArgumentException as CoreInvalidArgumentException;
+use Assert\InvalidArgumentException as InvalidAssertionException;
 
-class InvalidArgumentException extends CoreInvalidArgumentException
+class InvalidArgumentException extends InvalidAssertionException implements Exception
 {
-    /**
-     * @param string $expected  description of expected type
-     * @param string $parameterName
-     * @param mixed  $parameter the parameter that is not of the expected type.
-     *
-     * @return self
-     */
-    public static function invalidType($expected, $parameterName, $parameter)
+    // according to CS used, propertypath and value should be switched, but that breaks the integration with the library
+    // @codingStandardsIgnoreStart
+    public function __construct($message, $code, $propertyPath = null, $value, array $constraints = array())
     {
-        $message = sprintf(
-            'Invalid argument type: "%s" expected, "%s" given for "%s"',
-            $expected,
-            is_object($parameter) ? get_class($parameter) : gettype($parameter),
-            $parameterName
-        );
+    // @codingStandardsIgnoreEnd
+        if ($propertyPath !== null && strpos($message, $propertyPath) === false) {
+            $message = sprintf('Invalid argument given for "%s": %s', $propertyPath, $message);
+        }
 
-        return new self($message);
+        parent::__construct($message, $code, $propertyPath, $value, $constraints);
     }
 }

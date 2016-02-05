@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockBridge\Configuration;
 
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 final class EngineBlockIniFileLoader
@@ -49,9 +50,7 @@ final class EngineBlockIniFileLoader
      */
     private function parseIniFile($file)
     {
-        if (!is_string($file) || trim($file) === '') {
-            throw InvalidArgumentException::invalidType('non-empty string', 'file', $file);
-        }
+        Assertion::nonEmptyString($file, 'file');
 
         if (!file_exists($file)) {
             throw new InvalidArgumentException(sprintf(

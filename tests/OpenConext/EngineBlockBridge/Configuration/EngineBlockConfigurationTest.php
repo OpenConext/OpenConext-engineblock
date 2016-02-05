@@ -2,16 +2,15 @@
 
 namespace OpenConext\EngineBlockBridge\Tests;
 
-use OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration;
 use PHPUnit_Framework_TestCase as TestCase;
-use stdClass;
 
 class EngineBlockConfigurationTest extends TestCase
 {
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      */
     public function configuration_can_be_created_from_multidimensional_array()
     {
@@ -34,13 +33,12 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      *
-     * @dataProvider nonOrEmptyStringProvider
+     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage Invalid argument type
      *
-     * @param $path
+     * @param mixed $path
      */
     public function non_string_or_non_empty_string_path_cannot_be_used_for_querying($path)
     {
@@ -50,7 +48,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      */
     public function default_value_is_retrieved_when_configuration_path_cannot_be_found()
     {
@@ -64,7 +62,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      */
     public function default_value_is_retrieved_when_nested_configuration_path_cannot_be_found()
     {
@@ -78,11 +76,11 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      *
-     * @dataProvider scalarOrNullProvider
+     * @dataProvider \OpenConext\TestDataProvider::nullOrScalar
      *
-     * @param $configuredValue
+     * @param mixed $configuredValue
      */
     public function configured_scalars_or_null_can_be_retrieved_by_path($configuredValue)
     {
@@ -95,7 +93,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      */
     public function sub_configuration_can_be_retrieved_by_path()
     {
@@ -113,7 +111,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      */
     public function nested_value_can_be_retrieved_by_path()
     {
@@ -132,7 +130,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      */
     public function configuration_can_be_converted_to_array()
     {
@@ -146,7 +144,7 @@ class EngineBlockConfigurationTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockConfiguration
+     * @group EngineBlockBridge
      */
     public function nested_configuration_can_be_converted_to_array()
     {
@@ -161,29 +159,5 @@ class EngineBlockConfigurationTest extends TestCase
         $arrayFromConfiguration = $configuration->toArray();
 
         $this->assertEquals($configArray, $arrayFromConfiguration);
-    }
-
-    public function nonOrEmptyStringProvider()
-    {
-        return array(
-            'integer'      => array(1),
-            'float'        => array(1.1),
-            'boolean'      => array(true),
-            'array'        => array(array()),
-            'object'       => array(new stdClass()),
-            'null'         => array(null),
-            'empty string' => array('')
-        );
-    }
-
-    public function scalarOrNullProvider()
-    {
-        return array(
-            'integer' => array(1),
-            'float'   => array(1.1),
-            'boolean' => array(true),
-            'string'  => array('foo'),
-            'null'    => array(null)
-        );
     }
 }

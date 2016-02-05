@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockBridge\Mail;
 
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Assert\Assertion;
 
 class MailMessage
 {
@@ -28,17 +28,9 @@ class MailMessage
      */
     public function __construct($subject, $onBehalfOf, $body)
     {
-        if (!is_string($subject) || trim($subject) === '') {
-            throw InvalidArgumentException::invalidType('non-empty string', 'subject', $subject);
-        }
-
-        if (filter_var($onBehalfOf, FILTER_VALIDATE_EMAIL) === false) {
-            throw InvalidArgumentException::invalidType('RFC 822 compliant email address', 'onBehalfOf', $onBehalfOf);
-        }
-
-        if (!is_string($body) || trim($body) === '') {
-            throw InvalidArgumentException::invalidType('non-empty string', 'body', $body);
-        }
+        Assertion::nonEmptyString($subject, 'subject');
+        Assertion::email($onBehalfOf, 'Expceted RFC 822 compliant email address, "%s" given', 'onBehalfOf');
+        Assertion::nonEmptyString($body, 'body');
 
         $this->subject    = $subject;
         $this->onBehalfOf = $onBehalfOf;

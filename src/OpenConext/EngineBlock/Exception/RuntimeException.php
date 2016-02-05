@@ -4,6 +4,6 @@ namespace OpenConext\EngineBlock\Exception;
 
 use RuntimeException as CoreRuntimeException;
 
-final class RuntimeException extends CoreRuntimeException
+class RuntimeException extends CoreRuntimeException implements Exception
 {
 }

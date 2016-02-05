@@ -3,7 +3,7 @@
 namespace OpenConext\EngineBlock\Authentication\Entity;
 
 use DateTime;
-use OpenConext\EngineBlock\Authentication\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 
 final class Consent
@@ -51,13 +51,8 @@ final class Consent
         DateTime $lastUsedOn,
         ConsentType $consentType
     ) {
-        if (!is_string($userId)) {
-            throw InvalidArgumentException::invalidType('string', 'userId', $userId);
-        }
-
-        if (!is_string($serviceProviderEntityId)) {
-            throw InvalidArgumentException::invalidType('string', 'serviceProviderEntityId', $serviceProviderEntityId);
-        }
+        Assertion::nonEmptyString($userId, 'userId');
+        Assertion::nonEmptyString($serviceProviderEntityId, 'serviceProviderEntityId');
 
         $this->userId                  = $userId;
         $this->serviceProviderEntityId = $serviceProviderEntityId;

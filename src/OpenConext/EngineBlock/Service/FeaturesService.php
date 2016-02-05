@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Assert\Assertion;
 
 class FeaturesService
 {
@@ -28,17 +28,10 @@ class FeaturesService
      */
     public function __construct($metadataPushEnabled, $consentListingEnabled, $metadataApiEnabled)
     {
-        if (!is_bool($metadataPushEnabled)) {
-            throw InvalidArgumentException::invalidType('bool', 'metadataPushEnabled', $metadataPushEnabled);
-        }
-
-        if (!is_bool($consentListingEnabled)) {
-            throw InvalidArgumentException::invalidType('bool', 'consentListingEnabled', $consentListingEnabled);
-        }
-
-        if (!is_bool($metadataApiEnabled)) {
-            throw InvalidArgumentException::invalidType('bool', 'metadataApiEnabled', $metadataApiEnabled);
-        }
+        $message = 'Expected boolean for value for "%s"';
+        Assertion::boolean($metadataPushEnabled, sprintf($message, 'metadataPushEnabled') . ', "%s" given');
+        Assertion::boolean($consentListingEnabled, sprintf($message, 'consentListingEnabled') . ', "%s" given');
+        Assertion::boolean($metadataApiEnabled, sprintf($message, 'metadataApiEnabled') . ', "%s" given');
 
         $this->metadataPushEnabled   = $metadataPushEnabled;
         $this->consentListingEnabled = $consentListingEnabled;

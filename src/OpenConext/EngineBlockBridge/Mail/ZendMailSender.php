@@ -3,7 +3,7 @@
 namespace OpenConext\EngineBlockBridge\Mail;
 
 use Exception;
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use Psr\Log\LoggerInterface;
 use Zend_Mail;
@@ -26,9 +26,7 @@ class ZendMailSender implements MailSenderInterface
      */
     public function __construct($toAddress, LoggerInterface $logger)
     {
-        if (!is_string($toAddress) || trim($toAddress === '')) {
-            throw InvalidArgumentException::invalidType('non-empty string', 'toAddress', $toAddress);
-        }
+        Assertion::nonEmptyString($toAddress, $toAddress);
 
         $this->toAddress = $toAddress;
         $this->logger = $logger;

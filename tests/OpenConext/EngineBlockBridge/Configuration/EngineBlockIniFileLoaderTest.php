@@ -8,7 +8,7 @@ class EngineBlockIniFileLoaderTest extends TestCase
 {
     /**
      * @test
-     * @group EngineBlockIniFileLoader
+     * @group EngineBlockBridge
      */
     public function ignore_sections()
     {
@@ -19,7 +19,7 @@ class EngineBlockIniFileLoaderTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockIniFileLoader
+     * @group EngineBlockBridge
      */
     public function load_and_parse_an_ini_file()
     {
@@ -48,7 +48,7 @@ class EngineBlockIniFileLoaderTest extends TestCase
 
     /**
      * @test
-     * @group EngineBlockIniFileLoader
+     * @group EngineBlockBridge
      */
     public function load_and_parse_multiple_ini_files_where_last_defined_has_precedence_over_first_defined()
     {

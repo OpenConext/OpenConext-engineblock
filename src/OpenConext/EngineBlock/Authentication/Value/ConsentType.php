@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
-use OpenConext\EngineBlock\Authentication\Exception\InvalidArgumentException;
+use OpenConext\EngineBlock\Assert\Assertion;
 
 final class ConsentType
 {
@@ -38,13 +38,11 @@ final class ConsentType
      */
     public function __construct($consentType)
     {
-        if (!in_array($consentType, array(self::TYPE_EXPLICIT, self::TYPE_IMPLICIT), true)) {
-            throw InvalidArgumentException::invalidType(
-                'ConsentType::TYPE_EXPLICIT|ConsentType::TYPE_IMPLICIT',
-                'consentType',
-                $consentType
-            );
-        }
+        Assertion::choice(
+            $consentType,
+            array(self::TYPE_EXPLICIT, self::TYPE_IMPLICIT),
+            'ConsentType must be one of ConsentType::TYPE_EXPLICIT, ConsentType::TYPE_IMPLICIT'
+        );
 
         $this->consentType = $consentType;
     }
