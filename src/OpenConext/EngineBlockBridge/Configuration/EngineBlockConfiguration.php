@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockBridge\Configuration;
 
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 final class EngineBlockConfiguration
@@ -29,9 +30,7 @@ final class EngineBlockConfiguration
      */
     public function get($path, $default = null)
     {
-        if (!is_string($path) || trim($path) === '') {
-            throw InvalidArgumentException::invalidType('non-empty string', 'path', $path);
-        }
+        Assertion::nonEmptyString($path, 'path');
 
         $subPaths = explode('.', $path);
         $subPath = array_shift($subPaths);
