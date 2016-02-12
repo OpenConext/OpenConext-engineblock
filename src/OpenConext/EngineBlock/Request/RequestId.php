@@ -2,8 +2,6 @@
 
 namespace OpenConext\EngineBlock\Request;
 
-use OpenConext\EngineBlock\Request\RequestIdGenerator\RequestIdGenerator;
-
 final class RequestId
 {
     /**

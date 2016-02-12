@@ -2,7 +2,7 @@
 
 use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrErrorLevelActivationStrategyFactory;
 use OpenConext\EngineBlock\Request\RequestId;
-use OpenConext\EngineBlock\Request\RequestIdGenerator\UniqidGenerator;
+use OpenConext\EngineBlock\Request\UniqidGenerator;
 
 define('TEST_RESOURCES_DIR', dirname(__FILE__) . '/resources');
 

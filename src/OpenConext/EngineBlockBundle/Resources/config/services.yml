@@ -1,7 +1,7 @@
 services:
     engineblock.request.request_id_generator:
         public: false
-        class: OpenConext\EngineBlock\Request\RequestIdGenerator\UniqidGenerator
+        class: OpenConext\EngineBlock\Request\UniqidGenerator
 
     engineblock.request.request_id:
         class: OpenConext\EngineBlock\Request\RequestId

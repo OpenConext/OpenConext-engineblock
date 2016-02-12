@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlock\Request\RequestIdGenerator;
+namespace OpenConext\EngineBlock\Request;
 
 interface RequestIdGenerator
 {
