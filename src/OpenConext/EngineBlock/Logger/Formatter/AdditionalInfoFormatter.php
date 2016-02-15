@@ -25,10 +25,9 @@ final class AdditionalInfoFormatter implements FormatterInterface
 
     public function formatBatch(array $records)
     {
-        $self = $this;
-        array_walk($records, function (&$value) use ($self) {
-            $value = $self->addAdditionalInfoForEngineBlockExceptions($value);
-        });
+        foreach ($records as &$value) {
+            $value = $this->addAdditionalInfoForEngineBlockExceptions($value);
+        };
 
         return $this->formatter->formatBatch($records);
     }
