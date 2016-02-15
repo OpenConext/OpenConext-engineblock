@@ -1,7 +1,8 @@
 <?php
 
+namespace OpenConext\EngineBlock\Request;
+
 use Mockery as m;
-use OpenConext\EngineBlock\Request\RequestId;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class RequestIdTest extends TestCase
