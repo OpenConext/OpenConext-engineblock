@@ -10,7 +10,7 @@ final class RequestId
     private $generator;
 
     /**
-     * @var mixed
+     * @var string
      */
     private $requestId;
 
@@ -23,13 +23,14 @@ final class RequestId
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function get()
     {
         if ($this->requestId === null) {
             $this->requestId = $this->generator->generateRequestId();
         }
+
         return $this->requestId;
     }
 }
