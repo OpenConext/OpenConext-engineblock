@@ -6,35 +6,65 @@ use EngineBlock_Exception;
 
 final class AdditionalInfo
 {
+    /**
+     * @var string
+     */
     protected $severity;
+
+    /**
+     * @var string
+     */
     protected $location;
+
+    /**
+     * @var string|null
+     */
     protected $userId;
+
+    /**
+     * @var string|null
+     */
     protected $idp;
+
+    /**
+     * @var string|null
+     */
     protected $sp;
+
+    /**
+     * @var string
+     */
     protected $details = "";
+
+    /**
+     * @var string
+     */
     protected $messagePrefix;
 
-    public static function createFromException(EngineBlock_Exception $e)
+    public static function createFromException(EngineBlock_Exception $exception)
     {
-        /** @var AdditionalInfo $info */
-        $info         = new static();
-        $info->userId = $e->userId;
-        $info->idp    = $e->idpEntityId;
-        $info->sp     = $e->spEntityId;
+        $info         = new self();
+        $info->userId = $exception->userId;
+        $info->idp    = $exception->idpEntityId;
+        $info->sp     = $exception->spEntityId;
 
-        if (!empty($e->description)) {
-            $info->details = $e->description . PHP_EOL;
+        if (!empty($exception->description)) {
+            $info->details = $exception->description . PHP_EOL;
         }
 
-        $traces = array(get_class($e) . ': ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
-        $prev = $e;
-        while ($prev = $prev->getPrevious()) {
-            $traces[] = get_class($prev) . ': ' . $prev->getMessage() . PHP_EOL . $prev->getTraceAsString();
+        $traces = array(
+            get_class($exception) . ': ' . $exception->getMessage() . PHP_EOL . $exception->getTraceAsString()
+        );
+
+        $previous = $exception;
+        while ($previous = $previous->getPrevious()) {
+            $traces[] = get_class($previous) . ': ' . $previous->getMessage() . PHP_EOL . $previous->getTraceAsString();
         }
+
         $info->details .= implode(PHP_EOL . PHP_EOL, $traces);
 
-        $info->location = $e->getFile() . ':' . $e->getLine();
-        switch ($e->getSeverity()) {
+        $info->location = $exception->getFile() . ':' . $exception->getLine();
+        switch ($exception->getSeverity()) {
             case EngineBlock_Exception::CODE_EMERGENCY:
                 $info->severity = 'EMERG';
                 break;
@@ -60,35 +90,60 @@ final class AdditionalInfo
         return $info;
     }
 
+    /**
+     * @return static
+     */
     public static function create()
     {
         return new static();
     }
 
-    protected function __construct()
+    private function __construct()
     {
     }
 
+    /**
+     * @param string $severity
+     * @return $this
+     */
     public function setSeverity($severity)
     {
         $this->severity = $severity;
+
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getSeverity()
     {
         return $this->severity;
     }
 
+    /**
+     * @param string $line
+     * @return $this
+     */
     public function setLocation($line)
     {
         $this->location = $line;
+
+        return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getLocation()
     {
         return $this->location;
     }
 
+    /**
+     * @param string $details
+     * @return $this
+     */
     public function setDetails($details)
     {
         $this->details = $details;
@@ -96,11 +151,18 @@ final class AdditionalInfo
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getDetails()
     {
         return $this->details;
     }
 
+    /**
+     * @param string $idp
+     * @return $this
+     */
     public function setIdp($idp)
     {
         $this->idp = $idp;
@@ -108,11 +170,18 @@ final class AdditionalInfo
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getIdp()
     {
         return $this->idp;
     }
 
+    /**
+     * @param string $sp
+     * @return $this
+     */
     public function setSp($sp)
     {
         $this->sp = $sp;
@@ -120,11 +189,18 @@ final class AdditionalInfo
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getSp()
     {
         return $this->sp;
     }
 
+    /**
+     * @param string $userId
+     * @return $this
+     */
     public function setUserId($userId)
     {
         $this->userId = $userId;
@@ -132,6 +208,9 @@ final class AdditionalInfo
         return $this;
     }
 
+    /**
+     * @return null|string
+     */
     public function getUserId()
     {
         return $this->userId;
@@ -156,6 +235,9 @@ final class AdditionalInfo
         return $this->messagePrefix;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         return array(
