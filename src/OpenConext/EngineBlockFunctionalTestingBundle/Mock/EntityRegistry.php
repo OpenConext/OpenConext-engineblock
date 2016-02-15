@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
-use OpenConext\Component\EngineBlockFixtures\DataStore\SerializedDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class EntityRegistry extends ParameterBag

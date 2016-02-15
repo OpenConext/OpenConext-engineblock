@@ -19,8 +19,8 @@ class EngineBlock_Application_SuperGlobalManager
 
     public function injectOverrides()
     {
-        $fixture = new \OpenConext\Component\EngineBlockFixtures\SuperGlobalsFixture(
-            new \OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore(
+        $fixture = new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SuperGlobalsFixture(
+            new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore(
                 ENGINEBLOCK_FOLDER_ROOT . self::FILE
             )
         );

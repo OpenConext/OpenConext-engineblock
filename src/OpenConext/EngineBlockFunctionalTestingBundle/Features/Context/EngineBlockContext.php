@@ -3,13 +3,13 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use Behat\Mink\Element\NodeElement;
-use OpenConext\Component\EngineBlockFixtures\IdFixture;
-use OpenConext\Component\EngineBlockFixtures\IdFrame;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
-use OpenConext\Component\EngineBlockFixtures\ServiceRegistryFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 
 class EngineBlockContext extends AbstractSubContext
 {

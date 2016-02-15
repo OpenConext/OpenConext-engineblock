@@ -16,8 +16,8 @@ class EngineBlock_TimeProvider_Fixture implements EngineBlock_TimeProvider_Inter
 
     public function time()
     {
-        $fixture = new \OpenConext\Component\EngineBlockFixtures\TimeFixture(
-            new \OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore(
+        $fixture = new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\TimeFixture(
+            new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore(
                 ENGINEBLOCK_FOLDER_ROOT . static::FIXTURE_FILE
             )
         );

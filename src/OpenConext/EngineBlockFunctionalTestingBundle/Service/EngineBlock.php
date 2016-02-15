@@ -2,10 +2,10 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Service;
 
-use OpenConext\Component\EngineBlockFixtures\IdFixture;
-use OpenConext\Component\EngineBlockFixtures\IdFrame;
-use OpenConext\Component\EngineBlockFixtures\SuperGlobalsFixture;
-use OpenConext\Component\EngineBlockFixtures\TimeFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SuperGlobalsFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\TimeFixture;
 
 /**
  * Class EngineBlock

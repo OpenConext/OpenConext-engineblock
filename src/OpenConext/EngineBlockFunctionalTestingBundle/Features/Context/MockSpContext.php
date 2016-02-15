@@ -4,14 +4,14 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
-use OpenConext\Component\EngineBlockFixtures\IdFixture;
-use OpenConext\Component\EngineBlockFixtures\IdFrame;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
-use OpenConext\Component\EngineBlockFixtures\ServiceRegistryFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 
 /**
  * Class MockSpContext

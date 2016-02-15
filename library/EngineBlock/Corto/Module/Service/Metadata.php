@@ -1,7 +1,7 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\Component\EngineBlockFixtures\IdFrame;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
