@@ -1,6 +1,8 @@
 <?php
 
-use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
+namespace OpenConext\EngineBlock\Logger\Message;
+
+use EngineBlock_Exception;
 use PHPUnit_Framework_TestCase as TestCase;
 
 final class AdditionalInfoTest extends TestCase

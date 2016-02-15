@@ -1,8 +1,10 @@
 <?php
 
+namespace OpenConext\EngineBlock\Logger\Formatter;
+
+use EngineBlock_Exception;
+use Exception;
 use Mockery as m;
-use Monolog\Formatter\FormatterInterface;
-use OpenConext\EngineBlock\Logger\Formatter\AdditionalInfoFormatter;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class AdditionalInfoFormatterTest extends TestCase
@@ -12,24 +14,22 @@ class AdditionalInfoFormatterTest extends TestCase
      * @group EngineBlock
      * @group Logger
      */
-    public function testItAddsAdditionalInfoWhenAnExceptionIsPresent()
+    public function additional_info_is_added_for_an_engineblock_exception()
     {
         $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_EMERGENCY);
-        /** @var MockObject|FormatterInterface $decoratedFormatter */
-        $decoratedFormatter = $this->getMockBuilder('Monolog\Formatter\FormatterInterface')->getMock();
-        $decoratedFormatter->expects($this->once())
-            ->method('format')
-            ->with(
-                $this->callback(
-                    function ($record) {
-                        return is_array($record['context']['exception'])
-                        && $record['context']['exception']['severity'] === 'EMERG';
-                    }
-                )
-            )
-            ->willReturnArgument(0);
-        $formatter = new AdditionalInfoFormatter($decoratedFormatter);
-        $formatter->format(array('context' => array('exception' => $exception)));
+
+        $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
+        $formatted = $formatter->format(array('context' => array('exception' => $exception)));
+
+        $this->assertTrue(
+            is_array($formatted['context']['exception']),
+            'EngineBlock Exception representation should be converted to array'
+        );
+        $this->assertEquals(
+            'EMERG',
+            $formatted['context']['exception']['severity'],
+            'Engineblock Exception code should be mapped.'
+        );
     }
 
     /**
@@ -37,24 +37,22 @@ class AdditionalInfoFormatterTest extends TestCase
      * @group EngineBlock
      * @group Logger
      */
-    public function testItAddsAdditionalInfoInBatchWheneverAnExceptionIsPresent()
+    public function additional_info_is_added_for_engineblock_exception_when_batch_formatting()
     {
         $exception = new EngineBlock_Exception('message');
-        /** @var MockObject|FormatterInterface $decoratedFormatter */
-        $decoratedFormatter = $this->getMockBuilder('Monolog\Formatter\FormatterInterface')->getMock();
-        $decoratedFormatter->expects($this->once())
-            ->method('formatBatch')
-            ->with(
-                $this->callback(
-                    function ($records) {
-                        return is_array($records[0]['context']['exception'])
-                        && $records[0]['context']['exception']['severity'] === 'ERROR';
-                    }
-                )
-            )
-            ->willReturnArgument(0);
-        $formatter = new AdditionalInfoFormatter($decoratedFormatter);
-        $formatter->formatBatch(array(array('context' => array('exception' => $exception))));
+
+        $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
+        $formatted = $formatter->formatBatch(array(array('context' => array('exception' => $exception))));
+
+        $this->assertTrue(
+            is_array($formatted[0]['context']['exception']),
+            'EngineBlock Exception representation should be converted to array'
+        );
+        $this->assertEquals(
+            'ERROR',
+            $formatted[0]['context']['exception']['severity'],
+            'Engineblock Exception code should be mapped.'
+        );
     }
 
     /**
@@ -62,22 +60,13 @@ class AdditionalInfoFormatterTest extends TestCase
      * @group EngineBlock
      * @group Logger
      */
-    public function testItDoesntAdditionalInfoWhenARegularExceptionIsPresent()
+    public function additional_info_is_not_added_for_non_engineblock_exceptions()
     {
         $exception = new Exception('message');
-        /** @var MockObject|FormatterInterface $decoratedFormatter */
-        $decoratedFormatter = $this->getMockBuilder('Monolog\Formatter\FormatterInterface')->getMock();
-        $decoratedFormatter->expects($this->once())
-            ->method('format')
-            ->with(
-                $this->callback(
-                    function ($record) use ($exception) {
-                        return $record['context']['exception'] === $exception;
-                    }
-                )
-            )
-            ->willReturnArgument(0);
-        $formatter = new AdditionalInfoFormatter($decoratedFormatter);
-        $formatter->format(array('context' => array('exception' => $exception)));
+
+        $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
+        $formatted = $formatter->format(array('context' => array('exception' => $exception)));
+
+        $this->assertEquals($exception, $formatted['context']['exception']);
     }
 }

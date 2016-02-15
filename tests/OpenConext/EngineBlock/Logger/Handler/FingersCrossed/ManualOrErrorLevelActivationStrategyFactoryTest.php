@@ -1,6 +1,7 @@
 <?php
 
-use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrErrorLevelActivationStrategyFactory;
+namespace OpenConext\EngineBlock\Logger\Handler\FingersCrossed;
+
 use PHPUnit_Framework_TestCase as TestCase;
 
 class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
@@ -20,17 +21,18 @@ class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
      * @group EngineBlock
      * @group Logger
      *
-     * @dataProvider configurationTests
+     * @dataProvider configurationDataProvider
+     *
      * @param array $config
      * @param string $expectedExceptionMessageContains
      */
-    public function testItValidatesConfiguration(array $config, $expectedExceptionMessageContains)
+    public function configuration_is_validated(array $config, $expectedExceptionMessageContains)
     {
         $this->setExpectedException('OpenConext\EngineBlock\Exception\InvalidArgumentException', $expectedExceptionMessageContains);
         ManualOrErrorLevelActivationStrategyFactory::createActivationStrategy($config);
     }
 
-    public function configurationTests()
+    public function configurationDataProvider()
     {
         return array(
             'no action level'      => array(

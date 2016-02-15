@@ -1,7 +1,8 @@
 <?php
 
+namespace OpenConext\EngineBlock\Logger\Processor;
+
 use Mockery as m;
-use OpenConext\EngineBlock\Logger\Processor\RequestIdProcessor;
 use OpenConext\EngineBlock\Request\RequestId;
 use PHPUnit_Framework_TestCase as TestCase;
 
