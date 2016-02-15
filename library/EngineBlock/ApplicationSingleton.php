@@ -221,7 +221,7 @@ class EngineBlock_ApplicationSingleton
 
         $logRequestId = $this->getLogRequestId();
         if ($logRequestId === null) {
-            $logRequestId = 'N/A';
+            $logRequestId = 'N/A - application not yet bootstrapped';
         } else {
             $logRequestId = $logRequestId->get();
         }
