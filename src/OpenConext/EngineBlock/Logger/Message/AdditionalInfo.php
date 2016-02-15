@@ -9,37 +9,37 @@ final class AdditionalInfo
     /**
      * @var string
      */
-    protected $severity;
+    private $severity;
 
     /**
      * @var string
      */
-    protected $location;
+    private $location;
 
     /**
      * @var string|null
      */
-    protected $userId;
+    private $userId;
 
     /**
      * @var string|null
      */
-    protected $idp;
+    private $idp;
 
     /**
      * @var string|null
      */
-    protected $sp;
+    private $sp;
 
     /**
      * @var string
      */
-    protected $details = "";
+    private $details = "";
 
     /**
      * @var string
      */
-    protected $messagePrefix;
+    private $messagePrefix;
 
     public static function createFromException(EngineBlock_Exception $exception)
     {
