@@ -1,5 +1,7 @@
 <?php
 
+use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
+use OpenConext\EngineBlock\Request\RequestId;
 use Psr\Log\LoggerInterface;
 
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
@@ -48,13 +50,6 @@ class EngineBlock_ApplicationSingleton
     protected $_log;
 
     /**
-     * The ID that allows one to track all log messages that belong together.
-     *
-     * @var string|null
-     */
-    protected $_logRequestId;
-
-    /**
      * @var Zend_Translate
      */
     protected $_translator;
@@ -83,6 +78,11 @@ class EngineBlock_ApplicationSingleton
      * @var EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
      */
     private   $_activationStrategy;
+
+    /**
+     * @var null|RequestId
+     */
+    private $_requestId;
 
     /**
      *
@@ -137,18 +137,18 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @param LoggerInterface                                                                    $logger
-     * @param EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy $activationStrategy
-     * @param string                                                                             $requestId
+     * @param LoggerInterface $logger
+     * @param ActivationStrategyInterface $activationStrategy
+     * @param RequestId $requestId
      */
     public function bootstrap(
         LoggerInterface $logger,
-        EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy $activationStrategy,
-        $requestId
+        ActivationStrategyInterface $activationStrategy,
+        RequestId $requestId
     ) {
         $this->setLogInstance($logger);
         $this->_activationStrategy = $activationStrategy;
-        $this->setLogRequestId($requestId);
+        $this->_requestId = $requestId;
 
         if (!isset($this->_bootstrapper)) {
             $this->_bootstrapper = new EngineBlock_Application_Bootstrapper($this);
@@ -219,10 +219,16 @@ class EngineBlock_ApplicationSingleton
             $userAgent = 'not supplied';
         }
 
+        $logRequestId = $this->getLogRequestId();
+        if ($logRequestId === null) {
+            $logRequestId = 'N/A - application not yet bootstrapped';
+        } else {
+            $logRequestId = $logRequestId->get();
+        }
 
         $feedbackInfo = array();
         $feedbackInfo['timestamp'] = date('c');
-        $feedbackInfo['requestId'] = $this->getLogRequestId() ?: 'N/A';
+        $feedbackInfo['requestId'] = $logRequestId;
         $feedbackInfo['userAgent'] = $userAgent;
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
 
@@ -470,23 +476,7 @@ class EngineBlock_ApplicationSingleton
      */
     public function getLogRequestId()
     {
-        return $this->_logRequestId;
-    }
-
-    /**
-     * @param string $id
-     * @return EngineBlock_ApplicationSingleton
-     */
-    public function setLogRequestId($id)
-    {
-        if (!is_string($id)) {
-            throw new InvalidArgumentException(
-                sprintf("Invalid log request ID specified: expected string, but got '%s'", gettype($id))
-            );
-        }
-
-        $this->_logRequestId = $id;
-        return $this;
+        return $this->_requestId;
     }
 
     public function getErrorHandler()

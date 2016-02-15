@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
+
 class EngineBlock_VirtualOrganization_GroupValidator
 {
     const ACCESS_TOKEN_KEY = "EngineBlock_VirtualOrganization_GroupValidator_Access_Token_Key";
@@ -55,7 +57,7 @@ class EngineBlock_VirtualOrganization_GroupValidator
             }
             return false;
         } catch (Exception $exception) {
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()
+            $additionalInfo = AdditionalInfo::create()
                 ->setUserId($subjectId)
                 ->setDetails($exception->getTraceAsString());
             EngineBlock_ApplicationSingleton::getLog()->error(

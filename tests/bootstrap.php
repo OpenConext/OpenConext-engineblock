@@ -1,5 +1,9 @@
 <?php
 
+use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrErrorLevelActivationStrategyFactory;
+use OpenConext\EngineBlock\Request\RequestId;
+use OpenConext\EngineBlock\Request\UniqidGenerator;
+
 define('TEST_RESOURCES_DIR', dirname(__FILE__) . '/resources');
 
 require_once realpath(__DIR__) . '/../app/bootstrap.php.cache';
@@ -16,8 +20,8 @@ $config->testing = true;
 $application->setConfiguration($config);
 $application->bootstrap(
     new Psr\Log\NullLogger(),
-    EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory::factory(
+    ManualOrErrorLevelActivationStrategyFactory::createActivationStrategy(
         array('action_level' => 'ERROR')
     ),
-    'requestId'
+    new RequestId(new UniqidGenerator())
 );

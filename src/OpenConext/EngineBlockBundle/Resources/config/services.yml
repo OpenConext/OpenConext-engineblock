@@ -1,4 +1,13 @@
 services:
+    engineblock.request.request_id_generator:
+        public: false
+        class: OpenConext\EngineBlock\Request\UniqidGenerator
+
+    engineblock.request.request_id:
+        class: OpenConext\EngineBlock\Request\RequestId
+        arguments:
+            - @engineblock.request.request_id_generator
+
     engineblock.security.http_basic_entry_point:
         class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
         arguments:

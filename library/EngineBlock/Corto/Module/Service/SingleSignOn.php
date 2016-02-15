@@ -3,6 +3,7 @@
 use \OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -396,7 +397,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 continue;
             }
 
-            $additionalInfo = EngineBlock_Log_Message_AdditionalInfo::create()->setIdp($identityProvider->entityId);
+            $additionalInfo = AdditionalInfo::create()->setIdp($identityProvider->entityId);
 
             $wayfIdp = array(
                 'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
@@ -452,7 +453,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     private function getNameNl(
         IdentityProvider $identityProvider,
-        EngineBlock_Log_Message_AdditionalInfo $additionalLogInfo
+        AdditionalInfo $additionalLogInfo
     ) {
         if ($identityProvider->displayNameNl) {
             return $identityProvider->displayNameNl;
@@ -472,7 +473,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     private function getNameEn(
         IdentityProvider $identityProvider,
-        EngineBlock_Log_Message_AdditionalInfo $additionalInfo
+        AdditionalInfo $additionalInfo
     ) {
         if ($identityProvider->displayNameEn) {
             return $identityProvider->displayNameEn;

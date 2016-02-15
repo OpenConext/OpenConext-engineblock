@@ -8,37 +8,10 @@ services:
         class: OpenConext\EngineBlockBridge\ErrorReporter
         arguments:
             - @engineblock.compat.application
-            - @engineblock.compat.logger
+            - @logger
 
     engineblock.bridge.mailer:
         class: OpenConext\EngineBlockBridge\Mail\ZendMailSender
         arguments:
             - "@=service('engineblock.bridge.config').get('email.help')"
-            - @engineblock.compat.logger
-
-    engineblock.bridge.log.manual_or_error_activation_strategy:
-        class: EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
-        factory: [EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory, factory]
-        arguments:
-            - { action_level: "@=service('engineblock.bridge.config').get('logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level')" }
-
-    engineblock.bridge.log.line_formatter:
-        public: false
-        class: Monolog\Formatter\LineFormatter
-        arguments:
-            - "@=service('engineblock.bridge.config').get('logger.conf.handler.syslog.conf.formatter.conf.format')"
-
-    engineblock.bridge.log.additional_info_formatter:
-        class: EngineBlock_Log_Monolog_Formatter_AdditionalInfoFormatter
-        arguments:
-            - @engineblock.bridge.log.line_formatter
-
-    engineblock.bridge.log.session_id_processor:
-        class: EngineBlock_Log_Monolog_Processor_SessionIdProcessor
-        tags:
-            - { name: monolog.processor }
-
-    engineblock.bridge.log.request_id_processor:
-        class: EngineBlock_Log_Monolog_Processor_RequestIdProcessor
-        tags:
-            - { name: monolog.processor }
+            - @logger
