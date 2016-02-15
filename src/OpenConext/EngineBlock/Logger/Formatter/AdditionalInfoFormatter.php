@@ -6,10 +6,6 @@ use EngineBlock_Exception;
 use Monolog\Formatter\FormatterInterface;
 use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
 
-/**
- * This formatter add additional information to the log record context based on the exception, if present. It then
- * passes the log record on to the decorated formatter.
- */
 final class AdditionalInfoFormatter implements FormatterInterface
 {
     /**
@@ -24,32 +20,36 @@ final class AdditionalInfoFormatter implements FormatterInterface
 
     public function format(array $record)
     {
-        return $this->formatter->format($this->addAdditionalInfo($record));
+        return $this->formatter->format($this->addAdditionalInfoForEngineBlockExceptions($record));
+    }
+
+    public function formatBatch(array $records)
+    {
+        $self = $this;
+        array_walk($records, function (&$value) use ($self) {
+            $value = $self->addAdditionalInfoForEngineBlockExceptions($value);
+        });
+
+        return $this->formatter->formatBatch($records);
     }
 
     /**
      * @param array $record
      * @return array
      */
-    private function addAdditionalInfo(array $record)
+    private function addAdditionalInfoForEngineBlockExceptions(array $record)
     {
-        $hasEngineBlockException =
-            isset($record['context']['exception']) && $record['context']['exception'] instanceof EngineBlock_Exception;
-
-        if ($hasEngineBlockException) {
-            $record['context']['exception'] =
-                AdditionalInfo::createFromException($record['context']['exception'])->toArray();
+        if (!isset($record['context']['exception'])) {
+            return $record;
         }
+
+        $exception = $record['context']['exception'];
+        if (!$exception instanceof EngineBlock_Exception) {
+            return $record;
+        }
+
+        $record['context']['exception'] = AdditionalInfo::createFromException($exception)->toArray();
 
         return $record;
-    }
-
-    public function formatBatch(array $records)
-    {
-        foreach ($records as $key => $value) {
-            $records[$key] = $this->addAdditionalInfo($value);
-        }
-
-        return $this->formatter->formatBatch($records);
     }
 }
