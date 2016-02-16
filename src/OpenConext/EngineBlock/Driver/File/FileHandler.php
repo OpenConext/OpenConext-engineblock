@@ -16,4 +16,10 @@ interface FileHandler
      * @return mixed
      */
     public function readFrom($filePath);
+
+    /**
+     * @param string $filePath the path to the file to remove
+     * @return void
+     */
+    public function remove($filePath);
 }
