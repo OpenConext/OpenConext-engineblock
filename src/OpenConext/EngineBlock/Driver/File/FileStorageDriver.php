@@ -10,7 +10,7 @@ final class FileStorageDriver implements StorageDriver
     /**
      * @var FileHandler
      */
-    private $fileAccessor;
+    private $fileHandler;
 
     /**
      * @var string
@@ -18,26 +18,26 @@ final class FileStorageDriver implements StorageDriver
     private $filePath;
 
     /**
-     * @param FileHandler $fileAccessor
+     * @param FileHandler $fileHandler
      * @param string      $filePath
      */
-    public function __construct(FileHandler $fileAccessor, $filePath)
+    public function __construct(FileHandler $fileHandler, $filePath)
     {
         Assertion::nonEmptyString($filePath, 'filePath');
 
-        $this->fileAccessor = $fileAccessor;
-        $this->filePath = $filePath;
+        $this->fileHandler = $fileHandler;
+        $this->filePath    = $filePath;
     }
 
     public function save($data)
     {
         Assertion::string($data, 'Data to save must be a string, "%s" given');
 
-        $this->fileAccessor->writeTo($data, $this->filePath);
+        $this->fileHandler->writeTo($data, $this->filePath);
     }
 
     public function load()
     {
-        return $this->fileAccessor->readFrom($this->filePath);
+        return $this->fileHandler->readFrom($this->filePath);
     }
 }
