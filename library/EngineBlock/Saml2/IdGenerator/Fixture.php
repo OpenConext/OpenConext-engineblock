@@ -1,5 +1,8 @@
 <?php
 
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
+
 class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGenerator
 {
     const FIXTURE_FILE = 'tmp/eb-fixtures/saml2/id';
@@ -36,11 +39,7 @@ class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGener
 
     protected function loadFrame()
     {
-        $fixture = new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture(
-            new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore(
-                ENGINEBLOCK_FOLDER_ROOT . self::FIXTURE_FILE
-            )
-        );
+        $fixture = new IdFixture(new SerializedDataStore(ENGINEBLOCK_FOLDER_ROOT . self::FIXTURE_FILE));
         $this->frame = $fixture->shiftFrame();
     }
 }

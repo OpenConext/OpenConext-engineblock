@@ -1,5 +1,8 @@
 <?php
 
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SuperGlobalsFixture;
+
 class EngineBlock_Application_SuperGlobalManager
 {
     /**
@@ -19,11 +22,9 @@ class EngineBlock_Application_SuperGlobalManager
 
     public function injectOverrides()
     {
-        $fixture = new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SuperGlobalsFixture(
-            new \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore(
-                ENGINEBLOCK_FOLDER_ROOT . self::FILE
-            )
-        );
+        $jsonDataStore = new JsonDataStore(ENGINEBLOCK_FOLDER_ROOT . self::FILE);
+        $fixture = new SuperGlobalsFixture($jsonDataStore);
+
         $overrides = $fixture->getAll();
 
         foreach ($overrides as $superGlobalName => $values) {

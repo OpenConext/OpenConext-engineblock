@@ -1,6 +1,5 @@
 <?php
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
