@@ -2,9 +2,8 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Mink\Element\NodeElement;
+use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
@@ -125,7 +124,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->engineBlock->overrideHostname($hostname);
 
         $frame = $this->engineBlock->getIdsToUse(IdFixture::FRAME_REQUEST);
-        $frame->set(IdFrame::ID_USAGE_SAML2_REQUEST, $authnRequest->getId());
+        $frame->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST, $authnRequest->getId());
     }
 
     /**
@@ -140,12 +139,12 @@ class EngineBlockContext extends AbstractSubContext
 
         $this->engineBlock->getIdsToUse(IdFixture::FRAME_RESPONSE)
         // EB will generate internal responses, for now just let it give all Responses the same id
-            ->set(IdFrame::ID_USAGE_SAML2_RESPONSE, $response->getId())
-            ->set(IdFrame::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId())
-            ->set(IdFrame::ID_USAGE_SAML2_RESPONSE, $response->getId())
-            ->set(IdFrame::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId())
-            ->set(IdFrame::ID_USAGE_SAML2_RESPONSE, $response->getId())
-            ->set(IdFrame::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId());
+            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE, $response->getId())
+            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId())
+            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE, $response->getId())
+            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId())
+            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE, $response->getId())
+            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId());
     }
 
     /**

@@ -200,7 +200,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return EngineBlock_Saml2_IdGenerator_Interface
+     * @return EngineBlock_Saml2_IdGenerator
      */
     public function getSaml2IdGenerator()
     {

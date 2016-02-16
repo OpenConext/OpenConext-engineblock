@@ -1,6 +1,6 @@
 <?php
 
-class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGenerator_Interface
+class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGenerator
 {
     const FIXTURE_FILE = 'tmp/eb-fixtures/saml2/id';
 
@@ -11,10 +11,9 @@ class EngineBlock_Saml2_IdGenerator_Fixture implements EngineBlock_Saml2_IdGener
 
     public function __construct()
     {
-
     }
 
-    public function generate($prefix = 'EB', $usage = \OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame::ID_USAGE_OTHER)
+    public function generate($prefix = 'EB', $usage = EngineBlock_Saml2_IdGenerator::ID_USAGE_OTHER)
     {
         if (!file_exists(ENGINEBLOCK_FOLDER_ROOT . self::FIXTURE_FILE)) {
             $defaultGenerator = new EngineBlock_Saml2_IdGenerator_Default();

@@ -3,9 +3,9 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
+use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
@@ -155,7 +155,7 @@ class MockSpContext extends AbstractSubContext
             $requestIssuer = $unsolicitedRequest['saml:Issuer']['__v'];
 
             $frame = $this->engineBlock->getIdsToUse(IdFixture::FRAME_REQUEST);
-            $frame->set(IdFrame::ID_USAGE_SAML2_REQUEST, $unsolicitedRequest['_ID']);
+            $frame->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST, $unsolicitedRequest['_ID']);
         } else {
             // If not, then parse an AuthnRequest out of the log file
             $authnRequest = $logReader->getMessage(LogChunkParser::MESSAGE_TYPE_AUTHN_REQUEST);

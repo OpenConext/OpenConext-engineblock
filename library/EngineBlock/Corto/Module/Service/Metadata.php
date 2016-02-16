@@ -1,7 +1,6 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -31,7 +30,7 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
 
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
-            $this->_server->getNewId(IdFrame::ID_USAGE_SAML2_METADATA),
+            $this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
             false
         );
