@@ -8,7 +8,7 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\EncryptedAssertion;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
-use OpenConext\Component\EngineBlockFixtures\ServiceRegistryFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory;
 
 /**

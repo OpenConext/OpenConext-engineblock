@@ -32,8 +32,7 @@
         "incenteev/composer-parameter-handler": "~2.0",
         "openconext/saml-value-object": "^1.1",
         "symfony/monolog-bundle": "~2.4",
-        "beberlei/assert": "^2.4",
-        "openconext/engineblock-fixtures": "^0.5.2"
+        "beberlei/assert": "^2.4"
     },
     "require-dev": {
         "phake/phake": "2.1",

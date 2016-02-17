@@ -18,11 +18,10 @@
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">../src</directory>
             <directory suffix=".php">../library</directory>
-            <file>/path/to/file</file>
         </whitelist>
     </filter>
 
     <listeners>
-        <listener class="\Mockery\Adapter\Phpunit\TestListener"></listener>
+        <listener class="\Mockery\Adapter\Phpunit\TestListener" />
     </listeners>
 </phpunit>

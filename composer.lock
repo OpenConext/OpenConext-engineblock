@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0492cdf951f05e8691f085d765b8d8e8",
-    "content-hash": "9d9efb21acc214a823f4c82407cd16e5",
+    "hash": "6469663e13193ab297d67234f29f26e9",
+    "content-hash": "1ccedfada6b33a31070cbcc23f0a92db",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -906,36 +906,6 @@
             "description": "Minify is a PHP5 app that helps you follow several rules for client-side performance. It combines multiple CSS or Javascript files, removes unnecessary whitespace and comments, and serves them with gzip encoding and optimal client-side cache headers",
             "homepage": "http://code.google.com/p/minify/",
             "time": "2014-10-30 22:58:02"
-        },
-        {
-            "name": "openconext/engineblock-fixtures",
-            "version": "0.5.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/OpenConext/OpenConext-engineblock-fixtures.git",
-                "reference": "a990f6cead9067a21662ec4bb2ba2e76d4f95498"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-fixtures/zipball/a990f6cead9067a21662ec4bb2ba2e76d4f95498",
-                "reference": "a990f6cead9067a21662ec4bb2ba2e76d4f95498",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OpenConext\\Component\\EngineBlockFixtures\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "OpenConext Component for EngineBlock Fixtures",
-            "time": "2016-01-19 10:03:57"
         },
         {
             "name": "openconext/engineblock-metadata",
@@ -2856,7 +2826,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",

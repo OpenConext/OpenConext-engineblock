@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Command;
 
-use OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
