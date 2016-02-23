@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # @todo add more error handling
 
 RELEASE_DIR=${HOME}/Releases
