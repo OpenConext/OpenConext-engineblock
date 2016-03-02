@@ -70,3 +70,6 @@ services:
 
     engineblock.compat.janus_cient:
         class: Janus_Client_CacheProxy
+
+    engineblock.compat.asset_manager:
+        class: EngineBlock_AssetManager
