@@ -3,6 +3,7 @@
 use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
 use OpenConext\EngineBlock\Request\RequestId;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
@@ -140,15 +141,25 @@ class EngineBlock_ApplicationSingleton
      * @param LoggerInterface $logger
      * @param ActivationStrategyInterface $activationStrategy
      * @param RequestId $requestId
+     * @param ContainerInterface                  $container
      */
     public function bootstrap(
         LoggerInterface $logger,
         ActivationStrategyInterface $activationStrategy,
-        RequestId $requestId
+        RequestId $requestId,
+        ContainerInterface $container
     ) {
         $this->setLogInstance($logger);
         $this->_activationStrategy = $activationStrategy;
         $this->_requestId = $requestId;
+
+        if ($this->getConfigurationValue('testing', false)) {
+            $this->_diContainer = new EngineBlock_Application_TestDiContainer($container);
+        } elseif ($this->getConfigurationValue('functionalTesting', false)) {
+            $this->_diContainer = new EngineBlock_Application_FunctionalTestDiContainer($container);
+        } else {
+            $this->_diContainer = new EngineBlock_Application_DiContainer($container);
+        }
 
         if (!isset($this->_bootstrapper)) {
             $this->_bootstrapper = new EngineBlock_Application_Bootstrapper($this);
@@ -487,15 +498,6 @@ class EngineBlock_ApplicationSingleton
     public function setErrorHandler(EngineBlock_Application_ErrorHandler $errorHandler)
     {
         $this->_errorHandler = $errorHandler;
-        return $this;
-    }
-
-    /**
-     * @param \EngineBlock_Application_DiContainer $diContainer
-     */
-    public function setDiContainer(\EngineBlock_Application_DiContainer $diContainer)
-    {
-        $this->_diContainer = $diContainer;
         return $this;
     }
 

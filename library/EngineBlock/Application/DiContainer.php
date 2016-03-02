@@ -6,6 +6,7 @@ use Doctrine\ORM\Tools\Setup;
 use OpenConext\Component\EngineBlockMetadata\Container\ContainerInterface;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
@@ -28,7 +29,12 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
     const USER_DIRECTORY                        = 'userDirectory';
 
-    public function __construct()
+    /**
+     * @var SymfonyContainerInterface
+     */
+    private $container;
+
+    public function __construct(SymfonyContainerInterface $container)
     {
         $this->registerXmlConverter();
         $this->registerConsentFactory();
@@ -47,6 +53,8 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->registerAttributeMetadata();
         $this->registerAttributeValidator();
         $this->registerUserDirectory();
+
+        $this->container = $container;
     }
 
     protected function registerXmlConverter()

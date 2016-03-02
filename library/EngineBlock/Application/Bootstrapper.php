@@ -37,10 +37,8 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
-        $this->_bootstrapDefaultDiContainer();
         $this->_bootstrapConfiguration();
         $this->_bootstrapSessionConfiguration();
-        $this->_bootstrapTestDiContainer();
 
         $this->_bootstrapPhpSettings();
         $this->_bootstrapErrorReporting();
@@ -55,11 +53,6 @@ class EngineBlock_Application_Bootstrapper
         $this->_bootstrapped = true;
 
         return $this;
-    }
-
-    protected function _bootstrapDefaultDiContainer()
-    {
-        $this->_application->setDiContainer(new EngineBlock_Application_DiContainer());
     }
 
     protected function _bootstrapConfiguration()
@@ -85,19 +78,6 @@ class EngineBlock_Application_Bootstrapper
             true
         );
         session_name('main');
-    }
-
-    protected function _bootstrapTestDiContainer()
-    {
-        if ($this->_application->getConfigurationValue('testing', false)) {
-            $this->_application->setDiContainer(new EngineBlock_Application_TestDiContainer());
-            return;
-        }
-
-        if ($this->_application->getConfigurationValue('functionalTesting', false)) {
-            $this->_application->setDiContainer(new EngineBlock_Application_FunctionalTestDiContainer());
-            return;
-        }
     }
 
     /**
