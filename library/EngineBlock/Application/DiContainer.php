@@ -17,7 +17,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
     const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
-    const USER_DIRECTORY                        = 'userDirectory';
 
     /**
      * @var SymfonyContainerInterface
@@ -31,7 +30,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->registerDenormalizedAttributeDefinitions();
         $this->registerAttributeMetadata();
         $this->registerAttributeValidator();
-        $this->registerUserDirectory();
 
         $this->container = $container;
     }
@@ -108,6 +106,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getMetadataRepository()
     {
         return $this[self::METADATA_REPOSITORY];
+    }
+
+    /**
+     * @return EngineBlock_UserDirectory
+     */
+    public function getUserDirectory()
+    {
+        return $this->container->get('engineblock.compat.user_directory');
     }
 
     protected function registerMetadataRepository()
@@ -219,6 +225,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this[self::DOCTRINE_ENTITY_MANAGER];
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     private function registerDenormalizedAttributeDefinitions()
     {
         $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED] = function() {
@@ -235,11 +244,17 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         };
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     public function getDenormalizedAttributeDefinitions()
     {
         return $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED];
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     private function registerAttributeMetadata()
     {
         $this[self::ATTRIBUTE_METADATA] = function(EngineBlock_Application_DiContainer $container) {
@@ -251,6 +266,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @deprecated will be replaced with different (incompatible) system in the future
      * @return EngineBlock_Attributes_Metadata
      */
     public function getAttributeMetadata()
@@ -258,6 +274,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this[self::ATTRIBUTE_METADATA];
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     public function registerAttributeValidator()
     {
         $this[self::ATTRIBUTE_VALIDATOR] = function(EngineBlock_Application_DiContainer $container) {
@@ -269,45 +288,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @deprecated will be replaced with different (incompatible) system in the future
      * @return EngineBlock_Attributes_Validator
      */
     public function getAttributeValidator()
     {
         return $this[self::ATTRIBUTE_VALIDATOR];
-    }
-
-    private function registerUserDirectory()
-    {
-        $this[self::USER_DIRECTORY] = function() {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            /** @var Zend_Config $ldapConfig */
-            $ldapConfig = $application->getConfigurationValue('ldap', null);
-
-            if (empty($ldapConfig)) {
-                throw new EngineBlock_Exception('No LDAP config');
-            }
-
-            $ldapOptions = array(
-                'host' => $ldapConfig->host,
-                'useSsl' => $ldapConfig->useSsl,
-                'username' => $ldapConfig->userName,
-                'password' => $ldapConfig->password,
-                'bindRequiresDn' => $ldapConfig->bindRequiresDn,
-                'accountDomainName' => $ldapConfig->accountDomainName,
-                'baseDn' => $ldapConfig->baseDn
-            );
-
-            $ldapClient = new Zend_Ldap($ldapOptions);
-            $ldapClient->bind();
-            return new EngineBlock_UserDirectory($ldapClient);
-        };
-    }
-
-    /**
-     * @return EngineBlock_UserDirectory
-     */
-    public function getUserDirectory()
-    {
-        return $this[self::USER_DIRECTORY];
     }
 }
