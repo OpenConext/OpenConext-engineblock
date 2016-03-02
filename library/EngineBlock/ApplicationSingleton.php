@@ -1,6 +1,6 @@
 <?php
 
-use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
+use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
 use OpenConext\EngineBlock\Request\RequestId;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -76,19 +76,16 @@ class EngineBlock_ApplicationSingleton
     protected $_diContainer;
 
     /**
-     * @var EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
+     * @var ManualOrDecoratedActivationStrategy
      */
-    private   $_activationStrategy;
+    private $_activationStrategy;
 
     /**
      * @var null|RequestId
      */
     private $_requestId;
 
-    /**
-     *
-     */
-    protected function __construct()
+    private function __construct()
     {
     }
 
@@ -103,6 +100,7 @@ class EngineBlock_ApplicationSingleton
         if (!isset(self::$s_instance)) {
             self::$s_instance = new self();
         }
+
         return self::$s_instance;
     }
 
@@ -138,14 +136,14 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @param LoggerInterface $logger
-     * @param ActivationStrategyInterface $activationStrategy
-     * @param RequestId $requestId
+     * @param LoggerInterface                     $logger
+     * @param ManualOrDecoratedActivationStrategy $activationStrategy
+     * @param RequestId                           $requestId
      * @param ContainerInterface                  $container
      */
     public function bootstrap(
         LoggerInterface $logger,
-        ActivationStrategyInterface $activationStrategy,
+        ManualOrDecoratedActivationStrategy $activationStrategy,
         RequestId $requestId,
         ContainerInterface $container
     ) {
