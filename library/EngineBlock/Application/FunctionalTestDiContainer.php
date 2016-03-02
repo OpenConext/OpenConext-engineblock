@@ -8,12 +8,9 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
-    protected function registerServiceRegistryClient()
+    public function getServiceRegistryClient()
     {
-        $this[self::SERVICE_REGISTRY_CLIENT] = function ()
-        {
-            return new Janus_FixtureClient();
-        };
+        return new Janus_FixtureClient();
     }
 
     protected function registerTimeProvider()

@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
     const METADATA_REPOSITORY                   = 'metadataRepository';
     const ASSET_MANAGER                         = 'assetManager';
     const TIME                                  = 'dateTime';
@@ -30,7 +29,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
 
     public function __construct(SymfonyContainerInterface $container)
     {
-        $this->registerServiceRegistryClient();
         $this->registerMetadataRepository();
         $this->registerAssetManager();
         $this->registerTimeProvider();
@@ -86,6 +84,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * It has been done with the check to be backwards compatible. Ideally this would be
+     * hidden behind a compatibility layer rather than here and in the consumers of this
+     * service, but since this will be removed in the future there is no need to
+     * introduce additional code for this particular case.
+     *
      * @return Zend_Cache_Backend_Apc
      */
     public function getApplicationCache()
@@ -99,19 +102,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return Janus_Client_CacheProxy()
+     * @return Janus_Client_CacheProxy
      */
     public function getServiceRegistryClient()
     {
-        return $this[self::SERVICE_REGISTRY_CLIENT];
-    }
-
-    protected function registerServiceRegistryClient()
-    {
-        $this[self::SERVICE_REGISTRY_CLIENT] = function ()
-        {
-            return new Janus_Client_CacheProxy();
-        };
+        return $this->container->get('engineblock.compat.janus_cient');
     }
 
     /**
