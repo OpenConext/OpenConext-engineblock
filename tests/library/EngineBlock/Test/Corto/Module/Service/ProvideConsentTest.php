@@ -22,7 +22,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $this->proxyServerMock = $this->mockProxyServer();
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $this->xmlConverterMock = $this->mockXmlConverter($diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER]);
+        $this->xmlConverterMock = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
         $this->consentMock = $this->mockConsent();
     }
@@ -120,7 +120,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $ebRequest = new SAML2_AuthnRequest();
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
-        
+
         $dummyLog = new Psr\Log\NullLogger();
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
         $authnRequestRepository->store($spRequest);

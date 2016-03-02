@@ -44,4 +44,14 @@ services:
 
     engineblock.compat.logger:
         class: Monolog\Logger
-        factory:  [EngineBlock_ApplicationSingleton, getLog]
+        factory: [EngineBlock_ApplicationSingleton, getLog]
+
+#    Services that were previously configured and gotten through the DiContainer
+    engineblock.compat.xml_converter:
+        class: EngineBlock_Corto_XmlToArray
+
+    engineblock.compat.mailer:
+        class: EngineBlock_Mail_Mailer
+
+    engineblock.compat.corto_filter_command_factory:
+        class: EngineBlock_Corto_Filter_Command_Factory

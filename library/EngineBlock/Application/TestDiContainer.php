@@ -4,15 +4,19 @@
  */
 class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_DiContainer
 {
-    /**
-     * Registers a mocked xml converter
-     */
-    protected function registerXmlConverter()
+    public function getXmlConverter()
     {
-        $this[self::XML_CONVERTER] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return Phake::mock('EngineBlock_Corto_XmlToArray');
-        };
+        return Phake::mock('EngineBlock_Corto_XmlToArray');
+    }
+
+    public function getFilterCommandFactory()
+    {
+        return Phake::mock('EngineBlock_Corto_Filter_Command_Factory');
+    }
+
+    public function getMailer()
+    {
+        return Phake::mock('EngineBlock_Mail_Mailer');
     }
 
     /**
@@ -27,28 +31,6 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
                 ->create(Phake::anyParameters())
                 ->thenReturn(Phake::mock('EngineBlock_Corto_Model_Consent'));
             return $consentFactoryMock;
-        };
-    }
-
-    /**
-     * Registers a mocked mailer
-     */
-    protected function registerMailer()
-    {
-        $this[self::MAILER] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return Phake::mock('EngineBlock_Mail_Mailer');
-        };
-    }
-
-    /**
-     * Registers a factory which returns mocked consents
-     */
-    protected function registerFilterCommandFactory()
-    {
-        $this[self::FILTER_COMMAND_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return Phake::mock('EngineBlock_Corto_Filter_Command_Factory');
         };
     }
 

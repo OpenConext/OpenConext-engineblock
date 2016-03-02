@@ -10,10 +10,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const XML_CONVERTER                         = 'xmlConverter';
     const CONSENT_FACTORY                       = 'consentFactory';
     const MAILER                                = 'mailer';
-    const FILTER_COMMAND_FACTORY                = 'filterCommandFactory';
     const DATABASE_CONNECTION_FACTORY           = 'databaseConnectionFactory';
     const APPLICATION_CACHE                     = 'applicationCache';
     const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
@@ -36,10 +34,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
 
     public function __construct(SymfonyContainerInterface $container)
     {
-        $this->registerXmlConverter();
         $this->registerConsentFactory();
-        $this->registerMailer();
-        $this->registerFilterCommandFactory();
         $this->registerDatabaseConnectionFactory();
         $this->registerApplicationCache();
         $this->registerServiceRegistryClient();
@@ -57,12 +52,28 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this->container = $container;
     }
 
-    protected function registerXmlConverter()
+    /**
+     * @return EngineBlock_Corto_XmlToArray
+     */
+    public function getXmlConverter()
     {
-        $this[self::XML_CONVERTER] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Corto_XmlToArray();
-        };
+        return $this->container->get('engineblock.compat.xml_converter');
+    }
+
+    /**
+     * @return EngineBlock_Corto_Filter_Command_Factory
+     */
+    public function getFilterCommandFactory()
+    {
+        return $this->container->get('engineblock.compat.corto_filter_command_factory');
+    }
+
+    /**
+     * @return EngineBlock_Mail_Mailer
+     */
+    public function getMailer()
+    {
+        return $this->container->get('engineblock.compat.mailer');
     }
 
     protected function registerConsentFactory()
@@ -70,25 +81,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         $this[self::CONSENT_FACTORY] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_Model_Consent_Factory(
-                $container[$container::FILTER_COMMAND_FACTORY],
+                $container->getFilterCommandFactory(),
                 $container[$container::DATABASE_CONNECTION_FACTORY]
             );
-        };
-    }
-
-    protected function registerMailer()
-    {
-        $this[self::MAILER] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Mail_Mailer();
-        };
-    }
-
-    protected function registerFilterCommandFactory()
-    {
-        $this[self::FILTER_COMMAND_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Corto_Filter_Command_Factory();
         };
     }
 
