@@ -64,3 +64,6 @@ services:
         arguments:
             - "@engineblock.compat.corto_filter_command_factory"
             - "@engineblock.compat.database_connection_factory"
+
+    engineblock.compat.zend.apc_cache:
+        class: Zend_Cache_Backend_Apc

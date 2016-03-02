@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const APPLICATION_CACHE                     = 'applicationCache';
     const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
     const METADATA_REPOSITORY                   = 'metadataRepository';
     const ASSET_MANAGER                         = 'assetManager';
@@ -31,7 +30,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
 
     public function __construct(SymfonyContainerInterface $container)
     {
-        $this->registerApplicationCache();
         $this->registerServiceRegistryClient();
         $this->registerMetadataRepository();
         $this->registerAssetManager();
@@ -92,18 +90,12 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getApplicationCache()
     {
-        return $this[self::APPLICATION_CACHE];
-    }
+        $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
+        if ($isApcEnabled) {
+            return $this->container->get('engineblock.compat.zend.apc_cache');
+        }
 
-    protected function registerApplicationCache()
-    {
-        $this[self::APPLICATION_CACHE] = function (EngineBlock_Application_DiContainer $container)
-        {
-            $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
-            if ($isApcEnabled) {
-                return new Zend_Cache_Backend_Apc();
-            }
-        };
+        return null;
     }
 
     /**
