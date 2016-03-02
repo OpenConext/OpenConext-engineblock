@@ -15,22 +15,22 @@ services:
     engineblock.compat.repository.metadata:
         public: false
         class: OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
-        factory: [@engineblock.compat.di_container, getMetadataRepository]
+        factory: ["@engineblock.compat.di_container", getMetadataRepository]
 
     engineblock.compat.doctrine.entity_manager:
         public: false
         class: Doctrine\ORM\EntityManager
-        factory: [@engineblock.compat.di_container, getEntityManager]
+        factory: ["@engineblock.compat.di_container", getEntityManager]
 
     engineblock.compat.doctrine.dbal_connection:
         public: false
         class: Doctrine\DBAL\Connection
-        factory: [@engineblock.compat.doctrine.entity_manager, getConnection]
+        factory: ["@engineblock.compat.doctrine.entity_manager", getConnection]
 
     engineblock.compat.view:
         class: EngineBlock_View
         calls:
-            - ['setLayout', [@engineblock.compat.layout]]
+            - ['setLayout', ["@engineblock.compat.layout"]]
 
     engineblock.compat.layout:
         class: Zend_Layout

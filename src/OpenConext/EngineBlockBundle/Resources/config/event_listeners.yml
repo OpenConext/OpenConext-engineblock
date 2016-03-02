@@ -2,36 +2,36 @@ services:
     engineblock.listener.single_sign_on_exception:
         class: OpenConext\EngineBlockBundle\EventListener\RedirectToFeedbackPageExceptionListener
         arguments:
-            - @engineblock.compat.application
-            - @router
-            - @engineblock.bridge.error_reporter
-            - @engineblock.compat.logger
+            - "@engineblock.compat.application"
+            - "@router"
+            - "@engineblock.bridge.error_reporter"
+            - "@engineblock.compat.logger"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     engineblock.listener.api_http_exception_listener:
         class: OpenConext\EngineBlockBundle\EventListener\ApiHttpExceptionListener
         arguments:
-            - @engineblock.compat.logger
-            - @engineblock.bridge.error_reporter
+            - "@engineblock.compat.logger"
+            - "@engineblock.bridge.error_reporter"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
 
     engineblock.listener.not_found_http_exception:
         class: OpenConext\EngineBlockBundle\EventListener\NotFoundHttpExceptionListener
         arguments:
-            - @engineblock.compat.application
-            - @engineblock.compat.view
-            - @engineblock.compat.logger
+            - "@engineblock.compat.application"
+            - "@engineblock.compat.view"
+            - "@engineblock.compat.logger"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 25 }
 
     engineblock.listener.fallback_exception:
         class: OpenConext\EngineBlockBundle\EventListener\FallbackExceptionListener
         arguments:
-            - @engineblock.compat.application
-            - @engineblock.compat.view
-            - @engineblock.compat.logger
-            - @engineblock.bridge.error_reporter
+            - "@engineblock.compat.application"
+            - "@engineblock.compat.view"
+            - "@engineblock.compat.logger"
+            - "@engineblock.bridge.error_reporter"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -200 }
