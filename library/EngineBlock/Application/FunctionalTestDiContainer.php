@@ -23,11 +23,9 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return new EngineBlock_Saml2_IdGenerator_Fixture();
     }
 
-    protected function registerSuperGlobalManager()
+    public function getSuperGlobalManager()
     {
-        $this[self::SUPER_GLOBAL_MANAGER] = function() {
-            return new EngineBlock_Application_SuperGlobalManager();
-        };
+        return new EngineBlock_Application_SuperGlobalManager();
     }
 
     public function getMessageUtilClassName()

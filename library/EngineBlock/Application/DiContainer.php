@@ -27,7 +27,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function __construct(SymfonyContainerInterface $container)
     {
         $this->registerMetadataRepository();
-        $this->registerSuperGlobalManager();
         $this->registerEntityManager();
         $this->registerDenormalizedAttributeDefinitions();
         $this->registerAttributeMetadata();
@@ -171,16 +170,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return EngineBlock_Application_SuperGlobalManager
+     * @return EngineBlock_Application_SuperGlobalManager|false
      */
     public function getSuperGlobalManager()
     {
-        return $this[self::SUPER_GLOBAL_MANAGER];
-    }
-
-    protected function registerSuperGlobalManager()
-    {
-        $this[self::SUPER_GLOBAL_MANAGER] = false;
+        return false;
     }
 
     /**
