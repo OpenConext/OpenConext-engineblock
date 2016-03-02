@@ -24,18 +24,14 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
         return Phake::mock('EngineBlock_Database_ConnectionFactory');
     }
 
-    /**
-     * Registers a factory which returns mocked consents
-     */
-    protected function registerConsentFactory()
+    public function getConsentFactory()
     {
-        $this[self::CONSENT_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            $consentFactoryMock = Phake::mock('EngineBlock_Corto_Model_Consent_Factory');
-            Phake::when($consentFactoryMock)
-                ->create(Phake::anyParameters())
-                ->thenReturn(Phake::mock('EngineBlock_Corto_Model_Consent'));
-            return $consentFactoryMock;
-        };
+        $consentFactoryMock = Phake::mock('EngineBlock_Corto_Model_Consent_Factory');
+
+        Phake::when($consentFactoryMock)
+            ->create(Phake::anyParameters())
+            ->thenReturn(Phake::mock('EngineBlock_Corto_Model_Consent'));
+
+        return $consentFactoryMock;
     }
 }

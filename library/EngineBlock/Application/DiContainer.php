@@ -10,7 +10,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const CONSENT_FACTORY                       = 'consentFactory';
     const APPLICATION_CACHE                     = 'applicationCache';
     const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
     const METADATA_REPOSITORY                   = 'metadataRepository';
@@ -32,7 +31,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
 
     public function __construct(SymfonyContainerInterface $container)
     {
-        $this->registerConsentFactory();
         $this->registerApplicationCache();
         $this->registerServiceRegistryClient();
         $this->registerMetadataRepository();
@@ -81,15 +79,12 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this->container->get('engineblock.compat.database_connection_factory');
     }
 
-    protected function registerConsentFactory()
+    /**
+     * @return EngineBlock_Corto_Model_Consent_Factory
+     */
+    public function getConsentFactory()
     {
-        $this[self::CONSENT_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Corto_Model_Consent_Factory(
-                $container->getFilterCommandFactory(),
-                $container->getDatabaseConnectionFactory()
-            );
-        };
+        return $this->container->get('engineblock.compat.corto_model_consent_factory');
     }
 
     /**

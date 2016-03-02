@@ -58,3 +58,9 @@ services:
 
     engineblock.compat.database_connection_factory:
         class: EngineBlock_Database_ConnectionFactory
+
+    engineblock.compat.corto_model_consent_factory:
+        class: EngineBlock_Corto_Model_Consent_Factory
+        arguments:
+            - "@engineblock.compat.corto_filter_command_factory"
+            - "@engineblock.compat.database_connection_factory"
