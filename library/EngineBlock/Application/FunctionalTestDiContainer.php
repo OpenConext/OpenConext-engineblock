@@ -18,12 +18,9 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return new EngineBlock_TimeProvider_Fixture();
     }
 
-    protected function registerSaml2IdGenerator()
+    public function getSaml2IdGenerator()
     {
-        $this[self::SAML2_ID] = function()
-        {
-            return new EngineBlock_Saml2_IdGenerator_Fixture();
-        };
+        return new EngineBlock_Saml2_IdGenerator_Fixture();
     }
 
     protected function registerSuperGlobalManager()

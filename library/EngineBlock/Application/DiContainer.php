@@ -11,8 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
     const METADATA_REPOSITORY                   = 'metadataRepository';
-    const TIME                                  = 'dateTime';
-    const SAML2_ID                              = 'id';
     const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
     const OWN_ENTITIES_REPOSITORY               = 'ownMetadataRepository';
     const DOCTRINE_ENTITY_MANAGER               = 'entityManager';
@@ -29,7 +27,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function __construct(SymfonyContainerInterface $container)
     {
         $this->registerMetadataRepository();
-        $this->registerSaml2IdGenerator();
         $this->registerSuperGlobalManager();
         $this->registerEntityManager();
         $this->registerDenormalizedAttributeDefinitions();
@@ -170,15 +167,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getSaml2IdGenerator()
     {
-        return $this[self::SAML2_ID];
-    }
-
-    protected function registerSaml2IdGenerator()
-    {
-        $this[self::SAML2_ID] = function()
-        {
-            return new EngineBlock_Saml2_IdGenerator_Default();
-        };
+        return $this->container->get('engineblock.compat.saml2_id_generator');
     }
 
     /**
