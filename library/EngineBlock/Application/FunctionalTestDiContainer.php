@@ -13,12 +13,9 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return new Janus_FixtureClient();
     }
 
-    protected function registerTimeProvider()
+    public function getTimeProvider()
     {
-        $this[self::TIME] = function ()
-        {
-            return new EngineBlock_TimeProvider_Fixture();
-        };
+        return new EngineBlock_TimeProvider_Fixture();
     }
 
     protected function registerSaml2IdGenerator()

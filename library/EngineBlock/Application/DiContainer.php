@@ -29,7 +29,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function __construct(SymfonyContainerInterface $container)
     {
         $this->registerMetadataRepository();
-        $this->registerTimeProvider();
         $this->registerSaml2IdGenerator();
         $this->registerSuperGlobalManager();
         $this->registerEntityManager();
@@ -149,6 +148,8 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @deprecated since the themeis were introduced this should no longer be used.
+     *
      * @return EngineBlock_AssetManager
      */
     public function getAssetManager()
@@ -161,15 +162,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getTimeProvider()
     {
-        return $this[self::TIME];
-    }
-
-    protected function registerTimeProvider()
-    {
-        $this[self::TIME] = function ()
-        {
-            return new EngineBlock_TimeProvider_Default();
-        };
+        return $this->container->get('engineblock.compat.time_provider');
     }
 
     /**
