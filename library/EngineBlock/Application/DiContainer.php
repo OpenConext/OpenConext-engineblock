@@ -11,8 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
     const CONSENT_FACTORY                       = 'consentFactory';
-    const MAILER                                = 'mailer';
-    const DATABASE_CONNECTION_FACTORY           = 'databaseConnectionFactory';
     const APPLICATION_CACHE                     = 'applicationCache';
     const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
     const METADATA_REPOSITORY                   = 'metadataRepository';
@@ -35,7 +33,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function __construct(SymfonyContainerInterface $container)
     {
         $this->registerConsentFactory();
-        $this->registerDatabaseConnectionFactory();
         $this->registerApplicationCache();
         $this->registerServiceRegistryClient();
         $this->registerMetadataRepository();
@@ -76,24 +73,25 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this->container->get('engineblock.compat.mailer');
     }
 
+    /**
+     * @return EngineBlock_Database_ConnectionFactory
+     */
+    public function getDatabaseConnectionFactory()
+    {
+        return $this->container->get('engineblock.compat.database_connection_factory');
+    }
+
     protected function registerConsentFactory()
     {
         $this[self::CONSENT_FACTORY] = function (EngineBlock_Application_DiContainer $container)
         {
             return new EngineBlock_Corto_Model_Consent_Factory(
                 $container->getFilterCommandFactory(),
-                $container[$container::DATABASE_CONNECTION_FACTORY]
+                $container->getDatabaseConnectionFactory()
             );
         };
     }
 
-    protected function registerDatabaseConnectionFactory()
-    {
-        $this[self::DATABASE_CONNECTION_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Database_ConnectionFactory();
-        };
-    }
     /**
      * @return Zend_Cache_Backend_Apc
      */

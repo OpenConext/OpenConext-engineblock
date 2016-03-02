@@ -19,6 +19,11 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
         return Phake::mock('EngineBlock_Mail_Mailer');
     }
 
+    public function getDatabaseConnectionFactory()
+    {
+        return Phake::mock('EngineBlock_Database_ConnectionFactory');
+    }
+
     /**
      * Registers a factory which returns mocked consents
      */
@@ -31,14 +36,6 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
                 ->create(Phake::anyParameters())
                 ->thenReturn(Phake::mock('EngineBlock_Corto_Model_Consent'));
             return $consentFactoryMock;
-        };
-    }
-
-    protected function registerDatabaseConnectionFactory()
-    {
-        $this[self::DATABASE_CONNECTION_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return Phake::mock('EngineBlock_Database_ConnectionFactory');
         };
     }
 }
