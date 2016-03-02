@@ -55,3 +55,6 @@ services:
 
     engineblock.compat.corto_filter_command_factory:
         class: EngineBlock_Corto_Filter_Command_Factory
+
+    engineblock.compat.database_connection_factory:
+        class: EngineBlock_Database_ConnectionFactory
