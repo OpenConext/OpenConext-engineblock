@@ -92,9 +92,9 @@ services:
             -
                 host: "@=service('engineblock.bridge.config').get('ldap.host')"
                 useSsl: "@=service('engineblock.bridge.config').get('ldap.useSsl')"
-                username: "@=service('engineblock.bridge.config').get('ldap.username')"
+                username: "@=service('engineblock.bridge.config').get('ldap.userName')"
                 password: "@=service('engineblock.bridge.config').get('ldap.password')"
-                bindRequiresDsn: "@=service('engineblock.bridge.config').get('ldap.bindRequiresDsn')"
+                bindRequiresDn: "@=service('engineblock.bridge.config').get('ldap.bindRequiresDn')"
                 accountDomainName: "@=service('engineblock.bridge.config').get('ldap.accountDomainName')"
                 baseDn: "@=service('engineblock.bridge.config').get('ldap.baseDn')"
         calls:

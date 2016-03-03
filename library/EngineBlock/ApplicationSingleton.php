@@ -151,9 +151,16 @@ class EngineBlock_ApplicationSingleton
         $this->_activationStrategy = $activationStrategy;
         $this->_requestId = $requestId;
 
-        if ($this->getConfigurationValue('testing', false)) {
+        if ($container->getParameter('kernel.environment') === 'test') {
             $this->_diContainer = new EngineBlock_Application_TestDiContainer($container);
-        } elseif ($this->getConfigurationValue('functionalTesting', false)) {
+            $config = new Zend_Config_Ini(
+                ENGINEBLOCK_FOLDER_APPLICATION . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
+                'base',
+                array('allowModifications' => true)
+            );
+            $config->testing = true;
+            $this->setConfiguration($config);
+        } elseif ($container->get('engineblock.bridge.config')->get('functionalTesting')) {
             $this->_diContainer = new EngineBlock_Application_FunctionalTestDiContainer($container);
         } else {
             $this->_diContainer = new EngineBlock_Application_DiContainer($container);
