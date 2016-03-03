@@ -57,8 +57,8 @@ class EngineBlock_Mail_Mailer
      */
     protected function _getDatabaseConnection()
     {
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
+        $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        return $factory->create();
     }
 
 }

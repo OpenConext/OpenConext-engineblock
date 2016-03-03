@@ -46,3 +46,53 @@ monolog:
             type:      syslog
             ident:     %logger.syslog.ident%
             formatter: engineblock.logger.additional_info_formatter
+
+doctrine:
+    dbal:
+        default_connection: engineblock
+        connections:
+            engineblock:
+                driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
+                dbname:   %database.dbname%
+                host:     %database.host%
+                port:     %database.port%
+                user:     %database.user%
+                password: %database.password%
+                charset:  UTF8
+                # when true, queries are logged to a 'doctrine' monolog channel
+                logging: '%kernel.debug%'
+                profiling: '%kernel.debug%'
+                server_version: 5.5
+                mapping_types:
+                    enum: string
+    orm:
+        auto_generate_proxy_classes: "%kernel.debug%"
+        proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
+        entity_managers:
+            engineblock:
+                naming_strategy: doctrine.orm.naming_strategy.underscore
+                query_cache_driver:
+                    type: apc
+                metadata_cache_driver:
+                    type: apc
+                result_cache_driver:
+                    type: apc
+                connection: ~
+                mappings:
+                    # An array of mappings, which may be a bundle name or something else
+                    OpenConextEngineBlockBundle:
+                        mapping:   true
+                        type:      annotation
+                        is_bundle: true
+                    Metadata:
+                        mapping:   true
+                        type:      annotation
+                        dir:       %kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity
+                        prefix:    OpenConext\Component\EngineBlockMetadata
+                        is_bundle: false
+
+doctrine_migrations:
+    dir_name:   "%kernel.root_dir%/../database/DoctrineMigrations"
+    namespace:  OpenConext\EngineBlock\Doctrine\Migrations
+    table_name: migration_versions
+    name:       OpenConext EngineBlock Migrations

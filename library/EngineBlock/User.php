@@ -21,7 +21,7 @@ class EngineBlock_User
 
     public function getAttributes()
     {
-        return $this->_attributes; 
+        return $this->_attributes;
     }
 
     public function deleteConsent($spId)
@@ -123,8 +123,8 @@ class EngineBlock_User
      */
     protected function _getDatabaseConnection()
     {
-        $pdo = new EngineBlock_Database_ConnectionFactory();
-        return $pdo->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        $pdo = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        return $pdo->create();
     }
 
     /**

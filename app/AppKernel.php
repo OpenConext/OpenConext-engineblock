@@ -14,6 +14,8 @@ class AppKernel extends Kernel
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle()
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -31,7 +33,19 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader)
     {
-        $loader->load($this->getRootDir().'/config/config_'.$this->getEnvironment().'.yml');
+        $configurationDirectory = $this->getRootDir() . '/config/';
+        $loader->load($configurationDirectory . 'config_' . $this->getEnvironment() . '.yml');
+
+        $localConfiguration = $configurationDirectory . 'config_local.yml';
+        if (!file_exists($localConfiguration)) {
+            return;
+        }
+
+        if (!is_readable($localConfiguration)) {
+            throw new \RuntimeException(sprintf('Local configuration file "%s" is not readable', $localConfiguration));
+        }
+
+        $loader->load(($localConfiguration));
     }
 
     public function getCacheDir()

@@ -36,6 +36,11 @@ $ymlContent = array(
             'logger.conf.handler.fingers_crossed.conf.passthru_level'
         ),
         'logger.syslog.ident'                   => $config->get('logger.conf.handler.syslog.conf.ident'),
+        'database.host'                         => $config->get('database.host'),
+        'database.port'                         => $config->get('database.port'),
+        'database.user'                         => $config->get('database.user'),
+        'database.password'                     => $config->get('database.password'),
+        'database.dbname'                       => $config->get('database.dbname'),
     )
 );
 
