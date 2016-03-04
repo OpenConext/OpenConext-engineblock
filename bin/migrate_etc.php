@@ -6,7 +6,7 @@ $defaultConfigFile = realpath(__DIR__ . '/../application/configs/application.ini
 $defaultConfig  = parse_ini_file($defaultConfigFile,INI_SCANNER_RAW);
 
 // The local overrides.
-$localConfig    = parse_ini_file('/etc/surfconext/engineblock.ini', INI_SCANNER_RAW);
+$localConfig    = parse_ini_file('/etc/openconext/engineblock.ini', INI_SCANNER_RAW);
 
 // Header for the new local configuration file.
 $newLocalConfig = <<<CONFIG
@@ -35,7 +35,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
         // Move the default private key to a file.
         if ($sectionVarName === 'encryption.key.private') {
-            $filePath = "/etc/surfconext/engineblock.key";
+            $filePath = "/etc/openconext/engineblock.key";
             echo "|$sectionVarName| Writing out default private key to $filePath and setting encryption.keys.$defaultKeyId.privateFile";
             file_put_contents($filePath, $sectionVarValue);
             $newLocalConfig .= "encryption.keys.$defaultKeyId.privateFile = $filePath\n";
@@ -44,7 +44,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
         // Move the default private key to a file.
         if ($sectionVarName === 'encryption.key.privateFile') {
-            $filePath = "/etc/surfconext/engineblock.key";
+            $filePath = "/etc/openconext/engineblock.key";
             echo "|$sectionVarName| Moving default private key to $filePath and setting encryption.keys.$defaultKeyId.privateFile";
             rename($sectionVarValue, $filePath);
             $newLocalConfig .= "encryption.keys.$defaultKeyId.privateFile = $filePath\n";
@@ -53,7 +53,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
         // Move the default public key to a file.
         if ($sectionVarName === 'encryption.key.public') {
-            $filePath = "/etc/surfconext/engineblock.crt";
+            $filePath = "/etc/openconext/engineblock.crt";
             file_put_contents($filePath, $sectionVarValue);
             echo "|$sectionVarName| Writing out default public key to $filePath and setting encryption.keys.$defaultKeyId.publicFile";
             $newLocalConfig .= "encryption.keys.$defaultKeyId.publicFile = $filePath\n";
@@ -62,7 +62,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 
         // Make SimpleSAMLphp (used by Profile) use the file based public key.
         if ($sectionVarName === 'auth.simplesamlphp.idp.cert') {
-            $newLocalConfig .= "auth.simplesamlphp.idp.certificate = /etc/surfconext/engineblock.crt\n";
+            $newLocalConfig .= "auth.simplesamlphp.idp.certificate = /etc/openconext/engineblock.crt\n";
             continue;
         }
 
@@ -70,7 +70,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
         // Note that we leave .publicFile alone.
         $matches = array();
         if (preg_match('/encryption\.keys\.(?P<keyid>.+).public$/', $sectionVarName, $matches) > 0) {
-            $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.pem.crt";
+            $fileName = "/etc/openconext/engineblock.{$matches['keyid']}.pem.crt";
             file_put_contents($fileName, $sectionVarValue);
             $newLocalConfig .= "{$sectionVarName}File = $fileName\n";
             continue;
@@ -79,7 +79,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
         // Move any 'extra' private keys to a file as well.
         // Note that we leave .privateFile alone.
         if (preg_match('/encryption\.keys\.(?P<keyid>.+).private$/', $sectionVarName, $matches) > 0) {
-            $fileName = "/etc/surfconext/engineblock.{$matches['keyid']}.pem.key";
+            $fileName = "/etc/openconext/engineblock.{$matches['keyid']}.pem.key";
             file_put_contents($fileName, $sectionVarValue);
             $newLocalConfig .= "{$sectionVarName}File = $fileName\n";
             continue;
@@ -149,7 +149,7 @@ foreach ($localConfig as $sectionName => $sectionVars) {
 }
 
 // Write out the new configuration file.
-$newConfigFile = '/etc/surfconext/engineblock.ini.new';
+$newConfigFile = '/etc/openconext/engineblock.ini.new';
 file_put_contents($newConfigFile, $newLocalConfig);
 
 // Deliver a final message.
@@ -157,7 +157,7 @@ echo <<<FINAL_MESSAGE
 -----------------------------------------
 WROTE $newConfigFile
 PLEASE REVIEW MANUALLY AND RUN:
-sudo install -b /etc/surfconext/engineblock.ini.new /etc/surfconext/engineblock.ini
+sudo install -b /etc/openconext/engineblock.ini.new /etc/openconext/engineblock.ini
 -----------------------------------------
 
 FINAL_MESSAGE;
