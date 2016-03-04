@@ -19,17 +19,17 @@ The Database configuration changed from master/slave to single host to allow for
 configuration has changed from (**this will be ignored now**):
 ```ini
 database.master1.dsn = "mysql:host=123.456.78.90;port=3307;dbname=engineblock"
-database.master1.password = passwort
+database.master1.password = password
 database.master1.user = username
 database.slave1.dsn = "mysql:host=123.456.78.91;port=3307;dbname=engineblock"
-database.slave1.password = passwort
+database.slave1.password = password
 database.slave1.user = username
 database.masters[] = master1
 database.slaves[] = slave1
 ```
 
 To:
-```
+```ini
 database.host = 123.456.78.90
 database.port = 3307
 database.user = username
