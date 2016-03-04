@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
@@ -163,7 +164,21 @@ class EngineBlockContext extends AbstractSubContext
     {
         $mink = $this->getMainContext()->getMinkContext();
 
-        $mink->pressButton('Submit');
+        try {
+            $mink->pressButton('Submit');
+        } catch (ElementNotFoundException $exception) {
+            $debugLog = ENGINEBLOCK_FOLDER_ROOT . 'app/logs/test/test.log';
+
+            $content = @file_get_contents($debugLog);
+
+            if ($content) {
+                $mink->printDebug($content);
+            } else {
+                $mink->printDebug('Could not read logs :(');
+            }
+
+            throw $exception;
+        }
     }
 
     /**
