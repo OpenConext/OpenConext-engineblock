@@ -15,7 +15,7 @@ $command->execute();
 
 class moveGroupProvidersConfigToDatabase
 {
-    const ENGINEBLOCK_LOCAL_CONFIG_FILE     = '/etc/surfconext/engineblock.ini';
+    const ENGINEBLOCK_LOCAL_CONFIG_FILE     = '/etc/openconext/engineblock.ini';
     const ENGINEBLOCK_MODIFIED_CONFIG_FILE  = '/tmp/engineblock.ini';
 
     /**
