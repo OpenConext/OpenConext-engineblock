@@ -164,21 +164,7 @@ class EngineBlockContext extends AbstractSubContext
     {
         $mink = $this->getMainContext()->getMinkContext();
 
-        try {
-            $mink->pressButton('Submit');
-        } catch (ElementNotFoundException $exception) {
-            $debugLog = ENGINEBLOCK_FOLDER_ROOT . 'app/logs/test/test.log';
-
-            $content = @file_get_contents($debugLog);
-
-            if ($content) {
-                $mink->printDebug($content);
-            } else {
-                $mink->printDebug('Could not read logs :(');
-            }
-
-            throw $exception;
-        }
+        $mink->pressButton('Submit');
     }
 
     /**
