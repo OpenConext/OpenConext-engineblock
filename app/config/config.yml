@@ -52,6 +52,7 @@ doctrine:
         default_connection: engineblock
         connections:
             engineblock:
+#                schema_filter: ~^(?!group_|virtual_|service_provider_|saml_persistent_id|sso_provider_roles|log_logins|db_changelog|consent)~
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
                 dbname:   %database.dbname%
                 host:     %database.host%
@@ -85,11 +86,13 @@ doctrine:
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
-                    OpenConextEngineBlockBundle:
+                    Metadata:
                         mapping:   true
                         type:      annotation
-                        is_bundle: true
-                    Metadata:
+                        dir:       %kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Metadata
+                        prefix:    OpenConext\EngineBlockBundle\Metadata
+                        is_bundle: false
+                    EngineBlockMetadata:
                         mapping:   true
                         type:      annotation
                         dir:       %kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity
