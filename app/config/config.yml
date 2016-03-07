@@ -69,6 +69,7 @@ doctrine:
             engineblock_entity_id: OpenConext\EngineBlockBundle\Doctrine\Type\EntityIdType
             engineblock_entity_type: OpenConext\EngineBlockBundle\Doctrine\Type\EntityTypeType
             engineblock_json_metadata: OpenConext\EngineBlockBundle\Doctrine\Type\JsonMetadataType
+            engineblock_saml_entity_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\SamlEntityUuidType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
