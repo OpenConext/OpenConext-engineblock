@@ -3,7 +3,7 @@
 class EngineBlock_Application_Bootstrapper
 {
     const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
-    const CONFIG_FILE_ENVIRONMENT   = '/etc/surfconext/engineblock.ini';
+    const CONFIG_FILE_ENVIRONMENT   = '/etc/openconext/engineblock.ini';
     const P3P_HEADER = 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"';
 
     /**
