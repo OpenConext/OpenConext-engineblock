@@ -340,6 +340,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
 
             $ldapOptions = array(
                 'host' => $ldapConfig->host,
+                'port' => $ldapConfig->port,
                 'useSsl' => $ldapConfig->useSsl,
                 'username' => $ldapConfig->userName,
                 'password' => $ldapConfig->password,
