@@ -29,6 +29,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getSymfonyRequest()
+    {
+        return $this->container->get('request');
+    }
+
+    /**
      * @return EngineBlock_Corto_XmlToArray
      */
     public function getXmlConverter()
@@ -184,7 +192,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getMessageUtilClassName()
     {
-       return 'sspmod_saml_Message';
+       return 'EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage';
     }
 
     /**
