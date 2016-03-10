@@ -50,6 +50,7 @@ before_script:
   - sudo a2ensite default-ssl
   - sudo service apache2 restart
   - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
+  - composer config secure-http false
   - composer install --prefer-dist -n -o
   - app/console cache:clear --env=test
 
