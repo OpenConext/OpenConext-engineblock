@@ -4,6 +4,11 @@
 
 ### Backwards Compatibility Breaks
 
+#### PHP Versions
+
+As of version 5.0.0-alpha4 the minimum PHP version requirement has been upped to 5.6. This to ensure
+using a [safe and supported version of PHP][php1] to run the platform on. 
+
 #### Configuration File Location
 
 - config file location moved from `/etc/surfconext/engineblock.ini` to `/etc/openconext/engineblock.ini`
@@ -47,3 +52,4 @@ as to when a master or slave is used for a connection.
 [doct1]: http://symfony.com/doc/master/bundles/DoctrineBundle/index.html
 [doct2]: http://symfony.com/doc/2.7/reference/configuration/doctrine.html
 [doct3]: http://www.doctrine-project.org/api/dbal/2.3/class-Doctrine.DBAL.Connections.MasterSlaveConnection.html
+[php1]: http://php.net/supported-versions.php
