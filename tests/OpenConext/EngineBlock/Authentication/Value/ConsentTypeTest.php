@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlock\Authentication\Tests\Value;
 
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class ConsentTypeTest extends TestCase
@@ -14,13 +15,14 @@ class ConsentTypeTest extends TestCase
      * @group Value
      *
      * @dataProvider      \OpenConext\TestDataProvider::notStringOrEmptyString
-     * @expectedException \OpenConext\EngineBlock\Exception\InvalidArgumentException
      *
      * @param mixed $invalid
      */
     public function cannot_be_other_than_implicit_or_explicit($invalid)
     {
-        $invalidConsentType = new ConsentType($invalid);
+        $this->expectException(InvalidArgumentException::class);
+
+        new ConsentType($invalid);
     }
 
     /**

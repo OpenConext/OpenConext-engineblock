@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlock\Service;
 
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase as UnitTest;
 
 class FeaturesServiceTest extends UnitTest
@@ -12,12 +13,13 @@ class FeaturesServiceTest extends UnitTest
      * @group FeatureToggle
      *
      * @dataProvider \OpenConext\TestDataProvider::notBoolean
-     * @expectedException \OpenConext\EngineBlock\Exception\InvalidArgumentException
      *
      * @param mixed $notBoolean
      */
     public function metadata_push_enabled_is_required_to_be_a_boolean($notBoolean)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new FeaturesService($notBoolean, true, true);
     }
 
@@ -27,12 +29,13 @@ class FeaturesServiceTest extends UnitTest
      * @group FeatureToggle
      *
      * @dataProvider \OpenConext\TestDataProvider::notBoolean
-     * @expectedException \OpenConext\EngineBlock\Exception\InvalidArgumentException
      *
      * @param mixed $notBoolean
      */
     public function consent_listing_enabled_is_required_to_be_a_boolean($notBoolean)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new FeaturesService(true, $notBoolean, true);
     }
 
@@ -42,12 +45,13 @@ class FeaturesServiceTest extends UnitTest
      * @group FeatureToggle
      *
      * @dataProvider \OpenConext\TestDataProvider::notBoolean
-     * @expectedException \OpenConext\EngineBlock\Exception\InvalidArgumentException
      *
      * @param mixed $notBoolean
      */
     public function metadata_api_enabled_is_required_to_be_a_boolean($notBoolean)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new FeaturesService(true, true, $notBoolean);
     }
 

@@ -4,7 +4,7 @@
     <target name="pre-commit" depends="code-quality" />
     <target name="pre-push" depends="code-quality,functional-tests" />
     <target name="functional-tests" depends="behat-travis" />
-    <target name="code-quality" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpcpd-travis,phpunit-travis"/>
+    <target name="code-quality" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpunit-travis"/>
 
     <target name="install-git-hooks"
             description="installs the pre-commit and pre-push hooks for git">
@@ -73,14 +73,6 @@
             <arg value="--warning-severity=0" />
             <arg value="--extensions=php" />
             <arg path="src" />
-        </exec>
-    </target>
-
-    <target name="phpcpd-travis" description="Find duplicate code using PHPCPD">
-        <exec executable="vendor/bin/phpcpd" failonerror="false">
-            <arg value="--exclude"/>
-            <arg value="*/Tests/*"/>
-            <arg path="src"/>
         </exec>
     </target>
 

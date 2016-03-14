@@ -15,8 +15,8 @@ class SamlEntityUuidTest extends UnitTest
      * Sanity check that the static UUID namespace is used.
      *
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      */
     public function the_fixed_namespace_uuid_is_used()
     {
@@ -31,23 +31,24 @@ class SamlEntityUuidTest extends UnitTest
 
     /**
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      *
      * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
-     * @expectedException InvalidArgumentException
      *
      * @param mixed $invalidArgument
      */
     public function a_uuid_must_be_a_non_empty_string($invalidArgument)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new SamlEntityUuid($invalidArgument);
     }
 
     /**
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      */
     public function deserializing_a_serialized_saml_entity_uuid_creates_an_equal_value_object()
     {
@@ -61,8 +62,8 @@ class SamlEntityUuidTest extends UnitTest
 
     /**
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      */
     public function uuids_are_equal_for_the_same_entity()
     {
@@ -82,8 +83,8 @@ class SamlEntityUuidTest extends UnitTest
 
     /**
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      */
     public function uuids_are_equal_for_the_same_string()
     {
@@ -100,8 +101,8 @@ class SamlEntityUuidTest extends UnitTest
 
     /**
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      */
     public function uuid_generated_for_an_entity_is_equal_to_its_uuid_as_string()
     {
@@ -116,8 +117,8 @@ class SamlEntityUuidTest extends UnitTest
 
     /**
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      */
     public function the_uuid_value_can_be_retrieved()
     {
@@ -130,8 +131,8 @@ class SamlEntityUuidTest extends UnitTest
 
     /**
      * @test
-     * @group engineblock
-     * @group metadata
+     * @group EngineBlock
+     * @group Metadata
      */
     public function a_saml_entity_uuid_can_be_cast_to_string()
     {

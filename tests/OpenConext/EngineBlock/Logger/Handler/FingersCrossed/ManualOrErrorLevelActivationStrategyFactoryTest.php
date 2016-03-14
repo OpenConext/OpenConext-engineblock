@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlock\Logger\Handler\FingersCrossed;
 
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
@@ -28,7 +29,9 @@ class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
      */
     public function configuration_is_validated(array $config, $expectedExceptionMessageContains)
     {
-        $this->setExpectedException('OpenConext\EngineBlock\Exception\InvalidArgumentException', $expectedExceptionMessageContains);
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage($expectedExceptionMessageContains);
+
         ManualOrErrorLevelActivationStrategyFactory::createActivationStrategy($config);
     }
 

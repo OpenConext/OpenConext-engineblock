@@ -32,4 +32,18 @@ class Assertion extends BaseAssertion
             );
         }
     }
+
+    /**
+     * @param array       $requiredKeys
+     * @param array       $value
+     * @param null|string $message
+     * @param null|string $propertyPath
+     * @return void
+     */
+    public static function keysExist(array $value, array $requiredKeys, $message = null, $propertyPath = null)
+    {
+        foreach ($requiredKeys as $requiredKey) {
+            self::keyExists($value, $requiredKey, $message, $propertyPath);
+        }
+    }
 }

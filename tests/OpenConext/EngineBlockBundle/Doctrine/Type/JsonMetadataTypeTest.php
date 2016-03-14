@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
@@ -33,8 +34,8 @@ class JsonMetadataTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_null_value_remains_null_in_to_sql_conversion()
     {
@@ -47,8 +48,8 @@ class JsonMetadataTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_non_null_value_is_converted_to_the_correct_format()
     {
@@ -64,8 +65,8 @@ class JsonMetadataTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_null_value_remains_null_when_converting_from_db_to_php_value()
     {
@@ -78,8 +79,8 @@ class JsonMetadataTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_non_null_value_is_converted_to_an_array()
     {
@@ -95,15 +96,14 @@ class JsonMetadataTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
-     *
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function an_invalid_database_value_causes_an_exception_upon_conversion()
     {
         $entityIdType = Type::getType(EntityIdType::NAME);
 
+        $this->expectException(ConversionException::class);
         $entityIdType->convertToPHPValue(false, $this->platform);
     }
 }
