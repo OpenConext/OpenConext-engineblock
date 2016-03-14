@@ -12,7 +12,6 @@
     },
     "require": {
         "php": ">=5.6,<7",
-        "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
         "doctrine/orm": "~2.3",
         "kriswallsmith/assetic": "~1.2.0",
