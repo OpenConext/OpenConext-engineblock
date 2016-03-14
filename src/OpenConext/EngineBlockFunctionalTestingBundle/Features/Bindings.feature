@@ -18,7 +18,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
       And I pass through EngineBlock
-     Then the url should match "Dummy%20SP/acs"
+     Then the url should match "functional-testing/Dummy%20SP/acs"
 
   Scenario: EngineBlock accepts AuthnRequests using HTTP-Redirect binding
     Given the SP uses the HTTP Redirect Binding
@@ -27,7 +27,7 @@ Feature:
       And I pass through the IdP
       And I give my consent
       And I pass through EngineBlock
-     Then the url should match "Dummy%20SP/acs"
+     Then the url should match "functional-testing/Dummy%20SP/acs"
 
   Scenario: EngineBlock accepts Signed AuthnRequests using HTTP-POST binding
     Given the SP uses the HTTP POST Binding
@@ -38,4 +38,4 @@ Feature:
       And I pass through the IdP
       And I give my consent
       And I pass through EngineBlock
-     Then the url should match "Dummy%20SP/acs"
+     Then the url should match "functional-testing/Dummy%20SP/acs"
