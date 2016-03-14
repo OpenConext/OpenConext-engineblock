@@ -35,8 +35,8 @@ class SamlEntityUuidTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_null_value_remains_null_in_to_sql_conversion()
     {
@@ -49,8 +49,8 @@ class SamlEntityUuidTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_non_null_value_is_converted_to_the_correct_format()
     {
@@ -67,8 +67,8 @@ class SamlEntityUuidTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_null_value_remains_null_when_converting_from_db_to_php_value()
     {
@@ -81,8 +81,8 @@ class SamlEntityUuidTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function a_non_null_value_is_converted_to_an_saml_entity_uuid()
     {
@@ -97,8 +97,8 @@ class SamlEntityUuidTypeTest extends UnitTest
 
     /**
      * @test
-     * @group engineblockbundle
-     * @group doctrine
+     * @group EngineBlockBundle
+     * @group Doctrine
      */
     public function an_invalid_database_value_causes_an_exception_upon_conversion()
     {

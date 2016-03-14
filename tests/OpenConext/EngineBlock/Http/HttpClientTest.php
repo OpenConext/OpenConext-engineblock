@@ -32,7 +32,8 @@ class HttpClientTest extends UnitTest
 {
     /**
      * @test
-     * @group http
+     * @group EngineBlock
+     * @group Http
      */
     public function data_from_a_resource_can_be_read()
     {
@@ -57,6 +58,7 @@ class HttpClientTest extends UnitTest
 
     /**
      * @test
+     * @group EngineBlock
      * @group http
      */
     public function resource_parameters_are_formatted()
@@ -80,7 +82,8 @@ class HttpClientTest extends UnitTest
 
     /**
      * @test
-     * @group http
+     * @group EngineBlock
+     * @group Http
      */
     public function a_guzzle_request_exception_is_converted_to_an_engineblock_request_exception()
     {
@@ -100,7 +103,8 @@ class HttpClientTest extends UnitTest
 
     /**
      * @test
-     * @group http
+     * @group EngineBlock
+     * @group Http
      */
     public function malformed_json_causes_a_malformed_response_exception()
     {
@@ -125,7 +129,8 @@ class HttpClientTest extends UnitTest
 
     /**
      * @test
-     * @group http
+     * @group EngineBlock
+     * @group Http
      */
     public function null_is_returned_when_the_response_status_code_is_404()
     {
@@ -152,7 +157,8 @@ class HttpClientTest extends UnitTest
 
     /**
      * @test
-     * @group http
+     * @group EngineBlock
+     * @group Http
      */
     public function an_access_denied_exception_is_thrown_if_the_response_status_code_is_403()
     {
