@@ -95,29 +95,4 @@ class FilesystemAdapterTest extends UnitTest
         $this->expectException(RuntimeException::class);
         $filesystemAdapter->readFrom('/this/is/not/readable');
     }
-
-    /**
-     * @test
-     * @group EngineBlock
-     * @group Driver
-     */
-    public function data_is_returned_without_modification()
-    {
-        $data = json_encode(array('foo' => array('bar' => 'quuz', 'baz' => 1.24)));
-        $file = ENGINEBLOCK_FOLDER_ROOT . '/tmp/data';
-
-        $resource = fopen($file, 'w+');
-        fwrite($resource, $data);
-
-        $filesystemMock = m::mock('\Symfony\Component\Filesystem\Filesystem');
-        $filesystemMock->shouldReceive('exists')->andReturn(true);
-
-        $filesystemAdapter = new FilesystemAdapter($filesystemMock);
-        $read = $filesystemAdapter->readFrom($file);
-
-        fclose($resource);
-        unlink($file);
-
-        $this->assertEquals($data, $read);
-    }
 }
