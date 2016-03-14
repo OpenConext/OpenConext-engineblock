@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "089db630f9ee822a456e69f61e342d5f",
-    "content-hash": "38694fe0ab32852d5798462f31e37689",
+    "hash": "9d3da83819a99563987106f02b586116",
+    "content-hash": "eb19ba07b7632dc14fa3e40ecf2e7589",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -59,22 +59,6 @@
                 "validation"
             ],
             "time": "2015-08-21 16:50:17"
-        },
-        {
-            "name": "cssmin/cssmin",
-            "version": "3.0.1",
-            "dist": {
-                "type": "file",
-                "url": "http://cssmin.googlecode.com/files/cssmin-v3.0.1.php",
-                "reference": null,
-                "shasum": null
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "cssmin-v3.0.1.php"
-                ]
-            }
         },
         {
             "name": "dbpatch/dbpatch",
