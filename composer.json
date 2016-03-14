@@ -11,7 +11,7 @@
         "source": "https://github.com/OpenConext/OpenConext-engineblock"
     },
     "require": {
-        "php": ">=5.3.9",
+        "php": ">=5.6,<7",
         "cssmin/cssmin": "3.0.1",
         "dbpatch/dbpatch": "~1.2",
         "doctrine/orm": "~2.3",
@@ -30,9 +30,12 @@
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "openconext/saml-value-object": "^1.1",
+        "openconext/saml-value-object": "dev-feature/more-metadata-values",
         "symfony/monolog-bundle": "~2.4",
-        "beberlei/assert": "^2.4"
+        "beberlei/assert": "^2.4",
+        "doctrine/doctrine-migrations-bundle": "^1.1",
+        "doctrine/migrations": "*@dev",
+        "rhumsaa/uuid": "^2.8"
     },
     "require-dev": {
         "phake/phake": "2.1",
@@ -93,7 +96,7 @@
     },
     "config": {
         "platform": {
-            "php": "5.3.9"
+            "php": "5.6"
         }
     },
     "extra": {

@@ -27,12 +27,12 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
 
     public function setup()
     {
-        $this->proxyServerMock = $this->mockProxyServer();
-
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $this->xmlConverterMock = $this->mockXmlConverter($diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER]);
-        $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
-        $this->mailerMock = $diContainer[EngineBlock_Application_DiContainer::MAILER];
+
+        $this->proxyServerMock    = $this->mockProxyServer();
+        $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
+        $this->consentFactoryMock = $diContainer->getConsentFactory();
+        $this->mailerMock         = $diContainer->getMailer();
 
         $this->mockGlobals();
     }

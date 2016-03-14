@@ -91,8 +91,7 @@ class EngineBlock_Corto_Model_Consent
      */
     protected function _getConsentDatabaseConnection()
     {
-        // We only use the write connection because consent is 3 queries of which only 1 light select query.
-        return $this->_databaseConnectionFactory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        return $this->_databaseConnectionFactory->create();
     }
 
     protected function _getConsentUid()

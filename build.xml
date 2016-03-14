@@ -85,6 +85,7 @@
     </target>
 
     <target name="phpunit-travis" description="Run unit tests with PHPUnit">
+        <delete dir="app/cache/test"/>
         <exec executable="vendor/bin/phpunit" failonerror="true">
             <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
             <arg line="--coverage-text"/>

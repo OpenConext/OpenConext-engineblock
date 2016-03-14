@@ -20,27 +20,17 @@ class EngineBlock_DbPatch_Core_Application extends DbPatch_Core_Application
         try {
             $engineBlock = EngineBlock_ApplicationSingleton::getInstance();
 
-            $ebConfig = $engineBlock->getConfiguration();
-            $masterDbConfigName = $ebConfig->database->masters->get(0);
-            $dbConfig           = $ebConfig->database->get($masterDbConfigName);
-
-            $dsnParsed = parse_url($dbConfig->dsn);
-            $dsnPathParts = explode(';', $dsnParsed['path']);
-            $dsnProperties = array();
-            foreach ($dsnPathParts as $dsnPathPart) {
-                $dsnPathPart = explode('=', $dsnPathPart);
-                $dsnProperties[array_shift($dsnPathPart)] = implode($dsnPathPart, '=');
-            }
+            $databaseConfig = $engineBlock->getConfiguration()->database;
 
             $config = array(
                 'db' => array(
-                    'adapter'   => $this->_convertPdoDriverToZendDbAdapter($dsnParsed['scheme']),
+                    'adapter'   => 'MySqli',
                     'params' => array(
-                        'host'      => isset($dsnProperties['host'])    ? $dsnProperties['host']    : 'localhost',
-                        'username'  => isset($dbConfig->user)           ? $dbConfig->user           : 'root',
-                        'password'  => isset($dbConfig->password)       ? $dbConfig->password       : '',
-                        'dbname'    => isset($dsnProperties['dbname'])  ? $dsnProperties['dbname']  : 'engineblock',
-                        'charset'   => isset($dsnProperties['charset']) ? $dsnProperties['charset'] : 'utf8',
+                        'host'      => $databaseConfig->host,
+                        'username'  => $databaseConfig->user,
+                        'password'  => $databaseConfig->password,
+                        'dbname'    => $databaseConfig->dbname,
+                        'charset'   => 'utf8',
                     ),
                 ),
                 'patch_directory' => realpath(__DIR__ . '/../../../../database/patch'),
@@ -49,16 +39,6 @@ class EngineBlock_DbPatch_Core_Application extends DbPatch_Core_Application
             return new Zend_Config($config, true);
         } catch (Exception $e) {
            die($e->getMessage()."\n");
-        }
-    }
-
-    private function _convertPdoDriverToZendDbAdapter($pdoDriver)
-    {
-        switch ($pdoDriver) {
-            case 'mysql':
-                return 'Mysqli';
-            default:
-                throw new EngineBlock_Database_Exception("Unsupported PDO driver '$pdoDriver'");
         }
     }
 }

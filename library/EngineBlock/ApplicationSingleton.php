@@ -1,8 +1,9 @@
 <?php
 
-use Monolog\Handler\FingersCrossed\ActivationStrategyInterface;
+use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
 use OpenConext\EngineBlock\Request\RequestId;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
@@ -75,19 +76,16 @@ class EngineBlock_ApplicationSingleton
     protected $_diContainer;
 
     /**
-     * @var EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrDecoratedActivationStrategy
+     * @var ManualOrDecoratedActivationStrategy
      */
-    private   $_activationStrategy;
+    private $_activationStrategy;
 
     /**
      * @var null|RequestId
      */
     private $_requestId;
 
-    /**
-     *
-     */
-    protected function __construct()
+    private function __construct()
     {
     }
 
@@ -102,6 +100,7 @@ class EngineBlock_ApplicationSingleton
         if (!isset(self::$s_instance)) {
             self::$s_instance = new self();
         }
+
         return self::$s_instance;
     }
 
@@ -137,18 +136,35 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @param LoggerInterface $logger
-     * @param ActivationStrategyInterface $activationStrategy
-     * @param RequestId $requestId
+     * @param LoggerInterface                     $logger
+     * @param ManualOrDecoratedActivationStrategy $activationStrategy
+     * @param RequestId                           $requestId
+     * @param ContainerInterface                  $container
      */
     public function bootstrap(
         LoggerInterface $logger,
-        ActivationStrategyInterface $activationStrategy,
-        RequestId $requestId
+        ManualOrDecoratedActivationStrategy $activationStrategy,
+        RequestId $requestId,
+        ContainerInterface $container
     ) {
         $this->setLogInstance($logger);
         $this->_activationStrategy = $activationStrategy;
         $this->_requestId = $requestId;
+
+        if ($container->get('engineblock.bridge.config')->get('functionalTesting')) {
+            $this->_diContainer = new EngineBlock_Application_FunctionalTestDiContainer($container);
+        } elseif ($container->getParameter('kernel.environment') === 'test') {
+            $this->_diContainer = new EngineBlock_Application_TestDiContainer($container);
+            $config             = new Zend_Config_Ini(
+                ENGINEBLOCK_FOLDER_APPLICATION . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
+                'base',
+                array('allowModifications' => true)
+            );
+            $config->testing    = true;
+            $this->setConfiguration($config);
+        } else {
+            $this->_diContainer = new EngineBlock_Application_DiContainer($container);
+        }
 
         if (!isset($this->_bootstrapper)) {
             $this->_bootstrapper = new EngineBlock_Application_Bootstrapper($this);
@@ -487,15 +503,6 @@ class EngineBlock_ApplicationSingleton
     public function setErrorHandler(EngineBlock_Application_ErrorHandler $errorHandler)
     {
         $this->_errorHandler = $errorHandler;
-        return $this;
-    }
-
-    /**
-     * @param \EngineBlock_Application_DiContainer $diContainer
-     */
-    public function setDiContainer(\EngineBlock_Application_DiContainer $diContainer)
-    {
-        $this->_diContainer = $diContainer;
         return $this;
     }
 

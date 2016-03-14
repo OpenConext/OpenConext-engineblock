@@ -32,8 +32,8 @@ class moveGroupProvidersConfigToDatabase
     {
         $this->_writer = $writer;
 
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        $this->_database = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        $this->_database = $factory->create();
     }
 
     public function execute()

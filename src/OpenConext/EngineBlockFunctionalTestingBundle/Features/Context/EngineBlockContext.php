@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;

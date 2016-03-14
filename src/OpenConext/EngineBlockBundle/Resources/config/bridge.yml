@@ -7,11 +7,11 @@ services:
     engineblock.bridge.error_reporter:
         class: OpenConext\EngineBlockBridge\ErrorReporter
         arguments:
-            - @engineblock.compat.application
-            - @logger
+            - "@engineblock.compat.application"
+            - "@logger"
 
     engineblock.bridge.mailer:
         class: OpenConext\EngineBlockBridge\Mail\ZendMailSender
         arguments:
             - "@=service('engineblock.bridge.config').get('email.help')"
-            - @logger
+            - "@logger"

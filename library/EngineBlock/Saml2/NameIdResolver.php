@@ -247,8 +247,8 @@ class EngineBlock_Saml2_NameIdResolver
             return $s_db;
         }
 
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        $s_db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        $s_db = $factory->create();
 
         return $s_db;
     }

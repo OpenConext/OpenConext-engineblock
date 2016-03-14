@@ -2,7 +2,7 @@ services:
     engineblock.logger.additional_info_formatter:
         class: OpenConext\EngineBlock\Logger\Formatter\AdditionalInfoFormatter
         arguments:
-            - @engineblock.logger.line_formatter
+            - "@engineblock.logger.line_formatter"
 
     engineblock.logger.line_formatter:
         public: false
@@ -19,7 +19,7 @@ services:
     engineblock.logger.processor.request_id_processor:
         class: OpenConext\EngineBlock\Logger\Processor\RequestIdProcessor
         arguments:
-            - @engineblock.request.request_id
+            - "@engineblock.request.request_id"
         tags:
             - { name: monolog.processor, method: processRecord }
 

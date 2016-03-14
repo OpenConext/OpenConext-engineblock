@@ -6,7 +6,7 @@ services:
     engineblock.request.request_id:
         class: OpenConext\EngineBlock\Request\RequestId
         arguments:
-            - @engineblock.request.request_id_generator
+            - "@engineblock.request.request_id_generator"
 
     engineblock.security.http_basic_entry_point:
         class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
@@ -23,12 +23,12 @@ services:
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
         arguments:
-            - @engineblock.repository.consent
-            - @engineblock.service.metadata
-            - @engineblock.compat.logger
+            - "@engineblock.repository.consent"
+            - "@engineblock.service.metadata"
+            - "@engineblock.compat.logger"
 
     engineblock.service.metadata:
         class: OpenConext\EngineBlock\Service\MetadataService
         arguments:
-            - @engineblock.compat.repository.metadata
-            - @engineblock.compat.logger
+            - "@engineblock.compat.repository.metadata"
+            - "@engineblock.compat.logger"

@@ -8,35 +8,24 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
-    protected function registerServiceRegistryClient()
+    public function getServiceRegistryClient()
     {
-        $this[self::SERVICE_REGISTRY_CLIENT] = function ()
-        {
-            return new Janus_FixtureClient();
-        };
+        return new Janus_FixtureClient();
     }
 
-    protected function registerTimeProvider()
+    public function getTimeProvider()
     {
-        $this[self::TIME] = function ()
-        {
-            return new EngineBlock_TimeProvider_Fixture();
-        };
+        return new EngineBlock_TimeProvider_Fixture();
     }
 
-    protected function registerSaml2IdGenerator()
+    public function getSaml2IdGenerator()
     {
-        $this[self::SAML2_ID] = function()
-        {
-            return new EngineBlock_Saml2_IdGenerator_Fixture();
-        };
+        return new EngineBlock_Saml2_IdGenerator_Fixture();
     }
 
-    protected function registerSuperGlobalManager()
+    public function getSuperGlobalManager()
     {
-        $this[self::SUPER_GLOBAL_MANAGER] = function() {
-            return new EngineBlock_Application_SuperGlobalManager();
-        };
+        return new EngineBlock_Application_SuperGlobalManager();
     }
 
     public function getMessageUtilClassName()

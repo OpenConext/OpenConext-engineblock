@@ -9,7 +9,7 @@ class EngineBlock_Tracker
     {
         $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
         $db = $this->_getDbConnection();
-        
+
         $stmt = $db->prepare("
             INSERT INTO log_logins
               (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname, keyid)
@@ -32,10 +32,10 @@ class EngineBlock_Tracker
         $stmt->bindParam('keyid'        , $keyId);
         $stmt->execute();
     }
-    
+
     protected function _getDbConnection()
     {
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        return $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);  
+        $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        return $factory->create();
     }
 }

@@ -5,7 +5,7 @@ namespace OpenConext\EngineBlock\Authentication\Repository;
 use DateTime;
 use Doctrine\DBAL\Connection as DbalConnection;
 use Doctrine\DBAL\DBALException;
-use OpenConext\EngineBlock\Authentication\Entity\Consent;
+use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 use PDO;
 

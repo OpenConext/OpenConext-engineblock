@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlock\Authentication\Entity;
+namespace OpenConext\EngineBlock\Authentication\Model;
 
 use DateTime;
 use OpenConext\EngineBlock\Assert\Assertion;
