@@ -38,7 +38,6 @@
     },
     "require-dev": {
         "phake/phake": "2.1",
-        "phpunit/phpunit": "~4.3",
         "sensio/generator-bundle": "~2.3",
         "behat/behat": "~2.5",
         "behat/mink": "~1.5",
@@ -47,7 +46,11 @@
         "behat/symfony2-extension": "~1.1",
         "phpmd/phpmd": "^2.3",
         "squizlabs/php_codesniffer": "^2.5",
-        "mockery/mockery": "0.9.4"
+        "mockery/mockery": "0.9.4",
+        "phpunit/phpunit": "^5.2",
+        "phpunit/php-code-coverage": "^3.2",
+        "sebastian/version": "^2.0",
+        "phpunit/phpunit-mock-objects": "^3.0"
     },
     "scripts": {
         "pre-autoload-dump": [
