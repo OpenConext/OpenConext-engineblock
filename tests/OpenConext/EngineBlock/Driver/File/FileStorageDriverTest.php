@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlock\Driver\File;
 
 use Mockery as m;
+use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase as UnitTest;
 
 class FileStorageDriverTest extends UnitTest
@@ -13,12 +14,13 @@ class FileStorageDriverTest extends UnitTest
      * @group Driver
      *
      * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
-     * @expectedException \OpenConext\EngineBlock\Exception\InvalidArgumentException
      *
      * @param mixed $notStringOrEmptyString
      */
     public function filepath_must_be_a_non_empty_string($notStringOrEmptyString)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new FileStorageDriver(m::mock('OpenConext\EngineBlock\Driver\File\FileHandler'), $notStringOrEmptyString);
     }
 
@@ -28,12 +30,13 @@ class FileStorageDriverTest extends UnitTest
      * @group Driver
      *
      * @dataProvider \OpenConext\TestDataProvider::notString
-     * @expectedException \OpenConext\EngineBlock\Exception\InvalidArgumentException
      *
      * @param mixed $notString
      */
     public function data_to_save_must_be_a_string($notString)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $storage = new FileStorageDriver(m::mock('OpenConext\EngineBlock\Driver\File\FileHandler'), '/some/path');
 
         $storage->save($notString);

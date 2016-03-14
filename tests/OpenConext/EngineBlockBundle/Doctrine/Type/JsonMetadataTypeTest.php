@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
@@ -97,13 +98,12 @@ class JsonMetadataTypeTest extends UnitTest
      * @test
      * @group engineblockbundle
      * @group doctrine
-     *
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
      */
     public function an_invalid_database_value_causes_an_exception_upon_conversion()
     {
         $entityIdType = Type::getType(EntityIdType::NAME);
 
+        $this->expectException(ConversionException::class);
         $entityIdType->convertToPHPValue(false, $this->platform);
     }
 }

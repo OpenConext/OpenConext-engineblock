@@ -36,12 +36,13 @@ class EngineBlockConfigurationTest extends TestCase
      * @group EngineBlockBridge
      *
      * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
-     * @expectedException InvalidArgumentException
      *
      * @param mixed $path
      */
     public function non_string_or_non_empty_string_path_cannot_be_used_for_querying($path)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $configuration = new EngineBlockConfiguration(array());
         $configuration->get($path);
     }

@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use OpenConext\Value\Saml\EntityType;
 use PHPUnit_Framework_TestCase as UnitTest;
@@ -93,12 +94,12 @@ class EntityTypeTypeTest extends UnitTest
      * @test
      * @group engineblockbundle
      * @group doctrine
-     *
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
      */
     public function an_invalid_database_value_causes_an_exception_upon_conversion()
     {
         $entityTypeType = Type::getType(EntityTypeType::NAME);
+
+        $this->expectException(ConversionException::class);
         $entityTypeType->convertToPHPValue(false, $this->platform);
     }
 }

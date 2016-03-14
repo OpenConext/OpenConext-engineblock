@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Doctrine\Type;
 
 use Doctrine\DBAL\Platforms\MySqlPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use OpenConext\EngineBlock\Metadata\Value\SamlEntityUuid;
 use OpenConext\Value\Saml\Entity;
@@ -98,13 +99,12 @@ class SamlEntityUuidTypeTest extends UnitTest
      * @test
      * @group engineblockbundle
      * @group doctrine
-     *
-     * @expectedException \Doctrine\DBAL\Types\ConversionException
      */
     public function an_invalid_database_value_causes_an_exception_upon_conversion()
     {
         $entityIdType = Type::getType(SamlEntityUuidType::NAME);
 
+        $this->expectException(ConversionException::class);
         $entityIdType->convertToPHPValue(false, $this->platform);
     }
 }

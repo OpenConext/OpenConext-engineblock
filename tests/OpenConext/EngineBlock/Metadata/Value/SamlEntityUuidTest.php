@@ -35,12 +35,13 @@ class SamlEntityUuidTest extends UnitTest
      * @group metadata
      *
      * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
-     * @expectedException InvalidArgumentException
      *
      * @param mixed $invalidArgument
      */
     public function a_uuid_must_be_a_non_empty_string($invalidArgument)
     {
+        $this->expectException(InvalidArgumentException::class);
+
         new SamlEntityUuid($invalidArgument);
     }
 
