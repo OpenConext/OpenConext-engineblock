@@ -7,7 +7,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             // Core Symfony
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
@@ -25,7 +25,7 @@ class AppKernel extends Kernel
 
             // EngineBlock Integration
             new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
-        );
+        ];
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
