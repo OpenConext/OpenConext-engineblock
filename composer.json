@@ -34,11 +34,11 @@
         "beberlei/assert": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^1.1",
         "doctrine/doctrine-bundle": "^1.6",
-        "ramsey/uuid": "^3.2"
+        "ramsey/uuid": "^3.2",
+        "sensio/generator-bundle": "^3.0"
     },
     "require-dev": {
         "phake/phake": "2.1",
-        "sensio/generator-bundle": "~2.3",
         "behat/behat": "~2.5",
         "behat/mink": "~1.5",
         "behat/mink-extension": "~1.3",
