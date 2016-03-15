@@ -7,7 +7,7 @@ final class ConsentList
     /**
      * @var Consent[]
      */
-    private $consents = array();
+    private $consents = [];
 
     /**
      * @param Consent[] $consents

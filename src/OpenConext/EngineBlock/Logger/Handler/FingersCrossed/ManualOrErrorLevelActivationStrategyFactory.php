@@ -37,7 +37,7 @@ final class ManualOrErrorLevelActivationStrategyFactory implements ActivationStr
 
         Assertion::choice(
             $config['action_level'],
-            array(
+            [
                 LogLevel::EMERGENCY,
                 LogLevel::ALERT,
                 LogLevel::CRITICAL,
@@ -46,7 +46,7 @@ final class ManualOrErrorLevelActivationStrategyFactory implements ActivationStr
                 LogLevel::NOTICE,
                 LogLevel::INFO,
                 LogLevel::DEBUG,
-            ),
+            ],
             'Configured action level must be a valid PSR-compliant log level: "%s"'
         );
 

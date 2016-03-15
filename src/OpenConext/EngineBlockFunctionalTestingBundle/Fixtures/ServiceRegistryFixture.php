@@ -30,7 +30,7 @@ class ServiceRegistryFixture
 
     public function reset()
     {
-        $this->data = array();
+        $this->data = [];
         $files = glob($this->directory . 'arp-*');
         foreach ($files as $file) {
             unlink($file);
@@ -40,7 +40,7 @@ class ServiceRegistryFixture
 
     public function registerSp($name, $entityId, $acsLocation, $certData = '')
     {
-        $this->data[$entityId] = array(
+        $this->data[$entityId] = [
             'workflowState' => 'prodaccepted',
             'entityId'      => $entityId,
             'name:en' => $name,
@@ -49,7 +49,7 @@ class ServiceRegistryFixture
             'displayName:nl' => $name,
             'AssertionConsumerService:0:Binding'  => SAML2_Const::BINDING_HTTP_POST,
             'AssertionConsumerService:0:Location' => $acsLocation,
-        );
+        ];
         if (!empty($certData)) {
             $this->data[$entityId]['certData'] = $certData;
         }
@@ -58,7 +58,7 @@ class ServiceRegistryFixture
 
     public function registerIdp($name, $entityId, $ssoLocation, $certData = '')
     {
-        $this->data[$entityId] = array(
+        $this->data[$entityId] = [
             'workflowState' => 'prodaccepted',
             'entityId'      => $entityId,
             'name:en' => $name,
@@ -69,7 +69,7 @@ class ServiceRegistryFixture
             'SingleSignOnService:0:Location' => $ssoLocation,
             'SingleSignOnService:1:Binding'  => SAML2_Const::BINDING_HTTP_REDIRECT,
             'SingleSignOnService:1:Location' => $ssoLocation,
-        );
+        ];
         if (!empty($certData)) {
             $this->data[$entityId]['certData'] = $certData;
         }
@@ -197,7 +197,7 @@ class ServiceRegistryFixture
         }
     }
 
-    protected function flattenArray(array $array, array $newArray = array(), $prefix = false)
+    protected function flattenArray(array $array, array $newArray = [], $prefix = false)
     {
         foreach ($array as $name => $value) {
             if (is_array($value)) {
@@ -243,7 +243,7 @@ class ServiceRegistryFixture
 
     public function allowNoAttributeValues($entityId)
     {
-        $this->data[$entityId]['arp'] = array();
+        $this->data[$entityId]['arp'] = [];
 
         return $this;
     }
@@ -251,12 +251,12 @@ class ServiceRegistryFixture
     public function allowAttributeValue($entityId, $arpAttribute, $attributeValue)
     {
         if (!isset($this->data[$entityId]['arp'])) {
-            $this->data[$entityId]['arp'] = array();
+            $this->data[$entityId]['arp'] = [];
         }
 
         // Save allowed value
         if (!isset($this->data[$entityId]['arp'][$arpAttribute])) {
-            $this->data[$entityId]['arp'][$arpAttribute] = array();
+            $this->data[$entityId]['arp'][$arpAttribute] = [];
         }
         $this->data[$entityId]['arp'][$arpAttribute][] = $attributeValue;
 

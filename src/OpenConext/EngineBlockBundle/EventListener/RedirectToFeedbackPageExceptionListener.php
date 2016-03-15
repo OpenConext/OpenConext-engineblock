@@ -87,7 +87,7 @@ class RedirectToFeedbackPageExceptionListener
     {
         $exception = $event->getException();
 
-        $redirectParams = array();
+        $redirectParams = [];
         if ($exception instanceof EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException) {
             $message         = 'Unable to receive message';
             $redirectToRoute = 'authentication_feedback_unable_to_receive_message';
@@ -101,10 +101,10 @@ class RedirectToFeedbackPageExceptionListener
             $message         = 'Unknown Issuer';
             $redirectToRoute = 'authentication_feedback_unknown_issuer';
 
-            $redirectParams  = array(
+            $redirectParams  = [
                 'entity-id'   => $exception->getEntityId(),
                 'destination' => $exception->getDestination()
-            );
+            ];
         } elseif ($exception instanceof EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException) {
             $message         = 'No Identity Provider';
             $redirectToRoute = 'authentication_feedback_no_idps';
@@ -115,7 +115,7 @@ class RedirectToFeedbackPageExceptionListener
             $message         = 'Unknown Remote Entity';
             $redirectToRoute = 'authentication_feedback_unknown_service_provider';
 
-            $redirectParams  = array('entity-id' => $exception->getEntityId());
+            $redirectParams  = ['entity-id' => $exception->getEntityId()];
         } elseif ($exception instanceof EngineBlock_Corto_Exception_MissingRequiredFields) {
             $message         = 'Missing Required Fields';
             $redirectToRoute = 'authentication_feedback_missing_required_fields';
@@ -150,7 +150,7 @@ class RedirectToFeedbackPageExceptionListener
             $message         = $exception->getMessage();
             $redirectToRoute = 'authentication_feedback_unknown_preselected_idp';
 
-            $redirectParams = array('idp-hash' => $exception->getRemoteIdpMd5Hash());
+            $redirectParams = ['idp-hash' => $exception->getRemoteIdpMd5Hash()];
         } else {
             return;
         }

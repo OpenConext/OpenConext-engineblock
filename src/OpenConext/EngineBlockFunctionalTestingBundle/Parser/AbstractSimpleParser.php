@@ -91,7 +91,7 @@ abstract class AbstractSimpleParser
         $terminal = str_replace('/', '\\/', $terminal);
         $regex = '/^(' . $terminal . ')/';
 
-        $matches = array();
+        $matches = [];
         if (!preg_match($regex, $this->content, $matches)) {
             return false;
         }

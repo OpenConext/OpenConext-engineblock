@@ -32,7 +32,7 @@ class AuthnRequestFactory
         $request->setDestination($destination);
 
         if ($mockSp->mustSignAuthnRequests()) {
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'private'));
+            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
             $key->loadKey($mockSp->getPrivateKeyPem());
             $request->setSignatureKey($key);
         }

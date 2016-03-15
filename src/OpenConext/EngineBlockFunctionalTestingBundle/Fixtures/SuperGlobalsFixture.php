@@ -9,7 +9,7 @@ class SuperGlobalsFixture
     const SERVER = 'SERVER';
 
     protected $fixture;
-    protected $data = array();
+    protected $data = [];
 
     public function __construct(JsonDataStore $fixture)
     {
@@ -30,7 +30,7 @@ class SuperGlobalsFixture
     public function set($superGlobal, $name, $value)
     {
         if (!isset($this->data[$superGlobal])) {
-            $this->data[$superGlobal] = array();
+            $this->data[$superGlobal] = [];
         }
 
         $this->data[$superGlobal][$name] = $value;

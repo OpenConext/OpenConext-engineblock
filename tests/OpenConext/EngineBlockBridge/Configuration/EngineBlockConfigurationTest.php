@@ -14,16 +14,16 @@ class EngineBlockConfigurationTest extends TestCase
      */
     public function configuration_can_be_created_from_multidimensional_array()
     {
-        $configuredValues = array('path' => array('sub_path' => 'value'));
+        $configuredValues = ['path' => ['sub_path' => 'value']];
 
         $expectedConfiguration = new EngineBlockConfiguration(
-            array(
+            [
                 'path' => new EngineBlockConfiguration(
-                    array(
+                    [
                         'sub_path' => 'value'
-                    )
+                    ]
                 )
-            )
+            ]
         );
 
         $actualConfiguration = new EngineBlockConfiguration($configuredValues);
@@ -43,7 +43,7 @@ class EngineBlockConfigurationTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $configuration = new EngineBlockConfiguration(array());
+        $configuration = new EngineBlockConfiguration([]);
         $configuration->get($path);
     }
 
@@ -54,7 +54,7 @@ class EngineBlockConfigurationTest extends TestCase
     public function default_value_is_retrieved_when_configuration_path_cannot_be_found()
     {
         $defaultValue  = 'some_default_value';
-        $configuration = new EngineBlockConfiguration(array());
+        $configuration = new EngineBlockConfiguration([]);
 
         $retrievedValue = $configuration->get('not_configured_key', $defaultValue);
 
@@ -68,7 +68,7 @@ class EngineBlockConfigurationTest extends TestCase
     public function default_value_is_retrieved_when_nested_configuration_path_cannot_be_found()
     {
         $defaultValue  = 'some_default_value';
-        $configuration = new EngineBlockConfiguration(array('path' => array('sub_path' => 'not_retrieved_value')));
+        $configuration = new EngineBlockConfiguration(['path' => ['sub_path' => 'not_retrieved_value']]);
 
         $retrievedValue = $configuration->get('path.not_configured_key', $defaultValue);
 
@@ -86,7 +86,7 @@ class EngineBlockConfigurationTest extends TestCase
     public function configured_scalars_or_null_can_be_retrieved_by_path($configuredValue)
     {
         $path           = 'path_to_value';
-        $configuration  = new EngineBlockConfiguration(array($path => $configuredValue));
+        $configuration  = new EngineBlockConfiguration([$path => $configuredValue]);
         $retrievedValue = $configuration->get($path);
 
         $this->assertSame($configuredValue, $retrievedValue);
@@ -98,9 +98,9 @@ class EngineBlockConfigurationTest extends TestCase
      */
     public function sub_configuration_can_be_retrieved_by_path()
     {
-        $configuredSubConfig = array('path_to_value' => 'a_configured_value');
+        $configuredSubConfig = ['path_to_value' => 'a_configured_value'];
         $subConfigPath       = 'sub_config_path';
-        $configuration       = new EngineBlockConfiguration(array($subConfigPath => $configuredSubConfig));
+        $configuration       = new EngineBlockConfiguration([$subConfigPath => $configuredSubConfig]);
 
         $retrievedSubConfig = $configuration->get($subConfigPath);
 
@@ -117,11 +117,11 @@ class EngineBlockConfigurationTest extends TestCase
     public function nested_value_can_be_retrieved_by_path()
     {
         $configuredValue = 'some_configured_value';
-        $nestedConfig    = array(
-            'path' => array(
+        $nestedConfig    = [
+            'path' => [
                 'sub_path' => $configuredValue
-            )
-        );
+            ]
+        ];
         $configuration   = new EngineBlockConfiguration($nestedConfig);
 
         $retrievedValue = $configuration->get('path.sub_path');
@@ -135,7 +135,7 @@ class EngineBlockConfigurationTest extends TestCase
      */
     public function configuration_can_be_converted_to_array()
     {
-        $configArray = array('key_a' => 'value_a', 'key_b' => 'value_b');
+        $configArray = ['key_a' => 'value_a', 'key_b' => 'value_b'];
 
         $configuration          = new EngineBlockConfiguration($configArray);
         $arrayFromConfiguration = $configuration->toArray();
@@ -149,12 +149,12 @@ class EngineBlockConfigurationTest extends TestCase
      */
     public function nested_configuration_can_be_converted_to_array()
     {
-        $configArray = array(
+        $configArray = [
             'key_a' => 'value_a',
-            'key_b' => array(
+            'key_b' => [
                 'nested_key' => 'nested_value'
-            )
-        );
+            ]
+        ];
 
         $configuration          = new EngineBlockConfiguration($configArray);
         $arrayFromConfiguration = $configuration->toArray();

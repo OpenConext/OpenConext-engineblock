@@ -13,12 +13,12 @@ final class EngineBlockIniFileLoader
      */
     public function load(array $files)
     {
-        $parsedValues = array();
+        $parsedValues = [];
         foreach ($files as $file) {
             $parsedValues = array_replace_recursive($parsedValues, $this->parseIniFile($file));
         }
 
-        $mappedValues = array();
+        $mappedValues = [];
         foreach ($parsedValues as $keys => $value) {
             // In order to prevent Symfony parsing percent signs as parameter references, they are escaped
             $value = str_replace('%', '%%', $value);
@@ -38,10 +38,10 @@ final class EngineBlockIniFileLoader
     private function map($value, array $keys, array $mappedValues)
     {
         if (count($keys) > 1) {
-            return $this->map(array(array_pop($keys) => $value), $keys, $mappedValues);
+            return $this->map([array_pop($keys) => $value], $keys, $mappedValues);
         }
 
-        return array_replace_recursive($mappedValues, array($keys[0] => $value));
+        return array_replace_recursive($mappedValues, [$keys[0] => $value]);
     }
 
     /**

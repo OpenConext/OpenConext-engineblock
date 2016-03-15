@@ -26,14 +26,14 @@ class FeatureContext extends BehatContext implements KernelAwareInterface
     const PARAM_NAME_IDP_FIXTURE_FILE   = 'idp_fixture_file';
     const PARAM_NAME_SP_FIXTURE_FILE    = 'sp_fixture_file';
 
-    protected $containerParameters = array(
+    protected $containerParameters = [
         self::PARAM_NAME_ENGINE_URL,
         self::PARAM_NAME_ETS_URL,
         self::PARAM_NAME_IDPS_CONFIG_URL,
         self::PARAM_NAME_SPS_CONFIG_URL,
         self::PARAM_NAME_IDP_FIXTURE_FILE,
         self::PARAM_NAME_SP_FIXTURE_FILE,
-    );
+    ];
 
     /**
      * @var KernelInterface

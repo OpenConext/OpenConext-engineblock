@@ -52,9 +52,9 @@ final class AdditionalInfo
             $info->details = $exception->description . PHP_EOL;
         }
 
-        $traces = array(
+        $traces = [
             get_class($exception) . ': ' . $exception->getMessage() . PHP_EOL . $exception->getTraceAsString()
-        );
+        ];
 
         $previous = $exception;
         while ($previous = $previous->getPrevious()) {
@@ -240,7 +240,7 @@ final class AdditionalInfo
      */
     public function toArray()
     {
-        return array(
+        return [
             'severity'       => $this->severity,
             'location'       => $this->location,
             'userId'         => $this->userId,
@@ -248,6 +248,6 @@ final class AdditionalInfo
             'sp'             => $this->sp,
             'details'        => $this->details,
             'message_prefix' => $this->messagePrefix
-        );
+        ];
     }
 }

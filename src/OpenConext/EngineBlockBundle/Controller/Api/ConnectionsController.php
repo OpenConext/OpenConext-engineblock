@@ -51,7 +51,7 @@ class ConnectionsController
             return new JsonResponse(null, 404);
         }
 
-        if (!$this->authorizationChecker->isGranted(array('ROLE_API_USER_JANUS'))) {
+        if (!$this->authorizationChecker->isGranted(['ROLE_API_USER_JANUS'])) {
             throw new ApiAccessDeniedHttpException();
         }
 
@@ -67,7 +67,7 @@ class ConnectionsController
         $roles     = $assembler->assemble($body->connections);
 
         $diContainer = $this->engineBlockApplicationSingleton->getDiContainer();
-        $doctrineRepository = DoctrineMetadataRepository::createFromConfig(array(), $diContainer);
+        $doctrineRepository = DoctrineMetadataRepository::createFromConfig([], $diContainer);
 
         $result = $doctrineRepository->synchronize($roles);
 

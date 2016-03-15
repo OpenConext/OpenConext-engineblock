@@ -28,7 +28,7 @@ class XmlToArray
     /**
      * @var array All namespaces used in SAML2 messages.
      */
-    protected static $_namespaces = array(
+    protected static $_namespaces = [
         'urn:oasis:names:tc:SAML:1.0:protocol'          => 'samlp',
         'urn:oasis:names:tc:SAML:1.0:assertion'         => 'saml',
         'urn:oasis:names:tc:SAML:2.0:protocol'          => 'samlp',
@@ -41,12 +41,12 @@ class XmlToArray
         'http://www.w3.org/2000/09/xmldsig#'            => 'ds',
         'http://www.w3.org/2001/04/xmlenc#'             => 'xenc',
         'http://www.w3.org/2001/10/xml-exc-c14n#'       => 'ec',
-    );
+    ];
 
     /**
      * @var array All XML entities which are treated as single values in Corto.
      */
-    protected static $_singulars = array(
+    protected static $_singulars = [
         'md:AffiliationDescriptor',
 #        'md:AttributeAuthorityDescriptor',
 #        'md:AuthnAuthorityDescriptor',
@@ -125,9 +125,9 @@ class XmlToArray
         'ds:Transforms',
 #        'ds:X509Data',
         'ec:InclusiveNamespaces',
-    );
+    ];
 
-    protected static $_multipleValues = array(
+    protected static $_multipleValues = [
         'saml:Attribute',
         'saml:EncryptedAttribute',
         'saml:AttributeValue',
@@ -145,7 +145,7 @@ class XmlToArray
         'md:NameIDFormat',
         'md:ServiceDescription',
         'md:ServiceName'
-    );
+    ];
 
     /**
      * Non static alias function for use in unit testable code
@@ -168,7 +168,7 @@ class XmlToArray
             );
         }
 
-        $values = array();
+        $values = [];
         $parserResultStatus = xml_parse_into_struct($parser, $xml, $values);
         if ($parserResultStatus !== 1) {
             throw new \RuntimeException(
@@ -197,9 +197,9 @@ class XmlToArray
 
     protected static $counter = 0;
 
-    protected static function xml2arrayRecursive(&$elements, $level = 1, $namespaceMapping = array())
+    protected static function xml2arrayRecursive(&$elements, $level = 1, $namespaceMapping = [])
     {
-        $newElement = array();
+        $newElement = [];
 
         while(isset($elements[self::$counter])) {
             $value = $elements[self::$counter];
@@ -211,7 +211,7 @@ class XmlToArray
                 continue;
             }
 
-            $hashedAttributes = array();
+            $hashedAttributes = [];
             $tagName = $value['tag'];
             if (isset($value['attributes']) && $attributes = $value['attributes']) {
                 foreach($attributes as $attributeKey => $attributeValue) {
@@ -220,7 +220,7 @@ class XmlToArray
                 }
             }
 
-            $complete = array();
+            $complete = [];
 
             $tagName = self::mapNamespacesToSaml($tagName);
 
@@ -364,13 +364,13 @@ class XmlToArray
      */
     public static function attributes2array(array $attributes)
     {
-        $res = array();
+        $res = [];
         foreach($attributes as $attribute) {
             if(!isset($attribute['_Name'])) {
                 throw new \RuntimeException('Missing attribute name');
             }
 
-            $res[$attribute['_Name']] = array();
+            $res[$attribute['_Name']] = [];
             if(!isset($attribute['saml:AttributeValue'])) {
                 continue;
             }
@@ -397,23 +397,23 @@ class XmlToArray
 
     public static function array2attributes($attributes)
     {
-        $res = array();
+        $res = [];
         foreach((array)$attributes as $name => $attribute) {
             // Name must be a uri
             // Uri checking is hard, so at least check for a scheme.
             assert('(bool)preg_match("|(\w+)\:.+|", $name)');
-            $newAttribute = array(
+            $newAttribute = [
                 '_Name' => $name,
                 '_NameFormat' => 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-            );
+            ];
             foreach ((array)$attribute as $value) {
                 if (is_array($value)) {
                     $newAttribute['saml:AttributeValue'][] = $value;
                 }
                 else {
-                    $newAttribute['saml:AttributeValue'][] = array (
+                    $newAttribute['saml:AttributeValue'][] = [
                         self::VALUE_PFX  => $value,
-                    );
+                    ];
                 }
             }
             $res[] = $newAttribute;
@@ -439,7 +439,7 @@ class XmlToArray
         $token = strtok($xml, "\n");
         $result = ''; // holds formatted version as it is built
         $pad = 0; // initial indent
-        $matches = array(); // returns from preg_matches()
+        $matches = []; // returns from preg_matches()
         $indent = 0;
 
         // scan each line and adjust indent based on opening/closing tags

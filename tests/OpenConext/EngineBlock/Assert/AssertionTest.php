@@ -42,8 +42,8 @@ class AssertionTest extends UnitTest
     {
         $this->expectException(InvalidArgumentException::class);
 
-        $requiredKeys = array('a', 'b');
-        $actualData   = array('a' => 1, 'c' => 2);
+        $requiredKeys = ['a', 'b'];
+        $actualData   = ['a' => 1, 'c' => 2];
 
         Assertion::keysExist($actualData, $requiredKeys);
     }
@@ -53,9 +53,9 @@ class AssertionTest extends UnitTest
      */
     public function keys_exists_assertion_succeeds_if_all_required_keys_are_present_()
     {
-        $requiredKeys = array('a', 'b', 'c');
-        $match        = array('c' => 1, 'a' => 2, 'b' => 'foo');
-        $superfluous  = array('d' => 1, 'a' => 2, 'c' => 3, 'b' => 4);
+        $requiredKeys = ['a', 'b', 'c'];
+        $match        = ['c' => 1, 'a' => 2, 'b' => 'foo'];
+        $superfluous  = ['d' => 1, 'a' => 2, 'c' => 3, 'b' => 4];
 
         $exceptionCaught = false;
         try {

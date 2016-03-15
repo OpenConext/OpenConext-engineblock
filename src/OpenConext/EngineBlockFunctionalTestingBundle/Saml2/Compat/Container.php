@@ -23,7 +23,7 @@ class Container extends \SAML2_Compat_AbstractContainer
     /**
      * @var array
      */
-    protected $lastDebugMessage = array();
+    protected $lastDebugMessage = [];
 
     /**
      * @param string $type
@@ -80,7 +80,7 @@ class Container extends \SAML2_Compat_AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect($url, $data = array())
+    public function redirect($url, $data = [])
     {
         throw new NotImplementedException('SSP/SAML2 Redirect not implemented! URL: ' . $url);
     }
@@ -92,7 +92,7 @@ class Container extends \SAML2_Compat_AbstractContainer
      * @param array $data
      * @return $this
      */
-    public function postRedirect($url, $data = array())
+    public function postRedirect($url, $data = [])
     {
         $formData = '';
         foreach ($data as $name => $value) {

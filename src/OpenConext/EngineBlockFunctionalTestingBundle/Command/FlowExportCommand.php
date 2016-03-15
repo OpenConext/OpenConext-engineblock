@@ -39,7 +39,7 @@ class FlowExportCommand extends Command
     {
         $this
             ->setName('engineblock:replay:flow:export')
-            ->setAliases(array('replay:flow:export'))
+            ->setAliases(['replay:flow:export'])
             ->setDescription('Export all flows to a directory')
             ->addArgument(
                 'logfile',

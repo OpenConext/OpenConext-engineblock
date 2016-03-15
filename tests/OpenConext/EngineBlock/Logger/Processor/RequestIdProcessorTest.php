@@ -26,7 +26,7 @@ class RequestIdProcessorTest extends TestCase
         $requestId = new RequestId($requestIdGenerator);
 
         $requestIdProcessor = new RequestIdProcessor($requestId);
-        $record = array('extra' => array());
+        $record = ['extra' => []];
 
         $processedRecord = $requestIdProcessor->processRecord($record);
 

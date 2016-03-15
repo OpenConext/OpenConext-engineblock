@@ -10,7 +10,7 @@ final class EngineBlockConfiguration
     /**
      * @var array
      */
-    private $configuration = array();
+    private $configuration = [];
 
     public function __construct(array $configuration)
     {
@@ -57,7 +57,7 @@ final class EngineBlockConfiguration
      */
     public function toArray()
     {
-        $result = array();
+        $result = [];
 
         foreach ($this->configuration as $key => $value) {
             if ($value instanceof EngineBlockConfiguration) {

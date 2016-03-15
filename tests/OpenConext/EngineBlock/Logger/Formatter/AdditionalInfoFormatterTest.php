@@ -19,7 +19,7 @@ class AdditionalInfoFormatterTest extends TestCase
         $exception = new EngineBlock_Exception('message', EngineBlock_Exception::CODE_EMERGENCY);
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
-        $formatted = $formatter->format(array('context' => array('exception' => $exception)));
+        $formatted = $formatter->format(['context' => ['exception' => $exception]]);
 
         $this->assertTrue(
             is_array($formatted['context']['exception']),
@@ -42,7 +42,7 @@ class AdditionalInfoFormatterTest extends TestCase
         $exception = new EngineBlock_Exception('message');
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
-        $formatted = $formatter->formatBatch(array(array('context' => array('exception' => $exception))));
+        $formatted = $formatter->formatBatch([['context' => ['exception' => $exception]]]);
 
         $this->assertTrue(
             is_array($formatted[0]['context']['exception']),
@@ -65,7 +65,7 @@ class AdditionalInfoFormatterTest extends TestCase
         $exception = new Exception('message');
 
         $formatter = new AdditionalInfoFormatter(new PassthruFormatter());
-        $formatted = $formatter->format(array('context' => array('exception' => $exception)));
+        $formatted = $formatter->format(['context' => ['exception' => $exception]]);
 
         $this->assertEquals($exception, $formatted['context']['exception']);
     }

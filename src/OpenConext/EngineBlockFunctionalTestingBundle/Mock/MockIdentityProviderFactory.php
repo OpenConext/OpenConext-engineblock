@@ -42,7 +42,7 @@ class MockIdentityProviderFactory extends AbstractMockEntityFactory
         $entityMetadata = new \SAML2_XML_md_EntityDescriptor();
         $entityMetadata->entityID = $this->router->generate(
             'functional_testing_idp_metadata',
-            array('idpName' => $idpName),
+            ['idpName' => $idpName],
             RouterInterface::ABSOLUTE_URL
         );
 
@@ -51,12 +51,12 @@ class MockIdentityProviderFactory extends AbstractMockEntityFactory
         $acsService->Binding  = \SAML2_Const::BINDING_HTTP_REDIRECT;
         $acsService->Location = $this->router->generate(
             'functional_testing_idp_sso',
-            array('idpName' => $idpName),
+            ['idpName' => $idpName],
             RouterInterface::ABSOLUTE_URL
         );
 
         $idpSsoDescriptor = new \SAML2_XML_md_IDPSSODescriptor();
-        $idpSsoDescriptor->protocolSupportEnumeration = array(\SAML2_Const::NS_SAMLP);
+        $idpSsoDescriptor->protocolSupportEnumeration = [\SAML2_Const::NS_SAMLP];
         $idpSsoDescriptor->SingleSignOnService[] = $acsService;
 
         $idpSsoDescriptor->KeyDescriptor[] = $this->generateDefaultSigningKeyPair();

@@ -42,7 +42,7 @@ class IdentityProviderController extends Controller
         return new Response(
             $entityDescriptor->toXML()->ownerDocument->saveXML(),
             200,
-            array('Content-Type' => 'application/xml')
+            ['Content-Type' => 'application/xml']
         );
     }
 
@@ -95,10 +95,10 @@ class IdentityProviderController extends Controller
 
         $container->postRedirect(
             $destination,
-            array(
+            [
                 'authnRequestXml'=> htmlentities($authnRequestXml),
                 'SAMLResponse' => base64_encode($responseXml),
-            )
+            ]
         );
         return $container->getPostResponse();
     }

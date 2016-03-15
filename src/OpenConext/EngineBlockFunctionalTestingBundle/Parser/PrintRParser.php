@@ -32,7 +32,7 @@ class PrintRParser extends AbstractSimpleParser
         $this->newline();
         $this->optionalSpace();
         $this->consume('\(');
-        $array = array();
+        $array = [];
         $this->debug('Array START');
         while ($this->lookAhead("\n *\\[[" . static::KEY_CHARACTERS . "]+\\] =>")) {
             $array = $this->arrayContent($array);

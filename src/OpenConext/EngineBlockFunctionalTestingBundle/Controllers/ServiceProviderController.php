@@ -124,7 +124,7 @@ class ServiceProviderController extends Controller
         return new Response(
             $xml,
             200,
-            array('Content-Type' => 'application/xml')
+            ['Content-Type' => 'application/xml']
         );
     }
 
@@ -140,7 +140,7 @@ class ServiceProviderController extends Controller
         return new Response(
             $mockSp->getEntityDescriptor()->toXML()->ownerDocument->saveXML(),
             200,
-            array('Content-Type' => 'application/xml')
+            ['Content-Type' => 'application/xml']
         );
     }
 }

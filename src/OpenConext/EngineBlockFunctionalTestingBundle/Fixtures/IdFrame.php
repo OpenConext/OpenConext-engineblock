@@ -14,7 +14,7 @@ class IdFrame
     /**
      * @param array $ids
      */
-    public function __construct($ids = array())
+    public function __construct($ids = [])
     {
         $this->ids = $ids;
     }

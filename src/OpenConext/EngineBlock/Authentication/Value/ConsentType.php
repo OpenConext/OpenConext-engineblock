@@ -40,7 +40,7 @@ final class ConsentType
     {
         Assertion::choice(
             $consentType,
-            array(self::TYPE_EXPLICIT, self::TYPE_IMPLICIT),
+            [self::TYPE_EXPLICIT, self::TYPE_IMPLICIT],
             'ConsentType must be one of ConsentType::TYPE_EXPLICIT, ConsentType::TYPE_IMPLICIT'
         );
 

@@ -21,7 +21,7 @@ class SessionsFindCommand extends Command
     {
         $this
             ->setName('engineblock:replay:sessions:find')
-            ->setAliases(array('replay:sessions:find'))
+            ->setAliases(['replay:sessions:find'])
             ->setDescription('Find all sessions from log output on STDIN or for a given file')
             ->addArgument('file', InputArgument::OPTIONAL, 'File to get sessions from.')
             ->setHelp(
@@ -40,10 +40,10 @@ class SessionsFindCommand extends Command
     {
         $logStream = new FileOrStdInHelper($input, $output);
 
-        $sessions = array();
+        $sessions = [];
         try {
             $logStream->mapLines(function ($line) use (&$sessions, $output) {
-                $matches = array();
+                $matches = [];
                 if (!preg_match('/EB\[([\w\d]+)\]\[[\w\d]+\]/', $line, $matches)) {
                     return;
                 }

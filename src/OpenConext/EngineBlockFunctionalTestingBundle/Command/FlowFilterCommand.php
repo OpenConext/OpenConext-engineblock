@@ -25,7 +25,7 @@ class FlowFilterCommand extends Command
     {
         $this
             ->setName('engineblock:replay:flow:filter')
-            ->setAliases(array('replay:flow:filter'))
+            ->setAliases(['replay:flow:filter'])
             ->setDescription('Find all sessions that have an attached flow')
             ->addArgument('logfile', InputArgument::REQUIRED, 'File to get flows from')
             ->addArgument('sessionFile', InputArgument::OPTIONAL, 'File to get sessions from.')
@@ -101,13 +101,13 @@ class FlowFilterCommand extends Command
         $hasEbResponse  = false;
 
         rewind($logStream);
-        $history = array(
+        $history = [
             0 => '',
             1 => '',
             2 => '',
             3 => '',
             4 => '',
-        );
+        ];
         while (!feof($logStream)) {
             $logLine = stream_get_line($logStream, 2048, "\n");
 

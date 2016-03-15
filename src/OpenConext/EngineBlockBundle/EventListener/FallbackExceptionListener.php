@@ -65,7 +65,7 @@ class FallbackExceptionListener
             );
         }
 
-        $viewData = array();
+        $viewData = [];
         if ($this->engineBlockApplicationSingleton->getConfigurationValue('debug', false)) {
             $viewData['exception'] = $exception;
         }

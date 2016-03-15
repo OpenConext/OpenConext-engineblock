@@ -165,7 +165,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
             return null;
         }
 
-        $key = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type' => 'public'));
+        $key = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, ['type' => 'public']);
         $key->loadKey($this->findFile($this->descriptor->Extensions['EncryptionCert']), true, true);
 
         return $key;
@@ -196,7 +196,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $response = $role->Extensions['SAMLResponse'];
         $assertions = $response->getAssertions();
 
-        $newAttributes = array();
+        $newAttributes = [];
 
         $attributes = $assertions[0]->getAttributes();
         foreach ($attributes as $attributeName => $attributeValues) {

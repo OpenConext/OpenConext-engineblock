@@ -38,11 +38,11 @@ class OpenConextEngineBlockExtension extends Extension
     {
         $engineBlockLoader = new EngineBlockIniFileLoader;
         $engineBlockConfig = $engineBlockLoader->load(
-            array(
+            [
                 $container->getParameter('kernel.root_dir') .
                 '/../application/' . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
                 EngineBlock_Application_Bootstrapper::CONFIG_FILE_ENVIRONMENT,
-            )
+            ]
         );
 
         $container
@@ -64,7 +64,7 @@ class OpenConextEngineBlockExtension extends Extension
      */
     private function setUrlParameterBasedOnEnv(ContainerBuilder $container)
     {
-        if (in_array($container->getParameter('kernel.environment'), array('dev', 'test'))) {
+        if (in_array($container->getParameter('kernel.environment'), ['dev', 'test'])) {
             $container->setParameter(
                 'engineblock_url',
                 sprintf('https://engine.%s', $container->getParameter('domain'))
