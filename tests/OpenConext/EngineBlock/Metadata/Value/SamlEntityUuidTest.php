@@ -7,7 +7,7 @@ use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
 use PHPUnit_Framework_TestCase as UnitTest;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 class SamlEntityUuidTest extends UnitTest
 {
