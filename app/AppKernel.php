@@ -8,21 +8,28 @@ class AppKernel extends Kernel
     public function registerBundles()
     {
         $bundles = array(
+            // Core Symfony
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
+
+            // Sensio helpers
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
-            new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
+            new Sensio\Bundle\DistributionBundle\SensioDistributionBundle(),
+            new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle(),
+
+            // Doctrine Integration
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle()
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+
+            // EngineBlock Integration
+            new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
-            $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
-            $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
 
             // own bundles
             $bundles[] = new OpenConext\EngineBlockFunctionalTestingBundle\OpenConextEngineBlockFunctionalTestingBundle();
