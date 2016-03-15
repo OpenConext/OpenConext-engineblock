@@ -60,8 +60,6 @@ echo "Cleaning build of dev files" &&
 rm -rf ${PROJECT_DIR}/.idea &&
 rm -rf ${PROJECT_DIR}/.git &&
 rm -f ${PROJECT_DIR}/.gitignore &&
-rm -f ${PROJECT_DIR}/composer.json &&
-rm -f ${PROJECT_DIR}/composer.lock &&
 rm -f ${PROJECT_DIR}/makeRelease.sh &&
 rm -f ${PROJECT_DIR}/bin/composer.phar &&
 rm -rf ${PROJECT_DIR}/features &&
