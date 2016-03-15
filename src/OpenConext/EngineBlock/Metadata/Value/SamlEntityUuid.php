@@ -5,7 +5,7 @@ namespace OpenConext\EngineBlock\Metadata\Value;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Serializable;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 
 final class SamlEntityUuid implements Serializable
 {
