@@ -1347,12 +1347,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/SamlValueObject.git",
-                "reference": "df50c89ba8059667677cde18254037fddb956937"
+                "reference": "6a279e9aa04f4e68bbd222f06a99468347595a00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/df50c89ba8059667677cde18254037fddb956937",
-                "reference": "df50c89ba8059667677cde18254037fddb956937",
+                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/6a279e9aa04f4e68bbd222f06a99468347595a00",
+                "reference": "6a279e9aa04f4e68bbd222f06a99468347595a00",
                 "shasum": ""
             },
             "require": {
@@ -1380,7 +1380,7 @@
                 }
             ],
             "description": "Set of value objects for usage with SAML2",
-            "time": "2016-02-29 11:29:16"
+            "time": "2016-03-16 14:28:48"
         },
         {
             "name": "openconext/stoker-metadata",
