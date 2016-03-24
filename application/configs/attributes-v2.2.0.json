@@ -74,6 +74,25 @@
             }
         }
     },
+    "urn:oid:1.3.6.1.4.1.5923.1.1.1.16": "urn:mace:dir:attribute-def:eduPersonOrcid",
+    "urn:mace:dir:attribute-def:eduPersonOrcid": {
+        "Description": {
+            "en": "A persistent digital identifier for researchers",
+            "nl": "Een persistente digitale identificatie voor onderzoekers"
+        },
+        "Name": {
+            "en": "ORCID researcher ID",
+            "nl": "ORCID onderzoekers-ID"
+        },
+        "DisplayOrder" : 14,
+        "DisplayConsent" : true,
+        "Conditions": {
+            "warning": {
+                "max": "1",
+                "regex": "#^http://orcid\.org/\d{4}(-\d{4}){3}$#"
+            },
+        }
+    },
     "urn:oid:1.3.6.1.4.1.5923.1.1.1.6": "urn:mace:dir:attribute-def:eduPersonPrincipalName",
     "urn:mace:dir:attribute-def:eduPersonPrincipalName": {
         "Description": {
