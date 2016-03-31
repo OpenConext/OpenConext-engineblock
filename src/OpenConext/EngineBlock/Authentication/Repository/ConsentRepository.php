@@ -43,7 +43,7 @@ final class ConsentRepository
                 hashed_user_id=:hashed_user_id
         ';
 
-        $statement = $this->connection->executeQuery($sql, array('hashed_user_id' => sha1($userId)));
+        $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
         $rows      = $statement->fetchAll(PDO::FETCH_ASSOC);
 
         return array_map(

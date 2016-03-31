@@ -8,7 +8,7 @@ class InvalidArgumentException extends InvalidAssertionException implements Exce
 {
     // according to CS used, propertypath and value should be switched, but that breaks the integration with the library
     // @codingStandardsIgnoreStart
-    public function __construct($message, $code, $propertyPath = null, $value, array $constraints = array())
+    public function __construct($message, $code, $propertyPath = null, $value, array $constraints = [])
     {
     // @codingStandardsIgnoreEnd
         if ($propertyPath !== null && strpos($message, $propertyPath) === false) {

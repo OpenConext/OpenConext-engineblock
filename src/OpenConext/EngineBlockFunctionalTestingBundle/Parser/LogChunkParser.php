@@ -51,7 +51,7 @@ class LogChunkParser
     {
         $contents = $this->load();
 
-        $matches = array();
+        $matches = [];
         $matched = preg_match(
             '/\[Message INFO\] Detected pre-selection of (?P<entityId>.+) as IdP, switching to transparant mode/',
             $contents,
@@ -82,7 +82,7 @@ class LogChunkParser
                 continue;
             }
 
-            $matches = array();
+            $matches = [];
             $matched = preg_match('/\] (?P<printR>Array.+)/', $line, $matches);
             if ($matched === false) {
                 throw new \RuntimeException('Unable to execute regex!');
@@ -107,7 +107,7 @@ class LogChunkParser
 
     public function getMessage($messageType)
     {
-        if (!in_array($messageType, array(self::MESSAGE_TYPE_RESPONSE, self::MESSAGE_TYPE_AUTHN_REQUEST))) {
+        if (!in_array($messageType, [self::MESSAGE_TYPE_RESPONSE, self::MESSAGE_TYPE_AUTHN_REQUEST])) {
             throw new \RuntimeException("Unsupported messageType: " . $messageType);
         }
 
@@ -135,7 +135,7 @@ class LogChunkParser
     {
         $urlKey = $this->getUrlKeyForMessageType($messageType);
 
-        $matches = array();
+        $matches = [];
         if (!preg_match("/$urlKey=([A-Za-z0-9+\\/%]+)/", $content, $matches)) {
             return false;
         }
@@ -184,8 +184,8 @@ class LogChunkParser
     {
         $tagName = $this->getTagNameForMessageType($messageType);
 
-        $chunkStartMatches = array();
-        $chunkEndMatches = array();
+        $chunkStartMatches = [];
+        $chunkEndMatches = [];
 
         $matchedChunkStartLines = preg_match("/!CHUNKSTART>.+samlp:$tagName/", $content, $chunkStartMatches);
         $matchedChunkEndLines   = preg_match('/!CHUNKEND>/', $content, $chunkEndMatches);

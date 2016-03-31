@@ -17,7 +17,7 @@ class DumpServiceRegistryCommand extends ContainerAwareCommand
     {
         $this
             ->setName('engineblock:dump:sr')
-            ->setAliases(array('dump:sr'))
+            ->setAliases(['dump:sr'])
             ->setDescription('Find all sessions from log output on STDIN or for a given file')
             ->addArgument('file', InputArgument::OPTIONAL, 'File to get sessions from.');
     }

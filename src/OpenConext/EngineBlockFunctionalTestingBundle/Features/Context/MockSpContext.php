@@ -356,7 +356,7 @@ class MockSpContext extends AbstractSubContext
         /** @var MockServiceProvider $sp */
         $sp = $this->mockSpRegistry->get($spName);
 
-        $sp->getAuthnRequest()->setRequesterID(array($requesterEntityId));
+        $sp->getAuthnRequest()->setRequesterID([$requesterEntityId]);
 
         $this->mockSpRegistry->save();
     }

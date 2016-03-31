@@ -43,7 +43,7 @@ class EntityRegistry extends ParameterBag
 
     public function clear()
     {
-        $this->parameters = array();
+        $this->parameters = [];
 
         return $this;
     }

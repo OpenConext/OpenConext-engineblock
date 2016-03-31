@@ -36,7 +36,7 @@ class ErrorReporter
      */
     public function reportError(Exception $exception, $messageSuffix)
     {
-        $logContext = array('exception' => $exception);
+        $logContext = ['exception' => $exception];
 
         if ($exception instanceof EngineBlock_Exception) {
             $severity = $exception->getSeverity();
@@ -48,7 +48,7 @@ class ErrorReporter
         $prevException = $exception;
         while ($prevException = $prevException->getPrevious()) {
             if (!isset($logContext['previous_exceptions'])) {
-                $logContext['previous_exceptions'] = array();
+                $logContext['previous_exceptions'] = [];
             }
 
             $logContext['previous_exceptions'][] = (string)$prevException;
@@ -69,7 +69,7 @@ class ErrorReporter
         // Store some valuable debug info in session so it can be displayed on feedback pages
         $feedback = $_SESSION['feedbackInfo'];
         if (empty($feedback)) {
-            $feedback = array();
+            $feedback = [];
         }
 
         if ($exception instanceof EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
@@ -77,7 +77,7 @@ class ErrorReporter
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
             $feedback = array_merge(
                 $feedback,
-                array('error_authorization_policy_violation_name' => $exception->getMessage())
+                ['error_authorization_policy_violation_name' => $exception->getMessage()]
             );
         }
 

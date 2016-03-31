@@ -10,29 +10,29 @@ class TestDataProvider
     {
         return array_merge(
             self::emtpyString(),
-            array(
-                'float'  => array(1.234),
-                'true'   => array(true),
-                'false'  => array(false),
-                'array'  => array(array()),
-                'object' => array(new stdClass()),
-                'null'   => array(null),
-                'string' => array('string')
-            )
+            [
+                'float'  => [1.234],
+                'true'   => [true],
+                'false'  => [false],
+                'array'  => [[]],
+                'object' => [new stdClass()],
+                'null'   => [null],
+                'string' => ['string']
+            ]
         );
     }
 
     public static function notString()
     {
-        return array(
-            'integer' => array(1),
-            'float'   => array(1.234),
-            'true'    => array(true),
-            'false'   => array(false),
-            'array'   => array(array()),
-            'object'  => array(new stdClass()),
-            'null'    => array(null)
-        );
+        return [
+            'integer' => [1],
+            'float'   => [1.234],
+            'true'    => [true],
+            'false'   => [false],
+            'array'   => [[]],
+            'object'  => [new stdClass()],
+            'null'    => [null]
+        ];
     }
 
     public static function notStringOrEmptyString()
@@ -47,18 +47,18 @@ class TestDataProvider
     {
         return array_merge(
             self::nonStringScalar(),
-            array('string'  => array('some string'))
+            ['string' => ['some string']]
         );
     }
 
     public static function nonStringScalar()
     {
-        return array(
-            'integer' => array(1),
-            'float'   => array(1.234),
-            'true'    => array(true),
-            'false'   => array(false),
-        );
+        return [
+            'integer' => [1],
+            'float'   => [1.234],
+            'true'    => [true],
+            'false'   => [false],
+        ];
     }
 
     public static function nonStringScalarOrEmptyString()
@@ -73,7 +73,7 @@ class TestDataProvider
     {
         return array_merge(
             self::scalar(),
-            array('null' => array(null))
+            ['null' => [null]]
         );
     }
 
@@ -81,14 +81,14 @@ class TestDataProvider
     {
         return array_merge(
             self::emtpyString(),
-            array(
-                'integer' => array(1),
-                'float'   => array(1.234),
-                'array'   => array(array()),
-                'object'  => array(new stdClass()),
-                'null'    => array(null),
-                'string'  => array('string')
-            )
+            [
+                'integer' => [1],
+                'float'   => [1.234],
+                'array'   => [[]],
+                'object'  => [new stdClass()],
+                'null'    => [null],
+                'string'  => ['string']
+            ]
         );
     }
 
@@ -96,15 +96,15 @@ class TestDataProvider
     {
         return array_merge(
             self::emtpyString(),
-            array(
-                'integer' => array(1),
-                'float'   => array(1.234),
-                'true'    => array(true),
-                'false'   => array(false),
-                'object'  => array(new stdClass()),
-                'null'    => array(null),
-                'string'  => array('string')
-            )
+            [
+                'integer' => [1],
+                'float'   => [1.234],
+                'true'    => [true],
+                'false'   => [false],
+                'object'  => [new stdClass()],
+                'null'    => [null],
+                'string'  => ['string']
+            ]
         );
     }
 
@@ -112,26 +112,26 @@ class TestDataProvider
     {
         return array_merge(
             self::emtpyString(),
-            array(
-                'integer' => array(1),
-                'float'   => array(1.234),
-                'array'   => array(array()),
-                'true'    => array(true),
-                'false'   => array(false),
-                'object'  => array(new stdClass()),
-                'null'    => array(null),
-                'string'  => array('string')
-            )
+            [
+                'integer' => [1],
+                'float'   => [1.234],
+                'array'   => [[]],
+                'true'    => [true],
+                'false'   => [false],
+                'object'  => [new stdClass()],
+                'null'    => [null],
+                'string'  => ['string']
+            ]
         );
     }
 
     public static function emtpyString()
     {
-        return array(
-            'empty string'    => array(''),
-            'new line only'   => array("\n"),
-            'only whitespace' => array('   '),
-            'nullbyte'        => array(chr(0)),
-        );
+        return [
+            'empty string'    => [''],
+            'new line only'   => ["\n"],
+            'only whitespace' => ['   '],
+            'nullbyte'        => [chr(0)],
+        ];
     }
 }

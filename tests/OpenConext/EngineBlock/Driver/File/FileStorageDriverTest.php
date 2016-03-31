@@ -53,7 +53,7 @@ class FileStorageDriverTest extends UnitTest
         $filePath = '/some/file/path';
 
         $fileHandlerMock = m::mock('OpenConext\EngineBlock\Driver\File\FileHandler');
-        $fileHandlerMock->shouldReceive('writeTo')->withArgs(array($data, $filePath));
+        $fileHandlerMock->shouldReceive('writeTo')->withArgs([$data, $filePath]);
 
         $storage = new FileStorageDriver($fileHandlerMock, $filePath);
         $storage->save($data);
@@ -70,7 +70,7 @@ class FileStorageDriverTest extends UnitTest
         $filePath = '/some/file/path';
 
         $fileHandlerMock = m::mock('OpenConext\EngineBlock\Driver\File\FileHandler');
-        $fileHandlerMock->shouldReceive('readFrom')->withArgs(array($filePath))->andReturn($data);
+        $fileHandlerMock->shouldReceive('readFrom')->withArgs([$filePath])->andReturn($data);
 
         $storage = new FileStorageDriver($fileHandlerMock, $filePath);
         $read = $storage->load();

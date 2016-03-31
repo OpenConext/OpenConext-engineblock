@@ -58,7 +58,7 @@ abstract class AbstractMockEntityRole
     public function setCertificate($certificateFile)
     {
         $certData = str_replace(
-            array("-----BEGIN CERTIFICATE-----", "-----END CERTIFICATE-----", "\n"),
+            ["-----BEGIN CERTIFICATE-----", "-----END CERTIFICATE-----", "\n"],
             '',
             $this->readFile($certificateFile)
         );

@@ -72,7 +72,7 @@ class ResponseFactory
      */
     private function setResponseSignatureKey(MockIdentityProvider $mockIdp, Response $response)
     {
-        $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, array('type' => 'private'));
+        $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
         $key->loadKey($mockIdp->getPrivateKeyPem());
 
         if ($mockIdp->mustSignResponses()) {
@@ -99,7 +99,7 @@ class ResponseFactory
             return;
         }
 
-        $encryptedAssertions = array();
+        $encryptedAssertions = [];
         $assertions = $response->getAssertions();
         foreach ($assertions as $assertion) {
             $encryptedAssertion = new \SAML2_EncryptedAssertion();

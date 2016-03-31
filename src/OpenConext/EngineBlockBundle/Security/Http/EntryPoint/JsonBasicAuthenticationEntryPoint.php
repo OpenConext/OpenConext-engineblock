@@ -30,9 +30,9 @@ class JsonBasicAuthenticationEntryPoint implements AuthenticationEntryPointInter
             $authExceptionMessage
         );
         $response             = new JsonResponse(
-            array('errors' => array($error)),
+            ['errors' => [$error]],
             401,
-            array('WWW-Authenticate' => sprintf('Basic realm="%s"', $this->realmName))
+            ['WWW-Authenticate' => sprintf('Basic realm="%s"', $this->realmName)]
         );
 
         return $response;

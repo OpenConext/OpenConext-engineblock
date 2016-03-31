@@ -50,25 +50,25 @@ final class Consent
             $supportEmail = $supportContacts[0]->emailAddress;
         }
 
-        $serviceProvider = array(
+        $serviceProvider = [
             'entity_id'    => $this->serviceProvider->entityId,
-            'display_name' => array(
+            'display_name' => [
                 'en' => $this->serviceProvider->displayNameEn,
                 'nl' => $this->serviceProvider->displayNameNl,
-            ),
-            'support_url' => array(
+            ],
+            'support_url' => [
                 'en' => $this->serviceProvider->supportUrlEn,
                 'nl' => $this->serviceProvider->supportUrlNl,
-            ),
+            ],
             'eula_url' => $this->serviceProvider->termsOfServiceUrl,
             'support_email' => $supportEmail,
-        );
+        ];
 
-        return array(
+        return [
             'service_provider' => $serviceProvider,
             'consent_given_on' => $this->consent->getDateConsentWasGivenOn()->format(DateTime::ATOM),
             'last_used_on'     => $this->consent->getDateLastUsedOn()->format(DateTime::ATOM),
             'consent_type'     => $this->consent->getConsentType()->jsonSerialize(),
-        );
+        ];
     }
 }

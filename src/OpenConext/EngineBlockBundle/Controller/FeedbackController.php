@@ -82,10 +82,10 @@ class FeedbackController
      */
     public function unknownIssuerAction(Request $request)
     {
-        $viewData = array(
+        $viewData = [
             'entity-id' => $request->get('entity-id'),
             'destination' => $request->get('destination')
-        );
+        ];
 
         $body = $this->engineBlockView->setData($viewData)->render('Authentication/View/Feedback/UnknownIssuer.phtml');
 
@@ -122,7 +122,7 @@ class FeedbackController
      */
     public function unknownServiceProviderAction(Request $request)
     {
-        $viewData = array('entity-id' => $request->get('entity-id'));
+        $viewData = ['entity-id' => $request->get('entity-id')];
 
         $body = $this->engineBlockView
             ->setData($viewData)

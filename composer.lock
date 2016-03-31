@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c3b4ff97faea4beb136f74c529435fbf",
-    "content-hash": "2eff70fc7c22de9c79d1e2cdcc2c3eb1",
+    "hash": "01809f3a421e4191886721605ce4338c",
+    "content-hash": "9ce13a8233c134f309f3339300299657",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1343,16 +1343,16 @@
         },
         {
             "name": "openconext/saml-value-object",
-            "version": "dev-feature/more-metadata-values",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/SamlValueObject.git",
-                "reference": "df50c89ba8059667677cde18254037fddb956937"
+                "reference": "f61d56a99f4cc9085abaced1a62e1057c365d1c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/df50c89ba8059667677cde18254037fddb956937",
-                "reference": "df50c89ba8059667677cde18254037fddb956937",
+                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/f61d56a99f4cc9085abaced1a62e1057c365d1c0",
+                "reference": "f61d56a99f4cc9085abaced1a62e1057c365d1c0",
                 "shasum": ""
             },
             "require": {
@@ -1380,7 +1380,7 @@
                 }
             ],
             "description": "Set of value objects for usage with SAML2",
-            "time": "2016-02-29 11:29:16"
+            "time": "2016-03-31 13:37:16"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -4509,8 +4509,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "openid/php-openid": 20,
-        "openconext/saml-value-object": 20
+        "openid/php-openid": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

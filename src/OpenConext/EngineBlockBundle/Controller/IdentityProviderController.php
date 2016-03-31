@@ -148,7 +148,7 @@ class IdentityProviderController
         $invalid = $this->validateRequest($request);
 
         if (count($invalid)) {
-            $viewData = array();
+            $viewData = [];
             foreach ($invalid as $name) {
                 $viewData[$name . 'Error'] = true;
             }
@@ -196,7 +196,7 @@ class IdentityProviderController
      */
     private function validateRequest(Request $request)
     {
-        $invalid = array();
+        $invalid = [];
         foreach ($request->request->all() as $key => $value) {
             if (empty($value)) {
                 $invalid[] = $key;

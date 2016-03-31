@@ -19,7 +19,7 @@ class SyslogLogger extends AbstractLogger
      * @param array $context
      * @return null
      */
-    public function log($level, $message, array $context = array())
+    public function log($level, $message, array $context = [])
     {
         $level = $this->logLevelToSyslogLevel($level);
         syslog($level, $message . empty($context) ? '' : ' ' . json_encode($context));

@@ -77,7 +77,7 @@ class HttpClientTest extends UnitTest
             ->getMock();
 
         $httpClient = new HttpClient($guzzle);
-        $httpClient->read('/resource/%s', array('John/Doe'));
+        $httpClient->read('/resource/%s', ['John/Doe']);
     }
 
     /**
@@ -124,7 +124,7 @@ class HttpClientTest extends UnitTest
         $client = new HttpClient($guzzle);
 
         $this->expectException(MalformedResponseException::class);
-        $client->read('/resource/%s', array('John/Doe'));
+        $client->read('/resource/%s', ['John/Doe']);
     }
 
     /**
@@ -135,7 +135,7 @@ class HttpClientTest extends UnitTest
     public function null_is_returned_when_the_response_status_code_is_404()
     {
         $response = m::mock('Guzzle\Http\Message\ResponseInterface')
-            ->shouldReceive('json')->andReturn(array())
+            ->shouldReceive('json')->andReturn([])
             ->shouldReceive('getStatusCode')->andReturn('404')
             ->getMock();
 
@@ -163,7 +163,7 @@ class HttpClientTest extends UnitTest
     public function an_access_denied_exception_is_thrown_if_the_response_status_code_is_403()
     {
         $response = m::mock('Guzzle\Http\Message\ResponseInterface')
-            ->shouldReceive('json')->andReturn(array())
+            ->shouldReceive('json')->andReturn([])
             ->shouldReceive('getStatusCode')->andReturn('403')
             ->getMock();
 

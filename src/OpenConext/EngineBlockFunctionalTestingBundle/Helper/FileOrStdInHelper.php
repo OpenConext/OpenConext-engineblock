@@ -47,7 +47,7 @@ class FileOrStdInHelper
     {
         $stream = $this->getStream();
 
-        $output = array();
+        $output = [];
         while (!feof($stream)) {
             $line = stream_get_line($stream, 1024, "\n");
 

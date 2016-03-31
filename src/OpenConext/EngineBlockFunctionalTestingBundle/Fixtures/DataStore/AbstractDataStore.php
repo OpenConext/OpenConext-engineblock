@@ -34,7 +34,7 @@ abstract class AbstractDataStore
         }
     }
 
-    public function load($default = array())
+    public function load($default = [])
     {
         $this->verifyFilePath();
 

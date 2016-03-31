@@ -56,13 +56,13 @@ class HttpClient
      * @throws AccessDeniedException When the consumer isn't authorised to access given resource.
      * @throws UnreadableResourceException When the server doesn't respond with the resource.
      */
-    public function read($path, array $parameters = array(), HttpQuery $httpQuery = null)
+    public function read($path, array $parameters = [], HttpQuery $httpQuery = null)
     {
         $resource = $this->buildResourcePath($path, $parameters, $httpQuery);
 
         try {
             $response = $this->guzzleClient
-                ->get($resource, null, array('exceptions' => false))
+                ->get($resource, null, ['exceptions' => false])
                 ->send();
 
             $statusCode = $response->getStatusCode();

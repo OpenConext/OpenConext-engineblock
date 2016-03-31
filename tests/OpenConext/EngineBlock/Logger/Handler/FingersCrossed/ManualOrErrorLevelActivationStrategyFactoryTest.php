@@ -14,7 +14,7 @@ class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
      */
     public function factory_creates_a_manual_or_decorated_activation_strategy()
     {
-        ManualOrErrorLevelActivationStrategyFactory::createActivationStrategy(array('action_level' => 'INFO'));
+        ManualOrErrorLevelActivationStrategyFactory::createActivationStrategy(['action_level' => 'INFO']);
     }
 
     /**
@@ -37,15 +37,15 @@ class ManualOrErrorLevelActivationStrategyFactoryTest extends TestCase
 
     public function configurationDataProvider()
     {
-        return array(
-            'no action level'      => array(
-                array(),
+        return [
+            'no action level'      => [
+                [],
                 'Missing configuration value'
-            ),
-            'invalid action level' => array(
-                array('action_level' => 'INVALID'),
+            ],
+            'invalid action level' => [
+                ['action_level' => 'INVALID'],
                 'Configured action level must be a valid PSR-compliant log level'
-            ),
-        );
+            ],
+        ];
     }
 }

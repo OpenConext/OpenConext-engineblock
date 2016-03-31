@@ -54,7 +54,7 @@ final class ConsentService
             );
         }
 
-        return new ConsentList(array_filter(array_map(array($this, 'createConsentDtoFromConsentEntity'), $consents)));
+        return new ConsentList(array_filter(array_map([$this, 'createConsentDtoFromConsentEntity'], $consents)));
     }
 
     /**

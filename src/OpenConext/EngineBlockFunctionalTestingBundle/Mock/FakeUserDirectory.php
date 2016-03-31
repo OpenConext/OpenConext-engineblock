@@ -11,7 +11,7 @@ class FakeUserDirectory extends UserDirectory
     /**
      * @var array
      */
-    private $users = array();
+    private $users = [];
 
     /**
      * @var Filesystem
@@ -52,10 +52,10 @@ class FakeUserDirectory extends UserDirectory
     public function findUsersByIdentifier($identifier)
     {
         if (!array_key_exists($identifier, $this->users)) {
-            return array();
+            return [];
         }
 
-        return array($this->users[$identifier]);
+        return [$this->users[$identifier]];
     }
 
     public function registerUser(array $saml2attributes, $retry = true)

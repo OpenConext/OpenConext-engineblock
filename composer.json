@@ -29,7 +29,7 @@
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
         "incenteev/composer-parameter-handler": "~2.0",
-        "openconext/saml-value-object": "dev-feature/more-metadata-values",
+        "openconext/saml-value-object": "^1.2",
         "symfony/monolog-bundle": "~2.4",
         "beberlei/assert": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^1.1",

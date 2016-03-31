@@ -36,7 +36,7 @@ class MockServiceProviderFactory extends AbstractMockEntityFactory
         $descriptor = new \SAML2_XML_md_EntityDescriptor();
         $descriptor->entityID = $this->router->generate(
             'functional_testing_sp_metadata',
-            array('spName' => $spName),
+            ['spName' => $spName],
             RouterInterface::ABSOLUTE_URL
         );
 
@@ -45,12 +45,12 @@ class MockServiceProviderFactory extends AbstractMockEntityFactory
         $acsService->Binding  = \SAML2_Const::BINDING_HTTP_POST;
         $acsService->Location = $this->router->generate(
             'functional_testing_sp_acs',
-            array('spName' => $spName),
+            ['spName' => $spName],
             RouterInterface::ABSOLUTE_URL
         );
 
         $spSsoDescriptor = new \SAML2_XML_md_SPSSODescriptor();
-        $spSsoDescriptor->protocolSupportEnumeration = array(\SAML2_Const::NS_SAMLP);
+        $spSsoDescriptor->protocolSupportEnumeration = [\SAML2_Const::NS_SAMLP];
         $spSsoDescriptor->AssertionConsumerService[] = $acsService;
 
         $spSsoDescriptor->KeyDescriptor[] = $this->generateDefaultSigningKeyPair();
@@ -59,12 +59,12 @@ class MockServiceProviderFactory extends AbstractMockEntityFactory
 
         $descriptor->Extensions['LoginRedirectUrl'] = $this->router->generate(
             'functional_testing_sp_login_redirect',
-            array('spName' => $spName),
+            ['spName' => $spName],
             RouterInterface::ABSOLUTE_URL
         );
         $descriptor->Extensions['LoginPostUrl'] = $this->router->generate(
             'functional_testing_sp_login_post',
-            array('spName' => $spName),
+            ['spName' => $spName],
             RouterInterface::ABSOLUTE_URL
         );
         return $descriptor;

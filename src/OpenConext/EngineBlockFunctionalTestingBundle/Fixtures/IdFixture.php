@@ -93,7 +93,7 @@ class IdFixture
 
         $this->loadFrames();
 
-        $this->frames = array();
+        $this->frames = [];
         return $this;
     }
 
