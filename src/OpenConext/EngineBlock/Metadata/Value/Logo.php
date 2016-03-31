@@ -90,6 +90,6 @@ final class Logo implements Serializable
 
     public function __toString()
     {
-        return sprintf('Logo(url=%s, width=%d, height=%d', $this->url, $this->width, $this->height);
+        return sprintf('Logo(url=%s, width=%d, height=%d)', $this->url, $this->width, $this->height);
     }
 }

@@ -37,6 +37,8 @@ class AssertionTest extends UnitTest
 
     /**
      * @test
+     * @group EngineBlock
+     * @group Assertion
      */
     public function a_missing_key_makes_the_assertion_fail()
     {
@@ -50,6 +52,8 @@ class AssertionTest extends UnitTest
 
     /**
      * @test
+     * @group EngineBlock
+     * @group Assertion
      */
     public function keys_exists_assertion_succeeds_if_all_required_keys_are_present_()
     {
