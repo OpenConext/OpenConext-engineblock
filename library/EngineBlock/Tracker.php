@@ -5,37 +5,25 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 class EngineBlock_Tracker
 {
-    public function trackLogin(ServiceProvider $spEntityMetadata, IdentityProvider $idpEntityMetadata, $subjectId, $voContext, $keyId)
-    {
-        $request = EngineBlock_ApplicationSingleton::getInstance()->getInstance()->getHttpRequest();
-        $db = $this->_getDbConnection();
+    public function trackLogin(
+        ServiceProvider $spEntityMetadata,
+        IdentityProvider $idpEntityMetadata,
+        $subjectId,
+        $keyId
+    ) {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $logger = $diContainer->getAuthenticationLogger();
+        $symfonyRequest = $diContainer->getSymfonyRequest();
 
-        $stmt = $db->prepare("
-            INSERT INTO log_logins
-              (loginstamp, userid , spentityid , spentityname , idpentityid , idpentityname, useragent, voname, keyid)
-            VALUES
-              (now()     , :userid, :spentityid, :spentityname, :idpentityid, :idpentityname, :useragent, :voname, :keyid)"
-        );
-        $spEntityName  = (!empty($spEntityMetadata->displayNameEn)
-            ? $spEntityMetadata->displayNameEn
-            : $spEntityMetadata->entityId);
-        $idpEntityName = (!empty($idpEntityMetadata->displayNameEn)
-            ? $idpEntityMetadata->displayNameEn
-            : $idpEntityMetadata->entityId);
-        $stmt->bindParam('userid'       , $subjectId);
-        $stmt->bindParam('spentityid'   , $spEntityMetadata->entityId);
-        $stmt->bindParam('spentityname' , $spEntityName);
-        $stmt->bindParam('idpentityid'  , $idpEntityMetadata->entityId);
-        $stmt->bindParam('idpentityname', $idpEntityName);
-        $stmt->bindParam('useragent'    , $request->getHeader('User-Agent'));
-        $stmt->bindParam('voname'       , $voContext);
-        $stmt->bindParam('keyid'        , $keyId);
-        $stmt->execute();
-    }
+        $authenticationContext = [
+            'login_stamp' => time(),
+            'user_id' => $subjectId,
+            'sp_entity_id' => $spEntityMetadata->entityId,
+            'idp_entity_id' => $idpEntityMetadata->entityId,
+            'key_id' => $keyId,
+            'user_agent' => $symfonyRequest->headers->get('User-Agent')
+        ];
 
-    protected function _getDbConnection()
-    {
-        $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
-        return $factory->create();
+        $logger->info('login granted', $authenticationContext);
     }
 }

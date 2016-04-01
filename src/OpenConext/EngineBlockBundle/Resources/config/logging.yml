@@ -27,3 +27,6 @@ services:
         class: OpenConext\EngineBlock\Logger\Processor\SessionIdProcessor
         tags:
             - { name: monolog.processor, method: processRecord }
+
+    engineblock.logger.formatter.syslog_json:
+        class: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter

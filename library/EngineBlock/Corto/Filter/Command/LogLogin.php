@@ -12,17 +12,11 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             );
         }
 
-        $voContext = null;
-        if (isset($this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0])) {
-            $voContext = $this->_responseAttributes[self::VO_NAME_ATTRIBUTE][0];
-        }
-
         $tracker = new EngineBlock_Tracker();
         $tracker->trackLogin(
             $this->_serviceProvider,
             $this->_identityProvider,
             $this->_collabPersonId,
-            $voContext,
             $this->_request->getKeyId()
         );
     }

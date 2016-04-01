@@ -2,7 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: ini_parameters.yml }
     - { resource: security.yml }
-    - { resource: services.yml }
+    - { resource: logging.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 parameters:
@@ -33,19 +33,6 @@ framework:
         handler_id:  ~
     fragments:       ~
     http_method_override: true
-
-monolog:
-    channels: [%logger.channel%]
-    handlers:
-        main:
-            type: fingers_crossed
-            activation_strategy: engineblock.logger.manual_or_error_activation_strategy
-            passthru_level: %logger.fingers_crossed.passthru_level%
-            handler: syslog
-        syslog:
-            type:      syslog
-            ident:     %logger.syslog.ident%
-            formatter: engineblock.logger.additional_info_formatter
 
 doctrine:
     dbal:
