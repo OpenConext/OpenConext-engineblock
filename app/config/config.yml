@@ -54,11 +54,11 @@ doctrine:
             engineblock:
 #                schema_filter: ~^(?!group_|virtual_|service_provider_|saml_persistent_id|sso_provider_roles|log_logins|db_changelog|consent)~
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
-                dbname:   %database.dbname%
-                host:     %database.host%
-                port:     %database.port%
-                user:     %database.user%
-                password: %database.password%
+                dbname:   "%database.dbname%"
+                host:     "%database.host%"
+                port:     "%database.port%"
+                user:     "%database.user%"
+                password: "%database.password%"
                 charset:  UTF8
                 # when true, queries are logged to a 'doctrine' monolog channel
                 logging: '%kernel.debug%'
@@ -89,13 +89,13 @@ doctrine:
                     Metadata:
                         mapping:   true
                         type:      annotation
-                        dir:       %kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Metadata
+                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Metadata"
                         prefix:    OpenConext\EngineBlockBundle\Metadata
                         is_bundle: false
                     EngineBlockMetadata:
                         mapping:   true
                         type:      annotation
-                        dir:       %kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity
+                        dir:       "%kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity"
                         prefix:    OpenConext\Component\EngineBlockMetadata
                         is_bundle: false
 
