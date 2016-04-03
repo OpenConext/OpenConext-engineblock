@@ -30,3 +30,8 @@ services:
 
     engineblock.logger.formatter.syslog_json:
         class: OpenConext\EngineBlockBundle\Monolog\Formatter\SyslogJsonFormatter
+
+    engineblock.logger.authentication:
+        class: OpenConext\EngineBlock\Logger\AuthenticationLogger
+        arguments:
+            - "@monolog.logger.authentication"
