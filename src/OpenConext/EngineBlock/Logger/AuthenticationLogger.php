@@ -33,7 +33,7 @@ class AuthenticationLogger
         Entity $serviceProvider,
         Entity $identityProvider,
         CollabPersonId $collabPersonId,
-        KeyId $keyId
+        KeyId $keyId = null
     ) {
         $this->logger->info(
             'login granted',
@@ -42,7 +42,7 @@ class AuthenticationLogger
                 'user_id'       => $collabPersonId->getCollabPersonId(),
                 'sp_entity_id'  => $serviceProvider->getEntityId()->getEntityId(),
                 'idp_entity_id' => $identityProvider->getEntityId()->getEntityId(),
-                'key_id'        => $keyId->getKeyId(),
+                'key_id'        => $keyId ? $keyId->getKeyId() : '',
             ]
         );
     }

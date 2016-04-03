@@ -35,11 +35,13 @@ class AuthenticationLoggerAdapter
         $collabPersonId,
         $keyId
     ) {
+        $keyId = $keyId ? new KeyId($keyId) : null;
+
         $this->authenticationLogger->logGrantedLogin(
             new Entity(new EntityId($serviceProvider->entityId), EntityType::SP()),
             new Entity(new EntityId($identityProvider->entityId), EntityType::IdP()),
             new CollabPersonId($collabPersonId),
-            new KeyId($keyId)
+            $keyId
         );
     }
 }
