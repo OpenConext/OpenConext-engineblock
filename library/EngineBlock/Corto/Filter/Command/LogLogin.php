@@ -1,8 +1,18 @@
 <?php
 
+use OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter;
+
 class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter_Command_Abstract
 {
-    const VO_NAME_ATTRIBUTE         = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.2';
+    /**
+     * @var AuthenticationLoggerAdapter
+     */
+    private $authenticationLogger;
+
+    public function __construct(AuthenticationLoggerAdapter $authenticationLogger)
+    {
+        $this->authenticationLogger = $authenticationLogger;
+    }
 
     public function execute()
     {
@@ -12,8 +22,7 @@ class EngineBlock_Corto_Filter_Command_LogLogin extends EngineBlock_Corto_Filter
             );
         }
 
-        $tracker = new EngineBlock_Tracker();
-        $tracker->trackLogin(
+        $this->authenticationLogger->logLogin(
             $this->_serviceProvider,
             $this->_identityProvider,
             $this->_collabPersonId,

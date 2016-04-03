@@ -16,6 +16,8 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
      */
     protected function _getCommands()
     {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+
         return array(
             // If EngineBlock is in Processing mode (redirecting to it's self)
             // Then don't continue with the rest of the modifications
@@ -50,7 +52,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
 
             // Log the login
-            new EngineBlock_Corto_Filter_Command_LogLogin(),
+            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger()),
         );
     }
 }

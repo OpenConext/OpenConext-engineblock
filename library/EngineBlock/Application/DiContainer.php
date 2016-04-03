@@ -29,11 +29,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return \Psr\Log\LoggerInterface
+     * @return \OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
      */
     public function getAuthenticationLogger()
     {
-        return $this->container->get('monolog.logger.authentication');
+        return $this->container->get('engineblock.bridge.authentication_logger_adapter');
     }
 
     /**
