@@ -49,6 +49,17 @@ More information on how to configure Doctrine can be found in [the bundle docume
 reference documentation][doct2]. Before considering using a master/slave setup, please review [this documentation][doct3]
 as to when a master or slave is used for a connection.
 
+#### Login Tracking
+
+EngineBlock 4.x tracks logins in the log_login table of the database. In EngineBlock 5.0 this has been
+replaced wih logging to syslog. This to reduce write load on the database. The log statements are written
+to syslog using the specific ident `EBAUTH` as can be seen in the `app/config/logging.yml` file.
+
+For each login a message akin to the following is being logged:
+```
+Apr  1 11:49:00 apps EBAUTH[4861]: {"channel":"authentication","level":"INFO","message":"login granted","context":{"login_stamp":"2016-04-01T11:49:00+02:00","user_id":"urn:collab:person:engine-test-stand.openconext.org:test145950413313365","sp_entity_id":"https:\/\/engine.vm.openconext.org\/functional-testing\/No%20ARP\/metadata","idp_entity_id":"https:\/\/engine.vm.openconext.org\/functional-testing\/TestIdp\/metadata","key_id":null},"extra":{"session_id":"8zxzInsnhMWUOLJpXyz9uxX2TCa","request_id":"56fe440bc31ea"}}
+```
+
 [doct1]: http://symfony.com/doc/master/bundles/DoctrineBundle/index.html
 [doct2]: http://symfony.com/doc/2.7/reference/configuration/doctrine.html
 [doct3]: http://www.doctrine-project.org/api/dbal/2.3/class-Doctrine.DBAL.Connections.MasterSlaveConnection.html
