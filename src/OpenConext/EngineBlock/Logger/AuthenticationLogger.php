@@ -24,10 +24,13 @@ class AuthenticationLogger
     }
 
     /**
+     * KeyId is nullable in order to be able to differentiate between asking no specific key,
+     * the default key KeyId('default') and a specific key.
+     *
      * @param Entity         $serviceProvider
      * @param Entity         $identityProvider
      * @param CollabPersonId $collabPersonId
-     * @param KeyId          $keyId
+     * @param KeyId|null     $keyId
      */
     public function logGrantedLogin(
         Entity $serviceProvider,
@@ -38,11 +41,12 @@ class AuthenticationLogger
         $this->logger->info(
             'login granted',
             [
-                'login_stamp'   => (new DateTime())->format(DateTime::ISO8601),
+                //This is actually ISO 8601, the DateTime::ISO8601 misses the colon in the TZ part (known bug)
+                'login_stamp'   => (new DateTime())->format(DateTime::ATOM),
                 'user_id'       => $collabPersonId->getCollabPersonId(),
                 'sp_entity_id'  => $serviceProvider->getEntityId()->getEntityId(),
                 'idp_entity_id' => $identityProvider->getEntityId()->getEntityId(),
-                'key_id'        => $keyId ? $keyId->getKeyId() : '',
+                'key_id'        => $keyId ? $keyId->getKeyId() : null,
             ]
         );
     }
