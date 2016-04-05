@@ -2,7 +2,7 @@ imports:
     - { resource: parameters.yml }
     - { resource: ini_parameters.yml }
     - { resource: security.yml }
-    - { resource: services.yml }
+    - { resource: logging.yml }
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 parameters:
@@ -34,19 +34,6 @@ framework:
     fragments:       ~
     http_method_override: true
 
-monolog:
-    channels: [%logger.channel%]
-    handlers:
-        main:
-            type: fingers_crossed
-            activation_strategy: engineblock.logger.manual_or_error_activation_strategy
-            passthru_level: %logger.fingers_crossed.passthru_level%
-            handler: syslog
-        syslog:
-            type:      syslog
-            ident:     %logger.syslog.ident%
-            formatter: engineblock.logger.additional_info_formatter
-
 doctrine:
     dbal:
         default_connection: engineblock
@@ -54,11 +41,11 @@ doctrine:
             engineblock:
 #                schema_filter: ~^(?!group_|virtual_|service_provider_|saml_persistent_id|sso_provider_roles|log_logins|db_changelog|consent)~
                 driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
-                dbname:   %database.dbname%
-                host:     %database.host%
-                port:     %database.port%
-                user:     %database.user%
-                password: %database.password%
+                dbname:   "%database.dbname%"
+                host:     "%database.host%"
+                port:     "%database.port%"
+                user:     "%database.user%"
+                password: "%database.password%"
                 charset:  UTF8
                 # when true, queries are logged to a 'doctrine' monolog channel
                 logging: '%kernel.debug%'
@@ -89,13 +76,13 @@ doctrine:
                     Metadata:
                         mapping:   true
                         type:      annotation
-                        dir:       %kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Metadata
+                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Metadata"
                         prefix:    OpenConext\EngineBlockBundle\Metadata
                         is_bundle: false
                     EngineBlockMetadata:
                         mapping:   true
                         type:      annotation
-                        dir:       %kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity
+                        dir:       "%kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity"
                         prefix:    OpenConext\Component\EngineBlockMetadata
                         is_bundle: false
 

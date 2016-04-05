@@ -15,3 +15,8 @@ services:
         arguments:
             - "@=service('engineblock.bridge.config').get('email.help')"
             - "@logger"
+
+    engineblock.bridge.authentication_logger_adapter:
+        class: OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
+        arguments:
+            - "@engineblock.logger.authentication"

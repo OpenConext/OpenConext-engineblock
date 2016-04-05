@@ -4,10 +4,10 @@ security:
             memory:
                 users:
                     "%api.users.janus.username%":
-                        password: %api.users.janus.password%
+                        password: "%api.users.janus.password%"
                         roles: 'ROLE_API_USER_JANUS'
                     "%api.users.profile.username%":
-                        password: %api.users.profile.password%
+                        password: "%api.users.profile.password%"
                         roles: 'ROLE_API_USER_PROFILE'
 
     encoders:

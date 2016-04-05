@@ -29,6 +29,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @return \OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
+     */
+    public function getAuthenticationLogger()
+    {
+        return $this->container->get('engineblock.bridge.authentication_logger_adapter');
+    }
+
+    /**
      * @return \Symfony\Component\HttpFoundation\Request
      */
     public function getSymfonyRequest()
