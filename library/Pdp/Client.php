@@ -71,13 +71,13 @@ class Pdp_Client
                     "response from PDP";
 
                 EngineBlock_ApplicationSingleton::getLog()->error($error);
-                throw new EngineBlock_Exception($error);
+                throw new EngineBlock_Corto_Exception_PEPNoAccess('Authorization decision failed, please try again later or contact support@surfconext.nl');
             }
         }
         catch(Zend_Http_Client_Exception $e) {
             EngineBlock_ApplicationSingleton::getLog()
               ->error($e->getMessage());
-            throw new EngineBlock_Exception($e->getMessage());
+            throw new EngineBlock_Corto_Exception_PEPNoAccess('Authorization decision failed, please try again later or contact support@surfconext.nl');
         }
         $this->policyResponse = new Pdp_PolicyResponse($result->getBody());
         return $this->policyResponse;
