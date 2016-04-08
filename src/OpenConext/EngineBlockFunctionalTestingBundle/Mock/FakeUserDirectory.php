@@ -2,11 +2,17 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
-use EngineBlock_UserDirectory as UserDirectory;
+use OpenConext\EngineBlock\Authentication\Exception\RuntimeException as AuthenticationRuntimeException;
+use OpenConext\EngineBlock\Authentication\Model\User;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
+use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
+use OpenConext\EngineBlock\Authentication\Value\Uid;
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter;
 use Symfony\Component\Filesystem\Filesystem;
 
-class FakeUserDirectory extends UserDirectory
+class FakeUserDirectory extends UserDirectoryAdapter
 {
     /**
      * @var array
@@ -46,44 +52,52 @@ class FakeUserDirectory extends UserDirectory
             throw new RuntimeException(sprintf('Cannot read UserDirectory dump from "%s"', $filePath));
         }
 
-        $this->users = json_decode($content, true);
+        $users = json_decode($content, true);
+        array_walk($users, function (&$user) {
+            $user = new User(
+                new CollabPersonId($user['collab_person_id']),
+                new CollabPersonUuid($user['collab_person_uuid'])
+            );
+        });
+        $this->users = $users;
     }
 
-    public function findUsersByIdentifier($identifier)
+    public function registerUser($uid, $schacHomeOrganization)
     {
-        if (!array_key_exists($identifier, $this->users)) {
-            return [];
-        }
+        $collabPersonId = CollabPersonId::generateFrom(
+            new Uid($uid),
+            new SchacHomeOrganization($schacHomeOrganization)
+        );
+        $user = new User($collabPersonId, CollabPersonUuid::generate());
 
-        return [$this->users[$identifier]];
-    }
-
-    public function registerUser(array $saml2attributes, $retry = true)
-    {
-        $ldapAttributes = $this->_getSaml2AttributesFieldMapper()->saml2AttributesToLdapAttributes($saml2attributes);
-        $ldapAttributes = $this->_enrichLdapAttributes($ldapAttributes, $saml2attributes);
-
-        $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH] = $this->_getCollabPersonHash($ldapAttributes);
-        $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]   = $this->_getCollabPersonId($ldapAttributes);
-        $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_UUID] = $this->_getCollabPersonUuid($ldapAttributes);
-
-        $now = date(DATE_RFC822);
-
-        $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_REGISTERED]    = $now;
-        $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
-        $ldapAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
-        $ldapAttributes['objectClass']                               = $this->LDAP_OBJECT_CLASSES;
-
-        $collabPersonId = $this->_getCollabPersonId($ldapAttributes);
-
-        $this->users[$collabPersonId] = $ldapAttributes;
+        $this->users[$collabPersonId->getCollabPersonId()] = $user;
 
         $this->saveToDisk();
+
+        return $user;
+    }
+
+    public function findUserBy($collabPersonId)
+    {
+        if (!array_key_exists($collabPersonId, $this->users)) {
+            return null;
+        }
 
         return $this->users[$collabPersonId];
     }
 
-    public function deleteUser($collabPersonId)
+    public function getUserBy($collabPersonId)
+    {
+        $user = $this->findUserBy($collabPersonId);
+
+        if (!$user) {
+            throw new AuthenticationRuntimeException('Cannot retrieve user that has not been set in FakeUserDirectory');
+        }
+
+        return $user;
+    }
+
+    public function deleteUserWith($collabPersonId)
     {
         unset($this->users[$collabPersonId]);
 
@@ -101,6 +115,14 @@ class FakeUserDirectory extends UserDirectory
 
         $filePath = self::$directory . self::$fileName;
 
-        $this->filesystem->dumpFile($filePath, json_encode($this->users), 0664);
+        $users = $this->users;
+        array_walk($users, function (&$user) {
+            $user = [
+                'collab_person_id' => $user->getCollabPersonId()->getCollabPersonId(),
+                'collab_person_uuid' => $user->getCollabPersonUuid()->getUuid()
+            ];
+        });
+
+        $this->filesystem->dumpFile($filePath, json_encode($users), 0664);
     }
 }

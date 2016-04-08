@@ -20,3 +20,8 @@ services:
         class: OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
         arguments:
             - "@engineblock.logger.authentication"
+
+    engineblock.bridge.authentication.user_directory:
+        class: OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter
+        arguments:
+            - "@engineblock.authentication.user_directory"

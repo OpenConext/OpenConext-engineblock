@@ -1,5 +1,9 @@
 <?php
 
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
+use OpenConext\EngineBlock\Authentication\Value\Uid;
+
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
 {
     /**
@@ -24,28 +28,34 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
     public function execute()
     {
-        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
-        $user = $userDirectory->registerUser($this->_responseAttributes);
-
-        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
-            'subjectIdAttribute',
-            EngineBlock_UserDirectory::LDAP_ATTR_COLLAB_PERSON_ID
-        );
-        if (empty($user[$subjectIdField])) {
+        $uid = $this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0];
+        $sho = $this->_responseAttributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'][0];
+        if (!$uid || !$sho) {
             throw new EngineBlock_Exception(
-                "SubjectIdField '$subjectIdField' does not contain data for user: " . var_export($user, true)
+                'Cannot register user due to missing uid and/or schacHomeOrganization attribute'
             );
         }
-        $subjectId = $user[$subjectIdField];
+        $userId = new Uid($uid);
+        $schacHomeOrganization = new SchacHomeOrganization($sho);
+        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
 
-        $this->setCollabPersonId($subjectId);
+        // attempt to find the user
+        $collabPersonId = CollabPersonId::generateFrom($userId, $schacHomeOrganization);
+        $user = $userDirectory->findUserBy($collabPersonId->getCollabPersonId());
+        if (!$user) {
+            // if not found, register the user
+            $user = $userDirectory->registerUser($uid, $sho);
+        }
 
-        $this->_response->setCollabPersonId($subjectId);
+        $collabPersonIdValue = $user->getCollabPersonId()->getCollabPersonId();
+        $this->setCollabPersonId($collabPersonIdValue);
+
+        $this->_response->setCollabPersonId($collabPersonIdValue);
         $this->_response->setOriginalNameId($this->_response->getAssertion()->getNameId());
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
         $this->_response->getAssertion()->setNameId(array(
-            'Value' => $subjectId,
+            'Value' => $collabPersonIdValue,
             'Format' => SAML2_Const::NAMEID_PERSISTENT,
         ));
     }

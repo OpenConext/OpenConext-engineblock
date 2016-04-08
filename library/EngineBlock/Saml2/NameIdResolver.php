@@ -255,25 +255,13 @@ class EngineBlock_Saml2_NameIdResolver
 
     protected function _getUserUuid($collabPersonId)
     {
-        $userDirectory = $this->_getUserDirectory();
-        $users = $userDirectory->findUsersByIdentifier($collabPersonId);
-        if (count($users) > 1) {
-            throw new EngineBlock_Exception('Multiple users found for collabPersonId: ' . $collabPersonId);
-        }
+        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
+        $user = $userDirectory->findUserBy($collabPersonId);
 
-        if (count($users) < 1) {
+        if (!$user) {
             throw new EngineBlock_Exception('No users found for collabPersonId: ' . $collabPersonId);
         }
 
-        return $users[0]['collabpersonuuid'];
-    }
-
-    /**
-     * @return EngineBlock_UserDirectory
-     */
-    protected function _getUserDirectory()
-    {
-        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
-        return $userDirectory;
+        return $user->getCollabPersonUuid()->getUuid();
     }
 }

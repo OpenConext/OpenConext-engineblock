@@ -32,3 +32,15 @@ services:
         arguments:
             - "@engineblock.compat.repository.metadata"
             - "@engineblock.compat.logger"
+
+    engineblock.authentication.user_directory:
+        class: OpenConext\EngineBlockBundle\Authentication\Service\UserService
+        arguments:
+            - "@engineblock.repository.user"
+            - "@engineblock.authentication.collab_person_id_hasher"
+
+    engineblock.authentication.collab_person_id_hasher:
+        public: false
+        class: OpenConext\EngineBlockBundle\Authentication\Service\CollabPersonIdHasher
+        arguments:
+            - "sha256"

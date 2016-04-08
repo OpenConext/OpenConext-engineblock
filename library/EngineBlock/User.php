@@ -1,5 +1,9 @@
 <?php
 
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
+use OpenConext\EngineBlock\Authentication\Value\Uid;
+
 class EngineBlock_User
 {
     private $_attributes = array();
@@ -73,16 +77,29 @@ class EngineBlock_User
     }
 
     /**
-     * Delete the user from the SURFconext LDAP.
+     * Delete the user from the user table
      *
-     * @return void
+     * @throws EngineBlock_Exception
      */
     protected function _deleteLdapUser()
     {
+        $schacHomeOrganization = $this->_attributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'];
+
+        if (!$schacHomeOrganization) {
+            throw new EngineBlock_Exception(
+                'Cannot remove user, cannot reliably determine who the user is due to missing schacHomeOrganization '
+                . 'attribute'
+            );
+        }
+        $collabPersonId = CollabPersonId::generateFrom(
+            new Uid($this->getUid()),
+            new SchacHomeOrganization($schacHomeOrganization)
+        );
+
         EngineBlock_ApplicationSingleton::getInstance()
-          ->getDiContainer()
+            ->getDiContainer()
             ->getUserDirectory()
-            ->deleteUser($this->getUid());
+            ->deleteUserWith($collabPersonId);
     }
 
     /**
