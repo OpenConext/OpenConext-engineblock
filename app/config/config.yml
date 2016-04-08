@@ -58,6 +58,7 @@ doctrine:
             engineblock_entity_type: OpenConext\EngineBlockBundle\Doctrine\Type\EntityTypeType
             engineblock_json_metadata: OpenConext\EngineBlockBundle\Doctrine\Type\JsonMetadataType
             engineblock_saml_entity_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\SamlEntityUuidType
+            engineblock_collab_person_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonUuidType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         proxy_dir: '%kernel.cache_dir%/doctrine/orm/Proxies'
@@ -73,6 +74,12 @@ doctrine:
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
+                    Authencation:
+                        mapping:   true
+                        type:      annotation
+                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Authentication"
+                        prefix:    OpenConext\EngineBlockBundle\Authentication
+                        is_bundle: false
                     Metadata:
                         mapping:   true
                         type:      annotation
