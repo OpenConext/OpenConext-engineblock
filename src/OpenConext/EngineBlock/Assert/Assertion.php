@@ -10,7 +10,8 @@ use Assert\Assertion as BaseAssertion;
  */
 class Assertion extends BaseAssertion
 {
-    const INVALID_NON_EMPTY_STRING = 501;
+    const INVALID_NON_EMPTY_STRING  = 1001;
+    const INVALID_HASHING_ALGORITHM = 1002;
 
     protected static $exceptionClass = 'OpenConext\EngineBlock\Exception\InvalidArgumentException';
 
@@ -44,6 +45,20 @@ class Assertion extends BaseAssertion
     {
         foreach ($requiredKeys as $requiredKey) {
             self::keyExists($value, $requiredKey, $message, $propertyPath);
+        }
+    }
+
+    public static function validHashingAlgorithm($hashingAlgorithm)
+    {
+        Assertion::nonEmptyString($hashingAlgorithm, 'hashingAlgorithm');
+
+        if (!in_array($hashingAlgorithm, hash_algos())) {
+            throw static::createException(
+                $hashingAlgorithm,
+                sprintf('Hashing algorithm "%s" does not exist', $hashingAlgorithm),
+                static::INVALID_HASHING_ALGORITHM,
+                'hashingAlgorithm'
+            );
         }
     }
 }

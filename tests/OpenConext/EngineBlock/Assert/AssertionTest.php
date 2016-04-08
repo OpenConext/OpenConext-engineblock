@@ -71,4 +71,54 @@ class AssertionTest extends UnitTest
 
         $this->assertFalse($exceptionCaught, 'When all required keys are present, no exception should be thrown');
     }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Assertion
+     * @dataProvider \OpenConext\TestDataProvider::notStringOrEmptyString
+     */
+    public function valid_hashing_algorithm_only_accepts_non_empty_strings($notStringOrEmptyString)
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Assertion::validHashingAlgorithm($notStringOrEmptyString);
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Assertion
+     */
+    public function an_invalid_hashing_algorithm_causes_the_assertion_to_throw_an_exception()
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        Assertion::validHashingAlgorithm('invalid');
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Assertion
+     * @dataProvider validHashingAlgorithmProvider
+     */
+    public function existing_hashing_algorithms_are_considered_valid($validHashingAlgorithm)
+    {
+        $exceptionCaught = false;
+        try {
+            Assertion::validHashingAlgorithm($validHashingAlgorithm);
+        } catch (InvalidArgumentException $exception) {
+            $exceptionCaught = true;
+        }
+
+        $this->assertFalse($exceptionCaught, 'A valid hashing algorithm should not cause an exception to be thrown');
+    }
+
+    public function validHashingAlgorithmProvider()
+    {
+        return array_map(function ($algorithm) {
+            return [$algorithm];
+        }, hash_algos());
+    }
 }
