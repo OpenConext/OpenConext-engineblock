@@ -2,15 +2,31 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
-use EngineBlock_UserDirectory as UserDirectory;
 use OpenConext\EngineBlock\Assert\Assertion;
 
 final class CollabPersonId
 {
+    const URN_NAMESPACE = 'urn:collab:person';
+
     /**
      * @var string
      */
     private $collabPersonId;
+
+    /**
+     * @param Uid                   $uid
+     * @param SchacHomeOrganization $schacHomeOrganization
+     * @return CollabPersonId
+     */
+    public static function generateFrom(Uid $uid, SchacHomeOrganization $schacHomeOrganization)
+    {
+        $collabPersonId = implode(
+            ':',
+            [self::URN_NAMESPACE, $schacHomeOrganization->getSchacHomeOrganization(), $uid->getUid()]
+        );
+
+        return new self($collabPersonId);
+    }
 
     /**
      * @param string $collabPersonId
@@ -20,8 +36,8 @@ final class CollabPersonId
         Assertion::nonEmptyString($collabPersonId, 'collabPersonId');
         Assertion::startsWith(
             $collabPersonId,
-            UserDirectory::URN_COLLAB_PERSON_NAMESPACE,
-            sprintf('a CollabPersonId must start with the "%" namespace', UserDirectory::URN_COLLAB_PERSON_NAMESPACE)
+            self::URN_NAMESPACE,
+            sprintf('a CollabPersonId must start with the "%" namespace', self::URN_NAMESPACE)
         );
 
         $this->collabPersonId = $collabPersonId;
