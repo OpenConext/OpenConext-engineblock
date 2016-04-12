@@ -10,6 +10,8 @@ use OpenConext\EngineBlock\Assert\Assertion;
  */
 final class SchacHomeOrganization
 {
+    const URN_MACE = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
+
     /**
      * @var string
      */
