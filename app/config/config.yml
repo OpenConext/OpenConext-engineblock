@@ -65,6 +65,7 @@ doctrine:
             engineblock_entity_type: OpenConext\EngineBlockBundle\Doctrine\Type\EntityTypeType
             engineblock_json_metadata: OpenConext\EngineBlockBundle\Doctrine\Type\JsonMetadataType
             engineblock_saml_entity_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\SamlEntityUuidType
+            engineblock_collab_person_id: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonIdType
             engineblock_collab_person_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonUuidType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"

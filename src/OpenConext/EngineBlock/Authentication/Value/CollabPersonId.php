@@ -6,7 +6,15 @@ use OpenConext\EngineBlock\Assert\Assertion;
 
 final class CollabPersonId
 {
+    /**
+     * Required namespace prefix
+     */
     const URN_NAMESPACE = 'urn:collab:person';
+
+    /**
+     * Max length of the CollabPersonId.
+     */
+    const MAX_LENGTH = 255;
 
     /**
      * @var string
@@ -37,8 +45,9 @@ final class CollabPersonId
         Assertion::startsWith(
             $collabPersonId,
             self::URN_NAMESPACE,
-            sprintf('a CollabPersonId must start with the "%" namespace', self::URN_NAMESPACE)
+            sprintf('a CollabPersonId must start with the "%s" namespace', self::URN_NAMESPACE)
         );
+        Assertion::maxLength($collabPersonId, self::MAX_LENGTH, 'CollabPersonId length may not exceed 400 characters');
 
         $this->collabPersonId = $collabPersonId;
     }

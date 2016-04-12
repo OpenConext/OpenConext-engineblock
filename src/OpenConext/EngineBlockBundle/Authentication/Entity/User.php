@@ -7,6 +7,7 @@ use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 
 /**
  * @ORM\Entity(repositoryClass="OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository")
+ * @ORM\Table(indexes={@ORM\Index(name="idx_user_uuid", columns={"uuid"})})
  */
 class User
 {
@@ -14,14 +15,15 @@ class User
      * @var
      *
      * @ORM\Id
-     * @ORM\Column(length=64, options={"fixed"=true})
+     * @ORM\Column(type="engineblock_collab_person_id")
      */
     public $collabPersonId;
 
     /**
      * @var CollabPersonUuid
      *
-     * @ORM\Column(name="id", type="engineblock_collab_person_uuid")
+     *
+     * @ORM\Column(name="uuid", type="engineblock_collab_person_uuid")
      */
     public $collabPersonUuid;
 }

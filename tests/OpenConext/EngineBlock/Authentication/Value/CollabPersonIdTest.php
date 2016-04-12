@@ -80,6 +80,33 @@ class CollabPersonIdTest extends UnitTest
      * @group EngineBlock
      * @group Authentication
      */
+    public function collab_person_id_must_not_be_longer_than_400_characters()
+    {
+        $namespaceLength = strlen(CollabPersonId::URN_NAMESPACE);
+        $beneathLimit = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength - 1);
+        $exactlyLimit = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength);
+        $aboveLimit   = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength + 1);
+
+        $exceptionCaughtAtConstruction = function ($collabPersonId) {
+            try {
+                new CollabPersonId($collabPersonId);
+            } catch (InvalidArgumentException $exception) {
+                return true;
+            }
+
+            return false;
+        };
+
+        $this->assertFalse($exceptionCaughtAtConstruction($beneathLimit));
+        $this->assertFalse($exceptionCaughtAtConstruction($exactlyLimit));
+        $this->assertTrue($exceptionCaughtAtConstruction($aboveLimit));
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Authentication
+     */
     public function collab_person_id_can_be_retrieved()
     {
         $collabPersonIdValue = CollabPersonId::URN_NAMESPACE . ':openconext:unique-user-id';

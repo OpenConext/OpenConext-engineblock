@@ -1,9 +1,5 @@
 <?php
 
-use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
-use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
-use OpenConext\EngineBlock\Authentication\Value\Uid;
-
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
 {
     /**
@@ -28,24 +24,8 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
     public function execute()
     {
-        $uid = $this->_responseAttributes['urn:mace:dir:attribute-def:uid'][0];
-        $sho = $this->_responseAttributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'][0];
-        if (!$uid || !$sho) {
-            throw new EngineBlock_Exception(
-                'Cannot register user due to missing uid and/or schacHomeOrganization attribute'
-            );
-        }
-        $userId = new Uid($uid);
-        $schacHomeOrganization = new SchacHomeOrganization($sho);
         $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
-
-        // attempt to find the user
-        $collabPersonId = CollabPersonId::generateFrom($userId, $schacHomeOrganization);
-        $user = $userDirectory->findUserBy($collabPersonId->getCollabPersonId());
-        if (!$user) {
-            // if not found, register the user
-            $user = $userDirectory->registerUser($uid, $sho);
-        }
+        $user = $userDirectory->identifyUser($this->_responseAttributes);
 
         $collabPersonIdValue = $user->getCollabPersonId()->getCollabPersonId();
         $this->setCollabPersonId($collabPersonIdValue);

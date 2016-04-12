@@ -16,21 +16,15 @@ class UserService implements UserDirectory
      */
     private $userRepository;
 
-    /**
-     * @var CollabPersonIdHasher
-     */
-    private $collabPersonIdHasher;
-
-    public function __construct(UserRepository $userRepository, CollabPersonIdHasher $collabPersonIdHasher)
+    public function __construct(UserRepository $userRepository)
     {
         $this->userRepository       = $userRepository;
-        $this->collabPersonIdHasher = $collabPersonIdHasher;
     }
 
     public function register(User $user)
     {
         $userEntity                   = new UserEntity();
-        $userEntity->collabPersonId   = $this->collabPersonIdHasher->hash($user->getCollabPersonId());
+        $userEntity->collabPersonId   = $user->getCollabPersonId();
         $userEntity->collabPersonUuid = $user->getCollabPersonUuid();
 
         $this->userRepository->save($userEntity);
@@ -38,9 +32,7 @@ class UserService implements UserDirectory
 
     public function findUserBy(CollabPersonId $collabPersonId)
     {
-        $hashedCollabPersonId = $this->collabPersonIdHasher->hash($collabPersonId);
-
-        $userEntity = $this->userRepository->findByCollabPersonId($hashedCollabPersonId);
+        $userEntity = $this->userRepository->findByCollabPersonId($collabPersonId);
 
         if (!$userEntity) {
             return null;
@@ -65,8 +57,6 @@ class UserService implements UserDirectory
 
     public function removeUserWith(CollabPersonId $collabPersonId)
     {
-        $hashedCollabPersonId = $this->collabPersonIdHasher->hash($collabPersonId);
-
-        $this->userRepository->deleteUserWithCollabPersonId($hashedCollabPersonId);
+        $this->userRepository->deleteUserWithCollabPersonId($collabPersonId);
     }
 }

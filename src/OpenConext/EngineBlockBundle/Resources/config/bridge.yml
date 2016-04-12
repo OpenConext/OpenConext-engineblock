@@ -25,3 +25,6 @@ services:
         class: OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter
         arguments:
             - "@engineblock.authentication.user_directory"
+            - "@engineblock.compat.user_directory"
+            - "@engineblock.features"
+            - "@logger"

@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
+use EngineBlock_Exception_MissingRequiredFields;
 use OpenConext\EngineBlock\Authentication\Exception\RuntimeException as AuthenticationRuntimeException;
 use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
@@ -60,6 +61,38 @@ class FakeUserDirectory extends UserDirectoryAdapter
             );
         });
         $this->users = $users;
+    }
+
+    public function identifyUser(array $attributes)
+    {
+        if (!isset($attributes[Uid::URN_MACE][0])) {
+            throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
+                'Missing required SAML2 field "%s" in attributes',
+                Uid::URN_MACE
+            ));
+        }
+        if (!isset($attributes[SchacHomeOrganization::URN_MACE][0])) {
+            throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
+                'Missing required SAML2 field "%s" in attributes',
+                SchacHomeOrganization::URN_MACE
+            ));
+        }
+
+        $uid                   = $attributes[Uid::URN_MACE][0];
+        $schacHomeOrganization = $attributes[SchacHomeOrganization::URN_MACE][0];
+
+        $collabPersonUuid = CollabPersonUuid::generate();
+        $collabPersonId   = CollabPersonId::generateFrom(
+            new Uid($uid),
+            new SchacHomeOrganization($schacHomeOrganization)
+        );
+
+        $user = new User($collabPersonId, $collabPersonUuid);
+        $this->users[$collabPersonId->getCollabPersonId()] = $user;
+
+        $this->saveToDisk();
+
+        return $user;
     }
 
     public function registerUser($uid, $schacHomeOrganization)

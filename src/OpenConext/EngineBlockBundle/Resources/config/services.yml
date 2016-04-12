@@ -39,6 +39,6 @@ services:
             - "sha256"
 
     engineblock.features:
-        class: OpenConext\EngineBlock\Configuration\FeatureConfiguration
+        class: OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
         arguments:
             - # replaced in the extension
