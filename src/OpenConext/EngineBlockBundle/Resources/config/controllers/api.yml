@@ -2,16 +2,16 @@ services:
     engineblock.controller.api.connections:
         class: OpenConext\EngineBlockBundle\Controller\Api\ConnectionsController
         arguments:
-            - "@engineblock.compat.application"
             - "@security.authorization_checker"
-            - "@engineblock.service.features"
+            - "@engineblock.features"
+            - "@engineblock.compat.application"
 
     engineblock.controller.api.consent:
         class: OpenConext\EngineBlockBundle\Controller\Api\ConsentController
         arguments:
-            - "@engineblock.service.consent"
-            - "@engineblock.service.features"
             - "@security.authorization_checker"
+            - "@engineblock.features"
+            - "@engineblock.service.consent"
 
     engineblock.controller.api.heartbeat:
         class: OpenConext\EngineBlockBundle\Controller\Api\HeartbeatController
@@ -19,6 +19,6 @@ services:
     engineblock.controller.api.metadata:
         class: OpenConext\EngineBlockBundle\Controller\Api\MetadataController
         arguments:
-            - "@engineblock.service.metadata"
-            - "@engineblock.service.features"
             - "@security.authorization_checker"
+            - "@engineblock.features"
+            - "@engineblock.service.metadata"

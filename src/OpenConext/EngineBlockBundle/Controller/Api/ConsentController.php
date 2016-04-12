@@ -3,10 +3,10 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlock\Service\ConsentService;
-use OpenConext\EngineBlock\Service\FeaturesService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,9 +20,9 @@ final class ConsentController
     private $consentService;
 
     /**
-     * @var FeaturesService
+     * @var FeatureConfiguration
      */
-    private $featuresService;
+    private $featureConfiguration;
 
     /**
      * @var AuthorizationCheckerInterface
@@ -30,18 +30,18 @@ final class ConsentController
     private $authorizationChecker;
 
     public function __construct(
-        ConsentService $consentService,
-        FeaturesService $featuresService,
-        AuthorizationCheckerInterface $authorizationChecker
+        AuthorizationCheckerInterface $authorizationChecker,
+        FeatureConfiguration $featureConfiguration,
+        ConsentService $consentService
     ) {
-        $this->consentService       = $consentService;
-        $this->featuresService      = $featuresService;
         $this->authorizationChecker = $authorizationChecker;
+        $this->featureConfiguration = $featureConfiguration;
+        $this->consentService       = $consentService;
     }
 
     public function userAction($userId)
     {
-        if (!$this->featuresService->consentListingIsEnabled()) {
+        if (!$this->featureConfiguration->isEnabled('api.consent_listing')) {
             throw new NotFoundHttpException('Consent listing API is disabled');
         }
 

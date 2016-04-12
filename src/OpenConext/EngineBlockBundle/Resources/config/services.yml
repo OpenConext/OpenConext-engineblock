@@ -13,13 +13,6 @@ services:
         arguments:
             - "engine-api.%domain%"
 
-    engineblock.service.features:
-        class: OpenConext\EngineBlock\Service\FeaturesService
-        arguments:
-            - "@=service('engineblock.bridge.config').get('engineApi.features.metadataPush') == true"
-            - "@=service('engineblock.bridge.config').get('engineApi.features.consentListing') == true"
-            - "@=service('engineblock.bridge.config').get('engineApi.features.metadataApi') == true"
-
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
         arguments:
@@ -44,3 +37,8 @@ services:
         class: OpenConext\EngineBlockBundle\Authentication\Service\CollabPersonIdHasher
         arguments:
             - "sha256"
+
+    engineblock.features:
+        class: OpenConext\EngineBlock\Configuration\FeatureConfiguration
+        arguments:
+            - # replaced in the extension

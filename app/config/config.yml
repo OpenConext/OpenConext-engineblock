@@ -11,6 +11,13 @@ parameters:
     #   4102bffe58a9ecbce3c7c934e0aa8ece46efcf82/library/EngineBlock/Application/Bootstrapper.php#L242
     locale: en
 
+open_conext_engine_block:
+    features:
+        api.metadata_push:   "%feature_api_metadata_push%"
+        api.consent_listing: "%feature_api_consent_listing%"
+        api.metadata_api:    "%feature_api_metadata_api%"
+        eb.ldap_integration: "%feature_eb_ldap_integration%"
+
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
