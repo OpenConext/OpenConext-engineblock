@@ -144,6 +144,10 @@ class UserDirectoryAdapter
      */
     public function deleteUserWith($collabPersonId)
     {
+        if ($this->featureConfiguration->isEnabled('eb.ldap_integration')) {
+            $this->ldapUserDirectory->deleteUser($collabPersonId);
+        }
+
         $this->userDirectory->removeUserWith(new CollabPersonId($collabPersonId));
     }
 }

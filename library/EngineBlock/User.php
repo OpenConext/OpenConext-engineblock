@@ -83,23 +83,22 @@ class EngineBlock_User
      */
     protected function _deleteLdapUser()
     {
-        $schacHomeOrganization = $this->_attributes['urn:mace:terena.org:attribute-def:schacHomeOrganization'];
-
-        if (!$schacHomeOrganization) {
-            throw new EngineBlock_Exception(
-                'Cannot remove user, cannot reliably determine who the user is due to missing schacHomeOrganization '
-                . 'attribute'
-            );
+        if (!isset($this->_attributes[SchacHomeOrganization::URN_MACE][0])) {
+            throw new EngineBlock_Exception(sprintf(
+                'Cannot remove user, cannot reliably determine who the user is due to missing "%s" attribute',
+                SchacHomeOrganization::URN_MACE
+            ));
         }
+
         $collabPersonId = CollabPersonId::generateFrom(
             new Uid($this->getUid()),
-            new SchacHomeOrganization($schacHomeOrganization)
+            new SchacHomeOrganization($this->_attributes[SchacHomeOrganization::URN_MACE][0])
         );
 
         EngineBlock_ApplicationSingleton::getInstance()
             ->getDiContainer()
             ->getUserDirectory()
-            ->deleteUserWith($collabPersonId);
+            ->deleteUserWith($collabPersonId->getCollabPersonId());
     }
 
     /**

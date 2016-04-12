@@ -376,10 +376,46 @@ class UserDirectoryAdapterTest extends UnitTest
      * @group EngineBlockBridge
      * @group Authentication
      */
-    public function a_request_for_removal_is_handled()
+    public function a_request_for_removal_removes_the_user_from_the_database_backend()
     {
         $collabPersonId = $this->getCollabPersonId();
 
+        $this->featureConfiguration
+            ->shouldReceive('isEnabled')
+            ->once()
+            ->andReturn(false);
+        $this->userDirectory
+            ->shouldReceive('removeUserWith')
+            ->withArgs([new ValueObjectEqualsMatcher(new CollabPersonId($collabPersonId))])
+            ->once();
+
+        $userDirectoryAdapter = new UserDirectoryAdapter(
+            $this->userDirectory,
+            $this->ldapUserDirectory,
+            $this->featureConfiguration,
+            $this->logger
+        );
+
+        $userDirectoryAdapter->deleteUserWith($collabPersonId);
+    }
+
+    /**
+     * @test
+     * @group EngineBlockBridge
+     * @group Authentication
+     */
+    public function a_request_for_removal_also_removes_the_user_from_the_ldap_backend_if_enabled()
+    {
+        $collabPersonId = $this->getCollabPersonId();
+
+        $this->featureConfiguration
+            ->shouldReceive('isEnabled')
+            ->once()
+            ->andReturn(true);
+        $this->ldapUserDirectory
+            ->shouldReceive('deleteUser')
+            ->with($collabPersonId)
+            ->once();
         $this->userDirectory
             ->shouldReceive('removeUserWith')
             ->withArgs([new ValueObjectEqualsMatcher(new CollabPersonId($collabPersonId))])
