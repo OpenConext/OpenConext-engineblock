@@ -1,9 +1,5 @@
 <?php
 
-class EngineBlock_Exception_MissingRequiredFields extends EngineBlock_Exception {
-
-}
-
 class EngineBlock_Saml2Attributes_FieldMapper
 {
     protected $_saml2Required = array(
