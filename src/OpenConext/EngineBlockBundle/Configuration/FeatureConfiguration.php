@@ -5,7 +5,7 @@ namespace OpenConext\EngineBlockBundle\Configuration;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\LogicException;
 
-final class FeatureConfiguration
+class FeatureConfiguration
 {
     /**
      * @var Feature[]
