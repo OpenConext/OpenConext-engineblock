@@ -74,7 +74,7 @@ doctrine:
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
-                    Authencation:
+                    Authentication:
                         mapping:   true
                         type:      annotation
                         dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Authentication"
