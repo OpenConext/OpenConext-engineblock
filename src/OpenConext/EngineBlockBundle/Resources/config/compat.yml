@@ -81,3 +81,23 @@ services:
 
     engineblock.compat.saml2_id_generator:
         class: EngineBlock_Saml2_IdGenerator_Default
+
+    engineblock.compat.user_directory:
+         class: EngineBlock_UserDirectory
+         arguments:
+             - "@engineblock.compat.ldap_client"
+
+    engineblock.compat.ldap_client:
+        public: false
+        class: Zend_Ldap
+        arguments:
+            -
+                host: "@=service('engineblock.bridge.config').get('ldap.host')"
+                useSsl: "@=service('engineblock.bridge.config').get('ldap.useSsl')"
+                username: "@=service('engineblock.bridge.config').get('ldap.userName')"
+                password: "@=service('engineblock.bridge.config').get('ldap.password')"
+                bindRequiresDn: "@=service('engineblock.bridge.config').get('ldap.bindRequiresDn')"
+                accountDomainName: "@=service('engineblock.bridge.config').get('ldap.accountDomainName')"
+                baseDn: "@=service('engineblock.bridge.config').get('ldap.baseDn')"
+        calls:
+            - [bind, []]
