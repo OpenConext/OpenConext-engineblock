@@ -3,7 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Authentication\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use OpenConext\EngineBlock\Assert\Assertion;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlockBundle\Authentication\Entity\User;
 
 /**
@@ -21,15 +21,12 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param string $collabPersonId
+     * @param CollabPersonId $collabPersonId
      * @return null|User
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function findByCollabPersonId($collabPersonId)
+    public function findByCollabPersonId(CollabPersonId $collabPersonId)
     {
-        Assertion::nonEmptyString($collabPersonId, 'collabPersonId');
-        Assertion::length($collabPersonId, 64);
-
         return $this
             ->createQueryBuilder('u')
             ->where('u.collabPersonId = :collabPersonId')
@@ -39,13 +36,10 @@ class UserRepository extends EntityRepository
     }
 
     /**
-     * @param string $collabPersonId
+     * @param CollabPersonId $collabPersonId
      */
-    public function deleteUserWithCollabPersonId($collabPersonId)
+    public function deleteUserWithCollabPersonId(CollabPersonId $collabPersonId)
     {
-        Assertion::nonEmptyString($collabPersonId, 'collabPersonId');
-        Assertion::length($collabPersonId, 64);
-
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
 
         $queryBuilder
