@@ -58,8 +58,17 @@ class UserDirectoryAdapter
      */
     public function identifyUser(array $attributes)
     {
-        if (!isset($attributes[Uid::URN_MACE][0]) || !isset($attributes[SchacHomeOrganization::URN_MACE][0])) {
-            throw new EngineBlock_Exception_MissingRequiredFields('Missing required SAML2 fields in attributes');
+        if (!isset($attributes[Uid::URN_MACE][0])) {
+            throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
+                'Missing required SAML2 field "%s" in attributes',
+                Uid::URN_MACE
+            ));
+        }
+        if (!isset($attributes[SchacHomeOrganization::URN_MACE][0])) {
+            throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
+                'Missing required SAML2 field "%s" in attributes',
+                SchacHomeOrganization::URN_MACE
+            ));
         }
 
         if ($this->featureConfiguration->isEnabled('eb.ldap_integration')) {
