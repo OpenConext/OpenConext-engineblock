@@ -40,7 +40,7 @@ while (count($users) > 0) {
             }
         }
 
-        $user['collabpersonuuid'] = (string)Surfnet_Zend_Uuid::generate();
+        $user['collabpersonuuid'] = (string) \Ramsey\Uuid\Uuid::uuid4();
 
         $now = date(DATE_RFC822);
         $user['collabpersonlastupdated'] = $now;

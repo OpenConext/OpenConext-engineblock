@@ -1,6 +1,7 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use Ramsey\Uuid\Uuid;
 
 class EngineBlock_Saml2_NameIdResolver
 {
@@ -181,7 +182,7 @@ class EngineBlock_Saml2_NameIdResolver
             return $uuid;
         }
 
-        $uuid = (string)Surfnet_Zend_Uuid::generate();
+        $uuid = (string) Uuid::uuid4();
         $this->_storeServiceProviderUuid($spEntityId, $uuid);
 
         return $uuid;
