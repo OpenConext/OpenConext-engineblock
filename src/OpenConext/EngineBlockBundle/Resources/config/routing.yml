@@ -4,7 +4,7 @@ open_conext_engine_block_authentication_homepage:
 
 authentication_sp_debug:
     path:       /authentication/sp/debug
-    methods:    [GET]
+    methods:    [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.debug:debugSpConnectionAction
 
