@@ -8,6 +8,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ResponseFactory
 {
+    /**
+     * @param EngineBlock_Http_Response $response
+     * @return Response
+     */
     public static function fromEngineBlockResponse(EngineBlock_Http_Response $response)
     {
         if ($response->getRedirectUrl()) {
