@@ -108,6 +108,7 @@ class MetadataController
     /**
      * @param null|string $keyId
      * @param Request     $request
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
      */
     public function edugainMetadataAction(Request $request, $keyId = null)
@@ -126,5 +127,7 @@ class MetadataController
                 $exception
             );
         }
+
+        return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 }
