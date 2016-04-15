@@ -108,6 +108,22 @@ class TestDataProvider
         );
     }
 
+    public static function notNull()
+    {
+        return array_merge(
+            self::emtpyString(),
+            [
+                'integer' => [1],
+                'float'   => [1.234],
+                'array'   => [[]],
+                'true'    => [true],
+                'false'   => [false],
+                'object'  => [new stdClass()],
+                'string'  => ['string']
+            ]
+        );
+    }
+
     public static function notCallable()
     {
         return array_merge(
@@ -134,4 +150,5 @@ class TestDataProvider
             'nullbyte'        => [chr(0)],
         ];
     }
+
 }

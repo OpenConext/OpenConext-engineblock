@@ -119,11 +119,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return EngineBlock_UserDirectory
+     * @return \OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter
      */
     public function getUserDirectory()
     {
-        return $this->container->get('engineblock.compat.user_directory');
+        return $this->container->get('engineblock.bridge.authentication.user_directory');
     }
 
     protected function registerMetadataRepository()

@@ -2,12 +2,35 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
-use EngineBlock_UserDirectory;
 use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 use PHPUnit_Framework_TestCase as UnitTest;
 
 class CollabPersonIdTest extends UnitTest
 {
+    /**
+     * Smoke test that ensures that CollabPersonIds are generated in an reliable, known manner.
+     *
+     * @test
+     * @group EngineBlock
+     * @group Authentication
+     */
+    public function generate_returns_a_predictable_collab_person_id()
+    {
+        $schacHomeOrganizationValue = 'openconext.org';
+        $uidValue = 'homer@domain.invalid';
+
+        $schacHomeOrganization = new SchacHomeOrganization($schacHomeOrganizationValue);
+        $uid = new Uid($uidValue);
+
+        $collabPersonId = CollabPersonId::generateFrom($uid, $schacHomeOrganization);
+
+        $this->assertEquals(
+            CollabPersonId::URN_NAMESPACE . ':' . $schacHomeOrganizationValue . ':' . $uidValue,
+            $collabPersonId->getCollabPersonId()
+        );
+    }
+
+
     /**
      * @test
      * @group EngineBlock
@@ -25,8 +48,8 @@ class CollabPersonIdTest extends UnitTest
 
     /**
      * @test
-     * @group        EngineBlock
-     * @group        Authentication
+     * @group EngineBlock
+     * @group Authentication
      * @dataProvider invalidNameSpaceProvider
      *
      * @param string $wronglyNamespaced
@@ -48,18 +71,45 @@ class CollabPersonIdTest extends UnitTest
         return [
             'no namespace'              => [$user],
             'prefixed wrong namepace'   => ['urn:not-collab:person'],
-            'affixed correct namespace' => [$user . EngineBlock_UserDirectory::URN_COLLAB_PERSON_NAMESPACE]
+            'affixed correct namespace' => [$user . CollabPersonId::URN_NAMESPACE]
         ];
     }
 
     /**
      * @test
-     * @group        EngineBlock
-     * @group        Authentication
+     * @group EngineBlock
+     * @group Authentication
+     */
+    public function collab_person_id_must_not_be_longer_than_400_characters()
+    {
+        $namespaceLength = strlen(CollabPersonId::URN_NAMESPACE);
+        $beneathLimit = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength - 1);
+        $exactlyLimit = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength);
+        $aboveLimit   = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength + 1);
+
+        $exceptionCaughtAtConstruction = function ($collabPersonId) {
+            try {
+                new CollabPersonId($collabPersonId);
+            } catch (InvalidArgumentException $exception) {
+                return true;
+            }
+
+            return false;
+        };
+
+        $this->assertFalse($exceptionCaughtAtConstruction($beneathLimit));
+        $this->assertFalse($exceptionCaughtAtConstruction($exactlyLimit));
+        $this->assertTrue($exceptionCaughtAtConstruction($aboveLimit));
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Authentication
      */
     public function collab_person_id_can_be_retrieved()
     {
-        $collabPersonIdValue = EngineBlock_UserDirectory::URN_COLLAB_PERSON_NAMESPACE . ':openconext:unique-user-id';
+        $collabPersonIdValue = CollabPersonId::URN_NAMESPACE . ':openconext:unique-user-id';
 
         $collabPersonId = new CollabPersonId($collabPersonIdValue);
 
@@ -68,13 +118,13 @@ class CollabPersonIdTest extends UnitTest
 
     /**
      * @test
-     * @group        EngineBlock
-     * @group        Authentication
+     * @group EngineBlock
+     * @group Authentication
      */
     public function collab_person_ids_are_only_equal_if_created_with_the_same_value()
     {
-        $firstId  = EngineBlock_UserDirectory::URN_COLLAB_PERSON_NAMESPACE . ':openconext:unique-user-id';
-        $secondId = EngineBlock_UserDirectory::URN_COLLAB_PERSON_NAMESPACE . ':openconext:other-user-id';
+        $firstId  = CollabPersonId::URN_NAMESPACE . ':openconext:unique-user-id';
+        $secondId = CollabPersonId::URN_NAMESPACE . ':openconext:other-user-id';
 
         $base = new CollabPersonId($firstId);
         $same = new CollabPersonId($firstId);
@@ -86,12 +136,12 @@ class CollabPersonIdTest extends UnitTest
 
     /**
      * @test
-     * @group        EngineBlock
-     * @group        Authentication
+     * @group EngineBlock
+     * @group Authentication
      */
     public function a_collab_person_id_can_be_cast_to_string()
     {
-        $collabPersonIdValue = EngineBlock_UserDirectory::URN_COLLAB_PERSON_NAMESPACE . ':openconext:unique-user-id';
+        $collabPersonIdValue = CollabPersonId::URN_NAMESPACE . ':openconext:unique-user-id';
 
         $collabPersonId = new CollabPersonId($collabPersonIdValue);
 

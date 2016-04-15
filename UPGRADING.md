@@ -19,6 +19,11 @@ Part of the configuration is now also used in `.yml` configuration. In order to 
 parameters when booting, `app/config/ini_parameter.yml` must be present. This file is created automatically
 by composer during installation, but can be recreated manually using `bin/composer/dump-required-ini-params.sh`.
 
+##### Removed Configuration
+
+- `subjectIdAttribute` Due to the migration from LDAP to database storage for registered users, the configuration 
+  `subjectIdAttribute` has been removed. The equivalent of the `collabpersonid` configuration value will now always be used.
+
 #### Database Configuration
 The Database configuration changed from master/slave to single host to allow for multi-master clustering. This means the `.ini`
 configuration has changed from (**this will be ignored now**):
@@ -64,3 +69,7 @@ Apr  1 11:49:00 apps EBAUTH[4861]: {"channel":"authentication","level":"INFO","m
 [doct2]: http://symfony.com/doc/2.7/reference/configuration/doctrine.html
 [doct3]: http://www.doctrine-project.org/api/dbal/2.3/class-Doctrine.DBAL.Connections.MasterSlaveConnection.html
 [php1]: http://php.net/supported-versions.php
+
+#### User Storage
+
+The users are now stored in the database, and optionally also in the LDAP (to facilitate a graceful rollover).

@@ -3,9 +3,11 @@
 namespace OpenConext\EngineBlockBundle\DependencyInjection;
 
 use EngineBlock_Application_Bootstrapper;
+use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBridge\Configuration\EngineBlockIniFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 
@@ -13,8 +15,7 @@ class OpenConextEngineBlockExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configuration = new Configuration();
-        $this->processConfiguration($configuration, $configs);
+        $configuration = $this->processConfiguration(new Configuration(), $configs);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('controllers.yml');
@@ -29,6 +30,7 @@ class OpenConextEngineBlockExtension extends Extension
         $this->parseIniConfigurationFiles($container);
         $this->overwriteDefaultLogger($container);
         $this->setUrlParameterBasedOnEnv($container);
+        $this->setFeatureConfiguration($container, $configuration['features']);
     }
 
     /**
@@ -70,5 +72,24 @@ class OpenConextEngineBlockExtension extends Extension
                 sprintf('https://engine.%s', $container->getParameter('domain'))
             );
         }
+    }
+
+    /**
+     * Loads the feature configuration in a manner that can be dumped in the container cache
+     *
+     * @param ContainerBuilder $container
+     * @param array            $featureConfiguration
+     */
+    private function setFeatureConfiguration(ContainerBuilder $container, array $featureConfiguration)
+    {
+        // do note that duplicates cannot exist since the feature keys are keys in the configuration, which are
+        // enforced to be unique by the config component.
+        $features = [];
+        foreach ($featureConfiguration as $feature => $onOrOff) {
+            $features[$feature] = new Definition(Feature::class, [$feature, $onOrOff]);
+        }
+
+        $featureConfigurationService = $container->getDefinition('engineblock.features');
+        $featureConfigurationService->replaceArgument(0, $features);
     }
 }

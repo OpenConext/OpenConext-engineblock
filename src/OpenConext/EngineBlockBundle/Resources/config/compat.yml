@@ -83,9 +83,9 @@ services:
         class: EngineBlock_Saml2_IdGenerator_Default
 
     engineblock.compat.user_directory:
-        class: EngineBlock_UserDirectory
-        arguments:
-            - "@engineblock.compat.ldap_client"
+         class: EngineBlock_UserDirectory
+         arguments:
+             - "@engineblock.compat.ldap_client"
 
     engineblock.compat.ldap_client:
         public: false

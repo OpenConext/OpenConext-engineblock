@@ -13,13 +13,6 @@ services:
         arguments:
             - "engine-api.%domain%"
 
-    engineblock.service.features:
-        class: OpenConext\EngineBlock\Service\FeaturesService
-        arguments:
-            - "@=service('engineblock.bridge.config').get('engineApi.features.metadataPush') == true"
-            - "@=service('engineblock.bridge.config').get('engineApi.features.consentListing') == true"
-            - "@=service('engineblock.bridge.config').get('engineApi.features.metadataApi') == true"
-
     engineblock.service.consent:
         class: OpenConext\EngineBlock\Service\ConsentService
         arguments:
@@ -32,3 +25,13 @@ services:
         arguments:
             - "@engineblock.compat.repository.metadata"
             - "@engineblock.compat.logger"
+
+    engineblock.authentication.user_directory:
+        class: OpenConext\EngineBlockBundle\Authentication\Service\UserService
+        arguments:
+            - "@engineblock.repository.user"
+
+    engineblock.features:
+        class: OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
+        arguments:
+            - # replaced in the extension

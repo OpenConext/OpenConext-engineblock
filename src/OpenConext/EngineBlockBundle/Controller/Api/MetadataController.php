@@ -2,10 +2,10 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
-use OpenConext\EngineBlock\Service\FeaturesService;
 use OpenConext\EngineBlock\Service\MetadataService;
 use OpenConext\EngineBlockBundle\Http\Response\JsonHelper;
 use OpenConext\Value\Exception\InvalidArgumentException;
@@ -22,9 +22,9 @@ final class MetadataController
     private $metadataService;
 
     /**
-     * @var FeaturesService
+     * @var FeatureConfiguration
      */
-    private $featuresService;
+    private $featureConfiguration;
 
     /**
      * @var AuthorizationCheckerInterface
@@ -32,20 +32,20 @@ final class MetadataController
     private $authorizationChecker;
 
     public function __construct(
-        MetadataService $metadataService,
-        FeaturesService $featuresService,
-        AuthorizationCheckerInterface $authorizationChecker
+        AuthorizationCheckerInterface $authorizationChecker,
+        FeatureConfiguration $featureConfiguration,
+        MetadataService $metadataService
     ) {
-        $this->metadataService      = $metadataService;
-        $this->featuresService      = $featuresService;
         $this->authorizationChecker = $authorizationChecker;
+        $this->featureConfiguration = $featureConfiguration;
+        $this->metadataService      = $metadataService;
     }
 
     public function idpAction(Request $request)
     {
         $entityIdValue = $request->query->get('entity-id');
 
-        if (!$this->featuresService->metadataApiIsEnabled()) {
+        if (!$this->featureConfiguration->isEnabled('api.metadata_api')) {
             throw new NotFoundHttpException('Metadata API is disabled');
         }
 

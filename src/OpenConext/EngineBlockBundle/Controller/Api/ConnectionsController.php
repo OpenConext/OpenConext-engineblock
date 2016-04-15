@@ -5,10 +5,10 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 use EngineBlock_ApplicationSingleton;
 use OpenConext\Component\EngineBlockMetadata\Entity\Assembler\JanusPushMetadataAssembler;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadataRepository;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
-use OpenConext\EngineBlock\Service\FeaturesService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -26,28 +26,28 @@ class ConnectionsController
     private $authorizationChecker;
 
     /**
-     * @var FeaturesService
+     * @var FeatureConfiguration
      */
-    private $featuresService;
+    private $featureConfiguration;
 
     /**
-     * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
      * @param AuthorizationCheckerInterface    $authorizationChecker
-     * @param FeaturesService                  $featuresService
+     * @param FeatureConfiguration             $featureConfiguration
+     * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
      */
     public function __construct(
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         AuthorizationCheckerInterface $authorizationChecker,
-        FeaturesService $featuresService
+        FeatureConfiguration $featureConfiguration,
+        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->featuresService = $featuresService;
+        $this->authorizationChecker            = $authorizationChecker;
+        $this->featureConfiguration            = $featureConfiguration;
     }
 
     public function pushConnectionsAction(Request $request)
     {
-        if (!$this->featuresService->metadataPushIsEnabled()) {
+        if (!$this->featureConfiguration->isEnabled('api.metadata_push')) {
             return new JsonResponse(null, 404);
         }
 

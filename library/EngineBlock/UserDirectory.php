@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use Ramsey\Uuid\Uuid;
 
 /**
  * Access to the LDAP directory where all users are provisioned
@@ -189,14 +189,14 @@ class EngineBlock_UserDirectory
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_REGISTERED]    = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_ACCESSED] = $now;
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_LAST_UPDATED]  = $now;
-        
+
         $newAttributes['objectClass'] = $this->LDAP_OBJECT_CLASSES;
 
         $this->_addOrganization($newAttributes['o']);
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
         $this->_ldapClient->add($dn, $newAttributes);
-        
+
         return $newAttributes;
     }
 
@@ -252,7 +252,7 @@ class EngineBlock_UserDirectory
 
         $dn = $this->_getDnForLdapAttributes($newAttributes);
         $this->_ldapClient->update($dn, $newAttributes);
-        
+
         return $newAttributes;
     }
 
@@ -262,9 +262,9 @@ class EngineBlock_UserDirectory
         return self::URN_COLLAB_PERSON_NAMESPACE . ':' . $attributes['o'] . ':' . $uid;
     }
 
-    protected function _getCollabPersonUuid($attributes)
+    protected function _getCollabPersonUuid()
     {
-        return (string)Surfnet_Zend_Uuid::generate();
+        return (string) Uuid::uuid4();
     }
 
     protected function _getCollabPersonHash($attributes)

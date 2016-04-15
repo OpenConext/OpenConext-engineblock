@@ -3,7 +3,6 @@
 namespace OpenConext\EngineBlockBundle;
 
 use EngineBlock_ApplicationSingleton;
-use OpenConext\EngineBlock\Logger\RequestIdGenerator;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class OpenConextEngineBlockBundle extends Bundle
