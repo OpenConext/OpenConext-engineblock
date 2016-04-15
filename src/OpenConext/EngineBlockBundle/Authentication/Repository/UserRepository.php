@@ -30,7 +30,7 @@ class UserRepository extends EntityRepository
         return $this
             ->createQueryBuilder('u')
             ->where('u.collabPersonId = :collabPersonId')
-            ->setParameter('collabPersonId', $collabPersonId)
+            ->setParameter('collabPersonId', $collabPersonId->getCollabPersonId())
             ->getQuery()
             ->getOneOrNullResult();
     }
@@ -45,7 +45,7 @@ class UserRepository extends EntityRepository
         $queryBuilder
             ->delete($this->_entityName, 'u')
             ->where('u.collabPersonId = :collabPersonId')
-            ->setParameter('collabPersonId', $collabPersonId)
+            ->setParameter('collabPersonId', $collabPersonId->getCollabPersonId())
             ->getQuery()
             ->execute();
 
