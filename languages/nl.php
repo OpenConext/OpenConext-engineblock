@@ -271,7 +271,7 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
 
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
-    'attributes_data_mailed'          => 'De attribuutdata is gemaild',
+    'attributes_data_mailed'          => 'De attribuutdata zijn gemaild',
     'idp_debugging_title'             => 'Toon verkregen response van Identity Provider',
     'retry'                           => 'Opnieuw',
 
