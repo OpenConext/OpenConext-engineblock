@@ -322,7 +322,7 @@ this service.
 
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',
-    'attributes_data_mailed'          => 'Attribute data has been mailed',
+    'attributes_data_mailed'          => 'Attribute data have been mailed',
     'idp_debugging_title'             => 'Show response from Identity Provider',
     'retry'                           => 'Retry',
 
