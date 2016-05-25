@@ -88,6 +88,7 @@
             "EngineBlock_Test": "tests/library/",
             "Janus_": "library/",
             "Pdp_": "library/",
+            "AttributeAggregation_": "library/",
             "SurfConext_": "library/",
             "Surfnet_": "library/"
         },
