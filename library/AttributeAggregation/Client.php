@@ -49,7 +49,7 @@ class AttributeAggregation_Client
         $request = new AttributeAggregation_Request($subjectId, $spEntityId, $responseAttributes);
         $rawJson = $this->postAggregation($request);
         $aggregations = json_decode($rawJson);
-        if (!$aggregations) {
+        if (!$aggregations && !is_array($aggregations)) {
             throw new RuntimeException(
                 "AttributeAggregation: Invalid JSON: " . $rawJson
             );
