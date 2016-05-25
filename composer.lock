@@ -1304,16 +1304,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "1.4.3",
+            "version": "1.4.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "0ff0806af97ba4178842603432810b26c3ee139e"
+                "reference": "9d17652adf86312334eddda9abf895c244c71da8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/0ff0806af97ba4178842603432810b26c3ee139e",
-                "reference": "0ff0806af97ba4178842603432810b26c3ee139e",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/9d17652adf86312334eddda9abf895c244c71da8",
+                "reference": "9d17652adf86312334eddda9abf895c244c71da8",
                 "shasum": ""
             },
             "require": {
@@ -1339,7 +1339,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2016-01-06 09:05:06"
+            "time": "2016-02-02 08:04:27"
         },
         {
             "name": "openconext/saml-value-object",
@@ -1432,7 +1432,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/openid/php-openid/zipball/924f9aa42453cd0f9dba72587b4e2cdf7f4de874",
+                "url": "https://api.github.com/repos/openid/php-openid/zipball/ee669c6a9d4d95b58ecd9b6945627276807694fb",
                 "reference": "ee669c6a9d4d95b58ecd9b6945627276807694fb",
                 "shasum": ""
             },
