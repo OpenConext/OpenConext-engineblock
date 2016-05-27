@@ -227,9 +227,9 @@ Als je deze applicatie wilt gebruiken moet je:<br />
     </p>',
     'error_session_lost'                => 'Error - Sessie is verloren gegaan',
     'error_session_lost_desc'           => '<p>
-        Je sessie is ergens verloren gegaan.<br />
-        Waarschijnlijk mocht de cookie niet worden gezet door de strikte privacy configuratie van jouw browser?<br />
-        Ga alstublieft terug en probeer het opnieuw.
+        Je sessie is verloren gegaan.<br />
+        Waarschijnlijk kon er geen cookie worden gezet in je browser. SURFconext vereist het gebruik van cookies voor correcte werking.<br />
+        Verzeker jezelf ervan dat je browser cookies van SURFconext accepteert. Ga alstublieft terug en probeer het opnieuw.
         <br /><br />
     </p>',
     'error_dissimilar_workflow_state'       => 'Error - Verschillende productie statussen',

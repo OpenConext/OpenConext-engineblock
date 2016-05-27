@@ -229,8 +229,8 @@ If you want to use this application you have to:<br />
     'error_session_lost'            => 'Error - your session was lost',
     'error_session_lost_desc'       => '<p>
         Somewhere along the way, your session with us was lost. <br />
-        Most likely your browser privacy or security settings prevented the cookie to be set? <br />
-        Please go back and try again.
+        Likely your browser privacy or security settings prevented the cookie to be set. SURFconext requires that cookies are enabled.<br />
+        Make sure your browser accepts cookies from SURFconext. Please go back and try again.
         <br /><br />
     </p>',
     'error_dissimilar_workflow_state'       => 'Error - Dissimilar workflow states',
