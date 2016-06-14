@@ -442,6 +442,14 @@
     },
     "urn:oid:1.3.6.1.4.1.5923.1.1.1.9": "urn:mace:dir:attribute-def:eduPersonScopedAffiliation",
     "urn:mace:dir:attribute-def:eduPersonScopedAffiliation": {
+        "Description": {
+            "en": "The relationship between the user and a specific (security) domain with his home organisation",
+            "nl": "De relatie tussen de gebruiker en een specifiek (beveiligings) domein van de thuisorganisatie"
+        },
+        "Name": {
+            "en": "Scoped affiliation",
+            "nl": "Scoped affiliation"
+        },
         "Conditions": {
             "caseInsensitive": true
         }
