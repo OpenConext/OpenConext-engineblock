@@ -51,6 +51,8 @@ class EngineBlock_UserDirectory
      */
     public function findUsersByIdentifier($identifier)
     {
+        $this->bindLdapClientIfNeeded();
+
         $filter = '(&(objectclass=' . self::LDAP_CLASS_COLLAB_PERSON . ')';
         $filter .= '(' . self::LDAP_ATTR_COLLAB_PERSON_ID . '=' . $identifier . '))';
 
@@ -126,8 +128,24 @@ class EngineBlock_UserDirectory
      */
     public function deleteUser($collabPersonId)
     {
+        $this->bindLdapClientIfNeeded();
+
         $dn = $this->_buildUserDn($collabPersonId);
         $this->_ldapClient->delete($dn, false);
+    }
+
+    /**
+     * Allows for lazily binding the LDAP client.
+     *
+     * @throws Zend_Ldap_Exception
+     */
+    private function bindLdapClientIfNeeded()
+    {
+        static $bound = false;
+
+        if (!$bound) {
+            $this->_ldapClient->bind();
+        }
     }
 
     /**
@@ -139,6 +157,8 @@ class EngineBlock_UserDirectory
      */
     protected function _buildUserDn($collabPersonId)
     {
+        $this->bindLdapClientIfNeeded();
+
         $users = $this->findUsersByIdentifier($collabPersonId);
         if (count($users) !== 1) {
             $e = new EngineBlock_Exception("Multiple or no users found for uid $collabPersonId?");
@@ -180,6 +200,8 @@ class EngineBlock_UserDirectory
 
     protected function _addUser($newAttributes)
     {
+        $this->bindLdapClientIfNeeded();
+
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_HASH]          = $this->_getCollabPersonHash($newAttributes);
 
         $newAttributes[self::LDAP_ATTR_COLLAB_PERSON_ID]            = $this->_getCollabPersonId($newAttributes);
@@ -208,6 +230,8 @@ class EngineBlock_UserDirectory
      */
     protected function _addOrganization($organization)
     {
+        $this->bindLdapClientIfNeeded();
+
         $info = array(
             'o' => $organization ,
             'objectclass' => array(
@@ -227,6 +251,8 @@ class EngineBlock_UserDirectory
 
     protected function _updateUser($user, $newAttributes)
     {
+        $this->bindLdapClientIfNeeded();
+
         // Hackish, apparently LDAP gives us arrays even for single values?
         // So for now we assume arrays with only one value are single valued
         foreach ($user as $userKey => $userValue) {
@@ -295,6 +321,8 @@ class EngineBlock_UserDirectory
 
     protected function _getDnForLdapAttributes($attributes)
     {
+        $this->bindLdapClientIfNeeded();
+
         return 'uid=' . $attributes['uid'] . ',o=' . $attributes['o'] . ',' . $this->_ldapClient->getBaseDn();
     }
 
