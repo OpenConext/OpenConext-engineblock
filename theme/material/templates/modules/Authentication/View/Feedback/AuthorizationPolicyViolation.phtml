@@ -15,8 +15,15 @@ $layout->wide = true;
 <div class="box">
   <div class="mod-content">
     <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
-    <?= $this->t('error_authorization_policy_violation_desc');
+    <?= $this->t('error_authorization_policy_violation_info'); ?>
+    <?php
+      if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])) {
+    ?>
+      <h2><?= EngineBlock_View::htmlSpecialCharsText($_SESSION['feedbackInfo']['error_authorization_policy_violation_name'])?></h2>
+    <?php
+    }
+    ?>
+    <?= $this->t('error_authorization_policy_violation_desc'); ?>
 
-    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
   </div>
 </div>

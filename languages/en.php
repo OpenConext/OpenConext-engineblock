@@ -196,6 +196,7 @@ this service.
         You have successfully logged in at your institution, but unfortunately you can not use this service because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you feel you should be allowed access to this service.
     </p>',
     'error_authorization_policy_violation_name'       => 'Authorization policy message',
+    'error_authorization_policy_violation_info'       => 'Message from your institution: ',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
