@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "eb3d7cca70f1158c07a657f102daf957",
-    "content-hash": "c1b97c659fe75881a9bef2bdc0d89631",
+    "hash": "1c6b09cfee19c7d4c97d91391b3d08f7",
+    "content-hash": "6195156cf398ceddfadf1cfbf118b84c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1304,16 +1304,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "1.4.4",
+            "version": "dev-engineblock5-compat",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "9d17652adf86312334eddda9abf895c244c71da8"
+                "reference": "854cb56bccd39cf0dc65f5a344e5a3055c0e408c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/9d17652adf86312334eddda9abf895c244c71da8",
-                "reference": "9d17652adf86312334eddda9abf895c244c71da8",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/854cb56bccd39cf0dc65f5a344e5a3055c0e408c",
+                "reference": "854cb56bccd39cf0dc65f5a344e5a3055c0e408c",
                 "shasum": ""
             },
             "require": {
@@ -1325,8 +1325,7 @@
             "require-dev": {
                 "ibuildings/qa-tools": "~1.1",
                 "mockery/mockery": "~0.9",
-                "satooshi/php-coveralls": "~0.6",
-                "sebastian/phpcpd": "dev-master"
+                "satooshi/php-coveralls": "~0.6"
             },
             "type": "library",
             "autoload": {
@@ -1339,7 +1338,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2016-02-02 08:04:27"
+            "time": "2016-07-07 19:22:24"
         },
         {
             "name": "openconext/saml-value-object",
@@ -4564,6 +4563,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
+        "openconext/engineblock-metadata": 20,
         "openid/php-openid": 20
     },
     "prefer-stable": false,
