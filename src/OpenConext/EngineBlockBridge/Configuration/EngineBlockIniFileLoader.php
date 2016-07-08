@@ -2,8 +2,8 @@
 
 namespace OpenConext\EngineBlockBridge\Configuration;
 
+use InvalidArgumentException;
 use OpenConext\EngineBlock\Assert\Assertion;
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 final class EngineBlockIniFileLoader
 {
