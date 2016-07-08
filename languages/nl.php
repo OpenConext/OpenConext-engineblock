@@ -192,6 +192,7 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
         Je bent succesvol ingelogd bij jouw instelling, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst heeft jouw instelling met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de helpdesk van je instelling als je vindt dat je wel toegang moet hebben.
     </p>',
     'error_authorization_policy_violation_name'       => 'Omschrijving autorisatieregels',
+    'error_authorization_policy_violation_info'       => 'Bericht van je instelling: ',
     'error_no_message'                  => 'Error - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
