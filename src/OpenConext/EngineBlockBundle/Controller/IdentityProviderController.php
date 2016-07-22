@@ -108,7 +108,7 @@ class IdentityProviderController
             $cortoAdapter->setKeyId($keyId);
         }
 
-        $cortoAdapter->singleSignOn($idpHash);
+        $cortoAdapter->unsolicitedSingleSignOn($idpHash);
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

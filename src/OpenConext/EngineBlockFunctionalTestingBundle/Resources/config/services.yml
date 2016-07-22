@@ -23,6 +23,7 @@ services:
         arguments:
             - '@engineblock.functional_testing.fixture.service_registry'
             - '@engineblock.functional_testing.service.engine_block'
+            - '@engineblock.mock_entities.sp_registry'
             - '@engineblock.mock_entities.idp_registry'
             - '%sps_config_url%'
             - '%idps_config_url%'
