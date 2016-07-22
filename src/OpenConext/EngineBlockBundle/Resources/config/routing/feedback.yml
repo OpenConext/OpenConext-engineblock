@@ -81,4 +81,5 @@ authentication_feedback_pep_violation:
 authentication_feedback_unknown_preselected_idp:
     path:       '/unknown-preselected-idp'
     methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unknownPreselectedIdpAction }
 

@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Mink\Exception\ElementNotFoundException;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
@@ -11,18 +10,11 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
+ */
 class EngineBlockContext extends AbstractSubContext
 {
-    /**
-     * @var string
-     */
-    protected $idpsConfigUrl;
-
-    /**
-     * @var string
-     */
-    protected $spsConfigUrl;
-
     /**
      * @var ServiceRegistryFixture
      */
@@ -36,24 +28,42 @@ class EngineBlockContext extends AbstractSubContext
     /**
      * @var EntityRegistry
      */
+    private $mockSpRegistry;
+
+    /**
+     * @var EntityRegistry
+     */
     private $mockIdpRegistry;
 
     /**
+     * @var string
+     */
+    protected $idpsConfigUrl;
+
+    /**
+     * @var string
+     */
+    protected $spsConfigUrl;
+
+    /**
      * @param ServiceRegistryFixture $serviceRegistry
-     * @param EngineBlock    $engineBlock
-     * @param EntityRegistry $mockIdpRegistry
-     * @param string         $spsConfigUrl
-     * @param string         $idpsConfigUrl
+     * @param EngineBlock            $engineBlock
+     * @param EntityRegistry         $mockSpRegistry
+     * @param EntityRegistry         $mockIdpRegistry
+     * @param string                 $spsConfigUrl
+     * @param string                 $idpsConfigUrl
      */
     public function __construct(
         ServiceRegistryFixture $serviceRegistry,
         EngineBlock $engineBlock,
+        EntityRegistry $mockSpRegistry,
         EntityRegistry $mockIdpRegistry,
         $spsConfigUrl,
         $idpsConfigUrl
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
+        $this->mockSpRegistry = $mockSpRegistry;
         $this->mockIdpRegistry = $mockIdpRegistry;
         $this->spsConfigUrl = $spsConfigUrl;
         $this->idpsConfigUrl = $idpsConfigUrl;
@@ -176,6 +186,34 @@ class EngineBlockContext extends AbstractSubContext
         if (strstr($mink->getSession()->getPage()->getHtml(), 'accept_terms_button')) {
             $mink->pressButton('accept_terms_button');
         }
+    }
+
+    /**
+     * @Given /^An IdP initiated Single Sign on for SP "([^"]*)" is triggered by IdP "([^"]*)"$/
+     */
+    public function anIdpInitiatedSingleSignOnForSpIsTriggeredByIdP($spName, $idpName)
+    {
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $mockIdP = $this->mockIdpRegistry->get($idpName);
+
+        $mink = $this->getMainContext()->getMinkContext();
+        $mink->visit(
+            $this->engineBlock->unsolicitedLocation($mockIdP->entityId(), $mockSp->entityId())
+        );
+    }
+
+    /**
+     * @Given /^An IdP initiated Single Sign on for SP "([^"]*)" is incorrectly triggered by IdP "([^"]*)"$/
+     */
+    public function anIdpInitiatedSingleSignOnForSpIsIncorrectlyTriggeredByIdP($spName, $idpName)
+    {
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $mockIdP = $this->mockIdpRegistry->get($idpName);
+
+        $mink = $this->getMainContext()->getMinkContext();
+        $mink->visit(
+            $this->engineBlock->unsolicitedLocation($mockIdP->entityId() . 'I made a booboo', $mockSp->entityId())
+        );
     }
 
     /**
