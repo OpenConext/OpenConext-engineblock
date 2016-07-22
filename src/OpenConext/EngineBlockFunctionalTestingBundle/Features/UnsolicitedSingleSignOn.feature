@@ -17,3 +17,7 @@ Feature:
       And I give my consent
       And I pass through EngineBlock
      Then the url should match "functional-testing/Dummy%20SP/acs"
+
+  Scenario: An IdP initiates a login with an invalid hash
+     When An IdP initiated Single Sign on for SP "Dummy SP" is incorrectly triggered by IdP "Dummy IdP"
+     Then the url should match "authentication/feedback/unknown-preselected-idp"
