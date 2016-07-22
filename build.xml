@@ -2,7 +2,7 @@
 
     <target name="build" depends="code-quality,functional-tests" />
     <target name="pre-commit" depends="code-quality" />
-    <target name="pre-push" depends="code-quality,functional-tests" />
+    <target name="pre-push" depends="code-quality,behat-dev" />
     <target name="functional-tests" depends="behat-travis" />
     <target name="code-quality" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpunit-travis"/>
 
@@ -84,12 +84,49 @@
         </exec>
     </target>
 
+    <target name="behat-dev">
+        <echo message="Preparing the dev env to run in functional testing mode" />
+        <antcall target="enable-functional-testing"/>
+        <antcall target="prepare-env-in-dev-machine"/>
+        <echo message="${line.separator}${line.separator}Running Behat"/>
+        <antcall target="run-behat"/>
+        <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
+        <antcall target="disable-functional-testing"/>
+        <antcall target="prepare-env-in-dev-machine"/>
+    </target>
+
     <target name="behat-travis"
             description="Run the functional testing suite">
         <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
+        <antcall target="run-behat"/>
+        <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
+    </target>
+
+    <target name="run-behat"
+            description="Execute the behat test suite">
         <exec executable="vendor/bin/behat" failonerror="true">
             <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
         </exec>
-        <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
+    </target>
+
+    <target name="enable-functional-testing"
+            description="Set the functional testing flag to true">
+        <replace file="${basedir}/application/configs/application.ini"
+                 token=";functionalTesting = true"
+                 value="functionalTesting = true"/>
+    </target>
+
+    <target name="disable-functional-testing"
+            description="Set the functional testing flag to false">
+        <replace file="${basedir}/application/configs/application.ini"
+                 token="functionalTesting = true"
+                 value=";functionalTesting = true"/>
+    </target>
+
+    <target name="prepare-env-in-dev-machine"
+            description="ensures that the development environment uses the Functional Test DiContainer">
+        <exec executable="${basedir}/run-on-vm.sh" failonerror="true">
+            <arg line="composer prepare-env"/>
+        </exec>
     </target>
 </project>
