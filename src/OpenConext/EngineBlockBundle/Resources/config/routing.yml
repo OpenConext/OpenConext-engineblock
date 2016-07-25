@@ -32,3 +32,6 @@ feedback:
 
 wayf:
     resource: routing/wayf.yml
+
+logout:
+    resource: routing/logout.yml
