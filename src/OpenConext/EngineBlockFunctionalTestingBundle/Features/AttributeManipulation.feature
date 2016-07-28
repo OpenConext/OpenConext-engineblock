@@ -58,7 +58,10 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-     And the response should contain "arthur.dent@domain.test"
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Value="arthur.dent@domain.test"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Value="arthur.dent@domain.test"]'
 
   Scenario: The Service Provider can not have the SubjectID manipulated if using a NameID format other than unspecified
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
