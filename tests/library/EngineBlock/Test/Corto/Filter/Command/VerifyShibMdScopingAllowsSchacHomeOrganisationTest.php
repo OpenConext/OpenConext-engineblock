@@ -100,7 +100,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'schacHomeOrganization attribute value is not allowed by configured ShibMdScopes for IdP '
+            'schacHomeOrganization attribute value "' . self::SHO_VALUE . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertTrue($invalidScopeIsLogged);
