@@ -66,10 +66,10 @@ to start your installation.
 
 ### Then configure application config ###
 
-Copy over the example configuration file from the *docs* directory to */etc/surfconext/engineblock.ini*:
+Copy over the example configuration file from the *docs* directory to */etc/openconext/engineblock.ini*:
 
-    sudo mkdir /etc/surfconext
-    sudo cp docs/example.engineblock.ini /etc/surfconext/engineblock.ini
+    sudo mkdir /etc/openconext
+    sudo cp docs/example.engineblock.ini /etc/openconext/engineblock.ini
 
 Then edit this file with your favorite editor and review the settings to make sure it matches your configuration.
 The settings in the *example.engineblock.ini* are a subset of all configuration options, which can be found, along
