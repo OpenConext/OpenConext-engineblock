@@ -31,7 +31,7 @@ class EngineBlock_Attributes_Normalizer
          * @var array  $attributeValues
          */
         foreach ($this->_attributes as $attributeName => $attributeValues) {
-            // Not defined in SURFconext attributes... can't find any aliases.
+            // Not defined in OpenConext attributes... can't find any aliases.
             if (!isset($this->_definitions[$attributeName])) {
                 $newAttributes[$attributeName] = $attributeValues;
                 continue;

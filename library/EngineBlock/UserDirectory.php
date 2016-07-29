@@ -121,7 +121,7 @@ class EngineBlock_UserDirectory
     }
 
     /**
-     * Delete a user from the LDAP if he/she wants to be removed from the SURFconext platform
+     * Delete a user from the LDAP if he/she wants to be removed from the OpenConext platform
      *
      * @param string $collabPersonId
      * @return void

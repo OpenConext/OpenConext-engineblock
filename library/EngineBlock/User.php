@@ -60,7 +60,7 @@ class EngineBlock_User
     }
 
     /**
-     * Completely remove a user from the SURFconext platform.
+     * Completely remove a user from the OpenConext platform.
      *
      * @return void
      */
