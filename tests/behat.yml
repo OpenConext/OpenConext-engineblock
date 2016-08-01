@@ -16,6 +16,26 @@ default:
                 guzzle_parameters:
                     ssl.certificate_authority: false
 
+wip:
+    paths:
+        features: ../src/OpenConext/EngineBlockFunctionalTestingBundle/Features
+    formatter:
+        name: pretty
+        parameters:
+            verbose: true
+    filters:
+        tags: "@WIP"
+    extensions:
+        Behat\Symfony2Extension\Extension:
+            mink_driver: true
+            kernel:
+                env: test
+                debug: true
+        Behat\MinkExtension\Extension:
+            goutte:
+                guzzle_parameters:
+                    ssl.certificate_authority: false
+
 # FIX SO THAT ONLY REPLAY RUNS
 #replay:
 #    filters:

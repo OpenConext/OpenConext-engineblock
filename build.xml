@@ -89,7 +89,22 @@
         <antcall target="enable-functional-testing"/>
         <antcall target="prepare-env-in-dev-machine"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
-        <antcall target="run-behat"/>
+        <antcall target="run-behat">
+            <param name="profile" value="default"/>
+        </antcall>
+        <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
+        <antcall target="disable-functional-testing"/>
+        <antcall target="prepare-env-in-dev-machine"/>
+    </target>
+
+    <target name="behat-dev-wip">
+        <echo message="Preparing the dev env to run in functional testing mode" />
+        <antcall target="enable-functional-testing"/>
+        <antcall target="prepare-env-in-dev-machine"/>
+        <echo message="${line.separator}${line.separator}Running Behat"/>
+        <antcall target="run-behat">
+            <param name="profile" value="wip"/>
+        </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
         <antcall target="disable-functional-testing"/>
         <antcall target="prepare-env-in-dev-machine"/>
@@ -98,7 +113,9 @@
     <target name="behat-travis"
             description="Run the functional testing suite">
         <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
-        <antcall target="run-behat"/>
+        <antcall target="run-behat">
+            <param name="profile" value="default"/>
+        </antcall>
         <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
     </target>
 
@@ -106,6 +123,7 @@
             description="Execute the behat test suite">
         <exec executable="vendor/bin/behat" failonerror="true">
             <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
+            <arg line="--profile ${profile}"/>
         </exec>
     </target>
 
@@ -126,7 +144,7 @@
     <target name="prepare-env-in-dev-machine"
             description="ensures that the development environment uses the Functional Test DiContainer">
         <exec executable="${basedir}/run-on-vm.sh" failonerror="true">
-            <arg line="composer prepare-env"/>
+            <arg line="sudo composer prepare-env"/>
         </exec>
     </target>
 </project>
