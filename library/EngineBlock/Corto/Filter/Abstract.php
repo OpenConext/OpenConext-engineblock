@@ -30,7 +30,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
      * @throws Exception
      */
     public function filter(
-        EngineBlock_Saml2_ResponseAnnotationDecorator $response,
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
         array &$responseAttributes,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         ServiceProvider $serviceProvider,
