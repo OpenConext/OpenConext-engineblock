@@ -134,6 +134,19 @@ class ServiceRegistryFixture
         return $this;
     }
 
+    public function setEntityNameIdFormatPersistent($entityId)
+    {
+        $this->data[$entityId]['NameIDFormat'] = SAML2_Const::NAMEID_PERSISTENT;
+        return $this;
+    }
+
+
+    public function setEntityNameIdFormatTransient($entityId)
+    {
+        $this->data[$entityId]['NameIDFormat'] = SAML2_Const::NAMEID_TRANSIENT;
+        return $this;
+    }
+
     public function addSpsFromJsonExport($spsConfigExportUrl)
     {
         $this->addEntitiesFromJsonConfigExport($spsConfigExportUrl);

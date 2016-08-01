@@ -12,14 +12,11 @@ Feature:
     And a Service Provider named "Dummy-SP"
     And a Service Provider named "SP-with-Attribute-Manipulations"
 
-#  Scenario: No attribute manipulations
-#
-#  Scenario: IdP attribute manipulations
-#
+  @WIP
   Scenario: The Service Provider can have an attribute added
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
-      $attributes['nl:surf:test:something'] = array("arbitrary value");
+      $attributes['nl:surf:test:something'] = array("arbitrary-value");
       """
     When I log in at "SP-with-Attribute-Manipulations"
      And I select "Dummy-IdP" on the WAYF
@@ -28,12 +25,13 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-     And the response should contain "nl:surf:test:something"
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="nl:surf:test:something"]/saml:AttributeValue["arbitrary-value"]'
 
+  @WIP
   Scenario: The Service Provider can have the attributes manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
-      $attributes['urn:mace:dir:attribute-def:uid'] = array("the manipulated value");
+      $attributes['urn:mace:dir:attribute-def:uid'] = array("the-manipulated-value");
       """
     When I log in at "SP-with-Attribute-Manipulations"
      And I select "Dummy-IdP" on the WAYF
@@ -42,13 +40,13 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-     And the response should contain "urn:mace:dir:attribute-def:uid"
-     And the response should contain "the manipulated value"
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue["the-manipulated-value"]'
 
+  @WIP
   Scenario: The Service Provider can have the SubjectID manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
-      $subjectId = "arthur.dent@domain.test";
+      $subjectId = 'arthur.dent@domain.test';
       """
     And SP "SP-with-Attribute-Manipulations" uses the Unspecified NameID format
     When I log in at "SP-with-Attribute-Manipulations"
@@ -58,13 +56,16 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-     And the response should contain "arthur.dent@domain.test"
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="arthur.dent@domain.test"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="arthur.dent@domain.test"]'
 
-  Scenario: The Service Provider can not have the SubjectID manipulated if using a NameID format other than unspecified
+  @WIP
+  Scenario: The Service Provider cannot have the SubjectID manipulated if using a NameID format other than unspecified
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
       $subjectId = "arthur.dent@domain.test";
       """
+     And SP "SP-with-Attribute-Manipulations" uses the Persistent NameID format
     When I log in at "SP-with-Attribute-Manipulations"
      And I select "Dummy-IdP" on the WAYF
      And I pass through EngineBlock
@@ -72,6 +73,84 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-     And the response should not contain "arthur.dent@domain.test"
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="arthur.dent@domain.test"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"]'
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="arthur.dent@domain.test"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"]'
+
+  @WIP
+  Scenario: The Service Provider can have the SubjectID manipulated by manipulating the response
+    Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
+      """
+      $response['__']['CustomNameId'] = 'NOOT';
+      """
+     And SP "SP-with-Attribute-Manipulations" uses the Unspecified NameID format
+    When I log in at "SP-with-Attribute-Manipulations"
+     And I select "Dummy-IdP" on the WAYF
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+    Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
+
+  @WIP
+  Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the response when using a NameID Format other than unspecified
+    Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
+      """
+      $response['__']['IntendedNameId'] = 'NOOT';
+      """
+     And SP "SP-with-Attribute-Manipulations" uses the Transient NameID format
+    When I log in at "SP-with-Attribute-Manipulations"
+     And I select "Dummy-IdP" on the WAYF
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+    Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"]'
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"]'
+
+  @WIP
+  Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the responseObj
+    Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
+      """
+      $responseObj->setCollabPersonId('NOOT');
+      """
+     And SP "SP-with-Attribute-Manipulations" uses the Unspecified NameID format
+    When I log in at "SP-with-Attribute-Manipulations"
+     And I select "Dummy-IdP" on the WAYF
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+    Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"]'
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"]'
+
+  @WIP
+  Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the responseObj when using a NameID Format other than unspecified
+    Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
+      """
+      $responseObj->setCollabPersonId('NOOT');
+      """
+     And SP "SP-with-Attribute-Manipulations" uses the Persistent NameID format
+    When I log in at "SP-with-Attribute-Manipulations"
+     And I select "Dummy-IdP" on the WAYF
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+    Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="NOOT"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"]'
+     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="NOOT"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"]'
+
 #
 #  Scenario: Sp and IdP attribute manipulations

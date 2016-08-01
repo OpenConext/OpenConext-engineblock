@@ -436,6 +436,32 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" uses the Persistent NameID format$/
+     */
+    public function spUsesThePersistentNameidFormat($spName)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setEntityNameIdFormatPersistent($sp->entityId())
+            ->save();
+    }
+
+    /**
+     * @Given /^SP "([^"]*)" uses the Transient NameID format$/
+     */
+    public function spUsesTheTransientNameidFormat($spName)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->setEntityNameIdFormatTransient($sp->entityId())
+            ->save();
+    }
+
+    /**
      * @Given /^SP "([^"]*)" is using workflow state "([^"]*)"$/
      */
     public function spUsesStatus($spName, $workflowState)

@@ -29,8 +29,25 @@ class MinkContext extends BaseMinkContext
         $xpathObj = new \DOMXPath($document);
         $nodeList = $xpathObj->query($xpath);
 
-        if (!$nodeList || !$nodeList->length === 0) {
+        if (!$nodeList || $nodeList->length === 0) {
             $message = sprintf('The xpath "%s" was not found anywhere in the response of the current page.', $xpath);
+            throw new ExpectationException($message, $this->getSession());
+        }
+    }
+
+    /**
+     * @Then /^the response should not match xpath \'([^\']*)\'$/
+     */
+    public function theResponseShouldNotMatchXpath($xpath)
+    {
+        $document = new \DOMDocument();
+        $document->loadXML($this->getSession()->getPage()->getContent());
+
+        $xpathObj = new \DOMXPath($document);
+        $nodeList = $xpathObj->query($xpath);
+
+        if ($nodeList && $nodeList->length > 0) {
+            $message = sprintf('The xpath "%s" was found in the response, while it should not have been found', $xpath);
             throw new ExpectationException($message, $this->getSession());
         }
     }
