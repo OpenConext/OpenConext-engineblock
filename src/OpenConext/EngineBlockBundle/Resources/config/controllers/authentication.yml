@@ -53,6 +53,11 @@ services:
         arguments:
             - "@engineblock.compat.application"
 
+    engineblock.controller.authentication.logout:
+        class: OpenConext\EngineBlockBundle\Controller\LogoutController
+        arguments:
+            - "@engineblock.compat.view"
+
     engineblock.service.request_access_mailer:
         class: OpenConext\EngineBlock\Service\RequestAccessMailer
         arguments:

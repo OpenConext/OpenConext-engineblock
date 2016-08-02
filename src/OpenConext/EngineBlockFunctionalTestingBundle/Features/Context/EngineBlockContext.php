@@ -241,4 +241,12 @@ class EngineBlockContext extends AbstractSubContext
 
         $button->click();
     }
+
+    /**
+     * @Given /^I log out at EngineBlock$/
+     */
+    public function iLogoutAtEngineBlock()
+    {
+        $this->getMainContext()->getMinkContext()->visit($this->engineBlock->logoutLocation());
+    }
 }

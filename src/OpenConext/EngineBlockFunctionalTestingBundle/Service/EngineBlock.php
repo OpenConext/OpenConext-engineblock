@@ -18,6 +18,7 @@ class EngineBlock
     const SINGLE_SIGN_ON_PATH       = '/authentication/idp/single-sign-on';
     const ASSERTION_CONSUMER_PATH   = '/authentication/sp/consume-assertion';
     const UNSOLICITED_SSO_START_PATH = '/authentication/idp/unsolicited-single-sign-on/%s';
+    const LOGOUT                    = '/logout';
 
     protected $baseUrl;
     protected $timeFixture;
@@ -77,6 +78,11 @@ class EngineBlock
     public function assertionConsumerLocation()
     {
         return $this->baseUrl . self::ASSERTION_CONSUMER_PATH;
+    }
+
+    public function logoutLocation()
+    {
+        return $this->baseUrl . self::LOGOUT;
     }
 
     public function overrideHostname($hostname)
