@@ -12,7 +12,6 @@ Feature:
     And a Service Provider named "Dummy-SP"
     And a Service Provider named "SP-with-Attribute-Manipulations"
 
-  @WIP
   Scenario: The Service Provider can have an attribute added
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
@@ -27,7 +26,6 @@ Feature:
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="nl:surf:test:something"]/saml:AttributeValue["arbitrary-value"]'
 
-  @WIP
   Scenario: The Service Provider can have the attributes manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
@@ -42,7 +40,6 @@ Feature:
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue["the-manipulated-value"]'
 
-  @WIP
   Scenario: The Service Provider can have the SubjectID manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
@@ -59,7 +56,6 @@ Feature:
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="arthur.dent@domain.test"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="arthur.dent@domain.test"]'
 
-  @WIP
   Scenario: The Service Provider cannot have the SubjectID manipulated if using a NameID format other than unspecified
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
@@ -78,7 +74,6 @@ Feature:
      And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="arthur.dent@domain.test"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent"]'
 
-  @WIP
   Scenario: The Service Provider cannot have the Subject NameID manipulated by setting the IntendedNameId in the reponse as it is overwritten by the subjectId
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
@@ -98,7 +93,6 @@ Feature:
      And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="AAP"]'
 
-  @WIP
   Scenario: The Service Provider can replace the NameID by setting the CustomNameID with an array representation of the NameID
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
@@ -115,7 +109,6 @@ Feature:
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
 
-  @WIP
   Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the responseObj using the unspecified NameID Format
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
@@ -134,7 +127,6 @@ Feature:
      And the response should not match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"]'
 
-  @WIP
   Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the responseObj when using a NameID Format other than unspecified
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
