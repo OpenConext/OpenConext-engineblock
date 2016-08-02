@@ -44,8 +44,8 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganis
 
         if (!$scopeList->inScope($schacHomeOrganization)) {
             $this->logger->warning(sprintf(
-                'schacHomeOrganization attribute value is not allowed by configured ShibMdScopes for IdP "%s"',
-                $this->_identityProvider->entityId
+                'schacHomeOrganization attribute value "%s" is not allowed by configured ShibMdScopes for IdP "%s"',
+                $schacHomeOrganization, $this->_identityProvider->entityId
             ));
         }
     }

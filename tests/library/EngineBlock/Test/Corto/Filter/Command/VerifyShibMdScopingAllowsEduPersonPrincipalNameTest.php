@@ -8,9 +8,10 @@ use PHPUnit_Framework_TestCase as UnitTest;
 
 class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalNameTest extends UnitTest
 {
-    const URN_MACE   = 'urn:mace:dir:attribute-def:eduPersonPrincipalName';
-    const URN_OID    = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6';
-    const EPPN_VALUE = 'invalid@openconext.org';
+    const URN_MACE    = 'urn:mace:dir:attribute-def:eduPersonPrincipalName';
+    const URN_OID     = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6';
+    const EPPN_SUFFIX = 'openconext.org';
+    const EPPN_VALUE  = 'invalid@' . self::EPPN_SUFFIX;
 
     /**
      * @var TestHandler
@@ -125,7 +126,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
         $verifier->execute();
 
         $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
-            'eduPersonPrincipalName attribute value is not allowed by configured ShibMdScopes for IdP '
+            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
         );
 
         $this->assertTrue($invalidScopeIsLogged);

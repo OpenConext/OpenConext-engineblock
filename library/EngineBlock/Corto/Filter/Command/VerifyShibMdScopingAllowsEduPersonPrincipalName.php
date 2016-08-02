@@ -51,8 +51,8 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
 
         if (!$scopeList->inScope($suffix)) {
             $this->logger->warning(sprintf(
-                'eduPersonPrincipalName attribute value is not allowed by configured ShibMdScopes for IdP "%s"',
-                $this->_identityProvider->entityId
+                'eduPersonPrincipalName attribute value "%s" is not allowed by configured ShibMdScopes for IdP "%s"',
+                $suffix, $this->_identityProvider->entityId
             ));
         }
     }
