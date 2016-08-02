@@ -4,6 +4,7 @@
     <target name="pre-commit" depends="code-quality" />
     <target name="pre-push" depends="code-quality,behat-dev" />
     <target name="functional-tests" depends="behat-travis" />
+    <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="code-quality" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpunit-travis"/>
 
     <target name="install-git-hooks"
@@ -115,6 +116,15 @@
         <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
         <antcall target="run-behat">
             <param name="profile" value="default"/>
+        </antcall>
+        <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
+    </target>
+
+    <target name="behat-travis-wip"
+            description="Run the functional testing suite for features marked as WIP">
+        <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
+        <antcall target="run-behat">
+            <param name="profile" value="wip"/>
         </antcall>
         <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
     </target>

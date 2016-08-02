@@ -4,7 +4,7 @@ default:
     formatter:
         name: progress
     filters:
-        tags: "~@replay"
+        tags: "~@replay && ~@WIP"
     extensions:
         Behat\Symfony2Extension\Extension:
             mink_driver: true

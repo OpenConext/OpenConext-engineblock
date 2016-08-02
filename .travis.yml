@@ -5,14 +5,17 @@ php:
   - 7.0
 
 matrix:
+  fast_finish: true
   allow_failures:
   - php: 7.0
+  - env: COMMAND="functional-tests-wip"
 
 sudo: true # sudo is required for behat
 
 env:
   matrix:
     - COMMAND="functional-tests"
+    - COMMAND="functional-tests-wip"
     - COMMAND="code-quality"
   global:
     - SYMFONY_ENV=test
