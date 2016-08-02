@@ -1,6 +1,6 @@
 Feature:
   In order to limit leakage of unnecessary user data
-  As a SURFconext admin
+  As an OpenConext admin
   I need EB to apply Attribute Release Policies
 
   Background:
