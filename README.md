@@ -157,12 +157,12 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
 
 Use these URLs to test your EngineBlock instance:
 
-- [http://engine.example.com], this should redirect you to the following URL
-- [https://engine.example.com], show a page detailing information about the capabilities
-- [https://engine.example.com/authentication/idp/metadata], this should present you with the IdP metadata of EngineBlock
-- [https://engine.example.com/authentication/sp/metadata], this should present you with the SP metadata of EngineBlock
-- [https://engine.example.com/authentication/proxy/idps-metadata], this should present you with the proxy IdP metadata
-- [https://engine-api.example.com], this should return an empty 200 OK response
+- http://engine.example.com, this should redirect you to the following URL
+- https://engine.example.com, show a page detailing information about the capabilities
+- https://engine.example.com/authentication/idp/metadata, this should present you with the IdP metadata of EngineBlock
+- https://engine.example.com/authentication/sp/metadata, this should present you with the SP metadata of EngineBlock
+- https://engine.example.com/authentication/proxy/idps-metadata, this should present you with the proxy IdP metadata
+- https://engine-api.example.com, this should return an empty 200 OK response
 
 ## Updating ##
 
@@ -186,11 +186,15 @@ If you are using this pattern, an update can be done with the following:
 
 3. Prepare your environment (see above)
 
-    SYMFONY_ENV=prod composer prepare-env
+```
+SYMFONY_ENV=prod composer prepare-env
+```
     
 4. Run the database migrations script.
 
-    app/console doctrine:migrations:migrate --env=prod
+```
+app/console doctrine:migrations:migrate --env=prod
+```
 
 5. Change the symlink.
 
