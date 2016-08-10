@@ -16,20 +16,23 @@ See the LICENSE-2.0.txt file
 
 See the NOTICE.txt file
 
+## Upgrading
+
+See the UPGRADING.md file
 
 ## System Requirements ##
 
 * Linux
 * Apache with modules:
     - mod_php
-* PHP 5.3.x with modules:
-    - ldap
+* PHP 5.6:
+    - ldap (optional)
     - libxml
     - mcrypt
 * MySQL > 5.x with settings:
-    - default-storage-engine=InnoDB (recommended)
-    - default-collation=utf8_unicode_ci (recommended)
-* LDAP
+    - default-storage-engine=InnoDB
+    - default-collation=utf8_unicode_ci
+* LDAP (optional)
 * Internet2 Grouper
 * Service Registry
 * wget
@@ -43,11 +46,13 @@ it is only regularly tested with RedHat Enterprise Linux and CentOS.
 
 ## Installation ##
 
+_Note_: you are advised to use [OpenConext-Deploy][op-dep] to deploy OpenConext installations.
+
 If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination server,
 if not, then that would be step 1 for the installation.
 
-If you have an installed copy and your server meets all the requirements above, then please follow the steps below
-to start your installation.
+If you do not use [OpenConext-Deploy][op-dep] and have an installed copy and your server meets all the requirements 
+above, then please follow the steps below to start your installation.
 
 ### First, create an empty database ###
 
@@ -78,24 +83,42 @@ with their default value in *application/configs/application.ini*.
 Note that EngineBlock requires you to set a path to a logfile, but you have to make sure that this file
 is writable by your webserver user.
 
+After that, you are required to ensure the application is in bootable state. Assuming you are preparing your 
+installation for a production environment, you have to run:
+
+```
+composer prepare-env
+```
+
+should you not have access to a local installation of [composer][comp], a version is shipped with EngineBlock, replace
+the `composer` part above with `bin/composer.phar`. This version is regularly updated, but may give warnings about
+being outdated.
+
 
 ### Install database schema ###
 
-To install the initial database, just call the 'migrate' script in *bin/*, like so:
+To install the initial database, just call the 'migrate' script in *bin/*, followed by migration tool introduced in 5.x,
+ like so:
 
-    cd bin && ./migrate && cd ..
+```
+(cd bin && ./migrate && cd .. && app/console doctrine:migrations:migrate --env=prod)
+```
 
 **NOTE**
-EngineBlock requires database settings, without it the install script will not function
+EngineBlock requires database settings, without it the install script will not function. Furthermore, this assumes that
+the application must use the production settings (`--env=prod`), this could be replaced with `dev` should you run a 
+development version.
 
 
 ### Configure HTTP server ###
 
-Configure 2 HTTPS virtual hosts, one that points to the authentication interface, which handles authentication and
-proxying thereof. The second one should point to the profile interface.
+Configure a single virtual host, this should point to the `web` directory: 
 
-Make sure the `ENGINEBLOCK_ENV` is set.
-Make sure the `SYMFONY_ENV` is set, this can be mapped from `ENGINEBLOCK_ENV` as:
+    DocumentRoot    /opt/www/engineblock/web
+    
+It should also serve both the `engine.yourdomain.example` and `engine-api.yourdomain.example` domains.
+
+Make sure the `ENGINEBLOCK_ENV` is set, and that the `SYMFONY_ENV` is set, this can be mapped from `ENGINEBLOCK_ENV` as:
 | `ENGINEBLOCK_ENV` | `SYMFONY_ENV` |
 | --- | --- |
 | production | prod |
@@ -130,36 +153,16 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
     RewriteCond     %{SERVER_PORT} ^80$
     RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
 
-For all virtual hosts you should specify the same *DocumentRoot*.
+### Test your EngineBlock instance ###
 
-1st virtual host:
+Use these URLs to test your EngineBlock instance:
 
-    DocumentRoot    /opt/www/engineblock/web
-
-2nd virtual host:
-
-    DocumentRoot    /opt/www/engineblock/web
-
-Also for the 2nd virtual host (profile interface) you should specify an extra *RewriteCond*.
-Add it behind the last *RewriteCond* descriptive (but before the *RewriteRule* descriptive) in your virtual host
-configuration:
-
-    RewriteCond %{REQUEST_URI} !^/(simplesaml.*)$
-
-Also set an alias for simplesaml for the third virtual host:
-
-    Alias /simplesaml /opt/www/engineblock/vendor/simplesamlphp/simplesamlphp/www
-
-### Finally, test your EngineBlock instance ###
-
-Use these URLs to test your Engineblock instance:
-[http://engine.example.com]
-[https://engine.example.com]
-[https://engine.example.com/authentication/idp/metadata]
-[https://engine.example.com/authentication/sp/metadata]
-[https://engine.example.com/authentication/proxy/idps-metadata]
-[https://engine-api.example.com]
-[https://profile.example.com]
+- [http://engine.example.com], this should redirect you to the following URL
+- [https://engine.example.com], show a page detailing information about the capabilities
+- [https://engine.example.com/authentication/idp/metadata], this should present you with the IdP metadata of EngineBlock
+- [https://engine.example.com/authentication/sp/metadata], this should present you with the SP metadata of EngineBlock
+- [https://engine.example.com/authentication/proxy/idps-metadata], this should present you with the proxy IdP metadata
+- [https://engine-api.example.com], this should return an empty 200 OK response
 
 ## Updating ##
 
@@ -181,11 +184,15 @@ If you are using this pattern, an update can be done with the following:
 2. Check out the release notes in docs/release_notes/X.Y.Z.md (where X.Y.Z is the version number) for any
    additional steps.
 
-3. Change the symlink.
+3. Prepare your environment (see above)
 
-4. Install & Run the database migrations script.
+    SYMFONY_ENV=prod composer prepare-env
+    
+4. Run the database migrations script.
 
-    cd bin/ && ./migrate && cd ..
+    app/console doctrine:migrations:migrate --env=prod
+
+5. Change the symlink.
 
 ## Applying a new theme ##
 
@@ -195,7 +202,9 @@ Before being able to use the new theming system, you must install the following:
 - [Bower][2] (requires Node.JS)
 - [Compass][3]
 
-After installing the above tools, the following commandline may give you all the needed dependencies and run grunt to update the installed files after changing a theme:
+After installing the above tools, the following commandline may give you all the needed dependencies and run grunt to 
+update the installed files after changing a theme:
+
 ```
 (cd theme && npm install && sudo npm install -g bower && bower install && grunt)
 ```
@@ -209,3 +218,5 @@ the appropriate tasks for cleaning the previous theme and deploying the new them
 [1]: https://nodejs.org/en/
 [2]: http://bower.io/
 [3]: http://compass-style.org/
+[comp]: https://getcomposer.org/
+[op-dep]: https://github.com/OpenConext/OpenConext-deploy
