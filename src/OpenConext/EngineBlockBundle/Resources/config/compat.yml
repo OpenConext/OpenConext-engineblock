@@ -93,6 +93,7 @@ services:
         arguments:
             -
                 host: "@=service('engineblock.bridge.config').get('ldap.host')"
+                port: "@=service('engineblock.bridge.config').get('ldap.port')"
                 useSsl: "@=service('engineblock.bridge.config').get('ldap.useSsl')"
                 username: "@=service('engineblock.bridge.config').get('ldap.userName')"
                 password: "@=service('engineblock.bridge.config').get('ldap.password')"
