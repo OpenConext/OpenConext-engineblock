@@ -119,6 +119,7 @@ Configure a single virtual host, this should point to the `web` directory:
 It should also serve both the `engine.yourdomain.example` and `engine-api.yourdomain.example` domains.
 
 Make sure the `ENGINEBLOCK_ENV` is set, and that the `SYMFONY_ENV` is set, this can be mapped from `ENGINEBLOCK_ENV` as:
+
 | `ENGINEBLOCK_ENV` | `SYMFONY_ENV` |
 | --- | --- |
 | production | prod |
