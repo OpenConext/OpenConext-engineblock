@@ -43,8 +43,11 @@ class FeatureConfiguration
         if (!$this->hasFeature($featureKey)) {
             throw new LogicException(sprintf(
                 'Cannot state if feature "%s" is enabled as it does not exist. Please ensure that you configured it '
-                . 'correctly or verify with hasFeature() that the feature exists.',
-                $featureKey
+                . 'correctly or verify with hasFeature() that the feature exists. Features configured: %s',
+                $featureKey,
+                implode(', ', array_map(function (Feature $feature) {
+                    return $feature->getFeatureKey();
+                }, $this->features))
             ));
         }
 
