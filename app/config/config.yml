@@ -17,6 +17,7 @@ open_conext_engine_block:
         api.consent_listing: "%feature_api_consent_listing%"
         api.metadata_api:    "%feature_api_metadata_api%"
         eb.ldap_integration: "%feature_eb_ldap_integration%"
+        eb.encrypted_assertions: "%feature_eb_encrypted_assertions%"
 
 framework:
     #esi:             ~
