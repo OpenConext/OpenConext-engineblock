@@ -306,10 +306,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
             }
 
-            if ($this->hasEncryptedAssertion($sspResponse) && !$sspResponse->isMessageConstructedWithSignature()) {
+            if ($this->hasEncryptedAssertion($sspResponse)
+                && $this->featureConfiguration->isEnabled('eb.encrypted_assertions_require_outer_signature')
+                && !$sspResponse->isMessageConstructedWithSignature()) {
                 /** @see https://github.com/OpenConext/OpenConext-engineblock/issues/116 */
                 throw new EngineBlock_Corto_Module_Bindings_Exception(
-                    'Response signing required for use with encrypted assertions.',
+                    'Encrypted assertions are required to have an outer signature, but they have none',
                     EngineBlock_Exception::CODE_NOTICE
                 );
             }
