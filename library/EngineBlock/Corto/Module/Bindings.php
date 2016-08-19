@@ -53,12 +53,18 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected $_sspmodSamlMessageClassName;
 
+    /**
+     * @var OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
+     */
+    private $featureConfiguration;
+
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
         parent::__construct($server);
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $this->_sspmodSamlMessageClassName = $diContainer->getMessageUtilClassName();
+        $this->featureConfiguration        = $diContainer->getFeatureConfiguration();
     }
 
 
@@ -290,6 +296,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         try {
             // 'Process' the response, verify the signature, verify the timings.
             $className = $this->_sspmodSamlMessageClassName;
+
+            if ($this->featureConfiguration->isEnabled('eb.encrypted_assertions')
+                && !$this->hasEncryptedAssertion($sspResponse)) {
+
+                throw new EngineBlock_Corto_Module_Bindings_Exception(
+                    'Assertions are required to be encrypted, but they are not',
+                    EngineBlock_Exception::CODE_NOTICE
+                );
+            }
 
             if ($this->hasEncryptedAssertion($sspResponse) && !$sspResponse->isMessageConstructedWithSignature()) {
                 /** @see https://github.com/OpenConext/OpenConext-engineblock/issues/116 */
