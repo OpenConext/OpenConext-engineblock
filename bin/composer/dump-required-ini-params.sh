@@ -42,6 +42,7 @@ $ymlContent = array(
         'database.password'                     => $config->get('database.password'),
         'database.dbname'                       => $config->get('database.dbname'),
         'feature_eb_ldap_integration'           => (bool) $config->get('engineblock.feature.ldap_integration'),
+        'feature_eb_encrypted_assertions'       => (bool) $config->get('engineblock.feature.encrypted_assertions'),
         'feature_api_metadata_push'             => (bool) $config->get('engineApi.features.metadataPush'),
         'feature_api_consent_listing'           => (bool) $config->get('engineApi.features.consentListing'),
         'feature_api_metadata_api'              => (bool) $config->get('engineApi.features.metadataApi'),
