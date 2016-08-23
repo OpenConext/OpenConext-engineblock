@@ -38,4 +38,8 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return new FakeUserDirectory(new Filesystem());
     }
 
+    public function getFeatureConfiguration()
+    {
+        return $this->getFunctionalTestingFeatureConfiguration();
+    }
 }
