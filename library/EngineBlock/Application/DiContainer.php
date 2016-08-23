@@ -289,4 +289,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     {
         return $this[self::ATTRIBUTE_VALIDATOR];
     }
+
+    public function getFunctionalTestingFeatureConfiguration()
+    {
+        return $this->container->get('engineblock.functional_testing.fixture.features');
+    }
 }
