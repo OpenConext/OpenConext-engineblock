@@ -239,6 +239,19 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^the IdP does not sign its responses$/
+     */
+    public function theIdpDoesNotSignItsResponses()
+    {
+        /** @var MockIdentityProvider $idp */
+        $idp = $this->mockIdpRegistry->getOnly();
+
+        $idp->doNotUseResponseSigning();
+
+        $this->mockIdpRegistry->save();
+    }
+
+    /**
      * @Given /^the IdP encrypts it\'s assertions with the public key in "([^"]*)"$/
      */
     public function theIdpEncryptsItSAssertionsWithThePublicKeyIn($certFilePath)
