@@ -14,6 +14,7 @@ $ldapConfig = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration(
 
 $ldapOptions = array(
     'host'                 => $ldapConfig->host,
+    'port'                 => $ldapConfig->port,
     'useSsl'               => $ldapConfig->useSsl,
     'username'             => $ldapConfig->userName,
     'password'             => $ldapConfig->password,
