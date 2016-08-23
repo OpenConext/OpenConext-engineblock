@@ -56,15 +56,21 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * @var OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
      */
-    private $featureConfiguration;
+    private $_featureConfiguration;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $_logger;
 
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
         parent::__construct($server);
 
-        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $diContainer                       = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $this->_sspmodSamlMessageClassName = $diContainer->getMessageUtilClassName();
-        $this->featureConfiguration        = $diContainer->getFeatureConfiguration();
+        $this->_featureConfiguration       = $diContainer->getFeatureConfiguration();
+        $this->_logger                     = EngineBlock_ApplicationSingleton::getLog();
     }
 
 
@@ -297,18 +303,25 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             // 'Process' the response, verify the signature, verify the timings.
             $className = $this->_sspmodSamlMessageClassName;
 
-            if ($this->featureConfiguration->isEnabled('eb.encrypted_assertions')
-                && !$this->hasEncryptedAssertion($sspResponse)) {
+            if ($this->hasEncryptedAssertion($sspResponse)
+                && !$this->_featureConfiguration->isEnabled('eb.encrypted_assertions')
+            ) {
+                $this->_logger->warning('Received encrypted assertion, the encrypted assertion feature is not enabled');
 
                 throw new EngineBlock_Corto_Module_Bindings_Exception(
-                    'Assertions are required to be encrypted, but they are not',
+                    'Encrypted assertions are not supported',
                     EngineBlock_Exception::CODE_NOTICE
                 );
             }
 
             if ($this->hasEncryptedAssertion($sspResponse)
-                && $this->featureConfiguration->isEnabled('eb.encrypted_assertions_require_outer_signature')
-                && !$sspResponse->isMessageConstructedWithSignature()) {
+                && $this->_featureConfiguration->isEnabled('eb.encrypted_assertions_require_outer_signature')
+                && !$sspResponse->isMessageConstructedWithSignature()
+            ) {
+                $this->_logger->warning(
+                    'Received encrypted assertion without outer signature, outer signature is required'
+                );
+
                 /** @see https://github.com/OpenConext/OpenConext-engineblock/issues/116 */
                 throw new EngineBlock_Corto_Module_Bindings_Exception(
                     'Encrypted assertions are required to have an outer signature, but they have none',
