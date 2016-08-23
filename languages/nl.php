@@ -270,8 +270,8 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_attribute_validator_availability'        => '\'%3$s\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
 
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
-    'attributes_validation_failed'    => 'Sommige attributen falen validatie',
-    'attributes_data_mailed'          => 'De attribuutdata zijn gemaild',
+    'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
+    'attributes_data_mailed'          => 'De attribuutdata is gemaild',
     'idp_debugging_title'             => 'Toon verkregen response van Identity Provider',
     'retry'                           => 'Opnieuw',
 
