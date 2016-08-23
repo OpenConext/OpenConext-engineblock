@@ -136,12 +136,21 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
+  Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
+     When I log in at SP "Dummy SP" which attempts to preselect nonexistent IdP "DoesNotExist"
+     Then the url should match "/authentication/feedback/unknown-preselected-idp"
+      And I should see "No connection between institution and service"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+
 #
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying an invalid index
 #
-#  Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
 #
 #  Scenario: I don't give consent to release my attributes to a Service Provider
 #
