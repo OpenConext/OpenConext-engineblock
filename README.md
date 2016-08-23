@@ -10,21 +10,20 @@ Build Status:
 
 ## License
 
-See the LICENSE-2.0.txt file
+See the [LICENSE-2.0.txt](LICENSE-2.0.txt) file
 
 ## Disclaimer
 
-See the NOTICE.txt file
+See the [NOTICE.txt](NOTICE.txt) file
 
 ## Upgrading
 
-See the UPGRADING.md file
+See the [UPGRADING.md](UPGRADING.md) file
 
 ## System Requirements ##
 
 * Linux
-* Apache with modules:
-    - mod_php
+* Apache
 * PHP 5.6:
     - ldap (optional)
     - libxml
@@ -33,9 +32,7 @@ See the UPGRADING.md file
     - default-storage-engine=InnoDB
     - default-collation=utf8_unicode_ci
 * LDAP (optional)
-* Internet2 Grouper
-* Service Registry
-* wget
+* [Janus][janus]
 * NPM (optional for theme deployment)
 * Grunt-cli (optional for theme deployment)
 
@@ -225,3 +222,4 @@ the appropriate tasks for cleaning the previous theme and deploying the new them
 [3]: http://compass-style.org/
 [comp]: https://getcomposer.org/
 [op-dep]: https://github.com/OpenConext/OpenConext-deploy
+[janus]: https://github.com/janus-ssp/janus
