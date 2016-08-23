@@ -220,7 +220,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
             $application = EngineBlock_ApplicationSingleton::getInstance();
             $definitionFile = $application->getConfigurationValue(
                 'attributeDefinitionFile',
-                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
+                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes-v2.2.0.json'
             );
             $definitionFileContent = file_get_contents($definitionFile);
             $definitions = json_decode($definitionFileContent, true);
