@@ -231,10 +231,14 @@ class FeedbackController
         );
     }
 
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function unknownPreselectedIdpAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/UnknownPreselectedIdP.phtml'),
+            $this->engineBlockView->render('Authentication/View/Feedback/UnknownPreselectedIdp.phtml'),
             400
         );
     }

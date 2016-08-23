@@ -66,6 +66,21 @@ class MockSpContext extends AbstractSubContext
         $this->mockIdpRegistry = $mockIdpRegistry;
     }
 
+    /**
+     * @When /^I log in at SP "([^"]*)" which attempts to preselect nonexistent IdP "([^"]*)"$/
+     */
+    public function iLogInAtSPWhichAttemptsToPreselectNonexistentIdP($spName, $idpName)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $mockSp->useIdpTransparently($idpName);
+
+        $this->mockSpRegistry->save();
+
+        $this->iTriggerTheLoginEitherAtOrUnsolicitedAtEb($spName);
+    }
+
 
     /**
      * @When /^I trigger the login \(either at "([^"]*)" or unsolicited at EB\)$/
