@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # @todo add more error handling
 
 PREVIOUS_SF_ENV=${SYMFONY_ENV}
