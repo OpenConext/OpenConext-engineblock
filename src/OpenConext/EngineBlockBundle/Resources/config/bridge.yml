@@ -1,0 +1,30 @@
+services:
+    engineblock.bridge.config:
+        class: OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration
+        arguments:
+            - ~ # engineblock configuration array
+
+    engineblock.bridge.error_reporter:
+        class: OpenConext\EngineBlockBridge\ErrorReporter
+        arguments:
+            - "@engineblock.compat.application"
+            - "@logger"
+
+    engineblock.bridge.mailer:
+        class: OpenConext\EngineBlockBridge\Mail\ZendMailSender
+        arguments:
+            - "@=service('engineblock.bridge.config').get('email.help')"
+            - "@logger"
+
+    engineblock.bridge.authentication_logger_adapter:
+        class: OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
+        arguments:
+            - "@engineblock.logger.authentication"
+
+    engineblock.bridge.authentication.user_directory:
+        class: OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter
+        arguments:
+            - "@engineblock.authentication.user_directory"
+            - "@engineblock.compat.user_directory"
+            - "@engineblock.features"
+            - "@logger"

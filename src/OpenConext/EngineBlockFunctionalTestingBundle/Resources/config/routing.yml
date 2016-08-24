@@ -1,0 +1,41 @@
+functional_testing_idp_metadata:
+    path: "/{idpName}/metadata"
+    requirements:
+        idpName: ".+"
+    defaults:
+        _controller: engineblock.functional_test.controller.identity_provider:metadataAction
+
+functional_testing_idp_sso:
+    path: "/{idpName}/sso"
+    requirements:
+        idpName: ".+"
+    defaults:
+        _controller: engineblock.functional_test.controller.identity_provider:singleSignOnAction
+
+functional_testing_sp_login_redirect:
+    path: "/{spName}/login-redirect"
+    requirements:
+        spName: ".+"
+    defaults:
+        _controller: engineblock.functional_test.controller.service_provider:triggerLoginRedirectAction
+
+functional_testing_sp_login_post:
+    path: "/{spName}/login-post"
+    requirements:
+        spName: ".+"
+    defaults:
+        _controller: engineblock.functional_test.controller.service_provider:triggerLoginPostAction
+
+functional_testing_sp_acs:
+    path: "/{spName}/acs"
+    requirements:
+        spName: ".+"
+    defaults:
+        _controller: engineblock.functional_test.controller.service_provider:assertionConsumerAction
+
+functional_testing_sp_metadata:
+    path: "/{spName}/metadata"
+    requirements:
+        spName: ".+"
+    defaults:
+        _controller: engineblock.functional_test.controller.service_provider:metadataAction

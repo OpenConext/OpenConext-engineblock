@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Remove any IDP set urn:collab:org:... only SURFconext is allowed to set these.
+ * Remove any IDP set urn:collab:org:... only OpenConext is allowed to set these.
  */
 class EngineBlock_Corto_Filter_Command_FilterReservedMemberOfValues extends EngineBlock_Corto_Filter_Command_Abstract
 {

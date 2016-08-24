@@ -1,2 +1,15 @@
 /build
 /vendor/
+/www/authentication/generated/
+bin/ignore_me.php
+/web/bundles
+/web/app_dev.php
+/app/cache
+/app/logs
+/app/SymfonyRequirements.php
+/app/check.php
+/tmp/
+/app/config/functional_testing.yml
+/app/config/parameters.yml
+/app/config/ini_parameters.yml
+/app/config/config_local.yml

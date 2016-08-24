@@ -1,11 +1,14 @@
 <?php
 
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SuperGlobalsFixture;
+
 class EngineBlock_Application_SuperGlobalManager
 {
     /**
      * File where.
      */
-    const FILE = '/tmp/eb-fixtures/superglobals.json';
+    const FILE = 'tmp/eb-fixtures/superglobals.json';
 
     /**
      * @var Psr\Log\LoggerInterface
@@ -19,11 +22,9 @@ class EngineBlock_Application_SuperGlobalManager
 
     public function injectOverrides()
     {
-        $fixture = new \OpenConext\Component\EngineBlockFixtures\SuperGlobalsFixture(
-            new \OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore(
-                self::FILE
-            )
-        );
+        $jsonDataStore = new JsonDataStore(ENGINEBLOCK_FOLDER_ROOT . self::FILE);
+        $fixture = new SuperGlobalsFixture($jsonDataStore);
+
         $overrides = $fixture->getAll();
 
         foreach ($overrides as $superGlobalName => $values) {

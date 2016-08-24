@@ -62,7 +62,7 @@ class EngineBlock_VirtualOrganization
         );
         $stmt->execute(array($id));
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        
+
         if (empty($data)) {
             throw new EngineBlock_VirtualOrganization_VoIdentifierNotFoundException(
                 "No data found for Virtual Organization '{$id}'"
@@ -78,8 +78,8 @@ class EngineBlock_VirtualOrganization
             return $this->_db;
         }
 
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        $this->_db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_READ);
+        $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        $this->_db = $factory->create();
 
         return $this->_db;
     }

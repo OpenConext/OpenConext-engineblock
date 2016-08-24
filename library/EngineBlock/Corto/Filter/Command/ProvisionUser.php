@@ -25,27 +25,17 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
     public function execute()
     {
         $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
-        $user = $userDirectory->registerUser($this->_responseAttributes);
+        $user = $userDirectory->identifyUser($this->_responseAttributes);
 
-        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
-            'subjectIdAttribute',
-            EngineBlock_UserDirectory::LDAP_ATTR_COLLAB_PERSON_ID
-        );
-        if (empty($user[$subjectIdField])) {
-            throw new EngineBlock_Exception(
-                "SubjectIdField '$subjectIdField' does not contain data for user: " . var_export($user, true)
-            );
-        }
-        $subjectId = $user[$subjectIdField];
+        $collabPersonIdValue = $user->getCollabPersonId()->getCollabPersonId();
+        $this->setCollabPersonId($collabPersonIdValue);
 
-        $this->setCollabPersonId($subjectId);
-
-        $this->_response->setCollabPersonId($subjectId);
+        $this->_response->setCollabPersonId($collabPersonIdValue);
         $this->_response->setOriginalNameId($this->_response->getAssertion()->getNameId());
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
         $this->_response->getAssertion()->setNameId(array(
-            'Value' => $subjectId,
+            'Value' => $collabPersonIdValue,
             'Format' => SAML2_Const::NAMEID_PERSISTENT,
         ));
     }

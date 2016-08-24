@@ -1,8 +1,13 @@
 OpenConext - Copyright 2011 SURFnet bv, The Netherlands
 
-Unless stated otherwise in source code headers, all software in this repository 
-is governed by the Apache License, Version 2. 
+Unless stated otherwise in source code headers, all software in this repository
+is governed by the Apache License, Version 2.
 A copy of this license is added in this repository
- 
+
 This product includes software developed at
   SURFnet BV, The Netherlands
+
+This product reuses modified parts of [SURFnet/Stepup-Middleware-clientbundle][1].
+SURFnet/Stepup-Middleware-clientbundle is Copyright 2014 SURFnet bv, The Netherlands
+
+[1]: https://github.com/SURFnet/Stepup-Middleware-clientbundle

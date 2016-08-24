@@ -1,0 +1,13 @@
+services:
+    engineblock.repository.consent:
+        public: false
+        class: OpenConext\EngineBlock\Authentication\Repository\ConsentRepository
+        arguments:
+            - "@engineblock.compat.doctrine.dbal_connection"
+
+    engineblock.repository.user:
+        public: false
+        class: OpenConext\EngineBlockBundle\Authentication\Repository\UserRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - 'OpenConext\EngineBlockBundle\Authentication\Entity\User'

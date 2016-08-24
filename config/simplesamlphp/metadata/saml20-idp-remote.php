@@ -10,7 +10,7 @@
 
 require_once __DIR__. '/../../../../library/EngineBlock/ApplicationSingleton.php';
 $application = EngineBlock_ApplicationSingleton::getInstance();
-$application->bootstrap();
+
 $appConfig = $application->getConfiguration();
 
 $metadata[$appConfig->auth->simplesamlphp->idp->entityId] = array(

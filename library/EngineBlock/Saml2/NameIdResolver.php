@@ -1,6 +1,7 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use Ramsey\Uuid\Uuid;
 
 class EngineBlock_Saml2_NameIdResolver
 {
@@ -181,7 +182,7 @@ class EngineBlock_Saml2_NameIdResolver
             return $uuid;
         }
 
-        $uuid = (string)Surfnet_Zend_Uuid::generate();
+        $uuid = (string) Uuid::uuid4();
         $this->_storeServiceProviderUuid($spEntityId, $uuid);
 
         return $uuid;
@@ -247,33 +248,21 @@ class EngineBlock_Saml2_NameIdResolver
             return $s_db;
         }
 
-        $factory = new EngineBlock_Database_ConnectionFactory();
-        $s_db = $factory->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        $factory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        $s_db = $factory->create();
 
         return $s_db;
     }
 
     protected function _getUserUuid($collabPersonId)
     {
-        $userDirectory = $this->_getUserDirectory();
-        $users = $userDirectory->findUsersByIdentifier($collabPersonId);
-        if (count($users) > 1) {
-            throw new EngineBlock_Exception('Multiple users found for collabPersonId: ' . $collabPersonId);
-        }
+        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
+        $user = $userDirectory->findUserBy($collabPersonId);
 
-        if (count($users) < 1) {
+        if (!$user) {
             throw new EngineBlock_Exception('No users found for collabPersonId: ' . $collabPersonId);
         }
 
-        return $users[0]['collabpersonuuid'];
-    }
-
-    /**
-     * @return EngineBlock_UserDirectory
-     */
-    protected function _getUserDirectory()
-    {
-        $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
-        return $userDirectory;
+        return $user->getCollabPersonUuid()->getUuid();
     }
 }

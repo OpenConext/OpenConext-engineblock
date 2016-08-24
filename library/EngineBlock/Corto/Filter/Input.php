@@ -16,6 +16,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
      */
     protected function _getCommands()
     {
+        $logger = $this->_server->getSystemLog();
         return array(
             // Show an error if we get responses that do not have the Success status code
             new EngineBlock_Corto_Filter_Command_ValidateSuccessfulResponse(),
@@ -32,6 +33,10 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_IDP
             ),
 
+            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($logger),
+
+            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($logger),
+
             // Check whether this IdP is allowed to send a response to the destination SP
             new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(),
 
@@ -43,6 +48,12 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
 
             // Provision the User to LDAP and figure out the collabPersonId
             new EngineBlock_Corto_Filter_Command_ProvisionUser(),
+
+            // Aggregate additional attributes for this Service Provider
+            new EngineBlock_Corto_Filter_Command_AttributeAggregator(),
+
+            // Check if the Policy Decision Point needs to be consulted for this request
+            new EngineBlock_Corto_Filter_Command_EnforcePolicy(),
 
             // Apply the Attribute Release Policy before we do consent.
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),

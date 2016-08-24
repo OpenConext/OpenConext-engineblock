@@ -130,56 +130,6 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
-    // Profile
-    'profile_header'                    => 'SURFconext',
-    'profile_subheader'                 => 'Overzicht van jouw SURFconext-profiel.',
-    'profile_header_my_profile'         => 'Mijn Profiel',
-    'profile_header_my_groups'          => 'Mijn Groepen',
-    'profile_header_my_apps'            => 'Mijn Diensten',
-    'profile_header_exit'               => 'Exit',
-    'profile_header_surfteams'          => 'SURFconext Teams',
-    'profile_header_auth_needed'        => 'Authenticatie vereist',
-    'profile_header_leave_surfconext'   => 'Verlaat SURFconext',
-    'profile_store_info'                => 'Van jouw instelling hebben wij de volgende gegevens ontvangen. Deze gegevens worden opgeslagen in (en gebruikt door) SURFconext. Een subset van deze gegevens wordt verstrekt aan diensten die je via SURFconext benadert.',
-
-    'profile_group_membership_desc'     => 'Je bent lid van de volgende groepen.',
-    'profile_no_groups'                 => 'Geen groepen',
-    'profile_extra_groups_desc'         => 'Om jouw instellingsgroepen te zien moet je het gebruik hiervoor binnen SURFconext autoriseren.',
-    'profile_leave_surfconext_desc'     => 'Je gebruikt SURFconext om met je instellingsaccount in te loggen op een of meerdere diensten. Je kan jouw SURFconext profiel verwijderen door op onderstaande knop te drukken.',
-    'profile_leave_surfconext_link'     => 'Verwijder mijn profiel!',
-    'profile_leave_surfconext_disclaim' => 'Let op:
-                                            <ul>
-                                                <li>Alleen de informatie die in SURFconext wordt opgeslagen zal worden verwijderd.</li>
-                                                <li>Diensten waar je met SURFconext op bent ingelogd zullen niet worden ingelicht. Het is dus mogelijk dat jouw persoonlijke gegevens daar nog opgeslagen zijn.</li>
-                                                <li>Na een nieuwe login via SURFconext zal er automatisch weer een profiel worden aangemaakt.</li>
-                                             </ul>
-                                             <br>Meer informatie over welke informatie er wordt opgeslagen door SURFconext kan je vinden op de <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">SURFconext supportpagina\'s</a>.',
-    'profile_leave_surfconext_link_add' => '(Sluit je browser na deze actie om de verwijderprocedure te voltooien.)',
-    'profile_revoke_access'             => 'Trek toegang in',
-    'profile_leave_surfconext_conf'     => 'Weet je zeker dat je jouw profiel wilt verwijderen? Je zult de browser moeten afsluiten om deze actie te voltooien',
-    'profile_eula_link'                 => 'Gebruiksvoorwaarden',
-    'profile_support_link'              => 'Help URL',
-    'profile_mail_text'                 => 'SURFconext support kan je vragen om bovenstaande informatie te delen. Deze informatie kan hen helpen om de supportvraag te beantwoorden.',
-    'profile_mail_attributes'           => 'Mail data naar help@surfconext.nl',
-    'profile_mail_send_success'         => 'De mail met bovenstaande informatie is succesvol verstuurd.',
-    'profile_helplink'                  => 'https://wiki.surfnet.nl/display/conextsupport/Profile+page',
-
-    // Profile MyApps
-    'profile_apps_connected_aps'        => 'Mijn diensten via SURFconext',
-    'profile_apps_share'                => 'Je hebt toestemming gegeven om jouw informatie te delen met de volgende diensten:',
-    'profile_apps_service_th'           => 'Dienst/Applicatie',
-    'profile_apps_eula_th'              => 'EULA',
-    'profile_apps_support_name_th'      => 'Support contact',
-    'profile_apps_support_url_th'       => 'Support URL',
-    'profile_apps_support_email_th'	    => 'Support email',
-    'profile_apps_support_phone_th'     => 'Support telefoon',
-    'profile_apps_consent_th'           => 'Consent groep informatie',
-    'profile_revoke_consent'            => 'Consent intrekken',
-    'profile_no_consent'                => 'Nog niet uitgedeeld',
-    'profile_consent'                   => 'Consent gegeven',
-    'profile_attribute_release'         => 'Aan deze Service Provider worden de volgende attributen vrijgegeven:',
-    'profile_attribute_release_all'     => 'Deze dienst ontvangt alle attributen die door jouw instelling worden geleverd.',
-
     // Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'U bent bijna klaar...',
@@ -209,8 +159,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'error_404'                         => '404 - Pagina niet gevonden',
     'error_404_desc'                    => 'De pagina is niet gevonden.',
     'error_help_desc'                   => '<p>
-        Bezoek <a href="https://support.surfconext.nl/">de support pagina</a> als dit je probleem niet oplost.
-        Op deze pagina vind je meer informatie over de mogelijke oorzaken en hoe je contact kan opnemen met het supportteam.
+        Bezoek <a href="https://support.surfconext.nl/" target="_blank">de SURFconext support pagina\'s</a> voor ondersteuning bij deze foutmelding. Hier kun je ook vinden hoe je contact kunt opnemen met het supportteam als de fout aanblijft.
     </p>',
     'error_no_consent'                  => 'Niet mogelijk om verder te gaan naar dienst',
     'error_no_consent_desc'             => 'Deze applicatie kan enkel worden gebruikt wanneer de vermelde informatie wordt gedeeld.<br /><br />
@@ -243,6 +192,7 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
         Je bent succesvol ingelogd bij jouw instelling, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst heeft jouw instelling met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de helpdesk van je instelling als je vindt dat je wel toegang moet hebben.
     </p>',
     'error_authorization_policy_violation_name'       => 'Omschrijving autorisatieregels',
+    'error_authorization_policy_violation_info'       => 'Bericht van je instelling: ',
     'error_no_message'                  => 'Error - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
@@ -289,12 +239,12 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
         <br />
     </p>',
 
-    'error_received_error_status_code'     => 'Error - Identity Provider-fout',
+    'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
     'error_received_error_status_code_desc'=> '<p>
         Jouw instelling stuurde een authenticatierespons met een foutcode.
     </p>',
-    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van identity provider',
-    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op identity provider-antwoord',
+    'error_received_invalid_response'        => 'Error - Ongeldig antwoord van Identity Provider',
+    'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op antwoord Identity Provider',
     'error_received_status_code_desc'=> '<p>
         Jouw instelling stuurde een ongeldig authenticatierespons terug.
     </p>',
@@ -320,7 +270,7 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_attribute_validator_availability'        => '\'%3$s\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
 
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
-    'attributes_validation_failed'    => 'Sommige attributen falen validatie',
+    'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
     'attributes_data_mailed'          => 'De attribuutdata zijn gemaild',
     'idp_debugging_title'             => 'Toon verkregen response van Identity Provider',
     'retry'                           => 'Opnieuw',

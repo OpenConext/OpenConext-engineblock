@@ -1,0 +1,5 @@
+authentication_logout:
+    path:   /logout
+    methods: [GET,POST] # verify POST?
+    defaults:
+        _controller: engineblock.controller.authentication.logout:logoutAction

@@ -1,0 +1,37 @@
+services:
+    engineblock.request.request_id_generator:
+        public: false
+        class: OpenConext\EngineBlock\Request\UniqidGenerator
+
+    engineblock.request.request_id:
+        class: OpenConext\EngineBlock\Request\RequestId
+        arguments:
+            - "@engineblock.request.request_id_generator"
+
+    engineblock.security.http_basic_entry_point:
+        class: OpenConext\EngineBlockBundle\Security\Http\EntryPoint\JsonBasicAuthenticationEntryPoint
+        arguments:
+            - "engine-api.%domain%"
+
+    engineblock.service.consent:
+        class: OpenConext\EngineBlock\Service\ConsentService
+        arguments:
+            - "@engineblock.repository.consent"
+            - "@engineblock.service.metadata"
+            - "@engineblock.compat.logger"
+
+    engineblock.service.metadata:
+        class: OpenConext\EngineBlock\Service\MetadataService
+        arguments:
+            - "@engineblock.compat.repository.metadata"
+            - "@engineblock.compat.logger"
+
+    engineblock.authentication.user_directory:
+        class: OpenConext\EngineBlockBundle\Authentication\Service\UserService
+        arguments:
+            - "@engineblock.repository.user"
+
+    engineblock.features:
+        class: OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
+        arguments:
+            - # replaced in the extension

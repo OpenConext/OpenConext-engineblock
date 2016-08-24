@@ -490,11 +490,13 @@ class EngineBlock_Ssp_sspmod_saml_Message {
         }
 
         /* Validate Response-element destination. */
-        $currentURL = SimpleSAML_Utilities::selfURLNoQuery();
+        $currentRequest = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSymfonyRequest();
+        $requestUri     = $currentRequest->getSchemeAndHttpHost() . $currentRequest->getRequestUri();
         $msgDestination = $response->getDestination();
-        if ($msgDestination !== NULL && $msgDestination !== $currentURL) {
+
+        if ($msgDestination !== NULL && $msgDestination !== $requestUri) {
             throw new Exception('Destination in response doesn\'t match the current URL. Destination is "' .
-                $msgDestination . '", current URL is "' . $currentURL . '".');
+                $msgDestination . '", current URL is "' . $requestUri . '".');
         }
 
         $responseSigned = self::checkSign($idpMetadata, $response);
@@ -545,8 +547,8 @@ class EngineBlock_Ssp_sspmod_saml_Message {
             }
         }
         /* At least one valid signature found. */
-
-        $currentURL = SimpleSAML_Utilities::selfURLNoQuery();
+        $currentRequest = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSymfonyRequest();
+        $requestUri     = $currentRequest->getSchemeAndHttpHost() . $currentRequest->getRequestUri();
 
 
         /* Check various properties of the assertion. */
@@ -664,9 +666,9 @@ class EngineBlock_Ssp_sspmod_saml_Message {
                 $lastError = 'NotOnOrAfter in SubjectConfirmationData is in the past: ' . $scd->NotOnOrAfter;
                 continue;
             }
-            if ($scd->Recipient !== NULL && $scd->Recipient !== $currentURL) {
+            if ($scd->Recipient !== NULL && $scd->Recipient !== $requestUri) {
                 $lastError = 'Recipient in SubjectConfirmationData does not match the current URL. Recipient is ' .
-                    var_export($scd->Recipient, TRUE) . ', current URL is ' . var_export($currentURL, TRUE) . '.';
+                    var_export($scd->Recipient, TRUE) . ', current URL is ' . var_export($requestUri, TRUE) . '.';
                 continue;
             }
             if ($scd->InResponseTo !== NULL && $response->getInResponseTo() !== NULL && $scd->InResponseTo !== $response->getInResponseTo()) {

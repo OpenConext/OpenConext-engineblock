@@ -1,6 +1,5 @@
 <?php
 
-use OpenConext\Component\EngineBlockFixtures\IdFrame;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
@@ -319,7 +318,6 @@ class EngineBlock_Corto_ProxyServer
             $this->setRemoteIdpMd5($remoteIdpMd5);
         }
 
-        $this->startSession();
         $logger = $this->getSessionLog();
 
         if (empty($remoteIdpMd5)) {
@@ -431,7 +429,7 @@ class EngineBlock_Corto_ProxyServer
         // Create a new assertion by us.
         $newAssertion = new SAML2_Assertion();
         $newResponse->setAssertions(array($newAssertion));
-        $newAssertion->setId($this->getNewId(IdFrame::ID_USAGE_SAML2_ASSERTION));
+        $newAssertion->setId($this->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION));
         $newAssertion->setIssueInstant(time());
         $newAssertion->setIssuer($newResponse->getIssuer());
 
@@ -531,7 +529,7 @@ class EngineBlock_Corto_ProxyServer
         $response = new SAML2_Response();
         /** @var SAML2_AuthnRequest $request */
         $response->setRelayState($request->getRelayState());
-        $response->setId($this->getNewId(IdFrame::ID_USAGE_SAML2_RESPONSE));
+        $response->setId($this->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE));
         $response->setIssueInstant(time());
         if (!$requestWasUnsolicited) {
             $response->setInResponseTo($request->getId());
@@ -814,7 +812,10 @@ class EngineBlock_Corto_ProxyServer
 
         $templateFileName = ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/' . $templateName . '.phtml';
 
+        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
         $view = new EngineBlock_View();
+
+        $view->setLayout($layout);
         $view->setData($vars);
         return $view->render($templateFileName);
     }
@@ -1012,7 +1013,7 @@ class EngineBlock_Corto_ProxyServer
         return $provider->timestamp($deltaSeconds);
     }
 
-    public function getNewId($usage = IdFrame::ID_USAGE_OTHER)
+    public function getNewId($usage = EngineBlock_Saml2_IdGenerator::ID_USAGE_OTHER)
     {
         $generator = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getSaml2IdGenerator();
         return $generator->generate(self::ID_PREFIX, $usage);

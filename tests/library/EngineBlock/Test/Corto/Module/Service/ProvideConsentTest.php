@@ -19,12 +19,12 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     private $proxyServerMock;
 
     public function setup() {
-        $this->proxyServerMock = $this->mockProxyServer();
+        $diContainer              = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
-        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $this->xmlConverterMock = $this->mockXmlConverter($diContainer[EngineBlock_Application_DiContainer::XML_CONVERTER]);
-        $this->consentFactoryMock = $diContainer[EngineBlock_Application_DiContainer::CONSENT_FACTORY];
-        $this->consentMock = $this->mockConsent();
+        $this->proxyServerMock    = $this->mockProxyServer();
+        $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
+        $this->consentFactoryMock = $diContainer->getConsentFactory();
+        $this->consentMock        = $this->mockConsent();
     }
 
     public function testConsentRequested()
@@ -42,7 +42,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService = $this->factoryService();
 
         Phake::when($this->consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
+            ->explicitConsentWasGivenFor(Phake::anyParameters())
             ->thenReturn(true);
 
         $provideConsentService->serve(null);
@@ -120,7 +120,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $ebRequest = new SAML2_AuthnRequest();
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
-        
+
         $dummyLog = new Psr\Log\NullLogger();
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($dummyLog);
         $authnRequestRepository->store($spRequest);
@@ -183,7 +183,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     {
         $consentMock = Phake::mock('EngineBlock_Corto_Model_Consent');
         Phake::when($consentMock)
-            ->hasStoredConsent(Phake::anyParameters())
+            ->explicitConsentWasGivenFor(Phake::anyParameters())
             ->thenReturn(false);
         Phake::when($this->consentFactoryMock)
             ->create(Phake::anyParameters())

@@ -1,0 +1,102 @@
+services:
+    engineblock.compat.application:
+        class: EngineBlock_ApplicationSingleton
+        factory:  [EngineBlock_ApplicationSingleton, getInstance]
+
+    engineblock.compat.config:
+        class: Zend_Config
+        factory: ["@engineblock.compat.application", getConfiguration]
+
+    engineblock.compat.di_container:
+        public: false
+        class: EngineBlock_Application_DiContainer
+        factory: ["@engineblock.compat.application", getDiContainer]
+
+    engineblock.compat.repository.metadata:
+        public: false
+        class: OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+        factory: ["@engineblock.compat.di_container", getMetadataRepository]
+
+    engineblock.compat.doctrine.entity_manager:
+        public: false
+        class: Doctrine\ORM\EntityManager
+        factory: ["@engineblock.compat.di_container", getEntityManager]
+
+    engineblock.compat.doctrine.dbal_connection:
+        public: false
+        class: Doctrine\DBAL\Connection
+        factory: ["@engineblock.compat.doctrine.entity_manager", getConnection]
+
+    engineblock.compat.view:
+        class: EngineBlock_View
+        calls:
+            - ['setLayout', ["@engineblock.compat.layout"]]
+
+    engineblock.compat.layout:
+        class: Zend_Layout
+        calls:
+            - ['setLayout',       ["@=service('engineblock.bridge.config').get('defaults.layout')"]]
+            - ['setLayoutPath',   ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
+            - ['setViewBasePath', ["%kernel.root_dir%/Resources/views/modules/"]]
+        properties:
+            title: "@=service('engineblock.bridge.config').get('defaults.title')"
+            header: "@=service('engineblock.bridge.config').get('defaults.header')"
+
+    engineblock.compat.logger:
+        class: Monolog\Logger
+        factory: [EngineBlock_ApplicationSingleton, getLog]
+
+#    Services that were previously configured and gotten through the DiContainer
+    engineblock.compat.xml_converter:
+        class: EngineBlock_Corto_XmlToArray
+
+    engineblock.compat.mailer:
+        class: EngineBlock_Mail_Mailer
+
+    engineblock.compat.corto_filter_command_factory:
+        class: EngineBlock_Corto_Filter_Command_Factory
+
+    engineblock.compat.database_connection_factory:
+        class: EngineBlock_Database_ConnectionFactory
+        arguments:
+            - "@doctrine.dbal.engineblock_connection"
+
+    engineblock.compat.corto_model_consent_factory:
+        class: EngineBlock_Corto_Model_Consent_Factory
+        arguments:
+            - "@engineblock.compat.corto_filter_command_factory"
+            - "@engineblock.compat.database_connection_factory"
+
+    engineblock.compat.zend.apc_cache:
+        class: Zend_Cache_Backend_Apc
+
+    engineblock.compat.janus_cient:
+        class: Janus_Client_CacheProxy
+
+    engineblock.compat.asset_manager:
+        class: EngineBlock_AssetManager
+
+    engineblock.compat.time_provider:
+        class: EngineBlock_TimeProvider_Default
+
+    engineblock.compat.saml2_id_generator:
+        class: EngineBlock_Saml2_IdGenerator_Default
+
+    engineblock.compat.user_directory:
+         class: EngineBlock_UserDirectory
+         arguments:
+             - "@engineblock.compat.ldap_client"
+
+    engineblock.compat.ldap_client:
+        public: false
+        class: Zend_Ldap
+        arguments:
+            -
+                host: "@=service('engineblock.bridge.config').get('ldap.host')"
+                port: "@=service('engineblock.bridge.config').get('ldap.port')"
+                useSsl: "@=service('engineblock.bridge.config').get('ldap.useSsl')"
+                username: "@=service('engineblock.bridge.config').get('ldap.userName')"
+                password: "@=service('engineblock.bridge.config').get('ldap.password')"
+                bindRequiresDn: "@=service('engineblock.bridge.config').get('ldap.bindRequiresDn')"
+                accountDomainName: "@=service('engineblock.bridge.config').get('ldap.accountDomainName')"
+                baseDn: "@=service('engineblock.bridge.config').get('ldap.baseDn')"

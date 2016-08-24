@@ -1,7 +1,6 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -35,8 +34,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
                     $spEntity
                 )
             );
-        }
-        else {
+        } else {
             $identityProviders = $this->_server->getRepository()->findIdentityProviders();
         }
 
@@ -71,7 +69,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
-            $this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_METADATA),
+            $this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
             false
         );
@@ -97,5 +95,4 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
         $this->_server->sendHeader('Content-Type', 'application/xml');
         $this->_server->sendOutput($xml);
     }
-
 }

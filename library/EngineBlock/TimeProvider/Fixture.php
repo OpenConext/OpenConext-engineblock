@@ -1,8 +1,11 @@
 <?php
 
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\TimeFixture;
+
 class EngineBlock_TimeProvider_Fixture implements EngineBlock_TimeProvider_Interface
 {
-    const FIXTURE_FILE = '/tmp/eb-fixtures/saml2/time';
+    const FIXTURE_FILE = 'tmp/eb-fixtures/saml2/time';
 
     static $s_time;
 
@@ -16,9 +19,9 @@ class EngineBlock_TimeProvider_Fixture implements EngineBlock_TimeProvider_Inter
 
     public function time()
     {
-        $fixture = new \OpenConext\Component\EngineBlockFixtures\TimeFixture(
-            new \OpenConext\Component\EngineBlockFixtures\DataStore\JsonDataStore(
-                static::FIXTURE_FILE
+        $fixture = new TimeFixture(
+            new JsonDataStore(
+                ENGINEBLOCK_FOLDER_ROOT . static::FIXTURE_FILE
             )
         );
         return $fixture->get();

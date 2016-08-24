@@ -133,55 +133,6 @@ If you have any questions about your privacy and the policy applied, please visi
 
     <p>If you have any questions about your request, please contact <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
-    //Profile
-    'profile_header'                    => 'SURFconext',
-    'profile_subheader'                 => 'Overview of your SURFconext profile.',
-    'profile_header_my_profile'         => 'My Profile',
-    'profile_header_my_apps'            => 'My Services',
-    'profile_header_my_groups'          => 'My Groups',
-    'profile_header_surfteams'          => 'SURFconext Teams',
-    'profile_header_exit'               => 'Exit',
-    'profile_header_auth_needed'        => 'Authentication required',
-    'profile_header_leave_surfconext'   => 'Leave SURFconext',
-    'profile_store_info'                => 'Your institution provided the following profile information. This profile will be stored in (and used by) SURFconext. A subset of this information is provided to services that you access through SURFconext.',
-    'profile_group_membership_desc'     => 'You are a member of the following groups.',
-    'profile_no_groups'                 => 'No groups',
-    'profile_extra_groups_desc'         => 'In order to get extra groups you must authorize their use.',
-    'profile_leave_surfconext_desc'     => 'You currently use SURFconext to access one or more services with your institutional account. It is possible to delete your SURFconext profile by pressing the button below.',
-    'profile_leave_surfconext_link'     => 'Delete my SURFconext account!',
-    'profile_leave_surfconext_disclaim' => 'Note:
-                                            <ul>
-                                                <li>Only information stored in the SURFconext service will be deleted.</li>
-                                                <li>Applications accessed through SURFconext will not be notified. It is possible your personal data is still stored in these applications.</li>
-                                                <li>After a new SURFconext login a new profile will be created automatically.</li>
-                                             </ul>
-                                             <br>More information about what information is stored by SURFconext can be found on <a href="https://wiki.surfnet.nl/display/conextsupport/Profile+page" target="_blank">the SURFconext support pages</a>',
-    'profile_leave_surfconext_link_add' => '(Close your browser after this action to finalize the removal procedure)',
-    'profile_revoke_access'             => 'Revoke access',
-    'profile_leave_surfconext_conf'     => 'Are you sure you want to delete your profile? You must restart your browser to finalize this action',
-    'profile_eula_link'                 => 'Terms of use',
-    'profile_support_link'              => 'Support pages',
-    'profile_mail_text'                 => 'SURFconext support may ask you to share the abovementioned data. This information can help them to answer your support question.',
-    'profile_mail_attributes'           => 'Mail data to help@surfconext.nl',
-    'profile_mail_send_success'         => 'The mail with your information has been successfully sent.',
-    'profile_helplink'                  => 'https://wiki.surfnet.nl/display/conextsupport/Profile+page',
-
-    //Profile MyApps
-    'profile_apps_connected_aps'        => 'My services accessed through SURFconext',
-    'profile_apps_share'                => 'You have given permission to share your information with the following services:',
-    'profile_apps_service_th'           => 'Service/Application',
-    'profile_apps_eula_th'              => 'EULA',
-    'profile_apps_support_name_th'      => 'Support person name',
-    'profile_apps_support_url_th'       => 'Support URL',
-    'profile_apps_support_email_th'     => 'Support email',
-    'profile_apps_support_phone_th'     => 'Support person phone',
-    'profile_apps_consent_th'           => 'Consent group information',
-    'profile_revoke_consent'            => 'Revoke',
-    'profile_no_consent'                => 'Not granted yet',
-    'profile_consent'                   => 'Granted consent',
-    'profile_attribute_release'         => 'The following attributes are released to this Service Provider:',
-    'profile_attribute_release_all'     => 'This service receives all attributes provided by your institution.',
-
     //Delete User
     'deleteuser_success_header'         => 'SURFconext exit procedure',
     'deleteuser_success_subheader'      => 'You are almost done...',
@@ -209,9 +160,9 @@ If you have any questions about your privacy and the policy applied, please visi
     //Error screens
     'error_404'                         => '404 - Page not found',
     'error_404_desc'                    => 'This page has not been found.',
-    'error_help_desc'               => 'If this does not solve your problem, please visit
-        <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a>
-        or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.',
+    'error_help_desc'               => '<p>
+        Please visit <a href="https://support.surfconext.nl/" target="_blank">the SURFconext support pages</a> for help solving this problem. These pages also contain contact information for the support team if the problem persists.
+    </p>',
     'error_no_consent'              => 'Unable to continue to service',
     'error_no_consent_desc'         => 'This application can only be used when you share the mentioned information.<br /><br />
 
@@ -245,6 +196,7 @@ this service.
         You have successfully logged in at your institution, but unfortunately you can not use this service because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you feel you should be allowed access to this service.
     </p>',
     'error_authorization_policy_violation_name'       => 'Authorization policy message',
+    'error_authorization_policy_violation_info'       => 'Message from your institution: ',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',

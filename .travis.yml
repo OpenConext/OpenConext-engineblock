@@ -1,0 +1,69 @@
+language: php
+
+php:
+  - 5.6
+  - 7.0
+
+matrix:
+  fast_finish: true
+  allow_failures:
+  - php: 7.0
+  - env: COMMAND="functional-tests-wip"
+
+sudo: true # sudo is required for behat
+
+env:
+  matrix:
+    - COMMAND="functional-tests"
+    - COMMAND="functional-tests-wip"
+    - COMMAND="code-quality"
+  global:
+    - SYMFONY_ENV=test
+    - ENGINEBLOCK_ENV=test
+    - ANT_OPTS=-Xmx256m # ensure we got enough memory for ant
+
+cache:
+  directories:
+    - ~/.composer/cache/files
+
+before_install:
+  - mysql -e "create database IF NOT EXISTS engineblock;" -uroot
+  - mysql -uroot -Dengineblock < database/dumps/dump_test.sql
+
+before_script:
+  - phpenv config-add .travis.php.ini
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then printf "\n" | pecl install apcu-4.0.10; fi
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.3" ]]; then phpenv config-rm xdebug.ini; fi
+  - sudo ln -s "$(pwd)"/ci/travis/files/ /etc/openconext
+  - mkdir -p /tmp/engineblock/cache/test
+  - mkdir -p /tmp/engineblock/logs/test
+  - sudo apt-get update
+  - sudo apt-get install apache2 libapache2-mod-fastcgi
+  - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+  - sudo a2enmod rewrite actions fastcgi alias ssl
+  - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+  - sudo cp -f ci/travis/vhost-apache /etc/apache2/sites-available/default-ssl
+  - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/default-ssl
+  - sudo a2ensite default-ssl
+  - sudo service apache2 restart
+  - if [[ "$COMMAND" == "functional-tests" ]]; then echo "functionalTesting = true" >> "$(pwd)"/ci/travis/files/engineblock.ini; fi
+  - composer self-update
+  - composer config secure-http false
+  - composer install --prefer-dist -n -o
+  - app/console cache:clear --env=test
+
+script:
+  - ant $COMMAND
+
+branches:
+  only:
+    - 5.x-dev
+    - 5.x-refactor
+
+addons:
+  hosts:
+    - engine.vm.openconext.org
+
+services:
+  - mysql

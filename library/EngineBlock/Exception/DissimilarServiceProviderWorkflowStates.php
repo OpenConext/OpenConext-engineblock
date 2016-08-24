@@ -16,14 +16,15 @@ class EngineBlock_Exception_DissimilarServiceProviderWorkflowStates extends \Exc
 
     /**
      * EngineBlock_Exception_DissimilarServiceProviderWorkflowStates constructor.
+     *
      * @param ServiceProvider $trustedProxyServiceProvider
-     * @param string $requesterEntityId
+     * @param string          $requesterEntityId
      */
     public function __construct(
         ServiceProvider $trustedProxyServiceProvider,
         $requesterEntityId
     ) {
         $this->trustedProxyServiceProvider = $trustedProxyServiceProvider;
-        $this->requesterEntityId = $requesterEntityId;
+        $this->requesterEntityId           = $requesterEntityId;
     }
 }

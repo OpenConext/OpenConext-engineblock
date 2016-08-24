@@ -46,7 +46,7 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
 
         // Map the IdP configuration to a Corto XMLToArray structured document array
         $mapper = new EngineBlock_Corto_Mapper_Metadata_EdugainDocument(
-            $this->_server->getNewId(\OpenConext\Component\EngineBlockFixtures\IdFrame::ID_USAGE_SAML2_METADATA),
+            $this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_METADATA),
             $this->_server->timeStamp($this->_server->getConfig('metadataValidUntilSeconds', 86400)),
             true
         );
@@ -73,12 +73,9 @@ class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto
         $this->_server->sendOutput($xml);
     }
 
-
     protected function _addRequestAttributes($entity)
     {
         $arpRequestedAttributes = new EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes();
         return $arpRequestedAttributes->addRequestAttributes($entity);
     }
-
-
 }

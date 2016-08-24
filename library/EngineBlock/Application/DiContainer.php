@@ -1,129 +1,113 @@
 <?php
 
-use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Tools\Setup;
 use OpenConext\Component\EngineBlockMetadata\Container\ContainerInterface;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
 {
-    const XML_CONVERTER                         = 'xmlConverter';
-    const CONSENT_FACTORY                       = 'consentFactory';
-    const MAILER                                = 'mailer';
-    const FILTER_COMMAND_FACTORY                = 'filterCommandFactory';
-    const DATABASE_CONNECTION_FACTORY           = 'databaseConnectionFactory';
-    const APPLICATION_CACHE                     = 'applicationCache';
-    const SERVICE_REGISTRY_CLIENT               = 'serviceRegistryClient';
     const METADATA_REPOSITORY                   = 'metadataRepository';
-    const ASSET_MANAGER                         = 'assetManager';
-    const TIME                                  = 'dateTime';
-    const SAML2_ID                              = 'id';
     const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
-    const OWN_ENTITIES_REPOSITORY               = 'ownMetadataRepository';
-    const DOCTRINE_ENTITY_MANAGER               = 'entityManager';
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
     const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
-    const USER_DIRECTORY                        = 'userDirectory';
 
-    public function __construct()
+    /**
+     * @var SymfonyContainerInterface
+     */
+    private $container;
+
+    public function __construct(SymfonyContainerInterface $container)
     {
-        $this->registerXmlConverter();
-        $this->registerConsentFactory();
-        $this->registerMailer();
-        $this->registerFilterCommandFactory();
-        $this->registerDatabaseConnectionFactory();
-        $this->registerApplicationCache();
-        $this->registerServiceRegistryClient();
         $this->registerMetadataRepository();
-        $this->registerAssetManager();
-        $this->registerTimeProvider();
-        $this->registerSaml2IdGenerator();
-        $this->registerSuperGlobalManager();
-        $this->registerEntityManager();
         $this->registerDenormalizedAttributeDefinitions();
         $this->registerAttributeMetadata();
         $this->registerAttributeValidator();
-        $this->registerUserDirectory();
+
+        $this->container = $container;
     }
 
-    protected function registerXmlConverter()
-    {
-        $this[self::XML_CONVERTER] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Corto_XmlToArray();
-        };
-    }
-
-    protected function registerConsentFactory()
-    {
-        $this[self::CONSENT_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Corto_Model_Consent_Factory(
-                $container[$container::FILTER_COMMAND_FACTORY],
-                $container[$container::DATABASE_CONNECTION_FACTORY]
-            );
-        };
-    }
-
-    protected function registerMailer()
-    {
-        $this[self::MAILER] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Mail_Mailer();
-        };
-    }
-
-    protected function registerFilterCommandFactory()
-    {
-        $this[self::FILTER_COMMAND_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Corto_Filter_Command_Factory();
-        };
-    }
-
-    protected function registerDatabaseConnectionFactory()
-    {
-        $this[self::DATABASE_CONNECTION_FACTORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            return new EngineBlock_Database_ConnectionFactory();
-        };
-    }
     /**
+     * @return \OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
+     */
+    public function getAuthenticationLogger()
+    {
+        return $this->container->get('engineblock.bridge.authentication_logger_adapter');
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Request
+     */
+    public function getSymfonyRequest()
+    {
+        return $this->container->get('request');
+    }
+
+    /**
+     * @return EngineBlock_Corto_XmlToArray
+     */
+    public function getXmlConverter()
+    {
+        return $this->container->get('engineblock.compat.xml_converter');
+    }
+
+    /**
+     * @return EngineBlock_Corto_Filter_Command_Factory
+     */
+    public function getFilterCommandFactory()
+    {
+        return $this->container->get('engineblock.compat.corto_filter_command_factory');
+    }
+
+    /**
+     * @return EngineBlock_Mail_Mailer
+     */
+    public function getMailer()
+    {
+        return $this->container->get('engineblock.compat.mailer');
+    }
+
+    /**
+     * @return EngineBlock_Database_ConnectionFactory
+     */
+    public function getDatabaseConnectionFactory()
+    {
+        return $this->container->get('engineblock.compat.database_connection_factory');
+    }
+
+    /**
+     * @return EngineBlock_Corto_Model_Consent_Factory
+     */
+    public function getConsentFactory()
+    {
+        return $this->container->get('engineblock.compat.corto_model_consent_factory');
+    }
+
+    /**
+     * It has been done with the check to be backwards compatible. Ideally this would be
+     * hidden behind a compatibility layer rather than here and in the consumers of this
+     * service, but since this will be removed in the future there is no need to
+     * introduce additional code for this particular case.
+     *
      * @return Zend_Cache_Backend_Apc
      */
     public function getApplicationCache()
     {
-        return $this[self::APPLICATION_CACHE];
-    }
+        $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
+        if ($isApcEnabled) {
+            return $this->container->get('engineblock.compat.zend.apc_cache');
+        }
 
-    protected function registerApplicationCache()
-    {
-        $this[self::APPLICATION_CACHE] = function (EngineBlock_Application_DiContainer $container)
-        {
-            $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
-            if ($isApcEnabled) {
-                return new Zend_Cache_Backend_Apc();
-            }
-        };
+        return null;
     }
 
     /**
-     * @return Janus_Client_CacheProxy()
+     * @return Janus_Client_CacheProxy
      */
     public function getServiceRegistryClient()
     {
-        return $this[self::SERVICE_REGISTRY_CLIENT];
-    }
-
-    protected function registerServiceRegistryClient()
-    {
-        $this[self::SERVICE_REGISTRY_CLIENT] = function ()
-        {
-            return new Janus_Client_CacheProxy();
-        };
+        return $this->container->get('engineblock.compat.janus_cient');
     }
 
     /**
@@ -132,6 +116,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getMetadataRepository()
     {
         return $this[self::METADATA_REPOSITORY];
+    }
+
+    /**
+     * @return \OpenConext\EngineBlockBridge\Authentication\Repository\UserDirectoryAdapter
+     */
+    public function getUserDirectory()
+    {
+        return $this->container->get('engineblock.bridge.authentication.user_directory');
     }
 
     protected function registerMetadataRepository()
@@ -168,19 +160,13 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @deprecated since the themeis were introduced this should no longer be used.
+     *
      * @return EngineBlock_AssetManager
      */
     public function getAssetManager()
     {
-        return $this[self::ASSET_MANAGER];
-    }
-
-    protected function registerAssetManager()
-    {
-        $this[self::ASSET_MANAGER] = function ()
-        {
-            return new EngineBlock_AssetManager();
-        };
+        return $this->container->get('engineblock.compat.asset_manager');
     }
 
     /**
@@ -188,44 +174,23 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getTimeProvider()
     {
-        return $this[self::TIME];
-    }
-
-    protected function registerTimeProvider()
-    {
-        $this[self::TIME] = function ()
-        {
-            return new EngineBlock_TimeProvider_Default();
-        };
+        return $this->container->get('engineblock.compat.time_provider');
     }
 
     /**
-     * @return EngineBlock_Saml2_IdGenerator_Interface
+     * @return EngineBlock_Saml2_IdGenerator
      */
     public function getSaml2IdGenerator()
     {
-        return $this[self::SAML2_ID];
-    }
-
-    protected function registerSaml2IdGenerator()
-    {
-        $this[self::SAML2_ID] = function()
-        {
-            return new EngineBlock_Saml2_IdGenerator_Default();
-        };
+        return $this->container->get('engineblock.compat.saml2_id_generator');
     }
 
     /**
-     * @return EngineBlock_Application_SuperGlobalManager
+     * @return EngineBlock_Application_SuperGlobalManager|false
      */
     public function getSuperGlobalManager()
     {
-        return $this[self::SUPER_GLOBAL_MANAGER];
-    }
-
-    protected function registerSuperGlobalManager()
-    {
-        $this[self::SUPER_GLOBAL_MANAGER] = false;
+        return false;
     }
 
     /**
@@ -235,31 +200,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getMessageUtilClassName()
     {
-       return 'sspmod_saml_Message';
-    }
-
-    protected function registerEntityManager()
-    {
-        $this[self::DOCTRINE_ENTITY_MANAGER] = function () {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            $logger = $application->getLogInstance();
-            $engineBlockConfig = $application->getConfiguration();
-            $mapper = new EngineBlock_Doctrine_ConfigMapper($logger);
-
-            $driverConfig = $mapper->map($engineBlockConfig);
-
-            // obtaining the entity manager
-            return EntityManager::create(
-                DriverManager::getConnection($driverConfig),
-                Setup::createAnnotationMetadataConfiguration(
-                    array(ENGINEBLOCK_FOLDER_VENDOR . "/openconext/engineblock-metadata/src"),
-                    true,
-                    null,
-                    null,
-                    false
-                )
-            );
-        };
+       return 'EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage';
     }
 
     /**
@@ -267,16 +208,19 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getEntityManager()
     {
-        return $this[self::DOCTRINE_ENTITY_MANAGER];
+        return $this->container->get('doctrine.orm.engineblock_entity_manager');
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     private function registerDenormalizedAttributeDefinitions()
     {
         $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED] = function() {
             $application = EngineBlock_ApplicationSingleton::getInstance();
             $definitionFile = $application->getConfigurationValue(
                 'attributeDefinitionFile',
-                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
+                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes-v2.2.0.json'
             );
             $definitionFileContent = file_get_contents($definitionFile);
             $definitions = json_decode($definitionFileContent, true);
@@ -286,11 +230,17 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         };
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     public function getDenormalizedAttributeDefinitions()
     {
         return $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED];
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     private function registerAttributeMetadata()
     {
         $this[self::ATTRIBUTE_METADATA] = function(EngineBlock_Application_DiContainer $container) {
@@ -302,6 +252,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @deprecated will be replaced with different (incompatible) system in the future
      * @return EngineBlock_Attributes_Metadata
      */
     public function getAttributeMetadata()
@@ -309,6 +260,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this[self::ATTRIBUTE_METADATA];
     }
 
+    /**
+     * @deprecated will be replaced with different (incompatible) system in the future
+     */
     public function registerAttributeValidator()
     {
         $this[self::ATTRIBUTE_VALIDATOR] = function(EngineBlock_Application_DiContainer $container) {
@@ -320,46 +274,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @deprecated will be replaced with different (incompatible) system in the future
      * @return EngineBlock_Attributes_Validator
      */
     public function getAttributeValidator()
     {
         return $this[self::ATTRIBUTE_VALIDATOR];
-    }
-
-    private function registerUserDirectory()
-    {
-        $this[self::USER_DIRECTORY] = function() {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            /** @var Zend_Config $ldapConfig */
-            $ldapConfig = $application->getConfigurationValue('ldap', null);
-
-            if (empty($ldapConfig)) {
-                throw new EngineBlock_Exception('No LDAP config');
-            }
-
-            $ldapOptions = array(
-                'host' => $ldapConfig->host,
-                'port' => $ldapConfig->port,
-                'useSsl' => $ldapConfig->useSsl,
-                'username' => $ldapConfig->userName,
-                'password' => $ldapConfig->password,
-                'bindRequiresDn' => $ldapConfig->bindRequiresDn,
-                'accountDomainName' => $ldapConfig->accountDomainName,
-                'baseDn' => $ldapConfig->baseDn
-            );
-
-            $ldapClient = new Zend_Ldap($ldapOptions);
-            $ldapClient->bind();
-            return new EngineBlock_UserDirectory($ldapClient);
-        };
-    }
-
-    /**
-     * @return EngineBlock_UserDirectory
-     */
-    public function getUserDirectory()
-    {
-        return $this[self::USER_DIRECTORY];
     }
 }

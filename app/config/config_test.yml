@@ -1,0 +1,29 @@
+imports:
+    - { resource: functional_testing.yml }
+    - { resource: config_dev.yml }
+
+framework:
+    test: ~
+    router:
+        resource: "%kernel.root_dir%/config/routing_test.yml"
+        strict_requirements: true
+    profiler:
+        collect: false
+
+web_profiler:
+    toolbar: false
+    intercept_redirects: false
+
+# override the logging settings so that we can log to readable files on travis
+monolog:
+    channels: ["%logger.channel%", "authentication"]
+    handlers:
+        main:
+            type: fingers_crossed
+            activation_strategy: engineblock.logger.manual_or_error_activation_strategy
+            passthru_level: "%logger.fingers_crossed.passthru_level%"
+            handler: file
+        file:
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%.log"
+            level:  DEBUG

@@ -1,5 +1,9 @@
 <?php
 
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
+use OpenConext\EngineBlock\Authentication\Value\Uid;
+
 class EngineBlock_User
 {
     private $_attributes = array();
@@ -21,7 +25,7 @@ class EngineBlock_User
 
     public function getAttributes()
     {
-        return $this->_attributes; 
+        return $this->_attributes;
     }
 
     public function deleteConsent($spId)
@@ -56,7 +60,7 @@ class EngineBlock_User
     }
 
     /**
-     * Completely remove a user from the SURFconext platform.
+     * Completely remove a user from the OpenConext platform.
      *
      * @return void
      */
@@ -73,16 +77,28 @@ class EngineBlock_User
     }
 
     /**
-     * Delete the user from the SURFconext LDAP.
+     * Delete the user from the user table
      *
-     * @return void
+     * @throws EngineBlock_Exception
      */
     protected function _deleteLdapUser()
     {
+        if (!isset($this->_attributes[SchacHomeOrganization::URN_MACE][0])) {
+            throw new EngineBlock_Exception(sprintf(
+                'Cannot remove user, cannot reliably determine who the user is due to missing "%s" attribute',
+                SchacHomeOrganization::URN_MACE
+            ));
+        }
+
+        $collabPersonId = CollabPersonId::generateFrom(
+            new Uid($this->getUid()),
+            new SchacHomeOrganization($this->_attributes[SchacHomeOrganization::URN_MACE][0])
+        );
+
         EngineBlock_ApplicationSingleton::getInstance()
-          ->getDiContainer()
+            ->getDiContainer()
             ->getUserDirectory()
-            ->deleteUser($this->getUid());
+            ->deleteUserWith($collabPersonId->getCollabPersonId());
     }
 
     /**
@@ -123,8 +139,8 @@ class EngineBlock_User
      */
     protected function _getDatabaseConnection()
     {
-        $pdo = new EngineBlock_Database_ConnectionFactory();
-        return $pdo->create(EngineBlock_Database_ConnectionFactory::MODE_WRITE);
+        $pdo = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getDatabaseConnectionFactory();
+        return $pdo->create();
     }
 
     /**

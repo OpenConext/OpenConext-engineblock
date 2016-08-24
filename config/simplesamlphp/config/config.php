@@ -1,5 +1,5 @@
 <?php
-/* 
+/*
  * The configuration of simpleSAMLphp
  * To keep all configuration as much as possible in one place:
  * Use the applications authentication.ini
@@ -9,20 +9,9 @@
 
 require_once __DIR__. '/../../../../library/EngineBlock/ApplicationSingleton.php';
 $application = EngineBlock_ApplicationSingleton::getInstance();
-$application->bootstrap();
 $appConfig = $application->getConfiguration();
 
-/**
- * Hack because both Engine and Profile use the baseurlpath.
- * @see https://github.com/OpenConext/OpenConext-engineblock/issues/89
- */
-$hostMatch = $appConfig->profile->simplesamlphp->hostMatch;
-if (substr($_SERVER['SERVER_NAME'], 0, strlen($hostMatch)) === $hostMatch) {
-	$baseUrlPath = $appConfig->profile->simplesamlphp->baseurlpath;
-}
-else {
-	$baseUrlPath = $appConfig->engine->simplesamlphp->baseurlpath;
-}
+$baseUrlPath = $appConfig->engine->simplesamlphp->baseurlpath;
 
 $config = array (
 	/**
@@ -108,18 +97,18 @@ $config = array (
 
 	/*
 	 * Logging.
-	 * 
+	 *
 	 * define the minimum log level to log
 	 *		LOG_ERR				No statistics, only errors
 	 *		LOG_WARNING			No statistics, only warnings/errors
-	 *		LOG_NOTICE			Statistics and errors 
+	 *		LOG_NOTICE			Statistics and errors
 	 *		LOG_INFO			Verbose logs
 	 *		LOG_DEBUG			Full debug logs - not reccomended for production
-	 * 
+	 *
 	 * Choose logging handler.
-	 * 
+	 *
 	 * Options: [syslog,file,errorlog]
-	 * 
+	 *
 	 */
 	'logging.level'		 => SimpleSAML_Logger::NOTICE,
 	'logging.handler'	 => 'syslog',
@@ -151,8 +140,8 @@ $config = array (
 
 	/*
 	 * Enable
-	 * 
-	 * Which functionality in simpleSAMLphp do you want to enable. Normally you would enable only 
+	 *
+	 * Which functionality in simpleSAMLphp do you want to enable. Normally you would enable only
 	 * one of the functionalities below, but in some cases you could run multiple functionalities.
 	 * In example when you are setting up a federation bridge.
 	 */
@@ -162,7 +151,7 @@ $config = array (
 	'enable.wsfed-sp'		=> false,
 	'enable.authmemcookie'	=> false,
 
-	/* 
+	/*
 	 * This value is the duration of the session in seconds. Make sure that the time duration of
 	 * cookies both at the SP and the IdP exceeds this duration.
 	 */
@@ -283,15 +272,15 @@ $config = array (
 	'idpdisco.extDiscoveryStorage' => NULL,
 
 	/*
-	 * IdP Discovery service look configuration. 
-	 * Wether to display a list of idp or to display a dropdown box. For many IdP' a dropdown box  
+	 * IdP Discovery service look configuration.
+	 * Wether to display a list of idp or to display a dropdown box. For many IdP' a dropdown box
 	 * gives the best use experience.
-	 * 
-	 * When using dropdown box a cookie is used to highlight the previously chosen IdP in the dropdown.  
+	 *
+	 * When using dropdown box a cookie is used to highlight the previously chosen IdP in the dropdown.
 	 * This makes it easier for the user to choose the IdP
-	 * 
+	 *
 	 * Options: [links,dropdown]
-	 * 
+	 *
 	 */
 	'idpdisco.layout' => 'dropdown',
 
@@ -337,7 +326,7 @@ $config = array (
 		 */
 		50 => 'core:AttributeLimit',
 
-		/* 
+		/*
 		 * Search attribute "distinguishedName" for pattern and replaces if found
 
 		60 => array(
@@ -345,7 +334,7 @@ $config = array (
 			'pattern'	=> '/OU=studerende/',
 			'replacement'	=> 'Student',
 			'subject'	=> 'distinguishedName',
-			'%replace',	
+			'%replace',
 		),
 		 */
 
@@ -353,9 +342,9 @@ $config = array (
 		 * Consent module is enabled (with no permanent storage, using cookies).
 
 		90 => array(
-			'class' 	=> 'consent:Consent', 
-			'store' 	=> 'consent:Cookie', 
-			'focus' 	=> 'yes', 
+			'class' 	=> 'consent:Consent',
+			'store' 	=> 'consent:Cookie',
+			'focus' 	=> 'yes',
 			'checked' 	=> TRUE
 		),
 		 */
@@ -520,11 +509,7 @@ $config = array (
 	 * ),
 	 *
 	 */
-	'memcache_store.servers' => array(
-		array(
-			array('hostname' => 'localhost'),
-		),
-	),
+	'memcache_store.servers' => array(),
 
 
 	/*

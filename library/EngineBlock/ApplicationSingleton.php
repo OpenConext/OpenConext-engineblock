@@ -1,9 +1,14 @@
 <?php
 
+use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
+use OpenConext\EngineBlock\Request\RequestId;
+use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
 define('ENGINEBLOCK_FOLDER_ROOT'       , realpath(__DIR__ . '/../../') . '/');
 define('ENGINEBLOCK_FOLDER_LIBRARY'    , ENGINEBLOCK_FOLDER_ROOT . 'library/');
 define('ENGINEBLOCK_FOLDER_APPLICATION', ENGINEBLOCK_FOLDER_ROOT . 'application/');
-define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_APPLICATION . 'modules/');
+define('ENGINEBLOCK_FOLDER_MODULES'    , ENGINEBLOCK_FOLDER_ROOT . 'app/Resources/views/modules/');
 define('ENGINEBLOCK_FOLDER_VENDOR'    , ENGINEBLOCK_FOLDER_ROOT . 'vendor/');
 
 require_once ENGINEBLOCK_FOLDER_VENDOR . 'autoload.php';
@@ -46,13 +51,6 @@ class EngineBlock_ApplicationSingleton
     protected $_log;
 
     /**
-     * The ID that allows one to track all log messages that belong together.
-     *
-     * @var string|null
-     */
-    protected $_logRequestId;
-
-    /**
      * @var Zend_Translate
      */
     protected $_translator;
@@ -78,9 +76,16 @@ class EngineBlock_ApplicationSingleton
     protected $_diContainer;
 
     /**
-     *
+     * @var ManualOrDecoratedActivationStrategy
      */
-    protected function __construct()
+    private $_activationStrategy;
+
+    /**
+     * @var null|RequestId
+     */
+    private $_requestId;
+
+    private function __construct()
     {
     }
 
@@ -95,6 +100,7 @@ class EngineBlock_ApplicationSingleton
         if (!isset(self::$s_instance)) {
             self::$s_instance = new self();
         }
+
         return self::$s_instance;
     }
 
@@ -117,11 +123,10 @@ class EngineBlock_ApplicationSingleton
      */
     public function flushLog($reason)
     {
-        $activationStrategy = EngineBlock_Log_Monolog_Handler_FingersCrossed_ManualOrErrorLevelActivationStrategyFactory::getManufacturedStrategy();
         $logger = $this->getLog();
 
-        if ($activationStrategy) {
-            $activationStrategy->activate();
+        if ($this->_activationStrategy) {
+            $this->_activationStrategy->activate();
             $logger->notice($reason);
         } elseif ($this->getConfiguration()->debug) {
             $logger->notice(sprintf("No log buffer to flush. Reason given for flushing: '%s'.", $reason));
@@ -131,13 +136,40 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     *
+     * @param LoggerInterface                     $logger
+     * @param ManualOrDecoratedActivationStrategy $activationStrategy
+     * @param RequestId                           $requestId
+     * @param ContainerInterface                  $container
      */
-    public function bootstrap()
-    {
+    public function bootstrap(
+        LoggerInterface $logger,
+        ManualOrDecoratedActivationStrategy $activationStrategy,
+        RequestId $requestId,
+        ContainerInterface $container
+    ) {
+        $this->setLogInstance($logger);
+        $this->_activationStrategy = $activationStrategy;
+        $this->_requestId = $requestId;
+
+        if ($container->get('engineblock.bridge.config')->get('functionalTesting')) {
+            $this->_diContainer = new EngineBlock_Application_FunctionalTestDiContainer($container);
+        } elseif ($container->getParameter('kernel.environment') === 'test') {
+            $this->_diContainer = new EngineBlock_Application_TestDiContainer($container);
+            $config             = new Zend_Config_Ini(
+                ENGINEBLOCK_FOLDER_APPLICATION . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
+                'base',
+                array('allowModifications' => true)
+            );
+            $config->testing    = true;
+            $this->setConfiguration($config);
+        } else {
+            $this->_diContainer = new EngineBlock_Application_DiContainer($container);
+        }
+
         if (!isset($this->_bootstrapper)) {
             $this->_bootstrapper = new EngineBlock_Application_Bootstrapper($this);
         }
+
         $this->_bootstrapper->bootstrap();
     }
 
@@ -195,12 +227,25 @@ class EngineBlock_ApplicationSingleton
     /**
      * @return array
      */
-    private function collectFeedbackInfo()
+    public function collectFeedbackInfo()
     {
+        if (isset($_SERVER['HTTP_USER_AGENT'])) {
+            $userAgent = $_SERVER['HTTP_USER_AGENT'];
+        } else {
+            $userAgent = 'not supplied';
+        }
+
+        $logRequestId = $this->getLogRequestId();
+        if ($logRequestId === null) {
+            $logRequestId = 'N/A - application not yet bootstrapped';
+        } else {
+            $logRequestId = $logRequestId->get();
+        }
+
         $feedbackInfo = array();
         $feedbackInfo['timestamp'] = date('c');
-        $feedbackInfo['requestId'] = $this->getLogRequestId() ?: 'N/A';
-        $feedbackInfo['userAgent'] = $_SERVER['HTTP_USER_AGENT'];
+        $feedbackInfo['requestId'] = $logRequestId;
+        $feedbackInfo['userAgent'] = $userAgent;
         $feedbackInfo['ipAddress'] = $this->getClientIpAddress();
 
         // @todo  reset this when login is succesful
@@ -447,23 +492,7 @@ class EngineBlock_ApplicationSingleton
      */
     public function getLogRequestId()
     {
-        return $this->_logRequestId;
-    }
-
-    /**
-     * @param string $id
-     * @return EngineBlock_ApplicationSingleton
-     */
-    public function setLogRequestId($id)
-    {
-        if (!is_string($id)) {
-            throw new InvalidArgumentException(
-                sprintf("Invalid log request ID specified: expected string, but got '%s'", gettype($id))
-            );
-        }
-
-        $this->_logRequestId = $id;
-        return $this;
+        return $this->_requestId;
     }
 
     public function getErrorHandler()
@@ -474,15 +503,6 @@ class EngineBlock_ApplicationSingleton
     public function setErrorHandler(EngineBlock_Application_ErrorHandler $errorHandler)
     {
         $this->_errorHandler = $errorHandler;
-        return $this;
-    }
-
-    /**
-     * @param \EngineBlock_Application_DiContainer $diContainer
-     */
-    public function setDiContainer(\EngineBlock_Application_DiContainer $diContainer)
-    {
-        $this->_diContainer = $diContainer;
         return $this;
     }
 

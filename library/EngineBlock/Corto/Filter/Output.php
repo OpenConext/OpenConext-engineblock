@@ -16,6 +16,8 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
      */
     protected function _getCommands()
     {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+
         return array(
             // If EngineBlock is in Processing mode (redirecting to it's self)
             // Then don't continue with the rest of the modifications
@@ -23,9 +25,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
 
             // Check if the request was for a VO, if it was, validate that the user is a member of that vo
             new EngineBlock_Corto_Filter_Command_ValidateVoMembership(),
-
-            // Check if the Policy Decision Point needs to be consulted for this request
-            new EngineBlock_Corto_Filter_Command_EnforcePolicy(),
 
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
@@ -53,7 +52,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
 
             // Log the login
-            new EngineBlock_Corto_Filter_Command_LogLogin(),
+            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger()),
         );
     }
 }

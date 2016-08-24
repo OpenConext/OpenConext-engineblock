@@ -444,22 +444,11 @@ OpenConext.Tabs = function () {
   }
 };
 
-OpenConext.Profile = function () {
-  $(document.body).on('click', '#MyAppsTable .sp-row .sp-display-name', function (event) {
-    event.preventDefault();
-
-    $(this).parents('.sp-row')
-        .next('.attribute-table-row')
-        .toggleClass('attribute-table-row-expanded');
-  });
-};
-
 $('html').removeClass('no-js');
 $(function init() {
 
   new OpenConext.Tabs();
   new OpenConext.Discover();
-  new OpenConext.Profile();
   FastClick.attach(document.body);
 
   if ($('#engine-main-page').length > 0) {
