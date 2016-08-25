@@ -6,6 +6,17 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1000 }
 
+    engineblock.listener.error_response_time_padding:
+        class: OpenConext\EngineBlockBundle\EventListener\ErrorResponseTimePaddingListener
+        arguments:
+            - "@debug.stopwatch"
+            - "@router"
+            - "@engineblock.compat.logger"
+            - "@engineblock.bridge.error_reporter"
+            - "%padded_error_response_time%"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 1000 }
+
     engineblock.listener.redirect_to_feedback_page_exception:
         class: OpenConext\EngineBlockBundle\EventListener\RedirectToFeedbackPageExceptionListener
         arguments:
