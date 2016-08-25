@@ -1,4 +1,11 @@
 services:
+    engineblock.listener.start_response:
+        class: OpenConext\EngineBlockBundle\EventListener\StartResponseListener
+        arguments:
+            - "@debug.stopwatch"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1000 }
+
     engineblock.listener.redirect_to_feedback_page_exception:
         class: OpenConext\EngineBlockBundle\EventListener\RedirectToFeedbackPageExceptionListener
         arguments:
