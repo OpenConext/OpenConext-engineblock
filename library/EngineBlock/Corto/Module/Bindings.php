@@ -3,6 +3,7 @@
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -299,7 +300,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
             }
 
-            $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+            try {
+                $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+            } catch (Exception $exception) {
+                throw new ResponseProcessingFailedException(
+                    sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
+                );
+            }
 
             // We only support 1 assertion
             if (count($assertions) > 1) {
@@ -310,6 +317,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
 
             $sspResponse->setAssertions($assertions);
+        }
+        catch (ResponseProcessingFailedException $e) {
+            // Pass through, so exception listener handles it
+            throw $e;
         }
         // This misnamed exception is only thrown when the Response status code is not Success
         // If so, let the Corto Output Filters handle it.
