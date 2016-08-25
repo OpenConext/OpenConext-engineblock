@@ -1,5 +1,5 @@
 services:
-    engineblock.listener.single_sign_on_exception:
+    engineblock.listener.redirect_to_feedback_page_exception:
         class: OpenConext\EngineBlockBundle\EventListener\RedirectToFeedbackPageExceptionListener
         arguments:
             - "@engineblock.compat.application"
