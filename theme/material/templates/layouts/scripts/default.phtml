@@ -58,7 +58,7 @@
         <?php if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'): ?>
           <form method="post" action="">
             <?php foreach ($_POST as $key => $value): ?>
-              <input type="hidden" name="<?= EngineBlock_View::htmlSpecialCharsText($key) ?>" value="<?= EngineBlock_View::htmlSpecialCharsText($value) ?>">
+              <input type="hidden" name="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($key) ?>" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($value) ?>">
             <?php endforeach ?>
             <ul class="comp-language">
               <li>
