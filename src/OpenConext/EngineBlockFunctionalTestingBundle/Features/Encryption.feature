@@ -27,6 +27,7 @@ Feature:
   Scenario: EngineBlock rejects invalid RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
+      And feature "eb.encrypted_assertions_require_outer_signature" is enabled
       And the IdP encrypts its assertions with the public key in "src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt"
      When I log in at "Dummy SP"
       And I pass through the SP
