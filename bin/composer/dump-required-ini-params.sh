@@ -45,7 +45,7 @@ $ymlContent = array(
         'feature_api_metadata_push'                               => (bool) $config->get('engineApi.features.metadataPush'),
         'feature_api_consent_listing'                             => (bool) $config->get('engineApi.features.consentListing'),
         'feature_api_metadata_api'                                => (bool) $config->get('engineApi.features.metadataApi'),
-        'padded_error_response_time'                              => (int) $config->get('paddedErrorResponseTime'),
+        'minimum_execution_time_on_invalid_response'              => (int) $config->get('minimumExecutionTimeOnInvalidResponse'),
     )
 );
 

@@ -1,19 +1,19 @@
 services:
-    engineblock.listener.start_response:
-        class: OpenConext\EngineBlockBundle\EventListener\StartResponseListener
+    engineblock.listener.execution_time_tracker:
+        class: OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker
         arguments:
             - "@debug.stopwatch"
         tags:
-            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 1000 }
+            - { name: kernel.event_listener, event: kernel.request, method: startTracking, priority: 1000 }
 
     engineblock.listener.error_response_time_padding:
         class: OpenConext\EngineBlockBundle\EventListener\ErrorResponseTimePaddingListener
         arguments:
-            - "@debug.stopwatch"
+            - "@engineblock.listener.execution_time_tracker"
             - "@router"
             - "@engineblock.compat.logger"
             - "@engineblock.bridge.error_reporter"
-            - "%padded_error_response_time%"
+            - "@engineblock.minimum_execution_time_on_processing_error"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 1000 }
 

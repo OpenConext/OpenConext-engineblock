@@ -1,4 +1,10 @@
 services:
+    engineblock.minimum_execution_time_on_processing_error:
+        class: OpenConext\EngineBlockBundle\Value\ExecutionTime
+        factory: [ OpenConext\EngineBlockBundle\Value\ExecutionTime, "of" ]
+        arguments:
+            - "%minimum_execution_time_on_invalid_response%"
+
     engineblock.request.request_id_generator:
         public: false
         class: OpenConext\EngineBlock\Request\UniqidGenerator

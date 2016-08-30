@@ -2,21 +2,20 @@
 
 namespace OpenConext\EngineBlockBundle\EventListener;
 
-use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use OpenConext\EngineBlockBundle\Exception\AddExecutionTimePadding;
+use OpenConext\EngineBlockBundle\Value\ExecutionTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Stopwatch\Stopwatch;
 
 class ErrorResponseTimePaddingListener
 {
     /**
-     * @var Stopwatch
+     * @var ExecutionTimeTracker
      */
-    private $stopwatch;
+    private $executionTimeTracker;
 
     /**
      * @var UrlGeneratorInterface
@@ -34,55 +33,54 @@ class ErrorResponseTimePaddingListener
     private $errorReporter;
 
     /**
-     * @var integer
+     * @var ExecutionTime
      */
-    private $paddedResponseTime;
+    private $minimumExecutionTime;
 
     public function __construct(
-        Stopwatch $stopwatch,
+        ExecutionTimeTracker $executionTimeTracker,
         UrlGeneratorInterface $urlGenerator,
         LoggerInterface $logger,
         ErrorReporter $errorReporter,
-        $paddedResponseTime
+        $minimumExecutionTimeWhenProcessingFails
     ) {
-        Assertion::integer($paddedResponseTime);
-
-        $this->stopwatch          = $stopwatch;
-        $this->urlGenerator       = $urlGenerator;
-        $this->logger             = $logger;
-        $this->errorReporter      = $errorReporter;
-        $this->paddedResponseTime = $paddedResponseTime;
+        $this->executionTimeTracker = $executionTimeTracker;
+        $this->urlGenerator         = $urlGenerator;
+        $this->logger               = $logger;
+        $this->errorReporter        = $errorReporter;
+        $this->minimumExecutionTime = $minimumExecutionTimeWhenProcessingFails;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
     {
         $exception = $event->getException();
 
-        if (!$exception instanceof PadResponseTimeMarkerInterface) {
+        if (!$exception instanceof AddExecutionTimePadding) {
             return;
         }
 
-        $responseTimeInSeconds        = $this->stopwatch->stop('response')->getDuration() / 1000;
-        $responseTimePaddingInSeconds = $this->paddedResponseTime - $responseTimeInSeconds;
+        if (!$this->executionTimeTracker->isTracking()) {
+            return;
+        }
 
-        if ($responseTimePaddingInSeconds > 0) {
+        $this->logger->warning(
+            sprintf('Handling exception: "%s": "%s"', get_class($exception), $exception->getMessage())
+        );
+
+        if ($this->executionTimeTracker->currentExecutionTimeExceeds($this->minimumExecutionTime)) {
             $this->logger->warning(sprintf(
-                'Caught Exception "%s":"%s", padding response time with %f seconds',
-                get_class($exception),
-                $exception->getMessage(),
-                $responseTimePaddingInSeconds
+                'Not padding response time: it exceeds the configured padded response time (%d seconds)',
+                $this->minimumExecutionTime
             ));
-
-            usleep($responseTimePaddingInSeconds * 1000000);
         } else {
-            $this->logger->warning(sprintf(
-                'Caught Exception "%s":"%s", not padding response time: '
-                . 'it exceeds the configured padded response time (%d seconds) by %f seconds',
-                get_class($exception),
-                $exception->getMessage(),
-                $this->paddedResponseTime,
-                $responseTimePaddingInSeconds
+            $requiredPadding = $this->executionTimeTracker->timeRemainingUntil($this->minimumExecutionTime);
+
+            $this->logger->info(sprintf(
+                'Padding response time with %d milliseconds',
+                $requiredPadding->getExecutionTime()
             ));
+
+            usleep($requiredPadding->toMicroseconds());
         }
 
         $message         = 'Unable to verify message';
