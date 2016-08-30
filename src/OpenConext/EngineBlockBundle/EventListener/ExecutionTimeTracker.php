@@ -7,7 +7,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 
 final class ExecutionTimeTracker
 {
-    const IDENTIFIER = 'execution-time';
+    const NAME = 'execution-time';
 
     /**
      * @var Stopwatch
@@ -24,7 +24,7 @@ final class ExecutionTimeTracker
      */
     public function startTracking()
     {
-        $this->stopwatch->start(self::IDENTIFIER);
+        $this->stopwatch->start(self::NAME);
     }
 
     /**
@@ -32,7 +32,7 @@ final class ExecutionTimeTracker
      */
     public function isTracking()
     {
-        return $this->stopwatch->isStarted(self::IDENTIFIER);
+        return $this->stopwatch->isStarted(self::NAME);
     }
 
     /**
@@ -41,7 +41,7 @@ final class ExecutionTimeTracker
      */
     public function currentExecutionTimeExceeds(ExecutionTime $executionTime)
     {
-        $stopwatchEvent = $this->stopwatch->getEvent(self::IDENTIFIER);
+        $stopwatchEvent = $this->stopwatch->getEvent(self::NAME);
 
         return $stopwatchEvent->getDuration() > $executionTime->getExecutionTime();
     }
@@ -52,7 +52,7 @@ final class ExecutionTimeTracker
      */
     public function timeRemainingUntil(ExecutionTime $executionTime)
     {
-        $stopwatchEvent = $this->stopwatch->getEvent(self::IDENTIFIER);
+        $stopwatchEvent = $this->stopwatch->getEvent(self::NAME);
 
         if ($this->currentExecutionTimeExceeds($executionTime)) {
             return ExecutionTime::of(0);
