@@ -319,7 +319,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $sspResponse->setAssertions($assertions);
         }
         catch (ResponseProcessingFailedException $e) {
-            // Pass through, so exception listener handles it
+            // Passthrough, should be handled at a different level protecting against oracle attacks
             throw $e;
         }
         // This misnamed exception is only thrown when the Response status code is not Success
