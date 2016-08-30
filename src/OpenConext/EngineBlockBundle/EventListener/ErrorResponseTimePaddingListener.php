@@ -4,7 +4,7 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlockBridge\ErrorReporter;
-use OpenConext\EngineBlockBundle\Exception\PadResponseTimeMarkerInterface;
+use OpenConext\EngineBlockBundle\Exception\AddExecutionTimePadding;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;

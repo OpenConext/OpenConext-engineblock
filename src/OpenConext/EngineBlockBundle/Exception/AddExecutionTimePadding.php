@@ -2,6 +2,6 @@
 
 namespace OpenConext\EngineBlockBundle\Exception;
 
-interface PadResponseTimeMarkerInterface
+interface AddExecutionTimePadding
 {
 }
