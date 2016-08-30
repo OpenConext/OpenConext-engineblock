@@ -6,11 +6,15 @@
         convertNoticesToExceptions="false"
         convertWarningsToExceptions="false">
     <testsuites>
-        <!-- Declare a testsuite called All -->
-        <testsuite name="All">
-            <!-- Look for our unit tests in the following directory. They must end with Test.php -->
-            <directory suffix="Test.php">.</directory>
-            <directory suffix="Test.php">../src</directory>
+        <testsuite name="unit">
+            <directory suffix="Test.php">unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory suffix="Test.php">integration</directory>
+        </testsuite>
+        <testsuite name="eb4">
+            <directory suffix="Test.php">library</directory>
+            <directory suffix="Test.php">controllers</directory>
         </testsuite>
     </testsuites>
 
