@@ -24,6 +24,12 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Invalid Identity Provider response"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
 
     @WIP
     Scenario: I log in at my Identity Provider, but the IdP decides the user does not have access.
@@ -33,6 +39,12 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Invalid Identity Provider response"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
 
   @WIP
   Scenario: I log in at my Identity Provider, but it has changed (private/public) keys without notifying OpenConext
@@ -42,6 +54,12 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Invalid Identity Provider response"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
 
   Scenario: I want to log on, but this Service Provider may not access any Identity Providers
     When I log in at "Unconnected SP"
