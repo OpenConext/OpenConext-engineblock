@@ -16,7 +16,6 @@ Feature:
       And SP "Unconnected SP" uses a whitelist for access control
       And an unregistered Service Provider named "Unregistered SP"
 
-  @WIP
   Scenario: I log in at my Identity Provider, but something goes wrong and it returns an error response.
     Given the IdP is configured to always return Responses with StatusCode Requester/InvalidNameIDPolicy
       And the IdP is configured to always return Responses with StatusMessage "NameIdPolicy is invalid"
@@ -31,7 +30,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-    @WIP
     Scenario: I log in at my Identity Provider, but the IdP decides the user does not have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
       And the IdP is configured to always return Responses with StatusMessage "Invalid IP range"
@@ -46,7 +44,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-  @WIP
   Scenario: I log in at my Identity Provider, but it has changed (private/public) keys without notifying OpenConext
     Given the IdP uses the private key at "src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.key"
       And the IdP uses the certificate at "src/OpenConext/EngineBlockFunctionalTestingBundle//Resources/keys/rolled-over.crt"
