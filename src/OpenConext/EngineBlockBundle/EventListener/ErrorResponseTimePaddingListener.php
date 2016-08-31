@@ -69,8 +69,8 @@ class ErrorResponseTimePaddingListener
 
         if ($this->executionTimeTracker->currentExecutionTimeExceeds($this->minimumExecutionTime)) {
             $this->logger->warning(sprintf(
-                'Not padding response time: it exceeds the configured padded response time (%d seconds)',
-                $this->minimumExecutionTime
+                'Not padding response time: it exceeds the configured padded response time (%d milliseconds)',
+                $this->minimumExecutionTime->getExecutionTime()
             ));
         } else {
             $requiredPadding = $this->executionTimeTracker->timeRemainingUntil($this->minimumExecutionTime);
