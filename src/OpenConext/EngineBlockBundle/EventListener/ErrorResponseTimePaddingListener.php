@@ -42,13 +42,13 @@ class ErrorResponseTimePaddingListener
         UrlGeneratorInterface $urlGenerator,
         LoggerInterface $logger,
         ErrorReporter $errorReporter,
-        $minimumExecutionTimeWhenProcessingFails
+        ExecutionTime $minimumExecutionTime
     ) {
         $this->executionTimeTracker = $executionTimeTracker;
         $this->urlGenerator         = $urlGenerator;
         $this->logger               = $logger;
         $this->errorReporter        = $errorReporter;
-        $this->minimumExecutionTime = $minimumExecutionTimeWhenProcessingFails;
+        $this->minimumExecutionTime = $minimumExecutionTime;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
