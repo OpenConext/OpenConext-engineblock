@@ -10,7 +10,6 @@ Feature:
       And an Identity Provider named "Dummy Idp"
       And a Service Provider named "Dummy SP"
 
-  @WIP
   Scenario: EngineBlock accepts RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
@@ -23,7 +22,6 @@ Feature:
       And I pass through EngineBlock
      Then the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
 
-  @WIP
   Scenario: EngineBlock rejects invalid RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
@@ -35,7 +33,6 @@ Feature:
       And I pass through the IdP
      Then I should see "Invalid Identity Provider response"
 
-  @WIP
   Scenario: EngineBlock rejects Shared Key Encrypted Responses
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
@@ -46,7 +43,6 @@ Feature:
       And I pass through the IdP
      Then I should see "Invalid Identity Provider response"
 
-  @WIP
   Scenario: EngineBlock rejects encrypted responses if the feature "eb.encrypted_assertions" is not enabled
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is disabled
@@ -58,7 +54,6 @@ Feature:
      Then the url should match "authentication/feedback/received-invalid-response"
       And I should see "Invalid Identity Provider response"
 
-  @WIP
   Scenario: EngineBlock rejects encrypted responses without outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is enabled
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
@@ -72,7 +67,6 @@ Feature:
      Then the url should match "authentication/feedback/received-invalid-response"
       And I should see "Invalid Identity Provider response"
 
-  @WIP
   Scenario: EngineBlock accepts encrypted responses without an outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is disabled
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
