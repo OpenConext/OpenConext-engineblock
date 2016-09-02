@@ -62,7 +62,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
             );
         }
         /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
-        $response = $_SESSION['consent'][$_POST['ID']]['response'];
+        $response = $this->deserializeDomNodes($_SESSION['consent'][$_POST['ID']]['response']);
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
@@ -112,5 +112,56 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
                 '{user}' => $this->_preferredNameAttributeFilter->getAttribute($attributes)
             )
         );
+    }
+
+    private function deserializeDomNodes(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
+    {
+        if (!$response) {
+            return $response;
+        }
+
+        $assertions = $response->getAssertions();
+
+        foreach ($assertions as $assertion) {
+            $attributes = $assertion->getAttributes();
+
+            foreach ($attributes as $attributeKey => $attributeValues) {
+                // Multiple values
+                if (is_array($attributeValues)) {
+                    foreach ($attributeValues as $key => $value) {
+                        // Caution: XML can be injected!
+                        if (!@simplexml_load_string($value)) {
+                            continue;
+                        }
+
+                        $dom = new DOMDocument();
+                        $dom->loadXML($value);
+
+                        $temporaryDom = new DOMDocument;
+                        $temporaryDom->appendChild($temporaryDom->importNode($dom->documentElement, true));
+
+                        $attributes[$attributeKey][$key] = $temporaryDom->childNodes;
+                    }
+                // Single value
+                } else {
+                    // Caution: XML can be injected!
+                    if (!@simplexml_load_string($attributeValues)) {
+                        continue;
+                    }
+
+                    $dom = new DOMDocument();
+                    $dom->loadXML($value);
+
+                    $temporaryDom = new DOMDocument;
+                    $temporaryDom->appendChild($temporaryDom->importNode($dom->documentElement, true));
+
+                    $attributes[$attributeKey] = $temporaryDom->childNodes;
+                }
+            }
+
+            $assertion->setAttributes($attributes);
+        }
+
+        return $response;
     }
 }
