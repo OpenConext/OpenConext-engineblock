@@ -98,7 +98,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "OpenConext\\": "tests/OpenConext/"
+            "OpenConext\\": ["tests/unit/OpenConext/", "tests/integration/OpenConext/"]
         }
     },
     "config": {

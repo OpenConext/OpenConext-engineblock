@@ -22,9 +22,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Identity Provider error"
-      And I should see "InvalidNameIDPolicy"
-      And I should see "NameIdPolicy is invalid"
+     Then I should see "Invalid Identity Provider response"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -38,8 +36,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Identity Provider error"
-      And I should see "RequestDenied"
+     Then I should see "Invalid Identity Provider response"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -53,7 +50,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid signature on Identity Provider response"
+     Then I should see "Invalid Identity Provider response"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
