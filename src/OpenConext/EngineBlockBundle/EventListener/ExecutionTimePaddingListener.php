@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class ErrorResponseTimePaddingListener
+final class ExecutionTimePaddingListener
 {
     /**
      * @var ExecutionTimeTracker

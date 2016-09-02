@@ -7,7 +7,7 @@ services:
             - { name: kernel.event_listener, event: kernel.request, method: startTracking, priority: 1000 }
 
     engineblock.listener.error_response_time_padding:
-        class: OpenConext\EngineBlockBundle\EventListener\ErrorResponseTimePaddingListener
+        class: OpenConext\EngineBlockBundle\EventListener\ExecutionTimePaddingListener
         arguments:
             - "@engineblock.listener.execution_time_tracker"
             - "@router"
