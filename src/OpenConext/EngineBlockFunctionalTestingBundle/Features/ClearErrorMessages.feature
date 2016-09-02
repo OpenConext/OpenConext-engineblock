@@ -81,8 +81,8 @@ Feature:
      And I should see "EntityID:"
      And I should not see "Identity Provider:"
 
-  Scenario: An Identity Provider misrepresents it's entityId and is thus not recognized by EB
-    Given the IdP thinks it's EntityID is "https://wrong.example.edu/metadata"
+  Scenario: An Identity Provider misrepresents its entityId and is thus not recognized by EB
+    Given the IdP thinks its EntityID is "https://wrong.example.edu/metadata"
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
@@ -163,5 +163,5 @@ Feature:
 #
 #  Scenario: An attribute manipulation determines that a user may not continue
 #
-#  Scenario: An Identity Provider dates it's Assertions in the future.
+#  Scenario: An Identity Provider dates its assertions in the future.
 #  Scenario: I want to log in to a service but am not a member of the appropriate VO

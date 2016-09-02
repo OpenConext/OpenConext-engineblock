@@ -200,9 +200,9 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^the IdP thinks it\'s EntityID is "([^"]*)"$/
+     * @Given /^the IdP thinks its EntityID is "([^"]*)"$/
      */
-    public function theIdpThinksItSEntityidIs($entityId)
+    public function theIdpThinksItsEntityidIs($entityId)
     {
         /** @var MockIdentityProvider $idp */
         $idp = $this->mockIdpRegistry->getOnly();
@@ -239,9 +239,22 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^the IdP encrypts it\'s assertions with the public key in "([^"]*)"$/
+     * @Given /^the IdP does not sign its responses$/
      */
-    public function theIdpEncryptsItSAssertionsWithThePublicKeyIn($certFilePath)
+    public function theIdpDoesNotSignItsResponses()
+    {
+        /** @var MockIdentityProvider $idp */
+        $idp = $this->mockIdpRegistry->getOnly();
+
+        $idp->doNotUseResponseSigning();
+
+        $this->mockIdpRegistry->save();
+    }
+
+    /**
+     * @Given /^the IdP encrypts its assertions with the public key in "([^"]*)"$/
+     */
+    public function theIdpEncryptsItsAssertionsWithThePublicKeyIn($certFilePath)
     {
         /** @var MockIdentityProvider $idp */
         $idp = $this->mockIdpRegistry->getOnly();
@@ -252,9 +265,9 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^the IdP encrypts it\'s assertions with the shared key "([^"]*)"$/
+     * @Given /^the IdP encrypts its assertions with the shared key "([^"]*)"$/
      */
-    public function theIdpEncryptsItSAssertionsWithTheSharedKey($sharedKey)
+    public function theIdpEncryptsItsAssertionsWithTheSharedKey($sharedKey)
     {
         /** @var MockIdentityProvider $idp */
         $idp = $this->mockIdpRegistry->getOnly();
