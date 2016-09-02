@@ -126,6 +126,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this->container->get('engineblock.bridge.authentication.user_directory');
     }
 
+    /**
+     * @return OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
+     */
+    public function getFeatureConfiguration()
+    {
+        return $this->container->get('engineblock.features');
+    }
+
     protected function registerMetadataRepository()
     {
         $this[self::METADATA_REPOSITORY] = function (EngineBlock_Application_DiContainer $container)
@@ -280,5 +288,10 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getAttributeValidator()
     {
         return $this[self::ATTRIBUTE_VALIDATOR];
+    }
+
+    public function getFunctionalTestingFeatureConfiguration()
+    {
+        return $this->container->get('engineblock.functional_testing.fixture.features');
     }
 }

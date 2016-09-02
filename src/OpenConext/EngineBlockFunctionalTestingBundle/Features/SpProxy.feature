@@ -88,7 +88,7 @@ Feature:
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
       # Test to see that we don't trust trusted proxies without request signing
-      #And SP "Step Up" signs it's requests
+      #And SP "Step Up" signs its requests
      When I log in at "Step Up"
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
@@ -100,7 +100,7 @@ Feature:
   Scenario: User logs in via trusted proxy and sees consent for the destination
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
      When I log in at "Step Up"
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
@@ -113,7 +113,7 @@ Feature:
     Given SP "Step Up" is authenticating for SP "Far SP"
       And SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
      When I log in at "Step Up"
       And I pass through EngineBlock
       And I pass through the IdP
@@ -125,7 +125,7 @@ Feature:
   Scenario: User logs in via trusted proxy and sees no consent as the destination has it disabled
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
       And SP "Loa SP" does not require consent
      When I log in at "Step Up"
       And I select "AlwaysAuth" on the WAYF
@@ -136,7 +136,7 @@ Feature:
   Scenario: User logs in via trusted proxy and sees no consent as the destination has it disabled
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
       And SP "Step Up" does not require consent
      When I log in at "Step Up"
       And I select "AlwaysAuth" on the WAYF
@@ -147,7 +147,7 @@ Feature:
   Scenario: User logs in via trusted proxy and attribute release policy for destination is executed
     Given SP "Step Up" is authenticating for SP "Loa SP"
     And SP "Step Up" is a trusted proxy
-    And SP "Step Up" signs it's requests
+    And SP "Step Up" signs its requests
     And SP "Step Up" does not require consent
     And SP "Loa SP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
     When I log in at "Step Up"
@@ -161,7 +161,7 @@ Feature:
   Scenario: User logs in via trusted proxy and attribute manipulation for proxy and destination are executed
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
       And SP "Step Up" does not require consent
       And SP "Step Up" has the following Attribute Manipulation:
       """
@@ -182,7 +182,7 @@ Feature:
   Scenario: User logs in via trusted proxy and attribute release policy for proxy and destination are executed
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
       And SP "Step Up" does not require consent
       And SP "Loa SP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
      When I log in at "Step Up"
@@ -196,7 +196,7 @@ Feature:
   Scenario: User logs in via trusted proxy and attribute release policy for proxy and destination are executed
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
       And SP "Step Up" does not require consent
       And SP "Step Up" allows an attribute named "urn:mace:dir:attribute-def:uid"
       And SP "Loa SP" allows an attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
@@ -211,7 +211,7 @@ Feature:
   Scenario: User logs in via trusted proxy and I get a NameID for the SP and eduPersonTargettedID for the destination
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
       And SP "Step Up" does not require consent
       And SP "Step Up" uses the Unspecified NameID format
      When I log in at "Step Up"
@@ -225,7 +225,7 @@ Feature:
   Scenario: User logs in at test SP and via prod trusted proxy and is denied access
     Given SP "Step Up" is authenticating for SP "Test SP"
       And SP "Step Up" is a trusted proxy
-      And SP "Step Up" signs it's requests
+      And SP "Step Up" signs its requests
       And SP "Step Up" does not require consent
       And SP "Step Up" uses the Unspecified NameID format
      When I log in at "Step Up"

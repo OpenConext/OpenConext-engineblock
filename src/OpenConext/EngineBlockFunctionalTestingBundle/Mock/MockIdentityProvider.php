@@ -221,6 +221,12 @@ class MockIdentityProvider extends AbstractMockEntityRole
         return isset($this->descriptor->Extensions['SignResponses']);
     }
 
+    public function doNotUseResponseSigning()
+    {
+        unset($this->descriptor->Extensions['SignResponses']);
+        return $this;
+    }
+
     public function doNotUseAssertionSigning()
     {
         unset($this->descriptor->Extensions['SignAssertions']);

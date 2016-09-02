@@ -3,6 +3,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use EngineBlock_Saml2_IdGenerator;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
@@ -46,12 +47,23 @@ class EngineBlockContext extends AbstractSubContext
     protected $spsConfigUrl;
 
     /**
+     * @var FunctionalTestingFeatureConfiguration
+     */
+    private $features;
+
+    /**
+     * @var boolean
+     */
+    private $usingFeatures = false;
+
+    /**
      * @param ServiceRegistryFixture $serviceRegistry
-     * @param EngineBlock            $engineBlock
-     * @param EntityRegistry         $mockSpRegistry
-     * @param EntityRegistry         $mockIdpRegistry
-     * @param string                 $spsConfigUrl
-     * @param string                 $idpsConfigUrl
+     * @param EngineBlock $engineBlock
+     * @param EntityRegistry $mockSpRegistry
+     * @param EntityRegistry $mockIdpRegistry
+     * @param string $spsConfigUrl
+     * @param string $idpsConfigUrl
+     * @param FunctionalTestingFeatureConfiguration $features
      */
     public function __construct(
         ServiceRegistryFixture $serviceRegistry,
@@ -59,7 +71,8 @@ class EngineBlockContext extends AbstractSubContext
         EntityRegistry $mockSpRegistry,
         EntityRegistry $mockIdpRegistry,
         $spsConfigUrl,
-        $idpsConfigUrl
+        $idpsConfigUrl,
+        FunctionalTestingFeatureConfiguration $features
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
@@ -67,6 +80,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->mockIdpRegistry = $mockIdpRegistry;
         $this->spsConfigUrl = $spsConfigUrl;
         $this->idpsConfigUrl = $idpsConfigUrl;
+        $this->features = $features;
     }
 
     /**
@@ -248,5 +262,33 @@ class EngineBlockContext extends AbstractSubContext
     public function iLogoutAtEngineBlock()
     {
         $this->getMainContext()->getMinkContext()->visit($this->engineBlock->logoutLocation());
+    }
+
+    /**
+     * @Given /^feature "([^"]*)" is enabled$/
+     */
+    public function featureIsEnabled($feature)
+    {
+        $this->usingFeatures = true;
+        $this->features->save($feature, true);
+    }
+
+    /**
+     * @Given /^feature "([^"]*)" is disabled$/
+     */
+    public function featureIsDisabled($feature)
+    {
+        $this->usingFeatures = true;
+        $this->features->save($feature, false);
+    }
+
+    /**
+     * @AfterScenario
+     */
+    public function cleanUpFeatures()
+    {
+        if ($this->usingFeatures) {
+            $this->features->clean();
+        }
     }
 }

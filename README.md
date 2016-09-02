@@ -25,7 +25,7 @@ See the [UPGRADING.md](UPGRADING.md) file
 * Linux
 * Apache
 * PHP 5.6:
-    - ldap (optional)
+    - ldap
     - libxml
     - mcrypt
 * MySQL > 5.x with settings:

@@ -12,7 +12,8 @@ Feature:
 
   Scenario: EngineBlock accepts RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
-      And the IdP encrypts it's assertions with the public key in "/etc/openconext/engineblock.crt"
+      And feature "eb.encrypted_assertions" is enabled
+      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
      When I log in at "Dummy SP"
       And I pass through the SP
       And I pass through EngineBlock
@@ -23,7 +24,9 @@ Feature:
 
   Scenario: EngineBlock rejects invalid RSA Encrypted Responses
     Given the SP uses the HTTP POST Binding
-      And the IdP encrypts it's assertions with the public key in "src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt"
+      And feature "eb.encrypted_assertions" is enabled
+      And feature "eb.encrypted_assertions_require_outer_signature" is enabled
+      And the IdP encrypts its assertions with the public key in "src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.crt"
      When I log in at "Dummy SP"
       And I pass through the SP
       And I pass through EngineBlock
@@ -32,9 +35,48 @@ Feature:
 
   Scenario: EngineBlock rejects Shared Key Encrypted Responses
     Given the SP uses the HTTP POST Binding
-      And the IdP encrypts it's assertions with the shared key "IUVupkwUmm1hO6P2crD2WM1aQUmyomBA"
+      And feature "eb.encrypted_assertions" is enabled
+      And the IdP encrypts its assertions with the shared key "IUVupkwUmm1hO6P2crD2WM1aQUmyomBA"
      When I log in at "Dummy SP"
       And I pass through the SP
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Invalid Identity Provider response"
+
+  Scenario: EngineBlock rejects encrypted responses if the feature "eb.encrypted_assertions" is not enabled
+    Given the SP uses the HTTP POST Binding
+      And feature "eb.encrypted_assertions" is disabled
+      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
+     When I log in at "Dummy SP"
+      And I pass through the SP
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then the url should match "authentication/feedback/received-invalid-response"
+      And I should see "Invalid Identity Provider response"
+
+  Scenario: EngineBlock rejects encrypted responses without outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is enabled
+    Given the SP uses the HTTP POST Binding
+      And feature "eb.encrypted_assertions" is enabled
+      And feature "eb.encrypted_assertions_require_outer_signature" is enabled
+      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
+      And the IdP does not sign its responses
+     When I log in at "Dummy SP"
+      And I pass through the SP
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then the url should match "authentication/feedback/received-invalid-response"
+      And I should see "Invalid Identity Provider response"
+
+  Scenario: EngineBlock accepts encrypted responses without an outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is disabled
+    Given the SP uses the HTTP POST Binding
+      And feature "eb.encrypted_assertions" is enabled
+      And feature "eb.encrypted_assertions_require_outer_signature" is disabled
+     When I log in at "Dummy SP"
+      And the IdP encrypts its assertions with the public key in "/etc/openconext/engineblock.crt"
+      And the IdP does not sign its responses
+      And I pass through the SP
+      And I pass through EngineBlock
+      And I pass through the IdP
+      And I give my consent
+      And I pass through EngineBlock
+     Then the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"

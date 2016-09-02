@@ -31,7 +31,7 @@ Feature:
 
   Scenario: EngineBlock accepts Signed AuthnRequests using HTTP-POST binding
     Given the SP uses the HTTP POST Binding
-      And the SP signs it's requests
+      And the SP signs its requests
      When I log in at "Dummy SP"
       And I pass through the SP
       And I pass through EngineBlock
