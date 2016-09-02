@@ -16,6 +16,8 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
      */
     protected function _getCommands()
     {
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+
         $logger = $this->_server->getSystemLog();
         return array(
             // Show an error if we get responses that do not have the Success status code
@@ -57,6 +59,42 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
 
             // Apply the Attribute Release Policy before we do consent.
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
+
+            // The following actions were previously in the EngineBlock_Corto_Filter_Output
+            // If EngineBlock is in Processing mode (redirecting to it's self)
+            // Then don't continue with the rest of the modifications
+            new EngineBlock_Corto_Filter_Command_RejectProcessingMode(),
+
+            // Check if the request was for a VO, if it was, validate that the user is a member of that vo
+            new EngineBlock_Corto_Filter_Command_ValidateVoMembership(),
+
+            // Add collabPersonId attribute
+            new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
+
+            // Run custom attribute manipulations
+            new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
+                EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_SP
+            ),
+
+            // Run custom attribute manipulations in case we are behind a trusted proxy.
+            new EngineBlock_Corto_Filter_Command_RunAttributeManipulations(
+                EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_REQUESTER_SP
+            ),
+
+            // Set the persistent Identifier for this user on this SP
+            new EngineBlock_Corto_Filter_Command_SetNameId(),
+
+            // Add the appropriate NameID to the 'eduPeronTargetedID'.
+            new EngineBlock_Corto_Filter_Command_AddEduPersonTargettedId(),
+
+            // Apply ARP to custom added attributes one last time for the eduPersonTargetedId
+            new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
+
+            // Convert all attributes to their OID format (if known) and add these.
+            new EngineBlock_Corto_Filter_Command_DenormalizeAttributes(),
+
+            // Log the login
+            new EngineBlock_Corto_Filter_Command_LogLogin($diContainer->getAuthenticationLogger()),
         );
     }
 }
