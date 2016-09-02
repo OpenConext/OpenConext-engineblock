@@ -13,7 +13,7 @@ services:
             - "@router"
             - "@engineblock.compat.logger"
             - "@engineblock.bridge.error_reporter"
-            - "@engineblock.minimum_execution_time_on_invalid_response"
+            - "@engineblock.minimum_execution_time_on_invalid_received_response"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 1000 }
 
