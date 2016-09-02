@@ -23,10 +23,15 @@ $iniContent = $loader->load(
 
 $config = new \OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration($iniContent);
 
+$trustedProxies = $config->get('trustedProxyIps', array());
+if (!is_array($trustedProxies)) {
+    $trustedProxies = $trustedProxies->toArray();
+}
+
 $ymlContent = array(
     'parameters' => array(
         'domain'                                => $config->get('base_domain'),
-        'trusted_proxies'                       => $config->get('trustedProxyIps', array()),
+        'trusted_proxies'                       => $trustedProxies,
         'api.users.janus.username'              => $config->get('engineApi.users.janus.username'),
         'api.users.janus.password'              => $config->get('engineApi.users.janus.password'),
         'api.users.profile.username'            => $config->get('engineApi.users.profile.username'),
