@@ -23,7 +23,7 @@ class ExecutionTimeTrackerTest extends TestCase
         $stopwatch = Mockery::mock(Stopwatch::class);
         $stopwatch
             ->shouldReceive('start')
-            ->with(ExecutionTimeTracker::NAME)
+            ->with(ExecutionTimeTracker::SECTION_NAME)
             ->once();
         $stopwatch
             ->shouldReceive('isStarted')
@@ -71,7 +71,7 @@ class ExecutionTimeTrackerTest extends TestCase
         $stopwatch = Mockery::mock(Stopwatch::class);
         $stopwatch
             ->shouldReceive('start')
-            ->with(ExecutionTimeTracker::NAME);
+            ->with(ExecutionTimeTracker::SECTION_NAME);
         $stopwatch
             ->shouldReceive('getEvent')
             ->andReturn($stopwatchEvent);
@@ -135,7 +135,7 @@ class ExecutionTimeTrackerTest extends TestCase
         $stopwatch = Mockery::mock(Stopwatch::class);
         $stopwatch
             ->shouldReceive('start')
-            ->with(ExecutionTimeTracker::NAME);
+            ->with(ExecutionTimeTracker::SECTION_NAME);
         $stopwatch
             ->shouldReceive('getEvent')
             ->andReturn($stopwatchEvent);
@@ -166,7 +166,7 @@ class ExecutionTimeTrackerTest extends TestCase
         $stopwatch = Mockery::mock(Stopwatch::class);
         $stopwatch
             ->shouldReceive('start')
-            ->with(ExecutionTimeTracker::NAME);
+            ->with(ExecutionTimeTracker::SECTION_NAME);
         $stopwatch
             ->shouldReceive('getEvent')
             ->andReturn($stopwatchEvent);
@@ -197,7 +197,7 @@ class ExecutionTimeTrackerTest extends TestCase
         $stopwatch = Mockery::mock(Stopwatch::class);
         $stopwatch
             ->shouldReceive('start')
-            ->with(ExecutionTimeTracker::NAME);
+            ->with(ExecutionTimeTracker::SECTION_NAME);
         $stopwatch
             ->shouldReceive('getEvent')
             ->andReturn($stopwatchEvent);
