@@ -123,7 +123,6 @@ class EngineBlock_Application_Bootstrapper
         $this->_application->setHttpRequest($httpRequest);
 
         $response = new EngineBlock_Http_Response();
-        $response->setHeader('Strict-Transport-Security', 'max-age=15768000; includeSubDomains');
         // workaround, P3P is needed to support iframes like iframe gadgets in portals
         $response->setHeader('P3P', self::P3P_HEADER);
         $this->_application->setHttpResponse($response);
