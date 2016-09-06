@@ -233,7 +233,7 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^the SP signs it\'s requests$/
+     * @Given /^the SP signs its requests$/
      */
     public function theSpSignsItSRequests()
     {
@@ -243,7 +243,7 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SP "([^"]*)" signs it\'s requests$/
+     * @Given /^SP "([^"]*)" signs its requests$/
      */
     public function spSignsItSRequests($spName)
     {

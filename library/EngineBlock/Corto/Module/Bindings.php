@@ -3,6 +3,7 @@
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -53,12 +54,24 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     protected $_sspmodSamlMessageClassName;
 
+    /**
+     * @var OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
+     */
+    private $_featureConfiguration;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $_logger;
+
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
         parent::__construct($server);
 
-        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $diContainer                       = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $this->_sspmodSamlMessageClassName = $diContainer->getMessageUtilClassName();
+        $this->_featureConfiguration       = $diContainer->getFeatureConfiguration();
+        $this->_logger                     = EngineBlock_ApplicationSingleton::getLog();
     }
 
 
@@ -291,15 +304,39 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             // 'Process' the response, verify the signature, verify the timings.
             $className = $this->_sspmodSamlMessageClassName;
 
-            if ($this->hasEncryptedAssertion($sspResponse) && !$sspResponse->isMessageConstructedWithSignature()) {
-                /** @see https://github.com/OpenConext/OpenConext-engineblock/issues/116 */
+            if ($this->hasEncryptedAssertion($sspResponse)
+                && !$this->_featureConfiguration->isEnabled('eb.encrypted_assertions')
+            ) {
+                $this->_logger->warning('Received encrypted assertion, the encrypted assertion feature is not enabled');
+
                 throw new EngineBlock_Corto_Module_Bindings_Exception(
-                    'Response signing required for use with encrypted assertions.',
+                    'Encrypted assertions are not supported',
                     EngineBlock_Exception::CODE_NOTICE
                 );
             }
 
-            $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+            if ($this->hasEncryptedAssertion($sspResponse)
+                && $this->_featureConfiguration->isEnabled('eb.encrypted_assertions_require_outer_signature')
+                && !$sspResponse->isMessageConstructedWithSignature()
+            ) {
+                $this->_logger->warning(
+                    'Received encrypted assertion without outer signature, outer signature is required'
+                );
+
+                /** @see https://github.com/OpenConext/OpenConext-engineblock/issues/116 */
+                throw new EngineBlock_Corto_Module_Bindings_Exception(
+                    'Encrypted assertions are required to have an outer signature, but they have none',
+                    EngineBlock_Exception::CODE_NOTICE
+                );
+            }
+
+            try {
+                $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+            } catch (Exception $exception) {
+                throw new ResponseProcessingFailedException(
+                    sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
+                );
+            }
 
             // We only support 1 assertion
             if (count($assertions) > 1) {
@@ -310,6 +347,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
 
             $sspResponse->setAssertions($assertions);
+        }
+        catch (ResponseProcessingFailedException $e) {
+            // Passthrough, should be handled at a different level protecting against oracle attacks
+            throw $e;
         }
         // This misnamed exception is only thrown when the Response status code is not Success
         // If so, let the Corto Output Filters handle it.

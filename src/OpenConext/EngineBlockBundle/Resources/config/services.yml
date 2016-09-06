@@ -1,4 +1,10 @@
 services:
+    engineblock.minimum_execution_time_on_invalid_received_response:
+        class: OpenConext\EngineBlockBundle\Value\ExecutionTime
+        factory: [ OpenConext\EngineBlockBundle\Value\ExecutionTime, "of" ]
+        arguments:
+            - "%minimum_execution_time_on_invalid_received_response%"
+
     engineblock.request.request_id_generator:
         public: false
         class: OpenConext\EngineBlock\Request\UniqidGenerator

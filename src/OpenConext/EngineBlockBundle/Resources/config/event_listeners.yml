@@ -1,5 +1,23 @@
 services:
-    engineblock.listener.single_sign_on_exception:
+    engineblock.listener.execution_time_tracker:
+        class: OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker
+        arguments:
+            - "@debug.stopwatch"
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: startTracking, priority: 1000 }
+
+    engineblock.listener.error_response_time_padding:
+        class: OpenConext\EngineBlockBundle\EventListener\ExecutionTimePaddingListener
+        arguments:
+            - "@engineblock.listener.execution_time_tracker"
+            - "@router"
+            - "@engineblock.compat.logger"
+            - "@engineblock.bridge.error_reporter"
+            - "@engineblock.minimum_execution_time_on_invalid_received_response"
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: 1000 }
+
+    engineblock.listener.redirect_to_feedback_page_exception:
         class: OpenConext\EngineBlockBundle\EventListener\RedirectToFeedbackPageExceptionListener
         arguments:
             - "@engineblock.compat.application"

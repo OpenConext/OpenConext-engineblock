@@ -1,11 +1,12 @@
 <project name="OpenConext EngineBlock" default="build">
 
-    <target name="build" depends="code-quality,functional-tests" />
-    <target name="pre-commit" depends="code-quality" />
-    <target name="pre-push" depends="code-quality,behat-dev" />
+    <target name="build" depends="test-suites,code-quality,functional-tests" />
+    <target name="pre-commit" depends="test-suites,code-quality" />
+    <target name="pre-push" depends="test-suites,code-quality,behat-dev" />
     <target name="functional-tests" depends="behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
-    <target name="code-quality" depends="php-lint-travis,phpmd-travis,phpcs-travis,phpunit-travis"/>
+    <target name="code-quality" depends="php-lint,phpmd,phpcs"/>
+    <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests"/>
 
     <target name="install-git-hooks"
             description="installs the pre-commit and pre-push hooks for git">
@@ -46,7 +47,7 @@
         </loadresource>
     </target>
 
-    <target name="php-lint-travis" depends="get-changeset.php.spacesep" if="changeset.php.notempty"
+    <target name="php-lint" depends="get-changeset.php.spacesep" if="changeset.php.notempty"
             description="Perform syntax check of sourcecode files in parallel">
         <exec executable="sh" failonerror="true">
             <arg value="-c"/>
@@ -55,7 +56,7 @@
         <echo message="OK"/>
     </target>
 
-    <target name="phpmd-travis"
+    <target name="phpmd"
             description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
         <exec executable="vendor/bin/phpmd" failonerror="true">
             <arg path="src"/>
@@ -66,7 +67,7 @@
         </exec>
     </target>
 
-    <target name="phpcs-travis"
+    <target name="phpcs"
             description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
         <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
             <arg value="--report=full" />
@@ -77,13 +78,32 @@
         </exec>
     </target>
 
-    <target name="phpunit-travis" description="Run unit tests with PHPUnit">
+    <target name="eb4-tests" description="Run EB4 tests with PHPUnit">
         <delete dir="app/cache/test"/>
         <exec executable="vendor/bin/phpunit" failonerror="true">
             <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
+            <arg line="--testsuite=eb4"/>
             <arg line="--coverage-text"/>
         </exec>
     </target>
+
+    <target name="unit-tests" description="Run unit tests with PHPUnit">
+        <delete dir="app/cache/test"/>
+        <exec executable="vendor/bin/phpunit" failonerror="true">
+            <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
+            <arg line="--testsuite=unit"/>
+            <arg line="--coverage-text"/>
+        </exec>
+    </target>
+
+    <target name="integration-tests" description="Run integration tests with PHPUnit">
+        <delete dir="app/cache/test"/>
+        <exec executable="vendor/bin/phpunit" failonerror="true">
+            <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
+            <arg line="--testsuite=integration"/>
+        </exec>
+    </target>
+
 
     <target name="behat-dev">
         <echo message="Preparing the dev env to run in functional testing mode" />

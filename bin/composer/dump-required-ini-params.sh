@@ -30,26 +30,29 @@ if (!is_array($trustedProxies)) {
 
 $ymlContent = array(
     'parameters' => array(
-        'domain'                                => $config->get('base_domain'),
-        'trusted_proxies'                       => $trustedProxies,
-        'api.users.janus.username'              => $config->get('engineApi.users.janus.username'),
-        'api.users.janus.password'              => $config->get('engineApi.users.janus.password'),
-        'api.users.profile.username'            => $config->get('engineApi.users.profile.username'),
-        'api.users.profile.password'            => $config->get('engineApi.users.profile.password'),
-        'logger.channel'                        => $config->get('logger.conf.name'),
-        'logger.fingers_crossed.passthru_level' => $config->get(
+        'domain'                                                  => $config->get('base_domain'),
+        'trusted_proxies'                                         => $config->get('trustedProxyIps', array())->toArray(),
+        'api.users.janus.username'                                => $config->get('engineApi.users.janus.username'),
+        'api.users.janus.password'                                => $config->get('engineApi.users.janus.password'),
+        'api.users.profile.username'                              => $config->get('engineApi.users.profile.username'),
+        'api.users.profile.password'                              => $config->get('engineApi.users.profile.password'),
+        'logger.channel'                                          => $config->get('logger.conf.name'),
+        'logger.fingers_crossed.passthru_level'                   => $config->get(
             'logger.conf.handler.fingers_crossed.conf.passthru_level'
         ),
-        'logger.syslog.ident'                   => $config->get('logger.conf.handler.syslog.conf.ident'),
-        'database.host'                         => $config->get('database.host'),
-        'database.port'                         => $config->get('database.port'),
-        'database.user'                         => $config->get('database.user'),
-        'database.password'                     => $config->get('database.password'),
-        'database.dbname'                       => $config->get('database.dbname'),
-        'feature_eb_ldap_integration'           => (bool) $config->get('engineblock.feature.ldap_integration'),
-        'feature_api_metadata_push'             => (bool) $config->get('engineApi.features.metadataPush'),
-        'feature_api_consent_listing'           => (bool) $config->get('engineApi.features.consentListing'),
-        'feature_api_metadata_api'              => (bool) $config->get('engineApi.features.metadataApi'),
+        'logger.syslog.ident'                                     => $config->get('logger.conf.handler.syslog.conf.ident'),
+        'database.host'                                           => $config->get('database.host'),
+        'database.port'                                           => $config->get('database.port'),
+        'database.user'                                           => $config->get('database.user'),
+        'database.password'                                       => $config->get('database.password'),
+        'database.dbname'                                         => $config->get('database.dbname'),
+        'feature_eb_ldap_integration'                             => (bool) $config->get('engineblock.feature.ldap_integration'),
+        'feature_eb_encrypted_assertions'                         => (bool) $config->get('engineblock.feature.encrypted_assertions'),
+        'feature_eb_encrypted_assertions_require_outer_signature' => (bool) $config->get('engineblock.feature.encrypted_assertions_require_outer_signature'),
+        'feature_api_metadata_push'                               => (bool) $config->get('engineApi.features.metadataPush'),
+        'feature_api_consent_listing'                             => (bool) $config->get('engineApi.features.consentListing'),
+        'feature_api_metadata_api'                                => (bool) $config->get('engineApi.features.metadataApi'),
+        'minimum_execution_time_on_invalid_received_response'     => (int) $config->get('minimumExecutionTimeOnInvalidReceivedResponse'),
     )
 );
 

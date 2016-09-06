@@ -22,9 +22,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Identity Provider error"
-      And I should see "InvalidNameIDPolicy"
-      And I should see "NameIdPolicy is invalid"
+     Then I should see "Invalid Identity Provider response"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -38,8 +36,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Identity Provider error"
-      And I should see "RequestDenied"
+     Then I should see "Invalid Identity Provider response"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -53,7 +50,7 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid signature on Identity Provider response"
+     Then I should see "Invalid Identity Provider response"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -81,8 +78,8 @@ Feature:
      And I should see "EntityID:"
      And I should not see "Identity Provider:"
 
-  Scenario: An Identity Provider misrepresents it's entityId and is thus not recognized by EB
-    Given the IdP thinks it's EntityID is "https://wrong.example.edu/metadata"
+  Scenario: An Identity Provider misrepresents its entityId and is thus not recognized by EB
+    Given the IdP thinks its EntityID is "https://wrong.example.edu/metadata"
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
@@ -163,5 +160,5 @@ Feature:
 #
 #  Scenario: An attribute manipulation determines that a user may not continue
 #
-#  Scenario: An Identity Provider dates it's Assertions in the future.
+#  Scenario: An Identity Provider dates its assertions in the future.
 #  Scenario: I want to log in to a service but am not a member of the appropriate VO
