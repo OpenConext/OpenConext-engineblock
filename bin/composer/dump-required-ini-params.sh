@@ -23,6 +23,11 @@ $iniContent = $loader->load(
 
 $config = new \OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration($iniContent);
 
+$trustedProxies = $config->get('trustedProxyIps', array());
+if (!is_array($trustedProxies)) {
+    $trustedProxies = $trustedProxies->toArray();
+}
+
 $ymlContent = array(
     'parameters' => array(
         'domain'                                                  => $config->get('base_domain'),
