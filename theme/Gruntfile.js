@@ -23,7 +23,7 @@ module.exports = function(grunt) {
                         'bower_components/easyModal.js/jquery.easyModal.js',
                         'bower_components/fastclick/lib/fastclick.js',
                         'bower_components/underscore/underscore.js',
-                        '<%= config.theme %>/javascripts/application.js'
+                        '<%= config.theme %>/javascripts/**.js'
                     ]
                 }
             }
