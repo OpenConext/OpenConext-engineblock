@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "758cdc4453d1139664066eb89026796a",
-    "content-hash": "f858b2af397b6b9687380d32a8e27f00",
+    "hash": "f99b4cf3dd918fcf23134ed1aafce61b",
+    "content-hash": "bc53d11beda7d68a1b85a0bd60f5c3ea",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1893,16 +1893,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v1.7.2",
+            "version": "v1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "6b91b49fbb22d3a5691e94b6d0057b6ab03ee46f"
+                "reference": "6a4b1eece19b067b17fff718176689b82dc89fb9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/6b91b49fbb22d3a5691e94b6d0057b6ab03ee46f",
-                "reference": "6b91b49fbb22d3a5691e94b6d0057b6ab03ee46f",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/6a4b1eece19b067b17fff718176689b82dc89fb9",
+                "reference": "6a4b1eece19b067b17fff718176689b82dc89fb9",
                 "shasum": ""
             },
             "require": {
@@ -1938,7 +1938,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2016-01-11 16:04:45"
+            "time": "2016-09-15 06:14:20"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
@@ -4557,13 +4557,12 @@
         {
             "alias": "0.8.1",
             "alias_normalized": "0.8.1.0",
-            "version": "1.7.2.0",
+            "version": "1.10.0.0",
             "package": "simplesamlphp/saml2"
         }
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "openconext/engineblock-metadata": 20,
         "openid/php-openid": 20
     },
     "prefer-stable": false,
