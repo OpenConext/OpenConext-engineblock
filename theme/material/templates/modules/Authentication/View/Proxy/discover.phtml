@@ -98,72 +98,114 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
   <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" class="mod-search-input active">
 
   <button class="search">Search</button>
+    <?php
 
-  <div id="preselection" class="mod-results hidden">
-      <header>
-        <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
-      </header>
-      <div class="list">
+    $previousSelectionCookieIdentifier = 'selectedidps';
+    $previousSelection                 = json_decode($_COOKIE[$previousSelectionCookieIdentifier], true);
 
-      </div>
-  </div>
+    $previousSelectionIndex = [];
+    if ($previousSelection !== null) {
+        foreach ($previousSelection as $idp) {
+            $previousSelectionIndex[$idp['idp']] = $idp;
+        }
+    }
 
-  <div id="selection" class="mod-results">
-    <header>
-      <h2><?php echo $this->t('idps_with_access'); ?></h2>
-    </header>
-    <div class="list">
+    $formattedPreviousSelectionList = [];
+    $formattedIdpList = [];
+    foreach ($idpList as $idp) {
+        $idpKeywords = $idp['Keywords'] === 'Undefined' ? array() : array_values((array) $idp['Keywords']);
 
-      <div class="loading spinner hidden">
-        <div class="logo">
-          <img class="rotate-img" src="/images/spinner.svg" alt="" />
-        </div>
-        <?=$this->t('loading_idps');?>
-      </div>
+        if (isset($previousSelectionIndex[$idp['EntityID']])) {
+            $formattedPreviousSelectionList[] = array_merge(
+                $previousSelectionIndex[$idp['EntityID']],
+                [
+                    'entityId'     => $idp['EntityID'],
+                    'displayTitle' => $idp['Name_'.$lang],
+                    'title'        => strtolower($idp['Name_'.$lang]),
+                    'keywords'     => strtolower(join('|', $idpKeywords)),
+                    'logo'         => $idp['Logo'],
+                ]
+            );
+            continue;
+        }
 
-      <?php foreach ($idpList as $key => $idp) : ?>
-        <?php $idpKeywords = $idp['Keywords'] === 'Undefined' ? array() : array_values((array) $idp['Keywords']) ?>
-        <a class="result active access"
-           href="#"
-           tabindex="-1"
-           data-idp="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>"
-           data-keywords="<?= EngineBlock_View::htmlSpecialCharsAttributeValue(json_encode($idpKeywords)); ?>">
-          <div class="logo">
-            <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['Logo'] ?>" alt="" />
+        $formattedIdpList[] = [
+            'entityId'     => $idp['EntityID'],
+            'displayTitle' => $idp['Name_'.$lang],
+            'title'        => strtolower($idp['Name_'.$lang]),
+            'keywords'     => strtolower(join('|', $idpKeywords)),
+            'logo'         => $idp['Logo'],
+        ];
+    }
+
+    $configuration = [
+        'previousSelectionCookieName' => $previousSelectionCookieIdentifier,
+        'previousSelectionList'       => $formattedPreviousSelectionList,
+        'idpList'                     => $formattedIdpList,
+        'maximumIdpResultsPerList'    => 50,
+        'messages' => [
+            'pressEnterToSelect' => $this->t('press_enter_to_select'),
+            'moreIdpResults'     => $this->t('more_idp_results')
+        ],
+        'requestAccessUrl' => '/authentication/idp/requestAccess?' . http_build_query([
+            'lang' => $lang,
+            'spEntityId' => $metaDataSP->entityId,
+            'spName' => $spDisplayName,
+        ]),
+    ];
+    ?>
+
+    <script id="wayf-configuration" type="application/json">
+        <?php echo json_encode($configuration); ?>
+    </script>
+
+    <div id="idp-picker">
+      <div id="preselection" class="mod-results hidden">
+          <header>
+              <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
+          </header>
+          <div class="idp-list">
           </div>
-          <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
-          <span class="c-button white action"
-                data-toggle-text="<img class='deleteable' src='/images/cross.svg' alt='delete' />"
-            ><?php echo $this->t('press_enter_to_select'); ?></span>
-          <noscript>
+      </div>
+
+      <div id="selection" class="mod-results">
+        <header>
+            <h2><?php echo $this->t('idps_with_access'); ?></h2>
+        </header>
+
+          <div class="loading spinner hidden">
+            <div class="logo">
+              <img class="rotate-img" src="/images/spinner.svg" alt="" />
+            </div>
+            <?=$this->t('loading_idps');?>
+          </div>
+
+            <div class="idp-list">
+            </div>
+
+        <noscript>
+          <?php foreach ($idpList as $key => $idp) : ?>
+          <a class="result active access" href="#" tabindex="-1">
+              <div class="logo">
+                <img class="logo" src="/images/placeholder.png"/>
+              </div>
+              <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
               <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-                <input type="hidden"
-                       name="ID"
-                       value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
-                <input type="hidden"
-                       name="idp"
-                       value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
-                <input type="submit"
-                       data-entityid="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>"
-                       class="c-button white"
-                       value="Login" />
+                <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+                <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
+                <input type="submit" data-entityid="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" class="c-button white" value="Login" />
               </form>
-          </noscript>
-        </a>
-      <?php endforeach; ?>
-      <div class="loading<?php if (count($idpList) !== 0): ?> hidden<?php endif; ?> noresults">
-        <div class="logo">
-          <div class="letter">??</div>
-        </div>
-        <?php if ($showRequestAccess === true): ?>
-          <p><?php echo $this->t('no_idp_results_request_access'); ?></p>
-        <?php else: ?>
-          <p><?php echo $this->t('no_idp_results'); ?></p>
-        <?php endif; ?>
+          </a>
+          <?php endforeach; ?>
+        </noscript>
+          <div class="loading hidden noresults">
+            <div class="logo">
+              <div class="letter">??</div>
+            </div>
+            <p><?php echo $this->t('no_idp_results'); ?></p>
+          </div>
       </div>
     </div>
-  </div>
-
   <?php if ($showRequestAccess === true && count($idpList) > 0): ?>
   <div id="noselection" class="mod-results">
     <div class='list no-access'>
@@ -176,12 +218,4 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     </div>
   </div>
   <?php endif ?>
-
-  <script type="text/javascript">
-    var discover = {
-      lang: "<?=$lang?>",
-      spEntityId: "<?=$metaDataSP->entityId?>",
-      spName: "<?=$spDisplayName?>"
-    }
-  </script>
 </form>

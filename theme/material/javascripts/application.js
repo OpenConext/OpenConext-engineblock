@@ -1,109 +1,91 @@
-$(function init() {
-    $('html').removeClass('no-js');
-    FastClick.attach(document.body);
+import {replaceMetadataCertificateLinkTexts} from "./modules/EngineBlockMainPage";
+import {IdpList} from "./modules/IdpList";
+import {IdpPicker} from "./modules/IdpPicker";
+import {PreviousSelectionList} from "./modules/PreviousSelectionList";
+import {KeyboardListener} from "./modules/KeyboardListener";
+import {PreviousSelectionStorage} from "./modules/PreviousSelectionStorage";
+import {IdpListElementFactory} from "./modules/IdpListElementFactory";
+import {RequestAccessModalHelper} from "./modules/RequestAccessModalHelper";
 
-    var $searchBar = $('.mod-search-input');
-    var $idpChoices = $('.mod-results');
-    var $editPreselectionButton = $('.mod-results a.edit');
-    var $accessibleIdps = $('.mod-results a.result.access');
-    var $documentBody = $(document.body);
-    var $requestAccessButton = $('a.noaccess');
-    var $idpLogos = $('img.logo');
+function initialize() {
+    document.body.className = document.body.className.replace('no-js', '');
 
-    var possibleIdpChoices = new PossibleIdpChoices();
-    possibleIdpChoices.setPreviousIdpChoices(PreviousIdpChoices.fromJson(Cookies.get('selectedidps') || '[]'));
-    possibleIdpChoices.render();
+    if (document.getElementById('engine-main-page') !== null) {
+        replaceMetadataCertificateLinkTexts();
+        return;
+    }
 
-    var keyboardListener = new KeyboardListener();
-    $documentBody.on('keydown', keyboardListener.onKeyDown);
+    if (document.getElementById('wayf-configuration') === null) {
+        return;
+    }
 
-    $idpLogos.lazyload();
+    const $idpListTarget           = document.querySelector('#selection');
+    const $previousSelectionTarget = document.querySelector('#preselection');
+    const $searchBar               = document.querySelector('.mod-search-input');
+    const $idpPickerTarget         = document.getElementById('idp-picker');
+    const $searchForm              = document.querySelector('form.mod-search');
+    const $requestAccessLink       = document.querySelector('a.noaccess');
+    const $requestAccessModal      = document.getElementById('request-access');
+    const $requestAccessScroller   = document.getElementById('request-access-scroller');
 
-    $searchBar.on('focus', function () {
-        possibleIdpChoices.focusOnFirstIdp();
+    const configuration      = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
+    const throttleAmountInMs = 250;
+
+    const idpListElementFactory    = new IdpListElementFactory(
+        configuration.messages,
+        configuration.maximumIdpResultsPerList
+    );
+    const idpList                  = new IdpList($idpListTarget, configuration.idpList, idpListElementFactory);
+    const previousSelectionList    = new PreviousSelectionList(
+        $previousSelectionTarget,
+        configuration.previousSelectionList,
+        idpListElementFactory
+    );
+    const previousSelectionStorage = new PreviousSelectionStorage(configuration.previousSelectionCookieName);
+    const idpPicker                = new IdpPicker(
+        $searchForm,
+        $idpPickerTarget,
+        previousSelectionList,
+        idpList,
+        previousSelectionStorage,
+        configuration.messages
+    );
+    const requestAccessModalHelper = new RequestAccessModalHelper(
+        $requestAccessModal,
+        $requestAccessScroller,
+        $searchBar,
+        configuration.requestAccessUrl
+    );
+    const keyboardListener         = new KeyboardListener(idpPicker, $searchBar, requestAccessModalHelper);
+
+    // Keyup, click and input are registered events for cross-browser compatibility with HTML5 'search' input
+    $searchBar.addEventListener('keyup', throttle(event => idpPicker.searchBy(event.target.value), throttleAmountInMs));
+    $searchBar.addEventListener('click', event => idpPicker.searchBy(event.target.value));
+    $searchBar.addEventListener('input', event => idpPicker.searchBy(event.target.value));
+
+    document.addEventListener('keyup', event => keyboardListener.handle(event.keyCode));
+
+    $searchForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        idpPicker.selectIdpUnderFocus();
     });
 
-    // on desktop devices set the focus
+    if ($requestAccessLink !== null) {
+        $requestAccessLink.addEventListener('click', (event) => requestAccessModalHelper.openRequestAccessModal());
+    }
+
     if (window.innerWidth > 800) {
         $searchBar.focus();
     }
+}
 
-    // Listening to multiple events for crossbrowser capabilities
-    // 0-millisecond timeout is there to retrieve the input value after 'mouseup' events.
-    $searchBar.on('input keyup mouseup', function inputDetected(event) {
-        setTimeout(function () {
-            possibleIdpChoices.filterBy($(event.target).val());
-        }, 0);
-    });
+function throttle(action, delay) {
+    let timer = null;
 
-    $searchBar.on('blur', function () {
-        if ($('.result.focussed').length > 0) {
-            $(document.activeElement).filter('.result').blur();
-            $('.result').removeClass('focussed');
-        }
-    });
+    return function () {
+        clearTimeout(timer);
+        timer = setTimeout(() => action.apply(this, arguments), delay);
+    };
+}
 
-    $editPreselectionButton.on('click', function editPreselection(event) {
-        event.preventDefault();
-        possibleIdpChoices.editPreviousIdpChoices($(this));
-    });
-
-    $accessibleIdps.on('click', function handleIdpAction(event) {
-        possibleIdpChoices.handleIdpClickedEvent(event, $(this));
-    });
-
-    $idpChoices.on('mouseenter mouseleave', '.result', function () {
-        $(document.activeElement).filter('.result').blur();
-        $('.result').removeClass('focussed');
-    });
-
-    var requestAccessModalHelper = new RequestAccessModalHelper;
-    $documentBody.on('click', '#request-access-scroller, #request-access-container', function (e) {
-        if (e.target !== this) {
-            return;
-        }
-
-        requestAccessModalHelper.closeRequestAccessModal();
-    });
-
-    $documentBody.on('keydown', function (e) {
-        if (e.which !== 27 || e.altKey || e.ctrlKey || e.metaKey) {
-            return;
-        }
-
-        if ($('#request-access-scroller').data('opened') === false) {
-            return;
-        }
-
-        requestAccessModalHelper.closeRequestAccessModal();
-    });
-
-    $requestAccessButton.on('click', function requestAccess(event) {
-        event.preventDefault();
-
-        var params = $.param({
-            lang: discover.lang,
-            idpEntityId: $(this).attr('data-idp') || 'unknown',
-            idpName: $(this).text(),
-            spEntityId: discover.spEntityId,
-            spName: discover.spName
-        });
-
-        $.get('/authentication/idp/requestAccess?' + params, function (data) {
-            requestAccessModalHelper.openRequestAccessModal(data);
-        });
-    });
-
-    if ($('#engine-main-page').length > 0) {
-        // set absolute URLs of anchors as display text
-        $('dl.metadata-certificates-list a').not('a[data-external-link=true]').each(function () {
-            $(this).text(
-                window.location.protocol + '//' + window.location.hostname + $(this).attr('href')
-            );
-        });
-    }
-
-    $('#delete-confirmation-form').submit(function () {
-        return confirm($('#delete-confirmation-text').attr('data-confirmation-text'));
-    });
-});
+initialize();
