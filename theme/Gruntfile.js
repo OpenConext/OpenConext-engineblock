@@ -70,18 +70,6 @@ module.exports = function(grunt) {
             }
         },
         copy: {
-            polyfill: {
-                files: [
-                    {
-                        src: ['node_modules/ie8/build/ie8.js'],
-                        dest: '../web/javascripts/ie8.js'
-                    },
-                    {
-                        src: ['node_modules/es5-shim/es5-shim.min.js'],
-                        dest: '../web/javascripts/es5-shim.min.js'
-                    }
-                ]
-            },
             material: {
                 files: [
                     { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
