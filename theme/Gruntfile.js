@@ -42,7 +42,11 @@ module.exports = function(grunt) {
             },
             polyfill: {
                 files: {
-                    '../web/javascripts/polyfill.min.js': ['node_modules/ie8/build/ie8.js', 'node_modules/es5-shim/es5-shim.min.js']
+                    '../web/javascripts/polyfill.min.js': [
+                        'node_modules/ie8/build/ie8.js',
+                        'node_modules/es5-shim/es5-shim.min.js',
+                        'node_modules/html5shiv/dist/html5-shiv.min.js'
+                    ]
                 }
             }
         },
@@ -75,7 +79,6 @@ module.exports = function(grunt) {
                     { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
                     { expand: true, cwd: 'material/templates/modules/', src: ['**'], dest: '../app/Resources/views/modules' },
                     { expand: true, cwd: 'material/images/', src: ['**'], dest: '../web/images' },
-                    { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['html5shiv.min.js'], dest: '../web/javascripts' }
                 ]
             }
         },
