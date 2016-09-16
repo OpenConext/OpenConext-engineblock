@@ -2455,16 +2455,16 @@
         },
         {
             "name": "zendframework/zendframework1",
-            "version": "1.12.16",
+            "version": "1.12.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zf1.git",
-                "reference": "8a3c471ef0a337d303cd5ae578e64c2ba1d2c025"
+                "reference": "737ef159654fbbef37cf9af742b2c8f9690c2ece"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zf1/zipball/8a3c471ef0a337d303cd5ae578e64c2ba1d2c025",
-                "reference": "8a3c471ef0a337d303cd5ae578e64c2ba1d2c025",
+                "url": "https://api.github.com/repos/zendframework/zf1/zipball/737ef159654fbbef37cf9af742b2c8f9690c2ece",
+                "reference": "737ef159654fbbef37cf9af742b2c8f9690c2ece",
                 "shasum": ""
             },
             "require": {
@@ -2498,7 +2498,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-09-15 15:49:51"
+            "time": "2016-09-08 14:50:34"
         }
     ],
     "packages-dev": [
