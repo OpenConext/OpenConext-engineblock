@@ -45,6 +45,7 @@ return array(
     'request_access'            => 'Toegang aanvragen',
     'no_idp_results'            => 'Je zoekterm heeft geen resultaten opgeleverd.',
     'no_idp_results_request_access' => 'Kun je je instelling niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
+    'more_idp_results'          => '%d resultaten worden niet getoond. Verfijn je zoekopdracht voor specifiekere resultaten.',
     'return_to_sp'              => 'Keer terug naar Service Provider',
 
     //Footer
