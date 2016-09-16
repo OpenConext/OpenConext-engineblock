@@ -132,7 +132,9 @@ class IdentityProviderController
     public function requestAccessAction(Request $request)
     {
         $body = $this->engineBlockView
-            ->setData($request->query->all())
+            ->setData([
+                'queryParameters' => $request->query->all()
+            ])
             ->render('Authentication/View/IdentityProvider/RequestAccess.phtml');
 
         return new Response($body);
