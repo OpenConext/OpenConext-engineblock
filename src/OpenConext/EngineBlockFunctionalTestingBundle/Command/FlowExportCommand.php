@@ -345,7 +345,6 @@ class FlowExportCommand extends Command
 
         // Try to find posted messages (Responses may only be POSTED).
         while ($postedMessage = $this->findMessageSentViaPost($sessionLogStream)) {
-
             // If the message found is NOT a response, keep looking.
             if (!strstr($postedMessage, '[__t] => samlp:' . $tagName)) {
                 continue;
