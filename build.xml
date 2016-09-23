@@ -1,11 +1,12 @@
 <project name="OpenConext EngineBlock" default="build">
 
-    <target name="build" depends="test-suites,code-quality,functional-tests" />
+    <target name="build" depends="security,test-suites,code-quality,functional-tests" />
     <target name="pre-commit" depends="test-suites,code-quality" />
-    <target name="pre-push" depends="test-suites,code-quality,behat-dev" />
+    <target name="pre-push" depends="test-suites,code-quality,behat-dev,security" />
     <target name="functional-tests" depends="behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="code-quality-ci" depends="test-suites,code-quality"/>
+    <target name="security" depends="php-security-checker"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs"/>
     <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests"/>
 
@@ -55,6 +56,14 @@
             <arg value="echo '${changeset.php.spacesep}' | xargs -n 1 -P 4 php -l 1>/dev/null"/>
         </exec>
         <echo message="OK"/>
+    </target>
+
+    <target name="php-security-checker" description="Check your composer dependencies for insecure components">
+        <exec executable="vendor/bin/security-checker" failonerror="true">
+            <arg value="security:check"/>
+            <arg value="--verbose"/>
+            <arg value="composer.lock"/>
+        </exec>
     </target>
 
     <target name="phpmd"
