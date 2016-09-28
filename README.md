@@ -1,26 +1,26 @@
-# OpenConext EngineBlock #
+# OpenConext EngineBlock
 
 Build Status:
 
-| Branch  | Status |
-| ------- | ------ |
-| 5.x-dev | [![Build Status](https://travis-ci.org/OpenConext/OpenConext-engineblock.svg?branch=5.x-dev)](https://travis-ci.org/OpenConext/OpenConext-engineblock) |
-| master  | [![Build Status](https://travis-ci.org/OpenConext/OpenConext-engineblock.svg?branch=master)](https://travis-ci.org/OpenConext/OpenConext-engineblock) |
-
+[![Build Status](https://travis-ci.org/OpenConext/OpenConext-engineblock.svg?branch=master)][travis-build]
 
 ## License
 
-See the [LICENSE-2.0.txt](LICENSE-2.0.txt) file
+See the [LICENSE-2.0.txt][license] file
 
 ## Disclaimer
 
-See the [NOTICE.txt](NOTICE.txt) file
+See the [NOTICE.txt][notice] file
 
 ## Upgrading
 
-See the [UPGRADING.md](UPGRADING.md) file
+See the [UPGRADING.md][upgrading] file
 
-## System Requirements ##
+## (Theme) Development
+
+Please see the [wiki][eb-wiki] for information on how to get started with development of OpenConext EngineBlock
+
+## System Requirements
 
 * Linux
 * Apache
@@ -36,14 +36,13 @@ See the [UPGRADING.md](UPGRADING.md) file
 * NPM (optional for theme deployment)
 * Grunt-cli (optional for theme deployment)
 
-**NOTE**
+_**Note**:
 While care was given to make EngineBlock as compliant as possible with mainstream Linux distributions,
-it is only regularly tested with RedHat Enterprise Linux and CentOS.
+it is only regularly tested with RedHat Enterprise Linux and CentOS._
 
+## Installation
 
-## Installation ##
-
-_Note_: you are advised to use [OpenConext-Deploy][op-dep] to deploy OpenConext installations.
+_**Note**: you are advised to use [OpenConext-Deploy][op-dep] to deploy OpenConext installations._
 
 If you are reading this then you've probably already installed a copy of EngineBlock somewhere on the destination server,
 if not, then that would be step 1 for the installation.
@@ -51,7 +50,7 @@ if not, then that would be step 1 for the installation.
 If you do not use [OpenConext-Deploy][op-dep] and have an installed copy and your server meets all the requirements 
 above, then please follow the steps below to start your installation.
 
-### First, create an empty database ###
+### First, create an empty database
 
 **EXAMPLE**
 
@@ -66,7 +65,7 @@ above, then please follow the steps below to start your installation.
     mysql> create database engineblock default charset utf8 default collate utf8_unicode_ci;
 
 
-### Then configure application config ###
+### Then configure application config
 
 Copy over the example configuration file from the *docs* directory to */etc/openconext/engineblock.ini*:
 
@@ -83,31 +82,27 @@ is writable by your webserver user.
 After that, you are required to ensure the application is in bootable state. Assuming you are preparing your 
 installation for a production environment, you have to run:
 
-```
-composer prepare-env
-```
+    composer prepare-env
 
 should you not have access to a local installation of [composer][comp], a version is shipped with EngineBlock, replace
 the `composer` part above with `bin/composer.phar`. This version is regularly updated, but may give warnings about
 being outdated.
 
 
-### Install database schema ###
+### Install database schema
 
 To install the initial database, just call the 'migrate' script in *bin/*, followed by migration tool introduced in 5.x,
- like so:
+like so:
 
-```
-(cd bin && ./migrate && cd .. && app/console doctrine:migrations:migrate --env=prod)
-```
+    (cd bin && ./migrate && cd .. && app/console doctrine:migrations:migrate --env=prod)
 
-**NOTE**
+_**Note**:
 EngineBlock requires database settings, without it the install script will not function. Furthermore, this assumes that
 the application must use the production settings (`--env=prod`), this could be replaced with `dev` should you run a 
-development version.
+development version._
 
 
-### Configure HTTP server ###
+### Configure HTTP server
 
 Configure a single virtual host, this should point to the `web` directory: 
 
@@ -151,7 +146,7 @@ with the following Apache rewrite rules on a *:80 VirtualHost:
     RewriteCond     %{SERVER_PORT} ^80$
     RewriteRule     ^(.*)$ https://%{SERVER_NAME}$1 [L,R=301]
 
-### Test your EngineBlock instance ###
+### Test your EngineBlock instance
 
 Use these URLs to test your EngineBlock instance:
 
@@ -162,7 +157,7 @@ Use these URLs to test your EngineBlock instance:
 - https://engine.example.com/authentication/proxy/idps-metadata, this should present you with the proxy IdP metadata
 - https://engine-api.example.com, this should return an empty 200 OK response
 
-## Updating ##
+## Updating
 
 It is recommended practice that you deploy engineblock in a directory that includes the version number and use a
 symlink to link to the 'current' version of EngineBlock.
@@ -184,42 +179,19 @@ If you are using this pattern, an update can be done with the following:
 
 3. Prepare your environment (see above)
 
-```
-SYMFONY_ENV=prod composer prepare-env
-```
-    
+        SYMFONY_ENV=prod composer prepare-env
+
 4. Run the database migrations script.
 
-```
-app/console doctrine:migrations:migrate --env=prod
-```
+        app/console doctrine:migrations:migrate --env=prod
 
 5. Change the symlink.
 
-## Applying a new theme ##
-
-Before being able to use the new theming system, you must install the following:
-
-- [Node.JS][1]
-- [Bower][2] (requires Node.JS)
-- [Compass][3]
-
-After installing the above tools, the following commandline may give you all the needed dependencies and run grunt to 
-update the installed files after changing a theme:
-
-```
-(cd theme && npm install && sudo npm install -g bower && bower install && grunt)
-```
-
-When applying a theme for the first time you can enter the theme directory and run `npm install` and `bower install` to
-load the required theme modules.
-
-Themes can be deployed using a Grunt task, from the theme directory run `grunt theme:mythemename`, this will initiate
-the appropriate tasks for cleaning the previous theme and deploying the new theme on your installation.
-
-[1]: https://nodejs.org/en/
-[2]: http://bower.io/
-[3]: http://compass-style.org/
+[travis-build]: https://travis-ci.org/OpenConext/OpenConext-engineblock
+[license]: LICENSE-2.0.txt
+[notice]: NOTICE.txt
+[upgrading]: UPGRADING.md
 [comp]: https://getcomposer.org/
 [op-dep]: https://github.com/OpenConext/OpenConext-deploy
 [janus]: https://github.com/janus-ssp/janus
+[eb-wiki]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines
