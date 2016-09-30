@@ -31,10 +31,7 @@ function initialize() {
     const configuration      = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
     const throttleAmountInMs = 250;
 
-    const idpListElementFactory    = new IdpListElementFactory(
-        configuration.messages,
-        configuration.maximumIdpResultsPerList
-    );
+    const idpListElementFactory    = new IdpListElementFactory(configuration.messages);
     const idpList                  = new IdpList($idpListTarget, configuration.idpList, idpListElementFactory);
     const previousSelectionList    = new PreviousSelectionList(
         $previousSelectionTarget,
