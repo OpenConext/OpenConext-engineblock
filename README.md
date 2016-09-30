@@ -201,25 +201,23 @@ app/console doctrine:migrations:migrate --env=prod
 Before being able to use the new theming system, you must install the following:
 
 - [Node.JS][1]
-- [Bower][2] (requires Node.JS)
-- [Compass][3]
+- [Compass][2]
 
 After installing the above tools, the following commandline may give you all the needed dependencies and run grunt to 
 update the installed files after changing a theme:
 
 ```
-(cd theme && npm install && sudo npm install -g bower && bower install && grunt)
+(cd theme && npm install && grunt)
 ```
 
-When applying a theme for the first time you can enter the theme directory and run `npm install` and `bower install` to
-load the required theme modules.
+When applying a theme for the first time you can enter the theme directory and run `npm install` to load 
+the required theme modules.
 
 Themes can be deployed using a Grunt task, from the theme directory run `grunt theme:mythemename`, this will initiate
 the appropriate tasks for cleaning the previous theme and deploying the new theme on your installation.
 
 [1]: https://nodejs.org/en/
-[2]: http://bower.io/
-[3]: http://compass-style.org/
+[2]: http://compass-style.org/
 [comp]: https://getcomposer.org/
 [op-dep]: https://github.com/OpenConext/OpenConext-deploy
 [janus]: https://github.com/janus-ssp/janus
