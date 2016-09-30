@@ -140,10 +140,10 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     }
 
     $configuration = [
-        'previousSelectionCookieName' => $previousSelectionCookieIdentifier,
-        'previousSelectionList'       => $formattedPreviousSelectionList,
-        'idpList'                     => $formattedIdpList,
-        'maximumIdpResultsPerList'    => 50,
+        'previousSelectionCookieName'   => $previousSelectionCookieIdentifier,
+        'previousSelectionList'         => $formattedPreviousSelectionList,
+        'idpList'                       => $formattedIdpList,
+        'showUnfilteredIdpsCutoffPoint' => 5,
         'messages' => [
             'pressEnterToSelect' => $this->t('press_enter_to_select'),
             'moreIdpResults'     => $this->t('more_idp_results')

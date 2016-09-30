@@ -32,7 +32,12 @@ function initialize() {
     const throttleAmountInMs = 250;
 
     const idpListElementFactory    = new IdpListElementFactory(configuration.messages);
-    const idpList                  = new IdpList($idpListTarget, configuration.idpList, idpListElementFactory);
+    const idpList                  = new IdpList(
+        $idpListTarget,
+        configuration.idpList,
+        idpListElementFactory,
+        configuration.showUnfilteredIdpsCutoffPoint
+    );
     const previousSelectionList    = new PreviousSelectionList(
         $previousSelectionTarget,
         configuration.previousSelectionList,
