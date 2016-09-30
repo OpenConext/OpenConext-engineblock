@@ -1,5 +1,5 @@
 export class IdpPicker {
-    constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage, messages) {
+    constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage) {
         this.searchForm = searchForm;
         this.targetElement = targetElement;
         this.previousSelectionList = previousSelectionList;

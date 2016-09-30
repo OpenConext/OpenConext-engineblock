@@ -44,8 +44,7 @@ function initialize() {
         $idpPickerTarget,
         previousSelectionList,
         idpList,
-        previousSelectionStorage,
-        configuration.messages
+        previousSelectionStorage
     );
     const requestAccessModalHelper = new RequestAccessModalHelper(
         $requestAccessModal,
