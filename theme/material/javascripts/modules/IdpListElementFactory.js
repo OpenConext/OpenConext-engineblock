@@ -48,6 +48,7 @@ export class IdpListElementFactory {
 
             const logoElement = document.createElement('img');
             logoElement.className = 'logo';
+            logoElement.setAttribute('alt', '');
             setLogoAndFallbackUrlOnElement(idpList[i].logo, placeholderImage, logoElement);
 
             const titleElement = document.createElement('h3');

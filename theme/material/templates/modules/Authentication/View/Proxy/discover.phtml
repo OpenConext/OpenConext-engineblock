@@ -187,7 +187,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
           <?php foreach ($idpList as $key => $idp) : ?>
           <a class="result active access" href="#" tabindex="-1">
               <div class="logo">
-                <img class="logo" src="/images/placeholder.png"/>
+                <img class="logo" src="/images/placeholder.png" alt="" />
               </div>
               <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
               <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
