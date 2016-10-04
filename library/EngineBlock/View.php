@@ -201,6 +201,12 @@ class EngineBlock_View
 
     public static function htmlSpecialCharsText($content)
     {
+        if ($content instanceof DOMNodeList) {
+            $content = join(', ', array_map(function (DOMNode $node) {
+                return $node->nodeValue;
+            }, iterator_to_array($content)));
+        }
+
         return htmlspecialchars($content, ENT_NOQUOTES, 'UTF-8');
     }
 

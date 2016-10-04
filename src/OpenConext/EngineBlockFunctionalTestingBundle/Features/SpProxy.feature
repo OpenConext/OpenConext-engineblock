@@ -208,6 +208,7 @@ Feature:
      Then the response should not contain "urn:mace:dir:attribute-def:uid"
       And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
 
+  @WIP
   Scenario: User logs in via trusted proxy and I get a NameID for the SP and eduPersonTargettedID for the destination
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy

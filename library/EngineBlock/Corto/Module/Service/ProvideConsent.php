@@ -34,7 +34,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     public function serve($serviceName)
     {
         $response = $this->_server->getBindingsModule()->receiveResponse();
-        $_SESSION['consent'][$response->getId()]['response'] = $response;
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
@@ -81,6 +80,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
+        $_SESSION['consent'][$response->getId()]['response'] =  $this->serializeDomNodes($response);
+
         $priorConsent = $consentRepository->explicitConsentWasGivenFor($serviceProviderMetadata);
         if ($priorConsent) {
             $response->setConsent(SAML2_Const::CONSENT_PRIOR);
@@ -125,5 +126,35 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         }
 
         return false;
+    }
+
+    private function serializeDomNodes($response)
+    {
+        /** @var SAML2_Assertion[] $assertions */
+        $assertions = $response->getAssertions();
+        foreach ($assertions as $assertion) {
+            $attributes = $assertion->getAttributes();
+
+            foreach ($attributes as $attributeKey => $attributeValues) {
+                foreach ($attributeValues as $key => $value) {
+                    if (!$value instanceof DOMNodeList) {
+                        continue;
+                    }
+
+                    foreach ($value as $domNode) {
+                        $temporaryDom = new DOMDocument;
+
+                        $temporaryNode = $temporaryDom->importNode($domNode, true);
+                        $temporaryDom->appendChild($temporaryNode);
+
+                        $attributes[$attributeKey][$key] = $temporaryDom->saveXML();
+                    }
+                }
+            }
+
+            $assertion->setAttributes($attributes);
+        }
+
+        return $response;
     }
 }
