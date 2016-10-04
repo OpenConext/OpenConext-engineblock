@@ -211,10 +211,13 @@ class EngineBlock_View
 
     public function sortByDisplayOrder($attributes)
     {
-        return EngineBlock_ApplicationSingleton::getInstance()
+        $attributeMetadata = EngineBlock_ApplicationSingleton::getInstance()
             ->getDiContainer()
-            ->getAttributeMetadata()
-            ->sortByDisplayOrder($attributes);
+            ->getAttributeMetadata();
+
+        $sortedAttributes = $attributeMetadata->sortByDisplayOrder($attributes);
+
+        return $attributeMetadata->normalizeEptiAttributeValue($sortedAttributes);
     }
 
     /**

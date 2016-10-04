@@ -89,12 +89,17 @@ $inlineScriptHelper->appendScript('
     <div class="l-overflow">
         <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
         <table class="comp-table">
-        <?php foreach ($attributes as $uid => $attributeValues) : ?>
-            <?php $attributeName = $this->getAttributeName($uid, $lang)?>
-            <?php if ($attributeName) : ?>
+            <?php foreach ($attributes as $attributeIdentifier => $attributeValues) : ?>
+                <?php
+                // Attempt to get the short name for the attribute, else use the identifier
+                $attributeShortName = $this->getAttributeName($attributeIdentifier, $lang);
+                if (trim($attributeShortName) === '') {
+                    $attributeShortName = $attributeIdentifier;
+                }
+                ?>
                 <tr>
-                    <td class="strong">
-                        <?=EngineBlock_View::htmlSpecialCharsText($attributeName) ?>
+                    <td class="strong" data-identifier="<?= $attributeIdentifier ?>">
+                        <?=EngineBlock_View::htmlSpecialCharsText($attributeShortName) ?>
                     </td>
                     <td>
                         <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
@@ -108,8 +113,7 @@ $inlineScriptHelper->appendScript('
                         <?php endif ?>
                     </td>
                 </tr>
-            <?php endif; ?>
-        <?php endforeach ?>
+            <?php endforeach ?>
         </table>
     </div>
 

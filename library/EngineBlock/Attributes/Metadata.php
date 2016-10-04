@@ -104,6 +104,21 @@ class EngineBlock_Attributes_Metadata
         return $attributes;
     }
 
+    public function normalizeEptiAttributeValue(array $attributes)
+    {
+        foreach ($attributes as $attributeName => $attributeValues) {
+            if ($attributeName !== SAML2_Const::EPTI_URN_MACE && $attributeName !== SAML2_Const::EPTI_URN_OID) {
+                continue;
+            }
+
+            $attributes[$attributeName] = array_map(function (array $nameId) {
+                return $nameId['Value'];
+            }, $attributeValues);
+        }
+
+        return $attributes;
+    }
+
     /**
      * @return string[]
      */
