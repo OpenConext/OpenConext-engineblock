@@ -27,7 +27,9 @@ Feature:
     When I log in at "No ARP"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+   Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+   When I give my consent
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
@@ -36,7 +38,9 @@ Feature:
     When I log in at "Empty ARP"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+   Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
     And I pass through EngineBlock
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
@@ -45,7 +49,9 @@ Feature:
     When I log in at "Wildcard ARP"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+   Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+   When I give my consent
     And I pass through EngineBlock
     Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
@@ -54,7 +60,9 @@ Feature:
     When I log in at "Wrong Value ARP"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+   Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+   When I give my consent
     And I pass through EngineBlock
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
     And the response should not contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
@@ -63,7 +71,9 @@ Feature:
     When I log in at "Right Value ARP"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+   Then the response should not contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+    When I give my consent
     And I pass through EngineBlock
     Then the response should not contain "urn:mace:dir:attribute-def:uid"
     And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
@@ -72,7 +82,9 @@ Feature:
     When I log in at "Two value ARP"
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+   Then the response should contain "urn:mace:dir:attribute-def:uid"
+    And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"
+   When I give my consent
     And I pass through EngineBlock
-    Then the response should contain "urn:mace:dir:attribute-def:uid"
+   Then the response should contain "urn:mace:dir:attribute-def:uid"
     And the response should contain "urn:mace:terena.org:attribute-def:schacHomeOrganization"

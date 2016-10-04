@@ -23,7 +23,9 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then the response should contain "nl:surf:test:something"
+    And I should see "arbitrary-value"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="nl:surf:test:something"]/saml:AttributeValue["arbitrary-value"]'
@@ -37,7 +39,8 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then I should see "the-manipulated-value"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue["the-manipulated-value"]'
@@ -52,7 +55,8 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then I should see "arthur.dent@domain.test"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="arthur.dent@domain.test"]'
@@ -68,7 +72,8 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then I should not see "arthur.dent@domain.test"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="arthur.dent@domain.test"]'
@@ -87,7 +92,9 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then I should not see "NOOT"
+    And I should see "AAP"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
@@ -105,7 +112,8 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then I should see "NOOT"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
@@ -121,7 +129,8 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then I should not see "NOOT"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified" and text()="NOOT"]'
@@ -139,7 +148,8 @@ Feature:
     And I select "Dummy-IdP" on the WAYF
     And I pass through EngineBlock
     And I pass through the IdP
-    And I give my consent
+    Then I should not see "NOOT"
+    When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
     And the response should not match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent" and text()="NOOT"]'
