@@ -53,6 +53,7 @@ $ymlContent = array(
         'feature_api_consent_listing'                             => (bool) $config->get('engineApi.features.consentListing'),
         'feature_api_metadata_api'                                => (bool) $config->get('engineApi.features.metadataApi'),
         'minimum_execution_time_on_invalid_received_response'     => (int) $config->get('minimumExecutionTimeOnInvalidReceivedResponse'),
+        'wayf.show_unfiltered_idps_cutoff_point'                  => (int) $config->get('wayf.showUnfilteredIdpsCutoffPoint'),
     )
 );
 

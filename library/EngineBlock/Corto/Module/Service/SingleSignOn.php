@@ -372,11 +372,14 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $output = $this->_server->renderTemplate(
             'discover',
             array(
-                'preselectedIdp'    => $this->_server->getCookie('selectedIdp'),
-                'action'            => $action,
-                'ID'                => $request->getId(),
-                'idpList'           => $idpList,
-                'metaDataSP'        => $serviceProvider,
+                'preselectedIdp'                => $this->_server->getCookie('selectedIdp'),
+                'action'                        => $action,
+                'showUnfilteredIdpsCutoffPoint' => EngineBlock_ApplicationSingleton::getInstance()
+                    ->getDiContainer()
+                    ->getShowUnfilteredIdpsCutoffPoint(),
+                'ID'                            => $request->getId(),
+                'idpList'                       => $idpList,
+                'metaDataSP'                    => $serviceProvider,
             ));
         $this->_server->sendOutput($output);
     }

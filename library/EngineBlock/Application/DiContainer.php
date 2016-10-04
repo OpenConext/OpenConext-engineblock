@@ -294,4 +294,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     {
         return $this->container->get('engineblock.functional_testing.fixture.features');
     }
+
+    public function getShowUnfilteredIdpsCutoffPoint()
+    {
+        return $this->container->getParameter('wayf.show_unfiltered_idps_cutoff_point');
+    }
 }
