@@ -36,7 +36,7 @@ function initialize() {
         $idpListTarget,
         configuration.idpList,
         idpListElementFactory,
-        configuration.showUnfilteredIdpsCutoffPoint
+        configuration.cutoffPointForShowingUnfilteredIdps
     );
     const previousSelectionList    = new PreviousSelectionList(
         $previousSelectionTarget,

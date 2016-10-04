@@ -1,13 +1,13 @@
 import {IdpFilter} from "./IdpFilter";
 
 export class IdpList {
-    constructor(targetElement, idpList, idpListElementFactory, showUnfilteredIdpsCutoffPoint) {
+    constructor(targetElement, idpList, idpListElementFactory, cutoffPointForShowingUnfilteredIdps) {
         this.targetElement              = targetElement;
         this.idpList                    = idpList;
         this.idpListElementFactory      = idpListElementFactory;
 
         this.filterValue                 = '';
-        this.shouldHideUnfilteredIdpList = this.idpList.length > showUnfilteredIdpsCutoffPoint;
+        this.shouldHideUnfilteredIdpList = this.idpList.length > cutoffPointForShowingUnfilteredIdps;
         this.filteredIdpList             = this.idpList;
 
         this.render();

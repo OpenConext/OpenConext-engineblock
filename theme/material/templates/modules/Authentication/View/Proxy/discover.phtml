@@ -139,19 +139,21 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
     }
 
     $configuration = [
-        'previousSelectionCookieName'   => $previousSelectionCookieIdentifier,
-        'previousSelectionList'         => $formattedPreviousSelectionList,
-        'idpList'                       => $formattedIdpList,
-        'showUnfilteredIdpsCutoffPoint' => $showUnfilteredIdpsCutoffPoint,
-        'messages' => [
+        'previousSelectionCookieName'         => $previousSelectionCookieIdentifier,
+        'previousSelectionList'               => $formattedPreviousSelectionList,
+        'idpList'                             => $formattedIdpList,
+        'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
+        'messages'                            => [
             'pressEnterToSelect' => $this->t('press_enter_to_select'),
-            'moreIdpResults'     => $this->t('more_idp_results')
+            'moreIdpResults'     => $this->t('more_idp_results'),
         ],
-        'requestAccessUrl' => '/authentication/idp/requestAccess?' . http_build_query([
-            'lang' => $lang,
-            'spEntityId' => $metaDataSP->entityId,
-            'spName' => $spDisplayName,
-        ]),
+        'requestAccessUrl'                    => '/authentication/idp/requestAccess?'.http_build_query(
+                [
+                    'lang'       => $lang,
+                    'spEntityId' => $metaDataSP->entityId,
+                    'spName'     => $spDisplayName,
+                ]
+            ),
     ];
     ?>
 
