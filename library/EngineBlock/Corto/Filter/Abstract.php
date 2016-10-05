@@ -16,7 +16,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
      * @abstract
      * @return array
      */
-    abstract protected function _getCommands();
+    abstract public function getCommands();
 
     /**
      * Filter the response.
@@ -58,7 +58,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
             $collabPersonId = null;
         }
 
-        $commands = $this->_getCommands();
+        $commands = $this->getCommands();
 
         /** @var EngineBlock_Corto_Filter_Command_Abstract $command */
         foreach ($commands as $command) {

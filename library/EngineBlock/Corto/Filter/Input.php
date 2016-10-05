@@ -14,10 +14,13 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
      *
      * @return array
      */
-    protected function _getCommands()
+    public function getCommands()
     {
-        $logger = $this->_server->getSystemLog();
-        return array(
+        $diContainer          = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $featureConfiguration = $diContainer->getFeatureConfiguration();
+        $logger               = EngineBlock_ApplicationSingleton::getLog();
+
+        $commands = array(
             // Show an error if we get responses that do not have the Success status code
             new EngineBlock_Corto_Filter_Command_ValidateSuccessfulResponse(),
 
@@ -58,5 +61,13 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Apply the Attribute Release Policy before we do consent.
             new EngineBlock_Corto_Filter_Command_AttributeReleasePolicy(),
         );
+
+        if (!$featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent')) {
+            return $commands;
+        }
+
+        $outputFilter = new EngineBlock_Corto_Filter_Output($this->_server);
+
+        return array_merge($commands, $outputFilter->getCommands());
     }
 }
