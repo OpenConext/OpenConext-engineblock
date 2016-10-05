@@ -12,18 +12,40 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         config: config,
-
-        uglify: {
-            material: {
+        browserify: {
+            dist: {
+                options: {
+                    transform: [
+                        [
+                            "babelify", {
+                                presets: [
+                                    ['es2015', {'loose': true}]
+                                ],
+                                plugins: [
+                                    'transform-es3-property-literals',
+                                    'transform-es3-member-expression-literals'
+                                ]
+                            },
+                        ],
+                    ]
+                },
                 files: {
-                    '../web/javascripts/application.js': [
-                        'bower_components/jquery/dist/jquery.min.js',
-                        'bower_components/jquery.lazyload/jquery.lazyload.js',
-                        'bower_components/js-cookie/src/js.cookie.js',
-                        'bower_components/easyModal.js/jquery.easyModal.js',
-                        'bower_components/fastclick/lib/fastclick.js',
-                        'bower_components/underscore/underscore.js',
-                        '<%= config.theme %>/javascripts/application.js'
+                    "../web/javascripts/application.js": ["<%= config.theme %>/javascripts/application.js"]
+                }
+            }
+        },
+        uglify: {
+            dist: {
+                files: {
+                    '../web/javascripts/application.min.js': ['../web/javascripts/application.js']
+                },
+            },
+            polyfill: {
+                files: {
+                    '../web/javascripts/polyfill.min.js': [
+                        'node_modules/ie8/build/ie8.js',
+                        'node_modules/es5-shim/es5-shim.min.js',
+                        'node_modules/html5shiv/dist/html5-shiv.min.js'
                     ]
                 }
             }
@@ -57,7 +79,6 @@ module.exports = function(grunt) {
                     { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
                     { expand: true, cwd: 'material/templates/modules/', src: ['**'], dest: '../app/Resources/views/modules' },
                     { expand: true, cwd: 'material/images/', src: ['**'], dest: '../web/images' },
-                    { expand: true, cwd: 'bower_components/html5shiv/dist', src: ['html5shiv.min.js'], dest: '../web/javascripts' }
                 ]
             }
         },
@@ -74,6 +95,11 @@ module.exports = function(grunt) {
                     '../web/images/**/*',
                     '../web/javascripts/**/*',
                     '../web/stylesheets/**/*'
+                ]
+            },
+            nonMinifiedJavaScript: {
+                src: [
+                    '../web/javascripts/application.js'
                 ]
             }
         },
@@ -141,7 +167,9 @@ module.exports = function(grunt) {
                 ];
 
             tasks.push('postcss:' + theme);
-            tasks.push('uglify:' + theme);
+            tasks.push('browserify');
+            tasks.push('uglify');
+            tasks.push('clean:nonMinifiedJavaScript');
             tasks.push('add_comment:' + theme);
             tasks.push('string-replace:layoutconfig');
 
