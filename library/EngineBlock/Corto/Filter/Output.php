@@ -3,7 +3,8 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 /**
- * Called by Corto *after consent*, just as it prepares to send the response to the SP
+ * Commands are run before consent if the feature run_all_manipulations_prior_to_consent is turned on
+ * and after consent if the feature is turned off
  */
 class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
 {
