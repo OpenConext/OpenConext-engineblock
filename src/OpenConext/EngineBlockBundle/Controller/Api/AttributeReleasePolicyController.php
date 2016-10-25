@@ -6,6 +6,7 @@ use EngineBlock_Arp_AttributeReleasePolicyEnforcer;
 use OpenConext\EngineBlock\Service\MetadataService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
+use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
 use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,7 +49,7 @@ final class AttributeReleasePolicyController
             throw new ApiAccessDeniedHttpException('Access to the ARP API requires the role ROLE_API_USER_PROFILE');
         }
 
-        $body = json_decode($request->getContent(), true);
+        $body = JsonRequestHelper::decodeContentAsArrayOf($request);
 
         if (!is_array($body)) {
             throw new BadApiRequestHttpException('Unrecognized structure for JSON: ' . var_export($body, true));
