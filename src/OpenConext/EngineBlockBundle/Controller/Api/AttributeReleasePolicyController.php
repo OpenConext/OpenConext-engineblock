@@ -12,6 +12,10 @@ use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity) Extensive request validation
+ * @SuppressWarnings(PHPMD.NPathComplexity) Extensive request validation
+ */
 final class AttributeReleasePolicyController
 {
     /**
@@ -52,15 +56,34 @@ final class AttributeReleasePolicyController
         $body = JsonRequestHelper::decodeContentAsArrayOf($request);
 
         if (!is_array($body)) {
-            throw new BadApiRequestHttpException('Unrecognized structure for JSON: ' . var_export($body, true));
+            throw new BadApiRequestHttpException(sprintf(
+                'Unrecognized structure for JSON: expected decoded root value to be an array, got "%s"',
+                gettype($body)
+            ));
         }
 
-        if (!isset($body['entityIds']) && !is_array($body['entityIds'])) {
-            throw new BadApiRequestHttpException('Unrecognized structure for JSON key "entityIds" not found');
+        if (!isset($body['entityIds'])) {
+            throw new BadApiRequestHttpException('Invalid JSON structure: key "entityIds" not found');
         }
 
-        if (!isset($body['attributes']) && !is_array($body['attributes'])) {
-            throw new BadApiRequestHttpException('Unrecognized structure for JSON: key "attributes" not found');
+        if (!is_array($body['entityIds']) || empty($body['entityIds'])) {
+            throw new BadApiRequestHttpException('Invalid JSON structure: "entityIds" must be a non-empty array');
+        }
+
+        if (!isset($body['attributes'])) {
+            throw new BadApiRequestHttpException('Invalid JSON structure: key "attributes" not found');
+        }
+
+        if (!is_array($body['attributes'])) {
+            throw new BadApiRequestHttpException('Invalid JSON structure: "attributes" must be a JSON object');
+        }
+
+        foreach ($body['attributes'] as $attributeName => $attributeValues) {
+            if (!is_string($attributeName) || !is_array($attributeValues)) {
+                throw new BadApiRequestHttpException(
+                    'Invalid JSON structure: attributes should have strings as keys and an array of values'
+                );
+            }
         }
 
         $releasedAttributes = [];
