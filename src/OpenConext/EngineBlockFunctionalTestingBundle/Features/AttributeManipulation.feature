@@ -1,4 +1,3 @@
-@WIP
 Feature:
   In order to be to influence the released attribute values
   As an IdP or SP

@@ -1,4 +1,3 @@
-@WIP
 Feature:
   In order to limit leakage of unnecessary user data
   As an OpenConext admin
