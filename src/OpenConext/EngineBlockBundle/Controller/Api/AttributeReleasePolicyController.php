@@ -64,14 +64,7 @@ final class AttributeReleasePolicyController
 
         $releasedAttributes = [];
         foreach ($body['entityIds'] as $entityId) {
-            $serviceProvider = $this->metadataService->findServiceProvider(new EntityId($entityId));
-
-            if ($serviceProvider === null) {
-                continue;
-            }
-
-            $arp = $this->metadataService->findArpFor($serviceProvider);
-
+            $arp = $this->metadataService->findArpForServiceProviderByEntityId(new EntityId($entityId));
             $releasedAttributes[$entityId] = $this->arpEnforcer->enforceArp($arp, $body['attributes']);
         }
 

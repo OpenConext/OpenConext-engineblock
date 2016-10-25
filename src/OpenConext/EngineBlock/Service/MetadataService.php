@@ -52,11 +52,18 @@ final class MetadataService
     }
 
     /**
-     * @param ServiceProvider $serviceProvider
+     * @param EntityId $entityId
      * @return null|AttributeReleasePolicy
+     * @internal param ServiceProvider $serviceProvider
      */
-    public function findArpFor(ServiceProvider $serviceProvider)
+    public function findArpForServiceProviderByEntityId(EntityId $entityId)
     {
+        $serviceProvider = $this->findServiceProvider($entityId);
+
+        if ($serviceProvider === null) {
+            return null;
+        }
+
         return $this->metadataRepository->fetchServiceProviderArp($serviceProvider);
     }
 }
