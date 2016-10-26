@@ -12,10 +12,6 @@ use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CyclomaticComplexity) Extensive request validation
- * @SuppressWarnings(PHPMD.NPathComplexity) Extensive request validation
- */
 final class AttributeReleasePolicyController
 {
     /**
@@ -46,6 +42,9 @@ final class AttributeReleasePolicyController
     /**
      * @param Request $request
      * @return JsonResponse
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity) Extensive request validation
+     * @SuppressWarnings(PHPMD.NPathComplexity) Extensive request validation
      */
     public function applyArpAction(Request $request)
     {
