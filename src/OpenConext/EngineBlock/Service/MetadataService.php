@@ -54,7 +54,6 @@ final class MetadataService
     /**
      * @param EntityId $entityId
      * @return null|AttributeReleasePolicy
-     * @internal param ServiceProvider $serviceProvider
      */
     public function findArpForServiceProviderByEntityId(EntityId $entityId)
     {
