@@ -29,7 +29,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $metadataService = $this->createDummyMetadataService();
         $arpEnforcer = new EngineBlock_Arp_AttributeReleasePolicyEnforcer();
 
-        $authorizationChecker = $this->mockAuthorizationChecker(false);
+        $authorizationChecker = $this->mockAuthorizationCheckerDenyingAccessToProfile();
 
         $arpController = new AttributeReleasePolicyController($authorizationChecker, $metadataService, $arpEnforcer);
         $arpController->applyArpAction(new Request);
@@ -48,7 +48,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('null');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -68,7 +68,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -88,7 +88,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": "some-entity-id"}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -108,7 +108,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": []}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -128,7 +128,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": ["some-entity-id"]}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -148,7 +148,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent('{"entityIds": ["some-entity-id"], "attributes": "some-attribute"}');
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -170,7 +170,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         );
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -192,7 +192,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         );
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -225,7 +225,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $request = $this->createRequestWithContent($serializedJsonRequest);
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $this->createDummyMetadataService(),
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -273,7 +273,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $metadataServiceWithServiceProviders = new MetadataService($metadataRepository);
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $metadataServiceWithServiceProviders,
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -339,7 +339,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $metadataServiceWithServiceProviders = new MetadataService($metadataRepository);
 
         $arpController = new AttributeReleasePolicyController(
-            $this->mockAuthorizationChecker(),
+            $this->mockAuthorizationCheckerGrantingAccessToProfile(),
             $metadataServiceWithServiceProviders,
             new EngineBlock_Arp_AttributeReleasePolicyEnforcer
         );
@@ -349,15 +349,27 @@ class AttributeReleasePolicyControllerTest extends TestCase
     }
 
     /**
-     * @param bool $grantAccessToProfile
      * @return AuthorizationCheckerInterface
      */
-    public function mockAuthorizationChecker($grantAccessToProfile = true)
+    public function mockAuthorizationCheckerGrantingAccessToProfile()
     {
         $authorizationChecker = Mockery::mock(AuthorizationCheckerInterface::class);
         $authorizationChecker->shouldReceive('isGranted')
             ->with('ROLE_API_USER_PROFILE')
-            ->andReturn($grantAccessToProfile);
+            ->andReturn(true);
+
+        return $authorizationChecker;
+    }
+
+    /**
+     * @return AuthorizationCheckerInterface
+     */
+    public function mockAuthorizationCheckerDenyingAccessToProfile()
+    {
+        $authorizationChecker = Mockery::mock(AuthorizationCheckerInterface::class);
+        $authorizationChecker->shouldReceive('isGranted')
+            ->with('ROLE_API_USER_PROFILE')
+            ->andReturn(false);
 
         return $authorizationChecker;
     }
