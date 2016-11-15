@@ -136,8 +136,10 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapPhpSettings()
     {
-        $settings = $this->_application->getConfiguration()->phpSettings->toArray();
-        $this->_setIniSettings($settings);
+        $settings = $this->_application->getConfiguration()->phpSettings;
+        if (!is_null($settings)) {
+            $this->_setIniSettings($settings->toArray());
+        }
     }
 
     protected function _setIniSettings($settings, $prefix = '')
