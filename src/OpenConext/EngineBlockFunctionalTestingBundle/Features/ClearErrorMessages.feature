@@ -24,13 +24,14 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Identity Provider error"
+      And I should see "InvalidNameIDPolicy"
+      And I should see "NameIdPolicy is invalid"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
-      And I should see "NameIdPolicy is invalid"
 
     @WIP
     Scenario: I log in at my Identity Provider, but the IdP gives a message that I don't have access.
@@ -40,13 +41,14 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
+      And I should see "Invalid IP range"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
-      And I should see "Invalid IP range"
 
     @WIP
     Scenario: I log in at my Identity Provider, but I don't have access.
@@ -55,6 +57,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -71,6 +74,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -86,6 +90,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
      Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
