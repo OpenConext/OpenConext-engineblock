@@ -112,6 +112,16 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
+     * @return bool
+     */
+    public function hasAssertion()
+    {
+        $assertions = $this->sspMessage->getAssertions();
+
+        return !empty($assertions);
+    }
+
+    /**
      * @param string $return
      * @return $this
      */
