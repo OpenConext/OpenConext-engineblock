@@ -114,6 +114,12 @@ class MockServiceProvider extends AbstractMockEntityRole
         return $this;
     }
 
+    public function setAuthnRequestProxyCountTo($proxyCount)
+    {
+        $this->descriptor->Extensions['SAMLRequest']->setProxyCount($proxyCount);
+        return $this;
+    }
+
     protected function getRoleClass()
     {
         return '\SAML2_XML_md_SPSSODescriptor';

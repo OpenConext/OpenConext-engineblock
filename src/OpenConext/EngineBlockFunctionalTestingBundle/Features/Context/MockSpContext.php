@@ -488,4 +488,17 @@ class MockSpContext extends AbstractSubContext
             ->setWorkflowState($sp->entityId(), $workflowState)
             ->save();
     }
+
+    /**
+     * @Given /^SP "([^"]*)" is configured to generate a AuthnRequest with a ProxyCount of (\d+)$/
+     * @param string $spName
+     * @param int $proxyCount
+     */
+    public function spIsConfiguredToGenerateAAuthnRequestWithAProxyCountOf($spName, $proxyCount)
+    {
+        $sp = $this->mockSpRegistry->get($spName);
+        $sp->setAuthnRequestProxyCountTo((int) $proxyCount);
+
+        $this->mockSpRegistry->save();
+    }
 }
