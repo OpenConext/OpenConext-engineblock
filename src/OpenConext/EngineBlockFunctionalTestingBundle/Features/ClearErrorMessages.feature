@@ -30,6 +30,7 @@ Feature:
       And I should see "IP Address:"
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
+      And I should see "NameIdPolicy is invalid"
 
     @WIP
     Scenario: I log in at my Identity Provider, but the IdP gives a message that I don't have access.
@@ -45,6 +46,7 @@ Feature:
       And I should see "IP Address:"
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
+      And I should see "Invalid IP range"
 
     @WIP
     Scenario: I log in at my Identity Provider, but I don't have access.
