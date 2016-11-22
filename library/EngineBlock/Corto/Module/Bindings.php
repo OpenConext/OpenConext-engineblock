@@ -332,6 +332,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             try {
                 $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+            } catch (sspmod_saml_Error $exception) {
+                // Pass through, show specific feedback for responses with error status codes
+                throw $exception;
             } catch (Exception $exception) {
                 throw new ResponseProcessingFailedException(
                     sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
