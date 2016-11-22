@@ -66,7 +66,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
         if ($request->getProxyCount() === 0) {
             $log->info("Request does not allow any further proxying, responding with 'ProxyCountExceeded' status");
-            $response = $this->_server->createErrorResponse($request, 'ProxyCountExceeded');
+            $response = $this->_server->createProxyCountExceededResponse($request);
             $this->_server->sendResponseToRequestIssuer($request, $response);
             return;
         }
@@ -122,7 +122,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // > 1 IdPs found, but isPassive attribute given, unable to show WAYF.
         if ($request->getIsPassive()) {
             $log->info('Request is passive, but can be handled by more than one IdP: responding with NoPassive status');
-            $response = $this->_server->createErrorResponse($request, 'NoPassive');
+            $response = $this->_server->createNoPassiveResponse($request);
             $this->_server->sendResponseToRequestIssuer($request, $response);
             return;
         }
