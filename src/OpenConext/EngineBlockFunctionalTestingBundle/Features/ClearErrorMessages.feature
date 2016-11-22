@@ -16,13 +16,14 @@ Feature:
       And SP "Unconnected SP" uses a whitelist for access control
       And an unregistered Service Provider named "Unregistered SP"
 
+  @WIP
   Scenario: I log in at my Identity Provider, but something goes wrong and it returns an error response.
     Given the IdP is configured to always return Responses with StatusCode Requester/InvalidNameIDPolicy
       And the IdP is configured to always return Responses with StatusMessage "NameIdPolicy is invalid"
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Identity Provider response"
+     Then I should see "Identity Provider error"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
