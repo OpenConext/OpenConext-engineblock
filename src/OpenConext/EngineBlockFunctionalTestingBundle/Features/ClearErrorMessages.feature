@@ -59,6 +59,37 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
+    @WIP
+    Scenario: I log in at my Identity Provider, that does not send assertions, but they give a message that I don't have access.
+    Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
+      And the IdP is configured to always return Responses with StatusMessage "Invalid IP range"
+      And the IdP is configured to not send an Assertion
+     When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then I should see "Identity Provider error"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
+
+    @WIP
+    Scenario: I log in at my Identity Provider, that does not send assertions, but I don't have access.
+    Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
+      And the IdP is configured to not send an Assertion
+     When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then I should see "Identity Provider error"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
+
   Scenario: I log in at my Identity Provider, but it has changed (private/public) keys without notifying OpenConext
     Given the IdP uses the private key at "src/OpenConext/EngineBlockFunctionalTestingBundle/Resources/keys/rolled-over.key"
       And the IdP uses the certificate at "src/OpenConext/EngineBlockFunctionalTestingBundle//Resources/keys/rolled-over.crt"
