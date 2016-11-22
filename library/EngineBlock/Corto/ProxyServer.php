@@ -386,17 +386,6 @@ class EngineBlock_Corto_ProxyServer
 
 //////// RESPONSE HANDLING ////////
 
-    public function createErrorResponse(
-        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        $errorStatus
-    ) {
-        $response = $this->_createBaseResponse($request);
-        $response->setStatus(array(
-            'Code' => 'urn:oasis:names:tc:SAML:2.0:status:' . $errorStatus
-        ));
-        return $response;
-    }
-
     public function createProxyCountExceededResponse(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         $response = $this->_createBaseResponse($request);
