@@ -62,7 +62,11 @@ class ResponseFactory
             $status['SubCode'] = $secondStatusCode;
         }
 
-        $status['Message'] = $mockIdp->getStatusMessage();
+        $statusMessage = $mockIdp->getStatusMessage();
+        if ($statusMessage !== null) {
+            $status['Message'] = $mockIdp->getStatusMessage();
+        }
+
         $response->setStatus($status);
     }
 
