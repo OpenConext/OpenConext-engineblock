@@ -27,6 +27,10 @@ class ResponseFactory
 
         $this->encryptAssertions($mockIdp, $response);
 
+        if ($mockIdp->shouldNotSendAssertions()) {
+            $response->setAssertions([]);
+        }
+
         return $response;
     }
 

@@ -11,6 +11,8 @@ use XMLSecurityKey;
  */
 class MockIdentityProvider extends AbstractMockEntityRole
 {
+    private $sendAssertions = true;
+
     public function singleSignOnLocation()
     {
         return $this->getSsoRole()->SingleSignOnService[0]->Location;
@@ -241,6 +243,18 @@ class MockIdentityProvider extends AbstractMockEntityRole
     public function mustSignAssertions()
     {
         return isset($this->descriptor->Extensions['SignAssertions']);
+    }
+
+    public function doNotSendAssertions()
+    {
+        $this->sendAssertions = false;
+
+        return $this;
+    }
+
+    public function shouldNotSendAssertions()
+    {
+        return $this->sendAssertions === false;
     }
 
     protected function getRoleClass()
