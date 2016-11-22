@@ -158,58 +158,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $ebRequest->setWasSigned();
         }
 
-        $this->_annotateRequestWithVoContext($ebRequest, $serviceProvider);
-
         $this->_annotateRequestWithKeyId($ebRequest);
 
         return $ebRequest;
-    }
-
-    /**
-     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest
-     * @param array $cortoSpMetadata
-     * @return void
-     * @throws EngineBlock_Corto_Exception_VoMismatch
-     */
-    protected function _annotateRequestWithVoContext(
-        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest,
-        ServiceProvider $cortoSpMetadata
-    ) {
-        // Check if the request was received on a VO endpoint.
-        $explicitVo = $this->_server->getVirtualOrganisationContext();
-
-        // Check if the SP should always use a VO (implicit VO).
-        $implicitVo = NULL;
-        if ($cortoSpMetadata->implicitVoId) {
-            $implicitVo = $cortoSpMetadata->implicitVoId;
-        }
-
-        // If we have neither, then we're done here
-        if (!$explicitVo && !$implicitVo) {
-            return;
-        }
-
-        // If we have both then they'd better match!
-        if ($explicitVo && $implicitVo && $explicitVo !== $implicitVo) {
-            throw new EngineBlock_Corto_Exception_VoMismatch(
-                "Explicit VO '$explicitVo' does not match implicit VO '$implicitVo'!"
-            );
-        }
-
-        // If we received the request on a vo endpoint, then we should register it in the metadata,
-        // so we know to use that as Issuer of the resulting Response.
-        // And the implicit VO no longer matters.
-        if ($explicitVo) {
-            $ebRequest->setExplicitVoContext($explicitVo);
-            return;
-        }
-
-        // If we received the request from an SP with an implicit VO, then register it in the metadata,
-        // so it can be verified.
-        if ($implicitVo) {
-            $ebRequest->setImplicitVoContext($implicitVo);
-            return;
-        }
     }
 
     /**

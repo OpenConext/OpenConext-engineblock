@@ -31,17 +31,12 @@ class MetadataController
     }
 
     /**
-     * @param null|string $virtualOrganization
      * @param null|string $keyId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function idpMetadataAction($virtualOrganization = null, $keyId = null)
+    public function idpMetadataAction($keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
-
-        if ($virtualOrganization) {
-            $proxyServer->setVirtualOrganisationContext($virtualOrganization);
-        }
 
         if ($keyId) {
             $proxyServer->setKeyId($keyId);
@@ -53,17 +48,12 @@ class MetadataController
     }
 
     /**
-     * @param null|string $virtualOrganization
      * @param null|string $keyId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function spMetadataAction($virtualOrganization = null, $keyId = null)
+    public function spMetadataAction($keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
-
-        if ($virtualOrganization) {
-            $proxyServer->setVirtualOrganisationContext($virtualOrganization);
-        }
 
         if ($keyId) {
             $proxyServer->setKeyId($keyId);
@@ -75,19 +65,14 @@ class MetadataController
     }
 
     /**
-     * @param null|string $virtualOrganization
      * @param null|string $keyId
      * @param Request     $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
      */
-    public function allIdpsMetadataAction(Request $request, $virtualOrganization = null, $keyId = null)
+    public function allIdpsMetadataAction(Request $request, $keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
-
-        if ($virtualOrganization !== null) {
-            $proxyServer->setVirtualOrganisationContext($virtualOrganization);
-        }
 
         if ($keyId !== null) {
             $proxyServer->setKeyId($keyId);
