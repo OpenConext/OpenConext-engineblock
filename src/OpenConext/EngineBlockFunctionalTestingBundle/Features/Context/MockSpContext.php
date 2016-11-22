@@ -501,4 +501,16 @@ class MockSpContext extends AbstractSubContext
 
         $this->mockSpRegistry->save();
     }
+
+    /**
+     * @Given /^SP "([^"]*)" is configured to generate a passive AuthnRequest$/
+     * @param $spName
+     */
+    public function spIsConfiguredToGenerateAPassiveAuthnRequest($spName)
+    {
+        $sp = $this->mockSpRegistry->get($spName);
+        $sp->setAuthnRequestToPassive();
+
+        $this->mockSpRegistry->save();
+    }
 }
