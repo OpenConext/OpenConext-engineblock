@@ -12,11 +12,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
-        $log->notice(sprintf(
-            'Received Assertion from Issuer "%s" with signature method algorithm "%s"',
-            $receivedResponse->getIssuer(),
-            $receivedResponse->getAssertion()->getSignatureMethod()
-        ));
+        if ($receivedResponse->hasAssertion()) {
+            $log->notice(sprintf(
+                'Received Assertion from Issuer "%s" with signature method algorithm "%s"',
+                $receivedResponse->getIssuer(),
+                $receivedResponse->getAssertion()->getSignatureMethod()
+            ));
+        }
 
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
 
