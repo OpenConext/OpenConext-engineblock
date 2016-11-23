@@ -191,6 +191,14 @@ Feature:
       And I should see "IP Address:"
       And I should see "Service Provider:"
 
+  @WIP
+  Scenario: The session has been lost
+    When I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I lose my session
+     And I pass through the IdP
+     And I should see "your session was lost"
+
 #
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a binding
