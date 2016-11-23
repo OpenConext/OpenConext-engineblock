@@ -332,6 +332,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             try {
                 $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+            } catch (sspmod_saml_Error $exception) {
+                // Pass through, show specific feedback for responses with error status codes
+                throw $exception;
             } catch (Exception $exception) {
                 throw new ResponseProcessingFailedException(
                     sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
@@ -353,7 +356,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             throw $e;
         }
         // This misnamed exception is only thrown when the Response status code is not Success
-        // If so, let the Corto Output Filters handle it.
         catch (sspmod_saml_Error $e) {
             $log->notice(
                 'Received an Error Response',
@@ -364,6 +366,28 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                     'status_message'    => $e->getStatusMessage(),
                 )
             );
+
+            $status = $sspResponse->getStatus();
+
+            $statusCodeDescription = $status['Code'];
+            if (isset($status['SubCode'])) {
+                $statusCodeDescription .= '/' . $status['SubCode'];
+            }
+            $statusCodeDescription = str_replace('urn:oasis:names:tc:SAML:2.0:status:', '', $statusCodeDescription);
+
+            $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
+
+            // Throw the exception here instead of in the Corto Filters as Corto assumes the presence of an Assertion
+            $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
+                'Response received with Status: ' .
+                $statusCodeDescription .
+                ' - ' .
+                $statusMessage
+            );
+            $exception->setFeedbackStatusCode($statusCodeDescription);
+            $exception->setFeedbackStatusMessage($statusMessage);
+
+            throw $exception;
         }
         // Thrown when timings are out of whack or other some such verification exceptions.
         catch (SimpleSAML_Error_Exception $e) {

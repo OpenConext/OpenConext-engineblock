@@ -293,4 +293,16 @@ class MockIdpContext extends AbstractSubContext
         $mink = $this->getMainContext()->getMinkContext();
         $mink->pressButton('GO');
     }
+
+    /**
+     * @Given /^the IdP is configured to not send an Assertion$/
+     */
+    public function theIdPIsConfiguredToNotSendAnAssertion()
+    {
+        $idp = $this->mockIdpRegistry->getOnly();
+
+        $idp->doNotSendAssertions();
+
+        $this->mockIdpRegistry->save();
+    }
 }
