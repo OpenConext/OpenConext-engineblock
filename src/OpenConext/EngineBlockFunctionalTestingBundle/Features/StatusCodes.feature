@@ -24,6 +24,3 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
      Then the response should match xpath '/samlp:Response/samlp:Status/samlp:StatusCode[@Value="urn:oasis:names:tc:SAML:2.0:status:Responder"]/samlp:StatusCode[@Value="urn:oasis:names:tc:SAML:2.0:status:NoPassive"]'
-
-
-
