@@ -16,7 +16,6 @@ Feature:
       And SP "Unconnected SP" uses a whitelist for access control
       And an unregistered Service Provider named "Unregistered SP"
 
-  @WIP
   Scenario: I log in at my Identity Provider, but something goes wrong and it returns an error response.
     Given the IdP is configured to always return Responses with StatusCode Requester/InvalidNameIDPolicy
       And the IdP is configured to always return Responses with StatusMessage "NameIdPolicy is invalid"
@@ -33,7 +32,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-    @WIP
     Scenario: I log in at my Identity Provider, but the IdP gives a message that I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
       And the IdP is configured to always return Responses with StatusMessage "Invalid IP range"
@@ -50,7 +48,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-    @WIP
     Scenario: I log in at my Identity Provider, but I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
      When I log in at "Dummy SP"
@@ -65,7 +62,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-    @WIP
     Scenario: I log in at my Identity Provider, that does not send assertions, but they give a message that I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
       And the IdP is configured to always return Responses with StatusMessage "Invalid IP range"
@@ -82,7 +78,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-    @WIP
     Scenario: I log in at my Identity Provider, that does not send assertions, but I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
       And the IdP is configured to not send an Assertion
