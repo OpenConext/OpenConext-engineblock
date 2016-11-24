@@ -347,10 +347,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 continue;
             }
 
-            if (isset($cachedResponse['vo'])) {
-                $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
-            }
-
             if (isset($cachedResponse['key'])) {
                 $this->_server->setKeyId($cachedResponse['key']);
             }

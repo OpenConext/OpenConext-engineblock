@@ -153,7 +153,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-
   Scenario: An Identity Provider sends a response without a SHO
     Given the IdP does not send the attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
      When I log in at "Dummy SP"

@@ -1,6 +1,5 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
@@ -25,11 +24,6 @@ class EngineBlock_Corto_Adapter
      * @var EngineBlock_Corto_ProxyServer
      */
     protected $_proxyServer;
-
-    /**
-     * @var String the name of the Virtual Organisation context (if any)
-     */
-    protected $_voContext = NULL;
 
     /**
      * @var null
@@ -125,11 +119,6 @@ class EngineBlock_Corto_Adapter
     public function processedAssertionConsumer()
     {
         $this->_callCortoServiceUri('processedAssertionConsumerService');
-    }
-
-    public function setVirtualOrganisationContext($virtualOrganisation)
-    {
-        $this->_voContext = $virtualOrganisation;
     }
 
     public function setKeyId($filter)
@@ -384,10 +373,6 @@ class EngineBlock_Corto_Adapter
 
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
-
-        if ($this->_voContext!=null) {
-            $proxyServer->setVirtualOrganisationContext($this->_voContext);
-        }
     }
 
     /**

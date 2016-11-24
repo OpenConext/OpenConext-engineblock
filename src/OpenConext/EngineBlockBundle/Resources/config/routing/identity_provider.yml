@@ -25,160 +25,43 @@ authentication_idp_sso:
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        virtualOrganization: ~
         idpHash: ~
         keyId: ~
-
-authentication_idp_sso_vo:
-    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        idpHash: ~
-        keyId: ~
-    requirements:
-        virtualOrganization: .+
-
-authentication_idp_sso_vo_keyid:
-    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        idpHash: ~
-    requirements:
-        virtualOrganization: .+
-        keyId: .+
-
-authentication_idp_sso_vo_idphash:
-    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/{idpHash}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        keyId: ~
-    requirements:
-        virtualOrganization: .+
-        idpHash: .+
-
-authentication_idp_sso_vo_keyid_idphash:
-    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/key:{keyId}/{idpHash}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-    requirements:
-        virtualOrganization: .+
-        keyId: .+
-        idpHash: .+
-
-authentication_idp_sso_vo_idphash_keyid:
-    path:     '/authentication/idp/single-sign-on/vo:{virtualOrganization}/{idpHash}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-    requirements:
-        virtualOrganization: .+
-        keyId: .+
-        idpHash: .+
 
 authentication_idp_sso_keyid:
     path:     '/authentication/idp/single-sign-on/key:{keyId}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        virtualOrganization: ~
         idpHash: ~
     requirements:
-        virtualOrganization: .+
         idpHash: .+
-
-authentication_idp_sso_keyid_vo:
-    path:     '/authentication/idp/single-sign-on/key:{keyId}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        idpHash: ~
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
-
-authentication_idp_sso_keyid_vo_idphash:
-    path:     '/authentication/idp/single-sign-on/key:{keyId}/vo:{virtualOrganization}/{idpHash}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
-        idpHash: .+,
 
 authentication_idp_sso_keyid_idphash:
     path:     '/authentication/idp/single-sign-on/key:{keyId}/{idpHash}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        virtualOrganization: ~
     requirements:
        keyId: .+
        idpHash: .+
-
-authentication_idp_sso_keyid_idphash_vo:
-    path:     '/authentication/idp/single-sign-on/key:{keyId}/{idpHash}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
-        idpHash: .+,
 
 authentication_idp_sso_idphash:
     path:     '/authentication/idp/single-sign-on/{idpHash}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        virtualOrganization: ~
         keyId: ~
     requirements:
         idpHash: .+
-
-authentication_idp_sso_idphash_vo:
-    path:     '/authentication/idp/single-sign-on/{idpHash}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        keyId: ~
-    requirements:
-        idpHash: .+
-        virtualOrganization: .+,
-
-
-authentication_idp_sso_idphash_vo_keyid:
-    path:     '/authentication/idp/single-sign-on/{idpHash}/vo:{virtualOrganization}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-    requirements:
-        idpHash: .+
-        virtualOrganization: .+,
-        keyId: .+
 
 authentication_idp_sso_idphash_keyid:
     path:     '/authentication/idp/single-sign-on/{idpHash}/key:{keyId}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-        virtualOrganization: ~
     requirements:
         keyId: .+
-        idpHash: .+,
-
-authentication_idp_sso_idphash_keyid_vo:
-    path:     '/authentication/idp/single-sign-on/{idpHash}/key:{keyId}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:singleSignOnAction
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
         idpHash: .+,
 
 ### Unsollicited
@@ -188,158 +71,41 @@ authentication_idp_unsolicited_sso:
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        virtualOrganization: ~
         idpHash: ~
         keyId: ~
-
-authentication_idp_unsolicited_sso_vo:
-    path:     '/authentication/idp/unsolicited-single-sign-on/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        idpHash: ~
-        keyId: ~
-    requirements:
-        virtualOrganization: .+
-
-authentication_idp_unsolicited_sso_vo_keyid:
-    path:     '/authentication/idp/unsolicited-single-sign-on/vo:{virtualOrganization}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        idpHash: ~
-    requirements:
-        virtualOrganization: .+
-        keyId: .+
-
-authentication_idp_unsolicited_sso_vo_idphash:
-    path:     '/authentication/idp/unsolicited-single-sign-on/vo:{virtualOrganization}/{idpHash}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        keyId: ~
-    requirements:
-        virtualOrganization: .+
-        idpHash: .+
-
-authentication_idp_unsolicited_sso_vo_keyid_idphash:
-    path:     '/authentication/idp/unsolicited-single-sign-on/vo:{virtualOrganization}/key:{keyId}/{idpHash}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-    requirements:
-        virtualOrganization: .+
-        keyId: .+
-        idpHash: .+
-
-authentication_idp_unsolicited_sso_vo_idphash_keyid:
-    path:     '/authentication/idp/unsolicited-single-sign-on/vo:{virtualOrganization}/{idpHash}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-    requirements:
-        virtualOrganization: .+
-        keyId: .+
-        idpHash: .+
 
 authentication_idp_unsolicited_sso_keyid:
     path:     '/authentication/idp/unsolicited-single-sign-on/key:{keyId}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        virtualOrganization: ~
         idpHash: ~
     requirements:
-        virtualOrganization: .+
         idpHash: .+
-
-authentication_idp_unsolicited_sso_keyid_vo:
-    path:     '/authentication/idp/unsolicited-single-sign-on/key:{keyId}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        idpHash: ~
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
-
-authentication_idp_unsolicited_sso_keyid_vo_idphash:
-    path:     '/authentication/idp/unsolicited-single-sign-on/key:{keyId}/vo:{virtualOrganization}/{idpHash}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
-        idpHash: .+,
 
 authentication_idp_unsolicited_sso_keyid_idphash:
     path:     '/authentication/idp/unsolicited-single-sign-on/key:{keyId}/{idpHash}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        virtualOrganization: ~
     requirements:
        keyId: .+
        idpHash: .+
-
-authentication_idp_unsolicited_sso_keyid_idphash_vo:
-    path:     '/authentication/idp/unsolicited-single-sign-on/key:{keyId}/{idpHash}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
-        idpHash: .+,
 
 authentication_idp_unsolicited_sso_idphash:
     path:     '/authentication/idp/unsolicited-single-sign-on/{idpHash}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        virtualOrganization: ~
         keyId: ~
     requirements:
         idpHash: .+
-
-authentication_idp_unsolicited_sso_idphash_vo:
-    path:     '/authentication/idp/unsolicited-single-sign-on/{idpHash}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        keyId: ~
-    requirements:
-        idpHash: .+
-        virtualOrganization: .+,
-
-
-authentication_idp_unsolicited_sso_idphash_vo_keyid:
-    path:     '/authentication/idp/unsolicited-single-sign-on/{idpHash}/vo:{virtualOrganization}/key:{keyId}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-    requirements:
-        idpHash: .+
-        virtualOrganization: .+,
-        keyId: .+
 
 authentication_idp_unsolicited_sso_idphash_keyid:
     path:     '/authentication/idp/unsolicited-single-sign-on/{idpHash}/key:{keyId}'
     methods:  [GET,POST]
     defaults:
         _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-        virtualOrganization: ~
     requirements:
         keyId: .+
-        idpHash: .+,
-
-authentication_idp_unsolicited_sso_idphash_keyid_vo:
-    path:     '/authentication/idp/unsolicited-single-sign-on/{idpHash}/key:{keyId}/vo:{virtualOrganization}'
-    methods:  [GET,POST]
-    defaults:
-        _controller: engineblock.controller.authentication.identity_provider:unsolicitedSingleSignOnAction
-    requirements:
-        keyId: .+
-        virtualOrganization: .+
         idpHash: .+,

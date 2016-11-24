@@ -50,9 +50,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // Then don't continue with the rest of the modifications
             new EngineBlock_Corto_Filter_Command_RejectProcessingMode(),
 
-            // Check if the request was for a VO, if it was, validate that the user is a member of that vo
-            new EngineBlock_Corto_Filter_Command_ValidateVoMembership(),
-
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),
 
