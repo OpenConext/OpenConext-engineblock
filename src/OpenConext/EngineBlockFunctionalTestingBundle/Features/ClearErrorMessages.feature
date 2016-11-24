@@ -192,10 +192,18 @@ Feature:
       And I should see "Service Provider:"
 
   @WIP
-  Scenario: The session has been lost
+  Scenario: The session has been lost after passing through EngineBlock
     When I log in at "Dummy SP"
      And I pass through EngineBlock
      And I lose my session
+     And I pass through the IdP
+     And I should see "your session was lost"
+
+  @WIP
+  Scenario: The session has been lost after logging in at the SP
+    When I log in at "Dummy SP"
+     And I lose my session
+     And I pass through EngineBlock
      And I pass through the IdP
      And I should see "your session was lost"
 
