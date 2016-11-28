@@ -37,6 +37,31 @@ final class CollabPersonId
     }
 
     /**
+     * This method solely exists for compatibility between EB versions and existing SPs.
+     * Replacing the @-sign for underscores in collabPersonIds was part of the LDAP module.
+     *
+     * See: https://www.pivotaltracker.com/story/show/134915765 and
+     * https://github.com/OpenConext/OpenConext-engineblock/commit/e6631acd4c4299329c5c34899de2f3a464975a5a
+     *
+     * @param Uid $uid
+     * @param SchacHomeOrganization $schacHomeOrganization
+     * @return CollabPersonId
+     */
+    public static function generateWithReplacedAtSignFrom(Uid $uid, SchacHomeOrganization $schacHomeOrganization)
+    {
+        $collabPersonId = implode(
+            ':',
+            [
+                self::URN_NAMESPACE,
+                $schacHomeOrganization->getSchacHomeOrganization(),
+                str_replace('@', '_', $uid->getUid()),
+            ]
+        );
+
+        return new self($collabPersonId);
+    }
+
+    /**
      * @param string $collabPersonId
      */
     public function __construct($collabPersonId)
