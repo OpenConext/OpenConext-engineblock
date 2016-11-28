@@ -280,4 +280,20 @@ class MockIdpContext extends AbstractSubContext
         $mink = $this->getMainContext()->getMinkContext();
         $mink->pressButton('GO');
     }
+
+    /**
+     * @Given /^the IdP "([^"]*)" sends attribute "([^"]*)" with value "([^"]*)"$/
+     * @param string $idpName
+     * @param string $attributeName
+     * @param string $attributeValue
+     */
+    public function theIdPSendsAttributeWithValue($idpName, $attributeName, $attributeValue)
+    {
+        /** @var MockIdentityProvider $mockIdp */
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+
+        $mockIdp->setAttribute($attributeName, [$attributeValue]);
+
+        $this->mockIdpRegistry->save();
+    }
 }
