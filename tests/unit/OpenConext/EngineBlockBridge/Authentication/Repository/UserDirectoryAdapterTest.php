@@ -282,7 +282,7 @@ class UserDirectoryAdapterTest extends UnitTest
     {
         $uid                   = 'homer@invalid.org';
         $schacHomeOrganization = 'OpenConext.org';
-        $expected              = CollabPersonId::generateFrom(
+        $expected              = CollabPersonId::generateWithReplacedAtSignFrom(
             new Uid($uid),
             new SchacHomeOrganization($schacHomeOrganization)
         );
@@ -439,7 +439,7 @@ class UserDirectoryAdapterTest extends UnitTest
      */
     private function getCollabPersonId()
     {
-        $collabPersonId = CollabPersonId::generateFrom(
+        $collabPersonId = CollabPersonId::generateWithReplacedAtSignFrom(
             new Uid($this->getHomerUid()),
             new SchacHomeOrganization($this->getOpenConextSho())
         );

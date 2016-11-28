@@ -85,7 +85,7 @@ class UserDirectoryAdapter
             $schacHomeOrganization = $attributes[SchacHomeOrganization::URN_MACE][0];
 
             $collabPersonUuid      = CollabPersonUuid::generate();
-            $collabPersonId        = CollabPersonId::generateFrom(
+            $collabPersonId        = CollabPersonId::generateWithReplacedAtSignFrom(
                 new Uid($uid),
                 new SchacHomeOrganization($schacHomeOrganization)
             );
@@ -109,7 +109,7 @@ class UserDirectoryAdapter
      */
     public function registerUser($uid, $schacHomeOrganization)
     {
-        $collabPersonId = CollabPersonId::generateFrom(
+        $collabPersonId = CollabPersonId::generateWithReplacedAtSignFrom(
             new Uid($uid),
             new SchacHomeOrganization($schacHomeOrganization)
         );
