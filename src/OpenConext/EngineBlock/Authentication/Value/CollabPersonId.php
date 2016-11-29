@@ -72,7 +72,11 @@ final class CollabPersonId
             self::URN_NAMESPACE,
             sprintf('a CollabPersonId must start with the "%s" namespace', self::URN_NAMESPACE)
         );
-        Assertion::maxLength($collabPersonId, self::MAX_LENGTH, 'CollabPersonId length may not exceed 400 characters');
+        Assertion::maxLength(
+            $collabPersonId,
+            self::MAX_LENGTH,
+            sprintf('CollabPersonId length may not exceed %d characters', self::MAX_LENGTH)
+        );
 
         $this->collabPersonId = $collabPersonId;
     }
