@@ -30,6 +30,28 @@ class CollabPersonIdTest extends UnitTest
         );
     }
 
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Authentication
+     */
+    public function a_predictable_collab_person_id_is_generated_with_at_signs_replaced_with_underscores()
+    {
+        $schacHomeOrganizationValue = 'openconext.org';
+        $uidValue = 'homer@domain.invalid';
+
+        $schacHomeOrganization = new SchacHomeOrganization($schacHomeOrganizationValue);
+        $uid = new Uid($uidValue);
+
+        $collabPersonIdWithReplacedAtSign = CollabPersonId::generateWithReplacedAtSignFrom($uid, $schacHomeOrganization);
+
+        $expectedUidValue = 'homer_domain.invalid';
+
+        $this->assertEquals(
+            CollabPersonId::URN_NAMESPACE . ':' . $schacHomeOrganizationValue . ':' . $expectedUidValue,
+            $collabPersonIdWithReplacedAtSign->getCollabPersonId()
+        );
+    }
 
     /**
      * @test
