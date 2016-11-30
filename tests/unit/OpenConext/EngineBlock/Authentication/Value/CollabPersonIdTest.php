@@ -80,7 +80,7 @@ class CollabPersonIdTest extends UnitTest
      * @group EngineBlock
      * @group Authentication
      */
-    public function collab_person_id_must_not_be_longer_than_400_characters()
+    public function collab_person_id_must_not_be_longer_than_the_maximum_allowed_number_of_characters()
     {
         $namespaceLength = strlen(CollabPersonId::URN_NAMESPACE);
         $beneathLimit = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength - 1);
