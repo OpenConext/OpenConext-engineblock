@@ -22,21 +22,6 @@ final class CollabPersonId
     private $collabPersonId;
 
     /**
-     * @param Uid                   $uid
-     * @param SchacHomeOrganization $schacHomeOrganization
-     * @return CollabPersonId
-     */
-    public static function generateFrom(Uid $uid, SchacHomeOrganization $schacHomeOrganization)
-    {
-        $collabPersonId = implode(
-            ':',
-            [self::URN_NAMESPACE, $schacHomeOrganization->getSchacHomeOrganization(), $uid->getUid()]
-        );
-
-        return new self($collabPersonId);
-    }
-
-    /**
      * This method solely exists for compatibility between EB versions and existing SPs.
      * Replacing the @-sign for underscores in collabPersonIds was part of the LDAP module.
      *
