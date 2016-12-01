@@ -22,7 +22,7 @@ final class CollabPersonId
     private $collabPersonId;
 
     /**
-     * This method solely exists for compatibility between EB versions and existing SPs.
+     * This method provides compatibility between EB versions and existing SPs.
      * Replacing the @-sign for underscores in collabPersonIds was part of the LDAP module.
      *
      * See: https://www.pivotaltracker.com/story/show/134915765 and
