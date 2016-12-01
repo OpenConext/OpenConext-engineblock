@@ -8,29 +8,6 @@ use PHPUnit_Framework_TestCase as UnitTest;
 class CollabPersonIdTest extends UnitTest
 {
     /**
-     * Smoke test that ensures that CollabPersonIds are generated in an reliable, known manner.
-     *
-     * @test
-     * @group EngineBlock
-     * @group Authentication
-     */
-    public function generate_returns_a_predictable_collab_person_id()
-    {
-        $schacHomeOrganizationValue = 'openconext.org';
-        $uidValue = 'homer@domain.invalid';
-
-        $schacHomeOrganization = new SchacHomeOrganization($schacHomeOrganizationValue);
-        $uid = new Uid($uidValue);
-
-        $collabPersonId = CollabPersonId::generateFrom($uid, $schacHomeOrganization);
-
-        $this->assertEquals(
-            CollabPersonId::URN_NAMESPACE . ':' . $schacHomeOrganizationValue . ':' . $uidValue,
-            $collabPersonId->getCollabPersonId()
-        );
-    }
-
-    /**
      * @test
      * @group EngineBlock
      * @group Authentication
