@@ -29,7 +29,6 @@ class MetadataRepository
      */
     public function getSamlEntityBy(EntityId $entityId)
     {
-
     }
 
     /**
@@ -37,7 +36,6 @@ class MetadataRepository
      */
     public function getServiceProviderBy(EntityId $entityId)
     {
-
     }
 
     /**
@@ -45,6 +43,5 @@ class MetadataRepository
      */
     public function getIdentityProviderBy(EntityId $entityId)
     {
-
     }
 }
