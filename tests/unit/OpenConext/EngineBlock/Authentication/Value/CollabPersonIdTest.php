@@ -8,13 +8,11 @@ use PHPUnit_Framework_TestCase as UnitTest;
 class CollabPersonIdTest extends UnitTest
 {
     /**
-     * Smoke test that ensures that CollabPersonIds are generated in an reliable, known manner.
-     *
      * @test
      * @group EngineBlock
      * @group Authentication
      */
-    public function generate_returns_a_predictable_collab_person_id()
+    public function a_predictable_collab_person_id_is_generated_with_at_signs_replaced_with_underscores()
     {
         $schacHomeOrganizationValue = 'openconext.org';
         $uidValue = 'homer@domain.invalid';
@@ -22,14 +20,15 @@ class CollabPersonIdTest extends UnitTest
         $schacHomeOrganization = new SchacHomeOrganization($schacHomeOrganizationValue);
         $uid = new Uid($uidValue);
 
-        $collabPersonId = CollabPersonId::generateFrom($uid, $schacHomeOrganization);
+        $collabPersonIdWithReplacedAtSign = CollabPersonId::generateWithReplacedAtSignFrom($uid, $schacHomeOrganization);
+
+        $expectedUidValue = 'homer_domain.invalid';
 
         $this->assertEquals(
-            CollabPersonId::URN_NAMESPACE . ':' . $schacHomeOrganizationValue . ':' . $uidValue,
-            $collabPersonId->getCollabPersonId()
+            CollabPersonId::URN_NAMESPACE . ':' . $schacHomeOrganizationValue . ':' . $expectedUidValue,
+            $collabPersonIdWithReplacedAtSign->getCollabPersonId()
         );
     }
-
 
     /**
      * @test
@@ -80,7 +79,7 @@ class CollabPersonIdTest extends UnitTest
      * @group EngineBlock
      * @group Authentication
      */
-    public function collab_person_id_must_not_be_longer_than_400_characters()
+    public function collab_person_id_must_not_be_longer_than_the_maximum_allowed_number_of_characters()
     {
         $namespaceLength = strlen(CollabPersonId::URN_NAMESPACE);
         $beneathLimit = CollabPersonId::URN_NAMESPACE . str_repeat('a', CollabPersonId::MAX_LENGTH - $namespaceLength - 1);

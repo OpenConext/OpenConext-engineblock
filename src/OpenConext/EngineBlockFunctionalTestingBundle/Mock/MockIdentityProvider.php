@@ -212,6 +212,22 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $assertions[0]->setAttributes($newAttributes);
     }
 
+    public function setAttribute($attributeName, array $attributeValues)
+    {
+        $role = $this->getSsoRole();
+
+        /** @var Response $response */
+        $response = $role->Extensions['SAMLResponse'];
+        $assertions = $response->getAssertions();
+
+        $attributes = $assertions[0]->getAttributes();
+        $newAttributes = $attributes;
+
+        $newAttributes[$attributeName] = $attributeValues;
+
+        $assertions[0]->setAttributes($newAttributes);
+    }
+
     public function useResponseSigning()
     {
         $this->descriptor->Extensions['SignResponses'] = true;

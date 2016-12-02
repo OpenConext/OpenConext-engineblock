@@ -90,7 +90,7 @@ class EngineBlock_User
             ));
         }
 
-        $collabPersonId = CollabPersonId::generateFrom(
+        $collabPersonId = CollabPersonId::generateWithReplacedAtSignFrom(
             new Uid($this->getUid()),
             new SchacHomeOrganization($this->_attributes[SchacHomeOrganization::URN_MACE][0])
         );
