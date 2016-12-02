@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "758cdc4453d1139664066eb89026796a",
-    "content-hash": "f858b2af397b6b9687380d32a8e27f00",
+    "hash": "f9e9f0f584fa6b7633c1e818e938e827",
+    "content-hash": "bd63f2d609738066b26de713952b49c2",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1566,22 +1566,30 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.0",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/fe0936ee26643249e916849d48e3a51d5f5e278b",
-                "reference": "fe0936ee26643249e916849d48e3a51d5f5e278b",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=5.3.0"
+            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
-                "psr-0": {
-                    "Psr\\Log\\": ""
+                "psr-4": {
+                    "Psr\\Log\\": "Psr/Log/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1595,12 +1603,13 @@
                 }
             ],
             "description": "Common interface for logging libraries",
+            "homepage": "https://github.com/php-fig/log",
             "keywords": [
                 "log",
                 "psr",
                 "psr-3"
             ],
-            "time": "2012-12-21 11:40:51"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "ramsey/uuid",
@@ -1893,16 +1902,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v1.7.2",
+            "version": "v1.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "6b91b49fbb22d3a5691e94b6d0057b6ab03ee46f"
+                "reference": "3f268c25ca5e9748652834faad04525746227ef7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/6b91b49fbb22d3a5691e94b6d0057b6ab03ee46f",
-                "reference": "6b91b49fbb22d3a5691e94b6d0057b6ab03ee46f",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/3f268c25ca5e9748652834faad04525746227ef7",
+                "reference": "3f268c25ca5e9748652834faad04525746227ef7",
                 "shasum": ""
             },
             "require": {
@@ -1938,7 +1947,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2016-01-11 16:04:45"
+            "time": "2016-12-02 12:15:53"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
@@ -3547,7 +3556,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project Founder"
+                    "role": "Project founder"
                 },
                 {
                     "name": "Other contributors",
@@ -4557,7 +4566,7 @@
         {
             "alias": "0.8.1",
             "alias_normalized": "0.8.1.0",
-            "version": "1.7.2.0",
+            "version": "1.10.3.0",
             "package": "simplesamlphp/saml2"
         }
     ],
