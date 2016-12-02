@@ -10,7 +10,6 @@ Feature:
       And an Identity Provider named "Dummy IdP"
       And a Service Provider named "Dummy SP"
 
-  @WIP
   Scenario: a collabPersonId is constructed from a uid with its at-signs replaced by underscores when LDAP integration is disabled
     Given feature "eb.ldap_integration" is disabled
       And the IdP "Dummy IdP" sends attribute "urn:mace:dir:attribute-def:uid" with value "frits@example.test"
@@ -22,7 +21,6 @@ Feature:
      Then the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text() = "frits@example.test"]'
       And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:oid:1.3.6.1.4.1.1076.20.40.40.1"]/saml:AttributeValue[text() = "urn:collab:person:engine-test-stand.openconext.org:frits_example.test"]'
 
-  @WIP
   Scenario: a collabPersonId is constructed from a uid with its at-signs replaced by underscores when LDAP integration is enabled
     Given feature "eb.ldap_integration" is enabled
       And the IdP "Dummy IdP" sends attribute "urn:mace:dir:attribute-def:uid" with value "frits@example.test"
