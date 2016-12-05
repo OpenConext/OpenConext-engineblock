@@ -142,7 +142,7 @@ class CollabPersonIdTypeTest extends UnitTest
      */
     private function getCollabPersonId()
     {
-        $collabPersonId = CollabPersonId::generateFrom(
+        $collabPersonId = CollabPersonId::generateWithReplacedAtSignFrom(
             new Uid('homer@invalid.org'),
             new SchacHomeOrganization('OpenConext.org')
         );

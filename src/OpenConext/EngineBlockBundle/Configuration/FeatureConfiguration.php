@@ -5,7 +5,7 @@ namespace OpenConext\EngineBlockBundle\Configuration;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Exception\LogicException;
 
-class FeatureConfiguration
+class FeatureConfiguration implements FeatureConfigurationInterface
 {
     /**
      * @var Feature[]
@@ -23,10 +23,6 @@ class FeatureConfiguration
         $this->features = $features;
     }
 
-    /**
-     * @param string $featureKey
-     * @return bool
-     */
     public function hasFeature($featureKey)
     {
         Assertion::nonEmptyString($featureKey, 'featureKey');
@@ -34,10 +30,6 @@ class FeatureConfiguration
         return array_key_exists($featureKey, $this->features);
     }
 
-    /**
-     * @param string $featureKey
-     * @return bool
-     */
     public function isEnabled($featureKey)
     {
         if (!$this->hasFeature($featureKey)) {
