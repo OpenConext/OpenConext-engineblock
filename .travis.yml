@@ -60,6 +60,7 @@ branches:
   only:
     - 5.x-dev
     - master
+    - release/5.0
 
 addons:
   hosts:
