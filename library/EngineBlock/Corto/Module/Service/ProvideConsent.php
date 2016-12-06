@@ -1,6 +1,8 @@
 <?php
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
@@ -20,15 +22,22 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var EngineBlock_Corto_Model_Consent_Factory */
     private  $_consentFactory;
 
+    /**
+     * @var Session
+     */
+    private $session;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        EngineBlock_Corto_Model_Consent_Factory $consentFactory
+        EngineBlock_Corto_Model_Consent_Factory $consentFactory,
+        Session $session
     )
     {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
+        $this->session = $session;
     }
 
     public function serve($serviceName)
