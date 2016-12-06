@@ -29,6 +29,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 
         // Flush log if SP or IdP has additional logging enabled
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
+
+        // Exposing entityId for further processing
+        $application->authenticationStateIdpEntityId = $idp->entityId;
+
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
             $application->flushLog('Activated additional logging for the SP or IdP');
             $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
