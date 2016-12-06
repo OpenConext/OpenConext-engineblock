@@ -41,3 +41,10 @@ services:
         class: OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
         arguments:
             - # replaced in the extension
+
+    engineblock.authentication.authentication_loop_guard:
+        class: OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard
+        arguments:
+            - "@session"
+            - "%maximum_authentication_cycles_allowed%"
+            - "%time_frame_for_authentication_loop_in_seconds%"
