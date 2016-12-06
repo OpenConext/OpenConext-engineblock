@@ -79,6 +79,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
             }
 
+            /** @var AuthenticationState $authenticationState */
+            $authenticationState = $this->session->get('authentication_state');
+            $authenticationState->completeCurrent();
+
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
@@ -96,6 +100,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
+
+            /** @var AuthenticationState $authenticationState */
+            $authenticationState = $this->session->get('authentication_state');
+            $authenticationState->completeCurrent();
 
             $this->_server->getBindingsModule()->send(
                 $response,

@@ -100,6 +100,14 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
 
         $cortoAdapter->singleSignOn($idpHash);
 
+        $spEntityId      = EngineBlock_ApplicationSingleton::getInstance()->authenticationStateSpEntityId;
+        $serviceProvider = new Entity(new EntityId($spEntityId), EntityType::SP());
+
+        $this->authenticationLoopGuard->assertNotStuckInLoop($serviceProvider);
+
+        $authenticationState = $this->session->get('authentication_state');
+        $authenticationState->startAuthenticationOnBehalfOf($serviceProvider);
+
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
 
