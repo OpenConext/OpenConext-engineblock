@@ -62,7 +62,7 @@ final class AuthenticationLoopGuard
     /**
      * @param Entity $serviceProvider
      */
-    public function assertNotStuckInLoop(Entity $serviceProvider)
+    public function ensureNotStuckInLoop(Entity $serviceProvider)
     {
         /** @var AuthenticationState $authenticationState */
         $authenticationState = $this->session->get('authentication_state');
