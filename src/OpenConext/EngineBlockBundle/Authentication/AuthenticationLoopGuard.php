@@ -77,7 +77,7 @@ final class AuthenticationLoopGuard
             throw new StuckInAuthenticationLoopException(
                 sprintf(
                     'After %d authentication cycles, we determined within a time frame of %d seconds'
-                    . 'that we are stuck in an authentication loop for service provider "%s"',
+                    . ' that we are stuck in an authentication loop for service provider "%s"',
                     $this->maximumAuthenticationCyclesAllowed,
                     $this->timeFrameForAuthenticationLoopInSeconds,
                     $serviceProvider->getEntityId()
