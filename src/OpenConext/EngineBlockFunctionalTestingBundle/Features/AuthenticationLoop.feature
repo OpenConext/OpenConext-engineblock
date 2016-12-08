@@ -19,5 +19,15 @@ Feature:
      And I give my consent
      And I pass through EngineBlock
      And I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+     And I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I give my consent
+     And I pass through EngineBlock
+     And I log in at "Dummy SP"
     Then I should see "Black hole"
 
