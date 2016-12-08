@@ -52,32 +52,26 @@ final class AuthenticationProcedureList implements Countable
      * @param Entity $entity
      * @return AuthenticationProcedureList
      */
-    public function filterByAuthenticationsOnBehalfOf(Entity $entity)
+    public function findOnBehalfOf(Entity $entity)
     {
-        return new self(
-            array_filter(
-                $this->authenticationProcedures,
-                function (AuthenticationProcedure $authenticationProcedure) use ($entity) {
-                    return $authenticationProcedure->isOnBehalfOf($entity);
-                }
-            )
-        );
+        $filterMethod = function (AuthenticationProcedure $authenticationProcedure) use ($entity) {
+            return $authenticationProcedure->isOnBehalfOf($entity);
+        };
+
+        return new self(array_filter($this->authenticationProcedures, $filterMethod));
     }
 
     /**
      * @param DateTimeInterface $startDate
      * @return AuthenticationProcedureList
      */
-    public function filterByCompletedProceduresSince(DateTimeInterface $startDate)
+    public function findProceduresCompletedAfter(DateTimeInterface $startDate)
     {
-        return new self(
-            array_filter(
-                $this->authenticationProcedures,
-                function (AuthenticationProcedure $authenticationProcedure) use ($startDate) {
-                    return $authenticationProcedure->isCompletedAfter($startDate);
-                }
-            )
-        );
+        $filterMethod = function (AuthenticationProcedure $authenticationProcedure) use ($startDate) {
+            return $authenticationProcedure->isCompletedAfter($startDate);
+        };
+
+        return new self(array_filter($this->authenticationProcedures, $filterMethod));
     }
 
     /**

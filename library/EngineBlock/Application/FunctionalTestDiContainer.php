@@ -42,4 +42,9 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
     {
         return $this->getFunctionalTestingFeatureConfiguration();
     }
+
+    public function getAuthenticationLoopGuard()
+    {
+        return $this->getFunctionalTestingAuthenticationLoopGuard();
+    }
 }

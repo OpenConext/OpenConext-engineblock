@@ -14,7 +14,6 @@ services:
             - "@engineblock.compat.logger"
             - "@engineblock.service.request_access_mailer"
             - "@session"
-            - "@engineblock.authentication.authentication_loop_guard"
 
     engineblock.controller.authentication.index:
         class: OpenConext\EngineBlockBundle\Controller\IndexController

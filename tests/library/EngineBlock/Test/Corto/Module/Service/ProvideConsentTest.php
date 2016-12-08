@@ -1,8 +1,9 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
@@ -206,7 +207,15 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $dummySp  = new Entity(new EntityId('dummy.sp.example'), EntityType::SP());
         $dummyIdp = new Entity(new EntityId('dummy.idp.example'), EntityType::IdP());
 
-        $authenticationState = new AuthenticationState;
+        $maximumAllowedAuthenticationProcedures = 5;
+        $timeFrameForDeterminingAuthenticationLoopInSeconds = 1200;
+
+        $authenticationLoopGuard = new AuthenticationLoopGuard(
+            $maximumAllowedAuthenticationProcedures,
+            $timeFrameForDeterminingAuthenticationLoopInSeconds
+        );
+
+        $authenticationState = new AuthenticationState($authenticationLoopGuard);
         $authenticationState->startAuthenticationOnBehalfOf($dummySp);
         $authenticationState->authenticateAt($dummyIdp);
 
