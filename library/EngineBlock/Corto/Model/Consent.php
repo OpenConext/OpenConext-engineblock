@@ -120,9 +120,9 @@ class EngineBlock_Corto_Model_Consent
             return false;
         }
 
-        $query = "INSERT INTO consent (usage_date, hashed_user_id, service_id, attribute, consent_type)
-                  VALUES (NOW(), ?, ?, ?, ?)
-                  ON DUPLICATE KEY UPDATE usage_date=VALUES(usage_date), attribute=VALUES(attribute), consent_type=VALUES(consent_type)";
+        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type)
+                  VALUES (?, ?, ?, ?)
+                  ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type)";
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProvider->entityId,
@@ -177,14 +177,6 @@ class EngineBlock_Corto_Model_Consent
                 // No stored consent found
                 return false;
             }
-
-            // Update usage date
-            $statement = $dbh->prepare("UPDATE LOW_PRIORITY {$this->_tableName} SET usage_date = NOW() WHERE hashed_user_id = ? AND service_id = ? AND consent_type = ?");
-            $statement->execute(array(
-                $hashedUserId,
-                $serviceProvider->entityId,
-                $consentType
-            ));
 
             return true;
         } catch (PDOException $e) {
