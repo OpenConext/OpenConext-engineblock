@@ -43,7 +43,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
           <?= $this->t('attributes_validation_succeeded'); ?>
       <?php else: ?>
           <?php if (count($validationResult->getErrors()) > 0): ?>
-            <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" />
+            <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#9888;" />
           <?php else: ?>
             <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" />
           <?php endif; ?>
@@ -111,7 +111,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
     <h2><?= $this->t('attributes') ?></h2>
     <?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
         <p class="error">
-          <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" /> <?php
+          <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#9888;" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
         ?></p>
     <?php endforeach; ?>
@@ -165,7 +165,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
                       <?php else:
                           foreach ($validationResult->getErrors($attributeName) as $error) {
                               echo '<p class="error">' .
-                                      '<img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;" /> ' .
+                                      '<img src="/images/error.svg" class="c-icon c-icon-error" alt="&#9888;" /> ' .
                                       EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                                   '</p>';
                           }
