@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\EventListener;
 
+use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\EngineBlockBundle\Controller\AuthenticationLoopThrottlingController;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -43,7 +44,17 @@ final class AuthenticationStateInitializer
 
         $authenticationState = $this->session->get('authentication_state');
         if ($authenticationState === null) {
-            $this->session->set('authentication_state', new AuthenticationState);
+            $authenticationLoopGuard = $this->getAuthenticationLoopGuard();
+
+            $this->session->set('authentication_state', new AuthenticationState($authenticationLoopGuard));
         }
+    }
+
+    public function getAuthenticationLoopGuard()
+    {
+        // This allows us to overwrite the authentication loop guard when running functional tests
+        return EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAuthenticationLoopGuard();
     }
 }

@@ -19,7 +19,6 @@
 namespace OpenConext\EngineBlockBundle\Authentication;
 
 use DateTimeImmutable;
-use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\Value\Saml\Entity;
 
 final class AuthenticationState
@@ -34,9 +33,15 @@ final class AuthenticationState
      */
     private $authenticationProcedures;
 
-    public function __construct()
+    /**
+     * @var AuthenticationLoopGuardInterface
+     */
+    private $authenticationLoopGuard;
+
+    public function __construct(AuthenticationLoopGuardInterface $authenticationLoopGuard)
     {
         $this->authenticationProcedures = new AuthenticationProcedureList;
+        $this->authenticationLoopGuard  = $authenticationLoopGuard;
     }
 
     /**
@@ -46,6 +51,12 @@ final class AuthenticationState
     public function startAuthenticationOnBehalfOf(Entity $serviceProvider)
     {
         $this->currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
+
+        $this->authenticationLoopGuard->ensureNotStuckInLoop(
+            $serviceProvider,
+            $this->authenticationProcedures
+        );
+
         $this->authenticationProcedures = $this->authenticationProcedures->add($this->currentAuthenticationProcedure);
     }
 
@@ -64,29 +75,5 @@ final class AuthenticationState
     public function completeCurrent()
     {
         $this->currentAuthenticationProcedure->completeOn(new DateTimeImmutable);
-    }
-
-    /**
-     * @param Entity $serviceProvider
-     * @param int $maximumAuthenticationCyclesAllowed
-     * @param int $timeFrameForAuthenticationLoopInSeconds
-     * @return bool
-     */
-    public function isInLoop(
-        Entity $serviceProvider,
-        $maximumAuthenticationCyclesAllowed,
-        $timeFrameForAuthenticationLoopInSeconds
-    ) {
-        Assertion::integer($maximumAuthenticationCyclesAllowed);
-        Assertion::integer($timeFrameForAuthenticationLoopInSeconds);
-
-        $dateTime  = new DateTimeImmutable;
-        $startDate = $dateTime->modify(sprintf('-%s seconds', $timeFrameForAuthenticationLoopInSeconds));
-
-        $relevantProceduresInTimeFrame = $this->authenticationProcedures
-            ->filterByAuthenticationsOnBehalfOf($serviceProvider)
-            ->filterByCompletedProceduresSince($startDate);
-
-        return count($relevantProceduresInTimeFrame) > $maximumAuthenticationCyclesAllowed;
     }
 }

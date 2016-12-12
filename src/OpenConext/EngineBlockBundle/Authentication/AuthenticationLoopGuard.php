@@ -18,18 +18,13 @@
 
 namespace OpenConext\EngineBlockBundle\Authentication;
 
+use DateTimeImmutable;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\Value\Saml\Entity;
-use Symfony\Component\HttpFoundation\Session\Session;
 
-final class AuthenticationLoopGuard
+final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
 {
-    /**
-     * @var Session
-     */
-    private $session;
-
     /**
      * @var int
      */
@@ -41,7 +36,6 @@ final class AuthenticationLoopGuard
     private $timeFrameForAuthenticationLoopInSeconds;
 
     public function __construct(
-        Session $session,
         $maximumAuthenticationCyclesAllowed,
         $timeFrameForAuthenticationLoopInSeconds
     ) {
@@ -54,29 +48,31 @@ final class AuthenticationLoopGuard
             'Expected time frame for determining authentication loop in seconds to be an integer, got "%s"'
         );
 
-        $this->session                                 = $session;
         $this->maximumAuthenticationCyclesAllowed      = $maximumAuthenticationCyclesAllowed;
         $this->timeFrameForAuthenticationLoopInSeconds = $timeFrameForAuthenticationLoopInSeconds;
     }
 
     /**
      * @param Entity $serviceProvider
+     * @param AuthenticationProcedureList $pastAuthenticationProcedures
      */
-    public function ensureNotStuckInLoop(Entity $serviceProvider)
-    {
-        /** @var AuthenticationState $authenticationState */
-        $authenticationState = $this->session->get('authentication_state');
+    public function ensureNotStuckInLoop(
+        Entity $serviceProvider,
+        AuthenticationProcedureList $pastAuthenticationProcedures
+    ) {
+        $dateTime  = new DateTimeImmutable;
+        $startDate = $dateTime->modify(sprintf('-%d seconds', $this->timeFrameForAuthenticationLoopInSeconds));
 
-        $stuckInAuthenticationLoop = $authenticationState->isInLoop(
-            $serviceProvider,
-            $this->maximumAuthenticationCyclesAllowed,
-            $this->timeFrameForAuthenticationLoopInSeconds
-        );
+        $relevantProceduresInTimeFrame = $pastAuthenticationProcedures
+            ->findOnBehalfOf($serviceProvider)
+            ->findProceduresCompletedAfter($startDate);
+
+        $stuckInAuthenticationLoop = count($relevantProceduresInTimeFrame) >= $this->maximumAuthenticationCyclesAllowed;
 
         if ($stuckInAuthenticationLoop) {
             throw new StuckInAuthenticationLoopException(
                 sprintf(
-                    'After %d authentication cycles, we determined within a time frame of %d seconds'
+                    'After %d authentication procedures, we determined within a time frame of %d seconds'
                     . ' that we are stuck in an authentication loop for service provider "%s"',
                     $this->maximumAuthenticationCyclesAllowed,
                     $this->timeFrameForAuthenticationLoopInSeconds,

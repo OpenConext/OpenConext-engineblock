@@ -63,25 +63,18 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     private $session;
 
-    /**
-     * @var AuthenticationLoopGuard
-     */
-    private $authenticationLoopGuard;
-
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         EngineBlock_View $engineBlockView,
         LoggerInterface $loggerInterface,
         RequestAccessMailer $requestAccessMailer,
-        Session $session,
-        AuthenticationLoopGuard $authenticationLoopGuard
+        Session $session
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->engineBlockView                 = $engineBlockView;
         $this->logger                          = $loggerInterface;
         $this->requestAccessMailer             = $requestAccessMailer;
         $this->session                         = $session;
-        $this->authenticationLoopGuard         = $authenticationLoopGuard;
     }
 
     /**
@@ -102,8 +95,6 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
 
         $spEntityId      = EngineBlock_ApplicationSingleton::getInstance()->authenticationStateSpEntityId;
         $serviceProvider = new Entity(new EntityId($spEntityId), EntityType::SP());
-
-        $this->authenticationLoopGuard->ensureNotStuckInLoop($serviceProvider);
 
         $authenticationState = $this->session->get('authentication_state');
         $authenticationState->startAuthenticationOnBehalfOf($serviceProvider);

@@ -25,6 +25,7 @@ use OpenConext\EngineBlockBridge\ResponseFactory;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class ServiceProviderController implements AuthenticationLoopThrottlingController
