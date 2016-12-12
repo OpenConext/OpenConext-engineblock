@@ -1,4 +1,3 @@
-@AllManipulationsBeforeConsent @WIP
 Feature:
   In order to be to influence the released attribute values
   As an IdP or SP
@@ -28,7 +27,7 @@ Feature:
     When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="nl:surf:test:something"]/saml:AttributeValue["arbitrary-value"]'
+    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="nl:surf:test:something"]/saml:AttributeValue[text()="arbitrary-value"]'
 
   Scenario: The Service Provider can have the attributes manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
@@ -43,7 +42,7 @@ Feature:
     When I give my consent
     And I pass through EngineBlock
     Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
-    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue["the-manipulated-value"]'
+    And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:uid"]/saml:AttributeValue[text()="the-manipulated-value"]'
 
   Scenario: The Service Provider can have the SubjectID manipulated
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:

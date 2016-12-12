@@ -27,7 +27,6 @@ use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
-use EngineBlock_Corto_Exception_UserNotMember;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
@@ -91,9 +90,6 @@ class RedirectToFeedbackPageExceptionListener
         if ($exception instanceof EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException) {
             $message         = 'Unable to receive message';
             $redirectToRoute = 'authentication_feedback_unable_to_receive_message';
-        } elseif ($exception instanceof EngineBlock_Corto_Exception_UserNotMember) {
-            $message         = 'User is not a member';
-            $redirectToRoute = 'authentication_feedback_vo_membership_required';
         } elseif ($exception instanceof EngineBlock_Corto_Module_Services_SessionLostException) {
             $message         = 'Sessions lost';
             $redirectToRoute = 'authentication_feedback_session_lost';

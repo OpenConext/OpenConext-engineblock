@@ -36,20 +36,15 @@ class CertificateController
     }
 
     /**
-     * @param null|string $virtualOrganization
      * @param null|string $keyId
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
-    public function spSigningCertificateAction($virtualOrganization = null, $keyId = null)
+    public function spSigningCertificateAction($keyId = null)
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
 
         if ($keyId !== null) {
             $proxyServer->setKeyId($keyId);
-        }
-
-        if ($virtualOrganization !== null) {
-            $proxyServer->setVirtualOrganisationContext($virtualOrganization);
         }
 
         $proxyServer->spCertificate();

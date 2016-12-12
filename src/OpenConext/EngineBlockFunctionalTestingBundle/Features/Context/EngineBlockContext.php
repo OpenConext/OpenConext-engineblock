@@ -291,4 +291,13 @@ class EngineBlockContext extends AbstractSubContext
             $this->features->clean();
         }
     }
+
+    /**
+     * @Given /^I lose my session$/
+     */
+    public function iLoseMySession()
+    {
+        $session = $this->getMainContext()->getMinkContext()->getSession();
+        $session->restart();
+    }
 }

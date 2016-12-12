@@ -66,19 +66,14 @@ class IdentityProviderController
     }
 
     /**
-     * @param null|string $virtualOrganization
      * @param null|string $keyId
      * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws Exception
      */
-    public function singleSignOnAction($virtualOrganization = null, $keyId = null, $idpHash = null)
+    public function singleSignOnAction($keyId = null, $idpHash = null)
     {
         $cortoAdapter = new EngineBlock_Corto_Adapter();
-
-        if ($virtualOrganization !== null) {
-            $cortoAdapter->setVirtualOrganisationContext($virtualOrganization);
-        }
 
         if ($keyId !== null) {
             $cortoAdapter->setKeyId($keyId);
@@ -90,19 +85,14 @@ class IdentityProviderController
     }
 
     /**
-     * @param null $virtualOrganization
      * @param null $keyId
      * @param null $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws Exception
      */
-    public function unsolicitedSingleSignOnAction($virtualOrganization = null, $keyId = null, $idpHash = null)
+    public function unsolicitedSingleSignOnAction($keyId = null, $idpHash = null)
     {
         $cortoAdapter = new EngineBlock_Corto_Adapter();
-
-        if ($virtualOrganization !== null) {
-            $cortoAdapter->setVirtualOrganisationContext($virtualOrganization);
-        }
 
         if ($keyId !== null) {
             $cortoAdapter->setKeyId($keyId);

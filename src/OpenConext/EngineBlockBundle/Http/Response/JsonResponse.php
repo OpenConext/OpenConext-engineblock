@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockBundle\Http\Response;
 
-use OpenConext\Value\Exception\InvalidArgumentException;
+use OpenConext\EngineBlockBundle\Exception\InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Response;
 
 final class JsonResponse extends Response

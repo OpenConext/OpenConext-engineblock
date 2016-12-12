@@ -22,15 +22,25 @@ final class CollabPersonId
     private $collabPersonId;
 
     /**
-     * @param Uid                   $uid
+     * This method provides compatibility between EB versions and existing SPs.
+     * Replacing the @-sign for underscores in collabPersonIds was part of the LDAP module.
+     *
+     * See: https://www.pivotaltracker.com/story/show/134915765 and
+     * https://github.com/OpenConext/OpenConext-engineblock/commit/e6631acd4c4299329c5c34899de2f3a464975a5a
+     *
+     * @param Uid $uid
      * @param SchacHomeOrganization $schacHomeOrganization
      * @return CollabPersonId
      */
-    public static function generateFrom(Uid $uid, SchacHomeOrganization $schacHomeOrganization)
+    public static function generateWithReplacedAtSignFrom(Uid $uid, SchacHomeOrganization $schacHomeOrganization)
     {
         $collabPersonId = implode(
             ':',
-            [self::URN_NAMESPACE, $schacHomeOrganization->getSchacHomeOrganization(), $uid->getUid()]
+            [
+                self::URN_NAMESPACE,
+                $schacHomeOrganization->getSchacHomeOrganization(),
+                str_replace('@', '_', $uid->getUid()),
+            ]
         );
 
         return new self($collabPersonId);
@@ -47,7 +57,11 @@ final class CollabPersonId
             self::URN_NAMESPACE,
             sprintf('a CollabPersonId must start with the "%s" namespace', self::URN_NAMESPACE)
         );
-        Assertion::maxLength($collabPersonId, self::MAX_LENGTH, 'CollabPersonId length may not exceed 400 characters');
+        Assertion::maxLength(
+            $collabPersonId,
+            self::MAX_LENGTH,
+            sprintf('CollabPersonId length may not exceed %d characters', self::MAX_LENGTH)
+        );
 
         $this->collabPersonId = $collabPersonId;
     }

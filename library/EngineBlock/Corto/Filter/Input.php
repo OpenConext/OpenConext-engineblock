@@ -21,9 +21,6 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
         $logger               = EngineBlock_ApplicationSingleton::getLog();
 
         $commands = array(
-            // Show an error if we get responses that do not have the Success status code
-            new EngineBlock_Corto_Filter_Command_ValidateSuccessfulResponse(),
-
             // Convert all OID attributes to URN and remove the OID variant
             new EngineBlock_Corto_Filter_Command_NormalizeAttributes(),
 
