@@ -180,7 +180,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
-        $scope->allowed = '*conext\.org';
+        $scope->allowed = '.*conext\.org';
 
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = array($scope);
@@ -202,7 +202,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
-        $scope->allowed = '*\.noconext\.org';
+        $scope->allowed = '.*\.noconext\.org';
 
         $identityProvider               = new IdentityProvider('OpenConext');
         $identityProvider->shibMdScopes = array($scope);
