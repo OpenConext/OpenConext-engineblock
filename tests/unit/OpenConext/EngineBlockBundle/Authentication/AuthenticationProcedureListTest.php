@@ -80,7 +80,7 @@ class AuthenticationProcedureListTest extends TestCase
             $otherAuthenticationProcedure,
         ]);
 
-        $filteredList = $authenticationProcedureList->filterByAuthenticationsOnBehalfOf($someServiceProvider);
+        $filteredList = $authenticationProcedureList->findOnBehalfOf($someServiceProvider);
 
         $this->assertTrue(
             $filteredList->contains($someAuthenticationProcedure),
@@ -115,7 +115,7 @@ class AuthenticationProcedureListTest extends TestCase
             $otherAuthenticationProcedure,
         ]);
 
-        $filteredList = $authenticationProcedureList->filterByCompletedProceduresSince(
+        $filteredList = $authenticationProcedureList->findProceduresCompletedAfter(
             new DateTimeImmutable('2000-01-01')
         );
 
