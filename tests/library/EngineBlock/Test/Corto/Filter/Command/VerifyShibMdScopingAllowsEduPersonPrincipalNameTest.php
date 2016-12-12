@@ -131,4 +131,93 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPr
 
         $this->assertTrue($invalidScopeIsLogged);
     }
+
+    public function testEduPersonPrincipalNameThatMatchesLogsNoWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = false;
+        $scope->allowed = 'openconext.org';
+
+        $identityProvider               = new IdentityProvider('OpenConext');
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertFalse($invalidScopeIsLogged);
+    }
+
+    public function testEduPersonPrincipalNameThatMatchesCaseInsensitivelyLogsNoWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = false;
+        $scope->allowed = 'openconext.ORG';
+
+        $identityProvider               = new IdentityProvider('OpenConext');
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertFalse($invalidScopeIsLogged);
+    }
+
+    public function testEduPersonPrincipalNameThatMatchesRegexpLogsNoWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = true;
+        $scope->allowed = '.*conext\.org';
+
+        $identityProvider               = new IdentityProvider('OpenConext');
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertFalse($invalidScopeIsLogged);
+    }
+
+    public function testEduPersonPrincipalNameNotInRegexpScopeIsLoggedAsWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = true;
+        $scope->allowed = '.*\.noconext\.org';
+
+        $identityProvider               = new IdentityProvider('OpenConext');
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'eduPersonPrincipalName attribute value "' . self::EPPN_SUFFIX . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertTrue($invalidScopeIsLogged);
+    }
+
 }
