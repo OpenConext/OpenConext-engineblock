@@ -154,7 +154,7 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
     {
         $scope          = new ShibMdScope();
         $scope->regexp  = true;
-        $scope->allowed = '.*conext\.org';
+        $scope->allowed = '.*Conext';
 
         $identityProvider               = new IdentityProvider(self::SHO_VALUE);
         $identityProvider->shibMdScopes = array($scope);
