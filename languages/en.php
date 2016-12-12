@@ -264,7 +264,7 @@ this service.
     'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is not a valid email address',
     'error_attribute_validator_minlength'           => '\'%3$s\' is not long enough (minimum is %2$d characters)',
     'error_attribute_validator_maxlength'           => '\'%3$s\' is too long (maximum is %2$d characters)',
-    'error_attribute_validator_min'                 => '%1$s requires at least %2$d values (%3$d given)',
+    'error_attribute_validator_min'                 => '%1$s should have at least %2$d values (%3$d given)',
     'error_attribute_validator_max'                 => '%1$s may have no more than %2$d values (%3$d given)',
     'error_attribute_validator_regex'               => '\'%3$s\' does not match the expected format of this attribute (%2$s)',
     'error_attribute_validator_not_in_definitions'  => '%1$s is not known in the SURFconext schema',
