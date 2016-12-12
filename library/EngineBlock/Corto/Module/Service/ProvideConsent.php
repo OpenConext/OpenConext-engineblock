@@ -1,8 +1,6 @@
 <?php
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
@@ -22,22 +20,14 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var EngineBlock_Corto_Model_Consent_Factory */
     private  $_consentFactory;
 
-    /**
-     * @var Session
-     */
-    private $session;
-
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        EngineBlock_Corto_Model_Consent_Factory $consentFactory,
-        Session $session
-    )
-    {
+        EngineBlock_Corto_Model_Consent_Factory $consentFactory
+    ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
-        $this->session = $session;
     }
 
     public function serve($serviceName)
@@ -79,10 +69,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
             }
 
-            /** @var AuthenticationState $authenticationState */
-            $authenticationState = $this->session->get('authentication_state');
-            $authenticationState->completeCurrent();
-
             $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
@@ -100,10 +86,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
-
-            /** @var AuthenticationState $authenticationState */
-            $authenticationState = $this->session->get('authentication_state');
-            $authenticationState->completeCurrent();
 
             $this->_server->getBindingsModule()->send(
                 $response,

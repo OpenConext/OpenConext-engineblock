@@ -31,11 +31,6 @@ class EngineBlock_ApplicationSingleton
     public $authenticationStateIdpEntityId;
 
     /**
-     * @var null|string
-     */
-    public $authenticationStateSpEntityId;
-
-    /**
      * @var EngineBlock_ApplicationSingleton
      */
     protected static $s_instance;
