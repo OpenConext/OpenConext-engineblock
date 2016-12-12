@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuardInterface;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedure;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureList;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\Value\Saml\Entity;
@@ -54,14 +53,14 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
     }
 
     /**
-     * @param int $maximumAuthenticationCyclesAllowed
+     * @param int $maximumAuthenticationProceduresAllowed
      * @param int $timeFrameForAuthenticationLoopInSeconds
      */
     public function saveAuthenticationLoopGuardConfiguration(
-        $maximumAuthenticationCyclesAllowed,
+        $maximumAuthenticationProceduresAllowed,
         $timeFrameForAuthenticationLoopInSeconds
     ) {
-        $this->authenticationGuardFixture['maximumAuthenticationCyclesAllowed'] = $maximumAuthenticationCyclesAllowed;
+        $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'] = $maximumAuthenticationProceduresAllowed;
         $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds']
             = $timeFrameForAuthenticationLoopInSeconds;
 
@@ -85,7 +84,7 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
         }
 
         $authenticationLoopGuard = new AuthenticationLoopGuard(
-            $this->authenticationGuardFixture['maximumAuthenticationCyclesAllowed'],
+            $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'],
             $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds']
         );
 

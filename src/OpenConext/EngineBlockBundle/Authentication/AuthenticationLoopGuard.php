@@ -28,7 +28,7 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
     /**
      * @var int
      */
-    private $maximumAuthenticationCyclesAllowed;
+    private $maximumAuthenticationProceduresAllowed;
 
     /**
      * @var int
@@ -36,19 +36,19 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
     private $timeFrameForAuthenticationLoopInSeconds;
 
     public function __construct(
-        $maximumAuthenticationCyclesAllowed,
+        $maximumAuthenticationProceduresAllowed,
         $timeFrameForAuthenticationLoopInSeconds
     ) {
         Assertion::integer(
-            $maximumAuthenticationCyclesAllowed,
-            'Expected maximum authentication cycles allowed to be an integer, got "%s"'
+            $maximumAuthenticationProceduresAllowed,
+            'Expected maximum authentication procedures allowed to be an integer, got "%s"'
         );
         Assertion::integer(
             $timeFrameForAuthenticationLoopInSeconds,
             'Expected time frame for determining authentication loop in seconds to be an integer, got "%s"'
         );
 
-        $this->maximumAuthenticationCyclesAllowed      = $maximumAuthenticationCyclesAllowed;
+        $this->maximumAuthenticationProceduresAllowed  = $maximumAuthenticationProceduresAllowed;
         $this->timeFrameForAuthenticationLoopInSeconds = $timeFrameForAuthenticationLoopInSeconds;
     }
 
@@ -67,14 +67,14 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
             ->findOnBehalfOf($serviceProvider)
             ->findProceduresCompletedAfter($startDate);
 
-        $stuckInAuthenticationLoop = count($relevantProceduresInTimeFrame) >= $this->maximumAuthenticationCyclesAllowed;
+        $stuckInAuthenticationLoop = count($relevantProceduresInTimeFrame) >= $this->maximumAuthenticationProceduresAllowed;
 
         if ($stuckInAuthenticationLoop) {
             throw new StuckInAuthenticationLoopException(
                 sprintf(
                     'After %d authentication procedures, we determined within a time frame of %d seconds'
                     . ' that we are stuck in an authentication loop for service provider "%s"',
-                    $this->maximumAuthenticationCyclesAllowed,
+                    $this->maximumAuthenticationProceduresAllowed,
                     $this->timeFrameForAuthenticationLoopInSeconds,
                     $serviceProvider->getEntityId()
                 )
