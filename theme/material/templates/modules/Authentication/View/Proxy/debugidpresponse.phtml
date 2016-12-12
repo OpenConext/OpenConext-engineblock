@@ -111,7 +111,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
     <h2><?= $this->t('attributes') ?></h2>
     <?php foreach ($validationResult->getErrorsForMissingAttributes() as $error): ?>
         <p class="error">
-          <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#9888;" /> <?php
+          <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#x274c;" /> <?php
         echo EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error));
         ?></p>
     <?php endforeach; ?>
@@ -165,7 +165,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
                       <?php else:
                           foreach ($validationResult->getErrors($attributeName) as $error) {
                               echo '<p class="error">' .
-                                      '<img src="/images/error.svg" class="c-icon c-icon-error" alt="&#9888;" /> ' .
+                                      '<img src="/images/error.svg" class="c-icon c-icon-error" alt="&#x274c;" /> ' .
                                       EngineBlock_View::htmlSpecialCharsText(call_user_func_array(array($this, 'translate'), $error)) .
                                   '</p>';
                           }
