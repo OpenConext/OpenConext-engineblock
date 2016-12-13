@@ -35,7 +35,6 @@ final class ConsentRepository
             SELECT
                 service_id
             ,   consent_date
-            ,   usage_date
             ,   consent_type
             FROM
                 consent
@@ -52,7 +51,6 @@ final class ConsentRepository
                     $userId,
                     $row['service_id'],
                     new DateTime($row['consent_date']),
-                    new DateTime($row['usage_date']),
                     new ConsentType($row['consent_type'])
                 );
             },
