@@ -9,6 +9,10 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 {
     public function testNameIDFormatIsNotSetByDefault()
     {
+        $expectedNameIdPolicy = [
+            'AllowCreate' => true
+        ];
+
         $proxyServer = $this->factoryProxyServer();
 
         $originalRequest = $this->factoryOriginalRequest();
@@ -20,7 +24,9 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
             $proxyServer
         );
 
-        $this->assertNotContains('Format', $enhancedRequest->getNameIdPolicy());
+        $actualNameIdPolicy = $enhancedRequest->getNameIdPolicy();
+
+        $this->assertSame($expectedNameIdPolicy, $actualNameIdPolicy);
     }
 
     public function testNameIDFormatIsSetFromRemoteMetaData()
