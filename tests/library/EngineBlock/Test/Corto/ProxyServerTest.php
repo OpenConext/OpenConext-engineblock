@@ -20,10 +20,13 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
             $proxyServer
         );
 
-        $expectedNameIdPolicy = ['AllowCreate' => true];
-        $actualNameIdPolicy   = $enhancedRequest->getNameIdPolicy();
+        $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
 
-        $this->assertSame($expectedNameIdPolicy, $actualNameIdPolicy);
+        $this->assertNotContains(
+            'Format',
+            array_keys($nameIdPolicy),
+            'The NameIDPolicy should not contain the key "Format"'
+        );
     }
 
     public function testNameIDFormatIsSetFromRemoteMetaData()
