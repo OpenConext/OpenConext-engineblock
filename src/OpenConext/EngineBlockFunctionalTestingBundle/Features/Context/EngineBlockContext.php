@@ -2,14 +2,18 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Mink\Exception\ExpectationException;
+use DOMDocument;
+use DOMXPath;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
-use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
+use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
+use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
@@ -239,7 +243,7 @@ class EngineBlockContext extends AbstractSubContext
         $mockIdp = $this->mockIdpRegistry->get($idpName);
 
         if (!$mockIdp) {
-            throw new \RuntimeException(
+            throw new RuntimeException(
                 "Unable to find idp with name '$idpName'"
             );
         }
@@ -250,7 +254,7 @@ class EngineBlockContext extends AbstractSubContext
         $button = $mink->find('css', $selector);
 
         if (!$button) {
-            throw new \RuntimeException(sprintf('Unable to find button with selector "%s"', $selector));
+            throw new RuntimeException(sprintf('Unable to find button with selector "%s"', $selector));
         }
 
         $button->click();
@@ -299,5 +303,35 @@ class EngineBlockContext extends AbstractSubContext
     {
         $session = $this->getMainContext()->getMinkContext()->getSession();
         $session->restart();
+    }
+
+    /**
+     * @Then /^the AuthnRequest should match xpath '([^']*)'$/
+     */
+    public function theAuthnRequestShouldMatchXpath($xpath)
+    {
+        $session = $this->getMainContext()->getMinkContext()->getSession();
+        $mink    = $session->getPage();
+
+        $authnRequestElement = $mink->find('css', 'input[name="authnRequestXml"]');
+        if ($authnRequestElement === null) {
+            throw new ExpectationException('Element with the name "authnRequestXml" could not be found', $session);
+        }
+
+        $authnRequestXml = html_entity_decode($authnRequestElement->getValue());
+
+        /**
+         * @see MinkContext::theResponseShouldMatchXpath()
+         */
+        $authnRequest = new DOMDocument();
+        $authnRequest->loadXML($authnRequestXml);
+
+        $xpathObject = new DOMXPath($authnRequest);
+        $nodeList = $xpathObject->query($xpath);
+
+        if (!$nodeList || $nodeList->length === 0) {
+            $message = sprintf('The xpath "%s" did not result in at least one match.', $xpath);
+            throw new ExpectationException($message, $session);
+        }
     }
 }
