@@ -1,8 +1,8 @@
 @WIP
 Feature:
-  In order to maintain compatibility with certain IdPs
-  As Engineblock
-  I want to send correct AuthnRequests
+  In order to offer a predictable API to SPs and IdPs
+  As EngineBlock
+  I want to send them the correct AuthnRequests and Responses
 
   Background:
     Given an EngineBlock instance on "vm.openconext.org"
@@ -11,7 +11,7 @@ Feature:
       And an Identity Provider named "Dummy-IdP"
       And a Service Provider named "Dummy-SP"
 
-  Scenario: The AuthnRequest contains the correct attributes
+  Scenario: IdPs are allowed to create NameIDs
     When I log in at "Dummy-SP"
      And I pass through EngineBlock
      And I pass through the IdP
