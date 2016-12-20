@@ -196,14 +196,45 @@ Feature:
      And I pass through EngineBlock
      And I lose my session
      And I pass through the IdP
-     And I should see "your session was lost"
+    Then I should see "your session was lost"
 
   Scenario: The session has been lost after logging in at the SP
     When I log in at "Dummy SP"
      And I lose my session
      And I pass through EngineBlock
      And I pass through the IdP
-     And I should see "your session was lost"
+    Then I should see "your session was lost"
+
+#  @WIP
+#  Scenario: The user gets stuck in an authentication loop
+##   Given EngineBlock is configured to allow a maximum of 1 authentication cycles within a time frame of 180 seconds
+#    When I log in at "Dummy SP"
+#     And I pass through EngineBlock
+#     And I pass through the IdP
+#     And I give my consent
+#     And I log in at "Dummy SP"
+#     And I pass through EngineBlock
+#     And I pass through the IdP
+#     And I give my consent
+#     And I log in at "Dummy SP"
+#     And I pass through EngineBlock
+#     And I give my consent
+#     And I log in at "Dummy SP"
+#     And I pass through EngineBlock
+#     And I give my consent
+#     And I log in at "Dummy SP"
+#     And I pass through EngineBlock
+#     And I give my consent
+#     And I log in at "Dummy SP"
+#     And I pass through EngineBlock
+#
+##    Then the url should match "/authentication/feedback/stuck-in-authentication-loop"
+##     And I should see "No connection between institution and service"
+##     And I should see "Timestamp:"
+##     And I should see "Unique Request Id:"
+##     And I should see "User Agent:"
+##     And I should see "IP Address:"
+##     And I should see "Service Provider:"
 
 #
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location
