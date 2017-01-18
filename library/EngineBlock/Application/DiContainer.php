@@ -299,4 +299,9 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     {
         return $this->container->getParameter('wayf.cutoff_point_for_showing_unfiltered_idps');
     }
+
+    public function getPdpClient()
+    {
+        return $this->container->get('engineblock.pdp.pdp_client');
+    }
 }
