@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
+
 class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_Filter_Command_Abstract
 {
     public function execute()
@@ -18,31 +20,27 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
             return;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "Policy Enforcement Point consult"
-        );
-
-        $validator = $this->_getValidator();
-        $hasAccess = $validator->hasAccess(
+        $pdpRequest = Request::from(
             $this->_collabPersonId,
             $this->_identityProvider->entityId,
             $serviceProvider->entityId,
             $this->_responseAttributes
         );
 
-        if ($hasAccess) {
+        EngineBlock_ApplicationSingleton::getLog()->debug("Consulting Policy Enforcement Point");
+
+        $pdp = $this->getPdpClient();
+        $policyDecision = $pdp->giveDecisionBasedOn($pdpRequest);
+
+        if ($policyDecision->permitsAccess()) {
             return;
         }
 
-        $message = "Policy Decision Point: access denied.";
-        if ($validator->getMessage()) {
-            $message = $validator->getMessage();
-        }
-
         EngineBlock_ApplicationSingleton::getLog()->debug(
-            "Policy Enforcement Point access denied: " . $message
+            "Policy Enforcement Point access denied: " . $policyDecision->getLocalizedDenyMessage('en')
         );
-        throw new EngineBlock_Corto_Exception_PEPNoAccess($message);
+
+        throw EngineBlock_Corto_Exception_PEPNoAccess::with($policyDecision);
     }
 
     /**
@@ -51,5 +49,13 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
     protected function _getValidator()
     {
         return new EngineBlock_PolicyDecisionPoint_PepValidator();
+    }
+
+    /**
+     * @return OpenConext\EngineBlockBundle\Pdp\PdpClient
+     */
+    private function getPdpClient()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getPdpClient();
     }
 }

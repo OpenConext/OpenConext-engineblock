@@ -1,14 +1,17 @@
 <?php
 
+use OpenConext\EngineBlockBundle\Pdp\Dto\Attribute;
+use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
+use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+
 class EngineBlock_PolicyDecisionPoint_PepValidator
 {
-    const DEFAULT_LANG = self::LANGUAGE_EN;
-    const LANGUAGE_EN = 'en';
+    const DEFAULT_LANG = 'en';
 
     /**
      * @var array<string,string>
      */
-    private $messages;
+    private $message;
 
     /**
      * @param string $subjectId
@@ -19,71 +22,66 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
      */
     public function hasAccess($subjectId, $idp, $sp, array $responseAttributes)
     {
-        $policy_request = $this->buildPolicyRequest($subjectId, $idp, $sp, $responseAttributes);
+        $accessSubjectIdAttribute = new Attribute;
+        $accessSubjectIdAttribute->attributeId = 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
+        $accessSubjectIdAttribute->value = $subjectId;
+        $accessSubjectAttributes = [$accessSubjectIdAttribute];
 
-        $pdp = $this->createPdpClient($policy_request);
-        $hasAccess = $pdp->hasAccess();
-
-        if (!$hasAccess) {
-            $this->messages = $pdp->getReason();
+        foreach ($responseAttributes as $id => $values) {
+            foreach ($values as $value) {
+                $accessSubjectResponseAttribute = new Attribute;
+                $accessSubjectResponseAttribute->attributeId = $id;
+                $accessSubjectResponseAttribute->value = $value;
+                $accessSubjectAttributes[] = $accessSubjectResponseAttribute;
+            }
         }
 
-        return $hasAccess;
+        $idpAttribute = new Attribute;
+        $idpAttribute->attributeId = 'IDPentityID';
+        $idpAttribute->value = $idp;
+        $spAttribute = new Attribute;
+        $spAttribute->attributeId = 'SPentityID';
+        $spAttribute->value = $sp;
+
+        $pdpRequest = new Request();
+        $pdpRequest->accessSubject->attributes = $accessSubjectAttributes;
+        $pdpRequest->resource->attributes = [$idpAttribute, $spAttribute];
+
+        $pdpClient = $this->getPdpClient();
+
+        /** @var PolicyDecision $policyDecision */
+        $policyDecision = $pdpClient->giveDecisionBasedOn($pdpRequest);
+        if ($policyDecision->permitsAccess()) {
+            return true;
+        }
+
+        if ($policyDecision->isDeny()) {
+            $this->message = $policyDecision->getLocalizedDenyMessage($this->getLocale(), self::DEFAULT_LANG);
+        }
+
+        if ($policyDecision->isIndeterminate() && $policyDecision->hasStatusMessage()) {
+            $this->message = $policyDecision->getStatusMessage();
+        }
+
+        return false;
     }
 
     /**
      * Get the response message when subject has no access.
-     *
-     * @param string|null $lang
-     * @return string|null
+     * @return null|string
      */
-    public function getMessage($lang = null)
+    public function getMessage()
     {
-        $lang = !empty($lang) ? $lang : static::DEFAULT_LANG;
-
-        if (isset($this->messages[$lang])) {
-            return $this->messages[$lang];
-        }
-
-        return NULL;
+        return $this->message;
     }
 
-    /**
-     * Build the policy request object.
-     *
-     * @param string $subjectId
-     * @param string $idp
-     * @param string $sp
-     * @param array $responseAttributes
-     * @return Pdp_PolicyRequest
-     */
-    private function buildPolicyRequest($subjectId, $idp, $sp, array $responseAttributes)
+    private function getPdpClient()
     {
-        $policy_request = new Pdp_PolicyRequest();
-        $policy_request->addResourceAttribute('SPentityID', $sp);
-        $policy_request->addResourceAttribute('IDPentityID', $idp);
-
-        $policy_request->addAccessSubject('urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', $subjectId);
-
-        foreach ($responseAttributes as $id => $values) {
-            foreach ($values as $value) {
-                $policy_request->addAccessSubject($id, $value);
-            }
-        }
-
-        return $policy_request;
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getPdpClient();
     }
 
-    /**
-     * The PDP client.
-     *
-     * @param Pdp_PolicyRequest $policy_request
-     *
-     * @return Pdp_Client
-     */
-    protected function createPdpClient(Pdp_PolicyRequest $policy_request)
+    private function getLocale()
     {
-        $conf = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-        return new Pdp_Client($conf, $policy_request);
+        return EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter()->getLocale();
     }
 }

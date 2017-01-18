@@ -77,7 +77,7 @@ class ErrorReporter
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
             $feedback = array_merge(
                 $feedback,
-                ['error_authorization_policy_violation_name' => $exception->getMessage()]
+                ['error_authorization_policy_decision' => $exception->getPolicyDecision()]
             );
         }
 

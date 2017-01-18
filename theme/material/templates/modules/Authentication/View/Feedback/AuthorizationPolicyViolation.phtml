@@ -3,7 +3,22 @@
 /**
  * @var Zend_Layout $layout
  */
+use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
+
 $layout = $this->layout();
+
+$locale = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter()->getLocale();
+
+if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
+    /** @var PolicyDecision $policyDecision */
+    $policyDecision = $_SESSION['feedbackInfo']['error_authorization_policy_decision'];
+
+    if ($policyDecision->hasLocalizedDenyMessage()) {
+        $policyDecisionMessage = $policyDecision->getLocalizedDenyMessage($locale, 'en');
+    } elseif ($policyDecision->hasStatusMessage()) {
+        $policyDecisionMessage = $policyDecision->getStatusMessage();
+    }
+}
 
 // Set Layout properties
 $layout->title = $layout->title. ' - ' .$this->t('error_authorization_policy_violation');
@@ -17,10 +32,9 @@ $layout->wide = true;
     <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
     <?= $this->t('error_authorization_policy_violation_info'); ?>
     <?php
-      if (!empty($_SESSION['feedbackInfo']) && is_array($_SESSION['feedbackInfo'])
-          && array_key_exists('error_authorization_policy_violation_name', $_SESSION['feedbackInfo'])) {
+        if (isset($policyDecisionMessage)) {
     ?>
-      <h2><?= EngineBlock_View::htmlSpecialCharsText($_SESSION['feedbackInfo']['error_authorization_policy_violation_name'])?></h2>
+        <h2><?= EngineBlock_View::htmlSpecialCharsText($policyDecisionMessage)?></h2>
     <?php
     }
     ?>
