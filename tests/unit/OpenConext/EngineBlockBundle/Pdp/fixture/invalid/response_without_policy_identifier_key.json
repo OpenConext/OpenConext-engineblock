@@ -1,0 +1,18 @@
+{
+  "Response": [{
+    "Status": {
+      "StatusCode": {
+        "Value": "urn:oasis:names:tc:xacml:1.0:status:ok"
+      }
+    },
+    "Category": [{
+      "CategoryId": "urn:mace:terena.org:attribute-def:edu",
+      "Attribute": [{
+        "AttributeId": "urn:mace:terena.org:attribute-def:edu",
+        "Value": "what",
+        "DataType": "http://www.w3.org/2001/XMLSchema#string"
+      }]
+    }],
+    "Decision": "Permit"
+  }]
+}

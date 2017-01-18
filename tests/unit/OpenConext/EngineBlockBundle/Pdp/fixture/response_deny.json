@@ -1,0 +1,42 @@
+{
+  "Response" : [ {
+    "Status" : {
+      "StatusCode" : {
+        "Value" : "urn:oasis:names:tc:xacml:1.0:status:ok"
+      }
+    },
+    "Category" : [ {
+      "CategoryId" : "urn:mace:dir:attribute-def:eduPersonAffiliation",
+      "Attribute" : [ {
+        "AttributeId" : "urn:mace:dir:attribute-def:eduPersonAffiliation",
+        "Value" : "student",
+        "DataType" : "http://www.w3.org/2001/XMLSchema#string"
+      } ]
+    } ],
+    "AssociatedAdvice" : [ {
+      "AttributeAssignment" : [ {
+        "Category" : "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
+        "AttributeId" : "DenyMessage:en",
+        "Value" : "Students do not have access to this resource",
+        "DataType" : "http://www.w3.org/2001/XMLSchema#string"
+      }, {
+        "Category" : "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
+        "AttributeId" : "DenyMessage:nl",
+        "Value" : "Studenten hebben geen toegang tot deze dienst",
+        "DataType" : "http://www.w3.org/2001/XMLSchema#string"
+      } ],
+      "Id" : "urn:surfconext:xacml:policy:id:openconext_pdp_test_deny_policy_xml"
+    } ],
+    "PolicyIdentifier" : {
+      "PolicySetIdReference" : [ {
+        "Version" : "1.0",
+        "Id" : "urn:openconext:pdp:root:policyset"
+      } ],
+      "PolicyIdReference" : [ {
+        "Version" : "1",
+        "Id" : "urn:surfconext:xacml:policy:id:openconext_pdp_test_deny_policy_xml"
+      } ]
+    },
+    "Decision" : "Deny"
+  } ]
+}

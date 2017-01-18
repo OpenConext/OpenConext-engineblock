@@ -1,0 +1,22 @@
+{
+  "Response" : [ {
+    "Status" : {
+      "StatusDetail" : "<MissingAttributeDetail Category=\\\"urn:oasis:names:tc:xacml:1.0:subject-category:access-subject\\\" AttributeId=\\\"urn:mace:dir:attribute-def:eduPersonAffiliation\\\" DataType=\\\"http://www.w3.org/2001/XMLSchema#string\\\"></MissingAttributeDetail>",
+      "StatusCode" : {
+        "Value" : "urn:oasis:names:tc:xacml:1.0:status:missing-attribute"
+      },
+      "StatusMessage" : "Missing required attribute"
+    },
+    "PolicyIdentifier" : {
+      "PolicySetIdReference" : [ {
+        "Version" : "1.0",
+        "Id" : "5ea058ea-002c-4d52-a93c-4008df7d84b8"
+      } ],
+      "PolicyIdReference" : [ {
+        "Version" : "1",
+        "Id" : "urn:surfconext:xacml:policy:id:openconext.pdp.test.deny.policy.xml"
+      } ]
+    },
+    "Decision" : "Indeterminate"
+  } ]
+}

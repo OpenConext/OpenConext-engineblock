@@ -1,0 +1,16 @@
+{
+  "Response" : [ {
+    "Status" : {
+      "StatusCode" : {
+        "Value" : "urn:oasis:names:tc:xacml:1.0:status:ok"
+      }
+    },
+    "PolicyIdentifier" : {
+      "PolicySetIdReference" : [ {
+        "Version" : "1.0",
+        "Id" : "5554cfff-2aa9-4bf0-a9dd-507239939d05"
+      } ]
+    },
+    "Decision" : "NotApplicable"
+  } ]
+}
