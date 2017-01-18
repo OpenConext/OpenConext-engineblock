@@ -51,18 +51,19 @@ class HttpClient
      *                                   Example: '/foo/%s/bar/%s', ['foo' => 'ab-cd', 'bar' => 'ef']
      * @param array          $parameters An array containing the parameters to replace in the path.
      * @param HttpQuery|null $httpQuery
+     * @param array          $headers
      * @return null|mixed Most likely an array structure, null when the resource doesn't exist.
      * @throws MalformedResponseException When the server doesn't respond with (well-formed) JSON.
      * @throws AccessDeniedException When the consumer isn't authorised to access given resource.
      * @throws UnreadableResourceException When the server doesn't respond with the resource.
      */
-    public function read($path, array $parameters = [], HttpQuery $httpQuery = null)
+    public function read($path, array $parameters = [], HttpQuery $httpQuery = null, array $headers = [])
     {
         $resource = $this->buildResourcePath($path, $parameters, $httpQuery);
 
         try {
             $response = $this->guzzleClient
-                ->get($resource, null, ['exceptions' => false])
+                ->get($resource, $headers, ['exceptions' => false])
                 ->send();
 
             $statusCode = $response->getStatusCode();
@@ -96,6 +97,59 @@ class HttpClient
 
         if ($statusCode < 200 || $statusCode >= 300) {
             throw new UnreadableResourceException(sprintf('Resource could not be read (status code %d)', $statusCode));
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param string $resource
+     * @param string $postBody
+     * @param array  $headers
+     * @return null|mixed Most likely an array structure, null when the resource doesn't exist.
+     * @throws MalformedResponseException When the server doesn't respond with (well-formed) JSON.
+     * @throws AccessDeniedException When the consumer isn't authorised to access given resource.
+     * @throws UnreadableResourceException When the server doesn't respond with the resource.
+     */
+    public function post($resource, $postBody, array $headers = [])
+    {
+        try {
+            $response = $this->guzzleClient
+                ->post($resource, $headers, $postBody, ['exceptions' => false])
+                ->send();
+
+            $statusCode = $response->getStatusCode();
+
+            $data = $response->json();
+        } catch (GuzzleRequestException $exception) {
+            throw new RequestException(
+                sprintf(
+                    'Could not send request to resource "%s": "%s"',
+                    $resource,
+                    $exception->getMessage()
+                ),
+                $exception
+            );
+        } catch (CoreRuntimeException $exception) {
+
+            // Malformed JSON body
+            throw new MalformedResponseException(
+                sprintf('Cannot post resource: "%s"', $exception->getMessage()),
+                $exception
+            );
+        }
+
+        // 404 is considered a valid response, the resource may not be there (yet?) intentionally.
+        if ($statusCode == 404) {
+            return null;
+        }
+
+        if ($statusCode == 403) {
+            throw new AccessDeniedException($resource);
+        }
+
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new UnreadableResourceException(sprintf('Resource could not be posted (status code %d)', $statusCode));
         }
 
         return $data;

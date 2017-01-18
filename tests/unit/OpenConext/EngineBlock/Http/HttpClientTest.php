@@ -48,7 +48,7 @@ class HttpClientTest extends UnitTest
             ->getMock();
 
         $guzzle = m::mock('Guzzle\Http\ClientInterface')
-            ->shouldReceive('get')->with('/resource', null, m::any())->once()->andReturn($request)
+            ->shouldReceive('get')->with('/resource', [], m::any())->once()->andReturn($request)
             ->getMock();
 
         $client = new HttpClient($guzzle);
@@ -73,7 +73,7 @@ class HttpClientTest extends UnitTest
             ->getMock();
 
         $guzzle = m::mock('Guzzle\Http\ClientInterface')
-            ->shouldReceive('get')->with('/resource/John%2FDoe', null, m::any())->once()->andReturn($request)
+            ->shouldReceive('get')->with('/resource/John%2FDoe', [], m::any())->once()->andReturn($request)
             ->getMock();
 
         $httpClient = new HttpClient($guzzle);
@@ -85,14 +85,14 @@ class HttpClientTest extends UnitTest
      * @group EngineBlock
      * @group Http
      */
-    public function a_guzzle_request_exception_is_converted_to_an_engineblock_request_exception()
+    public function a_guzzle_request_exception_is_converted_to_an_engineblock_request_exception_when_reading()
     {
         $request = m::mock('Guzzle\Http\Message\RequestInterface')
             ->shouldReceive('send')->once()->andThrow('Guzzle\Http\Exception\RequestException')
             ->getMock();
 
         $guzzle = m::mock('Guzzle\Http\ClientInterface')
-            ->shouldReceive('get')->with('/some-resource/abc', null, m::any())->once()->andReturn($request)
+            ->shouldReceive('get')->with('/some-resource/abc', [], m::any())->once()->andReturn($request)
             ->getMock();
 
         $client = new HttpClient($guzzle);
@@ -106,7 +106,7 @@ class HttpClientTest extends UnitTest
      * @group EngineBlock
      * @group Http
      */
-    public function malformed_json_causes_a_malformed_response_exception()
+    public function malformed_json_causes_a_malformed_response_exception_when_reading()
     {
         $response = m::mock('Guzzle\Http\Message\ResponseInterface')
             ->shouldReceive('json')->andThrow(new \RuntimeException)
@@ -118,7 +118,7 @@ class HttpClientTest extends UnitTest
             ->getMock();
 
         $guzzle = m::mock('Guzzle\Http\ClientInterface')
-            ->shouldReceive('get')->with('/resource/John%2FDoe', null, m::any())->once()->andReturn($request)
+            ->shouldReceive('get')->with('/resource/John%2FDoe', [], m::any())->once()->andReturn($request)
             ->getMock();
 
         $client = new HttpClient($guzzle);
@@ -132,7 +132,7 @@ class HttpClientTest extends UnitTest
      * @group EngineBlock
      * @group Http
      */
-    public function null_is_returned_when_the_response_status_code_is_404()
+    public function null_is_returned_when_the_response_status_code_is_404_when_reading()
     {
         $response = m::mock('Guzzle\Http\Message\ResponseInterface')
             ->shouldReceive('json')->andReturn([])
@@ -144,7 +144,7 @@ class HttpClientTest extends UnitTest
             ->getMock();
 
         $guzzle   = m::mock('Guzzle\Http\ClientInterface')
-            ->shouldReceive('get')->with('/some-resource/abc', null, m::any())->once()->andReturn($request)
+            ->shouldReceive('get')->with('/some-resource/abc', [], m::any())->once()->andReturn($request)
             ->getMock();
 
         $client  = new HttpClient($guzzle);
@@ -160,7 +160,7 @@ class HttpClientTest extends UnitTest
      * @group EngineBlock
      * @group Http
      */
-    public function an_access_denied_exception_is_thrown_if_the_response_status_code_is_403()
+    public function an_access_denied_exception_is_thrown_if_the_response_status_code_is_403_when_reading()
     {
         $response = m::mock('Guzzle\Http\Message\ResponseInterface')
             ->shouldReceive('json')->andReturn([])
@@ -173,12 +173,151 @@ class HttpClientTest extends UnitTest
 
 
         $guzzle = m::mock('Guzzle\Http\ClientInterface')
-            ->shouldReceive('get')->with('/some-resource/abc', null, m::any())->once()->andReturn($request)
+            ->shouldReceive('get')->with('/some-resource/abc', [], m::any())->once()->andReturn($request)
             ->getMock();
 
         $client = new HttpClient($guzzle);
 
         $this->expectException(AccessDeniedException::class);
         $client->read('/some-resource/abc');
+    }
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Http
+     */
+    public function data_from_a_resource_can_be_posted()
+    {
+        $postBody = 'My posted data';
+        $data     = 'My first resource';
+        $response = m::mock('Guzzle\Http\Message\ResponseInterface')
+            ->shouldReceive('json')->andReturn($data)
+            ->shouldReceive('getStatusCode')->andReturn('200')
+            ->getMock();
+
+        $request = m::mock('Guzzle\Http\Message\RequestInterface')
+            ->shouldReceive('send')->once()->andReturn($response)
+            ->getMock();
+
+        $guzzle = m::mock('Guzzle\Http\ClientInterface')
+            ->shouldReceive('post')->with('/resource', [], $postBody, m::any())->once()->andReturn($request)
+            ->getMock();
+
+        $client = new HttpClient($guzzle);
+
+        $this->assertEquals($data, $client->post('/resource', $postBody));
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Http
+     */
+    public function a_guzzle_request_exception_is_converted_to_an_engineblock_request_exception_when_posting()
+    {
+        $postBody = 'My posted data';
+
+        $request = m::mock('Guzzle\Http\Message\RequestInterface')
+            ->shouldReceive('send')->once()->andThrow('Guzzle\Http\Exception\RequestException')
+            ->getMock();
+
+        $guzzle = m::mock('Guzzle\Http\ClientInterface')
+            ->shouldReceive('post')
+            ->with('/some-resource/abc', [], $postBody, m::any())
+            ->once()
+            ->andReturn($request)
+            ->getMock();
+
+        $client = new HttpClient($guzzle);
+
+        $this->expectException(RequestException::class);
+        $client->post('/some-resource/abc', $postBody);
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Http
+     */
+    public function malformed_json_causes_a_malformed_response_exception_when_posting()
+    {
+        $postBody = 'My posted data';
+
+        $response = m::mock('Guzzle\Http\Message\ResponseInterface')
+            ->shouldReceive('json')->andThrow(new \RuntimeException)
+            ->shouldReceive('getStatusCode')->andReturn('200')
+            ->getMock();
+
+        $request = m::mock('Guzzle\Http\Message\RequestInterface')
+            ->shouldReceive('send')->once()->andReturn($response)
+            ->getMock();
+
+        $guzzle = m::mock('Guzzle\Http\ClientInterface')
+            ->shouldReceive('post')->with('/some-resource/abc', [], $postBody, m::any())->once()->andReturn($request)
+            ->getMock();
+
+        $client = new HttpClient($guzzle);
+
+        $this->expectException(MalformedResponseException::class);
+        $client->post('/some-resource/abc', $postBody);
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Http
+     */
+    public function null_is_returned_when_the_response_status_code_is_404_when_posting()
+    {
+        $postBody = 'My posted data';
+
+        $response = m::mock('Guzzle\Http\Message\ResponseInterface')
+            ->shouldReceive('json')->andReturn([])
+            ->shouldReceive('getStatusCode')->andReturn('404')
+            ->getMock();
+
+        $request = m::mock('Guzzle\Http\Message\RequestInterface')
+            ->shouldReceive('send')->once()->andReturn($response)
+            ->getMock();
+
+        $guzzle   = m::mock('Guzzle\Http\ClientInterface')
+            ->shouldReceive('post')->with('/some-resource/abc', [], $postBody, m::any())->once()->andReturn($request)
+            ->getMock();
+
+        $client  = new HttpClient($guzzle);
+
+        $this->assertNull(
+            $client->post('/some-resource/abc', $postBody),
+            'Resource does not exist, yet a non-null value was returned'
+        );
+    }
+
+    /**
+     * @test
+     * @group EngineBlock
+     * @group Http
+     */
+    public function an_access_denied_exception_is_thrown_if_the_response_status_code_is_403_when_posting()
+    {
+        $postBody = 'My posted data';
+
+        $response = m::mock('Guzzle\Http\Message\ResponseInterface')
+            ->shouldReceive('json')->andReturn([])
+            ->shouldReceive('getStatusCode')->andReturn('403')
+            ->getMock();
+
+        $request = m::mock('Guzzle\Http\Message\RequestInterface')
+            ->shouldReceive('send')->once()->andReturn($response)
+            ->getMock();
+
+
+        $guzzle = m::mock('Guzzle\Http\ClientInterface')
+            ->shouldReceive('post')->with('/some-resource/abc', [], $postBody, m::any())->once()->andReturn($request)
+            ->getMock();
+
+        $client = new HttpClient($guzzle);
+
+        $this->expectException(AccessDeniedException::class);
+        $client->post('/some-resource/abc', $postBody);
     }
 }
