@@ -306,9 +306,9 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Then /^the AuthnRequest should match xpath '([^']*)'$/
+     * @Then /^the AuthnRequest to submit should match xpath '([^']*)'$/
      */
-    public function theAuthnRequestShouldMatchXpath($xpath)
+    public function theAuthnRequestToSubmitShouldMatchXpath($xpath)
     {
         $session = $this->getMainContext()->getMinkContext()->getSession();
         $mink    = $session->getPage();

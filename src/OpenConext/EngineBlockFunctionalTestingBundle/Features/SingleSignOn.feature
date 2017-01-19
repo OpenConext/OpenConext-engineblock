@@ -15,4 +15,4 @@ Feature:
     When I log in at "Dummy-SP"
      And I pass through EngineBlock
      And I pass through the IdP
-    Then the AuthnRequest should match xpath '/samlp:AuthnRequest/samlp:NameIDPolicy[@AllowCreate="true" or @AllowCreate="1"]'
+    Then the AuthnRequest to submit should match xpath '/samlp:AuthnRequest/samlp:NameIDPolicy[@AllowCreate="true" or @AllowCreate="1"]'
