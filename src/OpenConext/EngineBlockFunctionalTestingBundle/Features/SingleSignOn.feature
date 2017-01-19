@@ -1,4 +1,3 @@
-@WIP
 Feature:
   In order to offer a predictable API to SPs and IdPs
   As EngineBlock
