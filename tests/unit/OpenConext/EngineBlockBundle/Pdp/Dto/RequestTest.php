@@ -25,7 +25,6 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Request\AccessSubject;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request\Resource;
 use OpenConext\Value\Saml\NameIdFormat;
 use PHPUnit_Framework_TestCase as TestCase;
-use stdClass;
 
 class RequestTest extends TestCase
 {
@@ -48,7 +47,7 @@ class RequestTest extends TestCase
      * @test
      * @group Pdp
      *
-     * @dataProvider nonStringProvider
+     * @dataProvider \OpenConext\TestDataProvider::notString()
      * @param string $invalidSubjectId
      */
     public function a_pdp_requests_subject_id_must_be_a_string($invalidSubjectId)
@@ -68,7 +67,7 @@ class RequestTest extends TestCase
      * @test
      * @group Pdp
      *
-     * @dataProvider nonStringProvider
+     * @dataProvider \OpenConext\TestDataProvider::notString()
      * @param string $invalidIdpEntityId
      */
     public function a_pdp_requests_idp_entity_id_must_be_a_string($invalidIdpEntityId)
@@ -88,7 +87,7 @@ class RequestTest extends TestCase
      * @test
      * @group Pdp
      *
-     * @dataProvider nonStringProvider
+     * @dataProvider \OpenConext\TestDataProvider::notString()
      * @param $invalidSpEntityId
      */
     public function a_pdp_requests_sp_entity_id_must_be_a_string($invalidSpEntityId)
@@ -125,7 +124,7 @@ class RequestTest extends TestCase
      * @test
      * @group Pdp
      *
-     * @dataProvider nonArrayProvider
+     * @dataProvider \OpenConext\TestDataProvider::notArray()
      */
     public function a_pdp_requests_response_attribute_values_must_be_arrays($nonArray)
     {
@@ -231,29 +230,5 @@ class RequestTest extends TestCase
         }
 
         return $expectedRequest;
-    }
-
-    public function nonStringProvider()
-    {
-        return [
-            'null' => [null],
-            'boolean' => [true],
-            'array' => [[]],
-            'object' => [new stdClass()],
-            'integer' => [123],
-            'float' => [1.23],
-        ];
-    }
-
-    public function nonArrayProvider()
-    {
-        return [
-            'null' => [null],
-            'boolean' => [true],
-            'string' => ['my-string'],
-            'object' => [new stdClass()],
-            'integer' => [123],
-            'float' => [1.23],
-        ];
     }
 }
