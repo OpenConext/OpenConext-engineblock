@@ -36,7 +36,7 @@
         "doctrine/doctrine-bundle": "^1.6",
         "ramsey/uuid": "^3.3.0",
         "sensio/generator-bundle": "^3.0",
-        "guzzle/guzzle": "^3.9"
+        "guzzlehttp/guzzle": "^6.0"
     },
     "require-dev": {
         "phake/phake": "2.1",
