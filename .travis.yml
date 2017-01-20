@@ -58,7 +58,7 @@ script:
 
 branches:
   only:
-    - 5.x-dev
+    - release/5.1
     - master
 
 addons:

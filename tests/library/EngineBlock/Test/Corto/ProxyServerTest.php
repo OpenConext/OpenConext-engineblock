@@ -20,7 +20,41 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
             $proxyServer
         );
 
-        $this->assertNotContains('Format', $enhancedRequest->getNameIdPolicy());
+        $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
+
+        $this->assertNotContains(
+            'Format',
+            array_keys($nameIdPolicy),
+            'The NameIDPolicy should not contain the key "Format"',
+            false,
+            true,
+            true
+        );
+    }
+
+    public function testAllowCreateIsSet()
+    {
+        $proxyServer = $this->factoryProxyServer();
+
+        $originalRequest = $this->factoryOriginalRequest();
+        $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
+        /** @var SAML2_AuthnRequest $enhancedRequest */
+        $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
+            $originalRequest,
+            $identityProvider,
+            $proxyServer
+        );
+
+        $nameIdPolicy = $enhancedRequest->getNameIdPolicy();
+
+        $this->assertContains(
+            'AllowCreate',
+            array_keys($nameIdPolicy),
+            'The NameIDPolicy should contain the key "AllowCreate"',
+            false,
+            true,
+            true
+        );
     }
 
     public function testNameIDFormatIsSetFromRemoteMetaData()
