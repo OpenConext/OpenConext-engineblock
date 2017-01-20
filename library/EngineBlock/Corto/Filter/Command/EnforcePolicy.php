@@ -36,9 +36,19 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
             return;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "Policy Enforcement Point access denied: " . $policyDecision->getLocalizedDenyMessage('en')
-        );
+        if ($policyDecision->hasStatusMessage()) {
+            EngineBlock_ApplicationSingleton::getLog()->debug(sprintf(
+                'Policy Enforcement Point access denied with status message "%s"',
+                $policyDecision->getStatusMessage()
+            ));
+        }
+
+        if ($policyDecision->hasLocalizedDenyMessage()) {
+            EngineBlock_ApplicationSingleton::getLog()->debug(sprintf(
+                'Policy Enforcement Point access denied with status message "%s"',
+                $policyDecision->getLocalizedDenyMessage('en')
+            ));
+        }
 
         throw EngineBlock_Corto_Exception_PEPNoAccess::with($policyDecision);
     }
