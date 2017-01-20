@@ -23,10 +23,10 @@ use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 
 final class PolicyDecision
 {
-    const DECISION_PERMIT = 'Permit';
     const DECISION_DENY = 'Deny';
     const DECISION_INDETERMINATE = 'Indeterminate';
     const DECISION_NOT_APPLICABLE = 'NotApplicable';
+    const DECISION_PERMIT = 'Permit';
 
     /**
      * @var string
@@ -54,6 +54,10 @@ final class PolicyDecision
 
         if (isset($response->status->statusMessage)) {
             $policyDecision->statusMessage = $response->status->statusMessage;
+        }
+
+        if ($policyDecision->permitsAccess()) {
+            return $policyDecision;
         }
 
         if (isset($response->associatedAdvices)) {
