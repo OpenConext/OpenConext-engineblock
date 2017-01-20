@@ -22,7 +22,7 @@ use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 
-final class PdpClient
+final class PdpClient implements PdpClientInterface
 {
     /**
      * @var HttpClient
