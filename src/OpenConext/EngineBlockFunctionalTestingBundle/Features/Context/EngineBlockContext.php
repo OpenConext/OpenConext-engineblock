@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
@@ -57,6 +58,16 @@ class EngineBlockContext extends AbstractSubContext
     private $usingFeatures = false;
 
     /**
+     * @var FunctionalTestingPdpClient
+     */
+    private $pdpClient;
+
+    /**
+     * @var boolean
+     */
+    private $usingPdp = false;
+
+    /**
      * @param ServiceRegistryFixture $serviceRegistry
      * @param EngineBlock $engineBlock
      * @param EntityRegistry $mockSpRegistry
@@ -64,6 +75,7 @@ class EngineBlockContext extends AbstractSubContext
      * @param string $spsConfigUrl
      * @param string $idpsConfigUrl
      * @param FunctionalTestingFeatureConfiguration $features
+     * @param FunctionalTestingPdpClient $pdpClient
      */
     public function __construct(
         ServiceRegistryFixture $serviceRegistry,
@@ -72,7 +84,8 @@ class EngineBlockContext extends AbstractSubContext
         EntityRegistry $mockIdpRegistry,
         $spsConfigUrl,
         $idpsConfigUrl,
-        FunctionalTestingFeatureConfiguration $features
+        FunctionalTestingFeatureConfiguration $features,
+        FunctionalTestingPdpClient $pdpClient
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
@@ -81,6 +94,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->spsConfigUrl = $spsConfigUrl;
         $this->idpsConfigUrl = $idpsConfigUrl;
         $this->features = $features;
+        $this->pdpClient = $pdpClient;
     }
 
     /**
@@ -283,6 +297,61 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^I lose my session$/
+     */
+    public function iLoseMySession()
+    {
+        $session = $this->getMainContext()->getMinkContext()->getSession();
+        $session->restart();
+    }
+
+    /**
+     * @Given /^pdp gives a deny response$/
+     */
+    public function pdpGivesADenyResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveDenyResponse();
+    }
+
+    /**
+     * @Given /^pdp gives an indeterminate response$/
+     */
+    public function pdpGivesAnIndeterminateResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveIndeterminateResponse();
+    }
+
+    /**
+     * @Given /^pdp gives a permit response$/
+     */
+    public function pdpGivesAnPermitResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receivePermitResponse();
+    }
+
+    /**
+     * @Given /^pdp gives a not applicable response$/
+     */
+    public function pdpGivesANotApplicableResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveNotApplicableResponse();
+    }
+
+    /**
+     * @AfterScenario
+     */
+    public function cleanUpPdp()
+    {
+        if ($this->usingPdp) {
+            $this->pdpClient->clear();
+        }
+    }
+
+    /**
      * @AfterScenario
      */
     public function cleanUpFeatures()
@@ -290,14 +359,5 @@ class EngineBlockContext extends AbstractSubContext
         if ($this->usingFeatures) {
             $this->features->clean();
         }
-    }
-
-    /**
-     * @Given /^I lose my session$/
-     */
-    public function iLoseMySession()
-    {
-        $session = $this->getMainContext()->getMinkContext()->getSession();
-        $session->restart();
     }
 }
