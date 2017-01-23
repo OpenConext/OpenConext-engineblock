@@ -23,8 +23,11 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
      */
     private $_session;
 
-    public function __construct(EngineBlock_Corto_ProxyServer $server, EngineBlock_Corto_XmlToArray $xmlConverter, Session $session)
-    {
+    public function __construct(
+        EngineBlock_Corto_ProxyServer $server,
+        EngineBlock_Corto_XmlToArray $xmlConverter,
+        Session $session
+    ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_session = $session;
