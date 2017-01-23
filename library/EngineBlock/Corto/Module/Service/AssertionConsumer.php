@@ -21,13 +21,13 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
     /**
      * @var Session
      */
-    private $session;
+    private $_session;
 
     public function __construct(EngineBlock_Corto_ProxyServer $server, EngineBlock_Corto_XmlToArray $xmlConverter, Session $session)
     {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
-        $this->session = $session;
+        $this->_session = $session;
     }
 
     /**
@@ -102,7 +102,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
 
             $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
-            $authenticationState = $this->session->get('authentication_state');
+            $authenticationState = $this->_session->get('authentication_state');
             $authenticationState->authenticateAt($identityProvider);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
