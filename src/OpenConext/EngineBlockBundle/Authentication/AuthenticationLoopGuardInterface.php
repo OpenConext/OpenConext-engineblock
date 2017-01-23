@@ -10,7 +10,7 @@ interface AuthenticationLoopGuardInterface
      * @param AuthenticationProcedureList $pastAuthenticationProcedures
      * @return
      */
-    public function ensureNotStuckInLoop(
+    public function assertNotStuckInLoop(
         Entity $serviceProvider,
         AuthenticationProcedureList $pastAuthenticationProcedures
     );

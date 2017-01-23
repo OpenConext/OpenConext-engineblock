@@ -59,7 +59,7 @@ class AuthenticationLoopGuardTest extends TestCase
 
         $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure, $currentProcedure]);
 
-        $authenticationLoopGuard->ensureNotStuckInLoop($serviceProvider, $pastAuthenticationProcedures);
+        $authenticationLoopGuard->assertNotStuckInLoop($serviceProvider, $pastAuthenticationProcedures);
     }
 
     /**
@@ -85,6 +85,6 @@ class AuthenticationLoopGuardTest extends TestCase
         $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure]);
 
         // No exception should be thrown
-        $authenticationLoopGuard->ensureNotStuckInLoop($serviceProvider, $pastAuthenticationProcedures);
+        $authenticationLoopGuard->assertNotStuckInLoop($serviceProvider, $pastAuthenticationProcedures);
     }
 }

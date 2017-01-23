@@ -71,12 +71,12 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
      * @param Entity $serviceProvider
      * @param AuthenticationProcedureList $pastAuthenticationProcedures
      */
-    public function ensureNotStuckInLoop(
+    public function assertNotStuckInLoop(
         Entity $serviceProvider,
         AuthenticationProcedureList $pastAuthenticationProcedures
     ) {
         if ($this->authenticationGuardFixture === false) {
-            $this->authenticationLoopGuard->ensureNotStuckInLoop(
+            $this->authenticationLoopGuard->assertNotStuckInLoop(
                 $serviceProvider,
                 $pastAuthenticationProcedures
             );
@@ -88,7 +88,7 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
             $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds']
         );
 
-        $authenticationLoopGuard->ensureNotStuckInLoop(
+        $authenticationLoopGuard->assertNotStuckInLoop(
             $serviceProvider,
             $pastAuthenticationProcedures
         );

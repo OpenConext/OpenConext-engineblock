@@ -52,10 +52,7 @@ final class AuthenticationState
     {
         $this->currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
-        $this->authenticationLoopGuard->ensureNotStuckInLoop(
-            $serviceProvider,
-            $this->authenticationProcedures
-        );
+        $this->authenticationLoopGuard->assertNotStuckInLoop($serviceProvider, $this->authenticationProcedures);
 
         $this->authenticationProcedures = $this->authenticationProcedures->add($this->currentAuthenticationProcedure);
     }

@@ -56,7 +56,7 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
      * @param Entity $serviceProvider
      * @param AuthenticationProcedureList $pastAuthenticationProcedures
      */
-    public function ensureNotStuckInLoop(
+    public function assertNotStuckInLoop(
         Entity $serviceProvider,
         AuthenticationProcedureList $pastAuthenticationProcedures
     ) {
