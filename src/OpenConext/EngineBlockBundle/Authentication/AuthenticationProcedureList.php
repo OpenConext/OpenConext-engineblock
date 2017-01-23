@@ -52,7 +52,7 @@ final class AuthenticationProcedureList implements Countable
      * @param Entity $entity
      * @return AuthenticationProcedureList
      */
-    public function findOnBehalfOf(Entity $entity)
+    public function filterOnBehalfOf(Entity $entity)
     {
         $filterMethod = function (AuthenticationProcedure $authenticationProcedure) use ($entity) {
             return $authenticationProcedure->isOnBehalfOf($entity);
@@ -65,7 +65,7 @@ final class AuthenticationProcedureList implements Countable
      * @param DateTimeInterface $startDate
      * @return AuthenticationProcedureList
      */
-    public function findProceduresCompletedAfter(DateTimeInterface $startDate)
+    public function filterProceduresCompletedAfter(DateTimeInterface $startDate)
     {
         $filterMethod = function (AuthenticationProcedure $authenticationProcedure) use ($startDate) {
             return $authenticationProcedure->isCompletedAfter($startDate);
