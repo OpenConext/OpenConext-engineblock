@@ -55,7 +55,7 @@ final class AuthenticationProcedure
     /**
      * @param Entity $identityProvider
      */
-    public function authenticateAt(Entity $identityProvider)
+    public function authenticatedAt(Entity $identityProvider)
     {
         $this->identityProvider = $identityProvider;
     }
@@ -69,10 +69,18 @@ final class AuthenticationProcedure
     }
 
     /**
+     * @return bool
+     */
+    public function hasBeenAuthenticated()
+    {
+        return $this->identityProvider === null;
+    }
+
+    /**
      * @param Entity $identityProvider
      * @return bool
      */
-    public function isAuthenticatedAt(Entity $identityProvider)
+    public function hasBeenAuthenticatedAt(Entity $identityProvider)
     {
         return $this->identityProvider->equals($identityProvider);
     }

@@ -74,9 +74,9 @@ class AuthenticationProcedureTest extends TestCase
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
         $identityProvider = new Entity(new EntityId('my.identity-provider.example'), EntityType::IdP());
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
 
-        $sameIdentityProvider = $authenticationProcedure->isAuthenticatedAt($identityProvider);
+        $sameIdentityProvider = $authenticationProcedure->hasBeenAuthenticatedAt($identityProvider);
 
         $this->assertTrue(
             $sameIdentityProvider,
@@ -96,9 +96,9 @@ class AuthenticationProcedureTest extends TestCase
 
         $identityProvider = new Entity(new EntityId('my.identity-provider.example'), EntityType::IdP());
         $differentIdentityProvider = new Entity(new EntityId('other.identity-provider.example'), EntityType::IdP());
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
 
-        $sameIdentityProvider = $authenticationProcedure->isAuthenticatedAt($differentIdentityProvider);
+        $sameIdentityProvider = $authenticationProcedure->hasBeenAuthenticatedAt($differentIdentityProvider);
 
         $this->assertFalse(
             $sameIdentityProvider,
@@ -117,7 +117,7 @@ class AuthenticationProcedureTest extends TestCase
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
         $identityProvider = new Entity(new EntityId('my.identity-provider.example'), EntityType::IdP());
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
 
         $hasBeenCompleted = $authenticationProcedure->isCompletedAfter(new DateTimeImmutable('01-01-1970'));
 
@@ -137,7 +137,7 @@ class AuthenticationProcedureTest extends TestCase
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
         $identityProvider = new Entity(new EntityId('my.identity-provider.example'), EntityType::IdP());
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
 
         $timeOfCompletion = new DateTimeImmutable('01-01-1970');
         $laterTime = $timeOfCompletion->modify('+1 day');
@@ -161,7 +161,7 @@ class AuthenticationProcedureTest extends TestCase
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
         $identityProvider = new Entity(new EntityId('my.identity-provider.example'), EntityType::IdP());
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
 
         $timeOfCompletion = new DateTimeImmutable('01-01-1970');
         $earlierTime = $timeOfCompletion->modify('-1 day');
@@ -186,11 +186,11 @@ class AuthenticationProcedureTest extends TestCase
         $dateOfCompletion  = new DateTimeImmutable('01-01-1970');
 
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
         $authenticationProcedure->completeOn($dateOfCompletion);
 
         $sameAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $sameAuthenticationProcedure->authenticateAt($identityProvider);
+        $sameAuthenticationProcedure->authenticatedAt($identityProvider);
         $sameAuthenticationProcedure->completeOn($dateOfCompletion);
 
         $authenticationProceduresAreEqual = $authenticationProcedure->equals($sameAuthenticationProcedure);
@@ -211,11 +211,11 @@ class AuthenticationProcedureTest extends TestCase
         $otherServiceProvider = new Entity(new EntityId('other.service-provider.example'), EntityType::SP());
 
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
         $authenticationProcedure->completeOn($dateOfCompletion);
 
         $differentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($otherServiceProvider);
-        $differentAuthenticationProcedure->authenticateAt($identityProvider);
+        $differentAuthenticationProcedure->authenticatedAt($identityProvider);
         $differentAuthenticationProcedure->completeOn($dateOfCompletion);
 
         $authenticationProceduresAreEqual = $authenticationProcedure->equals($differentAuthenticationProcedure);
@@ -237,7 +237,7 @@ class AuthenticationProcedureTest extends TestCase
         $dateOfCompletion  = new DateTimeImmutable('01-01-1970');
 
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
         $authenticationProcedure->completeOn($dateOfCompletion);
 
         $differentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
@@ -265,11 +265,11 @@ class AuthenticationProcedureTest extends TestCase
         $otherIdentityProvider = new Entity(new EntityId('other.service-provider.example'), EntityType::IdP());
 
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
         $authenticationProcedure->completeOn($dateOfCompletion);
 
         $differentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $differentAuthenticationProcedure->authenticateAt($otherIdentityProvider);
+        $differentAuthenticationProcedure->authenticatedAt($otherIdentityProvider);
         $differentAuthenticationProcedure->completeOn($dateOfCompletion);
 
         $authenticationProceduresAreEqual = $authenticationProcedure->equals($differentAuthenticationProcedure);
@@ -293,11 +293,11 @@ class AuthenticationProcedureTest extends TestCase
         $otherDateOfCompletion = new DateTimeImmutable('01-01-1980');
 
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
         $authenticationProcedure->completeOn($dateOfCompletion);
 
         $differentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $differentAuthenticationProcedure->authenticateAt($identityProvider);
+        $differentAuthenticationProcedure->authenticatedAt($identityProvider);
         $differentAuthenticationProcedure->completeOn($otherDateOfCompletion);
         $authenticationProceduresAreEqual = $authenticationProcedure->equals($differentAuthenticationProcedure);
 
@@ -318,10 +318,10 @@ class AuthenticationProcedureTest extends TestCase
         $dateOfCompletion  = new DateTimeImmutable('01-01-1970');
 
         $authenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $authenticationProcedure->authenticateAt($identityProvider);
+        $authenticationProcedure->authenticatedAt($identityProvider);
 
         $differentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $differentAuthenticationProcedure->authenticateAt($identityProvider);
+        $differentAuthenticationProcedure->authenticatedAt($identityProvider);
         $differentAuthenticationProcedure->completeOn($dateOfCompletion);
 
         $authenticationProceduresAreEqual = $authenticationProcedure->equals($differentAuthenticationProcedure);

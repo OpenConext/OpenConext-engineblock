@@ -50,11 +50,11 @@ class AuthenticationLoopGuardTest extends TestCase
         $identityProvider = new Entity(new EntityId('some.identityprovider.example'), EntityType::IdP());
 
         $firstProcedure  = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $firstProcedure->authenticateAt($identityProvider);
+        $firstProcedure->authenticatedAt($identityProvider);
         $firstProcedure->completeOn(new DateTimeImmutable());
 
         $currentProcedure  = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $currentProcedure->authenticateAt($identityProvider);
+        $currentProcedure->authenticatedAt($identityProvider);
         $currentProcedure->completeOn(new DateTimeImmutable());
 
         $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure, $currentProcedure]);
@@ -79,7 +79,7 @@ class AuthenticationLoopGuardTest extends TestCase
         $identityProvider = new Entity(new EntityId('some.identityprovider.example'), EntityType::IdP());
 
         $firstProcedure  = AuthenticationProcedure::onBehalfOf($serviceProvider);
-        $firstProcedure->authenticateAt($identityProvider);
+        $firstProcedure->authenticatedAt($identityProvider);
         $firstProcedure->completeOn(new DateTimeImmutable());
 
         $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure]);

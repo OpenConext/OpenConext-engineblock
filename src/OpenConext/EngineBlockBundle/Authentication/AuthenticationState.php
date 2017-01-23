@@ -61,9 +61,9 @@ final class AuthenticationState
      * @param Entity $identityProvider
      * @return void
      */
-    public function authenticateAt(Entity $identityProvider)
+    public function authenticatedAt(Entity $identityProvider)
     {
-        $this->currentAuthenticationProcedure->authenticateAt($identityProvider);
+        $this->currentAuthenticationProcedure->authenticatedAt($identityProvider);
     }
 
     /**

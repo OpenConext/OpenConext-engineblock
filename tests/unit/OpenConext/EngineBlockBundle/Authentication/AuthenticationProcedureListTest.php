@@ -103,11 +103,11 @@ class AuthenticationProcedureListTest extends TestCase
         $someIdentityProvider = new Entity(new EntityId('some.identityprovider.example'), EntityType::IdP());
 
         $someAuthenticationProcedure  = AuthenticationProcedure::onBehalfOf($someServiceProvider);
-        $someAuthenticationProcedure->authenticateAt($someIdentityProvider);
+        $someAuthenticationProcedure->authenticatedAt($someIdentityProvider);
         $someAuthenticationProcedure->completeOn(new DateTimeImmutable('1999-01-01'));
 
         $otherAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($otherServiceProvider);
-        $otherAuthenticationProcedure->authenticateAt($someIdentityProvider);
+        $otherAuthenticationProcedure->authenticatedAt($someIdentityProvider);
         $otherAuthenticationProcedure->completeOn(new DateTimeImmutable('2001-01-01'));
 
         $authenticationProcedureList = new AuthenticationProcedureList([

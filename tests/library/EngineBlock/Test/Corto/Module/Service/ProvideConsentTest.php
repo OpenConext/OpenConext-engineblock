@@ -217,7 +217,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
         $authenticationState = new AuthenticationState($authenticationLoopGuard);
         $authenticationState->startAuthenticationOnBehalfOf($dummySp);
-        $authenticationState->authenticateAt($dummyIdp);
+        $authenticationState->authenticatedAt($dummyIdp);
 
         $sessionMock = Phake::mock(Session::class);
         Phake::when($sessionMock)
