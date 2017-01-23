@@ -63,11 +63,12 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
         $dateTime  = new DateTimeImmutable;
         $startDate = $dateTime->modify(sprintf('-%d seconds', $this->timeFrameForAuthenticationLoopInSeconds));
 
-        $relevantProceduresInTimeFrame = $pastAuthenticationProcedures
-            ->findOnBehalfOf($serviceProvider)
-            ->findProceduresCompletedAfter($startDate);
+        $processedLoginProcedures = $pastAuthenticationProcedures
+            ->filterOnBehalfOf($serviceProvider)
+            ->filterProceduresCompletedAfter($startDate)
+            ->count();
 
-        $stuckInAuthenticationLoop = count($relevantProceduresInTimeFrame) >= $this->maximumAuthenticationProceduresAllowed;
+        $stuckInAuthenticationLoop = $processedLoginProcedures >= $this->maximumAuthenticationProceduresAllowed;
 
         if ($stuckInAuthenticationLoop) {
             throw new StuckInAuthenticationLoopException(
