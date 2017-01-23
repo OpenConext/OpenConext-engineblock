@@ -23,7 +23,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
         $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
-        // Exposing entityId for further processing
+        // Exposing entityId to be used when tracking the start of an authentication procedure
        $application->authenticationStateSpEntityId = $sp->entityId;
 
         // Flush log if an SP in the requester chain has additional logging enabled

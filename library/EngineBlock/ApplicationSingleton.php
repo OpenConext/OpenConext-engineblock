@@ -28,7 +28,7 @@ class EngineBlock_ApplicationSingleton
     /**
      * @var null|string
      */
-    public $authenticationStateIdpEntityId;
+    public $authenticationStateSpEntityId;
 
     /**
      * @var EngineBlock_ApplicationSingleton
