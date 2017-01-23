@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuardInterface;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureList;
+use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\Value\Saml\Entity;
 
@@ -71,27 +72,30 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
      * @param Entity $serviceProvider
      * @param AuthenticationProcedureList $pastAuthenticationProcedures
      */
-    public function assertNotStuckInLoop(
+    public function detectsAuthenticationLoop(
         Entity $serviceProvider,
         AuthenticationProcedureList $pastAuthenticationProcedures
     ) {
         if ($this->authenticationGuardFixture === false) {
-            $this->authenticationLoopGuard->assertNotStuckInLoop(
-                $serviceProvider,
-                $pastAuthenticationProcedures
+            $authenticationLoopGuard = $this->authenticationLoopGuard;
+        } else {
+            $authenticationLoopGuard = new AuthenticationLoopGuard(
+                $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'],
+                $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds']
             );
-            return;
         }
 
-        $authenticationLoopGuard = new AuthenticationLoopGuard(
-            $this->authenticationGuardFixture['maximumAuthenticationProceduresAllowed'],
-            $this->authenticationGuardFixture['timeFrameForAuthenticationLoopInSeconds']
-        );
-
-        $authenticationLoopGuard->assertNotStuckInLoop(
-            $serviceProvider,
-            $pastAuthenticationProcedures
-        );
+        if ($authenticationLoopGuard->detectsAuthenticationLoop($serviceProvider, $pastAuthenticationProcedures)) {
+            throw new StuckInAuthenticationLoopException(
+                sprintf(
+                    'More than the configured maximum authentication procedures for the current user from SP "%s"'
+                    . ' occurred within the configured amount of seconds,'
+                    . ' the user seems to be stuck in an authentication loop. '
+                    . ' Aborting the current authentication procedure.',
+                    $serviceProvider->getEntityId()
+                )
+            );
+        }
     }
 
     public function cleanUp()

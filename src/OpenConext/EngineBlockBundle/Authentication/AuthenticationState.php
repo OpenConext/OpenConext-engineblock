@@ -20,6 +20,7 @@ namespace OpenConext\EngineBlockBundle\Authentication;
 
 use DateTimeImmutable;
 use OpenConext\EngineBlockBundle\Exception\LogicException;
+use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\Value\Saml\Entity;
 
 final class AuthenticationState
@@ -53,7 +54,22 @@ final class AuthenticationState
     {
         $this->currentAuthenticationProcedure = AuthenticationProcedure::onBehalfOf($serviceProvider);
 
-        $this->authenticationLoopGuard->assertNotStuckInLoop($serviceProvider, $this->authenticationProcedures);
+        $inAuthenticationLoop = $this->authenticationLoopGuard->detectsAuthenticationLoop(
+            $serviceProvider,
+            $this->authenticationProcedures
+        );
+
+        if ($inAuthenticationLoop) {
+            throw new StuckInAuthenticationLoopException(
+                sprintf(
+                    'More than the configured maximum authentication procedures for the current user from SP "%s"'
+                    . ' occurred within the configured amount of seconds,'
+                    . ' the user seems to be stuck in an authentication loop. '
+                    . ' Aborting the current authentication procedure.',
+                    $serviceProvider->getEntityId()
+                )
+            );
+        }
 
         $this->authenticationProcedures = $this->authenticationProcedures->add($this->currentAuthenticationProcedure);
     }

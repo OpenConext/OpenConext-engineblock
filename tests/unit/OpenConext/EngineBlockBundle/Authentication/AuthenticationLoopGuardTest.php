@@ -22,7 +22,6 @@ use DateTimeImmutable;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedure;
 use OpenConext\EngineBlockBundle\Authentication\AuthenticationProcedureList;
-use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -36,9 +35,6 @@ class AuthenticationLoopGuardTest extends TestCase
      */
     public function authentication_loop_guard_determines_that_it_is_in_a_loop()
     {
-        $this->expectException(StuckInAuthenticationLoopException::class);
-        $this->expectExceptionMessage('stuck in an authentication loop');
-
         $maximumNumberOfAuthenticationProceduresAllowed = 1;
         $timeFrameForCheckingAuthenticationLoopInSeconds = 60000;
         $authenticationLoopGuard = new AuthenticationLoopGuard(
@@ -59,7 +55,15 @@ class AuthenticationLoopGuardTest extends TestCase
 
         $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure, $currentProcedure]);
 
-        $authenticationLoopGuard->assertNotStuckInLoop($serviceProvider, $pastAuthenticationProcedures);
+        $stuckInLoop = $authenticationLoopGuard->detectsAuthenticationLoop(
+            $serviceProvider,
+            $pastAuthenticationProcedures
+        );
+
+        $this->assertTrue(
+            $stuckInLoop,
+            'The authentication loop guard should have detected an authentication loop, but it did not'
+        );
     }
 
     /**
@@ -84,7 +88,14 @@ class AuthenticationLoopGuardTest extends TestCase
 
         $pastAuthenticationProcedures = new AuthenticationProcedureList([$firstProcedure]);
 
-        // No exception should be thrown
-        $authenticationLoopGuard->assertNotStuckInLoop($serviceProvider, $pastAuthenticationProcedures);
+        $inAuthenticationLoop = $authenticationLoopGuard->detectsAuthenticationLoop(
+            $serviceProvider,
+            $pastAuthenticationProcedures
+        );
+
+        $this->assertFalse(
+            $inAuthenticationLoop,
+            'The authentication loop guard should not have detected an authentication loop, but it did'
+        );
     }
 }

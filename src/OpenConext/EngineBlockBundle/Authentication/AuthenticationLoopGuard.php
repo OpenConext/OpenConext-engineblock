@@ -55,31 +55,20 @@ final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface
     /**
      * @param Entity $serviceProvider
      * @param AuthenticationProcedureList $pastAuthenticationProcedures
+     * @return bool
      */
-    public function assertNotStuckInLoop(
+    public function detectsAuthenticationLoop(
         Entity $serviceProvider,
         AuthenticationProcedureList $pastAuthenticationProcedures
     ) {
-        $dateTime  = new DateTimeImmutable;
-        $startDate = $dateTime->modify(sprintf('-%d seconds', $this->timeFrameForAuthenticationLoopInSeconds));
+        $now  = new DateTimeImmutable;
+        $startDate = $now->modify(sprintf('-%d seconds', $this->timeFrameForAuthenticationLoopInSeconds));
 
         $processedLoginProcedures = $pastAuthenticationProcedures
             ->filterOnBehalfOf($serviceProvider)
             ->filterProceduresCompletedAfter($startDate)
             ->count();
 
-        $stuckInAuthenticationLoop = $processedLoginProcedures >= $this->maximumAuthenticationProceduresAllowed;
-
-        if ($stuckInAuthenticationLoop) {
-            throw new StuckInAuthenticationLoopException(
-                sprintf(
-                    'After %d authentication procedures, we determined within a time frame of %d seconds'
-                    . ' that we are stuck in an authentication loop for service provider "%s"',
-                    $this->maximumAuthenticationProceduresAllowed,
-                    $this->timeFrameForAuthenticationLoopInSeconds,
-                    $serviceProvider->getEntityId()
-                )
-            );
-        }
+        return $processedLoginProcedures >= $this->maximumAuthenticationProceduresAllowed;
     }
 }
