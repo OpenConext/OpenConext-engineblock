@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Authentication;
 
 use DateTimeImmutable;
+use OpenConext\EngineBlockBundle\Exception\LogicException;
 use OpenConext\Value\Saml\Entity;
 
 final class AuthenticationState
@@ -63,6 +64,13 @@ final class AuthenticationState
      */
     public function authenticatedAt(Entity $identityProvider)
     {
+        if ($this->currentAuthenticationProcedure === null) {
+            throw new LogicException(
+                'Current authentication procedure cannot be authenticated:'
+                 . ' authentication procedure has not been started'
+            );
+        }
+
         $this->currentAuthenticationProcedure->authenticatedAt($identityProvider);
     }
 
@@ -71,6 +79,22 @@ final class AuthenticationState
      */
     public function completeCurrentProcedure()
     {
+        if ($this->currentAuthenticationProcedure === null) {
+            throw new LogicException(
+                'Current authentication procedure cannot be completed:'
+                . ' authentication procedure has not been started'
+            );
+        }
+
+        if ($this->currentAuthenticationProcedure->hasBeenAuthenticated()) {
+            throw new LogicException(
+                'Current authentication procedure cannot be completed:'
+                . ' authentication procedure has not been authenticated'
+            );
+        }
+
         $this->currentAuthenticationProcedure->completeOn(new DateTimeImmutable);
+
+        $this->currentAuthenticationProcedure = null;
     }
 }
