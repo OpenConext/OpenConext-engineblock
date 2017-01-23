@@ -69,7 +69,7 @@ final class AuthenticationState
     /**
      * @return void
      */
-    public function completeCurrent()
+    public function completeCurrentProcedure()
     {
         $this->currentAuthenticationProcedure->completeOn(new DateTimeImmutable);
     }
