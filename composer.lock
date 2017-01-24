@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f9e9f0f584fa6b7633c1e818e938e827",
-    "content-hash": "bd63f2d609738066b26de713952b49c2",
+    "hash": "6f596daf96e12b280f32ef68755cf959",
+    "content-hash": "09125d1d75cc6f7a022bb7c7bb40c934",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1342,16 +1342,16 @@
         },
         {
             "name": "openconext/saml-value-object",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/SamlValueObject.git",
-                "reference": "f61d56a99f4cc9085abaced1a62e1057c365d1c0"
+                "reference": "1d523028915f65acaef546d892b0661718c94def"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/f61d56a99f4cc9085abaced1a62e1057c365d1c0",
-                "reference": "f61d56a99f4cc9085abaced1a62e1057c365d1c0",
+                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/1d523028915f65acaef546d892b0661718c94def",
+                "reference": "1d523028915f65acaef546d892b0661718c94def",
                 "shasum": ""
             },
             "require": {
@@ -1379,7 +1379,7 @@
                 }
             ],
             "description": "Set of value objects for usage with SAML2",
-            "time": "2016-03-31 13:37:16"
+            "time": "2016-12-09 13:13:31"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -3556,7 +3556,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",

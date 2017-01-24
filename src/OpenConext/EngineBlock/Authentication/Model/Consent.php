@@ -28,11 +28,6 @@ final class Consent
     private $consentGivenOn;
 
     /**
-     * @var DateTime
-     */
-    private $lastUsedOn;
-
-    /**
      * @var ConsentType
      */
     private $consentType;
@@ -41,14 +36,12 @@ final class Consent
      * @param string $userId
      * @param string $serviceProviderEntityId
      * @param DateTime $consentGivenOn
-     * @param DateTime $lastUsedOn
      * @param ConsentType $consentType
      */
     public function __construct(
         $userId,
         $serviceProviderEntityId,
         DateTime $consentGivenOn,
-        DateTime $lastUsedOn,
         ConsentType $consentType
     ) {
         Assertion::nonEmptyString($userId, 'userId');
@@ -57,7 +50,6 @@ final class Consent
         $this->userId                  = $userId;
         $this->serviceProviderEntityId = $serviceProviderEntityId;
         $this->consentGivenOn          = $consentGivenOn;
-        $this->lastUsedOn              = $lastUsedOn;
         $this->consentType             = $consentType;
     }
 
@@ -77,14 +69,6 @@ final class Consent
     public function getDateConsentWasGivenOn()
     {
         return clone $this->consentGivenOn;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getDateLastUsedOn()
-    {
-        return clone $this->lastUsedOn;
     }
 
     /**

@@ -1,5 +1,12 @@
 # UPGRADE NOTES
 
+## 5.x -> 5.2
+
+### Consent API
+Engineblock's Consent API, which is used by [OpenConext-Profile][op-pro]
+ no longer exposes the most recent date of consent given (last use on).
+ Instead, it offers only the first consent given (consent given on).
+
 ## 4.x -> 5.0
 
 ### General
