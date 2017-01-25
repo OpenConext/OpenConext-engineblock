@@ -64,7 +64,7 @@ class ServiceProviderController implements AuthenticationLoopThrottlingControlle
         $proxyServer->consumeAssertion();
 
         $authenticationState = $this->session->get('authentication_state');
-        $authenticationState->completeCurrent();
+        $authenticationState->completeCurrentProcedure();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

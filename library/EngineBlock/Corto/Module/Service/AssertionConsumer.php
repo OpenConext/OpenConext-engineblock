@@ -106,7 +106,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
 
             $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
             $authenticationState = $this->_session->get('authentication_state');
-            $authenticationState->authenticateAt($identityProvider);
+            $authenticationState->authenticatedAt($identityProvider);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
         }
