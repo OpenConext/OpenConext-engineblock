@@ -1668,3 +1668,6 @@ html.no-js .mod-results .action,
         padding: 1em 2em;
     }
 }
+#footer {
+    display:none
+}
