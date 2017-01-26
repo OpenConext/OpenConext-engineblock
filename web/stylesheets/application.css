@@ -499,14 +499,14 @@ blockquote {
     margin-bottom: 2em;
 }
 a {
-    color: #4db3cf;
+    color: #154274;
 }
 a:hover {
     text-decoration: underline;
 }
 strong.service-provider,
 strong.identity-provider {
-    color: #4db3cf;
+    color: #154274;
 }
 .mod-content h1,
 .mod-form h1,
@@ -537,7 +537,7 @@ input[type=Reset] {
 }
 .c-button {
     font-size: 15px;
-    background: #4db3cf;
+    background: #154274;
     padding: .5em 1rem;
     line-height: 1rem;
     border-radius: 10rem;
@@ -558,12 +558,12 @@ input[type=Reset] {
 }
 .c-button.outline {
     border: 1px solid rgba(0, 0, 0, .1);
-    color: #4db3cf;
+    color: #154274;
     background: #fff;
 }
 .c-button.white {
     background: #fff;
-    color: #4db3cf;
+    color: #154274;
 }
 .c-button.remove {
     width: 1rem;
@@ -644,7 +644,7 @@ input[type=Reset] {
 .comp-language a,
 .comp-language button {
     border: 0;
-    color: #4db3cf;
+    color: #154274;
     cursor: pointer;
     display: block;
     line-height: 1.75rem;
@@ -664,7 +664,7 @@ input[type=Reset] {
 .comp-language a.selected,
 .comp-language button:hover,
 .comp-language button.selected {
-    background: #4db3cf;
+    background: #154274;
     color: #fff;
 }
 @media(max-width:800px) {
@@ -745,7 +745,7 @@ input[type=Reset] {
     display: none;
 }
 .comp-links .help {
-    background: #4db3cf;
+    background: #154274;
     color: #fff;
     border-radius: 50%;
     box-sizing: border-box;
@@ -1041,7 +1041,7 @@ p.grey {
     padding: 1rem;
     background: #fff;
     box-shadow: 1px 1px 4px rgba(0, 0, 0, .2);
-    border-bottom: 2px solid #4db3cf;
+    border-bottom: 2px solid #154274;
     line-height: 30px;
     display: -ms-flexbox;
     display: flex;
@@ -1077,7 +1077,7 @@ p.grey {
     padding-right: 1em;
 }
 .mod-header .title strong {
-    color: #4db3cf;
+    color: #154274;
 }
 @media(max-width:800px) {
     .mod-header {
@@ -1413,7 +1413,7 @@ p.grey {
     margin-bottom: 1em;
 }
 .mod-redirect h1 {
-    color: #4db3cf;
+    color: #154274;
 }
 .mod-redirect p {
     color: #a2a2a2;
@@ -1421,9 +1421,9 @@ p.grey {
 .mod-results a.result:active,
 .mod-results a.result:hover {
     outline: none;
-    background: #4db3cf;
+    background: #154274;
     color: #fff;
-    border-bottom: 1px solid #4db3cf;
+    border-bottom: 1px solid #154274;
 }
 .mod-results {
     overflow: hidden;
@@ -1477,15 +1477,15 @@ p.grey {
 }
 .mod-results a.result.focussed {
     outline: none;
-    background: #4db3cf;
+    background: #154274;
     color: #fff;
-    border-bottom: 1px solid #4db3cf;
+    border-bottom: 1px solid #154274;
 }
 .mod-results a.result:focus {
     outline: none;
-    background: #4db3cf;
+    background: #154274;
     color: #fff;
-    border-bottom: 1px solid #4db3cf;
+    border-bottom: 1px solid #154274;
 }
 @media(max-width:800px) {
     .mod-results a.result {
@@ -1586,7 +1586,7 @@ html.no-js .mod-results .action,
     pointer-events: auto;
 }
 .lt-ie9 .mod-results .action.deleteable {
-    background: #4db3cf;
+    background: #154274;
 }
 .lt-ie9 .mod-results .action.deleteable:after {
     color: #fff;
@@ -1628,7 +1628,7 @@ html.no-js .mod-results .action,
 }
 .mod-tabs a:hover,
 .mod-tabs a.active {
-    color: #4db3cf;
+    color: #154274;
 }
 @media(min-width:800px) {
     .mod-tabs ul {
@@ -1654,7 +1654,7 @@ html.no-js .mod-results .action,
     }
     .mod-tabs a:hover,
     .mod-tabs a.active {
-        border-bottom: 1px solid #4db3cf;
+        border-bottom: 1px solid #154274;
         margin-bottom: -1px;
     }
 }
