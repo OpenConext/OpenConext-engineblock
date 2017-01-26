@@ -1534,8 +1534,8 @@ p.grey {
     max-height: 1.5em!important;
 }
 .mod-results .logo {
-    width: 4rem;
-    height: 3rem;
+/*    width: 4rem;
+    height: 3rem;*/
     margin-right: 1.5rem;
     display: -ms-inline-flexbox;
     display: inline-flex;
