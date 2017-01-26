@@ -35,14 +35,14 @@ else if (isset($_COOKIE['lang'])) {
     $lang = $_COOKIE['lang'];
 }
 else {
-    $lang = 'en';
+    $lang = 'nl';
 }
 
 $_GET['lang'] = $lang;
 
 // Guard against unsupported languages.
 if (!in_array($lang, array('nl','en'))) {
-    $lang = 'en';
+    $lang = 'nl';
 }
 
 // @todo move to entity (see also duplicate in consent.phtml)

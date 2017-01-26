@@ -222,8 +222,8 @@ class EngineBlock_Application_Bootstrapper
             $this->_application->getHttpResponse()->setCookie('lang', $lang, $cookieExpiry, '/', $cookieDomain);
         }
         else {
-            $translate->setLocale('en');
-            $this->_application->getHttpResponse()->setCookie('lang', 'en', $cookieExpiry, '/', $cookieDomain);
+            $translate->setLocale('nl');
+            $this->_application->getHttpResponse()->setCookie('lang', 'nl', $cookieExpiry, '/', $cookieDomain);
         }
 
         $this->_application->setTranslator($translate);
