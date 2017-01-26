@@ -742,6 +742,7 @@ input[type=Reset] {
     justify-content: center;
     -ms-flex-wrap: nowrap;
     flex-wrap: nowrap;
+    display: none;
 }
 .comp-links .help {
     background: #4db3cf;
