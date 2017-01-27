@@ -22,8 +22,13 @@ use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
 use EngineBlock_View;
 use OpenConext\EngineBlockBridge\ResponseFactory;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\HttpFoundation\Session\Session;
 
-class ServiceProviderController
+class ServiceProviderController implements AuthenticationLoopThrottlingController
 {
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -35,12 +40,19 @@ class ServiceProviderController
      */
     private $engineBlockView;
 
+    /**
+     * @var Session
+     */
+    private $session;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView
+        EngineBlock_View $engineBlockView,
+        Session $session
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView = $engineBlockView;
+        $this->engineBlockView                 = $engineBlockView;
+        $this->session                         = $session;
     }
 
     /**
@@ -50,6 +62,9 @@ class ServiceProviderController
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
         $proxyServer->consumeAssertion();
+
+        $authenticationState = $this->session->get('authentication_state');
+        $authenticationState->completeCurrentProcedure();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

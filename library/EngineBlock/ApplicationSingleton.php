@@ -26,6 +26,11 @@ class EngineBlock_ApplicationSingleton
     const IP_ADDRESS_CLI = '127.0.0.235';
 
     /**
+     * @var null|string
+     */
+    public $authenticationStateSpEntityId;
+
+    /**
      * @var EngineBlock_ApplicationSingleton
      */
     protected static $s_instance;

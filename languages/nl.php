@@ -247,6 +247,10 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_received_status_code_desc'=> '<p>
         Jouw instelling stuurde een ongeldig authenticatierespons terug.
     </p>',
+    'error_stuck_in_authentication_loop' => 'Error - Je zat vast in een zwart gat',
+    'error_stuck_in_authentication_loop_desc' => '<p>
+        Je bent succesvol ingelogd bij je Identity Provider maar de dienst waar je naartoe wilt stuurt je weer terug naar SURFconext. Omdat je succesvol bent ingelogd, stuurt SURFconext je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst. Bezoek <a href="https://support.surfconext.nl" target="_blank">de SURFconext support pagina\'s</a> voor meer ondersteuning bij deze foutmelding.
+    </p>',
 
     /**
      * %1 AttributeName

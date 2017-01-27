@@ -24,14 +24,19 @@ use EngineBlock_View;
 use Exception;
 use OpenConext\EngineBlock\Service\RequestAccessMailer;
 use OpenConext\EngineBlockBridge\ResponseFactory;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the compatibility requirements
  */
-class IdentityProviderController
+class IdentityProviderController implements AuthenticationLoopThrottlingController
 {
     /**
      * @var EngineBlock_ApplicationSingleton
@@ -53,16 +58,23 @@ class IdentityProviderController
      */
     private $requestAccessMailer;
 
+    /**
+     * @var Session
+     */
+    private $session;
+
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
         EngineBlock_View $engineBlockView,
         LoggerInterface $loggerInterface,
-        RequestAccessMailer $requestAccessMailer
+        RequestAccessMailer $requestAccessMailer,
+        Session $session
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->engineBlockView                 = $engineBlockView;
         $this->logger                          = $loggerInterface;
-        $this->requestAccessMailer = $requestAccessMailer;
+        $this->requestAccessMailer             = $requestAccessMailer;
+        $this->session                         = $session;
     }
 
     /**
@@ -80,6 +92,12 @@ class IdentityProviderController
         }
 
         $cortoAdapter->singleSignOn($idpHash);
+
+        $spEntityId      = EngineBlock_ApplicationSingleton::getInstance()->authenticationStateSpEntityId;
+        $serviceProvider = new Entity(new EntityId($spEntityId), EntityType::SP());
+
+        $authenticationState = $this->session->get('authentication_state');
+        $authenticationState->startAuthenticationOnBehalfOf($serviceProvider);
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
@@ -99,6 +117,12 @@ class IdentityProviderController
         }
 
         $cortoAdapter->unsolicitedSingleSignOn($idpHash);
+
+        $spEntityId      = EngineBlock_ApplicationSingleton::getInstance()->authenticationStateSpEntityId;
+        $serviceProvider = new Entity(new EntityId($spEntityId), EntityType::SP());
+
+        $authenticationState = $this->session->get('authentication_state');
+        $authenticationState->startAuthenticationOnBehalfOf($serviceProvider);
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

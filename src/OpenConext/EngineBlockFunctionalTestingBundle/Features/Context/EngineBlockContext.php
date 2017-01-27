@@ -6,6 +6,7 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
 use EngineBlock_Saml2_IdGenerator;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
@@ -56,9 +57,19 @@ class EngineBlockContext extends AbstractSubContext
     private $features;
 
     /**
+     * @var FunctionalTestingAuthenticationLoopGuard
+     */
+    private $authenticationLoopGuard;
+
+    /**
      * @var boolean
      */
     private $usingFeatures = false;
+
+    /**
+     * @var boolean
+     */
+    private $usingAuthenticationLoopGuard = false;
 
     /**
      * @param ServiceRegistryFixture $serviceRegistry
@@ -68,6 +79,7 @@ class EngineBlockContext extends AbstractSubContext
      * @param string $spsConfigUrl
      * @param string $idpsConfigUrl
      * @param FunctionalTestingFeatureConfiguration $features
+     * @param FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
      */
     public function __construct(
         ServiceRegistryFixture $serviceRegistry,
@@ -76,7 +88,8 @@ class EngineBlockContext extends AbstractSubContext
         EntityRegistry $mockIdpRegistry,
         $spsConfigUrl,
         $idpsConfigUrl,
-        FunctionalTestingFeatureConfiguration $features
+        FunctionalTestingFeatureConfiguration $features,
+        FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
@@ -85,6 +98,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->spsConfigUrl = $spsConfigUrl;
         $this->idpsConfigUrl = $idpsConfigUrl;
         $this->features = $features;
+        $this->authenticationLoopGuard = $authenticationLoopGuard;
     }
 
     /**
@@ -287,6 +301,31 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^I lose my session$/
+     */
+    public function iLoseMySession()
+    {
+        $session = $this->getMainContext()->getMinkContext()->getSession();
+        $session->restart();
+    }
+
+    /**
+     * @Given /^EngineBlock is configured to allow a maximum of (\d+) authentication procedures within a time frame of (\d+) seconds$/
+     * @param int $timeFrameForAuthenticationLoopInSeconds
+     * @param int $maximumAuthenticationProceduresAllowed
+     */
+    public function engineblockIsConfiguredToAllowAMaximumOfAuthenticationProceduresWithinATimeFrameOfSeconds(
+        $maximumAuthenticationProceduresAllowed,
+        $timeFrameForAuthenticationLoopInSeconds
+    ) {
+        $this->authenticationLoopGuard->saveAuthenticationLoopGuardConfiguration(
+            (int) $maximumAuthenticationProceduresAllowed,
+            (int) $timeFrameForAuthenticationLoopInSeconds
+        );
+        $this->usingAuthenticationLoopGuard = true;
+    }
+
+    /**
      * @AfterScenario
      */
     public function cleanUpFeatures()
@@ -297,12 +336,13 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^I lose my session$/
+     * @AfterScenario
      */
-    public function iLoseMySession()
+    public function cleanUpAuthenticationLoopGuard()
     {
-        $session = $this->getMainContext()->getMinkContext()->getSession();
-        $session->restart();
+        if ($this->usingAuthenticationLoopGuard) {
+            $this->authenticationLoopGuard->cleanUp();
+        }
     }
 
     /**

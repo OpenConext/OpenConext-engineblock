@@ -8,6 +8,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 {
     public function serve($serviceName)
     {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+
         $log = $this->_server->getSessionLog();
 
         $response = $this->_displayDebugResponse($serviceName);
@@ -20,6 +22,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
         $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+
+        // Exposing entityId to be used when tracking the start of an authentication procedure
+       $application->authenticationStateSpEntityId = $sp->entityId;
 
         // Flush log if an SP in the requester chain has additional logging enabled
         $log->info("Determining whether service provider in chain requires additional logging");
