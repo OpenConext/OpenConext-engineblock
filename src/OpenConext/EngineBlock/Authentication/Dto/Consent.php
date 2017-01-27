@@ -67,7 +67,6 @@ final class Consent
         return [
             'service_provider' => $serviceProvider,
             'consent_given_on' => $this->consent->getDateConsentWasGivenOn()->format(DateTime::ATOM),
-            'last_used_on'     => $this->consent->getDateLastUsedOn()->format(DateTime::ATOM),
             'consent_type'     => $this->consent->getConsentType()->jsonSerialize(),
         ];
     }

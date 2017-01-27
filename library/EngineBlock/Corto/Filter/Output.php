@@ -1,10 +1,37 @@
 <?php
+use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
 /**
- * Called by Corto *after consent*, just as it prepares to send the response to the SP
+ * Commands are run before consent if the feature run_all_manipulations_prior_to_consent is turned on
+ * and after consent if the feature is turned off
  */
 class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
 {
+    public function filter(
+        EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
+        array &$responseAttributes,
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        ServiceProvider $serviceProvider,
+        IdentityProvider $identityProvider
+    ) {
+        $featureConfiguration = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getFeatureConfiguration();
+
+        if ($featureConfiguration->isEnabled('eb.run_all_manipulations_prior_to_consent')) {
+            return;
+        }
+
+        parent::filter(
+            $response,
+            $responseAttributes,
+            $request,
+            $serviceProvider,
+            $identityProvider
+        );
+    }
+
     /**
      * These commands will be evaluated in order.
      *
@@ -14,7 +41,7 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
      *
      * @return array
      */
-    protected function _getCommands()
+    public function getCommands()
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
@@ -22,9 +49,6 @@ class EngineBlock_Corto_Filter_Output extends EngineBlock_Corto_Filter_Abstract
             // If EngineBlock is in Processing mode (redirecting to it's self)
             // Then don't continue with the rest of the modifications
             new EngineBlock_Corto_Filter_Command_RejectProcessingMode(),
-
-            // Check if the request was for a VO, if it was, validate that the user is a member of that vo
-            new EngineBlock_Corto_Filter_Command_ValidateVoMembership(),
 
             // Add collabPersonId attribute
             new EngineBlock_Corto_Filter_Command_AddCollabPersonIdAttribute(),

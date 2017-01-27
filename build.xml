@@ -5,6 +5,7 @@
     <target name="pre-push" depends="test-suites,code-quality,behat-dev" />
     <target name="functional-tests" depends="behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
+    <target name="code-quality-ci" depends="test-suites,code-quality"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs"/>
     <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests"/>
 

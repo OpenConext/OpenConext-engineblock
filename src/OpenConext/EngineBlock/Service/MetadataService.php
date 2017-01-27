@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlock\Service;
 
+use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\EntityNotFoundException;
@@ -48,5 +49,20 @@ final class MetadataService
         }
 
         return $serviceProvider;
+    }
+
+    /**
+     * @param EntityId $entityId
+     * @return null|AttributeReleasePolicy
+     */
+    public function findArpForServiceProviderByEntityId(EntityId $entityId)
+    {
+        $serviceProvider = $this->findServiceProvider($entityId);
+
+        if ($serviceProvider === null) {
+            return null;
+        }
+
+        return $this->metadataRepository->fetchServiceProviderArp($serviceProvider);
     }
 }

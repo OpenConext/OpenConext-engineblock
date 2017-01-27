@@ -47,7 +47,7 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
         }
 
         $scopeList = $this->buildScopeList($scopes);
-        list(,$suffix) = explode('@', $eduPersonPrincipalName);
+        list(,$suffix) = explode('@', $eduPersonPrincipalName, 2);
 
         if (!$scopeList->inScope($suffix)) {
             $this->logger->warning(sprintf(

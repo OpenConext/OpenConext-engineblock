@@ -79,8 +79,9 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 
         $attributes = $response->getAssertion()->getAttributes();
         $consentRepository = $this->_consentFactory->create($this->_server, $response, $attributes);
-        $consentRepository->giveExplicitConsentFor($destinationMetadata);
-        if ($consentRepository->countTotalConsent() === 1) {
+
+        if (!$consentRepository->explicitConsentWasGivenFor($serviceProvider)) {
+            $consentRepository->giveExplicitConsentFor($destinationMetadata);
             $this->_sendIntroductionMail($attributes);
         }
 

@@ -134,6 +134,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this->container->get('engineblock.features');
     }
 
+    /**
+     * @return OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard
+     */
+    public function getAuthenticationLoopGuard()
+    {
+        return $this->container->get('engineblock.authentication.authentication_loop_guard');
+    }
+
     protected function registerMetadataRepository()
     {
         $this[self::METADATA_REPOSITORY] = function (EngineBlock_Application_DiContainer $container)
@@ -290,8 +298,24 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this[self::ATTRIBUTE_VALIDATOR];
     }
 
-    public function getFunctionalTestingFeatureConfiguration()
+    public function getCutoffPointForShowingUnfilteredIdps()
     {
-        return $this->container->get('engineblock.functional_testing.fixture.features');
+        return $this->container->getParameter('wayf.cutoff_point_for_showing_unfiltered_idps');
+    }
+
+    /**
+     * @return object|\Symfony\Component\HttpFoundation\Session\Session
+     */
+    public function getSession()
+    {
+        return $this->container->get('session');
+    }
+
+    /**
+     * @return \Symfony\Component\DependencyInjection\ContainerInterface
+     */
+    protected function getSymfonyContainer()
+    {
+        return $this->container;
     }
 }

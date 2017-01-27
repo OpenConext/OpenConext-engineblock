@@ -22,7 +22,9 @@ Feature:
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Identity Provider response"
+     Then I should see "Identity Provider error"
+      And I should see "InvalidNameIDPolicy"
+      And I should see "NameIdPolicy is invalid"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -30,13 +32,60 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-    Scenario: I log in at my Identity Provider, but the IdP decides the user does not have access.
+    Scenario: I log in at my Identity Provider, but the IdP gives a message that I don't have access.
     Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
       And the IdP is configured to always return Responses with StatusMessage "Invalid IP range"
      When I log in at "Dummy SP"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Invalid Identity Provider response"
+     Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
+      And I should see "Invalid IP range"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
+
+    Scenario: I log in at my Identity Provider, but I don't have access.
+    Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
+     When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
+
+    Scenario: I log in at my Identity Provider, that does not send assertions, but they give a message that I don't have access.
+    Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
+      And the IdP is configured to always return Responses with StatusMessage "Invalid IP range"
+      And the IdP is configured to not send an Assertion
+     When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
+      And I should see "Timestamp:"
+      And I should see "Unique Request Id:"
+      And I should see "User Agent:"
+      And I should see "IP Address:"
+      And I should see "Service Provider:"
+      And I should see "Identity Provider:"
+
+    Scenario: I log in at my Identity Provider, that does not send assertions, but I don't have access.
+    Given the IdP is configured to always return Responses with StatusCode Responder/RequestDenied
+      And the IdP is configured to not send an Assertion
+     When I log in at "Dummy SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then I should see "Identity Provider error"
+      And I should see "RequestDenied"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
@@ -104,7 +153,6 @@ Feature:
       And I should see "Service Provider:"
       And I should see "Identity Provider:"
 
-
   Scenario: An Identity Provider sends a response without a SHO
     Given the IdP does not send the attribute named "urn:mace:terena.org:attribute-def:schacHomeOrganization"
      When I log in at "Dummy SP"
@@ -142,6 +190,20 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+
+  Scenario: The session has been lost after passing through EngineBlock
+    When I log in at "Dummy SP"
+     And I pass through EngineBlock
+     And I lose my session
+     And I pass through the IdP
+     And I should see "your session was lost"
+
+  Scenario: The session has been lost after logging in at the SP
+    When I log in at "Dummy SP"
+     And I lose my session
+     And I pass through EngineBlock
+     And I pass through the IdP
+     And I should see "your session was lost"
 
 #
 #  Scenario: I try an unsolicited login (at EB) but mess up by not specifying a location

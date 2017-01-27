@@ -105,4 +105,92 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
 
         $this->assertTrue($invalidScopeIsLogged);
     }
+
+    public function testSchacHomeOrganizationThatMatchesLogsNoWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = false;
+        $scope->allowed = 'OpenConext';
+
+        $identityProvider               = new IdentityProvider(self::SHO_VALUE);
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'schacHomeOrganization attribute value "' . self::SHO_VALUE . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertFalse($invalidScopeIsLogged);
+    }
+
+    public function testSchacHomeOrganizationThatMatchesCaseInsensitivelyLogsNoWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = false;
+        $scope->allowed = 'opeNconexT';
+
+        $identityProvider               = new IdentityProvider(self::SHO_VALUE);
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'schacHomeOrganization attribute value "' . self::SHO_VALUE . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertFalse($invalidScopeIsLogged);
+    }
+
+    public function testSchacHomeOrganizationThatMatchesRegexpLogsNoWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = true;
+        $scope->allowed = '.*Conext';
+
+        $identityProvider               = new IdentityProvider(self::SHO_VALUE);
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'schacHomeOrganization attribute value "' . self::SHO_VALUE . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertFalse($invalidScopeIsLogged);
+    }
+
+    public function testSchacHomeOrganizationNotInRegexpScopeIsLoggedAsWarning()
+    {
+        $scope          = new ShibMdScope();
+        $scope->regexp  = true;
+        $scope->allowed = '.*\.noconext\.org';
+
+        $identityProvider               = new IdentityProvider(self::SHO_VALUE);
+        $identityProvider->shibMdScopes = array($scope);
+
+        $verifier = new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($this->logger);
+        $verifier->setResponse($this->response);
+        $verifier->setIdentityProvider($identityProvider);
+
+        $verifier->execute();
+
+        $invalidScopeIsLogged = $this->handler->hasWarningThatContains(
+            'schacHomeOrganization attribute value "' . self::SHO_VALUE . '" is not allowed by configured ShibMdScopes for IdP '
+        );
+
+        $this->assertTrue($invalidScopeIsLogged);
+    }
 }

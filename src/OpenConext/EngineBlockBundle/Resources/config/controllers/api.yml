@@ -22,3 +22,10 @@ services:
             - "@security.authorization_checker"
             - "@engineblock.features"
             - "@engineblock.service.metadata"
+
+    engineblock.controller.api.attribute_release_policy:
+        class: OpenConext\EngineBlockBundle\Controller\Api\AttributeReleasePolicyController
+        arguments:
+            - "@security.authorization_checker"
+            - "@engineblock.service.metadata"
+            - "@engineblock.compat.attribute_release_policy_enforcer"

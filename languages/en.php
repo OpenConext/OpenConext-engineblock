@@ -46,6 +46,7 @@ return array(
     'request_access'            => 'Request access',
     'no_idp_results'            => 'Your search did not return any results.',
     'no_idp_results_request_access' => 'Can\'t find your institution? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
+    'more_idp_results'          => '%d results not shown. Refine your search to show more specific results.',
     'return_to_sp'              => 'Return to Service Provider',
 
     // Footer
@@ -217,8 +218,6 @@ this service.
     'error_unknown_issuer_desc'     => '<p>
         The service you are trying to log in to is unknown to SURFconext. Possibly your institution has never enabled access to this service. Please contact the helpdesk of your institution and provide them with the following information:
     </p>',
-    'error_vo_membership_required'      => 'Membership of a Virtual Organisation required',
-    'error_vo_membership_required_desc' => 'You have successfully authenticated at your Identity Provider, however in order to use this service you have to be a member of a Virtual Organisation.',
     'error_generic'                     => 'Error - An error occurred',
     'error_generic_desc'                => '<p>
         It is not possible to sign in. Please try again.
@@ -251,6 +250,10 @@ this service.
     'error_received_status_code_desc'=> '<p>
         Your Identity Provider sent an authentication response that was invalid.
     </p>',
+    'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
+    'error_stuck_in_authentication_loop_desc' => '<p>
+        You\'ve successfully authenticated at your Identity Provider but the service you are trying to access sends you back again to SURFconext. Because you are already logged in, SURFconext then forwards you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider. Visit <a href="https://support.surfconext.nl" target="_blank">the SURFconext support pages</a> for more extensive support on this error.
+    </p>',
 
     /**
      * %1 AttributeName
@@ -265,7 +268,7 @@ this service.
     'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is not a valid email address',
     'error_attribute_validator_minlength'           => '\'%3$s\' is not long enough (minimum is %2$d characters)',
     'error_attribute_validator_maxlength'           => '\'%3$s\' is too long (maximum is %2$d characters)',
-    'error_attribute_validator_min'                 => '%1$s requires at least %2$d values (%3$d given)',
+    'error_attribute_validator_min'                 => '%1$s should have at least %2$d values (%3$d given)',
     'error_attribute_validator_max'                 => '%1$s may have no more than %2$d values (%3$d given)',
     'error_attribute_validator_regex'               => '\'%3$s\' does not match the expected format of this attribute (%2$s)',
     'error_attribute_validator_not_in_definitions'  => '%1$s is not known in the SURFconext schema',

@@ -16,7 +16,7 @@ env:
   matrix:
     - COMMAND="functional-tests"
     - COMMAND="functional-tests-wip"
-    - COMMAND="code-quality"
+    - COMMAND="code-quality-ci"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test

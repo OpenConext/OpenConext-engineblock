@@ -100,3 +100,7 @@ services:
                 bindRequiresDn: "@=service('engineblock.bridge.config').get('ldap.bindRequiresDn')"
                 accountDomainName: "@=service('engineblock.bridge.config').get('ldap.accountDomainName')"
                 baseDn: "@=service('engineblock.bridge.config').get('ldap.baseDn')"
+
+    engineblock.compat.attribute_release_policy_enforcer:
+        public: false
+        class: EngineBlock_Arp_AttributeReleasePolicyEnforcer

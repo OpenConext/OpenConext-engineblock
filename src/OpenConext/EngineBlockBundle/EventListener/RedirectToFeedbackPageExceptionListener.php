@@ -27,7 +27,6 @@ use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
-use EngineBlock_Corto_Exception_UserNotMember;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
@@ -37,6 +36,7 @@ use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException;
 use EngineBlock_Exception_DissimilarServiceProviderWorkflowStates;
 use OpenConext\EngineBlockBridge\ErrorReporter;
+use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -91,9 +91,6 @@ class RedirectToFeedbackPageExceptionListener
         if ($exception instanceof EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException) {
             $message         = 'Unable to receive message';
             $redirectToRoute = 'authentication_feedback_unable_to_receive_message';
-        } elseif ($exception instanceof EngineBlock_Corto_Exception_UserNotMember) {
-            $message         = 'User is not a member';
-            $redirectToRoute = 'authentication_feedback_vo_membership_required';
         } elseif ($exception instanceof EngineBlock_Corto_Module_Services_SessionLostException) {
             $message         = 'Sessions lost';
             $redirectToRoute = 'authentication_feedback_session_lost';
@@ -151,6 +148,9 @@ class RedirectToFeedbackPageExceptionListener
             $redirectToRoute = 'authentication_feedback_unknown_preselected_idp';
 
             $redirectParams = ['idp-hash' => $exception->getRemoteIdpMd5Hash()];
+        } elseif ($exception instanceof StuckInAuthenticationLoopException) {
+            $message         = 'Stuck in authentication loop';
+            $redirectToRoute = 'authentication_feedback_stuck_in_authentication_loop';
         } else {
             return;
         }

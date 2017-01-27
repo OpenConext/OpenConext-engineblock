@@ -1,8 +1,14 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
+use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
 {
@@ -15,8 +21,11 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     /** @var EngineBlock_Corto_Model_Consent */
     private $consentMock;
 
-    /** @var  EngineBlock_Corto_ProxyServer */
+    /** @var EngineBlock_Corto_ProxyServer */
     private $proxyServerMock;
+
+    /** @var Session */
+    private $sessionMock;
 
     public function setup() {
         $diContainer              = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -25,6 +34,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer->getConsentFactory();
         $this->consentMock        = $this->mockConsent();
+        $this->sessionMock        = $this->mockSession();
     }
 
     public function testConsentRequested()
@@ -192,6 +202,31 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         return $consentMock;
     }
 
+    private function mockSession()
+    {
+        $dummySp  = new Entity(new EntityId('dummy.sp.example'), EntityType::SP());
+        $dummyIdp = new Entity(new EntityId('dummy.idp.example'), EntityType::IdP());
+
+        $maximumAllowedAuthenticationProcedures = 5;
+        $timeFrameForDeterminingAuthenticationLoopInSeconds = 1200;
+
+        $authenticationLoopGuard = new AuthenticationLoopGuard(
+            $maximumAllowedAuthenticationProcedures,
+            $timeFrameForDeterminingAuthenticationLoopInSeconds
+        );
+
+        $authenticationState = new AuthenticationState($authenticationLoopGuard);
+        $authenticationState->startAuthenticationOnBehalfOf($dummySp);
+        $authenticationState->authenticatedAt($dummyIdp);
+
+        $sessionMock = Phake::mock(Session::class);
+        Phake::when($sessionMock)
+            ->get('authentication_state')
+            ->thenReturn($authenticationState);
+
+        return $sessionMock;
+    }
+
     /**
      * @return EngineBlock_Corto_Module_Service_ProvideConsent
      */
@@ -200,7 +235,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         return new EngineBlock_Corto_Module_Service_ProvideConsent(
             $this->proxyServerMock,
             $this->xmlConverterMock,
-            $this->consentFactoryMock
+            $this->consentFactoryMock,
+            $this->sessionMock
         );
     }
 }

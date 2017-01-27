@@ -31,7 +31,7 @@ if (!is_array($trustedProxies)) {
 $ymlContent = array(
     'parameters' => array(
         'domain'                                                  => $config->get('base_domain'),
-        'trusted_proxies'                                         => $config->get('trustedProxyIps', array())->toArray(),
+        'trusted_proxies'                                         => $trustedProxies,
         'api.users.janus.username'                                => $config->get('engineApi.users.janus.username'),
         'api.users.janus.password'                                => $config->get('engineApi.users.janus.password'),
         'api.users.profile.username'                              => $config->get('engineApi.users.profile.username'),
@@ -52,7 +52,11 @@ $ymlContent = array(
         'feature_api_metadata_push'                               => (bool) $config->get('engineApi.features.metadataPush'),
         'feature_api_consent_listing'                             => (bool) $config->get('engineApi.features.consentListing'),
         'feature_api_metadata_api'                                => (bool) $config->get('engineApi.features.metadataApi'),
+        'feature_run_all_manipulations_prior_to_consent'          => (bool) $config->get('engineblock.feature.run_all_manipulations_prior_to_consent'),
         'minimum_execution_time_on_invalid_received_response'     => (int) $config->get('minimumExecutionTimeOnInvalidReceivedResponse'),
+        'wayf.cutoff_point_for_showing_unfiltered_idps'           => (int) $config->get('wayf.cutoffPointForShowingUnfilteredIdps'),
+        'time_frame_for_authentication_loop_in_seconds'           => (int) $config->get('engineblock.timeFrameForAuthenticationLoopInSeconds'),
+        'maximum_authentication_procedures_allowed'               => (int) $config->get('engineblock.maximumAuthenticationProceduresAllowed'),
     )
 );
 

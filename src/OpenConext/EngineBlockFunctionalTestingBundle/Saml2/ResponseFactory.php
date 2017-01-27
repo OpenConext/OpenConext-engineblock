@@ -27,6 +27,10 @@ class ResponseFactory
 
         $this->encryptAssertions($mockIdp, $response);
 
+        if ($mockIdp->shouldNotSendAssertions()) {
+            $response->setAssertions([]);
+        }
+
         return $response;
     }
 
@@ -50,20 +54,32 @@ class ResponseFactory
 
     /**
      * @param MockIdentityProvider $mockIdp
-     * @param $response
+     * @param Response $response
      */
     private function setResponseStatus(MockIdentityProvider $mockIdp, Response $response)
     {
-        $status = $response->getStatus();
-        $status['Code'] = $mockIdp->getStatusCodeTop();
+        $responseStatus = $response->getStatus();
 
-        $secondStatusCode = $mockIdp->getStatusCodeSecond();
-        if (!empty($secondStatusCode)) {
-            $status['SubCode'] = $secondStatusCode;
+        $statusOverride = [];
+        $mockIdpTopStatusCode = $mockIdp->getStatusCodeTop();
+        $mockIdpSubStatusCode = $mockIdp->getStatusCodeSecond();
+        $mockIdpStatusMessage = $mockIdp->getStatusMessage();
+
+        $statusOverride['Code'] = $mockIdpTopStatusCode;
+
+        if (!empty($mockIdpSubStatusCode)) {
+            $statusOverride['SubCode'] = $mockIdpSubStatusCode;
+        } else {
+            $statusOverride['SubCode'] = $responseStatus['SubCode'];
         }
 
-        $status['Message'] = $mockIdp->getStatusMessage();
-        $response->setStatus($status);
+        if ($mockIdpStatusMessage !== null) {
+            $statusOverride['Message'] = $mockIdpStatusMessage;
+        } elseif ($responseStatus['Message'] !== null) {
+            $statusOverride['Message'] = $responseStatus['Message'];
+        }
+
+        $response->setStatus($statusOverride);
     }
 
     /**

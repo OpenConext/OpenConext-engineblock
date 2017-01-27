@@ -45,6 +45,7 @@ return array(
     'request_access'            => 'Toegang aanvragen',
     'no_idp_results'            => 'Je zoekterm heeft geen resultaten opgeleverd.',
     'no_idp_results_request_access' => 'Kun je je instelling niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
+    'more_idp_results'          => '%d resultaten worden niet getoond. Verfijn je zoekopdracht voor specifiekere resultaten.',
     'return_to_sp'              => 'Keer terug naar Service Provider',
 
     //Footer
@@ -212,8 +213,6 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_unknown_issuer_desc'     => '<p>
         De dienst waarop je probeert in te loggen is niet bekend bij SURFconext. Mogelijk heeft jouw instelling de toegang tot deze dienst nooit aangevraagd. Neem contact op met de helpdesk van je instelling en geef daarbij de volgende informatie door:
     </p>',
-    'error_vo_membership_required'      => 'Lidmaatschap van een Virtuele Organisatie vereist',
-    'error_vo_membership_required_desc' => 'Je bent succesvol ingelogd bij jouw instelling, maar om gebruik te kunnen maken van deze dienst moet je ook lid zijn van een Virtuele Organisatie.',
     'error_generic'                     => 'Error - Foutmelding',
     'error_generic_desc'                => '<p>
         Het is niet mogelijk om in te loggen. Probeer het alstublieft opnieuw.
@@ -247,6 +246,10 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op antwoord Identity Provider',
     'error_received_status_code_desc'=> '<p>
         Jouw instelling stuurde een ongeldig authenticatierespons terug.
+    </p>',
+    'error_stuck_in_authentication_loop' => 'Error - Je zat vast in een zwart gat',
+    'error_stuck_in_authentication_loop_desc' => '<p>
+        Je bent succesvol ingelogd bij je Identity Provider maar de dienst waar je naartoe wilt stuurt je weer terug naar SURFconext. Omdat je succesvol bent ingelogd, stuurt SURFconext je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst. Bezoek <a href="https://support.surfconext.nl" target="_blank">de SURFconext support pagina\'s</a> voor meer ondersteuning bij deze foutmelding.
     </p>',
 
     /**

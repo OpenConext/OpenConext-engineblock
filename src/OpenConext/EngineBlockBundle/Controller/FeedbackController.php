@@ -19,10 +19,12 @@ class FeedbackController
      * @var EngineBlock_ApplicationSingleton
      */
     private $engineBlockApplicationSingleton;
+
     /**
      * @var EngineBlock_View
      */
     private $engineBlockView;
+
     /**
      * @var LoggerInterface
      */
@@ -239,6 +241,17 @@ class FeedbackController
     {
         return new Response(
             $this->engineBlockView->render('Authentication/View/Feedback/UnknownPreselectedIdp.phtml'),
+            400
+        );
+    }
+
+    /**
+     * @return Response
+     */
+    public function stuckInAuthenticationLoopAction()
+    {
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/StuckInAuthenticationLoop.phtml'),
             400
         );
     }

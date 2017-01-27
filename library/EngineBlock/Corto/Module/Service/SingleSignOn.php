@@ -8,6 +8,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 {
     public function serve($serviceName)
     {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+
         $log = $this->_server->getSessionLog();
 
         $response = $this->_displayDebugResponse($serviceName);
@@ -20,6 +22,9 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
         $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+
+        // Exposing entityId to be used when tracking the start of an authentication procedure
+       $application->authenticationStateSpEntityId = $sp->entityId;
 
         // Flush log if an SP in the requester chain has additional logging enabled
         $log->info("Determining whether service provider in chain requires additional logging");
@@ -66,7 +71,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
         if ($request->getProxyCount() === 0) {
             $log->info("Request does not allow any further proxying, responding with 'ProxyCountExceeded' status");
-            $response = $this->_server->createErrorResponse($request, 'ProxyCountExceeded');
+            $response = $this->_server->createProxyCountExceededResponse($request);
             $this->_server->sendResponseToRequestIssuer($request, $response);
             return;
         }
@@ -122,7 +127,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // > 1 IdPs found, but isPassive attribute given, unable to show WAYF.
         if ($request->getIsPassive()) {
             $log->info('Request is passive, but can be handled by more than one IdP: responding with NoPassive status');
-            $response = $this->_server->createErrorResponse($request, 'NoPassive');
+            $response = $this->_server->createNoPassiveResponse($request);
             $this->_server->sendResponseToRequestIssuer($request, $response);
             return;
         }
@@ -347,10 +352,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 continue;
             }
 
-            if (isset($cachedResponse['vo'])) {
-                $this->_server->setVirtualOrganisationContext($cachedResponse['vo']);
-            }
-
             if (isset($cachedResponse['key'])) {
                 $this->_server->setKeyId($cachedResponse['key']);
             }
@@ -372,12 +373,16 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $output = $this->_server->renderTemplate(
             'discover',
             array(
-                'preselectedIdp'    => $this->_server->getCookie('selectedIdp'),
-                'action'            => $action,
-                'ID'                => $request->getId(),
-                'idpList'           => $idpList,
-                'metaDataSP'        => $serviceProvider,
-            ));
+                'preselectedIdp'                      => $this->_server->getCookie('selectedIdp'),
+                'action'                              => $action,
+                'cutoffPointForShowingUnfilteredIdps' => EngineBlock_ApplicationSingleton::getInstance()
+                    ->getDiContainer()
+                    ->getCutoffPointForShowingUnfilteredIdps(),
+                'ID'                                  => $request->getId(),
+                'idpList'                             => $idpList,
+                'metaDataSP'                          => $serviceProvider,
+            )
+        );
         $this->_server->sendOutput($output);
     }
 
