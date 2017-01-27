@@ -10,7 +10,6 @@ Feature:
       And an Identity Provider named "Dummy IdP"
       And a Service Provider named "Dummy SP"
 
-  @WIP
   Scenario: Access is denied because of a Deny policy
     Given SP "Dummy SP" requires a policy enforcement decision
       And pdp gives a deny response
@@ -20,7 +19,6 @@ Feature:
       And I should see "Error - No access"
       And I should see "Message from your institution:"
 
-  @WIP
   Scenario: Access is denied because of an Indeterminate policy
     Given SP "Dummy SP" requires a policy enforcement decision
       And pdp gives an indeterminate response
@@ -30,7 +28,6 @@ Feature:
       And I should see "Error - No access"
       And I should see "Message from your institution:"
 
-  @WIP
   Scenario: Access is permitted because of a Permit policy
     Given SP "Dummy SP" requires a policy enforcement decision
       And pdp gives a permit response
@@ -39,7 +36,6 @@ Feature:
       And I pass through the IdP
       And I should not see "Error - No access"
 
-  @WIP
   Scenario: Access is permitted because of a Not Applicable policy
     Given SP "Dummy SP" requires a policy enforcement decision
       And pdp gives a not applicable response
