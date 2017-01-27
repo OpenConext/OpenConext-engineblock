@@ -56,11 +56,9 @@ util-rm-test-dir: ; @-rm -rf $(BASEDIR)/app/cache/test ## Remove the test env ca
 util-prepare-env-on-vm: ; @$(BASEDIR)/run-on-vm.sh "sudo composer prepare-env" ## Run the composer prepare-env command on the VM
 util-revert-env-on-vm: ; @$(BASEDIR)/run-on-vm.sh "sudo composer prepare-env" ## Copy of util-prepare-env-on-vm to be able to invoke it twice in one target
 util-enable-func-test: ## Enable the functionalTesting flag in the application configuration
-	@-sed -i '/;functionalTesting = true/c \
-	functionalTesting = true' $(BASEDIR)/application/configs/application.ini
+	@-perl -pi.bak -e 's/;functionalTesting = true/functionalTesting = true/' $(BASEDIR)/application/configs/application.ini && rm $(BASEDIR)/application/configs/application.ini.bak
 util-disable-func-test: ## Disable the functionalTesting flag in the application configuration
-	@-sed -i '/functionalTesting = true/c \
-	;functionalTesting = true' $(BASEDIR)/application/configs/application.ini
+	@-perl -pi.bak -e 's/functionalTesting = true/;functionalTesting = true/' $(BASEDIR)/application/configs/application.ini && rm $(BASEDIR)/application/configs/application.ini.bak
 util-run-behat-wip: ## Run Behat with the 'wip' profile, allowed to fail
 	@-$(BEHAT) --profile wip
 util-run-behat-regression: ## Run Behat with the default profile
