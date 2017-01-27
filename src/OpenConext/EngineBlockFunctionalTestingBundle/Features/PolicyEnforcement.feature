@@ -20,7 +20,7 @@ Feature:
       And I should see "Error - No access"
       And I should see "Message from your institution:"
 
-  @WIP @MEH
+  @WIP
   Scenario: Access is denied because of an Indeterminate policy
     Given SP "Dummy SP" requires a policy enforcement decision
       And pdp gives an indeterminate response

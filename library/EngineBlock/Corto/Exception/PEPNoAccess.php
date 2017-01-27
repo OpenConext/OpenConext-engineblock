@@ -14,7 +14,7 @@ class EngineBlock_Corto_Exception_PEPNoAccess extends EngineBlock_Exception
         parent::__construct($message, $severity, $previous);
     }
 
-    public static function with($policyDecision)
+    public static function basedOn($policyDecision)
     {
         $exception = new self('Access denied after policy enforcement');
         $exception->policyDecision = $policyDecision;

@@ -50,7 +50,7 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
         $pdpClient = $this->getPdpClient();
 
         /** @var PolicyDecision $policyDecision */
-        $policyDecision = $pdpClient->giveDecisionBasedOn($pdpRequest);
+        $policyDecision = $pdpClient->requestDecisionFor($pdpRequest);
         if ($policyDecision->permitsAccess()) {
             return true;
         }

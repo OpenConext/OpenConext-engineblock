@@ -38,7 +38,7 @@ final class PdpClient implements PdpClientInterface
      * @param Request $request
      * @return PolicyDecision $policyDecision
      */
-    public function giveDecisionBasedOn(Request $request)
+    public function requestDecisionFor(Request $request)
     {
         $jsonData = $this->httpClient->post(
             'decide/policy',

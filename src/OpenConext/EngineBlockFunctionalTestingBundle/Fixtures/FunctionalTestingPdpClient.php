@@ -51,7 +51,7 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
      * @param Request $request
      * @return PolicyDecision $policyDecision
      */
-    public function giveDecisionBasedOn(Request $request)
+    public function requestDecisionFor(Request $request)
     {
         $pdpResponse = new Response();
 
