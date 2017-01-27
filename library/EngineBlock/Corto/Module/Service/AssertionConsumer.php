@@ -1,9 +1,41 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\Value\Saml\Entity;
+use OpenConext\Value\Saml\EntityId;
+use OpenConext\Value\Saml\EntityType;
+use Symfony\Component\HttpFoundation\Session\Session;
 
-class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Corto_Module_Service_Abstract
+class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
+    /**
+     * @var EngineBlock_Corto_ProxyServer
+     */
+    private $_server;
+
+    /**
+     * @var EngineBlock_Corto_XmlToArray
+     */
+    private $_xmlConverter;
+
+    /**
+     * @var Session
+     */
+    private $_session;
+
+    public function __construct(
+        EngineBlock_Corto_ProxyServer $server,
+        EngineBlock_Corto_XmlToArray $xmlConverter,
+        Session $session
+    ) {
+        $this->_server = $server;
+        $this->_xmlConverter = $xmlConverter;
+        $this->_session = $session;
+    }
+
+    /**
+     * @param $serviceName
+     */
     public function serve($serviceName)
     {
         $receivedResponse = $this->_server->getBindingsModule()->receiveResponse();
@@ -29,6 +61,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
 
         // Flush log if SP or IdP has additional logging enabled
         $idp = $this->_server->getRepository()->fetchIdentityProviderByEntityId($receivedResponse->getIssuer());
+
         if (EngineBlock_SamlHelper::doRemoteEntitiesRequireAdditionalLogging(array($sp, $idp))) {
             $application->flushLog('Activated additional logging for the SP or IdP');
             $log->info('Raw HTTP request', array('http_request' => (string) $application->getHttpRequest()));
@@ -70,6 +103,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer extends EngineBlock_Cor
             $newResponse->setDestination($firstProcessingEntity->responseProcessingService->location);
             $newResponse->setDeliverByBinding($firstProcessingEntity->responseProcessingService->binding);
             $newResponse->setReturn($this->_server->getUrl('processedAssertionConsumerService'));
+
+            $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
+            $authenticationState = $this->_session->get('authentication_state');
+            $authenticationState->authenticatedAt($identityProvider);
 
             $this->_server->getBindingsModule()->send($newResponse, $firstProcessingEntity);
         }

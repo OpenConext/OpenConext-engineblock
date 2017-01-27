@@ -62,3 +62,9 @@ services:
                 # as we are working with self signed signatures
                 # Sadly, Guzzle 3 does not support setting curl.cainfo in php.ini or 20-curl.ini
                 verify: "@=service('kernel').getEnvironment() === 'prod'"
+
+    engineblock.authentication.authentication_loop_guard:
+        class: OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard
+        arguments:
+            - "%maximum_authentication_procedures_allowed%"
+            - "%time_frame_for_authentication_loop_in_seconds%"

@@ -74,13 +74,13 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
 
         switch($className) {
-            case 'EngineBlock_Corto_Module_Service_ProvideConsent' :
+            case EngineBlock_Corto_Module_Service_ProvideConsent::class :
                 return new EngineBlock_Corto_Module_Service_ProvideConsent(
                     $server,
                     $diContainer->getXmlConverter(),
                     $diContainer->getConsentFactory()
                 );
-            case 'EngineBlock_Corto_Module_Service_ProcessConsent' :
+            case EngineBlock_Corto_Module_Service_ProcessConsent::class :
                 $preferredNameAttributeFilter = new EngineBlock_User_PreferredNameAttributeFilter();
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
                     $server,
@@ -88,6 +88,12 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getConsentFactory(),
                     $diContainer->getMailer(),
                     $preferredNameAttributeFilter
+                );
+            case EngineBlock_Corto_Module_Service_AssertionConsumer::class :
+                return new EngineBlock_Corto_Module_Service_AssertionConsumer(
+                    $server,
+                    $diContainer->getXmlConverter(),
+                    $diContainer->getSession()
                 );
             default :
                 return new $className($server, $diContainer->getXmlConverter());

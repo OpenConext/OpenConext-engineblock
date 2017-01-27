@@ -53,3 +53,10 @@ services:
             - "@engineblock.bridge.error_reporter"
         tags:
             - { name: kernel.event_listener, event: kernel.exception, method: onKernelException, priority: -200 }
+
+    engineblock.listener.authentication_state_initializer:
+        class: OpenConext\EngineBlockBundle\EventListener\AuthenticationStateInitializer
+        arguments:
+            - "@session"
+        tags:
+            - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10 }

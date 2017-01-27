@@ -9,7 +9,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         IdentityProvider $idpMetadata,
         EngineBlock_Corto_ProxyServer $server
     ) {
-        $nameIdPolicy = array('AllowCreate' => 'true');
+        $nameIdPolicy = array('AllowCreate' => true);
         /**
          * Name policy is not required, so it is only set if configured, SAML 2.0 spec
          * says only following values are allowed:

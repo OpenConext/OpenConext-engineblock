@@ -40,7 +40,12 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
 
     public function getFeatureConfiguration()
     {
-        return $this->getFunctionalTestingFeatureConfiguration();
+        return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.features');
+    }
+
+    public function getAuthenticationLoopGuard()
+    {
+        return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.authentication_loop_guard');
     }
 
     public function getPdpClient()
