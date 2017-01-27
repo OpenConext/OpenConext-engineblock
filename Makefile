@@ -1,9 +1,5 @@
 .DEFAULT_GOAL := help
-.PHONY: help build pre-commit pre-push functional-tests functional-tests-wip code-quality test-suites install-git-hooks \
-        php-lint-staged php-lint phpmd phpcs test-unit-eb4 test-unit test-integration behat-wip behat-regression \
-        ci-behat-regression ci-behat-wip ci-test-integration ci-test-unit-eb4 ci-test-unit util-prepare-env-on-vm \
-        util-run-behat-regression util-run-behat-wip util-enable-func-test util-disable-func-test install-git-hooks \
-        util-revert-env-on-vm
+.PHONY: help
 
 BASEDIR := $(abspath $(abspath $(lastword $(MAKEFILE_LIST)))/../)
 PHPUNIT := $(BASEDIR)/vendor/bin/phpunit -c $(BASEDIR)/tests/phpunit.xml
