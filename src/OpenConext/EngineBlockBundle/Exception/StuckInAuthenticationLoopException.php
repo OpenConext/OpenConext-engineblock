@@ -18,8 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Exception;
 
-use RuntimeException;
-
 final class StuckInAuthenticationLoopException extends RuntimeException
 {
 }

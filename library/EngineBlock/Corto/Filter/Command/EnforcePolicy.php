@@ -1,5 +1,7 @@
 <?php
 
+use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
+
 class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_Filter_Command_Abstract
 {
     public function execute()
@@ -18,31 +20,46 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
             return;
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "Policy Enforcement Point consult"
-        );
+        $log = EngineBlock_ApplicationSingleton::getLog();
+        $log->debug("Policy Enforcement Point: consulting Policy Decision Point");
 
-        $validator = $this->_getValidator();
-        $hasAccess = $validator->hasAccess(
+        $pdpRequest = Request::from(
             $this->_collabPersonId,
             $this->_identityProvider->entityId,
             $serviceProvider->entityId,
             $this->_responseAttributes
         );
 
-        if ($hasAccess) {
+        $log->debug("Policy Enforcement Point: Requesting decision from PDP");
+
+        $pdp = $this->getPdpClient();
+        $policyDecision = $pdp->requestDecisionFor($pdpRequest);
+
+        $log->debug("Policy Enforcement Point: PDP decision received.");
+
+        if ($policyDecision->permitsAccess()) {
+            $log->debug("Policy Enforcement Point: PDP permits access");
+
             return;
         }
 
-        $message = "Policy Decision Point: access denied.";
-        if ($validator->getMessage()) {
-            $message = $validator->getMessage();
+        $log->debug("Policy Enforcement Point: PDP did not permit access, enforcing decision");
+
+        if ($policyDecision->hasStatusMessage()) {
+            EngineBlock_ApplicationSingleton::getLog()->debug(sprintf(
+                'Policy Enforcement Point access denied with status message "%s"',
+                $policyDecision->getStatusMessage()
+            ));
         }
 
-        EngineBlock_ApplicationSingleton::getLog()->debug(
-            "Policy Enforcement Point access denied: " . $message
-        );
-        throw new EngineBlock_Corto_Exception_PEPNoAccess($message);
+        if ($policyDecision->hasLocalizedDenyMessage()) {
+            EngineBlock_ApplicationSingleton::getLog()->debug(sprintf(
+                'Policy Enforcement Point access denied with status message "%s"',
+                $policyDecision->getLocalizedDenyMessage('en')
+            ));
+        }
+
+        throw EngineBlock_Corto_Exception_PEPNoAccess::basedOn($policyDecision);
     }
 
     /**
@@ -51,5 +68,13 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
     protected function _getValidator()
     {
         return new EngineBlock_PolicyDecisionPoint_PepValidator();
+    }
+
+    /**
+     * @return OpenConext\EngineBlockBundle\Pdp\PdpClient
+     */
+    private function getPdpClient()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getPdpClient();
     }
 }

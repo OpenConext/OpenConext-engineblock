@@ -36,6 +36,9 @@ $ymlContent = array(
         'api.users.janus.password'                                => $config->get('engineApi.users.janus.password'),
         'api.users.profile.username'                              => $config->get('engineApi.users.profile.username'),
         'api.users.profile.password'                              => $config->get('engineApi.users.profile.password'),
+        'pdp.base_url'                                            => $config->get('pdp.baseUrl'),
+        'pdp.username'                                            => $config->get('pdp.username'),
+        'pdp.password'                                            => $config->get('pdp.password'),
         'logger.channel'                                          => $config->get('logger.conf.name'),
         'logger.fingers_crossed.passthru_level'                   => $config->get(
             'logger.conf.handler.fingers_crossed.conf.passthru_level'

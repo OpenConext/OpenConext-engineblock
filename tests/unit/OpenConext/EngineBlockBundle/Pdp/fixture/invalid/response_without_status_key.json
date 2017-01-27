@@ -1,0 +1,23 @@
+{
+  "Response": [{
+    "Category": [{
+      "CategoryId": "urn:mace:terena.org:attribute-def:edu",
+      "Attribute": [{
+        "AttributeId": "urn:mace:terena.org:attribute-def:edu",
+        "Value": "what",
+        "DataType": "http://www.w3.org/2001/XMLSchema#string"
+      }]
+    }],
+    "PolicyIdentifier": {
+      "PolicySetIdReference": [{
+        "Version": "1.0",
+        "Id": "urn:openconext:pdp:root:policyset"
+      }],
+      "PolicyIdReference": [{
+        "Version": "1",
+        "Id": "urn:surfconext:xacml:policy:id:openconext_pdp_test_multiple_or_policy_xml"
+      }]
+    },
+    "Decision": "Permit"
+  }]
+}

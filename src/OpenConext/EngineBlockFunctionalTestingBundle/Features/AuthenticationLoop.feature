@@ -11,7 +11,6 @@ Feature:
       And an Identity Provider named "Dummy Idp"
       And a Service Provider named "Dummy SP"
 
-  @WIP
   Scenario: an authentication loop is detected
     When I log in at "Dummy SP"
      And I pass through EngineBlock
@@ -26,7 +25,6 @@ Feature:
      And I log in at "Dummy SP"
     Then I should see "Black hole"
 
-@WIP
   Scenario: an authentication loop is detected when doing an unsolicited single sign on
      When An IdP initiated Single Sign on for SP "Dummy SP" is triggered by IdP "Dummy Idp"
       And I pass through EngineBlock

@@ -318,4 +318,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     {
         return $this->container;
     }
+
+    public function getPdpClient()
+    {
+        return $this->container->get('engineblock.pdp.pdp_client');
+    }
+
+    public function getFunctionalTestingPdpClient()
+    {
+        return $this->container->get('engineblock.functional_testing.fixture.pdp_client');
+    }
 }

@@ -6,6 +6,7 @@ parameters:
     engineblock.functional_testing.service_registry_data_store.file:          "%kernel.root_dir%/../tmp/eb-fixtures/janus/entities"
     engineblock.functional_testing.features_data_store.file:                  "%kernel.root_dir%/../tmp/eb-fixtures/features.json"
     engineblock.functional_testing.authentication_loop_guard_data_store.file: "%kernel.root_dir%/../tmp/eb-fixtures/authentication-loop-guard.json"
+    engineblock.functional_testing.pdp_data_store.file:                       "%kernel.root_dir%/../tmp/eb-fixtures/policy_decision.json"
 
 services:
     engineblock.functional_testing.service.engine_block:
@@ -30,6 +31,7 @@ services:
             - '%sps_config_url%'
             - '%idps_config_url%'
             - '@engineblock.functional_testing.fixture.features'
+            - '@engineblock.functional_testing.fixture.pdp_client'
             - '@engineblock.functional_testing.fixture.authentication_loop_guard'
 
     engineblock.functional_testing.behat_context.mock_idp:
@@ -77,6 +79,11 @@ services:
             - '@engineblock.features'
             - '@engineblock.functional_testing.data_store.features'
 
+    engineblock.functional_testing.fixture.pdp_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient
+        arguments:
+            - '@engineblock.function_testing.data_store.pdp_client'
+
     engineblock.functional_testing.fixture.authentication_loop_guard:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard
         arguments:
@@ -109,6 +116,10 @@ services:
     engineblock.functional_testing.data_store.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
         arguments: ['%engineblock.functional_testing.features_data_store.file%']
+
+    engineblock.function_testing.data_store.pdp_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.pdp_data_store.file%']
 
     engineblock.functional_testing.data_store.authentication_loop_guard:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore

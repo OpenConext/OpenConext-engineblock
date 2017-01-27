@@ -1,11 +1,7 @@
 <?php
 
 /**
- * This code is part of SURFnet/Stepup-Middleware-clientbundle.
- *
- * @see https://github.com/SURFnet/Stepup-Middleware-clientbundle
- *
- * Copyright 2014 SURFnet bv
+ * Copyright 2016 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +16,17 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock\Http;
+namespace OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 
-interface HttpQuery
+final class AssociatedAdvice
 {
     /**
-     * Return the Http Query string as should be used, MUST include the '?' prefix.
-     *
-     * @return string
+     * @var string
      */
-    public function toHttpQuery();
+    public $id;
+
+    /**
+     * @var AttributeAssignment[]
+     */
+    public $attributeAssignments;
 }

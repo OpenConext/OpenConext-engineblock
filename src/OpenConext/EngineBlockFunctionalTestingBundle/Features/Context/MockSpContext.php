@@ -2,7 +2,9 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
@@ -512,5 +514,18 @@ class MockSpContext extends AbstractSubContext
         $sp->setAuthnRequestToPassive();
 
         $this->mockSpRegistry->save();
+    }
+
+    /**
+     * @Given /^SP "([^"]*)" requires a policy enforcement decision$/
+     * @param string $spName
+     */
+    public function spRequiresAPolicyEnforcementDecision($spName)
+    {
+        $sp = $this->anUnregisteredServiceProviderNamed($spName);
+
+        $this->serviceRegistryFixture
+            ->spRequiresPolicyEnforcementDecision($sp->entityId())
+            ->save();
     }
 }

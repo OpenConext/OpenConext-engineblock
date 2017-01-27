@@ -1,10 +1,6 @@
 <?php
-
 /**
- * This code reuses modified parts of SURFnet/Stepup-Middleware-clientbundle.
- * @see https://github.com/SURFnet/Stepup-Middleware-clientbundle
- *
- * Copyright 2014 SURFnet bv
+ * Copyright 2017 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,69 +17,48 @@
 
 namespace OpenConext\EngineBlock\Http;
 
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Exception\RequestException as GuzzleRequestException;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Request;
+use OpenConext\EngineBlock\Exception\InvalidJsonException;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Http\Exception\AccessDeniedException;
 use OpenConext\EngineBlock\Http\Exception\MalformedResponseException;
-use OpenConext\EngineBlock\Http\Exception\RequestException;
 use OpenConext\EngineBlock\Http\Exception\UnreadableResourceException;
-use RuntimeException as CoreRuntimeException;
 
-class HttpClient
+final class HttpClient
 {
     /**
      * @var ClientInterface
      */
-    private $guzzleClient;
+    private $httpClient;
 
     /**
-     * @param ClientInterface $guzzleClient
+     * @param ClientInterface $httpClient
      */
-    public function __construct(ClientInterface $guzzleClient)
+    public function __construct(ClientInterface $httpClient)
     {
-        $this->guzzleClient = $guzzleClient;
+        $this->httpClient = $httpClient;
     }
 
     /**
-     * @param string         $path       A URL path, optionally containing printf parameters (e.g. '/a/b/%s/d'). The
-     *                                   parameters will be URL encoded and formatted into the path string.
-     *                                   Example: '/foo/%s/bar/%s', ['foo' => 'ab-cd', 'bar' => 'ef']
-     * @param array          $parameters An array containing the parameters to replace in the path.
-     * @param HttpQuery|null $httpQuery
-     * @return null|mixed Most likely an array structure, null when the resource doesn't exist.
-     * @throws MalformedResponseException When the server doesn't respond with (well-formed) JSON.
-     * @throws AccessDeniedException When the consumer isn't authorised to access given resource.
-     * @throws UnreadableResourceException When the server doesn't respond with the resource.
+     * @param string $path A URL path, optionally containing printf parameters. The parameters
+     *               will be URL encoded and formatted into the path string.
+     *               Example: "connections/%d.json"
+     * @param array  $parameters
+     * @param array  $headers
+     * @return mixed $data
+     * @throws AccessDeniedException
+     * @throws UnreadableResourceException
+     * @throws MalformedResponseException
      */
-    public function read($path, array $parameters = [], HttpQuery $httpQuery = null)
+    public function read($path, array $parameters = [], array $headers = [])
     {
-        $resource = $this->buildResourcePath($path, $parameters, $httpQuery);
-
-        try {
-            $response = $this->guzzleClient
-                ->get($resource, null, ['exceptions' => false])
-                ->send();
-
-            $statusCode = $response->getStatusCode();
-
-            $data = $response->json();
-        } catch (GuzzleRequestException $exception) {
-            throw new RequestException(
-                sprintf(
-                    'Could not send request to resource "%s": "%s"',
-                    $resource,
-                    $exception->getMessage()
-                ),
-                $exception
-            );
-        } catch (CoreRuntimeException $exception) {
-            // Malformed JSON body
-            throw new MalformedResponseException(
-                sprintf('Cannot read resource: "%s"', $exception->getMessage()),
-                $exception
-            );
-        }
+        $resource = ResourcePathFormatter::format($path, $parameters);
+        $response = $this->httpClient->request('GET', $resource, [
+            'exceptions' => false,
+            'headers' => $headers
+        ]);
+        $statusCode = $response->getStatusCode();
 
         // 404 is considered a valid response, the resource may not be there (yet?) intentionally.
         if ($statusCode == 404) {
@@ -98,36 +73,55 @@ class HttpClient
             throw new UnreadableResourceException(sprintf('Resource could not be read (status code %d)', $statusCode));
         }
 
+        try {
+            $data = JsonResponseParser::parse((string) $response->getBody());
+        } catch (InvalidJsonException $e) {
+            throw new MalformedResponseException(
+                sprintf('Cannot read resource "%s": malformed JSON returned', $resource)
+            );
+        }
+
         return $data;
     }
 
     /**
-     * @param string         $path
-     * @param array          $parameters
-     * @param HttpQuery|null $httpQuery
-     * @return string
+     * @param mixed $data
+     * @param string $path
+     * @param array $parameters
+     * @param array $headers
+     * @return mixed
      */
-    private function buildResourcePath($path, array $parameters, HttpQuery $httpQuery = null)
+    public function post($data, $path, $parameters = [], array $headers = [])
     {
-        if (count($parameters) > 0) {
-            $resource = vsprintf($path, array_map('urlencode', $parameters));
-        } else {
-            $resource = $path;
+        $resource = ResourcePathFormatter::format($path, $parameters);
+        $response = $this->httpClient->request('POST', $resource, [
+            'exceptions' => false,
+            'body' => json_encode($data),
+            'headers' => $headers
+        ]);
+        $statusCode = $response->getStatusCode();
+
+        // 404 is considered a valid response, the resource may not be there (yet?) intentionally.
+        if ($statusCode == 404) {
+            return null;
         }
 
-        if (empty($resource)) {
-            throw new RuntimeException(sprintf(
-                'Could not construct resource path from path "%s", parameters "%s" and search query "%s"',
-                $path,
-                implode('","', $parameters),
-                $httpQuery ? $httpQuery->toHttpQuery() : ''
-            ));
+        if ($statusCode == 403) {
+            throw new AccessDeniedException($resource);
         }
 
-        if ($httpQuery !== null) {
-            $resource .= $httpQuery->toHttpQuery();
+        if ($statusCode < 200 || $statusCode >= 300) {
+            throw new UnreadableResourceException(sprintf('Resource could not be read (status code %d)', $statusCode));
         }
 
-        return $resource;
+        try {
+            $data = JsonResponseParser::parse((string) $response->getBody());
+        } catch (InvalidJsonException $e) {
+            throw new MalformedResponseException(
+                sprintf('Cannot read resource "%s": malformed JSON returned', $resource)
+            );
+        }
+
+        return $data;
     }
 }

@@ -1,0 +1,30 @@
+{
+  "Request": {
+    "ReturnPolicyIdList": true,
+    "CombinedDecision": false,
+    "AccessSubject": {
+      "Attribute": [
+        {
+          "AttributeId": "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified",
+          "Value": "an-unspecified-name-id"
+        },
+        {
+          "AttributeId": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+          "Value": "student"
+        }
+      ]
+    },
+    "Resource": {
+      "Attribute": [
+        {
+          "AttributeId": "SPentityID",
+          "Value": "avans_sp"
+        },
+        {
+          "AttributeId": "IDPentityID",
+          "Value": "avans_idp"
+        }
+      ]
+    }
+  }
+}

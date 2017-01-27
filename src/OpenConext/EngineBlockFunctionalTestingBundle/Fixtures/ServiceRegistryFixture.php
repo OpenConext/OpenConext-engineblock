@@ -56,6 +56,13 @@ class ServiceRegistryFixture
         return $this;
     }
 
+    public function spRequiresPolicyEnforcementDecision($entityId)
+    {
+        $this->data[$entityId]['coin:policy_enforcement_decision_required'] = true;
+
+        return $this;
+    }
+
     public function registerIdp($name, $entityId, $ssoLocation, $certData = '')
     {
         $this->data[$entityId] = [

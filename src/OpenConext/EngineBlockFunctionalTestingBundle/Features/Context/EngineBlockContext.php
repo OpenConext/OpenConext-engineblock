@@ -8,6 +8,7 @@ use DOMXPath;
 use EngineBlock_Saml2_IdGenerator;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
@@ -18,6 +19,7 @@ use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
  */
 class EngineBlockContext extends AbstractSubContext
 {
@@ -67,6 +69,16 @@ class EngineBlockContext extends AbstractSubContext
     private $usingFeatures = false;
 
     /**
+     * @var FunctionalTestingPdpClient
+     */
+    private $pdpClient;
+
+    /**
+     * @var boolean
+     */
+    private $usingPdp = false;
+
+    /*
      * @var boolean
      */
     private $usingAuthenticationLoopGuard = false;
@@ -79,6 +91,7 @@ class EngineBlockContext extends AbstractSubContext
      * @param string $spsConfigUrl
      * @param string $idpsConfigUrl
      * @param FunctionalTestingFeatureConfiguration $features
+     * @param FunctionalTestingPdpClient $pdpClient
      * @param FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
      */
     public function __construct(
@@ -89,6 +102,7 @@ class EngineBlockContext extends AbstractSubContext
         $spsConfigUrl,
         $idpsConfigUrl,
         FunctionalTestingFeatureConfiguration $features,
+        FunctionalTestingPdpClient $pdpClient,
         FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
@@ -98,6 +112,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->spsConfigUrl = $spsConfigUrl;
         $this->idpsConfigUrl = $idpsConfigUrl;
         $this->features = $features;
+        $this->pdpClient = $pdpClient;
         $this->authenticationLoopGuard = $authenticationLoopGuard;
     }
 
@@ -310,6 +325,42 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^pdp gives a deny response$/
+     */
+    public function pdpGivesADenyResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveDenyResponse();
+    }
+
+    /**
+     * @Given /^pdp gives an indeterminate response$/
+     */
+    public function pdpGivesAnIndeterminateResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveIndeterminateResponse();
+    }
+
+    /**
+     * @Given /^pdp gives a permit response$/
+     */
+    public function pdpGivesAnPermitResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receivePermitResponse();
+    }
+
+    /**
+     * @Given /^pdp gives a not applicable response$/
+     */
+    public function pdpGivesANotApplicableResponse()
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveNotApplicableResponse();
+    }
+
+    /**
      * @Given /^EngineBlock is configured to allow a maximum of (\d+) authentication procedures within a time frame of (\d+) seconds$/
      * @param int $timeFrameForAuthenticationLoopInSeconds
      * @param int $maximumAuthenticationProceduresAllowed
@@ -328,6 +379,16 @@ class EngineBlockContext extends AbstractSubContext
     /**
      * @AfterScenario
      */
+    public function cleanUpPdp()
+    {
+        if ($this->usingPdp) {
+            $this->pdpClient->clear();
+        }
+    }
+
+    /**
+     * @AfterScenario
+     */
     public function cleanUpFeatures()
     {
         if ($this->usingFeatures) {
@@ -336,7 +397,7 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @AfterScenario
+     * @AftectScenario
      */
     public function cleanUpAuthenticationLoopGuard()
     {
