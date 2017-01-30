@@ -18,9 +18,7 @@
 namespace OpenConext\EngineBlock\Http;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Psr7\Request;
 use OpenConext\EngineBlock\Exception\InvalidJsonException;
-use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Http\Exception\AccessDeniedException;
 use OpenConext\EngineBlock\Http\Exception\MalformedResponseException;
 use OpenConext\EngineBlock\Http\Exception\UnreadableResourceException;

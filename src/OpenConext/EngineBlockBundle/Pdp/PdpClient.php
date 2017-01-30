@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Pdp;
 
+use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Http\HttpClient;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
@@ -29,9 +30,19 @@ final class PdpClient implements PdpClientInterface
      */
     private $httpClient;
 
-    public function __construct(HttpClient $httpClient)
-    {
-        $this->httpClient = $httpClient;
+    /**
+     * @var string
+     */
+    private $policyDecisionPointPath;
+
+    public function __construct(
+        HttpClient $httpClient,
+        $policyDecisionPointPath
+    ) {
+        Assertion::string($policyDecisionPointPath, 'Path to PolicyDecisionPoint must be a string');
+
+        $this->httpClient              = $httpClient;
+        $this->policyDecisionPointPath = $policyDecisionPointPath;
     }
 
     /**
@@ -41,7 +52,7 @@ final class PdpClient implements PdpClientInterface
     public function requestDecisionFor(Request $request)
     {
         $jsonData = $this->httpClient->post(
-            'decide/policy',
+            $this->policyDecisionPointPath,
             json_encode($request),
             [
                 'Content-Type' => 'application/json',
