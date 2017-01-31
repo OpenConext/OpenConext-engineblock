@@ -47,7 +47,7 @@ class PdpClientTest extends TestCase
 
         $guzzle = new Client(['handler' => $mockHandler]);
 
-        $pdpClient = new PdpClient(new HttpClient($guzzle));
+        $pdpClient = new PdpClient(new HttpClient($guzzle), '/pdp/api/decide/policy');
         $policyDecision = $pdpClient->requestDecisionFor($pdpRequest);
 
         $this->assertInstanceOf(PolicyDecision::class, $policyDecision);

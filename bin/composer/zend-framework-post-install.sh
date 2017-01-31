@@ -16,7 +16,5 @@ cd vendor/zendframework
 # BSD's "-i" requires an extension for backups.
 # To prevent ".php-e" files we explicitly use ".bak" and remove the backups when we're done
 # See: http://stackoverflow.com/a/4247319
-find . -name '*.php' -print0  | \
-xargs -0 sed -E -i '.bak' -e "s#(include|require)_once[^;]*\.php['\"][)]?;##g"
-find . -name '*.php.bak' -print0  | \
-xargs -0 rm -f
+find . -name '*.php' -print0  | xargs -0 sed -E -i'.bak' -e "s#(include|require)_once[^;]*\.php['\"][)]?;##g"
+find . -name '*.php.bak' -print0  | xargs -0 rm -f
