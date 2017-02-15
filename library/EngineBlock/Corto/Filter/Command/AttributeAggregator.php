@@ -27,7 +27,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
         }
 
         if (!$serviceProvider->attributeAggregationRequired) {
-            $logger->notice("No Attribute Aggregation for " . $serviceProvider->entityId);
+            $logger->info("No Attribute Aggregation for " . $serviceProvider->entityId);
             return;
         }
 
