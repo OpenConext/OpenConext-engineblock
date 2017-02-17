@@ -54,15 +54,13 @@ services:
             - "@engineblock.pdp.guzzle_http_client"
 
     engineblock.pdp.guzzle_http_client:
-        class: Guzzle\Http\Client
+        class: GuzzleHttp\Client
         arguments:
-            - "%pdp.host%"
-            - request.options:
-                auth: ["%pdp.username%", "%pdp.password%", "Basic"]
-                # Verify CAs for certificates for prod, but not for other environments
-                # as we are working with self signed signatures
-                # Sadly, Guzzle 3 does not support setting curl.cainfo in php.ini or 20-curl.ini
-                verify: "@=service('kernel').getEnvironment() === 'prod'"
+            - base_uri: "%pdp.host%"
+              auth: ["%pdp.username%", "%pdp.password%", "Basic"]
+              # Verify CAs for certificates for prod, but not for other environments
+              # as we are working with self signed signatures
+              verify: "@=service('kernel').getEnvironment() === 'prod'"
 
     engineblock.authentication.authentication_loop_guard:
         class: OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard
