@@ -94,7 +94,7 @@ final class HttpClient
         $resource = ResourcePathFormatter::format($path, $parameters);
         $response = $this->httpClient->request('POST', $resource, [
             'exceptions' => false,
-            'body' => json_encode($data),
+            'body' => $data,
             'headers' => $headers
         ]);
         $statusCode = $response->getStatusCode();
