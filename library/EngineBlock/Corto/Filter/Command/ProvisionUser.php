@@ -25,7 +25,13 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
     public function execute()
     {
         $userDirectory = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getUserDirectory();
-        $user = $userDirectory->identifyUser($this->_responseAttributes);
+
+        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
+            'subjectIdAttribute',
+           'uid+sho' 
+        );
+
+        $user = $userDirectory->identifyUser($this->_responseAttributes, $subjectIdField);
 
         $collabPersonIdValue = $user->getCollabPersonId()->getCollabPersonId();
         $this->setCollabPersonId($collabPersonIdValue);

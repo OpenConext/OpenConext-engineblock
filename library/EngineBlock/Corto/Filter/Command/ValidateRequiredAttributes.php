@@ -5,6 +5,7 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends EngineBlock_Corto_Filter_Command_Abstract
 {
     const URN_MACE_TERENA_SCHACHOMEORG = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
+    const URN_MACE_DIR_UID = 'urn:mace:dir:attribute-def:uid';
 
     /**
      * This command may modify the response attributes
@@ -28,6 +29,17 @@ class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends Engine
                 $this->_identityProvider->schacHomeOrganization
             );
             $excluded[] = static::URN_MACE_TERENA_SCHACHOMEORG;
+        }
+
+        $subjectIdField = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
+            'subjectIdAttribute',
+           'uid+sho'
+        );
+
+       // If engineblock is configured to use eppn as subjectIdField, sho and uid should not be mandatory
+       if ($subjectIdField == 'eppn') {
+          $excluded[] = static::URN_MACE_TERENA_SCHACHOMEORG;
+          $excluded[] = static::URN_MACE_DIR_UID;
         }
 
         $validationResult = EngineBlock_ApplicationSingleton::getInstance()

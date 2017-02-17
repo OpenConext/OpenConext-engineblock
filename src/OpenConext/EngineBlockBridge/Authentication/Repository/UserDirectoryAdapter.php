@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockBridge\Authentication\Repository;
 
+use EngineBlock_Exception;
 use EngineBlock_Exception_MissingRequiredFields;
 use EngineBlock_UserDirectory as LdapUserDirectory;
 use OpenConext\EngineBlock\Authentication\Model\User;
@@ -56,19 +57,52 @@ class UserDirectoryAdapter
      *             UserDirectory. It contains Backwards Compatible code that should not be relied on (e.g. the throwing
      *             of an EngineBlock_Exception)
      */
-    public function identifyUser(array $attributes)
+    public function identifyUser(array $attributes, $subjectIdField)
     {
-        if (!isset($attributes[Uid::URN_MACE][0])) {
-            throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
-                'Missing required SAML2 field "%s" in attributes',
-                Uid::URN_MACE
-            ));
-        }
-        if (!isset($attributes[SchacHomeOrganization::URN_MACE][0])) {
-            throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
-                'Missing required SAML2 field "%s" in attributes',
-                SchacHomeOrganization::URN_MACE
-            ));
+        switch ($subjectIdField) {
+            case "uid+sho":
+                $this->logger->notice("case uid+sho");
+
+                if (!isset($attributes[Uid::URN_MACE][0])) {
+                     throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
+                       'Missing required SAML2 field "%s" in attributes',
+                       Uid::URN_MACE
+                     ));
+                }
+                if (!isset($attributes[SchacHomeOrganization::URN_MACE][0])) {
+                     throw new EngineBlock_Exception_MissingRequiredFields(sprintf(
+                       'Missing required SAML2 field "%s" in attributes',
+                       SchacHomeOrganization::URN_MACE
+                     ));
+                }
+
+                $uid          = $attributes[Uid::URN_MACE][0];
+                $organization = $attributes[SchacHomeOrganization::URN_MACE][0];
+
+                break;
+            case "eppn":
+                $this->logger->notice("case eppn");
+
+               if ($this->featureConfiguration->isEnabled('eb.ldap_integration')) {
+                     throw new EngineBlock_Exception(
+                       'eppn subjectIdField in conjunction with LDAP integration is not supported'
+                     );
+                }
+
+                if (!isset($attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'])) {
+                     throw new EngineBlock_Exception_MissingRequiredFields(
+                       'Missing required SAML2 field urn:mace:dir:attribute-def:eduPersonPrincipalName in attributes'
+                     );
+                }
+
+               list($uid, $organization) = explode('@', $attributes['urn:mace:dir:attribute-def:eduPersonPrincipalName'][0]);
+
+                break;
+            default:
+                throw new EngineBlock_Exception(
+                    "SubjectIdField '$subjectIdField' does not contain valid value"
+                );
+
         }
 
         if ($this->featureConfiguration->isEnabled('eb.ldap_integration')) {
@@ -81,13 +115,10 @@ class UserDirectoryAdapter
         } else {
             $this->logger->debug('LDAP integration not enabled, generating value objects based on saml attributes');
 
-            $uid                   = $attributes[Uid::URN_MACE][0];
-            $schacHomeOrganization = $attributes[SchacHomeOrganization::URN_MACE][0];
-
             $collabPersonUuid      = CollabPersonUuid::generate();
             $collabPersonId        = CollabPersonId::generateWithReplacedAtSignFrom(
                 new Uid($uid),
-                new SchacHomeOrganization($schacHomeOrganization)
+                new SchacHomeOrganization($organization)
             );
         }
 
