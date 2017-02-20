@@ -52,8 +52,9 @@ final class PdpClient implements PdpClientInterface
     public function requestDecisionFor(Request $request)
     {
         $jsonData = $this->httpClient->post(
-            $this->policyDecisionPointPath,
             json_encode($request),
+            $this->policyDecisionPointPath,
+            [],
             [
                 'Content-Type' => 'application/json',
                 'Accept'       => 'application/json',
