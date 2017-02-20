@@ -43,6 +43,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\DebugController
         arguments:
             - "@engineblock.compat.application"
+            - "@session"
 
     engineblock.controller.authentication.wayf:
         class: OpenConext\EngineBlockBundle\Controller\WayfController
