@@ -70,6 +70,8 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         if ($receivedRequest->isDebugRequest()) {
             $_SESSION['debugIdpResponse'] = $receivedResponse;
 
+            // Authentication state needs to be registered here as the debug flow differs from the regular flow,
+            // yet the procedures for both are completed when consuming the assertion in the ServiceProviderController
             $identityProvider = new Entity(new EntityId($idp->entityId), EntityType::IdP());
             $authenticationState = $this->_session->get('authentication_state');
             $authenticationState->authenticatedAt($identityProvider);
