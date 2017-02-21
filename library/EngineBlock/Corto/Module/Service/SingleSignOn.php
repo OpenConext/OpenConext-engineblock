@@ -373,7 +373,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $output = $this->_server->renderTemplate(
             'discover',
             array(
-                'preselectedIdp'                      => $this->_server->getCookie('selectedIdp'),
                 'action'                              => $action,
                 'cutoffPointForShowingUnfilteredIdps' => EngineBlock_ApplicationSingleton::getInstance()
                     ->getDiContainer()
