@@ -18,7 +18,11 @@ See the [UPGRADING.md][upgrading] file
 
 ## (Theme) Development
 
-Please see the [wiki][eb-wiki] for information on how to get started with development of OpenConext EngineBlock
+Please see the [wiki][eb-wiki-theme-development] for information on how to get started with developing themes for OpenConext EngineBlock
+In short, themes require compilation which can be done by running the following commands:
+```
+    (cd theme && npm install && grunt)
+```
 
 ## System Requirements
 
@@ -194,4 +198,4 @@ If you are using this pattern, an update can be done with the following:
 [comp]: https://getcomposer.org/
 [op-dep]: https://github.com/OpenConext/OpenConext-deploy
 [janus]: https://github.com/janus-ssp/janus
-[eb-wiki]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines
+[eb-wiki-theme-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development
