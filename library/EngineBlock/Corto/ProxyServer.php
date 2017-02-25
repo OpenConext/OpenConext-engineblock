@@ -585,7 +585,7 @@ class EngineBlock_Corto_ProxyServer
         /** @var SAML2_AuthnRequest $request */
 
         // Ignore requests for bindings we don't support for responses.
-        if ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST) {
+        if ($request->getProtocolBinding() && ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST)) {
             $this->_server->getSessionLog()->notice(
                 "ProtocolBinding '{$request->getProtocolBinding()}' requested is not supported, ignoring..."
             );
