@@ -54,7 +54,16 @@ module.exports = function(grunt) {
           options: {
             map: true,
             processors: [
-              require('autoprefixer-core')({browsers: 'last 3 versions'}),
+              require('autoprefixer-core')({browsers: [
+                  'ie >= 8',
+                  'chrome >= 20',
+                  'firefox >= 20',
+                  'opera >= 11',
+                  'safari >= 5',
+                  'android >= 4',
+                  'ios >= 4',
+                  'last 3 versions'
+              ]}),
               require('csswring')
             ]
           },
