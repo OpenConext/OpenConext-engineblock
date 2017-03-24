@@ -268,6 +268,8 @@ class EngineBlockContext extends AbstractSubContext
      */
     public function iSelectOnTheWAYF($idpName)
     {
+        $this->getMainContext()->getMinkContext()->printLastResponse();
+
         /** @var MockIdentityProvider $mockIdp */
         $mockIdp = $this->mockIdpRegistry->get($idpName);
 
