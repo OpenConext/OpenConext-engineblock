@@ -119,7 +119,6 @@ class EngineBlock_View
      */
     public function getDisplayName(array $entity) {
         $lang = $this->language();
-        $lang != null ? $lang : 'en';
 
         $displayAttributes = array('name', 'description', 'displayName');
         foreach ($displayAttributes as $key) {
