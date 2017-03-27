@@ -10,7 +10,7 @@ use Symfony\Component\Stopwatch\Stopwatch;
 use Symfony\Component\Stopwatch\StopwatchEvent;
 
 // in order to be in control of time during our tests with the Stopwatch, we use the Symfony's ClockMock
-require_once ENGINEBLOCK_FOLDER_VENDOR . '/symfony/symfony/src/Symfony/Component/Stopwatch/Tests/ClockMock.php';
+require_once ENGINEBLOCK_FOLDER_VENDOR . '/symfony/symfony/src/Symfony/Bridge/PhpUnit/ClockMock.php';
 
 class ExecutionTimeTrackerTest extends TestCase
 {
