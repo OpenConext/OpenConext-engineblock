@@ -111,26 +111,6 @@ class EngineBlock_View
         return call_user_func_array('sprintf', $arguments);
     }
 
-    /**
-     * Get the displayName for the entity
-     *
-     * @param array $entity the rmeote entity metadata
-     * @return the name to display
-     */
-    public function getDisplayName(array $entity) {
-        $lang = $this->language();
-        $lang != null ? $lang : 'en';
-
-        $displayAttributes = array('name', 'description', 'displayName');
-        foreach ($displayAttributes as $key) {
-            $ret = $this->_getLanguageFallback($entity, $key, $lang);
-            if ($ret) {
-                return $ret;
-            }
-        }
-        return "Unknown (meta-data incomplete)";
-    }
-
     public function getAttributeName($attributeId, $ietfLanguageTag = 'en')
     {
         return EngineBlock_ApplicationSingleton::getInstance()
@@ -150,17 +130,6 @@ class EngineBlock_View
     {
         $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
         return $translator->getLocale();
-    }
-
-    /**
-     * Return the module name
-     *
-     * @return string
-     */
-    public static function moduleName()
-    {
-        $serverName = $_SERVER['SERVER_NAME'];
-        return $serverName ? strtolower(trim(substr($serverName, 0, strpos($serverName, '.')))) : 'engine';
     }
 
     /**
