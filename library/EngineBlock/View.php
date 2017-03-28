@@ -133,17 +133,6 @@ class EngineBlock_View
     }
 
     /**
-     * Return the module name
-     *
-     * @return string
-     */
-    public static function moduleName()
-    {
-        $serverName = $_SERVER['SERVER_NAME'];
-        return $serverName ? strtolower(trim(substr($serverName, 0, strpos($serverName, '.')))) : 'engine';
-    }
-
-    /**
      * Set the language on the query string and return the new query string
      *
      * @example <?php echo $this->setLanguage('en'); ?>
