@@ -335,12 +335,6 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         $idpEntityId
     ) {
-        $cookieExpiresStamp = null;
-        if (isset($this->_configs['rememberIdp'])) {
-            $cookieExpiresStamp = strtotime($this->_configs['rememberIdp']);
-        }
-        $this->setCookie('selectedIdp', $idpEntityId, $cookieExpiresStamp);
-
         $originalId = $spRequest->getId();
 
         $identityProvider = $this->getRepository()->fetchIdentityProviderByEntityId($idpEntityId);

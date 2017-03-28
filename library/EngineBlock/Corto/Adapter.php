@@ -360,7 +360,6 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setConfigs(array(
             'debug' => $application->getConfigurationValue('debug', false),
             'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true),
-            'rememberIdp' => '+3 months',
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
         ));
 
