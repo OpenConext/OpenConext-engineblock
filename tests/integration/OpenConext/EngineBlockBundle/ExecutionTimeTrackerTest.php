@@ -15,7 +15,13 @@ class ExecutionTimeTrackerTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
-        ClockMock::register(ExecutionTimeTracker::class);
+        ClockMock::register(Stopwatch::class);
+        ClockMock::register(ExecutionTimeTrackerTest::class);
+    }
+
+    public function setUp()
+    {
+        ClockMock::withClockMock(0);
     }
 
     /**
