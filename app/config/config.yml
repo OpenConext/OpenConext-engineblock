@@ -77,11 +77,11 @@ doctrine:
             engineblock:
                 naming_strategy: doctrine.orm.naming_strategy.underscore
                 query_cache_driver:
-                    type: apc
+                    type: apcu
                 metadata_cache_driver:
-                    type: apc
+                    type: apcu
                 result_cache_driver:
-                    type: apc
+                    type: apcu
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
