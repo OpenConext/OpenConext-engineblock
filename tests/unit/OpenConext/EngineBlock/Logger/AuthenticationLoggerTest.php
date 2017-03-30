@@ -30,18 +30,23 @@ class AuthenticationLoggerTest extends UnitTest
         $identityProviderEntityId = 'IdpEntityId';
         $collabPersonIdValue      = EngineBlock_UserDirectory::URN_COLLAB_PERSON_NAMESPACE . ':openconext:some-person';
         $keyIdValue               = '20160403';
+        $spProxy1EntityId         = 'SpProxy1EntityId';
+        $spProxy2EntityId         = 'SpProxy2EntityId';
 
-        $serviceProvider  = new Entity(new EntityId($serviceProviderEntityId), EntityType::SP());
-        $identityProvider = new Entity(new EntityId($identityProviderEntityId), EntityType::IdP());
-        $collabPersonId   = new CollabPersonId($collabPersonIdValue);
-        $keyId            = new KeyId($keyIdValue);
+        $serviceProvider       = new Entity(new EntityId($serviceProviderEntityId), EntityType::SP());
+        $identityProvider      = new Entity(new EntityId($identityProviderEntityId), EntityType::IdP());
+        $collabPersonId        = new CollabPersonId($collabPersonIdValue);
+        $keyId                 = new KeyId($keyIdValue);
+        $serviceProviderProxy1 = new Entity(new EntityId($spProxy1EntityId), EntityType::SP());
+        $serviceProviderProxy2 = new Entity(new EntityId($spProxy2EntityId), EntityType::SP());
 
         // do note we omit login_stamp here as we check presence separately, but don't want to compare the value
         $expected = [
             'sp_entity_id' => $serviceProviderEntityId,
             'idp_entity_id' => $identityProviderEntityId,
             'user_id' => $collabPersonIdValue,
-            'key_id' => $keyIdValue
+            'key_id' => $keyIdValue,
+            'proxied_sp_entity_ids' => [$spProxy1EntityId, $spProxy2EntityId],
         ];
 
         $mockLogger = m::mock('\Psr\Log\LoggerInterface');
@@ -69,6 +74,12 @@ class AuthenticationLoggerTest extends UnitTest
             ->once();
 
         $authenticationLogger = new AuthenticationLogger($mockLogger);
-        $authenticationLogger->logGrantedLogin($serviceProvider, $identityProvider, $collabPersonId, $keyId);
+        $authenticationLogger->logGrantedLogin(
+            $serviceProvider,
+            $identityProvider,
+            $collabPersonId,
+            [$serviceProviderProxy1, $serviceProviderProxy2],
+            $keyId
+        );
     }
 }
