@@ -63,6 +63,6 @@ final class ValueObjectListEqualsMatcher extends MatcherAbstract
      */
     public function __toString()
     {
-        return sprintf('<ValueObjectListEqualsMatcher(%s)>', $this->_expected);
+        return sprintf('<ValueObjectListEqualsMatcher([%s])>', implode(', ', $this->_expected));
     }
 }
