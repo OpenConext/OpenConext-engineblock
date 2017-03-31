@@ -19,9 +19,7 @@ final class ValueObjectListEqualsMatcher extends MatcherAbstract
             __METHOD__
         );
 
-        $valueObjects = array_values($valueObjects);
-
-        $first = $valueObjects[0];
+        $first = array_values($valueObjects)[0];
 
         if (!is_object($first) || !method_exists($first, 'equals')) {
             throw new InvalidArgumentException($message);
@@ -47,8 +45,8 @@ final class ValueObjectListEqualsMatcher extends MatcherAbstract
             return false;
         }
 
-        foreach (array_values($actual) as $index => $valueObject) {
-            if (get_class($valueObject) !== get_class($this->_expected[0])) {
+        foreach ($actual as $index => $valueObject) {
+            if (get_class($valueObject) !== get_class($this->_expected[$index])) {
                 return false;
             }
 
