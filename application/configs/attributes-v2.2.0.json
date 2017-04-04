@@ -49,7 +49,9 @@
                 "allowed": [
                     "affiliate",
                     "employee",
+                    "faculty",
                     "member",
+                    "pre-student",
                     "student",
                     "staff"
                 ]
