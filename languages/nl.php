@@ -171,15 +171,14 @@ Als je deze applicatie wilt gebruiken moet je:<br />
 <li>jouw informatie delen</li></ul>',
     'error_no_idps'                     => 'Error - Geen instellingen gevonden',
     'error_no_idps_desc'                => '<p>
-        De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is niet toegankelijk via de SURFconext infrastructuur.
-        Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de helpdesk van SURFconext via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+        De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is niet toegankelijk via de SURFconext-infrastructuur.<br /><br />
+        Bezoek <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=54691917" target="_blank">de SURFconext support pagina\'s</a> voor meer ondersteuning bij deze foutmelding, als je denkt daadwerkelijk toegang te moeten hebben tot deze dienst.
         <br /><br />
     </p>',
     'error_session_lost'                => 'Error - Sessie is verloren gegaan',
     'error_session_lost_desc'           => '<p>
-        Je sessie is verloren gegaan.<br />
-        Waarschijnlijk kon er geen cookie worden gezet in je browser. SURFconext vereist het gebruik van cookies voor correcte werking.<br />
-        Verzeker jezelf ervan dat je browser cookies van SURFconext accepteert. Ga alstublieft terug en probeer het opnieuw.
+We weten helaas niet waar je heen wilt. Heb je te lang gewacht? Probeer het dan eerst opnieuw. Accepteert je browser wel cookies? Maak je gebruik van een te oude link of bookmark?<br /><br />
+Bezoek <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=52331093" target="_blank">de SURFconext support pagina\'s</a> voor meer ondersteuning bij deze foutmelding. Hier kun je ook vinden hoe je contact kunt opnemen met het supportteam als de fout aanblijft.
         <br /><br />
     </p>',
     'error_dissimilar_workflow_state'       => 'Error - Verschillende productie statussen',
@@ -190,7 +189,7 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
 </p>',
     'error_authorization_policy_violation'            => 'Error - Geen toegang',
     'error_authorization_policy_violation_desc'       => '<p>
-        Je bent succesvol ingelogd bij jouw instelling, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst heeft jouw instelling met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de helpdesk van je instelling als je vindt dat je wel toegang moet hebben.
+        Je bent succesvol ingelogd bij jouw instelling, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw instelling met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je instelling als je vindt dat je wel toegang moet hebben.
     </p>',
     'error_authorization_policy_violation_name'       => 'Omschrijving autorisatieregels',
     'error_authorization_policy_violation_info'       => 'Bericht van je instelling: ',
@@ -201,7 +200,7 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
     'error_unknown_preselected_idp' => 'Error - Instelling is niet gekoppeld aan dienst',
     'error_unknown_preselected_idp_desc' => '<p>
-        De instelling waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via SURFconext. Neem contact op met de helpdesk van jouw instelling als je toegang wilt krijgen tot deze dienst.
+        De instelling waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via SURFconext. Neem contact op met de helpdesk van jouw instelling als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;Service Provider&rsquo;) en waarom je toegang wilt.
     </p>',
     'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
@@ -211,11 +210,11 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
 
     'error_unknown_issuer'              => 'Error - Onbekende dienst',
     'error_unknown_issuer_desc'     => '<p>
-        De dienst waarop je probeert in te loggen is niet bekend bij SURFconext. Mogelijk heeft jouw instelling de toegang tot deze dienst nooit aangevraagd. Neem contact op met de helpdesk van je instelling en geef daarbij de volgende informatie door:
+Je aangevraagde dienst kon niet worden gevonden. Bezoek <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=53018683" target="_blank">de SURFconext support pagina\'s</a> voor meer ondersteuning bij deze foutmelding.
     </p>',
     'error_generic'                     => 'Error - Foutmelding',
     'error_generic_desc'                => '<p>
-        Het is niet mogelijk om in te loggen. Probeer het alstublieft opnieuw.
+Inloggen is niet gelukt en we kunnen je niet precies vertellen waarom. Probeer het eerst eens opnieuw, en bezoek anders <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=52331091" target="_blank">de SURFconext support pagina\'s</a> voor ondersteuning bij deze foutmelding. Hier kun je ook vinden hoe je contact kunt opnemen met het supportteam als de fout aanblijft.
     </p>',
     'error_missing_required_fields'     => 'Error - Verplichte velden ontbreken',
     'error_missing_required_fields_desc'=> '<p>
@@ -240,13 +239,10 @@ Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op
 
     'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
     'error_received_error_status_code_desc'=> '<p>
-        Jouw instelling stuurde een authenticatierespons met een foutcode.
+Je instelling heeft je de toegang geweigerd tot deze dienst. Je zult dus contact moeten opnemen met de (IT-)servicedesk van je eigen instelling om te kijken of dit verholpen kan worden.
     </p>',
     'error_received_invalid_response'        => 'Error - Ongeldig antwoord van Identity Provider',
     'error_received_invalid_signed_response' => 'Error - Ongeldige handtekening op antwoord Identity Provider',
-    'error_received_status_code_desc'=> '<p>
-        Jouw instelling stuurde een ongeldig authenticatierespons terug.
-    </p>',
     'error_stuck_in_authentication_loop' => 'Error - Je zat vast in een zwart gat',
     'error_stuck_in_authentication_loop_desc' => '<p>
         Je bent succesvol ingelogd bij je Identity Provider maar de dienst waar je naartoe wilt stuurt je weer terug naar SURFconext. Omdat je succesvol bent ingelogd, stuurt SURFconext je weer naar de dienst, wat resulteert in een oneindig zwart gat. Dit komt waarschijnlijk door een foutje aan de kant van de dienst. Bezoek <a href="https://support.surfconext.nl" target="_blank">de SURFconext support pagina\'s</a> voor meer ondersteuning bij deze foutmelding.

@@ -247,9 +247,6 @@ this service.
     </p>',
     'error_received_invalid_response'       => 'Error - Invalid Identity Provider response',
     'error_received_invalid_signed_response'=> 'Error - Invalid signature on Identity Provider response',
-    'error_received_status_code_desc'=> '<p>
-        Your Identity Provider sent an authentication response that was invalid.
-    </p>',
     'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
     'error_stuck_in_authentication_loop_desc' => '<p>
         You\'ve successfully authenticated at your Identity Provider but the service you are trying to access sends you back again to SURFconext. Because you are already logged in, SURFconext then forwards you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider. Visit <a href="https://support.surfconext.nl" target="_blank">the SURFconext support pages</a> for more extensive support on this error.
