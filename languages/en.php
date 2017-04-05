@@ -173,16 +173,15 @@ If you want to use this application you have to:<br />
 <li>share your information</li></ul>',
     'error_no_idps'                 => 'Error - No Identity Providers found',
     'error_no_idps_desc'            => '<p>
-        The application you came from (your &lsquo;Service Provider&rsquo;) is not allowed to connect with any Identity Provider.
-        Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
-        this service.
+The service you\'re trying to reach (&lsquo;Service Provider&rsquo;) is not accessible through SURFconext.<br /><br />
+
+Visit <a href="https://wiki.surfnet.nl/x/m69WAw" target="_blank">the SURFconext support pages</a> for more support, if you think you should have access to this service.
         <br /><br />
     </p>',
     'error_session_lost'            => 'Error - your session was lost',
     'error_session_lost_desc'       => '<p>
-        Somewhere along the way, your session with us was lost. <br />
-        Likely your browser privacy or security settings prevented the cookie to be set. SURFconext requires that cookies are enabled.<br />
-        Make sure your browser accepts cookies from SURFconext. Please go back and try again.
+We somehow lost where you wanted to go. Did you wait too long? If so, try again first. Does your browser accept cookies? Are you using an outdated URL or bookmark?<br /><br />
+Visit <a href="https://wiki.surfnet.nl/x/jq9WAw" target="_blank">the SURFconext supportpages</a> for more extensive support on this error.
         <br /><br />
     </p>',
     'error_dissimilar_workflow_state'       => 'Error - Dissimilar workflow states',
@@ -194,7 +193,7 @@ this service.
 </p>',
     'error_authorization_policy_violation'            => 'Error - No access',
     'error_authorization_policy_violation_desc'       => '<p>
-        You have successfully logged in at your institution, but unfortunately you can not use this service because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you feel you should be allowed access to this service.
+        You have successfully logged in at your institution, but unfortunately you cannot use this service (the &lsquo;Service Provider&rsquo;) because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you think you should be allowed access to this service.
     </p>',
     'error_authorization_policy_violation_name'       => 'Authorization policy message',
     'error_authorization_policy_violation_info'       => 'Message from your institution: ',
@@ -205,13 +204,11 @@ this service.
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
     'error_unknown_preselected_idp' => 'Error - No connection between institution and service',
     'error_unknown_preselected_idp_desc' => '<p>
-        The institution that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through SURFconext. Please contact your institution\'s helpdesk to request access to this service.
+        The institution that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through SURFconext. Please contact your institution\'s helpdesk to request access to this service. State what service it is about (the &lsquo;Service Provider&rsquo;) and why you need access.
     </p>',
     'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
     'error_unknown_service_provider_desc'     => '<p>
-        A Service Provider with the EntityID you have provided could not be found.
-        If you feel this is an error please contact the SURFconext helpdesk at
-        <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
+Your requested service couldn\'t be found. Visit <a href="https://wiki.surfnet.nl/x/k69WAw" target="_blank">the SURFconext supportpages</a> for more extensive support on this error.
     </p>',
 
     'error_unknown_issuer'          => 'Error - Unknown service',
@@ -220,7 +217,7 @@ this service.
     </p>',
     'error_generic'                     => 'Error - An error occurred',
     'error_generic_desc'                => '<p>
-        It is not possible to sign in. Please try again.
+Your log-in has failed and we don\'t know exactly why. Try again first, and if that doesn\'t work visit <a href="https://wiki.surfnet.nl/x/iq9WAw" target="_blank">the SURFconext supportpages</a> for more support with this error. On that page you can also find how to contact us if the error persists.
     </p>',
     'error_missing_required_fields'     => 'Error - Missing required fields',
     'error_missing_required_fields_desc'=> '<p>
@@ -243,13 +240,10 @@ this service.
        </p>',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
     'error_received_error_status_code_desc'=> '<p>
-        Your Identity Provider sent an authentication response with an error status code.
+Your institution has denied you access to this service. You will have to contact your own (IT-)servicedesk to see if this can be fixed.
     </p>',
     'error_received_invalid_response'       => 'Error - Invalid Identity Provider response',
     'error_received_invalid_signed_response'=> 'Error - Invalid signature on Identity Provider response',
-    'error_received_status_code_desc'=> '<p>
-        Your Identity Provider sent an authentication response that was invalid.
-    </p>',
     'error_stuck_in_authentication_loop' => 'Error - You got stuck in a black hole',
     'error_stuck_in_authentication_loop_desc' => '<p>
         You\'ve successfully authenticated at your Identity Provider but the service you are trying to access sends you back again to SURFconext. Because you are already logged in, SURFconext then forwards you back to the service, which results in an infinite black hole. Likely, this is caused by an error at the Service Provider. Visit <a href="https://support.surfconext.nl" target="_blank">the SURFconext support pages</a> for more extensive support on this error.
