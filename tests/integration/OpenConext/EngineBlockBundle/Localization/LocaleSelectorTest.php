@@ -20,6 +20,62 @@ class LocaleSelectorTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function the_lang_query_string_parameter_should_be_used()
+    {
+        $localeSelector = new LocaleSelector(['nl', 'en'], 'en');
+
+        $request = new Request(['lang' => 'nl']);
+
+        $localeSelector->setRequest($request);
+
+        $this->assertSame('nl', $localeSelector->getLocale());
+    }
+
+    /**
+     * @test
+     */
+    public function the_query_string_locale_should_be_ignored_if_it_is_not_available()
+    {
+        $localeSelector = new LocaleSelector(['nl', 'en'], 'en');
+
+        $request = new Request(['lang' => 'fr']);
+
+        $localeSelector->setRequest($request);
+
+        $this->assertSame('en', $localeSelector->getLocale());
+    }
+
+    /**
+     * @test
+     */
+    public function the_locale_in_the_request_body_should_be_used()
+    {
+        $localeSelector = new LocaleSelector(['nl', 'en'], 'en');
+
+        $request = new Request([], ['lang' => 'nl']);
+
+        $localeSelector->setRequest($request);
+
+        $this->assertSame('nl', $localeSelector->getLocale());
+    }
+
+    /**
+     * @test
+     */
+    public function the_request_body_locale_should_be_ignored_if_it_is_not_available()
+    {
+        $localeSelector = new LocaleSelector(['nl', 'en'], 'en');
+
+        $request = new Request([], ['lang' => 'fr']);
+
+        $localeSelector->setRequest($request);
+
+        $this->assertSame('en', $localeSelector->getLocale());
+    }
+
+    /**
+     * @test
+     */
     public function the_locale_stored_in_the_cookie_should_be_used()
     {
         $localeSelector = new LocaleSelector(['nl', 'en'], 'en');

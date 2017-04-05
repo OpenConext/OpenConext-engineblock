@@ -50,6 +50,14 @@ final class LocaleSelector
             return $this->defaultLocale;
         }
 
+        if (in_array($this->request->query->get('lang'), $this->availableLocales, true)) {
+            return $this->request->query->get('lang');
+        }
+
+        if (in_array($this->request->request->get('lang'), $this->availableLocales, true)) {
+            return $this->request->request->get('lang');
+        }
+
         if (in_array($this->request->cookies->get('lang'), $this->availableLocales, true)) {
             return $this->request->cookies->get('lang');
         }
