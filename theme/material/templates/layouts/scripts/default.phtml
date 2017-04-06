@@ -1,29 +1,15 @@
 <?php
-  // Determine the selected language, default to english
-  $locale = new Zend_Locale();
-  $lang = $locale->getLanguage() || 'en';
-  $lang = 'en';
-  if (isset($_GET['lang'])) {
-    $lang = $_GET['lang'];
-  } elseif (isset($_POST['lang'])) {
-    $lang = $_POST['lang'];
-  } elseif (isset($_COOKIE['lang'])) {
-    $lang = $_COOKIE['lang'];
-  }
-  if (!in_array($lang, array('nl','en'))) {
-    $lang = 'en';
-  }
-
   $view = new EngineBlock_View();
+  $locale = $view->getLocale();
 
   $uaSafari = preg_match('~Version/(\d)[\\.\d]+ Safari/~', $_SERVER['HTTP_USER_AGENT'], $matches) ? 'safari' . $matches[1] : '';
 ?><!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="<?php echo $lang; ?>"> <![endif]-->
-<!--[if IE 7]> <html class="no-js ie7 lt-ie10 lt-ie9 lt-ie8" lang="<?php echo $lang; ?>"> <![endif]-->
-<!--[if IE 8]> <html class="no-js ie8 lt-ie10 lt-ie9" lang="<?php echo $lang; ?>"> <![endif]-->
-<!--[if IE 9]> <html class="no-js ie9 lt-ie10" lang="<?php echo $lang; ?>"> <![endif]-->
-<!--[if gt IE 9]> <html class="no-js" lang="<?php echo $lang; ?>"> <![endif]-->
-<!--[if !IE]><!--> <html class="no-js <?= $uaSafari ?>" lang="<?php echo $lang; ?>"> <!--<![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="<?php echo $locale; ?>"> <![endif]-->
+<!--[if IE 7]> <html class="no-js ie7 lt-ie10 lt-ie9 lt-ie8" lang="<?php echo $locale; ?>"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie8 lt-ie10 lt-ie9" lang="<?php echo $locale; ?>"> <![endif]-->
+<!--[if IE 9]> <html class="no-js ie9 lt-ie10" lang="<?php echo $locale; ?>"> <![endif]-->
+<!--[if gt IE 9]> <html class="no-js" lang="<?php echo $locale; ?>"> <![endif]-->
+<!--[if !IE]><!--> <html class="no-js <?= $uaSafari ?>" lang="<?php echo $locale; ?>"> <!--<![endif]-->
 <head>
   <title><?php echo htmlentities($this->layout()->title, 0, 'UTF-8'); ?></title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -83,7 +69,7 @@
         <?php endif ?>
       <?php } ?>
       <?php if (!isset($this->layout()->displayLanguageSwitcher) || $this->layout()->displayLanguageSwitcher === true): ?>
-        <?php compLanguage($lang); ?>
+        <?php compLanguage($locale); ?>
       <?php endif ?>
       <ul class="comp-links">
         <?php if (isset($this->layout()->backLink) && $this->layout()->backLink === true): ?>
@@ -113,7 +99,7 @@
         </li>
         <li class="nav-row">
           <?php if (!isset($this->layout()->displayLanguageSwitcher) || $this->layout()->displayLanguageSwitcher === true): ?>
-            <?php compLanguage($lang); ?>
+            <?php compLanguage($locale); ?>
           <?php endif ?>
         </li>
         <li class="nav-row right">
