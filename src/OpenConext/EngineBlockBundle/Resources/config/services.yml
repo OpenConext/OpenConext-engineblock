@@ -80,3 +80,5 @@ services:
             - 'lang'
             - '%cookie.locale.domain%'
             - '%cookie.locale.expiry%'
+            - '%cookie.locale.http_only%'
+            - '%cookie.locale.secure%'
