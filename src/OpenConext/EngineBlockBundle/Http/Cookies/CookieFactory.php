@@ -24,11 +24,11 @@ final class CookieFactory
     private $expiry;
 
     /**
-     * @param string $name
-     * @param string $domain
-     * @param int    $expiry
+     * @param string   $name
+     * @param string   $domain
+     * @param int|null $expiry
      */
-    public function __construct($name, $domain, $expiry)
+    public function __construct($name, $domain, $expiry = null)
     {
         $this->name = $name;
         $this->domain = $domain;
@@ -42,12 +42,16 @@ final class CookieFactory
      */
     public function createCookie($value)
     {
-        $expirationDateTime = (new DateTime())->add(DateInterval::createFromDateString($this->expiry . ' seconds'));
+        $expire = 0;
+
+        if ($this->expiry) {
+            $expire = (new DateTime())->add(DateInterval::createFromDateString($this->expiry . ' seconds'));
+        }
 
         return new Cookie(
             $this->name,
             $value,
-            $expirationDateTime,
+            $expire,
             '/',
             $this->domain,
             false,
