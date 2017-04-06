@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Localization;
+namespace OpenConext\EngineBlockBundle\Http\Cookies;
 
 use DateInterval;
 use DateTime;

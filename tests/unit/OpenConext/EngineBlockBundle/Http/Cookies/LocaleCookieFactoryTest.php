@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenConext\EngineBlockBundle\Localization;
+namespace OpenConext\EngineBlockBundle\Http\Cookies;
 
 use PHPUnit_Framework_TestCase;
 

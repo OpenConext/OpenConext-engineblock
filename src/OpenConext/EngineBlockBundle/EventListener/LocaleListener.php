@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockBundle\EventListener;
 
-use OpenConext\EngineBlockBundle\Localization\LocaleCookieFactory;
+use OpenConext\EngineBlockBundle\Http\Cookies\LocaleCookieFactory;
 use OpenConext\EngineBlockBundle\Localization\LocaleProvider;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
