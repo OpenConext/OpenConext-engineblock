@@ -122,14 +122,13 @@ class EngineBlock_View
     /**
      * Return the language.
      *
-     * @example <?php echo $this->language(); ?>
+     * @example <?php echo $this->getLocale(); ?>
      *
      * @return string
      */
-    public function language()
+    public function getLocale()
     {
-        $translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
-        return $translator->getLocale();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getLocaleProvider()->getLocale();
     }
 
     /**

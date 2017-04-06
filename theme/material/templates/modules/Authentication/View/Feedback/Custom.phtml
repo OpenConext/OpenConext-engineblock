@@ -3,11 +3,11 @@
 /**
  * @var EngineBlock_View $this
  */
-$title = !empty($_SESSION['feedback_custom']['title'][$this->language()]) ?
-            $_SESSION['feedback_custom']['title'][$this->language()] :
+$title = !empty($_SESSION['feedback_custom']['title'][$this->getLocale()]) ?
+            $_SESSION['feedback_custom']['title'][$this->getLocale()] :
             $this->t('error_generic');
-$description = !empty($_SESSION['feedback_custom']['description'][$this->language()]) ?
-    $this->htmlSpecialCharsText($_SESSION['feedback_custom']['description'][$this->language()]) :
+$description = !empty($_SESSION['feedback_custom']['description'][$this->getLocale()]) ?
+    $this->htmlSpecialCharsText($_SESSION['feedback_custom']['description'][$this->getLocale()]) :
     $this->t('error_generic_desc');
 
 $layout = $this->layout();
