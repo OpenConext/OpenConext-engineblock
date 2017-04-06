@@ -68,8 +68,8 @@ services:
             - "%maximum_authentication_procedures_allowed%"
             - "%time_frame_for_authentication_loop_in_seconds%"
 
-    engineblock.locale_selector:
-        class: OpenConext\EngineBlockBundle\Localization\LocaleSelector
+    engineblock.locale_provider:
+        class: OpenConext\EngineBlockBundle\Localization\LocaleProvider
         arguments:
             - ['en', 'nl']
             - '%kernel.default_locale%'

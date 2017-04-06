@@ -4,7 +4,7 @@ namespace OpenConext\EngineBlockBundle\Localization;
 
 use Symfony\Component\HttpFoundation\Request;
 
-final class LocaleSelector
+final class LocaleProvider
 {
     /**
      * @var string[]

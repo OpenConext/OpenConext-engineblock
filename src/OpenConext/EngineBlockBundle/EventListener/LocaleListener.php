@@ -3,16 +3,16 @@
 namespace OpenConext\EngineBlockBundle\EventListener;
 
 use OpenConext\EngineBlockBundle\Localization\LocaleCookieFactory;
-use OpenConext\EngineBlockBundle\Localization\LocaleSelector;
+use OpenConext\EngineBlockBundle\Localization\LocaleProvider;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 
 final class LocaleListener
 {
     /**
-     * @var LocaleSelector
+     * @var LocaleProvider
      */
-    private $localeSelector;
+    private $localeProvider;
 
     /**
      * @var LocaleCookieFactory
@@ -20,12 +20,12 @@ final class LocaleListener
     private $cookieFactory;
 
     /**
-     * @param LocaleSelector      $localeSelector
+     * @param LocaleProvider      $localeProvider
      * @param LocaleCookieFactory $cookieFactory
      */
-    public function __construct(LocaleSelector $localeSelector, LocaleCookieFactory $cookieFactory)
+    public function __construct(LocaleProvider $localeProvider, LocaleCookieFactory $cookieFactory)
     {
-        $this->localeSelector = $localeSelector;
+        $this->localeProvider = $localeProvider;
         $this->cookieFactory = $cookieFactory;
     }
 
@@ -33,9 +33,9 @@ final class LocaleListener
     {
         $request = $event->getRequest();
 
-        $this->localeSelector->setRequest($request);
+        $this->localeProvider->setRequest($request);
 
-        $request->setLocale($this->localeSelector->getLocale());
+        $request->setLocale($this->localeProvider->getLocale());
     }
 
     public function onKernelResponse(FilterResponseEvent $event)
@@ -43,7 +43,7 @@ final class LocaleListener
         $request = $event->getRequest();
 
         if ($request->query->has('lang') || $request->request->has('lang')) {
-            $cookie = $this->cookieFactory->createCookie($this->localeSelector->getLocale());
+            $cookie = $this->cookieFactory->createCookie($this->localeProvider->getLocale());
             $event->getResponse()->headers->setCookie($cookie);
         }
     }

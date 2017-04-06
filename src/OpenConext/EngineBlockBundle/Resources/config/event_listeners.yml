@@ -64,7 +64,7 @@ services:
     engineblock.listener.locale:
         class: OpenConext\EngineBlockBundle\EventListener\LocaleListener
         arguments:
-            - '@engineblock.locale_selector'
+            - '@engineblock.locale_provider'
             - '@engineblock.locale.cookie_factory'
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 15 }
