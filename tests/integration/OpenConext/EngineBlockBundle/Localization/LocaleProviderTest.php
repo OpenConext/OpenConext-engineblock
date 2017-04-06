@@ -26,7 +26,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request(['lang' => 'nl']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('nl', $localeProvider->getLocale());
     }
@@ -40,7 +40,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request(['lang' => 'fr']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('en', $localeProvider->getLocale());
     }
@@ -54,7 +54,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request([], ['lang' => 'nl']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('nl', $localeProvider->getLocale());
     }
@@ -68,7 +68,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request([], ['lang' => 'fr']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('en', $localeProvider->getLocale());
     }
@@ -82,7 +82,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request([], [], [], ['lang' => 'nl']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('nl', $localeProvider->getLocale());
     }
@@ -96,7 +96,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request([], [], [], ['lang' => 'fr']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('en', $localeProvider->getLocale());
     }
@@ -110,7 +110,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'nl-NL, en;q=0.8']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('nl', $localeProvider->getLocale());
     }
@@ -124,7 +124,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
 
         $request = new Request([], [], [], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'fr-FR, fr;q=0.9, nl;q=0.8']);
 
-        $localeProvider->setRequest($request);
+        $localeProvider->scopeWithRequest($request);
 
         $this->assertSame('nl', $localeProvider->getLocale());
     }
@@ -135,7 +135,7 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
     public function the_default_language_should_be_used_if_neither_the_cookie_nor_the_accept_language_header_is_set()
     {
         $localeProvider = new LocaleProvider(['nl', 'en'], 'en');
-        $localeProvider->setRequest(new Request());
+        $localeProvider->scopeWithRequest(new Request());
 
         $this->assertSame('en', $localeProvider->getLocale());
     }

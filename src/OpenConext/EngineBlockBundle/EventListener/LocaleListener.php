@@ -33,7 +33,7 @@ final class LocaleListener
     {
         $request = $event->getRequest();
 
-        $this->localeProvider->setRequest($request);
+        $this->localeProvider->scopeWithRequest($request);
 
         $request->setLocale($this->localeProvider->getLocale());
     }

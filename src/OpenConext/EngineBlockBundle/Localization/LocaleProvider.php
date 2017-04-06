@@ -36,7 +36,7 @@ final class LocaleProvider
      *
      * @return void
      */
-    public function setRequest(Request $request)
+    public function scopeWithRequest(Request $request)
     {
         $this->request = $request;
     }
