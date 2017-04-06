@@ -75,7 +75,8 @@ services:
             - '%kernel.default_locale%'
 
     engineblock.locale.cookie_factory:
-        class: OpenConext\EngineBlockBundle\Http\Cookies\LocaleCookieFactory
+        class: OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory
         arguments:
+            - 'lang'
             - '%locale_cookie_domain%'
             - '%locale_cookie_expiry%'
