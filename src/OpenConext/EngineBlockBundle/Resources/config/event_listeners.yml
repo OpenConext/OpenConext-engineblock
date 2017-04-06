@@ -1,3 +1,4 @@
+# also see bridge_event_listeners.yml for event listeners that provide bridge functionality
 services:
     engineblock.listener.execution_time_tracker:
         class: OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker
