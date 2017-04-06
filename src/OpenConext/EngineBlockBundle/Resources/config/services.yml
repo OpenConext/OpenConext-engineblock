@@ -78,5 +78,5 @@ services:
         class: OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory
         arguments:
             - 'lang'
-            - '%locale_cookie_domain%'
-            - '%locale_cookie_expiry%'
+            - '%cookie.locale.domain%'
+            - '%cookie.locale.expiry%'
