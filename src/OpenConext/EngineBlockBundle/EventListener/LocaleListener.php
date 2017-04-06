@@ -40,11 +40,7 @@ final class LocaleListener
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        $request = $event->getRequest();
-
-        if ($request->query->has('lang') || $request->request->has('lang')) {
-            $cookie = $this->cookieFactory->createCookie($this->localeProvider->getLocale());
-            $event->getResponse()->headers->setCookie($cookie);
-        }
+        $cookie = $this->cookieFactory->createCookie($this->localeProvider->getLocale());
+        $event->getResponse()->headers->setCookie($cookie);
     }
 }
