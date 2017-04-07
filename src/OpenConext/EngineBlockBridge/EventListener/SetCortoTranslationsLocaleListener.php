@@ -6,6 +6,10 @@ use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Localization\LocaleProvider;
 use Zend_Translate_Adapter;
 
+/**
+ * This listener depends on the LocaleListener in the EngineBlockBundle, so the priority should be set so that it is
+ * called after the LocaleListener.
+ */
 final class SetCortoTranslationsLocaleListener
 {
     /**
