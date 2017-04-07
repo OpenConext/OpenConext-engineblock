@@ -6,7 +6,7 @@ use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Localization\LocaleProvider;
 use Zend_Translate_Adapter;
 
-final class CortoTranslationsLocaleListener
+final class SetCortoTranslationsLocaleListener
 {
     /**
      * @var LocaleProvider
