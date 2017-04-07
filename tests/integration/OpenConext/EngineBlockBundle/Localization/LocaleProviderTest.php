@@ -189,6 +189,20 @@ class LocaleProviderTest extends PHPUnit_Framework_TestCase
     /**
      * @test
      */
+    public function the_default_language_should_be_used_if_none_of_the_accepted_languages_are_available()
+    {
+        $localeProvider = new LocaleProvider(['nl', 'en'], 'en');
+
+        $request = new Request([], [], [], [], [], ['HTTP_ACCEPT_LANGUAGE' => 'fr-FR, fr;q=0.9, de;q=0.8']);
+
+        $localeProvider->scopeWithRequest($request);
+
+        $this->assertSame('en', $localeProvider->getLocale());
+    }
+
+    /**
+     * @test
+     */
     public function the_default_language_should_be_used_if_neither_the_cookie_nor_the_accept_language_header_is_set()
     {
         $localeProvider = new LocaleProvider(['nl', 'en'], 'en');
