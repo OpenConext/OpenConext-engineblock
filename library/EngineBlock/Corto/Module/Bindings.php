@@ -106,6 +106,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             ));
         }
 
+        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
+        if ($sspRequest->getIssueInstant() <= time() - 10 || $sspRequest->getIssueInstant() >= time() + 10) {
+            $this->_logger->notice(sprintf(
+                'IssueInstant of received request is out of sync (%lu), might indicate NTP-issues at the SP',
+                $sspRequest->getIssueInstant()
+            ));
+        }
+
+
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
         // Make sure the request from the sp has an Issuer
@@ -249,6 +258,15 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Unsolicited assertion (no InResponseTo in message) not supported!'
             );
+        }
+
+        // check the IssueInstant against our own time to see if the IdP's clock is getting out of sync
+        // a more strict check is implemented elsewehere; this simply serves as an advance warning
+        if ($sspResponse->getIssueInstant() <= time() - 10 || $sspResponse->getIssueInstant() >= time() + 10) {
+            $this->_logger->notice(sprintf(
+                'IssueInstant of received response is out of sync (%lu), might indicate NTP-issues at the IdP',
+                $sspResponse->getIssueInstant()
+            ));
         }
 
         try {
