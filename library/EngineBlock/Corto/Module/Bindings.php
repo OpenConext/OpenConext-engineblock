@@ -106,6 +106,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             ));
         }
 
+        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
+        $this->_checkIssueInstant( $sspRequest->getIssueInstant() );
+
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
         // Make sure the request from the sp has an Issuer
@@ -250,6 +253,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 'Unsolicited assertion (no InResponseTo in message) not supported!'
             );
         }
+
+        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
+        $this->_checkIssueInstant( $sspResponse->getIssueInstant() );
 
         try {
             // 'Process' the response, verify the signature, verify the timings.
@@ -407,6 +413,26 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $messageIssuer,
             $destination
         );
+    }
+
+    /**
+     * Check if the IssueInstant of the message is too far out of sync
+     * @param integer $issueInstant
+     */
+    protected function _checkIssueInstant($issueInstant)
+    {
+        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
+        // Ssp has a hard-coded limit of 60 seconds; use 30 here to catch an IdP's drifting clock early
+        $time = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTimeProvider()->time();
+        $timeDelta = $time - $issueInstant;
+        if (abs($timeDelta) > 30) {
+            $this->_logger->notice(
+                sprintf(
+                    'IssueInstant of SAML message is off by %d seconds; might indicate (local or remote) clock synchronization issues',
+                    $timeDelta
+                )
+            );
+        }
     }
 
     public function send(
