@@ -84,6 +84,11 @@ class EngineBlockContext extends AbstractSubContext
     private $usingAuthenticationLoopGuard = false;
 
     /**
+     * @var string
+     */
+    private $engineBlockDomain;
+
+    /**
      * @param ServiceRegistryFixture $serviceRegistry
      * @param EngineBlock $engineBlock
      * @param EntityRegistry $mockSpRegistry
@@ -136,6 +141,8 @@ class EngineBlockContext extends AbstractSubContext
             )
             ->save();
         $this->engineBlock->clearNewIds();
+
+        $this->engineBlockDomain = 'https://engine.' . $domain;
     }
 
     /**
@@ -434,5 +441,51 @@ class EngineBlockContext extends AbstractSubContext
             $message = sprintf('The xpath "%s" did not result in at least one match.', $xpath);
             throw new ExpectationException($message, $session);
         }
+    }
+
+    /**
+     * @Given /^my browser is configured to prefer "([^"]*)"$/
+     */
+    public function myBrowserIsConfiguredToPrefer($locale)
+    {
+        $this->getMainContext()->getMinkContext()->getSession()->setRequestHeader('Accept-Language', $locale);
+    }
+
+    /**
+     * @Given I don't have a cookie with a locale preference set
+     */
+    public function iDonTHaveACookieWithALocalePreferenceSet()
+    {
+    }
+
+    /**
+     * @Then /^a cookie should be set with locale "([^"]*)"$/
+     */
+    public function aCookieShouldBeSetWithLocale($locale)
+    {
+        $cookie = $this->getMainContext()->getMinkContext()->getSession()->getCookie('lang');
+
+        if ($cookie !== $locale) {
+            throw new ExpectationException(
+                sprintf('The "lang" cookie should contain "%s", but contains "%s"', $locale, $cookie),
+                $this->getMainContext()->getMinkContext()->getSession()->getDriver()
+            );
+        }
+    }
+
+    /**
+     * @Given /^I have a locale cookie containing "([^"]*)"$/
+     */
+    public function iHaveALocaleCookieContaining($locale)
+    {
+        $this->getMainContext()->getMinkContext()->getSession()->setCookie('lang', $locale);
+    }
+
+    /**
+     * @When /^I go to Engineblock URL "([^"]*)"$/
+     */
+    public function iGoToEngineblockURL($path)
+    {
+        $this->getMainContext()->getMinkContext()->visit($this->engineBlockDomain . $path);
     }
 }
