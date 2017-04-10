@@ -19,6 +19,7 @@ use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
+ * @SuppressWarnings(PHPMD.TooManyMethods) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
  */
 class EngineBlockContext extends AbstractSubContext
