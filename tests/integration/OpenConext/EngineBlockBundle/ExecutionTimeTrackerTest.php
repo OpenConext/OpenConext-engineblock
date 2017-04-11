@@ -5,14 +5,25 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker;
 use OpenConext\EngineBlockBundle\Value\ExecutionTime;
 use PHPUnit_Framework_TestCase as TestCase;
+use Symfony\Bridge\PhpUnit\ClockMock;
 use Symfony\Component\Stopwatch\Stopwatch;
-use function Symfony\Component\Stopwatch\Tests\usleep;
 
 // in order to be in control of time during our tests with the Stopwatch, we use the Symfony's ClockMock
-require_once ENGINEBLOCK_FOLDER_VENDOR . '/symfony/symfony/src/Symfony/Component/Stopwatch/Tests/ClockMock.php';
+require_once ENGINEBLOCK_FOLDER_VENDOR . '/symfony/symfony/src/Symfony/Bridge/PhpUnit/ClockMock.php';
 
 class ExecutionTimeTrackerTest extends TestCase
 {
+    public static function setUpBeforeClass()
+    {
+        ClockMock::register(Stopwatch::class);
+        ClockMock::register(ExecutionTimeTrackerTest::class);
+    }
+
+    public function setUp()
+    {
+        ClockMock::withClockMock(0);
+    }
+
     /**
      * @test
      * @group execution-time

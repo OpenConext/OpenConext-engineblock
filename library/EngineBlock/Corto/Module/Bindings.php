@@ -391,15 +391,22 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $remoteEntity = $this->_server->getRepository()->findEntityByEntityId($messageIssuer);
 
-        if (!$remoteEntity) {
-            throw new EngineBlock_Corto_Exception_UnknownIssuer(
-                "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)",
-                $messageIssuer,
-                $destination
-            );
+        if ($remoteEntity) {
+            return $remoteEntity;
         }
 
-        return $remoteEntity;
+        $this->_logger->notice(
+            sprintf(
+                'Tried to verify a message from issuer "%s", but there is no known entity with that ID.',
+                $messageIssuer
+            )
+        );
+
+        throw new EngineBlock_Corto_Exception_UnknownIssuer(
+            "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)",
+            $messageIssuer,
+            $destination
+        );
     }
 
     public function send(

@@ -1,8 +1,8 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_ProxyServer
@@ -319,14 +319,17 @@ class EngineBlock_Corto_ProxyServer
             );
             break;
         }
-        if (!isset($this->_configs['Idp'])) {
-            throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
-                "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
-                $remoteIdPMd5
-            );
+
+        if (isset($this->_configs['Idp'])) {
+            return $this;
         }
 
-        return $this;
+        $this->getSystemLog()->notice(sprintf('Unable to map remote IdpMD5 "%s" to a remote entity.', $remoteIdPMd5));
+
+        throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
+            "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
+            $remoteIdPMd5
+        );
     }
 
 ////////  REQUEST HANDLING /////////
