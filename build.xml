@@ -1,12 +1,13 @@
 <project name="OpenConext EngineBlock" default="build">
 
-    <target name="build" depends="test-suites,code-quality,functional-tests" />
+    <target name="build" depends="test-suites,code-quality,functional-tests,security-tests" />
     <target name="pre-commit" depends="test-suites,code-quality" />
-    <target name="pre-push" depends="test-suites,code-quality,behat-dev-wip" />
+    <target name="pre-push" depends="test-suites,code-quality,behat-dev-wip,security-tests" />
     <target name="functional-tests" depends="behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="code-quality-ci" depends="test-suites,code-quality"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs"/>
+    <target name="security-tests" depends="security-checker" />
     <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests"/>
 
     <target name="install-git-hooks"
@@ -76,6 +77,13 @@
             <arg value="--warning-severity=0" />
             <arg value="--extensions=php" />
             <arg path="src" />
+        </exec>
+    </target>
+
+    <target name="security-checker" description="Check for vulnerable dependencies with SensioLabs Security Checker">
+        <exec dir="${basedir}" executable="vendor/bin/security-checker" failonerror="true">
+            <arg value="security:check" />
+            <arg value="--verbose" />
         </exec>
     </target>
 
