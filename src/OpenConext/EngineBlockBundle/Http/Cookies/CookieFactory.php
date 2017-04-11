@@ -22,7 +22,7 @@ final class CookieFactory
     /**
      * @var int
      */
-    private $expiry;
+    private $expiryInSeconds;
 
     /**
      * @var bool
@@ -37,18 +37,18 @@ final class CookieFactory
     /**
      * @param string   $name
      * @param string   $domain
-     * @param int|null $expiry
+     * @param int|null $expiryInSeconds
      * @param bool     $httpOnly
      * @param bool     $secure
      */
-    public function __construct($name, $domain, $expiry = null, $httpOnly = false, $secure = false)
+    public function __construct($name, $domain, $expiryInSeconds = null, $httpOnly = false, $secure = false)
     {
         Assertion::boolean($httpOnly);
         Assertion::boolean($secure);
 
         $this->name = $name;
         $this->domain = $domain;
-        $this->expiry = $expiry;
+        $this->expiryInSeconds = $expiryInSeconds;
         $this->httpOnly = $httpOnly;
         $this->secure = $secure;
     }
@@ -60,16 +60,16 @@ final class CookieFactory
      */
     public function createCookie($value)
     {
-        $expire = 0;
+        $expiresAt = 0;
 
-        if ($this->expiry) {
-            $expire = (new DateTime())->add(DateInterval::createFromDateString($this->expiry . ' seconds'));
+        if ($this->expiryInSeconds) {
+            $expiresAt = (new DateTime())->add(DateInterval::createFromDateString($this->expiryInSeconds . ' seconds'));
         }
 
         return new Cookie(
             $this->name,
             $value,
-            $expire,
+            $expiresAt,
             '/',
             $this->domain,
             $this->secure,
