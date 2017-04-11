@@ -445,11 +445,11 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^my browser is configured to prefer "([^"]*)"$/
+     * @Given /^my browser is configured to accept language "([^"]*)"$/
      */
-    public function myBrowserIsConfiguredToPrefer($locale)
+    public function myBrowserIsConfiguredToAcceptLanguage($language)
     {
-        $this->getMainContext()->getMinkContext()->getSession()->setRequestHeader('Accept-Language', $locale);
+        $this->getMainContext()->getMinkContext()->getSession()->setRequestHeader('Accept-Language', $language);
     }
 
     /**

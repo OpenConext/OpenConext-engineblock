@@ -6,7 +6,7 @@ Feature:
 
   Background:
     Given an EngineBlock instance on "vm.openconext.org"
-    And my browser is configured to prefer "nl-NL"
+    And my browser is configured to accept language "nl-NL"
 
   Scenario: a user makes their first visit and doesn't have a locale cookie
     Given I don't have a cookie with a locale preference set
