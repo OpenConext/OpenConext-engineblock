@@ -13,4 +13,17 @@ class ApiContext extends AbstractSubContext
     {
         $this->apiBaseUrl = 'https://' . $apiBaseUrlWithoutScheme;
     }
+
+    /**
+     * @When /^I check EngineBlock's heartbeat$/
+     */
+    public function iCheckEngineBlockSHeartbeat()
+    {
+        $this->visit('/');
+    }
+
+    private function visit($path)
+    {
+        $this->getMainContext()->getMinkContext()->visit($this->apiBaseUrl . $path);
+    }
 }
