@@ -15,6 +15,7 @@ class FeatureContext extends BehatContext implements KernelAwareInterface
 {
     const SUB_CONTEXT_MINK          = 'mink';
     const SUB_CONTEXT_ENGINE_BLOCK  = 'engine';
+    const SUB_CONTEXT_API           = 'api';
     const SUB_CONTEXT_MOCK_IDP      = 'idp';
     const SUB_CONTEXT_MOCK_SP       = 'sp';
     const SUB_CONTEXT_REPLAY        = 'replay';
@@ -112,6 +113,11 @@ class FeatureContext extends BehatContext implements KernelAwareInterface
         $this->useContext(
             self::SUB_CONTEXT_ENGINE_BLOCK,
             $container->get('engineblock.functional_testing.behat_context.engine_block')
+        );
+
+        $this->useContext(
+            self::SUB_CONTEXT_API,
+            $container->get('engineblock.functional_testing.behat_context.api')
         );
 
         $this->useContext(
