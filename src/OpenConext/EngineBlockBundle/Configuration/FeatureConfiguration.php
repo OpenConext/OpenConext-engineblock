@@ -15,7 +15,7 @@ class FeatureConfiguration implements FeatureConfigurationInterface
     /**
      * @param Feature[] $features indexed by feature key
      */
-    public function __construct($features)
+    public function __construct(array $features)
     {
         Assertion::allIsInstanceOf($features, Feature::class);
         Assertion::allString(array_keys($features), 'All keys for features must be a string (the feature key itself).');
