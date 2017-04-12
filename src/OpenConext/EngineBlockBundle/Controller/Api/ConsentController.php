@@ -3,7 +3,7 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlock\Service\ConsentService;
@@ -20,7 +20,7 @@ final class ConsentController
     private $consentService;
 
     /**
-     * @var FeatureConfiguration
+     * @var FeatureConfigurationInterface
      */
     private $featureConfiguration;
 
@@ -31,7 +31,7 @@ final class ConsentController
 
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
-        FeatureConfiguration $featureConfiguration,
+        FeatureConfigurationInterface $featureConfiguration,
         ConsentService $consentService
     ) {
         $this->authorizationChecker = $authorizationChecker;
