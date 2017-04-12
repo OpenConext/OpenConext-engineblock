@@ -4,6 +4,8 @@ imports:
 
 framework:
     test: ~
+    session:
+        storage_id: session.storage.mock_file
     router:
         resource: "%kernel.root_dir%/config/routing_test.yml"
         strict_requirements: true
