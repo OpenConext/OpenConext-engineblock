@@ -21,11 +21,6 @@ services:
     engineblock.functional_testing.behat_context.mink:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MinkContext
 
-    engineblock.functional_testing.behat_context.api:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\ApiContext
-        arguments:
-            - "engine-api.%domain%"
-
     engineblock.functional_testing.behat_context.engine_block:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\EngineBlockContext
         arguments:
