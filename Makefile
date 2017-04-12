@@ -1,5 +1,4 @@
 .DEFAULT_GOAL := help
-.PHONY: help
 
 BASEDIR := $(abspath $(abspath $(lastword $(MAKEFILE_LIST)))/../)
 PHPUNIT := $(BASEDIR)/vendor/bin/phpunit -c $(BASEDIR)/tests/phpunit.xml
@@ -16,7 +15,7 @@ help:
 
 build: test-suites code-quality functional-tests ## Complete build to be run on a CI
 pre-commit: test-suites php-lint-staged phpmd phpcs ## Build to run in the pre-commit hook
-pre-push: clean test-suites code-quality behat-regression clean ## Build to run in the pre-push hook
+pre-push: clean test-suites code-quality behat-wip clean ## Build to run in the pre-push hook
 functional-tests: ci-behat-regression ## Alias for ci-behat-regression
 functional-tests-wip: ci-behat-wip ## Alias for ci-behat-wip
 code-quality: php-lint phpmd phpcs  ## Code quality inspections (lint, md, cs)
