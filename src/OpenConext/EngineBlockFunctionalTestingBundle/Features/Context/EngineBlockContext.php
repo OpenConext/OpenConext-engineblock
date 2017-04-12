@@ -460,9 +460,9 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Then /^a cookie should be set with locale "([^"]*)"$/
+     * @Then /^a lang cookie should be set with value "([^"]*)"$/
      */
-    public function aCookieShouldBeSetWithLocale($locale)
+    public function aLangCookieShouldBeSetWithValue($locale)
     {
         $cookie = $this->getMainContext()->getMinkContext()->getSession()->getCookie('lang');
 

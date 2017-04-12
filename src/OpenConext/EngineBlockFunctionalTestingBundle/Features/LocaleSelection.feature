@@ -11,17 +11,17 @@ Feature:
   Scenario: a user makes their first visit and doesn't have a locale cookie
     Given I don't have a cookie with a locale preference set
     When I go to Engineblock URL "/authentication/sp/debug"
-    Then a cookie should be set with locale "nl"
+    Then a lang cookie should be set with value "nl"
     And I should see "Gebruiksvoorwaarden"
 
   Scenario: a user makes a recurring visit
     Given I have a locale cookie containing "nl"
     When I go to Engineblock URL "/authentication/sp/debug"
-    Then a cookie should be set with locale "nl"
+    Then a lang cookie should be set with value "nl"
     And I should see "Gebruiksvoorwaarden"
 
   Scenario: a user changes their locale
     Given I have a locale cookie containing "nl"
     When I go to Engineblock URL "/authentication/sp/debug?lang=en"
-    Then a cookie should be set with locale "en"
+    Then a lang cookie should be set with value "en"
     And I should see "Terms of Service"
