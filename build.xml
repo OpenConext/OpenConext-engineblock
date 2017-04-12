@@ -1,9 +1,9 @@
 <project name="OpenConext EngineBlock" default="build">
 
     <target name="build" depends="test-suites,code-quality,functional-tests,security-tests" />
-    <target name="pre-commit" depends="test-suites,code-quality" />
+    <target name="pre-commit" depends="test-suites,phpunit-functional-tests,code-quality" />
     <target name="pre-push" depends="test-suites,code-quality,behat-dev-wip,security-tests" />
-    <target name="functional-tests" depends="behat-travis" />
+    <target name="functional-tests" depends="phpunit-functional-tests, behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="code-quality-ci" depends="test-suites,code-quality"/>
     <target name="code-quality" depends="php-lint,phpmd,phpcs"/>
@@ -124,6 +124,13 @@
         </exec>
     </target>
 
+    <target name="phpunit-functional-tests" description="Run functional tests with PHPUnit">
+        <delete dir="app/cache/test"/>
+        <exec executable="vendor/bin/phpunit" failonerror="true">
+            <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
+            <arg line="--testsuite=functional"/>
+        </exec>
+    </target>
 
     <target name="behat-dev">
         <echo message="Preparing the dev env to run in functional testing mode" />
