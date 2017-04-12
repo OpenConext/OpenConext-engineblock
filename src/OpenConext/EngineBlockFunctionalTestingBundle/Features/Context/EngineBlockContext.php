@@ -466,6 +466,13 @@ class EngineBlockContext extends AbstractSubContext
     {
         $cookie = $this->getMainContext()->getMinkContext()->getSession()->getCookie('lang');
 
+        if ($cookie === null) {
+            throw new ExpectationException(
+                'The "lang" cookie has not been set',
+                $this->getMainContext()->getMinkContext()->getSession()->getDriver()
+            );
+        }
+
         if ($cookie !== $locale) {
             throw new ExpectationException(
                 sprintf('The "lang" cookie should contain "%s", but contains "%s"', $locale, $cookie),
