@@ -181,6 +181,22 @@ class EngineBlock_Application_Bootstrapper
 
         $this->_application->setLayout($layout);
     }
+    
+    protected function _getPreferredLanguage($available_languages)
+    {
+        $accepted_languages = explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+        $preferred_language = $available_languages[0];
+
+        foreach($accepted_languages as $idx => $lang) {
+            $lang = substr($lang, 0, 2);
+            if (in_array($lang, $available_languages)) {
+                $preferred_language = $lang;
+                break;
+            }
+        }
+        return $preferred_language;
+    }
+
 
     protected function _bootstrapTranslations()
     {
@@ -222,8 +238,9 @@ class EngineBlock_Application_Bootstrapper
             $this->_application->getHttpResponse()->setCookie('lang', $lang, $cookieExpiry, '/', $cookieDomain);
         }
         else {
-            $translate->setLocale('en');
-            $this->_application->getHttpResponse()->setCookie('lang', 'en', $cookieExpiry, '/', $cookieDomain);
+            $preferredLanguage = $this->_getPreferredLanguage(array_keys($translationFiles));
+            $translate->setLocale($preferredLanguage);
+            $this->_application->getHttpResponse()->setCookie('lang', $preferredLanguage, $cookieExpiry, '/', $cookieDomain);
         }
 
         $this->_application->setTranslator($translate);
