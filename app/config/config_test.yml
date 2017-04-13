@@ -12,6 +12,8 @@ framework:
     profiler:
         collect: false
 
+liip_functional_test: ~
+
 web_profiler:
     toolbar: false
     intercept_redirects: false
