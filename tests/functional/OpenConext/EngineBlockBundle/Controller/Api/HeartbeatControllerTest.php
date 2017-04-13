@@ -3,7 +3,6 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
 final class HeartbeatControllerTest extends WebTestCase
