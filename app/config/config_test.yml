@@ -31,3 +31,12 @@ monolog:
             type:   stream
             path:   "%kernel.logs_dir%/%kernel.environment%.log"
             level:  DEBUG
+
+security:
+    providers:
+        in_memory:
+            memory:
+                users:
+                    no_roles:
+                        password: no_roles
+                        roles: []
