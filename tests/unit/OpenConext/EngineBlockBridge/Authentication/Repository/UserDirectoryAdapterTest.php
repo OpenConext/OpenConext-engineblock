@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlockBridge\Authentication\Repository;
 
-use EngineBlock_UserDirectory as LdapUserDirectory;
 use Mockery as m;
 use Mockery\Mock;
 use OpenConext\EngineBlock\Authentication\Model\User;
@@ -22,17 +21,7 @@ class UserDirectoryAdapterTest extends UnitTest
     /**
      * @var Mock
      */
-    private $ldapUserDirectory;
-
-    /**
-     * @var Mock
-     */
     private $userDirectory;
-
-    /**
-     * @var Mock
-     */
-    private $featureConfiguration;
 
     /**
      * @var Mock
@@ -41,9 +30,7 @@ class UserDirectoryAdapterTest extends UnitTest
 
     public function setUp()
     {
-        $this->ldapUserDirectory    = m::mock(LdapUserDirectory::class);
         $this->userDirectory        = m::mock(UserDirectory::class);
-        $this->featureConfiguration = m::mock(FeatureConfiguration::class);
         $this->logger               = m::mock(LoggerInterface::class);
 
         // the amount of logging is not really relevant.
@@ -61,8 +48,6 @@ class UserDirectoryAdapterTest extends UnitTest
     {
         $userDirectoryAdapter = new UserDirectoryAdapter(
             $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
             $this->logger
         );
 
@@ -105,8 +90,6 @@ class UserDirectoryAdapterTest extends UnitTest
     {
         $userDirectoryAdapter = new UserDirectoryAdapter(
             $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
             $this->logger
         );
 
@@ -143,141 +126,6 @@ class UserDirectoryAdapterTest extends UnitTest
      * @group EngineBlockBridge
      * @group Authentication
      */
-    public function if_ldap_is_disabled_no_calls_are_made_to_the_ldap_user_directory()
-    {
-        $attibutes = [
-            Uid::URN_MACE                   => [$this->getHomerUid()],
-            SchacHomeOrganization::URN_MACE => [$this->getOpenConextSho()]
-        ];
-        $user = new User(new CollabPersonId($this->getCollabPersonId()), CollabPersonUuid::generate());
-
-        $this->ldapUserDirectory->shouldNotReceive('registerUser');
-
-        $this->featureConfiguration
-            ->shouldReceive('isEnabled')
-            ->once()
-            ->andReturn(false);
-        $this->userDirectory
-            ->shouldReceive('findUserBy')
-            ->once()
-            ->with(new ValueObjectEqualsMatcher(new CollabPersonId($this->getCollabPersonId())))
-            ->andReturn($user);
-
-        $userDirectoryAdapter = new UserDirectoryAdapter(
-            $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
-            $this->logger
-        );
-
-        $identified = $userDirectoryAdapter->identifyUser($attibutes);
-        $this->assertSame($user, $identified);
-    }
-
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
-    public function if_ldap_is_enabled_the_user_is_registered_in_the_ldap_directory()
-    {
-        $attibutes = [
-            Uid::URN_MACE                   => [$this->getHomerUid()],
-            SchacHomeOrganization::URN_MACE => [$this->getOpenConextSho()]
-        ];
-        $user      = new User(new CollabPersonId($this->getCollabPersonId()), CollabPersonUuid::generate());
-
-        $this->ldapUserDirectory
-            ->shouldReceive('registerUser')
-            ->with($attibutes)
-            ->once()
-            ->andReturn(
-                [
-                    LdapUserDirectory::LDAP_ATTR_COLLAB_PERSON_UUID => (string) Uuid::uuid4(),
-                    LdapUserDirectory::LDAP_ATTR_COLLAB_PERSON_ID => $this->getCollabPersonId()
-                ]
-            );
-
-        $this->featureConfiguration
-            ->shouldReceive('isEnabled')
-            ->once()
-            ->andReturn(true);
-        $this->userDirectory
-            ->shouldReceive('findUserBy')
-            ->once()
-            ->with(new ValueObjectEqualsMatcher(new CollabPersonId($this->getCollabPersonId())))
-            ->andReturn($user);
-
-        $userDirectoryAdapter = new UserDirectoryAdapter(
-            $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
-            $this->logger
-        );
-
-        $identified = $userDirectoryAdapter->identifyUser($attibutes);
-        $this->assertSame($user, $identified);
-    }
-
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
-    public function if_the_user_is_not_found_in_the_user_directory_it_is_stored_in_the_user_directory()
-    {
-        $attibutes = [
-            Uid::URN_MACE                   => [$this->getHomerUid()],
-            SchacHomeOrganization::URN_MACE => [$this->getOpenConextSho()]
-        ];
-        $ldapAttributes = [
-            LdapUserDirectory::LDAP_ATTR_COLLAB_PERSON_UUID => (string) Uuid::uuid4(),
-            LdapUserDirectory::LDAP_ATTR_COLLAB_PERSON_ID   => $this->getCollabPersonId()
-        ];
-        $user = new User(
-            new CollabPersonId($this->getCollabPersonId()),
-            new CollabPersonUuid($ldapAttributes[LdapUserDirectory::LDAP_ATTR_COLLAB_PERSON_UUID])
-        );
-
-        $this->featureConfiguration
-            ->shouldReceive('isEnabled')
-            ->once()
-            ->andReturn(true);
-        $this->ldapUserDirectory
-            ->shouldReceive('registerUser')
-            ->with($attibutes)
-            ->once()
-            ->andReturn($ldapAttributes);
-        $this->userDirectory
-            ->shouldReceive('findUserBy')
-            ->once()
-            ->andReturnNull();
-        $this->userDirectory
-            ->shouldReceive('register')
-            ->once()
-            ->with(m::on(
-                function ($argument) use ($user) {
-                    return $user == $argument;
-                }
-            ))
-            ->andReturn($user);
-
-        $userDirectoryAdapter = new UserDirectoryAdapter(
-            $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
-            $this->logger
-        );
-
-        $identified = $userDirectoryAdapter->identifyUser($attibutes);
-        $this->assertEquals($user, $identified);
-    }
-
-    /**
-     * @test
-     * @group EngineBlockBridge
-     * @group Authentication
-     */
     public function registering_a_user_results_in_a_valid_user()
     {
         $uid                   = 'homer@invalid.org';
@@ -298,8 +146,6 @@ class UserDirectoryAdapterTest extends UnitTest
 
         $userDirectoryAdapter = new UserDirectoryAdapter(
             $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
             $this->logger
         );
 
@@ -333,8 +179,6 @@ class UserDirectoryAdapterTest extends UnitTest
 
         $userDirectoryAdapter = new UserDirectoryAdapter(
             $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
             $this->logger
         );
 
@@ -361,8 +205,6 @@ class UserDirectoryAdapterTest extends UnitTest
 
         $userDirectoryAdapter = new UserDirectoryAdapter(
             $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
             $this->logger
         );
 
@@ -380,10 +222,6 @@ class UserDirectoryAdapterTest extends UnitTest
     {
         $collabPersonId = $this->getCollabPersonId();
 
-        $this->featureConfiguration
-            ->shouldReceive('isEnabled')
-            ->once()
-            ->andReturn(false);
         $this->userDirectory
             ->shouldReceive('removeUserWith')
             ->withArgs([new ValueObjectEqualsMatcher(new CollabPersonId($collabPersonId))])
@@ -391,8 +229,6 @@ class UserDirectoryAdapterTest extends UnitTest
 
         $userDirectoryAdapter = new UserDirectoryAdapter(
             $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
             $this->logger
         );
 
@@ -408,14 +244,6 @@ class UserDirectoryAdapterTest extends UnitTest
     {
         $collabPersonId = $this->getCollabPersonId();
 
-        $this->featureConfiguration
-            ->shouldReceive('isEnabled')
-            ->once()
-            ->andReturn(true);
-        $this->ldapUserDirectory
-            ->shouldReceive('deleteUser')
-            ->with($collabPersonId)
-            ->once();
         $this->userDirectory
             ->shouldReceive('removeUserWith')
             ->withArgs([new ValueObjectEqualsMatcher(new CollabPersonId($collabPersonId))])
@@ -423,8 +251,6 @@ class UserDirectoryAdapterTest extends UnitTest
 
         $userDirectoryAdapter = new UserDirectoryAdapter(
             $this->userDirectory,
-            $this->ldapUserDirectory,
-            $this->featureConfiguration,
             $this->logger
         );
 

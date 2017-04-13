@@ -3,14 +3,12 @@
 namespace OpenConext\EngineBlockBridge\Authentication\Repository;
 
 use EngineBlock_Exception_MissingRequiredFields;
-use EngineBlock_UserDirectory as LdapUserDirectory;
 use OpenConext\EngineBlock\Authentication\Model\User;
 use OpenConext\EngineBlock\Authentication\Repository\UserDirectory;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
 use OpenConext\EngineBlock\Authentication\Value\SchacHomeOrganization;
 use OpenConext\EngineBlock\Authentication\Value\Uid;
-use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use Psr\Log\LoggerInterface;
 
 class UserDirectoryAdapter
@@ -21,30 +19,14 @@ class UserDirectoryAdapter
     private $userDirectory;
 
     /**
-     * @var LdapUserDirectory
-     */
-    private $ldapUserDirectory;
-
-    /**
-     * @var \OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
-     */
-    private $featureConfiguration;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
     private $logger;
 
-    public function __construct(
-        UserDirectory $userDirectory,
-        LdapUserDirectory $ldapUserDirectory,
-        FeatureConfiguration $featureConfiguration,
-        LoggerInterface $logger
-    ) {
-        $this->userDirectory        = $userDirectory;
-        $this->ldapUserDirectory    = $ldapUserDirectory;
-        $this->featureConfiguration = $featureConfiguration;
-        $this->logger               = $logger;
+    public function __construct(UserDirectory $userDirectory, LoggerInterface $logger)
+    {
+        $this->userDirectory = $userDirectory;
+        $this->logger = $logger;
     }
 
     /**
@@ -71,25 +53,14 @@ class UserDirectoryAdapter
             ));
         }
 
-        if ($this->featureConfiguration->isEnabled('eb.ldap_integration')) {
-            $this->logger->debug('LDAP integration enabled, registering user in LDAP');
+        $uid                   = $attributes[Uid::URN_MACE][0];
+        $schacHomeOrganization = $attributes[SchacHomeOrganization::URN_MACE][0];
 
-            $userData         = $this->ldapUserDirectory->registerUser($attributes);
-
-            $collabPersonUuid = new CollabPersonUuid($userData[LdapUserDirectory::LDAP_ATTR_COLLAB_PERSON_UUID]);
-            $collabPersonId   = new CollabPersonId($userData[LdapUserDirectory::LDAP_ATTR_COLLAB_PERSON_ID]);
-        } else {
-            $this->logger->debug('LDAP integration not enabled, generating value objects based on saml attributes');
-
-            $uid                   = $attributes[Uid::URN_MACE][0];
-            $schacHomeOrganization = $attributes[SchacHomeOrganization::URN_MACE][0];
-
-            $collabPersonUuid      = CollabPersonUuid::generate();
-            $collabPersonId        = CollabPersonId::generateWithReplacedAtSignFrom(
-                new Uid($uid),
-                new SchacHomeOrganization($schacHomeOrganization)
-            );
-        }
+        $collabPersonUuid      = CollabPersonUuid::generate();
+        $collabPersonId        = CollabPersonId::generateWithReplacedAtSignFrom(
+            new Uid($uid),
+            new SchacHomeOrganization($schacHomeOrganization)
+        );
 
         $user = $this->userDirectory->findUserBy($collabPersonId);
         if ($user === null) {
@@ -144,10 +115,6 @@ class UserDirectoryAdapter
      */
     public function deleteUserWith($collabPersonId)
     {
-        if ($this->featureConfiguration->isEnabled('eb.ldap_integration')) {
-            $this->ldapUserDirectory->deleteUser($collabPersonId);
-        }
-
         $this->userDirectory->removeUserWith(new CollabPersonId($collabPersonId));
     }
 }
