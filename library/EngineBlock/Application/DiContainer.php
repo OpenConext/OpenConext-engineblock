@@ -61,14 +61,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return EngineBlock_Mail_Mailer
-     */
-    public function getMailer()
-    {
-        return $this->container->get('engineblock.compat.mailer');
-    }
-
-    /**
      * @return EngineBlock_Database_ConnectionFactory
      */
     public function getDatabaseConnectionFactory()
