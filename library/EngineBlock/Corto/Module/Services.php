@@ -32,8 +32,6 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
     const RESPONSE_CACHE_TYPE_IN  = 'in';
     const RESPONSE_CACHE_TYPE_OUT = 'out';
 
-    const INTRODUCTION_EMAIL = 'introduction_email';
-
     /**
      * @param string $serviceName
      * @throws EngineBlock_Corto_Module_Services_Exception
@@ -81,13 +79,10 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getConsentFactory()
                 );
             case EngineBlock_Corto_Module_Service_ProcessConsent::class :
-                $preferredNameAttributeFilter = new EngineBlock_User_PreferredNameAttributeFilter();
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
                     $server,
                     $diContainer->getXmlConverter(),
-                    $diContainer->getConsentFactory(),
-                    $diContainer->getMailer(),
-                    $preferredNameAttributeFilter
+                    $diContainer->getConsentFactory()
                 );
             case EngineBlock_Corto_Module_Service_AssertionConsumer::class :
                 return new EngineBlock_Corto_Module_Service_AssertionConsumer(

@@ -50,9 +50,6 @@ services:
     engineblock.compat.xml_converter:
         class: EngineBlock_Corto_XmlToArray
 
-    engineblock.compat.mailer:
-        class: EngineBlock_Mail_Mailer
-
     engineblock.compat.corto_filter_command_factory:
         class: EngineBlock_Corto_Filter_Command_Factory
 
