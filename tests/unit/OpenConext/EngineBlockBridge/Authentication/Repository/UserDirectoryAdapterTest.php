@@ -240,7 +240,7 @@ class UserDirectoryAdapterTest extends UnitTest
      * @group EngineBlockBridge
      * @group Authentication
      */
-    public function a_request_for_removal_also_removes_the_user_from_the_ldap_backend_if_enabled()
+    public function a_request_for_removal_also_removes_the_user_from_the_user_directory_if_enabled()
     {
         $collabPersonId = $this->getCollabPersonId();
 
