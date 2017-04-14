@@ -193,39 +193,11 @@ class EngineBlock_Application_Bootstrapper
             $this->_application->getDiContainer()->getApplicationCache()
         );
 
-        $translate = $translationCacheProxy->load();
+        $locale = $this->_application->getDiContainer()->getLocaleProvider()->getLocale();
 
-        // If the URL has &lang=nl in it or the lang var is posted, or a lang cookie was set, then use that locale
-        $httpRequest = $this->_application->getHttpRequest();
-        $cookieLang = $httpRequest->getCookie('lang');
-        $getLang    = $httpRequest->getQueryParameter('lang');
-        $postLang   = $httpRequest->getPostParameter('lang');
+        $translator = $translationCacheProxy->load();
+        $translator->setLocale($locale);
 
-        $lang = null;
-        if ($getLang) {
-            $lang = strtolower($getLang);
-        } else if ($postLang) {
-            $lang = strtolower($postLang);
-        } else {
-            $lang = strtolower($cookieLang);
-        }
-
-        $langCookieConfig = $this->_application->getConfigurationValue('cookie')->lang;
-        $cookieDomain = $langCookieConfig->domain;
-        $cookieExpiry = null;
-        if (isset($langCookieConfig->expiry) && $langCookieConfig->expiry > 0) {
-            $cookieExpiry =  time() + $langCookieConfig->expiry;
-        }
-
-        if ($lang && $translate->getAdapter()->isAvailable($lang)) {
-            $translate->setLocale($lang);
-            $this->_application->getHttpResponse()->setCookie('lang', $lang, $cookieExpiry, '/', $cookieDomain);
-        }
-        else {
-            $translate->setLocale('en');
-            $this->_application->getHttpResponse()->setCookie('lang', 'en', $cookieExpiry, '/', $cookieDomain);
-        }
-
-        $this->_application->setTranslator($translate);
+        $this->_application->setTranslator($translator);
     }
 }
