@@ -90,6 +90,38 @@ class ConnectionsControllerTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
+    /**
+     * @test
+     * @group Api
+     * @group Connections
+     * @group Janus
+     *
+     * @dataProvider invalidJsonPayloadProvider
+     * @param string $invalidJsonPayload
+     */
+    public function cannot_push_invalid_content_to_the_metadata_push_api($invalidJsonPayload)
+    {
+        $client = $this->makeClient([
+            'username' => $this->getContainer()->getParameter('api.users.janus.username'),
+            'password' => $this->getContainer()->getParameter('api.users.janus.password'),
+        ]);
+
+        $this->enableMetadataPushApiFeatureFor($client);
+
+        $client->request(
+            'POST',
+            'https://engine-api.vm.openconext.org/api/connections',
+            [],
+            [],
+            [],
+            $invalidJsonPayload
+        );
+        $this->assertStatusCode(Response::HTTP_BAD_REQUEST, $client);
+
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+    }
+
     public function invalidHttpMethodProvider()
     {
         return [
@@ -98,6 +130,19 @@ class ConnectionsControllerTest extends WebTestCase
             'HEAD' => ['HEAD'],
             'PUT' => ['PUT'],
             'OPTIONS' => ['OPTIONS']
+        ];
+    }
+
+    public function invalidJsonPayloadProvider()
+    {
+        return [
+            'string body' => ['"a-string"'],
+            'integer body' => ['123'],
+            'array body' => ['["an-array"]'],
+            'empty object body' => ['{}'],
+            'string connections' => ['{connections: "a-string"}'],
+            'integer connections' => ['{connections: 1}'],
+            'array connections' => ['{connections: ["a", "b", "c"]'],
         ];
     }
 
