@@ -3,8 +3,6 @@
 class EngineBlock_Corto_Module_Service_ProcessConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
-    const INTRODUCTION_EMAIL = 'introduction_email';
-
     /**
      * @var \EngineBlock_Corto_ProxyServer
      */
@@ -21,34 +19,18 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
     private $_consentFactory;
 
     /**
-     * @var EngineBlock_Mail_Mailer
-     */
-    private $_mailer;
-
-    /**
-     * @var EngineBlock_User_PreferredNameAttributeFilter
-     */
-    private $_preferredNameAttributeFilter;
-
-    /**
      * @param EngineBlock_Corto_ProxyServer $server
      * @param EngineBlock_Corto_XmlToArray $xmlConverter
      * @param EngineBlock_Corto_Model_Consent_Factory $consentFactory
-     * @param EngineBlock_Mail_Mailer $mailer
-     * @param EngineBlock_User_PreferredNameAttributeFilter $preferredNameAttributeFilter
      */
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        EngineBlock_Corto_Model_Consent_Factory $consentFactory,
-        EngineBlock_Mail_Mailer $mailer,
-        EngineBlock_User_PreferredNameAttributeFilter $preferredNameAttributeFilter
+        EngineBlock_Corto_Model_Consent_Factory $consentFactory
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
-        $this->_mailer = $mailer;
-        $this->_preferredNameAttributeFilter = $preferredNameAttributeFilter;
     }
 
     public function serve($serviceName)
@@ -82,7 +64,6 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
 
         if (!$consentRepository->explicitConsentWasGivenFor($serviceProvider)) {
             $consentRepository->giveExplicitConsentFor($destinationMetadata);
-            $this->_sendIntroductionMail($attributes);
         }
 
         $response->setConsent(SAML2_Const::CONSENT_OBTAINED);
@@ -92,26 +73,6 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
         $this->_server->getBindingsModule()->send(
             $response,
             $serviceProvider
-        );
-    }
-
-    protected function _sendIntroductionMail(array $attributes)
-    {
-        if (!isset($attributes['urn:mace:dir:attribute-def:mail'])) {
-            return;
-        }
-        $config = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-        if (!isset($config->email->sendWelcomeMail) || !$config->email->sendWelcomeMail) {
-            return;
-        }
-
-        $emailAddress = $attributes['urn:mace:dir:attribute-def:mail'][0];
-        $this->_mailer->sendMail(
-            $emailAddress,
-            EngineBlock_Corto_Module_Services::INTRODUCTION_EMAIL,
-            array(
-                '{user}' => $this->_preferredNameAttributeFilter->getAttribute($attributes)
-            )
         );
     }
 }

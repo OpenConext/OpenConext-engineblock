@@ -20,11 +20,6 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
      */
     private $consentFactoryMock;
 
-    /**
-     * @var EngineBlock_Mail_Mailer
-     */
-    private $mailerMock;
-
     public function setup()
     {
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -32,7 +27,6 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $this->proxyServerMock    = $this->mockProxyServer();
         $this->xmlConverterMock   = $this->mockXmlConverter($diContainer->getXmlConverter());
         $this->consentFactoryMock = $diContainer->getConsentFactory();
-        $this->mailerMock         = $diContainer->getMailer();
 
         $this->mockGlobals();
     }
@@ -204,9 +198,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         return new EngineBlock_Corto_Module_Service_ProcessConsent(
             $this->proxyServerMock,
             $this->xmlConverterMock,
-            $this->consentFactoryMock,
-            $this->mailerMock,
-            new EngineBlock_User_PreferredNameAttributeFilter()
+            $this->consentFactoryMock
         );
     }
 }

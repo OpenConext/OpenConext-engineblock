@@ -33,6 +33,7 @@ before_install:
 
 before_script:
   - phpenv config-add .travis.php.ini
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then printf "\n" | pecl uninstall apcu; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.6" ]]; then printf "\n" | pecl install apc; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then printf "\n" | pecl install apcu-4.0.10 apc_bc; fi
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.3" ]]; then phpenv config-rm xdebug.ini; fi
@@ -41,6 +42,7 @@ before_script:
   - mkdir -p /tmp/engineblock/logs/test
   - sudo apt-get update
   - sudo apt-get install apache2 libapache2-mod-fastcgi
+  - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
   - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
   - sudo a2enmod rewrite actions fastcgi alias ssl
   - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini

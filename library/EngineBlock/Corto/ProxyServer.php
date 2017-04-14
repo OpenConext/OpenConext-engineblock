@@ -1,8 +1,8 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
 class EngineBlock_Corto_ProxyServer
@@ -319,14 +319,17 @@ class EngineBlock_Corto_ProxyServer
             );
             break;
         }
-        if (!isset($this->_configs['Idp'])) {
-            throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
-                "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
-                $remoteIdPMd5
-            );
+
+        if (isset($this->_configs['Idp'])) {
+            return $this;
         }
 
-        return $this;
+        $this->getSystemLog()->notice(sprintf('Unable to map remote IdpMD5 "%s" to a remote entity.', $remoteIdPMd5));
+
+        throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
+            "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
+            $remoteIdPMd5
+        );
     }
 
 ////////  REQUEST HANDLING /////////
@@ -335,12 +338,6 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         $idpEntityId
     ) {
-        $cookieExpiresStamp = null;
-        if (isset($this->_configs['rememberIdp'])) {
-            $cookieExpiresStamp = strtotime($this->_configs['rememberIdp']);
-        }
-        $this->setCookie('selectedIdp', $idpEntityId, $cookieExpiresStamp);
-
         $originalId = $spRequest->getId();
 
         $identityProvider = $this->getRepository()->fetchIdentityProviderByEntityId($idpEntityId);
@@ -585,7 +582,7 @@ class EngineBlock_Corto_ProxyServer
         /** @var SAML2_AuthnRequest $request */
 
         // Ignore requests for bindings we don't support for responses.
-        if ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST) {
+        if ($request->getProtocolBinding() && ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST)) {
             $this->_server->getSessionLog()->notice(
                 "ProtocolBinding '{$request->getProtocolBinding()}' requested is not supported, ignoring..."
             );

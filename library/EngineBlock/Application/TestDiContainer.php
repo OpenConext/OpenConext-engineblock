@@ -14,11 +14,6 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
         return Phake::mock('EngineBlock_Corto_Filter_Command_Factory');
     }
 
-    public function getMailer()
-    {
-        return Phake::mock('EngineBlock_Mail_Mailer');
-    }
-
     public function getDatabaseConnectionFactory()
     {
         return Phake::mock('EngineBlock_Database_ConnectionFactory');
