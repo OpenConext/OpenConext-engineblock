@@ -43,8 +43,6 @@ final class ConsentControllerTest extends WebTestCase
             'password' => $this->getContainer()->getParameter('api.users.profile.password'),
         ]);
 
-        $this->disableConsentApiFeatureFor($client);
-
         $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
 
