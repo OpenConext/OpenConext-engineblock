@@ -2,6 +2,9 @@
 
 namespace OpenConext\EngineBlockBundle\Http\Cookies;
 
+use DateTime as CoreDateTime;
+use OpenConext\EngineBlock\DateTime\DateTime;
+use OpenConext\EngineBlock\DateTimeHelper;
 use PHPUnit_Framework_TestCase;
 
 class CookieFactoryTest extends PHPUnit_Framework_TestCase
@@ -11,6 +14,8 @@ class CookieFactoryTest extends PHPUnit_Framework_TestCase
      */
     public function returns_the_cookie()
     {
+        DateTimeHelper::setCurrentTime(new DateTime(new CoreDateTime('@1')));
+
         $cookieFactory = new CookieFactory('name', '.example.com');
 
         $actual = $cookieFactory->createCookie('value');
@@ -35,6 +40,6 @@ class CookieFactoryTest extends PHPUnit_Framework_TestCase
         $cookie = $cookieFactory->createCookie('value');
 
         // Allow the result to be off by one second, to compensate for time issues
-        $this->assertEquals(time() + $expiry, $cookie->getExpiresTime(), '', 1);
+        $this->assertSame(time() + $expiry, $cookie->getExpiresTime());
     }
 }

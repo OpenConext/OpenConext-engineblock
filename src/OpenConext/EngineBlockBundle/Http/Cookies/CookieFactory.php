@@ -3,8 +3,8 @@
 namespace OpenConext\EngineBlockBundle\Http\Cookies;
 
 use DateInterval;
-use DateTime;
 use OpenConext\EngineBlock\Assert\Assertion;
+use OpenConext\EngineBlock\DateTime\DateTime;
 use Symfony\Component\HttpFoundation\Cookie;
 
 final class CookieFactory
