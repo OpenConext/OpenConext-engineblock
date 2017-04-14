@@ -3,6 +3,9 @@
 namespace OpenConext\EngineBlockBundle\Tests;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
+use OpenConext\EngineBlockBundle\Configuration\Feature;
+use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
 class ConnectionsControllerTest extends WebTestCase
@@ -43,6 +46,28 @@ class ConnectionsControllerTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
+    /**
+     * @test
+     * @group Api
+     * @group Connections
+     * @group Janus
+     */
+    public function cannot_push_metadata_if_feature_is_disabled()
+    {
+        $client = $this->makeClient([
+            'username' => $this->getContainer()->getParameter('api.users.janus.username'),
+            'password' => $this->getContainer()->getParameter('api.users.janus.password'),
+        ]);
+
+        $this->disableMetadataPushApiFeatureFor($client);
+
+        $client->request('POST', 'https://engine-api.vm.openconext.org/api/connections');
+        $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
+
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+    }
+
     public function invalidHttpMethodProvider()
     {
         return [
@@ -52,5 +77,21 @@ class ConnectionsControllerTest extends WebTestCase
             'PUT' => ['PUT'],
             'OPTIONS' => ['OPTIONS']
         ];
+    }
+
+    private function enableMetadataPushApiFeatureFor(Client $client)
+    {
+        $featureToggles = new FeatureConfiguration([
+            'api.metadata_push' => new Feature('api.metadata_push', true)
+        ]);
+        $client->getContainer()->set('engineblock.features', $featureToggles);
+    }
+
+    private function disableMetadataPushApiFeatureFor(Client $client)
+    {
+        $featureToggles = new FeatureConfiguration([
+            'api.metadata_push' => new Feature('api.metadata_push', false)
+        ]);
+        $client->getContainer()->set('engineblock.features', $featureToggles);
     }
 }

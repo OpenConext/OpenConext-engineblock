@@ -8,6 +8,7 @@ use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadata
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -53,7 +54,7 @@ class ConnectionsController
         }
 
         if (!$this->featureConfiguration->isEnabled('api.metadata_push')) {
-            return new JsonResponse(null, 404);
+            throw new ApiNotFoundHttpException('Metadata push API is disabled');
         }
 
         if (!$this->authorizationChecker->isGranted(['ROLE_API_USER_JANUS'])) {
