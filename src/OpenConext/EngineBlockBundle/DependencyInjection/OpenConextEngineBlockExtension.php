@@ -25,6 +25,7 @@ class OpenConextEngineBlockExtension extends Extension
         $loader->load('logging.yml');
 
         $loader->load('bridge.yml');
+        $loader->load('bridge_event_listeners.yml');
         $loader->load('compat.yml');
 
         $this->parseIniConfigurationFiles($container);

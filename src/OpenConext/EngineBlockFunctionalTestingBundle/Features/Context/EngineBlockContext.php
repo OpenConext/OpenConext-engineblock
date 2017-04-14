@@ -19,6 +19,7 @@ use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
+ * @SuppressWarnings(PHPMD.TooManyMethods) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
  */
 class EngineBlockContext extends AbstractSubContext
@@ -84,6 +85,11 @@ class EngineBlockContext extends AbstractSubContext
     private $usingAuthenticationLoopGuard = false;
 
     /**
+     * @var string
+     */
+    private $engineBlockDomain;
+
+    /**
      * @param ServiceRegistryFixture $serviceRegistry
      * @param EngineBlock $engineBlock
      * @param EntityRegistry $mockSpRegistry
@@ -136,6 +142,8 @@ class EngineBlockContext extends AbstractSubContext
             )
             ->save();
         $this->engineBlock->clearNewIds();
+
+        $this->engineBlockDomain = 'https://engine.' . $domain;
     }
 
     /**
@@ -434,5 +442,51 @@ class EngineBlockContext extends AbstractSubContext
             $message = sprintf('The xpath "%s" did not result in at least one match.', $xpath);
             throw new ExpectationException($message, $session);
         }
+    }
+
+    /**
+     * @Given /^my browser is configured to accept language "([^"]*)"$/
+     */
+    public function myBrowserIsConfiguredToAcceptLanguage($language)
+    {
+        $this->getMainContext()->getMinkContext()->getSession()->setRequestHeader('Accept-Language', $language);
+    }
+
+    /**
+     * @Then /^a lang cookie should be set with value "([^"]*)"$/
+     */
+    public function aLangCookieShouldBeSetWithValue($locale)
+    {
+        $cookie = $this->getMainContext()->getMinkContext()->getSession()->getCookie('lang');
+
+        if ($cookie === null) {
+            throw new ExpectationException(
+                'The "lang" cookie has not been set',
+                $this->getMainContext()->getMinkContext()->getSession()->getDriver()
+            );
+        }
+
+        if ($cookie !== $locale) {
+            throw new ExpectationException(
+                sprintf('The "lang" cookie should contain "%s", but contains "%s"', $locale, $cookie),
+                $this->getMainContext()->getMinkContext()->getSession()->getDriver()
+            );
+        }
+    }
+
+    /**
+     * @Given /^I have a locale cookie containing "([^"]*)"$/
+     */
+    public function iHaveALocaleCookieContaining($locale)
+    {
+        $this->getMainContext()->getMinkContext()->getSession()->setCookie('lang', $locale);
+    }
+
+    /**
+     * @When /^I go to Engineblock URL "([^"]*)"$/
+     */
+    public function iGoToEngineblockURL($path)
+    {
+        $this->getMainContext()->getMinkContext()->visit($this->engineBlockDomain . $path);
     }
 }

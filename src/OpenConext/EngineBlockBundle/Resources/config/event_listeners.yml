@@ -1,3 +1,4 @@
+# also see bridge_event_listeners.yml for event listeners that provide bridge functionality
 services:
     engineblock.listener.execution_time_tracker:
         class: OpenConext\EngineBlockBundle\EventListener\ExecutionTimeTracker
@@ -60,3 +61,12 @@ services:
             - "@session"
         tags:
             - { name: kernel.event_listener, event: kernel.controller, method: onKernelController, priority: 10 }
+
+    engineblock.listener.locale:
+        class: OpenConext\EngineBlockBundle\EventListener\LocaleListener
+        arguments:
+            - '@engineblock.locale_provider'
+            - '@engineblock.locale.cookie_factory'
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 15 }
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 15 }

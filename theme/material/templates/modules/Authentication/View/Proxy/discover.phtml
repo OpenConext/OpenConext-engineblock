@@ -25,29 +25,13 @@ $back = (bool) EngineBlock_ApplicationSingleton::getInstance()
 
 $layout->assign('backLink', $back);
 
-// Determine the selected language, default to english
-if (isset($_GET['lang'])) {
-    $lang = $_GET['lang'];
-}
-else if (isset($_COOKIE['lang'])) {
-    $lang = $_COOKIE['lang'];
-}
-else {
-    $lang = 'en';
-}
-
-$_GET['lang'] = $lang;
-
-// Guard against unsupported languages.
-if (!in_array($lang, array('nl','en'))) {
-    $lang = 'en';
-}
+$locale = $this->getLocale();
 
 // @todo move to entity (see also duplicate in consent.phtml)
 $spDisplayName = '';
 $showRequestAccess = $metaDataSP->displayUnconnectedIdpsWayf;
 
-if ($lang === 'nl') {
+if ($locale === 'nl') {
     if ($metaDataSP->nameNl) {
         $spDisplayName = $metaDataSP->nameNl;
     }
@@ -80,14 +64,14 @@ $idpList = array_filter($idpList, function (array $idp) {
   return $idp['Access'] === '1';
 });
 
-function nameSort($a, $b) {
-  $lang = $_GET['lang'];
-  return strtolower($a['Name_' . $lang]) > strtolower($b['Name_' . $lang]);
-}
-usort($idpList, 'nameSort');
+$nameSort = function ($a, $b) use ($locale) {
+    return strtolower($a['Name_' . $locale]) > strtolower($b['Name_' . $locale]);
+};
+
+usort($idpList, $nameSort);
 
 $layout->assign('greenHeader', $spDisplayName);
-$layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
+$layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $locale);
 ?>
 <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
@@ -119,8 +103,8 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
                 $previousSelectionIndex[$idp['EntityID']],
                 [
                     'entityId'     => $idp['EntityID'],
-                    'displayTitle' => $idp['Name_'.$lang],
-                    'title'        => strtolower($idp['Name_'.$lang]),
+                    'displayTitle' => $idp['Name_'.$locale],
+                    'title'        => strtolower($idp['Name_'.$locale]),
                     'keywords'     => strtolower(join('|', $idpKeywords)),
                     'logo'         => $idp['Logo'],
                 ]
@@ -130,8 +114,8 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
 
         $formattedIdpList[] = [
             'entityId'     => $idp['EntityID'],
-            'displayTitle' => $idp['Name_'.$lang],
-            'title'        => strtolower($idp['Name_'.$lang]),
+            'displayTitle' => $idp['Name_'.$locale],
+            'title'        => strtolower($idp['Name_'.$locale]),
             'keywords'     => strtolower(join('|', $idpKeywords)),
             'logo'         => $idp['Logo'],
         ];
@@ -148,7 +132,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
         ],
         'requestAccessUrl'                    => '/authentication/idp/requestAccess?'.http_build_query(
                 [
-                    'lang'       => $lang,
+                    'lang'       => $locale,
                     'spEntityId' => $metaDataSP->entityId,
                     'spName'     => $spDisplayName,
                 ]
@@ -190,7 +174,7 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $lang);
               <div class="logo">
                 <img class="logo" src="/images/placeholder.png" alt="" />
               </div>
-              <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $lang]); ?></h3>
+              <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $locale]); ?></h3>
               <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
                 <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
                 <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />

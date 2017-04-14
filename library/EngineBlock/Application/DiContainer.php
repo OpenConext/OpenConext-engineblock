@@ -320,4 +320,12 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     {
         return $this->container->get('engineblock.functional_testing.fixture.pdp_client');
     }
+
+    /**
+     * @return \OpenConext\EngineBlockBundle\Localization\LocaleProvider
+     */
+    public function getLocaleProvider()
+    {
+        return $this->container->get('engineblock.locale_provider');
+    }
 }

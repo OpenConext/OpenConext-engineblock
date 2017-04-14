@@ -67,3 +67,18 @@ services:
         arguments:
             - "%maximum_authentication_procedures_allowed%"
             - "%time_frame_for_authentication_loop_in_seconds%"
+
+    engineblock.locale_provider:
+        class: OpenConext\EngineBlockBundle\Localization\LocaleProvider
+        arguments:
+            - ['en', 'nl']
+            - '%kernel.default_locale%'
+
+    engineblock.locale.cookie_factory:
+        class: OpenConext\EngineBlockBundle\Http\Cookies\CookieFactory
+        arguments:
+            - 'lang'
+            - '%cookie.locale.domain%'
+            - '%cookie.locale.expiry%'
+            - '%cookie.locale.http_only%'
+            - '%cookie.locale.secure%'

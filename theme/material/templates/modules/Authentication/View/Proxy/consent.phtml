@@ -23,12 +23,11 @@ if (!isset($idp) || !$idp instanceof IdentityProvider) {
 }
 /** @var EngineBlock_View $this */
 
-// The current language
-$lang = isset($_POST['lang']) && in_array($_POST['lang'], array('nl','en')) ? $_POST['lang'] : $this->language();
+$locale = $this->getLocale();
 
 // @todo move to entity (see also duplicate in discover.phtml)
 $spName = '';
-if ($lang === 'nl') {
+if ($locale === 'nl') {
     $spName = $sp->nameNl;
 }
 if (empty($spName)) {
@@ -39,7 +38,7 @@ if (empty($spName)) {
 }
 
 $idpName = '';
-if ($lang === 'nl') {
+if ($locale === 'nl') {
     $idpName = $idp->nameNl;
 }
 if (empty($idpName)) {
@@ -92,7 +91,7 @@ $inlineScriptHelper->appendScript('
             <?php foreach ($attributes as $attributeIdentifier => $attributeValues) : ?>
                 <?php
                 // Attempt to get the short name for the attribute, else use the identifier
-                $attributeShortName = $this->getAttributeName($attributeIdentifier, $lang);
+                $attributeShortName = $this->getAttributeName($attributeIdentifier, $locale);
                 if (trim($attributeShortName) === '') {
                     $attributeShortName = $attributeIdentifier;
                 }
