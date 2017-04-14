@@ -51,6 +51,7 @@ class ConnectionsControllerTest extends WebTestCase
      * @group Api
      * @group Connections
      * @group Janus
+     * @group FeatureToggle
      */
     public function cannot_push_metadata_if_feature_is_disabled()
     {
