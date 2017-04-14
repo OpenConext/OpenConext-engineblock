@@ -47,6 +47,9 @@ final class ConsentControllerTest extends WebTestCase
 
         $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
+
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
     /**
@@ -69,6 +72,9 @@ final class ConsentControllerTest extends WebTestCase
 
         $client->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
         $this->assertStatusCode(Response::HTTP_NOT_FOUND, $client);
+
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
     /**
@@ -93,7 +99,7 @@ final class ConsentControllerTest extends WebTestCase
         $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
 
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
-        $this->assertTrue($isContentTypeJson);
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
     public function invalidHttpMethodProvider()
