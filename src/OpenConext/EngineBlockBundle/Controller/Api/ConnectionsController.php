@@ -7,6 +7,7 @@ use OpenConext\Component\EngineBlockMetadata\Entity\Assembler\JanusPushMetadataA
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,6 +48,10 @@ class ConnectionsController
 
     public function pushConnectionsAction(Request $request)
     {
+        if (!$request->isMethod(Request::METHOD_POST)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
+        }
+
         if (!$this->featureConfiguration->isEnabled('api.metadata_push')) {
             return new JsonResponse(null, 404);
         }

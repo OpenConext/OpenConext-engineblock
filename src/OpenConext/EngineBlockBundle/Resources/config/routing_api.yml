@@ -9,7 +9,6 @@ api_heartbeat:
 
 api_connections:
     path:     /api/connections
-    methods:    [POST]
     defaults:
         _controller: engineblock.controller.api.connections:pushConnectionsAction
 
