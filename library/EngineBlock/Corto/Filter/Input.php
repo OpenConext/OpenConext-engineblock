@@ -46,7 +46,7 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
             // Add guest status (isMemberOf)
             new EngineBlock_Corto_Filter_Command_AddGuestStatus(),
 
-            // Provision the User to LDAP and figure out the collabPersonId
+            // Figure out the collabPersonId
             new EngineBlock_Corto_Filter_Command_ProvisionUser(),
 
             // Aggregate additional attributes for this Service Provider
