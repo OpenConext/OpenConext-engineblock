@@ -15,6 +15,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Static calls, factories
+ */
 class ConnectionsController
 {
     /**
@@ -58,7 +61,9 @@ class ConnectionsController
         }
 
         if (!$this->authorizationChecker->isGranted(['ROLE_API_USER_JANUS'])) {
-            throw new ApiAccessDeniedHttpException();
+            throw new ApiAccessDeniedHttpException(
+                'Access to the metadata push API requires the role ROLE_API_USER_JANUS'
+            );
         }
 
         ini_set('memory_limit', '265M');

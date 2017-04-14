@@ -68,6 +68,28 @@ class ConnectionsControllerTest extends WebTestCase
         $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
     }
 
+    /**
+     * @test
+     * @group Api
+     * @group Connections
+     * @group Janus
+     */
+    public function cannot_push_metadata_if_user_does_not_have_janus_role()
+    {
+        $client = $this->makeClient([
+            'username' => 'no_roles',
+            'password' => 'no_roles',
+        ]);
+
+        $this->enableMetadataPushApiFeatureFor($client);
+
+        $client->request('POST', 'https://engine-api.vm.openconext.org/api/connections');
+        $this->assertStatusCode(Response::HTTP_FORBIDDEN, $client);
+
+        $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
+        $this->assertTrue($isContentTypeJson, 'Response should have Content-Type: application/json header');
+    }
+
     public function invalidHttpMethodProvider()
     {
         return [
