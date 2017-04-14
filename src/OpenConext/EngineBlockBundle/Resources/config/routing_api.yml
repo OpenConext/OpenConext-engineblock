@@ -21,7 +21,6 @@ api_consent_user:
 
 api_metadata_idp:
     path:    /metadata/idp
-    methods: [GET]
     defaults:
         _controller: engineblock.controller.api.metadata:idpAction
 
