@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_View;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiHttpException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
@@ -48,6 +49,10 @@ class NotFoundHttpExceptionListener
     {
         $exception = $event->getException();
         if (!$exception instanceof NotFoundHttpException) {
+            return;
+        }
+
+        if ($exception instanceof ApiHttpException) {
             return;
         }
 

@@ -7,11 +7,11 @@ use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlock\Service\ConsentService;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 final class ConsentController
@@ -43,6 +43,10 @@ final class ConsentController
 
     public function userAction($userId, Request $request)
     {
+        if (!$request->isMethod(Request::METHOD_GET)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_GET]);
+        }
+
         if (!$this->featureConfiguration->isEnabled('api.consent_listing')) {
             throw new ApiNotFoundHttpException('Consent listing API is disabled');
         }
