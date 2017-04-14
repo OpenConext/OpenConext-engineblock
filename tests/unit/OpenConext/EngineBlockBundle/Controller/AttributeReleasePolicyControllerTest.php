@@ -32,7 +32,11 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $authorizationChecker = $this->mockAuthorizationCheckerDenyingAccessToProfile();
 
         $arpController = new AttributeReleasePolicyController($authorizationChecker, $metadataService, $arpEnforcer);
-        $arpController->applyArpAction(new Request);
+
+        $request = new Request;
+        $request->setMethod(Request::METHOD_POST);
+
+        $arpController->applyArpAction($request);
     }
 
     /**
@@ -380,7 +384,10 @@ class AttributeReleasePolicyControllerTest extends TestCase
      */
     public function createRequestWithContent($content)
     {
-        return new Request([], [], [], [], [], [], $content);
+        $request = new Request([], [], [], [], [], [], $content);
+        $request->setMethod(Request::METHOD_POST);
+
+        return $request;
     }
 
     /**

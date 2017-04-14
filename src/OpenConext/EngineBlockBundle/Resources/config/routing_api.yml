@@ -26,6 +26,5 @@ api_metadata_idp:
 
 api_attribute_release_policy:
     path:   /arp
-    methods: [POST]
     defaults:
         _controller: engineblock.controller.api.attribute_release_policy:applyArpAction
