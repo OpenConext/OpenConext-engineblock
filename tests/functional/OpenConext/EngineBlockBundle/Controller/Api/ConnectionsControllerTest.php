@@ -13,7 +13,7 @@ class ConnectionsControllerTest extends WebTestCase
      * @group Connections
      * @group Janus
      */
-    public function authentication_is_required_for_pushing_connections()
+    public function authentication_is_required_for_pushing_metadata()
     {
         $unauthenticatedClient = $this->makeClient();
         $unauthenticatedClient->request('POST', 'https://engine-api.vm.openconext.org/api/connections');
@@ -29,7 +29,7 @@ class ConnectionsControllerTest extends WebTestCase
      * @dataProvider invalidHttpMethodProvider
      * @param string $invalidHttpMethod
      */
-    public function only_post_requests_are_allowed_when_pushing_connections($invalidHttpMethod)
+    public function only_post_requests_are_allowed_when_pushing_metadata($invalidHttpMethod)
     {
         $client = $this->makeClient([
             'username' => $this->getContainer()->getParameter('api.users.janus.username'),
