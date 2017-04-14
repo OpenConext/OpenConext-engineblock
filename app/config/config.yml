@@ -76,12 +76,6 @@ doctrine:
         entity_managers:
             engineblock:
                 naming_strategy: doctrine.orm.naming_strategy.underscore
-                query_cache_driver:
-                    type: apcu
-                metadata_cache_driver:
-                    type: apcu
-                result_cache_driver:
-                    type: apcu
                 connection: ~
                 mappings:
                     # An array of mappings, which may be a bundle name or something else
