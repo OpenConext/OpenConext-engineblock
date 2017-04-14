@@ -7,7 +7,9 @@ use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiInternalServerErrorHttpException;
 use OpenConext\EngineBlock\Service\ConsentService;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -39,10 +41,10 @@ final class ConsentController
         $this->consentService       = $consentService;
     }
 
-    public function userAction($userId)
+    public function userAction($userId, Request $request)
     {
         if (!$this->featureConfiguration->isEnabled('api.consent_listing')) {
-            throw new NotFoundHttpException('Consent listing API is disabled');
+            throw new ApiNotFoundHttpException('Consent listing API is disabled');
         }
 
         if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {

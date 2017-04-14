@@ -30,6 +30,30 @@ final class ConsentControllerTest extends WebTestCase
      * @group Api
      * @group Consent
      * @group Profile
+     *
+     * @dataProvider invalidHttpMethodProvider
+     * @param string $invalidHttpMethod
+     */
+    public function only_get_requests_are_allowed_when_accessing_the_consent_api($invalidHttpMethod)
+    {
+        $userId = 1111;
+
+        $client = $this->makeClient([
+            'username' => $this->getContainer()->getParameter('api.users.profile.username'),
+            'password' => $this->getContainer()->getParameter('api.users.profile.password'),
+        ]);
+
+        $this->disableConsentApiFeatureFor($client);
+
+        $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/consent/' . $userId);
+        $this->assertStatusCode(Response::HTTP_METHOD_NOT_ALLOWED, $client);
+    }
+
+    /**
+     * @test
+     * @group Api
+     * @group Consent
+     * @group Profile
      * @group FeatureToggle
      */
     public function cannot_access_the_consent_api_if_the_feature_has_been_disabled()
@@ -70,6 +94,17 @@ final class ConsentControllerTest extends WebTestCase
 
         $isContentTypeJson =  $client->getResponse()->headers->contains('Content-Type', 'application/json');
         $this->assertTrue($isContentTypeJson);
+    }
+
+    public function invalidHttpMethodProvider()
+    {
+        return [
+            'POST' => ['POST'],
+            'DELETE' => ['DELETE'],
+            'HEAD' => ['HEAD'],
+            'PUT' => ['PUT'],
+            'OPTIONS' => ['OPTIONS']
+        ];
     }
 
     private function enableConsentApiFeatureFor(Client $client)
