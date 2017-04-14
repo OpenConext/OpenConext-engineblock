@@ -9,14 +9,12 @@ Feature:
     And my browser is configured to accept language "nl-NL"
 
   Scenario: a user makes their first visit and doesn't have a locale cookie
-    Given I don't have a cookie with a locale preference set
     When I go to Engineblock URL "/authentication/sp/debug"
     Then a lang cookie should be set with value "nl"
     And I should see "Gebruiksvoorwaarden"
 
   Scenario: a user requests an unsupported locale, so EngineBlock will fallback to the default locale
-    Given I don't have a cookie with a locale preference set
-    And my browser is configured to accept language "de-DE"
+    Given my browser is configured to accept language "de-DE"
     When I go to Engineblock URL "/authentication/sp/debug"
     Then a lang cookie should be set with value "en"
     And I should see "Terms of Service"

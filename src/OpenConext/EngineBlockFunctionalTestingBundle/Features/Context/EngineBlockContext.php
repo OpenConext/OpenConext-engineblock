@@ -453,13 +453,6 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Given I don't have a cookie with a locale preference set
-     */
-    public function iDonTHaveACookieWithALocalePreferenceSet()
-    {
-    }
-
-    /**
      * @Then /^a lang cookie should be set with value "([^"]*)"$/
      */
     public function aLangCookieShouldBeSetWithValue($locale)
