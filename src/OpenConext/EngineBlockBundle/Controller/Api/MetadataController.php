@@ -4,6 +4,8 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
 use OpenConext\EngineBlock\Service\MetadataService;
@@ -11,9 +13,11 @@ use OpenConext\EngineBlockBundle\Http\Response\JsonHelper;
 use OpenConext\Value\Exception\InvalidArgumentException;
 use OpenConext\Value\Saml\EntityId;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Static calls, factories
+ */
 final class MetadataController
 {
     /**
@@ -43,10 +47,14 @@ final class MetadataController
 
     public function idpAction(Request $request)
     {
+        if (!$request->isMethod(Request::METHOD_GET)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_GET]);
+        }
+
         $entityIdValue = $request->query->get('entity-id');
 
         if (!$this->featureConfiguration->isEnabled('api.metadata_api')) {
-            throw new NotFoundHttpException('Metadata API is disabled');
+            throw new ApiNotFoundHttpException('Metadata API is disabled');
         }
 
         if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
@@ -67,7 +75,7 @@ final class MetadataController
         $identityProvider = $this->metadataService->findIdentityProvider($entityId);
 
         if ($identityProvider === null) {
-            return new JsonResponse('null', JsonResponse::HTTP_NOT_FOUND);
+            return new ApiNotFoundHttpException();
         }
 
         return new JsonResponse(JsonHelper::serializeIdentityProvider($identityProvider), JsonResponse::HTTP_OK);
