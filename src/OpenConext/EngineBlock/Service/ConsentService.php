@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use Doctrine\DBAL\DBALException;
+use Exception;
 use OpenConext\EngineBlock\Authentication\Dto\Consent;
 use OpenConext\EngineBlock\Authentication\Dto\ConsentList;
 use OpenConext\EngineBlock\Authentication\Model\Consent as ConsentEntity;
@@ -46,7 +46,7 @@ final class ConsentService
     {
         try {
             $consents = $this->consentRepository->findAllFor($userId);
-        } catch (DBALException $e) {
+        } catch (Exception $e) {
             throw new RuntimeException(
                 sprintf('An exception occurred while fetching consents the user has given ("%s")', $e->getMessage()),
                 0,
