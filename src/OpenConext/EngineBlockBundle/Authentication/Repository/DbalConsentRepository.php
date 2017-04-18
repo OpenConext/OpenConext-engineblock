@@ -8,6 +8,7 @@ use Doctrine\DBAL\DBALException;
 use OpenConext\EngineBlock\Authentication\Model\Consent;
 use OpenConext\EngineBlock\Authentication\Repository\ConsentRepository;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
+use OpenConext\EngineBlock\Exception\RuntimeException;
 use PDO;
 
 final class DbalConsentRepository implements ConsentRepository
@@ -27,8 +28,10 @@ final class DbalConsentRepository implements ConsentRepository
 
     /**
      * @param string $userId
+     *
      * @return Consent[]
-     * @throws DBALException
+     *
+     * @throws RuntimeException
      */
     public function findAllFor($userId)
     {
@@ -43,8 +46,12 @@ final class DbalConsentRepository implements ConsentRepository
                 hashed_user_id=:hashed_user_id
         ';
 
-        $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
-        $rows      = $statement->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $statement = $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
+            $rows = $statement->fetchAll(PDO::FETCH_ASSOC);
+        } catch (DBALException $exception) {
+            throw new RuntimeException('Could not fetch user consents from the database', 0, $exception);
+        }
 
         return array_map(
             function (array $row) use ($userId) {
