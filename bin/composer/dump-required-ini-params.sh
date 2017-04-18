@@ -54,7 +54,6 @@ $ymlContent = array(
         'cookie.locale.expiry'                                    => (int) $config->get('cookie.lang.expiry'),
         'cookie.locale.http_only'                                 => (bool) $config->get('cookie.lang.http_only', false),
         'cookie.locale.secure'                                    => (bool) $config->get('cookie.lang.secure', false),
-        'feature_eb_ldap_integration'                             => (bool) $config->get('engineblock.feature.ldap_integration'),
         'feature_eb_encrypted_assertions'                         => (bool) $config->get('engineblock.feature.encrypted_assertions'),
         'feature_eb_encrypted_assertions_require_outer_signature' => (bool) $config->get('engineblock.feature.encrypted_assertions_require_outer_signature'),
         'feature_api_metadata_push'                               => (bool) $config->get('engineApi.features.metadataPush'),

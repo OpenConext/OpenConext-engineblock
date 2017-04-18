@@ -66,23 +66,6 @@ class EngineBlock_User
      */
     public function delete()
     {
-        $this->_deleteLdapUser();
-
-        $this->_deleteUserConsent();
-
-        $this->_deleteOauthTokens();
-
-        // Delete the cookies and session
-        $this->_deleteFromEnvironment();
-    }
-
-    /**
-     * Delete the user from the user table
-     *
-     * @throws EngineBlock_Exception
-     */
-    protected function _deleteLdapUser()
-    {
         if (!isset($this->_attributes[SchacHomeOrganization::URN_MACE][0])) {
             throw new EngineBlock_Exception(sprintf(
                 'Cannot remove user, cannot reliably determine who the user is due to missing "%s" attribute',
@@ -99,6 +82,13 @@ class EngineBlock_User
             ->getDiContainer()
             ->getUserDirectory()
             ->deleteUserWith($collabPersonId->getCollabPersonId());
+
+        $this->_deleteUserConsent();
+
+        $this->_deleteOauthTokens();
+
+        // Delete the cookies and session
+        $this->_deleteFromEnvironment();
     }
 
     /**

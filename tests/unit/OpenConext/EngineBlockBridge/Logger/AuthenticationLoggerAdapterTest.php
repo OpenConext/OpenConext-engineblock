@@ -27,7 +27,7 @@ class AuthenticationLoggerAdapterTest extends UnitTest
     {
         $serviceProviderEntityId  = 'SpEntityId';
         $identityProviderEntityId = 'IdpEntityId';
-        $collabPersonIdValue      = EngineBlock_UserDirectory::URN_COLLAB_PERSON_NAMESPACE . ':openconext:some-person';
+        $collabPersonIdValue      = 'urn:collab:person:openconext:some-person';
         $keyIdValue               = '20160403';
         $spProxy1EntityId         = 'SpProxy1EntityId';
         $spProxy2EntityId         = 'SpProxy2EntityId';
