@@ -18,7 +18,7 @@ final class ConsentControllerTest extends WebTestCase
      */
     public function authentication_is_required_for_accessing_the_consent_api()
     {
-        $userId = 1111;
+        $userId = 'my-name-id';
 
         $unauthenticatedClient = $this->makeClient();
         $unauthenticatedClient->request('GET', 'https://engine-api.vm.openconext.org/consent/' . $userId);
@@ -36,7 +36,7 @@ final class ConsentControllerTest extends WebTestCase
      */
     public function only_get_requests_are_allowed_when_accessing_the_consent_api($invalidHttpMethod)
     {
-        $userId = 1111;
+        $userId = 'my-name-id';
 
         $client = $this->makeClient([
             'username' => $this->getContainer()->getParameter('api.users.profile.username'),
@@ -59,7 +59,7 @@ final class ConsentControllerTest extends WebTestCase
      */
     public function cannot_access_the_consent_api_if_the_feature_has_been_disabled()
     {
-        $userId = 1111;
+        $userId = 'my-name-id';
 
         $client = $this->makeClient([
             'username' => $this->getContainer()->getParameter('api.users.profile.username'),
@@ -83,7 +83,7 @@ final class ConsentControllerTest extends WebTestCase
      */
     public function cannot_access_the_consent_api_if_user_does_not_have_profile_role()
     {
-        $userId = 1111;
+        $userId = 'my-name-id';
 
         $client = $this->makeClient([
             'username' => 'no_roles',
