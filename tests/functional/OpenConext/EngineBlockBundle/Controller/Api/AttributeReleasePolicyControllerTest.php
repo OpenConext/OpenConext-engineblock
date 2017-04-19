@@ -29,7 +29,7 @@ class AttributeReleasePolicyControllerTest extends WebTestCase
      * @dataProvider invalidHttpMethodProvider
      * @param string $invalidHttpMethod
      */
-    public function only_post_requests_are_allowed_when_pushing_metadata($invalidHttpMethod)
+    public function only_post_requests_are_allowed_when_applying_arp($invalidHttpMethod)
     {
         $client = $this->makeClient([
             'username' => $this->getContainer()->getParameter('api.users.profile.username'),
@@ -49,7 +49,7 @@ class AttributeReleasePolicyControllerTest extends WebTestCase
      * @group Arp
      * @group Profile
      */
-    public function cannot_push_metadata_if_user_does_not_have_profile_role()
+    public function cannot_apply_arp_if_user_does_not_have_profile_role()
     {
         $client = $this->makeClient([
             'username' => 'no_roles',
@@ -72,7 +72,7 @@ class AttributeReleasePolicyControllerTest extends WebTestCase
      * @dataProvider invalidJsonPayloadProvider
      * @param string $invalidJsonPayload
      */
-    public function cannot_push_invalid_content_to_the_metadata_push_api($invalidJsonPayload)
+    public function cannot_push_invalid_content_to_the_arp_api($invalidJsonPayload)
     {
         $client = $this->makeClient([
             'username' => $this->getContainer()->getParameter('api.users.profile.username'),
