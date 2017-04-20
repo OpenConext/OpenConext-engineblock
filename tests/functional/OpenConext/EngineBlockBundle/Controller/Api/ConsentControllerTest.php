@@ -16,7 +16,7 @@ final class ConsentControllerTest extends WebTestCase
     public function __construct($name = null, array $data = [], $dataName = '')
     {
         $this->clearConsentFixtures();
-        $this->clearServiceProviderFixtures();
+        $this->clearMetadataFixtures();
 
         parent::__construct($name, $data, $dataName);
 
@@ -25,7 +25,7 @@ final class ConsentControllerTest extends WebTestCase
     public function tearDown()
     {
         $this->clearConsentFixtures();
-        $this->clearServiceProviderFixtures();
+        $this->clearMetadataFixtures();
     }
 
     /**
@@ -274,7 +274,7 @@ final class ConsentControllerTest extends WebTestCase
         $em->flush();
     }
 
-    private function clearServiceProviderFixtures()
+    private function clearMetadataFixtures()
     {
         $queryBuilder = $this->getContainer()->get('doctrine')->getConnection()->createQueryBuilder();
         $queryBuilder
