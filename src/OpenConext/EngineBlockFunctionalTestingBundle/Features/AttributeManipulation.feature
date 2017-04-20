@@ -12,6 +12,7 @@ Feature:
     And a Service Provider named "Dummy-SP"
     And a Service Provider named "SP-with-Attribute-Manipulations"
 
+  @WIP
   Scenario: The Service Provider can have an attribute added
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
