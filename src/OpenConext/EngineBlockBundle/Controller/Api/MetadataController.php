@@ -75,7 +75,7 @@ final class MetadataController
         $identityProvider = $this->metadataService->findIdentityProvider($entityId);
 
         if ($identityProvider === null) {
-            return new ApiNotFoundHttpException();
+            throw new ApiNotFoundHttpException();
         }
 
         return new JsonResponse(JsonHelper::serializeIdentityProvider($identityProvider), JsonResponse::HTTP_OK);
