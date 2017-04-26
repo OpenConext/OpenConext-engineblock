@@ -29,13 +29,11 @@ In short, themes require compilation which can be done by running the following 
 * Linux
 * Apache
 * PHP 5.6:
-    - ldap
     - libxml
     - mcrypt
 * MySQL > 5.x with settings:
     - default-storage-engine=InnoDB
     - default-collation=utf8_unicode_ci
-* LDAP (optional)
 * [Janus][janus]
 * NPM (optional for theme deployment)
 * Grunt-cli (optional for theme deployment)
