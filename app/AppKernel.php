@@ -57,19 +57,11 @@ class AppKernel extends Kernel
 
     public function getCacheDir()
     {
-        if ($this->environment === 'dev') {
-            return '/tmp/engineblock/cache';
-        }
-
         return $this->rootDir . '/cache/' . $this->environment;
     }
 
     public function getLogDir()
     {
-        if ($this->environment === 'dev') {
-            return '/tmp/engineblock/log';
-        }
-
         return $this->rootDir . '/logs/' . $this->environment;
     }
 }
