@@ -33,7 +33,7 @@ class AttributeReleasePolicyControllerTest extends TestCase
 
         $arpController = new AttributeReleasePolicyController($authorizationChecker, $metadataService, $arpEnforcer);
 
-        $request = new Request;
+        $request = new Request();
         $request->setMethod(Request::METHOD_POST);
 
         $arpController->applyArpAction($request);
