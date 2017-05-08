@@ -16,7 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Static calls, factories
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Static calls, factories, and having to check HTTP methods which is
+ *                                                 usually done by Symfony
  */
 class ConnectionsController
 {
