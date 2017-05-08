@@ -5,7 +5,6 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
-use stdClass;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
