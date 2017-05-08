@@ -1,5 +1,6 @@
 # This routing file is separated due to being hosted on a different sub-domain
 # see app/config/routing.yml
+# Allowed methods are registered in the controllers so API specific exceptions are thrown
 
 api_heartbeat:
     path:     /
@@ -8,13 +9,11 @@ api_heartbeat:
 
 api_connections:
     path:     /api/connections
-    methods:    [POST]
     defaults:
         _controller: engineblock.controller.api.connections:pushConnectionsAction
 
 api_consent_user:
     path:    /consent/{userId}
-    methods: [GET]
     requirements:
         userId: .+
     defaults:
@@ -22,12 +21,10 @@ api_consent_user:
 
 api_metadata_idp:
     path:    /metadata/idp
-    methods: [GET]
     defaults:
         _controller: engineblock.controller.api.metadata:idpAction
 
 api_attribute_release_policy:
     path:   /arp
-    methods: [POST]
     defaults:
         _controller: engineblock.controller.api.attribute_release_policy:applyArpAction

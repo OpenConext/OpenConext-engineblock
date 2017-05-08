@@ -5,6 +5,7 @@ namespace OpenConext\EngineBlockBundle\Controller\Api;
 use EngineBlock_Arp_AttributeReleasePolicyEnforcer;
 use OpenConext\EngineBlock\Service\MetadataService;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use OpenConext\EngineBlockBundle\Http\Response\JsonResponse;
@@ -48,6 +49,10 @@ final class AttributeReleasePolicyController
      */
     public function applyArpAction(Request $request)
     {
+        if (!$request->isMethod(Request::METHOD_POST)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
+        }
+
         if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
             throw new ApiAccessDeniedHttpException('Access to the ARP API requires the role ROLE_API_USER_PROFILE');
         }

@@ -7,12 +7,18 @@ use OpenConext\Component\EngineBlockMetadata\Entity\Assembler\JanusPushMetadataA
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;
+use OpenConext\EngineBlockBundle\Http\Exception\ApiNotFoundHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\BadApiRequestHttpException;
 use OpenConext\EngineBlockBundle\Http\Request\JsonRequestHelper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Static calls, factories, and having to check HTTP methods which is
+ *                                                 usually done by Symfony
+ */
 class ConnectionsController
 {
     /**
@@ -47,12 +53,18 @@ class ConnectionsController
 
     public function pushConnectionsAction(Request $request)
     {
+        if (!$request->isMethod(Request::METHOD_POST)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
+        }
+
         if (!$this->featureConfiguration->isEnabled('api.metadata_push')) {
-            return new JsonResponse(null, 404);
+            throw new ApiNotFoundHttpException('Metadata push API is disabled');
         }
 
         if (!$this->authorizationChecker->isGranted(['ROLE_API_USER_JANUS'])) {
-            throw new ApiAccessDeniedHttpException();
+            throw new ApiAccessDeniedHttpException(
+                'Access to the metadata push API requires the role ROLE_API_USER_JANUS'
+            );
         }
 
         ini_set('memory_limit', '265M');
