@@ -52,8 +52,8 @@ ci-behat-regression: util-enable-func-test util-run-behat-regression util-disabl
 clean: util-disable-func-test util-rm-test-dir ## Cleanup :)
 
 util-rm-test-dir: ; @-rm -rf $(BASEDIR)/app/cache/test ## Remove the test env cache
-util-prepare-env-on-vm: ; @$(BASEDIR)/run-on-vm.sh "sudo composer prepare-env" ## Run the composer prepare-env command on the VM
-util-revert-env-on-vm: ; @$(BASEDIR)/run-on-vm.sh "sudo composer prepare-env" ## Copy of util-prepare-env-on-vm to be able to invoke it twice in one target
+util-prepare-env-on-vm: ; @$(BASEDIR)/run-on-vm.sh "composer prepare-env" ## Run the composer prepare-env command on the VM
+util-revert-env-on-vm: ; @$(BASEDIR)/run-on-vm.sh "composer prepare-env" ## Copy of util-prepare-env-on-vm to be able to invoke it twice in one target
 util-enable-func-test: ## Enable the functionalTesting flag in the application configuration
 	@-perl -pi.bak -e 's/;functionalTesting = true/functionalTesting = true/' $(BASEDIR)/application/configs/application.ini && rm $(BASEDIR)/application/configs/application.ini.bak
 util-disable-func-test: ## Disable the functionalTesting flag in the application configuration
