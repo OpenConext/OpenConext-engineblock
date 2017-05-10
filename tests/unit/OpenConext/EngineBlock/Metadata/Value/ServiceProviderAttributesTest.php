@@ -24,7 +24,7 @@ class ServiceProviderAttributesTest extends UnitTest
                 new LocalizedDescription([new LocalizedText('OpenConext', 'en')]),
                 new Logo('https://domain.invalid/img.png', 150, 150)
             ),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([])
         );
 
@@ -45,7 +45,7 @@ class ServiceProviderAttributesTest extends UnitTest
                 $localizedDescription,
                 new Logo('https://domain.invalid/img.png', 150, 150)
             ),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([])
         );
 
@@ -66,7 +66,7 @@ class ServiceProviderAttributesTest extends UnitTest
                 new LocalizedDescription([new LocalizedText('OpenConext', 'en')]),
                 $logo
             ),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([])
         );
 
@@ -80,7 +80,7 @@ class ServiceProviderAttributesTest extends UnitTest
      */
     public function terms_of_service_url_can_be_retrieved()
     {
-        $termsOfServiceUrl         = new LocalizedUri('http://domain.invalid/tos', 'en');
+        $termsOfServiceUrl         = new Url('http://domain.invalid/tos');
         $serviceProviderAttributes = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
             $termsOfServiceUrl,
@@ -100,7 +100,7 @@ class ServiceProviderAttributesTest extends UnitTest
         $supportUrl                = new LocalizedSupportUrl([]);
         $serviceProviderAttributes = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             $supportUrl
         );
 
@@ -116,12 +116,12 @@ class ServiceProviderAttributesTest extends UnitTest
     {
         $base = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([])
         );
         $same = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([])
         );
         $differentEntityAttributes = new ServiceProviderAttributes(
@@ -130,17 +130,17 @@ class ServiceProviderAttributesTest extends UnitTest
                 new LocalizedDescription([]),
                 new Logo('https://domain.invalid/img.png', 150, 150)
             ),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([])
         );
         $differentTermsOfService = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
-            new LocalizedUri('http://somewhere.invalid/t-o-s', 'nl'),
+            new Url('http://somewhere.invalid/t-o-s', 'nl'),
             new LocalizedSupportUrl([])
         );
         $differentSupportUrl = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([new LocalizedUri('http://domain.invalid/support', 'en')])
         );
 
@@ -159,7 +159,7 @@ class ServiceProviderAttributesTest extends UnitTest
     {
         $original = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos'),
             new LocalizedSupportUrl([])
         );
 
@@ -207,13 +207,13 @@ class ServiceProviderAttributesTest extends UnitTest
             'no matches' => [
                 [
                     'foo' => $this->getEntityAttributes()->serialize(),
-                    'bar' => (new LocalizedUri('uri', 'en'))->serialize(),
+                    'bar' => (new Url('https://en.domain.invalid/'))->serialize(),
                     'baz' => (new LocalizedSupportUrl([new LocalizedUri('uri', 'en')]))->serialize()
                 ]
             ],
             'no entity_attributes' => [
                 [
-                    'terms_of_service_url' => (new LocalizedUri('uri', 'en'))->serialize(),
+                    'terms_of_service_url' => (new Url('https://en.domain.invalid/'))->serialize(),
                     'support_urls'         => (new LocalizedSupportUrl([new LocalizedUri('uri', 'en')]))->serialize()
                 ]
             ],
@@ -226,7 +226,7 @@ class ServiceProviderAttributesTest extends UnitTest
             'no support_urls' => [
                 [
                     'entity_attributes'    => $this->getEntityAttributes()->serialize(),
-                    'terms_of_service_url' => (new LocalizedUri('uri', 'en'))->serialize(),
+                    'terms_of_service_url' => (new Url('https://en.domain.invalid/'))->serialize(),
                 ]
             ],
         ];
@@ -241,7 +241,7 @@ class ServiceProviderAttributesTest extends UnitTest
     {
         $serviceProviderAttributes = new ServiceProviderAttributes(
             $this->getEntityAttributes(),
-            new LocalizedUri('http://domain.invalid/tos', 'en'),
+            new Url('http://domain.invalid/tos', 'en'),
             new LocalizedSupportUrl([])
         );
 

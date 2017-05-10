@@ -1,0 +1,55 @@
+diff --git a/src/OpenConext/EngineBlockBundle/Controller/Api/ConnectionsController.php b/src/OpenConext/EngineBlockBundle/Controller/Api/ConnectionsController.php
+index 551cde0..7ae0c99 100644
+--- a/src/OpenConext/EngineBlockBundle/Controller/Api/ConnectionsController.php
++++ b/src/OpenConext/EngineBlockBundle/Controller/Api/ConnectionsController.php
+@@ -3,6 +3,7 @@
+ namespace OpenConext\EngineBlockBundle\Controller\Api;
+ 
+ use EngineBlock_ApplicationSingleton;
++use OpenConext\EngineBlockBundle\Metadata\Service\MetadataConnectionsFactory;
+ use OpenConext\Component\EngineBlockMetadata\Entity\Assembler\JanusPushMetadataAssembler;
+ use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadataRepository;
+ use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+@@ -47,6 +48,8 @@ class ConnectionsController
+ 
+     public function pushConnectionsAction(Request $request)
+     {
++        //file_put_contents('../pushed_connections.json', $request->getContent());
++
+         if (!$this->featureConfiguration->isEnabled('api.metadata_push')) {
+             return new JsonResponse(null, 404);
+         }
+@@ -57,20 +60,25 @@ class ConnectionsController
+ 
+         ini_set('memory_limit', '265M');
+ 
+-        $body = JsonRequestHelper::decodeContentOf($request);
++        $requestData = JsonRequestHelper::decodeContentOf($request);
+ 
+-        if (!is_object($body) || !isset($body->connections) && !is_object($body->connections)) {
++        if (!isset($requestData['connections']) || !is_array($requestData['connections'])) {
+             throw new BadApiRequestHttpException('Unrecognized structure for JSON');
+         }
+ 
+-        $assembler = new JanusPushMetadataAssembler();
+-        $roles     = $assembler->assemble($body->connections);
++        //file_put_contents('../pushed_connections.json', json_encode($requestData, JSON_PRETTY_PRINT));
+ 
+-        $diContainer = $this->engineBlockApplicationSingleton->getDiContainer();
+-        $doctrineRepository = DoctrineMetadataRepository::createFromConfig([], $diContainer);
++        $connections = MetadataConnectionsFactory::createConnectionsFrom($requestData['connections']);
+ 
+-        $result = $doctrineRepository->synchronize($roles);
++        //        $assembler = new JanusPushMetadataAssembler();
++        //        $roles     = $assembler->assemble($body->connections);
+ 
+-        return new JsonResponse($result);
++        //        $diContainer = $this->engineBlockApplicationSingleton->getDiContainer();
++        //        $doctrineRepository = DoctrineMetadataRepository::createFromConfig([], $diContainer);
++        //
++        //        $result = $doctrineRepository->synchronize($roles);
++        //
++        //        return new JsonResponse($result);
++        file_put_contents('../exported_connections', '<?php ' . PHP_EOL . var_export($connections, true) . ';');
+     }
+ }
