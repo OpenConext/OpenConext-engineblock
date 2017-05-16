@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "88ed20d0349e9825e0d4a4caaba1483b",
+    "content-hash": "44ca426d471214eee863f212f6fe5ff4",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1633,55 +1633,6 @@
             ],
             "description": "PHP library for accessing OpenConext stoker metadata",
             "time": "2014-11-20T15:22:19+00:00"
-        },
-        {
-            "name": "openid/php-openid",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/openid/php-openid.git",
-                "reference": "ee669c6a9d4d95b58ecd9b6945627276807694fb"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/openid/php-openid/zipball/ee669c6a9d4d95b58ecd9b6945627276807694fb",
-                "reference": "ee669c6a9d4d95b58ecd9b6945627276807694fb",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-dom": "*",
-                "ext-gmp": "*",
-                "php": ">=4.3"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "Auth"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "include-path": [
-                "."
-            ],
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "JanRain Inc.",
-                    "homepage": "http://www.openidenabled.com"
-                }
-            ],
-            "description": "OpenID library for PHP5",
-            "homepage": "http://github.com/openid/php-openid",
-            "keywords": [
-                "Authentication",
-                "OpenId",
-                "auth",
-                "yadis"
-            ],
-            "time": "2013-10-03 21:21:20"
         },
         {
             "name": "paragonie/random_compat",
@@ -4362,7 +4313,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",
@@ -5364,12 +5315,6 @@
     ],
     "aliases": [
         {
-            "alias": "2.2.2",
-            "alias_normalized": "2.2.2.0",
-            "version": "9999999-dev",
-            "package": "openid/php-openid"
-        },
-        {
             "alias": "1.9.1",
             "alias_normalized": "1.9.1.0",
             "version": "1.10.3.0",
@@ -5377,9 +5322,7 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "openid/php-openid": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
