@@ -341,5 +341,7 @@ Uses:
 [output]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Output.php
 [folder]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Command
 [ps]: https://github.com/OpenConext/OpenConext-engineblock/blob/master/library/EngineBlock/Corto/ProxyServer.php
+[fOAA]: https://github.com/OpenConext/OpenConext-engineblock/blob/master/library/EngineBlock/Corto/ProxyServer.php#L749
+[fIAA]: https://github.com/OpenConext/OpenConext-engineblock/blob/master/library/EngineBlock/Corto/ProxyServer.php#L736
 [cAF]: https://github.com/OpenConext/OpenConext-engineblock/blob/83591aeef5f79418a899aa57357a2d820adbb82c/library/EngineBlock/Corto/ProxyServer.php#L762
 [pdp-repo]: https://github.com/OpenConext/OpenConext-pdp#miscellaneous
