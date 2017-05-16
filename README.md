@@ -189,6 +189,18 @@ If you are using this pattern, an update can be done with the following:
 
 5. Change the symlink.
 
+## Additional Documentation
+
+Most additional documentation can be found in the [wiki][wiki]. If you want to help with development for instance, you
+can take a look at the [Development Guidelines][wiki-development]
+
+Also, the following documentation can be found in the [docs][docs] directory:
+
+1. [License][docs-license]
+1. [Release Procedure][docs-release]
+1. [EngineBlock Input and Output Command Chains][docs-filter]
+1. [Release notes for releases < 5.0.0][docs-release-notes]
+
 [travis-build]: https://travis-ci.org/OpenConext/OpenConext-engineblock
 [license]: LICENSE-2.0.txt
 [notice]: NOTICE.txt
@@ -197,3 +209,10 @@ If you are using this pattern, an update can be done with the following:
 [op-dep]: https://github.com/OpenConext/OpenConext-deploy
 [janus]: https://github.com/janus-ssp/janus
 [eb-wiki-theme-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development
+[wiki]: https://github.com/OpenConext/OpenConext-engineblock/wiki
+[wiki-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines
+[docs]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/index.md
+[docs-license]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/LICENSE
+[docs-release]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_procedure.md
+[docs-filter]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/filter_commands.md
+[docs-release-notes]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_notes
