@@ -70,7 +70,7 @@ return array(
     'question_log_in'                   =>      'Hoe werkt inloggen via SURFconext?',
     'answer_log_in'                     =>      '<ul>
                             <li>Je selecteert in dit scherm je eigen instelling.</li>
-                            <li>Je wordt doorgestuurd naar een inlogpagina van je eigen instelling.Daar log je in.</li>
+                            <li>Je wordt doorgestuurd naar een inlogpagina van je eigen instelling. Daar log je in.</li>
                             <li>Je instelling geeft door aan SURFconext dat je succesvol bent ingelogd.</li>
                             <li>Je wordt doorgestuurd naar de dienst waarop je hebt ingelogd om deze te gaan gebruiken.</li>
                         </ul>',
