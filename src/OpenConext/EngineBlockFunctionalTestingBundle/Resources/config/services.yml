@@ -7,6 +7,7 @@ parameters:
     engineblock.functional_testing.features_data_store.file:                  "%kernel.root_dir%/../tmp/eb-fixtures/features.json"
     engineblock.functional_testing.authentication_loop_guard_data_store.file: "%kernel.root_dir%/../tmp/eb-fixtures/authentication-loop-guard.json"
     engineblock.functional_testing.pdp_data_store.file:                       "%kernel.root_dir%/../tmp/eb-fixtures/policy_decision.json"
+    engineblock.functional_testing.attribute_aggregation_data_store.file:     "%kernel.root_dir%/../tmp/eb-fixtures/attribute_aggregation.json"
 
 services:
     engineblock.functional_testing.service.engine_block:
@@ -33,6 +34,7 @@ services:
             - '@engineblock.functional_testing.fixture.features'
             - '@engineblock.functional_testing.fixture.pdp_client'
             - '@engineblock.functional_testing.fixture.authentication_loop_guard'
+            - '@engineblock.functional_testing.fixture.attribute_aggregation_client'
 
     engineblock.functional_testing.behat_context.mock_idp:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\MockIdpContext
@@ -90,6 +92,10 @@ services:
             - '@engineblock.authentication.authentication_loop_guard'
             - '@engineblock.functional_testing.data_store.authentication_loop_guard'
 
+    engineblock.functional_testing.fixture.attribute_aggregation_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient
+        arguments:
+            - '@engineblock.function_testing.data_store.attribute_aggregation_client'
     #endregion Fixtures
 
     #region Data Stores
@@ -124,4 +130,8 @@ services:
     engineblock.functional_testing.data_store.authentication_loop_guard:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
         arguments: ['%engineblock.functional_testing.authentication_loop_guard_data_store.file%']
+
+    engineblock.function_testing.data_store.attribute_aggregation_client:
+        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
+        arguments: ['%engineblock.functional_testing.attribute_aggregation_data_store.file%']
     #endregion Data Stores

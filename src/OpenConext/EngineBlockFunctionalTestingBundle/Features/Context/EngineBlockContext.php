@@ -6,6 +6,7 @@ use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
 use EngineBlock_Saml2_IdGenerator;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient;
@@ -90,6 +91,11 @@ class EngineBlockContext extends AbstractSubContext
     private $engineBlockDomain;
 
     /**
+     * @var FunctionalTestingAttributeAggregationClient
+     */
+    private $attributeAggregationClient;
+
+    /**
      * @param ServiceRegistryFixture $serviceRegistry
      * @param EngineBlock $engineBlock
      * @param EntityRegistry $mockSpRegistry
@@ -99,6 +105,9 @@ class EngineBlockContext extends AbstractSubContext
      * @param FunctionalTestingFeatureConfiguration $features
      * @param FunctionalTestingPdpClient $pdpClient
      * @param FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
+     * @param FunctionalTestingAttributeAggregationClient $attributeAggregationClient
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ServiceRegistryFixture $serviceRegistry,
@@ -109,7 +118,8 @@ class EngineBlockContext extends AbstractSubContext
         $idpsConfigUrl,
         FunctionalTestingFeatureConfiguration $features,
         FunctionalTestingPdpClient $pdpClient,
-        FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
+        FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard,
+        FunctionalTestingAttributeAggregationClient $attributeAggregationClient
     ) {
         $this->serviceRegistryFixture = $serviceRegistry;
         $this->engineBlock = $engineBlock;
@@ -120,6 +130,7 @@ class EngineBlockContext extends AbstractSubContext
         $this->features = $features;
         $this->pdpClient = $pdpClient;
         $this->authenticationLoopGuard = $authenticationLoopGuard;
+        $this->attributeAggregationClient = $attributeAggregationClient;
     }
 
     /**
@@ -488,5 +499,21 @@ class EngineBlockContext extends AbstractSubContext
     public function iGoToEngineblockURL($path)
     {
         $this->getMainContext()->getMinkContext()->visit($this->engineBlockDomain . $path);
+    }
+
+    /**
+     * @Given /^the attribute aggregator returns no attributes$/
+     */
+    public function aaReturnsNoAttributes()
+    {
+        $this->attributeAggregationClient->returnsNothing();
+    }
+
+    /**
+     * @Given /^the attribute aggregator returns an "eduPersonOrcid" attribute$/
+     */
+    public function aaReturnsEduPersonOrcid()
+    {
+        $this->attributeAggregationClient->returnsOrcid();
     }
 }

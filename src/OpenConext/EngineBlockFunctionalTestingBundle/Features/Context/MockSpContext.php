@@ -528,4 +528,18 @@ class MockSpContext extends AbstractSubContext
             ->spRequiresPolicyEnforcementDecision($sp->entityId())
             ->save();
     }
+
+    /**
+     * @Given /^SP "([^"]*)" requires attribute aggregation$/
+     * @param string $spName
+     */
+    public function spRequiresAttributeAggregation($spName)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture
+            ->requireAttributeAggregation($mockSp->entityId())
+            ->save();
+    }
 }

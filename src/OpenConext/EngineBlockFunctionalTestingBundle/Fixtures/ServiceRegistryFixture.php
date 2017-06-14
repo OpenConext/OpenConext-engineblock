@@ -63,6 +63,12 @@ class ServiceRegistryFixture
         return $this;
     }
 
+    public function requireAttributeAggregation($entityId)
+    {
+        $this->data[$entityId]['coin:attribute_aggregation_required'] = true;
+        return $this;
+    }
+
     public function registerIdp($name, $entityId, $ssoLocation, $certData = '')
     {
         $this->data[$entityId] = [
@@ -146,7 +152,6 @@ class ServiceRegistryFixture
         $this->data[$entityId]['NameIDFormat'] = SAML2_Const::NAMEID_PERSISTENT;
         return $this;
     }
-
 
     public function setEntityNameIdFormatTransient($entityId)
     {
