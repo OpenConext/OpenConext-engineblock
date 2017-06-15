@@ -82,3 +82,19 @@ services:
             - '%cookie.locale.expiry%'
             - '%cookie.locale.http_only%'
             - '%cookie.locale.secure%'
+
+    engineblock.attribute_aggregation.client:
+        class: OpenConext\EngineBlock\AttributeAggregation\AttributeAggregationClient
+        arguments:
+            - "@engineblock.attribute_aggregation.http_client"
+
+    engineblock.attribute_aggregation.http_client:
+        class: OpenConext\EngineBlock\Http\HttpClient
+        arguments:
+            - "@engineblock.attribute_aggregation.guzzle_http_client"
+
+    engineblock.attribute_aggregation.guzzle_http_client:
+        class: GuzzleHttp\Client
+        arguments:
+            - base_uri: "%attribute_aggregation.base_url%"
+              auth: ["%attribute_aggregation.username%", "%attribute_aggregation.password%", "Basic"]

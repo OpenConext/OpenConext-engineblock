@@ -1,7 +1,24 @@
 <?php
 
+use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
+use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AggregatedAttribute;
+use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
+
 class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    /**
+     * @var AttributeAggregationClient
+     */
+    private $client;
+
+    /**
+     * @param AttributeAggregationClient $client
+     */
+    public function __construct(AttributeAggregationClientInterface $client)
+    {
+        $this->client = $client;
+    }
+
     /**
      * This command may modify the response attributes
      *
@@ -35,22 +52,28 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
 
         $logger->notice("Attribute Aggregation for $spEntityId");
 
-        $aggregator = $this->_getAggregator();
-
-        $aggregations = $aggregator->aggregate(
-            $this->_collabPersonId,
-            $spEntityId,
-            $this->_responseAttributes
+        $response = $this->client->aggregate(
+            Request::from(
+                $this->_collabPersonId,
+                (array) $this->_responseAttributes,
+                []
+            )
         );
 
-        $this->_responseAttributes = array_merge($this->_responseAttributes, $aggregations);
+        $this->replaceAggregatedAttributes($response->attributes);
     }
 
     /**
-     * @return EngineBlock_AttributeAggregation_Aggregator
+     * Replace the attributes sent by the IdP with aggregated attributes.
+     *
+     * TODO: keep track of attribute sources.
+     *
+     * @param array $attributes
      */
-    protected function _getAggregator()
-    {
-        return new AttributeAggregation_Client(EngineBlock_ApplicationSingleton::getInstance()->getConfiguration());
+    private function replaceAggregatedAttributes(array $attributes) {
+        foreach ($attributes as $attribute) {
+            /** @var AggregatedAttribute $attribute */
+            $this->_responseAttributes[$attribute->name] = $attribute->values;
+        }
     }
 }

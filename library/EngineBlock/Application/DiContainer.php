@@ -103,6 +103,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
+     * @return \OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface
+     */
+    public function getAttributeAggregationClient()
+    {
+        return $this->container->get('engineblock.attribute_aggregation.client');
+    }
+
+    /**
      * @return CompositeMetadataRepository
      */
     public function getMetadataRepository()
