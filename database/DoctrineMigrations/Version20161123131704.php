@@ -18,8 +18,8 @@ class Version20161123131704 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
 
         // Remove the virtual organisation tables as the functionality has been removed
-        $this->addSql('DROP TABLE virtual_organisation');
-        $this->addSql('DROP TABLE virtual_organisation_group');
+        $this->addSql('DROP TABLE IF NOT EXISTS virtual_organisation');
+        $this->addSql('DROP TABLE IF NOT EXISTS virtual_organisation_group');
         $this->addSql('DROP TABLE virtual_organisation_idp');
 
         // Remove the implicit_vo_id from the sso_provider_roles
