@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "44ca426d471214eee863f212f6fe5ff4",
+    "content-hash": "66a04e1913ff55de7f0775b805f590e2",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1517,16 +1517,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "2.1.0",
+            "version": "dev-feature/attribute-aggregation",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "05ded4b0b0323378606f568c2d083f96da9e1026"
+                "reference": "e530513fff44dad01ffa031e19b2c4d680bbbf78"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/05ded4b0b0323378606f568c2d083f96da9e1026",
-                "reference": "05ded4b0b0323378606f568c2d083f96da9e1026",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/e530513fff44dad01ffa031e19b2c4d680bbbf78",
+                "reference": "e530513fff44dad01ffa031e19b2c4d680bbbf78",
                 "shasum": ""
             },
             "require": {
@@ -1551,7 +1551,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2016-12-14T15:48:28+00:00"
+            "time": "2017-06-22 11:56:19"
         },
         {
             "name": "openconext/saml-value-object",
@@ -4030,12 +4030,12 @@
             "version": "0.9.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/padraic/mockery.git",
+                "url": "https://github.com/mockery/mockery.git",
                 "reference": "70bba85e4aabc9449626651f48b9018ede04f86b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/70bba85e4aabc9449626651f48b9018ede04f86b",
+                "url": "https://api.github.com/repos/mockery/mockery/zipball/70bba85e4aabc9449626651f48b9018ede04f86b",
                 "reference": "70bba85e4aabc9449626651f48b9018ede04f86b",
                 "shasum": ""
             },
@@ -4313,7 +4313,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project Founder"
+                    "role": "Project founder"
                 },
                 {
                     "name": "Other contributors",
@@ -5322,7 +5322,9 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "openconext/engineblock-metadata": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

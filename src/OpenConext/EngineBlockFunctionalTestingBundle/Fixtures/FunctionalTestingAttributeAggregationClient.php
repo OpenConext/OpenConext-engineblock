@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
+use InvalidArgumentException;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
@@ -48,6 +49,19 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
     public function aggregate(Request $request)
     {
         if ($this->fixture === 'aggregate-orcid') {
+            if (empty($request->rules)) {
+                throw new InvalidArgumentException(
+                    'Expecting an ARP rule for eduPersonOrcid, but no rules found.'
+                );
+            }
+
+            $rule = reset($request->rules);
+            if ($rule->name !== 'eduPersonOrcid' || $rule->source !== 'voot') {
+                throw new InvalidArgumentException(
+                    'Expectation failed for fixture aggregate-orcid: expecting ARP rule for eduPersonOrcid from source voot'
+                );
+            }
+
             return Response::fromData([
                 [
                     'name' => 'eduPersonOrcid',
@@ -62,7 +76,7 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
     }
 
     /**
-     * Configure the fake client to return no attributes.
+     * Configure the client mock to return no attributes.
      */
     public function returnsNothing()
     {
@@ -70,7 +84,7 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
     }
 
     /**
-     * Configure the fake client to return an eduPersonOrcid attribute.
+     * Configure the client mock to return an eduPersonOrcid attribute.
      */
     public function returnsOrcid()
     {

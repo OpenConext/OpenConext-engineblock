@@ -57,4 +57,19 @@ final class AttributeRule
 
         return $rule;
     }
+
+    /**
+     * @param AttributeReleasePolicy $arp
+     * @return AttributeRule[]
+     */
+    public static function fromArp(AttributeReleasePolicy $arp)
+    {
+        $queries = [];
+        foreach ($arp->getRulesWithSourceSpecification() as $name => $rules) {
+            foreach ($rules as $rule) {
+                $queries[] = self::from($name, $rule['value'], $rule['source']);
+            }
+        }
+        return $queries;
+    }
 }

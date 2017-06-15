@@ -273,7 +273,7 @@ class ServiceRegistryFixture
         return $this;
     }
 
-    public function allowAttributeValue($entityId, $arpAttribute, $attributeValue)
+    public function allowAttributeValue($entityId, $arpAttribute, $attributeValue, $attributeSource = null)
     {
         if (!isset($this->data[$entityId]['arp'])) {
             $this->data[$entityId]['arp'] = [];
@@ -283,7 +283,17 @@ class ServiceRegistryFixture
         if (!isset($this->data[$entityId]['arp'][$arpAttribute])) {
             $this->data[$entityId]['arp'][$arpAttribute] = [];
         }
-        $this->data[$entityId]['arp'][$arpAttribute][] = $attributeValue;
+
+        if ($attributeSource) {
+            $arpRule = [
+                'value' => $attributeValue,
+                'source' => $attributeSource,
+            ];
+        } else {
+            $arpRule = $attributeValue;
+        }
+
+        $this->data[$entityId]['arp'][$arpAttribute][] = $arpRule;
 
         return $this;
     }

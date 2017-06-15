@@ -11,18 +11,8 @@ Feature:
     And a Service Provider named "SP-AA"
     And SP "SP-AA" requires attribute aggregation
 
-  Scenario: As a user for an SP where no attributes are configured for aggregation
-    Given SP "SP-AA" allows no attributes
-    Given the attribute aggregator returns an "eduPersonOrcid" attribute
-    When I log in at "SP-AA"
-    And I pass through EngineBlock
-    And I pass through the IdP
-    When I give my consent
-    And I pass through EngineBlock
-    Then the response should not contain "eduPersonOrcid"
-
   Scenario: As a user for an SP where eduPersonOrcid is configured for aggregation
-    Given SP "SP-AA" allows an attribute named "eduPersonOrcid"
+    Given SP "SP-AA" allows an attribute named "eduPersonOrcid" and configures it for aggregation from "voot"
     And the attribute aggregator returns an "eduPersonOrcid" attribute
     When I log in at "SP-AA"
     And I pass through EngineBlock
@@ -32,7 +22,7 @@ Feature:
     Then the response should contain "eduPersonOrcid"
 
   Scenario: As a user for an SP where the aggregator returns no attributes
-    Given SP "SP-AA" allows an attribute named "eduPersonOrcid"
+    Given SP "SP-AA" allows an attribute named "eduPersonOrcid" and configures it for aggregation from "voot"
     And the attribute aggregator returns no attributes
     When I log in at "SP-AA"
     And I pass through EngineBlock
