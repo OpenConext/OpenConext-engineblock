@@ -39,6 +39,7 @@ final class AttributeAggregationClient implements AttributeAggregationClientInte
      *
      * @param Request $request
      * @return Response
+     * @throws \OpenConext\EngineBlock\Http\Exception\HttpException
      */
     public function aggregate(Request $request)
     {

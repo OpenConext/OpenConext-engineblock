@@ -6,6 +6,7 @@ use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClient
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AggregatedAttribute;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
+use OpenConext\EngineBlock\Http\Exception\HttpException;
 use Psr\Log\LoggerInterface;
 
 
@@ -75,15 +76,24 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
             return;
         }
 
-        $response = $this->client->aggregate(
-            Request::from(
-                $this->_collabPersonId,
-                (array) $this->_responseAttributes,
-                $rules
-            )
-        );
+        try {
+            $response = $this->client->aggregate(
+                Request::from(
+                    $this->_collabPersonId,
+                    (array) $this->_responseAttributes,
+                    $rules
+                )
+            );
 
-        $this->replaceAggregatedAttributes($response->attributes);
+            $this->replaceAggregatedAttributes($response->attributes);
+        } catch (HttpException $e) {
+            $this->logger->error(
+                "Error accessing the attribute aggregator API endpoint for {$serviceProvider->entityId}",
+                [
+                    'exception' => $e,
+                ]
+            );
+        }
     }
 
     /**

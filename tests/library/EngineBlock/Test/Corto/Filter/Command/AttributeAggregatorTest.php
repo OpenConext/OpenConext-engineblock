@@ -23,6 +23,7 @@ use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
+use OpenConext\EngineBlock\Http\Exception\HttpException;
 use PHPUnit_Framework_TestCase as UnitTest;
 
 /**
@@ -165,5 +166,43 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $command->setServiceProvider($this->sp);
 
         $command->execute();
+    }
+
+    public function testAggregatorHandlesHttpClientExceptions()
+    {
+        $client = Mockery::mock(AttributeAggregationClientInterface::class);
+        $client->shouldReceive('aggregate')
+            ->andThrow(HttpException::class);
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
+
+        $this->repository->shouldReceive('fetchServiceProviderArp')
+            ->andReturn(new AttributeReleasePolicy([
+                'name' => [
+                    [
+                        'value' => 'value',
+                        'source' => 'source',
+                    ],
+                ],
+            ]));
+
+        $this->sp->attributeAggregationRequired = true;
+
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command->setCollabPersonId('subjectId');
+        $command->setProxyServer($server);
+        $command->setRequest($this->request);
+        $command->setResponse($this->response);
+        $command->setServiceProvider($this->sp);
+
+        $command->execute();
+
+        $exceptionLogged = $this->handler->hasError(
+            'Error accessing the attribute aggregator API endpoint for SP'
+        );
+
+        $this->assertTrue($exceptionLogged, 'HTTP exception on the AA endpoint is logged');
     }
 }
