@@ -1,24 +1,42 @@
 <?php
 
+use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AggregatedAttribute;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use Psr\Log\LoggerInterface;
+
 
 class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_Corto_Filter_Command_Abstract
 {
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
     /**
      * @var AttributeAggregationClient
      */
     private $client;
 
     /**
+     * @var MetadataRepositoryInterface
+     */
+    private $metadataRepository;
+
+    /**
      * @param AttributeAggregationClient $client
      */
-    public function __construct(AttributeAggregationClientInterface $client)
-    {
+    public function __construct(
+        LoggerInterface $logger,
+        AttributeAggregationClientInterface $client,
+        MetadataRepositoryInterface $metadataRepository
+    ) {
+        $this->logger = $logger;
         $this->client = $client;
+        $this->metadataRepository = $metadataRepository;
     }
 
     /**
@@ -33,8 +51,6 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
 
     public function execute()
     {
-        $logger = EngineBlock_ApplicationSingleton::getLog();
-
         $serviceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
             $this->_serviceProvider,
             $this->_request,
@@ -46,16 +62,16 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
         }
 
         if (!$serviceProvider->attributeAggregationRequired) {
-            $logger->info("No Attribute Aggregation for " . $serviceProvider->entityId);
+            $this->logger->info("No Attribute Aggregation for " . $serviceProvider->entityId);
             return;
         }
 
-        $logger->notice("Attribute Aggregation for {$serviceProvider->entityId}");
+        $this->logger->notice("Attribute Aggregation for {$serviceProvider->entityId}");
 
         $rules = $this->createAttributeRulesForSp($serviceProvider);
 
         if (empty($rules)) {
-            $logger->warning("No attribute rules configured for aggregation for " . $serviceProvider->entityId);
+            $this->logger->warning("No attribute rules configured for aggregation for " . $serviceProvider->entityId);
             return;
         }
 
@@ -77,20 +93,12 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
      * @return AttributeRule[]
      */
     private function createAttributeRulesForSp(ServiceProvider $sp) {
-        $arp = $this->getMetadataRepository()->fetchServiceProviderArp($sp);
+        $arp = $this->metadataRepository->fetchServiceProviderArp($sp);
         if (!$arp) {
             return [];
         }
 
         return AttributeRule::fromArp($arp);
-    }
-
-    /**
-     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository
-     */
-    private function getMetadataRepository()
-    {
-        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMetadataRepository();
     }
 
     /**

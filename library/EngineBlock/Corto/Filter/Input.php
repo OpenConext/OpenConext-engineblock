@@ -51,7 +51,9 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
 
             // Aggregate additional attributes for this Service Provider
             new EngineBlock_Corto_Filter_Command_AttributeAggregator(
-                $diContainer->getAttributeAggregationClient()
+                $logger,
+                $diContainer->getAttributeAggregationClient(),
+                $diContainer->getMetadataRepository()
             ),
 
             // Check if the Policy Decision Point needs to be consulted for this request
