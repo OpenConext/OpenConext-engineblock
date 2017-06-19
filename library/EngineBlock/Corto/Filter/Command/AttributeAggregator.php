@@ -47,7 +47,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
      */
     public function getResponseAttributes()
     {
-        return $this->_responseAttributes;
+        return (array) $this->_responseAttributes;
     }
 
     public function execute()
@@ -76,6 +76,8 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
             return;
         }
 
+        $this->clearAttributesForAggregation($rules);
+
         try {
             $response = $this->client->aggregate(
                 Request::from(
@@ -85,7 +87,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
                 )
             );
 
-            $this->replaceAggregatedAttributes($response->attributes);
+            $this->addAggregatedAttributes($response->attributes);
         } catch (HttpException $e) {
             $this->logger->error(
                 "Error accessing the attribute aggregator API endpoint for {$serviceProvider->entityId}",
@@ -112,15 +114,30 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     }
 
     /**
+     * Clear all response attributes configured for aggregation.
+     *
+     * Attributes defined for aggregation must always come from the
+     * aggregator, so before adding the aggregated attributes we clear all
+     * attributes that do not come from the aggregator but are configured for
+     * aggregation.
+     *
+     * @param AttributeRule[] $rules
+     */
+    private function clearAttributesForAggregation(array $rules) {
+        foreach ($rules as $rule) {
+            unset($this->_responseAttributes[$rule->name]);
+        }
+    }
+
+    /**
      * Replace the attributes sent by the IdP with aggregated attributes.
      *
      * TODO: keep track of attribute sources.
      *
-     * @param array $attributes
+     * @param AggregatedAttribute[] $attributes
      */
-    private function replaceAggregatedAttributes(array $attributes) {
+    private function addAggregatedAttributes(array $attributes) {
         foreach ($attributes as $attribute) {
-            /** @var AggregatedAttribute $attribute */
             $this->_responseAttributes[$attribute->name] = $attribute->values;
         }
     }

@@ -205,4 +205,98 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
 
         $this->assertTrue($exceptionLogged, 'HTTP exception on the AA endpoint is logged');
     }
+
+    public function testAggregatorReplacesAttributes()
+    {
+        $client = Mockery::mock(AttributeAggregationClientInterface::class);
+        $client->shouldReceive('aggregate')
+            ->andReturn(Response::fromData([
+                [
+                    'name' => 'name',
+                    'values' => ['aggregated-value'],
+                    'source' => ['source'],
+                ],
+            ]));
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
+
+        $this->repository->shouldReceive('fetchServiceProviderArp')
+            ->andReturn(new AttributeReleasePolicy([
+                'name' => [
+                    [
+                        'value' => 'value',
+                        'source' => 'source',
+                    ],
+                ],
+            ]));
+
+        $this->sp->attributeAggregationRequired = true;
+
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command->setCollabPersonId('subjectId');
+        $command->setProxyServer($server);
+        $command->setRequest($this->request);
+        $command->setResponse($this->response);
+        $command->setResponseAttributes([
+          'name' => ['non-aggregated-value'],
+        ]);
+        $command->setServiceProvider($this->sp);
+
+        $command->execute();
+
+        $this->assertEquals(
+            [
+                'name' => [
+                    'aggregated-value',
+                ],
+            ],
+            $command->getResponseAttributes()
+        );
+    }
+
+    public function testAggregatorStripsIdpAttributesIfAggregatorHasNoResults()
+    {
+        $client = Mockery::mock(AttributeAggregationClientInterface::class);
+        $client->shouldReceive('aggregate')
+            ->andReturn(Response::fromData([]));
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
+
+        $this->repository->shouldReceive('fetchServiceProviderArp')
+            ->andReturn(new AttributeReleasePolicy([
+                'name' => [
+                    [
+                        'value' => 'value',
+                        'source' => 'source',
+                    ],
+                ],
+            ]));
+
+        $this->sp->attributeAggregationRequired = true;
+
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command->setCollabPersonId('subjectId');
+        $command->setProxyServer($server);
+        $command->setRequest($this->request);
+        $command->setResponse($this->response);
+        $command->setResponseAttributes([
+          'name' => ['non-aggregated-value'],
+        ]);
+
+        $command->setServiceProvider($this->sp);
+
+        $command->execute();
+
+        // The 'name' attribute should not be there, because it is configured
+        // for aggregation and the aggregator returned no results. The
+        // attribute was in the response, but since the ARP specifies a source
+        // and the source didn't return the attribute, the attribute should be
+        // dropped.
+        $this->assertEquals([], $command->getResponseAttributes());
+    }
+
 }
