@@ -11,7 +11,7 @@ class Version20170331145533 extends AbstractMigration
     {
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('DROP TABLE IF NOT EXISTS log_logins');
+        $this->addSql('DROP TABLE IF EXISTS log_logins');
     }
 
     public function down(Schema $schema)
