@@ -8,11 +8,10 @@
  * If THEIR SP is known to us and wants a different NameID they'll just have to use the eduPersonTargettedId.
  */
 class EngineBlock_Corto_Filter_Command_SetNameId extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface
 {
     /**
-     * This command may modify the response.
-     *
-     * @return EngineBlock_Saml2_ResponseAnnotationDecorator
+     * {@inheritdoc}
      */
     public function getResponse()
     {

@@ -1,11 +1,10 @@
 <?php
 
 class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
     /**
-     * This command may modify the response attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResponseAttributes()
     {

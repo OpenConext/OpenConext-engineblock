@@ -1,5 +1,8 @@
 <?php
 
+use EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface as ResponseAttributesModificationInterface;
+use EngineBlock_Corto_Filter_Command_ResponseModificationInterface as ResponseModificationInterface;
+use EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface as CollabPersonIdModificationInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
@@ -81,13 +84,13 @@ abstract class EngineBlock_Corto_Filter_Abstract
                 throw $e;
             }
 
-            if (method_exists($command, 'getResponse')) {
+            if ($command instanceof ResponseModificationInterface) {
                 $response = $command->getResponse();
             }
-            if (method_exists($command, 'getResponseAttributes')) {
+            if ($command instanceof ResponseAttributesModificationInterface) {
                 $responseAttributes = $command->getResponseAttributes();
             }
-            if (method_exists($command, 'getCollabPersonId')) {
+            if ($command instanceof CollabPersonIdModificationInterface) {
                 $collabPersonId = $command->getCollabPersonId();
             }
 

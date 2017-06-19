@@ -1,11 +1,11 @@
 <?php
 
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
+               EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface
 {
     /**
-     * This command modifies the response
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResponse()
     {
@@ -13,9 +13,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
     }
 
     /**
-     * This command modifies the collabPersonId
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getCollabPersonId()
     {

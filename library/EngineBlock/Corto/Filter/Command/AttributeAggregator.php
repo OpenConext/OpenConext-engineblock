@@ -11,6 +11,7 @@ use Psr\Log\LoggerInterface;
 
 
 class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
     /**
      * @var LoggerInterface
@@ -41,9 +42,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     }
 
     /**
-     * This command may modify the response attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResponseAttributes()
     {

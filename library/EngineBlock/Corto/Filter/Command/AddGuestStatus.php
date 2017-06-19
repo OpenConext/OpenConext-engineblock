@@ -6,14 +6,13 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
  *
  */
 class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
     const URN_SURF_PERSON_AFFILIATION       = 'urn:oid:1.3.6.1.4.1.1076.20.100.10.10.1';
     const URN_IS_MEMBER_OF                  = 'urn:mace:dir:attribute-def:isMemberOf';
 
     /**
-     * This command may modify the response attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResponseAttributes()
     {
