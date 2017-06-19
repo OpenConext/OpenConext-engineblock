@@ -11,7 +11,9 @@ use Psr\Log\LoggerInterface;
 
 
 class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_Corto_Filter_Command_Abstract
-    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface,
+               EngineBlock_Corto_Filter_Command_ResponseAttributeSourcesModificationInterface,
+               EngineBlock_Corto_Filter_Command_ResponseModificationInterface
 {
     /**
      * @var LoggerInterface
@@ -29,6 +31,13 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     private $metadataRepository;
 
     /**
+     * Metadata about the origin of response attributes.
+     *
+     * @var array
+     */
+    private $responseAttributeSources = [];
+
+    /**
      * @param AttributeAggregationClient $client
      */
     public function __construct(
@@ -44,9 +53,25 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     /**
      * {@inheritdoc}
      */
+    public function getResponse()
+    {
+        return $this->_response;
+    }
+
+    /**
+     * {@inhericdoc}
+     */
     public function getResponseAttributes()
     {
         return (array) $this->_responseAttributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResponseAttributeSources()
+    {
+        return $this->responseAttributeSources;
     }
 
     public function execute()
@@ -131,13 +156,12 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     /**
      * Replace the attributes sent by the IdP with aggregated attributes.
      *
-     * TODO: keep track of attribute sources.
-     *
      * @param AggregatedAttribute[] $attributes
      */
     private function addAggregatedAttributes(array $attributes) {
         foreach ($attributes as $attribute) {
             $this->_responseAttributes[$attribute->name] = $attribute->values;
+            $this->responseAttributeSources[$attribute->name] = $attribute->source;
         }
     }
 }

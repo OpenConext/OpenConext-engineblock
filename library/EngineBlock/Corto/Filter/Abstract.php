@@ -1,8 +1,9 @@
 <?php
 
+use EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface as CollabPersonIdModificationInterface;
+use EngineBlock_Corto_Filter_Command_ResponseAttributeSourcesModificationInterface as ResponseAttributeSourcesModificationInterface;
 use EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface as ResponseAttributesModificationInterface;
 use EngineBlock_Corto_Filter_Command_ResponseModificationInterface as ResponseModificationInterface;
-use EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface as CollabPersonIdModificationInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
@@ -89,6 +90,9 @@ abstract class EngineBlock_Corto_Filter_Abstract
             }
             if ($command instanceof ResponseAttributesModificationInterface) {
                 $responseAttributes = $command->getResponseAttributes();
+            }
+            if ($command instanceof ResponseAttributeSourcesModificationInterface) {
+                $_SESSION[$request->getId()]['attribute_sources'] = $command->getResponseAttributeSources();
             }
             if ($command instanceof CollabPersonIdModificationInterface) {
                 $collabPersonId = $command->getCollabPersonId();

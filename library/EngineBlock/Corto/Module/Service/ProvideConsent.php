@@ -97,11 +97,12 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $html = $this->_server->renderTemplate(
             'consent',
             array(
-                'action'    => $this->_server->getUrl('processConsentService'),
-                'ID'        => $response->getId(),
-                'attributes'=> $attributes,
-                'sp'        => $serviceProviderMetadata,
-                'idp'       => $identityProvider,
+                'action'            => $this->_server->getUrl('processConsentService'),
+                'ID'                => $response->getId(),
+                'attributes'        => $attributes,
+                'attribute_sources' => $this->getAttributeSources($request->getId()),
+                'sp'                => $serviceProviderMetadata,
+                'idp'               => $identityProvider,
             ));
         $this->_server->sendOutput($html);
     }
@@ -124,5 +125,20 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         }
 
         return false;
+    }
+
+    /**
+     * Find attribute sources in the session.
+     *
+     * The attribute aggregator corto filter stores the aggregated attribute
+     * sources in the session.
+     */
+    private function getAttributeSources($requestId)
+    {
+        if (isset($_SESSION[$requestId]['attribute_sources'])) {
+            return $_SESSION[$requestId]['attribute_sources'];
+        }
+
+        return [];
     }
 }
