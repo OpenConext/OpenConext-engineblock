@@ -155,6 +155,10 @@ If you have any questions about your privacy and the policy applied, please visi
     //New Consent
     'consent_header_info'               => 'Request for release of your information',
     'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%1$s</strong> using your institutional account, <strong class="identity-provider">%2$s</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%2$s</strong> shares certain information with this service. For this, your permission is required. The service needs the following information:',
+    'consent_aggregated_attributes_info' => '<strong class="service-provider">%1$s</strong> also requires access to information from the source <strong class="attribute-source">%2$s</strong>. The service needs the following additional information:',
+    'consent_attribute_source_voot'     => 'Group membership',
+    'consent_attribute_source_sab'      => 'SURFnet Autorisatie Beheer',
+    'consent_attribute_source_orcid'    => 'ORCID iD',
     'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
     'name_id'                           => 'SURFconext user ID',
 

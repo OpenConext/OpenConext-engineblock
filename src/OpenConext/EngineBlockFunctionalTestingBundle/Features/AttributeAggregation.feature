@@ -9,6 +9,7 @@ Feature:
     And no registered Idps
     And an Identity Provider named "IDP-AA"
     And a Service Provider named "SP-AA"
+    And SP "SP-AA" allows an attribute named "urn:mace:dir:attribute-def:uid"
     And SP "SP-AA" requires attribute aggregation
 
   Scenario: As a user for an SP where eduPersonOrcid is configured for aggregation
