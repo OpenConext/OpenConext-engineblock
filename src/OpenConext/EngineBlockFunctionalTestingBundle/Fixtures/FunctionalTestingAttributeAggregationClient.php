@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use InvalidArgumentException;
+use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
@@ -31,15 +32,9 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
      */
     private $dataStore;
 
-    /**
-     * @var string
-     */
-    private $fixture;
-
     public function __construct(AbstractDataStore $dataStore)
     {
         $this->dataStore = $dataStore;
-        $this->fixture = $dataStore->load();
     }
 
     /**
@@ -48,31 +43,52 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
      */
     public function aggregate(Request $request)
     {
-        if ($this->fixture === 'aggregate-orcid') {
+        $attributes = $this->dataStore->load();
+
+        foreach ($attributes as $attribute) {
             if (empty($request->rules)) {
                 throw new InvalidArgumentException(
-                    'Expecting an ARP rule for eduPersonOrcid, but no rules found.'
+                    "Expecting an ARP rule for {$attribute['name']}, but no rules found."
                 );
             }
 
-            $rule = reset($request->rules);
-            if ($rule->name !== 'eduPersonOrcid' || $rule->source !== 'voot') {
+            if (!$this->hasRuleForAttribute($request->rules, $attribute['name'], $attribute['source'])) {
                 throw new InvalidArgumentException(
-                    'Expectation failed for fixture aggregate-orcid: expecting ARP rule for eduPersonOrcid from source voot'
+                    "Expectation failed in AA client mock: expecting ARP rule for '{$attribute['name']}"
                 );
             }
-
-            return Response::fromData([
-                [
-                    'name' => 'eduPersonOrcid',
-                    'values' => ['123456'],
-                    'source' => 'voot',
-                ],
-            ]);
         }
 
-        // Default to no empty aggregation response.
-        return Response::fromData([]);
+        return Response::fromData($attributes);
+    }
+
+    /**
+     * @param array $rules ARP rules
+     * @param string $name
+     * @param string $source
+     * @return bool
+     */
+    private function hasRuleForAttribute(array $rules, $name, $source)
+    {
+        foreach ($rules as $rule) {
+            if ($this->ruleMatchesAttribute($rule, $name, $source)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param AttributeRule $rule
+     * @param string $name
+     * @param string $source
+     * @return bool
+     */
+    private function ruleMatchesAttribute(AttributeRule $rule, $name, $source)
+    {
+        return ($rule->name === $name) &&
+               ($rule->source === $source);
     }
 
     /**
@@ -80,14 +96,26 @@ final class FunctionalTestingAttributeAggregationClient implements AttributeAggr
      */
     public function returnsNothing()
     {
-        $this->dataStore->save('aggregate-nothing');
+        $this->dataStore->save([]);
     }
 
     /**
-     * Configure the client mock to return an eduPersonOrcid attribute.
+     * Configure the client mock to return a speficic attribute.
+     *
+     * @param string $name
+     * @param array $values
+     * @param string $source
      */
-    public function returnsOrcid()
+    public function returnsAttribute($name, array $values, $source)
     {
-        $this->dataStore->save('aggregate-orcid');
+        $attributes = $this->dataStore->load();
+
+        $attributes[] = [
+            'name'   => $name,
+            'values' => $values,
+            'source' => $source,
+        ];
+
+        $this->dataStore->save($attributes);
     }
 }

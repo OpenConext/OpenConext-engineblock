@@ -97,7 +97,7 @@ $inlineScriptHelper->appendScript('
             <?= $this->t('consent_aggregated_attributes_info', $spName, $this->getAttributeSourceDisplayName($attributeSource)); ?>
           </p>
         <?php endif ?>
-        <table class="comp-table">
+        <table class="comp-table" data-attr-source="<?php print EngineBlock_View::htmlSpecialCharsText($attributeSource); ?>">
           <?php foreach ($attributes as $attributeIdentifier => $attributeValues) : ?>
 
             <?php
