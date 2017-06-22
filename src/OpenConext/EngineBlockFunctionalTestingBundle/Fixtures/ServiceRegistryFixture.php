@@ -66,6 +66,14 @@ class ServiceRegistryFixture
     public function requireAttributeAggregation($entityId)
     {
         $this->data[$entityId]['coin:attribute_aggregation_required'] = true;
+
+        return $this;
+    }
+
+    public function displayUnconnectedIdpsForSp($entityId, $displayUnconnected = true)
+    {
+        $this->data[$entityId]['coin:display_unconnected_idps_wayf'] = $displayUnconnected;
+
         return $this;
     }
 
