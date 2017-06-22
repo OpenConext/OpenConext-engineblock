@@ -39,8 +39,23 @@ export class RequestAccessModalHelper {
         }
     }
 
+    requestAccessClickHandler() {
+        function isUnconnectedIdpRow(element) {
+            return (element.className.indexOf('noaccess') > -1);
+        }
+
+        return event => {
+            if (
+                (isUnconnectedIdpRow(event.target)) ||
+                (isUnconnectedIdpRow(event.target.parentElement))
+            ) {
+                this.openRequestAccessModal();
+            }
+        }
+    }
+
     containerClickHandler(containerElement) {
-        return () => {
+        return event => {
             if (event.target === containerElement) {
                 this.closeRequestAccessModal();
             }

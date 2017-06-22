@@ -11,7 +11,14 @@ export class IdpListElementFactory {
 
         for (let i = 0; i < idpList.length; i++) {
             const idpElement = document.createElement('a');
-            idpElement.className = 'result active access';
+            idpElement.className = 'result active';
+
+            if (idpList[i].connected) {
+                idpElement.className += ' access';
+            } else {
+                idpElement.className += ' noaccess';
+            }
+
             idpElement.setAttribute('href', '#');
             idpElement.setAttribute('tabindex', '-1');
 
@@ -24,7 +31,12 @@ export class IdpListElementFactory {
 
             const actionElement = document.createElement('span');
             actionElement.className = 'c-button white action';
-            actionElement.textContent = this.messages['pressEnterToSelect'];
+
+            if (idpList[i].connected) {
+                actionElement.textContent = this.messages['pressEnterToSelect'];
+            } else {
+                actionElement.textContent = this.messages['requestAccess'];
+            }
 
             idpElement.appendChild(logoElement);
             idpElement.appendChild(titleElement);

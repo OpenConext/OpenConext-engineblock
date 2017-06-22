@@ -4,6 +4,9 @@
   .lt-ie9 &
     margin-bottom: 2em
 
+  &.hidden
+    display: none
+
   +max-width($medium)
     margin-bottom: 1rem
     .lt-ie9 &
@@ -26,7 +29,6 @@
     background: #fff
     background-origin: content-box
     -webkit-appearance: none
-    margin-bottom: 2rem
     .lt-ie9 &
       font-size: 1em
       padding: 0.75em 3.5em 0.75em 1em
@@ -39,6 +41,14 @@
     +hocus
       outline: none
       box-shadow: 0 1px $br rgba(black,.4)
+
+    // fallback login button for non-javascript
+    &.c-button
+      padding: 0
+      margin-left: 1rem
+
+  &.login
+    margin-bottom: 0
 
   button.search
     position: absolute

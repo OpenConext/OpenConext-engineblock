@@ -1,41 +1,36 @@
-export class IdpPicker {
+import {AbstractIdpPicker} from "./AbstractIdpPicker";
+
+export class ConnectedIdpPicker extends AbstractIdpPicker {
     constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage) {
-        this.searchForm = searchForm;
-        this.targetElement = targetElement;
+        super(searchForm, targetElement, idpList);
+
         this.previousSelectionList = previousSelectionList;
-        this.idpList = idpList;
         this.previousSelectionStorage = previousSelectionStorage;
 
-        this.previousSearchTerm = '';
         this.indexOfIdpUnderFocus = null;
 
-        this.focusOnFirstIdp();
-        this.indexElements();
-        this.updateResultSelectedClickListeners();
-        this.updateEditPreviousSelectionClickListener();
+        this.updateFocus();
     }
 
-    searchBy(searchTerm) {
-        searchTerm = searchTerm.trim().toLowerCase();
+    narrowFilterBy(searchTerm) {
+        super.narrowFilterBy(searchTerm);
 
-        if (searchTerm === this.previousSearchTerm) {
-            return;
-        }
+        this.previousSelectionList.narrowFilterBy(searchTerm);
+    }
 
-        if (searchTerm.length > this.previousSearchTerm.length) {
-            this.previousSelectionList.narrowFilterBy(searchTerm);
-            this.idpList.narrowFilterBy(searchTerm);
-        } else {
-            this.previousSelectionList.filterBy(searchTerm);
-            this.idpList.filterBy(searchTerm);
-        }
+    filterBy(searchTerm) {
+        super.filterBy(searchTerm);
+
+        this.previousSelectionList.filterBy(searchTerm);
+    }
+
+    updateFocus() {
+        super.updateFocus();
 
         this.focusOnFirstIdp();
         this.indexElements();
         this.updateResultSelectedClickListeners();
         this.updateEditPreviousSelectionClickListener();
-
-        this.previousSearchTerm = searchTerm;
     }
 
     indexElements() {
@@ -115,15 +110,17 @@ export class IdpPicker {
 
     updateEditPreviousSelectionClickListener() {
         const $editButton = this.targetElement.querySelector('.edit');
-        $editButton.removeEventListener('click', this.editPreviousSelectionClickHandler());
-        $editButton.addEventListener('click', this.editPreviousSelectionClickHandler());
+        if ($editButton) {
+            $editButton.removeEventListener('click', this.editPreviousSelectionClickHandler());
+            $editButton.addEventListener('click', this.editPreviousSelectionClickHandler());
+        }
     }
 
     editPreviousSelectionClickHandler() {
         return (event) => {
             event.preventDefault();
 
-            const $previousSelectionList = this.targetElement.querySelector('#preselection .idp-list');
+            const $previousSelectionList = this.targetElement.querySelector('.preselection .idp-list');
 
             if ($previousSelectionList.className.indexOf('show-buttons') > -1) {
                 $previousSelectionList.className = $previousSelectionList.className.replace('show-buttons', '');
@@ -182,13 +179,16 @@ export class IdpPicker {
         const index = $focused.getAttribute('data-idp-list-index');
 
         let idp;
-        if (this.previousSelectionList.hasElement($focused)) {
-            idp = this.previousSelectionList.getFilteredIdpByIndex(index);
-        } else {
-            idp = this.idpList.getFilteredIdpByIndex(index - this.previousSelectionList.getLengthOfFilteredList());
-        }
 
-        this.previousSelectionStorage.save(this.previousSelectionList.getListUpdatedWith(idp));
+        if (this.previousSelectionList) {
+            if (this.previousSelectionList.hasElement($focused)) {
+                idp = this.previousSelectionList.getFilteredIdpByIndex(index);
+            } else {
+                idp = this.idpList.getFilteredIdpByIndex(index - this.previousSelectionList.getLengthOfFilteredList());
+            }
+
+            this.previousSelectionStorage.save(this.previousSelectionList.getListUpdatedWith(idp));
+        }
 
         this.searchForm.elements['form-idp'].value = idp.entityId;
         this.searchForm.submit();

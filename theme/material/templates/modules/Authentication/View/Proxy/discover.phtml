@@ -60,10 +60,6 @@ else {
     }
 }
 
-$idpList = array_filter($idpList, function (array $idp) {
-  return $idp['Access'] === '1';
-});
-
 $nameSort = function ($a, $b) use ($locale) {
     return strtolower($a['Name_' . $locale]) > strtolower($b['Name_' . $locale]);
 };
@@ -73,7 +69,7 @@ usort($idpList, $nameSort);
 $layout->assign('greenHeader', $spDisplayName);
 $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $locale);
 ?>
-<form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+<form class="mod-search hidden" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
   <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
   <input type="hidden" id="form-idp" name="idp" value="" />
 
@@ -81,126 +77,158 @@ $layout->assign('helpLink', '/authentication/idp/help-discover?lang=' . $locale)
   <input placeholder="<?= $this->t('search'); ?>" type="search" tabindex="0" class="mod-search-input active">
 
   <button class="search">Search</button>
-    <?php
+</form>
 
-    $previousSelectionCookieIdentifier = 'selectedidps';
-    $previousSelection                 = json_decode($_COOKIE[$previousSelectionCookieIdentifier], true);
+<?php
+$previousSelectionCookieIdentifier = 'selectedidps';
+$previousSelection                 = json_decode($_COOKIE[$previousSelectionCookieIdentifier], true);
 
-    $previousSelectionIndex = [];
-    if ($previousSelection !== null) {
-        foreach ($previousSelection as $idp) {
-            $previousSelectionIndex[$idp['idp']] = $idp;
-        }
+$previousSelectionIndex = [];
+if ($previousSelection !== null) {
+    foreach ($previousSelection as $idp) {
+        $previousSelectionIndex[$idp['idp']] = $idp;
+    }
+}
+
+$formattedPreviousSelectionList = [];
+$formattedIdpList = [];
+foreach ($idpList as $idp) {
+    $idpKeywords = $idp['Keywords'] === 'Undefined' ? array() : array_values((array) $idp['Keywords']);
+
+    if (isset($previousSelectionIndex[$idp['EntityID']])) {
+        $formattedPreviousSelectionList[] = array_merge(
+            $previousSelectionIndex[$idp['EntityID']],
+            [
+                'entityId'     => $idp['EntityID'],
+                'connected'    => $idp['Access'] === '1',
+                'displayTitle' => $idp['Name_'.$locale],
+                'title'        => strtolower($idp['Name_'.$locale]),
+                'keywords'     => strtolower(join('|', $idpKeywords)),
+                'logo'         => $idp['Logo'],
+            ]
+        );
+        continue;
     }
 
-    $formattedPreviousSelectionList = [];
-    $formattedIdpList = [];
-    foreach ($idpList as $idp) {
-        $idpKeywords = $idp['Keywords'] === 'Undefined' ? array() : array_values((array) $idp['Keywords']);
-
-        if (isset($previousSelectionIndex[$idp['EntityID']])) {
-            $formattedPreviousSelectionList[] = array_merge(
-                $previousSelectionIndex[$idp['EntityID']],
-                [
-                    'entityId'     => $idp['EntityID'],
-                    'displayTitle' => $idp['Name_'.$locale],
-                    'title'        => strtolower($idp['Name_'.$locale]),
-                    'keywords'     => strtolower(join('|', $idpKeywords)),
-                    'logo'         => $idp['Logo'],
-                ]
-            );
-            continue;
-        }
-
-        $formattedIdpList[] = [
-            'entityId'     => $idp['EntityID'],
-            'displayTitle' => $idp['Name_'.$locale],
-            'title'        => strtolower($idp['Name_'.$locale]),
-            'keywords'     => strtolower(join('|', $idpKeywords)),
-            'logo'         => $idp['Logo'],
-        ];
-    }
-
-    $configuration = [
-        'previousSelectionCookieName'         => $previousSelectionCookieIdentifier,
-        'previousSelectionList'               => $formattedPreviousSelectionList,
-        'idpList'                             => $formattedIdpList,
-        'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
-        'messages'                            => [
-            'pressEnterToSelect' => $this->t('press_enter_to_select'),
-            'moreIdpResults'     => $this->t('more_idp_results'),
-        ],
-        'requestAccessUrl'                    => '/authentication/idp/requestAccess?'.http_build_query(
-                [
-                    'lang'       => $locale,
-                    'spEntityId' => $metaDataSP->entityId,
-                    'spName'     => $spDisplayName,
-                ]
-            ),
+    $formattedIdpList[] = [
+        'entityId'     => $idp['EntityID'],
+        'connected'    => $idp['Access'] === '1',
+        'displayTitle' => $idp['Name_'.$locale],
+        'title'        => strtolower($idp['Name_'.$locale]),
+        'keywords'     => strtolower(join('|', $idpKeywords)),
+        'logo'         => $idp['Logo'],
     ];
-    ?>
+}
 
-    <script id="wayf-configuration" type="application/json">
-        <?php echo json_encode($configuration); ?>
-    </script>
+$connectedIdps = array_filter(
+    $formattedIdpList,
+    function ($idp) {
+        return $idp['connected'];
+    }
+);
 
-    <div id="idp-picker">
-      <div id="preselection" class="mod-results hidden">
-          <header>
-              <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
-          </header>
-          <div class="idp-list">
-          </div>
-      </div>
+if ($showRequestAccess === true) {
+    $unconnectedIdps = array_filter(
+        $formattedIdpList,
+        function ($idp) {
+            return !$idp['connected'];
+        }
+    );
+} else {
+    $unconnectedIdps = array();
+}
 
-      <div id="selection" class="mod-results">
-        <header>
-            <h2><?php echo $this->t('idps_with_access'); ?></h2>
-        </header>
+$configuration = [
+    'previousSelectionCookieName'         => $previousSelectionCookieIdentifier,
+    'previousSelectionList'               => $formattedPreviousSelectionList,
+    'connectedIdps'                       => array_values($connectedIdps),
+    'unconnectedIdps'                     => array_values($unconnectedIdps),
+    'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
+    'messages'                            => [
+        'pressEnterToSelect' => $this->t('press_enter_to_select'),
+        'moreIdpResults'     => $this->t('more_idp_results'),
+        'requestAccess'      => $this->t('request_access'),
+    ],
+    'requestAccessUrl'                    => '/authentication/idp/requestAccess?'.http_build_query(
+        [
+            'lang'       => $locale,
+            'spEntityId' => $metaDataSP->entityId,
+            'spName'     => $spDisplayName,
+        ]
+    ),
+];
+?>
 
-          <div class="loading spinner hidden">
-            <div class="logo">
-              <img class="rotate-img" src="/images/spinner.svg" alt="" />
-            </div>
-            <?=$this->t('loading_idps');?>
-          </div>
+<script id="wayf-configuration" type="application/json">
+  <?php echo json_encode($configuration); ?>
+</script>
 
-            <div class="idp-list">
-            </div>
-
-        <noscript>
-          <?php foreach ($idpList as $key => $idp) : ?>
-          <a class="result active access" href="#" tabindex="-1">
-              <div class="logo">
-                <img class="logo" src="/images/placeholder.png" alt="" />
-              </div>
-              <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['Name_' . $locale]); ?></h3>
-              <form class="mod-search" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-                <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
-                <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" />
-                <input type="submit" data-entityid="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['EntityID']); ?>" class="c-button white" value="Login" />
-              </form>
-          </a>
-          <?php endforeach; ?>
-        </noscript>
-          <div class="loading hidden noresults">
-            <div class="logo">
-              <div class="letter">??</div>
-            </div>
-            <p><?php echo $this->t('no_idp_results'); ?></p>
-          </div>
-      </div>
-    </div>
-  <?php if ($showRequestAccess === true && count($idpList) > 0): ?>
-  <div id="noselection" class="mod-results">
-    <div class='list no-access'>
-      <div class="loading noresults">
-        <div class="logo">
-          <div class="letter">??</div>
-        </div>
-        <p><?php echo $this->t('no_idp_results_request_access'); ?></p>
-      </div>
+<div id="connected-idp-picker">
+  <div class="preselection mod-results hidden">
+    <header>
+      <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
+    </header>
+    <div class="idp-list">
     </div>
   </div>
-  <?php endif ?>
-</form>
+
+  <div class="selection mod-results">
+    <header>
+      <h2><?php echo $this->t('idps_with_access'); ?></h2>
+    </header>
+
+    <div class="loading spinner hidden">
+      <div class="logo">
+        <img class="rotate-img" src="/images/spinner.svg" alt="" />
+      </div>
+      <?=$this->t('loading_idps');?>
+    </div>
+
+    <div class="idp-list">
+    </div>
+
+    <noscript>
+      <div class="list show-buttons">
+        <?php foreach (array_merge($formattedPreviousSelectionList, $connectedIdps) as $key => $idp) : ?>
+        <a class="result active access" href="#" tabindex="-1">
+          <div class="logo">
+            <img class="logo" src="/images/placeholder.png" data-original="<?= $idp['logo'] ?>" />
+          </div>
+          <h3><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['displayTitle']); ?></h3>
+          <form class="mod-search login" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+            <input type="hidden" name="ID" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>" />
+            <input type="hidden" name="idp" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['entityId']); ?>" />
+            <input type="submit" data-entityid="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp['entityId']); ?>" class="c-button white" value="Login" />
+          </form>
+        </a>
+        <?php endforeach; ?>
+      </div>
+    </noscript>
+    <div class="loading hidden noresults">
+      <div class="logo">
+        <div class="letter">??</div>
+      </div>
+      <p><?php echo $this->t('no_idp_results'); ?></p>
+    </div>
+  </div>
+</div>
+
+<?php if ($showRequestAccess === true): ?>
+<div id="unconnected-idp-picker" class="idp-picker hidden">
+  <div class="selection mod-results">
+    <header>
+      <h2><?php echo $this->t('idps_without_access'); ?></h2>
+    </header>
+
+    <div class="idp-list">
+    </div>
+
+    <div class="loading hidden noresults">
+      <div class="logo">
+        <div class="letter">??</div>
+      </div>
+      <p><?php echo $this->t('no_idp_results_request_access'); ?></p>
+    </div>
+  </div>
+</div>
+<?php endif ?>
