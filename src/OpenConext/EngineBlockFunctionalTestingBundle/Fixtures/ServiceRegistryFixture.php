@@ -63,6 +63,12 @@ class ServiceRegistryFixture
         return $this;
     }
 
+    public function requireAttributeAggregation($entityId)
+    {
+        $this->data[$entityId]['coin:attribute_aggregation_required'] = true;
+        return $this;
+    }
+
     public function registerIdp($name, $entityId, $ssoLocation, $certData = '')
     {
         $this->data[$entityId] = [
@@ -146,7 +152,6 @@ class ServiceRegistryFixture
         $this->data[$entityId]['NameIDFormat'] = SAML2_Const::NAMEID_PERSISTENT;
         return $this;
     }
-
 
     public function setEntityNameIdFormatTransient($entityId)
     {
@@ -268,7 +273,7 @@ class ServiceRegistryFixture
         return $this;
     }
 
-    public function allowAttributeValue($entityId, $arpAttribute, $attributeValue)
+    public function allowAttributeValue($entityId, $arpAttribute, $attributeValue, $attributeSource = null)
     {
         if (!isset($this->data[$entityId]['arp'])) {
             $this->data[$entityId]['arp'] = [];
@@ -278,7 +283,17 @@ class ServiceRegistryFixture
         if (!isset($this->data[$entityId]['arp'][$arpAttribute])) {
             $this->data[$entityId]['arp'][$arpAttribute] = [];
         }
-        $this->data[$entityId]['arp'][$arpAttribute][] = $attributeValue;
+
+        if ($attributeSource) {
+            $arpRule = [
+                'value' => $attributeValue,
+                'source' => $attributeSource,
+            ];
+        } else {
+            $arpRule = $attributeValue;
+        }
+
+        $this->data[$entityId]['arp'][$arpAttribute][] = $arpRule;
 
         return $this;
     }

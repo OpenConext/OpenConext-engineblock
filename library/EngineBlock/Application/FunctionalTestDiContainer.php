@@ -52,4 +52,12 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
     {
         return $this->getFunctionalTestingPdpClient();
     }
+
+    /**
+     * @return \OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface
+     */
+    public function getAttributeAggregationClient()
+    {
+        return $this->getSymfonyContainer()->get('engineblock.functional_testing.fixture.attribute_aggregation_client');
+    }
 }

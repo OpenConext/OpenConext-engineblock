@@ -40,6 +40,9 @@ $ymlContent = array(
         'pdp.policy_decision_point_path'                          => $config->get('pdp.policy_decision_point_path'),
         'pdp.username'                                            => $config->get('pdp.username'),
         'pdp.password'                                            => $config->get('pdp.password'),
+        'attribute_aggregation.base_url'                          => $config->get('attributeAggregation.baseUrl'),
+        'attribute_aggregation.username'                          => $config->get('attributeAggregation.username'),
+        'attribute_aggregation.password'                          => $config->get('attributeAggregation.password'),
         'logger.channel'                                          => $config->get('logger.conf.name'),
         'logger.fingers_crossed.passthru_level'                   => $config->get(
             'logger.conf.handler.fingers_crossed.conf.passthru_level'

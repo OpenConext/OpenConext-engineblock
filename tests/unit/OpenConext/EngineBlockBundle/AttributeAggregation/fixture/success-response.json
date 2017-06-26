@@ -1,0 +1,18 @@
+[
+   {
+      "name": "urn:mace:dir:attribute-def:eduPersonEntitlement",
+      "values": [
+         "urn:x-surfnet:surfnet.nl:sab:role:SURFwireless-beheerder",
+         "urn:x-surfnet:surfnet.nl:sab:role:Coordinerend-SURF-Contactpersoon"
+      ],
+      "source": "sab"
+   },
+   {
+      "name": "urn:mace:dir:attribute-def:isMemberOf",
+      "values": [
+         "urn:collab:group:surfnet.nl:crowd-surfnet",
+         "urn:collab:group:test.surfteams.nl:nl:surfnet:diensten:surflabs"
+      ],
+      "source": "voot"
+   }
+]
