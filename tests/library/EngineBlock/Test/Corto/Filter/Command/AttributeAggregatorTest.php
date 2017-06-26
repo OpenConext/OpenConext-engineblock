@@ -214,7 +214,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
                 [
                     'name' => 'name',
                     'values' => ['aggregated-value'],
-                    'source' => ['source'],
+                    'source' => 'source',
                 ],
             ]));
 
@@ -253,6 +253,13 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
                 ],
             ],
             $command->getResponseAttributes()
+        );
+
+        $this->assertEquals(
+            [
+                'name' => 'source'
+            ],
+            $command->getResponseAttributeSources()
         );
     }
 

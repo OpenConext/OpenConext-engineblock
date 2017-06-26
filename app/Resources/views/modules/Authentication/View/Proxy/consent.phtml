@@ -16,6 +16,9 @@ if (!isset($ID)) {
 if (!isset($attributes)) {
     throw new EngineBlock_View_Exception('No Attributes given to consent screen');
 }
+if (!isset($attribute_sources)) {
+    throw new EngineBlock_View_Exception('No attributes sources given to consent screen');
+}
 if (!isset($sp) || !$sp instanceof ServiceProvider) {
     throw new EngineBlock_View_Exception('No SP information given to consent screen');
 }
@@ -87,34 +90,42 @@ $inlineScriptHelper->appendScript('
     </p>
 
     <div class="l-overflow">
-        <?php $attributes = $this->sortByDisplayOrder($attributes) ?>
-        <table class="comp-table">
-            <?php foreach ($attributes as $attributeIdentifier => $attributeValues) : ?>
-                <?php
-                // Attempt to get the short name for the attribute, else use the identifier
-                $attributeShortName = $this->getAttributeName($attributeIdentifier, $locale);
-                if (trim($attributeShortName) === '') {
-                    $attributeShortName = $attributeIdentifier;
-                }
-                ?>
-                <tr>
-                    <td class="strong" data-identifier="<?= $attributeIdentifier ?>">
-                        <?=EngineBlock_View::htmlSpecialCharsText($attributeShortName) ?>
-                    </td>
-                    <td>
-                        <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
-                            <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
-                        <?php /** Multiple attribute values */ else: ?>
-                            <ul>
-                                <?php foreach ($attributeValues as $value) : ?>
-                                    <li><?=EngineBlock_View::htmlSpecialCharsText($value); ?></li>
-                                <?php endforeach ?>
-                            </ul>
-                        <?php endif ?>
-                    </td>
-                </tr>
-            <?php endforeach ?>
+      <?php $attributesBySource = $this->sortByDisplayOrder($attributes, $attribute_sources) ?>
+      <?php foreach ($attributesBySource as $attributeSource => $attributes) : ?>
+        <?php if ($attributeSource !== 'idp'): ?>
+          <p>
+            <?= $this->t('consent_aggregated_attributes_info', $spName, $this->getAttributeSourceDisplayName($attributeSource)); ?>
+          </p>
+        <?php endif ?>
+        <table class="comp-table" data-attr-source="<?php print EngineBlock_View::htmlSpecialCharsText($attributeSource); ?>">
+          <?php foreach ($attributes as $attributeIdentifier => $attributeValues) : ?>
+
+            <?php
+            // Attempt to get the short name for the attribute, else use the identifier
+            $attributeShortName = $this->getAttributeName($attributeIdentifier, $locale);
+            if (trim($attributeShortName) === '') {
+                $attributeShortName = $attributeIdentifier;
+            }
+            ?>
+            <tr>
+              <td class="strong" data-identifier="<?= $attributeIdentifier ?>">
+                <?=EngineBlock_View::htmlSpecialCharsText($attributeShortName) ?>
+              </td>
+              <td>
+                <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
+                  <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+                <?php /** Multiple attribute values */ else: ?>
+                  <ul>
+                    <?php foreach ($attributeValues as $value) : ?>
+                      <li><?=EngineBlock_View::htmlSpecialCharsText($value); ?></li>
+                    <?php endforeach ?>
+                  </ul>
+                <?php endif ?>
+              </td>
+            </tr>
+          <?php endforeach ?>
         </table>
+      <?php endforeach ?>
     </div>
 
     <div id="approve">

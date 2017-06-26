@@ -3,13 +3,12 @@
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Filter_Command_ValidateRequiredAttributes extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
     const URN_MACE_TERENA_SCHACHOMEORG = 'urn:mace:terena.org:attribute-def:schacHomeOrganization';
 
     /**
-     * This command may modify the response attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResponseAttributes()
     {

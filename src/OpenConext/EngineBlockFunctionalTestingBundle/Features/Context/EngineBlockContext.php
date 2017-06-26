@@ -2,10 +2,13 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
 use EngineBlock_Saml2_IdGenerator;
+use Ingenerator\BehatTableAssert\AssertTable;
+use Ingenerator\BehatTableAssert\TableParser\HTMLTable;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
@@ -94,6 +97,11 @@ class EngineBlockContext extends AbstractSubContext
      * @var FunctionalTestingAttributeAggregationClient
      */
     private $attributeAggregationClient;
+
+    /**
+     * @var boolean
+     */
+    private $usingAttributeAggregationClient = false;
 
     /**
      * @param ServiceRegistryFixture $serviceRegistry
@@ -241,6 +249,36 @@ class EngineBlockContext extends AbstractSubContext
         $mink = $this->getMainContext()->getMinkContext();
 
         $mink->pressButton('Submit');
+    }
+
+    /**
+     * @Then /^I should see the following "([^"]*)" attributes listed on the consent page:$/
+     */
+    public function iSeeTheAttributesFromSourceOnConsentPage($source, TableNode $attributes)
+    {
+        $mink = $this->getMainContext()->getMinkContext();
+        $tableSelector = 'table[data-attr-source="' . strtolower($source) . '"]';
+        $tableTemplate = <<<HTML
+<table>
+    <thead>
+        <tr>
+            <td>Name</td>
+            <td>Value</td>
+        </tr>
+    </thead>
+    <tbody>%s</tbody>
+</table>
+HTML;
+
+        $actualTable = HTMLTable::fromHTMLString(
+            sprintf(
+                $tableTemplate,
+                $mink->assertSession()->elementExists('css', $tableSelector)->getHtml()
+            )
+        );
+
+        $assert = new \Ingenerator\BehatTableAssert\AssertTable;
+        $assert->isComparable($attributes, $actualTable, []);
     }
 
     /**
@@ -398,6 +436,16 @@ class EngineBlockContext extends AbstractSubContext
     /**
      * @AfterScenario
      */
+    public function cleanAttributeAggregator()
+    {
+        if ($this->usingAttributeAggregationClient) {
+            $this->attributeAggregationClient->returnsNothing();
+        }
+    }
+
+    /**
+     * @AfterScenario
+     */
     public function cleanUpPdp()
     {
         if ($this->usingPdp) {
@@ -506,14 +554,24 @@ class EngineBlockContext extends AbstractSubContext
      */
     public function aaReturnsNoAttributes()
     {
+        $this->usingAttributeAggregationClient = true;
+
         $this->attributeAggregationClient->returnsNothing();
     }
 
     /**
-     * @Given /^the attribute aggregator returns an "eduPersonOrcid" attribute$/
+     * @Given /^the attribute aggregator returns the attributes:$/
      */
-    public function aaReturnsEduPersonOrcid()
+    public function aaReturnsAttributes(TableNode $attributes)
     {
-        $this->attributeAggregationClient->returnsOrcid();
+        $this->usingAttributeAggregationClient = true;
+
+        foreach ($attributes->getHash() as $attribute) {
+            $this->attributeAggregationClient->returnsAttribute(
+                $attribute['Name'],
+                explode(',', $attribute['Value']),
+                $attribute['Source']
+            );
+        }
     }
 }

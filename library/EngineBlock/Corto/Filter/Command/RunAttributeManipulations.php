@@ -4,6 +4,8 @@
  * Attribute / NameId / Response manipulation / mangling
  */
 class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineBlock_Corto_Filter_Command_Abstract
+    implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
+               EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
     const TYPE_SP  = 'sp';
     const TYPE_REQUESTER_SP = 'requester-sp';
@@ -19,15 +21,16 @@ class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineB
         $this->_type = $type;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getResponse()
     {
         return $this->_response;
     }
 
     /**
-     * This command may modify the response attributes
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResponseAttributes()
     {

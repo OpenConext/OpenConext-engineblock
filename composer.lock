@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "66a04e1913ff55de7f0775b805f590e2",
+    "content-hash": "0bb2a24faab0cfc2e51f52a38c5b242d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3946,6 +3946,54 @@
                 "test"
             ],
             "time": "2015-05-11T14:41:42+00:00"
+        },
+        {
+            "name": "ingenerator/behat-tableassert",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ingenerator/behat-tableassert.git",
+                "reference": "368f34c082836446a12c91bd6e2014b2137dbe2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ingenerator/behat-tableassert/zipball/368f34c082836446a12c91bd6e2014b2137dbe2f",
+                "reference": "368f34c082836446a12c91bd6e2014b2137dbe2f",
+                "shasum": ""
+            },
+            "require": {
+                "behat/gherkin": ">=2.0.0 <5.0.0",
+                "ext-dom": "*",
+                "ext-libxml": "*",
+                "ext-simplexml": "*",
+                "php": "^5.5||^7.0"
+            },
+            "require-dev": {
+                "behat/mink": "^1.7",
+                "phpunit/phpunit": "^4.8"
+            },
+            "suggest": {
+                "behat/mink": "For parsing tables from a browser response"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ingenerator\\BehatTableAssert\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Andrew Coulton",
+                    "email": "andrew@ingenerator.com"
+                }
+            ],
+            "description": "Assertions for all sorts of tabular data in behat",
+            "homepage": "https://github.com/ingenerator/behat-tableassert",
+            "time": "2016-09-05T10:39:11+00:00"
         },
         {
             "name": "liip/functional-test-bundle",

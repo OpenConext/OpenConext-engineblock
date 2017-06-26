@@ -453,6 +453,21 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^SP "([^"]*)" allows the following attributes:$/
+     */
+    public function spAllowsGivenAttributes($spName, TableNode $attributes)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+
+        foreach ($attributes->getHash() as $attribute) {
+            $this->serviceRegistryFixture
+                ->allowAttributeValue($sp->entityId(), $attribute['Name'], $attribute['Value'], $attribute['Source'])
+                ->save();
+        }
+    }
+
+    /**
      * @Given /^SP "([^"]*)" uses the Unspecified NameID format$/
      */
     public function spUsesTheUnspecifiedNameidFormat($spName)

@@ -120,6 +120,17 @@ class EngineBlock_View
     }
 
     /**
+     * Get user-friendly attribute source name.
+     *
+     * @param $source Source identifier (e.g. "voot")
+     * @return string
+     */
+    public function getAttributeSourceDisplayName($source)
+    {
+        return $this->translate('consent_attribute_source_' . strtolower($source));
+    }
+
+    /**
      * Return the language.
      *
      * @example <?php echo $this->getLocale(); ?>
@@ -177,15 +188,49 @@ class EngineBlock_View
         return htmlspecialchars($content, ENT_COMPAT, 'UTF-8');
     }
 
-    public function sortByDisplayOrder($attributes)
+    /**
+     * Sort, group and normalize attributes for display on the consent page.
+     *
+     * To preserve backwards compatibility in consent.phtml, the attributes are
+     * not grouped by attribute source when $attributeSources is omitted.
+     *
+     * @param $attributes
+     * @param array|null $attributeSources
+     * @return array
+     */
+    public function sortByDisplayOrder($attributes, array $attributeSources = null)
     {
         $attributeMetadata = EngineBlock_ApplicationSingleton::getInstance()
             ->getDiContainer()
             ->getAttributeMetadata();
 
         $sortedAttributes = $attributeMetadata->sortByDisplayOrder($attributes);
+        $normalizedAttributes = $attributeMetadata->normalizeEptiAttributeValue($sortedAttributes);
 
-        return $attributeMetadata->normalizeEptiAttributeValue($sortedAttributes);
+        if ($attributeSources === null) {
+            return $normalizedAttributes;
+        }
+
+        return $this->groupAttributesBySource($normalizedAttributes, $attributeSources);
+    }
+
+    private function groupAttributesBySource($attributes, array $attributeSources = array())
+    {
+        $groupedAttributes = array(
+            'idp' => array(),
+        );
+
+        foreach ($attributes as $attributeName => $attributeValue) {
+            if (isset($attributeSources[$attributeName])) {
+                $sourceName = $attributeSources[$attributeName];
+            } else {
+                $sourceName = 'idp';
+            }
+
+            $groupedAttributes[$sourceName][$attributeName] = $attributeValue;
+        }
+
+        return $groupedAttributes;
     }
 
     /**
