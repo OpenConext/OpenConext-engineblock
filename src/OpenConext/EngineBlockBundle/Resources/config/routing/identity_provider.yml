@@ -10,7 +10,7 @@ authentication_idp_perform_request_access_two:
     path:       '/authentication/idp/performRequestAccess'
     methods:    [POST]
     defaults:
-        _controller: engineblock.controller.authentication.identity_provider:requestAccessAction
+        _controller: engineblock.controller.authentication.identity_provider:performRequestAccessAction
 
 authentication_idp_process_consent:
     path:       '/authentication/idp/process-consent'

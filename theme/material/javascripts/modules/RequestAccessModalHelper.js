@@ -34,7 +34,9 @@ export class RequestAccessModalHelper {
             $closeModalButton.addEventListener('click', this.closeModalClickHandler());
         }
 
-        $nameField.focus();
+        if ($nameField) {
+            $nameField.focus();
+        }
     }
 
     containerClickHandler(containerElement) {
@@ -94,7 +96,7 @@ function sendGetRequest(url, callback) {
     request.send(null);
 }
 
-function sendPostRequest(url, jsonData, callback) {
+function sendPostRequest(url, formData, callback) {
     const request = new XMLHttpRequest;
 
     request.onreadystatechange = () => {
@@ -103,7 +105,13 @@ function sendPostRequest(url, jsonData, callback) {
         }
     };
 
+    var parts = [];
+
+    for (name in formData) {
+        parts.push(encodeURIComponent(name) + '=' + encodeURIComponent(formData[name]));
+    }
+
     request.open('POST', url, true);
-    request.setRequestHeader('Content-type', 'application/json');
-    request.send(JSON.stringify(jsonData));
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.send(parts.join('&'));
 }
