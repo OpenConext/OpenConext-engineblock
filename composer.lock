@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "0bb2a24faab0cfc2e51f52a38c5b242d",
+    "content-hash": "7beba29e84054522e70929182857d024",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1517,16 +1517,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "dev-feature/attribute-aggregation",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "e530513fff44dad01ffa031e19b2c4d680bbbf78"
+                "reference": "caeb39c1736bd4250f5570e3ce42e3d7cf9cc6bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/e530513fff44dad01ffa031e19b2c4d680bbbf78",
-                "reference": "e530513fff44dad01ffa031e19b2c4d680bbbf78",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/caeb39c1736bd4250f5570e3ce42e3d7cf9cc6bf",
+                "reference": "caeb39c1736bd4250f5570e3ce42e3d7cf9cc6bf",
                 "shasum": ""
             },
             "require": {
@@ -1551,7 +1551,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2017-06-22 11:56:19"
+            "time": "2017-06-26T12:22:17+00:00"
         },
         {
             "name": "openconext/saml-value-object",
@@ -5370,9 +5370,7 @@
         }
     ],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "openconext/engineblock-metadata": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
