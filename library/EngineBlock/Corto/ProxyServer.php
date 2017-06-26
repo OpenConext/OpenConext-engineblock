@@ -40,9 +40,9 @@ class EngineBlock_Corto_ProxyServer
     protected $_keyId = null;
 
     protected $_server;
-    protected $_systemLog;
-    protected $_sessionLog;
-    protected $_sessionLogDefault;
+
+    /** @var Psr\Log\LoggerInterface */
+    protected $_logger;
 
     protected $_configs;
 
@@ -290,7 +290,7 @@ class EngineBlock_Corto_ProxyServer
             $this->setRemoteIdpMd5($remoteIdpMd5);
         }
 
-        $logger = $this->getSessionLog();
+        $logger = $this->getLogger();
 
         if (empty($remoteIdpMd5)) {
             $logger->info("Calling service '$serviceName'");
@@ -314,7 +314,7 @@ class EngineBlock_Corto_ProxyServer
 
             $this->_configs['Idp'] = $idpEntityId;
             $this->_configs['TransparentProxy'] = true;
-            $this->getSessionLog()->info(
+            $this->getLogger()->info(
                 "Detected pre-selection of $idpEntityId as IdP, switching to transparent mode"
             );
             break;
@@ -324,7 +324,7 @@ class EngineBlock_Corto_ProxyServer
             return $this;
         }
 
-        $this->getSystemLog()->notice(sprintf('Unable to map remote IdpMD5 "%s" to a remote entity.', $remoteIdPMd5));
+        $this->getLogger()->notice(sprintf('Unable to map remote IdpMD5 "%s" to a remote entity.', $remoteIdPMd5));
 
         throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
             "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
@@ -346,7 +346,7 @@ class EngineBlock_Corto_ProxyServer
         $newId = $ebRequest->getId();
 
         // Store the original Request
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_sessionLog);
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
         $authnRequestRepository->store($spRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
@@ -557,7 +557,7 @@ class EngineBlock_Corto_ProxyServer
             }
         }
 
-        $this->getSystemLog()->error(
+        $this->getLogger()->error(
             'No supported binding found for ACS',
             array('acs' => $serviceProvider->assertionConsumerServices)
         );
@@ -583,7 +583,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Ignore requests for bindings we don't support for responses.
         if ($request->getProtocolBinding() && ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST)) {
-            $this->_server->getSessionLog()->notice(
+            $this->_server->getLogger()->notice(
                 "ProtocolBinding '{$request->getProtocolBinding()}' requested is not supported, ignoring..."
             );
             return false;
@@ -592,7 +592,7 @@ class EngineBlock_Corto_ProxyServer
         // Custom ACS Location & ProtocolBinding goes first
         if ($request->getAssertionConsumerServiceURL() && $request->getProtocolBinding()) {
             if ($requestWasSigned) {
-                $this->_server->getSessionLog()->info(
+                $this->_server->getLogger()->info(
                     "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
                         "and ProtocolBinding '{$request->getProtocolBinding()}' from signed request. "
                 );
@@ -610,7 +610,7 @@ class EngineBlock_Corto_ProxyServer
                     }
                 }
                 if ($requestAcsIsRegisteredInMetadata) {
-                    $this->_server->getSessionLog()->info(
+                    $this->_server->getLogger()->info(
                         "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
                             "and ProtocolBinding '{$request->getProtocolBinding()}' from unsigned request, " .
                             "it's okay though, the ACSLocation and Binding were registered in the metadata"
@@ -618,7 +618,7 @@ class EngineBlock_Corto_ProxyServer
                     return new Service($request->getAssertionConsumerServiceURL(),$request->getProtocolBinding());
                 }
                 else {
-                    $this->_server->getSessionLog()->notice(
+                    $this->_server->getLogger()->notice(
                         "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
                             "and ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, " .
                             "but the AuthnRequest was not signed, and the ACSLocation and Binding were not found in " .
@@ -634,7 +634,7 @@ class EngineBlock_Corto_ProxyServer
                 // Note that an SP is not actually required to supply both a URL and a Binding.
                 // But what should we do if we don't have both? Pick out a random counterpart from the metadata?
                 // Seems a little hard to predict for the SP, so we go with the default endpoint.
-                $this->_server->getSessionLog()->notice(
+                $this->_server->getLogger()->notice(
                     "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
                     "or ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, " .
                     "but not both! Ignoring... "
@@ -655,13 +655,13 @@ class EngineBlock_Corto_ProxyServer
             }
 
             if ($indexedAssertionConsumerService) {
-                $this->_server->getSessionLog()->info(
+                $this->_server->getLogger()->info(
                     "Using AssertionConsumerServiceIndex '$index' from request"
                 );
                 return $indexedAssertionConsumerService;
             }
             else {
-                $this->_server->getSessionLog()->notice(
+                $this->_server->getLogger()->notice(
                     "AssertionConsumerServiceIndex was mentioned in request, but we don't know any ACS by ".
                         "index '$index'? Maybe the metadata was updated and we don't have that endpoint yet? " .
                         "Trying the default endpoint.."
@@ -709,7 +709,7 @@ class EngineBlock_Corto_ProxyServer
             );
         }
 
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->getSessionLog());
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->getLogger());
 
         $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);
         if (!$spRequestId) {
@@ -781,7 +781,7 @@ class EngineBlock_Corto_ProxyServer
 
     public function renderTemplate($templateName, array $vars = array())
     {
-        $this->getSessionLog()->info("Rendering template '$templateName'");
+        $this->getLogger()->info("Rendering template '$templateName'");
 
         $templateFileName = ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/' . $templateName . '.phtml';
 
@@ -816,7 +816,7 @@ class EngineBlock_Corto_ProxyServer
 
     public function redirect($location, $message)
     {
-        $this->getSessionLog()->info("Redirecting to $location");
+        $this->getLogger()->info("Redirecting to $location");
 
         if ($this->getConfig('debug', true)) {
             $output = $this->renderTemplate('redirect', array('location'=>$location, 'message' => $message));
@@ -998,43 +998,6 @@ class EngineBlock_Corto_ProxyServer
     }
 
     /**
-     * @return Psr\Log\LoggerInterface
-     */
-    public function getSystemLog()
-    {
-        if (!isset($this->_systemLog)) {
-            $this->_systemLog = EngineBlock_ApplicationSingleton::getLog();
-        }
-
-        return $this->_systemLog;
-    }
-
-    public function getSessionLog()
-    {
-        if (isset($this->_sessionLog)) {
-            return $this->_sessionLog;
-        }
-
-        if (!isset($this->_sessionLogDefault)) {
-            $this->_sessionLogDefault = EngineBlock_ApplicationSingleton::getLog();
-        }
-
-        $this->_sessionLog = $this->_sessionLogDefault;
-
-        return $this->_sessionLog;
-    }
-
-    public function setSystemLog(Psr\Log\LoggerInterface $log)
-    {
-        $this->_systemLog = $log;
-    }
-
-    public function setSessionLogDefault($logDefault)
-    {
-        $this->_sessionLogDefault = $logDefault;
-    }
-
-    /**
      * @param $certificates
      * @return resource
      * @throws EngineBlock_Corto_ProxyServer_Exception
@@ -1068,4 +1031,23 @@ class EngineBlock_Corto_ProxyServer
         }
         return $privateKey;
     }
+
+    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    {
+        $this->_logger = $logger;
+    }
+
+    /**
+     * Getter for the Logger. If the logger is not yet present it is loaded from the ApplicationSingleton.
+     * @return \Psr\Log\LoggerInterface
+     */
+    public function getLogger()
+    {
+        if ($this->_logger instanceof \Psr\Log\LoggerInterface) {
+            return $this->_logger;
+        }
+        $this->_logger = EngineBlock_ApplicationSingleton::getLog();
+        return $this->_logger;
+    }
+
 }

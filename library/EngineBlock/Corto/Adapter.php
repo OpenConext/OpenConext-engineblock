@@ -351,8 +351,8 @@ class EngineBlock_Corto_Adapter
 
     protected function _configureProxyServer(EngineBlock_Corto_ProxyServer $proxyServer)
     {
-        $proxyServer->setSystemLog($this->_getSystemLog());
-        $proxyServer->setSessionLogDefault($this->_getSessionLog());
+
+        $proxyServer->setLogger($this->_getSystemLog());
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $proxyServer->setHostName($application->getHostname());

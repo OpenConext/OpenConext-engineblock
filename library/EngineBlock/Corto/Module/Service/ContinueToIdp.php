@@ -28,7 +28,7 @@ class EngineBlock_Corto_Module_Service_ContinueToIdp extends EngineBlock_Corto_M
             );
         }
 
-        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_server->getSessionLog());
+        $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_server->getLogger());
         $request = $authnRequestRepository->findRequestById($id);
 
         if (!$request) {
