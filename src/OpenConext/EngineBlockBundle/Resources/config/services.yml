@@ -84,7 +84,7 @@ services:
             - '%cookie.locale.secure%'
 
     engineblock.attribute_aggregation.client:
-        class: OpenConext\EngineBlock\AttributeAggregation\AttributeAggregationClient
+        class: OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClient
         arguments:
             - "@engineblock.attribute_aggregation.http_client"
 
