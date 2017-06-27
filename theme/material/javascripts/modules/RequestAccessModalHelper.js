@@ -6,11 +6,11 @@ export class RequestAccessModalHelper {
         this.requestAccessUrl     = requestAccessUrl;
     }
 
-    openRequestAccessModal() {
-        sendGetRequest(this.requestAccessUrl, (responseText) => this.renderRequestAccessModal(responseText));
+    openRequestAccessModal(institutionName) {
+        sendGetRequest(this.requestAccessUrl, (responseText) => this.renderRequestAccessModal(responseText, institutionName));
     }
 
-    renderRequestAccessModal(responseText) {
+    renderRequestAccessModal(responseText, institutionName) {
         document.body.style.overflowY = 'auto';
         this.requestAccessElement.innerHTML = responseText;
 
@@ -20,6 +20,7 @@ export class RequestAccessModalHelper {
         const $closeModalButton = this.requestAccessElement.querySelector('.close-modal');
         const $submitButton     = this.requestAccessElement.querySelector('#request_access_submit');
         const $nameField        = this.requestAccessElement.querySelector('#name');
+        const $institutionField = this.requestAccessElement.querySelector('#institution');
 
         $container.removeEventListener('click', this.containerClickHandler());
         $container.addEventListener('click', this.containerClickHandler($container));
@@ -32,6 +33,10 @@ export class RequestAccessModalHelper {
         if ($closeModalButton !== null) {
             $closeModalButton.removeEventListener('click', this.closeModalClickHandler());
             $closeModalButton.addEventListener('click', this.closeModalClickHandler());
+        }
+
+        if (institutionName) {
+            $institutionField.value = institutionName;
         }
 
         if ($nameField) {
@@ -49,7 +54,14 @@ export class RequestAccessModalHelper {
                 (isUnconnectedIdpRow(event.target)) ||
                 (isUnconnectedIdpRow(event.target.parentElement))
             ) {
-                this.openRequestAccessModal();
+                const $institutionTitle = event.target.parentElement.querySelector('h3');
+                var institutionName = '';
+
+                if ($institutionTitle) {
+                    institutionName = $institutionTitle.innerText;
+                }
+
+                this.openRequestAccessModal(institutionName);
             }
         }
     }
