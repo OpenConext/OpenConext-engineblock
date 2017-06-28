@@ -99,7 +99,7 @@ class MockSpContext extends AbstractSubContext
         } else {
             $ssoStartLocation = $mockSp->loginUrlRedirect();
         }
-
+die($ssoStartLocation);
         $this->getMainContext()->getMinkContext()->visit($ssoStartLocation);
     }
 
@@ -360,6 +360,23 @@ class MockSpContext extends AbstractSubContext
         $authNRequest = $sp->getAuthnRequest();
         $requesterIds = $authNRequest->getRequesterID();
         $requesterIds[] = $spDestination->entityId();
+        $authNRequest->setRequesterID($requesterIds);
+
+        $this->mockSpRegistry->save();
+    }
+    /**
+     * @Given /^SP "([^"]*)" is authenticating for misconfigured SP "([^"]*)"$/
+     */
+    public function spIsAuthenticatingForMisconfiguredSp($spName, $spDestinationName)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+        /** @var MockServiceProvider $spDestination */
+        $spDestination = $this->mockSpRegistry->get($spDestinationName);
+
+        $authNRequest = $sp->getAuthnRequest();
+        $requesterIds = $authNRequest->getRequesterID();
+        $requesterIds[] = $spDestination->entityId() . '-i-do-not-exist';
         $authNRequest->setRequesterID($requesterIds);
 
         $this->mockSpRegistry->save();
