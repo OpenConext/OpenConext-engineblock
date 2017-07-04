@@ -29,9 +29,15 @@ final class AttributeAggregationClient implements AttributeAggregationClientInte
      */
     private $httpClient;
 
-    public function __construct(HttpClient $httpClient)
+    /**
+     * @var string
+     */
+    private $apiBasePath;
+
+    public function __construct(HttpClient $httpClient, $apiBasePath)
     {
         $this->httpClient = $httpClient;
+        $this->apiBasePath = $apiBasePath;
     }
 
     /**
@@ -45,7 +51,7 @@ final class AttributeAggregationClient implements AttributeAggregationClientInte
     {
         $jsonData = $this->httpClient->post(
             json_encode($request),
-            '/',
+            $this->apiBasePath,
             [],
             [
                 'Content-Type' => 'application/json',
