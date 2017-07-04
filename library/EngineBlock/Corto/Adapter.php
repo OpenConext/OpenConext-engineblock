@@ -207,7 +207,7 @@ class EngineBlock_Corto_Adapter
                 );
             }
             else {
-                $this->_getSessionLog()->warning(
+                $this->_getLogger()->warning(
                     "Unable to apply RequesterID '$requesterId' to sub-scope the available IdPs as we don't know this SP!"
                 );
             }
@@ -351,8 +351,8 @@ class EngineBlock_Corto_Adapter
 
     protected function _configureProxyServer(EngineBlock_Corto_ProxyServer $proxyServer)
     {
-        $proxyServer->setSystemLog($this->_getSystemLog());
-        $proxyServer->setSessionLogDefault($this->_getSessionLog());
+
+        $proxyServer->setLogger($this->_getLogger());
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $proxyServer->setHostName($application->getHostname());
@@ -377,15 +377,7 @@ class EngineBlock_Corto_Adapter
     /**
      * @return Psr\Log\LoggerInterface
      */
-    protected function _getSystemLog()
-    {
-        return EngineBlock_ApplicationSingleton::getLog();
-    }
-
-    /**
-     * @return Psr\Log\LoggerInterface
-     */
-    protected function _getSessionLog()
+    protected function _getLogger()
     {
         return EngineBlock_ApplicationSingleton::getLog();
     }
@@ -483,13 +475,13 @@ class EngineBlock_Corto_Adapter
         $keyPairs = array();
         foreach ($keysConfig as $keyId => $keyConfig) {
             if (!isset($keyConfig['privateFile'])) {
-                $this->_getSessionLog()->warning(
+                $this->_getLogger()->warning(
                     'Reference to private key file not found for key: ' . $keyId . ' skipping keypair.'
                 );
                 continue;
             }
             if (!isset($keyConfig['publicFile'])) {
-                $this->_getSessionLog()->warning('Reference to public key file not found for key: ' . $keyId);
+                $this->_getLogger()->warning('Reference to public key file not found for key: ' . $keyId);
                 continue;
             }
 

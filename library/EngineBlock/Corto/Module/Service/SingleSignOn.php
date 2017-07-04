@@ -10,7 +10,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     {
         $application = EngineBlock_ApplicationSingleton::getInstance();
 
-        $log = $this->_server->getSessionLog();
+        $log = $this->_server->getLogger();
 
         $response = $this->_displayDebugResponse($serviceName);
         if ($response) {
@@ -149,7 +149,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     protected function _getRequest($serviceName)
     {
-        $logger = $this->_server->getSessionLog();
+        $logger = $this->_server->getLogger();
         $logger->info('Getting request...');
 
         if ($serviceName === 'unsolicitedSingleSignOnService') {
@@ -200,7 +200,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $protocolBinding = $request->getProtocolBinding();
 
         if ($acsUrl XOR $protocolBinding) {
-            $this->_server->getSessionLog()->error(
+            $this->_server->getLogger()->error(
                 "Incomplete ACS location found in request (missing URL or binding)"
             );
 
@@ -274,7 +274,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     protected function _getScopedIdPs(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
     ) {
-        $log = $this->_server->getSessionLog();
+        $log = $this->_server->getLogger();
 
         /** @var SAML2_AuthnRequest $request */
         $scopedIdPs = $request->getIDPList();
@@ -330,7 +330,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
-        $this->_server->getSessionLog()->info("Cached response found from Idp");
+        $this->_server->getLogger()->info("Cached response found from Idp");
         // Note that we would like to repurpose the response,
         // but that's tricky as it is probably no longer valid (lifetime is usually something like 5 minutes)
         // so instead we scope the request to that Idp and trust the Idp to do the remembering.
