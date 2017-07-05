@@ -19,6 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Pdp;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 
 final class PolicyDecision
@@ -44,7 +45,7 @@ final class PolicyDecision
     private $statusMessage;
 
     /**
-     * @var string
+     * @var Logo
      */
     private $idpLogo;
 
@@ -148,10 +149,26 @@ final class PolicyDecision
     }
 
     /**
-     * @param $logoUri
+     * @param Logo $logoUri
      */
-    public function setIdpLogo($logoUri)
+    public function setIdpLogo(Logo $logoUri)
     {
         $this->idpLogo = $logoUri;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasIdpLogo()
+    {
+        return !is_null($this->idpLogo);
+    }
+
+    /**
+     * @return Logo
+     */
+    public function getIdpLogo()
+    {
+        return $this->idpLogo;
     }
 }
