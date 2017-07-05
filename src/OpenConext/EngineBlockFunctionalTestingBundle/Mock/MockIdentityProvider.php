@@ -13,6 +13,8 @@ class MockIdentityProvider extends AbstractMockEntityRole
 {
     private $sendAssertions = true;
 
+    private $logo = null;
+
     public function singleSignOnLocation()
     {
         return $this->getSsoRole()->SingleSignOnService[0]->Location;
@@ -271,6 +273,11 @@ class MockIdentityProvider extends AbstractMockEntityRole
     public function shouldNotSendAssertions()
     {
         return $this->sendAssertions === false;
+    }
+
+    public function setLogo($logo)
+    {
+        $this->logo = $logo;
     }
 
     protected function getRoleClass()

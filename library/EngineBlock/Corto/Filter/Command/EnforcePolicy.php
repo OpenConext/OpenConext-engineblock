@@ -34,6 +34,7 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
 
         $pdp = $this->getPdpClient();
         $policyDecision = $pdp->requestDecisionFor($pdpRequest);
+        $policyDecision->setIdpLogo($this->_identityProvider->logo);
 
         $log->debug("Policy Enforcement Point: PDP decision received.");
 

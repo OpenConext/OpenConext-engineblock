@@ -44,6 +44,11 @@ final class PolicyDecision
     private $statusMessage;
 
     /**
+     * @var string
+     */
+    private $idpLogo;
+
+    /**
      * @param Response $response
      * @return PolicyDecision
      */
@@ -140,5 +145,13 @@ final class PolicyDecision
     public function hasStatusMessage()
     {
         return isset($this->statusMessage);
+    }
+
+    /**
+     * @param $logoUri
+     */
+    public function setIdpLogo($logoUri)
+    {
+        $this->idpLogo = $logoUri;
     }
 }
