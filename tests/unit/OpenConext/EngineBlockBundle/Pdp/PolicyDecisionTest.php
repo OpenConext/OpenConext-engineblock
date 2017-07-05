@@ -81,6 +81,31 @@ class PolicyDecisionTest extends TestCase
         $fallbackDenyMessage = $decision->getLocalizedDenyMessage('de', 'en');
 
         $this->assertEquals($expectedFallbackDenyMessage, $fallbackDenyMessage);
+        $this->assertFalse($decision->isIdpSpecificMessage());
+
+    }
+
+    /**
+     * @test
+     * @group Pdp
+     */
+    public function a_deny_policy_with_idp_specific_message_is_parsed_correctly()
+    {
+        $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny_idp_specific.json'), true);
+        $response = Response::fromData($responseJson);
+
+        $decision = PolicyDecision::fromResponse($response);
+
+        $expectedDenyMessageEn = 'MyIdp students do not have access to the Foobar portal';
+        $expectedDenyMessageNl = 'MyIdp studenten hebben geen toegang tot het Foobar portaal';
+
+        $denyMessageEn = $decision->getLocalizedDenyMessage('en');
+        $denyMessageNl = $decision->getLocalizedDenyMessage('nl');
+
+        $this->assertEquals($expectedDenyMessageEn, $denyMessageEn);
+        $this->assertEquals($expectedDenyMessageNl, $denyMessageNl);
+        $this->assertTrue($decision->isIdpSpecificMessage());
+
     }
 
     /**

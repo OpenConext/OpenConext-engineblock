@@ -44,6 +44,8 @@ final class PolicyDecision
      */
     private $statusMessage;
 
+    private $idpOnly = false;
+
     /**
      * @var Logo
      */
@@ -74,6 +76,15 @@ final class PolicyDecision
 
                     if ($identifier === 'DenyMessage') {
                         $localizedDenyMessages[$locale] = $attributeAssignment->value;
+                    }
+
+                    // When the Identifier is IdpOnly and its value is true, this is a message that's IdP specific.
+                    $isIdpOnly = $identifier === 'IdPOnly'
+                        && isset($attributeAssignment->value)
+                        && $attributeAssignment->value === true;
+
+                    if ($isIdpOnly) {
+                        $policyDecision->idpOnly = true;
                     }
                 }
             }
@@ -170,5 +181,13 @@ final class PolicyDecision
     public function getIdpLogo()
     {
         return $this->idpLogo;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isIdpSpecificMessage()
+    {
+        return $this->idpOnly;
     }
 }
