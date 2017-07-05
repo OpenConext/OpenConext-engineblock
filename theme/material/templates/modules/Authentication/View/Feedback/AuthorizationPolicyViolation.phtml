@@ -3,11 +3,13 @@
 /**
  * @var Zend_Layout $layout
  */
+use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 
 $layout = $this->layout();
 
 $locale = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter()->getLocale();
+$logo = false;
 
 if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
     /** @var PolicyDecision $policyDecision */
@@ -18,6 +20,13 @@ if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
     } elseif ($policyDecision->hasStatusMessage()) {
         $policyDecisionMessage = $policyDecision->getStatusMessage();
     }
+
+    // Show the IdP logo for status messages
+    if ($policyDecision->isIdpSpecificMessage() && $policyDecision->hasIdpLogo()) {
+        /** @var Logo $logo */
+        $logo = $policyDecision->getIdpLogo();
+    }
+
 }
 
 // Set Layout properties
@@ -34,7 +43,15 @@ $layout->wide = true;
     <?php
         if (isset($policyDecisionMessage)) {
     ?>
+        <?php if ($logo !== false) : ?>
+            <img src="<?php echo $logo->getUrl(); ?>"
+                 class="pull-right"
+                 width="<?php echo $logo->getWidth(); ?>"
+                 height="<?php echo $logo->getHeight(); ?>"
+            >
+        <?php endif; ?>
         <h2><?= EngineBlock_View::htmlSpecialCharsText($policyDecisionMessage)?></h2>
+
     <?php
     }
     ?>
