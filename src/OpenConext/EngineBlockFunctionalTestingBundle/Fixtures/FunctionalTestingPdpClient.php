@@ -82,9 +82,12 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
                 $dutchDenyMessage = new AttributeAssignment();
                 $dutchDenyMessage->attributeId = 'DenyMessage:nl';
                 $dutchDenyMessage->value = sprintf('Studenten van %s hebben geen toegang tot deze dienst', $idp);
+                $idpOnlyMessage = new AttributeAssignment();
+                $idpOnlyMessage->attributeId = 'IdPOnly';
+                $idpOnlyMessage->value = true;
 
                 $associatedAdvice = new AssociatedAdvice();
-                $associatedAdvice->attributeAssignments = [$englishDenyMessage, $dutchDenyMessage];
+                $associatedAdvice->attributeAssignments = [$englishDenyMessage, $dutchDenyMessage, $idpOnlyMessage];
                 $pdpResponse->associatedAdvices = [$associatedAdvice];
                 break;
             case PolicyDecision::DECISION_INDETERMINATE:
