@@ -8,7 +8,7 @@ use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 $layout = $this->layout();
 
 $locale = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter()->getLocale();
-
+$logo = null;
 if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
     /** @var PolicyDecision $policyDecision */
     $policyDecision = $_SESSION['feedbackInfo']['error_authorization_policy_decision'];
@@ -18,11 +18,7 @@ if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
     } elseif ($policyDecision->hasStatusMessage()) {
         $policyDecisionMessage = $policyDecision->getStatusMessage();
     }
-}
-
-$logo = null;
-if (isset($_SESSION['feedbackInfo']['idp_logo'])) {
-    $logo = $_SESSION['feedbackInfo']['idp_logo'];
+    $logo = $policyDecision->getIdpLogo();
 }
 
 // Set Layout properties

@@ -75,20 +75,11 @@ class ErrorReporter
         if ($exception instanceof EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
             $feedback = array_merge($feedback, $exception->getFeedbackInfo());
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
-            $policyDecision = $exception->getPolicyDecision();
-
-            // Show the IdP logo for status messages
-            $idpLogo = $policyDecision->getIdpLogo();
-
             $feedback = array_merge(
                 $feedback,
-                [
-                    'error_authorization_policy_decision' => $policyDecision,
-                    'idp_logo' => $idpLogo,
-                ]
+                ['error_authorization_policy_decision' => $exception->getPolicyDecision()]
             );
         }
-
 
         $_SESSION['feedbackInfo'] = array_merge(
             $feedback,
