@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
+use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use PHPUnit_Framework_TestCase as TestCase;
@@ -81,7 +82,7 @@ class PolicyDecisionTest extends TestCase
         $fallbackDenyMessage = $decision->getLocalizedDenyMessage('de', 'en');
 
         $this->assertEquals($expectedFallbackDenyMessage, $fallbackDenyMessage);
-        $this->assertFalse($decision->isIdpSpecificMessage());
+        $this->assertNull($decision->getIdpLogo());
 
     }
 
@@ -94,7 +95,10 @@ class PolicyDecisionTest extends TestCase
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny_idp_specific.json'), true);
         $response = Response::fromData($responseJson);
 
+        $logo = new Logo('logo.png', 100, 100);
+
         $decision = PolicyDecision::fromResponse($response);
+        $decision->setIdpLogo($logo);
 
         $expectedDenyMessageEn = 'MyIdp students do not have access to the Foobar portal';
         $expectedDenyMessageNl = 'MyIdp studenten hebben geen toegang tot het Foobar portaal';
@@ -104,7 +108,8 @@ class PolicyDecisionTest extends TestCase
 
         $this->assertEquals($expectedDenyMessageEn, $denyMessageEn);
         $this->assertEquals($expectedDenyMessageNl, $denyMessageNl);
-        $this->assertTrue($decision->isIdpSpecificMessage());
+
+        $this->assertEquals($logo, $decision->getIdpLogo());
 
     }
 
@@ -117,7 +122,10 @@ class PolicyDecisionTest extends TestCase
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_indeterminate.json'), true);
         $response = Response::fromData($responseJson);
 
+        $logo = new Logo('logo.png', 100, 100);
+
         $decision = PolicyDecision::fromResponse($response);
+        $decision->setIdpLogo($logo);
 
         $expectedStatusMessage = 'Missing required attribute';
 

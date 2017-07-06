@@ -62,19 +62,14 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
         $additionalData = [];
         if ($isSpecificDenyResponse) {
             $decision = $this->policyDecisionFixture[0];
-            $additionalData = $this->policyDecisionFixture[0];
+            $additionalData = $this->policyDecisionFixture;
         }
 
         switch ($decision) {
             case PolicyDecision::DECISION_DENY:
                 $pdpResponse->decision = PolicyDecision::DECISION_DENY;
 
-                $idp = '';
-                if (!empty($additionalData)) {
-                    if (array_key_exists('idpName', $this->policyDecisionFixture)) {
-                        $idp = $this->policyDecisionFixture['idpName'];
-                    }
-                }
+                $idp = $this->getIdpFromAdditionalData($additionalData);
 
                 $englishDenyMessage = new AttributeAssignment();
                 $englishDenyMessage->attributeId = 'DenyMessage:en';
@@ -173,5 +168,19 @@ XML;
     public function clear()
     {
         $this->dataStore->save(null);
+    }
+
+    /**
+     * @param array $additionalData
+     * @return string
+     */
+    private function getIdpFromAdditionalData(array $additionalData)
+    {
+        $idp = '';
+        if (array_key_exists('idpName', $additionalData)) {
+            $idp = $additionalData['idpName'];
+        }
+
+        return $idp;
     }
 }

@@ -21,6 +21,7 @@ namespace OpenConext\EngineBlockBundle\Pdp;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
+use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
 
 final class PolicyDecision
 {
@@ -44,7 +45,10 @@ final class PolicyDecision
      */
     private $statusMessage;
 
-    private $idpOnly = false;
+    /**
+     * @var bool
+     */
+    private $isIdpSpecific = false;
 
     /**
      * @var Logo
@@ -78,20 +82,34 @@ final class PolicyDecision
                         $localizedDenyMessages[$locale] = $attributeAssignment->value;
                     }
 
-                    // When the Identifier is IdpOnly and its value is true, this is a message that's IdP specific.
-                    $isIdpOnly = $identifier === 'IdPOnly'
-                        && isset($attributeAssignment->value)
-                        && $attributeAssignment->value === true;
-
-                    if ($isIdpOnly) {
-                        $policyDecision->idpOnly = true;
-                    }
+                    self::setAttributeAssignmentSource($attributeAssignment, $policyDecision);
                 }
             }
             $policyDecision->localizedDenyMessages = $localizedDenyMessages;
         }
 
         return $policyDecision;
+    }
+
+    /**
+     * Checks attributeAssignment for clues if this assignment is IdP specific. And sets the idpOnly field
+     * accordingly.
+     *
+     * @param AttributeAssignment $attributeAssignment
+     * @param PolicyDecision $policyDecision
+     */
+    private static function setAttributeAssignmentSource(
+        AttributeAssignment $attributeAssignment,
+        PolicyDecision $policyDecision
+    ) {
+
+        if ($attributeAssignment->attributeId !== 'IdPOnly') {
+            return;
+        }
+
+        if (isset($attributeAssignment->value) && $attributeAssignment->value === true) {
+            $policyDecision->isIdpSpecific = true;
+        }
     }
 
     /**
@@ -168,26 +186,31 @@ final class PolicyDecision
     }
 
     /**
+     * If the logo is not set, this method returns null
+     * @return Logo|null
+     */
+    public function getIdpLogo()
+    {
+        if ($this->isIdpSpecificMessage() && $this->hasIdpLogo()) {
+            /** @var Logo $logo */
+            return $this->idpLogo;
+        }
+        return null;
+    }
+
+    /**
      * @return bool
      */
-    public function hasIdpLogo()
+    private function hasIdpLogo()
     {
         return !is_null($this->idpLogo);
     }
 
     /**
-     * @return Logo
-     */
-    public function getIdpLogo()
-    {
-        return $this->idpLogo;
-    }
-
-    /**
      * @return bool
      */
-    public function isIdpSpecificMessage()
+    private function isIdpSpecificMessage()
     {
-        return $this->idpOnly;
+        return $this->isIdpSpecific;
     }
 }

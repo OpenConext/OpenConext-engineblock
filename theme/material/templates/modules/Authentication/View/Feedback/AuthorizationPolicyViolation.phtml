@@ -3,13 +3,11 @@
 /**
  * @var Zend_Layout $layout
  */
-use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 
 $layout = $this->layout();
 
 $locale = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter()->getLocale();
-$logo = false;
 
 if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
     /** @var PolicyDecision $policyDecision */
@@ -20,13 +18,11 @@ if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
     } elseif ($policyDecision->hasStatusMessage()) {
         $policyDecisionMessage = $policyDecision->getStatusMessage();
     }
+}
 
-    // Show the IdP logo for status messages
-    if ($policyDecision->isIdpSpecificMessage() && $policyDecision->hasIdpLogo()) {
-        /** @var Logo $logo */
-        $logo = $policyDecision->getIdpLogo();
-    }
-
+$logo = null;
+if (isset($_SESSION['feedbackInfo']['idp_logo'])) {
+    $logo = $_SESSION['feedbackInfo']['idp_logo'];
 }
 
 // Set Layout properties
@@ -38,16 +34,16 @@ $layout->wide = true;
 ?>
 <div class="box">
   <div class="mod-content">
-    <h1><?php echo htmlentities($this->layout()->subheader, 0, "UTF-8"); ?></h1>
+    <h1><?php echo EngineBlock_View::htmlSpecialCharsText($this->layout()->subheader); ?></h1>
     <?= $this->t('error_authorization_policy_violation_info'); ?>
     <?php
         if (isset($policyDecisionMessage)) {
     ?>
-        <?php if ($logo !== false) : ?>
-            <img src="<?php echo $logo->getUrl(); ?>"
+        <?php if (!is_null($logo)) : ?>
+            <img src="<?php echo EngineBlock_View::htmlSpecialCharsAttributeValue($logo->getUrl()); ?>"
                  class="pull-right"
-                 width="<?php echo $logo->getWidth(); ?>"
-                 height="<?php echo $logo->getHeight(); ?>"
+                 width="<?php echo EngineBlock_View::htmlSpecialCharsAttributeValue($logo->getWidth()); ?>"
+                 height="<?php echo EngineBlock_View::htmlSpecialCharsAttributeValue($logo->getHeight()); ?>"
             >
         <?php endif; ?>
         <h2><?= EngineBlock_View::htmlSpecialCharsText($policyDecisionMessage)?></h2>
