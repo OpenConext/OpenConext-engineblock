@@ -99,7 +99,7 @@ class MockSpContext extends AbstractSubContext
         } else {
             $ssoStartLocation = $mockSp->loginUrlRedirect();
         }
-die($ssoStartLocation);
+
         $this->getMainContext()->getMinkContext()->visit($ssoStartLocation);
     }
 

@@ -65,12 +65,15 @@ class EngineBlock_SamlHelper
      * @param ServiceProvider $serviceProvider
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param MetadataRepositoryInterface $repository
+     * @param \Psr\Log\LoggerInterface $logger
      * @return null|ServiceProvider
+     * @throws EngineBlock_Exception_UnknownServiceProvider
      */
     public static function findRequesterServiceProvider(
         ServiceProvider $serviceProvider,
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        MetadataRepositoryInterface $repository
+        MetadataRepositoryInterface $repository,
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         if (!$serviceProvider->isTrustedProxy) {
             return null;
@@ -91,7 +94,8 @@ class EngineBlock_SamlHelper
 
         // Find and validate the lastRequesterEntity, the Entity is filtered against the implementations of the
         // MetadataRepository/Filter/FilterInterface. Any of these filters can reject the entity as being a valid SP.
-        $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId);
+        // The filters will log any additional information that is available.
+        $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId, $logger);
         if (!$lastRequesterEntity) {
             throw new EngineBlock_Exception_UnknownServiceProvider(
                 $serviceProvider,

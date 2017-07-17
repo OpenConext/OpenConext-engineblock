@@ -79,7 +79,8 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
         $serviceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
             $this->_serviceProvider,
             $this->_request,
-            $this->_server->getRepository()
+            $this->_server->getRepository(),
+            $this->logger
         );
 
         if (!$serviceProvider) {
