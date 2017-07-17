@@ -272,6 +272,9 @@ Je instelling heeft je de toegang geweigerd tot deze dienst. Je zult dus contact
     'error_attribute_validator_allowed'             => '\'%3$s\' is geen toegestane waarde voor dit attribuut',
     'error_attribute_validator_availability'        => '\'%3$s\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
 
+    'error_unknown_service'         => 'Error - Deze dienst is niet geregistreerd bij SURFconext.',
+    'error_unknown_service_desc'    => '<p>Deze dienst is niet bekend. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
+
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',
     'attributes_data_mailed'          => 'De attribuutdata zijn gemaild',

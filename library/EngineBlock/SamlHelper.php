@@ -89,9 +89,11 @@ class EngineBlock_SamlHelper
             return null;
         }
 
+        // Find and validate the lastRequesterEntity, the Entity is filtered against the implementations of the
+        // MetadataRepository/Filter/FilterInterface. Any of these filters can reject the entity as being a valid SP.
         $lastRequesterEntity = $repository->findServiceProviderByEntityId($lastRequesterEntityId);
         if (!$lastRequesterEntity) {
-            throw new EngineBlock_Exception_DissimilarServiceProviderWorkflowStates(
+            throw new EngineBlock_Exception_UnknownServiceProvider(
                 $serviceProvider,
                 $lastRequesterEntityId
             );

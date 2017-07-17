@@ -273,6 +273,9 @@ Your institution has denied you access to this service. You will have to contact
     'error_attribute_validator_allowed'             => '\'%3$s\' is not an allowed value for this attribute',
     'error_attribute_validator_availability'        => '\'%3$s\' is a reserved schacHomeOrganization for another Identity Provider',
 
+    'error_unknown_service'         => 'Error - Unknown service',
+    'error_unknown_service_desc'    => '<p>Your requested service couldn\'t be found.Please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
+
     'attributes_validation_succeeded' => 'Authentication success',
     'attributes_validation_failed'    => 'Some attributes failed validation',
     'attributes_data_mailed'          => 'Attribute data have been mailed',

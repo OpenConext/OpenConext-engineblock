@@ -225,6 +225,18 @@ class FeedbackController
      * @return Response
      * @throws \EngineBlock_Exception
      */
+    public function unknownServiceAction()
+    {
+        return new Response(
+            $this->engineBlockView->render('Authentication/View/Feedback/UnknownService.phtml'),
+            400
+        );
+    }
+
+    /**
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function authorizationPolicyViolationAction()
     {
         return new Response(
