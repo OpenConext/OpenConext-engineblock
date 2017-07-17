@@ -34,7 +34,6 @@ use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
 use EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException;
-use EngineBlock_Exception_DissimilarServiceProviderWorkflowStates;
 use EngineBlock_Exception_UnknownServiceProvider;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
@@ -138,9 +137,6 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_NoConsentProvided) {
             $message         = 'No Consent Provided';
             $redirectToRoute = 'authentication_feedback_no_consent';
-        } elseif ($exception instanceof EngineBlock_Exception_DissimilarServiceProviderWorkflowStates) {
-            $message         = 'Dissimilar Service Provider workflowstates in request chain (transparant proxying)';
-            $redirectToRoute = 'authentication_feedback_dissimilar_workflow_states';
         } elseif ($exception instanceof EngineBlock_Exception_UnknownServiceProvider) {
             $message         = 'Encountered unknown RequesterID for the Service Provider (transparant proxying)';
             $redirectToRoute = 'authentication_feedback_unknown_service';

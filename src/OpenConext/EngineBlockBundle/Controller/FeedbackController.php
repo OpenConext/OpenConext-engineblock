@@ -213,18 +213,6 @@ class FeedbackController
      * @return Response
      * @throws \EngineBlock_Exception
      */
-    public function dissimilarWorkflowStatesAction()
-    {
-        return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/DissimilarWorkflowStates.phtml'),
-            400
-        );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
     public function unknownServiceAction()
     {
         return new Response(

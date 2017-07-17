@@ -188,13 +188,7 @@ We somehow lost where you wanted to go. Did you wait too long? If so, try again 
 Visit <a href="https://wiki.surfnet.nl/x/jq9WAw" target="_blank">the SURFconext supportpages</a> for more extensive support on this error.
         <br /><br />
     </p>',
-    'error_dissimilar_workflow_state'       => 'Error - Dissimilar workflow states',
-    'error_dissimilar_workflow_state_desc'  => '<p>
-The application you came from (your &lsquo;Service Provider&rsquo;) is not available on the SURFconext infrastructure yet.
-Please <a href="javascript:history.back();">go back</a> and contact the administrator(s) of
-this service.
-<br /><br />
-</p>',
+
     'error_authorization_policy_violation'            => 'Error - No access',
     'error_authorization_policy_violation_desc'       => '<p>
         You have successfully logged in at your institution, but unfortunately you cannot use this service (the &lsquo;Service Provider&rsquo;) because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you think you should be allowed access to this service.

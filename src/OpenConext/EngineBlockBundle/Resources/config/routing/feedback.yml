@@ -63,11 +63,6 @@ authentication_feedback_no_consent:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:noConsentAction }
 
-authentication_feedback_dissimilar_workflow_states:
-    path:       '/dissimilar-workflow-states'
-    methods:    [GET]
-    defaults:   { _controller: engineblock.controller.authentication.feedback:dissimilarWorkflowStatesAction }
-
 authentication_feedback_unknown_service:
     path:       '/unknown-service'
     methods:    [GET]
