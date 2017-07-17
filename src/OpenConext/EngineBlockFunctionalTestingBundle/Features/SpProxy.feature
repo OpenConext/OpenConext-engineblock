@@ -228,5 +228,12 @@ Feature:
       And SP "Step Up" signs its requests
       And SP "Step Up" does not require consent
       And SP "Step Up" uses the Unspecified NameID format
-     When I log in at "Step Up"
-     Then I should see "Dissimilar workflow states"
+    When I log in at "Step Up"
+    Then I should see "Error - Unknown service"
+
+  Scenario: User logs in via misconfigured trusted proxy and sees error
+    Given SP "Step Up" is authenticating for misconfigured SP "Far SP"
+    And SP "Step Up" is a trusted proxy
+    And SP "Step Up" signs its requests
+    When I log in at "Step Up"
+    Then I should see "Error - Unknown service"
