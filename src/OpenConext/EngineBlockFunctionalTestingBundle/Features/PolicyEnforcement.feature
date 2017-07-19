@@ -7,8 +7,19 @@ Feature:
     Given an EngineBlock instance on "vm.openconext.org"
       And no registered SPs
       And no registered Idps
-      And an Identity Provider named "Dummy IdP"
+      And an Identity Provider named "Dummy IdP" with logo "idp-logo.jpg"
       And a Service Provider named "Dummy SP"
+
+  Scenario: Access is denied because of an IdP specific Deny policy a logo is shown
+    Given SP "Dummy SP" requires a policy enforcement decision
+    And pdp gives an IdP specific deny response for "MyIdP"
+    When I log in at "Dummy SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I should see "Error - No access"
+    And I should see "Message from your institution:"
+    And I should see "Students of MyIdP do not have access to this resource"
+    And the response should contain "idp-logo.jpg"
 
   Scenario: Access is denied because of a Deny policy
     Given SP "Dummy SP" requires a policy enforcement decision

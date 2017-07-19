@@ -56,7 +56,7 @@ class AttributeAggregationClientTest extends TestCase
 
         $guzzle = new Client(['handler' => $mockHandler]);
 
-        $client = new AttributeAggregationClient(new HttpClient($guzzle));
+        $client = new AttributeAggregationClient(new HttpClient($guzzle), 'https://attr.at/api');
         $response = $client->aggregate($request);
 
         $this->assertInstanceOf(Response::class, $response);

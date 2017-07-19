@@ -81,7 +81,6 @@ class ErrorReporter
             );
         }
 
-
         $_SESSION['feedbackInfo'] = array_merge(
             $feedback,
             $this->engineBlockApplicationSingleton->collectFeedbackInfo()

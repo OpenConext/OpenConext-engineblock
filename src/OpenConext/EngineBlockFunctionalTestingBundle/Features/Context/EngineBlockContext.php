@@ -391,6 +391,15 @@ HTML;
     }
 
     /**
+     * @Given /^pdp gives an IdP specific deny response for "([^"]*)"$/
+     */
+    public function pdpGivesAnIdpSpecificDenyResponse($idpName)
+    {
+        $this->usingPdp = true;
+        $this->pdpClient->receiveSpecificDenyResponse($idpName);
+    }
+
+    /**
      * @Given /^pdp gives an indeterminate response$/
      */
     public function pdpGivesAnIndeterminateResponse()

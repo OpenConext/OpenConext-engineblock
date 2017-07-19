@@ -81,6 +81,16 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
+     * @Given /^an Identity Provider named "([^"]*)" with logo "([^"]*)"$/
+     */
+    public function anIdentityProviderNamedWithLogo($name, $logo)
+    {
+        $this->anIdentityProviderNamed($name);
+        $mockIdp = $this->mockIdpRegistry->get($name);
+        $this->serviceRegistryFixture->setLogo($mockIdp->entityId(), $logo)->save();
+    }
+
+    /**
      * @Given /^IdP "([^"]*)" is configured to return a Response like the one at "([^"]*)"$/
      */
     public function idpIsConfiguredToReturnAResponseLikeTheOneAt($idpName, $responseLogFile)
