@@ -7,10 +7,12 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
 {
     public function execute()
     {
+        $log = EngineBlock_ApplicationSingleton::getLog();
         $serviceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
             $this->_serviceProvider,
             $this->_request,
-            $this->_server->getRepository()
+            $this->_server->getRepository(),
+            $log
         );
 
         if (!$serviceProvider) {

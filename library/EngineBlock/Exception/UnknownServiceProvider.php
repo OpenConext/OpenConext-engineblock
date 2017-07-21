@@ -2,7 +2,7 @@
 
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 
-class EngineBlock_Exception_DissimilarServiceProviderWorkflowStates extends \Exception
+class EngineBlock_Exception_UnknownServiceProvider extends \Exception
 {
     /**
      * @var ServiceProvider
@@ -15,7 +15,7 @@ class EngineBlock_Exception_DissimilarServiceProviderWorkflowStates extends \Exc
     private $requesterEntityId;
 
     /**
-     * EngineBlock_Exception_DissimilarServiceProviderWorkflowStates constructor.
+     * EngineBlock_Exception_UnknownServiceProvider constructor.
      *
      * @param ServiceProvider $trustedProxyServiceProvider
      * @param string          $requesterEntityId

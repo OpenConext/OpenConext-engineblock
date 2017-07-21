@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "cfa2f6064c5ea59335d7258baca39aea",
+    "content-hash": "7beba29e84054522e70929182857d024",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1517,16 +1517,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "2.2.1",
+            "version": "2.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "831bf41b29036ec7923d5cbed2c7d6b5cfa45791"
+                "reference": "80b7774602ad3ca49d0930d3a0e138c5d36619cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/831bf41b29036ec7923d5cbed2c7d6b5cfa45791",
-                "reference": "831bf41b29036ec7923d5cbed2c7d6b5cfa45791",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/80b7774602ad3ca49d0930d3a0e138c5d36619cd",
+                "reference": "80b7774602ad3ca49d0930d3a0e138c5d36619cd",
                 "shasum": ""
             },
             "require": {
@@ -1551,7 +1551,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2017-07-03T07:15:30+00:00"
+            "time": "2017-07-19T11:48:11+00:00"
         },
         {
             "name": "openconext/saml-value-object",
@@ -4078,12 +4078,12 @@
             "version": "0.9.4",
             "source": {
                 "type": "git",
-                "url": "https://github.com/mockery/mockery.git",
+                "url": "https://github.com/padraic/mockery.git",
                 "reference": "70bba85e4aabc9449626651f48b9018ede04f86b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mockery/mockery/zipball/70bba85e4aabc9449626651f48b9018ede04f86b",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/70bba85e4aabc9449626651f48b9018ede04f86b",
                 "reference": "70bba85e4aabc9449626651f48b9018ede04f86b",
                 "shasum": ""
             },
