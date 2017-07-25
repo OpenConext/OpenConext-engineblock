@@ -97,7 +97,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         if ($sspRequest->isMessageConstructedWithSignature()) {
-            $log = $this->_server->getSessionLog();
+            $log = $this->_server->getLogger();
 
             $log->notice(sprintf(
                 'Received signed AuthnRequest from Issuer "%s" with signature method algorithm "%s"',
@@ -207,7 +207,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         // Log the response we received for troubleshooting
-        $log = $this->_server->getSessionLog();
+        $log = $this->_server->getLogger();
         $log->info(
             'Received response',
             array('saml_response' => $sspResponse->toUnsignedXML()->ownerDocument->saveXML())
@@ -457,7 +457,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
             $action = $sspMessage->getDestination();
 
-            $log = $this->_server->getSessionLog();
+            $log = $this->_server->getLogger();
             $log->info('HTTP-Post: Sending Message', array('saml_message' => $xml));
 
             $output = $this->_server->renderTemplate(
@@ -540,7 +540,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $this->_server->setRemoteIdpMd5($parameters['RemoteIdPMd5']);
         }
 
-        $log = $this->_server->getSessionLog();
+        $log = $this->_server->getLogger();
         $log->info("Using internal binding for destination $destinationLocation", array('url_params' => $parameters));
 
         $serviceName = $parameters['ServiceName'];

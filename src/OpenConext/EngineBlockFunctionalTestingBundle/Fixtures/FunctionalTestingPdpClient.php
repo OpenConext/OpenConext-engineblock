@@ -55,19 +55,34 @@ final class FunctionalTestingPdpClient implements PdpClientInterface
     {
         $pdpResponse = new Response();
 
-        switch ($this->policyDecisionFixture) {
+        $isSpecificDenyResponse = is_array($this->policyDecisionFixture)
+            && $this->policyDecisionFixture[0] === PolicyDecision::DECISION_DENY;
+
+        $decision = $this->policyDecisionFixture;
+        $additionalData = [];
+        if ($isSpecificDenyResponse) {
+            $decision = $this->policyDecisionFixture[0];
+            $additionalData = $this->policyDecisionFixture;
+        }
+
+        switch ($decision) {
             case PolicyDecision::DECISION_DENY:
                 $pdpResponse->decision = PolicyDecision::DECISION_DENY;
 
+                $idp = $this->getIdpFromAdditionalData($additionalData);
+
                 $englishDenyMessage = new AttributeAssignment();
                 $englishDenyMessage->attributeId = 'DenyMessage:en';
-                $englishDenyMessage->value = 'Students do not have access to this resource';
+                $englishDenyMessage->value = sprintf('Students of %s do not have access to this resource', $idp);
                 $dutchDenyMessage = new AttributeAssignment();
                 $dutchDenyMessage->attributeId = 'DenyMessage:nl';
-                $dutchDenyMessage->value = 'Studenten hebben geen toegang tot deze dienst';
+                $dutchDenyMessage->value = sprintf('Studenten van %s hebben geen toegang tot deze dienst', $idp);
+                $idpOnlyMessage = new AttributeAssignment();
+                $idpOnlyMessage->attributeId = 'IdPOnly';
+                $idpOnlyMessage->value = true;
 
                 $associatedAdvice = new AssociatedAdvice();
-                $associatedAdvice->attributeAssignments = [$englishDenyMessage, $dutchDenyMessage];
+                $associatedAdvice->attributeAssignments = [$englishDenyMessage, $dutchDenyMessage, $idpOnlyMessage];
                 $pdpResponse->associatedAdvices = [$associatedAdvice];
                 break;
             case PolicyDecision::DECISION_INDETERMINATE:
@@ -121,6 +136,20 @@ XML;
         $this->dataStore->save(PolicyDecision::DECISION_DENY);
     }
 
+    /**
+     * Stores a deny message with additional information about the idp
+     *
+     * @param $idpName
+     */
+    public function receiveSpecificDenyResponse($idpName)
+    {
+        $data = [
+            PolicyDecision::DECISION_DENY,
+            'idpName' => $idpName,
+        ];
+        $this->dataStore->save($data);
+    }
+
     public function receiveIndeterminateResponse()
     {
         $this->dataStore->save(PolicyDecision::DECISION_INDETERMINATE);
@@ -139,5 +168,19 @@ XML;
     public function clear()
     {
         $this->dataStore->save(null);
+    }
+
+    /**
+     * @param array $additionalData
+     * @return string
+     */
+    private function getIdpFromAdditionalData(array $additionalData)
+    {
+        $idp = '';
+        if (array_key_exists('idpName', $additionalData)) {
+            $idp = $additionalData['idpName'];
+        }
+
+        return $idp;
     }
 }

@@ -1,0 +1,63 @@
+{
+  "Response": [
+    {
+      "Status": {
+        "StatusCode": {
+          "Value": "urn:oasis:names:tc:xacml:1.0:status:ok"
+        }
+      },
+      "Category": [
+        {
+          "CategoryId": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+          "Attribute": [
+            {
+              "AttributeId": "urn:mace:dir:attribute-def:eduPersonAffiliation",
+              "Value": "student",
+              "DataType": "http://www.w3.org/2001/XMLSchema#string"
+            }
+          ]
+        }
+      ],
+      "AssociatedAdvice": [
+        {
+          "AttributeAssignment": [
+            {
+              "Category": "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
+              "AttributeId": "DenyMessage:en",
+              "Value": "MyIdp students do not have access to the Foobar portal",
+              "DataType": "http://www.w3.org/2001/XMLSchema#string"
+            },
+            {
+              "Category": "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
+              "AttributeId": "DenyMessage:nl",
+              "Value": "MyIdp studenten hebben geen toegang tot het Foobar portaal",
+              "DataType": "http://www.w3.org/2001/XMLSchema#string"
+            },
+            {
+              "Category": "urn:oasis:names:tc:xacml:3.0:attribute-category:resource",
+              "AttributeId": "IdPOnly",
+              "Value": true,
+              "DataType": "http://www.w3.org/2001/XMLSchema#boolean"
+            }
+          ],
+          "Id": "urn:surfconext:xacml:policy:id:openconext_pdp_test_deny_policy_xml"
+        }
+      ],
+      "PolicyIdentifier": {
+        "PolicySetIdReference": [
+          {
+            "Version": "1.0",
+            "Id": "urn:openconext:pdp:root:policyset"
+          }
+        ],
+        "PolicyIdReference": [
+          {
+            "Version": "1",
+            "Id": "urn:surfconext:xacml:policy:id:openconext_pdp_test_deny_policy_xml"
+          }
+        ]
+      },
+      "Decision": "Deny"
+    }
+  ]
+}

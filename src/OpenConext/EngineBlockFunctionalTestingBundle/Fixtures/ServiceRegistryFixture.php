@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
+use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\FileFlags;
 use SAML2_Const;
@@ -310,6 +311,15 @@ class ServiceRegistryFixture
     {
         $this->data[$entityId]['workflowState'] = $workflowState;
 
+        return $this;
+    }
+
+
+    public function setLogo($entityId, $logo)
+    {
+        $this->data[$entityId]['logo:0:url'] = $logo;
+        $this->data[$entityId]['logo:0:width'] = 100;
+        $this->data[$entityId]['logo:0:height'] = 100;
         return $this;
     }
 

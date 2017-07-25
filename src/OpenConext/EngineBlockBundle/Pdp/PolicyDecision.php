@@ -19,7 +19,9 @@
 namespace OpenConext\EngineBlockBundle\Pdp;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
+use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
+use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
 
 final class PolicyDecision
 {
@@ -42,6 +44,16 @@ final class PolicyDecision
      * @var string|null
      */
     private $statusMessage;
+
+    /**
+     * @var bool
+     */
+    private $isIdpSpecific = false;
+
+    /**
+     * @var Logo
+     */
+    private $idpLogo;
 
     /**
      * @param Response $response
@@ -69,12 +81,35 @@ final class PolicyDecision
                     if ($identifier === 'DenyMessage') {
                         $localizedDenyMessages[$locale] = $attributeAssignment->value;
                     }
+
+                    self::setAttributeAssignmentSource($attributeAssignment, $policyDecision);
                 }
             }
             $policyDecision->localizedDenyMessages = $localizedDenyMessages;
         }
 
         return $policyDecision;
+    }
+
+    /**
+     * Checks attributeAssignment for clues if this assignment is IdP specific. And sets the idpOnly field
+     * accordingly.
+     *
+     * @param AttributeAssignment $attributeAssignment
+     * @param PolicyDecision $policyDecision
+     */
+    private static function setAttributeAssignmentSource(
+        AttributeAssignment $attributeAssignment,
+        PolicyDecision $policyDecision
+    ) {
+
+        if ($attributeAssignment->attributeId !== 'IdPOnly') {
+            return;
+        }
+
+        if (isset($attributeAssignment->value) && $attributeAssignment->value === true) {
+            $policyDecision->isIdpSpecific = true;
+        }
     }
 
     /**
@@ -140,5 +175,42 @@ final class PolicyDecision
     public function hasStatusMessage()
     {
         return isset($this->statusMessage);
+    }
+
+    /**
+     * @param Logo $logoUri
+     */
+    public function setIdpLogo(Logo $logoUri)
+    {
+        $this->idpLogo = $logoUri;
+    }
+
+    /**
+     * If the logo is not set, this method returns null
+     * @return Logo|null
+     */
+    public function getIdpLogo()
+    {
+        if ($this->isIdpSpecificMessage() && $this->hasIdpLogo()) {
+            /** @var Logo $logo */
+            return $this->idpLogo;
+        }
+        return null;
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasIdpLogo()
+    {
+        return !is_null($this->idpLogo);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isIdpSpecificMessage()
+    {
+        return $this->isIdpSpecific;
     }
 }

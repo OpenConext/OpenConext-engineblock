@@ -186,12 +186,7 @@ We weten helaas niet waar je heen wilt. Heb je te lang gewacht? Probeer het dan 
 Bezoek <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=52331093" target="_blank">de SURFconext support pagina\'s</a> voor meer ondersteuning bij deze foutmelding. Hier kun je ook vinden hoe je contact kunt opnemen met het supportteam als de fout aanblijft.
         <br /><br />
     </p>',
-    'error_dissimilar_workflow_state'       => 'Error - Verschillende productie statussen',
-    'error_dissimilar_workflow_state_desc'  => '<p>
-De dienst die je probeert te benaderen (de &lsquo;Service Provider&rsquo;) is nog niet beschikbaar via de SURFconext infrastructuur.
-Ga alstublieft <a href="javascript:history.back();">terug</a> en neem contact op met de helpdesk van SURFconext via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-<br /><br />
-</p>',
+
     'error_authorization_policy_violation'            => 'Error - Geen toegang',
     'error_authorization_policy_violation_desc'       => '<p>
         Je bent succesvol ingelogd bij jouw instelling, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw instelling met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je instelling als je vindt dat je wel toegang moet hebben.
@@ -272,6 +267,9 @@ Je instelling heeft je de toegang geweigerd tot deze dienst. Je zult dus contact
     'error_attribute_validator_not_in_definitions'  => '%1$s is niet bekend in het SURFconext schema',
     'error_attribute_validator_allowed'             => '\'%3$s\' is geen toegestane waarde voor dit attribuut',
     'error_attribute_validator_availability'        => '\'%3$s\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
+
+    'error_unknown_service'         => 'Error - Deze dienst is niet geregistreerd bij SURFconext.',
+    'error_unknown_service_desc'    => '<p>Deze dienst is niet bekend. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
 
     'attributes_validation_succeeded' => 'Authenticatie geslaagd',
     'attributes_validation_failed'    => 'Sommige attributen kunnen niet gevalideerd worden',

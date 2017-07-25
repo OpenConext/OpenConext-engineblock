@@ -364,6 +364,23 @@ class MockSpContext extends AbstractSubContext
 
         $this->mockSpRegistry->save();
     }
+    /**
+     * @Given /^SP "([^"]*)" is authenticating for misconfigured SP "([^"]*)"$/
+     */
+    public function spIsAuthenticatingForMisconfiguredSp($spName, $spDestinationName)
+    {
+        /** @var MockServiceProvider $sp */
+        $sp = $this->mockSpRegistry->get($spName);
+        /** @var MockServiceProvider $spDestination */
+        $spDestination = $this->mockSpRegistry->get($spDestinationName);
+
+        $authNRequest = $sp->getAuthnRequest();
+        $requesterIds = $authNRequest->getRequesterID();
+        $requesterIds[] = $spDestination->entityId() . '-i-do-not-exist';
+        $authNRequest->setRequesterID($requesterIds);
+
+        $this->mockSpRegistry->save();
+    }
 
     /**
      * @Given /^SP "([^"]*)" is authenticating and uses RequesterID "([^"]*)"$/
