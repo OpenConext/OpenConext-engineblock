@@ -30,12 +30,12 @@ final class Logo implements Serializable
     public function __construct($url, $width, $height)
     {
         Assertion::nonEmptyString($url, 'url');
-        Assertion::integer($width);
-        Assertion::integer($height);
+        Assertion::integerish($width);
+        Assertion::integerish($height);
 
         $this->url = $url;
-        $this->width = $width;
-        $this->height = $height;
+        $this->width = (int)$width;
+        $this->height = (int)$height;
     }
 
     /**
