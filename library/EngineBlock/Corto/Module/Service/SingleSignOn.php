@@ -24,7 +24,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $sp = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
         // Exposing entityId to be used when tracking the start of an authentication procedure
-       $application->authenticationStateSpEntityId = $sp->entityId;
+        $application->authenticationStateSpEntityId = $sp->entityId;
 
         // Flush log if an SP in the requester chain has additional logging enabled
         $log->info("Determining whether service provider in chain requires additional logging");
@@ -38,7 +38,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         );
 
         if ($isAdditionalLoggingRequired) {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
             $application->flushLog('Activated additional logging for one or more SPs in the SP requester chain');
 
             $logger = $application->getLogInstance();
