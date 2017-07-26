@@ -23,6 +23,7 @@ use RuntimeException;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Both set up and tasks can be a lot...
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.TooManyMethods) Both set up and tasks can be a lot...
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to all integration specific features
  */
@@ -344,6 +345,35 @@ HTML;
         }
 
         $button->click();
+    }
+
+    /**
+     * @Then /^I should see the "Request access" button$/
+     */
+    public function iSeeTheRequestAccessButton()
+    {
+        $selector = 'a.noaccess';
+
+        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
+        $button = $mink->find('css', $selector);
+
+        if (!$button) {
+            throw new RuntimeException(sprintf('Unable to find Request access button %s', $selector));
+        }
+    }
+
+    /**
+     * @Then /^I should not see the "Request access" button$/
+     */
+    public function iDoNotSeeTheRequestAccessButton()
+    {
+        try {
+            $this->iSeeTheRequestAccessButton();
+        } catch (RuntimeException $e) {
+            return;
+        }
+
+        throw new RuntimeException('Request access button found on page');
     }
 
     /**

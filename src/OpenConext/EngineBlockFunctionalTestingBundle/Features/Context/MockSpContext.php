@@ -587,4 +587,30 @@ class MockSpContext extends AbstractSubContext
             ->requireAttributeAggregation($mockSp->entityId())
             ->save();
     }
+
+    /**
+     * @Given /^SP "([^"]*)" is configured to display unconnected IdPs in the WAYF$/
+     * @param string $spName
+     */
+    public function spIsConfiguredToDisplayUnconnectedIdps($spName)
+    {
+        $sp = $this->anUnregisteredServiceProviderNamed($spName);
+
+        $this->serviceRegistryFixture
+            ->displayUnconnectedIdpsForSp($sp->entityId())
+            ->save();
+    }
+
+    /**
+     * @Given /^SP "([^"]*)" is configured to only display connected IdPs in the WAYF$/
+     * @param string $spName
+     */
+    public function spIsConfiguredToDisplayOnlyConnectedIdps($spName)
+    {
+        $sp = $this->anUnregisteredServiceProviderNamed($spName);
+
+        $this->serviceRegistryFixture
+            ->displayUnconnectedIdpsForSp($sp->entityId(), false)
+            ->save();
+    }
 }

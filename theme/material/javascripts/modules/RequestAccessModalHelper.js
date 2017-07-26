@@ -6,11 +6,11 @@ export class RequestAccessModalHelper {
         this.requestAccessUrl     = requestAccessUrl;
     }
 
-    openRequestAccessModal() {
-        sendGetRequest(this.requestAccessUrl, (responseText) => this.renderRequestAccessModal(responseText));
+    openRequestAccessModal(institutionName) {
+        sendGetRequest(this.requestAccessUrl, (responseText) => this.renderRequestAccessModal(responseText, institutionName));
     }
 
-    renderRequestAccessModal(responseText) {
+    renderRequestAccessModal(responseText, institutionName) {
         document.body.style.overflowY = 'auto';
         this.requestAccessElement.innerHTML = responseText;
 
@@ -20,6 +20,7 @@ export class RequestAccessModalHelper {
         const $closeModalButton = this.requestAccessElement.querySelector('.close-modal');
         const $submitButton     = this.requestAccessElement.querySelector('#request_access_submit');
         const $nameField        = this.requestAccessElement.querySelector('#name');
+        const $institutionField = this.requestAccessElement.querySelector('#institution');
 
         $container.removeEventListener('click', this.containerClickHandler());
         $container.addEventListener('click', this.containerClickHandler($container));
@@ -34,11 +35,39 @@ export class RequestAccessModalHelper {
             $closeModalButton.addEventListener('click', this.closeModalClickHandler());
         }
 
-        $nameField.focus();
+        if (institutionName) {
+            $institutionField.value = institutionName;
+        }
+
+        if ($nameField) {
+            $nameField.focus();
+        }
+    }
+
+    requestAccessClickHandler() {
+        function isUnconnectedIdpRow(element) {
+            return (element.className.indexOf('noaccess') > -1);
+        }
+
+        return event => {
+            if (
+                (isUnconnectedIdpRow(event.target)) ||
+                (isUnconnectedIdpRow(event.target.parentElement))
+            ) {
+                const $institutionTitle = event.target.parentElement.querySelector('h3');
+                var institutionName = '';
+
+                if ($institutionTitle) {
+                    institutionName = $institutionTitle.innerText;
+                }
+
+                this.openRequestAccessModal(institutionName);
+            }
+        }
     }
 
     containerClickHandler(containerElement) {
-        return () => {
+        return event => {
             if (event.target === containerElement) {
                 this.closeRequestAccessModal();
             }
@@ -94,7 +123,7 @@ function sendGetRequest(url, callback) {
     request.send(null);
 }
 
-function sendPostRequest(url, jsonData, callback) {
+function sendPostRequest(url, formData, callback) {
     const request = new XMLHttpRequest;
 
     request.onreadystatechange = () => {
@@ -103,7 +132,13 @@ function sendPostRequest(url, jsonData, callback) {
         }
     };
 
+    var parts = [];
+
+    for (name in formData) {
+        parts.push(encodeURIComponent(name) + '=' + encodeURIComponent(formData[name]));
+    }
+
     request.open('POST', url, true);
-    request.setRequestHeader('Content-type', 'application/json');
-    request.send(JSON.stringify(jsonData));
+    request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    request.send(parts.join('&'));
 }

@@ -33,6 +33,7 @@ return array(
     'idp_selection_desc'        => 'Select an institution to login to <i>%s</i>',
     'our_suggestion'            => 'Previously chosen:',
     'idps_with_access'          => 'Identity Providers with access',
+    'idps_without_access'       => 'Identity Providers without access',
     'no_access'                 => 'No access',
     'no_access_more_info'       => 'No access. &raquo;',
     'no_results'                => 'Your search did not return any results.',
