@@ -169,6 +169,8 @@ Uses:
 Modifies:
 - responseAttributes
 
+See: [Engineblock Attribute Aggregation](attribute_aggregation.md) for more information.
+
 ### EnforcePolicy
 Makes a call to the external PolicyDecisionPoint service. This returns a response which details whether or not the 
 current User is allowed access to the Service Provider. For more information see [the PDP repository README][pdp-repo]
