@@ -3,6 +3,7 @@
 1. [License][license]
 1. [Release Procedure][release]
 1. [EngineBlock Input and Output Command Chains][filter]
+1. [Attribute Aggregation](attribute_aggregation.md)
 1. [Release notes for releases < 5.0.0][release-notes]
 
 [license]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/LICENSE
