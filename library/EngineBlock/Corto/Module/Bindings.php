@@ -107,13 +107,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
-        if ($sspRequest->getIssueInstant() <= time() - 10 || $sspRequest->getIssueInstant() >= time() + 10) {
-            $this->_logger->notice(sprintf(
-                'IssueInstant of received request is out of sync (%lu), might indicate NTP-issues at the SP',
-                $sspRequest->getIssueInstant()
-            ));
-        }
-
+        $this->_checkIssueInstant( $sspRequest->getIssueInstant() );
 
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
@@ -260,14 +254,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        // check the IssueInstant against our own time to see if the IdP's clock is getting out of sync
-        // a more strict check is implemented elsewehere; this simply serves as an advance warning
-        if ($sspResponse->getIssueInstant() <= time() - 10 || $sspResponse->getIssueInstant() >= time() + 10) {
-            $this->_logger->notice(sprintf(
-                'IssueInstant of received response is out of sync (%lu), might indicate NTP-issues at the IdP',
-                $sspResponse->getIssueInstant()
-            ));
-        }
+        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
+        $this->_checkIssueInstant( $sspResponse->getIssueInstant() );
 
         try {
             // 'Process' the response, verify the signature, verify the timings.
@@ -425,6 +413,26 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $messageIssuer,
             $destination
         );
+    }
+
+    /**
+     * Check if the IssueInstant of the message is too far out of sync
+     * @param integer $issueInstant
+     */
+    protected function _checkIssueInstant($issueInstant)
+    {
+        // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
+        // Ssp has a hard-coded limit of 60 seconds; use 30 here to catch an IdP's drifting clock early
+        $time = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTimeProvider()->time();
+        $timeDelta = $time - $issueInstant;
+        if (abs($timeDelta) > 30) {
+            $this->_logger->notice(
+                sprintf(
+                    'IssueInstant of SAML message is off by %d seconds; might indicate (local or remote) clock synchronization issues',
+                    $timeDelta
+                )
+            );
+        }
     }
 
     public function send(
