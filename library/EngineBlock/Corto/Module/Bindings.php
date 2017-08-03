@@ -107,7 +107,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
-        $this->_checkIssueInstant( $sspRequest->getIssueInstant() );
+        $this->_checkIssueInstant( $sspRequest->getIssueInstant(), 'SP',  $sspRequest->getIssuer() );
 
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($sspRequest);
 
@@ -255,7 +255,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
-        $this->_checkIssueInstant( $sspResponse->getIssueInstant() );
+        $this->_checkIssueInstant( $sspResponse->getIssueInstant(), 'IdP', $idpEntityId );
 
         try {
             // 'Process' the response, verify the signature, verify the timings.
@@ -418,8 +418,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * Check if the IssueInstant of the message is too far out of sync
      * @param integer $issueInstant
+     * @param string $type
+     * @param string $entityid
      */
-    protected function _checkIssueInstant($issueInstant)
+    protected function _checkIssueInstant($issueInstant, $type, $entityid)
     {
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
         // Ssp has a hard-coded limit of 60 seconds; use 30 here to catch an IdP's drifting clock early
@@ -428,8 +430,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if (abs($timeDelta) > 30) {
             $this->_logger->notice(
                 sprintf(
-                    'IssueInstant of SAML message is off by %d seconds; might indicate (local or remote) clock synchronization issues',
-                    $timeDelta
+                    'IssueInstant of SAML message from %s "%s" is %d seconds in the %s; might indicate (local or remote) clock synchronization issues',
+                    $type,
+                    $entityid,
+                    abs($timeDelta),
+                    $timeDelta>0 ? "past" : "future"
                 )
             );
         }
