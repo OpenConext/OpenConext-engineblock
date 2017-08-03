@@ -430,7 +430,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if (abs($timeDelta) > 30) {
             $this->_logger->notice(
                 sprintf(
-                    'IssueInstant of SAML message from %s "%s" is in %d seconds in the %s; might indicate (local or remote) clock synchronization issues',
+                    'IssueInstant of SAML message from %s "%s" is %d seconds in the %s; might indicate (local or remote) clock synchronization issues',
                     $type,
                     $entityid,
                     abs($timeDelta),
