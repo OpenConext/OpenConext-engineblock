@@ -1,22 +1,22 @@
 # Trusted Proxy in EngineBlock
 
-In version 4.3.3 support for "trusted proxies" was added to Openconext. A "trusted proxy" is a SAML SP that uses engine as it's IdP. The difference between a normal SP and a SP is that is a trusted proxy is that the latter is allowed to impersonate other service providers. This allows a SP proxy to be connected to engineblock while using the ACL, ARP, consent and pseudonymisation functions of enginblock.
+In version 4.3.3 support for "trusted proxies" was added to Openconext. A "trusted proxy" is a SAML SP that uses engineblock as its IdP. The difference between a normal SP and a SP is that is a trusted proxy is that the latter is allowed to impersonate other service providers. This allows a SP proxy to be connected to engineblock while using the ACL, ARP, consent and pseudonymisation functions of enginblock.
 
 
 ## Enabling
 
-Trusted proxy is enabled per SP. To enable trusted proxy behaviour for a SP, set "coin:trusted_proxy" to true for the configuration of the SP. The default for this setting is false.
+Trusted proxy is enabled per SP. To enable trusted proxy behaviour for a SP, set "coin:trusted_proxy" and "coin:redirect.sign" to true for the configuration of the SP. The default for this setting is false. Note that after enabling "coin:redirect.sign" all AuthnRequests must be signed.
 
 ## Engineblock Trusted Proxy behaviour
 
-Engine block will only enable trusted proxy processing for a SAML AuthnRequest that it receives from a SP when all of the following conditions are met:
+Engineblock will only enable trusted proxy processing for a SAML AuthnRequest that it receives from a SP when all of the following conditions are met:
+* Both "coin:trusted_proxy" and "coin:redirect.sign" are set in the SP Entity configuration in engineblock. This SP is identified by the value of the /AuthnRequest/Issuer element in the SAML AuthnRequest.
 * The AuthnRequest has a valid signature
-* "coin:trusted_proxy" is enabled in the SP Entity configuration in engineblock. This SP is identified by the value of the /AuthnRequest/Issuer element in the SAML AuthnRequest.
 * The SAML AuthnRequest contains at least one /AuthnRequest/Scoping/RequesterID element.
 
 ### Trusted proxy processing
 
-The imange below show a proxy (a trusted proxy) that is connected to engineblock :
+The image below shows a proxy (a trusted proxy) that is connected to engineblock :
 * The __trusted proxy SP__ is an SP that sends an AuthnRequest to engineblock.
 * The __SP being proxied__ is the SP behind the trusted proxy.
 
@@ -25,7 +25,7 @@ The imange below show a proxy (a trusted proxy) that is connected to engineblock
 When processing a AuthnRequest from a trusted proxy engineblock performs some actions as if the SP being proxied sent the AuthnRequest directly. This is what differentiates trusted proxy processing from the normal processing in engineblock, which is also proxy aware but will never allow impersonation of another SP or reveal pseudonyms of another SP. For trusted proxies engineblock:
 * Generates the NameID for the SP being proxied and adds this to the eduPersonTargetedID attribute. This makes the persistent NameID (which is a pseudonym targeted at a SP) of the SP being proxied available to the trusted proxy. The NameID for the trusted proxy is available in the Subject in the Assertion. This way the trusted proxy can have an unique identifier for the user. When generating the Assertion for the SP being proxied the trusted proxy must copy the NameID from the eduPersonTargetedID to the Subject.
 * Consent is asked and remembered for the SP being proxied
-* The attribute manipulations of the SP being proxies are run
+* The attribute manipulations of the SP being proxied are run
 
 ### Trusted proxy processing details
 
@@ -56,6 +56,7 @@ Processing of the request:
 * The ACL of both the trusted proxy SP and the SP being proxied are verified. Only IdPs are allowed access to both SPs are allowed to login
 * The ARPs of both the trusted proxy SP and the SP being proxied are applied. Only attributes and attribute values that are allowed by both ARP are included in the response
 * The attribute manipulations (AMs) of both the trusted proxy SP and the SP being proxied are run. The AMs of the trusted proxy SP are run first.
+* The PDP is called for the SP being proxied only.
 
-* The NameID in the Subject of the response is generated according the NameID rules configured for the trusted proxy SP, NameIDs requested in the AuthnRequest are not taken into account.
-* The NameID in the eduPersonTargetedID attribute of the response is generated according the NameID rules configured for the trusted proxy SP, NameIDs requested in the AuthnRequest are taken into account.
+* The NameID in the Subject of the response is generated according the NameID configured for the trusted proxy SP. The NameID format requested in the AuthnRequest is not taken into account.
+* The NameID in the eduPersonTargetedID attribute of the response is generated according the NameID configured for the trusted proxy SP. The NameID format requested in the AuthnRequest are not taken into account.
