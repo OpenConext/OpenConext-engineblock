@@ -27,6 +27,7 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
         $log->debug("Policy Enforcement Point: consulting Policy Decision Point");
 
         $pdpRequest = Request::from(
+            $this->getPdpClientId(),
             $this->_collabPersonId,
             $this->_identityProvider->entityId,
             $serviceProvider->entityId,
@@ -85,5 +86,13 @@ class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_F
     private function getPdpClient()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getPdpClient();
+    }
+
+    /**
+     * @return string
+     */
+    private function getPdpClientId()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getPdpClientId();
     }
 }

@@ -17,6 +17,10 @@
     "Resource": {
       "Attribute": [
         {
+          "AttributeId": "ClientID",
+          "Value": "clientid"
+        },
+        {
           "AttributeId": "SPentityID",
           "Value": "avans_sp"
         },

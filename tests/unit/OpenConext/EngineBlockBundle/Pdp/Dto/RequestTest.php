@@ -35,6 +35,7 @@ class RequestTest extends TestCase
 
     public function setUp()
     {
+        $this->validClientId   = 'clientid';
         $this->validSubjectId   = 'subject-id';
         $this->validIdpEntityId = 'https://my-idp.example';
         $this->validSpEntityId  = 'https://my-sp.example';
@@ -42,7 +43,27 @@ class RequestTest extends TestCase
             ['urn:mace:dir:attribute-def:eduPersonAffiliation' => ['student', 'alumni']]
         ];
     }
-    
+
+    /**
+     * @test
+     * @group Pdp
+     *
+     * @dataProvider \OpenConext\TestDataProvider::notString()
+     */
+    public function a_pdp_requests_client_id_must_be_a_string()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The client ID must be a string');
+
+        Request::from(
+            123,
+            $this->validSubjectId,
+            $this->validIdpEntityId,
+            $this->validSpEntityId,
+            $this->validResponseAttributes
+        );
+    }
+
     /**
      * @test
      * @group Pdp
@@ -56,6 +77,7 @@ class RequestTest extends TestCase
         $this->expectExceptionMessage('SubjectId must be a string');
 
         Request::from(
+            $this->validClientId,
             $invalidSubjectId,
             $this->validIdpEntityId,
             $this->validSpEntityId,
@@ -76,6 +98,7 @@ class RequestTest extends TestCase
         $this->expectExceptionMessage('IDPentityID must be a string');
 
         Request::from(
+            $this->validClientId,
             $this->validSubjectId,
             $invalidIdpEntityId,
             $this->validSpEntityId,
@@ -95,7 +118,13 @@ class RequestTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('SPentityID must be a string');
 
-        Request::from($this->validSubjectId, $this->validIdpEntityId, $invalidSpEntityId, $this->validResponseAttributes);
+        Request::from(
+            $this->validClientId,
+            $this->validSubjectId,
+            $this->validIdpEntityId,
+            $invalidSpEntityId,
+            $this->validResponseAttributes
+        );
     }
 
     /**
@@ -113,6 +142,7 @@ class RequestTest extends TestCase
         ];
 
         Request::from(
+            $this->validClientId,
             $this->validSubjectId,
             $this->validIdpEntityId,
             $this->validSpEntityId,
@@ -136,6 +166,7 @@ class RequestTest extends TestCase
         ];
 
         Request::from(
+            $this->validClientId,
             $this->validSubjectId,
             $this->validIdpEntityId,
             $this->validSpEntityId,
@@ -150,6 +181,7 @@ class RequestTest extends TestCase
     public function a_pdp_request_is_built_correctly()
     {
         $resourceAttributeValues = [
+            'ClientID' => 'clientid',
             'SPentityID' => 'avans_sp',
             'IDPentityID' => 'avans_idp',
         ];
@@ -161,6 +193,7 @@ class RequestTest extends TestCase
         $expectedRequest = $this->buildPdpRequest($resourceAttributeValues, $accessSubjectAttributeValues);
 
         $actualRequest = Request::from(
+            $this->validClientId,
             $accessSubjectAttributeValues[NameIdFormat::UNSPECIFIED],
             $resourceAttributeValues['IDPentityID'],
             $resourceAttributeValues['SPentityID'],
@@ -185,6 +218,7 @@ class RequestTest extends TestCase
         );
 
         $resourceAttributeValues = [
+            'ClientID' => 'clientid',
             'SPentityID' => 'avans_sp',
             'IDPentityID' => 'avans_idp',
         ];
