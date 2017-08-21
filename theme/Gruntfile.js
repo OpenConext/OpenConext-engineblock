@@ -30,22 +30,11 @@ module.exports = function(grunt) {
                     ]
                 },
                 files: {
-                    "../web/javascripts/application.js": ["<%= config.theme %>/javascripts/application.js"]
-                }
-            }
-        },
-        uglify: {
-            dist: {
-                files: {
-                    '../web/javascripts/application.min.js': ['../web/javascripts/application.js']
-                },
-            },
-            polyfill: {
-                files: {
-                    '../web/javascripts/polyfill.min.js': [
-                        'node_modules/ie8/build/ie8.js',
-                        'node_modules/es5-shim/es5-shim.min.js',
-                        'node_modules/html5shiv/dist/html5-shiv.min.js'
+                    "../web/javascripts/application.js": ["<%= config.theme %>/javascripts/application.js"],
+                    '../web/javascripts/polyfill.js': [
+                        'node_modules/ie8/build/ie8.max.js',
+                        'node_modules/es5-shim/es5-shim.js',
+                        'node_modules/html5shiv/dist/html5shiv.js'
                     ]
                 }
             }
@@ -64,7 +53,6 @@ module.exports = function(grunt) {
                   'ios >= 4',
                   'last 3 versions'
               ]}),
-              require('csswring')
             ]
           },
           material: {
@@ -77,7 +65,8 @@ module.exports = function(grunt) {
                     sassDir: 'material/stylesheets',
                     cssDir: '../web/stylesheets',
                     imagesDir: 'material/images',
-                    outputStyle: 'compressed',
+                    outputStyle: 'expanded',
+                    environment: 'production',
                     raw: 'preferred_syntax = :sass\n'
                 }
             }
@@ -106,11 +95,6 @@ module.exports = function(grunt) {
                     '../web/stylesheets/**/*'
                 ]
             },
-            nonMinifiedJavaScript: {
-                src: [
-                    '../web/javascripts/application.js'
-                ]
-            }
         },
         'string-replace': {
             layoutconfig: {
@@ -177,8 +161,6 @@ module.exports = function(grunt) {
 
             tasks.push('postcss:' + theme);
             tasks.push('browserify');
-            tasks.push('uglify');
-            tasks.push('clean:nonMinifiedJavaScript');
             tasks.push('add_comment:' + theme);
             tasks.push('string-replace:layoutconfig');
 
