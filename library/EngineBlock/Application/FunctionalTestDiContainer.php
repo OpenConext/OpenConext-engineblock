@@ -53,6 +53,11 @@ class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Appl
         return $this->getFunctionalTestingPdpClient();
     }
 
+    public function getPdpClientId()
+    {
+        return 'Federation';
+    }
+
     /**
      * @return \OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface
      */

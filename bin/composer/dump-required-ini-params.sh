@@ -40,6 +40,7 @@ $ymlContent = array(
         'pdp.policy_decision_point_path'                          => $config->get('pdp.policy_decision_point_path'),
         'pdp.username'                                            => $config->get('pdp.username'),
         'pdp.password'                                            => $config->get('pdp.password'),
+        'pdp.client_id'                                           => $config->get('pdp.client_id'),
         'attribute_aggregation.base_url'                          => $config->get('attributeAggregation.baseUrl'),
         'attribute_aggregation.username'                          => $config->get('attributeAggregation.username'),
         'attribute_aggregation.password'                          => $config->get('attributeAggregation.password'),

@@ -47,6 +47,7 @@ final class Request implements JsonSerializable
     public $resource;
 
     /**
+     * @var string $clientId
      * @var string $subjectId
      * @param string $subjectId
      * @param string $idpEntityId
@@ -54,8 +55,9 @@ final class Request implements JsonSerializable
      * @param array $responseAttributes
      * @return Request $request
      */
-    public static function from($subjectId, $idpEntityId, $spEntityId, array $responseAttributes)
+    public static function from($clientId, $subjectId, $idpEntityId, $spEntityId, array $responseAttributes)
     {
+        Assertion::string($clientId, 'The client ID must be a string, received "%s" (%s)');
         Assertion::string($subjectId, 'The SubjectId must be a string, received "%s" (%s)');
         Assertion::string($idpEntityId, 'The IDPentityID must be a string, received "%s" (%s)');
         Assertion::string($spEntityId, 'The SPentityID must be a string, received "%s" (%s)');
@@ -74,6 +76,10 @@ final class Request implements JsonSerializable
         $request->accessSubject = new AccessSubject;
         $request->accessSubject->attributes = [$subjectIdAttribute];
 
+        $clientIdAttribute  = new Attribute;
+        $clientIdAttribute->attributeId = 'ClientID';
+        $clientIdAttribute->value = $clientId;
+
         $spEntityIdAttribute  = new Attribute;
         $spEntityIdAttribute->attributeId = 'SPentityID';
         $spEntityIdAttribute->value = $spEntityId;
@@ -83,7 +89,7 @@ final class Request implements JsonSerializable
         $idpEntityIdAttribute->value = $idpEntityId;
 
         $request->resource = new Resource;
-        $request->resource->attributes = [$spEntityIdAttribute, $idpEntityIdAttribute];
+        $request->resource->attributes = [$clientIdAttribute, $spEntityIdAttribute, $idpEntityIdAttribute];
 
         foreach ($responseAttributes as $id => $values) {
             foreach ($values as $value) {

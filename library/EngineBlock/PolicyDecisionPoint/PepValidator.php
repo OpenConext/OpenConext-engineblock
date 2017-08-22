@@ -36,6 +36,9 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
             }
         }
 
+        $clientIdAttribute = new Attribute;
+        $clientIdAttribute->attributeId = 'ClientID';
+        $clientIdAttribute->value = $this->getPdpClientId();
         $idpAttribute = new Attribute;
         $idpAttribute->attributeId = 'IDPentityID';
         $idpAttribute->value = $idp;
@@ -45,7 +48,7 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
 
         $pdpRequest = new Request();
         $pdpRequest->accessSubject->attributes = $accessSubjectAttributes;
-        $pdpRequest->resource->attributes = [$idpAttribute, $spAttribute];
+        $pdpRequest->resource->attributes = [$clientIdAttribute, $idpAttribute, $spAttribute];
 
         $pdpClient = $this->getPdpClient();
 
@@ -78,6 +81,11 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
     private function getPdpClient()
     {
         return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getPdpClient();
+    }
+
+    private function getPdpClientId()
+    {
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getPdpClientId();
     }
 
     private function getLocale()
