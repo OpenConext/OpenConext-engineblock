@@ -85,8 +85,6 @@ class EngineBlock_User
 
         $this->_deleteUserConsent();
 
-        $this->_deleteOauthTokens();
-
         // Delete the cookies and session
         $this->_deleteFromEnvironment();
     }
@@ -104,20 +102,6 @@ class EngineBlock_User
                     WHERE hashed_user_id = ?";
         $parameters = array(
             sha1($this->getUid())
-        );
-
-        $statement = $pdo->prepare($query);
-        $statement->execute($parameters);
-    }
-
-    protected function _deleteOauthTokens()
-    {
-        $pdo = $this->_getDatabaseConnection();
-
-        $query = "DELETE FROM group_provider_user_oauth
-                    WHERE user_id = ?";
-        $parameters = array(
-            $this->getUid()
         );
 
         $statement = $pdo->prepare($query);
