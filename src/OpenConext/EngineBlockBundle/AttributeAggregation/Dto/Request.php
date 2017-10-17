@@ -26,6 +26,11 @@ final class Request implements JsonSerializable
     /**
      * @var string
      */
+    public $spEntityId;
+
+    /**
+     * @var string
+     */
     public $subjectId;
 
     /**
@@ -41,16 +46,19 @@ final class Request implements JsonSerializable
     public $rules = [];
 
     /**
+     * @param string $spEntityId
      * @param string $subjectId
      * @param AttributeRule[] $rules
      * @return Request $request
      */
-    public static function from($subjectId, array $attributes, array $rules)
+    public static function from($spEntityId, $subjectId, array $attributes, array $rules)
     {
+        Assertion::string($spEntityId, 'The SP entity ID must be a string, received "%s" (%s)');
         Assertion::string($subjectId, 'The SubjectId must be a string, received "%s" (%s)');
         Assertion::allIsInstanceOf($rules, AttributeRule::class, 'All attributes must be of type AttributeRule');
 
         $request = new self;
+        $request->spEntityId = $spEntityId;
         $request->subjectId = $subjectId;
         $request->attributes = $attributes;
         $request->rules = $rules;
@@ -67,6 +75,10 @@ final class Request implements JsonSerializable
                         'name' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                         'values' => [$this->subjectId],
                     ],
+                    [
+                        'name' => 'SPentityID',
+                        'values' => [$this->spEntityId],
+                    ]
                 ],
                 array_map(
                     function ($values, $name) {

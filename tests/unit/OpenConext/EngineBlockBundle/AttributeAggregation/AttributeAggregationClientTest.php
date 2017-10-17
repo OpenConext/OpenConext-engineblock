@@ -40,12 +40,13 @@ class AttributeAggregationClientTest extends TestCase
     public function an_attributeaggregation_client_parses_the_aggregator_response()
     {
         $request = Request::from(
-          'subject',
-          [],
-          [
-            AttributeRule::from('name', 'value', 'source'),
-            AttributeRule::from('name', 'value', 'source'),
-          ]
+            'sp-entity-id',
+            'subject',
+            [],
+            [
+                AttributeRule::from('name', 'value', 'source'),
+                AttributeRule::from('name', 'value', 'source'),
+            ]
         );
 
         $responseFixture = file_get_contents(__DIR__ . '/fixture/success-response.json');
