@@ -2206,16 +2206,16 @@
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v1.14.15",
+            "version": "v1.14.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/simplesamlphp.git",
-                "reference": "466c19e6c06a116f658c2fdb309b59aa5537271a"
+                "reference": "9ebbbbc7fa334d55526c2a5e230d9941002cdcb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/466c19e6c06a116f658c2fdb309b59aa5537271a",
-                "reference": "466c19e6c06a116f658c2fdb309b59aa5537271a",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/9ebbbbc7fa334d55526c2a5e230d9941002cdcb8",
+                "reference": "9ebbbbc7fa334d55526c2a5e230d9941002cdcb8",
                 "shasum": ""
             },
             "require": {
@@ -2273,7 +2273,7 @@
                 "sp",
                 "ws-federation"
             ],
-            "time": "2017-08-07T14:38:12+00:00"
+            "time": "2017-09-04T12:11:47+00:00"
         },
         {
             "name": "sybio/image-workshop",
