@@ -34,6 +34,7 @@ class RequestTest extends TestCase
     public function request_serializes_to_aa_api_format()
     {
         $request = Request::from(
+            'sp-entity-id',
             'subject',
             [
                 'attr' => [1, 2, 3],
@@ -50,6 +51,10 @@ class RequestTest extends TestCase
                     [
                         'name' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                         'values' => ['subject'],
+                    ],
+                    [
+                        'name' => 'SPentityID',
+                        'values' => ['sp-entity-id'],
                     ],
                     [
                         'name' => 'attr',
@@ -83,7 +88,16 @@ class RequestTest extends TestCase
     public function request_subject_must_be_set()
     {
         $this->setExpectedException(InvalidArgumentException::class);
-        Request::from(NULL, [], []);
+        Request::from('sp-entity-id', NULL, [], []);
+    }
+
+    /**
+     * @test
+     */
+    public function request_sp_entity_id_must_be_set()
+    {
+        $this->setExpectedException(InvalidArgumentException::class);
+        Request::from(NULL,'subject-id', [], []);
     }
 
     /**
@@ -92,6 +106,6 @@ class RequestTest extends TestCase
     public function request_attributes_must_be_of_type_dto()
     {
         $this->setExpectedException(InvalidArgumentException::class);
-        Request::from('subject', [], [['invalid']]);
+        Request::from('sp-entity-id', 'subject', [], [['invalid']]);
     }
 }

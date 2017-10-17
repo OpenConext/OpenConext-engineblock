@@ -106,6 +106,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
         try {
             $response = $this->client->aggregate(
                 Request::from(
+                    $serviceProvider->entityId,
                     $this->_collabPersonId,
                     (array) $this->_responseAttributes,
                     $rules
