@@ -101,17 +101,18 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
             return;
         }
 
+        // The AA request contains all response attributes.
+        $request = Request::from(
+            $serviceProvider->entityId,
+            $this->_collabPersonId,
+            (array) $this->_responseAttributes,
+            $rules
+        );
+
         $this->clearAttributesForAggregation($rules);
 
         try {
-            $response = $this->client->aggregate(
-                Request::from(
-                    $serviceProvider->entityId,
-                    $this->_collabPersonId,
-                    (array) $this->_responseAttributes,
-                    $rules
-                )
-            );
+            $response = $this->client->aggregate($request);
 
             $this->addAggregatedAttributes($response->attributes);
         } catch (HttpException $e) {
