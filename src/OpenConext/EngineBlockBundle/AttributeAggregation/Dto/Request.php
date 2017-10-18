@@ -48,6 +48,7 @@ final class Request implements JsonSerializable
     /**
      * @param string $spEntityId
      * @param string $subjectId
+     * @param array $attributes
      * @param AttributeRule[] $rules
      * @return Request $request
      */
