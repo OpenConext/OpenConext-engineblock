@@ -5,12 +5,12 @@ In version 4.3.3 support for "trusted proxies" was added to Openconext. A "trust
 
 ## Enabling
 
-Trusted proxy is enabled per SP. To enable trusted proxy behaviour for a SP, set "coin:trusted_proxy" and "coin:redirect.sign" to true for the configuration of the SP. The default for this setting is false. Note that after enabling "coin:redirect.sign" all AuthnRequests must be signed.
+Trusted proxy is enabled per SP. To enable trusted proxy behaviour for a SP, set "coin:trusted_proxy" and "redirect.sign" to true for the configuration of the SP. The default for this setting is false. Note that after enabling "redirect.sign" all AuthnRequests must be signed.
 
 ## Engineblock Trusted Proxy behaviour
 
 Engineblock will only enable trusted proxy processing for a SAML AuthnRequest that it receives from a SP when all of the following conditions are met:
-* Both "coin:trusted_proxy" and "coin:redirect.sign" are set in the SP Entity configuration in engineblock. This SP is identified by the value of the /AuthnRequest/Issuer element in the SAML AuthnRequest.
+* Both "coin:trusted_proxy" and "redirect.sign" are set in the SP Entity configuration in engineblock. This SP is identified by the value of the /AuthnRequest/Issuer element in the SAML AuthnRequest.
 * The AuthnRequest has a valid signature
 * The SAML AuthnRequest contains at least one /AuthnRequest/Scoping/RequesterID element.
 
