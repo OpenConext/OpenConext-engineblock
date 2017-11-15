@@ -2206,16 +2206,16 @@
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v1.14.16",
+            "version": "v1.14.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/simplesamlphp.git",
-                "reference": "9ebbbbc7fa334d55526c2a5e230d9941002cdcb8"
+                "reference": "92de42cb0a25ccbf46f78a0e2f3257272afb8ba2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/9ebbbbc7fa334d55526c2a5e230d9941002cdcb8",
-                "reference": "9ebbbbc7fa334d55526c2a5e230d9941002cdcb8",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/92de42cb0a25ccbf46f78a0e2f3257272afb8ba2",
+                "reference": "92de42cb0a25ccbf46f78a0e2f3257272afb8ba2",
                 "shasum": ""
             },
             "require": {
@@ -2273,7 +2273,7 @@
                 "sp",
                 "ws-federation"
             ],
-            "time": "2017-09-04T12:11:47+00:00"
+            "time": "2017-10-25T09:58:32+00:00"
         },
         {
             "name": "sybio/image-workshop",
@@ -4362,7 +4362,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",
