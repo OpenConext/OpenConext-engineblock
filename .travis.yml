@@ -1,5 +1,7 @@
 language: php
 
+dist: precise
+
 php:
   - 5.6
   - 7.0
@@ -15,9 +17,6 @@ sudo: true # sudo is required for behat
 env:
   matrix:
     - COMMAND="functional-tests"
-    - COMMAND="functional-tests-wip"
-    - COMMAND="code-quality-ci"
-    - COMMAND="security-tests"
   global:
     - SYMFONY_ENV=test
     - ENGINEBLOCK_ENV=test
@@ -59,10 +58,18 @@ before_script:
 script:
   - ant $COMMAND
 
+after_script:
+  - cat ~/build/OpenConext/OpenConext-engineblock/app/logs/test/test-errors.log
+  - sudo cat /var/log/apache2/error.log
+  - sudo ls -l /var/log
+  - sudo ls -l /var/log/apache2
+  - sudo ls -l /var/log/php-fpm
+
 branches:
   only:
     - 5.x-dev
     - master
+    - travis-debug
 
 addons:
   hosts:

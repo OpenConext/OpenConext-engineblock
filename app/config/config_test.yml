@@ -31,6 +31,10 @@ monolog:
             type:   stream
             path:   "%kernel.logs_dir%/%kernel.environment%.log"
             level:  DEBUG
+        file_errors:
+            type:   stream
+            path:   "%kernel.logs_dir%/%kernel.environment%-errors.log"
+            level:  ERROR
 
 security:
     providers:

@@ -12,6 +12,7 @@ Feature:
     And SP "SP-AA" requires attribute aggregation
     And feature "eb.run_all_manipulations_prior_to_consent" is disabled
 
+  @debug
   Scenario: As a user for an SP where urn:mace:dir:attribute-def:eduPersonOrcid is configured for aggregation
     Given SP "SP-AA" allows an attribute named "urn:mace:dir:attribute-def:eduPersonOrcid" and configures it for aggregation from "voot"
     And the attribute aggregator returns the attributes:
