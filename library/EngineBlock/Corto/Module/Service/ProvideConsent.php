@@ -94,6 +94,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
+        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
+        $layout->hideHeader = true;
+        $layout->hideFooter = true;
+
         $html = $this->_server->renderTemplate(
             'consent',
             array(
@@ -103,7 +107,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attribute_sources' => $this->getAttributeSources($request->getId()),
                 'sp'                => $serviceProviderMetadata,
                 'idp'               => $identityProvider,
-            ));
+            ),
+            $layout
+        );
+
         $this->_server->sendOutput($html);
     }
 

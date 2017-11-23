@@ -1,18 +1,188 @@
-form#accept
-  float: left
+.mod-content.consent
+  margin-top: 2rem
 
-form#reject
-  float: right
+  +max-width($small)
+    margin-top: 0
 
-+max-width($medium)
-  #approve
-    text-align: center
-    p
+  padding: 0
+
+  a
+    color: black
+
+    &.help::after
+      content: ''
+      background: url(../images/question-circle-o.svg) 0 0 no-repeat
+      background-size: cover
+      display: inline-block
+      height: 1.2em
+      margin-left: 5px
+      vertical-align: middle
+      width: 1.2em
+
+  p
+    margin: 0
+
+  h2
+    font-size: 16px
+    font-weight: bold
+
+  header
+    align-items: normal
+    display: block
+    padding: 2rem 2rem 0
+
+    h1
+      margin-bottom: 1rem
+
+  section
+    padding: 1rem 2rem
+
+    &.privacy
+      a
+        color: $link-grey
+
+      h2
+        margin-bottom: 0
+
+    form#accept
       display: inline
-    .c-button
-      margin-bottom: 0.5em
-  form#accept, form#reject
-    float: none
 
-p.grey
-  clear: both
+      input.submit
+        font-weight: bold
+        max-width: 100%
+        min-width: 50%
+        padding: 1rem
+
+        &:focus
+          outline: none
+
+        &::-moz-focus-inner
+          border: 0
+
+    form#reject
+      display: inline
+
+      a
+        color: $blue
+        text-decoration: underline
+
+    &.attributes
+      overflow-x: auto
+      padding: 0
+
+      table
+        background-color: $table-bg
+        border-width: 0
+        margin: 0
+        overflow: hidden
+        padding: 1rem 0
+
+        tbody
+          tr
+            display: none
+
+            &:nth-child(-n+8),
+            &.toggle-attributes,
+            &.separator
+              display: table-row
+
+              +max-width($small)
+                display: block
+
+            &.toggle-attributes
+              &:nth-child(-n+8)
+                display: none
+              a
+                color: $blue
+
+                &::after
+                  content: ''
+                  background: url(../images/chevron-down.svg) 0 0 no-repeat
+                  background-size: cover
+                  display: inline-block
+                  height: 0.7em
+                  width: 0.7em
+
+          &.expanded
+            tr
+              display: table-row
+
+              +max-width($small)
+                display: block
+
+              &.toggle-attributes a::after
+                background-image: url(../images/chevron-up.svg)
+
+        tr
+          border-color: transparent
+          border-style: solid
+          border-width: 0 2rem
+          margin: 0 2rem
+          padding: 0 1rem
+
+          td
+            border-color: $border-dark
+            border-style: solid
+            border-width: 1px 0 0 0
+            white-space: normal
+
+            &.attr-name
+              font-size: small
+              text-align: right
+
+          &.source-info
+            td > *
+              display: inline
+              vertical-align: middle
+
+            td
+              border-width: 0
+              padding-left: 0
+
+              a
+                color: $link-grey
+
+              img, h2
+                margin-right: 5px
+
+          &.toggle-attributes
+            td
+              text-align: center
+
+              a
+                color: $blue
+
+          &.separator
+            background-color: white
+            border-color: white
+            height: 1rem
+
+            td
+              border-width: 0
+
+        +max-width($small)
+          padding: 0
+
+          thead, tbody, th, td, tr
+            display: block
+
+          tr
+            border-width: 0
+            margin: 0
+            padding: 0
+
+            td.attr-name
+              text-align: left
+
+            &.source-info
+              td
+                padding-left: 1rem
+
+                & > *
+                  display: block
+
+  footer
+    border-top: 1px solid $border-dark
+    clear: both
+    padding: 2rem
+    text-align: center

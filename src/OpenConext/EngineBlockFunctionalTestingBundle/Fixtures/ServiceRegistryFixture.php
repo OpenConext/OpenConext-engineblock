@@ -50,6 +50,8 @@ class ServiceRegistryFixture
             'displayName:nl' => $name,
             'AssertionConsumerService:0:Binding'  => SAML2_Const::BINDING_HTTP_POST,
             'AssertionConsumerService:0:Location' => $acsLocation,
+            'coin:eula' => 'http://welcome.vm.openconext.org',
+            'logo:0:url' => '/images/placeholder.png',
         ];
         if (!empty($certData)) {
             $this->data[$entityId]['certData'] = $certData;

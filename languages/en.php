@@ -140,7 +140,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'deleteuser_success_subheader'      => 'You are almost done...',
     'deleteuser_success_desc'           => '<strong>Important!</strong> To finalize the exit procedure you must close your browser.',
 
-    //Consent
+    // Consent theme before EB 2.3.0
     'external_link'                     => 'opens in a new window',
     'consent_header'                    => '%s requests your information',
     'consent_subheader'                 => '%s requests your information',
@@ -153,15 +153,31 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_decline'                   => 'No, I don\'t want to use this service',
     'consent_notice'                    => '(We will ask you again when the information changes)',
 
-    //New Consent
+    // Consent theme before EB 5.5.0
     'consent_header_info'               => 'Request for release of your information',
     'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%1$s</strong> using your institutional account, <strong class="identity-provider">%2$s</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%2$s</strong> shares certain information with this service. For this, your permission is required. The service needs the following information:',
     'consent_aggregated_attributes_info' => '<strong class="service-provider">%1$s</strong> also requires access to information from the source <strong class="attribute-source">%2$s</strong>. The service needs the following additional information:',
-    'consent_attribute_source_voot'     => 'Group membership',
-    'consent_attribute_source_sab'      => 'SURFnet Autorisatie Beheer',
-    'consent_attribute_source_orcid'    => 'ORCID iD',
     'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
     'name_id'                           => 'SURFconext user ID',
+
+    // Consent theme EB 5.5.0 and later
+    'consent_header_title'                    => '%s needs your information before logging in',
+    'consent_header_text'                     => 'This service needs access to some of your information. Your information will be sent securely via <a class="help" href="#surfconext">SURFconext</a>.',
+    'consent_privacy_title'                   => 'The following information will be shared with %s:',
+    'consent_privacy_link'                    => 'Read the privacy policy of this service',
+    'consent_attributes_correction_link'      => 'Is this incorrect?',
+    'consent_attributes_show_all'             => 'Show all information',
+    'consent_attribute_source_voot'           => 'Group membership',
+    'consent_attribute_source_sab'            => 'SURFnet Autorisatie Beheer',
+    'consent_attribute_source_orcid'          => 'ORCID iD',
+    'consent_attribute_source_logo_url_voot'  => 'https://static.surfconext.nl/media/aa/voot.png',
+    'consent_attribute_source_logo_url_sab'   => 'https://static.surfconext.nl/media/aa/sab.png',
+    'consent_attribute_source_logo_url_orcid' => 'https://static.surfconext.nl/media/aa/orcid.png',
+    'consent_buttons_title'                   => 'Do you agree with sharing this data?',
+    'consent_buttons_ok'                      => 'Yes, proceed to %s',
+    'consent_buttons_nok'                     => 'No, I do not agree',
+    'consent_footer_text'                     => 'You are using %1$s services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View the list of services and your profile information.</a>',
+    'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View your profile information.</a>',
 
     //Error screens
     'error_404'                         => '404 - Page not found',

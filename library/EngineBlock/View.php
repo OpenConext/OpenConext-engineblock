@@ -131,6 +131,17 @@ class EngineBlock_View
     }
 
     /**
+     * Get logo for attribute source.
+     *
+     * @param $source Source identifier (e.g. "voot")
+     * @return string URL
+     */
+    public function getAttributeSourceLogoUrl($source)
+    {
+        return $this->translate('consent_attribute_source_logo_url_' . strtolower($source));
+    }
+
+    /**
      * Return the language.
      *
      * @example <?php echo $this->getLocale(); ?>

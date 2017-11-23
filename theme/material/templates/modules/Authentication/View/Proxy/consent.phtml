@@ -61,103 +61,119 @@ $layout->setLayout('default');
 
 // Set Layout variables
 $layout->use_header = false;
-$layout->title      = $layout->title . ' - '. $this->t('consent_header', $spName);
-$layout->subheader  = $this->t('consent_subheader', $spName);
+$layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $spName);
 
-/** @var $view Zend_View */
-$view = $layout->getView();
-/** @var $inlineScriptHelper Zend_View_Helper_InlineScript */
-$inlineScriptHelper = $view->getHelper('InlineScript');
-$inlineScriptHelper->appendScript('$("#accept_terms_button").focus();');
-$inlineScriptHelper->appendScript('
-(function() {
-    var d = new Discover();
-    d.linkHelp();
-' . (isset($_POST['show-help']) && $_POST['show-help'] === 'yes' ? 'd.showHelp(0)' : '') .
-' })();');
 ?>
 
 <div class="box">
-  <div class="mod-content">
+  <div class="mod-content consent">
     <header>
-      <img src="/images/user.svg" alt="user" />
-      <h1><?= $this->t('consent_header_info'); ?></h1>
+      <h1><?= $this->t('consent_header_title', $spName); ?></h1>
+      <p><?= $this->t('consent_header_text', $spName); ?></p>
     </header>
 
-    <p>
-        <?= $this->t('consent_sp_idp_info', $spName, $idpName); ?>
-    </p>
+    <section class="privacy">
+      <h2><?= $this->t('consent_privacy_title', $spName); ?></h2>
+      <?php if (isset($sp->termsOfServiceUrl)) : ?>
+        <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->termsOfServiceUrl); ?>"><?= $this->t('consent_privacy_link'); ?></a>
+      <?php endif; ?>
+    </section>
 
-    <div class="l-overflow">
-      <?php $attributesBySource = $this->sortByDisplayOrder($attributes, $attribute_sources) ?>
-      <?php foreach ($attributesBySource as $attributeSource => $attributes) : ?>
-        <?php if ($attributeSource !== 'idp'): ?>
-          <p>
-            <?= $this->t('consent_aggregated_attributes_info', $spName, $this->getAttributeSourceDisplayName($attributeSource)); ?>
-          </p>
-        <?php endif ?>
-        <table class="comp-table" data-attr-source="<?php print EngineBlock_View::htmlSpecialCharsText($attributeSource); ?>">
+    <section class="attributes">
+      <table class="comp-table attributes">
+        <?php $attributesBySource = $this->sortByDisplayOrder($attributes, $attribute_sources) ?>
+        <?php foreach ($attributesBySource as $attributeSource => $attributes): ?>
+        <tbody data-attr-source="<?=EngineBlock_View::htmlSpecialCharsText($attributeSource) ?>">
+          <tr class="source-info">
+            <td colspan="2">
+              <?php if ($attributeSource !== 'idp'): ?>
+                <img width="30" height="30" src="<?= $this->getAttributeSourceLogoUrl($attributeSource); ?>" alt="" />
+                <h2><?= $this->getAttributeSourceDisplayName($attributeSource); ?></h2>
+              <?php else:?>
+                <?php if (isset($idp->logo)): ?>
+                  <img width="30" height="30" src="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->logo->url); ?>" alt="" />
+                <?php else: ?>
+                  <img width="30" height="30" src="/images/placeholder.png" alt="" />
+                <?php endif; ?>
+                <h2><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idpName); ?></h2>
+              <?php endif ?>
+              <a href="#"><?= $this->t('consent_attributes_correction_link'); ?></a>
+            </td>
+          </tr>
+
           <?php foreach ($attributes as $attributeIdentifier => $attributeValues) : ?>
-
-            <?php
-            // Attempt to get the short name for the attribute, else use the identifier
-            $attributeShortName = $this->getAttributeName($attributeIdentifier, $locale);
-            if (trim($attributeShortName) === '') {
-                $attributeShortName = $attributeIdentifier;
-            }
-            ?>
-            <tr>
-              <td class="strong" data-identifier="<?= $attributeIdentifier ?>">
-                <?=EngineBlock_View::htmlSpecialCharsText($attributeShortName) ?>
-              </td>
-              <td>
-                <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
-                  <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
-                <?php /** Multiple attribute values */ else: ?>
-                  <ul>
-                    <?php foreach ($attributeValues as $value) : ?>
-                      <li><?=EngineBlock_View::htmlSpecialCharsText($value); ?></li>
-                    <?php endforeach ?>
-                  </ul>
-                <?php endif ?>
-              </td>
-            </tr>
+          <?php
+          // Attempt to get the short name for the attribute, else use the identifier
+          $attributeShortName = $this->getAttributeName($attributeIdentifier, $locale);
+          if (trim($attributeShortName) === '') {
+          $attributeShortName = $attributeIdentifier;
+          }
+          ?>
+          <tr>
+            <td class="attr-name" data-identifier="<?=EngineBlock_View::htmlSpecialCharsText($attributeIdentifier) ?>">
+              <?=EngineBlock_View::htmlSpecialCharsText($attributeShortName) ?>
+            </td>
+            <td class="attr-value">
+              <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
+              <a class="help" href="#">
+                <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+              </a>
+              <?php /** Multiple attribute values */ else: ?>
+              <ul>
+                <?php foreach ($attributeValues as $value) : ?>
+                <li>
+                  <a class="help tooltip" title="<?=EngineBlock_View::htmlSpecialCharsText($attributeIdentifier); ?>" href="#">
+                    <?=EngineBlock_View::htmlSpecialCharsText($value); ?>
+                  </a>
+                </li>
+                <?php endforeach ?>
+              </ul>
+              <?php endif ?>
+            </td>
+          </tr>
           <?php endforeach ?>
-        </table>
-      <?php endforeach ?>
-    </div>
+          <tr class="toggle-attributes">
+            <td colspan="2">
+              <a href="#">
+                <?= $this->t('consent_attributes_show_all'); ?>
+              </a>
+            </td>
+          </tr>
+          <tr class="separator">
+            <td colspan="2"></td>
+          </tr>
+        </tbody>
+        <?php endforeach ?>
+      </table>
+    </section>
 
-    <div id="approve">
+    <section>
+      <h2><?= $this->t('consent_buttons_title'); ?></h2>
       <!-- YES -->
       <form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-          <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
-          <input type="hidden" name="consent" value="yes" />
-
-        <p>
-          <input id="accept_terms_button"
-                 class="submit c-button"
-                 type="submit"
-                 value="<?= $this->t('consent_accept'); ?>"
-                 />
-        </p>
+        <input type="hidden" name="ID"      value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+        <input type="hidden" name="consent" value="yes" />
+        <input id="accept_terms_button"
+          class="submit c-button"
+          type="submit"
+          value="<?= $this->t('consent_buttons_ok', $spName); ?>"
+        />
       </form>
 
       <!-- NO -->
       <form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-              <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
-              <input type="hidden" name="consent" value="no" />
-        <p>
-              <a id="decline_terms_button" class="c-button c-button-link" href="#" onclick="document.getElementById('reject').submit();">
-                  <?= $this->t('consent_decline'); ?>
-              </a>
-        </p>
+        <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
+        <input type="hidden" name="consent" value="no" />
+        <a id="decline_terms_button" class="c-button c-button-link" href="#" onclick="document.getElementById('reject').submit();">
+          <?= $this->t('consent_buttons_nok'); ?>
+        </a>
       </form>
-    </div>
+    </section>
 
-    <p class="grey"><?= $this->t('consent_notice'); ?></p>
-
-    <?php if (isset($sp->termsOfServiceUrl)) : ?>
-        <?= $this->t('sp_terms_of_service', $spName, $sp->termsOfServiceUrl); ?>
-    <?php endif; ?>
+    <footer>
+      <p>
+        <?= $this->t('consent_footer_text'); ?>
+      </p>
+    </footer>
   </div>
 </div>
