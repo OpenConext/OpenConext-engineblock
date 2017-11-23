@@ -138,7 +138,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'deleteuser_success_desc'           => '<strong>Belangrijk!</strong> Om de exit procedure succesvol af te ronden, moet je nu de browser afsluiten.',
 
 
-    // Consent
+    // Consent theme before EB 2.3.0
     'external_link'                     => 'opent in een nieuw venster',
     'consent_header'                    => '%s verzoekt jouw informatie',
     'consent_subheader'                 => '%s verzoekt jouw informatie',
@@ -151,15 +151,27 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_decline'                   => 'Nee, ik wil geen gebruik maken van deze dienst',
     'consent_notice'                    => '(We zullen dit nogmaals vragen als jouw informatie wijzigt)',
 
-    // New Consent
+    // Consent theme before EB 5.5.0
     'consent_header_info'               => 'Verzoek voor doorgeven van jouw informatie',
     'consent_sp_idp_info'               => 'Om met je instellingsaccount in te kunnen loggen op de dienst <strong class="service-provider">%1$s</strong> maakt <strong class="identity-provider">%2$s</strong> gebruik van SURFconext. Voor het functioneren van deze dienst is het noodzakelijk dat <strong class="identity-provider">%2$s</strong> een aantal gegevens via SURFconext deelt met deze dienst. Hiervoor is jouw toestemming nodig. Het gaat om de volgende gegevens:',
     'consent_aggregated_attributes_info' => '<strong class="service-provider">%1$s</strong> heeft ook toegang nodig tot gegevens uit de gegevensbron <strong class="attribute-source">%2$s</strong>. Het gaat om de volgende aanvullende gegevens:',
-    'consent_attribute_source_voot'     => 'Groepslidmaatschap',
-    'consent_attribute_source_sab'      => 'SURFnet Autorisatie Beheer',
-    'consent_attribute_source_orcid'    => 'ORCID iD',
     'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
     'name_id'                           => 'SURFconext gebruikers ID',
+
+    // Consent theme EB 5.5.0 and later
+    'consent_header_title'               => 'Om in te loggen heeft %s jouw gegevens nodig',
+    'consent_header_text'                => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw instelling veilig verstuurd naar %s via <a class="help" href="#surfconext">SURFconext</a>.',
+    'consent_privacy_title'              => 'De volgende gegevens worden doorgestuurd naar %s:',
+    'consent_privacy_link'               => 'Lees het privacybeleid van deze dienst',
+    'consent_attributes_correction_link' => 'Kloppen deze gegevens niet?',
+    'consent_attributes_show_all'        => 'Bekijk alle gegevens',
+    'consent_attribute_source_voot'      => 'Groepslidmaatschap',
+    'consent_attribute_source_sab'       => 'SURFnet Autorisatie Beheer',
+    'consent_attribute_source_orcid'     => 'ORCID iD',
+    'consent_buttons_title'              => 'Ga je akkoord met het doorsturen van deze gegevens?',
+    'consent_buttons_ok'                 => 'Ja, ga door naar %s',
+    'consent_buttons_nok'                => 'Nee, ik ga niet akkoord',
+    'consent_footer_text'                => '<a href="#">Bekijk of wijzig eerdere toestemmingen</a>',
 
     // Error screens
     'error_404'                         => '404 - Pagina niet gevonden',

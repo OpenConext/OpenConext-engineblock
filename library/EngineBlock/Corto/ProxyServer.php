@@ -779,13 +779,16 @@ class EngineBlock_Corto_ProxyServer
         $response->getAssertion()->setAttributes($responseAttributes);
     }
 
-    public function renderTemplate($templateName, array $vars = array())
+    public function renderTemplate($templateName, array $vars = array(), Zend_Layout $layout = null)
     {
         $this->getLogger()->info("Rendering template '$templateName'");
 
         $templateFileName = ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/' . $templateName . '.phtml';
 
-        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
+        if ($layout === null) {
+            $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
+        }
+
         $view = new EngineBlock_View();
 
         $view->setLayout($layout);
