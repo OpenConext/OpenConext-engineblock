@@ -106,7 +106,7 @@ $layout->subheader  = $this->t('consent_subheader', $spName);
           // Attempt to get the short name for the attribute, else use the identifier
           $attributeShortName = $this->getAttributeName($attributeIdentifier, $locale);
           if (trim($attributeShortName) === '') {
-          $attributeShortName = $attributeIdentifier;
+            $attributeShortName = $attributeIdentifier;
           }
           ?>
           <tr>
@@ -115,7 +115,7 @@ $layout->subheader  = $this->t('consent_subheader', $spName);
             </td>
             <td class="attr-value">
               <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
-              <a class="help" href="#">
+              <a class="help tooltip" title="<?=EngineBlock_View::htmlSpecialCharsText($attributeIdentifier); ?>" href="#">
                 <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
               </a>
               <?php /** Multiple attribute values */ else: ?>
