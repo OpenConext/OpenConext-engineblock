@@ -1,4 +1,5 @@
 import {replaceMetadataCertificateLinkTexts} from "./modules/EngineBlockMainPage";
+import {initConsentPage} from "./modules/ConsentPage";
 import {IdpList} from "./modules/IdpList";
 import {ConnectedIdpPicker} from "./modules/ConnectedIdpPicker";
 import {UnconnectedIdpPicker} from "./modules/UnconnectedIdpPicker";
@@ -10,6 +11,11 @@ import {RequestAccessModalHelper} from "./modules/RequestAccessModalHelper";
 
 function initialize() {
     document.body.className = document.body.className.replace('no-js', '');
+
+    if (document.querySelector('.mod-content.consent') !== null) {
+        initConsentPage();
+        return;
+    }
 
     if (document.getElementById('engine-main-page') !== null) {
         replaceMetadataCertificateLinkTexts();

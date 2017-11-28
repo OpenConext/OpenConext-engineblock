@@ -24,6 +24,18 @@ In short, themes require compilation which can be done by running the following 
     (cd theme && npm install && grunt)
 ```
 
+Do setup the required tooling on the VM, the following steps might be useful:
+
+    cd /opt/openconext/OpenConext-engineblock/themes
+    sudo yum install npm
+    sudo npm install -g grunt grunt-cli
+    npm install
+
+    sudo yum install gem ruby-devel
+    gem install compass
+
+    (cd theme && npm install && grunt)
+
 ## System Requirements
 
 * Linux

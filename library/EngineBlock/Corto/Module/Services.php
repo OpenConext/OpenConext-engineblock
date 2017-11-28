@@ -76,7 +76,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                 return new EngineBlock_Corto_Module_Service_ProvideConsent(
                     $server,
                     $diContainer->getXmlConverter(),
-                    $diContainer->getConsentFactory()
+                    $diContainer->getConsentFactory(),
+                    $diContainer->getConsentService()
                 );
             case EngineBlock_Corto_Module_Service_ProcessConsent::class :
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
