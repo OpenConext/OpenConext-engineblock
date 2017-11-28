@@ -174,7 +174,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',
     'consent_buttons_ok'                      => 'Ja, ga door naar %s',
     'consent_buttons_nok'                     => 'Nee, ik ga niet akkoord',
-    'consent_footer_text'                     => 'Je gebruikt al %1$s diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
+    'consent_footer_text_singluar'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
+    'consent_footer_text_plural'              => 'Je gebruikt al %1$s diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
     'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier je profielinformatie.</a>',
 
     // Error screens

@@ -11,7 +11,7 @@ use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\Value\Saml\EntityId;
 use Psr\Log\LoggerInterface;
 
-final class ConsentService
+final class ConsentService implements ConsentServiceInterface
 {
     /**
      * @var ConsentRepository
@@ -55,6 +55,25 @@ final class ConsentService
         }
 
         return new ConsentList(array_filter(array_map([$this, 'createConsentDtoFromConsentEntity'], $consents)));
+    }
+
+    /**
+     * @param string $userId
+     * @return int
+     */
+    public function countAllFor($userId)
+    {
+        try {
+            $consents = $this->consentRepository->findAllFor($userId);
+        } catch (Exception $e) {
+            throw new RuntimeException(
+                sprintf('An exception occurred while fetching consents the user has given ("%s")', $e->getMessage()),
+                0,
+                $e
+            );
+        }
+
+        return count($consents);
     }
 
     /**

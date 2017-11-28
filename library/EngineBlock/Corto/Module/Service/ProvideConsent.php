@@ -1,6 +1,7 @@
 <?php
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
@@ -20,14 +21,19 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var EngineBlock_Corto_Model_Consent_Factory */
     private  $_consentFactory;
 
+    /** @var ConsentServiceInterface */
+    private  $_consentService;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
-        EngineBlock_Corto_Model_Consent_Factory $consentFactory
+        EngineBlock_Corto_Model_Consent_Factory $consentFactory,
+        ConsentServiceInterface $consentService
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
+        $this->_consentService = $consentService;
     }
 
     public function serve($serviceName)
@@ -107,6 +113,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attribute_sources' => $this->getAttributeSources($request->getId()),
                 'sp'                => $serviceProviderMetadata,
                 'idp'               => $identityProvider,
+                'consent_count'     => $this->_consentService->countAllFor(
+                    $response->getNameIdValue()
+                )
             ),
             $layout
         );

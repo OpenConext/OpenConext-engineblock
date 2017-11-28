@@ -142,6 +142,14 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this->container->get('engineblock.authentication.authentication_loop_guard');
     }
 
+    /**
+     * @return OpenConext\EngineBlock\Service\ConsentService
+     */
+    public function getConsentService()
+    {
+        return $this->container->get('engineblock.service.consent');
+    }
+
     protected function registerMetadataRepository()
     {
         $this[self::METADATA_REPOSITORY] = function (EngineBlock_Application_DiContainer $container)

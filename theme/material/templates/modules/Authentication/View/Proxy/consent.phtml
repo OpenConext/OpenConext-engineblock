@@ -172,7 +172,13 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
 
     <footer>
       <p>
-        <?= $this->t('consent_footer_text'); ?>
+        <?php if ($consent_count === 0): ?>
+          <?= $this->t('consent_footer_text_first_consent'); ?>
+        <?php elseif ($consent_count === 1): ?>
+          <?= $this->t('consent_footer_text_singular'); ?>
+        <?php else: ?>
+          <?= $this->t('consent_footer_text_plural', $consent_count); ?>
+        <?php endif; ?>
       </p>
     </footer>
   </div>
