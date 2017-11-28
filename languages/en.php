@@ -173,7 +173,9 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_buttons_title'              => 'Do you agree with sharing this data?',
     'consent_buttons_ok'                 => 'Yes, proceed to %s',
     'consent_buttons_nok'                => 'No, I do not agree',
-    'consent_footer_text'                => '<a href="#">View or modify earlier approvals</a>',
+    'consent_footer_text'                => 'You have granted %1$s services access to your information.',
+    'consent_footer_text_first_consent'  => 'You have not shared your information with other services.',
+    'consent_footer_link'                => '<a href="#">View or modify earlier approvals</a>',
 
     //Error screens
     'error_404'                         => '404 - Page not found',

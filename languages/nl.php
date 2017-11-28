@@ -171,7 +171,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_buttons_title'              => 'Ga je akkoord met het doorsturen van deze gegevens?',
     'consent_buttons_ok'                 => 'Ja, ga door naar %s',
     'consent_buttons_nok'                => 'Nee, ik ga niet akkoord',
-    'consent_footer_text'                => '<a href="#">Bekijk of wijzig eerdere toestemmingen</a>',
+    'consent_footer_text'                => 'Je hebt aan %1$s diensten toegang verleend tot je gegevens.',
+    'consent_footer_text_first_consent'  => 'Je hebt nog geen enkele andere dienst toegang verleend tot je gegevens.',
+    'consent_footer_link'                => '<a href="#">Bekijk of wijzig eerdere toestemmingen</a>',
 
     // Error screens
     'error_404'                         => '404 - Pagina niet gevonden',

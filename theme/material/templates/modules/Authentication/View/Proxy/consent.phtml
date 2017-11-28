@@ -172,7 +172,12 @@ $layout->subheader  = $this->t('consent_subheader', $spName);
 
     <footer>
       <p>
-        <?= $this->t('consent_footer_text'); ?>
+        <?php if ($consent_count === 0): ?>
+          <?= $this->t('consent_footer_text_first_consent'); ?>
+        <?php else: ?>
+          <?= $this->t('consent_footer_text', $consent_count); ?>
+          <?= $this->t('consent_footer_link'); ?>
+        <?php endif; ?>
       </p>
     </footer>
   </div>
