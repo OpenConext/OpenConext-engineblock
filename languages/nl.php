@@ -160,7 +160,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     // Consent theme EB 5.5.0 and later
     'consent_header_title'                    => 'Om in te loggen heeft %s jouw gegevens nodig',
-    'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw instelling veilig verstuurd naar %s via <a class="help" href="#surfconext">SURFconext</a>.',
+    'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw instelling veilig verstuurd naar %s via <a class="help" data-slidein="about">SURFconext</a>.',
     'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %s:',
     'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst',
     'consent_attributes_correction_link'      => 'Kloppen deze gegevens niet?',
@@ -177,6 +177,44 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_footer_text_singluar'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
     'consent_footer_text_plural'              => 'Je gebruikt al %1$s diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
     'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier je profielinformatie.</a>',
+
+    // Consent slidein: Kloppen de getoonde gegevens niet?
+    'consent_slidein_correction_title' => 'Kloppen de getoonde gegevens niet?',
+    'consent_slidein_correction_text_idp'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
+    'consent_slidein_correction_text_aa'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
+    'consent_slidein_correction_details_title' => 'Contactgegevens %1$s',
+    'consent_slidein_correction_details_email' => 'Email',
+
+    // Consent slidein: About SURFconext
+    'consent_slidein_about_text'  => <<<'TXT'
+<h1>Inloggen met SURFconext</h1>
+<img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
+<p>
+Via de SURFconext loggen onderzoekers, medewerkers en studenten met hun eigen instellingsaccount veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. SURFconext biedt bescherming van de privacy doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.
+<p>
+Weten waar je al eerder toestemming voor hebt gegevens? Bekijk hier je <a href="https://profile.surfconext.nl/">SURFconext profielpagina</a>.
+<h1>SURFconext is onderdeel van SURF</h1>
+<p>
+SURF is de ICT-samenwerkignsorganisatie van het onderwijs en onderzoekt in Nederland.
+<br>
+Dankzij SURF beschikken studenten, docenten en onderzoekers in Nederland over de best mogelijke ICT-voorzieningen voor toponderzoek en talentontwikkeling.
+TXT
+    ,
+
+    // Consent slidein: Reject
+    'consent_slidein_reject_text'  => <<<'TXT'
+<h1>Je geeft geen toestemming om gegevens door te sturen</h1>
+<p>
+De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functiopneren. Als je hier geen toestemming voor geeft dan kun je geen gebruik maken van deze dienst.
+<p>
+Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a>.
+TXT
+    ,
+    'consent_slidein_reject_text_no_support' => 'Er zijn geen contact gegevens beschikbaar.',
+
+    // Generic slide-in
+    'slidein_close' => 'Sluiten',
+    'slidein_read_more' => 'Lees meer',
 
     // Error screens
     'error_404'                         => '404 - Pagina niet gevonden',

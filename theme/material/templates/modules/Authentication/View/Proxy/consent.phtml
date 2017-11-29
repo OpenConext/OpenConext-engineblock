@@ -75,7 +75,7 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
     <section class="privacy">
       <h2><?= $this->t('consent_privacy_title', $spName); ?></h2>
       <?php if (isset($sp->termsOfServiceUrl)) : ?>
-        <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->termsOfServiceUrl); ?>"><?= $this->t('consent_privacy_link'); ?></a>
+        <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->termsOfServiceUrl); ?>" target="_blank"><?= $this->t('consent_privacy_link'); ?></a>
       <?php endif; ?>
     </section>
 
@@ -97,7 +97,7 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
                 <?php endif; ?>
                 <h2><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idpName); ?></h2>
               <?php endif ?>
-              <a href="#"><?= $this->t('consent_attributes_correction_link'); ?></a>
+              <a href="#" data-slidein="correction-<?= EngineBlock_View::htmlSpecialCharsAttributeValue($attributeSource); ?>"><?= $this->t('consent_attributes_correction_link'); ?></a>
             </td>
           </tr>
 
@@ -161,13 +161,9 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
       </form>
 
       <!-- NO -->
-      <form id="reject" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-        <input type="hidden" name="ID"      value="<?=EngineBlock_View::htmlSpecialCharsAttributeValue($ID); ?>">
-        <input type="hidden" name="consent" value="no" />
-        <a id="decline_terms_button" class="c-button c-button-link" href="#" onclick="document.getElementById('reject').submit();">
-          <?= $this->t('consent_buttons_nok'); ?>
-        </a>
-      </form>
+      <a id="decline-terms" class="reject c-button c-button-link" href="#" data-slidein="reject">
+        <?= $this->t('consent_buttons_nok'); ?>
+      </a>
     </section>
 
     <footer>
@@ -183,3 +179,8 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
     </footer>
   </div>
 </div>
+<?php require(__DIR__ . '/consent-slidein-reject.phtml'); ?>
+<?php foreach (array_keys($attributesBySource) as $attributeSource): ?>
+  <?php require(__DIR__ . '/consent-slidein-correction.phtml'); ?>
+<?php endforeach; ?>
+<?php require(__DIR__ . '/consent-slidein-about.phtml'); ?>

@@ -1,0 +1,22 @@
+<div class="slidein correction-<?= EngineBlock_View::htmlSpecialCharsAttributeValue($attributeSource); ?>">
+  <div class="mod-content">
+    <a class="close" href="#"><?= $this->t('slidein_close'); ?></a>
+    <section>
+      <h1><?= $this->t('consent_slidein_correction_title'); ?></h1>
+      <?php if ($attributeSource === 'idp'): ?>
+        <p><?= $this->t('consent_slidein_correction_text_idp'); ?></p>
+        <?php if (isset($idp_support->emailAddress)): ?>
+          <h2><?= $this->t('consent_slidein_correction_details_title', $idpName); ?></h2>
+          <p>
+            <?= $this->t('consent_slidein_correction_details_email'); ?>:
+            <a href="mailto:<?=EngineBlock_View::htmlSpecialCharsText($idp_support->emailAddress) ?>">
+              <?=EngineBlock_View::htmlSpecialCharsText($idp_support->emailAddress) ?>
+            </a>
+          </p>
+        <?php endif; ?>
+      <?php else: ?>
+        <p><?= $this->t('consent_slidein_correction_text_aa'); ?></p>
+      <?php endif; ?>
+    </section>
+  </div>
+</div>

@@ -22,9 +22,13 @@
   p
     margin: 0
 
+  h1
+    line-height: 32px
+
   h2
     font-size: 16px
     font-weight: bold
+    line-height: 22px
 
   header
     align-items: normal
@@ -59,12 +63,9 @@
         &::-moz-focus-inner
           border: 0
 
-    form#reject
-      display: inline
-
-      a
-        color: $blue
-        text-decoration: underline
+    a#decline-terms
+      color: $blue
+      text-decoration: underline
 
     &.attributes
       overflow-x: auto

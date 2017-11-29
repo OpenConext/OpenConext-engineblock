@@ -113,6 +113,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attribute_sources' => $this->getAttributeSources($request->getId()),
                 'sp'                => $serviceProviderMetadata,
                 'idp'               => $identityProvider,
+                'idp_support'       => $this->getSupportContact($identityProvider),
                 'consent_count'     => $this->_consentService->countAllFor(
                     $response->getNameIdValue()
                 )
@@ -156,5 +157,17 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         }
 
         return [];
+    }
+
+    /**
+     * @return ContactPerson|null
+     */
+    public function getSupportContact(IdentityProvider $idp)
+    {
+        foreach ($idp->contactPersons as $contact) {
+            if ($contact->contactType === 'support') {
+                return $contact;
+            }
+        }
     }
 }
