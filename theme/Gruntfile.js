@@ -37,19 +37,15 @@ module.exports = function(grunt) {
         uglify: {
             dist: {
                 files: {
-                    '../web/javascripts/application.min.js': ['../web/javascripts/application.js']
-                },
-            },
-            polyfill: {
-                files: {
-                    '../web/javascripts/polyfill.min.js': [
-                        'node_modules/ie8/build/ie8.js',
+                    '../web/javascripts/application.min.js': [
+                        'node_modules/es5-shim/es5-shim.min.js',
                         'node_modules/es6-shim/es6-shim.min.js',
                         'node_modules/html5shiv/dist/html5-shiv.min.js',
-                        'node_modules/dom-polyfills/polyfills.js'
+                        'node_modules/dom-polyfills/polyfills.js',
+                        '../web/javascripts/application.js'
                     ]
-                }
-            }
+                },
+            },
         },
         postcss: {
           options: {
