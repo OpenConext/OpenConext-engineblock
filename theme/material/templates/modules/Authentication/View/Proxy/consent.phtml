@@ -91,7 +91,7 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
                 <h2><?= $this->getAttributeSourceDisplayName($attributeSource); ?></h2>
               <?php else:?>
                 <?php if (isset($idp->logo)): ?>
-                  <img width="30" height="30" src="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->logo->url); ?>" alt="" />
+                  <img width="30" height="30" src="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp->logo->url); ?>" alt="" />
                 <?php else: ?>
                   <img width="30" height="30" src="/images/placeholder.png" alt="" />
                 <?php endif; ?>
