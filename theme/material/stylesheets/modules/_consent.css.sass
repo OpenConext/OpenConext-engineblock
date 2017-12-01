@@ -125,7 +125,12 @@
             border-color: $border-dark
             border-style: solid
             border-width: 1px 0 0 0
+            max-width: 200px
             white-space: normal
+            word-wrap: break-word
+
+            +max-width($small)
+              max-width: none
 
             &.attr-name
               font-size: small
