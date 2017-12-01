@@ -48,6 +48,10 @@
       h2
         margin-bottom: 0
 
+    &.buttons
+      h2
+        margin-bottom: 1rem
+
     form#accept
       display: inline
 
@@ -79,6 +83,9 @@
         padding: 1rem 0
 
         tbody
+          &:last-child tr.separator
+            display: none
+
           tr
             display: none
 
@@ -93,7 +100,7 @@
             &.toggle-attributes
               // Hide the 'expand' row if there are no more rows (and
               // take into account the separator row)
-              &:nth-last-child(2):nth-child(-n+9)
+              &:nth-child(-n+9)
                 display: none
 
               a
@@ -109,10 +116,7 @@
 
           &.expanded
             tr
-              display: table-row
-
-              &:nth-last-child(2)
-                display: table-row
+              display: table-row !important
 
               +max-width($small)
                 display: block
