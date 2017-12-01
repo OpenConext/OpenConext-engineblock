@@ -162,7 +162,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_header_title'                    => 'Om in te loggen heeft %s jouw gegevens nodig',
     'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw instelling veilig verstuurd naar %s via <a class="help" data-slidein="about">SURFconext</a>.',
     'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %s:',
-    'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst',
+    'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst.',
     'consent_attributes_correction_link'      => 'Kloppen deze gegevens niet?',
     'consent_attributes_show_all'             => 'Bekijk alle gegevens',
     'consent_attribute_source_voot'           => 'Groepslidmaatschap',
