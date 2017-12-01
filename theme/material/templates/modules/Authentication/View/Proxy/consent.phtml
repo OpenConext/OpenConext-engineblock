@@ -116,14 +116,14 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
             <td class="attr-value">
               <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
               <a class="help tooltip" title="<?=EngineBlock_View::htmlSpecialCharsText($attributeIdentifier); ?>" href="#">
-                <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
+                <span><?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?></span>
               </a>
               <?php /** Multiple attribute values */ else: ?>
               <ul>
                 <?php foreach ($attributeValues as $value) : ?>
                 <li>
                   <a class="help tooltip" title="<?=EngineBlock_View::htmlSpecialCharsText($attributeIdentifier); ?>" href="#">
-                    <?=EngineBlock_View::htmlSpecialCharsText($value); ?>
+                    <span><?=EngineBlock_View::htmlSpecialCharsText($value); ?></span>
                   </a>
                 </li>
                 <?php endforeach ?>

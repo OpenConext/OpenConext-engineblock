@@ -136,6 +136,16 @@
               font-size: small
               text-align: right
 
+            &.attr-value
+              a
+                text-decoration: none
+
+                // We underline the inner-span instead of the anchor
+                // because we don't want :after (help icon) to be
+                // underlined as well
+                span
+                  text-decoration: underline
+
           &.source-info
             td > *
               display: inline
