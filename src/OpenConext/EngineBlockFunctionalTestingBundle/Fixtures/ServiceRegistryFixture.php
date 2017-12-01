@@ -93,6 +93,9 @@ class ServiceRegistryFixture
             'SingleSignOnService:0:Location' => $ssoLocation,
             'SingleSignOnService:1:Binding'  => SAML2_Const::BINDING_HTTP_REDIRECT,
             'SingleSignOnService:1:Location' => $ssoLocation,
+            'contacts:0:contactType' => 'support',
+            'contacts:0:emailAddress' => 'support@openconext.org',
+            'contacts:0:telephoneNumber' => '+31612345678',
         ];
         if (!empty($certData)) {
             $this->data[$entityId]['certData'] = $certData;

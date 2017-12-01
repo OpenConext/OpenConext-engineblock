@@ -2,8 +2,10 @@
   <div class="mod-content">
     <a class="close" href="#"><?= $this->t('slidein_close'); ?></a>
     <section>
-      <?php if (isset($idp_support->emailAddress)): ?>
-        <?= $this->t('consent_slidein_reject_text', $idp_support->emailAddress); ?>
+      <?php if (!empty($idp_support->telephoneNumber)): ?>
+        <?= $this->t('consent_slidein_reject_text_contact_mail_phone', $idp_support->emailAddress, $idp_support->telephoneNumber); ?>
+      <?php elseif (!empty($idp_support->emailAddress)): ?>
+        <?= $this->t('consent_slidein_reject_text_contact_mail', $idp_support->emailAddress); ?>
       <?php else: ?>
         <?= $this->t('consent_slidein_reject_text_no_support'); ?>
       <?php endif; ?>

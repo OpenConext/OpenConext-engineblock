@@ -184,8 +184,9 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_slidein_correction_title' => 'Kloppen de getoonde gegevens niet?',
     'consent_slidein_correction_text_idp'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
     'consent_slidein_correction_text_aa'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
-    'consent_slidein_correction_details_title' => 'Contactgegevens %1$s',
+    'consent_slidein_correction_details_title' => 'Contactgegevens %1$s:',
     'consent_slidein_correction_details_email' => 'Email',
+    'consent_slidein_correction_details_phone' => 'Phone',
 
     // Consent slidein: About SURFconext
     'consent_slidein_about_text'  => <<<'TXT'
@@ -212,6 +213,9 @@ De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen f
 Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a>.
 TXT
     ,
+    'consent_slidein_reject_text_no_support' => 'Er zijn geen contact gegevens beschikbaar.',
+    'consent_slidein_reject_text_contact_mail'  => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a>.',
+    'consent_slidein_reject_text_contact_mail_phone'  => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a> of telefoonnummer <a href="tel:%2$s">%2$s</a>.',
     'consent_slidein_reject_text_no_support' => 'Er zijn geen contact gegevens beschikbaar.',
 
     // Generic slide-in

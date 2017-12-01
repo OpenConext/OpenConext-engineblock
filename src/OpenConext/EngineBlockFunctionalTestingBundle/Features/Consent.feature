@@ -29,9 +29,12 @@ Feature:
         | Name                                      |  Value | Source |
         | urn:mace:dir:attribute-def:eduPersonOrcid | 123456 | voot   |
 
-  Scenario: IdPs are allowed to create NameIDs
+  Scenario: The user is asked for consent to share information with the SP
     Given I log in at "Dummy-SP"
       And I pass through EngineBlock
       And I pass through the IdP
+     Then the response should contain "Dummy-SP needs your information before logging in"
+     Then the response should contain "support@openconext.org"
+     Then the response should contain "+31612345678"
      When I give my consent
      Then I pass through EngineBlock
