@@ -5,22 +5,7 @@
       <h1><?= $this->t('consent_slidein_correction_title'); ?></h1>
       <?php if ($attributeSource === 'idp'): ?>
         <p><?= $this->t('consent_slidein_correction_text_idp'); ?></p>
-        <?php if (!empty($idp_support->emailAddress) || !empty($idp_support->telephoneNumber)): ?>
-          <h2><?= $this->t('consent_slidein_correction_details_title', $idpName); ?></h2>
-          <p>
-            <?= $this->t('consent_slidein_correction_details_email'); ?>:
-            <a href="mailto:<?=EngineBlock_View::htmlSpecialCharsText($idp_support->emailAddress) ?>">
-              <?=EngineBlock_View::htmlSpecialCharsText($idp_support->emailAddress) ?>
-            </a>
-            <?php if (!empty($idp_support->telephoneNumber)): ?>
-              <br>
-              <?= $this->t('consent_slidein_correction_details_phone'); ?>:
-              <a href="tel:<?=EngineBlock_View::htmlSpecialCharsText($idp_support->telephoneNumber) ?>">
-                <?=EngineBlock_View::htmlSpecialCharsText($idp_support->telephoneNumber) ?>
-              </a>
-            <?php endif; ?>
-          </p>
-        <?php endif; ?>
+        <?php require(__DIR__ . '/consent-slidein-contact-details.phtml'); ?>
       <?php else: ?>
         <p><?= $this->t('consent_slidein_correction_text_aa'); ?></p>
       <?php endif; ?>
