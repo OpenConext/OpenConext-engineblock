@@ -1,0 +1,51 @@
+.slidein
+  background-color: $dark-blue
+  bottom: 0
+  left: 0
+  overflow: hidden
+  position: fixed
+  right: 999999px
+  top: 0
+  transition: right 0.5s ease-in-out
+
+  &.visible
+    right: 0
+
+  .mod-content
+    background-color: white
+    float: right
+    height: 100%
+    overflow-y: scroll
+    width: 70%
+
+    section
+      padding: 2rem
+
+    img
+      max-height: none
+      margin-bottom: 1rem
+
+    a
+      color: $blue
+
+      &.close::before
+        content: ''
+        background: url(../images/times.svg) 0 0 no-repeat
+        background-size: cover
+        display: inline-block
+        height: 1.2em
+        margin-right: 5px
+        vertical-align: middle
+        width: 1.2em
+
+    p
+      margin-bottom: 1rem
+
+    +max-width($medium)
+      width: 100%
+
+      section
+        padding: 0
+
+      img
+        width: 100%

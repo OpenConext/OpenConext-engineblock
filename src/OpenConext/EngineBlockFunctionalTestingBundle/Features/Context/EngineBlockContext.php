@@ -258,7 +258,7 @@ class EngineBlockContext extends AbstractSubContext
     public function iSeeTheAttributesFromSourceOnConsentPage($source, TableNode $attributes)
     {
         $mink = $this->getMainContext()->getMinkContext();
-        $tableSelector = 'table[data-attr-source="' . strtolower($source) . '"]';
+        $tableSelector = 'tbody[data-attr-source="' . strtolower($source) . '"]';
         $tableTemplate = <<<HTML
 <table>
     <thead>
@@ -277,6 +277,17 @@ HTML;
                 $mink->assertSession()->elementExists('css', $tableSelector)->getHtml()
             )
         );
+
+        $rows = $actualTable->getRows();
+
+        // Remove the first row (IDP name, is this correct?)
+        unset($rows[1]);
+
+        // Remove the last row (Show more and separator)
+        array_pop($rows);
+        array_pop($rows);
+
+        $actualTable->setRows($rows);
 
         $assert = new \Ingenerator\BehatTableAssert\AssertTable;
         $assert->isComparable($attributes, $actualTable, []);

@@ -50,6 +50,8 @@ class ServiceRegistryFixture
             'displayName:nl' => $name,
             'AssertionConsumerService:0:Binding'  => SAML2_Const::BINDING_HTTP_POST,
             'AssertionConsumerService:0:Location' => $acsLocation,
+            'coin:eula' => 'http://welcome.vm.openconext.org',
+            'logo:0:url' => '/images/placeholder.png',
         ];
         if (!empty($certData)) {
             $this->data[$entityId]['certData'] = $certData;
@@ -91,6 +93,9 @@ class ServiceRegistryFixture
             'SingleSignOnService:0:Location' => $ssoLocation,
             'SingleSignOnService:1:Binding'  => SAML2_Const::BINDING_HTTP_REDIRECT,
             'SingleSignOnService:1:Location' => $ssoLocation,
+            'contacts:0:contactType' => 'support',
+            'contacts:0:emailAddress' => 'support@openconext.org',
+            'contacts:0:telephoneNumber' => '+31612345678',
         ];
         if (!empty($certData)) {
             $this->data[$entityId]['certData'] = $certData;

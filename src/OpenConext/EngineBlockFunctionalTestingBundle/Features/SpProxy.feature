@@ -80,7 +80,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Request for release of your information"
+     Then I should see "needs your information"
       And I should see "Step Up"
       And I should not see "Loa SP"
 
@@ -93,7 +93,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Request for release of your information"
+     Then I should see "needs your information"
       And I should see "Step Up"
       And I should not see "Loa SP"
 
@@ -105,7 +105,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Request for release of your information"
+     Then I should see "needs your information"
       And I should see "Loa SP"
       And I should not see "Step Up"
 
@@ -117,7 +117,7 @@ Feature:
      When I log in at "Step Up"
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should see "Request for release of your information"
+     Then I should see "needs your information"
       And I should not see "Far SP"
       And I should not see "Step Up"
       And I should see "Loa SP"
@@ -131,7 +131,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should not see "Request for release of your information"
+     Then I should not see "needs your information"
 
   Scenario: User logs in via trusted proxy and sees no consent as the destination has it disabled
     Given SP "Step Up" is authenticating for SP "Loa SP"
@@ -142,7 +142,7 @@ Feature:
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP
-     Then I should not see "Request for release of your information"
+     Then I should not see "needs your information"
 
   Scenario: User logs in via trusted proxy and attribute release policy for destination is executed
     Given SP "Step Up" is authenticating for SP "Loa SP"

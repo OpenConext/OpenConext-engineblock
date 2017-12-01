@@ -140,7 +140,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'deleteuser_success_subheader'      => 'You are almost done...',
     'deleteuser_success_desc'           => '<strong>Important!</strong> To finalize the exit procedure you must close your browser.',
 
-    //Consent
+    // Consent theme before EB 2.3.0
     'external_link'                     => 'opens in a new window',
     'consent_header'                    => '%s requests your information',
     'consent_subheader'                 => '%s requests your information',
@@ -153,15 +153,74 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_decline'                   => 'No, I don\'t want to use this service',
     'consent_notice'                    => '(We will ask you again when the information changes)',
 
-    //New Consent
+    // Consent theme before EB 5.5.0
     'consent_header_info'               => 'Request for release of your information',
     'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%1$s</strong> using your institutional account, <strong class="identity-provider">%2$s</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%2$s</strong> shares certain information with this service. For this, your permission is required. The service needs the following information:',
     'consent_aggregated_attributes_info' => '<strong class="service-provider">%1$s</strong> also requires access to information from the source <strong class="attribute-source">%2$s</strong>. The service needs the following additional information:',
-    'consent_attribute_source_voot'     => 'Group membership',
-    'consent_attribute_source_sab'      => 'SURFnet Autorisatie Beheer',
-    'consent_attribute_source_orcid'    => 'ORCID iD',
     'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
     'name_id'                           => 'SURFconext user ID',
+
+    // Consent theme EB 5.5.0 and later
+    'consent_header_title'                    => '%s needs your information before logging in',
+    'consent_header_text'                     => 'This service needs access to some of your information. Your information will be sent securely via <a class="help" href="#" data-slidein="about">SURFconext</a>.',
+    'consent_privacy_title'                   => 'The following information will be shared with %s:',
+    'consent_privacy_link'                    => 'Read the privacy policy of this service',
+    'consent_attributes_correction_link'      => 'Is this incorrect?',
+    'consent_attributes_show_all'             => 'Show all information',
+    'consent_attribute_source_voot'           => 'Group membership',
+    'consent_attribute_source_sab'            => 'SURFnet Autorisatie Beheer',
+    'consent_attribute_source_orcid'          => 'ORCID iD',
+    'consent_attribute_source_logo_url_voot'  => 'https://static.surfconext.nl/media/aa/voot.png',
+    'consent_attribute_source_logo_url_sab'   => 'https://static.surfconext.nl/media/aa/sab.png',
+    'consent_attribute_source_logo_url_orcid' => 'https://static.surfconext.nl/media/aa/orcid.png',
+    'consent_buttons_title'                   => 'Do you agree with sharing this data?',
+    'consent_buttons_ok'                      => 'Yes, proceed to %s',
+    'consent_buttons_nok'                     => 'No, I do not agree',
+    'consent_footer_text_singular'            => 'You are using one other service via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View the list of services and your profile information.</a>',
+    'consent_footer_text_plural'              => 'You are using %1$s services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View the list of services and your profile information.</a>',
+    'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View your profile information.</a>',
+
+    // Consent slidein: Kloppen de getoonde gegevens niet?
+    'consent_slidein_correction_title' => 'Kloppen de getoonde gegevens niet?',
+    'consent_slidein_correction_text_idp'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
+    'consent_slidein_correction_text_aa'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
+    'consent_slidein_correction_details_title' => 'Contactgegevens %1$s:',
+    'consent_slidein_correction_details_email' => 'Email',
+    'consent_slidein_correction_details_phone' => 'Phone',
+
+    // Consent slidein: About SURFconext
+    'consent_slidein_about_text'  => <<<'TXT'
+<h1>Inloggen met SURFconext</h1>
+<img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
+<p>
+Via de SURFconext loggen onderzoekers, medewerkers en studenten met hun eigen instellingsaccount veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. SURFconext biedt bescherming van de privacy doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.
+<p>
+Weten waar je al eerder toestemming voor hebt gegevens? Bekijk hier je <a href="https://profile.surfconext.nl/">SURFconext profielpagina</a>.
+<h1>SURFconext is onderdeel van SURF</h1>
+<p>
+SURF is de ICT-samenwerkignsorganisatie van het onderwijs en onderzoekt in Nederland.
+<br>
+Dankzij SURF beschikken studenten, docenten en onderzoekers in Nederland over de best mogelijke ICT-voorzieningen voor toponderzoek en talentontwikkeling.
+TXT
+    ,
+
+    // Consent slidein: Reject
+    'consent_slidein_reject_text'  => <<<'TXT'
+<h1>Je geeft geen toestemming om gegevens door te sturen</h1>
+<p>
+De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functiopneren. Als je hier geen toestemming voor geeft dan kun je geen gebruik maken van deze dienst.
+<p>
+Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a>.
+TXT
+    ,
+    'consent_slidein_reject_text_no_support' => 'Er zijn geen contact gegevens beschikbaar.',
+    'consent_slidein_reject_text_contact_mail'  => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a>.',
+    'consent_slidein_reject_text_contact_mail_phone'  => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a> of telefoonnummer <a href="tel:%2$s">%2$s</a>.',
+    'consent_slidein_reject_text_no_support' => 'Er zijn geen contact gegevens beschikbaar.',
+
+    // Generic slide-in
+    'slidein_close' => 'Sluiten',
+    'slidein_read_more' => 'Lees meer',
 
     //Error screens
     'error_404'                         => '404 - Page not found',

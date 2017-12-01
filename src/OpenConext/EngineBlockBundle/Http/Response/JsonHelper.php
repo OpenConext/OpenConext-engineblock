@@ -39,6 +39,7 @@ final class JsonHelper
                         return [
                             'contact_type'  => $contactPerson->contactType,
                             'email_address' => $contactPerson->emailAddress,
+                            'telephone_number' => $contactPerson->telephoneNumber,
                         ];
                     },
                     $identityProvider->contactPersons
