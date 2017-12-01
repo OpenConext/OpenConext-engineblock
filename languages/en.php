@@ -165,7 +165,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_header_text'                     => 'This service needs access to some of your information. Your information will be sent securely via <a class="help" href="#" data-slidein="about">SURFconext</a>.',
     'consent_privacy_title'                   => 'The following information will be shared with %s:',
     'consent_privacy_link'                    => 'Read the privacy policy of this service',
-    'consent_attributes_correction_link'      => 'Is this incorrect?',
+    'consent_attributes_correction_link'      => 'Are your details incorrect?',
     'consent_attributes_show_all'             => 'Show all information',
     'consent_attribute_source_voot'           => 'Group membership',
     'consent_attribute_source_sab'            => 'SURFnet Autorisatie Beheer',
