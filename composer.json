@@ -17,7 +17,7 @@
         "kriswallsmith/assetic": "~1.2.0",
         "monolog/monolog": "~1.13",
         "mrclay/minify": "~2.2",
-        "openconext/engineblock-metadata": "^2.3.0",
+        "openconext/engineblock-metadata": "^2.4.0",
         "openconext/stoker-metadata": "~0.1",
         "pimple/pimple": "~2.1",
         "simplesamlphp/saml2": "1.10.3 as 1.9.1",

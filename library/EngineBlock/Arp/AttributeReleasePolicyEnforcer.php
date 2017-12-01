@@ -4,9 +4,26 @@ use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
 
 class EngineBlock_Arp_AttributeReleasePolicyEnforcer
 {
-    public function enforceArp(AttributeReleasePolicy $arp = null, $responseAttributes)
+    public function enforceArp(AttributeReleasePolicy $arp = null, $responseAttributes, $showSources = false)
     {
         if (!$arp) {
+            if ($showSources) {
+                $newAttributes = array();
+                foreach ($responseAttributes as $attributeName => $attributeValues) {
+                    foreach ($attributeValues as $attributeValue) {
+                        if (!isset($newAttributes[$attributeName])) {
+                            $newAttributes[$attributeName] = array();
+                        }
+                        $attribute = array(
+                            'value' => $attributeValue,
+                            'source' => 'idp',
+                        );
+                        $newAttributes[$attributeName][] = $attribute;
+                    }
+                }
+                $responseAttributes = $newAttributes;
+            }
+
             return $responseAttributes;
         }
 
@@ -28,7 +45,15 @@ class EngineBlock_Arp_AttributeReleasePolicyEnforcer
                     $newAttributes[$attributeName] = array();
                 }
 
-                $newAttributes[$attributeName][] = $attributeValue;
+                if ($showSources) {
+                    $attribute = array(
+                        'value' => $attributeValue,
+                        'source' => $arp->getSource($attributeName),
+                    );
+                    $newAttributes[$attributeName][] = $attribute;
+                } else {
+                    $newAttributes[$attributeName][] = $attributeValue;
+                }
             }
         }
         return $newAttributes;
