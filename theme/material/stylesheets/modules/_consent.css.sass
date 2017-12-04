@@ -121,6 +121,12 @@
                   height: 0.7em
                   width: 0.7em
 
+                span.show-more
+                  display: inline
+
+                span.show-less
+                  display: none
+
           &.expanded
             tr
               display: table-row !important
@@ -128,8 +134,17 @@
               +max-width($small)
                 display: block
 
-              &.toggle-attributes a::after
-                background-image: url(../images/chevron-up.svg)
+              &.toggle-attributes
+                a
+                  &::after
+                    background-image: url(../images/chevron-up.svg)
+
+                  span.show-more
+                    display: none
+
+                  span.show-less
+                    display: inline
+
 
         tr
           border-color: transparent

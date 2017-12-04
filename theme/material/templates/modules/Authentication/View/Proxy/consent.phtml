@@ -133,7 +133,12 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
           <tr class="toggle-attributes">
             <td colspan="2">
               <a href="#">
-                <?= $this->t('consent_attributes_show_all'); ?>
+                <span class="show-more">
+                  <?= $this->t('consent_attributes_show_more'); ?>
+                </span>
+                <span class="show-less">
+                  <?= $this->t('consent_attributes_show_less'); ?>
+                </span>
               </a>
             </td>
           </tr>
