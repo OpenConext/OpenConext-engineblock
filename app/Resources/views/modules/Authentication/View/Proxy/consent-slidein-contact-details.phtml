@@ -1,0 +1,25 @@
+<?php /* This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory. */ ?>
+<p>
+  <?php if (isset($idp_support)): ?>
+    <?= $this->t('consent_slidein_text_contact'); ?>
+    <br>
+    <?php if (!empty($idp_support->givenName) || !empty($idp_support->surName)): ?>
+      <?=EngineBlock_View::htmlSpecialCharsText($idp_support->givenName) ?>
+      <?=EngineBlock_View::htmlSpecialCharsText($idp_support->surName) ?>
+      <br>
+    <?php endif; ?>
+    <?= $this->t('consent_slidein_details_email'); ?>:
+    <a href="mailto:<?=EngineBlock_View::htmlSpecialCharsText($idp_support->emailAddress) ?>">
+      <?=EngineBlock_View::htmlSpecialCharsText($idp_support->emailAddress) ?>
+    </a>
+    <?php if (!empty($idp_support->telephoneNumber)): ?>
+      <br>
+      <?= $this->t('consent_slidein_details_phone'); ?>:
+      <a href="tel:<?=EngineBlock_View::htmlSpecialCharsText($idp_support->telephoneNumber) ?>">
+        <?=EngineBlock_View::htmlSpecialCharsText($idp_support->telephoneNumber) ?>
+      </a>
+    <?php endif; ?>
+  <?php else: ?>
+    <?= $this->t('consent_slidein_text_no_support'); ?>
+  <?php endif; ?>
+</p>
