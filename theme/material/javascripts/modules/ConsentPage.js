@@ -35,6 +35,7 @@ export function initConsentPage() {
 
                     if (slideIn !== null) {
                         slideIn.classList.add('visible');
+                        document.body.classList.add('slidein-open');
 
                         slideIn.querySelector('a.close').addEventListener(
                             'click',
@@ -42,6 +43,7 @@ export function initConsentPage() {
                                 event.preventDefault();
 
                                 slideIn.classList.remove('visible');
+                                document.body.classList.remove('slidein-open');
                             },
                             {
                                 once: true
