@@ -12,7 +12,11 @@ export function initConsentPage() {
             document.querySelectorAll('tr.toggle-attributes a'),
             (anchor) => anchor.addEventListener(
                 'click',
-                () => anchor.closest('tbody').classList.toggle('expanded')
+                (event) => {
+                    event.preventDefault();
+
+                    anchor.closest('tbody').classList.toggle('expanded');
+                }
             )
         );
     }
@@ -34,7 +38,11 @@ export function initConsentPage() {
 
                         slideIn.querySelector('a.close').addEventListener(
                             'click',
-                            () => slideIn.classList.remove('visible'),
+                            (event) => {
+                                event.preventDefault();
+
+                                slideIn.classList.remove('visible');
+                            },
                             {
                                 once: true
                             }
