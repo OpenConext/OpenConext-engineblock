@@ -12,15 +12,23 @@
     &.small
       font-size: 80%
 
-    &.help::after
-      content: ''
-      background: url(../images/question-circle-o.svg) 0 0 no-repeat
+    &.help::after,
+    &[target="_blank"]::after
       background-size: cover
+      background-position: 0 0
+      background-repeat: no-repeat
+      content: ''
       display: inline-block
       height: 1.2em
       margin-left: 5px
       vertical-align: middle
       width: 1.2em
+
+    &.help::after
+      background-image: url(../images/question-circle-o.svg)
+
+    &[target="_blank"]::after
+      background-image: url(../images/external-link.svg)
 
   p
     margin: 0
