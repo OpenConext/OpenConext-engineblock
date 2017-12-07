@@ -48,6 +48,16 @@ return array(
     'no_idp_results_request_access' => 'Kun je je instelling niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
     'more_idp_results'          => '%d resultaten worden niet getoond. Verfijn je zoekopdracht voor specifiekere resultaten.',
     'return_to_sp'              => 'Keer terug naar Service Provider',
+    'remember_choice'           => 'Onthoud mijn keuze',
+
+    //Remove cookies
+    'cookie_not_set'            => 'Geen waarde',
+    'cookie_removal_header'     => 'Cookies verwijderen',
+    'cookie_remove_button'      => 'Verwijderen',
+    'cookie_remove_all_button'  => 'Alles verwijderen',
+    'cookie_removal_description' => '<p>In onderstaande overzicht vindt u uw opgeslagen cookies en een de mogelijk om deze individueel of allemaal tegelijk te verwijderen.</p>',
+    'cookie_removal_confirm'     => 'Uw cookie is verwijderd.',
+    'cookies_removal_confirm'    => 'Uw cookies zijn verwijderd.',
 
     //Footer
     'service_by'            => 'Deze dienst is verbonden via',
@@ -65,7 +75,7 @@ return array(
     'close_question'        =>      'Sluit',
 
     //Help questions
-		// general help questions
+    // general help questions
     'question_surfconext'               =>      'Wat is SURFconext?',
     'answer_surfconext'                 =>      '<p>SURFconext is een verbindingsinfrastructuur die een aantal bouwstenen voor online samenwerking met elkaar verbindt. Die bouwstenen zijn services voor federatieve authenticatie, groepsbeheer, sociale netwerken en cloud applicaties van verschillende aanbieders. Met SURFconext is het mogelijk om met je eigen instellingsaccount toegang te krijgen tot diensten van verschillende aanbieders.</p>',
     'question_log_in'                   =>      'Hoe werkt inloggen via SURFconext?',
@@ -83,7 +93,7 @@ Persoonsgegevens worden alleen verstrekt aan een dienstaanbieder wanneer dat noo
 Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lezen op <a href="https://wiki.surfnet.nl/display/conextsupport/">de SURFconext support pagina</a>. Heb je vragen ten aanzien van het privacybeleid van SURFconext, mail deze dan naar de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
 
-    	// consent help questions
+    // consent help questions
     'question_consentscreen'           	=>      'Waarom dit scherm?',
     'answer_consentscreen'             	=>      '<p>Om toegang te krijgen tot deze dienst is het noodzakelijk dat een aantal persoonlijke gegevens wordt gedeeld met deze dienst.</p>',
     'question_consentinfo'           	=>      'Wat gebeurt er met mijn gegevens?',
@@ -93,7 +103,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'question_consentagain'           	=>      'Ik heb eerder al toestemming gegeven voor het delen van mijn gegevens, waarom krijg ik deze vraag opnieuw?',
     'answer_consentagain'             	=>      '<p>Indien de gegevens die doorgegeven worden aan deze dienst zijn gewijzigd zal er nogmaals gevraagd worden of je akkoord gaat met het delen van jouw gegevens.</p>',
 
-		// WAYF help questions
+    // WAYF help questions
     'question_screen'                   =>      'Waarom dit scherm?',
     'answer_screen'                     =>      '<p>Je kunt met je instellingsaccount inloggen bij deze dienst. In dit scherm geef je aan via welke instelling je wilt inloggen.</p>',
     'question_institution_not_listed'   =>      'Ik zie mijn instelling er niet tussen staan, wat nu?',

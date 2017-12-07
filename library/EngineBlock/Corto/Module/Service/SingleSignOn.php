@@ -131,6 +131,19 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return;
         }
 
+        // Auto-select IdP when 'wayf.rememberChoice' feature is enabled and is allowed for the current request
+        if (($application->getDiContainer()->getRememberChoice() === true) && !($request->getForceAuthn() || $request->isDebugRequest())) {
+            $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();
+            if (array_key_exists('rememberchoice', $cookies)) {
+                $remembered = $cookies['rememberchoice'];
+                if (array_search($remembered, $candidateIDPs) !== false) {
+                    $log->info("Auto-selecting IdP ('$remembered'): omitting WAYF, sending authentication request");
+                    $this->_server->sendAuthenticationRequest($request, $remembered);
+                    return;
+                }
+            }
+        }
+
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($log);
         $authnRequestRepository->store($request);
 
@@ -366,19 +379,23 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // Post to the 'continueToIdp' service
         $action = $this->_server->getUrl('continueToIdP');
 
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();
+
         $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
         $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest());
+        $rememberChoiceFeature = $application->getDiContainer()->getRememberChoice();
 
         $output = $this->_server->renderTemplate(
             'discover',
             array(
                 'action'                              => $action,
-                'cutoffPointForShowingUnfilteredIdps' => EngineBlock_ApplicationSingleton::getInstance()
-                    ->getDiContainer()
-                    ->getCutoffPointForShowingUnfilteredIdps(),
+                'cutoffPointForShowingUnfilteredIdps' => $application->getDiContainer()->getCutoffPointForShowingUnfilteredIdps(),
+                'rememberChoiceFeature'               => $rememberChoiceFeature,
                 'ID'                                  => $request->getId(),
                 'idpList'                             => $idpList,
                 'metaDataSP'                          => $serviceProvider,
+                'cookies'                             => $cookies,
             )
         );
         $this->_server->sendOutput($output);

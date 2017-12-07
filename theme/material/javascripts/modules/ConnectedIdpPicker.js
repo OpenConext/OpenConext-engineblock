@@ -1,12 +1,14 @@
 import {AbstractIdpPicker} from "./AbstractIdpPicker";
 
 export class ConnectedIdpPicker extends AbstractIdpPicker {
-    constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage) {
+    constructor(searchForm, targetElement, previousSelectionList, idpList, previousSelectionStorage, rememberChoiceFeature, rememberChoiceStorage) {
         super(searchForm, targetElement, idpList);
 
         this.previousSelectionList = previousSelectionList;
         this.previousSelectionStorage = previousSelectionStorage;
 
+        this.rememberChoiceFeature = rememberChoiceFeature;
+        this.rememberChoiceStorage = rememberChoiceStorage;
         this.indexOfIdpUnderFocus = null;
 
         this.updateFocus();
@@ -188,6 +190,13 @@ export class ConnectedIdpPicker extends AbstractIdpPicker {
             }
 
             this.previousSelectionStorage.save(this.previousSelectionList.getListUpdatedWith(idp));
+        }
+
+        if (this.rememberChoiceFeature) {
+            const $checkbox = this.targetElement.querySelector('#rememberChoice');
+            if ($checkbox.checked) {
+                this.rememberChoiceStorage.save(idp.entityId);
+            }
         }
 
         this.searchForm.elements['form-idp'].value = idp.entityId;
