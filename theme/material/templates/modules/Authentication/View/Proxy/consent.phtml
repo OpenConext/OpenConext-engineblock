@@ -71,10 +71,13 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
       <h1><?= $this->t('consent_header_title', $spName); ?></h1>
       <p>
         <?= $this->t('consent_header_text', $spName); ?>
-        <?php if (isset($sp->termsOfServiceUrl)) : ?>
-          <a class="small" href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->termsOfServiceUrl); ?>" target="_blank"><?= $this->t('consent_privacy_link'); ?></a>.
-        <?php endif; ?>
       </p>
+      <?php if (isset($sp->termsOfServiceUrl)) : ?>
+      <p>
+        <br>
+        <a class="small" href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->termsOfServiceUrl); ?>" target="_blank"><?= $this->t('consent_privacy_link'); ?></a>
+      </p>
+      <?php endif; ?>
     </header>
 
     <section class="privacy">
