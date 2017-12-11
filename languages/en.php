@@ -50,6 +50,16 @@ return array(
     'more_idp_results'          => '%d results not shown. Refine your search to show more specific results.',
     'return_to_sp'              => 'Return to Service Provider',
 
+    // Remove cookies
+    'remember_choice'           => 'Remember my choice',
+    'cookie_not_set'            => 'Not set',
+    'cookie_removal_header'     => 'Remove cookies',
+    'cookie_remove_button'      => 'Remove',
+    'cookie_remove_all_button'  => 'Remove all',
+    'cookie_removal_description' => '<p>Below you will find an overview of your cookies and the possibility to remove them individually or all at once.</p>',
+    'cookie_removal_confirm'     => 'Your cookie has been removed.',
+    'cookies_removal_confirm'    => 'Your cookies have been removed.',
+
     // Footer
     'service_by'            => 'This is a service connected through',
     'serviceprovider_link'  => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>',
@@ -95,7 +105,7 @@ If you have any questions about your privacy and the policy applied, please visi
     'question_consentagain'             =>      'I\'ve previously shared my information with the service, but why do i get the same question again?',
     'answer_consentagain'               =>      '<p>When your information previously provided to the service has changed, you will be asked again if you allow the sharing of your information.</p>',
 
-		// WAYF help questions
+    // WAYF help questions
     'question_screen'                   =>      'Why this screen?',
     'answer_screen'                     =>      '<p>You can log in to this service with your institutional account. In this screen, you select the institution you are affiliated with.</p>',
     'question_institution_not_listed'   =>      'My institution is not listed. What should I do?',

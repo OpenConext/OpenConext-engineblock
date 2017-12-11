@@ -138,12 +138,16 @@ if ($showRequestAccess === true) {
     $unconnectedIdps = array();
 }
 
+$rememberChoiceCookieIdentifier = 'rememberchoice';
+
 $configuration = [
     'previousSelectionCookieName'         => $previousSelectionCookieIdentifier,
     'previousSelectionList'               => $formattedPreviousSelectionList,
     'connectedIdps'                       => array_values($connectedIdps),
     'unconnectedIdps'                     => array_values($unconnectedIdps),
     'cutoffPointForShowingUnfilteredIdps' => $cutoffPointForShowingUnfilteredIdps,
+    'rememberChoiceCookieName'            => $rememberChoiceCookieIdentifier,
+    'rememberChoiceFeature'               => $rememberChoiceFeature,
     'messages'                            => [
         'pressEnterToSelect' => $this->t('press_enter_to_select'),
         'moreIdpResults'     => $this->t('more_idp_results'),
@@ -211,6 +215,16 @@ $configuration = [
       <p><?php echo $this->t('no_idp_results'); ?></p>
     </div>
   </div>
+<?php if ($rememberChoiceFeature === true): ?>
+  <div id="rememberChoiceDiv" class="mod-results">
+    <header>
+      <form method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+        <label for="rememberChoice"><?= $this->t('remember_choice'); ?></label>
+        <input type="checkbox" name="rememberChoice" id="rememberChoice" />
+      </form>
+    </header>
+  </div>
+<?php endif ?>
 </div>
 
 <?php if ($showRequestAccess === true): ?>

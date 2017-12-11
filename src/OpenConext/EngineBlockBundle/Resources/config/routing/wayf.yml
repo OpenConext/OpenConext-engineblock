@@ -9,3 +9,9 @@ authentication_wayf_help_discover:
     methods: [GET]
     defaults:
         _controller: engineblock.controller.authentication.wayf:helpDiscoverAction
+
+authentication_wayf_remove_cookie:
+    path:   /authentication/idp/remove-cookies
+    methods: [GET,POST]
+    defaults:
+        _controller: engineblock.controller.authentication.wayf:cookieAction

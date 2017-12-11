@@ -184,7 +184,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @deprecated since the themeis were introduced this should no longer be used.
+     * @deprecated since the theme is were introduced this should no longer be used.
      *
      * @return EngineBlock_AssetManager
      */
@@ -309,6 +309,11 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getCutoffPointForShowingUnfilteredIdps()
     {
         return $this->container->getParameter('wayf.cutoff_point_for_showing_unfiltered_idps');
+    }
+
+    public function getRememberChoice()
+    {
+        return $this->container->getParameter('wayf.remember_choice');
     }
 
     /**

@@ -8,6 +8,7 @@ import {KeyboardListener} from "./modules/KeyboardListener";
 import {PreviousSelectionStorage} from "./modules/PreviousSelectionStorage";
 import {IdpListElementFactory} from "./modules/IdpListElementFactory";
 import {RequestAccessModalHelper} from "./modules/RequestAccessModalHelper";
+import {RememberChoiceStorage} from "./modules/RememberChoiceStorage";
 
 function initialize() {
     document.body.className = document.body.className.replace('no-js', '');
@@ -33,7 +34,8 @@ function initialize() {
     const $searchForm                 = document.querySelector('form.mod-search');
     const $requestAccessModal         = document.getElementById('request-access');
     const $requestAccessScroller      = document.getElementById('request-access-scroller');
-
+    const $rememberChoiceTarget       = document.querySelector('#rememberChoiceDiv');
+ 
     const configuration      = JSON.parse(document.getElementById('wayf-configuration').innerHTML);
     const throttleAmountInMs = 250;
 
@@ -50,12 +52,15 @@ function initialize() {
         idpListElementFactory
     );
     const previousSelectionStorage = new PreviousSelectionStorage(configuration.previousSelectionCookieName);
+    const rememberChoiceStorage = new RememberChoiceStorage(configuration.rememberChoiceCookieName);
     const connectedIdpPicker       = new ConnectedIdpPicker(
         $searchForm,
         $connectedIdpPickerTarget,
         previousSelectionList,
         connectedIdpList,
-        previousSelectionStorage
+        previousSelectionStorage,
+        configuration.rememberChoiceFeature,
+        rememberChoiceStorage
     );
     const requestAccessModalHelper = new RequestAccessModalHelper(
         $requestAccessModal,

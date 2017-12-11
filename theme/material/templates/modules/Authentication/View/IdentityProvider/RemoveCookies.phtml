@@ -1,0 +1,42 @@
+<?php
+/** @var Zend_Layout $layout */
+$layout = $this->layout();
+$layout->assign('subheader', $this->t('cookie_removal_header'));
+$cookies = array('main', 'rememberchoice', 'lang', 'selectedidps');
+$cookiesSet = $this->_data['cookiesSet'];
+$removal = $this->_data['removal'];
+$all = $this->_data['all'];
+?>
+<div class="box">
+  <div class="mod-content">
+    <h1><?= $this->t('cookie_removal_header'); ?></h1>
+    <?= $this->t('cookie_removal_description'); ?>
+    <form id="remove_cookie_form" method="post" class="apply clearfix">
+<table style="border-spacing: 15px; border-collapse: separate;">
+<?php
+foreach ($cookies as $cookie) {
+    if (array_key_exists($cookie, $cookiesSet)) {
+        $value = htmlspecialchars($cookiesSet[$cookie]);
+        echo "<tr><td><label for='$cookie'>$cookie</label></td>";
+        echo "<td>$value</td>";
+        echo "<td><button name='remove_$cookie' id='remove_$cookie' class='c-button'>" . $this->t('cookie_remove_button') . "</button></td></tr>";
+    } else {
+        echo "<tr><td><label for='$cookie'>$cookie</label></td><td>Not set</td><td><button disabled='disabled' name='remove_$cookie' id='remove_$cookie' style='background: grey; color: darkgrey;' class='c-button'>" . $this->t('cookie_remove_button') . "</button></td></tr>";
+    }
+}
+?>
+        <tr><td colspan='3'>&nbsp;</td></tr>
+        <tr><td colspan='3' style='text-align: right;'><button name="remove_all" id="remove_all" class="c-button"><?= $this->t('cookie_remove_all_button'); ?></button></td><tr>
+      </table>
+    </form>
+<?php
+    if ($removal === true) {
+        if ($all === true) {
+            echo "<div class='results'><br /><p style='color:red'>" . $this->t('cookies_removal_confirm') . "</p></div>";
+        } else {
+            echo "<div class='results'><br /><p style='color:red'>" . $this->t('cookie_removal_confirm') . "</p></div>";
+        }
+    }
+?>
+  </div>
+</div>
