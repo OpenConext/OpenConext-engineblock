@@ -19,11 +19,14 @@ class AppKernel extends Kernel
             new Sensio\Bundle\DistributionBundle\SensioDistributionBundle(),
             new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle(),
 
-            // Doctrine Integration
+            // Doctrine integration
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
 
-            // EngineBlock Integration
+            // OpenConext Monitor integration
+            new OpenConext\MonitorBundle\OpenConextMonitorBundle(),
+
+            // EngineBlock integration
             new OpenConext\EngineBlockBundle\OpenConextEngineBlockBundle(),
         ];
 
