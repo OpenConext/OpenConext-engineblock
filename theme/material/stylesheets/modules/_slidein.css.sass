@@ -1,15 +1,27 @@
+body.slidein-open
+  overflow: hidden
+
 .slidein
-  background-color: $dark-blue
   bottom: 0
   left: 0
   overflow: hidden
   position: fixed
-  right: 999999px
+  right: calc(100%)
   top: 0
   transition: right 0.5s ease-in-out
 
   &.visible
     right: 0
+
+  .mod-filler
+    background-color: $dark-grey
+    float: left
+    height: 100%
+    opacity: 0.8
+    width: 30%
+
+    +max-width($medium)
+      width: 0
 
   .mod-content
     background-color: white

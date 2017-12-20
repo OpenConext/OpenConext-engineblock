@@ -174,7 +174,8 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %s:',
     'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst',
     'consent_attributes_correction_link'      => 'Kloppen deze gegevens niet?',
-    'consent_attributes_show_all'             => 'Bekijk alle gegevens',
+    'consent_attributes_show_more'            => 'Toon alle gegevens',
+    'consent_attributes_show_less'            => 'Toon minder gegevens',
     'consent_attribute_source_voot'           => 'Groepslidmaatschap',
     'consent_attribute_source_sab'            => 'SURFnet Autorisatie Beheer',
     'consent_attribute_source_orcid'          => 'ORCID iD',
@@ -184,17 +185,19 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',
     'consent_buttons_ok'                      => 'Ja, ga door naar %s',
     'consent_buttons_nok'                     => 'Nee, ik ga niet akkoord',
-    'consent_footer_text_singluar'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
+    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
     'consent_footer_text_plural'              => 'Je gebruikt al %1$s diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
     'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier je profielinformatie.</a>',
+    'consent_slidein_details_email'           => 'Email',
+    'consent_slidein_details_phone'           => 'Telefoon',
+    'consent_slidein_text_contact'            => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling:',
+    'consent_slidein_text_no_support'         => 'Er zijn geen contact gegevens beschikbaar.',
 
     // Consent slidein: Kloppen de getoonde gegevens niet?
     'consent_slidein_correction_title' => 'Kloppen de getoonde gegevens niet?',
     'consent_slidein_correction_text_idp'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
     'consent_slidein_correction_text_aa'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
     'consent_slidein_correction_details_title' => 'Contactgegevens %1$s:',
-    'consent_slidein_correction_details_email' => 'Email',
-    'consent_slidein_correction_details_phone' => 'Telefoon',
 
     // Consent slidein: About SURFconext
     'consent_slidein_about_text'  => <<<'TXT'
@@ -216,12 +219,9 @@ TXT
     'consent_slidein_reject_text'  => <<<'TXT'
 <h1>Je geeft geen toestemming om gegevens door te sturen</h1>
 <p>
-De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functiopneren. Als je hier geen toestemming voor geeft dan kun je geen gebruik maken van deze dienst.
+De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functioneren. Als je hier geen toestemming voor geeft dan kun je geen gebruik maken van deze dienst.
 TXT
     ,
-    'consent_slidein_reject_text_contact_mail'  => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a>.',
-    'consent_slidein_reject_text_contact_mail_phone'  => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling op <a href="mailto:%1$s">%1$s</a> of telefoonnummer <a href="tel:%2$s">%2$s</a>.',
-    'consent_slidein_reject_text_no_support' => 'Er zijn geen contact gegevens beschikbaar.',
 
     // Generic slide-in
     'slidein_close' => 'Sluiten',

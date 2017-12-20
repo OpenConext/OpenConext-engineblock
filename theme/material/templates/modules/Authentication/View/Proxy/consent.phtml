@@ -69,14 +69,19 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
   <div class="mod-content consent">
     <header>
       <h1><?= $this->t('consent_header_title', $spName); ?></h1>
-      <p><?= $this->t('consent_header_text', $spName); ?></p>
+      <p>
+        <?= $this->t('consent_header_text', $spName); ?>
+      </p>
+      <?php if (isset($sp->termsOfServiceUrl)) : ?>
+      <p>
+        <br>
+        <a class="small" href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->termsOfServiceUrl); ?>" target="_blank"><?= $this->t('consent_privacy_link'); ?></a>
+      </p>
+      <?php endif; ?>
     </header>
 
     <section class="privacy">
       <h2><?= $this->t('consent_privacy_title', $spName); ?></h2>
-      <?php if (isset($sp->termsOfServiceUrl)) : ?>
-        <a href="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->termsOfServiceUrl); ?>" target="_blank"><?= $this->t('consent_privacy_link'); ?></a>
-      <?php endif; ?>
     </section>
 
     <section class="attributes">
@@ -91,13 +96,13 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
                 <h2><?= $this->getAttributeSourceDisplayName($attributeSource); ?></h2>
               <?php else:?>
                 <?php if (isset($idp->logo)): ?>
-                  <img width="30" height="30" src="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($sp->logo->url); ?>" alt="" />
+                  <img width="30" height="30" src="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($idp->logo->url); ?>" alt="" />
                 <?php else: ?>
                   <img width="30" height="30" src="/images/placeholder.png" alt="" />
                 <?php endif; ?>
                 <h2><?= EngineBlock_View::htmlSpecialCharsAttributeValue($idpName); ?></h2>
               <?php endif ?>
-              <a href="#" data-slidein="correction-<?= EngineBlock_View::htmlSpecialCharsAttributeValue($attributeSource); ?>"><?= $this->t('consent_attributes_correction_link'); ?></a>
+              <a class="small" href="#" data-slidein="correction-<?= EngineBlock_View::htmlSpecialCharsAttributeValue($attributeSource); ?>"><?= $this->t('consent_attributes_correction_link'); ?></a>
             </td>
           </tr>
 
@@ -115,16 +120,12 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
             </td>
             <td class="attr-value">
               <?php /** Single attribute value */ if (count($attributeValues)==1) : ?>
-              <a class="help tooltip" title="<?=EngineBlock_View::htmlSpecialCharsText($attributeIdentifier); ?>" href="#">
                 <?=EngineBlock_View::htmlSpecialCharsText($attributeValues[0]);?>
-              </a>
               <?php /** Multiple attribute values */ else: ?>
               <ul>
                 <?php foreach ($attributeValues as $value) : ?>
                 <li>
-                  <a class="help tooltip" title="<?=EngineBlock_View::htmlSpecialCharsText($attributeIdentifier); ?>" href="#">
-                    <?=EngineBlock_View::htmlSpecialCharsText($value); ?>
-                  </a>
+                  <?=EngineBlock_View::htmlSpecialCharsText($value); ?>
                 </li>
                 <?php endforeach ?>
               </ul>
@@ -135,7 +136,12 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
           <tr class="toggle-attributes">
             <td colspan="2">
               <a href="#">
-                <?= $this->t('consent_attributes_show_all'); ?>
+                <span class="show-more">
+                  <?= $this->t('consent_attributes_show_more'); ?>
+                </span>
+                <span class="show-less">
+                  <?= $this->t('consent_attributes_show_less'); ?>
+                </span>
               </a>
             </td>
           </tr>
@@ -147,7 +153,7 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
       </table>
     </section>
 
-    <section>
+    <section class="buttons">
       <h2><?= $this->t('consent_buttons_title'); ?></h2>
       <!-- YES -->
       <form id="accept" method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">

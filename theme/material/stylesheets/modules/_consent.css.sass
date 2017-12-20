@@ -9,15 +9,26 @@
   a
     color: black
 
-    &.help::after
-      content: ''
-      background: url(../images/question-circle-o.svg) 0 0 no-repeat
+    &.small
+      font-size: 80%
+
+    &.help::after,
+    &[target="_blank"]::after
       background-size: cover
+      background-position: 0 0
+      background-repeat: no-repeat
+      content: ''
       display: inline-block
       height: 1.2em
       margin-left: 5px
       vertical-align: middle
       width: 1.2em
+
+    &.help::after
+      background-image: url(../images/question-circle-o.svg)
+
+    &[target="_blank"]::after
+      background-image: url(../images/external-link.svg)
 
   p
     margin: 0
@@ -48,10 +59,18 @@
       h2
         margin-bottom: 0
 
+    &.buttons
+      text-align: center
+
+      h2
+        text-align: left
+        margin-bottom: 1rem
+
     form#accept
       display: inline
 
       input.submit
+        border-radius: 5px
         font-weight: bold
         max-width: 100%
         min-width: 50%
@@ -79,6 +98,9 @@
         padding: 1rem 0
 
         tbody
+          &:last-child tr.separator
+            display: none
+
           tr
             display: none
 
@@ -91,8 +113,11 @@
                 display: block
 
             &.toggle-attributes
-              &:nth-child(-n+8)
+              // Hide the 'expand' row if there are no more rows (and
+              // take into account the separator row)
+              &:nth-child(-n+9)
                 display: none
+
               a
                 color: $blue
 
@@ -104,15 +129,30 @@
                   height: 0.7em
                   width: 0.7em
 
+                span.show-more
+                  display: inline
+
+                span.show-less
+                  display: none
+
           &.expanded
             tr
-              display: table-row
+              display: table-row !important
 
               +max-width($small)
                 display: block
 
-              &.toggle-attributes a::after
-                background-image: url(../images/chevron-up.svg)
+              &.toggle-attributes
+                a
+                  &::after
+                    background-image: url(../images/chevron-up.svg)
+
+                  span.show-more
+                    display: none
+
+                  span.show-less
+                    display: inline
+
 
         tr
           border-color: transparent
@@ -135,6 +175,15 @@
             &.attr-name
               font-size: small
               text-align: right
+              width: 35%
+
+              +max-width($small)
+                width: auto
+
+
+            &.attr-value
+              ul
+                margin-bottom: 0
 
           &.source-info
             td > *
@@ -192,3 +241,7 @@
     clear: both
     padding: 2rem
     text-align: center
+
+    p
+      a
+        white-space: nowrap

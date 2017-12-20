@@ -33,7 +33,7 @@ else
     TAG=$1
 fi
 
-PROJECT_DIR_NAME=${PROJECT_NAME}-${TAG} &&
+PROJECT_DIR_NAME=${PROJECT_NAME}-${TAG//\//_} &&
 PROJECT_DIR=${RELEASE_DIR}/${PROJECT_DIR_NAME} &&
 
 echo "Preparing environment" &&
