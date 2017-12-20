@@ -26,6 +26,10 @@ security:
             stateless: true
             pattern: ^/.+
 
+        monitor:
+            pattern: ^/(info|health)$
+            security: false
+
         main:
             anonymous: ~
             stateless:  true

@@ -15,3 +15,7 @@ openconext_engineblock_api:
     prefix:   /
     defaults:
         domain: "%domain%"
+
+openconext_monitor:
+    resource: "@OpenConextMonitorBundle/Resources/config/routing.yml"
+    prefix: /
