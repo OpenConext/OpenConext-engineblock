@@ -194,41 +194,37 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View your profile information.</a>',
     'consent_slidein_details_email'           => 'Email',
     'consent_slidein_details_phone'           => 'Phone',
-    'consent_slidein_text_contact'            => 'Neem voor vragen hierover contact op met de technische helpdesk van je instelling:',
-    'consent_slidein_text_no_support'         => 'Er zijn geen contact gegevens beschikbaar.',
+    'consent_slidein_text_contact'            => 'If you have any questions, contact your institution\'s help desk:',
+    'consent_slidein_text_no_support'         => 'No contact data available.',
 
-    // Consent slidein: Kloppen de getoonde gegevens niet?
-    'consent_slidein_correction_title' => 'Kloppen de getoonde gegevens niet?',
-    'consent_slidein_correction_text_idp'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
-    'consent_slidein_correction_text_aa'  => 'SURFconext slaat geen gegevens op. Als je gegevens niet kloppen dan kun je terecht bij je instelling om het te wijzigen.',
+    // Consent slidein: Is the data shown incorrect?
+    'consent_slidein_correction_title' => 'Is the data shown incorrect?',
+    'consent_slidein_correction_text_idp'  => 'SURFconext does not store information. If your information is incorrect, your institution can help you change it.',
+    'consent_slidein_correction_text_aa'  => 'SURFconext does not store information. If your information is incorrect, you can contact the mentioned data source to correct it. You can ask your local help desk for assistance with this.',
 
     // Consent slidein: About SURFconext
     'consent_slidein_about_text'  => <<<'TXT'
-<h1>Inloggen met SURFconext</h1>
+<h1>Logging in through SURFconext</h1>
 <img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
-<p>
-Via de SURFconext loggen onderzoekers, medewerkers en studenten met hun eigen instellingsaccount veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. SURFconext biedt bescherming van de privacy doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.
-<p>
-Weten waar je al eerder toestemming voor hebt gegevens? Bekijk hier je <a href="https://profile.surfconext.nl/">SURFconext profielpagina</a>.
-<h1>SURFconext is onderdeel van SURF</h1>
-<p>
-SURF is de ICT-samenwerkignsorganisatie van het onderwijs en onderzoekt in Nederland.
-<br>
-Dankzij SURF beschikken studenten, docenten en onderzoekers in Nederland over de best mogelijke ICT-voorzieningen voor toponderzoek en talentontwikkeling.
+<p>Via SURFconext researchers, staff and students can safely and easily log into cloud services of various suppliers through their own institutional account. SURFconext protects privacy by sending a minimum of personal data to these cloud services.</p>
+<p>Want to know for which services you agreed to share your information with before? Visit your <a href="https://profile.surfconext.nl/">SURFconext profile page</a>.</p>
+
+<h1>SURFconext is part of SURF</h1>
+<p>SURF is the collaborative ICT organisation for Dutch education and research.<br>
+SURF offers students, lecturers and scientists in the Netherlands access to the best possible internet and IT facilities.</p>
 TXT
     ,
 
     // Consent slidein: Reject
     'consent_slidein_reject_text'  => <<<'TXT'
-<h1>Je geeft geen toestemming om gegevens door te sturen</h1>
-<p>
-De dienst waar je probeert in te loggen heeft jouw gegevens nodig om te kunnen functioneren. Als je hier geen toestemming voor geeft dan kun je geen gebruik maken van deze dienst.
+<h1>You declined to share your data</h1>
+<p>The service you're logging into requires your data to function. If you do not agree with sharing your data, you cannot use this service.</p>
 TXT
     ,
 
     // Generic slide-in
-    'slidein_close' => 'Sluiten',
-    'slidein_read_more' => 'Lees meer',
+    'slidein_close' => 'Close',
+    'slidein_read_more' => 'Read more',
 
     //Error screens
     'error_404'                         => '404 - Page not found',
