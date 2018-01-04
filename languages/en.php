@@ -194,31 +194,31 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View your profile information.</a>',
     'consent_slidein_details_email'           => 'Email',
     'consent_slidein_details_phone'           => 'Phone',
-    'consent_slidein_text_contact'            => 'If you have any questions, contact your institution\'s help desk:',
+    'consent_slidein_text_contact'            => 'If you have any questions about this page, please contact the help desk of your institution. SURFconext has the following contact information:',
     'consent_slidein_text_no_support'         => 'No contact data available.',
 
     // Consent slidein: Is the data shown incorrect?
     'consent_slidein_correction_title' => 'Is the data shown incorrect?',
-    'consent_slidein_correction_text_idp'  => 'SURFconext does not store information. If your information is incorrect, your institution can help you change it.',
-    'consent_slidein_correction_text_aa'  => 'SURFconext does not store information. If your information is incorrect, you can contact the mentioned data source to correct it. You can ask your local help desk for assistance with this.',
+    'consent_slidein_correction_text_idp'  => 'SURFconext receives the information directly from your institution and does not store the information itself. If your information is incorrect, please contact the help desk of your institution to change it.',
+    'consent_slidein_correction_text_aa'  => 'SURFconext receives the information directly from the attribute provider and does not store the information itself. If your information is incorrect, please contact the attribute provider directly to correct it. You can ask the help desk of your institution for assistance with this.',
 
     // Consent slidein: About SURFconext
     'consent_slidein_about_text'  => <<<'TXT'
 <h1>Logging in through SURFconext</h1>
 <img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
-<p>Via SURFconext researchers, staff and students can safely and easily log into cloud services of various suppliers through their own institutional account. SURFconext protects privacy by sending a minimum of personal data to these cloud services.</p>
-<p>Want to know for which services you agreed to share your information with before? Visit your <a href="https://profile.surfconext.nl/">SURFconext profile page</a>.</p>
+<p>Via SURFconext, researchers, staff and students can easily and securely log in into various cloud services using their own institutional account. SURFconext offers extra privacy protection by sending a minimum set of personal data to these cloud services.</p>
+<p>Curious about which services already received your information before through SURFconext? Visit your <a href="https://profile.surfconext.nl/">SURFconext profile page</a>.</p>
 
 <h1>SURFconext is part of SURF</h1>
-<p>SURF is the collaborative ICT organisation for Dutch education and research.<br>
-SURF offers students, lecturers and scientists in the Netherlands access to the best possible internet and IT facilities.</p>
+<p>SURF is the collaborative ICT organisation for Dutch education and research.</p>
+<p>SURF provides access to the best possible internet and IT facilities to students, teachers and researchers in the Netherlands. Want to know more about SURF? Have a look at the <a href="https://www.surf.nl/" target="_blank">website from SURF</a>.</p>
 TXT
     ,
 
     // Consent slidein: Reject
     'consent_slidein_reject_text'  => <<<'TXT'
 <h1>You declined to share your data</h1>
-<p>The service you're logging into requires your data to function. If you do not agree with sharing your data, you cannot use this service.</p>
+<p>The service you're logging into requires your data to function. If you do not agree with sharing your data, you cannot use this service. By closing your browser or this tab you fully decline to share the necessary information. If you change your mind after this, please return to the service and you will be asked for permission once again.</p>
 TXT
     ,
 
