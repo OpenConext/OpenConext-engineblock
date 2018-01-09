@@ -104,4 +104,35 @@ final class AttributeReleasePolicyController
 
         return new JsonResponse(json_encode($releasedAttributes));
     }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function readArpAction(Request $request)
+    {
+        if (!$request->isMethod(Request::METHOD_POST)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
+        }
+
+        if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
+            throw new ApiAccessDeniedHttpException('Access to the ARP API requires the role ROLE_API_USER_PROFILE');
+        }
+
+        $body = JsonRequestHelper::decodeContentAsArrayOf($request);
+
+        if (!isset($body['entityIds'])) {
+            throw new BadApiRequestHttpException('Invalid JSON structure: key "entityIds" not found');
+        }
+
+        $arpCollection = [];
+        foreach ($body['entityIds'] as $entityId) {
+            $arp = $this->metadataService->findArpForServiceProviderByEntityId(new EntityId($entityId));
+            if ($arp) {
+                $arpCollection[$entityId] = $arp->getAttributeRules();
+            }
+        }
+
+        return new JsonResponse(json_encode($arpCollection));
+    }
 }
