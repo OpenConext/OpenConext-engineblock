@@ -24,7 +24,12 @@ api_metadata_idp:
     defaults:
         _controller: engineblock.controller.api.metadata:idpAction
 
-api_attribute_release_policy:
+api_apply_attribute_release_policy:
     path:   /arp
     defaults:
         _controller: engineblock.controller.api.attribute_release_policy:applyArpAction
+
+api_read_attribute_release_policy:
+    path:   /read-arp
+    defaults:
+        _controller: engineblock.controller.api.attribute_release_policy:readArpAction
