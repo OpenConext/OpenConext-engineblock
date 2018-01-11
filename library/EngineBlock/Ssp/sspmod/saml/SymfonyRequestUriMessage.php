@@ -25,8 +25,8 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         SAML2_SignedElement $element
     ) {
 
-        $keyArray  = SimpleSAML_Utilities::loadPrivateKey($srcMetadata, true);
-        $certArray = SimpleSAML_Utilities::loadPublicKey($srcMetadata, false);
+        $keyArray  = SimpleSAML\Utils\Crypto::loadPrivateKey($srcMetadata, true);
+        $certArray = SimpleSAML\Utils\Crypto::loadPublicKey($srcMetadata, false);
 
         $algo = $dstMetadata->getString('signature.algorithm', null);
         if ($algo === null) {
@@ -292,7 +292,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         $keys = array();
 
         /* Load the new private key if it exists. */
-        $keyArray = SimpleSAML_Utilities::loadPrivateKey($dstMetadata, false, 'new_');
+        $keyArray = SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, false, 'new_');
         if ($keyArray !== null) {
             assert('isset($keyArray["PEM"])');
 
@@ -305,7 +305,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         }
 
         /* Find the existing private key. */
-        $keyArray = SimpleSAML_Utilities::loadPrivateKey($dstMetadata, true);
+        $keyArray = SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, true);
         assert('isset($keyArray["PEM"])');
 
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type' => 'private'));

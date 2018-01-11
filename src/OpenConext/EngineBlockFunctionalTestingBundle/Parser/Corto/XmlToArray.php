@@ -154,7 +154,35 @@ class XmlToArray
      * @return array
      */
     public function attributesToArray(array $attributes) {
-        return self::attributes2array($attributes);
+        $res = [];
+        foreach($attributes as $attribute) {
+            if(!isset($attribute['_Name'])) {
+                throw new \RuntimeException('Missing attribute name');
+            }
+
+            $res[$attribute['_Name']] = [];
+            if(!isset($attribute['saml:AttributeValue'])) {
+                continue;
+            }
+
+            if(!is_array($attribute['saml:AttributeValue'])) {
+                throw new \RuntimeException('AttributeValue collection is not an array');
+            }
+
+            // Add each value of the collection to the result
+            foreach ($attribute['saml:AttributeValue'] as $value) {
+                if(!is_array($value)) {
+                    throw new \RuntimeException('AttributeValue is not an array');
+                }
+
+                if(!isset($value[self::VALUE_PFX])) {
+                    continue;
+                }
+
+                $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
+            }
+        }
+        return $res;
     }
 
     public static function xml2array($xml)
@@ -353,45 +381,6 @@ class XmlToArray
         if (!isset($hash[0])) {
             $writer->endElement();
         }
-    }
-
-    /**
-     * @deprecated Use XML converter from DI container and use none static method attributesToArray() instead
-     * @param array $attributes
-     * @return array
-     * @throws \RuntimeException
-     */
-    public static function attributes2array(array $attributes)
-    {
-        $res = [];
-        foreach($attributes as $attribute) {
-            if(!isset($attribute['_Name'])) {
-                throw new \RuntimeException('Missing attribute name');
-            }
-
-            $res[$attribute['_Name']] = [];
-            if(!isset($attribute['saml:AttributeValue'])) {
-                continue;
-            }
-
-            if(!is_array($attribute['saml:AttributeValue'])) {
-                throw new \RuntimeException('AttributeValue collection is not an array');
-            }
-
-            // Add each value of the collection to the result
-            foreach ($attribute['saml:AttributeValue'] as $value) {
-                if(!is_array($value)) {
-                    throw new \RuntimeException('AttributeValue is not an array');
-                }
-
-                if(!isset($value[self::VALUE_PFX])) {
-                    continue;
-                }
-
-                $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
-            }
-        }
-        return $res;
     }
 
     public static function array2attributes($attributes)

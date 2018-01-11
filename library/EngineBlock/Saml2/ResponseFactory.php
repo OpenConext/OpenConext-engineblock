@@ -35,7 +35,7 @@ class EngineBlock_Saml2_ResponseFactory
         // $assertion->setValidAudiences(array($authnRequest->getIssuer()));
         $assertion->setAttributes($attributes);
         $assertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_UNSPECIFIED);
-        $assertion->setAuthnContext(SAML2_Const::AC_PASSWORD);
+        $assertion->setAuthnContextClassRef(SAML2_Const::AC_PASSWORD);
 
         $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
         $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
