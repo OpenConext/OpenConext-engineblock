@@ -12,8 +12,8 @@ use Psr\Log\LoggerInterface;
 
 class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface,
-               EngineBlock_Corto_Filter_Command_ResponseAttributeSourcesModificationInterface,
-               EngineBlock_Corto_Filter_Command_ResponseModificationInterface
+    EngineBlock_Corto_Filter_Command_ResponseAttributeSourcesModificationInterface,
+    EngineBlock_Corto_Filter_Command_ResponseModificationInterface
 {
     /**
      * @var LoggerInterface

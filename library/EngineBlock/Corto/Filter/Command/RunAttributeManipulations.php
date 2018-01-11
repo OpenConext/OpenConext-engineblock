@@ -5,7 +5,7 @@
  */
 class EngineBlock_Corto_Filter_Command_RunAttributeManipulations extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
-               EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
+    EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
 {
     const TYPE_SP  = 'sp';
     const TYPE_REQUESTER_SP = 'requester-sp';

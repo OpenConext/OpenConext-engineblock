@@ -2,9 +2,8 @@
 /**
  * @todo write unit tests
  */
-class EngineBlock_Config_CacheProxy
-    extends  EngineBlock_Cache_FileCacheProxyAbstract {
-
+class EngineBlock_Config_CacheProxy extends EngineBlock_Cache_FileCacheProxyAbstract
+{
     protected function getCacheKey()
     {
         return 'config';

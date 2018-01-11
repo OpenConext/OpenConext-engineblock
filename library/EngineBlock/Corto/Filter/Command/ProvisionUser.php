@@ -2,7 +2,7 @@
 
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
-               EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface
+    EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface
 {
     /**
      * {@inheritdoc}

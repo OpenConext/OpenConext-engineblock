@@ -221,8 +221,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
     public static function validateMessage(
         SimpleSAML_Configuration $srcMetadata,
         SimpleSAML_Configuration $dstMetadata,
-        SAML2_Message $message
-    )
+        SAML2_Message $message)
     {
         $enabled = null;
         if ($message instanceof SAML2_LogoutRequest || $message instanceof SAML2_LogoutResponse) {
@@ -462,8 +461,8 @@ class EngineBlock_Ssp_sspmod_saml_Message
      * @param SimpleSAML_Configuration $srcMetadata  The metadata of the sender.
      * @param SimpleSAML_Configuration $dstpMetadata  The metadata of the recipient.
      */
-    public static function buildLogoutResponse(SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata) {
-
+    public static function buildLogoutResponse(SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata)
+    {
         $lr = new SAML2_LogoutResponse();
         $lr->setIssuer($srcMetadata->getString('entityid'));
 
@@ -486,8 +485,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
      */
     public static function processResponse(
         SimpleSAML_Configuration $spMetadata, SimpleSAML_Configuration $idpMetadata,
-        SAML2_Response $response
-    )
+        SAML2_Response $response)
     {
         if (!$response->isSuccess()) {
             throw self::getResponseError($response);
@@ -538,8 +536,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
      */
     private static function processAssertion(
         SimpleSAML_Configuration $spMetadata, SimpleSAML_Configuration $idpMetadata,
-        SAML2_Response $response, $assertion, $responseSigned
-    )
+        SAML2_Response $response, $assertion, $responseSigned)
     {
         assert('$assertion instanceof SAML2_Assertion || $assertion instanceof SAML2_EncryptedAssertion');
         assert('is_bool($responseSigned)');
