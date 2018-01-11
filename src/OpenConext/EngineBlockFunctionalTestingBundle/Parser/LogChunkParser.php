@@ -3,7 +3,6 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Parser;
 
 use Doctrine\Common\Annotations\PhpParser;
-use OpenConext\EngineBlockFunctionalTestingBundle\Parser\Corto\XmlToArray;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\AuthnRequest;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Response;
 
@@ -242,7 +241,7 @@ class LogChunkParser
         if (isset($messageArray['__']['Raw'])) {
             $xml = $messageArray['__']['Raw'];
         } else {
-            $xml = XmlToArray::array2xml($messageArray, 'samlp:' . $this->getTagNameForMessageType($messageType));
+            $xml = Corto\XmlToArray::array2xml($messageArray, 'samlp:' . $this->getTagNameForMessageType($messageType));
         }
 
         $document = new \DOMDocument();

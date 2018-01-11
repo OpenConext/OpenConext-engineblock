@@ -153,7 +153,7 @@ class Janus_FixtureClient implements Janus_Client_Interface, RestClientInterface
             }
 
             // Skip if the entity may not connect to the given sp
-            if ($forSpEntityId) {
+            if ($forSpEntityId !== null) {
                 if (!$this->isConnectionAllowed($forSpEntityId, $entityId)) {
                     continue;
                 }

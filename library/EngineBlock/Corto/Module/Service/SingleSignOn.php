@@ -220,7 +220,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // if none specified, all is ok
-        if (!$acsUrl && !$acsIndex) {
+        if ($acsUrl === null && $acsIndex === null) {
             return true;
         }
 

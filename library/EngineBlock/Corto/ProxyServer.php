@@ -702,7 +702,7 @@ class EngineBlock_Corto_ProxyServer
     {
         /** @var SAML2_Response $response */
         $requestId = $response->getInResponseTo();
-        if (!$requestId) {
+        if ($requestId === null) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 'Response without InResponseTo, e.g. unsolicited. We don\'t support this.',
                 EngineBlock_Exception::CODE_NOTICE
@@ -712,7 +712,7 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->getLogger());
 
         $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);
-        if (!$spRequestId) {
+        if ($spRequestId === null) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
                 "Trying to find a AuthnRequest (we made and sent) with id '$requestId' but it is not known in this session? ".
                 "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",

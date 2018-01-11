@@ -169,8 +169,10 @@ class EngineBlock_Http_Request
         if ($this->_rawBody === null) {
             $this->_rawBody = fopen('php://temp', 'w+');
             $input = fopen('php://input', 'r');
-            stream_copy_to_stream($input, $this->_rawBody);
-            fclose($input);
+            if ($input !== false && $this->_rawBody !== false) {
+                stream_copy_to_stream($input, $this->_rawBody);
+                fclose($input);
+            } // should probably throw an exception
         }
 
         return stream_get_contents($this->_rawBody, -1, 0);

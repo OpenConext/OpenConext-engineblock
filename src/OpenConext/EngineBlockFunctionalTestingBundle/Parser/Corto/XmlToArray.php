@@ -163,8 +163,7 @@ class XmlToArray
         $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         if (!$foldingOptionSet) {
             throw new \RuntimeException(
-                "Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: " . xml_error_string(xml_get_error_code($parser)),
-                \RuntimeException::CODE_ERROR
+                "Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: " . xml_error_string(xml_get_error_code($parser))
             );
         }
 
