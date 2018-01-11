@@ -492,6 +492,9 @@ class EngineBlock_Corto_ProxyServer
         return $newResponse;
     }
 
+    /**
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     */
     protected function _createBaseResponse(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         if ($keyId = $request->getKeyId()) {
@@ -848,7 +851,7 @@ class EngineBlock_Corto_ProxyServer
     /**
      * Sign a Corto_XmlToArray array with XML.
      *
-     * @param  $element    Element to sign
+     * @param EngineBlock_Corto_XmlToArray $element    Element to sign
      * @return array Signed element
      */
     public function sign(array $element)

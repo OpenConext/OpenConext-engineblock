@@ -2,6 +2,10 @@
 
 /**
  * Annotate the response with our own metadata
+ *
+ * @method void setStatus(array)
+ * @method void setAssertions(array)
+ * @method void setIssuer(string)
  */
 class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator
 {

@@ -412,7 +412,7 @@ class EngineBlock_ApplicationSingleton
 
     /**
      * @param $key
-     * @param null $default
+     * @param mixed|null $default
      * @return mixed|null
      */
     public function getConfigurationValue($key, $default = null)
@@ -493,7 +493,7 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @return string|null
+     * @return null|RequestId
      */
     public function getLogRequestId()
     {

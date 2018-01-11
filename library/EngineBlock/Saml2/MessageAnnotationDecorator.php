@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @method getReturn()
+ */
 class EngineBlock_Saml2_MessageAnnotationDecorator
 {
     const MESSAGE_TYPE_REQUEST = 'SAMLRequest';

@@ -17,7 +17,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return;
         }
 
-        /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator|SAML2_AuthnRequest $request */
         $request = $this->_getRequest($serviceName);
 
         $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));

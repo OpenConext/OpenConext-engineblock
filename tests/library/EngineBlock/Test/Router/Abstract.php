@@ -12,9 +12,9 @@ abstract class EngineBlock_Test_Router_Abstract extends PHPUnit_Framework_TestCa
      * @param string $routerClass
      * @param string $uri
      * @param bool   $routable
-     * @param null   $module
-     * @param null   $controller
-     * @param null   $action
+     * @param null|string   $module
+     * @param null|string   $controller
+     * @param null|string   $action
      * @param array  $arguments
      * @return void
      */
