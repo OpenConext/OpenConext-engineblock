@@ -79,7 +79,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         SimpleSAML_Configuration $dstMetadata,
         SAML2_message $message
     ) {
-
+        $signingEnabled = null;
         if ($message instanceof SAML2_LogoutRequest || $message instanceof SAML2_LogoutResponse) {
             $signingEnabled = $srcMetadata->getBoolean('sign.logout', null);
             if ($signingEnabled === null) {
@@ -242,7 +242,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         SimpleSAML_Configuration $dstMetadata,
         SAML2_Message $message
     ) {
-
+        $enabled = null;
         if ($message instanceof SAML2_LogoutRequest || $message instanceof SAML2_LogoutResponse) {
             $enabled = $srcMetadata->getBoolean('validate.logout', null);
             if ($enabled === null) {
@@ -675,6 +675,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
                 /* We have a valid client certificate from the browser. */
                 $clientCert = str_replace(array("\r", "\n", " "), '', $matches[1]);
 
+                $keyInfo = array();
                 foreach ($scd->info as $thing) {
                     if ($thing instanceof SAML2_XML_ds_KeyInfo) {
                         $keyInfo[] = $thing;
@@ -685,21 +686,25 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
                     continue;
                 }
 
+                $x509data = array();
                 foreach ($keyInfo[0]->info as $thing) {
                     if ($thing instanceof SAML2_XML_ds_X509Data) {
                         $x509data[] = $thing;
                     }
                 }
+
                 if (count($x509data) != 1) {
                     $lastError = 'Error validating Holder-of-Key assertion: Only one <ds:X509Data> element in <ds:KeyInfo> within <SubjectConfirmationData> allowed';
                     continue;
                 }
 
+                $x509cert = array();
                 foreach ($x509data[0]->data as $thing) {
                     if ($thing instanceof SAML2_XML_ds_X509Certificate) {
                         $x509cert[] = $thing;
                     }
                 }
+
                 if (count($x509cert) != 1) {
                     $lastError = 'Error validating Holder-of-Key assertion: Only one <ds:X509Certificate> element in <ds:X509Data> within <SubjectConfirmationData> allowed';
                     continue;

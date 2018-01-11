@@ -65,6 +65,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
      */
     private static function addRedirectSign(SimpleSAML_Configuration $srcMetadata, SimpleSAML_Configuration $dstMetadata, SAML2_message $message)
     {
+        $signingEnabled = null;
         if ($message instanceof SAML2_LogoutRequest || $message instanceof SAML2_LogoutResponse) {
             $signingEnabled = $srcMetadata->getBoolean('sign.logout', null);
             if ($signingEnabled === null) {
@@ -223,6 +224,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
         SAML2_Message $message
     )
     {
+        $enabled = null;
         if ($message instanceof SAML2_LogoutRequest || $message instanceof SAML2_LogoutResponse) {
             $enabled = $srcMetadata->getBoolean('validate.logout', null);
             if ($enabled === null) {
@@ -624,6 +626,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
                 /* We have a valid client certificate from the browser. */
                 $clientCert = str_replace(array("\r", "\n", " "), '', $matches[1]);
 
+                $keyInfo = array();
                 foreach ($scd->info as $thing) {
                     if($thing instanceof SAML2_XML_ds_KeyInfo) {
                         $keyInfo[]=$thing;
@@ -639,6 +642,8 @@ class EngineBlock_Ssp_sspmod_saml_Message
                         $x509data[]=$thing;
                     }
                 }
+
+                $x509data = array();
                 if (count($x509data)!=1) {
                     $lastError = 'Error validating Holder-of-Key assertion: Only one <ds:X509Data> element in <ds:KeyInfo> within <SubjectConfirmationData> allowed';
                     continue;
@@ -649,6 +654,8 @@ class EngineBlock_Ssp_sspmod_saml_Message
                         $x509cert[]=$thing;
                     }
                 }
+
+                $x509cert = array();
                 if (count($x509cert)!=1) {
                     $lastError = 'Error validating Holder-of-Key assertion: Only one <ds:X509Certificate> element in <ds:X509Data> within <SubjectConfirmationData> allowed';
                     continue;
