@@ -4,6 +4,9 @@
  * SimpleSamlPHP class we have to use due to having to use the correct RequestUri as
  * determined by Symfony.
  */
+
+use \SimpleSAML_Logger as Logger;
+
 /**
  * Common code for building SAML 2 messages based on the
  * available metadata.
@@ -25,8 +28,8 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         SAML2_SignedElement $element
     ) {
 
-        $keyArray  = SimpleSAML\Utils\Crypto::loadPrivateKey($srcMetadata, true);
-        $certArray = SimpleSAML\Utils\Crypto::loadPublicKey($srcMetadata, false);
+        $keyArray  = \SimpleSAML\Utils\Crypto::loadPrivateKey($srcMetadata, true);
+        $certArray = \SimpleSAML\Utils\Crypto::loadPublicKey($srcMetadata, false);
 
         $algo = $dstMetadata->getString('signature.algorithm', null);
         if ($algo === null) {
@@ -160,7 +163,8 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
                             "-----END CERTIFICATE-----\n";
                         break;
                     default:
-                        SimpleSAML_Logger::debug('Skipping unknown key type: ' . $key['type']);
+                        Logger::debug('Skipping unknown key type: ' . $key['type']);
+                        break;
                 }
             }
         } elseif ($srcMetadata->hasValue('certFingerprint')) {
@@ -177,11 +181,11 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
              */
             if (count($certificates) === 0) {
                 /* We need the full certificate in order to match it against the fingerprint. */
-                SimpleSAML_Logger::debug('No certificate in message when validating against fingerprint.');
+                Logger::debug('No certificate in message when validating against fingerprint.');
 
                 return false;
             } else {
-                SimpleSAML_Logger::debug('Found ' . count($certificates) . ' certificates in ' . get_class($element));
+                Logger::debug('Found ' . count($certificates) . ' certificates in ' . get_class($element));
             }
 
             $pemCert = self::findCertificate($certFingerprint, $certificates);
@@ -193,7 +197,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
             );
         }
 
-        SimpleSAML_Logger::debug('Has ' . count($pemKeys) . ' candidate keys for validation.');
+        Logger::debug('Has ' . count($pemKeys) . ' candidate keys for validation.');
 
         $lastException = null;
         foreach ($pemKeys as $i => $pem) {
@@ -207,13 +211,13 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
                  */
                 $res = $element->validate($key);
                 if ($res) {
-                    SimpleSAML_Logger::debug('Validation with key #' . $i . ' succeeded.');
+                    Logger::debug('Validation with key #' . $i . ' succeeded.');
 
                     return true;
                 }
-                SimpleSAML_Logger::debug('Validation with key #' . $i . ' failed without exception.');
+                Logger::debug('Validation with key #' . $i . ' failed without exception.');
             } catch (Exception $e) {
-                SimpleSAML_Logger::debug('Validation with key #' . $i . ' failed with exception: ' . $e->getMessage());
+                Logger::debug('Validation with key #' . $i . ' failed with exception: ' . $e->getMessage());
                 $lastException = $e;
             }
         }
@@ -292,7 +296,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         $keys = array();
 
         /* Load the new private key if it exists. */
-        $keyArray = SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, false, 'new_');
+        $keyArray = \SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, false, 'new_');
         if ($keyArray !== null) {
             assert('isset($keyArray["PEM"])');
 
@@ -305,7 +309,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         }
 
         /* Find the existing private key. */
-        $keyArray = SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, true);
+        $keyArray = \SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, true);
         assert('isset($keyArray["PEM"])');
 
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type' => 'private'));
@@ -384,11 +388,11 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         foreach ($keys as $i => $key) {
             try {
                 $ret = $assertion->getAssertion($key, $blacklist);
-                SimpleSAML_Logger::debug('Decryption with key #' . $i . ' succeeded.');
+                Logger::debug('Decryption with key #' . $i . ' succeeded.');
 
                 return $ret;
             } catch (Exception $e) {
-                SimpleSAML_Logger::debug('Decryption with key #' . $i . ' failed with exception: ' . $e->getMessage());
+                Logger::debug('Decryption with key #' . $i . ' failed with exception: ' . $e->getMessage());
                 $lastException = $e;
             }
         }
@@ -652,7 +656,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
             $scd = $sc->SubjectConfirmationData;
             if ($sc->Method === SAML2_Const::CM_HOK) {
                 /* Check HoK Assertion */
-                if (SimpleSAML_Utilities::isHTTPS() === false) {
+                if (\SimpleSAML\Utils\HTTP::isHTTPS() === false) {
                     $lastError = 'No HTTPS connection, but required for Holder-of-Key SSO';
                     continue;
                 }
@@ -769,11 +773,11 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
             foreach ($keys as $i => $key) {
                 try {
                     $assertion->decryptNameId($key, $blacklist);
-                    SimpleSAML_Logger::debug('Decryption with key #' . $i . ' succeeded.');
+                    Logger::debug('Decryption with key #' . $i . ' succeeded.');
                     $lastException = null;
                     break;
                 } catch (Exception $e) {
-                    SimpleSAML_Logger::debug(
+                    Logger::debug(
                         'Decryption with key #' . $i . ' failed with exception: ' . $e->getMessage()
                     );
                     $lastException = $e;
