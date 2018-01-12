@@ -48,6 +48,7 @@ final class EntitySamlConfiguration implements Serializable
      */
     private $organization;
 
+    // @codingStandardsIgnoreStart
     /**
      * @param NameIdFormat      $preferredNameIdFormat
      * @param NameIdFormatList  $allowedNameIdFormats
@@ -61,10 +62,10 @@ final class EntitySamlConfiguration implements Serializable
         NameIdFormat $preferredNameIdFormat,
         NameIdFormatList $allowedNameIdFormats,
         CertificateList $certificateList,
-        Endpoint $singleLogoutService,
-        Endpoint $responseProcessingService,
+        Endpoint $singleLogoutService = null,
+        Endpoint $responseProcessingService = null,
         ContactPersonList $contactPersons,
-        Organization $organization = null // <- verify
+        Organization $organization = null
     ) {
         $this->preferredNameIdFormat     = $preferredNameIdFormat;
         $this->allowedNameIdFormats      = $allowedNameIdFormats;
@@ -74,6 +75,7 @@ final class EntitySamlConfiguration implements Serializable
         $this->contactPersons            = $contactPersons;
         $this->organization              = $organization;
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * @return NameIdFormat
@@ -176,9 +178,9 @@ final class EntitySamlConfiguration implements Serializable
             'preferred_name_id_format' => $this->preferredNameIdFormat->serialize(),
             'allowed_name_id_formats' => $this->allowedNameIdFormats->serialize(),
             'certificate_list' => $this->certificateList->serialize(),
+            'contact_person_list' => $this->contactPersons->serialize(),
             'single_logout_service' => $this->singleLogoutService->serialize(),
             'response_processing_service' => $this->responseProcessingService->serialize(),
-            'contact_person_list' => $this->contactPersons->serialize(),
             'organization' => $this->organization ? $this->organization->serialize() : null
         ];
     }

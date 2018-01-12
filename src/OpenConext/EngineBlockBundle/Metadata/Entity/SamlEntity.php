@@ -6,7 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Exception\RuntimeException;
 use OpenConext\EngineBlock\Metadata\Model\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Model\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Value\IdentityProviderAttributes;
+use OpenConext\EngineBlock\Metadata\Value\IdentityProviderConfiguration;
+use OpenConext\EngineBlock\Metadata\Value\IdentityProviderSamlConfiguration;
 use OpenConext\EngineBlock\Metadata\Value\SamlEntityUuid;
+use OpenConext\EngineBlock\Metadata\Value\ServiceProviderAttributes;
+use OpenConext\EngineBlock\Metadata\Value\ServiceProviderConfiguration;
+use OpenConext\EngineBlock\Metadata\Value\ServiceProviderSamlConfiguration;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -22,6 +28,8 @@ use OpenConext\Value\Saml\EntityType;
  *          )
  *      }
  * )
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects) due to the IdP/SP Mapping back and forth
  */
 class SamlEntity
 {
@@ -54,15 +62,49 @@ class SamlEntity
      */
     private $metadata;
 
-    /**
-     * @param Entity $entity
-     * @param array  $metadata
-     */
-    public function __construct(Entity $entity, array $metadata)
+    public static function fromServiceProvider(ServiceProvider $serviceProvider)
     {
-        $this->samlEntityUuid = SamlEntityUuid::forEntity($entity);
-        $this->entityId       = $entity->getEntityId();
-        $this->entityType     = $entity->getEntityType();
+        return new self(
+            SamlEntityUuid::forEntity($serviceProvider->getEntity()),
+            $serviceProvider->getEntity()->getEntityId(),
+            $serviceProvider->getEntity()->getEntityType(),
+            [
+                'saml_configuration' => $serviceProvider->getServiceProviderSamlConfiguration()->serialize(),
+                'configuration'      => $serviceProvider->getServiceProviderConfiguration()->serialize(),
+                'attributes'         => $serviceProvider->getServiceProviderAttributes()->serialize()
+            ]
+        );
+    }
+
+    public static function fromIdentityProvider(IdentityProvider $identityProvider)
+    {
+        return new self(
+            SamlEntityUuid::forEntity($identityProvider->getEntity()),
+            $identityProvider->getEntity()->getEntityId(),
+            $identityProvider->getEntity()->getEntityType(),
+            [
+                'saml_configuration' => $identityProvider->getIdentityProviderSamlConfiguration()->serialize(),
+                'configuration'      => $identityProvider->getIdentityProviderConfiguration()->serialize(),
+                'attributes'         => $identityProvider->getIdentityProviderAttributes()->serialize()
+            ]
+        );
+    }
+
+    /**
+     * @param SamlEntityUuid $samlEntityUuid
+     * @param EntityId       $entityId
+     * @param EntityType     $entityType
+     * @param array          $metadata
+     */
+    private function __construct(
+        SamlEntityUuid $samlEntityUuid,
+        EntityId $entityId,
+        EntityType $entityType,
+        array $metadata
+    ) {
+        $this->samlEntityUuid = $samlEntityUuid;
+        $this->entityId       = $entityId;
+        $this->entityType     = $entityType;
         $this->metadata       = $metadata;
     }
 
@@ -77,7 +119,12 @@ class SamlEntity
             );
         }
 
-        return ServiceProvider::create(new Entity($this->entityId, $this->entityType));
+        return new ServiceProvider(
+            new Entity($this->entityId, $this->entityType),
+            ServiceProviderSamlConfiguration::deserialize($this->metadata['saml_configuration']),
+            ServiceProviderConfiguration::deserialize($this->metadata['configuration']),
+            ServiceProviderAttributes::deserialize($this->metadata['attributes'])
+        );
     }
 
     /**
@@ -91,7 +138,12 @@ class SamlEntity
             );
         }
 
-        return IdentityProvider::create(new Entity($this->entityId, $this->entityType));
+        return new IdentityProvider(
+            new Entity($this->entityId, $this->entityType),
+            IdentityProviderSamlConfiguration::deserialize($this->metadata['saml_configuration']),
+            IdentityProviderConfiguration::deserialize($this->metadata['configuration']),
+            IdentityProviderAttributes::deserialize($this->metadata['attributes'])
+        );
     }
 
     /**

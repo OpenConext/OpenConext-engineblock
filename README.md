@@ -211,6 +211,7 @@ Also, the following documentation can be found in the [docs][docs] directory:
 1. [Release Procedure][docs-release]
 1. [EngineBlock Input and Output Command Chains][docs-filter]
 1. [Release notes for releases < 5.0.0][docs-release-notes]
+1. [Metadata Documentation][docs-metadata]
 
 [travis-build]: https://travis-ci.org/OpenConext/OpenConext-engineblock
 [license]: LICENSE-2.0.txt
@@ -227,3 +228,4 @@ Also, the following documentation can be found in the [docs][docs] directory:
 [docs-release]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_procedure.md
 [docs-filter]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/filter_commands.md
 [docs-release-notes]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/docs/release_notes
+[docs-metadata]: https://github.com/OpenConext/OpenConext-engineblock/blob/feature/metadata-api/docs/Metadata/index.md

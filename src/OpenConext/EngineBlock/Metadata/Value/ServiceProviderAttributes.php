@@ -25,7 +25,7 @@ final class ServiceProviderAttributes implements Serializable
 
     public function __construct(
         EntityAttributes $entityAttributes,
-        LocalizedUri $termsOfServiceUrl,
+        Url $termsOfServiceUrl,
         LocalizedSupportUrl $localizedSupportUrl
     ) {
         $this->entityAttributes    = $entityAttributes;
@@ -91,7 +91,7 @@ final class ServiceProviderAttributes implements Serializable
 
         return new self(
             EntityAttributes::deserialize($data['entity_attributes']),
-            LocalizedUri::deserialize($data['terms_of_service_url']),
+            Url::deserialize($data['terms_of_service_url']),
             LocalizedSupportUrl::deserialize($data['support_urls'])
         );
     }
