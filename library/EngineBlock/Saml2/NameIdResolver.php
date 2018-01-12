@@ -34,7 +34,7 @@ class EngineBlock_Saml2_NameIdResolver
         $collabPersonId
     ) {
         $customNameId = $response->getCustomNameId();
-        if ($customNameId) {
+        if (!empty($customNameId)) {
             return $customNameId;
         }
 

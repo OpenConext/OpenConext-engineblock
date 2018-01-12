@@ -55,6 +55,6 @@ abstract class EngineBlock_Router_Abstract implements EngineBlock_Router_Interfa
      */
     protected function _convertHyphenatedToCamelCase($name)
     {
-        return implode(array_map('ucfirst', explode('-', $name)));
+        return implode('', array_map('ucfirst', explode('-', $name)));
     }
 }

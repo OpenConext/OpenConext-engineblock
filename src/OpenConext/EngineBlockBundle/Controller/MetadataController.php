@@ -38,7 +38,7 @@ class MetadataController
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
 
-        if ($keyId) {
+        if ($keyId !== null) {
             $proxyServer->setKeyId($keyId);
         }
 
@@ -55,7 +55,7 @@ class MetadataController
     {
         $proxyServer = new EngineBlock_Corto_Adapter();
 
-        if ($keyId) {
+        if ($keyId !== null) {
             $proxyServer->setKeyId($keyId);
         }
 
@@ -105,7 +105,7 @@ class MetadataController
         }
 
         try {
-            $proxyServer->edugainMetadata($request->getQueryString());
+            $proxyServer->edugainMetadata();
         } catch (Janus_Client_CacheProxy_Exception $exception) {
             throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException(
                 $request->query->get('sp-entity-id'),

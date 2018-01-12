@@ -4,6 +4,11 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2;
 
 class Response extends \SAML2_Response
 {
+    /**
+     * @var string
+     */
+    private $xml;
+
     public function setXml($xml)
     {
         $this->xml = $xml;

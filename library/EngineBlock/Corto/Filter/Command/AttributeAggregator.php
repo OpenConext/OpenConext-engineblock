@@ -21,7 +21,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     private $logger;
 
     /**
-     * @var AttributeAggregationClient
+     * @var AttributeAggregationClientInterface
      */
     private $client;
 
@@ -38,7 +38,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     private $responseAttributeSources = [];
 
     /**
-     * @param AttributeAggregationClient $client
+     * @param AttributeAggregationClientInterface $client
      */
     public function __construct(
         LoggerInterface $logger,

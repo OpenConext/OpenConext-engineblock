@@ -29,7 +29,7 @@ final class EngineBlock_Application_Error
     {
         $errorArray = error_get_last();
 
-        if (!$errorArray) {
+        if (empty($errorArray)) {
             return null;
         }
 

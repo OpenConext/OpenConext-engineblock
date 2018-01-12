@@ -248,7 +248,7 @@ class LogChunkParser
         $document->loadXML($xml);
 
         $messageObj = $this->createObjectForMessageType($messageType, $document->firstChild);
-        $messageObj->xml = $xml;
+        $messageObj->setXml($xml);
         return $messageObj;
     }
 

@@ -146,8 +146,8 @@ class EngineBlock_Http_Request
     /**
      * Get the value of a specific POST variable based on a given parameter name
      *
-     * @param $param the name of the post parameter
-     * @return mixed the value of the requested post parameter || null when it doesn't exist
+     * @param string $param the name of the post parameter
+     * @return mixed|null the value of the requested post parameter || null when it doesn't exist
      */
     public function getPostParameter($param)
     {

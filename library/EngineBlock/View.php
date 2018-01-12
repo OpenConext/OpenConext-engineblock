@@ -122,7 +122,7 @@ class EngineBlock_View
     /**
      * Get user-friendly attribute source name.
      *
-     * @param $source Source identifier (e.g. "voot")
+     * @param string $source Source identifier (e.g. "voot")
      * @return string
      */
     public function getAttributeSourceDisplayName($source)
@@ -133,7 +133,7 @@ class EngineBlock_View
     /**
      * Get logo for attribute source.
      *
-     * @param $source Source identifier (e.g. "voot")
+     * @param string $source Source identifier (e.g. "voot")
      * @return string URL
      */
     public function getAttributeSourceLogoUrl($source)
