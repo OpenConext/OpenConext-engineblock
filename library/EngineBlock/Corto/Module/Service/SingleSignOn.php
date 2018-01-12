@@ -322,8 +322,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $cachedResponses = $_SESSION['CachedResponses'];
 
-        $requestIssuerEntityId  = $request->getIssuer();
-
         // First, if there is scoping, we reject responses from idps not in the list
         if (count($scopedIdps) > 0) {
             foreach ($cachedResponses as $key => $cachedResponse) {

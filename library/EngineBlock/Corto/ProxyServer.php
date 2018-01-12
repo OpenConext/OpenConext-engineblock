@@ -227,7 +227,7 @@ class EngineBlock_Corto_ProxyServer
         return $this->_keyPairs[$keyId];
     }
 
-    public function getUrl($serviceName = "", $remoteEntityId = "", EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request = null)
+    public function getUrl($serviceName = "", $remoteEntityId = "")
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
@@ -338,12 +338,9 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         $idpEntityId
     ) {
-        $originalId = $spRequest->getId();
-
         $identityProvider = $this->getRepository()->fetchIdentityProviderByEntityId($idpEntityId);
 
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $identityProvider, $this);
-        $newId = $ebRequest->getId();
 
         // Store the original Request
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
@@ -511,7 +508,7 @@ class EngineBlock_Corto_ProxyServer
             $response->setInResponseTo($request->getId());
         }
         $response->setDestination($request->getIssuer());
-        $response->setIssuer($this->getUrl('idpMetadataService', $request->getIssuer(), $request));
+        $response->setIssuer($this->getUrl('idpMetadataService', $request->getIssuer()));
 
         $acs = $this->getRequestAssertionConsumer($request);
         $response->setDestination($acs->location);
@@ -933,7 +930,6 @@ class EngineBlock_Corto_ProxyServer
         );
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
-        $signatureValue = null;
         $signatureValue = $signingKeyPair->getPrivateKey()->sign($canonicalXml2);
 
         $signature['ds:SignatureValue']['__v'] = base64_encode($signatureValue);

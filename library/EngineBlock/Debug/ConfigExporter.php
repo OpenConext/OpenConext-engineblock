@@ -16,7 +16,7 @@ class EngineBlock_Debug_ConfigExporter
      * @param string $envId
      * @return string
      */
-    public static function export(Zend_Config $config, $envId) {
+    public static function export(Zend_Config $config) {
         $configCopy = $config->toArray();
         self::ksortTree($configCopy);
         return print_r($configCopy, true);

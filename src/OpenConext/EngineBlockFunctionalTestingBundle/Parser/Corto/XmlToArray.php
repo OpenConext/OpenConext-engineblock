@@ -3,7 +3,7 @@
 /**
  * FORKED from OpenConext EngineBlock_Corto_XmlToArray.
  *
- * Note that this format is deprecated so there it little risk of missing an update
+ * Note that this format is deprecated so there is little risk of missing an update
  * and in the future it should be possible to remove this fork.
  */
 // @codingStandardsIgnoreStart
