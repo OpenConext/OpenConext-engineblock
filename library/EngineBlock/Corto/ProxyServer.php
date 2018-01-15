@@ -227,7 +227,7 @@ class EngineBlock_Corto_ProxyServer
         return $this->_keyPairs[$keyId];
     }
 
-    public function getUrl($serviceName = "", $remoteEntityId = "", EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request = null)
+    public function getUrl($serviceName = "", $remoteEntityId = "")
     {
         if (!isset($this->_serviceToControllerMapping[$serviceName])) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
@@ -338,12 +338,9 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $spRequest,
         $idpEntityId
     ) {
-        $originalId = $spRequest->getId();
-
         $identityProvider = $this->getRepository()->fetchIdentityProviderByEntityId($idpEntityId);
 
         $ebRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest($spRequest, $identityProvider, $this);
-        $newId = $ebRequest->getId();
 
         // Store the original Request
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->_logger);
@@ -492,6 +489,9 @@ class EngineBlock_Corto_ProxyServer
         return $newResponse;
     }
 
+    /**
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     */
     protected function _createBaseResponse(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         if ($keyId = $request->getKeyId()) {
@@ -508,7 +508,7 @@ class EngineBlock_Corto_ProxyServer
             $response->setInResponseTo($request->getId());
         }
         $response->setDestination($request->getIssuer());
-        $response->setIssuer($this->getUrl('idpMetadataService', $request->getIssuer(), $request));
+        $response->setIssuer($this->getUrl('idpMetadataService', $request->getIssuer()));
 
         $acs = $this->getRequestAssertionConsumer($request);
         $response->setDestination($acs->location);
@@ -702,7 +702,7 @@ class EngineBlock_Corto_ProxyServer
     {
         /** @var SAML2_Response $response */
         $requestId = $response->getInResponseTo();
-        if (!$requestId) {
+        if ($requestId === null) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 'Response without InResponseTo, e.g. unsolicited. We don\'t support this.',
                 EngineBlock_Exception::CODE_NOTICE
@@ -712,7 +712,7 @@ class EngineBlock_Corto_ProxyServer
         $authnRequestRepository = new EngineBlock_Saml2_AuthnRequestSessionRepository($this->getLogger());
 
         $spRequestId = $authnRequestRepository->findLinkedRequestId($requestId);
-        if (!$spRequestId) {
+        if ($spRequestId === null) {
             throw new EngineBlock_Corto_Module_Services_SessionLostException(
                 "Trying to find a AuthnRequest (we made and sent) with id '$requestId' but it is not known in this session? ".
                 "This could be an unsolicited Response (which we do not support) but more likely the user lost their session",
@@ -848,7 +848,7 @@ class EngineBlock_Corto_ProxyServer
     /**
      * Sign a Corto_XmlToArray array with XML.
      *
-     * @param  $element    Element to sign
+     * @param EngineBlock_Corto_XmlToArray $element    Element to sign
      * @return array Signed element
      */
     public function sign(array $element)
@@ -930,7 +930,6 @@ class EngineBlock_Corto_ProxyServer
         );
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
-        $signatureValue = null;
         $signatureValue = $signingKeyPair->getPrivateKey()->sign($canonicalXml2);
 
         $signature['ds:SignatureValue']['__v'] = base64_encode($signatureValue);

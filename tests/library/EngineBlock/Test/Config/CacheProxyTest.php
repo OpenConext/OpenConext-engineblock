@@ -1,6 +1,5 @@
 <?php
-class EngineBlock_Test_Config_CacheProxyTest
-    extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Config_CacheProxyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array

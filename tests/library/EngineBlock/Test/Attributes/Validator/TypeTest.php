@@ -1,6 +1,5 @@
 <?php
-class EngineBlock_Test_TypeTest
-    extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_TypeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @dataProvider validAttributesProvider

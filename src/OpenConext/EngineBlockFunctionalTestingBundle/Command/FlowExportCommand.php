@@ -86,7 +86,7 @@ class FlowExportCommand extends Command
          * @var $that
          */
         $that = $this;
-        $sessionsStream->mapLines(function ($line) use ($input, $output, $that) {
+        $sessionsStream->mapLines(function ($line) use ($output, $that) {
             $sessionId = trim($line);
             if (!$sessionId) {
                 return;

@@ -136,7 +136,7 @@ class EngineBlock_Http_Request
     /**
      * Get all the POST parameters for the given request
      *
-     * @return all POST parameters as an array for the given request
+     * @return array all POST parameters as an array for the given request
      */
     public function getPostParameters()
     {
@@ -146,8 +146,8 @@ class EngineBlock_Http_Request
     /**
      * Get the value of a specific POST variable based on a given parameter name
      *
-     * @param $param the name of the post parameter
-     * @return the value of the requested post parameter || null when it doesn't exist
+     * @param string $param the name of the post parameter
+     * @return mixed|null the value of the requested post parameter || null when it doesn't exist
      */
     public function getPostParameter($param)
     {
@@ -169,8 +169,10 @@ class EngineBlock_Http_Request
         if ($this->_rawBody === null) {
             $this->_rawBody = fopen('php://temp', 'w+');
             $input = fopen('php://input', 'r');
-            stream_copy_to_stream($input, $this->_rawBody);
-            fclose($input);
+            if ($input !== false && $this->_rawBody !== false) {
+                stream_copy_to_stream($input, $this->_rawBody);
+                fclose($input);
+            } // should probably throw an exception
         }
 
         return stream_get_contents($this->_rawBody, -1, 0);
@@ -179,9 +181,9 @@ class EngineBlock_Http_Request
     /**
      * Get a specific cookie name
      *
-     * @param $name the cookie name to retrieve
-     * @param null $defaultValue the default value to return
-     * @return the cookie value if available otherwise the @var $defaultValue
+     * @param string $name the cookie name to retrieve
+     * @param mixed|null $defaultValue the default value to return
+     * @return mixed the cookie value if available otherwise the @var $defaultValue
      */
     public function getCookie($name, $defaultValue = null)
     {

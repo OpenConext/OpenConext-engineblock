@@ -295,7 +295,7 @@ class EngineBlock_ApplicationSingleton
         $hasRemoteAddr   = isset($_SERVER['REMOTE_ADDR']);
         $isRemoteAddrTrusted = $hasRemoteAddr && in_array($_SERVER['REMOTE_ADDR'], $trustedProxyIpAddresses);
 
-        if ($hasForwardedFor AND $hasRemoteAddr AND $isRemoteAddrTrusted) {
+        if ($hasForwardedFor && $hasRemoteAddr && $isRemoteAddrTrusted) {
             // Use the forwarded IP address, typically set when the
             // client is using a proxy server.
             // Format: "X-Forwarded-For: client1, proxy1, proxy2"
@@ -304,7 +304,7 @@ class EngineBlock_ApplicationSingleton
             return array_shift($client_ips);
         }
 
-        if ($hasClientIp AND $hasRemoteAddr AND $isRemoteAddrTrusted)
+        if ($hasClientIp && $hasRemoteAddr && $isRemoteAddrTrusted)
         {
             // Use the forwarded IP address, typically set when the
             // client is using a proxy server.
@@ -412,7 +412,7 @@ class EngineBlock_ApplicationSingleton
 
     /**
      * @param $key
-     * @param null $default
+     * @param mixed|null $default
      * @return mixed|null
      */
     public function getConfigurationValue($key, $default = null)
@@ -493,7 +493,7 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * @return string|null
+     * @return null|RequestId
      */
     public function getLogRequestId()
     {

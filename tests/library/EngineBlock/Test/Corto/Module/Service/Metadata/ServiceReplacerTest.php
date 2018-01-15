@@ -4,8 +4,7 @@ use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Service;
 
-class EngineBlock_Test_ServiceReplacerTest
-    extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var IdentityProvider

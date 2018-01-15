@@ -23,28 +23,4 @@ class MetadataRepository
         $this->samlEntityRepository = $samlEntityRepository;
         $this->connectionRepository = $connectionRepository;
     }
-
-    /**
-     *
-     */
-    public function getSamlEntityBy(EntityId $entityId)
-    {
-
-    }
-
-    /**
-     *
-     */
-    public function getServiceProviderBy(EntityId $entityId)
-    {
-
-    }
-
-    /**
-     *
-     */
-    public function getIdentityProviderBy(EntityId $entityId)
-    {
-
-    }
 }

@@ -1,6 +1,5 @@
 <?php
-class EngineBlock_Test_Validator_UrnTest
-    extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Validator_UrnTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var EngineBlock_Validator_Urn

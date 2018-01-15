@@ -113,7 +113,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Make sure the request from the sp has an Issuer
         $spEntityId = $ebRequest->getIssuer();
-        if (!$spEntityId) {
+        if ($spEntityId === null) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Missing <saml:Issuer> in message delivered to AssertionConsumerService.'
             );
@@ -248,7 +248,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // Make sure it has a InResponseTo (Unsolicited is not supported) but don't actually check that what it's
         // in response to is actually a message we sent quite yet.
-        if (!$sspResponse->getInResponseTo()) {
+        if ($sspResponse->getInResponseTo() === null) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Unsolicited assertion (no InResponseTo in message) not supported!'
             );

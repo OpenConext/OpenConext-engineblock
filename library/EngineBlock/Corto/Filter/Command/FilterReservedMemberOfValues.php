@@ -24,8 +24,9 @@ class EngineBlock_Corto_Filter_Command_FilterReservedMemberOfValues extends Engi
         }
 
         $groups = &$this->_responseAttributes[self::URN_IS_MEMBER_OF];
+        $gcount = count($groups);
 
-        for ($i = 0; $i < count($groups); $i++) {
+        for ($i = 0; $i < $gcount; $i++) {
             $hasVoPrefix = strpos($groups[$i], self::URN_COLLAB_ORG_PREFIX) === 0;
 
             if (!$hasVoPrefix) {

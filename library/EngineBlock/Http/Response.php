@@ -80,13 +80,13 @@ class EngineBlock_Http_Response
     /**
      * Set a cookie
      *
-     * @param $name the cookie name
-     * @param $value the cookie value
-     * @param null $expire the expiration time
-     * @param null $path the cookie path
-     * @param null $domain the cookie domain
-     * @param null $secure secure cookie?
-     * @param null $httpOnly http only
+     * @param string $name the cookie name
+     * @param string $value the cookie value
+     * @param int|null $expire the expiration time
+     * @param string|null $path the cookie path
+     * @param string|null $domain the cookie domain
+     * @param bool|null $secure secure cookie?
+     * @param bool|null $httpOnly http only
      * @return bool true on success, false on failure
      */
     public function setCookie($name, $value, $expire = null, $path = null, $domain = null, $secure = null, $httpOnly = null)

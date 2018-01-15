@@ -7,8 +7,6 @@ class EngineBlock_TimeProvider_Fixture implements EngineBlock_TimeProvider_Inter
 {
     const FIXTURE_FILE = 'tmp/eb-fixtures/saml2/time';
 
-    static $s_time;
-
     public function timestamp($deltaSeconds = 0, $time = null)
     {
         $time = $this->time();

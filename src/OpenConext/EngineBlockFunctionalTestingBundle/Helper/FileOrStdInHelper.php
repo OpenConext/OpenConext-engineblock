@@ -60,7 +60,7 @@ class FileOrStdInHelper
     }
 
     /**
-     * @return resource
+     * @return resource|bool
      * @throws \Doctrine\Common\Proxy\Exception\InvalidArgumentException
      */
     protected function getStream()

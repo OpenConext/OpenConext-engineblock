@@ -38,7 +38,7 @@ final class FunctionalTestingAuthenticationLoopGuard implements AuthenticationLo
     private $dataStore;
 
     /**
-     * @var array
+     * @var false|array
      */
     private $authenticationGuardFixture;
 

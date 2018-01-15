@@ -12,6 +12,11 @@ final class Feature
     private $isEnabled;
 
     /**
+     * @var string
+     */
+    private $featureKey;
+
+    /**
      * @param string $featureKey the key with which this feature is identified
      * @param bool $isEnabled
      */

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @method getProxyCount()
+ * @method getIsPassive()
+ * @method getForceAuthn()
+ * @method toUnsignedXML()
+ */
 class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator
 {
     /**

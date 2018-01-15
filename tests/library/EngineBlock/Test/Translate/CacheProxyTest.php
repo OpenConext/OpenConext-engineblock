@@ -1,6 +1,5 @@
 <?php
-class EngineBlock_Test_Translate_CacheProxyTest
-    extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Translate_CacheProxyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var array
@@ -39,7 +38,6 @@ class EngineBlock_Test_Translate_CacheProxyTest
     public function testTranslateIsLoadedFromCache()
     {
         $translateMock = Phake::mock('Zend_Translate');
-        $cachedData = array('foo' => 'cached');
         Phake::when($translateMock)->translate('onlyincache')->thenReturn('Only in cache');
 
         $applicationCacheMock = Phake::mock('Zend_Cache_Backend_Apc');

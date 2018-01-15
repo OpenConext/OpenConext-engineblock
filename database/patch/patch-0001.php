@@ -152,7 +152,7 @@ class moveGroupProvidersConfigToDatabase
         );
         $result = $statement->execute($params);
         if ($result === false) {
-            $this->_writer->error("Error occurred inserting the group provider, error code: " . var_export($statement->errorCode()));
+            $this->_writer->error("Error occurred inserting the group provider, error code: " . var_export($statement->errorCode(), true));
             $this->_writer->error("Error info: " . print_r($statement->errorInfo(), true));
         }
         unset($groupProviderConfig['name'], $groupProviderConfig['className']);

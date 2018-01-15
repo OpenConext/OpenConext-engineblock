@@ -28,7 +28,7 @@ class EngineBlock_Validator_Uri
     {
         preg_match(self::REGEX, $uri, $matches);
 
-        $keys[] = 'match';
+        $keys = ['match'];
         $keys[] = 'scheme+separator';
         $keys[] = 'scheme';
         $keys[] = 'host+separator';

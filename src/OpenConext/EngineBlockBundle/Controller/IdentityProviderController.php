@@ -103,8 +103,8 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     }
 
     /**
-     * @param null $keyId
-     * @param null $idpHash
+     * @param null|string $keyId
+     * @param null|string $idpHash
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @throws Exception
      */

@@ -2,6 +2,11 @@
 
 class EngineBlock_Database_ConnectionFactory
 {
+    /**
+     * @var \Doctrine\DBAL\Connection
+     */
+    private $connection;
+
     public function __construct(\Doctrine\DBAL\Connection $connection)
     {
         $this->connection = $connection;

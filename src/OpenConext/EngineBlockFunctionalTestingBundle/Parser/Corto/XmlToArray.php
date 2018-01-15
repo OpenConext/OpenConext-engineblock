@@ -3,7 +3,7 @@
 /**
  * FORKED from OpenConext EngineBlock_Corto_XmlToArray.
  *
- * Note that this format is deprecated so there it little risk of missing an update
+ * Note that this format is deprecated so there is little risk of missing an update
  * and in the future it should be possible to remove this fork.
  */
 // @codingStandardsIgnoreStart
@@ -154,7 +154,35 @@ class XmlToArray
      * @return array
      */
     public function attributesToArray(array $attributes) {
-        return self::attributes2array($attributes);
+        $res = [];
+        foreach($attributes as $attribute) {
+            if(!isset($attribute['_Name'])) {
+                throw new \RuntimeException('Missing attribute name');
+            }
+
+            $res[$attribute['_Name']] = [];
+            if(!isset($attribute['saml:AttributeValue'])) {
+                continue;
+            }
+
+            if(!is_array($attribute['saml:AttributeValue'])) {
+                throw new \RuntimeException('AttributeValue collection is not an array');
+            }
+
+            // Add each value of the collection to the result
+            foreach ($attribute['saml:AttributeValue'] as $value) {
+                if(!is_array($value)) {
+                    throw new \RuntimeException('AttributeValue is not an array');
+                }
+
+                if(!isset($value[self::VALUE_PFX])) {
+                    continue;
+                }
+
+                $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
+            }
+        }
+        return $res;
     }
 
     public static function xml2array($xml)
@@ -163,8 +191,7 @@ class XmlToArray
         $foldingOptionSet = xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, 0);
         if (!$foldingOptionSet) {
             throw new \RuntimeException(
-                "Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: " . xml_error_string(xml_get_error_code($parser)),
-                \RuntimeException::CODE_ERROR
+                "Unable to set XML_OPTION_CASE_FOLDING on parser object? Error message: " . xml_error_string(xml_get_error_code($parser))
             );
         }
 
@@ -354,45 +381,6 @@ class XmlToArray
         if (!isset($hash[0])) {
             $writer->endElement();
         }
-    }
-
-    /**
-     * @deprecated Use XML converter from DI container and use none static method attributesToArray() instead
-     * @param array $attributes
-     * @return array
-     * @throws \RuntimeException
-     */
-    public static function attributes2array(array $attributes)
-    {
-        $res = [];
-        foreach($attributes as $attribute) {
-            if(!isset($attribute['_Name'])) {
-                throw new \RuntimeException('Missing attribute name');
-            }
-
-            $res[$attribute['_Name']] = [];
-            if(!isset($attribute['saml:AttributeValue'])) {
-                continue;
-            }
-
-            if(!is_array($attribute['saml:AttributeValue'])) {
-                throw new \RuntimeException('AttributeValue collection is not an array');
-            }
-
-            // Add each value of the collection to the result
-            foreach ($attribute['saml:AttributeValue'] as $value) {
-                if(!is_array($value)) {
-                    throw new \RuntimeException('AttributeValue is not an array');
-                }
-
-                if(!isset($value[self::VALUE_PFX])) {
-                    continue;
-                }
-
-                $res[$attribute['_Name']][] = $value[self::VALUE_PFX];
-            }
-        }
-        return $res;
     }
 
     public static function array2attributes($attributes)

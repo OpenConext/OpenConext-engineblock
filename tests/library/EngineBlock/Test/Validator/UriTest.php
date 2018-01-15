@@ -2,8 +2,7 @@
 /**
  * @todo write test which tests failing...this validator is so permissive it is VERY hard to let it fail
  */
-class EngineBlock_Test_Validator_UriTest
-    extends PHPUnit_Framework_TestCase
+class EngineBlock_Test_Validator_UriTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var EngineBlock_Validator_Urn

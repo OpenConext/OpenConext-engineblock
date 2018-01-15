@@ -17,7 +17,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return;
         }
 
-        /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator|SAML2_AuthnRequest $request */
         $request = $this->_getRequest($serviceName);
 
         $log->info(sprintf("Fetching service provider matching request issuer '%s'", $request->getIssuer()));
@@ -220,7 +219,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // if none specified, all is ok
-        if (!$acsUrl && !$acsIndex) {
+        if ($acsUrl === null && $acsIndex === null) {
             return true;
         }
 
@@ -322,8 +321,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         $cachedResponses = $_SESSION['CachedResponses'];
-
-        $requestIssuerEntityId  = $request->getIssuer();
 
         // First, if there is scoping, we reject responses from idps not in the list
         if (count($scopedIdps) > 0) {
