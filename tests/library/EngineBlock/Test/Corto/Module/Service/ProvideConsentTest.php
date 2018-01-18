@@ -9,6 +9,9 @@ use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
+use SAML2\Assertion;
+use SAML2\AuthnRequest;
+use SAML2\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
@@ -126,12 +129,12 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
      */
     private function mockBindingsModule()
     {
-        $spRequest = new SAML2_AuthnRequest();
+        $spRequest = new AuthnRequest();
         $spRequest->setId('SPREQUEST');
         $spRequest->setIssuer('testSp');
         $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
 
-        $ebRequest = new SAML2_AuthnRequest();
+        $ebRequest = new AuthnRequest();
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
 
@@ -141,7 +144,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $authnRequestRepository->store($ebRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
-        $assertion = new SAML2_Assertion();
+        $assertion = new Assertion();
         $assertion->setAttributes(array(
             'urn:org:openconext:corto:internal:sp-entity-id' => array(
                 'testSp'
@@ -154,7 +157,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
             'Value' => 'nameid',
         ));
 
-        $responseFixture = new SAML2_Response();
+        $responseFixture = new Response();
         $responseFixture->setInResponseTo('EBREQUEST');
         $responseFixture->setAssertions(array($assertion));
         $responseFixture = new EngineBlock_Saml2_ResponseAnnotationDecorator($responseFixture);

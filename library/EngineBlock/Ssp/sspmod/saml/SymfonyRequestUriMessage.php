@@ -5,7 +5,23 @@
  * determined by Symfony.
  */
 
-use \SimpleSAML_Logger as Logger;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Assertion;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
+use SAML2\EncryptedAssertion;
+use SAML2\LogoutRequest;
+use SAML2\LogoutResponse;
+use SAML2\Message;
+use SAML2\Response;
+use SAML2\SignedElement;
+use SAML2\StatusResponse;
+use SAML2\XML\ds\KeyInfo;
+use SAML2\XML\ds\X509Certificate;
+use SAML2\XML\ds\X509Data;
+use SimpleSAML\Logger;
+use SimpleSAML\Utils\Crypto;
+use SimpleSAML\Utils\HTTP;
 
 /**
  * Common code for building SAML 2 messages based on the
@@ -20,16 +36,16 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
      *
      * @param SimpleSAML_Configuration $srcMetadata The metadata of the sender.
      * @param SimpleSAML_Configuration $dstMetadata The metadata of the recipient.
-     * @param SAML2_Message            $element     The element we should add the data to.
+     * @param Message            $element     The element we should add the data to.
      */
     public static function addSign(
         SimpleSAML_Configuration $srcMetadata,
         SimpleSAML_Configuration $dstMetadata,
-        SAML2_SignedElement $element
+        SignedElement $element
     ) {
 
-        $keyArray  = \SimpleSAML\Utils\Crypto::loadPrivateKey($srcMetadata, true);
-        $certArray = \SimpleSAML\Utils\Crypto::loadPublicKey($srcMetadata, false);
+        $keyArray  = Crypto::loadPrivateKey($srcMetadata, true);
+        $certArray = Crypto::loadPublicKey($srcMetadata, false);
 
         $algo = $dstMetadata->getString('signature.algorithm', null);
         if ($algo === null) {
@@ -72,20 +88,20 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
      *
      * @param SimpleSAML_Configuration $srcMetadata The metadata of the sender.
      * @param SimpleSAML_Configuration $dstMetadata The metadata of the recipient.
-     * @param SAML2_Message            $message     The message we should add the data to.
+     * @param Message            $message     The message we should add the data to.
      */
     private static function addRedirectSign(
         SimpleSAML_Configuration $srcMetadata,
         SimpleSAML_Configuration $dstMetadata,
-        SAML2_message $message
+        Message $message
     ) {
         $signingEnabled = null;
-        if ($message instanceof SAML2_LogoutRequest || $message instanceof SAML2_LogoutResponse) {
+        if ($message instanceof LogoutRequest || $message instanceof LogoutResponse) {
             $signingEnabled = $srcMetadata->getBoolean('sign.logout', null);
             if ($signingEnabled === null) {
                 $signingEnabled = $dstMetadata->getBoolean('sign.logout', null);
             }
-        } elseif ($message instanceof SAML2_AuthnRequest) {
+        } elseif ($message instanceof AuthnRequest) {
             $signingEnabled = $srcMetadata->getBoolean('sign.authnrequest', null);
             if ($signingEnabled === null) {
                 $signingEnabled = $dstMetadata->getBoolean('sign.authnrequest', null);
@@ -146,9 +162,9 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
      * Check the signature on a SAML2 message or assertion.
      *
      * @param SimpleSAML_Configuration $srcMetadata The metadata of the sender.
-     * @param SAML2_SignedElement      $element     Either a SAML2_Response or a SAML2_Assertion.
+     * @param SignedElement      $element     Either a Response or a Assertion.
      */
-    public static function checkSign(SimpleSAML_Configuration $srcMetadata, SAML2_SignedElement $element)
+    public static function checkSign(SimpleSAML_Configuration $srcMetadata, SignedElement $element)
     {
 
         /* Find the public key that should verify signatures by this entity. */
@@ -235,20 +251,20 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
      *
      * @param SimpleSAML_Configuration $srcMetadata The metadata of the sender.
      * @param SimpleSAML_Configuration $dstMetadata The metadata of the recipient.
-     * @param SAML2_Message            $message     The message we should check the signature on.
+     * @param Message            $message     The message we should check the signature on.
      */
     public static function validateMessage(
         SimpleSAML_Configuration $srcMetadata,
         SimpleSAML_Configuration $dstMetadata,
-        SAML2_Message $message
+        Message $message
     ) {
         $enabled = null;
-        if ($message instanceof SAML2_LogoutRequest || $message instanceof SAML2_LogoutResponse) {
+        if ($message instanceof LogoutRequest || $message instanceof LogoutResponse) {
             $enabled = $srcMetadata->getBoolean('validate.logout', null);
             if ($enabled === null) {
                 $enabled = $dstMetadata->getBoolean('validate.logout', null);
             }
-        } elseif ($message instanceof SAML2_AuthnRequest) {
+        } elseif ($message instanceof AuthnRequest) {
             $enabled = $srcMetadata->getBoolean('validate.authnrequest', null);
             if ($enabled === null) {
                 $enabled = $dstMetadata->getBoolean('validate.authnrequest', null);
@@ -296,7 +312,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         $keys = array();
 
         /* Load the new private key if it exists. */
-        $keyArray = \SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, false, 'new_');
+        $keyArray = Crypto::loadPrivateKey($dstMetadata, false, 'new_');
         if ($keyArray !== null) {
             assert('isset($keyArray["PEM"])');
 
@@ -309,7 +325,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         }
 
         /* Find the existing private key. */
-        $keyArray = \SimpleSAML\Utils\Crypto::loadPrivateKey($dstMetadata, true);
+        $keyArray = Crypto::loadPrivateKey($dstMetadata, true);
         assert('isset($keyArray["PEM"])');
 
         $key = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, array('type' => 'private'));
@@ -347,23 +363,23 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
     /**
      * Decrypt an assertion.
      *
-     * This function takes in a SAML2_Assertion and decrypts it if it is encrypted.
+     * This function takes in a Assertion and decrypts it if it is encrypted.
      * If it is unencrypted, and encryption is enabled in the metadata, an exception
      * will be throws.
      *
      * @param SimpleSAML_Configuration                 $srcMetadata The metadata of the sender (IdP).
      * @param SimpleSAML_Configuration                 $dstMetadata The metadata of the recipient (SP).
-     * @param SAML2_Assertion|SAML2_EncryptedAssertion $assertion   The assertion we are decrypting.
-     * @return SAML2_Assertion  The assertion.
+     * @param Assertion|EncryptedAssertion $assertion   The assertion we are decrypting.
+     * @return Assertion  The assertion.
      */
     private static function decryptAssertion(
         SimpleSAML_Configuration $srcMetadata,
         SimpleSAML_Configuration $dstMetadata,
         $assertion
     ) {
-        assert('$assertion instanceof SAML2_Assertion || $assertion instanceof SAML2_EncryptedAssertion');
+        assert('$assertion instanceof \SAML2\Assertion || $assertion instanceof \SAML2\EncryptedAssertion');
 
-        if ($assertion instanceof SAML2_Assertion) {
+        if ($assertion instanceof Assertion) {
             $encryptAssertion = $srcMetadata->getBoolean('assertion.encryption', null);
             if ($encryptAssertion === null) {
                 $encryptAssertion = $dstMetadata->getBoolean('assertion.encryption', false);
@@ -402,10 +418,10 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
     /**
      * Retrieve the status code of a response as a sspmod_saml_Error.
      *
-     * @param SAML2_StatusResponse $response The response.
+     * @param StatusResponse $response The response.
      * @return sspmod_saml_Error  The error.
      */
-    public static function getResponseError(SAML2_StatusResponse $response)
+    public static function getResponseError(StatusResponse $response)
     {
 
         $status = $response->getStatus();
@@ -424,12 +440,12 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         SimpleSAML_Configuration $idpMetadata
     ) {
 
-        $ar = new SAML2_AuthnRequest();
+        $ar = new AuthnRequest();
 
         if ($spMetadata->hasValue('NameIDPolicy')) {
             $nameIdPolicy = $spMetadata->getString('NameIDPolicy', null);
         } else {
-            $nameIdPolicy = $spMetadata->getString('NameIDFormat', SAML2_Const::NAMEID_TRANSIENT);
+            $nameIdPolicy = $spMetadata->getString('NameIDFormat', Constants::NAMEID_TRANSIENT);
         }
 
         if ($nameIdPolicy !== null) {
@@ -447,12 +463,12 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         $protbind = $spMetadata->getValueValidate(
             'ProtocolBinding',
             array(
-                SAML2_Const::BINDING_HTTP_POST,
-                SAML2_Const::BINDING_HOK_SSO,
-                SAML2_Const::BINDING_HTTP_ARTIFACT,
-                SAML2_Const::BINDING_HTTP_REDIRECT,
+                Constants::BINDING_HTTP_POST,
+                Constants::BINDING_HOK_SSO,
+                Constants::BINDING_HTTP_ARTIFACT,
+                Constants::BINDING_HTTP_REDIRECT,
             ),
-            SAML2_Const::BINDING_HTTP_POST
+            Constants::BINDING_HTTP_POST
         );
 
         /* Shoaib - setting the appropriate binding based on parameter in sp-metadata defaults to HTTP_POST */
@@ -484,7 +500,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         SimpleSAML_Configuration $dstMetadata
     ) {
 
-        $lr = new SAML2_LogoutRequest();
+        $lr = new LogoutRequest();
         $lr->setIssuer($srcMetadata->getString('entityid'));
 
         self::addRedirectSign($srcMetadata, $dstMetadata, $lr);
@@ -503,7 +519,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         SimpleSAML_Configuration $dstMetadata
     ) {
 
-        $lr = new SAML2_LogoutResponse();
+        $lr = new LogoutResponse();
         $lr->setIssuer($srcMetadata->getString('entityid'));
 
         self::addRedirectSign($srcMetadata, $dstMetadata, $lr);
@@ -519,13 +535,13 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
      *
      * @param SimpleSAML_Configuration $spMetadata  The metadata of the service provider.
      * @param SimpleSAML_Configuration $idpMetadata The metadata of the identity provider.
-     * @param SAML2_Response           $response    The response.
-     * @return array  Array with SAML2_Assertion objects, containing valid assertions from the response.
+     * @param Response           $response    The response.
+     * @return array  Array with Assertion objects, containing valid assertions from the response.
      */
     public static function processResponse(
         SimpleSAML_Configuration $spMetadata,
         SimpleSAML_Configuration $idpMetadata,
-        SAML2_Response $response
+        Response $response
     ) {
 
         if (!$response->isSuccess()) {
@@ -571,19 +587,19 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
      *
      * @param SimpleSAML_Configuration                 $spMetadata     The metadata of the service provider.
      * @param SimpleSAML_Configuration                 $idpMetadata    The metadata of the identity provider.
-     * @param SAML2_Response                           $response       The response containing the assertion.
-     * @param SAML2_Assertion|SAML2_EncryptedAssertion $assertion      The assertion.
+     * @param Response                           $response       The response containing the assertion.
+     * @param Assertion|EncryptedAssertion $assertion      The assertion.
      * @param bool                                     $responseSigned Whether the response is signed.
-     * @return SAML2_Assertion  The assertion, if it is valid.
+     * @return Assertion  The assertion, if it is valid.
      */
     private static function processAssertion(
         SimpleSAML_Configuration $spMetadata,
         SimpleSAML_Configuration $idpMetadata,
-        SAML2_Response $response,
+        Response $response,
         $assertion,
         $responseSigned
     ) {
-        assert('$assertion instanceof SAML2_Assertion || $assertion instanceof SAML2_EncryptedAssertion');
+        assert('$assertion instanceof \SAML2\Assertion || $assertion instanceof \SAML2\EncryptedAssertion');
         assert('is_bool($responseSigned)');
 
         $assertion = self::decryptAssertion($idpMetadata, $spMetadata, $assertion);
@@ -634,7 +650,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
         $found     = false;
         $lastError = 'No SubjectConfirmation element in Subject.';
         foreach ($assertion->getSubjectConfirmation() as $sc) {
-            if ($sc->Method !== SAML2_Const::CM_BEARER && $sc->Method !== SAML2_Const::CM_HOK) {
+            if ($sc->Method !== Constants::CM_BEARER && $sc->Method !== Constants::CM_HOK) {
                 $lastError = 'Invalid Method on SubjectConfirmation: ' . var_export($sc->Method, true);
                 continue;
             }
@@ -644,19 +660,19 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
             if ($hok === null) {
                 $hok = $spMetadata->getBoolean('saml20.hok.assertion', false);
             }
-            if ($sc->Method === SAML2_Const::CM_BEARER && $hok) {
+            if ($sc->Method === Constants::CM_BEARER && $hok) {
                 $lastError = 'Bearer SubjectConfirmation received, but Holder-of-Key SubjectConfirmation needed';
                 continue;
             }
-            if ($sc->Method === SAML2_Const::CM_HOK && !$hok) {
+            if ($sc->Method === Constants::CM_HOK && !$hok) {
                 $lastError = 'Holder-of-Key SubjectConfirmation received, but the Holder-of-Key profile is not enabled.';
                 continue;
             }
 
             $scd = $sc->SubjectConfirmationData;
-            if ($sc->Method === SAML2_Const::CM_HOK) {
+            if ($sc->Method === Constants::CM_HOK) {
                 /* Check HoK Assertion */
-                if (\SimpleSAML\Utils\HTTP::isHTTPS() === false) {
+                if (HTTP::isHTTPS() === false) {
                     $lastError = 'No HTTPS connection, but required for Holder-of-Key SSO';
                     continue;
                 }
@@ -677,7 +693,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
 
                 $keyInfo = array();
                 foreach ($scd->info as $thing) {
-                    if ($thing instanceof SAML2_XML_ds_KeyInfo) {
+                    if ($thing instanceof KeyInfo) {
                         $keyInfo[] = $thing;
                     }
                 }
@@ -688,7 +704,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
 
                 $x509data = array();
                 foreach ($keyInfo[0]->info as $thing) {
-                    if ($thing instanceof SAML2_XML_ds_X509Data) {
+                    if ($thing instanceof X509Data) {
                         $x509data[] = $thing;
                     }
                 }
@@ -700,7 +716,7 @@ class EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage extends sspmod_saml_M
 
                 $x509cert = array();
                 foreach ($x509data[0]->data as $thing) {
-                    if ($thing instanceof SAML2_XML_ds_X509Certificate) {
+                    if ($thing instanceof X509Certificate) {
                         $x509cert[] = $thing;
                     }
                 }

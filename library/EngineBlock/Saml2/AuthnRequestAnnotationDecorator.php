@@ -1,5 +1,7 @@
 <?php
 
+use SAML2\AuthnRequest;
+
 /**
  * @method getProxyCount()
  * @method getIsPassive()
@@ -9,7 +11,7 @@
 class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator
 {
     /**
-     * @var SAML2_AuthnRequest
+     * @var AuthnRequest
      */
     protected $sspMessage;
 
@@ -39,9 +41,9 @@ class EngineBlock_Saml2_AuthnRequestAnnotationDecorator extends EngineBlock_Saml
     protected $transparent = false;
 
     /**
-     * @param SAML2_AuthnRequest $request
+     * @param AuthnRequest $request
      */
-    public function __construct(SAML2_AuthnRequest $request)
+    public function __construct(AuthnRequest $request)
     {
         $this->sspMessage = $request;
     }

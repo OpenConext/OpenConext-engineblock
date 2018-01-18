@@ -7,6 +7,8 @@
  * $Id$
  */
 
+use SimpleSAML\Logger;
+
 require_once __DIR__. '/../../../../library/EngineBlock/ApplicationSingleton.php';
 $application = EngineBlock_ApplicationSingleton::getInstance();
 $appConfig = $application->getConfiguration();
@@ -110,7 +112,7 @@ $config = array (
 	 * Options: [syslog,file,errorlog]
 	 *
 	 */
-	'logging.level'		 => SimpleSAML_Logger::NOTICE,
+	'logging.level'		 => Logger::NOTICE,
 	'logging.handler'	 => 'syslog',
 
 	/*

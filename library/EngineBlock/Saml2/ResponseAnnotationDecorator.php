@@ -1,5 +1,9 @@
 <?php
 
+use SAML2\Assertion;
+use SAML2\EncryptedAssertion;
+use SAML2\Response;
+
 /**
  * Annotate the response with our own metadata
  *
@@ -10,7 +14,7 @@
 class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_MessageAnnotationDecorator
 {
     /**
-     * @var SAML2_Response
+     * @var Response
      */
     protected $sspMessage;
 
@@ -25,7 +29,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $originalIssuer;
 
     /**
-     * @var string
+     * @var null|\SAML2\XML\saml\NameID
      */
     protected $originalNameId;
 
@@ -45,7 +49,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $collabPersonId;
 
     /**
-     * @var string
+     * @var array
      */
     protected $customNameId;
 
@@ -55,15 +59,15 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $intendedNameId;
 
     /**
-     * @param SAML2_Response $response
+     * @param Response $response
      */
-    function __construct(SAML2_Response $response)
+    function __construct(Response $response)
     {
         $this->sspMessage = $response;
     }
 
     /**
-     * @return SAML2_Assertion
+     * @return Assertion
      * @throws RuntimeException
      */
     public function getAssertion()
@@ -75,6 +79,9 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
         return $assertions[0];
     }
 
+    /**
+     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     */
     public function getNameId()
     {
         $assertion = $this->getAssertion();
@@ -84,19 +91,19 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     public function getNameIdValue()
     {
         $nameId = $this->getNameId();
-        if (empty($nameId['Value'])) {
+        if (!$nameId) {
             throw new \RuntimeException('No NameID in Assertion?');
         }
-        return $nameId['Value'];
+        return $nameId->value;
     }
 
     public function getNameIdFormat()
     {
         $nameId = $this->getNameId();
-        if (empty($nameId['Format'])) {
+        if (!$nameId->Format) {
             throw new \RuntimeException('No NameID in Assertion?');
         }
-        return $nameId['Format'];
+        return $nameId->Format;
     }
 
     /**
@@ -108,7 +115,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @return SAML2_Assertion[]|SAML2_EncryptedAssertion[]
+     * @return Assertion[]|EncryptedAssertion[]
      */
     public function getAssertions()
     {
@@ -152,7 +159,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @param string $originalNameId
+     * @param null|\SAML2\XML\saml\NameID $originalNameId
      * @return $this
      */
     public function setOriginalNameId($originalNameId)
@@ -162,7 +169,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @return string
+     * @return null|\SAML2\XML\saml\NameID
      */
     public function getOriginalNameId()
     {

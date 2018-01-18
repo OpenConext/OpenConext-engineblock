@@ -1,5 +1,7 @@
 <?php
 
+use SAML2\Constants;
+
 class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_Filter_Command_Abstract
     implements EngineBlock_Corto_Filter_Command_ResponseModificationInterface,
     EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface
@@ -29,12 +31,12 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
         $this->setCollabPersonId($collabPersonIdValue);
 
         $this->_response->setCollabPersonId($collabPersonIdValue);
-        $this->_response->setOriginalNameId($this->_response->getAssertion()->getNameId());
+        $this->_response->setOriginalNameId($this->_response->getNameId());
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
         $this->_response->getAssertion()->setNameId(array(
             'Value' => $collabPersonIdValue,
-            'Format' => SAML2_Const::NAMEID_PERSISTENT,
+            'Format' => Constants::NAMEID_PERSISTENT,
         ));
     }
 }

@@ -1,4 +1,10 @@
 <?php
+
+use SAML2\AuthnRequest;
+use SAML2\DOMDocumentFactory;
+use SAML2\Message;
+use SAML2\Response;
+
 /**
  * NOTE: use for testing only!
  *
@@ -7,10 +13,10 @@
 class EngineBlock_Saml2_MessageSerializer
 {
     /**
-     * @param SAML2_Message $samlMessage
+     * @param Message $samlMessage
      * @return mixed
      */
-    public function serialize(SAML2_Message $samlMessage)
+    public function serialize(Message $samlMessage)
     {
         if ($samlMessage->getSignatureKey()) {
             $samlMessageDomElement = $samlMessage->toSignedXML();
@@ -23,18 +29,19 @@ class EngineBlock_Saml2_MessageSerializer
     /**
      * @param string $samlMessageXml
      * @param string $class
-     * @return SAML_Message
+     * @return Message
+     * @throws EngineBlock_Exception
      */
     public function deserialize($samlMessageXml, $class)
     {
         $elementName = $this->getElementForClass($class);
-        $document = SAML2_DOMDocumentFactory::fromString($samlMessageXml);
+        $document = DOMDocumentFactory::fromString($samlMessageXml);
         $messageDomElement = $document->getElementsByTagNameNs('urn:oasis:names:tc:SAML:2.0:protocol', $elementName)->item(0);
-        if ($class === 'SAML2_AuthnRequest') {
-            return SAML2_AuthnRequest::fromXML($messageDomElement);
+        if ($class === AuthnRequest::class) {
+            return AuthnRequest::fromXML($messageDomElement);
         }
-        else if ($class === 'SAML2_Response') {
-            return SAML2_Response::fromXML($messageDomElement);
+        else if ($class === Response::class) {
+            return Response::fromXML($messageDomElement);
         }
 
         throw new EngineBlock_Exception('Unknown message type for deserialization?');
@@ -48,8 +55,8 @@ class EngineBlock_Saml2_MessageSerializer
     private function getElementForClass($class)
     {
         $mapping = array(
-            'SAML2_AuthnRequest' => 'AuthnRequest',
-            'SAML2_Response' => 'Response'
+            AuthnRequest::class => 'AuthnRequest',
+            Response::class => 'Response'
         );
 
         if (!isset($mapping[$class])) {

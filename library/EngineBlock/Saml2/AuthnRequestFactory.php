@@ -1,6 +1,8 @@
 <?php
 
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
 
 class EngineBlock_Saml2_AuthnRequestFactory
 {
@@ -23,16 +25,16 @@ class EngineBlock_Saml2_AuthnRequestFactory
             $nameIdPolicy['Format'] = $idpMetadata->nameIdFormat;
         }
 
-        /** @var SAML2_AuthnRequest $originalRequest */
+        /** @var AuthnRequest $originalRequest */
 
-        $sspRequest = new SAML2_AuthnRequest();
+        $sspRequest = new AuthnRequest();
         $sspRequest->setId($server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssueInstant(time());
         $sspRequest->setDestination($idpMetadata->singleSignOnServices[0]->location);
         $sspRequest->setForceAuthn($originalRequest->getForceAuthn());
         $sspRequest->setIsPassive($originalRequest->getIsPassive());
         $sspRequest->setAssertionConsumerServiceURL($server->getUrl('assertionConsumerService'));
-        $sspRequest->setProtocolBinding(SAML2_Const::BINDING_HTTP_POST);
+        $sspRequest->setProtocolBinding(Constants::BINDING_HTTP_POST);
         $sspRequest->setIssuer($server->getUrl('spMetadataService'));
         $sspRequest->setNameIdPolicy($nameIdPolicy);
 
@@ -66,7 +68,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
      * @param string $destinationUrl
      * @param string $assertionConsumerServiceURL
      * @param string $issuerUrl
-     * @return SAML2_AuthnRequest
+     * @return AuthnRequest
      */
     public function create(
         $destinationUrl,
@@ -74,13 +76,13 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $issuerUrl
     )
     {
-        $request = new SAML2_AuthnRequest();
+        $request = new AuthnRequest();
         $request->setDestination($destinationUrl);
         $request->setAssertionConsumerServiceURL($assertionConsumerServiceURL);
         $request->setIssuer($issuerUrl);
-        $request->setProtocolBinding(SAML2_Const::BINDING_HTTP_POST);
+        $request->setProtocolBinding(Constants::BINDING_HTTP_POST);
         $request->setNameIdPolicy(array(
-            'Format' => SAML2_Const::NAMEID_TRANSIENT,
+            'Format' => Constants::NAMEID_TRANSIENT,
             'AllowCreate' => true
         ));
 
@@ -89,7 +91,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
 
     /**
      * @param EngineBlock_Http_Request $httpRequest
-     * @return SAML2_AuthnRequest
+     * @return AuthnRequest
      */
     public function createFromHttpRequest(EngineBlock_Http_Request $httpRequest)
     {
@@ -97,7 +99,7 @@ class EngineBlock_Saml2_AuthnRequestFactory
         $requestXml = $this->decodeParameter($parameter);
 
         $serializer = new EngineBlock_Saml2_MessageSerializer();
-        return $serializer->deserialize($requestXml, 'SAML2_AuthnRequest');
+        return $serializer->deserialize($requestXml, AuthnRequest::class);
     }
 
     /**

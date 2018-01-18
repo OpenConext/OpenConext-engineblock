@@ -6,6 +6,7 @@ use EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface as 
 use EngineBlock_Corto_Filter_Command_ResponseModificationInterface as ResponseModificationInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use SAML2\AuthnRequest;
 
 abstract class EngineBlock_Corto_Filter_Abstract
 {
@@ -41,7 +42,7 @@ abstract class EngineBlock_Corto_Filter_Abstract
         IdentityProvider $identityProvider
     )
     {
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         // Note that IDs are only unique per SP... we hope...
         $responseNameId = $response->getAssertion()->getNameId();
 
@@ -55,8 +56,8 @@ abstract class EngineBlock_Corto_Filter_Abstract
         else if (isset($responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0])) {
             $collabPersonId = $responseAttributes['urn:oid:1.3.6.1.4.1.1076.20.40.40.1'][0];
         }
-        else if (!empty($responseNameId['Value'])) {
-            $collabPersonId = $responseNameId['Value'];
+        else if ($responseNameId->value) {
+            $collabPersonId = $responseNameId->value;
         }
         else {
             $collabPersonId = null;

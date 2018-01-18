@@ -2,6 +2,11 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
+use SAML2\AuthnRequest;
+use SAML2\Constants;
+use SAML2\XML\md\EntityDescriptor;
+use SAML2\XML\md\IndexedEndpointType;
+use SAML2\XML\md\SPSSODescriptor;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -33,24 +38,24 @@ class MockServiceProviderFactory extends AbstractMockEntityFactory
 
     protected function generateDefaultEntityMetadata($spName)
     {
-        $descriptor = new \SAML2_XML_md_EntityDescriptor();
+        $descriptor = new EntityDescriptor();
         $descriptor->entityID = $this->router->generate(
             'functional_testing_sp_metadata',
             ['spName' => $spName],
             RouterInterface::ABSOLUTE_URL
         );
 
-        $acsService = new \SAML2_XML_md_IndexedEndpointType();
+        $acsService = new IndexedEndpointType();
         $acsService->index = 0;
-        $acsService->Binding  = \SAML2_Const::BINDING_HTTP_POST;
+        $acsService->Binding  = Constants::BINDING_HTTP_POST;
         $acsService->Location = $this->router->generate(
             'functional_testing_sp_acs',
             ['spName' => $spName],
             RouterInterface::ABSOLUTE_URL
         );
 
-        $spSsoDescriptor = new \SAML2_XML_md_SPSSODescriptor();
-        $spSsoDescriptor->protocolSupportEnumeration = [\SAML2_Const::NS_SAMLP];
+        $spSsoDescriptor = new SPSSODescriptor();
+        $spSsoDescriptor->protocolSupportEnumeration = [Constants::NS_SAMLP];
         $spSsoDescriptor->AssertionConsumerService[] = $acsService;
 
         $spSsoDescriptor->KeyDescriptor[] = $this->generateDefaultSigningKeyPair();
@@ -72,7 +77,7 @@ class MockServiceProviderFactory extends AbstractMockEntityFactory
 
     private function generateDefaultAuthnRequest(MockServiceProvider $mockSp)
     {
-        $request = new \SAML2_AuthnRequest();
+        $request = new AuthnRequest();
         $request->setIssuer($mockSp->entityId());
         return $request;
     }

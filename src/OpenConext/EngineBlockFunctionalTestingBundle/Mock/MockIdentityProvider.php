@@ -2,9 +2,10 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
-use DOMElement;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Response;
-use XMLSecurityKey;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Constants;
+use SAML2\XML\md\IDPSSODescriptor;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Allows for better control
@@ -22,7 +23,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     public function setResponse(Response $response)
     {
-        /** @var \SAML2_XML_md_IDPSSODescriptor $role */
+        /** @var IDPSSODescriptor $role */
         $role = $this->getSsoRole();
         $role->Extensions['SAMLResponse'] = $response;
 
@@ -64,7 +65,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     private function getFullyQualifiedStatusCode($shortStatusCode)
     {
-        $class = new \ReflectionClass('\\SAML2_Const');
+        $class = new \ReflectionClass(Constants::class);
         $constants = $class->getConstants();
         foreach ($constants as $constName => $constValue) {
             if (strpos($constName, 'STATUS_') !== 0) {
@@ -86,7 +87,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
      */
     public function getResponse()
     {
-        /** @var \SAML2_XML_md_IDPSSODescriptor $role */
+        /** @var IDPSSODescriptor $role */
         $role = $this->getSsoRole();
         return $role->Extensions['SAMLResponse'];
     }
@@ -96,7 +97,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $role = $this->getSsoRole();
 
         if (!isset($role->Extensions['StatusCodeTop'])) {
-            return \SAML2_Const::STATUS_SUCCESS;
+            return Constants::STATUS_SUCCESS;
         }
 
         return $role->Extensions['StatusCodeTop'];
@@ -282,6 +283,6 @@ class MockIdentityProvider extends AbstractMockEntityRole
 
     protected function getRoleClass()
     {
-        return '\SAML2_XML_md_IDPSSODescriptor';
+        return IDPSSODescriptor::class;
     }
 }

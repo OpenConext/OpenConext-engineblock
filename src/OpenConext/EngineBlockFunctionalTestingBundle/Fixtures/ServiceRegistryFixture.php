@@ -2,10 +2,9 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
-use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\FileFlags;
-use SAML2_Const;
+use SAML2\Constants;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
@@ -48,7 +47,7 @@ class ServiceRegistryFixture
             'name:nl' => $name,
             'displayName:en' => $name,
             'displayName:nl' => $name,
-            'AssertionConsumerService:0:Binding'  => SAML2_Const::BINDING_HTTP_POST,
+            'AssertionConsumerService:0:Binding'  => Constants::BINDING_HTTP_POST,
             'AssertionConsumerService:0:Location' => $acsLocation,
             'coin:eula' => 'http://welcome.vm.openconext.org',
             'logo:0:url' => '/images/placeholder.png',
@@ -89,9 +88,9 @@ class ServiceRegistryFixture
             'name:nl' => $name,
             'displayName:en' => $name,
             'displayName:nl' => $name,
-            'SingleSignOnService:0:Binding'  => SAML2_Const::BINDING_HTTP_POST,
+            'SingleSignOnService:0:Binding'  => Constants::BINDING_HTTP_POST,
             'SingleSignOnService:0:Location' => $ssoLocation,
-            'SingleSignOnService:1:Binding'  => SAML2_Const::BINDING_HTTP_REDIRECT,
+            'SingleSignOnService:1:Binding'  => Constants::BINDING_HTTP_REDIRECT,
             'SingleSignOnService:1:Location' => $ssoLocation,
             'contacts:0:contactType' => 'support',
             'contacts:0:emailAddress' => 'support@openconext.org',
@@ -157,19 +156,19 @@ class ServiceRegistryFixture
 
     public function setEntityNameIdFormatUnspecified($entityId)
     {
-        $this->data[$entityId]['NameIDFormat'] = SAML2_Const::NAMEID_UNSPECIFIED;
+        $this->data[$entityId]['NameIDFormat'] = Constants::NAMEID_UNSPECIFIED;
         return $this;
     }
 
     public function setEntityNameIdFormatPersistent($entityId)
     {
-        $this->data[$entityId]['NameIDFormat'] = SAML2_Const::NAMEID_PERSISTENT;
+        $this->data[$entityId]['NameIDFormat'] = Constants::NAMEID_PERSISTENT;
         return $this;
     }
 
     public function setEntityNameIdFormatTransient($entityId)
     {
-        $this->data[$entityId]['NameIDFormat'] = SAML2_Const::NAMEID_TRANSIENT;
+        $this->data[$entityId]['NameIDFormat'] = Constants::NAMEID_TRANSIENT;
         return $this;
     }
 

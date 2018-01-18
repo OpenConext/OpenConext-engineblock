@@ -1,8 +1,9 @@
 <?php
 
 use Psr\Log\LoggerInterface;
+use SAML2\Compat\AbstractContainer;
 
-final class EngineBlock_Saml2_Container extends SAML2_Compat_AbstractContainer
+final class EngineBlock_Saml2_Container extends AbstractContainer
 {
     /**
      * @var LoggerInterface

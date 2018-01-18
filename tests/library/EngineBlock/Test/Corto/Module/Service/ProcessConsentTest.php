@@ -2,6 +2,9 @@
 
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use SAML2\Assertion;
+use SAML2\AuthnRequest;
+use SAML2\Response;
 
 class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_Framework_TestCase
 {
@@ -148,17 +151,17 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $_POST['ID'] = 'test';
         $_POST['consent'] = 'yes';
 
-        $assertion = new SAML2_Assertion();
+        $assertion = new Assertion();
         $assertion->setAttributes(array(
             'urn:mace:dir:attribute-def:mail' => 'test@test.test'
         ));
 
-        $spRequest = new SAML2_AuthnRequest();
+        $spRequest = new AuthnRequest();
         $spRequest->setId('SPREQUEST');
         $spRequest->setIssuer('https://sp.example.edu');
         $spRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($spRequest);
 
-        $ebRequest = new SAML2_AuthnRequest();
+        $ebRequest = new AuthnRequest();
         $ebRequest->setId('EBREQUEST');
         $ebRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($ebRequest);
 
@@ -168,7 +171,7 @@ class EngineBlock_Test_Corto_Module_Service_ProcessConsentTest extends PHPUnit_F
         $authnRequestRepository->store($ebRequest);
         $authnRequestRepository->link($ebRequest, $spRequest);
 
-        $sspResponse = new SAML2_Response();
+        $sspResponse = new Response();
         $sspResponse->setInResponseTo('EBREQUEST');
         $sspResponse->setAssertions(array($assertion));
         $_SESSION['consent']['test']['response'] = new EngineBlock_Saml2_ResponseAnnotationDecorator($sspResponse);

@@ -1,6 +1,7 @@
 <?php
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use SAML2\AuthnRequest;
 
 /**
  * Note: this Test only tests setting of NameIDFormat, add other tests if required
@@ -13,7 +14,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
         $originalRequest = $this->factoryOriginalRequest();
         $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
-        /** @var SAML2_AuthnRequest $enhancedRequest */
+        /** @var AuthnRequest $enhancedRequest */
         $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $originalRequest,
             $identityProvider,
@@ -38,7 +39,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
         $originalRequest = $this->factoryOriginalRequest();
         $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
-        /** @var SAML2_AuthnRequest $enhancedRequest */
+        /** @var AuthnRequest $enhancedRequest */
         $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $originalRequest,
             $identityProvider,
@@ -65,7 +66,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
         $identityProvider = $proxyServer->getRepository()->fetchIdentityProviderByEntityId('testIdp');
         $identityProvider->nameIdFormat = 'fooFormat';
 
-        /** @var SAML2_AuthnRequest $enhancedRequest */
+        /** @var AuthnRequest $enhancedRequest */
         $enhancedRequest = EngineBlock_Saml2_AuthnRequestFactory::createFromRequest(
             $originalRequest,
             $identityProvider,
@@ -81,7 +82,7 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
      */
     private function factoryOriginalRequest()
     {
-        $originalRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new SAML2_AuthnRequest());
+        $originalRequest = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new AuthnRequest());
 
         return $originalRequest;
     }

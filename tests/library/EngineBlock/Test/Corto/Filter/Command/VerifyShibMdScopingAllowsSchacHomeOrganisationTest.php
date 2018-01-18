@@ -5,6 +5,8 @@ use Monolog\Logger;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\ShibMdScope;
 use PHPUnit_Framework_TestCase as UnitTest;
+use SAML2\Assertion;
+use SAML2\Response;
 
 class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisationTest extends UnitTest
 {
@@ -32,10 +34,10 @@ class EngineBlock_Test_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOr
         $this->handler = new TestHandler();
         $this->logger  = new Logger('Test', array($this->handler));
 
-        $assertion = new SAML2_Assertion();
+        $assertion = new Assertion();
         $assertion->setAttributes(array(self::URN_OID => array(self::SHO_VALUE)));
 
-        $response = new SAML2_Response();
+        $response = new Response();
         $response->setAssertions(array($assertion));
 
         $this->response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);

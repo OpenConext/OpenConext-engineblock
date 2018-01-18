@@ -2,6 +2,8 @@
 
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use Ramsey\Uuid\Uuid;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
 
 class EngineBlock_Saml2_NameIdResolver
 {
@@ -15,9 +17,9 @@ class EngineBlock_Saml2_NameIdResolver
      * @var array
      */
     private $SUPPORTED_NAMEID_FORMATS = array(
-        SAML2_Const::NAMEID_PERSISTENT,
-        SAML2_Const::NAMEID_TRANSIENT,
-        SAML2_Const::NAMEID_UNSPECIFIED,
+        Constants::NAMEID_PERSISTENT,
+        Constants::NAMEID_TRANSIENT,
+        Constants::NAMEID_UNSPECIFIED,
     );
 
     /**
@@ -40,7 +42,7 @@ class EngineBlock_Saml2_NameIdResolver
 
         $nameIdFormat = $this->_getNameIdFormat($request, $destinationMetadata);
 
-        $requireUnspecified = ($nameIdFormat === SAML2_Const::NAMEID_UNSPECIFIED);
+        $requireUnspecified = ($nameIdFormat === Constants::NAMEID_UNSPECIFIED);
         if ($requireUnspecified) {
             return array(
                 'Format' => $nameIdFormat,
@@ -48,7 +50,7 @@ class EngineBlock_Saml2_NameIdResolver
             );
         }
 
-        $requireTransient = ($nameIdFormat === SAML2_Const::NAMEID_TRANSIENT);
+        $requireTransient = ($nameIdFormat === Constants::NAMEID_TRANSIENT);
         if ($requireTransient) {
             return array(
                 'Format' => $nameIdFormat,
@@ -108,7 +110,7 @@ class EngineBlock_Saml2_NameIdResolver
         }
 
         // If the SP requests a specific NameIDFormat in their AuthnRequest
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         $nameIdPolicy = $request->getNameIdPolicy();
         if (!empty($nameIdPolicy['Format'])) {
             $mayUseRequestedNameIdFormat = true;

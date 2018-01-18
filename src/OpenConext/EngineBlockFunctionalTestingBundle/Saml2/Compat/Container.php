@@ -3,10 +3,11 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat;
 
 use Psr;
+use SAML2\Compat\AbstractContainer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Intl\Exception\NotImplementedException;
 
-class Container extends \SAML2_Compat_AbstractContainer
+class Container extends AbstractContainer
 {
     const ID_PREFIX = 'OPENCONEXT_ETS_';
 

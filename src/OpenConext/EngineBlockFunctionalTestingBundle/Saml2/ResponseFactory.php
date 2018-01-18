@@ -2,17 +2,17 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2;
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
-use XMLSecurityKey;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\AuthnRequest as SAMLAuthnRequest;
+use SAML2\EncryptedAssertion;
+use SAML2\XML\saml\SubjectConfirmation;
 
 class ResponseFactory
 {
     public function createForEntityWithRequest(
         MockIdentityProvider $mockIdp,
-        \SAML2_AuthnRequest $request
+        SAMLAuthnRequest $request
     ) {
         // Note that we expect the Mock IdP to always have a 'template' Response.
         $response = $mockIdp->getResponse();
@@ -35,14 +35,14 @@ class ResponseFactory
     }
 
     /**
-     * @param \SAML2_AuthnRequest $request
+     * @param SAMLAuthnRequest $request
      * @param $response
      */
-    private function setResponseReferencesToRequest(\SAML2_AuthnRequest $request, Response $response)
+    private function setResponseReferencesToRequest(SAMLAuthnRequest $request, Response $response)
     {
         $response->setInResponseTo($request->getId());
         $assertions = $response->getAssertions();
-        /** @var \SAML2_XML_saml_SubjectConfirmation[] $subjectConfirmations */
+        /** @var SubjectConfirmation[] $subjectConfirmations */
         $subjectConfirmations = $assertions[0]->getSubjectConfirmation();
 
         foreach ($subjectConfirmations as $subjectConfirmation) {
@@ -118,7 +118,7 @@ class ResponseFactory
         $encryptedAssertions = [];
         $assertions = $response->getAssertions();
         foreach ($assertions as $assertion) {
-            $encryptedAssertion = new \SAML2_EncryptedAssertion();
+            $encryptedAssertion = new EncryptedAssertion();
             $encryptedAssertion->setAssertion($assertion, $encryptionKey);
             $encryptedAssertions[] = $encryptedAssertion;
         }

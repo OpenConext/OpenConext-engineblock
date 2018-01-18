@@ -1,5 +1,9 @@
 <?php
 
+use SAML2\Message;
+use SAML2\Request;
+use SAML2\Response;
+
 /**
  * @method getReturn()
  */
@@ -9,7 +13,7 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
     const MESSAGE_TYPE_RESPONSE = 'SAMLResponse';
 
     /**
-     * @var SAML2_Message
+     * @var Message
      */
     protected $sspMessage;
 
@@ -19,9 +23,9 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
     protected $deliverByBinding;
 
     /**
-     * @param SAML2_Message $message
+     * @param Message $message
      */
-    function __construct(SAML2_Message $message)
+    function __construct(Message $message)
     {
         $this->sspMessage;
     }
@@ -70,7 +74,7 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
     #endregion proxy methods
 
     /**
-     * @return \SAML2_Message
+     * @return Message
      */
     public function getSspMessage()
     {
@@ -99,10 +103,10 @@ class EngineBlock_Saml2_MessageAnnotationDecorator
      */
     public function getMessageType()
     {
-        if ($this->sspMessage instanceof SAML2_Request) {
+        if ($this->sspMessage instanceof Request) {
             return self::MESSAGE_TYPE_REQUEST;
         }
-        if ($this->sspMessage instanceof SAML2_Response) {
+        if ($this->sspMessage instanceof Response) {
             return self::MESSAGE_TYPE_RESPONSE;
         }
         throw new \RuntimeException('Unknown message type?!');

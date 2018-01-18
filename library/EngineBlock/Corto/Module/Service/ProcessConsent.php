@@ -1,5 +1,8 @@
 <?php
 
+use SAML2\Constants;
+use SAML2\Response;
+
 class EngineBlock_Corto_Module_Service_ProcessConsent
     implements EngineBlock_Corto_Module_Service_ServiceInterface
 {
@@ -43,7 +46,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
                 "Stored response for ResponseID '{$_POST['ID']}' not found"
             );
         }
-        /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
+        /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['consent'][$_POST['ID']]['response'];
 
         $request = $this->_server->getReceivedRequestFromResponse($response);
@@ -66,7 +69,7 @@ class EngineBlock_Corto_Module_Service_ProcessConsent
             $consentRepository->giveExplicitConsentFor($destinationMetadata);
         }
 
-        $response->setConsent(SAML2_Const::CONSENT_OBTAINED);
+        $response->setConsent(Constants::CONSENT_OBTAINED);
         $response->setDestination($response->getReturn());
         $response->setDeliverByBinding('INTERNAL');
 

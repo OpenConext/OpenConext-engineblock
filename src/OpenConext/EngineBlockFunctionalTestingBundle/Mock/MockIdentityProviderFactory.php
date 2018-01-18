@@ -3,6 +3,11 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Response;
+use SAML2\Compat\ContainerSingleton;
+use SAML2\Constants;
+use SAML2\XML\md\EntityDescriptor;
+use SAML2\XML\md\IDPSSODescriptor;
+use SAML2\XML\md\IndexedEndpointType;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -35,28 +40,28 @@ class MockIdentityProviderFactory extends AbstractMockEntityFactory
 
     /**
      * @param string $idpName
-     * @return \SAML2_XML_md_EntityDescriptor
+     * @return EntityDescriptor
      */
     protected function generateDefaultEntityMetadata($idpName)
     {
-        $entityMetadata = new \SAML2_XML_md_EntityDescriptor();
+        $entityMetadata = new EntityDescriptor();
         $entityMetadata->entityID = $this->router->generate(
             'functional_testing_idp_metadata',
             ['idpName' => $idpName],
             RouterInterface::ABSOLUTE_URL
         );
 
-        $acsService = new \SAML2_XML_md_IndexedEndpointType();
+        $acsService = new IndexedEndpointType();
         $acsService->index = 0;
-        $acsService->Binding  = \SAML2_Const::BINDING_HTTP_REDIRECT;
+        $acsService->Binding  = Constants::BINDING_HTTP_REDIRECT;
         $acsService->Location = $this->router->generate(
             'functional_testing_idp_sso',
             ['idpName' => $idpName],
             RouterInterface::ABSOLUTE_URL
         );
 
-        $idpSsoDescriptor = new \SAML2_XML_md_IDPSSODescriptor();
-        $idpSsoDescriptor->protocolSupportEnumeration = [\SAML2_Const::NS_SAMLP];
+        $idpSsoDescriptor = new IDPSSODescriptor();
+        $idpSsoDescriptor->protocolSupportEnumeration = [Constants::NS_SAMLP];
         $idpSsoDescriptor->SingleSignOnService[] = $acsService;
 
         $idpSsoDescriptor->KeyDescriptor[] = $this->generateDefaultSigningKeyPair();
@@ -70,8 +75,8 @@ class MockIdentityProviderFactory extends AbstractMockEntityFactory
     {
         $requestId = 'FIXME';
         $idpEntityId = $mockIdp->entityId();
-        $responseId  = \SAML2_Compat_ContainerSingleton::getInstance()->generateId();
-        $assertionId = \SAML2_Compat_ContainerSingleton::getInstance()->generateId();
+        $responseId  = ContainerSingleton::getInstance()->generateId();
+        $assertionId = ContainerSingleton::getInstance()->generateId();
 
         $now        = gmdate('Y-m-d\TH:i:s\Z');
         $tomorrow   = gmdate('Y-m-d\TH:i:s\Z', time() + (24 * 60 * 60));

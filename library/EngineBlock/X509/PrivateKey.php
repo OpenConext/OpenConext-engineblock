@@ -1,5 +1,7 @@
 <?php
 
+use RobRichards\XMLSecLibs\XMLSecurityKey;
+
 class EngineBlock_X509_PrivateKey
 {
     private $_filePath;

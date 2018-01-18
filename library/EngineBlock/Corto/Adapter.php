@@ -11,6 +11,8 @@ use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveEnt
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\Component\EngineBlockMetadata\Service;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
 
 class EngineBlock_Corto_Adapter
 {
@@ -538,9 +540,9 @@ class EngineBlock_Corto_Adapter
 
         $engineIdentityProvider->certificates = array($keyPair->getCertificate());
         $engineIdentityProvider->supportedNameIdFormats = array(
-            SAML2_Const::NAMEID_PERSISTENT,
-            SAML2_Const::NAMEID_TRANSIENT,
-            SAML2_Const::NAMEID_UNSPECIFIED,
+            Constants::NAMEID_PERSISTENT,
+            Constants::NAMEID_TRANSIENT,
+            Constants::NAMEID_UNSPECIFIED,
         );
         return $engineIdentityProvider;
     }
@@ -570,9 +572,9 @@ class EngineBlock_Corto_Adapter
         }
         $engineServiceProvider->certificates = array($keyPair->getCertificate());
         $engineServiceProvider->supportedNameIdFormats = array(
-            SAML2_Const::NAMEID_PERSISTENT,
-            SAML2_Const::NAMEID_TRANSIENT,
-            SAML2_Const::NAMEID_UNSPECIFIED,
+            Constants::NAMEID_PERSISTENT,
+            Constants::NAMEID_TRANSIENT,
+            Constants::NAMEID_UNSPECIFIED,
         );
 
         $metadata = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();

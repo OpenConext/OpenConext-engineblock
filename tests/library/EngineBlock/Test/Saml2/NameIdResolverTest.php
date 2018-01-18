@@ -1,5 +1,9 @@
 <?php
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use SAML2\Assertion;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
+use SAML2\Response;
 
 /**
  * Tests for EngineBlock_Log
@@ -35,11 +39,11 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
     public function setUp()
     {
-        $this->request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new SAML2_AuthnRequest());
+        $this->request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator(new AuthnRequest());
 
-        $assertion = new SAML2_Assertion();
+        $assertion = new Assertion();
         $assertion->setAttributes(array());
-        $response = new SAML2_Response();
+        $response = new Response();
         $response->setAssertions(array($assertion));
         $response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
         $response->setIntendedNameId('urn:collab:person:example.edu:mock1');
@@ -71,10 +75,10 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
     {
         // Input
         $nameId = array(
-            'Format' => Saml2_Const::NAMEID_UNSPECIFIED,
+            'Format' => Constants::NAMEID_UNSPECIFIED,
             'Value' => $this->response->getIntendedNameId(),
         );
-        $this->serviceProvider->supportedNameIdFormats[] = Saml2_Const::NAMEID_UNSPECIFIED;
+        $this->serviceProvider->supportedNameIdFormats[] = Constants::NAMEID_UNSPECIFIED;
         /** @var SAML2_AuthnRequest $request */
         $request = $this->request;
         $request->setNameIdPolicy(array('Format' => $nameId['Format']));
@@ -94,11 +98,11 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
     {
         // Input
         $nameId = array(
-            'Format' => Saml2_Const::NAMEID_UNSPECIFIED,
+            'Format' => Constants::NAMEID_UNSPECIFIED,
             'Value' => $this->response->getIntendedNameId(),
         );
         $this->serviceProvider->nameIdFormat = $nameId['Format'];
-        $this->serviceProvider->supportedNameIdFormats[] = Saml2_Const::NAMEID_UNSPECIFIED;
+        $this->serviceProvider->supportedNameIdFormats[] = Constants::NAMEID_UNSPECIFIED;
 
         // Run
         $resolvedNameId = $this->resolver->resolve($this->request, $this->response, $this->serviceProvider, $this->collabPersonId);
@@ -115,13 +119,13 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
     {
         // Input
         $nameId = array(
-            'Format' => Saml2_Const::NAMEID_UNSPECIFIED,
+            'Format' => Constants::NAMEID_UNSPECIFIED,
             'Value' => $this->response->getIntendedNameId(),
         );
         $this->serviceProvider->nameIdFormat = $nameId['Format'];
-        $this->serviceProvider->supportedNameIdFormats[] = Saml2_Const::NAMEID_UNSPECIFIED;
+        $this->serviceProvider->supportedNameIdFormats[] = Constants::NAMEID_UNSPECIFIED;
 
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         $request = $this->request;
         $request->setNameIdPolicy(array('Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient'));
 
@@ -170,14 +174,14 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
         $_SESSION = array();
 
         // Input
-        $this->serviceProvider->nameIdFormat = Saml2_Const::NAMEID_TRANSIENT;
+        $this->serviceProvider->nameIdFormat = Constants::NAMEID_TRANSIENT;
 
         // Run
         $resolvedNameId = $this->resolver->resolve($this->request, $this->response, $this->serviceProvider, $this->collabPersonId);
 
         // Test
         $this->assertEquals(
-            Saml2_Const::NAMEID_TRANSIENT,
+            Constants::NAMEID_TRANSIENT,
             $resolvedNameId['Format'],
             'Assertion NameID is set to what is set for this SP in the Metadata, NOT what it requested'
         );
@@ -194,7 +198,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
         // Input
         $this->serviceProvider = new ServiceProvider('https://sp2.example.edu');
-        $this->serviceProvider->nameIdFormat = Saml2_Const::NAMEID_TRANSIENT;
+        $this->serviceProvider->nameIdFormat = Constants::NAMEID_TRANSIENT;
 
         // Run
         $resolvedNameId3 = $this->resolver->resolve($this->request, $this->response, $this->serviceProvider, $this->collabPersonId);

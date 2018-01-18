@@ -4,6 +4,10 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Controllers;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
+use SAML2\AuthnRequest;
+use SAML2\HTTPPost;
+use SAML2\HTTPRedirect;
+use SAML2\Utils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -55,16 +59,16 @@ class IdentityProviderController extends Controller
     public function singleSignOnAction(Request $request, $idpName)
     {
         if ($request->isMethod('GET')) {
-            $redirectBinding = new \SAML2_HTTPRedirect();
+            $redirectBinding = new HTTPRedirect();
             $message = $redirectBinding->receive();
         } elseif ($request->isMethod('POST')) {
-            $postBinding = new \SAML2_HTTPPost();
+            $postBinding = new HTTPPost();
             $message = $postBinding->receive();
         } else {
             throw new \RuntimeException('Unsupported HTTP method');
         }
 
-        if (!$message instanceof \SAML2_AuthnRequest) {
+        if (!$message instanceof AuthnRequest) {
             throw new \RuntimeException('Unknown message type: ' . get_class($message));
         }
         $authnRequest = $message;
@@ -82,14 +86,14 @@ class IdentityProviderController extends Controller
                 $response->getDestination()));
 
         if ($mockIdp->mustUseHttpRedirect()) {
-            $redirect = new \SAML2_HTTPRedirect();
+            $redirect = new HTTPRedirect();
             $redirect->setDestination($destination);
             $url = $redirect->getRedirectURL($response);
             return new RedirectResponse($url);
         }
 
         /** @var Container $container */
-        $container = \SAML2_Utils::getContainer();
+        $container = Utils::getContainer();
         $authnRequestXml = $container->getLastDebugMessageOfType(Container::DEBUG_TYPE_IN);
         $responseXml = $response->toXml();
 

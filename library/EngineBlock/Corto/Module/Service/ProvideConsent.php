@@ -2,6 +2,7 @@
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
+use SAML2\Constants;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
@@ -75,7 +76,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 $consentRepository->giveImplicitConsentFor($serviceProviderMetadata);
             }
 
-            $response->setConsent(SAML2_Const::CONSENT_INAPPLICABLE);
+            $response->setConsent(Constants::CONSENT_INAPPLICABLE);
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');
 
@@ -88,7 +89,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         $priorConsent = $consentRepository->explicitConsentWasGivenFor($serviceProviderMetadata);
         if ($priorConsent) {
-            $response->setConsent(SAML2_Const::CONSENT_PRIOR);
+            $response->setConsent(Constants::CONSENT_PRIOR);
 
             $response->setDestination($response->getReturn());
             $response->setDeliverByBinding('INTERNAL');

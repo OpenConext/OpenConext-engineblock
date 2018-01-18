@@ -1,5 +1,7 @@
 <?php
 
+use SAML2\DOMDocumentFactory;
+
 class EngineBlock_Xml_Validator
 {
     private $_schemaLocation;
@@ -34,7 +36,7 @@ class EngineBlock_Xml_Validator
 
         $schemaXml = $this->_absolutizeSchemaLocations($schemaXml, $this->_schemaLocation);
 
-        $dom = SAML2_DOMDocumentFactory::fromString($xml);
+        $dom = DOMDocumentFactory::fromString($xml);
         if (!@$dom->schemaValidateSource($schemaXml)) {
             $errorInfo = error_get_last();
             $errorMessage = $errorInfo['message'];

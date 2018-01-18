@@ -1,5 +1,7 @@
 <?php
 
+use SAML2\Constants;
+
 /**
  * Metadata for (known) attributes.
  */
@@ -107,7 +109,7 @@ class EngineBlock_Attributes_Metadata
     public function normalizeEptiAttributeValue(array $attributes)
     {
         foreach ($attributes as $attributeName => $attributeValues) {
-            if ($attributeName !== SAML2_Const::EPTI_URN_MACE && $attributeName !== SAML2_Const::EPTI_URN_OID) {
+            if ($attributeName !== Constants::EPTI_URN_MACE && $attributeName !== Constants::EPTI_URN_OID) {
                 continue;
             }
 
