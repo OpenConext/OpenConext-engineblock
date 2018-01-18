@@ -264,6 +264,8 @@ Visit <a href="https://wiki.surfnet.nl/x/jq9WAw" target="_blank">the SURFconext 
     'error_invalid_acs_location'    => 'The given "Assertion Consumer Service" is unknown or invalid.',
     'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
+    'error_unsupported_signature_method' => 'Signature method is not supported',
+    'error_unsupported_signature_method_desc' => 'The signature method %1$s is not supported, please upgrade to RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_preselected_idp' => 'Error - No connection between institution and service',
     'error_unknown_preselected_idp_desc' => '<p>
         The institution that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through SURFconext. Please contact your institution\'s helpdesk to request access to this service. State what service it is about (the &lsquo;Service Provider&rsquo;) and why you need access.

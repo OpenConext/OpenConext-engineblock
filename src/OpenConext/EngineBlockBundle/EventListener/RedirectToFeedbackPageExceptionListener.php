@@ -30,6 +30,7 @@ use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
+use EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException;
 use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
@@ -125,6 +126,12 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_UnsupportedBindingException) {
             $message         = 'Unsupported Binding';
             $redirectToRoute = 'authentication_feedback_invalid_acs_binding';
+        } elseif ($exception instanceof EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException) {
+            $message         = 'Unsupported signature method';
+            $redirectToRoute = 'authentication_feedback_unsupported_signature_method';
+            $redirectParams  = [
+                'signature-method' => $exception->getSignatureMethod(),
+            ];
         } elseif ($exception instanceof EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
             $message         = 'Received Error Status Code';
             $redirectToRoute = 'authentication_feedback_received_error_status_code';

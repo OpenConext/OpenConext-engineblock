@@ -44,12 +44,7 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $log = $application->getLogInstance();
 
-        $log->notice(sprintf(
-            'Received Assertion from Issuer "%s" with signature method algorithms Response: "%s" and Assertion: "%s"',
-            $receivedResponse->getIssuer(),
-            $receivedResponse->getSignatureMethod(),
-            $receivedResponse->getAssertion()->getSignatureMethod()
-        ));
+        $this->checkResponseSignatureMethods($receivedResponse);
 
         $sp  = $this->_server->getRepository()->fetchServiceProviderByEntityId($receivedRequest->getIssuer());
 
@@ -124,6 +119,50 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
         else {
             $newResponse = $this->_server->createEnhancedResponse($receivedRequest, $receivedResponse);
             $this->_server->sendResponseToRequestIssuer($receivedRequest, $newResponse);
+        }
+    }
+
+    /**
+     * Log and verify the signature methods used.
+     *
+     * The signatures are not validated here, but the used methods
+     * (algorithms) are logged and an error is thrown if they're explicitly
+     * prohibited from use.
+     *
+     * @param EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse
+     */
+    private function checkResponseSignatureMethods(EngineBlock_Saml2_ResponseAnnotationDecorator $receivedResponse)
+    {
+        $issuer = $receivedResponse->getIssuer();
+        $log = EngineBlock_ApplicationSingleton::getInstance()
+            ->getLogInstance();
+
+        $log->notice(
+            sprintf(
+                'Received Assertion from Issuer "%s" with signature method algorithms Response: "%s" and Assertion: "%s"',
+                $issuer,
+                $receivedResponse->getSignatureMethod(),
+                $receivedResponse->getAssertion()->getSignatureMethod()
+            )
+        );
+
+        if ($receivedResponse->getSignatureMethod() !== null) {
+            $this->assertSignatureMethodIsAllowed($receivedResponse->getSignatureMethod());
+        }
+
+        if ($receivedResponse->getAssertion()->getSignatureMethod() !== null) {
+            $this->assertSignatureMethodIsAllowed($receivedResponse->getAssertion()->getSignatureMethod());
+        }
+    }
+
+    /**
+     * @param string $signatureMethod
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     */
+    private function assertSignatureMethodIsAllowed($signatureMethod)
+    {
+        if (in_array($signatureMethod, $this->_server->getConfig('forbiddenSignatureMethods'))) {
+            throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
         }
     }
 }

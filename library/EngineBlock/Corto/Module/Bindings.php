@@ -108,14 +108,21 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        if ($sspRequest->isMessageConstructedWithSignature()) {
+        $signatureMethod = $this->getRequestSignatureMethod($sspRequest);
+
+        if ($signatureMethod !== null) {
             $log = $this->_server->getLogger();
 
             $log->notice(sprintf(
                 'Received signed AuthnRequest from Issuer "%s" with signature method algorithm "%s"',
                 $sspRequest->getIssuer(),
-                $sspRequest->getSignatureMethod()
+                $signatureMethod
             ));
+
+            $forbiddenSignatureMethods = $this->_server->getConfig('forbiddenSignatureMethods');
+            if (in_array($signatureMethod, $forbiddenSignatureMethods)) {
+                throw new EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException($signatureMethod);
+            }
         }
 
         // check the IssueInstant against our own time to see if the SP's clock is getting out of sync
@@ -180,6 +187,21 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->_server->setReceivedRequest($ebRequest);
 
         return $ebRequest;
+    }
+
+    /**
+     * @param Message $message
+     * @return null|string
+     */
+    private function getRequestSignatureMethod(Message $message)
+    {
+        if ($message->isMessageConstructedWithSignature()) {
+            return $message->getSignatureMethod();
+        }
+
+        if (isset($_GET['SigAlg'])) {
+            return $_GET['SigAlg'];
+        }
     }
 
     /**
