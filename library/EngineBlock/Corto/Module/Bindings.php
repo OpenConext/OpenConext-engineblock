@@ -475,7 +475,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $keyPair = $this->_server->getSigningCertificates();
 
             $sspMessage->setCertificates(array($keyPair->getCertificate()->toPem()));
-            $sspMessage->setSignatureKey($keyPair->getPrivateKey()->toXmlSecurityKey());
+            $sspMessage->setSignatureKey(
+                $keyPair->getPrivateKey()->toXmlSecurityKey(
+                    $remoteEntity->signatureMethod
+                )
+            );
         }
 
         $sspBinding = Binding::getBinding($bindingUrn);
