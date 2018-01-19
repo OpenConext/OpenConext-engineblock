@@ -74,8 +74,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $this->_logger                     = EngineBlock_ApplicationSingleton::getLog();
     }
 
-
     /**
+     * Process an authorization request.
+     *
+     * NOTE: Never call this method more than once for the same request. This method
+     *       does not cache its results.
+     *
      * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
      * @throws EngineBlock_Corto_Module_Bindings_VerificationException
@@ -162,6 +166,10 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         $this->_annotateRequestWithKeyId($ebRequest);
+
+        // Corto service modules (SingleSignOn) can use the received
+        // request object without having to process it again.
+        $this->_server->setReceivedRequest($ebRequest);
 
         return $ebRequest;
     }

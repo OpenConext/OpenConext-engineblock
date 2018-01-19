@@ -173,8 +173,10 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $request = $this->_createDebugRequest();
             $logMessage = 'Created debug SAML request';
         } else {
-            // parse SAML request
-            $request = $this->_server->getBindingsModule()->receiveRequest();
+            // Get the previously parsed request object, see
+            // EngineBlock_Corto_Adapter::singleSignOn() and
+            // EngineBlock_Corto_Module_Bindings::receiveRequest().
+            $request = $this->_server->getReceivedRequest();
 
             // set transparent proxy mode
             if ($this->_server->getConfig('TransparentProxy', false)) {
