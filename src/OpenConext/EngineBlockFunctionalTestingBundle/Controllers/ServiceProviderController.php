@@ -8,6 +8,10 @@ use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\AuthnRequestFactory;
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\Compat\Container;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
+use SAML2\HTTPPost;
+use SAML2\HTTPRedirect;
+use SAML2\Response as SAMLResponse;
+use SAML2\Utils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -54,7 +58,7 @@ class ServiceProviderController extends Controller
             $this->engineBlock
         );
 
-        $redirect = new \SAML2_HTTPRedirect();
+        $redirect = new HTTPRedirect();
         $url = $redirect->getRedirectURL($authnRequest);
 
         return new RedirectResponse($url);
@@ -77,11 +81,11 @@ class ServiceProviderController extends Controller
             $this->engineBlock
         );
 
-        $redirect = new \SAML2_HTTPPost();
+        $redirect = new HTTPPost();
         $redirect->send($authnRequest);
 
         /** @var Container $container */
-        $container = \SAML2_Utils::getContainer();
+        $container = Utils::getContainer();
         return $container->getPostResponse();
     }
 
@@ -93,11 +97,11 @@ class ServiceProviderController extends Controller
     public function assertionConsumerAction(Request $request)
     {
         try {
-            $httpPostBinding = new \SAML2_HTTPPost();
+            $httpPostBinding = new HTTPPost();
             $message = $httpPostBinding->receive();
         } catch (\Exception $e1) {
             try {
-                $httpRedirectBinding = new \SAML2_HTTPRedirect();
+                $httpRedirectBinding = new HTTPRedirect();
                 $message = $httpRedirectBinding->receive();
             } catch (\Exception $e2) {
                 throw new \RuntimeException(
@@ -108,7 +112,7 @@ class ServiceProviderController extends Controller
             }
         }
 
-        if (!$message instanceof \SAML2_Response) {
+        if (!$message instanceof SAMLResponse) {
             throw new \RuntimeException('Unrecognized message type received: ' . get_class($message));
         }
 

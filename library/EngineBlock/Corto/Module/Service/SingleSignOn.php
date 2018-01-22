@@ -3,6 +3,8 @@
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
+use SAML2\AuthnRequest;
+use SAML2\Response;
 
 class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -206,7 +208,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         ServiceProvider $remoteEntity
     ) {
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         // show error when acl is given without binding or vice versa
         $acsUrl = $request->getAssertionConsumerServiceURL();
         $acsIndex = $request->getAssertionConsumerServiceIndex();
@@ -249,7 +251,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // Requested relay state
         $relayState  = !empty($_GET['RelayState'])   ? $_GET['RelayState']  : null;
 
-        $sspRequest = new SAML2_AuthnRequest();
+        $sspRequest = new AuthnRequest();
         $sspRequest->setId($this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssuer($entityId);
         $sspRequest->setRelayState($relayState);
@@ -274,7 +276,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     protected function _createDebugRequest()
     {
-        $sspRequest = new SAML2_AuthnRequest();
+        $sspRequest = new AuthnRequest();
         $sspRequest->setId($this->_server->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST));
         $sspRequest->setIssuer($this->_server->getUrl('spMetadataService'));
 
@@ -289,7 +291,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     ) {
         $log = $this->_server->getLogger();
 
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         $scopedIdPs = $request->getIDPList();
         $presetIdP  = $this->_server->getConfig('Idp');
 
@@ -313,7 +315,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         $scopedIdps
     ) {
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         if ($request->getForceAuthn()) {
             return false;
         }
@@ -433,7 +435,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
     }
 
     /**
-     * @param SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response
+     * @param Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response
      */
     protected function _sendDebugMail(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
@@ -541,7 +543,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
-        /** @var SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
+        /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['debugIdpResponse'];
 
         if (isset($_POST['mail'])) {

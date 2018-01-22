@@ -4,6 +4,14 @@ use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
+use SAML2\AuthnRequest;
+use SAML2\Binding;
+use SAML2\DOMDocumentFactory;
+use SAML2\EncryptedAssertion;
+use SAML2\HTTPPost;
+use SAML2\HTTPRedirect;
+use SAML2\Message;
+use SAML2\Response;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -88,12 +96,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     public function receiveRequest()
     {
         // Detect the current binding from the super globals
-        $sspBinding = SAML2_Binding::getCurrentBinding();
+        $sspBinding = Binding::getCurrentBinding();
 
         // Receive the request.
         $sspRequest = $sspBinding->receive();
 
-        if (!($sspRequest instanceof SAML2_AuthnRequest)) {
+        if (!($sspRequest instanceof AuthnRequest)) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
                 'Unsupported Binding used',
                 EngineBlock_Exception::CODE_NOTICE
@@ -189,10 +197,13 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * @return bool|EngineBlock_Saml2_ResponseAnnotationDecorator|SAML2_Response
+     * @return bool|EngineBlock_Saml2_ResponseAnnotationDecorator|Response
+     *
+     * @throws EngineBlock_Corto_Exception_ReceivedErrorStatusCode
+     * @throws EngineBlock_Corto_Module_Bindings_Exception
+     * @throws EngineBlock_Corto_Module_Bindings_SignatureVerificationException
      * @throws EngineBlock_Corto_Module_Bindings_UnsupportedBindingException
      * @throws EngineBlock_Corto_Module_Bindings_VerificationException
-     * @throws EngineBlock_Corto_Module_Bindings_Exception
      */
     public function receiveResponse()
     {
@@ -206,11 +217,11 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $sspSpMetadata = $this->getSspOwnMetadata();
 
         // Detect the binding being used from the global variables (GET, POST, SERVER)
-        $sspBinding = SAML2_Binding::getCurrentBinding();
+        $sspBinding = Binding::getCurrentBinding();
 
         // Receive a message from the binding
         $sspResponse = $sspBinding->receive();
-        if (!($sspResponse instanceof SAML2_Response)) {
+        if (!($sspResponse instanceof Response)) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Unsupported Message received: ' . get_class($sspResponse),
                 EngineBlock_Exception::CODE_NOTICE
@@ -236,7 +247,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $_SESSION['currentIdentityProvider'] = $idpEntityId;
 
         // We only support HTTP-POST binding for Responses
-        if (!$sspBinding instanceof SAML2_HTTPPost) {
+        if (!$sspBinding instanceof HTTPPost) {
             throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
                 'Unsupported Binding used: ' . get_class($sspBinding),
                 EngineBlock_Exception::CODE_NOTICE
@@ -467,12 +478,12 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $sspMessage->setSignatureKey($keyPair->getPrivateKey()->toXmlSecurityKey());
         }
 
-        $sspBinding = SAML2_Binding::getBinding($bindingUrn);
-        if ($sspBinding instanceof SAML2_HTTPPost) {
+        $sspBinding = Binding::getBinding($bindingUrn);
+        if ($sspBinding instanceof HTTPPost) {
 
             // SAML2int dictates that we MUST sign assertions.
             // The SAML2 library will do that for us, if we just set the key to sign with.
-            if ($sspMessage instanceof SAML2_Response) {
+            if ($sspMessage instanceof Response) {
                 foreach ($sspMessage->getAssertions() as $assertion) {
                     $assertion->setCertificates($sspMessage->getCertificates());
                     $assertion->setSignatureKey($sspMessage->getSignatureKey());
@@ -511,8 +522,8 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
             $this->_server->sendOutput($output);
 
-        } else if ($sspBinding instanceof SAML2_HTTPRedirect) {
-            if ($sspMessage instanceof SAML2_Response) {
+        } else if ($sspBinding instanceof HTTPRedirect) {
+            if ($sspMessage instanceof Response) {
                 throw new EngineBlock_Corto_Module_Bindings_UnsupportedBindingException(
                     'May not send a Reponse via HTTP Redirect'
                 );
@@ -532,20 +543,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     {
         $schemaUrl = 'http://docs.oasis-open.org/security/saml/v2.0/saml-schema-protocol-2.0.xsd';
         if ($this->_server->getConfig('debug') && ini_get('allow_url_fopen') && file_exists($schemaUrl)) {
-            $dom = SAML2_DOMDocumentFactory::fromString($xml);
+            $dom = DOMDocumentFactory::fromString($xml);
             if (!$dom->schemaValidate($schemaUrl)) {
                 throw new Exception('Message XML doesnt validate against XSD at Oasis-open.org?!');
             }
         }
     }
 
-    protected function shouldMessageBeSigned(SAML2_Message $sspMessage, AbstractRole $remoteEntity)
+    protected function shouldMessageBeSigned(Message $sspMessage, AbstractRole $remoteEntity)
     {
-        if ($sspMessage instanceof SAML2_Response) {
+        if ($sspMessage instanceof Response) {
             return true;
         }
 
-        if (!$sspMessage instanceof SAML2_AuthnRequest) {
+        if (!$sspMessage instanceof AuthnRequest) {
             throw new EngineBlock_Corto_Module_Bindings_Exception(
                 'Unsupported Message type: ' . get_class($sspMessage)
             );
@@ -572,7 +583,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $name = $message->getMessageType();
         $this->_internalBindingMessages[$name] = $message;
 
-        /** @var SAML2_Message $message */
+        /** @var Message $message */
         $destinationLocation = $message->getDestination();
         $parameters = $this->_server->getParametersFromUrl($destinationLocation);
         if (isset($parameters['RemoteIdPMd5'])) {
@@ -666,14 +677,14 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     /**
      * Determines if a Response carries an encrypted assertion.
      *
-     * @param SAML2_Response $sspResponse
+     * @param Response $sspResponse
      * @return bool
      */
-    private function hasEncryptedAssertion(SAML2_Response $sspResponse)
+    private function hasEncryptedAssertion(Response $sspResponse)
     {
         $hasEncryptedAssertion = false;
         foreach ($sspResponse->getAssertions() as $assertion) {
-            if ($assertion instanceof SAML2_EncryptedAssertion) {
+            if ($assertion instanceof EncryptedAssertion) {
                 $hasEncryptedAssertion = true;
                 break;
             }

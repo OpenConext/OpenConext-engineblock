@@ -2,11 +2,13 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2;
 
+use SAML2\AuthnRequest as SAMLAuthnRequest;
+
 /**
  * Class AuthnRequest
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Saml2
  */
-class AuthnRequest extends \SAML2_AuthnRequest
+class AuthnRequest extends SAMLAuthnRequest
 {
     /**
      * @var string

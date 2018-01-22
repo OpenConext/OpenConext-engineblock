@@ -2,7 +2,9 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2;
 
-class Response extends \SAML2_Response
+use SAML2\Response as SAMLResponse;
+
+class Response extends SAMLResponse
 {
     /**
      * @var string

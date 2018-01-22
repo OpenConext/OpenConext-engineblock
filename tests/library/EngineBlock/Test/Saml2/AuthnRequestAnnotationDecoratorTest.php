@@ -1,10 +1,12 @@
 <?php
 
+use SAML2\AuthnRequest;
+
 class EngineBlock_Test_Saml2_AuthnRequestAnnotationDecoratorTest extends PHPUnit_Framework_TestCase
 {
     public function testToString()
     {
-        $request = new SAML2_AuthnRequest();
+        $request = new AuthnRequest();
         $request->setId('TEST123');
         $request->setIssueInstant(0);
 

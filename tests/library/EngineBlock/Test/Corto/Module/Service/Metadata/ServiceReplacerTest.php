@@ -3,6 +3,7 @@
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Service;
+use SAML2\Constants;
 
 class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
 {
@@ -19,11 +20,11 @@ class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->entity = new IdentityProvider('https://sp.example.edu');
-        $this->entity->singleSignOnServices[] = new Service(SAML2_Const::BINDING_HTTP_REDIRECT, 'redirectlocation');
+        $this->entity->singleSignOnServices[] = new Service(Constants::BINDING_HTTP_REDIRECT, 'redirectlocation');
 
         $this->proxyEntity = new IdentityProvider('https://proxy.example.edu');
-        $this->proxyEntity->singleSignOnServices[] = new Service('proxyRedirectLocation', SAML2_Const::BINDING_HTTP_REDIRECT);
-        $this->proxyEntity->singleSignOnServices[] = new Service('proxyPostLocation', SAML2_Const::BINDING_HTTP_POST);
+        $this->proxyEntity->singleSignOnServices[] = new Service('proxyRedirectLocation', Constants::BINDING_HTTP_REDIRECT);
+        $this->proxyEntity->singleSignOnServices[] = new Service('proxyPostLocation', Constants::BINDING_HTTP_POST);
     }
 
     public function testServicesAreReplaced()
@@ -32,8 +33,8 @@ class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
         $replacer->replace($this->entity, 'newLocation');
 
         $expectedBinding = array(
-            new Service('newLocation', SAML2_Const::BINDING_HTTP_REDIRECT),
-            new Service('newLocation', SAML2_Const::BINDING_HTTP_POST),
+            new Service('newLocation', Constants::BINDING_HTTP_REDIRECT),
+            new Service('newLocation', Constants::BINDING_HTTP_POST),
         );
         $this->assertEquals($expectedBinding, $this->entity->singleSignOnServices);
     }
@@ -45,8 +46,8 @@ class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase
         $replacer->replace($this->entity, 'newLocation');
 
         $expectedBinding = array(
-            new Service('newLocation', SAML2_Const::BINDING_HTTP_REDIRECT),
-            new Service('newLocation', SAML2_Const::BINDING_HTTP_POST),
+            new Service('newLocation', Constants::BINDING_HTTP_REDIRECT),
+            new Service('newLocation', Constants::BINDING_HTTP_POST),
         );
         $this->assertEquals($expectedBinding, $this->entity->singleSignOnServices);
     }

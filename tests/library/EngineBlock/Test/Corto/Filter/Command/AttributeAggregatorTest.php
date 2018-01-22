@@ -25,6 +25,9 @@ use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClient
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Response;
 use OpenConext\EngineBlock\Http\Exception\HttpException;
 use PHPUnit_Framework_TestCase as UnitTest;
+use SAML2\Assertion;
+use SAML2\AuthnRequest;
+use SAML2\Response as SAMLResponse;
 
 /**
  * @group AttributeAggregation
@@ -73,10 +76,10 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $this->repository->shouldReceive('findServiceProviderByEntityId')
             ->andReturn($this->sp);
 
-        $assertion = new SAML2_Assertion();
+        $assertion = new Assertion();
 
-        $request = new SAML2_AuthnRequest();
-        $response = new SAML2_Response();
+        $request = new AuthnRequest();
+        $response = new SAMLResponse();
         $response->setAssertions(array($assertion));
 
         $this->request = new EngineBlock_Saml2_AuthnRequestAnnotationDecorator($request);

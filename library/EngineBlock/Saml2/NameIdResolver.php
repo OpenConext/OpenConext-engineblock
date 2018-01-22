@@ -2,6 +2,9 @@
 
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use Ramsey\Uuid\Uuid;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
+use SAML2\XML\saml\NameID;
 
 class EngineBlock_Saml2_NameIdResolver
 {
@@ -15,9 +18,9 @@ class EngineBlock_Saml2_NameIdResolver
      * @var array
      */
     private $SUPPORTED_NAMEID_FORMATS = array(
-        SAML2_Const::NAMEID_PERSISTENT,
-        SAML2_Const::NAMEID_TRANSIENT,
-        SAML2_Const::NAMEID_UNSPECIFIED,
+        Constants::NAMEID_PERSISTENT,
+        Constants::NAMEID_TRANSIENT,
+        Constants::NAMEID_UNSPECIFIED,
     );
 
     /**
@@ -25,7 +28,7 @@ class EngineBlock_Saml2_NameIdResolver
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @param ServiceProvider $destinationMetadata
      * @param $collabPersonId
-     * @return array
+     * @return NameID
      */
     public function resolve(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
@@ -35,31 +38,31 @@ class EngineBlock_Saml2_NameIdResolver
     ) {
         $customNameId = $response->getCustomNameId();
         if (!empty($customNameId)) {
-            return $customNameId;
+            return NameID::fromArray($customNameId);
         }
 
         $nameIdFormat = $this->_getNameIdFormat($request, $destinationMetadata);
 
-        $requireUnspecified = ($nameIdFormat === SAML2_Const::NAMEID_UNSPECIFIED);
+        $requireUnspecified = ($nameIdFormat === Constants::NAMEID_UNSPECIFIED);
         if ($requireUnspecified) {
-            return array(
+            return NameID::fromArray([
                 'Format' => $nameIdFormat,
                 'Value' => $response->getIntendedNameId(),
-            );
+            ]);
         }
 
-        $requireTransient = ($nameIdFormat === SAML2_Const::NAMEID_TRANSIENT);
+        $requireTransient = ($nameIdFormat === Constants::NAMEID_TRANSIENT);
         if ($requireTransient) {
-            return array(
+            return NameID::fromArray([
                 'Format' => $nameIdFormat,
                 'Value' => $this->_getTransientNameId($destinationMetadata->entityId, $response->getOriginalIssuer()),
-            );
+            ]);
         }
 
-        return array(
+        return NameID::fromArray([
             'Format' => $nameIdFormat,
             'Value' => $this->_getPersistentNameId($collabPersonId, $destinationMetadata->entityId),
-        );
+        ]);
     }
 
     /**
@@ -108,7 +111,7 @@ class EngineBlock_Saml2_NameIdResolver
         }
 
         // If the SP requests a specific NameIDFormat in their AuthnRequest
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         $nameIdPolicy = $request->getNameIdPolicy();
         if (!empty($nameIdPolicy['Format'])) {
             $mayUseRequestedNameIdFormat = true;

@@ -3,6 +3,8 @@
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\AuthnRequest;
+use SAML2\AuthnRequest as SAMLAuthnRequest;
+use SAML2\XML\md\SPSSODescriptor;
 
 /**
  * Class MockServiceProvider
@@ -28,7 +30,7 @@ class MockServiceProvider extends AbstractMockEntityRole
 
     public function assertionConsumerServiceLocation()
     {
-        /** @var \SAML2_XML_md_SPSSODescriptor $role */
+        /** @var SPSSODescriptor $role */
         $role = $this->getSsoRole();
         return $role->AssertionConsumerService[0]->Location;
     }
@@ -41,7 +43,7 @@ class MockServiceProvider extends AbstractMockEntityRole
         return $this->descriptor->Extensions['SAMLRequest'];
     }
 
-    public function setAuthnRequest(\SAML2_AuthnRequest $authnRequest)
+    public function setAuthnRequest(SAMLAuthnRequest $authnRequest)
     {
         $this->descriptor->Extensions['SAMLRequest'] = $authnRequest;
         return $this;
@@ -73,7 +75,7 @@ class MockServiceProvider extends AbstractMockEntityRole
 
     public function signAuthnRequests()
     {
-        /** @var \SAML2_XML_md_SPSSODescriptor $role */
+        /** @var SPSSODescriptor $role */
         $role = $this->getSsoRole();
         $role->AuthnRequestsSigned = true;
         return $this;
@@ -81,7 +83,7 @@ class MockServiceProvider extends AbstractMockEntityRole
 
     public function mustSignAuthnRequests()
     {
-        /** @var \SAML2_XML_md_SPSSODescriptor $role */
+        /** @var SPSSODescriptor $role */
         $role = $this->getSsoRole();
         return $role->AuthnRequestsSigned;
     }
@@ -127,6 +129,6 @@ class MockServiceProvider extends AbstractMockEntityRole
 
     protected function getRoleClass()
     {
-        return '\SAML2_XML_md_SPSSODescriptor';
+        return SPSSODescriptor::class;
     }
 }

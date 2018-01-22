@@ -1,5 +1,8 @@
 <?php
 
+use SAML2\DOMDocumentFactory;
+use SAML2\Response;
+
 /**
  * Class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
  */
@@ -43,9 +46,9 @@ class EngineBlock_Corto_Mapper_Legacy_ResponseTranslator
         $legacyResponse = EngineBlock_Corto_XmlToArray::registerNamespaces($legacyResponse);
         $xml = EngineBlock_Corto_XmlToArray::array2xml($legacyResponse);
 
-        $document = SAML2_DOMDocumentFactory::fromString($xml);
+        $document = DOMDocumentFactory::fromString($xml);
 
-        $response = new SAML2_Response($document->firstChild);
+        $response = new Response($document->firstChild);
         $annotatedResponse = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
 
         return $this->addPrivateVars($annotatedResponse, $legacyResponse);

@@ -4,7 +4,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Saml2;
 
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
-use XMLSecurityKey;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 /**
  * Class AuthnRequestFactory

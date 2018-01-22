@@ -1,4 +1,13 @@
 <?php
+
+use SAML2\Assertion;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
+use SAML2\Message;
+use SAML2\Response;
+use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\saml\SubjectConfirmationData;
+
 /**
  * NOTE: use for testing only!
  *
@@ -7,15 +16,15 @@
 class EngineBlock_Saml2_ResponseFactory
 {
     /**
-     * @param SAML2_AuthnRequest $authnRequest
+     * @param AuthnRequest $authnRequest
      * @param SimpleSAML_Configuration $idpConfig
      * @param $nameId
      * @param $issuer
      * @param array $attributes
-     * @return SAML2_Response
+     * @return Response
      */
     public function create(
-        SAML2_AuthnRequest $authnRequest,
+        AuthnRequest $authnRequest,
         SimpleSAML_Configuration $idpConfig,
         $nameId,
         $issuer,
@@ -23,29 +32,29 @@ class EngineBlock_Saml2_ResponseFactory
     )
     {
         /* $returnAttributes contains the attributes we should return. Send them. */
-        $assertion = new SAML2_Assertion();
+        $assertion = new Assertion();
         $assertion->setIssuer($issuer);
         $assertion->setNameId(array(
             'Value' => $nameId,
-            'Format' => SAML2_Const::NAMEID_UNSPECIFIED
+            'Format' => Constants::NAMEID_UNSPECIFIED
         ));
         $assertion->setNotBefore(time());
         $assertion->setNotOnOrAfter(time() + 5*60);
         // Valid audiences is not required so disabled for now
         // $assertion->setValidAudiences(array($authnRequest->getIssuer()));
         $assertion->setAttributes($attributes);
-        $assertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_UNSPECIFIED);
-        $assertion->setAuthnContextClassRef(SAML2_Const::AC_PASSWORD);
+        $assertion->setAttributeNameFormat(Constants::NAMEFORMAT_UNSPECIFIED);
+        $assertion->setAuthnContextClassRef(Constants::AC_PASSWORD);
 
-        $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
-        $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
-        $subjectConfirmation->SubjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
+        $subjectConfirmation = new SubjectConfirmation();
+        $subjectConfirmation->Method = Constants::CM_BEARER;
+        $subjectConfirmation->SubjectConfirmationData = new SubjectConfirmationData();
         $subjectConfirmation->SubjectConfirmationData->NotOnOrAfter = time() + 5*60;
         $subjectConfirmation->SubjectConfirmationData->Recipient = $authnRequest->getAssertionConsumerServiceURL();
         $subjectConfirmation->SubjectConfirmationData->InResponseTo = $authnRequest->getId();
         $assertion->setSubjectConfirmation(array($subjectConfirmation));
 
-        $response = new SAML2_Response();
+        $response = new Response();
         $response->setRelayState($authnRequest->getRelayState());
         $response->setDestination($authnRequest->getAssertionConsumerServiceURL());
         $response->setIssuer($issuer);
@@ -58,10 +67,10 @@ class EngineBlock_Saml2_ResponseFactory
     }
 
     /**
-     * @param SAML2_Response $response
+     * @param Response $response
      * @param SimpleSAML_Configuration $idpConfig
      */
-    private function addSigns(SAML2_Response $response, SimpleSAML_Configuration $idpConfig)
+    private function addSigns(Response $response, SimpleSAML_Configuration $idpConfig)
     {
         $assertions = $response->getAssertions();
         $className = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getMessageUtilClassName();
@@ -85,7 +94,7 @@ class EngineBlock_Saml2_ResponseFactory
 
     /**
      * @param EngineBlock_Http_Request $httpRequest
-     * @return SAML2_Message
+     * @return Message
      */
     public function createFromHttpRequest(EngineBlock_Http_Request $httpRequest)
     {
@@ -93,7 +102,7 @@ class EngineBlock_Saml2_ResponseFactory
         $responseXml = $this->decodeParameter($parameter);
 
         $serializer = new EngineBlock_Saml2_MessageSerializer();
-        return $serializer->deserialize($responseXml, 'SAML2_Response');
+        return $serializer->deserialize($responseXml, Response::class);
     }
 
     /**

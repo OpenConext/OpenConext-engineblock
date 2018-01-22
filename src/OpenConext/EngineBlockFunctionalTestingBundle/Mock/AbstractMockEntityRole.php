@@ -2,6 +2,14 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Mock;
 
+use RuntimeException;
+use SAML2\XML\Chunk;
+use SAML2\XML\ds\X509Certificate;
+use SAML2\XML\ds\X509Data;
+use SAML2\XML\md\EntityDescriptor;
+use SAML2\XML\md\SPSSODescriptor;
+use SAML2\XML\md\SSODescriptorType;
+
 /**
  * Class AbstractMockEntityRole
  * @package OpenConext\EngineBlockFunctionalTestingBundle\Mock
@@ -13,7 +21,7 @@ abstract class AbstractMockEntityRole
 
     public function __construct(
         $name,
-        \SAML2_XML_md_EntityDescriptor $descriptor
+        EntityDescriptor $descriptor
     ) {
         $this->name = $name;
         $this->descriptor = $descriptor;
@@ -40,19 +48,19 @@ abstract class AbstractMockEntityRole
         $role = $this->getSsoRole();
 
         foreach ($role->KeyDescriptor[0]->KeyInfo->info as $info) {
-            if (!$info instanceof \SAML2_XML_ds_X509Data) {
+            if (!$info instanceof X509Data) {
                 continue;
             }
 
             foreach ($info->data as $data) {
-                if (!$data instanceof \SAML2_XML_ds_X509Certificate) {
+                if (!$data instanceof X509Certificate) {
                     continue;
                 }
 
                 return $data->certificate;
             }
         }
-        throw new \RuntimeException("MockIdp does not have KeyInfo with an X509Certificate");
+        throw new RuntimeException("MockIdp does not have KeyInfo with an X509Certificate");
     }
 
     public function setCertificate($certificateFile)
@@ -66,12 +74,12 @@ abstract class AbstractMockEntityRole
         $role = $this->getSsoRole();
 
         foreach ($role->KeyDescriptor[0]->KeyInfo->info as $info) {
-            if (!$info instanceof \SAML2_XML_ds_X509Data) {
+            if (!$info instanceof X509Data) {
                 continue;
             }
 
             foreach ($info->data as $data) {
-                if (!$data instanceof \SAML2_XML_ds_X509Certificate) {
+                if (!$data instanceof X509Certificate) {
                     continue;
                 }
 
@@ -79,7 +87,7 @@ abstract class AbstractMockEntityRole
                 return;
             }
         }
-        throw new \RuntimeException("MockIdp does not have KeyInfo with an X509Certificate");
+        throw new RuntimeException("MockIdp does not have KeyInfo with an X509Certificate");
     }
 
     public function setPrivateKey($privateKeyFile)
@@ -87,7 +95,7 @@ abstract class AbstractMockEntityRole
         $role = $this->getSsoRole();
 
         foreach ($role->KeyDescriptor[0]->KeyInfo->info as $info) {
-            if (!$info instanceof \SAML2_XML_Chunk) {
+            if (!$info instanceof Chunk) {
                 continue;
             }
 
@@ -99,19 +107,19 @@ abstract class AbstractMockEntityRole
             return;
         }
 
-        throw new \RuntimeException("Unable to set private key, no KeyInfo with PrivateKey element set");
+        throw new RuntimeException("Unable to set private key, no KeyInfo with PrivateKey element set");
     }
 
     public function getPrivateKeyPem()
     {
-        /** @var \SAML2_XML_md_SPSSODescriptor $spssoRole */
+        /** @var SPSSODescriptor $spssoRole */
         $idpSsoRole = $this->getSsoRole();
 
-        /** @var \SAML2_XML_Chunk $certificate */
+        /** @var Chunk $certificate */
         $certificate = array_reduce(
             $idpSsoRole->KeyDescriptor[0]->KeyInfo->info,
             function ($carry, $info) {
-                return $carry ? $carry : $info instanceof \SAML2_XML_Chunk ? $info : false;
+                return $carry ? $carry : $info instanceof Chunk ? $info : false;
             }
         );
 
@@ -119,8 +127,8 @@ abstract class AbstractMockEntityRole
     }
 
     /**
-     * @return \SAML2_XML_md_SSODescriptorType
-     * @throws \RuntimeException
+     * @return SSODescriptorType
+     * @throws RuntimeException
      */
     protected function getSsoRole()
     {
@@ -132,7 +140,7 @@ abstract class AbstractMockEntityRole
 
             return $role;
         }
-        throw new \RuntimeException('No IDPSSODescriptor for MockIdentityProvider?');
+        throw new RuntimeException('No IDPSSODescriptor for MockIdentityProvider?');
     }
 
     abstract protected function getRoleClass();
@@ -159,6 +167,6 @@ abstract class AbstractMockEntityRole
             return $pathFromRoot;
         }
 
-        throw new \RuntimeException('Unable to find file: ' . $filePath . " ($fullFilePath)");
+        throw new RuntimeException('Unable to find file: ' . $filePath . " ($fullFilePath)");
     }
 }

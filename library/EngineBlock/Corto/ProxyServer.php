@@ -4,6 +4,13 @@ use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Component\EngineBlockMetadata\Service;
+use SAML2\Assertion;
+use SAML2\AuthnRequest;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
+use SAML2\Response;
+use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\saml\SubjectConfirmationData;
 
 class EngineBlock_Corto_ProxyServer
 {
@@ -380,8 +387,8 @@ class EngineBlock_Corto_ProxyServer
     {
         $response = $this->_createBaseResponse($request);
         $response->setStatus([
-            'Code'    => SAML2_Const::STATUS_RESPONDER,
-            'SubCode' => SAML2_Const::STATUS_PROXY_COUNT_EXCEEDED,
+            'Code'    => Constants::STATUS_RESPONDER,
+            'SubCode' => Constants::STATUS_PROXY_COUNT_EXCEEDED,
         ]);
 
         return $response;
@@ -391,16 +398,18 @@ class EngineBlock_Corto_ProxyServer
     {
         $response = $this->_createBaseResponse($request);
         $response->setStatus([
-            'Code'    => SAML2_Const::STATUS_RESPONDER,
-            'SubCode' => SAML2_Const::STATUS_NO_PASSIVE,
+            'Code'    => Constants::STATUS_RESPONDER,
+            'SubCode' => Constants::STATUS_NO_PASSIVE,
         ]);
 
         return $response;
     }
 
     /**
-     * @param SAML2_AuthnRequest|EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
-     * @param SAML2_Response|EngineBlock_Saml2_ResponseAnnotationDecorator $sourceResponse
+     * @param AuthnRequest|EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param Response|EngineBlock_Saml2_ResponseAnnotationDecorator $sourceResponse
+     *
+     * @return EngineBlock_Saml2_ResponseAnnotationDecorator|Response
      */
     public function createEnhancedResponse(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
@@ -428,7 +437,7 @@ class EngineBlock_Corto_ProxyServer
         $newResponse->setStatus($sourceResponse->getStatus());
 
         // Create a new assertion by us.
-        $newAssertion = new SAML2_Assertion();
+        $newAssertion = new Assertion();
         $newResponse->setAssertions(array($newAssertion));
         $newAssertion->setId($this->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION));
         $newAssertion->setIssueInstant(time());
@@ -446,20 +455,15 @@ class EngineBlock_Corto_ProxyServer
         // Copy over the NameID for now...
         // (further on in the filters we'll have more info and set this to something better)
         $sourceNameId = $sourceAssertion->getNameId();
-        if (!empty($sourceNameId) && !empty($sourceNameId['Value']) && !empty($sourceNameId['Format'])) {
-            $newAssertion->setNameId(
-                array(
-                    'Value'  => $sourceNameId['Value'],
-                    'Format' => $sourceNameId['Format'],
-                )
-            );
+        if ($sourceNameId->value && $sourceNameId->Format) {
+            $newAssertion->setNameId($sourceNameId);
         }
 
         // Set up the Subject Confirmation element.
-        $subjectConfirmation = new SAML2_XML_saml_SubjectConfirmation();
-        $subjectConfirmation->Method = SAML2_Const::CM_BEARER;
+        $subjectConfirmation = new SubjectConfirmation();
+        $subjectConfirmation->Method = Constants::CM_BEARER;
         $newAssertion->setSubjectConfirmation(array($subjectConfirmation));
-        $subjectConfirmationData = new SAML2_XML_saml_SubjectConfirmationData();
+        $subjectConfirmationData = new SubjectConfirmationData();
         $subjectConfirmation->SubjectConfirmationData = $subjectConfirmationData;
 
         // Confirm where we are sending it.
@@ -468,7 +472,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Confirm that this is in response to their AuthnRequest (unless, you know, it isn't).
         if (!$request->isUnsolicited()) {
-            /** @var SAML2_AuthnRequest $request */
+            /** @var \SAML2\AuthnRequest $request */
             $subjectConfirmationData->InResponseTo = $request->getId();
         }
 
@@ -508,7 +512,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Copy over the attributes
         $newAssertion->setAttributes($sourceAssertion->getAttributes());
-        $newAssertion->setAttributeNameFormat(SAML2_Const::NAMEFORMAT_URI);
+        $newAssertion->setAttributeNameFormat(Constants::NAMEFORMAT_URI);
 
         return $newResponse;
     }
@@ -523,8 +527,8 @@ class EngineBlock_Corto_ProxyServer
         }
         $requestWasUnsolicited = $request->isUnsolicited();
 
-        $response = new SAML2_Response();
-        /** @var SAML2_AuthnRequest $request */
+        $response = new Response();
+        /** @var AuthnRequest $request */
         $response->setRelayState($request->getRelayState());
         $response->setId($this->getNewId(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE));
         $response->setIssueInstant(time());
@@ -536,7 +540,7 @@ class EngineBlock_Corto_ProxyServer
 
         $acs = $this->getRequestAssertionConsumer($request);
         $response->setDestination($acs->location);
-        $response->setStatus(array('Code' => SAML2_Const::STATUS_SUCCESS));
+        $response->setStatus(array('Code' => Constants::STATUS_SUCCESS));
 
         $response = new EngineBlock_Saml2_ResponseAnnotationDecorator($response);
         $response->setDeliverByBinding($acs->binding);
@@ -552,7 +556,7 @@ class EngineBlock_Corto_ProxyServer
      */
     public function getRequestAssertionConsumer(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
 
         // parse and validate custom ACS location
@@ -603,10 +607,10 @@ class EngineBlock_Corto_ProxyServer
     ) {
         $requestWasSigned    = $request->wasSigned();
 
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
 
         // Ignore requests for bindings we don't support for responses.
-        if ($request->getProtocolBinding() && ($request->getProtocolBinding() !== SAML2_Const::BINDING_HTTP_POST)) {
+        if ($request->getProtocolBinding() && ($request->getProtocolBinding() !== Constants::BINDING_HTTP_POST)) {
             $this->_server->getLogger()->notice(
                 "ProtocolBinding '{$request->getProtocolBinding()}' requested is not supported, ignoring..."
             );
@@ -698,12 +702,12 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         EngineBlock_Saml2_ResponseAnnotationDecorator $response
     ) {
-        /** @var SAML2_AuthnRequest $request */
+        /** @var AuthnRequest $request */
         $requestIssuer = $request->getIssuer();
         $serviceProvider = $this->getRepository()->fetchServiceProviderByEntityId($requestIssuer);
 
         // Detect error responses and send them off without an assertion.
-        /** @var SAML2_Response $response */
+        /** @var Response $response */
         $status = $response->getStatus();
         if ($status['Code'] !== 'urn:oasis:names:tc:SAML:2.0:status:Success') {
             $response->setAssertions(array());
@@ -724,7 +728,7 @@ class EngineBlock_Corto_ProxyServer
      */
     public function getReceivedRequestFromResponse(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
-        /** @var SAML2_Response $response */
+        /** @var Response $response */
         $requestId = $response->getInResponseTo();
         if ($requestId === null) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
@@ -926,7 +930,7 @@ class EngineBlock_Corto_ProxyServer
         );
 
         // Convert the XMl object to actual XML and get a reference to what we're about to sign
-        $canonicalXmlDom = SAML2_DOMDocumentFactory::create();
+        $canonicalXmlDom = DOMDocumentFactory::create();
         $canonicalXmlDom->loadXML(EngineBlock_Corto_XmlToArray::array2xml($element));
 
         // Note that the current element may not be the first or last, because we might include comments, so look for
@@ -949,7 +953,7 @@ class EngineBlock_Corto_ProxyServer
 
         // Now we start the actual signing, instead of signing the entire (possibly large) document,
         // we only sign the 'SignedInfo' which includes the 'Reference' hash
-        $canonicalXml2Dom = SAML2_DOMDocumentFactory::fromString(
+        $canonicalXml2Dom = DOMDocumentFactory::fromString(
           EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo'])
         );
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);

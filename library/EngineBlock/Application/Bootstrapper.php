@@ -1,5 +1,7 @@
 <?php
 
+use SAML2\Compat\ContainerSingleton;
+
 class EngineBlock_Application_Bootstrapper
 {
     const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
@@ -131,7 +133,7 @@ class EngineBlock_Application_Bootstrapper
     private function _bootstrapSaml2()
     {
         $container = new EngineBlock_Saml2_Container($this->_application->getLogInstance());
-        SAML2_Compat_ContainerSingleton::setContainer($container);
+        ContainerSingleton::setContainer($container);
     }
 
     protected function _bootstrapPhpSettings()
