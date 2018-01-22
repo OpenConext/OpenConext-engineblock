@@ -4,6 +4,7 @@ use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\Response;
+use SAML2\XML\saml\NameID;
 
 /**
  * Tests for EngineBlock_Log
@@ -68,7 +69,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
         $resolvedNameID = $this->resolver->resolve($this->request, $this->response, $this->serviceProvider, $this->collabPersonId);
 
         // Test
-        $this->assertEquals($nameId, $resolvedNameID, 'CustomNameId is used');
+        $this->assertEquals(NameID::fromArray($nameId), $resolvedNameID, 'CustomNameId is used');
     }
 
     public function testNameIdPolicyInAuthnRequest()
@@ -88,7 +89,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
         // Test
         $this->assertEquals(
-            $nameId,
+            NameID::fromArray($nameId),
             $resolvedNameId,
             'Assertion NameID is set to unspecified, as requested in the AuthnRequest/NameIDPolicy[Format]'
         );
@@ -109,7 +110,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
         // Test
         $this->assertEquals(
-            $nameId,
+            NameID::fromArray($nameId),
             $resolvedNameId,
             'Assertion NameID is set to CustomNameId, allowing overrides in Attribute Manipulations'
         );
@@ -134,7 +135,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
         // Test
         $this->assertEquals(
-            $nameId,
+            NameID::fromArray($nameId),
             $resolvedNameId,
             'Assertion NameID is set to what is set for this SP in the Metadata, NOT what it requested'
         );
@@ -156,7 +157,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
         // Test
         $this->assertEquals(
-            $nameId['Format'],
+            NameID::fromArray($nameId['Format']),
             $resolvedNameId['Format'],
             'Requesting Persistent gives a persistent identifier'
         );
@@ -182,7 +183,7 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
         // Test
         $this->assertEquals(
             Constants::NAMEID_TRANSIENT,
-            $resolvedNameId['Format'],
+            $resolvedNameId->Format,
             'Assertion NameID is set to what is set for this SP in the Metadata, NOT what it requested'
         );
 
@@ -191,8 +192,8 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
         // Test
         $this->assertEquals(
-            $resolvedNameId['Value'],
-            $resolvedNameId2['Value'],
+            $resolvedNameId->value,
+            $resolvedNameId2->value,
             'Asking for another NameID in a given session, for the same SP and IdP, gives the same id'
         );
 
@@ -230,11 +231,11 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
         $_SESSION = array();
 
         // Input
-        $nameId = array(
+        $nameId = NameID::fromArray([
             'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
             'Value' => '',
-        );
-        $this->serviceProvider->nameIdFormat = $nameId['Format'];
+        ]);
+        $this->serviceProvider->nameIdFormat = $nameId->Format;
 
         // Run
         $resolvedNameId = $this->resolver->resolve($this->request, $this->response, $this->serviceProvider, $this->collabPersonId);
