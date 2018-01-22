@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "48325d54a6237b5e11c957a6d717b115",
+    "content-hash": "f23af16f15102956f7e91f201ed578d9",
     "packages": [
         {
             "name": "beberlei/assert",
-            "version": "v2.4",
+            "version": "v2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beberlei/assert.git",
-                "reference": "7281b1fd8118b31cb9162c2fb5a4cc6f01d62ed6"
+                "reference": "fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beberlei/assert/zipball/7281b1fd8118b31cb9162c2fb5a4cc6f01d62ed6",
-                "reference": "7281b1fd8118b31cb9162c2fb5a4cc6f01d62ed6",
+                "url": "https://api.github.com/repos/beberlei/assert/zipball/fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337",
+                "reference": "fd8dc8f6de4645ccf4d1a0b38a6b8fdaf2e8b337",
                 "shasum": ""
             },
             "require": {
@@ -25,17 +25,13 @@
                 "php": ">=5.3"
             },
             "require-dev": {
-                "phpunit/phpunit": "@stable"
+                "friendsofphp/php-cs-fixer": "^2.1.1",
+                "phpunit/phpunit": "^4.8.35|^5.7"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.3-dev"
-                }
-            },
             "autoload": {
-                "psr-0": {
-                    "Assert": "lib/"
+                "psr-4": {
+                    "Assert\\": "lib/Assert"
                 },
                 "files": [
                     "lib/Assert/functions.php"
@@ -48,7 +44,13 @@
             "authors": [
                 {
                     "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
+                    "email": "kontakt@beberlei.de",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Richard Quadling",
+                    "email": "rquadling@gmail.com",
+                    "role": "Collaborator"
                 }
             ],
             "description": "Thin assertion library for input validation in business models.",
@@ -57,7 +59,7 @@
                 "assertion",
                 "validation"
             ],
-            "time": "2015-08-21T16:50:17+00:00"
+            "time": "2017-11-30T13:25:15+00:00"
         },
         {
             "name": "dbpatch/dbpatch",
@@ -1517,16 +1519,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "2.4.2",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "ffd471a074e3e9dac0f402c45610e25f88586344"
+                "reference": "c1bfe6ad43780ab3848a781747fa9c4635d29349"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/ffd471a074e3e9dac0f402c45610e25f88586344",
-                "reference": "ffd471a074e3e9dac0f402c45610e25f88586344",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/c1bfe6ad43780ab3848a781747fa9c4635d29349",
+                "reference": "c1bfe6ad43780ab3848a781747fa9c4635d29349",
                 "shasum": ""
             },
             "require": {
@@ -1551,7 +1553,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2018-01-10T10:20:11+00:00"
+            "time": "2018-01-19T14:21:41+00:00"
         },
         {
             "name": "openconext/monitor-bundle",
@@ -1608,21 +1610,21 @@
         },
         {
             "name": "openconext/saml-value-object",
-            "version": "1.3.0",
+            "version": "1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/SamlValueObject.git",
-                "reference": "1d523028915f65acaef546d892b0661718c94def"
+                "reference": "d47dfa6f30f30b81454f35fe49abdf77ddea1edd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/1d523028915f65acaef546d892b0661718c94def",
-                "reference": "1d523028915f65acaef546d892b0661718c94def",
+                "url": "https://api.github.com/repos/OpenConext/SamlValueObject/zipball/d47dfa6f30f30b81454f35fe49abdf77ddea1edd",
+                "reference": "d47dfa6f30f30b81454f35fe49abdf77ddea1edd",
                 "shasum": ""
             },
             "require": {
-                "beberlei/assert": "^2.4",
-                "php": ">=5.3.9,<8.0-dev"
+                "beberlei/assert": "^2.6",
+                "php": ">=5.4,<8.0-dev"
             },
             "require-dev": {
                 "ibuildings/qa-tools": "^1.1",
@@ -1645,7 +1647,7 @@
                 }
             ],
             "description": "Set of value objects for usage with SAML2",
-            "time": "2016-12-09T13:13:31+00:00"
+            "time": "2018-01-22T15:22:14+00:00"
         },
         {
             "name": "openconext/stoker-metadata",
@@ -4471,7 +4473,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",
