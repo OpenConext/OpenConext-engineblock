@@ -1,6 +1,7 @@
 <?php
 
 use SAML2\Constants;
+use SAML2\XML\saml\NameID;
 
 /**
  * Metadata for (known) attributes.
@@ -113,8 +114,8 @@ class EngineBlock_Attributes_Metadata
                 continue;
             }
 
-            $attributes[$attributeName] = array_map(function (array $nameId) {
-                return $nameId['Value'];
+            $attributes[$attributeName] = array_map(function (NameID $nameId) {
+                return $nameId->value;
             }, $attributeValues);
         }
 

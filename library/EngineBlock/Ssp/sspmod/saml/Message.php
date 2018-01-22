@@ -340,7 +340,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
     /**
      * Decrypt an assertion.
      *
-     * This function takes in a SAML2_Assertion and decrypts it if it is encrypted.
+     * This function takes in a SAML2\Assertion and decrypts it if it is encrypted.
      * If it is unencrypted, and encryption is enabled in the metadata, an exception
      * will be throws.
      *
@@ -498,7 +498,7 @@ class EngineBlock_Ssp_sspmod_saml_Message
      * @param SimpleSAML_Configuration $spMetadata  The metadata of the service provider.
      * @param SimpleSAML_Configuration $idpMetadata  The metadata of the identity provider.
      * @param Response $response  The response.
-     * @return array  Array with SAML2_Assertion objects, containing valid assertions from the response.
+     * @return array  Array with SAML2\Assertion objects, containing valid assertions from the response.
      */
     public static function processResponse(
         SimpleSAML_Configuration $spMetadata, SimpleSAML_Configuration $idpMetadata,
