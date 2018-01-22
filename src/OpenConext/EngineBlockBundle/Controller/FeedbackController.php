@@ -122,6 +122,23 @@ class FeedbackController
      * @return Response
      * @throws \EngineBlock_Exception
      */
+    public function unsupportedSignatureMethodAction(Request $request)
+    {
+        return new Response(
+            $this->engineBlockView
+                ->setData([
+                    'signature-method' => $request->get('signature-method')
+                ])
+                ->render('Authentication/View/Feedback/UnsupportedSignatureMethod.phtml'),
+            400
+        );
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
+     * @throws \EngineBlock_Exception
+     */
     public function unknownServiceProviderAction(Request $request)
     {
         $viewData = ['entity-id' => $request->get('entity-id')];

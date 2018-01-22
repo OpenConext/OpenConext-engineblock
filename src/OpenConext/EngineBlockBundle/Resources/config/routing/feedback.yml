@@ -23,6 +23,11 @@ authentication_feedback_invalid_acs_location:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAcsLocationAction }
 
+authentication_feedback_unsupported_signature_method:
+    path:       '/unsupportedSignatureMethod'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:unsupportedSignatureMethodAction }
+
 authentication_feedback_unknown_service_provider:
     path:       '/unknown-service-provider'
     methods:    [GET]

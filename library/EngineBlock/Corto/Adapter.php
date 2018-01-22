@@ -338,6 +338,7 @@ class EngineBlock_Corto_Adapter
             'debug' => $application->getConfigurationValue('debug', false),
             'ConsentStoreValues' => $this->_getConsentConfigurationValue('storeValues', true),
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
+            'forbiddenSignatureMethods' => $this->_getForbiddenSignatureMethods(),
         ));
 
         /**
@@ -372,6 +373,22 @@ class EngineBlock_Corto_Adapter
             return $default;
         }
         return $configuration->authentication->consent->$name;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function _getForbiddenSignatureMethods()
+    {
+        $application = EngineBlock_ApplicationSingleton::getInstance();
+        $commaSeparatedList = $application->getConfigurationValue('forbiddenSignatureMethods', '');
+
+        $list = array_map(
+            'trim',
+            explode(',', $commaSeparatedList)
+        );
+
+        return array_filter($list);
     }
 
     public function getProxyServer()

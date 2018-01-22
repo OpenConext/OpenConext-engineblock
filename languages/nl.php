@@ -263,6 +263,8 @@ Bezoek <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=52331093" t
     'error_invalid_acs_location'        => 'De opgegeven "Assertion Consumer Service" is onjuist of bestaat niet.',
     'error_invalid_acs_binding'        => 'Onjuist ACS Binding Type',
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
+    'error_unsupported_signature_method' => 'Ondertekeningsmethode wordt niet ondersteund',
+    'error_unsupported_signature_method_desc' => 'De ondertekeningsmethode %1$s wordt niet ondersteund, upgrade naar RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_preselected_idp' => 'Error - Instelling is niet gekoppeld aan dienst',
     'error_unknown_preselected_idp_desc' => '<p>
         De instelling waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via SURFconext. Neem contact op met de helpdesk van jouw instelling als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;Service Provider&rsquo;) en waarom je toegang wilt.
