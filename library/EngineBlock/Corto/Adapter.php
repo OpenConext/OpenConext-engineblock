@@ -39,9 +39,13 @@ class EngineBlock_Corto_Adapter
     {
         $this->_initProxy();
 
-        $this->_filterRemoteEntitiesByRequestSp();
-        $this->_filterRemoteEntitiesByRequestSpWorkflowState();
-        $this->_filterRemoteEntitiesByRequestScopingRequesterId();
+        $request = $this->_proxyServer
+            ->getBindingsModule()
+            ->receiveRequest();
+
+        $this->_filterRemoteEntitiesByRequestSp($request);
+        $this->_filterRemoteEntitiesByRequestSpWorkflowState($request);
+        $this->_filterRemoteEntitiesByRequestScopingRequesterId($request);
 
         $this->_callCortoServiceUri('singleSignOnService', $idPProviderHash);
     }
@@ -127,31 +131,17 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * Get the SAML2 Authn Request
-     *
-     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
-     */
-    protected function _getRequestInstance() {
-        // Use the binding module to get the request
-        $bindingModule = $this->_proxyServer->getBindingsModule();
-        $request = $bindingModule->receiveRequest();
-        // then store it back so Corto will think it has received it
-        // from an internal binding, because if Corto would try to
-        // get the request again from the binding module, it would fail.
-        $bindingModule->registerInternalBindingMessage('SAMLRequest', $request);
-        return $request;
-    }
-
-    /**
      * Filter out IdPs that are not allowed to connect to the given SP. We don't filter out
      * any IdP's if this is explicitly configured for the given in SR.
      *
      * Determines SP based on Authn Request (required).
+     *
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      */
-    protected function _filterRemoteEntitiesByRequestSp()
+    protected function _filterRemoteEntitiesByRequestSp(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
         $repository = $this->getMetadataRepository();
-        $serviceProvider = $repository->fetchServiceProviderByEntityId($this->_getIssuerSpEntityId());
+        $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
 
         if ($serviceProvider->displayUnconnectedIdpsWayf) {
             $repository->appendVisitor(new DisableDisallowedEntitiesInWayfVisitor(
@@ -190,9 +180,12 @@ class EngineBlock_Corto_Adapter
         );
     }
 
-    protected function _filterRemoteEntitiesByRequestScopingRequesterId()
+    /**
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     */
+    protected function _filterRemoteEntitiesByRequestScopingRequesterId(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
-        $requesterIds = $this->_getRequestScopingRequesterIds();
+        $requesterIds = $request->getRequesterID();
 
         $repository = $this->getMetadataRepository();
         foreach ($requesterIds as $requesterId) {
@@ -244,13 +237,13 @@ class EngineBlock_Corto_Adapter
      * Given a list of Idps, filters out all that do not have the same state as the requesting SP.
      *
      * Determines SP based on Authn Request.
+     *
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      */
-    protected function _filterRemoteEntitiesByRequestSpWorkflowState()
+    protected function _filterRemoteEntitiesByRequestSpWorkflowState(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
     {
-        $spEntityId = $this->_getIssuerSpEntityId();
-
         $repository = $this->getMetadataRepository();
-        $serviceProvider = $repository->fetchServiceProviderByEntityId($spEntityId);
+        $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
 
         $repository->appendFilter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
     }
@@ -284,24 +277,6 @@ class EngineBlock_Corto_Adapter
         $entityIds = $this->getMetadataRepository()->findAllowedIdpEntityIdsForSp($serviceProvider);
         $entityIds[] = $this->_proxyServer->getUrl('idpMetadataService');
         return $entityIds;
-    }
-
-    /**
-     * @return array RequesterIDs in Request Scoping (if any, otherwise empty)
-     */
-    protected function _getRequestScopingRequesterIds()
-    {
-        $request = $this->_getRequestInstance();
-        /** @var SAML2_AuthnRequest $request */
-        return $request->getRequesterID();
-    }
-
-    /**
-     * @return string $issuerSpEntityId
-     */
-    protected function _getIssuerSpEntityId()
-    {
-        return $this->_getRequestInstance()->getIssuer();
     }
 
     /**

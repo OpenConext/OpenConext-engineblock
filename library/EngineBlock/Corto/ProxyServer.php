@@ -55,6 +55,11 @@ class EngineBlock_Corto_ProxyServer
     private $_hostName;
 
     /**
+     * @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     */
+    private $receivedRequest;
+
+    /**
      * @var MetadataRepositoryInterface
      */
     private $_repository;
@@ -119,6 +124,25 @@ class EngineBlock_Corto_ProxyServer
     public function setHostName($hostName)
     {
         $this->_hostName = $hostName;
+    }
+
+    /**
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @return EngineBlock_Corto_ProxyServer
+     */
+    public function setReceivedRequest(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request)
+    {
+        $this->receivedRequest = $request;
+
+        return $this;
+    }
+
+    /**
+     * @return EngineBlock_Saml2_AuthnRequestAnnotationDecorator
+     */
+    public function getReceivedRequest()
+    {
+        return $this->receivedRequest;
     }
 
     /**
