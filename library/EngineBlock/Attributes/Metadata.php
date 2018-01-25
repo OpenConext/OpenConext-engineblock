@@ -94,8 +94,8 @@ class EngineBlock_Attributes_Metadata
     {
         $definitions = $this->definitions;
         uksort($attributes, function ($a, $b) use ($definitions) {
-            $orderA = -1;
-            $orderB = -1;
+            $orderA = 999999;
+            $orderB = 999999;
             if (isset($definitions[$a]['DisplayOrder'])) {
                 $orderA = $definitions[$a]['DisplayOrder'];
             }
