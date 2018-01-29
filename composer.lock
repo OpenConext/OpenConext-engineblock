@@ -1684,16 +1684,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "de77eb3c26be71ca66e4e3e9c124d1144c3bb6eb"
+                "reference": "3e0b69e933d505b5a699ab06f9a5bdef459e59a8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/de77eb3c26be71ca66e4e3e9c124d1144c3bb6eb",
-                "reference": "de77eb3c26be71ca66e4e3e9c124d1144c3bb6eb",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/3e0b69e933d505b5a699ab06f9a5bdef459e59a8",
+                "reference": "3e0b69e933d505b5a699ab06f9a5bdef459e59a8",
                 "shasum": ""
             },
             "require": {
@@ -1718,7 +1718,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2018-01-22T14:50:51+00:00"
+            "time": "2018-01-29T12:01:24+00:00"
         },
         {
             "name": "openconext/monitor-bundle",
