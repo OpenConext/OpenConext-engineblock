@@ -14,7 +14,7 @@ services:
 
     engineblock.compat.repository.metadata:
         public: false
-        class: OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface
         factory: ["@engineblock.compat.di_container", getMetadataRepository]
 
     engineblock.compat.doctrine.entity_manager:

@@ -4,9 +4,9 @@ namespace OpenConext\EngineBlockBundle\Tests;
 
 use EngineBlock_Arp_AttributeReleasePolicyEnforcer;
 use Mockery;
-use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Service\MetadataService;
 use OpenConext\EngineBlockBundle\Controller\Api\AttributeReleasePolicyController;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;

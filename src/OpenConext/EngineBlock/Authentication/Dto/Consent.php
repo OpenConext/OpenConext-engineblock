@@ -3,8 +3,8 @@
 namespace OpenConext\EngineBlock\Authentication\Dto;
 
 use DateTime;
-use OpenConext\Component\EngineBlockMetadata\ContactPerson;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Model\Consent as ConsentEntity;
 
 final class Consent

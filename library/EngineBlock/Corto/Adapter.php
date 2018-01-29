@@ -1,16 +1,16 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
-use OpenConext\Component\EngineBlockMetadata\RequestedAttribute;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveEntityByEntityIdFilter;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\Service;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
+use OpenConext\EngineBlock\Metadata\RequestedAttribute;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveEntityByEntityIdFilter;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Metadata\Service;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 

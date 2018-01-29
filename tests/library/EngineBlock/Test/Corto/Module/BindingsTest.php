@@ -1,5 +1,5 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use SAML2\Constants;
 use SAML2\Response;
 

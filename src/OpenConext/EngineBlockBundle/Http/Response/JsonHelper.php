@@ -2,10 +2,10 @@
 
 namespace OpenConext\EngineBlockBundle\Http\Response;
 
-use OpenConext\Component\EngineBlockMetadata\ContactPerson;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Service;
-use OpenConext\Component\EngineBlockMetadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\ShibMdScope;
 
 final class JsonHelper
 {

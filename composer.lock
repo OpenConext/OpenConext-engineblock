@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "15b1950a5bb52f5c93abd6fe97dfbbfe",
+    "content-hash": "c6539ff31cb7cd5a911ac2407dea5bfd",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1681,44 +1681,6 @@
                 "service proxies"
             ],
             "time": "2015-08-09T04:28:19+00:00"
-        },
-        {
-            "name": "openconext/engineblock-metadata",
-            "version": "3.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "e3c939a1c786175cdd68e8b77d21becdd26d254c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/e3c939a1c786175cdd68e8b77d21becdd26d254c",
-                "reference": "e3c939a1c786175cdd68e8b77d21becdd26d254c",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/orm": "~2.3",
-                "openconext/stoker-metadata": "~0.1",
-                "php": ">=5.6,<7",
-                "simplesamlphp/saml2": "^3.1"
-            },
-            "require-dev": {
-                "ibuildings/qa-tools": "~1.1",
-                "mockery/mockery": "~0.9",
-                "satooshi/php-coveralls": "~0.6"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OpenConext\\Component\\EngineBlockMetadata\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2018-01-29T14:35:18+00:00"
         },
         {
             "name": "openconext/monitor-bundle",

@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
+use OpenConext\EngineBlock\Metadata\JanusRestV1\RestClientInterface;
 
 /**
  * A Caching Proxy for the Service Registry, will cache all function calls.

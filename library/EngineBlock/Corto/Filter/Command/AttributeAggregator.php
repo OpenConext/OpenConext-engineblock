@@ -1,12 +1,12 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AggregatedAttribute;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use OpenConext\EngineBlock\Http\Exception\HttpException;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use Psr\Log\LoggerInterface;
 
 

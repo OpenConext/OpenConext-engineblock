@@ -1,5 +1,5 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Constants;

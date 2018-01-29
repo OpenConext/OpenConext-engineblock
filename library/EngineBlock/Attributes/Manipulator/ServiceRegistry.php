@@ -1,8 +1,8 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\Disassembler\CortoDisassembler;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\Disassembler\CortoDisassembler;
 
 class EngineBlock_Attributes_Manipulator_ServiceRegistry
 {
@@ -120,7 +120,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
     }
 
     /**
-     * @return \OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+     * @return \OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface
      */
     protected function _getMetadataRepository()
     {

@@ -86,11 +86,11 @@ doctrine:
                         dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Authentication"
                         prefix:    OpenConext\EngineBlockBundle\Authentication
                         is_bundle: false
-                    EngineBlockMetadata:
+                    Metadata:
                         mapping:   true
                         type:      annotation
-                        dir:       "%kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity"
-                        prefix:    OpenConext\Component\EngineBlockMetadata
+                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlock/Metadata"
+                        prefix:    OpenConext\EngineBlock\Metadata
                         is_bundle: false
 
 doctrine_migrations:

@@ -1,5 +1,5 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
+use OpenConext\EngineBlock\Metadata\JanusRestV1\RestClientInterface;
 
 /**
  * Implementation of the Engine Block internal Service Registry interface.

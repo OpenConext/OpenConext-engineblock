@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface;
+use OpenConext\EngineBlock\Metadata\JanusRestV1\RestClientInterface;
 
 class Janus_FixtureClient implements Janus_Client_Interface, RestClientInterface
 {

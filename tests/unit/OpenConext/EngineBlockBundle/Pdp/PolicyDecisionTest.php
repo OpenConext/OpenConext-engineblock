@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use OpenConext\Component\EngineBlockMetadata\Logo;
+use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use PHPUnit_Framework_TestCase as TestCase;

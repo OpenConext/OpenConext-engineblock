@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor_Scope
 {

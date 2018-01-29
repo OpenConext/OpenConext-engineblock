@@ -1,6 +1,6 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Organization;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Organization;
 
 class EngineBlock_Test_Corto_Mapper_Metadata_Entity_OrganizationTest extends PHPUnit_Framework_TestCase
 {

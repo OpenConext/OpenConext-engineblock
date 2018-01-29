@@ -3,8 +3,8 @@
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
 use EngineBlock_ApplicationSingleton;
-use OpenConext\Component\EngineBlockMetadata\Entity\Assembler\JanusPushMetadataAssembler;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\DoctrineMetadataRepository;
+use OpenConext\EngineBlock\Metadata\Entity\Assembler\JanusPushMetadataAssembler;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiMethodNotAllowedHttpException;

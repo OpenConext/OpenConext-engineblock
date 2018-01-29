@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Pdp;
 
 use OpenConext\EngineBlock\Exception\RuntimeException;
-use OpenConext\Component\EngineBlockMetadata\Logo;
+use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response\AttributeAssignment;
 
