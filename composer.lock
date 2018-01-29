@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bb96fdafde4e1348524677309ff24d94",
+    "content-hash": "15b1950a5bb52f5c93abd6fe97dfbbfe",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1684,16 +1684,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "3.0.1",
+            "version": "3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "3e0b69e933d505b5a699ab06f9a5bdef459e59a8"
+                "reference": "e3c939a1c786175cdd68e8b77d21becdd26d254c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/3e0b69e933d505b5a699ab06f9a5bdef459e59a8",
-                "reference": "3e0b69e933d505b5a699ab06f9a5bdef459e59a8",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/e3c939a1c786175cdd68e8b77d21becdd26d254c",
+                "reference": "e3c939a1c786175cdd68e8b77d21becdd26d254c",
                 "shasum": ""
             },
             "require": {
@@ -1718,7 +1718,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2018-01-29T12:01:24+00:00"
+            "time": "2018-01-29T14:35:18+00:00"
         },
         {
             "name": "openconext/monitor-bundle",
@@ -4706,7 +4706,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",
