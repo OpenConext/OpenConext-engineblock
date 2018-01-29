@@ -189,9 +189,9 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_buttons_title'                   => 'Do you agree with sharing this data?',
     'consent_buttons_ok'                      => 'Yes, proceed to %s',
     'consent_buttons_nok'                     => 'No, I do not agree',
-    'consent_footer_text_singular'            => 'You are using one other service via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View the list of services and your profile information.</a>',
-    'consent_footer_text_plural'              => 'You are using %1$s services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View the list of services and your profile information.</a>',
-    'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">View your profile information.</a>',
+    'consent_footer_text_singular'            => 'You are using one other service via SURFconext. <a href="%1$s" target="_blank">View the list of services and your profile information.</a>',
+    'consent_footer_text_plural'              => 'You are using %1$s services via SURFconext. <a href="%2$s" target="_blank">View the list of services and your profile information.</a>',
+    'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="%1$s" target="_blank">View your profile information.</a>',
     'consent_slidein_details_email'           => 'Email',
     'consent_slidein_details_phone'           => 'Phone',
     'consent_slidein_text_contact'            => 'If you have any questions about this page, please contact the help desk of your institution. SURFconext has the following contact information:',
@@ -207,7 +207,7 @@ If you have any questions about your privacy and the policy applied, please visi
 <h1>Logging in through SURFconext</h1>
 <img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
 <p>Via SURFconext, researchers, staff and students can easily and securely log in into various cloud services using their own institutional account. SURFconext offers extra privacy protection by sending a minimum set of personal data to these cloud services.</p>
-<p>Curious about which services already received your information before through SURFconext? Visit your <a href="https://profile.surfconext.nl/">SURFconext profile page</a>.</p>
+<p>Curious about which services already received your information before through SURFconext? Visit your <a href="%1$s">SURFconext profile page</a>.</p>
 
 <h1>SURFconext is part of SURF</h1>
 <p>SURF is the collaborative ICT organisation for Dutch education and research.</p>

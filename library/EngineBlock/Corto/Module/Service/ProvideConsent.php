@@ -105,6 +105,12 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         $layout->hideHeader = true;
         $layout->hideFooter = true;
 
+        // Profile url is configurable in application.ini (profile.baseUrl)
+        $profileUrl = '#';
+        if (EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('profile', null)) {
+            $profileUrl = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('profile')->baseUrl;
+        }
+
         $html = $this->_server->renderTemplate(
             'consent',
             array(
@@ -117,7 +123,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'idp_support'       => $this->getSupportContact($identityProvider),
                 'consent_count'     => $this->_consentService->countAllFor(
                     $response->getNameIdValue()
-                )
+                ),
+                'profile_url'       => $profileUrl
             ),
             $layout
         );

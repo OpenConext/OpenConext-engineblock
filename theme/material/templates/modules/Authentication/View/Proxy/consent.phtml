@@ -174,12 +174,13 @@ $layout->title      = $layout->title . ' - '. $this->t('consent_header_title', $
 
     <footer>
       <p>
+
         <?php if ($consent_count === 0): ?>
-          <?= $this->t('consent_footer_text_first_consent'); ?>
+          <?= $this->t('consent_footer_text_first_consent', $profile_url); ?>
         <?php elseif ($consent_count === 1): ?>
-          <?= $this->t('consent_footer_text_singular'); ?>
+          <?= $this->t('consent_footer_text_singular', $profile_url); ?>
         <?php else: ?>
-          <?= $this->t('consent_footer_text_plural', $consent_count); ?>
+          <?= $this->t('consent_footer_text_plural', $consent_count, $profile_url); ?>
         <?php endif; ?>
       </p>
     </footer>
