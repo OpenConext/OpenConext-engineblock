@@ -97,11 +97,12 @@ Feature:
       And I should see "Step Up"
       And I should not see "Loa SP"
 
-  Scenario: User logs in via trusted proxy and sees consent for the destination
+  Scenario: User logs in via trusted signing proxy and sees consent for the destination
     Given SP "Step Up" is authenticating for SP "Loa SP"
       And SP "Step Up" is a trusted proxy
       And SP "Step Up" signs its requests
      When I log in at "Step Up"
+     Then I should see "Select an institution to login to the service: Loa SP"
       And I select "AlwaysAuth" on the WAYF
       And I pass through EngineBlock
       And I pass through the IdP

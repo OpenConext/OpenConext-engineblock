@@ -3,6 +3,7 @@
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
+use Psr\Log\LoggerInterface;
 use SAML2\AuthnRequest;
 use SAML2\Response;
 
@@ -383,7 +384,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();
 
-        $serviceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+        $serviceProvider = $this->findOriginalServiceProvider($request, $application->getLogInstance());
+
         $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest());
         $rememberChoiceFeature = $application->getDiContainer()->getRememberChoice();
 
@@ -400,6 +402,37 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             )
         );
         $this->_server->sendOutput($output);
+    }
+
+    /**
+     * Find a ServiceProvider instance based on the received AuthnRequest.
+     *
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param LoggerInterface $logger
+     * @return ServiceProvider
+     */
+    private function findOriginalServiceProvider(
+        EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
+        LoggerInterface $logger
+    ) {
+
+        $issuingServiceProvider = $this->_server->getRepository()->fetchServiceProviderByEntityId($request->getIssuer());
+
+        // Find the original requester SP
+        $originalRequesterServiceProvider = EngineBlock_SamlHelper::findRequesterServiceProvider(
+            $issuingServiceProvider,
+            $request,
+            $this->_server->getRepository(),
+            $logger
+        );
+
+        // If the SamlHelper found us the correct SP, return it
+        if ($originalRequesterServiceProvider) {
+            return $originalRequesterServiceProvider;
+        }
+
+        // Return the SP based on the Issuer.
+        return $issuingServiceProvider;
     }
 
     protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest)
