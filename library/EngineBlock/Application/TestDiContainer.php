@@ -29,4 +29,14 @@ class EngineBlock_Application_TestDiContainer extends EngineBlock_Application_Di
 
         return $consentFactoryMock;
     }
+
+    /**
+     * @return EngineBlock_Attributes_Metadata
+     */
+    public function getAttributeMetadata()
+    {
+        // returns a realistic representation of the attribute metadata
+        $definitions = json_decode(file_get_contents(__DIR__ . '/../../../tests/resources/config/attributes-fixture.json'), true);
+        return new EngineBlock_Attributes_Metadata($definitions, Phake::mock('\Psr\Log\LoggerInterface'));
+    }
 }
