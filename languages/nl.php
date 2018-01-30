@@ -187,9 +187,9 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',
     'consent_buttons_ok'                      => 'Ja, ga door naar %s',
     'consent_buttons_nok'                     => 'Nee, ik ga niet akkoord',
-    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
-    'consent_footer_text_plural'              => 'Je gebruikt al %1$s diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
-    'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via SURFconext. <a href="https://profile.surfconext.nl/" target="_blank">Bekijk hier je profielinformatie.</a>',
+    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="%1$s" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
+    'consent_footer_text_plural'              => 'Je gebruikt al %1$s diensten via SURFconext. <a href="%2$s" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
+    'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via SURFconext. <a href="%1$s" target="_blank">Bekijk hier je profielinformatie.</a>',
     'consent_slidein_details_email'           => 'Email',
     'consent_slidein_details_phone'           => 'Telefoon',
     'consent_slidein_text_contact'            => 'Neem voor vragen hierover contact op met de helpdesk van je instelling. De volgende gegevens zijn bij SURFconext bekend:',
@@ -206,7 +206,7 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 <h1>Inloggen met SURFconext</h1>
 <img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
 <p>Via SURFconext loggen onderzoekers, medewerkers en studenten met hun eigen instellingsaccount veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. SURFconext biedt extra privacy-bescherming doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.</p>
-<p>Zien waar je al eerder toestemming voor hebt gegeven? Bekijk hier je <a href="https://profile.surfconext.nl/" target="_blank">SURFconext profielpagina</a>.</p>
+<p>Zien waar je al eerder toestemming voor hebt gegeven? Bekijk hier je <a href="%1$s" target="_blank">SURFconext profielpagina</a>.</p>
 
 <h1>SURFconext is onderdeel van SURF</h1>
 <p>SURF is de ICT-samenwerkingsorganisatie van het onderwijs en onderzoek in Nederland.</p>
