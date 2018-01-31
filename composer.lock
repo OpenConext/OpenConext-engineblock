@@ -2433,16 +2433,16 @@
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v1.15.1",
+            "version": "v1.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/simplesamlphp.git",
-                "reference": "14b876ba453059d9c216703f6834dc6c749d4586"
+                "reference": "d6d8df7297778317fbf07edc8d882ceb283715f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/14b876ba453059d9c216703f6834dc6c749d4586",
-                "reference": "14b876ba453059d9c216703f6834dc6c749d4586",
+                "url": "https://api.github.com/repos/simplesamlphp/simplesamlphp/zipball/d6d8df7297778317fbf07edc8d882ceb283715f0",
+                "reference": "d6d8df7297778317fbf07edc8d882ceb283715f0",
                 "shasum": ""
             },
             "require": {
@@ -2459,7 +2459,7 @@
                 "jaimeperez/twig-configurable-i18n": "^1.2",
                 "php": ">=5.4",
                 "robrichards/xmlseclibs": "~3.0",
-                "simplesamlphp/saml2": "~3.0",
+                "simplesamlphp/saml2": "~3.1.1",
                 "twig/twig": "~1.0",
                 "whitehat101/apr1-md5": "~1.0"
             },
@@ -2505,7 +2505,7 @@
                 "sp",
                 "ws-federation"
             ],
-            "time": "2018-01-12T11:25:30+00:00"
+            "time": "2018-01-31T10:45:27+00:00"
         },
         {
             "name": "sybio/image-workshop",
