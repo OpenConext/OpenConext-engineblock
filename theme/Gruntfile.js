@@ -41,7 +41,7 @@ module.exports = function(grunt) {
                         'node_modules/es5-shim/es5-shim.min.js',
                         'node_modules/es6-shim/es6-shim.min.js',
                         'node_modules/html5shiv/dist/html5-shiv.min.js',
-                        'node_modules/dom-polyfills/polyfills.js',
+                        'node_modules/dom4/build/dom4.js',
                         '../web/javascripts/application.js'
                     ]
                 },

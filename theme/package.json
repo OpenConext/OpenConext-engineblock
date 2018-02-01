@@ -30,7 +30,7 @@
     "load-grunt-tasks": "^3.1.0"
   },
   "dependencies": {
-    "dom-polyfills": "^1.2.2",
+    "dom4": "^2.0.1",
     "es5-shim": "^4.5.9",
     "es6-shim": "^0.35.3",
     "js-cookie": "^2.1.3"
