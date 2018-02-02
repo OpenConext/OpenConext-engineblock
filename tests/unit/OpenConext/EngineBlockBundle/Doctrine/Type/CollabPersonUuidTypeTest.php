@@ -6,7 +6,6 @@ use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\Type;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonUuid;
-use OpenConext\EngineBlock\Metadata\Value\SamlEntityUuid;
 use OpenConext\TestDataProvider;
 use PHPUnit_Framework_TestCase as UnitTest;
 use Ramsey\Uuid\Uuid;
@@ -87,7 +86,7 @@ class CollabPersonUuidTypeTest extends UnitTest
             TestDataProvider::notNull(),
             [
                 'uuid object'          => [Uuid::uuid4()],
-                'similar value object' => [SamlEntityUuid::fromString((string) Uuid::uuid4())]
+                'similar value object' => [Uuid::fromString((string) Uuid::uuid4())]
             ]
         );
     }
