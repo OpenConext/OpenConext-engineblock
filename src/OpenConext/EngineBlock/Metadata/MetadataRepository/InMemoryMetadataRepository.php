@@ -3,7 +3,6 @@
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
 use InvalidArgumentException;
-use OpenConext\EngineBlock\Metadata\Container\ContainerInterface;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -47,16 +46,6 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
         foreach ($serviceProviders as $serviceProvider) {
             $this->registerServiceProvider($serviceProvider);
         }
-    }
-
-    /**
-     * @param array $repositoryConfig
-     * @param ContainerInterface $container
-     * @return static
-     */
-    public static function createFromConfig(array $repositoryConfig, ContainerInterface $container)
-    {
-        return new static(array(), array());
     }
 
     /**

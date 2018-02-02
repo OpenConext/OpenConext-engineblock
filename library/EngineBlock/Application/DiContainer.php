@@ -1,11 +1,11 @@
 <?php
 
 use Doctrine\ORM\EntityManager;
-use OpenConext\EngineBlock\Metadata\Container\ContainerInterface;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
-class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
+class EngineBlock_Application_DiContainer extends Pimple
 {
     const METADATA_REPOSITORY                   = 'metadataRepository';
     const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
@@ -95,14 +95,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return Janus_Client_CacheProxy
-     */
-    public function getServiceRegistryClient()
-    {
-        return $this->container->get('engineblock.compat.janus_cient');
-    }
-
-    /**
      * @return \OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface
      */
     public function getAttributeAggregationClient()
@@ -154,32 +146,17 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     {
         $this[self::METADATA_REPOSITORY] = function (EngineBlock_Application_DiContainer $container)
         {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
+            $em = $container->getEntityManager();
+            $spRepository  = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\ServiceProvider');
+            $idpRepository = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider');
 
-            $repositoryConfigs = $application->getConfigurationValue('metadataRepository');
-            if (!$repositoryConfigs instanceof Zend_Config) {
-                throw new RuntimeException('metadataRepository config is not set or not multi-valued?');
-            }
-
-            $repositoriesConfig = $application->getConfigurationValue('metadataRepositories');
-            if (!$repositoriesConfig instanceof Zend_Config) {
-                throw new RuntimeException('metadataRepositories config is not set or not multi-valued?');
-            }
-
-            $repositoryConfigs  = $repositoryConfigs->toArray();
-            $repositoriesConfig = $repositoriesConfig->toArray();
-
-            $processedRepositoriesConfig = array();
-            foreach ($repositoriesConfig as $repositoryId) {
-                if (!isset($repositoryConfigs[$repositoryId])) {
-                    throw new RuntimeException(
-                        "metadataRepositories config mentions '$repositoryId', but no metadataRepository.$repositoryId found"
-                    );
-                }
-                $processedRepositoriesConfig[] = $repositoryConfigs[$repositoryId];
-            }
-
-            return CompositeMetadataRepository::createFromConfig($processedRepositoriesConfig, $container);
+            return new CompositeMetadataRepository(
+                array(
+                    new CachedDoctrineMetadataRepository(
+                        new DoctrineMetadataRepository($em, $spRepository, $idpRepository)
+                    )
+                )
+            );
         };
     }
 

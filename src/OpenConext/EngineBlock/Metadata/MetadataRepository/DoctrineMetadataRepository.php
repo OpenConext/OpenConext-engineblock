@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use OpenConext\EngineBlock\Metadata\Container\ContainerInterface;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -40,21 +39,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
     private $idpRepository;
 
     /**
-     * @param array $repositoryConfig
-     * @param ContainerInterface $container
-     * @return self
-     */
-    public static function createFromConfig(array $repositoryConfig, ContainerInterface $container)
-    {
-        /** @var EntityManager $em */
-        $em = $container->getEntityManager();
-        $idpRepository = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider');
-        $spRepository  = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\ServiceProvider');
-
-        return new self($em, $spRepository, $idpRepository);
-    }
-
-    /**
+     * @param EntityManager $entityManager
      * @param EntityRepository $spRepository
      * @param EntityRepository $idpRepository
      */

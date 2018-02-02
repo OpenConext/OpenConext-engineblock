@@ -78,8 +78,11 @@ class ConnectionsController
         $assembler = new JanusPushMetadataAssembler();
         $roles     = $assembler->assemble($body->connections);
 
-        $diContainer = $this->engineBlockApplicationSingleton->getDiContainer();
-        $doctrineRepository = DoctrineMetadataRepository::createFromConfig([], $diContainer);
+        $em = $this->engineBlockApplicationSingleton->getDiContainer()->getEntityManager();
+        $spRepository  = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\ServiceProvider');
+        $idpRepository = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider');
+
+        $doctrineRepository = DoctrineMetadataRepository::createFromConfig($em, $spRepository, $idpRepository);
 
         $result = $doctrineRepository->synchronize($roles);
 
