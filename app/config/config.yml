@@ -11,6 +11,9 @@ parameters:
     #   4102bffe58a9ecbce3c7c934e0aa8ece46efcf82/library/EngineBlock/Application/Bootstrapper.php#L242
     locale: en
 
+    # This value is used as cache-buster, replaced by the release script
+    asset_version: "#ASSET_VERSION#"
+
 open_conext_engine_block:
     features:
         api.metadata_push:   "%feature_api_metadata_push%"
@@ -33,7 +36,6 @@ framework:
     #serializer:      { enable_annotations: true }
     templating:
         engines: ['php']
-        #assets_version: SomeVersionScheme
     default_locale:  "%locale%"
     trusted_hosts:   ~
     trusted_proxies: "%trusted_proxies%"
