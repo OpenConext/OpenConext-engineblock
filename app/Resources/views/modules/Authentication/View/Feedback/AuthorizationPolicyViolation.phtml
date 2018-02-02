@@ -36,11 +36,11 @@ $layout->wide = true;
     <?php
         if (isset($policyDecisionMessage)) {
     ?>
-        <?php if (!is_null($logo)) : ?>
-            <img src="<?php echo EngineBlock_View::htmlSpecialCharsAttributeValue($logo->getUrl()); ?>"
+        <?php if (!empty($logo->url)) : ?>
+            <img src="<?php echo EngineBlock_View::htmlSpecialCharsAttributeValue($logo->url); ?>"
                  class="pull-right"
-                 width="<?php echo EngineBlock_View::htmlSpecialCharsAttributeValue($logo->getWidth()); ?>"
-                 height="<?php echo EngineBlock_View::htmlSpecialCharsAttributeValue($logo->getHeight()); ?>"
+                 width="<?php echo (int) $logo->width; ?>"
+                 height="<?php echo (int) $logo->height; ?>"
             >
         <?php endif; ?>
         <h2><?= EngineBlock_View::htmlSpecialCharsText($policyDecisionMessage)?></h2>
