@@ -71,9 +71,6 @@ services:
     engineblock.compat.janus_cient:
         class: Janus_Client_CacheProxy
 
-    engineblock.compat.asset_manager:
-        class: EngineBlock_AssetManager
-
     engineblock.compat.time_provider:
         class: EngineBlock_TimeProvider_Default
 
