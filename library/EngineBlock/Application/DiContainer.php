@@ -184,16 +184,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @deprecated since the theme is were introduced this should no longer be used.
-     *
-     * @return EngineBlock_AssetManager
-     */
-    public function getAssetManager()
-    {
-        return $this->container->get('engineblock.compat.asset_manager');
-    }
-
-    /**
      * @return EngineBlock_TimeProvider_Interface
      */
     public function getTimeProvider()
