@@ -22,8 +22,8 @@ What the filter does is:
 ```
 Loop over given Filter Commands, for each Command:
     set the proxy server (EngineBlock_Corto_ProxyServer)
-    set the used IdP (OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider)
-    set the originating SP (OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider)
+    set the used IdP (OpenConext\EngineBlock\Metadata\Entity\IdentityProvider)
+    set the originating SP (OpenConext\EngineBlock\Metadata\Entity\ServiceProvider)
     set the SAMLRequest (EngineBlock_Saml2_AuthnRequestAnnotationDecorator)
     set the Response (EngineBlock_Saml2_ResponseAnnotationDecorator)
     set the responseAttributes (array of attributes from Assertion from the receieved Response)
@@ -80,8 +80,8 @@ Depends on:
 - MetadataRepository
 
 Uses:
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - collabPersonId
 - responseAttributes
 
@@ -95,7 +95,7 @@ Log a notice otherwise.
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 
 ### VerifyShibMdScopingAllowsEduPersonPrincipalName
 log a warning if received `eduPersonPrincipalName` is not allowed by configured shibmd:scopes for the used IdP. Log a
@@ -103,7 +103,7 @@ notice otherwise.
 
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 
 ### ValidateAllowedConnection
 validate if the used IdP is allowed by the metadata configuration of the SP the user comes from.
@@ -112,8 +112,8 @@ Depends on:
 - MetadataRepository
 
 Uses:
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 
 ### ValidateRequiredAttributes
 validate that all required attributes are present in the received response
@@ -122,7 +122,7 @@ Depends on:
 - AttributeValidator
 
 Uses:
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 
 Modifies:
 - responseAttributes
@@ -135,7 +135,7 @@ Depends On:
 - Configuration
 
 Uses:
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 
 Modifies:
 - responseAttributes
@@ -162,7 +162,7 @@ Depends On:
 - AttributeAggregation_Client
 
 Uses:
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - collabPersonId
 - responseAttributes
 
@@ -181,8 +181,8 @@ Depends On:
 
 Uses:
 - collabPersonId
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - responseAttributes
 
 ### AttributeReleasePolicy
@@ -196,7 +196,7 @@ Depends on:
 
 Uses:
 - responseAttributes
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
 
 Modifies:
@@ -234,8 +234,8 @@ Depends On:
 - MetadataRepository
 
 Uses:
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - collabPersonId
 - responseAttributes
 
@@ -253,8 +253,8 @@ Depends On:
 - MetadataRepository
 
 Uses:
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - collabPersonId
 - responseAttributes
 
@@ -271,7 +271,7 @@ Depends on:
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - collabPersonId
 
 Modifies:
@@ -287,7 +287,7 @@ Depends on:
 Uses:
 - EngineBlock_Saml2_ResponseAnnotationDecorator
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - collabPersonId
 
 Modifies:
@@ -304,7 +304,7 @@ Depends on:
 
 Uses:
 - responseAttributes
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
 
 Modifies:
@@ -319,7 +319,7 @@ Depends on:
 
 Uses:
 responseAttributes
-OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
+OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
 
 Modifies:
 - responseAttributes
@@ -330,13 +330,13 @@ Logs the login to the login log.
 Depends on:
 - OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
 - EngineBlock_SamlHelper
-- OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface
+- OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface
 
 Uses:
 - collabPersonId
 - responseAttributes
-- OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider
-- OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider
+- OpenConext\EngineBlock\Metadata\Entity\ServiceProvider
+- OpenConext\EngineBlock\Metadata\Entity\IdentityProvider
 - EngineBlock_Saml2_AuthnRequestAnnotationDecorator
 
 [input]: https://github.com/OpenConext/OpenConext-engineblock/tree/master/library/EngineBlock/Corto/Filter/Input.php

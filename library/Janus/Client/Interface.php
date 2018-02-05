@@ -4,7 +4,7 @@
  * Implementation of the Engine Block internal Service Registry interface.
  *
  * Note that this is a list of the functionality that EngineBlock Metadata doesn't used due to a bug in PHP 5.3.3,
- * the remaining methods can be found in: OpenConext\Component\EngineBlockMetadata\JanusRestV1\RestClientInterface
+ * the remaining methods can be found in: OpenConext\EngineBlock\Metadata\JanusRestV1\RestClientInterface
  */
 interface Janus_Client_Interface
 {

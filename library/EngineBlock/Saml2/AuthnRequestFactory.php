@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 

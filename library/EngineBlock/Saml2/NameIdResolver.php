@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Ramsey\Uuid\Uuid;
 use SAML2\AuthnRequest;
 use SAML2\Constants;

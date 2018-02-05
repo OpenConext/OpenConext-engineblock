@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 
 class EngineBlock_Test_Arp_AttributeReleasePolicyEnforcer extends PHPUnit_Framework_TestCase
 {

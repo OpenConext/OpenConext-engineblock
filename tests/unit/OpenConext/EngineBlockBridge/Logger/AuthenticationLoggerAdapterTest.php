@@ -4,8 +4,8 @@ namespace OpenConext\EngineBlockBridge\Logger;
 
 use EngineBlock_UserDirectory;
 use Mockery as m;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\KeyId;
 use OpenConext\EngineBlock\Logger\AuthenticationLogger;

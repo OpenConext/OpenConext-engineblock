@@ -1,8 +1,8 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 
 class EngineBlock_SamlHelper
 {

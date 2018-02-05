@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlockBundle\AttributeAggregation\Dto;
 
 use OpenConext\EngineBlock\Assert\Assertion;
-use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 
 final class AttributeRule
 {

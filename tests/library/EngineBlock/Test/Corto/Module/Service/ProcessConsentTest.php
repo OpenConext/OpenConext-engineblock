@@ -1,7 +1,7 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;

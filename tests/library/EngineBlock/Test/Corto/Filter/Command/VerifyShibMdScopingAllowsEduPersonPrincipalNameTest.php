@@ -2,8 +2,8 @@
 
 use Monolog\Handler\TestHandler;
 use Monolog\Logger;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use PHPUnit_Framework_TestCase as UnitTest;
 use SAML2\Assertion;
 use SAML2\Response;

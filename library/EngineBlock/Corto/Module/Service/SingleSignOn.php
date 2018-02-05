@@ -1,7 +1,7 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Logger\Message\AdditionalInfo;
 use Psr\Log\LoggerInterface;
 use SAML2\AuthnRequest;

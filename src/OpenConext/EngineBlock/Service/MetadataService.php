@@ -2,11 +2,11 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\EntityNotFoundException;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\Value\Saml\EntityId;
 
 final class MetadataService

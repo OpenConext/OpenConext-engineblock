@@ -12,8 +12,8 @@
  */
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer_Exception as Exception;
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
-use OpenConext\Component\EngineBlockMetadata\Service;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Service;
 
 class EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer
 {

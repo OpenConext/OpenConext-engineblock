@@ -65,10 +65,6 @@ doctrine:
                 mapping_types:
                     enum: string
         types:
-            engineblock_entity_id: OpenConext\EngineBlockBundle\Doctrine\Type\EntityIdType
-            engineblock_entity_type: OpenConext\EngineBlockBundle\Doctrine\Type\EntityTypeType
-            engineblock_json_metadata: OpenConext\EngineBlockBundle\Doctrine\Type\JsonMetadataType
-            engineblock_saml_entity_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\SamlEntityUuidType
             engineblock_collab_person_id: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonIdType
             engineblock_collab_person_uuid: OpenConext\EngineBlockBundle\Doctrine\Type\CollabPersonUuidType
     orm:
@@ -95,14 +91,8 @@ doctrine:
                     Metadata:
                         mapping:   true
                         type:      annotation
-                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlockBundle/Metadata"
-                        prefix:    OpenConext\EngineBlockBundle\Metadata
-                        is_bundle: false
-                    EngineBlockMetadata:
-                        mapping:   true
-                        type:      annotation
-                        dir:       "%kernel.root_dir%/../vendor/openconext/engineblock-metadata/src/Entity"
-                        prefix:    OpenConext\Component\EngineBlockMetadata
+                        dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlock/Metadata"
+                        prefix:    OpenConext\EngineBlock\Metadata
                         is_bundle: false
 
 doctrine_migrations:

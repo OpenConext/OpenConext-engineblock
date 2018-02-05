@@ -1,6 +1,6 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use SAML2\Constants;
 

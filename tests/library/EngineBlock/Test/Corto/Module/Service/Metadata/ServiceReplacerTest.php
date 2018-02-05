@@ -1,8 +1,8 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Service;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Service;
 use SAML2\Constants;
 
 class EngineBlock_Test_ServiceReplacerTest extends PHPUnit_Framework_TestCase

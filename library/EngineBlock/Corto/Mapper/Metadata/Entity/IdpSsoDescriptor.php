@@ -1,7 +1,7 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_IdpSsoDescriptor extends EngineBlock_Corto_Mapper_Metadata_Entity_SsoDescriptor
 {

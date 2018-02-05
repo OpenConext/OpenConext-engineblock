@@ -19,7 +19,7 @@
 namespace OpenConext\EngineBlockBundle\Tests\AttributeAggregation\Dto;
 
 use InvalidArgumentException;
-use OpenConext\Component\EngineBlockMetadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\AttributeRule;
 use OpenConext\EngineBlockBundle\AttributeAggregation\Dto\Request;
 use PHPUnit_Framework_TestCase as TestCase;

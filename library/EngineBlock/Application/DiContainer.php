@@ -1,8 +1,8 @@
 <?php
 
 use Doctrine\ORM\EntityManager;
-use OpenConext\Component\EngineBlockMetadata\Container\ContainerInterface;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\CompositeMetadataRepository;
+use OpenConext\EngineBlock\Metadata\Container\ContainerInterface;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface

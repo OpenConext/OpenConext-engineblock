@@ -1,9 +1,9 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\Component\EngineBlockMetadata\Service;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\Service;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -599,7 +599,7 @@ class EngineBlock_Corto_ProxyServer
      *
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param ServiceProvider $serviceProvider
-     * @return null|\OpenConext\Component\EngineBlockMetadata\IndexedService
+     * @return null|\OpenConext\EngineBlock\Metadata\IndexedService
      */
     public function getCustomAssertionConsumer(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,

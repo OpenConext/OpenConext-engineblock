@@ -1,6 +1,6 @@
 <?php
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use SAML2\AuthnRequest;
 
 /**

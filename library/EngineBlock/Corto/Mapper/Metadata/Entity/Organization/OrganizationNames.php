@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 
 class EngineBlock_Corto_Mapper_Metadata_Entity_Organization_OrganizationNames
 {

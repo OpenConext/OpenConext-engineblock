@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\ShibMdScope;
+use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\Value\RegularExpression;
 use OpenConext\Value\Saml\Metadata\ShibbolethMetadataScope;
 use OpenConext\Value\Saml\Metadata\ShibbolethMetadataScopeList;

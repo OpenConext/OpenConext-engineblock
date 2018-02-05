@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 
 abstract class EngineBlock_Attributes_Validator_Abstract implements EngineBlock_Attributes_Validator_Interface
 {

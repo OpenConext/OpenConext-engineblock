@@ -1,7 +1,7 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
-use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 
 class EngineBlock_Corto_Module_Service_EdugainMetadata extends EngineBlock_Corto_Module_Service_Abstract
 {

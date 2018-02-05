@@ -18,7 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Tests;
 
-use OpenConext\EngineBlock\Metadata\Value\Logo;
+use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Response;
 use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use PHPUnit_Framework_TestCase as TestCase;
@@ -95,7 +95,7 @@ class PolicyDecisionTest extends TestCase
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_deny_idp_specific.json'), true);
         $response = Response::fromData($responseJson);
 
-        $logo = new Logo('logo.png', 100, 100);
+        $logo = new Logo('logo.png');
 
         $decision = PolicyDecision::fromResponse($response);
         $decision->setIdpLogo($logo);
@@ -122,7 +122,7 @@ class PolicyDecisionTest extends TestCase
         $responseJson = json_decode(file_get_contents(__DIR__ . '/fixture/response_indeterminate.json'), true);
         $response = Response::fromData($responseJson);
 
-        $logo = new Logo('logo.png', 100, 100);
+        $logo = new Logo('logo.png');
 
         $decision = PolicyDecision::fromResponse($response);
         $decision->setIdpLogo($logo);

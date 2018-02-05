@@ -1,6 +1,6 @@
 <?php
 
-use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 
 class EngineBlock_Exception_UnknownServiceProvider extends \Exception
 {
