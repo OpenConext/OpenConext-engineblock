@@ -245,3 +245,13 @@
     p
       a
         white-space: nowrap
+
+        +max-width($small)
+          white-space: normal
+
+          // Force the 'more information' link on a new line,
+          // for bigger displays, we want everything on the
+          // same line.
+          &::before
+            content: ' '
+            display: block
