@@ -14,7 +14,6 @@
         "php": ">=5.6,<7",
         "dbpatch/dbpatch": "~1.2",
         "doctrine/orm": "~2.3",
-        "kriswallsmith/assetic": "~1.2.0",
         "monolog/monolog": "~1.13",
         "mrclay/minify": "~2.2",
         "openconext/stoker-metadata": "~0.1",
