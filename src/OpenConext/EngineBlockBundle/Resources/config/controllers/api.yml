@@ -4,7 +4,7 @@ services:
         arguments:
             - "@security.authorization_checker"
             - "@engineblock.features"
-            - "@engineblock.compat.application"
+            - '@engineblock.metadata.repository.doctrine'
 
     engineblock.controller.api.consent:
         class: OpenConext\EngineBlockBundle\Controller\Api\ConsentController

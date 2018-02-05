@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
-use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlock\Metadata\Entity\Assembler\JanusPushMetadataAssembler;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
@@ -22,11 +21,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 class ConnectionsController
 {
     /**
-     * @var EngineBlock_ApplicationSingleton
-     */
-    private $engineBlockApplicationSingleton;
-
-    /**
      * @var AuthorizationCheckerInterface
      */
     private $authorizationChecker;
@@ -39,16 +33,16 @@ class ConnectionsController
     /**
      * @param AuthorizationCheckerInterface    $authorizationChecker
      * @param FeatureConfiguration             $featureConfiguration
-     * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
+     * @param DoctrineMetadataRepository       $repository
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
         FeatureConfiguration $featureConfiguration,
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
+        DoctrineMetadataRepository $repository
     ) {
-        $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
         $this->authorizationChecker            = $authorizationChecker;
         $this->featureConfiguration            = $featureConfiguration;
+        $this->repository                      = $repository;
     }
 
     public function pushConnectionsAction(Request $request)
@@ -77,14 +71,7 @@ class ConnectionsController
 
         $assembler = new JanusPushMetadataAssembler();
         $roles     = $assembler->assemble($body->connections);
-
-        $em = $this->engineBlockApplicationSingleton->getDiContainer()->getEntityManager();
-        $spRepository  = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\ServiceProvider');
-        $idpRepository = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider');
-
-        $doctrineRepository = DoctrineMetadataRepository::createFromConfig($em, $spRepository, $idpRepository);
-
-        $result = $doctrineRepository->synchronize($roles);
+        $result    = $this->repository->synchronize($roles);
 
         return new JsonResponse($result);
     }

@@ -11,3 +11,17 @@ services:
         factory: ["@doctrine.orm.entity_manager", getRepository]
         arguments:
             - 'OpenConext\EngineBlockBundle\Authentication\Entity\User'
+
+    engineblock.repository.service_provider:
+        public: false
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - 'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider'
+
+    engineblock.repository.identity_provider:
+        public: false
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - 'OpenConext\EngineBlock\Metadata\Entity\IdentityProvider'

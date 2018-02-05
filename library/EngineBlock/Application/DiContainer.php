@@ -1,13 +1,11 @@
 <?php
 
 use Doctrine\ORM\EntityManager;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
 {
-    const METADATA_REPOSITORY                   = 'metadataRepository';
     const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
@@ -20,7 +18,6 @@ class EngineBlock_Application_DiContainer extends Pimple
 
     public function __construct(SymfonyContainerInterface $container)
     {
-        $this->registerMetadataRepository();
         $this->registerDenormalizedAttributeDefinitions();
         $this->registerAttributeMetadata();
         $this->registerAttributeValidator();
@@ -107,7 +104,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getMetadataRepository()
     {
-        return $this[self::METADATA_REPOSITORY];
+        return $this->container->get('engineblock.metadata.repository.composite');
     }
 
     /**
@@ -140,24 +137,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getConsentService()
     {
         return $this->container->get('engineblock.service.consent');
-    }
-
-    protected function registerMetadataRepository()
-    {
-        $this[self::METADATA_REPOSITORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            $em = $container->getEntityManager();
-            $spRepository  = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\ServiceProvider');
-            $idpRepository = $em->getRepository('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider');
-
-            return new CompositeMetadataRepository(
-                array(
-                    new CachedDoctrineMetadataRepository(
-                        new DoctrineMetadataRepository($em, $spRepository, $idpRepository)
-                    )
-                )
-            );
-        };
     }
 
     /**
