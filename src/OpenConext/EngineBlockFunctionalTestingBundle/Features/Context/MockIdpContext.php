@@ -118,54 +118,6 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^the IdP uses a blacklist for access control$/
-     */
-    public function theIdpUsesABlacklistForAccessControl()
-    {
-        $this->serviceRegistryFixture
-            ->blacklist($this->mockIdpRegistry->getOnly()->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^IdP "([^"]*)" uses a blacklist for access control$/
-     */
-    public function idpUsesABlacklist($idpName)
-    {
-        $this->serviceRegistryFixture
-            ->blacklist($this->mockIdpRegistry->get($idpName)->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^IdP "([^"]*)" uses a whitelist for access control$/
-     */
-    public function idpUsesAWhitelist($idpName)
-    {
-        /** @var MockIdentityProvider $mockIdp */
-        $mockIdp = $this->mockIdpRegistry->get($idpName);
-
-        $this->serviceRegistryFixture->whitelist($mockIdp->entityId());
-
-        $this->serviceRegistryFixture->save();
-    }
-
-    /**
-     * @Given /^IdP "([^"]*)" whitelists SP "([^"]*)"$/
-     */
-    public function idpWhitelistsSp($idpName, $spName)
-    {
-        /** @var MockIdentityProvider $mockIdp */
-        $mockIdp = $this->mockIdpRegistry->get($idpName);
-        /** @var MockServiceProvider $mockSp */
-        $mockSp  = $this->mockSpRegistry->get($spName);
-
-        $this->serviceRegistryFixture->allow($mockSp->entityid(), $mockIdp->entityId());
-
-        $this->serviceRegistryFixture->save();
-    }
-
-    /**
      * @Given /^the IdP is configured to always return Responses with StatusCode (\w+)\/(\w+)$/
      */
     public function theIdpIsConfiguredToAlwaysReturnResponsesWithStatuscode($topStatusCode, $secondStatusCode)

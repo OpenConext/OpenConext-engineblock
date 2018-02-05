@@ -8,13 +8,10 @@ Feature:
       And no registered SPs
       And no registered Idps
       And an Identity Provider named "Dummy Idp"
-      And the IdP uses a blacklist for access control
       And a Service Provider named "Dummy SP"
-      And a Service Provider named "Connected SP"
-      And SP "Connected SP" uses a blacklist for access control
       And a Service Provider named "Unconnected SP"
-      And SP "Unconnected SP" uses a whitelist for access control
       And an unregistered Service Provider named "Unregistered SP"
+      And SP "Unconnected SP" is not connected to IdP "Dummy Idp"
 
   Scenario: I log in at my Identity Provider, but something goes wrong and it returns an error response.
     Given the IdP is configured to always return Responses with StatusCode Requester/InvalidNameIDPolicy

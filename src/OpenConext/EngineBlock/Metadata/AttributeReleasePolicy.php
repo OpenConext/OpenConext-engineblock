@@ -92,7 +92,7 @@ class AttributeReleasePolicy
             $rulesWithSource[$name] = array_filter(
                 $rules,
                 function ($rule) {
-                    return isset($rule['source']);
+                    return isset($rule['source']) && $rule['source'] !== 'idp';
                 }
             );
         }

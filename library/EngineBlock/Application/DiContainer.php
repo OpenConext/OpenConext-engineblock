@@ -14,7 +14,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     /**
      * @var SymfonyContainerInterface
      */
-    private $container;
+    protected $container;
 
     public function __construct(SymfonyContainerInterface $container)
     {

@@ -12,10 +12,8 @@ Feature:
     And an Identity Provider named "Connected IdP2"
     And an Identity Provider named "Unconnected IdP1"
     And an Identity Provider named "Unconnected IdP2"
-    And IdP "Connected IdP1" uses a blacklist for access control
-    And IdP "Connected IdP2" uses a blacklist for access control
-    And IdP "Unconnected IdP1" uses a whitelist for access control
-    And IdP "Unconnected IdP2" uses a whitelist for access control
+    And SP "SP" is not connected to IdP "Unconnected IdP1"
+    And SP "SP" is not connected to IdP "Unconnected IdP2"
 
   Scenario: As a user for an SP I see only connected IdPs without request form
     Given SP "SP" is configured to only display connected IdPs in the WAYF

@@ -8,6 +8,14 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
+    /**
+     * @return CompositeMetadataRepository
+     */
+    public function getMetadataRepository()
+    {
+        return $this->container->get('engineblock.functional_testing.metadata.repository.composite');
+    }
+
     public function getTimeProvider()
     {
         return new EngineBlock_TimeProvider_Fixture();

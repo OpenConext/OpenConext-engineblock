@@ -133,20 +133,7 @@ class MockSpContext extends AbstractSubContext
      */
     public function spMayOnlyAccess($spName, $idpName)
     {
-        $spEntityId = $this->mockSpRegistry->get($spName)->entityId();
-
-        $idpEntityId = $this->mockIdpRegistry->get($idpName)->entityId();
-
-        $this->serviceRegistryFixture
-            ->blacklist($spEntityId)
-            ->allow($spEntityId, $idpEntityId)
-            ->save();
-
-        // Override the Destination for the Response
-        $this->mockIdpRegistry->get($idpName)->overrideResponseDestination(
-            $this->engineBlock->assertionConsumerLocation()
-        );
-        $this->mockIdpRegistry->save();
+        throw new \Exception('Log replay is not implemented');
     }
 
     /**
@@ -277,40 +264,16 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SP "([^"]*)" uses a blacklist for access control$/
+     * @Given /^SP "([^"]*)" is not connected to IdP "([^"]*)"$/
      */
-    public function spUsesABlacklistOfAccessControl($spName)
-    {
-        /** @var MockServiceProvider $sp */
-        $sp = $this->mockSpRegistry->get($spName);
-        $this->serviceRegistryFixture
-            ->blacklist($sp->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" uses a whitelist for access control$/
-     */
-    public function spUsesAWhitelistForAccessControl($spName)
-    {
-        /** @var MockServiceProvider $sp */
-        $sp = $this->mockSpRegistry->get($spName);
-        $this->serviceRegistryFixture
-            ->whitelist($sp->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" whitelists IdP "([^"]*)"$/
-     */
-    public function spWhitelistsIdp($spName, $idpName)
+    public function disconnectSpToIdp($spName, $idpName)
     {
         /** @var MockIdentityProvider $mockIdp */
         $mockIdp = $this->mockIdpRegistry->get($idpName);
         /** @var MockServiceProvider $mockSp */
         $mockSp  = $this->mockSpRegistry->get($spName);
 
-        $this->serviceRegistryFixture->allow($mockSp->entityid(), $mockIdp->entityId());
+        $this->serviceRegistryFixture->disconnect($mockSp->entityId(), $mockIdp->entityId());
 
         $this->serviceRegistryFixture->save();
     }

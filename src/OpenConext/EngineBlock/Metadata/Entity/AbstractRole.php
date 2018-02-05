@@ -249,7 +249,7 @@ abstract class AbstractRole
      *
      * @ORM\Column(name="manipulation", type="text")
      */
-    protected $manipulation;
+    public $manipulation;
 
     /**
      * @param $entityId
