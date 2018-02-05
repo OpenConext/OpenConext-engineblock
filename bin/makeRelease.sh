@@ -56,6 +56,9 @@ COMMITHASH=`git rev-parse HEAD` &&
 echo "Tag: ${TAG}" > ${PROJECT_DIR}/RELEASE &&
 echo "Commit: ${COMMITHASH}" >> ${PROJECT_DIR}/RELEASE &&
 
+echo "Updating asset_version in config"
+sed -i s,#ASSET_VERSION#,${TAG},g ${PROJECT_DIR}/app/config/config.yml
+
 echo "Cleaning build of dev files" &&
 rm -rf ${PROJECT_DIR}/.idea &&
 rm -rf ${PROJECT_DIR}/.git &&

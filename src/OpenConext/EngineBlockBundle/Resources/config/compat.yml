@@ -41,6 +41,7 @@ services:
         properties:
             title: "@=service('engineblock.bridge.config').get('defaults.title')"
             header: "@=service('engineblock.bridge.config').get('defaults.header')"
+            assetVersion: "%asset_version%"
 
     engineblock.compat.logger:
         class: Monolog\Logger
