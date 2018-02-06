@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use OpenConext\EngineBlock\Metadata\Container\ContainerInterface;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
@@ -22,23 +21,6 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
      * @var MetadataRepositoryInterface[]
      */
     private $orderedRepositories = array();
-
-    /**
-     * @param array $repositoryConfig
-     * @param ContainerInterface $container
-     * @return mixed
-     */
-    public static function createFromConfig(array $repositoryConfig, ContainerInterface $container)
-    {
-        $factory = new RepositoryFactory();
-
-        $orderedRepositories = array();
-        foreach ($repositoryConfig as $nestedRepositoryConfig) {
-            $orderedRepositories[] = $factory->createFromConfig($nestedRepositoryConfig, $container);
-        }
-
-        return new static($orderedRepositories);
-    }
 
     /**
      * @param MetadataRepositoryInterface[] $orderedRepositories
@@ -228,12 +210,12 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
     /**
      * {@inheritdoc}
      */
-    public function findEntitiesPublishableInEdugain(MetadataRepositoryInterface $repository = null)
+    public function findEntitiesPublishableInEdugain()
     {
         $entityIndex = array();
         $entities = array();
         foreach ($this->orderedRepositories as $repository) {
-            $repositoryEntities = $repository->findEntitiesPublishableInEdugain($this);
+            $repositoryEntities = $repository->findEntitiesPublishableInEdugain();
             foreach ($repositoryEntities as $repositoryEntity) {
                 // When is an entity the same as another one? For now when it's the same role type (SP / IDP)
                 // and has the same entityId. Though the SAML2 spec allows for much more than that,

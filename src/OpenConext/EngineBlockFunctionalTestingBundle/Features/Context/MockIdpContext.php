@@ -2,14 +2,11 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Saml2\EncryptedAssertion;
-use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProviderFactory;
+use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 
 /**
  * Class MockIdpContext
@@ -88,81 +85,6 @@ class MockIdpContext extends AbstractSubContext
         $this->anIdentityProviderNamed($name);
         $mockIdp = $this->mockIdpRegistry->get($name);
         $this->serviceRegistryFixture->setLogo($mockIdp->entityId(), $logo)->save();
-    }
-
-    /**
-     * @Given /^IdP "([^"]*)" is configured to return a Response like the one at "([^"]*)"$/
-     */
-    public function idpIsConfiguredToReturnAResponseLikeTheOneAt($idpName, $responseLogFile)
-    {
-        // Parse a Response out of the log file
-        $logReader = new LogChunkParser($responseLogFile);
-        $response = $logReader->getMessage(LogChunkParser::MESSAGE_TYPE_RESPONSE);
-
-        $this->printDebug(print_r($response, true));
-
-        // Write out how the IDP should behave
-        /** @var MockIdentityProvider $mockIdp */
-        $mockIdp = $this->mockIdpRegistry->get($idpName);
-        $mockIdp->setResponse($response);
-        $this->mockIdpRegistry->save();
-
-        $ssoUrl = $mockIdp->singleSignOnLocation();
-
-        // Override the SSO Location for the IDP used in the response to go to the Mock Idp
-        $this->serviceRegistryFixture
-            ->setEntitySsoLocation($response->getIssuer(), $ssoUrl)
-            ->save();
-
-        $this->engineBlock->overrideTime($response->getIssueInstant());
-    }
-
-    /**
-     * @Given /^the IdP uses a blacklist for access control$/
-     */
-    public function theIdpUsesABlacklistForAccessControl()
-    {
-        $this->serviceRegistryFixture
-            ->blacklist($this->mockIdpRegistry->getOnly()->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^IdP "([^"]*)" uses a blacklist for access control$/
-     */
-    public function idpUsesABlacklist($idpName)
-    {
-        $this->serviceRegistryFixture
-            ->blacklist($this->mockIdpRegistry->get($idpName)->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^IdP "([^"]*)" uses a whitelist for access control$/
-     */
-    public function idpUsesAWhitelist($idpName)
-    {
-        /** @var MockIdentityProvider $mockIdp */
-        $mockIdp = $this->mockIdpRegistry->get($idpName);
-
-        $this->serviceRegistryFixture->whitelist($mockIdp->entityId());
-
-        $this->serviceRegistryFixture->save();
-    }
-
-    /**
-     * @Given /^IdP "([^"]*)" whitelists SP "([^"]*)"$/
-     */
-    public function idpWhitelistsSp($idpName, $spName)
-    {
-        /** @var MockIdentityProvider $mockIdp */
-        $mockIdp = $this->mockIdpRegistry->get($idpName);
-        /** @var MockServiceProvider $mockSp */
-        $mockSp  = $this->mockSpRegistry->get($spName);
-
-        $this->serviceRegistryFixture->allow($mockSp->entityid(), $mockIdp->entityId());
-
-        $this->serviceRegistryFixture->save();
     }
 
     /**

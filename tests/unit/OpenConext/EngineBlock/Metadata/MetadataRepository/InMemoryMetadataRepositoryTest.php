@@ -19,15 +19,6 @@ class MetadataRepositoryTest extends PHPUnit_Framework_TestCase
 {
     const MOCK_IDP_NAME = 'https://idp.example.edu';
 
-    public function testCreateFromConfigStartsEmpty()
-    {
-        $repository = InMemoryMetadataRepository::createFromConfig(
-            array(),
-            Mockery::mock('OpenConext\EngineBlock\Metadata\Container\ContainerInterface')
-        );
-        $this->assertEmpty($repository->findIdentityProviders());
-    }
-
     public function testFetchEntityByEntityId()
     {
         $repository = new InMemoryMetadataRepository(array(), array());

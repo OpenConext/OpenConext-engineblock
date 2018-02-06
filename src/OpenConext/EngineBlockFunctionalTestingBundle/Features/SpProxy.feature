@@ -15,23 +15,14 @@ Feature:
       And a Service Provider named "Loa SP"
       And a Service Provider named "Far SP"
       And a Service Provider named "Test SP"
-      And IdP "AlwaysAuth" uses a blacklist for access control
-      And IdP "StepUpOnlyAuth" uses a whitelist for access control
-      And IdP "StepUpOnlyAuth" whitelists SP "Step Up"
-      And IdP "LoaOnlyAuth" uses a whitelist for access control
-      And IdP "LoaOnlyAuth" whitelists SP "Loa SP"
-      And IdP "CombinedAuth" uses a whitelist for access control
-      And IdP "CombinedAuth" whitelists SP "Step Up"
-      And IdP "CombinedAuth" whitelists SP "Loa SP"
-      And SP "Step Up" uses a whitelist for access control
-      And SP "Step Up" whitelists IdP "AlwaysAuth"
-      And SP "Step Up" whitelists IdP "StepUpOnlyAuth"
-      And SP "Step Up" whitelists IdP "CombinedAuth"
-      And SP "Loa SP" uses a whitelist for access control
-      And SP "Loa SP" whitelists IdP "AlwaysAuth"
-      And SP "Loa SP" whitelists IdP "LoaOnlyAuth"
-      And SP "Loa SP" whitelists IdP "CombinedAuth"
-      And SP "Far SP" uses a blacklist for access control
+      And SP "Far SP" is not connected to IdP "CombinedAuth"
+      And SP "Far SP" is not connected to IdP "LoaOnlyAuth"
+      And SP "Far SP" is not connected to IdP "StepUpOnlyAuth"
+      And SP "Loa SP" is not connected to IdP "StepUpOnlyAuth"
+      And SP "Step Up" is not connected to IdP "LoaOnlyAuth"
+      And SP "Test SP" is not connected to IdP "CombinedAuth"
+      And SP "Test SP" is not connected to IdP "LoaOnlyAuth"
+      And SP "Test SP" is not connected to IdP "StepUpOnlyAuth"
       And SP "Test SP" is using workflow state "testaccepted"
 
   Scenario: User logs in to the SP without a proxy and wayf shows relevant Identity Providers

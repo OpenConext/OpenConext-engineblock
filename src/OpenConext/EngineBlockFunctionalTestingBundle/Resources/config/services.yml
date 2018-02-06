@@ -1,7 +1,4 @@
 parameters:
-    engineblock.functional_testing.id_data_store.file:                        "%kernel.root_dir%/../tmp/eb-fixtures/saml2/id"
-    engineblock.functional_testing.time_data_store.file:                      "%kernel.root_dir%/../tmp/eb-fixtures/saml2/time"
-    engineblock.functional_testing.super_globals_data_store.file:             "%kernel.root_dir%/../tmp/eb-fixtures/superglobals.json"
     engineblock.functional_testing.service_registry_data_store.dir:           "%kernel.root_dir%/../tmp/eb-fixtures/janus/"
     engineblock.functional_testing.service_registry_data_store.file:          "%kernel.root_dir%/../tmp/eb-fixtures/janus/entities"
     engineblock.functional_testing.features_data_store.file:                  "%kernel.root_dir%/../tmp/eb-fixtures/features.json"
@@ -14,9 +11,6 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock
         arguments:
             - '%engineblock_url%'
-            - '@engineblock.functional_testing.fixture.time'
-            - '@engineblock.functional_testing.fixture.super_globals'
-            - '@engineblock.functional_testing.fixture.id'
 
     #region Behat Contexts
     engineblock.functional_testing.behat_context.mink:
@@ -60,20 +54,16 @@ services:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture
         arguments:
             - '@engineblock.functional_testing.data_store.service_registry'
-            - '@engineblock.functional_testing.data_store.service_registry_flags'
             - '%engineblock.functional_testing.service_registry_data_store.dir%'
 
-    engineblock.functional_testing.fixture.id:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture
-        arguments: ['@engineblock.functional_testing.data_store.id']
+    engineblock.functional_testing.metadata.repository.fixture_reader:
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository
+        factory: ['@engineblock.functional_testing.fixture.service_registry', 'createInMemoryMetadataRepository']
 
-    engineblock.functional_testing.fixture.time:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\TimeFixture
-        arguments: ['@engineblock.functional_testing.data_store.time']
-
-    engineblock.functional_testing.fixture.super_globals:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SuperGlobalsFixture
-        arguments: ['@engineblock.functional_testing.data_store.super_globals']
+    engineblock.functional_testing.metadata.repository.composite:
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository
+        arguments:
+            - ['@engineblock.functional_testing.metadata.repository.fixture_reader']
 
     engineblock.functional_testing.fixture.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
@@ -100,24 +90,8 @@ services:
 
     #region Data Stores
     engineblock.functional_testing.data_store.service_registry:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
-        arguments: ['%engineblock.functional_testing.service_registry_data_store.file%']
-
-    engineblock.functional_testing.data_store.service_registry_flags:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\FileFlags
-        arguments: ['%engineblock.functional_testing.service_registry_data_store.dir%']
-
-    engineblock.functional_testing.data_store.id:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\SerializedDataStore
-        arguments: ['%engineblock.functional_testing.id_data_store.file%']
-
-    engineblock.functional_testing.data_store.time:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
-        arguments: ['%engineblock.functional_testing.time_data_store.file%']
-
-    engineblock.functional_testing.data_store.super_globals:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore
-        arguments: ['%engineblock.functional_testing.super_globals_data_store.file%']
+        arguments: ['%engineblock.functional_testing.service_registry_data_store.file%']
 
     engineblock.functional_testing.data_store.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\JsonDataStore

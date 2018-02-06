@@ -3,7 +3,6 @@
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
-use OpenConext\EngineBlock\Metadata\Container\ContainerInterface;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -35,18 +34,6 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
      * @var DoctrineMetadataRepository
      */
     private $repository = array();
-
-    /**
-     * @param array $repositoryConfig
-     * @param ContainerInterface $container
-     * @return CachedDoctrineMetadataRepository
-     */
-    public static function createFromConfig(array $repositoryConfig, ContainerInterface $container)
-    {
-        return new self(
-            DoctrineMetadataRepository::createFromConfig($repositoryConfig, $container)
-        );
-    }
 
     /**
      * @param DoctrineMetadataRepository $repository
@@ -218,7 +205,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     /**
      * @return AbstractRole[]
      */
-    public function findEntitiesPublishableInEdugain(MetadataRepositoryInterface $repository = null)
+    public function findEntitiesPublishableInEdugain()
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }

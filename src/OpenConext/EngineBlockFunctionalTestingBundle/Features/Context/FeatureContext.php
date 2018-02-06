@@ -17,7 +17,6 @@ class FeatureContext extends BehatContext implements KernelAwareInterface
     const SUB_CONTEXT_ENGINE_BLOCK  = 'engine';
     const SUB_CONTEXT_MOCK_IDP      = 'idp';
     const SUB_CONTEXT_MOCK_SP       = 'sp';
-    const SUB_CONTEXT_REPLAY        = 'replay';
 
     const PARAM_NAME_ENGINE_URL         = 'engineblock_url';
     const PARAM_NAME_ETS_URL            = 'engine_test_stand_url';
@@ -122,11 +121,6 @@ class FeatureContext extends BehatContext implements KernelAwareInterface
         $this->useContext(
             self::SUB_CONTEXT_MOCK_SP,
             $container->get('engineblock.functional_testing.behat_context.mock_sp')
-        );
-
-        $this->useContext(
-            self::SUB_CONTEXT_REPLAY,
-            $container->get('engineblock.functional_testing.behat_context.replay')
         );
     }
 

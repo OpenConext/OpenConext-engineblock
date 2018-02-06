@@ -98,3 +98,21 @@ services:
         class: GuzzleHttp\Client
         arguments:
             - auth: ["%attribute_aggregation.username%", "%attribute_aggregation.password%", "Basic"]
+
+    engineblock.metadata.repository.composite:
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository
+        arguments:
+            - ["@engineblock.metadata.repository.cached_doctrine"]
+
+    engineblock.metadata.repository.cached_doctrine:
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository
+        arguments:
+            - "@engineblock.metadata.repository.doctrine"
+
+    engineblock.metadata.repository.doctrine:
+        public: false
+        class: OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@engineblock.repository.service_provider"
+            - "@engineblock.repository.identity_provider"

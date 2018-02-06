@@ -1,14 +1,11 @@
 <?php
 
 use Doctrine\ORM\EntityManager;
-use OpenConext\EngineBlock\Metadata\Container\ContainerInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
-class EngineBlock_Application_DiContainer extends Pimple implements ContainerInterface
+class EngineBlock_Application_DiContainer extends Pimple
 {
-    const METADATA_REPOSITORY                   = 'metadataRepository';
-    const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
     const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
@@ -16,11 +13,10 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     /**
      * @var SymfonyContainerInterface
      */
-    private $container;
+    protected $container;
 
     public function __construct(SymfonyContainerInterface $container)
     {
-        $this->registerMetadataRepository();
         $this->registerDenormalizedAttributeDefinitions();
         $this->registerAttributeMetadata();
         $this->registerAttributeValidator();
@@ -95,14 +91,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     }
 
     /**
-     * @return Janus_Client_CacheProxy
-     */
-    public function getServiceRegistryClient()
-    {
-        return $this->container->get('engineblock.compat.janus_cient');
-    }
-
-    /**
      * @return \OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface
      */
     public function getAttributeAggregationClient()
@@ -115,7 +103,7 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
      */
     public function getMetadataRepository()
     {
-        return $this[self::METADATA_REPOSITORY];
+        return $this->container->get('engineblock.metadata.repository.composite');
     }
 
     /**
@@ -150,39 +138,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
         return $this->container->get('engineblock.service.consent');
     }
 
-    protected function registerMetadataRepository()
-    {
-        $this[self::METADATA_REPOSITORY] = function (EngineBlock_Application_DiContainer $container)
-        {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-
-            $repositoryConfigs = $application->getConfigurationValue('metadataRepository');
-            if (!$repositoryConfigs instanceof Zend_Config) {
-                throw new RuntimeException('metadataRepository config is not set or not multi-valued?');
-            }
-
-            $repositoriesConfig = $application->getConfigurationValue('metadataRepositories');
-            if (!$repositoriesConfig instanceof Zend_Config) {
-                throw new RuntimeException('metadataRepositories config is not set or not multi-valued?');
-            }
-
-            $repositoryConfigs  = $repositoryConfigs->toArray();
-            $repositoriesConfig = $repositoriesConfig->toArray();
-
-            $processedRepositoriesConfig = array();
-            foreach ($repositoriesConfig as $repositoryId) {
-                if (!isset($repositoryConfigs[$repositoryId])) {
-                    throw new RuntimeException(
-                        "metadataRepositories config mentions '$repositoryId', but no metadataRepository.$repositoryId found"
-                    );
-                }
-                $processedRepositoriesConfig[] = $repositoryConfigs[$repositoryId];
-            }
-
-            return CompositeMetadataRepository::createFromConfig($processedRepositoriesConfig, $container);
-        };
-    }
-
     /**
      * @return EngineBlock_TimeProvider_Interface
      */
@@ -197,14 +152,6 @@ class EngineBlock_Application_DiContainer extends Pimple implements ContainerInt
     public function getSaml2IdGenerator()
     {
         return $this->container->get('engineblock.compat.saml2_id_generator');
-    }
-
-    /**
-     * @return EngineBlock_Application_SuperGlobalManager|false
-     */
-    public function getSuperGlobalManager()
-    {
-        return false;
     }
 
     /**

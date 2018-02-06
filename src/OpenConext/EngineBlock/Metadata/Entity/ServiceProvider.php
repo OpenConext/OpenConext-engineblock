@@ -27,7 +27,7 @@ class ServiceProvider extends AbstractRole
      *
      * @ORM\Column(name="attribute_release_policy", type="array")
      */
-    protected $attributeReleasePolicy;
+    public $attributeReleasePolicy;
 
     /**
      * @var IndexedService[]

@@ -47,4 +47,12 @@ class X509CertificateLazyProxy
 
         return call_user_func_array(array($this->certificate, $methodName), $methodArguments);
     }
+
+    /**
+     * Take care not to serialize the openSSL resource ($this->certificate).
+     */
+    public function __sleep()
+    {
+        return array('certData', 'factory');
+    }
 }

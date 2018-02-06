@@ -2,18 +2,14 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use EngineBlock_Saml2_IdGenerator;
-use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 
 /**
  * Class MockSpContext
@@ -129,91 +125,6 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SP "([^"]*)" may only access "([^"]*)"$/
-     */
-    public function spMayOnlyAccess($spName, $idpName)
-    {
-        $spEntityId = $this->mockSpRegistry->get($spName)->entityId();
-
-        $idpEntityId = $this->mockIdpRegistry->get($idpName)->entityId();
-
-        $this->serviceRegistryFixture
-            ->blacklist($spEntityId)
-            ->allow($spEntityId, $idpEntityId)
-            ->save();
-
-        // Override the Destination for the Response
-        $this->mockIdpRegistry->get($idpName)->overrideResponseDestination(
-            $this->engineBlock->assertionConsumerLocation()
-        );
-        $this->mockIdpRegistry->save();
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" is configured to generate a AuthnRequest like the one at "([^"]*)"$/
-     */
-    public function spIsConfiguredToGenerateAAuthnrequestLikeTheOneAt($spName, $authnRequestLogFile)
-    {
-        /** @var MockServiceProvider $mockSp */
-        $mockSp = $this->mockSpRegistry->get($spName);
-
-        $mockSpDefaultEntityId = $mockSp->entityId();
-        $mockSpAcsLocation     = $mockSp->assertionConsumerServiceLocation();
-
-        // First see if the request was even triggered by the SP, or if it was an unsolicited request
-        // by EB.
-        $logReader = new LogChunkParser($authnRequestLogFile);
-        $unsolicitedRequest = $logReader->detectUnsolicitedRequest();
-        if ($unsolicitedRequest) {
-            $this->printDebug("Unsolicited Request:" . PHP_EOL . print_r($unsolicitedRequest, true));
-
-            $mockSp->useUnsolicited();
-
-            $requestIssuer = $unsolicitedRequest['saml:Issuer']['__v'];
-
-            $frame = $this->engineBlock->getIdsToUse(IdFixture::FRAME_REQUEST);
-            $frame->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST, $unsolicitedRequest['_ID']);
-        } else {
-            // If not, then parse an AuthnRequest out of the log file
-            $authnRequest = $logReader->getMessage(LogChunkParser::MESSAGE_TYPE_AUTHN_REQUEST);
-            $mockSp->setAuthnRequest($authnRequest);
-            $this->printDebug(print_r($authnRequest, true));
-
-            $requestIssuer = $authnRequest->getIssuer();
-        }
-
-        // Listen up Mock Service Provider, you must now pretend that you are the issuer of the request.
-        $mockSp->setEntityId($requestIssuer);
-
-        $this->mockSpRegistry->save();
-
-        // Override the ACS Location for the SP used in the response to go to the Mock SP
-        $this->serviceRegistryFixture
-            ->remove($mockSpDefaultEntityId)
-            ->setEntityAcsLocation($requestIssuer, $mockSpAcsLocation)
-            ->save();
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" may run in transparent mode, if indicated in "([^"]*)"$/
-     */
-    public function spMayRunInTransparentModeIfIndicatedIn($spName, $sessionLogFIle)
-    {
-        $logReader = new LogChunkParser($sessionLogFIle);
-        $entityId = $logReader->detectTransparentRequest();
-
-        if (!$entityId) {
-            return;
-        }
-
-        /** @var MockServiceProvider $mockSp */
-        $mockSp = $this->mockSpRegistry->get($spName);
-        $mockSp->useIdpTransparently($entityId);
-
-        $this->mockSpRegistry->save();
-    }
-
-    /**
      * @Given /^SP "([^"]*)" does not require consent$/
      */
     public function spDoesNotRequireConsent($spName)
@@ -277,40 +188,16 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SP "([^"]*)" uses a blacklist for access control$/
+     * @Given /^SP "([^"]*)" is not connected to IdP "([^"]*)"$/
      */
-    public function spUsesABlacklistOfAccessControl($spName)
-    {
-        /** @var MockServiceProvider $sp */
-        $sp = $this->mockSpRegistry->get($spName);
-        $this->serviceRegistryFixture
-            ->blacklist($sp->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" uses a whitelist for access control$/
-     */
-    public function spUsesAWhitelistForAccessControl($spName)
-    {
-        /** @var MockServiceProvider $sp */
-        $sp = $this->mockSpRegistry->get($spName);
-        $this->serviceRegistryFixture
-            ->whitelist($sp->entityId())
-            ->save();
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" whitelists IdP "([^"]*)"$/
-     */
-    public function spWhitelistsIdp($spName, $idpName)
+    public function disconnectSpToIdp($spName, $idpName)
     {
         /** @var MockIdentityProvider $mockIdp */
         $mockIdp = $this->mockIdpRegistry->get($idpName);
         /** @var MockServiceProvider $mockSp */
         $mockSp  = $this->mockSpRegistry->get($spName);
 
-        $this->serviceRegistryFixture->allow($mockSp->entityid(), $mockIdp->entityId());
+        $this->serviceRegistryFixture->disconnect($mockSp->entityId(), $mockIdp->entityId());
 
         $this->serviceRegistryFixture->save();
     }

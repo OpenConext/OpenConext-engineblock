@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6539ff31cb7cd5a911ac2407dea5bfd",
+    "content-hash": "bdb11f3c44c49a9b9aae641eb1a29521",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -1656,46 +1656,6 @@
             ],
             "description": "Set of value objects for usage with SAML2",
             "time": "2018-01-22T15:22:14+00:00"
-        },
-        {
-            "name": "openconext/stoker-metadata",
-            "version": "0.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/OpenConext/OpenConext-stoker-metadata.git",
-                "reference": "fd2df32c3763ffa1f7aa51ca7ed40c0882c8c53d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-stoker-metadata/zipball/fd2df32c3763ffa1f7aa51ca7ed40c0882c8c53d",
-                "reference": "fd2df32c3763ffa1f7aa51ca7ed40c0882c8c53d",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "require-dev": {
-                "ibuildings/qa-tools": "~1.1",
-                "sebastian/phpcpd": "dev-master"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "OpenConext\\Component\\StokerMetadata\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "APACHE-2"
-            ],
-            "authors": [
-                {
-                    "name": "Boy Baukema",
-                    "email": "boy.baukema@flex.surfnet.nl"
-                }
-            ],
-            "description": "PHP library for accessing OpenConext stoker metadata",
-            "time": "2014-11-20T15:22:19+00:00"
         },
         {
             "name": "paragonie/random_compat",

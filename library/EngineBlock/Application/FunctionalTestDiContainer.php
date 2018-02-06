@@ -8,24 +8,12 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
-    public function getServiceRegistryClient()
+    /**
+     * @return CompositeMetadataRepository
+     */
+    public function getMetadataRepository()
     {
-        return new Janus_FixtureClient();
-    }
-
-    public function getTimeProvider()
-    {
-        return new EngineBlock_TimeProvider_Fixture();
-    }
-
-    public function getSaml2IdGenerator()
-    {
-        return new EngineBlock_Saml2_IdGenerator_Fixture();
-    }
-
-    public function getSuperGlobalManager()
-    {
-        return new EngineBlock_Application_SuperGlobalManager();
+        return $this->container->get('engineblock.functional_testing.metadata.repository.composite');
     }
 
     public function getMessageUtilClassName()
