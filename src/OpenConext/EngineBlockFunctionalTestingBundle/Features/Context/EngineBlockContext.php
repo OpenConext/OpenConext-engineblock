@@ -166,19 +166,6 @@ class EngineBlockContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^an EngineBlock instance configured with JSON data$/
-     */
-    public function anEngineblockInstanceConfiguredWithJsonData()
-    {
-        // Add all known IdPs
-        $this->serviceRegistryFixture
-            ->reset()
-            ->addSpsFromJsonExport($this->spsConfigUrl)
-            ->addIdpsFromJsonExport($this->idpsConfigUrl)
-            ->save();
-    }
-
-    /**
      * @Given /^I follow the EB debug screen to the IdP$/
      */
     public function iFollowTheEbDebugScreenToTheIdp()
