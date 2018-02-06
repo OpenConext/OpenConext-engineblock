@@ -1,3 +1,0 @@
-services:
-    engineblock.functional_testing.behat_context.replay:
-        class: OpenConext\EngineBlockFunctionalTestingBundle\Features\Context\ReplayContext

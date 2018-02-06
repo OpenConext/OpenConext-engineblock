@@ -129,59 +129,6 @@ class MockSpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^SP "([^"]*)" may only access "([^"]*)"$/
-     */
-    public function spMayOnlyAccess($spName, $idpName)
-    {
-        throw new \Exception('Log replay is not implemented');
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" is configured to generate a AuthnRequest like the one at "([^"]*)"$/
-     */
-    public function spIsConfiguredToGenerateAAuthnrequestLikeTheOneAt($spName, $authnRequestLogFile)
-    {
-        /** @var MockServiceProvider $mockSp */
-        $mockSp = $this->mockSpRegistry->get($spName);
-
-        $mockSpDefaultEntityId = $mockSp->entityId();
-        $mockSpAcsLocation     = $mockSp->assertionConsumerServiceLocation();
-
-        // First see if the request was even triggered by the SP, or if it was an unsolicited request
-        // by EB.
-        $logReader = new LogChunkParser($authnRequestLogFile);
-        $unsolicitedRequest = $logReader->detectUnsolicitedRequest();
-        if ($unsolicitedRequest) {
-            $this->printDebug("Unsolicited Request:" . PHP_EOL . print_r($unsolicitedRequest, true));
-
-            $mockSp->useUnsolicited();
-
-            $requestIssuer = $unsolicitedRequest['saml:Issuer']['__v'];
-
-            $frame = $this->engineBlock->getIdsToUse(IdFixture::FRAME_REQUEST);
-            $frame->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST, $unsolicitedRequest['_ID']);
-        } else {
-            // If not, then parse an AuthnRequest out of the log file
-            $authnRequest = $logReader->getMessage(LogChunkParser::MESSAGE_TYPE_AUTHN_REQUEST);
-            $mockSp->setAuthnRequest($authnRequest);
-            $this->printDebug(print_r($authnRequest, true));
-
-            $requestIssuer = $authnRequest->getIssuer();
-        }
-
-        // Listen up Mock Service Provider, you must now pretend that you are the issuer of the request.
-        $mockSp->setEntityId($requestIssuer);
-
-        $this->mockSpRegistry->save();
-
-        // Override the ACS Location for the SP used in the response to go to the Mock SP
-        $this->serviceRegistryFixture
-            ->remove($mockSpDefaultEntityId)
-            ->setEntityAcsLocation($requestIssuer, $mockSpAcsLocation)
-            ->save();
-    }
-
-    /**
      * @Given /^SP "([^"]*)" may run in transparent mode, if indicated in "([^"]*)"$/
      */
     public function spMayRunInTransparentModeIfIndicatedIn($spName, $sessionLogFIle)

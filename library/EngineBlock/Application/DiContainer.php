@@ -6,7 +6,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainer
 
 class EngineBlock_Application_DiContainer extends Pimple
 {
-    const SUPER_GLOBAL_MANAGER                  = 'superGlobalManager';
     const ATTRIBUTE_METADATA                    = 'attributeMetadata';
     const ATTRIBUTE_DEFINITIONS_DENORMALIZED    = 'attributeDefinitionsDenormalized';
     const ATTRIBUTE_VALIDATOR                   = 'attributeValidator';
@@ -153,14 +152,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getSaml2IdGenerator()
     {
         return $this->container->get('engineblock.compat.saml2_id_generator');
-    }
-
-    /**
-     * @return EngineBlock_Application_SuperGlobalManager|false
-     */
-    public function getSuperGlobalManager()
-    {
-        return false;
     }
 
     /**

@@ -2,11 +2,6 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Service;
 
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFrame;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\SuperGlobalsFixture;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\TimeFixture;
-
 /**
  * Class EngineBlock
  * @SuppressWarnings("PMD")
@@ -21,26 +16,13 @@ class EngineBlock
     const LOGOUT                    = '/logout';
 
     protected $baseUrl;
-    protected $timeFixture;
-    protected $superGlobalFixture;
-    protected $idFixture;
 
     /**
      * @param $baseUrl
-     * @param TimeFixture $timeFixture
-     * @param SuperGlobalsFixture $superGlobalFixture
-     * @param IdFixture $idFixture
      */
-    public function __construct(
-        $baseUrl,
-        TimeFixture $timeFixture,
-        SuperGlobalsFixture $superGlobalFixture,
-        IdFixture $idFixture
-    ) {
-        $this->baseUrl              = $baseUrl;
-        $this->timeFixture          = $timeFixture;
-        $this->superGlobalFixture   = $superGlobalFixture;
-        $this->idFixture            = $idFixture;
+    public function __construct($baseUrl)
+    {
+        $this->baseUrl = $baseUrl;
     }
 
     public function idpEntityId()
@@ -83,38 +65,5 @@ class EngineBlock
     public function logoutLocation()
     {
         return $this->baseUrl . self::LOGOUT;
-    }
-
-    public function overrideHostname($hostname)
-    {
-        $this->superGlobalFixture->set(SuperGlobalsFixture::SERVER, 'HTTP_HOST', $hostname);
-        return $this;
-    }
-
-    public function overrideTime($time)
-    {
-        $this->timeFixture->set($time);
-        return $this;
-    }
-
-    public function getIdsToUse($frameName)
-    {
-        if (!$this->idFixture->hasFrame($frameName)) {
-            $frame = new IdFrame();
-            $this->idFixture->addFrame($frameName, $frame);
-        }
-
-        return $this->idFixture->getFrame($frameName);
-    }
-
-    public function clearNewIds()
-    {
-        $this->idFixture->clear();
-        return $this;
-    }
-
-    public function getIdFixture()
-    {
-        return $this->idFixture;
     }
 }

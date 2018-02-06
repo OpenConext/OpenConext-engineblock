@@ -273,16 +273,6 @@ class ServiceRegistryFixture
         return $this;
     }
 
-    public function addSpsFromJsonExport($spsConfigExportUrl)
-    {
-        throw new \Exception('Log replay is not implemented');
-    }
-
-    public function addIdpsFromJsonExport($idpsConfigExportUrl)
-    {
-        throw new \Exception('Log replay is not implemented');
-    }
-
     public function disconnect($spEntityId, $idpEntityId)
     {
         $sp = $this->getEntity($spEntityId);

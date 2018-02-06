@@ -161,7 +161,6 @@ class EngineBlockContext extends AbstractSubContext
                 "https://engine.$domain/authentication/idp/single-sign-on"
             )
             ->save();
-        $this->engineBlock->clearNewIds();
 
         $this->engineBlockDomain = 'https://engine.' . $domain;
     }
@@ -177,8 +176,6 @@ class EngineBlockContext extends AbstractSubContext
             ->addSpsFromJsonExport($this->spsConfigUrl)
             ->addIdpsFromJsonExport($this->idpsConfigUrl)
             ->save();
-
-        $this->engineBlock->clearNewIds();
     }
 
     /**
@@ -195,51 +192,6 @@ class EngineBlockContext extends AbstractSubContext
 
         // Default to HTTP-Redirect
         $this->getMainContext()->getMinkContext()->clickLink('GO');
-    }
-
-    /**
-     * @Given /^EngineBlock is expected to send a AuthnRequest like the one at "([^"]*)"$/
-     */
-    public function engineblockIsExpectedToSendAAuthnrequestLikeTheOneAt($authnRequestLogFile)
-    {
-        // Parse an AuthnRequest out of the log file
-        $logReader = new LogChunkParser($authnRequestLogFile);
-        $authnRequest = $logReader->getMessage(LogChunkParser::MESSAGE_TYPE_AUTHN_REQUEST);
-
-        $hostname = parse_url($authnRequest->getIssuer(), PHP_URL_HOST);
-        $this->engineBlock->overrideHostname($hostname);
-
-        $frame = $this->engineBlock->getIdsToUse(IdFixture::FRAME_REQUEST);
-        $frame->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_REQUEST, $authnRequest->getId());
-    }
-
-    /**
-     * @Given /^EngineBlock is expected to send a Response like the one at "([^"]*)"$/
-     */
-    public function engineblockIsExpectedToSendAResponseLikeTheOneAt($responseLogFile)
-    {
-        // Parse an AuthnRequest out of the log file
-        $logReader = new LogChunkParser($responseLogFile);
-        $response = $logReader->getMessage(LogChunkParser::MESSAGE_TYPE_RESPONSE);
-        $responseAssertions = $response->getAssertions();
-
-        $this->engineBlock->getIdsToUse(IdFixture::FRAME_RESPONSE)
-        // EB will generate internal responses, for now just let it give all Responses the same id
-            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE, $response->getId())
-            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId())
-            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE, $response->getId())
-            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId())
-            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_RESPONSE, $response->getId())
-            ->set(EngineBlock_Saml2_IdGenerator::ID_USAGE_SAML2_ASSERTION, $responseAssertions[0]->getId());
-    }
-
-    /**
-     * @Given /^I print the configured ids$/
-     */
-    public function iPrintTheConfiguredIds()
-    {
-        $idFixture = $this->engineBlock->getIdFixture();
-        $this->printDebug(print_r($idFixture));
     }
 
     /**

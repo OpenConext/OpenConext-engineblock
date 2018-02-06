@@ -91,33 +91,6 @@ class MockIdpContext extends AbstractSubContext
     }
 
     /**
-     * @Given /^IdP "([^"]*)" is configured to return a Response like the one at "([^"]*)"$/
-     */
-    public function idpIsConfiguredToReturnAResponseLikeTheOneAt($idpName, $responseLogFile)
-    {
-        // Parse a Response out of the log file
-        $logReader = new LogChunkParser($responseLogFile);
-        $response = $logReader->getMessage(LogChunkParser::MESSAGE_TYPE_RESPONSE);
-
-        $this->printDebug(print_r($response, true));
-
-        // Write out how the IDP should behave
-        /** @var MockIdentityProvider $mockIdp */
-        $mockIdp = $this->mockIdpRegistry->get($idpName);
-        $mockIdp->setResponse($response);
-        $this->mockIdpRegistry->save();
-
-        $ssoUrl = $mockIdp->singleSignOnLocation();
-
-        // Override the SSO Location for the IDP used in the response to go to the Mock Idp
-        $this->serviceRegistryFixture
-            ->setEntitySsoLocation($response->getIssuer(), $ssoUrl)
-            ->save();
-
-        $this->engineBlock->overrideTime($response->getIssueInstant());
-    }
-
-    /**
      * @Given /^the IdP is configured to always return Responses with StatusCode (\w+)\/(\w+)$/
      */
     public function theIdpIsConfiguredToAlwaysReturnResponsesWithStatuscode($topStatusCode, $secondStatusCode)
