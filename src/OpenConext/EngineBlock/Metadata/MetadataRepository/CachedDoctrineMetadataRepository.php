@@ -205,7 +205,7 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     /**
      * @return AbstractRole[]
      */
-    public function findEntitiesPublishableInEdugain(MetadataRepositoryInterface $repository = null)
+    public function findEntitiesPublishableInEdugain()
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }

@@ -94,7 +94,7 @@ interface MetadataRepositoryInterface
     /**
      * @return AbstractRole[]
      */
-    public function findEntitiesPublishableInEdugain(MetadataRepositoryInterface $repository = null);
+    public function findEntitiesPublishableInEdugain();
 
     /**
      * @param AbstractRole $entity

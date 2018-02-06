@@ -210,12 +210,12 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
     /**
      * {@inheritdoc}
      */
-    public function findEntitiesPublishableInEdugain(MetadataRepositoryInterface $repository = null)
+    public function findEntitiesPublishableInEdugain()
     {
         $entityIndex = array();
         $entities = array();
         foreach ($this->orderedRepositories as $repository) {
-            $repositoryEntities = $repository->findEntitiesPublishableInEdugain($this);
+            $repositoryEntities = $repository->findEntitiesPublishableInEdugain();
             foreach ($repositoryEntities as $repositoryEntity) {
                 // When is an entity the same as another one? For now when it's the same role type (SP / IDP)
                 // and has the same entityId. Though the SAML2 spec allows for much more than that,

@@ -207,7 +207,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
     /**
      * @return AbstractRole[]
      */
-    public function findEntitiesPublishableInEdugain(MetadataRepositoryInterface $repository = null)
+    public function findEntitiesPublishableInEdugain()
     {
         $result = array();
         $result = array_merge($result, $this->idpRepository->findBy(array('publishInEdugain' => true)));
