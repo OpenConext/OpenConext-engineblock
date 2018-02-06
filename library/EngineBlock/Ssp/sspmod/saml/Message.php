@@ -13,6 +13,7 @@ use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\EncryptedAssertion;
 use SAML2\LogoutRequest;
+use SAML2\LogoutResponse;
 use SAML2\Message;
 use SAML2\Response;
 use SAML2\SignedElement;

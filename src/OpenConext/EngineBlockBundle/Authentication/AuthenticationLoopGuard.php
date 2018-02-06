@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlockBundle\Authentication;
 
 use DateTimeImmutable;
 use OpenConext\EngineBlock\Assert\Assertion;
-use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
 use OpenConext\Value\Saml\Entity;
 
 final class AuthenticationLoopGuard implements AuthenticationLoopGuardInterface

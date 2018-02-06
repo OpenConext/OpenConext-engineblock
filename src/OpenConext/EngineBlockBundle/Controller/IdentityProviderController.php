@@ -24,7 +24,6 @@ use EngineBlock_View;
 use Exception;
 use OpenConext\EngineBlock\Service\RequestAccessMailer;
 use OpenConext\EngineBlockBridge\ResponseFactory;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;

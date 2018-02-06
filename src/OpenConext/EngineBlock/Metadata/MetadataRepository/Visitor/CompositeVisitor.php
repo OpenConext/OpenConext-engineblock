@@ -2,13 +2,9 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor;
 
-use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Expr\CompositeExpression;
-use Doctrine\ORM\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 
 /**
  * Class FilterCollection
