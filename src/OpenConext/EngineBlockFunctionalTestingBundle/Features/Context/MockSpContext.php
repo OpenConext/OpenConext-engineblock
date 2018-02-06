@@ -2,18 +2,14 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
-use Behat\Behat\Exception\PendingException;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
-use EngineBlock_Saml2_IdGenerator;
-use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockServiceProviderFactory;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
+use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 
 /**
  * Class MockSpContext
@@ -126,25 +122,6 @@ class MockSpContext extends AbstractSubContext
         $this->mockSpRegistry->set($name, $mockSp);
         $this->mockSpRegistry->save();
         return $mockSp;
-    }
-
-    /**
-     * @Given /^SP "([^"]*)" may run in transparent mode, if indicated in "([^"]*)"$/
-     */
-    public function spMayRunInTransparentModeIfIndicatedIn($spName, $sessionLogFIle)
-    {
-        $logReader = new LogChunkParser($sessionLogFIle);
-        $entityId = $logReader->detectTransparentRequest();
-
-        if (!$entityId) {
-            return;
-        }
-
-        /** @var MockServiceProvider $mockSp */
-        $mockSp = $this->mockSpRegistry->get($spName);
-        $mockSp->useIdpTransparently($entityId);
-
-        $this->mockSpRegistry->save();
     }
 
     /**
