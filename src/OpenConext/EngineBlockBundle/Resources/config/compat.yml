@@ -68,9 +68,6 @@ services:
     engineblock.compat.zend.apc_cache:
         class: Zend_Cache_Backend_Apc
 
-    engineblock.compat.janus_cient:
-        class: Janus_Client_CacheProxy
-
     engineblock.compat.time_provider:
         class: EngineBlock_TimeProvider_Default
 
