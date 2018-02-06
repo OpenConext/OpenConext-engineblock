@@ -4,9 +4,7 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
-use EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException;
 use EngineBlock_View;
-use Janus_Client_CacheProxy_Exception;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -68,7 +66,6 @@ class MetadataController
      * @param null|string $keyId
      * @param Request     $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
-     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
      */
     public function allIdpsMetadataAction(Request $request, $keyId = null)
     {
@@ -78,14 +75,7 @@ class MetadataController
             $proxyServer->setKeyId($keyId);
         }
 
-        try {
-            $proxyServer->idPsMetadata();
-        } catch (Janus_Client_CacheProxy_Exception $exception) {
-            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException(
-                $request->query->get('sp-entity-id'),
-                $exception
-            );
-        }
+        $proxyServer->idPsMetadata();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }
@@ -94,7 +84,6 @@ class MetadataController
      * @param null|string $keyId
      * @param Request     $request
      * @return \Symfony\Component\HttpFoundation\Response
-     * @throws EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException
      */
     public function edugainMetadataAction(Request $request, $keyId = null)
     {
@@ -104,14 +93,7 @@ class MetadataController
             $proxyServer->setKeyId($keyId);
         }
 
-        try {
-            $proxyServer->edugainMetadata();
-        } catch (Janus_Client_CacheProxy_Exception $exception) {
-            throw new EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException(
-                $request->query->get('sp-entity-id'),
-                $exception
-            );
-        }
+        $proxyServer->edugainMetadata();
 
         return ResponseFactory::fromEngineBlockResponse($this->engineBlockApplicationSingleton->getHttpResponse());
     }

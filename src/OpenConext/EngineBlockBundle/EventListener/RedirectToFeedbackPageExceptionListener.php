@@ -34,7 +34,6 @@ use EngineBlock_Corto_Module_Bindings_UnsupportedSignatureMethodException;
 use EngineBlock_Corto_Module_Bindings_VerificationException;
 use EngineBlock_Corto_Module_Service_SingleSignOn_NoIdpsException;
 use EngineBlock_Corto_Module_Services_SessionLostException;
-use EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException;
 use EngineBlock_Exception_UnknownServiceProvider;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use OpenConext\EngineBlockBundle\Exception\StuckInAuthenticationLoopException;
@@ -109,11 +108,6 @@ class RedirectToFeedbackPageExceptionListener
         } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidAcsLocation) {
             $message         = 'Invalid ACS location';
             $redirectToRoute = 'authentication_feedback_invalid_acs_location';
-        } elseif ($exception instanceof EngineBlock_Corto_ProxyServer_UnknownRemoteEntityException) {
-            $message         = 'Unknown Remote Entity';
-            $redirectToRoute = 'authentication_feedback_unknown_service_provider';
-
-            $redirectParams  = ['entity-id' => $exception->getEntityId()];
         } elseif ($exception instanceof EngineBlock_Corto_Exception_MissingRequiredFields) {
             $message         = 'Missing Required Fields';
             $redirectToRoute = 'authentication_feedback_missing_required_fields';
