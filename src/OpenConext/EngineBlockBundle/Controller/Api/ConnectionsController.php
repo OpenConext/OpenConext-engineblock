@@ -31,6 +31,11 @@ class ConnectionsController
     private $featureConfiguration;
 
     /**
+     * @var DoctrineMetadataRepository
+     */
+    private $repository;
+
+    /**
      * @param AuthorizationCheckerInterface    $authorizationChecker
      * @param FeatureConfiguration             $featureConfiguration
      * @param DoctrineMetadataRepository       $repository
