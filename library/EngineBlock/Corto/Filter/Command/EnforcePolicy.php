@@ -1,6 +1,5 @@
 <?php
 
-use OpenConext\EngineBlock\Metadata\Value\Logo;
 use OpenConext\EngineBlockBundle\Pdp\Dto\Request;
 
 class EngineBlock_Corto_Filter_Command_EnforcePolicy extends EngineBlock_Corto_Filter_Command_Abstract
