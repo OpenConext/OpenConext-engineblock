@@ -103,7 +103,7 @@ $validationResult = EngineBlock_ApplicationSingleton::getInstance()
               <th>NameID</th>
 
               <td>
-                  <?php $nameId = $response->getAssertion()->getNameId(); echo EngineBlock_View::htmlSpecialCharsText($nameId['Value']); ?>
+                  <?php $nameId = $response->getAssertion()->getNameId(); echo EngineBlock_View::htmlSpecialCharsText($nameId->value); ?>
               </td>
           </tr>
       </table>
