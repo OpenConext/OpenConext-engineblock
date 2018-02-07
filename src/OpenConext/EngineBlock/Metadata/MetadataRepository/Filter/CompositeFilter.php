@@ -116,12 +116,12 @@ class CompositeFilter implements FilterInterface
             $expressions[] = $expression;
         }
 
-        if (count($expression) === 0) {
+        if (count($expressions) === 0) {
             return null;
         }
 
-        if (count($expression) === 1) {
-            return $expression;
+        if (count($expressions) === 1) {
+            return reset($expressions);
         }
 
         return new CompositeExpression(CompositeExpression::TYPE_AND, $expressions);
