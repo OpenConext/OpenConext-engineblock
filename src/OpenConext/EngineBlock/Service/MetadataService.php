@@ -63,6 +63,6 @@ final class MetadataService
             return null;
         }
 
-        return $this->metadataRepository->fetchServiceProviderArp($serviceProvider);
+        return $serviceProvider->getAttributeReleasePolicy();
     }
 }

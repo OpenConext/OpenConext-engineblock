@@ -26,7 +26,6 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $doctrineRepository->shouldReceive('findAllIdentityProviderEntityIds');
         $doctrineRepository->shouldReceive('findReservedSchacHomeOrganizations');
         $doctrineRepository->shouldReceive('findEntitiesPublishableInEdugain');
-        $doctrineRepository->shouldReceive('fetchServiceProviderArp');
         $doctrineRepository->shouldReceive('findAllowedIdpEntityIdsForSp');
 
         $sp = new ServiceProvider('test');
@@ -40,7 +39,6 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $repository->findAllIdentityProviderEntityIds();
         $repository->findReservedSchacHomeOrganizations();
         $repository->findEntitiesPublishableInEdugain();
-        $repository->fetchServiceProviderArp($sp);
         $repository->findAllowedIdpEntityIdsForSp($sp);
     }
 

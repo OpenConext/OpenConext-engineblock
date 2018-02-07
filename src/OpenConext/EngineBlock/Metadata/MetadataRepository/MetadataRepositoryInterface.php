@@ -98,12 +98,6 @@ interface MetadataRepositoryInterface
 
     /**
      * @param ServiceProvider $serviceProvider
-     * @return AttributeReleasePolicy
-     */
-    public function fetchServiceProviderArp(ServiceProvider $serviceProvider);
-
-    /**
-     * @param ServiceProvider $serviceProvider
      * @return array
      */
     public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider);

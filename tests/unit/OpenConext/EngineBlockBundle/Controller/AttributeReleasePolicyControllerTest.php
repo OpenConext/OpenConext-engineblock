@@ -329,16 +329,14 @@ class AttributeReleasePolicyControllerTest extends TestCase
         $metadataRepository->shouldReceive('fetchServiceProviderByEntityId')
             ->with('some-entity-id')
             ->andReturn($someServiceProvider);
-        $metadataRepository->shouldReceive('fetchServiceProviderArp')
-            ->with($someServiceProvider)
-            ->andReturn($arpForSomeServiceProvider);
+
+        $someServiceProvider->attributeReleasePolicy = $arpForSomeServiceProvider;
 
         $metadataRepository->shouldReceive('fetchServiceProviderByEntityId')
             ->with($anotherEntityId)
             ->andReturn($anotherServiceProvider);
-        $metadataRepository->shouldReceive('fetchServiceProviderArp')
-            ->with($anotherServiceProvider)
-            ->andReturn($arpForAnotherServiceProvider);
+
+        $anotherServiceProvider->attributeReleasePolicy = $arpForAnotherServiceProvider;
 
         $metadataServiceWithServiceProviders = new MetadataService($metadataRepository);
 

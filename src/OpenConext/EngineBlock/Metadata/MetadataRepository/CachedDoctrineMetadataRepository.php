@@ -212,15 +212,6 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
 
     /**
      * @param ServiceProvider $serviceProvider
-     * @return AttributeReleasePolicy
-     */
-    public function fetchServiceProviderArp(ServiceProvider $serviceProvider)
-    {
-        return $this->invoke(__FUNCTION__, func_get_args());
-    }
-
-    /**
-     * @param ServiceProvider $serviceProvider
      * @return array
      */
     public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)

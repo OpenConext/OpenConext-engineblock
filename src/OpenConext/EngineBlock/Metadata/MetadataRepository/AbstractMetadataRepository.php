@@ -189,19 +189,6 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
-     *
-     *
-     * Note that this is here primarily for compatibility with JanusRestV1.
-     *
-     * @param ServiceProvider $serviceProvider
-     * @return AttributeReleasePolicy
-     */
-    public function fetchServiceProviderArp(ServiceProvider $serviceProvider)
-    {
-        return $serviceProvider->getAttributeReleasePolicy();
-    }
-
-    /**
      * @param ServiceProvider $serviceProvider
      * @return \string[]
      */

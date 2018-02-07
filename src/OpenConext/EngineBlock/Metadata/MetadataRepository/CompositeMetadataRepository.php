@@ -236,24 +236,6 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
     /**
      * {@inheritdoc}
      */
-    public function fetchServiceProviderArp(ServiceProvider $serviceProvider)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            if (!$repository->findServiceProviderByEntityId($serviceProvider->entityId)) {
-                continue;
-            }
-
-            return $repository->fetchServiceProviderArp($serviceProvider);
-        }
-
-        throw new \RuntimeException(
-            __METHOD__ . ' was unable to find a repository for SP: ' . $serviceProvider->entityId
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
     {
         $allowed = array();

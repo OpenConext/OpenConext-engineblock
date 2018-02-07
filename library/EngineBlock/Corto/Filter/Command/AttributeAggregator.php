@@ -26,11 +26,6 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
     private $client;
 
     /**
-     * @var MetadataRepositoryInterface
-     */
-    private $metadataRepository;
-
-    /**
      * Metadata about the origin of response attributes.
      *
      * @var array
@@ -42,12 +37,10 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
      */
     public function __construct(
         LoggerInterface $logger,
-        AttributeAggregationClientInterface $client,
-        MetadataRepositoryInterface $metadataRepository
+        AttributeAggregationClientInterface $client
     ) {
         $this->logger = $logger;
         $this->client = $client;
-        $this->metadataRepository = $metadataRepository;
     }
 
     /**
@@ -132,7 +125,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
      * @return AttributeRule[]
      */
     private function createAttributeRulesForSp(ServiceProvider $sp) {
-        $arp = $this->metadataRepository->fetchServiceProviderArp($sp);
+        $arp = $sp->getAttributeReleasePolicy();
         if (!$arp) {
             return [];
         }
