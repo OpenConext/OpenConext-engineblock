@@ -110,6 +110,8 @@ class IdentityProvider extends AbstractRole
      * @param string $signatureMethod
      * @param Service $responseProcessingService
      * @param string $workflowState
+     * @param string $manipulation
+     * @param null $attributeReleasePolicy
      * @param bool $enabledInWayf
      * @param string $guestQualifier
      * @param bool $hidden

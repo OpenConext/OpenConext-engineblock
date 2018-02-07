@@ -3,15 +3,14 @@
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
-use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveEntityByEntityIdFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
+use OpenConext\EngineBlock\Metadata\RequestedAttribute;
 use OpenConext\EngineBlock\Metadata\Service;
-use SAML2\AuthnRequest;
 use SAML2\Constants;
 
 class EngineBlock_Corto_Adapter

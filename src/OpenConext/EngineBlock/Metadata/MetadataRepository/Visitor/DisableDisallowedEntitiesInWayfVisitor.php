@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor;
 
-use BadMethodCallException;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;

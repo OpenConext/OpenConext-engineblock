@@ -3,7 +3,6 @@
 namespace OpenConext\EngineBlockBridge\Configuration;
 
 use OpenConext\EngineBlock\Assert\Assertion;
-use OpenConext\EngineBlock\Exception\InvalidArgumentException;
 
 final class EngineBlockConfiguration
 {

@@ -4,11 +4,10 @@ namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
-use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
-use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Service;
 use OpenConext\EngineBlock\Metadata\X509\X509Certificate;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
