@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
-use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\ShibMdScope;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
 
@@ -185,10 +185,10 @@ class IdentityProvider extends AbstractRole
             $signatureMethod,
             $responseProcessingService,
             $workflowState,
-            $manipulation
+            $manipulation,
+            $attributeReleasePolicy
         );
 
-        $this->attributeReleasePolicy = $attributeReleasePolicy;
         $this->enabledInWayf = $enabledInWayf;
         $this->guestQualifier = $guestQualifier;
         $this->hidden = $hidden;
