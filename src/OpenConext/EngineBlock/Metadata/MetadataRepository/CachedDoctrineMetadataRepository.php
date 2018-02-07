@@ -211,15 +211,6 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
-     * @param AbstractRole $entity
-     * @return string
-     */
-    public function fetchEntityManipulation(AbstractRole $entity)
-    {
-        return $this->invoke(__FUNCTION__, func_get_args());
-    }
-
-    /**
      * @param ServiceProvider $serviceProvider
      * @return AttributeReleasePolicy
      */

@@ -24,7 +24,7 @@ class EngineBlock_Attributes_Manipulator_ServiceRegistry
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
     ) {
-        $manipulationCode = $this->_getMetadataRepository()->fetchEntityManipulation($entity);
+        $manipulationCode = $entity->getManipulation();
         if (empty($manipulationCode)) {
             return false;
         }

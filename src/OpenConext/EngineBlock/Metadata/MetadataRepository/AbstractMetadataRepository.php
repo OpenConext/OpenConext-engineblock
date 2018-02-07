@@ -190,18 +190,6 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
 
     /**
      *
-     * Note that this is here primarily for compatibility with JanusRestV1.
-     *
-     * @param AbstractRole $entity
-     * @return string
-     */
-    public function fetchEntityManipulation(AbstractRole $entity)
-    {
-        return $entity->getManipulation();
-    }
-
-    /**
-     *
      *
      * Note that this is here primarily for compatibility with JanusRestV1.
      *

@@ -236,24 +236,6 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
     /**
      * {@inheritdoc}
      */
-    public function fetchEntityManipulation(AbstractRole $entity)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            if (!$repository->findEntityByEntityId($entity->entityId)) {
-                continue;
-            }
-
-            return $repository->fetchEntityManipulation($entity);
-        }
-
-        throw new \RuntimeException(
-            __METHOD__ . ' was unable to find a repository for entity: ' . $entity->entityId
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function fetchServiceProviderArp(ServiceProvider $serviceProvider)
     {
         foreach ($this->orderedRepositories as $repository) {

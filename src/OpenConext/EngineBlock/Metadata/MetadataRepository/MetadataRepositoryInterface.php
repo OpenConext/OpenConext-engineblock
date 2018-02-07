@@ -97,12 +97,6 @@ interface MetadataRepositoryInterface
     public function findEntitiesPublishableInEdugain();
 
     /**
-     * @param AbstractRole $entity
-     * @return string
-     */
-    public function fetchEntityManipulation(AbstractRole $entity);
-
-    /**
      * @param ServiceProvider $serviceProvider
      * @return AttributeReleasePolicy
      */
