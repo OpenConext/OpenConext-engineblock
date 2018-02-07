@@ -2,8 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use Psr\Log\LoggerInterface;
