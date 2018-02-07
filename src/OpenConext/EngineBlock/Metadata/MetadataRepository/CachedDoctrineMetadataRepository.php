@@ -209,14 +209,4 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return array
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
-    {
-        // This is a simple getter. Cache this.
-        return $this->repository->findAllowedIdpEntityIdsForSp($serviceProvider);
-    }
 }

@@ -232,17 +232,4 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
         }
         return $entities;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
-    {
-        $allowed = array();
-        foreach ($this->orderedRepositories as $repository) {
-            $allowed += $repository->findAllowedIdpEntityIdsForSp($serviceProvider);
-        }
-
-        return array_values(array_unique($allowed));
-    }
 }

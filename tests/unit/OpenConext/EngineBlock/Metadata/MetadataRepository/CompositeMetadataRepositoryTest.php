@@ -104,7 +104,7 @@ class CompositeMetadataRepositoryTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $repository->findAllIdentityProviderEntityIds(),
-            $repository->findAllowedIdpEntityIdsForSp($sp)
+            $sp->allowedIdpEntityIds
         );
     }
 

@@ -95,10 +95,4 @@ interface MetadataRepositoryInterface
      * @return AbstractRole[]
      */
     public function findEntitiesPublishableInEdugain();
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return array
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider);
 }

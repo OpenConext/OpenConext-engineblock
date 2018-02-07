@@ -196,15 +196,6 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
-     * @param ServiceProvider $serviceProvider
-     * @return \string[]
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
-    {
-        return $serviceProvider->allowedIdpEntityIds;
-    }
-
-    /**
      * @return AbstractRole[]
      */
     public function findEntitiesPublishableInEdugain()

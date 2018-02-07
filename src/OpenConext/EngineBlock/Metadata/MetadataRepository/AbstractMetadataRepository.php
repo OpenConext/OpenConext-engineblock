@@ -187,13 +187,4 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
 
         return null;
     }
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return \string[]
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
-    {
-        return $serviceProvider->allowedIdpEntityIds;
-    }
 }
