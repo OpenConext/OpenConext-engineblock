@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
@@ -85,41 +84,6 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
         }
 
         return $identityProvider;
-    }
-
-    /**
-     * @param string $entityId
-     * @return AbstractRole
-     * @throws EntityNotFoundException
-     */
-    public function fetchEntityByEntityId($entityId)
-    {
-        $entity = $this->findEntityByEntityId($entityId);
-
-        if (!$entity) {
-            throw new EntityNotFoundException("Entity '$entityId' not found in InMemoryMetadataRepository");
-        }
-
-        return $entity;
-    }
-
-    /**
-     * @param string $entityId
-     * @return AbstractRole|null
-     */
-    public function findEntityByEntityId($entityId)
-    {
-        $serviceProvider = $this->findServiceProviderByEntityId($entityId);
-        if ($serviceProvider) {
-            return $serviceProvider;
-        }
-
-        $identityProvider = $this->findIdentityProviderByEntityId($entityId);
-        if ($identityProvider) {
-            return $identityProvider;
-        }
-
-        return null;
     }
 
     /**
