@@ -84,7 +84,7 @@ class MockIdpContext extends AbstractSubContext
     {
         $this->anIdentityProviderNamed($name);
         $mockIdp = $this->mockIdpRegistry->get($name);
-        $this->serviceRegistryFixture->setLogo($mockIdp->entityId(), $logo)->save();
+        $this->serviceRegistryFixture->setIdpLogo($mockIdp->entityId(), $logo)->save();
     }
 
     /**

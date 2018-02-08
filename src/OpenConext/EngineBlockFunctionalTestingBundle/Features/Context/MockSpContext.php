@@ -133,7 +133,7 @@ class MockSpContext extends AbstractSubContext
         $mockSp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setEntityNoConsent($mockSp->entityId())
+            ->setSpEntityNoConsent($mockSp->entityId())
             ->save();
     }
 
@@ -172,7 +172,7 @@ class MockSpContext extends AbstractSubContext
         $this->mockSpRegistry->save();
 
         $this->serviceRegistryFixture
-            ->setEntityWantsSignature($sp->entityId())
+            ->setSpEntityWantsSignature($sp->entityId())
             ->save();
     }
 
@@ -181,7 +181,7 @@ class MockSpContext extends AbstractSubContext
      */
     public function spIsATrustedProxy($spName)
     {
-        $this->serviceRegistryFixture->setEntityTrustedProxy(
+        $this->serviceRegistryFixture->setSpEntityTrustedProxy(
             $this->mockSpRegistry->get($spName)->entityid()
         );
         $this->serviceRegistryFixture->save();
@@ -197,7 +197,7 @@ class MockSpContext extends AbstractSubContext
         /** @var MockServiceProvider $mockSp */
         $mockSp  = $this->mockSpRegistry->get($spName);
 
-        $this->serviceRegistryFixture->disconnect($mockSp->entityId(), $mockIdp->entityId());
+        $this->serviceRegistryFixture->disconnectSp($mockSp->entityId(), $mockIdp->entityId());
 
         $this->serviceRegistryFixture->save();
     }
@@ -300,7 +300,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setEntityManipulation($sp->entityId(), $manipulation->getRaw())
+            ->setSpEntityManipulation($sp->entityId(), $manipulation->getRaw())
             ->save();
     }
 
@@ -313,7 +313,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->allowNoAttributeValues($sp->entityId())
+            ->allowNoAttributeValuesForSp($sp->entityId())
             ->save();
     }
 
@@ -326,7 +326,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->allowAttributeValue($sp->entityId(), $arpAttribute, "*")
+            ->allowAttributeValueForSp($sp->entityId(), $arpAttribute, "*")
             ->save();
     }
 
@@ -339,7 +339,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->allowAttributeValue($sp->entityId(), $arpAttribute, $arpAttributeValue)
+            ->allowAttributeValueForSp($sp->entityId(), $arpAttribute, $arpAttributeValue)
             ->save();
     }
 
@@ -352,7 +352,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->allowAttributeValue($sp->entityId(), $arpAttribute, "*", $attributeSource)
+            ->allowAttributeValueForSp($sp->entityId(), $arpAttribute, "*", $attributeSource)
             ->save();
     }
 
@@ -366,7 +366,7 @@ class MockSpContext extends AbstractSubContext
 
         foreach ($attributes->getHash() as $attribute) {
             $this->serviceRegistryFixture
-                ->allowAttributeValue($sp->entityId(), $attribute['Name'], $attribute['Value'], $attribute['Source'])
+                ->allowAttributeValueForSp($sp->entityId(), $attribute['Name'], $attribute['Value'], $attribute['Source'])
                 ->save();
         }
     }
@@ -380,7 +380,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setEntityNameIdFormatUnspecified($sp->entityId())
+            ->setSpEntityNameIdFormatUnspecified($sp->entityId())
             ->save();
     }
 
@@ -393,7 +393,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setEntityNameIdFormatPersistent($sp->entityId())
+            ->setSpEntityNameIdFormatPersistent($sp->entityId())
             ->save();
     }
 
@@ -406,7 +406,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setEntityNameIdFormatTransient($sp->entityId())
+            ->setSpEntityNameIdFormatTransient($sp->entityId())
             ->save();
     }
 
@@ -419,7 +419,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->setWorkflowState($sp->entityId(), $workflowState)
+            ->setSpWorkflowState($sp->entityId(), $workflowState)
             ->save();
     }
 
@@ -457,7 +457,7 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->anUnregisteredServiceProviderNamed($spName);
 
         $this->serviceRegistryFixture
-            ->spRequiresPolicyEnforcementDecision($sp->entityId())
+            ->spRequiresPolicyEnforcementDecisionForSp($sp->entityId())
             ->save();
     }
 
@@ -471,7 +471,7 @@ class MockSpContext extends AbstractSubContext
         $mockSp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture
-            ->requireAttributeAggregation($mockSp->entityId())
+            ->requireAttributeAggregationForSp($mockSp->entityId())
             ->save();
     }
 
