@@ -30,8 +30,10 @@ cache:
     - ~/.composer/cache/files
 
 before_install:
-  - mysql -e "create database IF NOT EXISTS engineblock;" -uroot
-  - mysql -uroot -Dengineblock < database/dumps/dump_test.sql
+  - mysql -e "create database IF NOT EXISTS eb_test;" -uroot
+  - mysql -uroot -D eb_test < database/dumps/dump_test.sql
+  - mysql -uroot -e "CREATE USER 'eb_testrw'@'localhost' IDENTIFIED BY 'secret';"
+  - mysql -uroot -e "GRANT ALL ON eb_test.* TO 'eb_testrw'@'localhost';"
 
 before_script:
   - phpenv config-add .travis.php.ini
@@ -66,7 +68,6 @@ branches:
     - 5.x-dev
     - master
     - refactoring-2018
-    - feature/cleanup-abstract-metadata-repository
 
 addons:
   hosts:
