@@ -2,11 +2,10 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use Psr\Log\LoggerInterface;
 
@@ -29,14 +28,6 @@ interface MetadataRepositoryInterface
     public function appendVisitor(VisitorInterface $visitor);
 
     /**
-     *
-     * @param string $entityId
-     * @return AbstractRole
-     * @throws EntityNotFoundException
-     */
-    public function fetchEntityByEntityId($entityId);
-
-    /**
      * @param string $entityId
      * @return ServiceProvider
      * @throws EntityNotFoundException
@@ -48,14 +39,6 @@ interface MetadataRepositoryInterface
      * @return IdentityProvider
      */
     public function fetchIdentityProviderByEntityId($entityId);
-
-    /**
-     * @deprecated depends on repository implementation.
-     *
-     * @param string $entityId
-     * @return AbstractRole|null
-     */
-    public function findEntityByEntityId($entityId);
 
     /**
      * @param string $entityId
@@ -95,22 +78,4 @@ interface MetadataRepositoryInterface
      * @return AbstractRole[]
      */
     public function findEntitiesPublishableInEdugain();
-
-    /**
-     * @param AbstractRole $entity
-     * @return string
-     */
-    public function fetchEntityManipulation(AbstractRole $entity);
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return AttributeReleasePolicy
-     */
-    public function fetchServiceProviderArp(ServiceProvider $serviceProvider);
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return array
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider);
 }

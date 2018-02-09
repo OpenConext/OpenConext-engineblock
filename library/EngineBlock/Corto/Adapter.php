@@ -145,9 +145,7 @@ class EngineBlock_Corto_Adapter
         $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
 
         if ($serviceProvider->displayUnconnectedIdpsWayf) {
-            $repository->appendVisitor(new DisableDisallowedEntitiesInWayfVisitor(
-                $repository->findAllowedIdpEntityIdsForSp($serviceProvider)
-            ));
+            $repository->appendVisitor(new DisableDisallowedEntitiesInWayfVisitor($serviceProvider->allowedIdpEntityIds));
             return;
         }
 
@@ -272,10 +270,11 @@ class EngineBlock_Corto_Adapter
 
     /**
      * @param ServiceProvider $serviceProvider
+     * @return array|string[]
      */
     private function _findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
     {
-        $entityIds = $this->getMetadataRepository()->findAllowedIdpEntityIdsForSp($serviceProvider);
+        $entityIds = $serviceProvider->allowedIdpEntityIds;
         $entityIds[] = $this->_proxyServer->getUrl('idpMetadataService');
         return $entityIds;
     }
@@ -287,17 +286,6 @@ class EngineBlock_Corto_Adapter
     {
         $claimedSpEntityId = EngineBlock_ApplicationSingleton::getInstance()->getHttpRequest()->getQueryParameter('sp-entity-id');
         return $claimedSpEntityId;
-    }
-
-    /**
-     * Gets workflow state for given entity id
-     *
-     * @param string $entityId
-     * @return string $workflowState
-     */
-    protected function _getEntityWorkFlowState($entityId)
-    {
-        return $this->_proxyServer->getRepository()->fetchEntityByEntityId($entityId)->workflowState;
     }
 
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")

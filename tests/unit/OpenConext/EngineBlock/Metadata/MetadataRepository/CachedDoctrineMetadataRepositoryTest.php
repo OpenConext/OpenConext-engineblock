@@ -26,11 +26,6 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $doctrineRepository->shouldReceive('findAllIdentityProviderEntityIds');
         $doctrineRepository->shouldReceive('findReservedSchacHomeOrganizations');
         $doctrineRepository->shouldReceive('findEntitiesPublishableInEdugain');
-        $doctrineRepository->shouldReceive('fetchEntityManipulation');
-        $doctrineRepository->shouldReceive('fetchServiceProviderArp');
-        $doctrineRepository->shouldReceive('findAllowedIdpEntityIdsForSp');
-
-        $sp = new ServiceProvider('test');
 
         $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
         $repository->findIdentityProviderByEntityId('test');
@@ -41,22 +36,6 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $repository->findAllIdentityProviderEntityIds();
         $repository->findReservedSchacHomeOrganizations();
         $repository->findEntitiesPublishableInEdugain();
-        $repository->fetchEntityManipulation($sp);
-        $repository->fetchServiceProviderArp($sp);
-        $repository->findAllowedIdpEntityIdsForSp($sp);
-    }
-
-    public function testFetchEntityThrowExceptions()
-    {
-        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
-        $doctrineRepository->shouldReceive('findEntityByEntityId');
-        $doctrineRepository->shouldReceive('findServiceProviderByEntityId');
-        $doctrineRepository->shouldReceive('findIdentityProviderByEntityId');
-
-        $this->setExpectedException('OpenConext\\EngineBlock\\Metadata\\MetadataRepository\\EntityNotFoundException');
-
-        $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
-        $repository->fetchEntityByEntityId('test');
     }
 
     public function testFetchIdentityProviderThrowExceptions()

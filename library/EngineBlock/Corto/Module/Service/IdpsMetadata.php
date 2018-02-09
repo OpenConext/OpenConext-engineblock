@@ -30,9 +30,7 @@ class EngineBlock_Corto_Module_Service_IdpsMetadata extends EngineBlock_Corto_Mo
 
         if (isset($spEntity)) {
             $identityProviders = $this->_server->getRepository()->findIdentityProvidersByEntityId(
-                $this->_server->getRepository()->findAllowedIdpEntityIdsForSp(
-                    $spEntity
-                )
+                $spEntity->allowedIdpEntityIds
             );
         } else {
             $identityProviders = $this->_server->getRepository()->findIdentityProviders();

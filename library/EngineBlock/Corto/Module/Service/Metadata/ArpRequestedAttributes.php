@@ -15,7 +15,7 @@ class EngineBlock_Corto_Module_Service_Metadata_ArpRequestedAttributes
             return $entity;
         }
 
-        $arp = $this->getMetadataRepository()->fetchServiceProviderArp($entity);
+        $arp = $entity->getAttributeReleasePolicy();
         if (!$arp) {
             return $entity;
         }

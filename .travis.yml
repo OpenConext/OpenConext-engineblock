@@ -66,6 +66,7 @@ branches:
     - 5.x-dev
     - master
     - refactoring-2018
+    - feature/cleanup-abstract-metadata-repository
 
 addons:
   hosts:

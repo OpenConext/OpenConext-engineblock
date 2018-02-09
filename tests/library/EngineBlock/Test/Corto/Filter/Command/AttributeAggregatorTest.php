@@ -71,7 +71,6 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
 
         $this->sp = new ServiceProvider('SP');
 
-
         $this->repository = Mockery::mock(MetadataRepositoryInterface::class);
         $this->repository->shouldReceive('findServiceProviderByEntityId')
             ->andReturn($this->sp);
@@ -95,7 +94,7 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $server->shouldReceive('getRepository')
             ->andReturn($this->repository);
 
-        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setProxyServer($server);
         $command->setRequest($this->request);
         $command->setResponse($this->response);
@@ -119,12 +118,11 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $server->shouldReceive('getRepository')
             ->andReturn($this->repository);
 
-        $this->repository->shouldReceive('fetchServiceProviderArp')
-            ->andReturn(new AttributeReleasePolicy([]));
+        $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([]);
 
         $this->sp->attributeAggregationRequired = true;
 
-        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setProxyServer($server);
         $command->setRequest($this->request);
         $command->setResponse($this->response);
@@ -149,19 +147,18 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $server->shouldReceive('getRepository')
             ->andReturn($this->repository);
 
-        $this->repository->shouldReceive('fetchServiceProviderArp')
-            ->andReturn(new AttributeReleasePolicy([
-                'name' => [
-                    [
-                        'value' => 'value',
-                        'source' => 'source',
-                    ],
+        $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([
+            'name' => [
+                [
+                    'value' => 'value',
+                    'source' => 'source',
                 ],
-            ]));
+            ],
+        ]);
 
         $this->sp->attributeAggregationRequired = true;
 
-        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
         $command->setProxyServer($server);
         $command->setRequest($this->request);
@@ -181,19 +178,18 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $server->shouldReceive('getRepository')
             ->andReturn($this->repository);
 
-        $this->repository->shouldReceive('fetchServiceProviderArp')
-            ->andReturn(new AttributeReleasePolicy([
-                'name' => [
-                    [
-                        'value' => 'value',
-                        'source' => 'source',
-                    ],
+        $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([
+            'name' => [
+                [
+                    'value' => 'value',
+                    'source' => 'source',
                 ],
-            ]));
+            ],
+        ]);
 
         $this->sp->attributeAggregationRequired = true;
 
-        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
         $command->setProxyServer($server);
         $command->setRequest($this->request);
@@ -225,19 +221,18 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $server->shouldReceive('getRepository')
             ->andReturn($this->repository);
 
-        $this->repository->shouldReceive('fetchServiceProviderArp')
-            ->andReturn(new AttributeReleasePolicy([
-                'name' => [
-                    [
-                        'value' => 'value',
-                        'source' => 'source',
-                    ],
+        $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([
+            'name' => [
+                [
+                    'value' => 'value',
+                    'source' => 'source',
                 ],
-            ]));
+            ],
+        ]);
 
         $this->sp->attributeAggregationRequired = true;
 
-        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
         $command->setProxyServer($server);
         $command->setRequest($this->request);
@@ -276,19 +271,18 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $server->shouldReceive('getRepository')
             ->andReturn($this->repository);
 
-        $this->repository->shouldReceive('fetchServiceProviderArp')
-            ->andReturn(new AttributeReleasePolicy([
-                'name' => [
-                    [
-                        'value' => 'value',
-                        'source' => 'source',
-                    ],
+        $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([
+            'name' => [
+                [
+                    'value' => 'value',
+                    'source' => 'source',
                 ],
-            ]));
+            ],
+        ]);
 
         $this->sp->attributeAggregationRequired = true;
 
-        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client, $this->repository);
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
         $command->setProxyServer($server);
         $command->setRequest($this->request);

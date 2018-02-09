@@ -28,7 +28,7 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
         foreach ($requesterChain as $spMetadata) {
             $spEntityId = $spMetadata->entityId;
 
-            $arp = $this->getMetadataRepository()->fetchServiceProviderArp($spMetadata);
+            $arp = $spMetadata->getAttributeReleasePolicy();
 
             if (!$arp) {
                 continue;

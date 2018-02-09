@@ -2,11 +2,9 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 
 /**
@@ -57,70 +55,6 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
-     *
-     * WARNING: Very inefficient in-memory default.
-     *
-     * @return string[]
-     */
-    public function findAllIdentityProviderEntityIds()
-    {
-        $identityProviders = $this->findIdentityProviders();
-
-        $entityIds = array();
-        foreach ($identityProviders as $identityProvider) {
-            $entityIds[] = $identityProvider->entityId;
-        }
-
-        return $entityIds;
-    }
-
-    /**
-     *
-     * WARNING: Very inefficient in-memory default.
-     *
-     * @return string[]
-     */
-    public function findReservedSchacHomeOrganizations()
-    {
-        $schacHomeOrganizations = array();
-
-        $identityProviders = $this->findIdentityProviders();
-        foreach ($identityProviders as $identityProvider) {
-            if (!$identityProvider->schacHomeOrganization) {
-                continue;
-            }
-
-            $schacHomeOrganizations[] = $identityProvider->schacHomeOrganization;
-        }
-        return $schacHomeOrganizations;
-    }
-
-    /**
-     *
-     *
-     * WARNING: Very inefficient in-memory default.
-     *
-     * @param array $identityProviderEntityIds
-     * @return array|IdentityProvider[]
-     * @throws EntityNotFoundException
-     */
-    public function findIdentityProvidersByEntityId(array $identityProviderEntityIds)
-    {
-        $identityProviders = $this->findIdentityProviders();
-
-        $filteredIdentityProviders = array();
-        foreach ($identityProviderEntityIds as $identityProviderEntityId) {
-            if (!isset($identityProviders[$identityProviderEntityId])) {
-                // @todo warn
-                continue;
-            }
-
-            $filteredIdentityProviders[$identityProviderEntityId] = $identityProviders[$identityProviderEntityId];
-        }
-        return $filteredIdentityProviders;
-    }
-
-    /**
      * @param string $entityId
      * @return ServiceProvider
      * @throws EntityNotFoundException
@@ -153,72 +87,25 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
+     * WARNING: Very inefficient in-memory default.
      *
-     * @param string $entityId
-     * @return AbstractRole
+     * @param array $identityProviderEntityIds
+     * @return array|IdentityProvider[]
      * @throws EntityNotFoundException
      */
-    public function fetchEntityByEntityId($entityId)
+    public function findIdentityProvidersByEntityId(array $identityProviderEntityIds)
     {
-        $entity = $this->findEntityByEntityId($entityId);
+        $identityProviders = $this->findIdentityProviders();
 
-        if (!$entity) {
-            throw new EntityNotFoundException("Entity '$entityId' not found in InMemoryMetadataRepository");
+        $filteredIdentityProviders = array();
+        foreach ($identityProviderEntityIds as $identityProviderEntityId) {
+            if (!isset($identityProviders[$identityProviderEntityId])) {
+                // @todo warn
+                continue;
+            }
+
+            $filteredIdentityProviders[$identityProviderEntityId] = $identityProviders[$identityProviderEntityId];
         }
-
-        return $entity;
-    }
-
-    /**
-     * @param string $entityId
-     * @return AbstractRole|null
-     */
-    public function findEntityByEntityId($entityId)
-    {
-        $serviceProvider = $this->findServiceProviderByEntityId($entityId);
-        if ($serviceProvider) {
-            return $serviceProvider;
-        }
-
-        $identityProvider = $this->findIdentityProviderByEntityId($entityId);
-        if ($identityProvider) {
-            return $identityProvider;
-        }
-
-        return null;
-    }
-
-    /**
-     *
-     * Note that this is here primarily for compatibility with JanusRestV1.
-     *
-     * @param AbstractRole $entity
-     * @return string
-     */
-    public function fetchEntityManipulation(AbstractRole $entity)
-    {
-        return $entity->getManipulation();
-    }
-
-    /**
-     *
-     *
-     * Note that this is here primarily for compatibility with JanusRestV1.
-     *
-     * @param ServiceProvider $serviceProvider
-     * @return AttributeReleasePolicy
-     */
-    public function fetchServiceProviderArp(ServiceProvider $serviceProvider)
-    {
-        return $serviceProvider->getAttributeReleasePolicy();
-    }
-
-    /**
-     * @param ServiceProvider $serviceProvider
-     * @return \string[]
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
-    {
-        return $serviceProvider->allowedIdpEntityIds;
+        return $filteredIdentityProviders;
     }
 }

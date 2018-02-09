@@ -2,8 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use Psr\Log\LoggerInterface;
@@ -66,22 +64,6 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
     /**
      * {@inheritdoc}
      */
-    public function fetchEntityByEntityId($entityId)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            $entity = $repository->findEntityByEntityId($entityId);
-
-            if ($entity) {
-                return $entity;
-            }
-        }
-
-        throw new EntityNotFoundException("Unable to find '$entityId' in any configured repository");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function fetchServiceProviderByEntityId($entityId)
     {
         foreach ($this->orderedRepositories as $repository) {
@@ -109,21 +91,6 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
         }
 
         throw new EntityNotFoundException("Unable to find '$entityId' in any configured repository");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findEntityByEntityId($entityId)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            $entity = $repository->findEntityByEntityId($entityId);
-
-            if ($entity) {
-                return $entity;
-            }
-        }
-        return null;
     }
 
     /**
@@ -231,54 +198,5 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
             }
         }
         return $entities;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fetchEntityManipulation(AbstractRole $entity)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            if (!$repository->findEntityByEntityId($entity->entityId)) {
-                continue;
-            }
-
-            return $repository->fetchEntityManipulation($entity);
-        }
-
-        throw new \RuntimeException(
-            __METHOD__ . ' was unable to find a repository for entity: ' . $entity->entityId
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function fetchServiceProviderArp(ServiceProvider $serviceProvider)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            if (!$repository->findServiceProviderByEntityId($serviceProvider->entityId)) {
-                continue;
-            }
-
-            return $repository->fetchServiceProviderArp($serviceProvider);
-        }
-
-        throw new \RuntimeException(
-            __METHOD__ . ' was unable to find a repository for SP: ' . $serviceProvider->entityId
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findAllowedIdpEntityIdsForSp(ServiceProvider $serviceProvider)
-    {
-        $allowed = array();
-        foreach ($this->orderedRepositories as $repository) {
-            $allowed += $repository->findAllowedIdpEntityIdsForSp($serviceProvider);
-        }
-
-        return array_values(array_unique($allowed));
     }
 }
