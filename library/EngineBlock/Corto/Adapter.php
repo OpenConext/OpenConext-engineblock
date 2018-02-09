@@ -288,17 +288,6 @@ class EngineBlock_Corto_Adapter
         return $claimedSpEntityId;
     }
 
-    /**
-     * Gets workflow state for given entity id
-     *
-     * @param string $entityId
-     * @return string $workflowState
-     */
-    protected function _getEntityWorkFlowState($entityId)
-    {
-        return $this->_proxyServer->getRepository()->fetchEntityByEntityId($entityId)->workflowState;
-    }
-
     protected function _callCortoServiceUri($serviceName, $idPProviderHash = "")
     {
         $this->_initProxy();

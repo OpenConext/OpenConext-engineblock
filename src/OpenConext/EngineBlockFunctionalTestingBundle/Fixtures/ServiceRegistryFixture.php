@@ -48,30 +48,24 @@ class ServiceRegistryFixture
      */
     public function createInMemoryMetadataRepository()
     {
-        $idps = [];
-        $sps = [];
-
-        foreach ($this->data as $entity) {
-            if ($entity instanceof IdentityProvider) {
-                $idps[] = $entity;
-            } else {
-                $sps[] = $entity;
-            }
-        }
+        $idps = $this->data[self::TYPE_IDP] ?: [];
+        $sps = $this->data[self::TYPE_SP] ?: [];
 
         return new InMemoryMetadataRepository($idps, $sps);
     }
 
     /**
      * @param $entityId
+     * @param $role
      * @return AbstractRole
+     * @throws \Exception
      */
-    private function getEntity($entityId)
+    private function getEntity($entityId, $role)
     {
         $entity = null;
 
-        if (isset($this->data[$entityId])) {
-            $entity = $this->data[$entityId];
+        if (isset($this->data[$role][$entityId])) {
+            $entity = $this->data[$role][$entityId];
         }
 
         if (!$entity instanceof AbstractRole) {
@@ -107,34 +101,36 @@ class ServiceRegistryFixture
         $sp->termsOfServiceUrl = 'http://welcome.vm.openconext.org';
         $sp->logo = new Logo('/images/placeholder.png');
 
-        $this->data[$entityId] = $sp;
+        $this->data[self::TYPE_SP][$entityId] = $sp;
 
-        foreach ($this->data as $entity) {
-            if ($entity instanceof IdentityProvider) {
-                $sp->allowedIdpEntityIds[] = $entity->entityId;
+        if (isset($this->data[self::TYPE_IDP])) {
+            foreach ($this->data[self::TYPE_IDP] as $entity) {
+                if ($entity instanceof IdentityProvider) {
+                    $sp->allowedIdpEntityIds[] = $entity->entityId;
+                }
             }
         }
 
         return $this;
     }
 
-    public function spRequiresPolicyEnforcementDecision($entityId)
+    public function spRequiresPolicyEnforcementDecisionForSp($entityId)
     {
-        $this->getEntity($entityId)->policyEnforcementDecisionRequired = true;
+        $this->getEntity($entityId, self::TYPE_SP)->policyEnforcementDecisionRequired = true;
 
         return $this;
     }
 
-    public function requireAttributeAggregation($entityId)
+    public function requireAttributeAggregationForSp($entityId)
     {
-        $this->getEntity($entityId)->attributeAggregationRequired = true;
+        $this->getEntity($entityId, self::TYPE_SP)->attributeAggregationRequired = true;
 
         return $this;
     }
 
     public function displayUnconnectedIdpsForSp($entityId, $displayUnconnected = true)
     {
-        $this->getEntity($entityId)->displayUnconnectedIdpsWayf = (bool) $displayUnconnected;
+        $this->getEntity($entityId, self::TYPE_SP)->displayUnconnectedIdpsWayf = (bool) $displayUnconnected;
 
         return $this;
     }
@@ -154,11 +150,13 @@ class ServiceRegistryFixture
 
         $idp->contactPersons[] = $contact;
 
-        $this->data[$entityId] = $idp;
+        $this->data[self::TYPE_IDP][$entityId] = $idp;
 
-        foreach ($this->data as $entity) {
-            if ($entity instanceof ServiceProvider) {
-                $entity->allowedIdpEntityIds[] = $idp->entityId;
+        if (isset($this->data[self::TYPE_SP])) {
+            foreach ($this->data[self::TYPE_SP] as $entity) {
+                if ($entity instanceof ServiceProvider) {
+                    $entity->allowedIdpEntityIds[] = $idp->entityId;
+                }
             }
         }
 
@@ -191,91 +189,65 @@ class ServiceRegistryFixture
         }
     }
 
-    public function move($fromEntityId, $toEntityId)
-    {
-        $this->data[$toEntityId] = $this->data[$fromEntityId];
-
-        $this->remove($fromEntityId);
-
-        $this->data[$toEntityId]->entityId = $toEntityId;
-
-        return $this;
-    }
-
     public function remove($entityId)
     {
-        unset($this->data[$entityId]);
+        unset($this->data[self::TYPE_SP][$entityId]);
 
         return $this;
     }
 
-    public function setEntitySsoLocation($entityId, $ssoLocation)
+    public function setSpEntityNoConsent($entityId)
     {
-        $this->getEntity($entityId)->singleSignOnServices[0]->location = $ssoLocation;
+        $this->getEntity($entityId, self::TYPE_SP)->isConsentRequired = false;
 
         return $this;
     }
 
-    public function setEntityAcsLocation($entityId, $acsLocation)
+    public function setSpEntityWantsSignature($entityId)
     {
-
-        $this->getEntity($entityId)->assertionConsumerServices[0]->location = $acsLocation;
+        $this->getEntity($entityId, self::TYPE_SP)->requestsMustBeSigned = true;
 
         return $this;
     }
 
-    public function setEntityNoConsent($entityId)
+    public function setSpEntityTrustedProxy($entityId)
     {
-        $this->getEntity($entityId)->isConsentRequired = false;
+        $this->getEntity($entityId, self::TYPE_SP)->isTrustedProxy = true;
 
         return $this;
     }
 
-    public function setEntityWantsSignature($entityId)
+    public function setSpEntityManipulation($entityId, $manipulation)
     {
-        $this->getEntity($entityId)->requestsMustBeSigned = true;
+        $this->getEntity($entityId, self::TYPE_SP)->manipulation = $manipulation;
 
         return $this;
     }
 
-    public function setEntityTrustedProxy($entityId)
+    public function setSpEntityNameIdFormatUnspecified($entityId)
     {
-        $this->getEntity($entityId)->isTrustedProxy = true;
+        $this->getEntity($entityId, self::TYPE_SP)->nameIdFormat = Constants::NAMEID_UNSPECIFIED;
 
         return $this;
     }
 
-    public function setEntityManipulation($entityId, $manipulation)
+    public function setSpEntityNameIdFormatPersistent($entityId)
     {
-        $this->getEntity($entityId)->manipulation = $manipulation;
+        $this->getEntity($entityId, self::TYPE_SP)->nameIdFormat = Constants::NAMEID_PERSISTENT;
 
         return $this;
     }
 
-    public function setEntityNameIdFormatUnspecified($entityId)
+    public function setSpEntityNameIdFormatTransient($entityId)
     {
-        $this->getEntity($entityId)->nameIdFormat = Constants::NAMEID_UNSPECIFIED;
+        $this->getEntity($entityId, self::TYPE_SP)->nameIdFormat = Constants::NAMEID_TRANSIENT;
 
         return $this;
     }
 
-    public function setEntityNameIdFormatPersistent($entityId)
+    public function disconnectSp($spEntityId, $idpEntityId)
     {
-        $this->getEntity($entityId)->nameIdFormat = Constants::NAMEID_PERSISTENT;
-
-        return $this;
-    }
-
-    public function setEntityNameIdFormatTransient($entityId)
-    {
-        $this->getEntity($entityId)->nameIdFormat = Constants::NAMEID_TRANSIENT;
-
-        return $this;
-    }
-
-    public function disconnect($spEntityId, $idpEntityId)
-    {
-        $sp = $this->getEntity($spEntityId);
+        $sp = $this->getEntity($spEntityId, self::TYPE_SP);
 
         $index = array_search($idpEntityId, $sp->allowedIdpEntityIds);
 
@@ -286,17 +258,17 @@ class ServiceRegistryFixture
         return $this;
     }
 
-    public function allowNoAttributeValues($entityId)
+    public function allowNoAttributeValuesForSp($entityId)
     {
-        $this->getEntity($entityId)->attributeReleasePolicy = new AttributeReleasePolicy(array());
+        $this->getEntity($entityId, self::TYPE_SP)->attributeReleasePolicy = new AttributeReleasePolicy(array());
 
         return $this;
     }
 
-    public function allowAttributeValue($entityId, $arpAttribute, $attributeValue, $attributeSource = null)
+    public function allowAttributeValueForSp($entityId, $arpAttribute, $attributeValue, $attributeSource = null)
     {
         /** @var AttributeReleasePolicy $arp */
-        $arp = $this->getEntity($entityId)->attributeReleasePolicy;
+        $arp = $this->getEntity($entityId, self::TYPE_SP)->attributeReleasePolicy;
 
         $rules = [];
 
@@ -315,25 +287,25 @@ class ServiceRegistryFixture
 
         $rules[$arpAttribute] = [$arpRule];
 
-        $this->getEntity($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
+        $this->getEntity($entityId, self::TYPE_SP)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
 
         return $this;
     }
 
-    public function setWorkflowState($entityId, $workflowState)
+    public function setSpWorkflowState($entityId, $workflowState)
     {
-        $this->getEntity($entityId)->workflowState = $workflowState;
+        $this->getEntity($entityId, self::TYPE_SP)->workflowState = $workflowState;
 
         return $this;
     }
 
-    public function setLogo($entityId, $url)
+    public function setIdpLogo($entityId, $url)
     {
         $logo = new Logo($url);
         $logo->height = 100;
         $logo->width = 100;
 
-        $this->getEntity($entityId)->logo = $logo;
+        $this->getEntity($entityId, self::TYPE_IDP)->logo = $logo;
 
         return $this;
     }

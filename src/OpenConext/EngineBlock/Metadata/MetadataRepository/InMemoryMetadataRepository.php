@@ -243,4 +243,41 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
 
         return array_shift($filteredRoles);
     }
+
+    /**
+     * WARNING: Very inefficient in-memory default.
+     *
+     * @return string[]
+     */
+    public function findAllIdentityProviderEntityIds()
+    {
+        $identityProviders = $this->findIdentityProviders();
+
+        $entityIds = array();
+        foreach ($identityProviders as $identityProvider) {
+            $entityIds[] = $identityProvider->entityId;
+        }
+
+        return $entityIds;
+    }
+
+    /**
+     * WARNING: Very inefficient in-memory default.
+     *
+     * @return string[]
+     */
+    public function findReservedSchacHomeOrganizations()
+    {
+        $schacHomeOrganizations = array();
+
+        $identityProviders = $this->findIdentityProviders();
+        foreach ($identityProviders as $identityProvider) {
+            if (!$identityProvider->schacHomeOrganization) {
+                continue;
+            }
+
+            $schacHomeOrganizations[] = $identityProvider->schacHomeOrganization;
+        }
+        return $schacHomeOrganizations;
+    }
 }

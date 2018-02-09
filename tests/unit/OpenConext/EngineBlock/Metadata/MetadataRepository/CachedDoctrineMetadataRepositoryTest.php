@@ -38,19 +38,6 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $repository->findEntitiesPublishableInEdugain();
     }
 
-    public function testFetchEntityThrowExceptions()
-    {
-        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
-        $doctrineRepository->shouldReceive('findEntityByEntityId');
-        $doctrineRepository->shouldReceive('findServiceProviderByEntityId');
-        $doctrineRepository->shouldReceive('findIdentityProviderByEntityId');
-
-        $this->setExpectedException('OpenConext\\EngineBlock\\Metadata\\MetadataRepository\\EntityNotFoundException');
-
-        $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
-        $repository->fetchEntityByEntityId('test');
-    }
-
     public function testFetchIdentityProviderThrowExceptions()
     {
         $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
