@@ -64,22 +64,6 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
     /**
      * {@inheritdoc}
      */
-    public function fetchEntityByEntityId($entityId)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            $entity = $repository->findEntityByEntityId($entityId);
-
-            if ($entity) {
-                return $entity;
-            }
-        }
-
-        throw new EntityNotFoundException("Unable to find '$entityId' in any configured repository");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function fetchServiceProviderByEntityId($entityId)
     {
         foreach ($this->orderedRepositories as $repository) {
@@ -107,21 +91,6 @@ class CompositeMetadataRepository extends AbstractMetadataRepository
         }
 
         throw new EntityNotFoundException("Unable to find '$entityId' in any configured repository");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function findEntityByEntityId($entityId)
-    {
-        foreach ($this->orderedRepositories as $repository) {
-            $entity = $repository->findEntityByEntityId($entityId);
-
-            if ($entity) {
-                return $entity;
-            }
-        }
-        return null;
     }
 
     /**

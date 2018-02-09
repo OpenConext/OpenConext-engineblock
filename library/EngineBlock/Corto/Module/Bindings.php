@@ -141,7 +141,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         $_SESSION['currentServiceProvider'] = $ebRequest->getIssuer();
 
         // Verify that we know this SP and have metadata for it.
-        $serviceProvider = $this->_verifyKnownMessageIssuer(
+        $serviceProvider = $this->_verifyKnownSP(
             $spEntityId,
             $ebRequest->getDestination()
         );
@@ -277,7 +277,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         }
 
         // Verify that we know this IdP and have metadata for it.
-        $cortoIdpMetadata = $this->_verifyKnownMessageIssuer(
+        $cortoIdpMetadata = $this->_verifyKnownIdP(
             $idpEntityId,
             $sspResponse->getDestination()
         );
@@ -427,16 +427,16 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * Verify if a message has an issuer that is known to us. If not, it
+     * Verify if a message has an issuer that is known as an SP to us. If not, it
      * throws a Corto_Module_Bindings_VerificationException.
      * @param string $messageIssuer
      * @param string $destination
      * @return AbstractRole Remote Entity that issued the message
      * @throws EngineBlock_Corto_Exception_UnknownIssuer
      */
-    protected function _verifyKnownMessageIssuer($messageIssuer, $destination = '')
+    protected function _verifyKnownSP($messageIssuer, $destination = '')
     {
-        $remoteEntity = $this->_server->getRepository()->findEntityByEntityId($messageIssuer);
+        $remoteEntity = $this->_server->getRepository()->findServiceProviderByEntityId($messageIssuer);
 
         if ($remoteEntity) {
             return $remoteEntity;
@@ -444,13 +444,43 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         $this->_logger->notice(
             sprintf(
-                'Tried to verify a message from issuer "%s", but there is no known entity with that ID.',
+                'Tried to verify a message from issuer "%s", but there is no known SP with that ID.',
                 $messageIssuer
             )
         );
 
         throw new EngineBlock_Corto_Exception_UnknownIssuer(
-            "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP/IdP to Remote Entities)",
+            "Issuer '{$messageIssuer}' is not a known remote entity? (please add SP to Remote Entities)",
+            $messageIssuer,
+            $destination
+        );
+    }
+
+    /**
+     * Verify if a message has an issuer that is known to us. If not, it
+     * throws a Corto_Module_Bindings_VerificationException.
+     * @param string $messageIssuer
+     * @param string $destination
+     * @return AbstractRole Remote Entity that issued the message
+     * @throws EngineBlock_Corto_Exception_UnknownIssuer
+     */
+    protected function _verifyKnownIdP($messageIssuer, $destination = '')
+    {
+        $remoteEntity = $this->_server->getRepository()->findIdentityProviderByEntityId($messageIssuer);
+
+        if ($remoteEntity) {
+            return $remoteEntity;
+        }
+
+        $this->_logger->notice(
+            sprintf(
+                'Tried to verify a message from issuer "%s", but there is no known IdP entity with that ID.',
+                $messageIssuer
+            )
+        );
+
+        throw new EngineBlock_Corto_Exception_UnknownIssuer(
+            "Issuer '{$messageIssuer}' is not a known remote entity? (please add IdP to Remote Entities)",
             $messageIssuer,
             $destination
         );

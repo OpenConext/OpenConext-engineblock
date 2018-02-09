@@ -19,20 +19,6 @@ class MetadataRepositoryTest extends PHPUnit_Framework_TestCase
 {
     const MOCK_IDP_NAME = 'https://idp.example.edu';
 
-    public function testFetchEntityByEntityId()
-    {
-        $repository = new InMemoryMetadataRepository(array(), array());
-
-        $e = null;
-        try {
-            $repository->fetchEntityByEntityId(self::MOCK_IDP_NAME);
-        } catch (Exception $e) {
-        }
-        $this->assertNotNull($e);
-        $repository->registerServiceProvider(new ServiceProvider('https://sp.example.edu'));
-        $this->assertNotNull($repository->fetchEntityByEntityId('https://sp.example.edu'));
-    }
-
     public function testFetchIdentityProviderByEntityId()
     {
         $repository = new InMemoryMetadataRepository(array(), array());
@@ -125,7 +111,6 @@ class MetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $this->assertEmpty($repository->findAllIdentityProviderEntityIds());
         $this->assertEmpty($repository->findIdentityProvidersByEntityId(array('https://idp2.example.edu')));
 
-        $this->assertNull($repository->findEntityByEntityId('https://idp1.example.edu'));
         $this->assertNull($repository->findIdentityProviderByEntityId('https://idp1.example.edu'));
         $this->assertNull($repository->findServiceProviderByEntityId('https://sp1.example.edu'));
 
@@ -159,9 +144,6 @@ class MetadataRepositoryTest extends PHPUnit_Framework_TestCase
         $identityProviders = $repository->findIdentityProvidersByEntityId(array('https://idp2.example.edu'));
         $this->assertCount(1, $identityProviders);
         $this->assertEquals('MOCKED', reset($identityProviders)->nameEn);
-
-        $identityProvider = $repository->findEntityByEntityId('https://idp3.example.edu');
-        $this->assertEquals('MOCKED', $identityProvider->nameEn);
     }
 
     /**

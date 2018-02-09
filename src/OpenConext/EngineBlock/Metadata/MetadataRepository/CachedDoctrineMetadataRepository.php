@@ -84,22 +84,6 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
 
     /**
      * @param string $entityId
-     * @return AbstractRole
-     * @throws EntityNotFoundException
-     */
-    public function fetchEntityByEntityId($entityId)
-    {
-        $entity = $this->findEntityByEntityId($entityId);
-
-        if (!$entity) {
-            throw new EntityNotFoundException("Entity '$entityId' not found in database");
-        }
-
-        return $entity;
-    }
-
-    /**
-     * @param string $entityId
      * @return ServiceProvider
      * @throws EntityNotFoundException
      */
@@ -127,26 +111,6 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
         }
 
         return $identityProvider;
-    }
-
-    /**
-     * @deprecated Don't use this method: entity ID is NOT unique, in theory,
-     *             service- and identity providers can share the same entity ID.
-     *
-     * @param string $entityId
-     * @return AbstractRole|null
-     */
-    public function findEntityByEntityId($entityId)
-    {
-        $serviceProvider = $this->findServiceProviderByEntityId($entityId);
-        if ($serviceProvider) {
-            return $serviceProvider;
-        }
-
-        $identityProvider = $this->findIdentityProviderByEntityId($entityId);
-        if ($identityProvider) {
-            return $identityProvider;
-        }
     }
 
     /**

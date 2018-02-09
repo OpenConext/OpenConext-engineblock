@@ -1,6 +1,7 @@
 <?php
 
 use EngineBlock_Corto_Module_Service_Metadata_ServiceReplacer as ServiceReplacer;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 
 class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module_Service_Abstract
 {
@@ -11,7 +12,12 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         $engineEntityId = $this->_server->getUrl($serviceName);
         $this->_server->unsetProcessingMode();
 
-        $engineEntity = $this->_server->getRepository()->fetchEntityByEntityId($engineEntityId);
+        // TODO: Are we dealing with an SP or IdP at this point? The previous solution suggests it can be both
+        try {
+            $engineEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($engineEntityId);
+        } catch (EntityNotFoundException $e) {
+            $engineEntity = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineEntityId);
+        }
 
         // Override the EntityID and SSO location to optionally append VO id
         $externalEngineEntityId = $this->_server->getUrl($serviceName);
