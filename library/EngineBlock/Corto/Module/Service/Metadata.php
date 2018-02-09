@@ -12,11 +12,33 @@ class EngineBlock_Corto_Module_Service_Metadata extends EngineBlock_Corto_Module
         $engineEntityId = $this->_server->getUrl($serviceName);
         $this->_server->unsetProcessingMode();
 
-        // TODO: Are we dealing with an SP or IdP at this point? The previous solution suggests it can be both
-        try {
-            $engineEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($engineEntityId);
-        } catch (EntityNotFoundException $e) {
-            $engineEntity = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineEntityId);
+        $log = EngineBlock_ApplicationSingleton::getInstance()->getLogInstance();
+
+        // The requested service can be both a SP and an IdP. Based on the serviceName we know what entity type to load.
+        switch ($serviceName) {
+            case 'idpMetadataService':
+                $engineEntity = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineEntityId);
+                break;
+            case 'spMetadataService':
+                $engineEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($engineEntityId);
+                break;
+            default:
+                // If an unsupported serviceName is used, first try to resolve a SP, then try IdP. This is a fallback
+                // and wil probably return the correct entity. In the case of IdP/SP with the same EntityID this might
+                // not be the case. A warning is logged to warn us about this situation.
+                $log->warning(
+                    sprintf(
+                        "Trying to find EngineBlock entity for serviceName '%s'. Please update the switch in '%s'",
+                        $serviceName,
+                        'EngineBlock_Corto_Module_Service_Metadata::serve'
+                    )
+                );
+                try {
+                    $engineEntity = $this->_server->getRepository()->fetchServiceProviderByEntityId($engineEntityId);
+                } catch (EntityNotFoundException $e) {
+                    $engineEntity = $this->_server->getRepository()->fetchIdentityProviderByEntityId($engineEntityId);
+                }
+                break;
         }
 
         // Override the EntityID and SSO location to optionally append VO id
