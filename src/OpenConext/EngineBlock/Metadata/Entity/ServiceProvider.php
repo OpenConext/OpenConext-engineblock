@@ -2,16 +2,16 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
 use OpenConext\EngineBlock\Metadata\RequestedAttribute;
-use OpenConext\EngineBlock\Metadata\IndexedService;
 use OpenConext\EngineBlock\Metadata\Service;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
-use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class ServiceProvider
@@ -22,13 +22,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ServiceProvider extends AbstractRole
 {
-    /**
-     * @var null|AttributeReleasePolicy
-     *
-     * @ORM\Column(name="attribute_release_policy", type="array")
-     */
-    public $attributeReleasePolicy;
-
     /**
      * @var IndexedService[]
      *
@@ -233,10 +226,10 @@ class ServiceProvider extends AbstractRole
             $signatureMethod,
             $responseProcessingService,
             $workflowState,
-            $manipulation
+            $manipulation,
+            $attributeReleasePolicy
         );
 
-        $this->attributeReleasePolicy = $attributeReleasePolicy;
         $this->allowedIdpEntityIds = $allowedIdpEntityIds;
         $this->assertionConsumerServices = $assertionConsumerServices;
         $this->displayUnconnectedIdpsWayf = $displayUnconnectedIdpsWayf;

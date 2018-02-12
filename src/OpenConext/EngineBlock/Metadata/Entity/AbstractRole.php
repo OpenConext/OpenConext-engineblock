@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
@@ -251,6 +252,13 @@ abstract class AbstractRole
     public $manipulation;
 
     /**
+     * @var null|AttributeReleasePolicy
+     *
+     * @ORM\Column(name="attribute_release_policy", type="array")
+     */
+    public $attributeReleasePolicy;
+
+    /**
      * @param $entityId
      * @param Organization $organizationEn
      * @param Organization $organizationNl
@@ -277,6 +285,7 @@ abstract class AbstractRole
      * @param Service $responseProcessingService
      * @param string $workflowState
      * @param string $manipulation
+     * @param AttributeReleasePolicy $attributeReleasePolicy
      */
     public function __construct(
         $entityId,
@@ -307,9 +316,11 @@ abstract class AbstractRole
         $signatureMethod = XMLSecurityKey::RSA_SHA1,
         Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
-        $manipulation = ''
+        $manipulation = '',
+        AttributeReleasePolicy $attributeReleasePolicy = null
     ) {
         $this->additionalLogging = $additionalLogging;
+        $this->attributeReleasePolicy = $attributeReleasePolicy;
         $this->certificates = $certificates;
         $this->contactPersons = $contactPersons;
         $this->descriptionEn = $descriptionEn;
