@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -69,17 +68,6 @@ class RemoveOtherWorkflowStatesFilter extends AbstractFilter
             ->andWhere('(role.workflowState = :requiredWorkflowState OR role.entityId IN (:eb_ids))')
             ->setParameter('requiredWorkflowState', $this->workflowState)
             ->setParameter('eb_ids', [$this->idpEntityId, $this->spEntityId]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toExpression($repositoryClassName)
-    {
-        return Criteria::expr()->orX(
-            Criteria::expr()->eq('workflowState', $this->workflowState),
-            Criteria::expr()->in('entityId', [$this->idpEntityId, $this->spEntityId])
-        );
     }
 
     /**

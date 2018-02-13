@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -67,18 +66,6 @@ class RemoveDisallowedIdentityProvidersFilter extends AbstractFilter
         return $queryBuilder
             ->andWhere("role.entityId IN(:allowedEntityIds)")
             ->setParameter('allowedEntityIds', $this->allowedIdentityProviderEntityIds);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toExpression($repositoryClassName)
-    {
-        if ($repositoryClassName !== 'OpenConext\EngineBlock\Metadata\Entity\IdentityProvider') {
-            return null;
-        }
-
-        return Criteria::expr()->in('entityId', $this->allowedIdentityProviderEntityIds);
     }
 
     /**

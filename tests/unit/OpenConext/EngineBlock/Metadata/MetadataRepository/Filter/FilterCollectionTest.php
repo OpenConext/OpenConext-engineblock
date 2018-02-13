@@ -38,22 +38,11 @@ class FilterCollectionTest extends PHPUnit_Framework_TestCase
         $mockFilter = Mockery::mock(
             'OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface'
         );
-        $mockFilter->shouldReceive('toExpression')->andReturn(Criteria::expr()->isNull('entityId'));
         $mockFilter->shouldReceive('toQueryBuilder');
 
         $collection = new CompositeFilter();
         $collection->add($mockFilter);
 
-        $this->assertTrue(
-            $collection->toExpression(
-                'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider'
-            ) instanceof Expression
-        );
-        $this->assertTrue(
-            $collection->toCriteria(
-                'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider'
-            ) instanceof Criteria
-        );
         $queryBuilderMock = Mockery::mock('Doctrine\ORM\QueryBuilder');
         $this->assertEquals(
             $queryBuilderMock,

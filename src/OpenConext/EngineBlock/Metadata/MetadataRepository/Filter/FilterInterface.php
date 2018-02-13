@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 
-use Doctrine\Common\Collections\Expr\Expression;
 use Doctrine\ORM\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use Psr\Log\LoggerInterface;
@@ -26,12 +25,6 @@ interface FilterInterface
      * @return QueryBuilder
      */
     public function toQueryBuilder(QueryBuilder $queryBuilder, $repositoryClassName);
-
-    /**
-     * @param string $repositoryClassName
-     * @return Expression|null
-     */
-    public function toExpression($repositoryClassName);
 
     /**
      * @return string
