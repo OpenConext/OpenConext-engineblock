@@ -5,6 +5,7 @@ namespace OpenConext\EngineBlock\Metadata\MetadataRepository\Filter;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
+use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Psr\Log\LoggerInterface;
 
@@ -20,11 +21,25 @@ class RemoveOtherWorkflowStatesFilter extends AbstractFilter
     private $workflowState;
 
     /**
-     * @param ServiceProvider $serviceProvider
+     * @var string
      */
-    public function __construct(ServiceProvider $serviceProvider)
+    private $idpEntityId;
+
+    /**
+     * @var string
+     */
+    private $spEntityId;
+
+    /**
+     * @param ServiceProvider $serviceProvider
+     * @param string $idpEntityId
+     * @param string $spEntityId
+     */
+    public function __construct(ServiceProvider $serviceProvider, $idpEntityId, $spEntityId)
     {
         $this->workflowState = $serviceProvider->workflowState;
+        $this->idpEntityId = $idpEntityId;
+        $this->spEntityId = $spEntityId;
     }
 
     /**
@@ -32,6 +47,12 @@ class RemoveOtherWorkflowStatesFilter extends AbstractFilter
      */
     public function filterRole(AbstractRole $role, LoggerInterface $logger = null)
     {
+        // EngineBlock itself should always work regardless of the workflow state.
+        if (($role instanceof ServiceProvider && $role->entityId === $this->spEntityId) ||
+            ($role instanceof IdentityProvider && $role->entityId === $this->idpEntityId)) {
+            return $role;
+        }
+
         $result = $role->workflowState === $this->workflowState ? $role : null;
         if (!is_null($logger) && is_null($result)) {
             $logger->debug(sprintf('Dissimilar workflow states (%s)', $this->__toString()));
@@ -44,9 +65,10 @@ class RemoveOtherWorkflowStatesFilter extends AbstractFilter
      */
     public function toQueryBuilder(QueryBuilder $queryBuilder, $repositoryClassName)
     {
-        $queryBuilder
-            ->andWhere('role.workflowState = :requiredWorkflowState')
-            ->setParameter('requiredWorkflowState', $this->workflowState);
+        return $queryBuilder
+            ->andWhere('(role.workflowState = :requiredWorkflowState OR role.entityId IN (:eb_ids))')
+            ->setParameter('requiredWorkflowState', $this->workflowState)
+            ->setParameter('eb_ids', [$this->idpEntityId, $this->spEntityId]);
     }
 
     /**
@@ -54,7 +76,10 @@ class RemoveOtherWorkflowStatesFilter extends AbstractFilter
      */
     public function toExpression($repositoryClassName)
     {
-        return Criteria::expr()->eq('workflowState', $this->workflowState);
+        return Criteria::expr()->orX(
+            Criteria::expr()->eq('workflowState', $this->workflowState),
+            Criteria::expr()->in('entityId', [$this->idpEntityId, $this->spEntityId])
+        );
     }
 
     /**

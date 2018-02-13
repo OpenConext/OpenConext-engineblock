@@ -22,7 +22,7 @@ class RemoveOtherWorkflowStatesTest extends PHPUnit_Framework_TestCase
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
             array('entityId' => 'https://prod.sp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_PROD)
         );
-        $filter = new RemoveOtherWorkflowStatesFilter($prodSp);
+        $filter = new RemoveOtherWorkflowStatesFilter($prodSp, 'idp', 'sp');
 
         $prodIdp = Utils::instantiate(
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
@@ -66,7 +66,7 @@ class RemoveOtherWorkflowStatesTest extends PHPUnit_Framework_TestCase
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
             array('entityId' => 'https://prod.sp.example.edu', 'workflowState' => ServiceProvider::WORKFLOW_STATE_PROD)
         );
-        $filter = new RemoveOtherWorkflowStatesFilter($prodSp);
+        $filter = new RemoveOtherWorkflowStatesFilter($prodSp, 'idp', 'sp');
         $buggyIdp = Utils::instantiate(
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
             array('entityId' => 'https://buggy.idp.example.edu', 'workflowState' => '')

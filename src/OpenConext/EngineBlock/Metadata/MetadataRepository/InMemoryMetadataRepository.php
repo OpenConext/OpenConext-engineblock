@@ -16,11 +16,6 @@ use Psr\Log\LoggerInterface;
 class InMemoryMetadataRepository extends AbstractMetadataRepository
 {
     /**
-     * @var array<string,AbstractRole[]>
-     */
-    private $entities = array();
-
-    /**
      * @var ServiceProvider[]
      */
     private $serviceProviders = array();
@@ -56,7 +51,7 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
     {
         $this->serviceProviders[] = $serviceProvider;
 
-        return $this->registerEntityRole($serviceProvider);
+        return $this;
     }
 
     /**
@@ -67,20 +62,6 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
     {
         $this->identityProviders[] = $identityProvider;
 
-        return $this->registerEntityRole($identityProvider);
-    }
-
-    /**
-     * @param AbstractRole $serviceProvider
-     */
-    private function registerEntityRole(AbstractRole $role)
-    {
-        if (!isset($this->entities[$role->entityId])) {
-            $this->entities[$role->entityId] = array();
-        }
-
-        $this->entities[$role->entityId][] = $role;
-
         return $this;
     }
 
@@ -90,40 +71,13 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
      */
     public function findIdentityProviderByEntityId($entityId)
     {
-        $roles = $this->findIdentityProviderRolesByEntityId($entityId);
-        if (empty($roles)) {
-            return null;
-        }
+        $roles = $this->findIdentityProviders();
 
-        $role = $this->findFilteredRole($roles);
-        if (!$role) {
-            return null;
-        }
-
-        $role->accept($this->compositeVisitor);
-
-        return $role;
-    }
-
-    /**
-     * @param $entityId
-     * @return array
-     */
-    private function findIdentityProviderRolesByEntityId($entityId)
-    {
-        if (empty($this->entities[$entityId])) {
-            return null;
-        }
-
-        $idpRoles = array();
-        foreach ($this->entities[$entityId] as $role) {
-            if (!$role instanceof IdentityProvider) {
-                continue;
+        foreach ($roles as $role) {
+            if ($role->entityId === $entityId) {
+                return $role;
             }
-
-            $idpRoles[] = $role;
         }
-        return $idpRoles;
     }
 
     /**
@@ -133,40 +87,13 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
      */
     public function findServiceProviderByEntityId($entityId, LoggerInterface $logger = null)
     {
-        $roles = $this->findServiceProviderRolesByEntityId($entityId);
-        if (empty($roles)) {
-            return null;
-        }
+        $roles = $this->findServiceProviders();
 
-        $role = $this->findFilteredRole($roles);
-        if (!$role) {
-            return null;
-        }
-
-        $role->accept($this->compositeVisitor);
-
-        return $role;
-    }
-
-    /**
-     * @param $entityId
-     * @return array
-     */
-    private function findServiceProviderRolesByEntityId($entityId)
-    {
-        if (empty($this->entities[$entityId])) {
-            return null;
-        }
-
-        $spRoles = array();
-        foreach ($this->entities[$entityId] as $role) {
-            if (!$role instanceof ServiceProvider) {
-                continue;
+        foreach ($roles as $role) {
+            if ($role->entityId === $entityId) {
+                return $role;
             }
-
-            $spRoles[] = $role;
         }
-        return $spRoles;
     }
 
     /**
@@ -187,6 +114,22 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
             $indexedIdentityProviders[$identityProvider->entityId] = $identityProvider;
         }
         return $indexedIdentityProviders;
+    }
+
+    /**
+     * @return ServiceProvider[]
+     */
+    private function findServiceProviders()
+    {
+        $serviceProviders = $this->compositeFilter->filterRoles(
+            $this->serviceProviders
+        );
+
+        foreach ($serviceProviders as $serviceProvider) {
+            $serviceProvider->accept($this->compositeVisitor);
+        }
+
+        return $serviceProviders;
     }
 
     /**
@@ -217,36 +160,6 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
-     * @param AbstractRole[] $roles
-     * @return AbstractRole|null
-     */
-    private function findFilteredRole(array $roles)
-    {
-        $filteredRoles = array();
-        foreach ($roles as $role) {
-            $role = $this->compositeFilter->filterRole($role);
-
-            if (!$role) {
-                continue;
-            }
-
-            $filteredRoles[] = $role;
-        }
-
-        if (empty($filteredRoles)) {
-            return null;
-        }
-
-        if (count($filteredRoles) > 2) {
-            throw new \RuntimeException('Multiple roles matching after filtering!');
-        }
-
-        return array_shift($filteredRoles);
-    }
-
-    /**
-     * WARNING: Very inefficient in-memory default.
-     *
      * @return string[]
      */
     public function findAllIdentityProviderEntityIds()
@@ -262,8 +175,6 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
-     * WARNING: Very inefficient in-memory default.
-     *
      * @return string[]
      */
     public function findReservedSchacHomeOrganizations()
@@ -279,5 +190,25 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
             $schacHomeOrganizations[] = $identityProvider->schacHomeOrganization;
         }
         return $schacHomeOrganizations;
+    }
+
+    /**
+     * @param array $identityProviderEntityIds
+     * @return array|IdentityProvider[]
+     * @throws EntityNotFoundException
+     */
+    public function findIdentityProvidersByEntityId(array $identityProviderEntityIds)
+    {
+        $identityProviders = $this->findIdentityProviders();
+
+        $filteredIdentityProviders = array();
+        foreach ($identityProviderEntityIds as $identityProviderEntityId) {
+            if (!isset($identityProviders[$identityProviderEntityId])) {
+                continue;
+            }
+
+            $filteredIdentityProviders[$identityProviderEntityId] = $identityProviders[$identityProviderEntityId];
+        }
+        return $filteredIdentityProviders;
     }
 }

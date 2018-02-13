@@ -1,5 +1,6 @@
 <?php
 
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\FakeUserDirectory;
 use Symfony\Component\Filesystem\Filesystem;
 
@@ -9,11 +10,11 @@ use Symfony\Component\Filesystem\Filesystem;
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
     /**
-     * @return CompositeMetadataRepository
+     * @return MetadataRepositoryInterface
      */
     public function getMetadataRepository()
     {
-        return $this->container->get('engineblock.functional_testing.metadata.repository.composite');
+        return $this->container->get('engineblock.functional_testing.metadata.repository.fixture_reader');
     }
 
     public function getMessageUtilClassName()

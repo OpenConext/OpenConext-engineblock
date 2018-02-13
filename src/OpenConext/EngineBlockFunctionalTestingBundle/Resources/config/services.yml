@@ -60,11 +60,6 @@ services:
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository
         factory: ['@engineblock.functional_testing.fixture.service_registry', 'createInMemoryMetadataRepository']
 
-    engineblock.functional_testing.metadata.repository.composite:
-        class: OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository
-        arguments:
-            - ['@engineblock.functional_testing.metadata.repository.fixture_reader']
-
     engineblock.functional_testing.fixture.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration
         arguments:

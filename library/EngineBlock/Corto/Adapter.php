@@ -1,12 +1,8 @@
 <?php
 
-use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveDisallowedIdentityProvidersFilter;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveEntityByEntityIdFilter;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\RemoveOtherWorkflowStatesFilter;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\EngineBlockMetadataVisitor;
@@ -243,7 +239,13 @@ class EngineBlock_Corto_Adapter
         $repository = $this->getMetadataRepository();
         $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
 
-        $repository->appendFilter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
+        $filter = new RemoveOtherWorkflowStatesFilter(
+            $serviceProvider,
+            $this->getProxyServer()->getUrl('idpMetadataService'),
+            $this->getProxyServer()->getUrl('spMetadataService')
+        );
+
+        $repository->appendFilter($filter);
     }
 
     /**
@@ -264,7 +266,13 @@ class EngineBlock_Corto_Adapter
             return;
         }
 
-        $repository->appendFilter(new RemoveOtherWorkflowStatesFilter($serviceProvider));
+        $filter = new RemoveOtherWorkflowStatesFilter(
+            $serviceProvider,
+            $this->getProxyServer()->getUrl('idpMetadataService'),
+            $this->getProxyServer()->getUrl('spMetadataService')
+        );
+
+        $repository->appendFilter($filter);
     }
 
     /**
@@ -330,13 +338,8 @@ class EngineBlock_Corto_Adapter
 
         $this->enrichEngineBlockMetadata($proxyServer);
 
-        /**
-         * Augment our own IdP entry with stuff that can't be set via the Service Registry (yet)
-         */
-        $metadataRepository = $this->_configureMetadataRepository($proxyServer, $application);
-
-        $proxyServer->setRepository($metadataRepository);
-
+        $proxyServer->setRepository($this->getMetadataRepository());
+        $proxyServer->setConfig('Processing', ['Consent' => $this->getEngineSpRole($proxyServer)]);
         $proxyServer->setBindingsModule(new EngineBlock_Corto_Module_Bindings($proxyServer));
         $proxyServer->setServicesModule(new EngineBlock_Corto_Module_Services($proxyServer));
     }
@@ -386,7 +389,7 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @return CompositeMetadataRepository
+     * @return MetadataRepositoryInterface
      */
     public function getMetadataRepository()
     {
@@ -490,38 +493,6 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @param EngineBlock_Corto_ProxyServer $proxyServer
-     * @return CompositeMetadataRepository
-     * @throws EngineBlock_Exception
-     */
-    protected function _configureMetadataRepository(EngineBlock_Corto_ProxyServer $proxyServer)
-    {
-        $idpEntityId = $proxyServer->getUrl('idpMetadataService');
-        $metadataRepository = $this->getMetadataRepository();
-
-        $engineIdentityProvider = $this->getEngineIdpRole($metadataRepository, $idpEntityId);
-        $engineServiceProvider  = $this->getEngineSpRole($metadataRepository, $proxyServer);
-
-        $proxyServer->setConfig('Processing', array('Consent' => $engineServiceProvider));
-
-        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineServiceProvider->entityId));
-        $metadataRepository->appendFilter(new RemoveEntityByEntityIdFilter($engineIdentityProvider->entityId));
-
-        $engineServiceProviderAlternateWorkflow = clone $engineServiceProvider;
-        $engineServiceProviderAlternateWorkflow->toggleWorkflowState();
-
-        $engineIdentityProviderAlternateWorkflow = clone $engineIdentityProvider;
-        $engineIdentityProviderAlternateWorkflow->toggleWorkflowState();
-
-        $ownMetadataRepository = new InMemoryMetadataRepository(
-            array($engineIdentityProvider, $engineIdentityProviderAlternateWorkflow),
-            array($engineServiceProvider, $engineServiceProviderAlternateWorkflow)
-        );
-        $metadataRepository->appendRepository($ownMetadataRepository);
-        return $metadataRepository;
-    }
-
-    /**
      * Modify EngineBlocks own metadata entries.
      *
      * See EngineBlockMetadataVisitor for more information on what is modified
@@ -551,34 +522,15 @@ class EngineBlock_Corto_Adapter
     }
 
     /**
-     * @param MetadataRepositoryInterface $metadataRepository
-     * @param $idpEntityId
-     * @return IdentityProvider
-     * @throws EngineBlock_Exception
-     */
-    protected function getEngineIdpRole(MetadataRepositoryInterface $metadataRepository, $idpEntityId)
-    {
-        $engineIdentityProvider = $metadataRepository->findIdentityProviderByEntityId($idpEntityId);
-        if (!$engineIdentityProvider) {
-            throw new EngineBlock_Exception(
-                "Unable to find EngineBlock configured as Identity Provider. No '$idpEntityId' in repository!"
-            );
-        }
-
-        return $engineIdentityProvider;
-    }
-
-    /**
-     * @param MetadataRepositoryInterface $metadataRepository
      * @param EngineBlock_Corto_ProxyServer $proxyServer
      * @return ServiceProvider
      * @throws EngineBlock_Corto_ProxyServer_Exception
      * @throws EngineBlock_Exception
      */
-    protected function getEngineSpRole(MetadataRepositoryInterface $metadataRepository, EngineBlock_Corto_ProxyServer $proxyServer)
+    protected function getEngineSpRole(EngineBlock_Corto_ProxyServer $proxyServer)
     {
         $spEntityId = $proxyServer->getUrl('spMetadataService');
-        $engineServiceProvider = $metadataRepository->findServiceProviderByEntityId($spEntityId);
+        $engineServiceProvider = $proxyServer->getRepository()->findServiceProviderByEntityId($spEntityId);
         if (!$engineServiceProvider) {
             throw new EngineBlock_Exception(
                 "Unable to find EngineBlock configured as Service Provider. No '$spEntityId' in repository!"
