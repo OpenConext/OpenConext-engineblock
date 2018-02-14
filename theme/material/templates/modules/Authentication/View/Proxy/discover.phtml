@@ -32,31 +32,31 @@ $spDisplayName = '';
 $showRequestAccess = $metaDataSP->displayUnconnectedIdpsWayf;
 
 if ($locale === 'nl') {
-    if ($metaDataSP->nameNl) {
-        $spDisplayName = $metaDataSP->nameNl;
-    }
-    else if ($metaDataSP->displayNameNl) {
+    if ($metaDataSP->displayNameNl) {
         $spDisplayName = $metaDataSP->displayNameNl;
-    }
-    else if ($metaDataSP->nameEn) {
-        $spDisplayName = $metaDataSP->nameEn;
-    }
-    else if ($metaDataSP->displayNameEn) {
-        $spDisplayName = $metaDataSP->displayNameEn;
-    }
-}
-else {
-    if ($metaDataSP->nameEn) {
-        $spDisplayName = $metaDataSP->nameEn;
-    }
-    else if ($metaDataSP->displayNameEn) {
-        $spDisplayName = $metaDataSP->displayNameEn;
     }
     else if ($metaDataSP->nameNl) {
         $spDisplayName = $metaDataSP->nameNl;
     }
+    else if ($metaDataSP->displayNameEn) {
+        $spDisplayName = $metaDataSP->displayNameEn;
+    }
+    else if ($metaDataSP->nameEn) {
+        $spDisplayName = $metaDataSP->nameEn;
+    }
+}
+else {
+    if ($metaDataSP->displayNameEn) {
+        $spDisplayName = $metaDataSP->displayNameEn;
+    }
+    else if ($metaDataSP->nameEn) {
+        $spDisplayName = $metaDataSP->nameEn;
+    }
     else if ($metaDataSP->displayNameNl) {
         $spDisplayName = $metaDataSP->displayNameNl;
+    }
+    else if ($metaDataSP->nameNl) {
+        $spDisplayName = $metaDataSP->nameNl;
     }
 }
 
