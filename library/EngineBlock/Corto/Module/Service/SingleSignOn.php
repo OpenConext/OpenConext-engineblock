@@ -64,7 +64,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // or we could have it configured that the SP may only be serviced by specific IdPs
         $scopedIdps = $this->_getScopedIdPs($request);
 
-        $cacheResponseSent = $this->_sendCachedResponse($request, $scopedIdps);
+        $cacheResponseSent = $this->_sendCachedResponse($request, $sp, $scopedIdps);
         if ($cacheResponseSent) {
             return;
         }
@@ -304,7 +304,8 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
     protected function _sendCachedResponse(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
-        $scopedIdps
+        ServiceProvider $sp,
+        array $scopedIdps
     ) {
         /** @var AuthnRequest $request */
         if ($request->getForceAuthn()) {
@@ -329,7 +330,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
-        $cachedResponse = $this->_pickCachedResponse($cachedResponses);
+        $cachedResponse = $this->_pickCachedResponse($cachedResponses, $sp);
         if (!$cachedResponse) {
             return false;
         }
@@ -342,17 +343,17 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return true;
     }
 
-    protected function _pickCachedResponse(array $cachedResponses)
+    protected function _pickCachedResponse(array $cachedResponses, ServiceProvider $sp)
     {
-        $idpEntityIds = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
-
+        // Find the first cached response for an IDP that is allowed by the SP
+        // we're authentication for.
         foreach ($cachedResponses as $cachedResponse) {
             if ($cachedResponse['type'] !== EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN) {
                 continue;
             }
 
-            // Check if it is for a valid idp
-            if (!in_array($cachedResponse['idp'], $idpEntityIds)) {
+            // Check if it is for an allowed idp
+            if (!$sp->isAllowed($cachedResponse['idp'])) {
                 continue;
             }
 
