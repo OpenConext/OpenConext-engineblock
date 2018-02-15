@@ -42,32 +42,24 @@ class EngineBlockMetadataVisitor implements VisitorInterface
     private $consentService;
 
     /**
-     * @var array
-     */
-    private $allIdpEntityIds;
-
-    /**
      * @param string $idpEntityId
      * @param string $spEntityId
      * @param KeyPair $keyPair
      * @param AttributesMetadata $attributes
      * @param Service $consentService
-     * @param array $allIdpEntityIds
      */
     public function __construct(
         $idpEntityId,
         $spEntityId,
         KeyPair $keyPair,
         AttributesMetadata $attributes,
-        Service $consentService,
-        array $allIdpEntityIds
+        Service $consentService
     ) {
         $this->idpEntityId = $idpEntityId;
         $this->spEntityId = $spEntityId;
         $this->keyPair = $keyPair;
         $this->attributes = $attributes;
         $this->consentService = $consentService;
-        $this->allIdpEntityIds = $allIdpEntityIds;
     }
 
     /**
@@ -167,6 +159,6 @@ class EngineBlockMetadataVisitor implements VisitorInterface
     private function setConsentService(ServiceProvider $entity)
     {
         $entity->responseProcessingService = $this->consentService;
-        $entity->allowedIdpEntityIds = $this->allIdpEntityIds;
+        $entity->allowAll = true;
     }
 }
