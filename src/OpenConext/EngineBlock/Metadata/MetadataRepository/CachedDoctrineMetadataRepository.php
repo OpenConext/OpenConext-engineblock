@@ -150,9 +150,10 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
+     * @param array $scope
      * @return string[]
      */
-    public function findAllIdentityProviderEntityIds()
+    public function findAllIdentityProviderEntityIds(array $scope = [])
     {
         return $this->invoke(__FUNCTION__, func_get_args());
     }

@@ -160,15 +160,20 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
+     * @param array $scope
      * @return string[]
      */
-    public function findAllIdentityProviderEntityIds()
+    public function findAllIdentityProviderEntityIds(array $scope = [])
     {
         $identityProviders = $this->findIdentityProviders();
 
         $entityIds = array();
         foreach ($identityProviders as $identityProvider) {
             $entityIds[] = $identityProvider->entityId;
+        }
+
+        if (!empty($scope)) {
+            $entityIds = array_intersect($entityIds, $scope);
         }
 
         return $entityIds;

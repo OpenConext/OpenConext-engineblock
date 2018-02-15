@@ -56,13 +56,20 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
 
     /**
      *
+     * @param array $scope
      * @return string[]
      */
-    public function findAllIdentityProviderEntityIds()
+    public function findAllIdentityProviderEntityIds(array $scope = [])
     {
         $queryBuilder = $this->idpRepository
             ->createQueryBuilder('role')
             ->select('role.entityId');
+
+        if (!empty($scope)) {
+            $queryBuilder
+                ->where('role.entityId IN (:scopedEntityIds)')
+                ->setParameter('scopedEntityIds', $scope);
+        }
 
         $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
 

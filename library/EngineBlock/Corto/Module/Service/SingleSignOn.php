@@ -80,7 +80,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         // Get all registered Single Sign On Services
         // Note that we could also only get the ones that are allowed for this SP, but we may also want to show
         // those that are not allowed.
-        $candidateIDPs = $this->_server->getRepository()->findAllIdentityProviderEntityIds();
+        $candidateIDPs = $this->_server->getRepository()->findAllIdentityProviderEntityIds($scopedIdps);
 
         $posOfOwnIdp = array_search($this->_server->getUrl('idpMetadataService'), $candidateIDPs);
         if ($posOfOwnIdp !== false) {
@@ -88,16 +88,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             unset($candidateIDPs[$posOfOwnIdp]);
         }
 
-
-        // If we have scoping, filter out every non-scoped IdP
         if (count($scopedIdps) > 0) {
-            $log->info(
-                sprintf('%d candidate IdPs before scoping', count($candidateIDPs)),
-                array('idps' => array_values($candidateIDPs))
-            );
-
-            $candidateIDPs = array_intersect($scopedIdps, $candidateIDPs);
-
             $log->info(
                 sprintf('%d candidate IdPs after scoping', count($candidateIDPs)),
                 array('idps' => array_values($candidateIDPs))
@@ -108,7 +99,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
                 array('idps' => array_values($candidateIDPs))
             );
         }
-
 
         // 0 IdPs found! Throw an exception.
         if (count($candidateIDPs) === 0) {
