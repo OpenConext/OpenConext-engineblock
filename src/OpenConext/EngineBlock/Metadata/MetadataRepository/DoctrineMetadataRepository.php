@@ -147,6 +147,32 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
     }
 
     /**
+     * @param string $hash
+     * @return string|null
+     */
+    public function findIdentityProviderEntityIdByMd5Hash($hash)
+    {
+        $queryBuilder = $this->idpRepository->createQueryBuilder('role')
+            ->select('role.entityId')
+            ->andWhere('MD5(role.entityId) = :hash')
+            ->setParameter('hash', $hash);
+
+        $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
+
+        $result = $queryBuilder->getQuery()->execute();
+
+        if (empty($result)) {
+            return null;
+        }
+
+        if (count($result) > 1) {
+            throw new RuntimeException('Multiple Identity Providers found for entityId MD5 hash: ' . $hash);
+        }
+
+        return reset($result)['entityId'];
+    }
+
+    /**
      * @param $entityId
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider

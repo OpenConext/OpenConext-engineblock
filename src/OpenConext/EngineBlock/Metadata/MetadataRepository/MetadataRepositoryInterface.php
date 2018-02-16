@@ -47,6 +47,12 @@ interface MetadataRepositoryInterface
     public function findIdentityProviderByEntityId($entityId);
 
     /**
+     * @param string $hash
+     * @return string|null
+     */
+    public function findIdentityProviderEntityIdByMd5Hash($hash);
+
+    /**
      * @param $entityId
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider

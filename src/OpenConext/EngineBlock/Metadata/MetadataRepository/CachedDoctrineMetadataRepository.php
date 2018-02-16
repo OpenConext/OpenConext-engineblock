@@ -123,6 +123,15 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     }
 
     /**
+     * @param string $hash
+     * @return string|null
+     */
+    public function findIdentityProviderEntityIdByMd5Hash($hash)
+    {
+        return $this->invoke(__FUNCTION__, func_get_args());
+    }
+
+    /**
      * @param $entityId
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider

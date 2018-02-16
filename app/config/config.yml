@@ -94,6 +94,9 @@ doctrine:
                         dir:       "%kernel.root_dir%/../src/OpenConext/EngineBlock/Metadata"
                         prefix:    OpenConext\EngineBlock\Metadata
                         is_bundle: false
+                dql:
+                    string_functions:
+                        md5: OpenConext\EngineBlockBundle\Doctrine\DqlFunction\Md5
 
 doctrine_migrations:
     dir_name:   "%kernel.root_dir%/../database/DoctrineMigrations"

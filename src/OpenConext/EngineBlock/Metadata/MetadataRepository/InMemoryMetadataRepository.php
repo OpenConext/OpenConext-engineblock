@@ -12,6 +12,7 @@ use Psr\Log\LoggerInterface;
  * Class InMemoryMetadataRepository
  * @package OpenConext\EngineBlock\Metadata\MetadataRepository
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class InMemoryMetadataRepository extends AbstractMetadataRepository
 {
@@ -76,6 +77,21 @@ class InMemoryMetadataRepository extends AbstractMetadataRepository
         foreach ($roles as $role) {
             if ($role->entityId === $entityId) {
                 return $role;
+            }
+        }
+    }
+
+    /**
+     * @param string $hash
+     * @return string|null
+     */
+    public function findIdentityProviderEntityIdByMd5Hash($hash)
+    {
+        $roles = $this->findIdentityProviders();
+
+        foreach ($roles as $role) {
+            if (md5($role->entityId) === $hash) {
+                return $role->entityId;
             }
         }
     }
