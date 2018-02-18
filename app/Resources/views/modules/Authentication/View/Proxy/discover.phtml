@@ -170,17 +170,25 @@ $configuration = [
 
 <div id="connected-idp-picker">
   <div class="preselection mod-results hidden">
-    <header>
-      <h2><?php echo $this->t('our_suggestion'); ?><a class="edit" href="#" data-toggle="view" data-toggle-text="<?= $this->t('done'); ?>"><?= $this->t('edit'); ?></a></h2>
-    </header>
     <div class="idp-list">
     </div>
   </div>
 
+<?php if ($rememberChoiceFeature === true): ?>
+  <div id="rememberChoiceDiv" class="selection mod-results">
+    <header>
+      <h2><?php echo $this->t('idps_with_access'); ?></h2>
+      <form method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
+        <label for="rememberChoice"><?= $this->t('remember_choice'); ?></label>
+        <input type="checkbox" name="rememberChoice" id="rememberChoice" />
+      </form>
+    </header>
+<?php else: ?>
   <div class="selection mod-results">
     <header>
       <h2><?php echo $this->t('idps_with_access'); ?></h2>
     </header>
+<?php endif ?>
 
     <div class="loading spinner hidden">
       <div class="logo">
@@ -216,16 +224,6 @@ $configuration = [
       <p><?php echo $this->t('no_idp_results'); ?></p>
     </div>
   </div>
-<?php if ($rememberChoiceFeature === true): ?>
-  <div id="rememberChoiceDiv" class="mod-results">
-    <header>
-      <form method="post" action="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($action); ?>">
-        <label for="rememberChoice"><?= $this->t('remember_choice'); ?></label>
-        <input type="checkbox" name="rememberChoice" id="rememberChoice" />
-      </form>
-    </header>
-  </div>
-<?php endif ?>
 </div>
 
 <?php if ($showRequestAccess === true): ?>
