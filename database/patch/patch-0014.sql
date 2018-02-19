@@ -1,1 +1,0 @@
-ALTER TABLE `virtual_organisation` CHANGE `vo_type` `vo_type` ENUM( 'GROUP', 'STEM', 'IDP', 'MIXED' ) NOT NULL;
