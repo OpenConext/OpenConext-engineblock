@@ -139,17 +139,21 @@ class EngineBlock_Corto_Adapter
         $repository = $this->getMetadataRepository();
         $serviceProvider = $repository->fetchServiceProviderByEntityId($request->getIssuer());
 
-        if ($serviceProvider->displayUnconnectedIdpsWayf) {
-            $repository->appendVisitor(new DisableDisallowedEntitiesInWayfVisitor($serviceProvider->allowedIdpEntityIds));
-            return;
-        }
+        if (!$serviceProvider->allowAll) {
+            if ($serviceProvider->displayUnconnectedIdpsWayf) {
+                $repository->appendVisitor(
+                    new DisableDisallowedEntitiesInWayfVisitor($serviceProvider->allowedIdpEntityIds)
+                );
+                return;
+            }
 
-        $repository->appendFilter(
-            new RemoveDisallowedIdentityProvidersFilter(
-                $serviceProvider->entityId,
-                $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
-            )
-        );
+            $repository->appendFilter(
+                new RemoveDisallowedIdentityProvidersFilter(
+                    $serviceProvider->entityId,
+                    $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
+                )
+            );
+        }
     }
 
     /**
@@ -166,12 +170,15 @@ class EngineBlock_Corto_Adapter
 
         $repository = $this->getMetadataRepository();
         $serviceProvider = $repository->fetchServiceProviderByEntityId($serviceProviderEntityId);
-        $repository->appendFilter(
-            new RemoveDisallowedIdentityProvidersFilter(
-                $serviceProvider->entityId,
-                $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
-            )
-        );
+
+        if (!$serviceProvider->allowAll) {
+            $repository->appendFilter(
+                new RemoveDisallowedIdentityProvidersFilter(
+                    $serviceProvider->entityId,
+                    $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
+                )
+            );
+        }
     }
 
     /**
@@ -186,12 +193,14 @@ class EngineBlock_Corto_Adapter
             $serviceProvider = $repository->findServiceProviderByEntityId($requesterId);
 
             if ($serviceProvider) {
-                $repository->appendFilter(
-                    new RemoveDisallowedIdentityProvidersFilter(
-                        $serviceProvider->entityId,
-                        $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
-                    )
-                );
+                if (!$serviceProvider->allowAll) {
+                    $repository->appendFilter(
+                        new RemoveDisallowedIdentityProvidersFilter(
+                            $serviceProvider->entityId,
+                            $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
+                        )
+                    );
+                }
             }
             else {
                 $this->_getLogger()->warning(
@@ -219,12 +228,14 @@ class EngineBlock_Corto_Adapter
             return;
         }
 
-        $this->getMetadataRepository()->appendFilter(
-            new RemoveDisallowedIdentityProvidersFilter(
-                $serviceProvider->entityId,
-                $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
-            )
-        );
+        if (!$serviceProvider->allowAll) {
+            $this->getMetadataRepository()->appendFilter(
+                new RemoveDisallowedIdentityProvidersFilter(
+                    $serviceProvider->entityId,
+                    $this->_findAllowedIdpEntityIdsForSp($serviceProvider)
+                )
+            );
+        }
     }
 
     /**
@@ -514,8 +525,7 @@ class EngineBlock_Corto_Adapter
             new Service(
                 $proxyServer->getUrl('provideConsentService'),
                 'INTERNAL'
-            ),
-            $this->getMetadataRepository()->findAllIdentityProviderEntityIds()
+            )
         );
 
         $this->getMetadataRepository()->appendVisitor($visitor);

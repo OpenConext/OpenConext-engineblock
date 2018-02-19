@@ -102,7 +102,14 @@ class JanusPushMetadataAssembler
                 unset($allowedIdpEntityIds[$index]);
             }
 
-            $role->allowedIdpEntityIds = array_values($allowedIdpEntityIds);
+            if ($allowedIdpEntityIds === $allIdpEntityIds) {
+                // If a blacklist was configured, and no IDPs were explicitly
+                // blacklisted, then don't keep track of all entity IDs, but
+                // remember that all IDPs are allowed.
+                $role->allowAll = true;
+            } else {
+                $role->allowedIdpEntityIds = $allowedIdpEntityIds;
+            }
         }
         return $roles;
     }

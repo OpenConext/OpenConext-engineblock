@@ -47,6 +47,12 @@ interface MetadataRepositoryInterface
     public function findIdentityProviderByEntityId($entityId);
 
     /**
+     * @param string $hash
+     * @return string|null
+     */
+    public function findIdentityProviderEntityIdByMd5Hash($hash);
+
+    /**
      * @param $entityId
      * @param LoggerInterface|null $logger
      * @return null|ServiceProvider
@@ -65,9 +71,10 @@ interface MetadataRepositoryInterface
     public function findIdentityProvidersByEntityId(array $identityProviderEntityIds);
 
     /**
+     * @param array $scope
      * @return string[]
      */
-    public function findAllIdentityProviderEntityIds();
+    public function findAllIdentityProviderEntityIds(array $scope = []);
 
     /**
      * @return string[]

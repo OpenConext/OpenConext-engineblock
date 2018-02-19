@@ -336,31 +336,24 @@ class EngineBlock_Corto_ProxyServer
 
     public function setRemoteIdpMd5($remoteIdPMd5)
     {
-        $idpEntityIds = $this->_repository->findAllIdentityProviderEntityIds();
+        $entityId = $this->_repository->findIdentityProviderEntityIdByMd5Hash($remoteIdPMd5);
 
-        foreach ($idpEntityIds as $idpEntityId) {
-            if (md5($idpEntityId) !== $remoteIdPMd5) {
-                continue;
-            }
-
-            $this->_configs['Idp'] = $idpEntityId;
+        if ($entityId !== null) {
+            $this->_configs['Idp'] = $entityId;
             $this->_configs['TransparentProxy'] = true;
             $this->getLogger()->info(
-                "Detected pre-selection of $idpEntityId as IdP, switching to transparent mode"
+                "Detected pre-selection of $entityId as IdP, switching to transparent mode"
             );
-            break;
+        } else {
+            $this->getLogger()->notice(sprintf('Unable to map remote IdpMD5 "%s" to a remote entity.', $remoteIdPMd5));
+
+            throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
+                "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
+                $remoteIdPMd5
+            );
         }
 
-        if (isset($this->_configs['Idp'])) {
-            return $this;
-        }
-
-        $this->getLogger()->notice(sprintf('Unable to map remote IdpMD5 "%s" to a remote entity.', $remoteIdPMd5));
-
-        throw new EngineBlock_Corto_Exception_UnknownPreselectedIdp(
-            "Unable to map remote IdpMD5 '$remoteIdPMd5' to a remote entity!",
-            $remoteIdPMd5
-        );
+        return $this;
     }
 
 ////////  REQUEST HANDLING /////////

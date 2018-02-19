@@ -88,6 +88,13 @@ class ServiceProvider extends AbstractRole
     /**
      * @var bool
      *
+     * @ORM\Column(name="allow_all", type="boolean")
+     */
+    public $allowAll;
+
+    /**
+     * @var bool
+     *
      * @ORM\Column(name="policy_enforcement_decision_required", type="boolean")
      */
     public $policyEnforcementDecisionRequired;
@@ -147,6 +154,7 @@ class ServiceProvider extends AbstractRole
      * @param Service $responseProcessingService
      * @param string $workflowState
      * @param array $allowedIdpEntityIds
+     * @param bool $allowAll
      * @param array $assertionConsumerServices
      * @param bool $displayUnconnectedIdpsWayf
      * @param null $termsOfServiceUrl
@@ -192,6 +200,7 @@ class ServiceProvider extends AbstractRole
         Service $responseProcessingService = null,
         $workflowState = self::WORKFLOW_STATE_DEFAULT,
         array $allowedIdpEntityIds = array(),
+        $allowAll = false,
         array $assertionConsumerServices = array(),
         $displayUnconnectedIdpsWayf = false,
         $termsOfServiceUrl = null,
@@ -238,6 +247,7 @@ class ServiceProvider extends AbstractRole
 
         $this->attributeReleasePolicy = $attributeReleasePolicy;
         $this->allowedIdpEntityIds = $allowedIdpEntityIds;
+        $this->allowAll = $allowAll;
         $this->assertionConsumerServices = $assertionConsumerServices;
         $this->displayUnconnectedIdpsWayf = $displayUnconnectedIdpsWayf;
         $this->termsOfServiceUrl = $termsOfServiceUrl;
@@ -266,5 +276,14 @@ class ServiceProvider extends AbstractRole
     public function getAttributeReleasePolicy()
     {
         return $this->attributeReleasePolicy;
+    }
+
+    /**
+     * @param string $idpEntityId
+     * @return bool
+     */
+    public function isAllowed($idpEntityId)
+    {
+        return $this->allowAll || in_array($idpEntityId, $this->allowedIdpEntityIds);
     }
 }

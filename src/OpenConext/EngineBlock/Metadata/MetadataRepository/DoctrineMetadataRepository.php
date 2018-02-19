@@ -56,13 +56,20 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
 
     /**
      *
+     * @param array $scope
      * @return string[]
      */
-    public function findAllIdentityProviderEntityIds()
+    public function findAllIdentityProviderEntityIds(array $scope = [])
     {
         $queryBuilder = $this->idpRepository
             ->createQueryBuilder('role')
             ->select('role.entityId');
+
+        if (!empty($scope)) {
+            $queryBuilder
+                ->where('role.entityId IN (:scopedEntityIds)')
+                ->setParameter('scopedEntityIds', $scope);
+        }
 
         $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
 
@@ -137,6 +144,32 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
         $identityProvider->accept($this->compositeVisitor);
 
         return $identityProvider;
+    }
+
+    /**
+     * @param string $hash
+     * @return string|null
+     */
+    public function findIdentityProviderEntityIdByMd5Hash($hash)
+    {
+        $queryBuilder = $this->idpRepository->createQueryBuilder('role')
+            ->select('role.entityId')
+            ->andWhere('MD5(role.entityId) = :hash')
+            ->setParameter('hash', $hash);
+
+        $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
+
+        $result = $queryBuilder->getQuery()->execute();
+
+        if (empty($result)) {
+            return null;
+        }
+
+        if (count($result) > 1) {
+            throw new RuntimeException('Multiple Identity Providers found for entityId MD5 hash: ' . $hash);
+        }
+
+        return reset($result)['entityId'];
     }
 
     /**
