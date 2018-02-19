@@ -83,12 +83,10 @@ class EngineBlock_Corto_Module_Service_AssertionConsumer implements EngineBlock_
             $this->_server->setKeyId($receivedRequest->getKeyId());
         }
 
-        // Cache the response
-        EngineBlock_Corto_Model_Response_Cache::cacheResponse(
-            $receivedRequest,
-            $receivedResponse,
-            EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN
-        );
+        // Keep track of what IDP was used for this SP. This way the user does
+        // not have to go trough the WAYF again when logging into this service
+        // or another service.
+        EngineBlock_Corto_Model_Response_Cache::rememberIdp($receivedRequest, $receivedResponse);
 
         $this->_server->filterInputAssertionAttributes($receivedResponse, $receivedRequest);
 
