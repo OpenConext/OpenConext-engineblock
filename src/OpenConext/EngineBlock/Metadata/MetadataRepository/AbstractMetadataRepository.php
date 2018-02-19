@@ -10,8 +10,6 @@ use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 /**
  * Class AbstractMetadataRepository
  * @package OpenConext\EngineBlock\Metadata\MetadataRepository
- * @SuppressWarnings(PMD.TooManyMethods)
- * @SuppressWarnings(PMD.TooManyPublicMethods)
  */
 abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
 {
@@ -84,28 +82,5 @@ abstract class AbstractMetadataRepository implements MetadataRepositoryInterface
         }
 
         return $identityProvider;
-    }
-
-    /**
-     * WARNING: Very inefficient in-memory default.
-     *
-     * @param array $identityProviderEntityIds
-     * @return array|IdentityProvider[]
-     * @throws EntityNotFoundException
-     */
-    public function findIdentityProvidersByEntityId(array $identityProviderEntityIds)
-    {
-        $identityProviders = $this->findIdentityProviders();
-
-        $filteredIdentityProviders = array();
-        foreach ($identityProviderEntityIds as $identityProviderEntityId) {
-            if (!isset($identityProviders[$identityProviderEntityId])) {
-                // @todo warn
-                continue;
-            }
-
-            $filteredIdentityProviders[$identityProviderEntityId] = $identityProviders[$identityProviderEntityId];
-        }
-        return $filteredIdentityProviders;
     }
 }

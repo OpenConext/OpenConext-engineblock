@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Mockery;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -17,13 +16,18 @@ class DoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
 {
     public function testFindIdentityProviders()
     {
+        $mockQueryBuilder = Mockery::mock('Doctrine\ORM\QueryBuilder');
+        $mockQueryBuilder
+            ->shouldReceive('getQuery->execute')
+            ->andReturn([new IdentityProvider('https://idp.entity.com')]);
+
         $mockSpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
         $mockIdpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
         $mockIdpRepository
             ->shouldReceive('getClassName')
             ->andReturn('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider')
-            ->shouldReceive('matching')
-            ->andReturn(new ArrayCollection(array(new IdentityProvider('https://idp.entity.com'))));
+            ->shouldReceive('createQueryBuilder')
+            ->andReturn($mockQueryBuilder);
 
         $repository = new DoctrineMetadataRepository(
             Mockery::mock('Doctrine\ORM\EntityManager'),
@@ -36,16 +40,21 @@ class DoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
 
     public function testFindIdentityProvidersVisitor()
     {
+        $mockQueryBuilder = Mockery::mock('Doctrine\ORM\QueryBuilder');
+        $mockQueryBuilder
+            ->shouldReceive('getQuery->execute')
+            ->andReturn([
+                new IdentityProvider('https://idp.entity.com'),
+                new IdentityProvider('https://unconnected.entity.com')
+            ]);
+
         $mockSpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
         $mockIdpRepository = Mockery::mock('Doctrine\ORM\EntityRepository');
         $mockIdpRepository
             ->shouldReceive('getClassName')
             ->andReturn('OpenConext\EngineBlock\Metadata\Entity\IdentityProvider')
-            ->shouldReceive('matching')
-            ->andReturn(new ArrayCollection(array(
-                new IdentityProvider('https://idp.entity.com'),
-                new IdentityProvider('https://unconnected.entity.com')
-            )));
+            ->shouldReceive('createQueryBuilder')
+            ->andReturn($mockQueryBuilder);
 
         $repository = new DoctrineMetadataRepository(
             Mockery::mock('Doctrine\ORM\EntityManager'),

@@ -2,7 +2,6 @@
 
 namespace OpenConext\EngineBlock\Metadata\MetadataRepository;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
@@ -97,16 +96,15 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
      */
     public function findIdentityProvidersByEntityId(array $identityProviderIds)
     {
-        $identityProviders = $this->idpRepository->matching(
-            $this->compositeFilter->toCriteria($this->idpRepository->getClassName())
-                ->andWhere(Criteria::expr()->in('entityId', $identityProviderIds))
-        )->toArray();
+        $queryBuilder = $this->idpRepository->createQueryBuilder('role')
+            ->andWhere('role.entityId IN (:ids)')
+            ->setParameter('ids', $identityProviderIds);
+
+        $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
+
+        $identityProviders = $queryBuilder->getQuery()->execute();
 
         foreach ($identityProviders as $identityProvider) {
-            if (!$identityProvider instanceof IdentityProvider) {
-                throw new RuntimeException('Non-IdentityProvider found');
-            }
-
             $identityProvider->accept($this->compositeVisitor);
         }
 
@@ -119,24 +117,23 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
      */
     public function findIdentityProviderByEntityId($entityId)
     {
-        $identityProviderCollection = $this->idpRepository->matching(
-            $this->compositeFilter->toCriteria($this->idpRepository->getClassName())
-                ->andWhere(Criteria::expr()->eq('entityId', $entityId))
-        );
+        $queryBuilder = $this->idpRepository->createQueryBuilder('role')
+            ->andWhere('role.entityId = :id')
+            ->setParameter('id', $entityId);
 
-        if ((int) $identityProviderCollection->count() === 0) {
+        $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
+
+        $result = $queryBuilder->getQuery()->execute();
+
+        if (empty($result)) {
             return null;
         }
 
-        if ((int) $identityProviderCollection->count() > 1) {
+        if (count($result) > 1) {
             throw new RuntimeException('Multiple Identity Providers found for entityId: ' . $entityId);
         }
 
-        $identityProvider = $identityProviderCollection->first();
-        if (!$identityProvider instanceof IdentityProvider) {
-            throw new RuntimeException('Entity found for entityId: ' . $entityId . ' is not an Identity Provider!');
-        }
-
+        $identityProvider = reset($result);
         $identityProvider->accept($this->compositeVisitor);
 
         return $identityProvider;
@@ -149,28 +146,23 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
      */
     public function findServiceProviderByEntityId($entityId, LoggerInterface $logger = null)
     {
-        $serviceProviderCollection = $this->spRepository->matching(
-            $this->compositeFilter->toCriteria($this->spRepository->getClassName())
-                ->andWhere(Criteria::expr()->eq('entityId', $entityId))
-        );
+        $queryBuilder = $this->spRepository->createQueryBuilder('role')
+            ->andWhere('role.entityId = :id')
+            ->setParameter('id', $entityId);
 
-        if ((int) $serviceProviderCollection->count() === 0) {
+        $this->compositeFilter->toQueryBuilder($queryBuilder, $this->spRepository->getClassName());
+
+        $result = $queryBuilder->getQuery()->execute();
+
+        if (empty($result)) {
             return null;
         }
 
-        if ((int) $serviceProviderCollection->count() > 1) {
+        if (count($result) > 1) {
             throw new RuntimeException('Multiple Service Providers found for entityId: ' . $entityId);
         }
 
-        $serviceProvider = $serviceProviderCollection->first();
-        if (!$serviceProvider instanceof ServiceProvider) {
-            throw new RuntimeException('Entity found for entityId: ' . $entityId . ' is not an ServiceProvider!');
-        }
-
-        if (!$serviceProvider) {
-            return null;
-        }
-
+        $serviceProvider = reset($result);
         $serviceProvider->accept($this->compositeVisitor);
 
         return $serviceProvider;
@@ -181,14 +173,13 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
      */
     public function findIdentityProviders()
     {
-        $identityProviders = $this->idpRepository->matching(
-            $this->compositeFilter->toCriteria($this->idpRepository->getClassName())
-        )->toArray();
+        $queryBuilder = $this->idpRepository->createQueryBuilder('role');
+
+        $this->compositeFilter->toQueryBuilder($queryBuilder, $this->idpRepository->getClassName());
+
+        $identityProviders = $queryBuilder->getQuery()->execute();
 
         foreach ($identityProviders as $identityProvider) {
-            if (!$identityProvider instanceof IdentityProvider) {
-                throw new RuntimeException('Non-IdentityProvider found');
-            }
             $identityProvider->accept($this->compositeVisitor);
         }
 

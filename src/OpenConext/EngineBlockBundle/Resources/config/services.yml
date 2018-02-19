@@ -99,11 +99,6 @@ services:
         arguments:
             - auth: ["%attribute_aggregation.username%", "%attribute_aggregation.password%", "Basic"]
 
-    engineblock.metadata.repository.composite:
-        class: OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository
-        arguments:
-            - ["@engineblock.metadata.repository.cached_doctrine"]
-
     engineblock.metadata.repository.cached_doctrine:
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\CachedDoctrineMetadataRepository
         arguments:

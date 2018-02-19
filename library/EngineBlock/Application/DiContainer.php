@@ -1,7 +1,7 @@
 <?php
 
 use Doctrine\ORM\EntityManager;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\CompositeMetadataRepository;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface as SymfonyContainerInterface;
 
 class EngineBlock_Application_DiContainer extends Pimple
@@ -99,11 +99,11 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return CompositeMetadataRepository
+     * @return MetadataRepositoryInterface
      */
     public function getMetadataRepository()
     {
-        return $this->container->get('engineblock.metadata.repository.composite');
+        return $this->container->get('engineblock.metadata.repository.cached_doctrine');
     }
 
     /**

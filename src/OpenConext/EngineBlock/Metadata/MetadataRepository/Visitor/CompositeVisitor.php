@@ -46,14 +46,4 @@ class CompositeVisitor implements VisitorInterface
             $visitor->visitServiceProvider($serviceProvider);
         }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function visitRole(AbstractRole $role)
-    {
-        foreach ($this->visitors as $visitor) {
-            $visitor->visitRole($role);
-        }
-    }
 }
