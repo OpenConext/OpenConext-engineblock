@@ -169,11 +169,4 @@ class EngineBlockMetadataVisitor implements VisitorInterface
         $entity->responseProcessingService = $this->consentService;
         $entity->allowedIdpEntityIds = $this->allIdpEntityIds;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function visitRole(AbstractRole $role)
-    {
-    }
 }

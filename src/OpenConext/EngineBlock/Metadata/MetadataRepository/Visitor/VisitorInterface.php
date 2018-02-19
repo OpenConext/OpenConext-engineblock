@@ -23,10 +23,4 @@ interface VisitorInterface
      * @return ServiceProvider|null
      */
     public function visitServiceProvider(ServiceProvider $serviceProvider);
-
-    /**
-     * @param AbstractRole $role
-     * @return AbstractRole|null
-     */
-    public function visitRole(AbstractRole $role);
 }

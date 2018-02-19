@@ -43,11 +43,4 @@ class DisableDisallowedEntitiesInWayfVisitor implements VisitorInterface
     public function visitServiceProvider(ServiceProvider $serviceProvider)
     {
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function visitRole(AbstractRole $role)
-    {
-    }
 }
