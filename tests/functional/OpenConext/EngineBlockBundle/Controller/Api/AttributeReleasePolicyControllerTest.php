@@ -472,6 +472,7 @@ class AttributeReleasePolicyControllerTest extends WebTestCase
             null,
             ServiceProvider::WORKFLOW_STATE_DEFAULT,
             [],
+            false,
             [],
             false,
             null,
