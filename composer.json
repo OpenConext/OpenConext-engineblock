@@ -12,7 +12,6 @@
     },
     "require": {
         "php": ">=5.6,<7",
-        "dbpatch/dbpatch": "~1.2",
         "doctrine/orm": "~2.3",
         "monolog/monolog": "~1.13",
         "pimple/pimple": "~2.1",
@@ -51,7 +50,6 @@
     },
     "scripts": {
         "pre-autoload-dump": [
-            "bin/composer/dbpatch-post-install.sh",
             "bin/composer/simplesamlphp-post-install.sh",
             "bin/composer/zend-framework-post-install.sh"
         ],
@@ -80,7 +78,6 @@
     },
     "autoload": {
         "psr-0": {
-            "DbPatch_": "vendor/dbpatch/dbpatch/src/",
             "EngineBlock_": "library/",
             "EngineBlock_Test": "tests/library/",
             "Janus_": "library/",

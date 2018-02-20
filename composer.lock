@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bdb11f3c44c49a9b9aae641eb1a29521",
+    "content-hash": "18afea66c4b9e171e68623023f0037c4",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -60,48 +60,6 @@
                 "validation"
             ],
             "time": "2017-11-30T13:25:15+00:00"
-        },
-        {
-            "name": "dbpatch/dbpatch",
-            "version": "v1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dbpatch/DbPatch.git",
-                "reference": "cb24fffca38a81de7da26ccd97de01a475e09804"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dbpatch/DbPatch/zipball/cb24fffca38a81de7da26ccd97de01a475e09804",
-                "reference": "cb24fffca38a81de7da26ccd97de01a475e09804",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.1.0"
-            },
-            "bin": [
-                "bin/dbpatch.php"
-            ],
-            "type": "library",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Sandy Pleyte"
-                },
-                {
-                    "name": "Martijn de Letter"
-                }
-            ],
-            "description": "DbPatch is a commandline utility to manage/track (my)sql/php patch files.",
-            "homepage": "http://www.dbpatch-project.com/",
-            "keywords": [
-                "database",
-                "db",
-                "migrations"
-            ],
-            "time": "2014-12-16T08:55:26+00:00"
         },
         {
             "name": "doctrine/annotations",
