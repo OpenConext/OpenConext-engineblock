@@ -67,7 +67,6 @@ branches:
   only:
     - 5.x-dev
     - master
-    - refactoring-2018
 
 addons:
   hosts:
