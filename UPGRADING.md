@@ -1,5 +1,28 @@
 # UPGRADE NOTES
 
+## 5.2 -> 5.7
+
+### Database migration tooling
+Doctrine Migrations is now the only tool used to manage database schema changes. If your deployment scripts call
+`bin/migrate` or `bin/dbpatch.php`, those calls can be removed.
+
+NOTE: Upgrade from EB4.x is no longer supported. Upgrade to EB<=5.6 BEFORE upgrading to 5.7.
+
+https://www.pivotaltracker.com/story/show/148324779
+
+### Removed metadata backends
+The Push API is the only supported method of provisioning metadata to EngineBlock. EngineBlock always reads metadata
+from the `sso_provider_roles_eb5` table. This means INI configuration regarding metadata repositories can be removed
+from your configuration:
+
+    metadataRepository.*
+    metadataRepositories[*]
+    serviceRegistry.*
+
+If those options are not removed from the configuration, they will be ignored.
+
+https://www.pivotaltracker.com/story/show/154839908
+
 ## 5.x -> 5.2
 
 ### Consent API
