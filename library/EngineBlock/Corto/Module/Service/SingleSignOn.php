@@ -61,13 +61,17 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         }
 
         // The request may specify it ONLY wants a response from specific IdPs
-        // or we could have it configured that the SP may only be serviced by specific IdPs
-        $scopedIdps = $this->_getScopedIdPs($request);
-
-        $cacheResponseSent = $this->_sendCachedResponse($request, $sp, $scopedIdps);
-        if ($cacheResponseSent) {
-            return;
-        }
+        // or we could have it configured that the SP may only be serviced by
+        // specific IdPs.
+        //
+        // The scope is further limited to the previously used IDP that is
+        // allowed for the current issuer, this way the user does not need to
+        // go trough the WAYF on subsequent logins.
+        $scopedIdps = $this->_limitScopeToRememberedIdp(
+            $request,
+            $sp,
+            $this->_getScopedIdPs($request)
+        );
 
         // If the scoped proxycount = 0, respond with a ProxyCountExceeded error
         if ($request->getProxyCount() === 0) {
@@ -302,69 +306,30 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $scopedIdPs;
     }
 
-    protected function _sendCachedResponse(
+    /**
+     * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
+     * @param ServiceProvider $sp
+     * @param array $scopedIdps
+     * @return array
+     */
+    protected function _limitScopeToRememberedIdp(
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         ServiceProvider $sp,
         array $scopedIdps
     ) {
         /** @var AuthnRequest $request */
         if ($request->getForceAuthn()) {
-            return false;
+            return $scopedIdps;
         }
 
-        if (!isset($_SESSION['CachedResponses'])) {
-            return false;
+        $rememberedIdp = EngineBlock_Corto_Model_Response_Cache::findRememberedIdp($sp, $scopedIdps);
+        if ($rememberedIdp !== null) {
+            $this->_server->getLogger()->info("Remembered last used IDP - limiting scope to last selection");
+
+            $scopedIdps = [$rememberedIdp];
         }
 
-        $cachedResponses = $_SESSION['CachedResponses'];
-
-        // First, if there is scoping, we reject responses from idps not in the list
-        if (count($scopedIdps) > 0) {
-            foreach ($cachedResponses as $key => $cachedResponse) {
-                if (!in_array($cachedResponse['idp'], $scopedIdps)) {
-                    unset($cachedResponses[$key]);
-                }
-            }
-        }
-        if (empty($cachedResponses)) {
-            return false;
-        }
-
-        $cachedResponse = $this->_pickCachedResponse($cachedResponses, $sp);
-        if (!$cachedResponse) {
-            return false;
-        }
-
-        $this->_server->getLogger()->info("Cached response found from Idp");
-        // Note that we would like to repurpose the response,
-        // but that's tricky as it is probably no longer valid (lifetime is usually something like 5 minutes)
-        // so instead we scope the request to that Idp and trust the Idp to do the remembering.
-        $this->_server->sendAuthenticationRequest($request, $cachedResponse['idp']);
-        return true;
-    }
-
-    protected function _pickCachedResponse(array $cachedResponses, ServiceProvider $sp)
-    {
-        // Find the first cached response for an IDP that is allowed by the SP
-        // we're authentication for.
-        foreach ($cachedResponses as $cachedResponse) {
-            if ($cachedResponse['type'] !== EngineBlock_Corto_Model_Response_Cache::RESPONSE_CACHE_TYPE_IN) {
-                continue;
-            }
-
-            // Check if it is for an allowed idp
-            if (!$sp->isAllowed($cachedResponse['idp'])) {
-                continue;
-            }
-
-            if (isset($cachedResponse['key'])) {
-                $this->_server->setKeyId($cachedResponse['key']);
-            }
-
-            return $cachedResponse;
-        }
-
-        return false;
+        return $scopedIdps;
     }
 
     protected function _showWayf(EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request, array $candidateIdpEntityIds)
