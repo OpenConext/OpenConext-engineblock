@@ -53,12 +53,8 @@ services:
     engineblock.functional_testing.fixture.service_registry:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture
         arguments:
-            - '@engineblock.functional_testing.data_store.service_registry'
-            - '%engineblock.functional_testing.service_registry_data_store.dir%'
-
-    engineblock.functional_testing.metadata.repository.fixture_reader:
-        class: OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository
-        factory: ['@engineblock.functional_testing.fixture.service_registry', 'createInMemoryMetadataRepository']
+            - '@engineblock.metadata.repository.doctrine'
+            - '@engineblock.compat.doctrine.entity_manager'
 
     engineblock.functional_testing.fixture.features:
         class: OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration

@@ -1,15 +1,18 @@
 <?php
 
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManager;
+
 class EngineBlock_Database_ConnectionFactory
 {
     /**
-     * @var \Doctrine\DBAL\Connection
+     * @var Connection
      */
     private $connection;
 
-    public function __construct(\Doctrine\DBAL\Connection $connection)
+    public function __construct(EntityManager $em)
     {
-        $this->connection = $connection;
+        $this->connection = $em->getConnection();
     }
 
     /**

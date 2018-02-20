@@ -6,18 +6,14 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
-use EngineBlock_Saml2_IdGenerator;
-use Ingenerator\BehatTableAssert\AssertTable;
 use Ingenerator\BehatTableAssert\TableParser\HTMLTable;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 use RuntimeException;
 

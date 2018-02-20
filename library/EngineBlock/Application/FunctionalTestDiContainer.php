@@ -9,13 +9,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
-    /**
-     * @return MetadataRepositoryInterface
-     */
-    public function getMetadataRepository()
-    {
-        return $this->container->get('engineblock.functional_testing.metadata.repository.fixture_reader');
-    }
 
     public function getMessageUtilClassName()
     {
