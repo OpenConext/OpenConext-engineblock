@@ -124,7 +124,9 @@
         </exec>
     </target>
 
-    <target name="api-functional-tests" description="Run functional tests with PHPUnit">
+    <target name="api-functional-tests"
+            description="Run functional tests with PHPUnit"
+            depends="create-test-db">
         <delete dir="app/cache/test"/>
         <exec executable="vendor/bin/phpunit" failonerror="true">
             <arg line="--configuration=${basedir}/tests/phpunit.xml"/>
@@ -177,7 +179,8 @@
     </target>
 
     <target name="run-behat"
-            description="Execute the behat test suite">
+            description="Execute the behat test suite"
+            depends="create-test-db">
         <exec executable="vendor/bin/behat" failonerror="true">
             <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
             <arg line="--profile ${profile}"/>
@@ -204,4 +207,14 @@
             <arg line="composer prepare-env"/>
         </exec>
     </target>
+
+    <target name="create-test-db">
+        <exec executable="app/console" failonerror="true">
+            <arg line="doctrine:schema:drop --force --env=test" />
+        </exec>
+        <exec executable="app/console" failonerror="true">
+            <arg line="doctrine:schema:create --env=test" />
+        </exec>
+    </target>
+
 </project>

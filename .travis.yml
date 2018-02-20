@@ -31,7 +31,6 @@ cache:
 
 before_install:
   - mysql -e "create database IF NOT EXISTS eb_test;" -uroot
-  - mysql -uroot -D eb_test < database/dumps/dump_test.sql
   - mysql -uroot -e "CREATE USER 'eb_testrw'@'localhost' IDENTIFIED BY 'secret';"
   - mysql -uroot -e "GRANT ALL ON eb_test.* TO 'eb_testrw'@'localhost';"
 
