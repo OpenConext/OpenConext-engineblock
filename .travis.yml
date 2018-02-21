@@ -71,5 +71,4 @@ addons:
   hosts:
     - engine.vm.openconext.org
 
-services:
-  - mysql
+  mariadb: '10.1'
