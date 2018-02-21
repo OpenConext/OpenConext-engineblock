@@ -48,6 +48,16 @@ framework:
     fragments:       ~
     http_method_override: true
 
+# Twig Configuration
+twig:
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    paths:
+        "%kernel.root_dir%/../theme/material/templates/modules": theme
+        "%kernel.root_dir%/../theme/material/templates/layouts": themeLayouts
+    globals:
+        assetsVersion: %asset_version%
+
 doctrine:
     dbal:
         default_connection: engineblock

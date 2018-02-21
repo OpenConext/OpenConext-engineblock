@@ -111,3 +111,10 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@engineblock.repository.service_provider"
             - "@engineblock.repository.identity_provider"
+
+    engineblock.twig.extension.i18n:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n
+        arguments:
+            - "@engineblock.compat.translator"
+        tags:
+             - { name: 'twig.extension' }
