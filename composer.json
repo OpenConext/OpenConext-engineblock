@@ -33,7 +33,9 @@
         "guzzlehttp/guzzle": "^6.0",
         "openconext/monitor-bundle": "^1.0",
         "swiftmailer/swiftmailer": "^5.4",
-        "symfony/swiftmailer-bundle": "^2.6"
+        "symfony/swiftmailer-bundle": "^2.6",
+        "twig/twig": "^1.35",
+        "twig/extensions": "^1.5"
     },
     "require-dev": {
         "phake/phake": "2.1",
