@@ -20,7 +20,7 @@ class Consent
     /**
      * @var DateTime
      *
-     * @ORM\Column(name="consent_date", type="datetime", options={"default": 0})
+     * @ORM\Column(name="consent_date", type="datetime", nullable=false)
      */
     public $date;
 

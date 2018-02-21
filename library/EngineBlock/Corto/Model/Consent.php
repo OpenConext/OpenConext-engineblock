@@ -120,9 +120,9 @@ class EngineBlock_Corto_Model_Consent
             return false;
         }
 
-        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type)
-                  VALUES (?, ?, ?, ?)
-                  ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type)";
+        $query = "INSERT INTO consent (hashed_user_id, service_id, attribute, consent_type, consent_date)
+                  VALUES (?, ?, ?, ?, NOW())
+                  ON DUPLICATE KEY UPDATE attribute=VALUES(attribute), consent_type=VALUES(consent_type), consent_date=NOW()";
         $parameters = array(
             sha1($this->_getConsentUid()),
             $serviceProvider->entityId,
