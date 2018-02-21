@@ -1,0 +1,116 @@
+{% import "@themeLayouts/scripts/languageSwitcher.html.twig" as languageSwitcher %}
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="{{ app.request.locale }}"> <![endif]-->
+<!--[if IE 7]> <html class="no-js ie7 lt-ie10 lt-ie9 lt-ie8" lang="{{ app.request.locale }}"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie8 lt-ie10 lt-ie9" lang="{{ app.request.locale }}"> <![endif]-->
+<!--[if IE 9]> <html class="no-js ie9 lt-ie10" lang="{{ app.request.locale }}"> <![endif]-->
+<!--[if gt IE 9]> <html class="no-js" lang="{{ app.request.locale }}"> <![endif]-->
+<!--[if !IE]><!--> <html class="no-js {{ userAgent('safari') }}" lang="{{ app.request.locale }}"> <!--<![endif]-->
+<head>
+    <title>{% block title %}SURFconext{% endblock %}</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
+    <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+    <link href="/favicon.ico" rel="shortcut icon">
+    <link href="/stylesheets/application.css?v={{ assetsVersion }}" rel="stylesheet" type="text/css"/>
+    <!-- Firefox CSS -->
+    <style>
+        @-moz-document url-prefix() {
+            .comp-links .help {
+                line-height: 1.7rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="index">
+
+{% if hideHeader is not defined or hideHeader == false %}
+<div class="mod-header">
+    <h1 class="title">
+        <h1>
+            {% block page_heading %}{% endblock %}
+
+            {% if greenHeader is defined %}
+            <strong>{{ greenHeader }}</strong>
+            {% endif %}
+        </h1>
+    </h1>
+
+    <div class="meta">
+
+        {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
+            {{ languageSwitcher.form(app.request.locale) }}
+        {% endif %}
+
+        <ul class="comp-links">
+
+            {% if backLink is defined and backLink == true %}
+            <li>
+                <a href="javascript:window.history.back(-2)">{{ 'return_to_sp'|trans|capitalize }}</a>
+            </li>
+            {% endif %}
+
+            {% if helpLink is defined %}
+            <li>
+                <a href="{{ helpLink }}" target="_blank">{{ 'help_header'|trans }}<span class="help">?</span></a>
+            </li>
+            {% endif %}
+        </ul>
+
+    </div>
+    <a class="burger" href="#footer"><img src="/images/burger.svg" alt="&#9776;"></a>
+</div>
+
+{% endif %}
+
+<div class="l-container {% if wide is defined and wide == true %}wide{% endif %}">
+    {% block content %}{% endblock %}
+</div>
+
+<div id="footer" class="l-footer">
+    <nav class="mod-footer">
+        <ul class="footer-menu">
+
+            <li class="nav-row left">
+                {{ 'service_by'|trans }} {{ 'serviceprovider_link'|trans|raw }}
+            </li>
+
+            <li class="nav-row">
+                {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
+                    {{ languageSwitcher.form(app.request.locale) }}
+                {% endif %}
+            </li>
+
+            <li class="nav-row right">
+                <ul class="comp-links">
+
+                    {% if helpLink is defined %}
+                    <li>
+                        <a href="{{ helpLink }}" target="_blank">{{ 'help'|trans }}</a>
+                    </li>
+                    {% endif %}
+
+                    {% if backLink is defined and backLink == true %}
+                    <li>
+                        <a href="javascript:window.history.back(-2)">{{ 'return_to_sp'|trans|capitalize }}</a>
+                    </li>
+                    {% endif %}
+
+                    <li>
+                        {{ 'terms_of_service_link'|trans|raw }}
+                    </li>
+
+                </ul>
+            </li>
+
+        </ul>
+    </nav>
+</div>
+
+<script src="/javascripts/application.min.js?v={{ assetsVersion }}" type="text/javascript"></script>
+
+</body>
+</html>

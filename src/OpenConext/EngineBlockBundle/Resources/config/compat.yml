@@ -42,17 +42,6 @@ services:
     engineblock.compat.logger:
         class: Monolog\Logger
         factory: [EngineBlock_ApplicationSingleton, getLog]
-
-    engineblock.compat.translator:
-        public: false
-        class: Zend_Translate_Adapter
-        factory: ["@engineblock.compat.di_container", getTranslator]
-
-    engineblock.compat.keypairs:
-        public: false
-        class: Zend_Config
-        factory: ["@engineblock.compat.di_container", getKeypairConfig]
-
 #    Services that were previously configured and gotten through the DiContainer
     engineblock.compat.xml_converter:
         class: EngineBlock_Corto_XmlToArray

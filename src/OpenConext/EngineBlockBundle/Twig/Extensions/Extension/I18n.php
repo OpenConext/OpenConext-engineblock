@@ -2,17 +2,17 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use Twig_Extensions_Extension_I18n;
-use Zend_Translate_Adapter;
+use Zend_Translate;
 
 class I18n extends Twig_Extensions_Extension_I18n implements \Twig_Extension_InitRuntimeInterface
 {
 
     /**
-     * @var Zend_Translate_Adapter
+     * @var Zend_Translate
      */
     private $translator;
 
-    public function __construct(Zend_Translate_Adapter $translator)
+    public function __construct(Zend_Translate $translator)
     {
         $this->translator = $translator;
     }

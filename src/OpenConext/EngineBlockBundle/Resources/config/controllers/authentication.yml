@@ -18,8 +18,8 @@ services:
     engineblock.controller.authentication.index:
         class: OpenConext\EngineBlockBundle\Controller\IndexController
         arguments:
-            - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
+            - "%encryption_keys%"
 
     engineblock.controller.authentication.feedback:
         class: OpenConext\EngineBlockBundle\Controller\FeedbackController

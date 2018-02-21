@@ -118,3 +118,10 @@ services:
             - "@engineblock.compat.translator"
         tags:
              - { name: 'twig.extension' }
+
+    engineblock.twig.extension.user_agent:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\UserAgent
+        arguments:
+            - "@request_stack"
+        tags:
+             - { name: 'twig.extension' }
