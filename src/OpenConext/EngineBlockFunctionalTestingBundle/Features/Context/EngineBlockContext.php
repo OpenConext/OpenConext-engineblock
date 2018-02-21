@@ -46,16 +46,6 @@ class EngineBlockContext extends AbstractSubContext
     private $mockIdpRegistry;
 
     /**
-     * @var string
-     */
-    protected $idpsConfigUrl;
-
-    /**
-     * @var string
-     */
-    protected $spsConfigUrl;
-
-    /**
      * @var FunctionalTestingFeatureConfiguration
      */
     private $features;
@@ -105,8 +95,6 @@ class EngineBlockContext extends AbstractSubContext
      * @param EngineBlock $engineBlock
      * @param EntityRegistry $mockSpRegistry
      * @param EntityRegistry $mockIdpRegistry
-     * @param string $spsConfigUrl
-     * @param string $idpsConfigUrl
      * @param FunctionalTestingFeatureConfiguration $features
      * @param FunctionalTestingPdpClient $pdpClient
      * @param FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
@@ -119,8 +107,6 @@ class EngineBlockContext extends AbstractSubContext
         EngineBlock $engineBlock,
         EntityRegistry $mockSpRegistry,
         EntityRegistry $mockIdpRegistry,
-        $spsConfigUrl,
-        $idpsConfigUrl,
         FunctionalTestingFeatureConfiguration $features,
         FunctionalTestingPdpClient $pdpClient,
         FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard,
@@ -130,8 +116,6 @@ class EngineBlockContext extends AbstractSubContext
         $this->engineBlock = $engineBlock;
         $this->mockSpRegistry = $mockSpRegistry;
         $this->mockIdpRegistry = $mockIdpRegistry;
-        $this->spsConfigUrl = $spsConfigUrl;
-        $this->idpsConfigUrl = $idpsConfigUrl;
         $this->features = $features;
         $this->pdpClient = $pdpClient;
         $this->authenticationLoopGuard = $authenticationLoopGuard;
