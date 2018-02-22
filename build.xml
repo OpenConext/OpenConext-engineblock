@@ -138,7 +138,7 @@
         <echo message="Preparing the dev env to run in functional testing mode" />
         <antcall target="enable-functional-testing"/>
         <antcall target="enable-test-env"/>
-        <antcall target="prepare-env-in-dev-machine"/>
+        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="profile" value="default"/>
@@ -146,20 +146,22 @@
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
         <antcall target="disable-functional-testing"/>
         <antcall target="disable-test-env"/>
-        <antcall target="prepare-env-in-dev-machine"/>
+        <antcall target="prepare-env"/>
     </target>
 
     <target name="behat-dev-wip">
         <echo message="Preparing the dev env to run in functional testing mode" />
         <antcall target="enable-functional-testing"/>
-        <antcall target="prepare-env-in-dev-machine"/>
+        <antcall target="enable-test-env"/>
+        <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
             <param name="profile" value="wip"/>
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
         <antcall target="disable-functional-testing"/>
-        <antcall target="prepare-env-in-dev-machine"/>
+        <antcall target="disable-test-env"/>
+        <antcall target="prepare-env"/>
     </target>
 
     <target name="behat-travis"
@@ -217,10 +219,11 @@
                  value="new AppKernel('dev', false)"/>
     </target>
 
-    <target name="prepare-env-in-dev-machine"
-            description="ensures that the development environment uses the Functional Test DiContainer">
-        <exec executable="${basedir}/run-on-vm.sh" failonerror="true">
-            <arg line="SYMFONY_ENV=test composer prepare-env"/>
+    <target name="prepare-env"
+            description="ensures that the environment cache is rebuilt">
+        <exec executable="composer" failonerror="true">
+            <env key="SYMFONY_ENV" value="test"/>
+            <arg line="prepare-env"/>
         </exec>
     </target>
 
