@@ -6,7 +6,7 @@
             <h1>{{ 'consent_slidein_correction_title'|trans }}</h1>
             {% if attributeSource == 'idp' %}
                 <p>{{ 'consent_slidein_correction_text_idp'|trans }}</p>
-                {% include '@theme/Authentication/View/Proxy/ConsentSlideinContactDetails.html.twig' %}
+                {% include '@theme/Authentication/View/Proxy/consent-slidein-contact-details.html.twig' %}
             {% else %}
                 <p>{{ 'consent_slidein_correction_text_aa'|trans }}</p>
             {% endif %}

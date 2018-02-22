@@ -35,7 +35,7 @@ class IndexController
 
         return new Response(
             $this->twig->render(
-                '@theme/Authentication/View/Index/Index.html.twig',
+                '@theme/Authentication/View/Index/index.html.twig',
                 [
                     'subHeader' => 'IdP Certificate and Metadata',
                     'wide' => true,

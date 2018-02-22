@@ -120,26 +120,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $profileUrl = $configuredUrl;
         }
 
-//        $html = $this->_server->renderTemplate(
-//            'consent',
-//            array(
-//                'action'            => $this->_server->getUrl('processConsentService'),
-//                'ID'                => $response->getId(),
-//                'attributes'        => $attributes,
-//                'attribute_sources' => $this->getAttributeSources($request->getId()),
-//                'sp'                => $serviceProviderMetadata,
-//                'idp'               => $identityProvider,
-//                'idp_support'       => $this->getSupportContact($identityProvider),
-//                'consent_count'     => $this->_consentService->countAllFor(
-//                    $response->getNameIdValue()
-//                ),
-//                'profile_url'       => $profileUrl
-//            ),
-//            $layout
-//        );
-
         $html = $this->twig->render(
-            '@theme/Authentication/View/Proxy/Consent.html.twig',
+            '@theme/Authentication/View/Proxy/consent.html.twig',
             [
                 'action' => $this->_server->getUrl('processConsentService'),
                 'responseId' => $response->getId(),
