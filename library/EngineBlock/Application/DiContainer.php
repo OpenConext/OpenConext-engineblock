@@ -41,6 +41,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return array
+     */
+    public function getPhpSettings()
+    {
+        return (array) $this->container->getParameter('php_settings');
+    }
+
+    /**
      * @return \OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
      */
     public function getAuthenticationLogger()

@@ -41,6 +41,51 @@ $forbiddenSignatureMethods = array_filter(
     )
 );
 
+/**
+ * Convert PHP-ini configuration in EB-ini format to yaml format.
+ *
+ * In EB-ini format, php-settings were defined like this:
+ *
+ *     phpSettings.memory_limit = "128M"
+ *     phpSettings.date.timezone = "Europe/Amsterdam"
+ *
+ * Which was parsed by Zend_Config as:
+ *
+ *     [
+ *         "memory_limit" => "128M",
+ *         "date" => [
+ *              "timezone" => "Europe/Amsterdam"
+ *         ]
+ *     ]
+ *
+ * The EngineBlock code responsible for actually calling ini_set then had
+ * complicated logic (see below) to flatten the structure. We have now moved
+ * that logic to here, so the YAML configuration used is a simple list of
+ * PHP-ini settings:
+ *
+ *     phpSettings:
+ *         memory_limit: "128M"
+ *         date.timezone: "Europe/Amsterdam"
+ */
+function legacyPhpSettingsToYaml($legacySettings, &$flatSettings = [], $prefix = '')
+{
+    foreach ($legacySettings as $name => $value) {
+        $prefixedName = $name;
+
+        if (!empty($prefix)) {
+            $prefixedName = $prefix . '.' . $name;
+        }
+
+        if (is_array($value)) {
+            legacyPhpSettingsToYaml($value, $flatSettings, $prefixedName);
+        } else {
+            $flatSettings[$prefixedName] = $value;
+        }
+    }
+
+    return $flatSettings;
+}
+
 $ymlContent = array(
     'parameters' => array(
         // Setting the debug mode to true will cause EngineBlock to display
@@ -66,6 +111,11 @@ $ymlContent = array(
 
         // List of signature methods explicitly forbidden by EngineBlock.
         'forbidden_signature_methods'                             => $forbiddenSignatureMethods,
+
+        // Ideally, PHP is configured using the regular PHP configuration in
+        // /etc, but EngineBlock supports runtime modification of PHP
+        // settings.
+        'php_settings'                                            => legacyPhpSettingsToYaml($config->get('phpSettings', [])->toArray()),
 
         'api.users.janus.username'                                => $config->get('engineApi.users.janus.username'),
         'api.users.janus.password'                                => $config->get('engineApi.users.janus.password'),

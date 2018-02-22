@@ -120,21 +120,9 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapPhpSettings()
     {
-        $settings = $this->_application->getConfiguration()->phpSettings;
-        if (!is_null($settings)) {
-            $this->_setIniSettings($settings->toArray());
-        }
-    }
-
-    protected function _setIniSettings($settings, $prefix = '')
-    {
-        foreach ($settings as $settingName => $settingValue) {
-            if (is_array($settingValue)) {
-                $this->_setIniSettings((array)$settingValue, $prefix . $settingName . '.');
-            }
-            else {
-                ini_set($prefix . $settingName, $settingValue);
-            }
+        $settings = $this->_application->getDiContainer()->getPhpSettings();
+        foreach ($settings as $name => $value) {
+            ini_set($name, $value);
         }
     }
 
