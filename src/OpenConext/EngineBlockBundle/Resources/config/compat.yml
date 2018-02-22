@@ -13,6 +13,11 @@ services:
         class: OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface
         factory: ["@engineblock.compat.di_container", getMetadataRepository]
 
+    engineblock.compat.metadata.definitions:
+        public: false
+        class: EngineBlock_Attributes_Metadata
+        factory: ["@engineblock.compat.di_container", getAttributeMetadata]
+
     engineblock.compat.doctrine.entity_manager:
         public: false
         class: Doctrine\ORM\EntityManager

@@ -336,6 +336,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return Twig_Environment
+     */
+    public function getTwigEnvironment()
+    {
+        return $this->container->get('twig');
+    }
+
+    /**
      * @return array
      */
     public function getTrustedProxiesIpAddresses()
