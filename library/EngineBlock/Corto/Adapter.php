@@ -345,7 +345,7 @@ class EngineBlock_Corto_Adapter
             'forbiddenSignatureMethods' => $this->_getForbiddenSignatureMethods(),
         ));
 
-        $this->configureProxyCertificates($proxyServer, $application->getConfiguration());
+        $this->configureProxyCertificates($proxyServer);
 
         $this->enrichEngineBlockMetadata($proxyServer);
 
@@ -449,20 +449,13 @@ class EngineBlock_Corto_Adapter
      * the proxy server. Let the proxy server then decide which signing certificates to use.
      *
      * @param EngineBlock_Corto_ProxyServer $proxyServer
-     * @param Zend_Config $applicationConfiguration
      * @return EngineBlock_X509_KeyPair
      * @throws EngineBlock_Corto_ProxyServer_Exception
      * @throws EngineBlock_Exception
      */
-    protected function configureProxyCertificates(
-        EngineBlock_Corto_ProxyServer $proxyServer,
-        Zend_Config $applicationConfiguration)
+    protected function configureProxyCertificates(EngineBlock_Corto_ProxyServer $proxyServer)
     {
-        if (!isset($applicationConfiguration->encryption) || !isset($applicationConfiguration->encryption->keys)) {
-            throw new EngineBlock_Corto_ProxyServer_Exception("No encryption/signing keys defined!");
-        }
-
-        $keysConfig = $applicationConfiguration->encryption->keys->toArray();
+        $keysConfig = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getEncryptionKeysConfiguration();
 
         if (empty($keysConfig)) {
             throw new EngineBlock_Corto_ProxyServer_Exception("No encryption/signing keys defined!");
