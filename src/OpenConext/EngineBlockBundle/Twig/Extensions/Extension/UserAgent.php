@@ -19,7 +19,7 @@ class UserAgent extends Twig_Extension
 
     public function __construct(RequestStack $requestStack)
     {
-        $this->httpUserAgent = $requestStack->getCurrentRequest()->server->get('HTTP_USER_AGENT', '');
+        $this->httpUserAgent = $this->getUserAgent($requestStack);
     }
 
     public function getFunctions()
@@ -44,6 +44,16 @@ class UserAgent extends Twig_Extension
                     )
                 );
         }
+    }
+
+    private function getUserAgent(RequestStack $requestStack)
+    {
+        $currentRequest = $requestStack->getCurrentRequest();
+        $userAgent = '';
+        if ($currentRequest) {
+            $userAgent = $currentRequest->server->get('HTTP_USER_AGENT', '');
+        }
+        return $userAgent;
     }
 
 }
