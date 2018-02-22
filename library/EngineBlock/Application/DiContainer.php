@@ -414,4 +414,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return (bool) $this->container->getParameter('cookie.secure');
     }
+
+    /**
+     * @return array
+     */
+    public function getEmailIdpDebuggingConfiguration()
+    {
+        return (array) $this->container->getParameter('email_idp_debugging');
+    }
 }

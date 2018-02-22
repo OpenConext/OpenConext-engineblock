@@ -13,7 +13,7 @@ services:
     engineblock.bridge.mailer:
         class: OpenConext\EngineBlockBridge\Mail\ZendMailSender
         arguments:
-            - "@=service('engineblock.bridge.config').get('email.help')"
+            - "%email_help_address%"
             - "@logger"
 
     engineblock.bridge.authentication_logger_adapter:

@@ -189,6 +189,10 @@ $ymlContent = array(
             '%%',
             $config->get('openconext.termsOfUse')
         ),
+
+        // Email configuration
+        'email_help_address'                                      => $config->get('email.help'),
+        'email_idp_debugging'                                     => $config->get('email.idpDebugging'),
     )
 );
 
