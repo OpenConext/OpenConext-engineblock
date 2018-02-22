@@ -33,6 +33,14 @@ if (!is_array($encryptionKeys)) {
     $encryptionKeys = $encryptionKeys->toArray();
 }
 
+$forbiddenSignatureMethodsCommaSeparated = $config->get('forbiddenSignatureMethods', '');
+$forbiddenSignatureMethods = array_filter(
+    array_map(
+        'trim',
+        explode(',', $forbiddenSignatureMethodsCommaSeparated)
+    )
+);
+
 $ymlContent = array(
     'parameters' => array(
         // Setting the debug mode to true will cause EngineBlock to display
@@ -47,6 +55,10 @@ $ymlContent = array(
         'domain'                                                  => $config->get('base_domain'),
         'trusted_proxies'                                         => $trustedProxies,
         'encryption_keys'                                         => $encryptionKeys,
+
+        // List of signature methods explicitly forbidden by EngineBlock.
+        'forbidden_signature_methods'                             => $forbiddenSignatureMethods,
+
         'api.users.janus.username'                                => $config->get('engineApi.users.janus.username'),
         'api.users.janus.password'                                => $config->get('engineApi.users.janus.password'),
         'api.users.profile.username'                              => $config->get('engineApi.users.profile.username'),

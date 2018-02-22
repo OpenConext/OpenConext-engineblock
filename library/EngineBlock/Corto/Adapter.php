@@ -336,13 +336,15 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setLogger($this->_getLogger());
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
+        $settings = $application->getDiContainer();
+
         $proxyServer->setHostName($application->getHostname());
 
         $proxyServer->setConfigs(array(
-            'debug' => $application->getDiContainer()->isDebug(),
-            'ConsentStoreValues' => $application->getDiContainer()->isConsentStoreValuesActive(),
+            'debug' => $settings->isDebug(),
+            'ConsentStoreValues' => $settings->isConsentStoreValuesActive(),
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
-            'forbiddenSignatureMethods' => $this->_getForbiddenSignatureMethods(),
+            'forbiddenSignatureMethods' => $settings->getForbiddenSignatureMethods(),
         ));
 
         $this->configureProxyCertificates($proxyServer);
@@ -361,22 +363,6 @@ class EngineBlock_Corto_Adapter
     protected function _getLogger()
     {
         return EngineBlock_ApplicationSingleton::getLog();
-    }
-
-    /**
-     * @return string[]
-     */
-    private function _getForbiddenSignatureMethods()
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $commaSeparatedList = $application->getConfigurationValue('forbiddenSignatureMethods', '');
-
-        $list = array_map(
-            'trim',
-            explode(',', $commaSeparatedList)
-        );
-
-        return array_filter($list);
     }
 
     public function getProxyServer()
