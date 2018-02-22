@@ -82,8 +82,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getApplicationCache()
     {
-        $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
-        if ($isApcEnabled) {
+        if ($this->container->has('engineblock.compat.zend.apc_cache')) {
             return $this->container->get('engineblock.compat.zend.apc_cache');
         }
 
@@ -290,5 +289,13 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getLocaleProvider()
     {
         return $this->container->get('engineblock.locale_provider');
+    }
+
+    /**
+     * @return \Zend_Translate
+     */
+    public function getTranslator()
+    {
+        return $this->container->get('engineblock.compat.translator');
     }
 }

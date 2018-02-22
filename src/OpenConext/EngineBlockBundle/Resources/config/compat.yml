@@ -65,9 +65,6 @@ services:
             - "@engineblock.compat.corto_filter_command_factory"
             - "@engineblock.compat.database_connection_factory"
 
-    engineblock.compat.zend.apc_cache:
-        class: Zend_Cache_Backend_Apc
-
     engineblock.compat.time_provider:
         class: EngineBlock_TimeProvider_Default
 
@@ -77,3 +74,17 @@ services:
     engineblock.compat.attribute_release_policy_enforcer:
         public: false
         class: EngineBlock_Arp_AttributeReleasePolicyEnforcer
+
+    engineblock.compat.translator_cache_proxy:
+        class: EngineBlock_Translate_CacheProxy
+        arguments:
+            -
+                en: "%kernel.root_dir%/../languages/en.php"
+                nl: "%kernel.root_dir%/../languages/nl.php"
+            - "@?engineblock.compat.zend.apc_cache"
+
+    engineblock.compat.translator:
+        class: Zend_Translate
+        factory: ["@engineblock.compat.translator_cache_proxy", "load"]
+        calls:
+            - ["setLocale", ["@=service('engineblock.locale_provider').getLocale()"]]

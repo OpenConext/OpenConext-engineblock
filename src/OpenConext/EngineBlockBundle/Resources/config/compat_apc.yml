@@ -1,0 +1,3 @@
+services:
+    engineblock.compat.zend.apc_cache:
+        class: Zend_Cache_Backend_Apc

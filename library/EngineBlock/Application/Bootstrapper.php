@@ -168,20 +168,8 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapTranslations()
     {
-        $translationFiles = array(
-            'en' => ENGINEBLOCK_FOLDER_ROOT . 'languages/en.php',
-            'nl' => ENGINEBLOCK_FOLDER_ROOT . 'languages/nl.php'
+        $this->_application->setTranslator(
+            $this->_application->getDiContainer()->getTranslator()
         );
-        $translationCacheProxy = new EngineBlock_Translate_CacheProxy(
-            $translationFiles,
-            $this->_application->getDiContainer()->getApplicationCache()
-        );
-
-        $locale = $this->_application->getDiContainer()->getLocaleProvider()->getLocale();
-
-        $translator = $translationCacheProxy->load();
-        $translator->setLocale($locale);
-
-        $this->_application->setTranslator($translator);
     }
 }
