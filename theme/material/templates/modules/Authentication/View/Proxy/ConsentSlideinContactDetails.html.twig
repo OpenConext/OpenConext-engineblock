@@ -1,0 +1,25 @@
+<p>
+    {% if idpSupport is defined %}
+        {{ 'consent_slidein_text_contact'|trans }}
+        <br>
+
+        {% if idpSupport.givenName is not empty or idpSupport.surName is not empty %}
+            {{ idpSupport.givenName }}
+            {{ idpSupport.surName }}
+            <br>
+        {% endif %}
+
+        {{ 'consent_slidein_details_email'|trans }}:
+        <a href="mailto:{{ idpSupport.emailAddress }}">
+            {{ idpSupport.emailAddress }}
+        </a>
+
+        {% if idpSupport.telephoneNumber is not empty %}
+            <br>
+            {{ 'consent_slidein_details_phone'|trans }}: {{ idpSupport.telephoneNumber }}
+            </a>
+        {% endif %}
+    {% else %}
+        {{ 'consent_slidein_text_no_support'|trans }}
+    {% endif %}
+</p>
