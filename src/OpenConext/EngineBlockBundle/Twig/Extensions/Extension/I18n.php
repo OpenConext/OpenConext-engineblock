@@ -26,10 +26,8 @@ class I18n extends Twig_Extensions_Extension_I18n implements \Twig_Extension_Ini
     {
         return array(
             new \Twig_SimpleFilter('trans', array($this, 'translateSingular')),
-            new \Twig_SimpleFilter('transchoice', array($this, 'translatePlural')),
         );
     }
-
 
     /**
      * @return string
@@ -44,19 +42,5 @@ class I18n extends Twig_Extensions_Extension_I18n implements \Twig_Extension_Ini
         }
 
         return call_user_func_array('sprintf', $arguments);
-    }
-
-
-    /**
-     * Wrapper around the given callable we have to use to translate plural strings.
-     *
-     * Defaults to ngettext().
-     *
-     * @return string
-     */
-    public function translatePlural()
-    {
-        $args = func_get_args();
-        return call_user_func_array($this->plural, $args);
     }
 }
