@@ -156,12 +156,12 @@ class EngineBlock_Application_Bootstrapper
         $layout->setLayoutPath(ENGINEBLOCK_FOLDER_APPLICATION . 'layouts/scripts/');
 
         // Defaults
-        $defaultsConfig = $this->_application->getConfiguration()->defaults;
-        $layout->title  = $defaultsConfig->title;
-        $layout->header = $defaultsConfig->header;
+        $defaultsConfig = $this->_application->getDiContainer()->getViewConfiguration();
+        $layout->title  = $defaultsConfig['title'];
+        $layout->header = $defaultsConfig['header'];
 
         // choose a different layout script:
-        $layout->setLayout($defaultsConfig->layout);
+        $layout->setLayout($defaultsConfig['layout']);
 
         $this->_application->setLayout($layout);
     }

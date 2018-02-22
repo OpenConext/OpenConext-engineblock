@@ -306,4 +306,24 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return $this->container->getParameter('encryption_keys');
     }
+
+    /**
+     * @return bool
+     */
+    public function isUiOptionReturnToSpActive()
+    {
+        return (bool) $this->container->getParameter('ui_return_to_sp_link');
+    }
+
+    /**
+     * @return array
+     */
+    public function getViewConfiguration()
+    {
+        return (array) [
+            'layout' => $this->container->getParameter('view_default_layout'),
+            'title' => $this->container->getParameter('view_default_title'),
+            'header' => $this->container->getParameter('view_default_header'),
+        ];
+    }
 }

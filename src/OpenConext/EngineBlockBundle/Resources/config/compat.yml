@@ -35,12 +35,12 @@ services:
     engineblock.compat.layout:
         class: Zend_Layout
         calls:
-            - ['setLayout',       ["@=service('engineblock.bridge.config').get('defaults.layout')"]]
+            - ['setLayout',       ["%view_default_layout%"]]
             - ['setLayoutPath',   ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
             - ['setViewBasePath', ["%kernel.root_dir%/Resources/views/modules/"]]
         properties:
-            title: "@=service('engineblock.bridge.config').get('defaults.title')"
-            header: "@=service('engineblock.bridge.config').get('defaults.header')"
+            title: "%view_default_title%"
+            header: "%view_default_header%"
             assetVersion: "%asset_version%"
 
     engineblock.compat.logger:

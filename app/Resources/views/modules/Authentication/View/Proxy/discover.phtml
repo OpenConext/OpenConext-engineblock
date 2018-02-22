@@ -18,11 +18,8 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 $layout = $this->layout();
 $layout->assign('subheader', $this->t('log_in_to'));
 $layout->assign('beforeScriptHtml', '<div id="request-access-scroller"><div id="request-access-container"><div id="request-access"></div></div></div>');
-$back = (bool) EngineBlock_ApplicationSingleton::getInstance()
-    ->getConfiguration()
-    ->ui
-    ->return_to_sp_link
-    ->active;
+$back = EngineBlock_ApplicationSingleton::getInstance()
+    ->getDiContainer()->isUiOptionReturnToSpActive();
 
 $layout->assign('backLink', $back);
 
