@@ -318,6 +318,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     /**
      * @return array
      */
+    public function getTrustedProxiesIpAddresses()
+    {
+        return (array) $this->container->getParameter('trusted_proxies');
+    }
+
+    /**
+     * @return array
+     */
     public function getForbiddenSignatureMethods()
     {
         return (array) $this->container->getParameter('forbidden_signature_methods');

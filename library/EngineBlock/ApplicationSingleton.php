@@ -288,17 +288,7 @@ class EngineBlock_ApplicationSingleton
      */
     public function getClientIpAddress()
     {
-        $trustedProxyIpAddresses = $this->getConfiguration()->get('trustedProxyIps');
-
-        if ($trustedProxyIpAddresses instanceof Zend_Config) {
-            $trustedProxyIpAddresses = $trustedProxyIpAddresses->toArray();
-        }
-        if (!$trustedProxyIpAddresses) {
-            $trustedProxyIpAddresses = array();
-        }
-        if (!is_array($trustedProxyIpAddresses)) {
-            throw new EngineBlock_Exception('Trusted IP addresses is not an array: ' . print_r($trustedProxyIpAddresses, true));
-        }
+        $trustedProxyIpAddresses = $this->getDiContainer()->getTrustedProxiesIpAddresses();
 
         $hasForwardedFor = isset($_SERVER['HTTP_X_FORWARDED_FOR']);
         $hasClientIp     = isset($_SERVER['HTTP_CLIENT_IP']);
