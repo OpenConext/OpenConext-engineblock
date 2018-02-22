@@ -286,4 +286,19 @@ class ServiceProvider extends AbstractRole
     {
         return $this->allowAll || in_array($idpEntityId, $this->allowedIdpEntityIds);
     }
+
+    public function getDisplayName($preferredLocale = '')
+    {
+        $spName = '';
+        if ($preferredLocale === 'nl') {
+            $spName = $this->nameNl;
+        }
+        if (empty($spName)) {
+            $spName = $this->nameEn;
+        }
+        if (empty($spName)) {
+            $spName = $this->entityId;
+        }
+        return $spName;
+    }
 }
