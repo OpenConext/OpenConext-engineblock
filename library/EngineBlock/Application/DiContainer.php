@@ -33,6 +33,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return string
+     */
+    public function getHostname()
+    {
+        return (string) $this->container->getParameter('hostname');
+    }
+
+    /**
      * @return \OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
      */
     public function getAuthenticationLogger()

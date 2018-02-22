@@ -52,7 +52,15 @@ $ymlContent = array(
         // Note: this setting is independent from Symfony debug mode.
         'debug'                                                   => $config->get('debug', false),
 
+        // Note: due to legacy reasons, hostname must be left empty (hostname
+        // from the Host header will be used) or set to match the domain
+        // setting. For example:
+        //
+        //    domain = vm.openconext.org
+        //    hostname = empty, or engine.vm.openconext.org
         'domain'                                                  => $config->get('base_domain'),
+        'hostname'                                                => $config->get('hostname'),
+
         'trusted_proxies'                                         => $trustedProxies,
         'encryption_keys'                                         => $encryptionKeys,
 

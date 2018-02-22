@@ -332,7 +332,7 @@ class EngineBlock_ApplicationSingleton
      */
     public function getHostname()
     {
-        $configHostname = $this->getConfiguration()->get('hostname');
+        $configHostname = $this->getDiContainer()->getHostname();
 
         if (is_string($configHostname) && !empty($configHostname)) {
             return $configHostname;
