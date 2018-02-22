@@ -220,7 +220,7 @@
     <target name="prepare-env-in-dev-machine"
             description="ensures that the development environment uses the Functional Test DiContainer">
         <exec executable="${basedir}/run-on-vm.sh" failonerror="true">
-            <arg line="composer prepare-env"/>
+            <arg line="SYMFONY_ENV=test composer prepare-env"/>
         </exec>
     </target>
 
