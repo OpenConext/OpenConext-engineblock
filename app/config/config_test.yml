@@ -40,3 +40,15 @@ security:
                     no_roles:
                         password: no_roles
                         roles: []
+
+doctrine:
+    dbal:
+        default_connection: engineblock_test
+        connections:
+            engineblock_test:
+                driver:   pdo_mysql         # This must be PDO until all database interaction runs through doctrine
+                dbname:   "%database.test.dbname%"
+                host:     "%database.test.host%"
+                port:     "%database.test.port%"
+                user:     "%database.test.user%"
+                password: "%database.test.password%"

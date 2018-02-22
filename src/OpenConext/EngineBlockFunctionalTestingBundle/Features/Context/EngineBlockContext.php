@@ -6,18 +6,14 @@ use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 use DOMDocument;
 use DOMXPath;
-use EngineBlock_Saml2_IdGenerator;
-use Ingenerator\BehatTableAssert\AssertTable;
 use Ingenerator\BehatTableAssert\TableParser\HTMLTable;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAttributeAggregationClient;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingAuthenticationLoopGuard;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingFeatureConfiguration;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\FunctionalTestingPdpClient;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\IdFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
-use OpenConext\EngineBlockFunctionalTestingBundle\Parser\LogChunkParser;
 use OpenConext\EngineBlockFunctionalTestingBundle\Service\EngineBlock;
 use RuntimeException;
 
@@ -48,16 +44,6 @@ class EngineBlockContext extends AbstractSubContext
      * @var EntityRegistry
      */
     private $mockIdpRegistry;
-
-    /**
-     * @var string
-     */
-    protected $idpsConfigUrl;
-
-    /**
-     * @var string
-     */
-    protected $spsConfigUrl;
 
     /**
      * @var FunctionalTestingFeatureConfiguration
@@ -109,8 +95,6 @@ class EngineBlockContext extends AbstractSubContext
      * @param EngineBlock $engineBlock
      * @param EntityRegistry $mockSpRegistry
      * @param EntityRegistry $mockIdpRegistry
-     * @param string $spsConfigUrl
-     * @param string $idpsConfigUrl
      * @param FunctionalTestingFeatureConfiguration $features
      * @param FunctionalTestingPdpClient $pdpClient
      * @param FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard
@@ -123,8 +107,6 @@ class EngineBlockContext extends AbstractSubContext
         EngineBlock $engineBlock,
         EntityRegistry $mockSpRegistry,
         EntityRegistry $mockIdpRegistry,
-        $spsConfigUrl,
-        $idpsConfigUrl,
         FunctionalTestingFeatureConfiguration $features,
         FunctionalTestingPdpClient $pdpClient,
         FunctionalTestingAuthenticationLoopGuard $authenticationLoopGuard,
@@ -134,8 +116,6 @@ class EngineBlockContext extends AbstractSubContext
         $this->engineBlock = $engineBlock;
         $this->mockSpRegistry = $mockSpRegistry;
         $this->mockIdpRegistry = $mockIdpRegistry;
-        $this->spsConfigUrl = $spsConfigUrl;
-        $this->idpsConfigUrl = $idpsConfigUrl;
         $this->features = $features;
         $this->pdpClient = $pdpClient;
         $this->authenticationLoopGuard = $authenticationLoopGuard;

@@ -63,9 +63,15 @@ class RemoveDisallowedIdentityProvidersFilter extends AbstractFilter
             return null;
         }
 
+        // Generate an unique key for the filter on allowedEntityIds. This filter can/will be added more than once.
+        // Having a non unique filter key will result in overwriting the parameter with the value of the last set
+        // allowedEntityIds.
+        // A str_replace is performed on dots. As dots are not allowed in DQL when naming a parameter.
+        $parameterKey = str_replace('.', '', uniqid('allowedEntityIds', true));
+
         return $queryBuilder
-            ->andWhere("role.entityId IN(:allowedEntityIds)")
-            ->setParameter('allowedEntityIds', $this->allowedIdentityProviderEntityIds);
+            ->andWhere("role.entityId IN(:$parameterKey)")
+            ->setParameter($parameterKey, $this->allowedIdentityProviderEntityIds);
     }
 
     /**

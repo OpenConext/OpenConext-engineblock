@@ -2,18 +2,18 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
+use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
-use OpenConext\EngineBlock\Metadata\Logo;
-use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
-use OpenConext\EngineBlock\Metadata\Service;
-use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
-use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
-use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\DataStore\AbstractDataStore;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\IndexedService;
+use OpenConext\EngineBlock\Metadata\Logo;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
+use OpenConext\EngineBlock\Metadata\Service;
+use OpenConext\EngineBlock\Metadata\X509\X509CertificateFactory;
+use OpenConext\EngineBlock\Metadata\X509\X509CertificateLazyProxy;
 use SAML2\Constants;
 
 /**
@@ -25,38 +25,27 @@ class ServiceRegistryFixture
     const TYPE_SP = 'sp';
     const TYPE_IDP = 'idp';
 
-    protected $fixture;
-    protected $directory;
+    /**
+     * @var DoctrineMetadataRepository
+     */
+    private $repository;
 
     /**
-     * @var IdentityProvider[]
+     * Used strictly to write fixture data to the test database and reset the state of the database between tests.
+     * @var EntityManager
      */
-    protected $idpFixtures;
+    private $entityManager;
 
-    /**
-     * @var ServiceProvider[]
-     */
-    protected $spFixtures;
 
-    public function __construct(AbstractDataStore $dataStore, $directory)
+    public function __construct(DoctrineMetadataRepository $repository, EntityManager $em)
     {
-        $this->fixture = $dataStore;
-        $this->directory = $directory;
-
-        $data = $dataStore->load();
-
-        $this->idpFixtures = $data[self::TYPE_IDP] ?: [];
-        $this->spFixtures = $data[self::TYPE_SP] ?: [];
+        $this->repository = $repository;
+        $this->entityManager = $em;
     }
 
-    /**
-     * Create a metadata repository to read the fixture data.
-     *
-     * @return InMemoryMetadataRepository
-     */
-    public function createInMemoryMetadataRepository()
+    public function __destruct()
     {
-        return new InMemoryMetadataRepository($this->idpFixtures, $this->spFixtures);
+        $this->save();
     }
 
     /**
@@ -66,17 +55,15 @@ class ServiceRegistryFixture
      */
     private function getServiceProvider($entityId)
     {
-        $entity = null;
-
-        if (isset($this->spFixtures[$entityId])) {
-            $entity = $this->spFixtures[$entityId];
-        }
+        $entity = $this->repository->findServiceProviderByEntityId($entityId);
 
         if ($entity === null) {
             throw new \Exception(
                 "Entity '{$entityId} was not registered with registerSp()"
             );
         }
+
+        $this->entityManager->persist($entity);
 
         return $entity;
     }
@@ -88,11 +75,7 @@ class ServiceRegistryFixture
      */
     private function getIdentityProvider($entityId)
     {
-        $entity = null;
-
-        if (isset($this->idpFixtures[$entityId])) {
-            $entity = $this->idpFixtures[$entityId];
-        }
+        $entity = $this->repository->findIdentityProviderByEntityId($entityId);
 
         if ($entity === null) {
             throw new \Exception(
@@ -100,13 +83,36 @@ class ServiceRegistryFixture
             );
         }
 
+        $this->entityManager->persist($entity);
+
         return $entity;
+    }
+
+    public function save()
+    {
+        $this->entityManager->flush();
     }
 
     public function reset()
     {
-        $this->idpFixtures = [];
-        $this->spFixtures = [];
+        $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
+        $queryBuilder
+            ->delete('sso_provider_roles_eb5')
+            ->execute();
+
+        return $this;
+    }
+
+    public function remove($entityId, $role)
+    {
+        $queryBuilder = $this->entityManager->getConnection()->createQueryBuilder();
+        $queryBuilder
+            ->delete('sso_provider_roles_eb5', 'roles')
+            ->where('roles.entity_id = :entityId')
+            ->andWhere('roles.type = :type')
+            ->setParameter('entityId', $entityId)
+            ->setParameter('type', $role)
+            ->execute();
 
         return $this;
     }
@@ -128,34 +134,23 @@ class ServiceRegistryFixture
         $sp->termsOfServiceUrl = 'http://welcome.vm.openconext.org';
         $sp->logo = new Logo('/images/placeholder.png');
 
-        $this->spFixtures[$entityId] = $sp;
+        // The repository does not allow us to retrieve all SP's for good reason. In functional testing mode the total
+        // number of SP's should always be limited.
+        $idpEntityIDQuery = <<<QUERY
+        SELECT `entity_id`
+        FROM `sso_provider_roles_eb5`
+        WHERE `type` = 'idp'
+QUERY;
+        $query = $this->entityManager->getConnection()->prepare($idpEntityIDQuery);
+        $query->execute();
+        $idps = $query->fetchAll();
 
-        foreach ($this->idpFixtures as $entity) {
-            if ($entity instanceof IdentityProvider) {
-                $sp->allowedIdpEntityIds[] = $entity->entityId;
-            }
+        foreach ($idps as $idpEntityId) {
+            $idp = $this->repository->findIdentityProviderByEntityId($idpEntityId['entity_id']);
+            $sp->allowedIdpEntityIds[] = $idp->entityId;
         }
 
-        return $this;
-    }
-
-    public function spRequiresPolicyEnforcementDecisionForSp($entityId)
-    {
-        $this->getServiceProvider($entityId)->policyEnforcementDecisionRequired = true;
-
-        return $this;
-    }
-
-    public function requireAttributeAggregationForSp($entityId)
-    {
-        $this->getServiceProvider($entityId)->attributeAggregationRequired = true;
-
-        return $this;
-    }
-
-    public function displayUnconnectedIdpsForSp($entityId, $displayUnconnected = true)
-    {
-        $this->getServiceProvider($entityId)->displayUnconnectedIdpsWayf = (bool) $displayUnconnected;
+        $this->entityManager->persist($sp);
 
         return $this;
     }
@@ -175,13 +170,24 @@ class ServiceRegistryFixture
 
         $idp->contactPersons[] = $contact;
 
-        $this->idpFixtures[$entityId] = $idp;
+        // The repository does not allow us to retrieve all SP's for good reason. In functional testing mode the total
+        // number of SP's should always be limited.
+        $spEntityIDQuery = <<<QUERY
+        SELECT `entity_id`
+        FROM `sso_provider_roles_eb5`
+        WHERE `type` = 'sp'
+QUERY;
+        $query = $this->entityManager->getConnection()->prepare($spEntityIDQuery);
+        $query->execute();
+        $sps = $query->fetchAll();
 
-        foreach ($this->spFixtures as $entity) {
-            if ($entity instanceof ServiceProvider) {
-                $entity->allowedIdpEntityIds[] = $idp->entityId;
-            }
+        foreach ($sps as $spEntityId) {
+            $sp = $this->repository->findServiceProviderByEntityId($spEntityId['entity_id']);
+            $sp->allowedIdpEntityIds[] = $idp->entityId;
+            $this->entityManager->persist($sp);
         }
+
+        $this->entityManager->persist($idp);
 
         return $this;
     }
@@ -261,6 +267,27 @@ class ServiceRegistryFixture
         return $this;
     }
 
+    public function spRequiresPolicyEnforcementDecisionForSp($entityId)
+    {
+        $this->getServiceProvider($entityId)->policyEnforcementDecisionRequired = true;
+
+        return $this;
+    }
+
+    public function requireAttributeAggregationForSp($entityId)
+    {
+        $this->getServiceProvider($entityId)->attributeAggregationRequired = true;
+
+        return $this;
+    }
+
+    public function displayUnconnectedIdpsForSp($entityId, $displayUnconnected = true)
+    {
+        $this->getServiceProvider($entityId)->displayUnconnectedIdpsWayf = (bool) $displayUnconnected;
+
+        return $this;
+    }
+
     public function disconnectSp($spEntityId, $idpEntityId)
     {
         $sp = $this->getServiceProvider($spEntityId);
@@ -324,18 +351,5 @@ class ServiceRegistryFixture
         $this->getIdentityProvider($entityId)->logo = $logo;
 
         return $this;
-    }
-
-    public function save()
-    {
-        $this->fixture->save([
-            self::TYPE_IDP => $this->idpFixtures,
-            self::TYPE_SP => $this->spFixtures,
-        ]);
-    }
-
-    public function __destruct()
-    {
-        $this->save();
     }
 }
