@@ -391,12 +391,27 @@ class EngineBlock_Application_DiContainer extends Pimple
         return (string) $this->container->getParameter('addgueststatus_guestqualifier');
     }
 
-
     /**
      * @return string
      */
     public function getOpenConextTermsOfUseUrl()
     {
         return (string) $this->container->getParameter('openconext_terms_of_use');
+    }
+
+    /**
+     * @return string
+     */
+    public function getCookiePath()
+    {
+        return (string) $this->container->getParameter('cookie.path');
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCookieUseSecure()
+    {
+        return (bool) $this->container->getParameter('cookie.secure');
     }
 }

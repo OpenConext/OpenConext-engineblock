@@ -71,11 +71,13 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapSessionConfiguration()
     {
+        $settings = $this->_application->getDiContainer();
+
         session_set_cookie_params(
             0,
-            $this->_application->getConfigurationValue('cookie_path', '/'),
+            $settings->getCookiePath(),
             '',
-            $this->_application->getConfigurationValue('use_secure_cookies', true),
+            $settings->getCookieUseSecure(),
             true
         );
         session_name('main');

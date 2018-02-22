@@ -144,10 +144,17 @@ $ymlContent = array(
         'database.test.user'                                      => $config->get('database.test.user'),
         'database.test.password'                                  => $config->get('database.test.password'),
         'database.test.dbname'                                    => $config->get('database.test.dbname'),
+
+        // Generic cookie settings.
+        'cookie.path'                                             => $config->get('cookie_path', '/'),
+        'cookie.secure'                                           => (bool) $config->get('use_secure_cookies', true),
+
+        // Cookie settings specific to the language cookie.
         'cookie.locale.domain'                                    => $config->get('cookie.lang.domain'),
         'cookie.locale.expiry'                                    => (int) $config->get('cookie.lang.expiry'),
         'cookie.locale.http_only'                                 => (bool) $config->get('cookie.lang.http_only', false),
         'cookie.locale.secure'                                    => (bool) $config->get('cookie.lang.secure', false),
+
         'feature_eb_encrypted_assertions'                         => (bool) $config->get('engineblock.feature.encrypted_assertions'),
         'feature_eb_encrypted_assertions_require_outer_signature' => (bool) $config->get('engineblock.feature.encrypted_assertions_require_outer_signature'),
         'feature_api_metadata_push'                               => (bool) $config->get('engineApi.features.metadataPush'),
