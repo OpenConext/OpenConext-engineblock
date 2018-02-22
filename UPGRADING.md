@@ -23,6 +23,11 @@ If those options are not removed from the configuration, they will be ignored.
 
 https://www.pivotaltracker.com/story/show/154839908
 
+### Removal of simplesamlphp configuration
+
+All INI setting under "auth.simplesamlphp." and "engine.simplesamlphp." can be safely removed from INI configuration. If
+the options are not removed, they will be ignored. The options are have no effect in any EB5.x release.
+
 ## 5.x -> 5.2
 
 ### Consent API
