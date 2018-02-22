@@ -93,7 +93,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getSession()
                 );
             default :
-                return new $className($server, $diContainer->getXmlConverter());
+                return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
         }
     }
 }
