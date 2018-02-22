@@ -422,4 +422,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return (array) $this->container->getParameter('email_idp_debugging');
     }
+
+    /**
+     * @return string
+     */
+    public function getProfileBaseUrl()
+    {
+        return (string) $this->container->getParameter('profile_base_url');
+    }
 }
