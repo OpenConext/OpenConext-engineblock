@@ -339,7 +339,7 @@ class EngineBlock_Corto_Adapter
         $proxyServer->setHostName($application->getHostname());
 
         $proxyServer->setConfigs(array(
-            'debug' => $application->getConfigurationValue('debug', false),
+            'debug' => $application->getDiContainer()->isDebug(),
             'ConsentStoreValues' => $application->getDiContainer()->isConsentStoreValuesActive(),
             'metadataValidUntilSeconds' => 86400, // This sets the time (in seconds) the entity metadata is valid.
             'forbiddenSignatureMethods' => $this->_getForbiddenSignatureMethods(),

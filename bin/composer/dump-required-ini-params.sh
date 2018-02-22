@@ -35,6 +35,15 @@ if (!is_array($encryptionKeys)) {
 
 $ymlContent = array(
     'parameters' => array(
+        // Setting the debug mode to true will cause EngineBlock to display
+        // more information about errors that have occurred and it will show
+        // the messages it sends and receives for the authentication.
+        //
+        // NEVER TURN THIS ON FOR PRODUCTION!
+        //
+        // Note: this setting is independent from Symfony debug mode.
+        'debug'                                                   => $config->get('debug', false),
+
         'domain'                                                  => $config->get('base_domain'),
         'trusted_proxies'                                         => $trustedProxies,
         'encryption_keys'                                         => $encryptionKeys,
