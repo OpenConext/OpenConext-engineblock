@@ -5,8 +5,6 @@ namespace OpenConext\EngineBlockBundle\Tests;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants;
 use Symfony\Component\HttpFoundation\Response;
 
 class AttributeReleasePolicyControllerTest extends WebTestCase
@@ -442,50 +440,9 @@ class AttributeReleasePolicyControllerTest extends WebTestCase
 
     private function createServiceProviderWithArp($entityId, AttributeReleasePolicy $attributeReleasePolicy)
     {
-        return new ServiceProvider(
-            $entityId,
-            null,
-            null,
-            null,
-            false,
-            [],
-            [],
-            '',
-            '',
-            false,
-            '',
-            '',
-            '',
-            '',
-            null,
-            '',
-            '',
-            null,
-            [
-                Constants::NAMEID_TRANSIENT,
-                Constants::NAMEID_PERSISTENT,
-            ],
-            null,
-            false,
-            false,
-            XMLSecurityKey::RSA_SHA1,
-            null,
-            ServiceProvider::WORKFLOW_STATE_DEFAULT,
-            [],
-            false,
-            [],
-            false,
-            null,
-            true,
-            false,
-            false,
-            null,
-            false,
-            false,
-            false,
-            '',
-            $attributeReleasePolicy
-        );
+        $sp = new ServiceProvider($entityId);
+        $sp->attributeReleasePolicy = $attributeReleasePolicy;
+        return $sp;
     }
 
     private function addServiceProviderFixture(ServiceProvider $serviceProvider)
