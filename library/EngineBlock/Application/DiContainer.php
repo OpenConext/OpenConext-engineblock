@@ -374,4 +374,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return (bool) $this->container->getParameter('consent_store_values');
     }
+
+    /**
+     * @return array
+     */
+    public function getEdugainMetadataConfiguration()
+    {
+        return (array) $this->container->getParameter('edugain');
+    }
 }

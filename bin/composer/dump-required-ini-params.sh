@@ -168,6 +168,9 @@ $ymlContent = array(
         // sends a new value (like a new e-mail address) consent has to be
         // given again.
         'consent_store_values'                                    => (bool) $config->get('authentication.storeValues', true),
+
+        // Edugain metadata
+        'edugain'                                                 => $config->get('edugain', array())->toArray(),
     )
 );
 
