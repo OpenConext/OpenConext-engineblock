@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2018 SURFnet bv
+ * Copyright 2018 SURFnet B.V.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,21 +16,37 @@
  * limitations under the License.
  */
 
-namespace OpenConext\EngineBlock;
+namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use EngineBlock_View;
-use PHPUnit_Framework_TestCase as UnitTest;
+use EngineBlock_Attributes_Metadata;
+use Mockery as m;
+use PHPUnit\Framework\TestCase;
+use Zend_Translate;
 
-class ViewTest extends UnitTest
+class MetadataTest extends TestCase
 {
     /**
-     * @var EngineBlock_View
+     * @var Metadata
      */
-    private $view;
+    private $metadata;
+
+    /**
+     * @var EngineBlock_Attributes_Metadata
+     */
+    private $metadataDefinition;
+
+    /**
+     * @var Zend_Translate
+     */
+    private $translator;
 
     protected function setUp()
     {
-        $this->view = new EngineBlock_View();
+        // Note that this unit tests depends on a real EngingeBlock_EngineBlock_Attributes_Metadata instance from the
+        // Di container.
+        $this->metadataDefinition = \EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();
+        $this->translator = m::mock(Zend_Translate::class);
+        $this->metadata = new Metadata($this->metadataDefinition, $this->translator);
     }
 
     /**
@@ -49,7 +66,7 @@ class ViewTest extends UnitTest
             "urn:mace:dir:attribute-def:eduPersonPrincipalName": ["j.doe@example.com"]
         }', true);
 
-        $ordered = $this->view->sortByDisplayOrder($attributes, []);
+        $ordered = $this->metadata->sortByDisplayOrder($attributes, []);
 
         $expectedOrder = [
             "urn:mace:dir:attribute-def:displayName",
@@ -84,7 +101,7 @@ class ViewTest extends UnitTest
             "urn:mace:dir:attribute-def:norEduPersonBirthDate" => "dummySource",
         ];
 
-        $ordered = $this->view->sortByDisplayOrder($attributes, $attributeSources);
+        $ordered = $this->metadata->sortByDisplayOrder($attributes, $attributeSources);
 
         $expectedIdPOrder = [
             "urn:mace:dir:attribute-def:displayName",
