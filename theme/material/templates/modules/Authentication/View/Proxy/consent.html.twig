@@ -1,8 +1,8 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 
 {# SP and IdP name are stored in a local variable for convenience #}
-{% set spName = sp.displayName(app.request.locale) %}
-{% set idpName = idp.displayName(app.request.locale) %}
+{% set spName = sp.displayName(locale()) %}
+{% set idpName = idp.displayName(locale()) %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'consent_header_title'|trans(spName) %}
@@ -68,7 +68,7 @@
                             <tr>
                                 <td class="attr-name"
                                     data-identifier="{{ attributeIdentifier }}">
-                                    {{ attributeShortName(attributeIdentifier, app.request.locale) }}
+                                    {{ attributeShortName(attributeIdentifier, locale()) }}
                                 </td>
                                 <td class="attr-value">
                                     {# Single attribute value #}

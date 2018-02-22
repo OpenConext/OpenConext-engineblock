@@ -1,11 +1,11 @@
 {% import "@themeLayouts/scripts/language-switcher.html.twig" as languageSwitcher %}
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="{{ app.request.locale }}"> <![endif]-->
-<!--[if IE 7]> <html class="no-js ie7 lt-ie10 lt-ie9 lt-ie8" lang="{{ app.request.locale }}"> <![endif]-->
-<!--[if IE 8]> <html class="no-js ie8 lt-ie10 lt-ie9" lang="{{ app.request.locale }}"> <![endif]-->
-<!--[if IE 9]> <html class="no-js ie9 lt-ie10" lang="{{ app.request.locale }}"> <![endif]-->
-<!--[if gt IE 9]> <html class="no-js" lang="{{ app.request.locale }}"> <![endif]-->
-<!--[if !IE]><!--> <html class="no-js {{ userAgent('safari') }}" lang="{{ app.request.locale }}"> <!--<![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie10 lt-ie9 lt-ie8 lt-ie7" lang="{{ locale() }}"> <![endif]-->
+<!--[if IE 7]> <html class="no-js ie7 lt-ie10 lt-ie9 lt-ie8" lang="{{ locale() }}"> <![endif]-->
+<!--[if IE 8]> <html class="no-js ie8 lt-ie10 lt-ie9" lang="{{ locale() }}"> <![endif]-->
+<!--[if IE 9]> <html class="no-js ie9 lt-ie10" lang="{{ locale() }}"> <![endif]-->
+<!--[if gt IE 9]> <html class="no-js" lang="{{ locale() }}"> <![endif]-->
+<!--[if !IE]><!--> <html class="no-js {{ userAgent('safari') }}" lang="{{ locale() }}"> <!--<![endif]-->
 <head>
     <title>{% block title %}SURFconext{% endblock %}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -42,7 +42,7 @@
     <div class="meta">
 
         {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
-            {{ languageSwitcher.form(app.request.locale) }}
+            {{ languageSwitcher.form(locale()) }}
         {% endif %}
 
         <ul class="comp-links">
@@ -80,7 +80,7 @@
 
             <li class="nav-row">
                 {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
-                    {{ languageSwitcher.form(app.request.locale) }}
+                    {{ languageSwitcher.form(locale()) }}
                 {% endif %}
             </li>
 

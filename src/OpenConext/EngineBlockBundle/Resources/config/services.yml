@@ -119,6 +119,14 @@ services:
         tags:
              - { name: 'twig.extension' }
 
+    engineblock.twig.extension.locale:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Locale
+        arguments:
+            - "@request_stack"
+            - "%locale%"
+        tags:
+             - { name: 'twig.extension' }
+
     engineblock.twig.extension.metadata:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Metadata
         arguments:
