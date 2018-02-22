@@ -137,6 +137,7 @@
     <target name="behat-dev">
         <echo message="Preparing the dev env to run in functional testing mode" />
         <antcall target="enable-functional-testing"/>
+        <antcall target="enable-test-env"/>
         <antcall target="prepare-env-in-dev-machine"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
         <antcall target="run-behat">
@@ -144,6 +145,7 @@
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
         <antcall target="disable-functional-testing"/>
+        <antcall target="disable-test-env"/>
         <antcall target="prepare-env-in-dev-machine"/>
     </target>
 
@@ -162,20 +164,20 @@
 
     <target name="behat-travis"
             description="Run the functional testing suite">
-        <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
+        <antcall target="enable-functional-testing"/>
         <antcall target="run-behat">
             <param name="profile" value="default"/>
         </antcall>
-        <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
+        <antcall target="disable-functional-testing"/>
     </target>
 
     <target name="behat-travis-wip"
             description="Run the functional testing suite for features marked as WIP">
-        <replace file="${basedir}/application/configs/application.ini" token=";functionalTesting = true" value="functionalTesting = true"/>
+        <antcall target="enable-functional-testing"/>
         <antcall target="run-behat">
             <param name="profile" value="wip"/>
         </antcall>
-        <replace file="${basedir}/application/configs/application.ini" token="functionalTesting = true" value=";functionalTesting = true"/>
+        <antcall target="disable-functional-testing"/>
     </target>
 
     <target name="run-behat"
@@ -199,6 +201,20 @@
         <replace file="${basedir}/application/configs/application.ini"
                  token="functionalTesting = true"
                  value=";functionalTesting = true"/>
+    </target>
+
+    <target name="enable-test-env"
+            description="Set the environment in app_dev.php test">
+        <replace file="${basedir}/web/app_dev.php"
+                 token="new AppKernel('dev', false)"
+                 value="new AppKernel('test', false)"/>
+    </target>
+
+    <target name="disable-test-env"
+            description="Set the environment in app_dev.php dev">
+        <replace file="${basedir}/web/app_dev.php"
+                 token="new AppKernel('test', false)"
+                 value="new AppKernel('dev', false)"/>
     </target>
 
     <target name="prepare-env-in-dev-machine"
