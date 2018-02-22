@@ -326,4 +326,12 @@ class EngineBlock_Application_DiContainer extends Pimple
             'header' => $this->container->getParameter('view_default_header'),
         ];
     }
+
+    /**
+     * @return bool
+     */
+    public function isConsentStoreValuesActive()
+    {
+        return (bool) $this->container->getParameter('consent_store_values');
+    }
 }

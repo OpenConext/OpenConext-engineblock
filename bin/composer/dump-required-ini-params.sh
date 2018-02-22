@@ -84,6 +84,11 @@ $ymlContent = array(
         'view_default_title'                                      => $config->get('defaults.title'),
         'view_default_header'                                     => $config->get('defaults.header'),
         'ui_return_to_sp_link'                                    => (bool) $config->get('ui.return_to_sp_link.active'),
+
+        // Store attributes with their values, meaning that if an Idp suddenly
+        // sends a new value (like a new e-mail address) consent has to be
+        // given again.
+        'consent_store_values'                                    => (bool) $config->get('authentication.storeValues', true),
     )
 );
 
