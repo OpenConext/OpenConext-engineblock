@@ -25,7 +25,11 @@ class UserAgent extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new TwigFunction('userAgent', [$this, 'userAgent'], ['is_safe' => ['html']])
+            new TwigFunction(
+                'userAgent',
+                [$this, 'userAgent'],
+                ['is_safe' => ['html']]
+            )
         ];
     }
 
@@ -36,7 +40,7 @@ class UserAgent extends Twig_Extension
                 $pattern = '~Version/(\d)[\\.\d]+ Safari/~';
                 return preg_match($pattern, $this->httpUserAgent, $matches) ? 'safari' . $matches[1] : '';
                 break;
-            default :
+            default:
                 throw new RuntimeException(
                     sprintf(
                         'This user agent ("%s") is not yet supported in the UserAgent Twig extension',
@@ -55,5 +59,4 @@ class UserAgent extends Twig_Extension
         }
         return $userAgent;
     }
-
 }

@@ -3,18 +3,20 @@
         {{ 'consent_slidein_text_contact'|trans }}
         <br>
 
-        {% if idpSupport.givenName is not empty or idpSupport.surName is not empty %}
-            {{ idpSupport.givenName }}
-            {{ idpSupport.surName }}
+        {% if idpSupport.givenName is defined or idpSupport.surName is defined %}
+            {% if idpSupport.givenName is not empty %}{{ idpSupport.givenName }}{% endif %}
+            {% if idpSupport.surName is not empty %}{{ idpSupport.surName }}{% endif %}
             <br>
         {% endif %}
 
-        {{ 'consent_slidein_details_email'|trans }}:
-        <a href="mailto:{{ idpSupport.emailAddress }}">
-            {{ idpSupport.emailAddress }}
-        </a>
+        {% if idpSupport.emailAddress is defined %}
+            {{ 'consent_slidein_details_email'|trans }}:
+            <a href="mailto:{{ idpSupport.emailAddress }}">
+                {{ idpSupport.emailAddress }}
+            </a>
+        {% endif %}
 
-        {% if idpSupport.telephoneNumber is not empty %}
+        {% if idpSupport.telephoneNumber is defined %}
             <br>
             {{ 'consent_slidein_details_phone'|trans }}: {{ idpSupport.telephoneNumber }}
             </a>

@@ -32,9 +32,15 @@ class Metadata extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new TwigFunction('sortByDisplayOrder', [$this, 'sortByDisplayOrder'], ['is_safe' => ['html']]),
             new TwigFunction(
-                'attributeSourceLogoUrl', [$this, 'getAttributeSourceLogoUrl'], ['is_safe' => ['html']]
+                'sortByDisplayOrder',
+                [$this, 'sortByDisplayOrder'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFunction(
+                'attributeSourceLogoUrl',
+                [$this, 'getAttributeSourceLogoUrl'],
+                ['is_safe' => ['html']]
             ),
             new TwigFunction(
                 'attributeSourceDisplayName',
