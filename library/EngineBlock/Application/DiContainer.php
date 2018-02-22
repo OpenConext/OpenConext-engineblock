@@ -382,4 +382,12 @@ class EngineBlock_Application_DiContainer extends Pimple
     {
         return (array) $this->container->getParameter('edugain');
     }
+
+    /**
+     * @return string
+     */
+    public function getGuestStatusQualifier()
+    {
+        return (string) $this->container->getParameter('addgueststatus_guestqualifier');
+    }
 }

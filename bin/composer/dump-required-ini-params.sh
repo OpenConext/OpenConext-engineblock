@@ -171,6 +171,9 @@ $ymlContent = array(
 
         // Edugain metadata
         'edugain'                                                 => $config->get('edugain', array())->toArray(),
+
+        // Guest qualifier for the AddGuestStatus filter.
+        'addgueststatus_guestqualifier'                           => $config->get('addgueststatus.guestqualifier', ''),
     )
 );
 
