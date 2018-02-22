@@ -83,7 +83,7 @@ $ymlContent = array(
     )
 );
 
-$ymlToDump = \Symfony\Component\Yaml\Yaml::dump($ymlContent);
+$ymlToDump = \Symfony\Component\Yaml\Yaml::dump($ymlContent, 4, 4);
 
 $comment = "# This file is auto-generated" . PHP_EOL;
 
