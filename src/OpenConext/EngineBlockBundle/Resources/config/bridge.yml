@@ -1,9 +1,4 @@
 services:
-    engineblock.bridge.config:
-        class: OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration
-        arguments:
-            - ~ # engineblock configuration array
-
     engineblock.bridge.error_reporter:
         class: OpenConext\EngineBlockBridge\ErrorReporter
         arguments:

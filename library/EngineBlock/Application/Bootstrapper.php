@@ -4,8 +4,6 @@ use SAML2\Compat\ContainerSingleton;
 
 class EngineBlock_Application_Bootstrapper
 {
-    const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
-    const CONFIG_FILE_ENVIRONMENT   = '/etc/openconext/engineblock.ini';
     const P3P_HEADER = 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"';
 
     /**
@@ -39,7 +37,6 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
-        $this->_bootstrapConfiguration();
         $this->_bootstrapSessionConfiguration();
 
         $this->_bootstrapPhpSettings();
@@ -54,19 +51,6 @@ class EngineBlock_Application_Bootstrapper
         $this->_bootstrapped = true;
 
         return $this;
-    }
-
-    protected function _bootstrapConfiguration()
-    {
-        if ($this->_application->getConfiguration()) {
-            return;
-        }
-
-        $configProxy = new EngineBlock_Config_CacheProxy(
-            $this->_getAllConfigFiles(),
-            $this->_application->getDiContainer()->getApplicationCache()
-        );
-        $this->_application->setConfiguration($configProxy->load());
     }
 
     protected function _bootstrapSessionConfiguration()

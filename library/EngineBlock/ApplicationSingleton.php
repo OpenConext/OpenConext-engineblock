@@ -46,11 +46,6 @@ class EngineBlock_ApplicationSingleton
     protected $_httpResponse;
 
     /**
-     * @var Zend_Config
-     */
-    protected $_configuration = null;
-
-    /**
      * @var Psr\Log\LoggerInterface
      */
     protected $_log;
@@ -165,14 +160,6 @@ class EngineBlock_ApplicationSingleton
                 // phpunit tests run in CLI, so if the environment is test and
                 // we're on CLI: use the test container.
                 $this->_diContainer = new EngineBlock_Application_TestDiContainer($container);
-
-                $config = new Zend_Config_Ini(
-                    ENGINEBLOCK_FOLDER_APPLICATION . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
-                    'base',
-                    array('allowModifications' => true)
-                );
-                $config->testing = true;
-                $this->setConfiguration($config);
             } else {
                 // Non-cli requests in the test environment must be behat!
                 $this->_diContainer = new EngineBlock_Application_FunctionalTestDiContainer($container);
@@ -399,38 +386,6 @@ class EngineBlock_ApplicationSingleton
     public function setTranslator(Zend_Translate $translator)
     {
         $this->_translator = $translator;
-        return $this;
-    }
-
-    /**
-     * @return Zend_Config
-     */
-    public function getConfiguration()
-    {
-        return $this->_configuration;
-    }
-
-    /**
-     * @param $key
-     * @param mixed|null $default
-     * @return mixed|null
-     */
-    public function getConfigurationValue($key, $default = null)
-    {
-        if (isset($this->_configuration->$key)) {
-            return $this->_configuration->$key;
-        }
-
-        return $default;
-    }
-
-    /**
-     * @param Zend_Config $applicationConfiguration
-     * @return EngineBlock_ApplicationSingleton
-     */
-    public function setConfiguration(Zend_Config $applicationConfiguration)
-    {
-        $this->_configuration = $applicationConfiguration;
         return $this;
     }
 

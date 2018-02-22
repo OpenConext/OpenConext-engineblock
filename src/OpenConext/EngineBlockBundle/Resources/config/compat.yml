@@ -3,10 +3,6 @@ services:
         class: EngineBlock_ApplicationSingleton
         factory:  [EngineBlock_ApplicationSingleton, getInstance]
 
-    engineblock.compat.config:
-        class: Zend_Config
-        factory: ["@engineblock.compat.application", getConfiguration]
-
     engineblock.compat.di_container:
         public: false
         class: EngineBlock_Application_DiContainer

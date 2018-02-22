@@ -1,6 +1,9 @@
 #!/usr/bin/env php
 <?php
 
+use OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration;
+use OpenConext\EngineBlockBridge\Configuration\EngineBlockIniFileLoader;
+
 /*
  * This should be run in the VM in order to dump required INI configuration values to a YAML parameter file that
  * can be used by Symfony
@@ -13,15 +16,15 @@ $ymlDumpPath  = $projectRoot . 'app/config/ini_parameters.yml';
 
 require_once($autoloadPath);
 
-$loader     = new OpenConext\EngineBlockBridge\Configuration\EngineBlockIniFileLoader();
+$loader     = new EngineBlockIniFileLoader();
 $iniContent = $loader->load(
     array(
-        $projectRoot . 'application/' . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
-        EngineBlock_Application_Bootstrapper::CONFIG_FILE_ENVIRONMENT,
+        $projectRoot . 'application/' . EngineBlockIniFileLoader::CONFIG_FILE_DEFAULT,
+        EngineBlockIniFileLoader::CONFIG_FILE_ENVIRONMENT,
     )
 );
 
-$config = new \OpenConext\EngineBlockBridge\Configuration\EngineBlockConfiguration($iniContent);
+$config = new EngineBlockConfiguration($iniContent);
 
 $trustedProxies = $config->get('trustedProxyIps', array());
 if (!is_array($trustedProxies)) {
