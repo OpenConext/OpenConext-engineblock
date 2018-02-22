@@ -201,11 +201,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     private function registerDenormalizedAttributeDefinitions()
     {
         $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED] = function() {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            $definitionFile = $application->getConfigurationValue(
-                'attributeDefinitionFile',
-                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes-v2.2.0.json'
-            );
+            $definitionFile = $this->getAttributeDefinitionFilePath();
             $definitionFileContent = file_get_contents($definitionFile);
             $definitions = json_decode($definitionFileContent, true);
 
@@ -429,5 +425,13 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getProfileBaseUrl()
     {
         return (string) $this->container->getParameter('profile_base_url');
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttributeDefinitionFilePath()
+    {
+        return (string) $this->container->getParameter('attribute_definition_file_path');
     }
 }

@@ -196,6 +196,16 @@ $ymlContent = array(
 
         // Profile.
         'profile_base_url'                                        => $config->get('profile.baseUrl', ''),
+
+        // Path to the attribute definition file. Note the
+        // backwards-compatible support for using the app root constant.
+        'attribute_definition_file_path'                          => str_replace(
+            'ENGINEBLOCK_FOLDER_APPLICATION',
+            $projectRoot . 'application/',
+            $config->get(
+                'attributeDefinitionFile', $projectRoot . 'application/configs/attributes-v2.2.0.json'
+            )
+        )
     )
 );
 

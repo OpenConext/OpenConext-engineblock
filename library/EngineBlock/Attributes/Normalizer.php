@@ -144,10 +144,7 @@ class EngineBlock_Attributes_Normalizer
 
         $this->_definitions = json_decode(
             file_get_contents(
-                EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue(
-                    'attributeDefinitionFile',
-                    ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes.json'
-                )
+                EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeDefinitionFilePath()
             ),
             true
         );
