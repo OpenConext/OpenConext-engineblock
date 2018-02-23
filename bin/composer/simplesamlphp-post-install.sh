@@ -7,11 +7,7 @@ cd $ROOT_DIR
 
 # Add/override SimpleSamlPhp config
 mkdir -p vendor/simplesamlphp/simplesamlphp/config/
-cp config/simplesamlphp/config/* vendor/simplesamlphp/simplesamlphp/config/
-
-# Add/override SimpleSamlPhp metadata
-mkdir -p vendor/simplesamlphp/simplesamlphp/metadata/
-cp config/simplesamlphp/metadata/* vendor/simplesamlphp/simplesamlphp/metadata/
+cp config/simplesamlphp/config/config.php vendor/simplesamlphp/simplesamlphp/config/
 
 # Delete unused config, metadata and modules
 rm -rf vendor/simplesamlphp/simplesamlphp/config/acl.php \

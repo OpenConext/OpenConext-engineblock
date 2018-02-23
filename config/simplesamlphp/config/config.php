@@ -1,26 +1,21 @@
 <?php
-/*
- * The configuration of simpleSAMLphp
- * To keep all configuration as much as possible in one place:
- * Use the applications authentication.ini
+/**
+ * This is the configuration for SimpleSAMLphp.
  *
- * $Id$
+ * EngineBlock uses only a few components of SimpleSAMLphp, and those
+ * components require a config.php. Only the settings related to
+ * logging have effect in EngineBlock because EngineBLock does not use
+ * the SimpleSAMLphp GUI.
  */
 
 use SimpleSAML\Logger;
-
-require_once __DIR__. '/../../../../library/EngineBlock/ApplicationSingleton.php';
-$application = EngineBlock_ApplicationSingleton::getInstance();
-$appConfig = $application->getConfiguration();
-
-$baseUrlPath = $appConfig->engine->simplesamlphp->baseurlpath;
 
 $config = array (
 	/**
 	 * Setup the following parameters to match the directory of your installation.
 	 * See the user manual for more details.
 	 */
-	'baseurlpath'			=> $baseUrlPath,
+        'baseurlpath' => 'simplesaml/',
 	'certdir'				=> 'cert/',
 	'loggingdir'			=> 'log/',
 	'datadir'				=> 'data/',
@@ -45,7 +40,7 @@ $config = array (
 	'debug' => FALSE,
 
 
-	'showerrors'			=>	(bool) $appConfig->auth->simplesamlphp->showErrors,
+	'showerrors'			=>	FALSE,
 
 	/**
 	 * Custom error show function called from SimpleSAML_Error_Error::show.
@@ -66,7 +61,7 @@ $config = array (
 	 * This password will give access to the installation page of simpleSAMLphp with
 	 * metadata listing and diagnostics pages.
 	 */
-	'auth.adminpassword'		=> $appConfig->auth->simplesamlphp->adminPassword,
+	'auth.adminpassword'		=> '',
 	'admin.protectindexpage'	=> TRUE,
 	'admin.protectmetadata'		=> FALSE,
 
@@ -78,15 +73,15 @@ $config = array (
 	 * A possible way to generate a random salt is by running the following command from a unix shell:
 	 * tr -c -d '0123456789abcdefghijklmnopqrstuvwxyz' </dev/urandom | dd bs=32 count=1 2>/dev/null;echo
 	 */
-	'secretsalt' => $appConfig->auth->simplesamlphp->secretSalt,
+	'secretsalt' => '',
 
 	/*
 	 * Some information about the technical persons running this installation.
 	 * The email address will be used as the recipient address for error reports, and
 	 * also as the technical contact in generated metadata.
 	 */
-	'technicalcontact_name'	 	=> $appConfig->auth->simplesamlphp->technicalContactName,
-	'technicalcontact_email'	=> $appConfig->auth->simplesamlphp->technicalContactEmail,
+	'technicalcontact_name'	 	=> '',
+	'technicalcontact_email'	=> '',
 
 	/*
 	 * The timezone of the server. This option should be set to the timezone you want
@@ -95,7 +90,7 @@ $config = array (
 	 *
 	 * See this page for a list of valid timezones: http://php.net/manual/en/timezones.php
 	 */
-	'timezone' => $appConfig->phpSettings->date->timezone,
+	'timezone' => ini_get('date.timezone'),
 
 	/*
 	 * Logging.
@@ -323,7 +318,7 @@ $config = array (
 			'type' => 'saml20-idp-SSO',
 		),
 
-		/* When called without parameters, it will fallback to filter attributes ‹the old way›
+		/* When called without parameters, it will fallback to filter attributes  the old way 
 		 * by checking the 'attributes' parameter in metadata on IdP hosted and SP remote.
 		 */
 		50 => 'core:AttributeLimit',
@@ -364,7 +359,7 @@ $config = array (
 		),
 		*/
 
-		/* When called without parameters, it will fallback to filter attributes ‹the old way›
+		/* When called without parameters, it will fallback to filter attributes  the old way 
 		 * by checking the 'attributes' parameter in metadata on SP hosted and IdP remote.
 		 */
 		50 => 'core:AttributeLimit',
