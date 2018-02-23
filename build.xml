@@ -136,7 +136,6 @@
 
     <target name="behat-dev">
         <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="enable-functional-testing"/>
         <antcall target="enable-test-env"/>
         <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
@@ -144,14 +143,12 @@
             <param name="profile" value="default"/>
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
-        <antcall target="disable-functional-testing"/>
         <antcall target="disable-test-env"/>
         <antcall target="prepare-env"/>
     </target>
 
     <target name="behat-dev-wip">
         <echo message="Preparing the dev env to run in functional testing mode" />
-        <antcall target="enable-functional-testing"/>
         <antcall target="enable-test-env"/>
         <antcall target="prepare-env"/>
         <echo message="${line.separator}${line.separator}Running Behat"/>
@@ -159,27 +156,22 @@
             <param name="profile" value="wip"/>
         </antcall>
         <echo message="${line.separator}${line.separator}Reverting the dev env to run in normal mode"/>
-        <antcall target="disable-functional-testing"/>
         <antcall target="disable-test-env"/>
         <antcall target="prepare-env"/>
     </target>
 
     <target name="behat-travis"
             description="Run the functional testing suite">
-        <antcall target="enable-functional-testing"/>
         <antcall target="run-behat">
             <param name="profile" value="default"/>
         </antcall>
-        <antcall target="disable-functional-testing"/>
     </target>
 
     <target name="behat-travis-wip"
             description="Run the functional testing suite for features marked as WIP">
-        <antcall target="enable-functional-testing"/>
         <antcall target="run-behat">
             <param name="profile" value="wip"/>
         </antcall>
-        <antcall target="disable-functional-testing"/>
     </target>
 
     <target name="run-behat"
@@ -189,20 +181,6 @@
             <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
             <arg line="--profile ${profile}"/>
         </exec>
-    </target>
-
-    <target name="enable-functional-testing"
-            description="Set the functional testing flag to true">
-        <replace file="${basedir}/application/configs/application.ini"
-                 token=";functionalTesting = true"
-                 value="functionalTesting = true"/>
-    </target>
-
-    <target name="disable-functional-testing"
-            description="Set the functional testing flag to false">
-        <replace file="${basedir}/application/configs/application.ini"
-                 token="functionalTesting = true"
-                 value=";functionalTesting = true"/>
     </target>
 
     <target name="enable-test-env"
