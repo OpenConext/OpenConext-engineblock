@@ -112,6 +112,13 @@ services:
             - "@engineblock.repository.service_provider"
             - "@engineblock.repository.identity_provider"
 
+    engineblock.twig.extension.feedback:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Feedback
+        arguments:
+            - "@engineblock.compat.application"
+        tags:
+             - { name: 'twig.extension' }
+
     engineblock.twig.extension.i18n:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n
         arguments:

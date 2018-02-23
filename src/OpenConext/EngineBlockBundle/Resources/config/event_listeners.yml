@@ -49,7 +49,7 @@ services:
         class: OpenConext\EngineBlockBundle\EventListener\FallbackExceptionListener
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
             - "@engineblock.compat.logger"
             - "@engineblock.bridge.error_reporter"
         tags:

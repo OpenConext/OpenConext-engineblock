@@ -18,46 +18,91 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use OpenConext\EngineBlockBundle\Exception\RuntimeException;
+use EngineBlock_ApplicationSingleton;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFunction;
 use Twig_Extension;
 
-/**
- * The Locale extension can be used to retrieve the currently active locale. By default returns the locale that
- * can be found in the RequestStack. If none can be found in the request stack, the default locale is returned.
- */
-class Locale extends Twig_Extension
+class Feedback extends Twig_Extension
 {
     /**
-     * @var string
+     * @var EngineBlock_ApplicationSingleton
      */
-    private $locale;
+    private $application;
 
-    public function __construct(RequestStack $requestStack, $defaultLocale)
+    public function __construct(EngineBlock_ApplicationSingleton $application)
     {
-        $this->locale = $this->retrieveLocale($requestStack, $defaultLocale);
+        $this->application = $application;
     }
 
     public function getFunctions()
     {
         return [
-            new TwigFunction('locale', [$this, 'getLocale'], ['is_safe' => ['html']])
+            new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo'], ['is_safe' => ['html']]),
+            new TwigFunction('flushLog', [$this, 'flushLog'], ['is_safe' => ['html']]),
+            new TwigFunction('var_export', [$this, 'varExport'], ['is_safe' => ['html']]),
+            new TwigFunction('var_dump', [$this, 'varDump'], ['is_safe' => ['html']]),
         ];
     }
 
-    public function getLocale()
+    public function flushLog($message)
     {
-        return $this->locale;
+        // For now use the EngineBlock_ApplicationSingleton to flush the log
+        $this->application->flushLog($message);
     }
 
-    private function retrieveLocale(RequestStack $requestStack, $defaultLocale)
+    public function getFeedbackInfo()
     {
-        $currentRequest = $requestStack->getCurrentRequest();
-        $locale = $defaultLocale;
-        if ($currentRequest) {
-            $locale = $currentRequest->getLocale();
+        return $this->retrieveFeedbackInfo();
+    }
+
+    /**
+     * Provides var dump functionality for use in Twig templates
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseParameterName)
+     *
+     * @param mixed $expression
+     * @param mixed $_
+     * @return string
+     */
+    public function varDump($expression, $_ = null)
+    {
+        ob_start();
+        var_dump(func_get_args());
+        return ob_get_flush();
+    }
+
+    /**
+     * Provide var export functionality for use in Twig templates
+     * @param mixed $expression
+     * @return string
+     */
+    public function varExport($expression)
+    {
+        return var_export($expression, true);
+    }
+
+    /**
+     * Loads the feedbackInfo from the session and filters out empty valued entries.
+     *
+     * @SuppressWarnings(PHPMD.Superglobals) In this case the SESSION super global is used to read error feedback. This
+     *                                       feedback is not yet stored in a Symfony managed session but uses the
+     *                                       super global.
+     *
+     * @return array|mixed
+     */
+    private function retrieveFeedbackInfo()
+    {
+        $feedbackInfo = $_SESSION['feedbackInfo'];
+
+        // Remove the empty valued feedback info entries.
+        if (!empty($feedbackInfo)) {
+            foreach ($feedbackInfo as $key => $value) {
+                if (empty($value)) {
+                    unset($feedbackInfo[$key]);
+                }
+            }
         }
-        return $locale;
+        return $feedbackInfo;
     }
 }
