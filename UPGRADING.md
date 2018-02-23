@@ -43,6 +43,8 @@ configuration files and will be ignored otherwise.
     error.module
     error.controller
     error.action
+    symfony.logPath
+    symfony.cachePath
 
 ## 5.x -> 5.2
 
