@@ -10,7 +10,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\IdentityProviderController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
             - "@engineblock.compat.logger"
             - "@engineblock.service.request_access_mailer"
             - "@session"
