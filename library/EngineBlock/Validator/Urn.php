@@ -1,7 +1,8 @@
 <?php
 /**
- * Alternative for Zend_Urn::check() which does not correctly validate Urn's following the spec:
- * http://www.rfc-editor.org/errata_search.php?rfc=3986
+ * Validate URNs according to RFC-3986.
+ *
+ * See: http://www.rfc-editor.org/errata_search.php?rfc=3986
  *
  * Note that this is a VERY permissive regex
  */
