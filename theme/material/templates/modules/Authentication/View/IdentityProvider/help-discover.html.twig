@@ -1,0 +1,54 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'help_header'|trans %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block page_heading %}{{ pageTitle }}{% endblock %}
+
+{% block content %}
+
+<div class="box">
+  <div class="mod-content">
+    <h1>{{ 'help_header'|trans }}</h1>
+    <p>{{ 'help_description'|trans|raw }}</p>
+    <div class="results">
+      <ul id="faq" class="faq">
+          <li class="open">
+              <h3>{{ 'question_screen'|trans }}</h3>
+              {{ 'answer_screen'|trans|raw }}
+          </li>
+          <li>
+              <h3>{{ 'question_surfconext'|trans }}</h3>
+              {{ 'answer_surfconext'|trans|raw }}
+          </li>
+          <li>
+              <h3>{{ 'question_log_in'|trans }}</h3>
+              {{ 'answer_log_in'|trans|raw }}
+          </li>
+          <li>
+              <h3>{{ 'question_security'|trans }}</h3>
+              {{ 'answer_security'|trans|raw }}
+          </li>
+          <li>
+              <h3>{{ 'question_institution_not_listed'|trans }}</h3>
+              {{ 'answer_institution_not_listed'|trans|raw }}
+          </li>
+          <li>
+              <h3>{{ 'question_institution_no_access'|trans }}</h3>
+              {{ 'answer_institution_no_access'|trans|raw }}
+          </li>
+          <li>
+              <h3>{{ 'question_asked_institution_access'|trans }}</h3>
+              {{ 'answer_asked_institution_access'|trans|raw }}
+          </li>
+          <li>
+              <h3>{{ 'question_cannot_select'|trans }}</h3>
+              {{ 'answer_cannot_select'|trans|raw }}
+          </li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

@@ -4,10 +4,10 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
-use EngineBlock_View;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Twig_Environment;
 
 class WayfController
 {
@@ -16,20 +16,20 @@ class WayfController
      */
     private $engineBlockApplicationSingleton;
     /**
-     * @var EngineBlock_View
+     * @var Twig_Environment
      */
-    private $engineBlockView;
+    private $twig;
 
     /**
      * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
-     * @param EngineBlock_View                 $engineBlockView
+     * @param Twig_Environment $twig
      */
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView
+        Twig_Environment $twig
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView = $engineBlockView;
+        $this->twig = $twig;
     }
 
     /**
@@ -49,7 +49,7 @@ class WayfController
      */
     public function helpDiscoverAction()
     {
-        return new Response($this->engineBlockView->render('Authentication/View/IdentityProvider/HelpDiscover.phtml'));
+        return new Response($this->twig->render('@theme/Authentication/View/IdentityProvider/help-discover.html.twig'));
     }
 
     /**
@@ -78,21 +78,25 @@ class WayfController
                 session_destroy();
                 $removal = true;
                 $all = true;
-            } else if (!empty($postData)) {
-                foreach ($cookies as $cookie) {
-                    if (array_key_exists('remove_' . $cookie, $postData)) {
-                        unset($cookiesSet[$cookie]);
-                        $response->headers->clearCookie($cookie);
-                        $removal = true;
-                        break;
+            } else {
+                if (!empty($postData)) {
+                    foreach ($cookies as $cookie) {
+                        if (array_key_exists('remove_'.$cookie, $postData)) {
+                            unset($cookiesSet[$cookie]);
+                            $response->headers->clearCookie($cookie);
+                            $removal = true;
+                            break;
+                        }
                     }
                 }
             }
             $viewData = ['removal' => $removal, 'all' => $all, 'cookiesSet' => $cookiesSet];
+
             return $response->setContent(
-                $this->engineBlockView->setData($viewData)->render('Authentication/View/IdentityProvider/RemoveCookies.phtml')
+                $this->twig->setData($viewData)->render('Authentication/View/IdentityProvider/RemoveCookies.phtml')
             );
         }
-        return new Response($this->engineBlockView->render('Default/View/Error/NotFound.phtml'), 404);
+
+        return new Response($this->twig->render('Default/View/Error/NotFound.phtml'), 404);
     }
 }

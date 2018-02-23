@@ -49,7 +49,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\WayfController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
 
     engineblock.controller.authentication.proxy:
         class: OpenConext\EngineBlockBundle\Controller\ProxyController
