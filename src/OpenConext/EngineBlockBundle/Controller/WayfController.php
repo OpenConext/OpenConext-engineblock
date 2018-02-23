@@ -104,6 +104,6 @@ class WayfController
             );
         }
 
-        return new Response($this->twig->render('Default/View/Error/NotFound.phtml'), 404);
+        return new Response($this->twig->render('@theme/Default/View/Error/not-found.html.twig'), 404);
     }
 }
