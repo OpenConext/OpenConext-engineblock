@@ -103,7 +103,7 @@ class EngineBlock_Attributes_Normalizer
         foreach ($this->_attributes as $attributeName => $attributeValues) {
             $newAttributes[$attributeName] = $attributeValues;
 
-            // Not defined in SURFconext attributes... can't find any aliases.
+            // Not defined in EngineBlock attribute definitions... can't find any aliases.
             if (!isset($this->_definitions[$attributeName])) {
                 $this->_logger->debug(
                     "Attribute Denormalization: Don't have a definition for '$attributeName', unable to add any aliases"
