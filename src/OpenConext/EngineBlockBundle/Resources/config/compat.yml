@@ -3,10 +3,6 @@ services:
         class: EngineBlock_ApplicationSingleton
         factory:  [EngineBlock_ApplicationSingleton, getInstance]
 
-    engineblock.compat.config:
-        class: Zend_Config
-        factory: ["@engineblock.compat.application", getConfiguration]
-
     engineblock.compat.di_container:
         public: false
         class: EngineBlock_Application_DiContainer
@@ -35,12 +31,12 @@ services:
     engineblock.compat.layout:
         class: Zend_Layout
         calls:
-            - ['setLayout',       ["@=service('engineblock.bridge.config').get('defaults.layout')"]]
+            - ['setLayout',       ["%view_default_layout%"]]
             - ['setLayoutPath',   ["%kernel.root_dir%/Resources/views/layouts/scripts/"]]
             - ['setViewBasePath', ["%kernel.root_dir%/Resources/views/modules/"]]
         properties:
-            title: "@=service('engineblock.bridge.config').get('defaults.title')"
-            header: "@=service('engineblock.bridge.config').get('defaults.header')"
+            title: "%view_default_title%"
+            header: "%view_default_header%"
             assetVersion: "%asset_version%"
 
     engineblock.compat.logger:
@@ -65,9 +61,6 @@ services:
             - "@engineblock.compat.corto_filter_command_factory"
             - "@engineblock.compat.database_connection_factory"
 
-    engineblock.compat.zend.apc_cache:
-        class: Zend_Cache_Backend_Apc
-
     engineblock.compat.time_provider:
         class: EngineBlock_TimeProvider_Default
 
@@ -77,3 +70,17 @@ services:
     engineblock.compat.attribute_release_policy_enforcer:
         public: false
         class: EngineBlock_Arp_AttributeReleasePolicyEnforcer
+
+    engineblock.compat.translator_cache_proxy:
+        class: EngineBlock_Translate_CacheProxy
+        arguments:
+            -
+                en: "%kernel.root_dir%/../languages/en.php"
+                nl: "%kernel.root_dir%/../languages/nl.php"
+            - "@?engineblock.compat.zend.apc_cache"
+
+    engineblock.compat.translator:
+        class: Zend_Translate
+        factory: ["@engineblock.compat.translator_cache_proxy", "load"]
+        calls:
+            - ["setLocale", ["@=service('engineblock.locale_provider').getLocale()"]]

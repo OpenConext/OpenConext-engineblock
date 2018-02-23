@@ -8,13 +8,13 @@ services:
         public: false
         class: Monolog\Formatter\LineFormatter
         arguments:
-            - "@=service('engineblock.bridge.config').get('logger.conf.handler.syslog.conf.formatter.conf.format')"
+            - "%logger.line_format%"
 
     engineblock.logger.manual_or_error_activation_strategy:
         class: OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy
         factory: [OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrErrorLevelActivationStrategyFactory, createActivationStrategy]
         arguments:
-            - { action_level: "@=service('engineblock.bridge.config').get('logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level')" }
+            - { action_level: "%logger.fingers_crossed.action_level%" }
 
     engineblock.logger.processor.request_id_processor:
         class: OpenConext\EngineBlock\Logger\Processor\RequestIdProcessor

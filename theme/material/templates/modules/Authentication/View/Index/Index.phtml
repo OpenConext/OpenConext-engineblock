@@ -10,11 +10,10 @@ $layout->header = $layout->title;
 $layout->subheader = 'IdP Certificate and Metadata';
 $layout->displayLanguageSwitcher = false;
 
-/** @var Zend_Config $keyPairs */
-$keyPairs = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->encryption->keys;
+$keyPairs = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getEncryptionKeysConfiguration();
 $keyPairIds = array();
 if ($keyPairs) {
-    $keyPairIds = array_keys($keyPairs->toArray());
+    $keyPairIds = array_keys($keyPairs);
 }
 ?>
 <div id="engine-main-page" class="box">

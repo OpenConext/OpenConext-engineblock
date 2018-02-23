@@ -80,8 +80,10 @@ class EngineBlock_Corto_Mapper_Metadata_EdugainDocument
 
     protected function _getTermsOfUse()
     {
+        $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+
         return $this->_eduGain ?
-            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->edugain->termsOfUse :
-            EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->openconext->termsOfUse ;
+            $settings->getEdugainMetadataConfiguration()['termsOfUse'] :
+            $settings->getOpenConextTermsOfUseUrl();
     }
 }

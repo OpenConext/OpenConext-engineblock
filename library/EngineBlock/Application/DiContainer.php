@@ -25,6 +25,30 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return bool
+     */
+    public function isDebug()
+    {
+        return (bool) $this->container->getParameter('debug');
+    }
+
+    /**
+     * @return string
+     */
+    public function getHostname()
+    {
+        return (string) $this->container->getParameter('hostname');
+    }
+
+    /**
+     * @return array
+     */
+    public function getPhpSettings()
+    {
+        return (array) $this->container->getParameter('php_settings');
+    }
+
+    /**
      * @return \OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
      */
     public function getAuthenticationLogger()
@@ -82,8 +106,7 @@ class EngineBlock_Application_DiContainer extends Pimple
      */
     public function getApplicationCache()
     {
-        $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
-        if ($isApcEnabled) {
+        if ($this->container->has('engineblock.compat.zend.apc_cache')) {
             return $this->container->get('engineblock.compat.zend.apc_cache');
         }
 
@@ -178,11 +201,7 @@ class EngineBlock_Application_DiContainer extends Pimple
     private function registerDenormalizedAttributeDefinitions()
     {
         $this[self::ATTRIBUTE_DEFINITIONS_DENORMALIZED] = function() {
-            $application = EngineBlock_ApplicationSingleton::getInstance();
-            $definitionFile = $application->getConfigurationValue(
-                'attributeDefinitionFile',
-                ENGINEBLOCK_FOLDER_APPLICATION . 'configs/attributes-v2.2.0.json'
-            );
+            $definitionFile = $this->getAttributeDefinitionFilePath();
             $definitionFileContent = file_get_contents($definitionFile);
             $definitions = json_decode($definitionFileContent, true);
 
@@ -290,5 +309,129 @@ class EngineBlock_Application_DiContainer extends Pimple
     public function getLocaleProvider()
     {
         return $this->container->get('engineblock.locale_provider');
+    }
+
+    /**
+     * @return \Zend_Translate
+     */
+    public function getTranslator()
+    {
+        return $this->container->get('engineblock.compat.translator');
+    }
+
+    /**
+     * @return array
+     */
+    public function getEncryptionKeysConfiguration()
+    {
+        return $this->container->getParameter('encryption_keys');
+    }
+
+    /**
+     * @return array
+     */
+    public function getTrustedProxiesIpAddresses()
+    {
+        return (array) $this->container->getParameter('trusted_proxies');
+    }
+
+    /**
+     * @return array
+     */
+    public function getForbiddenSignatureMethods()
+    {
+        return (array) $this->container->getParameter('forbidden_signature_methods');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUiOptionReturnToSpActive()
+    {
+        return (bool) $this->container->getParameter('ui_return_to_sp_link');
+    }
+
+    /**
+     * @return array
+     */
+    public function getViewConfiguration()
+    {
+        return (array) [
+            'layout' => $this->container->getParameter('view_default_layout'),
+            'title' => $this->container->getParameter('view_default_title'),
+            'header' => $this->container->getParameter('view_default_header'),
+        ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConsentStoreValuesActive()
+    {
+        return (bool) $this->container->getParameter('consent_store_values');
+    }
+
+    /**
+     * @return array
+     */
+    public function getEdugainMetadataConfiguration()
+    {
+        return (array) $this->container->getParameter('edugain');
+    }
+
+    /**
+     * @return string
+     */
+    public function getGuestStatusQualifier()
+    {
+        return (string) $this->container->getParameter('addgueststatus_guestqualifier');
+    }
+
+    /**
+     * @return string
+     */
+    public function getOpenConextTermsOfUseUrl()
+    {
+        return (string) $this->container->getParameter('openconext_terms_of_use');
+    }
+
+    /**
+     * @return string
+     */
+    public function getCookiePath()
+    {
+        return (string) $this->container->getParameter('cookie.path');
+    }
+
+    /**
+     * @return bool
+     */
+    public function getCookieUseSecure()
+    {
+        return (bool) $this->container->getParameter('cookie.secure');
+    }
+
+    /**
+     * @return array
+     */
+    public function getEmailIdpDebuggingConfiguration()
+    {
+        return (array) $this->container->getParameter('email_idp_debugging');
+    }
+
+    /**
+     * @return string
+     */
+    public function getProfileBaseUrl()
+    {
+        return (string) $this->container->getParameter('profile_base_url');
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttributeDefinitionFilePath()
+    {
+        return (string) $this->container->getParameter('attribute_definition_file_path');
     }
 }

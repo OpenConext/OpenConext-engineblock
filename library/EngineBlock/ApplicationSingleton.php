@@ -46,11 +46,6 @@ class EngineBlock_ApplicationSingleton
     protected $_httpResponse;
 
     /**
-     * @var Zend_Config
-     */
-    protected $_configuration = null;
-
-    /**
      * @var Psr\Log\LoggerInterface
      */
     protected $_log;
@@ -133,7 +128,7 @@ class EngineBlock_ApplicationSingleton
         if ($this->_activationStrategy) {
             $this->_activationStrategy->activate();
             $logger->notice($reason);
-        } elseif ($this->getConfiguration()->debug) {
+        } elseif ($this->getDiContainer()->isDebug()) {
             $logger->notice(sprintf("No log buffer to flush. Reason given for flushing: '%s'.", $reason));
         } else {
             $logger->warning(sprintf("Unable to flush the log buffer. Reason given for flushing: '%s'.", $reason));
@@ -165,14 +160,6 @@ class EngineBlock_ApplicationSingleton
                 // phpunit tests run in CLI, so if the environment is test and
                 // we're on CLI: use the test container.
                 $this->_diContainer = new EngineBlock_Application_TestDiContainer($container);
-
-                $config = new Zend_Config_Ini(
-                    ENGINEBLOCK_FOLDER_APPLICATION . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
-                    'base',
-                    array('allowModifications' => true)
-                );
-                $config->testing = true;
-                $this->setConfiguration($config);
             } else {
                 // Non-cli requests in the test environment must be behat!
                 $this->_diContainer = new EngineBlock_Application_FunctionalTestDiContainer($container);
@@ -288,17 +275,7 @@ class EngineBlock_ApplicationSingleton
      */
     public function getClientIpAddress()
     {
-        $trustedProxyIpAddresses = $this->getConfiguration()->get('trustedProxyIps');
-
-        if ($trustedProxyIpAddresses instanceof Zend_Config) {
-            $trustedProxyIpAddresses = $trustedProxyIpAddresses->toArray();
-        }
-        if (!$trustedProxyIpAddresses) {
-            $trustedProxyIpAddresses = array();
-        }
-        if (!is_array($trustedProxyIpAddresses)) {
-            throw new EngineBlock_Exception('Trusted IP addresses is not an array: ' . print_r($trustedProxyIpAddresses, true));
-        }
+        $trustedProxyIpAddresses = $this->getDiContainer()->getTrustedProxiesIpAddresses();
 
         $hasForwardedFor = isset($_SERVER['HTTP_X_FORWARDED_FOR']);
         $hasClientIp     = isset($_SERVER['HTTP_CLIENT_IP']);
@@ -342,7 +319,7 @@ class EngineBlock_ApplicationSingleton
      */
     public function getHostname()
     {
-        $configHostname = $this->getConfiguration()->get('hostname');
+        $configHostname = $this->getDiContainer()->getHostname();
 
         if (is_string($configHostname) && !empty($configHostname)) {
             return $configHostname;
@@ -409,38 +386,6 @@ class EngineBlock_ApplicationSingleton
     public function setTranslator(Zend_Translate $translator)
     {
         $this->_translator = $translator;
-        return $this;
-    }
-
-    /**
-     * @return Zend_Config
-     */
-    public function getConfiguration()
-    {
-        return $this->_configuration;
-    }
-
-    /**
-     * @param $key
-     * @param mixed|null $default
-     * @return mixed|null
-     */
-    public function getConfigurationValue($key, $default = null)
-    {
-        if (isset($this->_configuration->$key)) {
-            return $this->_configuration->$key;
-        }
-
-        return $default;
-    }
-
-    /**
-     * @param Zend_Config $applicationConfiguration
-     * @return EngineBlock_ApplicationSingleton
-     */
-    public function setConfiguration(Zend_Config $applicationConfiguration)
-    {
-        $this->_configuration = $applicationConfiguration;
         return $this;
     }
 

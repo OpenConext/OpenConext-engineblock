@@ -5,7 +5,10 @@ class EngineBlock_Corto_Mapper_Metadata_Entity_MdRpi_PublicationInfo
 
     public function mapTo(array $rootElement)
     {
-        $publication = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration()->edugain->publication;
+        $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
+            ->getEdugainMetadataConfiguration();
+
+        $publication = $settings['publication'];
 
         if (!isset($rootElement['md:Extensions'])) {
             $rootElement['md:Extensions'] = array(

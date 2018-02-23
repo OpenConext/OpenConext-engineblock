@@ -23,10 +23,28 @@ If those options are not removed from the configuration, they will be ignored.
 
 https://www.pivotaltracker.com/story/show/154839908
 
-### Removal of simplesamlphp configuration
+### Removal of legacy INI settings
 
-All INI setting under "auth.simplesamlphp." and "engine.simplesamlphp." can be safely removed from INI configuration. If
-the options are not removed, they will be ignored. The options are have no effect in any EB5.x release.
+The following INI settings are inherited from EB4.x and were never used in EB5.x. They can be safely removed from
+configuration files and will be ignored otherwise.
+
+    auth.simplesamlphp.*
+    engine.simplesamlphp.*
+    defaults.subheader
+    logger.factory
+    logger.conf.handlers
+    logger.conf.handler.syslog.factory
+    logger.conf.handler.syslog.conf.formatter.factory
+    logger.conf.handler.fingers_crossed.factory
+    logger.conf.handler.fingers_crossed.conf.handler
+    logger.conf.handler.fingers_crossed.conf.activation_strategy.factory
+    logger.conf.processor.request_id.factory
+    logger.conf.processor.session_id.factory
+    error.module
+    error.controller
+    error.action
+    symfony.logPath
+    symfony.cachePath
 
 ## 5.x -> 5.2
 

@@ -7,6 +7,9 @@ use OpenConext\EngineBlock\Assert\Assertion;
 
 final class EngineBlockIniFileLoader
 {
+    const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
+    const CONFIG_FILE_ENVIRONMENT   = '/etc/openconext/engineblock.ini';
+
     /**
      * @param string[] $files
      * @return array

@@ -107,8 +107,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
 
         // Profile url is configurable in application.ini (profile.baseUrl)
         $profileUrl = '#';
-        if (EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('profile', null)) {
-            $profileUrl = EngineBlock_ApplicationSingleton::getInstance()->getConfigurationValue('profile')->baseUrl;
+        $configuredUrl = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getProfileBaseUrl();
+        if (!empty($configuredUrl)) {
+            $profileUrl = $configuredUrl;
         }
 
         $html = $this->_server->renderTemplate(

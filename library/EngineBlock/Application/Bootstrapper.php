@@ -4,8 +4,6 @@ use SAML2\Compat\ContainerSingleton;
 
 class EngineBlock_Application_Bootstrapper
 {
-    const CONFIG_FILE_DEFAULT       = 'configs/application.ini';
-    const CONFIG_FILE_ENVIRONMENT   = '/etc/openconext/engineblock.ini';
     const P3P_HEADER = 'CP="IDC DSP COR ADM DEVi TAIi PSA PSD IVAi IVDi CONi HIS OUR IND CNT"';
 
     /**
@@ -39,7 +37,6 @@ class EngineBlock_Application_Bootstrapper
             return $this;
         }
 
-        $this->_bootstrapConfiguration();
         $this->_bootstrapSessionConfiguration();
 
         $this->_bootstrapPhpSettings();
@@ -56,26 +53,15 @@ class EngineBlock_Application_Bootstrapper
         return $this;
     }
 
-    protected function _bootstrapConfiguration()
-    {
-        if ($this->_application->getConfiguration()) {
-            return;
-        }
-
-        $configProxy = new EngineBlock_Config_CacheProxy(
-            $this->_getAllConfigFiles(),
-            $this->_application->getDiContainer()->getApplicationCache()
-        );
-        $this->_application->setConfiguration($configProxy->load());
-    }
-
     protected function _bootstrapSessionConfiguration()
     {
+        $settings = $this->_application->getDiContainer();
+
         session_set_cookie_params(
             0,
-            $this->_application->getConfigurationValue('cookie_path', '/'),
+            $settings->getCookiePath(),
             '',
-            $this->_application->getConfigurationValue('use_secure_cookies', true),
+            $settings->getCookieUseSecure(),
             true
         );
         session_name('main');
@@ -120,21 +106,9 @@ class EngineBlock_Application_Bootstrapper
 
     protected function _bootstrapPhpSettings()
     {
-        $settings = $this->_application->getConfiguration()->phpSettings;
-        if (!is_null($settings)) {
-            $this->_setIniSettings($settings->toArray());
-        }
-    }
-
-    protected function _setIniSettings($settings, $prefix = '')
-    {
-        foreach ($settings as $settingName => $settingValue) {
-            if (is_array($settingValue)) {
-                $this->_setIniSettings((array)$settingValue, $prefix . $settingName . '.');
-            }
-            else {
-                ini_set($prefix . $settingName, $settingValue);
-            }
+        $settings = $this->_application->getDiContainer()->getPhpSettings();
+        foreach ($settings as $name => $value) {
+            ini_set($name, $value);
         }
     }
 
@@ -156,32 +130,20 @@ class EngineBlock_Application_Bootstrapper
         $layout->setLayoutPath(ENGINEBLOCK_FOLDER_APPLICATION . 'layouts/scripts/');
 
         // Defaults
-        $defaultsConfig = $this->_application->getConfiguration()->defaults;
-        $layout->title  = $defaultsConfig->title;
-        $layout->header = $defaultsConfig->header;
+        $defaultsConfig = $this->_application->getDiContainer()->getViewConfiguration();
+        $layout->title  = $defaultsConfig['title'];
+        $layout->header = $defaultsConfig['header'];
 
         // choose a different layout script:
-        $layout->setLayout($defaultsConfig->layout);
+        $layout->setLayout($defaultsConfig['layout']);
 
         $this->_application->setLayout($layout);
     }
 
     protected function _bootstrapTranslations()
     {
-        $translationFiles = array(
-            'en' => ENGINEBLOCK_FOLDER_ROOT . 'languages/en.php',
-            'nl' => ENGINEBLOCK_FOLDER_ROOT . 'languages/nl.php'
+        $this->_application->setTranslator(
+            $this->_application->getDiContainer()->getTranslator()
         );
-        $translationCacheProxy = new EngineBlock_Translate_CacheProxy(
-            $translationFiles,
-            $this->_application->getDiContainer()->getApplicationCache()
-        );
-
-        $locale = $this->_application->getDiContainer()->getLocaleProvider()->getLocale();
-
-        $translator = $translationCacheProxy->load();
-        $translator->setLocale($locale);
-
-        $this->_application->setTranslator($translator);
     }
 }

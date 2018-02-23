@@ -86,7 +86,8 @@ class EngineBlock_Corto_Filter_Command_AddGuestStatus extends EngineBlock_Corto_
             $this->_responseAttributes[static::URN_IS_MEMBER_OF] = array();
         }
 
-        $configuration = EngineBlock_ApplicationSingleton::getInstance()->getConfiguration();
-        $this->_responseAttributes[static::URN_IS_MEMBER_OF][] =  $configuration->addgueststatus->guestqualifier;
+        $qualifier = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
+            ->getGuestStatusQualifier();
+        $this->_responseAttributes[static::URN_IS_MEMBER_OF][] = $qualifier;
     }
 }

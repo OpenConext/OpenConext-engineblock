@@ -2,9 +2,7 @@
 
 namespace OpenConext\EngineBlockBundle\DependencyInjection;
 
-use EngineBlock_Application_Bootstrapper;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
-use OpenConext\EngineBlockBridge\Configuration\EngineBlockIniFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Definition;
@@ -28,29 +26,14 @@ class OpenConextEngineBlockExtension extends Extension
         $loader->load('bridge_event_listeners.yml');
         $loader->load('compat.yml');
 
-        $this->parseIniConfigurationFiles($container);
+        $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
+        if ($isApcEnabled) {
+            $loader->load('compat_apc.yml');
+        }
+
         $this->overwriteDefaultLogger($container);
         $this->setUrlParameterBasedOnEnv($container);
         $this->setFeatureConfiguration($container, $configuration['features']);
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     */
-    private function parseIniConfigurationFiles(ContainerBuilder $container)
-    {
-        $engineBlockLoader = new EngineBlockIniFileLoader;
-        $engineBlockConfig = $engineBlockLoader->load(
-            [
-                $container->getParameter('kernel.root_dir') .
-                '/../application/' . EngineBlock_Application_Bootstrapper::CONFIG_FILE_DEFAULT,
-                EngineBlock_Application_Bootstrapper::CONFIG_FILE_ENVIRONMENT,
-            ]
-        );
-
-        $container
-            ->getDefinition('engineblock.bridge.config')
-            ->replaceArgument(0, $engineBlockConfig);
     }
 
     /**
