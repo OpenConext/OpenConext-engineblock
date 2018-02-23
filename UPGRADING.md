@@ -45,7 +45,6 @@ configuration files and will be ignored otherwise.
     error.action
     symfony.logPath
     symfony.cachePath
-    subjectIdAttribute
 
 ## 5.x -> 5.2
 
