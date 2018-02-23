@@ -77,9 +77,8 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
                 break;
 
             case 'EmailAddress':
-                $emailValidator = new Zend_Validate_EmailAddress();
                 foreach ($attributeValues as $attributeValue) {
-                    if (!$emailValidator->isValid($attributeValue)) {
+                    if (filter_var($attributeValue, FILTER_VALIDATE_EMAIL) === false) {
                         $this->_messages[] = array(
                             self::ERROR_ATTRIBUTE_VALIDATOR_EMAIL,
                             $this->_attributeName,
