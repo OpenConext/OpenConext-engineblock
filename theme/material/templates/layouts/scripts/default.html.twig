@@ -110,6 +110,10 @@
     </nav>
 </div>
 
+{% if beforeScriptHtml is defined %}
+    {{ beforeScriptHtml|raw }}
+{% endif %}
+
 <script src="/javascripts/application.min.js?v={{ assetsVersion }}" type="text/javascript"></script>
 
 </body>

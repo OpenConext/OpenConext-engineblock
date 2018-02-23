@@ -24,7 +24,7 @@ Feature:
     And I should not see "Unconnected IdP1"
     And I should not see "Unconnected IdP2"
 
-  Scenario: As a user for an SP I see only connected IdPs without request form
+  Scenario: As a user for an SP I see only unconnected IdPs without request form
     Given SP "SP" is configured to display unconnected IdPs in the WAYF
     When I log in at "SP"
     Then I should see "Connected IdP1"
