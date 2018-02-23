@@ -12,7 +12,7 @@ interface EngineBlock_Attributes_Provider_Interface
      * Retrieve all attributes that the Attributes Provider provides for the
      * given user.
      * @param String $uid The URN of a user, for example
-     *                    urn:collab:surfnet.nl:niels
+     *                    urn:collab:example.org:niels
      * @param String $format Format of the attributes to get.
      * @return Array An array containing attributes. The keys of the array are
      *               the names of the attributes. Each array element contains
