@@ -90,10 +90,17 @@ class WayfController
                     }
                 }
             }
-            $viewData = ['removal' => $removal, 'all' => $all, 'cookiesSet' => $cookiesSet];
 
             return $response->setContent(
-                $this->twig->setData($viewData)->render('Authentication/View/IdentityProvider/RemoveCookies.phtml')
+                $this->twig->render(
+                    '@theme/Authentication/View/IdentityProvider/remove-cookies.html.twig',
+                    [
+                        'removal' => $removal,
+                        'all' => $all,
+                        'cookies' => ['main', 'rememberchoice', 'lang', 'selectedidps'],
+                        'cookiesSet' => $cookiesSet
+                    ]
+                )
             );
         }
 
