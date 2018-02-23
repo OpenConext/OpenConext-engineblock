@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
-use EngineBlock_View;
 use Exception;
 use OpenConext\EngineBlock\Service\RequestAccessMailer;
 use OpenConext\EngineBlockBridge\ResponseFactory;
@@ -201,7 +200,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         }
 
         return new Response(
-            $this->engineBlockView->render('Authentication/View/IdentityProvider/PerformRequestAccess.phtml')
+            $this->twig->render('@theme/Authentication/View/IdentityProvider/perform-request-access.html.twig')
         );
     }
 
