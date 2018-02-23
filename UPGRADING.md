@@ -32,6 +32,20 @@ the options are not removed, they will be ignored. The options are have no effec
 
 The INI setting "defaults.subheader" has no effect in EB5 and can be safely removed.
 
+### Removal of logging settings
+
+The following INI settings have no effect in EB5 and can be safely removed:
+
+    logger.factory
+    logger.conf.handlers
+    logger.conf.handler.syslog.factory
+    logger.conf.handler.syslog.conf.formatter.factory
+    logger.conf.handler.fingers_crossed.factory
+    logger.conf.handler.fingers_crossed.conf.handler
+    logger.conf.handler.fingers_crossed.conf.activation_strategy.factory
+    logger.conf.processor.request_id.factory
+    logger.conf.processor.session_id.factory
+
 ## 5.x -> 5.2
 
 ### Consent API

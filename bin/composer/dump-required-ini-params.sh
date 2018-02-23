@@ -86,6 +86,16 @@ function legacyPhpSettingsToYaml($legacySettings, &$flatSettings = [], $prefix =
     return $flatSettings;
 }
 
+/**
+ * Escape '%' signs in YAML values.
+ *
+ * Without escaping them, '%test%' will be interpreted as a DI parameter.
+ */
+function escapeYamlValue($value)
+{
+    return str_replace('%', '%%', $value);
+}
+
 $ymlContent = array(
     'parameters' => array(
         // Setting the debug mode to true will cause EngineBlock to display
@@ -118,31 +128,34 @@ $ymlContent = array(
         'php_settings'                                            => legacyPhpSettingsToYaml($config->get('phpSettings', [])->toArray()),
 
         'api.users.janus.username'                                => $config->get('engineApi.users.janus.username'),
-        'api.users.janus.password'                                => $config->get('engineApi.users.janus.password'),
+        'api.users.janus.password'                                => escapeYamlValue($config->get('engineApi.users.janus.password')),
         'api.users.profile.username'                              => $config->get('engineApi.users.profile.username'),
-        'api.users.profile.password'                              => $config->get('engineApi.users.profile.password'),
+        'api.users.profile.password'                              => escapeYamlValue($config->get('engineApi.users.profile.password')),
         'pdp.host'                                                => $config->get('pdp.host'),
         'pdp.policy_decision_point_path'                          => $config->get('pdp.policy_decision_point_path'),
         'pdp.username'                                            => $config->get('pdp.username'),
-        'pdp.password'                                            => $config->get('pdp.password'),
+        'pdp.password'                                            => escapeYamlValue($config->get('pdp.password')),
         'pdp.client_id'                                           => $config->get('pdp.client_id'),
         'attribute_aggregation.base_url'                          => $config->get('attributeAggregation.baseUrl'),
         'attribute_aggregation.username'                          => $config->get('attributeAggregation.username'),
-        'attribute_aggregation.password'                          => $config->get('attributeAggregation.password'),
+        'attribute_aggregation.password'                          => escapeYamlValue($config->get('attributeAggregation.password')),
+
+        // Logger settings.
         'logger.channel'                                          => $config->get('logger.conf.name'),
-        'logger.fingers_crossed.passthru_level'                   => $config->get(
-            'logger.conf.handler.fingers_crossed.conf.passthru_level'
-        ),
+        'logger.fingers_crossed.passthru_level'                   => $config->get('logger.conf.handler.fingers_crossed.conf.passthru_level'),
+        'logger.fingers_crossed.action_level'                     => $config->get('logger.conf.handler.fingers_crossed.conf.activation_strategy.conf.action_level'),
         'logger.syslog.ident'                                     => $config->get('logger.conf.handler.syslog.conf.ident'),
+        'logger.line_format'                                      => escapeYamlValue($config->get('logger.conf.handler.syslog.conf.formatter.conf.format')),
+
         'database.host'                                           => $config->get('database.host'),
         'database.port'                                           => $config->get('database.port'),
         'database.user'                                           => $config->get('database.user'),
-        'database.password'                                       => $config->get('database.password'),
+        'database.password'                                       => escapeYamlValue($config->get('database.password')),
         'database.dbname'                                         => $config->get('database.dbname'),
         'database.test.host'                                      => $config->get('database.test.host'),
         'database.test.port'                                      => $config->get('database.test.port'),
         'database.test.user'                                      => $config->get('database.test.user'),
-        'database.test.password'                                  => $config->get('database.test.password'),
+        'database.test.password'                                  => escapeYamlValue($config->get('database.test.password')),
         'database.test.dbname'                                    => $config->get('database.test.dbname'),
 
         // Generic cookie settings.
@@ -184,11 +197,7 @@ $ymlContent = array(
 
         // OpenConext terms-of-use URL.
         // Note the escaping of '%' to support URLs like '/Terms+of+Service+%28EN%29'.
-        'openconext_terms_of_use'                                 => str_replace(
-            '%',
-            '%%',
-            $config->get('openconext.termsOfUse')
-        ),
+        'openconext_terms_of_use'                                 => escapeYamlValue($config->get('openconext.termsOfUse')),
 
         // Email configuration
         'email_help_address'                                      => $config->get('email.help'),
