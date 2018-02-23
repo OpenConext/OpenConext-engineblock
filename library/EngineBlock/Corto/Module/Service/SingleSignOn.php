@@ -442,25 +442,24 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     protected function _sendDebugMail(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
-        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
-        $oldLayout = $layout->getLayout();
-        $layout->setLayout('empty');
-
-        $wasEnabled = $layout->isEnabled();
-        if ($wasEnabled) {
-            $layout->disableLayout();
-        }
-
         $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer());
 
         $attributes = $response->getAssertion()->getAttributes();
-        $output = $this->_server->renderTemplate(
-            'debugidpmail',
-            array(
-                'idp'       => $identityProvider,
-                'response'  => $response,
-                'attributes'=> $attributes,
-            )
+
+        $validationResult = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeValidator()
+            ->validate($attributes);
+
+        $output = $this->twig->render(
+            '@theme/Authentication/View/Proxy/debug-idp-mail.txt.twig',
+            [
+                'idp' => $identityProvider,
+                'response' => $response,
+                'attributes' => $attributes,
+                'validationResult' => $validationResult,
+                'nameId' => $response->getAssertion()->getNameId()
+            ]
         );
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -474,8 +473,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             ->setBody($output, 'text/plain');
 
         $diContainer->getMailer()->send($message);
-
-        $layout->setLayout($oldLayout);
     }
 
     private function getNameNl(

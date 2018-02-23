@@ -68,6 +68,11 @@ class Metadata extends Twig_Extension
                 [$this, 'getAttributeShortName'],
                 ['is_safe' => ['html']]
             ),
+            new TwigFunction(
+                'attributeName',
+                [$this, 'getAttributeName'],
+                ['is_safe' => ['html']]
+            ),
         ];
     }
 
@@ -120,12 +125,12 @@ class Metadata extends Twig_Extension
      * definition list is used. Otherwise, falls back on the attribute id that was passed in the first place.
      *
      * @param $attributeId
-     * @param string $ietfLanguageTag
+     * @param string $preferecLocale
      * @return mixed
      */
-    public function getAttributeShortName($attributeId, $ietfLanguageTag = 'en')
+    public function getAttributeShortName($attributeId, $preferecLocale = 'en')
     {
-        $attributeShortName = $this->attributeMetadata->getName($attributeId, $ietfLanguageTag);
+        $attributeShortName = $this->getAttributeName($attributeId, $preferecLocale);
         if (trim($attributeShortName) === '') {
             $attributeShortName = $attributeId;
         }
@@ -133,6 +138,15 @@ class Metadata extends Twig_Extension
         return $attributeShortName;
     }
 
+    /**
+     * @param $attributeId
+     * @param string $preferedLocale
+     * @return string
+     */
+    public function getAttributeName($attributeId, $preferedLocale = 'en')
+    {
+        return $this->attributeMetadata->getName($attributeId, $preferedLocale);
+    }
 
     private function groupAttributesBySource($attributes, array $attributeSources = array())
     {
