@@ -49,7 +49,7 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
 
             case 'URL':
                 foreach ($attributeValues as $attributeValue) {
-                    if (!Zend_Uri::check($attributeValue)) {
+                    if (filter_var($attributeValue, FILTER_VALIDATE_URL) === false) {
                         $this->_messages[] = array(
                             self::ERROR_ATTRIBUTE_VALIDATOR_URL,
                             $this->_attributeName,
