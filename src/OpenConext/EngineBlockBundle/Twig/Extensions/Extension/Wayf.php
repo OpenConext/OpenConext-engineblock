@@ -22,7 +22,7 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFunction;
 use Twig_Extension;
-use Zend_Translate_Adapter;
+use Zend_Translate;
 
 class Wayf extends Twig_Extension
 {
@@ -31,7 +31,7 @@ class Wayf extends Twig_Extension
 
 
     /**
-     * @var Zend_Translate_Adapter
+     * @var Zend_Translate
      */
     private $translator;
 
@@ -40,7 +40,7 @@ class Wayf extends Twig_Extension
      */
     private $previousSelection;
 
-    public function __construct(RequestStack $requestStack, Zend_Translate_Adapter $translator)
+    public function __construct(RequestStack $requestStack, Zend_Translate $translator)
     {
         $this->previousSelection = $this->loadPreviousSelectionFromCookie($requestStack);
         $this->translator = $translator;

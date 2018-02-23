@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use EngineBlock_Attributes_Metadata;
 use Twig\TwigFunction;
 use Twig_Extension;
-use Zend_Translate_Adapter;
+use Zend_Translate;
 
 /**
  * Used to perform certain view related operations on metadata. For example this extension provides a function that
@@ -35,11 +35,11 @@ class Metadata extends Twig_Extension
     private $attributeMetadata;
 
     /**
-     * @var Zend_Translate_Adapter
+     * @var Zend_Translate
      */
     private $translator;
 
-    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, Zend_Translate_Adapter $translator)
+    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, Zend_Translate $translator)
     {
         $this->attributeMetadata = $attributesMetadata;
         $this->translator = $translator;

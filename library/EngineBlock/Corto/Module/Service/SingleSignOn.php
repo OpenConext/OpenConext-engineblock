@@ -338,24 +338,31 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $action = $this->_server->getUrl('continueToIdP');
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();
+        $container = $application->getDiContainer();
 
+        $currentLocale = $container->getLocaleProvider()->getLocale();
+
+        $cookies = $container->getSymfonyRequest()->cookies->all();
         $serviceProvider = $this->findOriginalServiceProvider($request, $application->getLogInstance());
+        $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest(), $currentLocale);
+        $rememberChoiceFeature = $container->getRememberChoice();
 
-        $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest());
-        $rememberChoiceFeature = $application->getDiContainer()->getRememberChoice();
-
-        $output = $this->_server->renderTemplate(
-            'discover',
-            array(
-                'action'                              => $action,
-                'cutoffPointForShowingUnfilteredIdps' => $application->getDiContainer()->getCutoffPointForShowingUnfilteredIdps(),
-                'rememberChoiceFeature'               => $rememberChoiceFeature,
-                'ID'                                  => $request->getId(),
-                'idpList'                             => $idpList,
-                'metaDataSP'                          => $serviceProvider,
-                'cookies'                             => $cookies,
-            )
+        $output = $this->twig->render(
+            '@theme/Authentication/View/Proxy/wayf.html.twig',
+            [
+                'action' => $action,
+                'greenHeader' => $serviceProvider->getDisplayName(),
+                'helpLink' => '/authentication/idp/help-discover?lang=' . $currentLocale,
+                'backLink' => $container->isUiOptionReturnToSpActive(),
+                'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
+                'rememberChoiceFeature' => $rememberChoiceFeature,
+                'showRequestAccess' => $serviceProvider->displayUnconnectedIdpsWayf,
+                'requestId' => $request->getId(),
+                'serviceProvider' => $serviceProvider,
+                'idpList' => $idpList,
+                'cookies' => $cookies,
+                'beforeScriptHtml' => '<div id="request-access-scroller"><div id="request-access-container"><div id="request-access"></div></div></div>',
+            ]
         );
         $this->_server->sendOutput($output);
     }
@@ -391,7 +398,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $issuingServiceProvider;
     }
 
-    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest)
+    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest, $currentLocale)
     {
         $identityProviders = $this->_server->getRepository()->findIdentityProvidersByEntityId($idpEntityIds);
 
@@ -419,6 +426,13 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             );
             $wayfIdps[] = $wayfIdp;
         }
+
+        $nameSort = function ($a, $b) use ($currentLocale) {
+            return strtolower($a['Name_' . $currentLocale]) > strtolower($b['Name_' . $currentLocale]);
+        };
+
+        // Sort the IdP entries by name
+        usort($wayfIdps, $nameSort);
 
         return $wayfIdps;
     }
