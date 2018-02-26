@@ -204,7 +204,7 @@ $ymlContent = array(
 
         // Email configuration
         'email_help_address'                                      => $config->get('email.help'),
-        'email_idp_debugging'                                     => $config->get('email.idpDebugging'),
+        'email_idp_debugging'                                     => $config->get('email.idpDebugging')->toArray(),
 
         // Profile.
         'profile_base_url'                                        => $config->get('profile.baseUrl', ''),
