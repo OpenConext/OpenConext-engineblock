@@ -1,9 +1,7 @@
 {% extends '@theme/Default/View/Error/error.html.twig' %}
 
 {% set wide = true %}
-{% set pageTitle = 'error_unknown_issuer'|trans %}
+{% set pageTitle = 'error_received_invalid_signed_response'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 {% block page_heading %}{{ pageTitle }}{% endblock %}
-
-{% block errorMessage %}{{ 'error_unknown_issuer_desc'|trans|raw }}{% endblock %}

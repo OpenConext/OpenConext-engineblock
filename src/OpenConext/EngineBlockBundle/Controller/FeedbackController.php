@@ -2,13 +2,14 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
-use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_ProxyServer;
-use EngineBlock_View;
+use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig_Environment;
+use Zend_Translate;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Mimics the previous methodology, will be refactored
@@ -17,9 +18,9 @@ use Twig_Environment;
 class FeedbackController
 {
     /**
-     * @var EngineBlock_ApplicationSingleton
+     * @var Zend_Translate
      */
-    private $engineBlockApplicationSingleton;
+    private $translator;
 
     /**
      * @var Twig_Environment
@@ -32,11 +33,11 @@ class FeedbackController
     private $logger;
 
     public function __construct(
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
+        Zend_Translate $translator,
         Twig_Environment $twig,
         LoggerInterface $logger
     ) {
-        $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
+        $this->translator = $translator;
         $this->twig = $twig;
         $this->logger = $logger;
 
@@ -52,20 +53,8 @@ class FeedbackController
     public function unableToReceiveMessageAction()
     {
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/UnableToReceiveMessage.phtml'),
+            $this->twig->render('@theme/Authentication/View/Feedback/unable-to-receive-message.html.twig'),
             400
-        );
-    }
-
-    /**
-     * @return Response
-     * @throws \EngineBlock_Exception
-     */
-    public function voMembershipRequiredAction()
-    {
-        return new Response(
-            $this->twig->render('Authentication/View/Feedback/Vomembershiprequired.phtml'),
-            403
         );
     }
 
@@ -75,7 +64,7 @@ class FeedbackController
      */
     public function sessionLostAction()
     {
-        return new Response($this->twig->render('Authentication/View/Feedback/SessionLost.phtml'), 400);
+        return new Response($this->twig->render('@theme/Authentication/View/Feedback/session-lost.html.twig'), 400);
     }
 
     /**
@@ -89,18 +78,9 @@ class FeedbackController
         $customFeedbackInfo['EntityID'] = $request->get('entity-id');
         $customFeedbackInfo['Destination'] = $request->get('destination');
 
-        $session = $request->getSession();
-        if (!$session->has('feedbackInfo')){
-            $session->set('feedbackInfo', []);
-        }
-        $session->set('feedbackInfo', array_merge($customFeedbackInfo, $session->get('feedbackInfo')));
+        $this->setFeedbackInformationOnSession($customFeedbackInfo);
 
-        $body = $this->twig->render(
-            '@theme/Authentication/View/Feedback/unknown-issuer.html.twig',
-            [
-                'wide' => true,
-            ]
-        );
+        $body = $this->twig->render('@theme/Authentication/View/Feedback/unknown-issuer.html.twig');
 
         return new Response($body, 404);
     }
@@ -113,7 +93,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
 
-        return new Response($this->twig->render('Authentication/View/Feedback/NoIdps.phtml'));
+        return new Response($this->twig->render('@theme/Authentication/View/Feedback/no-idps.html.twig'));
     }
 
     /**
@@ -123,7 +103,7 @@ class FeedbackController
     public function invalidAcsLocationAction()
     {
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/InvalidAcsLocation.phtml'),
+            $this->twig->render('@theme/Authentication/View/Feedback/invalid-acs-location.html.twig'),
             400
         );
     }
@@ -137,10 +117,12 @@ class FeedbackController
     {
         return new Response(
             $this->twig
-                ->setData([
-                    'signature-method' => $request->get('signature-method')
-                ])
-                ->render('Authentication/View/Feedback/UnsupportedSignatureMethod.phtml'),
+                ->render(
+                    '@theme/Authentication/View/Feedback/unsupported-signature-method.html.twig',
+                    [
+                        'signatureMethod' => $request->get('signature-method')
+                    ]
+                ),
             400
         );
     }
@@ -152,11 +134,18 @@ class FeedbackController
      */
     public function unknownServiceProviderAction(Request $request)
     {
-        $viewData = ['entity-id' => $request->get('entity-id')];
+        $entityId = $request->get('entity-id');
 
-        $body = $this->twig
-            ->setData($viewData)
-            ->render('Authentication/View/Feedback/UnknownServiceProvider.phtml');
+        // Add feedback info from url
+        $customFeedbackInfo['EntityID'] = $entityId;
+        $this->setFeedbackInformationOnSession($customFeedbackInfo);
+
+        $body = $this->twig->render(
+            '@theme/Authentication/View/Feedback/unknown-service-provider.html.twig',
+            [
+                'entityId' => $entityId
+            ]
+        );
 
         return new Response($body, 400);
     }
@@ -168,18 +157,44 @@ class FeedbackController
     public function missingRequiredFieldsAction()
     {
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/MissingRequiredFields.phtml'),
+            $this->twig->render('@theme/Authentication/View/Feedback/missing-required-fields.html.twig'),
             400
         );
     }
 
     /**
+     * @SuppressWarnings(PHPMD.Superglobals) This is required to mimic the existing functionality
+     *
+     * @param Request $request
      * @return Response
-     * @throws \EngineBlock_Exception
      */
     public function customAction()
     {
-        return new Response($this->twig->render('Authentication/View/Feedback/Custom.phtml'));
+        $currentLocale = $this->translator->getLocale();
+
+        $title = $this->translator->translate('error_generic');
+        $description = $this->translator->translate('error_generic_desc');
+
+        if ($session->has('feedback_custom')) {
+            $feedbackCustom = $session->get('feedback_custom');
+            if (isset($feedbackCustom['title'][$currentLocale])) {
+                $title = $feedbackCustom['title'][$currentLocale];
+            }
+
+            if (isset($feedbackCustom['description'][$currentLocale])) {
+                $description = $feedbackCustom['description'][$currentLocale];
+            }
+        }
+
+        return new Response(
+            $this->twig->render(
+                '@theme/Authentication/View/Feedback/custom.html.twig',
+                [
+                    'title' => $title,
+                    'description' => $description,
+                ]
+            )
+        );
     }
 
     /**
@@ -189,7 +204,7 @@ class FeedbackController
     public function invalidAcsBindingAction()
     {
         // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
-        return new Response($this->twig->render('Authentication/View/Feedback/InvalidAcsBinding.phtml'));
+        return new Response($this->twig->render('@theme/Authentication/View/Feedback/invalid-acs-binding.html.twig'));
     }
 
     /**
@@ -200,7 +215,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/ReceivedErrorStatusCode.phtml')
+            $this->twig->render('@theme/Authentication/View/Feedback/received-error-status-code.html.twig')
         );
     }
 
@@ -212,7 +227,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/ReceivedInvalidSignedResponse.phtml')
+            $this->twig->render('@theme/Authentication/View/Feedback/received-invalid-signed-response.html.twig')
         );
     }
 
@@ -224,7 +239,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/ReceivedInvalidResponse.phtml')
+            $this->twig->render('@theme/Authentication/View/Feedback/received-invalid-response.html.twig')
         );
     }
 
@@ -234,7 +249,7 @@ class FeedbackController
      */
     public function noConsentAction()
     {
-        return new Response($this->twig->render('Authentication/View/Feedback/NoConsent.phtml'));
+        return new Response($this->twig->render('@theme/Authentication/View/Feedback/no-consent.html.twig'));
     }
 
     /**
@@ -244,31 +259,60 @@ class FeedbackController
     public function unknownServiceAction()
     {
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/UnknownService.phtml'),
+            $this->twig->render('@theme/Authentication/View/Feedback/unknown-service.html.twig'),
             400
         );
     }
 
     /**
+     * @SuppressWarnings(PHPMD.Superglobals) This is required to mimic the existing functionality
+     *
+     * @param Request $request
      * @return Response
-     * @throws \EngineBlock_Exception
      */
     public function authorizationPolicyViolationAction()
     {
+        $locale = $this->translator->getLocale();
+        $logo = null;
+        $policyDecisionMessage = null;
+
+        if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
+            /** @var PolicyDecision $policyDecision */
+            $policyDecision = $_SESSION['feedbackInfo']['error_authorization_policy_decision'];
+
+            if ($policyDecision->hasLocalizedDenyMessage()) {
+                $policyDecisionMessage = $policyDecision->getLocalizedDenyMessage($locale, 'en');
+            } elseif ($policyDecision->hasStatusMessage()) {
+                $policyDecisionMessage = $policyDecision->getStatusMessage();
+            }
+            $logo = $policyDecision->getIdpLogo();
+        }
+
+
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/AuthorizationPolicyViolation.phtml'),
+            $this->twig->render(
+                '@theme/Authentication/View/Feedback/authorization-policy-violation.html.twig',
+                [
+                    'logo' => $logo,
+                    'policyDecisionMessage' => $policyDecisionMessage,
+                ]
+            ),
             400
         );
     }
 
     /**
+     * @param Request $request
      * @return Response
-     * @throws \EngineBlock_Exception
      */
-    public function unknownPreselectedIdpAction()
+    public function unknownPreselectedIdpAction(Request $request)
     {
+        // Add feedback info from url
+        $customFeedbackInfo['Idp Hash'] = $request->get('idp-hash');
+        $this->setFeedbackInformationOnSession($customFeedbackInfo);
+
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/UnknownPreselectedIdp.phtml'),
+            $this->twig->render('@theme/Authentication/View/Feedback/unknown-preselected-idp.html.twig'),
             400
         );
     }
@@ -279,8 +323,21 @@ class FeedbackController
     public function stuckInAuthenticationLoopAction()
     {
         return new Response(
-            $this->twig->render('Authentication/View/Feedback/StuckInAuthenticationLoop.phtml'),
+            $this->twig->render('@theme/Authentication/View/Feedback/stuck-in-authentication-loop.html.twig'),
             400
         );
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals) This is required to mimic the existing functionality
+     *
+     * @param array $customFeedbackInfo
+     */
+    private function setFeedbackInformationOnSession(array $customFeedbackInfo)
+    {
+        if (!isset($_SESSION['feedbackInfo'])) {
+            $_SESSION['feedbackInfo'] = [];
+        }
+        $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
     }
 }
