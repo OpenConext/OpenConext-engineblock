@@ -449,15 +449,17 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             )
         );
 
-        $emailConfiguration = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()
-            ->getEmailIdpDebuggingConfiguration();
+        $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
+        $emailConfiguration = $diContainer->getEmailIdpDebuggingConfiguration();
 
-        $mailer = new Zend_Mail('UTF-8');
-        $mailer->setFrom($emailConfiguration['from']['address'], $emailConfiguration['from']['name']);
-        $mailer->addTo($emailConfiguration['to']['address'], $emailConfiguration['to']['name']);
-        $mailer->setSubject(sprintf($emailConfiguration['subject'], $identityProvider->nameEn));
-        $mailer->setBodyText($output);
-        $mailer->send();
+        $message = new Swift_Message();
+        $message
+            ->setSubject(sprintf($emailConfiguration['subject'], $identityProvider->nameEn))
+            ->setFrom($emailConfiguration['from']['address'], $emailConfiguration['from']['name'])
+            ->setTo($emailConfiguration['to']['address'], $emailConfiguration['to']['name'])
+            ->setBody($output, 'text/plain');
+
+        $diContainer->getMailer()->send($message);
 
         $layout->setLayout($oldLayout);
     }

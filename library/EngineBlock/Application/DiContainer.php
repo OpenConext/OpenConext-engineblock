@@ -281,6 +281,14 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
+     * @return Swift_Mailer
+     */
+    public function getMailer()
+    {
+        return $this->container->get('mailer');
+    }
+
+    /**
      * @return \Symfony\Component\DependencyInjection\ContainerInterface
      */
     protected function getSymfonyContainer()
