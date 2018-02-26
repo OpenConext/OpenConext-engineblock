@@ -5,12 +5,6 @@ services:
             - "@engineblock.compat.application"
             - "@logger"
 
-    engineblock.bridge.mailer:
-        class: OpenConext\EngineBlockBridge\Mail\ZendMailSender
-        arguments:
-            - "%email_help_address%"
-            - "@logger"
-
     engineblock.bridge.authentication_logger_adapter:
         class: OpenConext\EngineBlockBridge\Logger\AuthenticationLoggerAdapter
         arguments:

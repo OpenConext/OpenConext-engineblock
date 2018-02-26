@@ -203,7 +203,7 @@ $ymlContent = array(
         'openconext_terms_of_use'                                 => escapeYamlValue($config->get('openconext.termsOfUse')),
 
         // Email configuration
-        'email_help_address'                                      => $config->get('email.help'),
+        'email_request_access_address'                            => $config->get('email.help'),
         'email_idp_debugging'                                     => $config->get('email.idpDebugging')->toArray(),
 
         // Profile.

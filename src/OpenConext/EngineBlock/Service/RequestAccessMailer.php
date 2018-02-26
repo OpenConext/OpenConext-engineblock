@@ -2,8 +2,8 @@
 
 namespace OpenConext\EngineBlock\Service;
 
-use OpenConext\EngineBlockBridge\Mail\MailMessage;
-use OpenConext\EngineBlockBridge\Mail\MailSenderInterface;
+use Swift_Mailer;
+use Swift_Message;
 
 class RequestAccessMailer
 {
@@ -31,16 +31,23 @@ The comment was:
 TPL;
 
     /**
-     * @var MailSenderInterface
+     * @var Swift_Mailer
      */
-    private $mailSender;
+    private $mailer;
 
     /**
-     * @param MailSenderInterface $mailSender
+     * @var string
      */
-    public function __construct(MailSenderInterface $mailSender)
+    private $requestAccessEmailAddress;
+
+    /**
+     * @param Swift_Mailer $mailer
+     * @param string $requestAccessEmailAddress
+     */
+    public function __construct(Swift_Mailer $mailer, $requestAccessEmailAddress)
     {
-        $this->mailSender = $mailSender;
+        $this->mailer = $mailer;
+        $this->requestAccessEmailAddress = $requestAccessEmailAddress;
     }
 
     /**
@@ -55,9 +62,14 @@ TPL;
         $subject = sprintf(self::REQUEST_ACCESS_SUBJECT, gethostname());
         $body = sprintf(self::REQUEST_ACCESS_TEMPLATE, $identityProvider, $serviceProvider, $name, $email, $comment);
 
-        $message = new MailMessage($subject, $email, $body);
+        $message = new Swift_Message();
+        $message
+            ->setSubject($subject)
+            ->setFrom($email, $name)
+            ->setTo($this->requestAccessEmailAddress)
+            ->setBody($body, 'text/plain');
 
-        $this->mailSender->send($message);
+        $this->mailer->send($message);
     }
 
     /**
@@ -79,8 +91,14 @@ TPL;
             $comment
         );
 
-        $message = new MailMessage($subject, $email, $body);
+        $message = new Swift_Message();
+        $message
+            ->setSubject($subject)
+            ->setFrom($email, $name)
+            ->setTo($this->requestAccessEmailAddress)
+            ->setBody($body, 'text/plain');
 
-        $this->mailSender->send($message);
+
+        $this->mailer->send($message);
     }
 }

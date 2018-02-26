@@ -64,4 +64,5 @@ services:
     engineblock.service.request_access_mailer:
         class: OpenConext\EngineBlock\Service\RequestAccessMailer
         arguments:
-            - "@engineblock.bridge.mailer"
+            - "@mailer"
+            - "%email_request_access_address%"
