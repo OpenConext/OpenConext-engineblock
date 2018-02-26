@@ -1,60 +1,9 @@
-{% extends '@themeLayouts/scripts/default.html.twig' %}
+{% extends '@theme/Default/View/Error/error.html.twig' %}
 
 {# Prepare the page title #}
 {% set pageTitle = 'error_generic'|trans %}
-{% set feedbackInfo = feedbackInfo() %}
-
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
 {% block page_heading %}{{ pageTitle }}{% endblock %}
 
-{% block content %}
-
-    {{ flushLog('Showing feedback page with message: ' ~ pageTitle) }}
-
-    <div class="box">
-        <div class="mod-content">
-            <h1>{{ pageTitle }}</h1>
-
-            {{ 'error_generic_desc'|trans|raw }}
-
-            <div class="l-overflow">
-                <table class="comp-table">
-                    <thead></thead>
-                    <tbody>
-
-                    {% if feedbackInfo is not empty %}
-                        {% for name, value in feedbackInfo %}
-                            <tr>
-                                <td class="strong">{{ name|trans }}:</td>
-                                <td style="font-size: 0.8em;">{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    {% endif %}
-
-                    </tbody>
-                </table>
-            </div>
-
-            <p>{{ 'error_help_desc'|trans|raw }}</p>
-
-            {# @todo make the number of steps in history that the back button makes dynamic, it is not always 2 #}
-            <a href="#" id="GoBack" class="c-button" onclick="history.back(-2); return false;">
-                {{ 'go_back'|trans|raw }}
-            </a>
-
-            {% if exception is defined %}
-                <div class="l-overflow">
-                    <strong>{{ exception.message }}</strong>
-                    <pre>
-                    {{ var_dump(exception) }}
-
-                    {% if exception.xdebug_message is defined %}
-                        {{ exception.xdebug_message|raw }}
-                    {% endif %}
-                    </pre>
-                </div>
-            {% endif %}
-
-        </div>
-    </div>
-{% endblock %}
+{% block errorMessage %}{{ 'error_generic_desc'|trans|raw }}{% endblock %}

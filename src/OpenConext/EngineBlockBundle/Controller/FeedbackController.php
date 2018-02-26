@@ -52,7 +52,7 @@ class FeedbackController
     public function unableToReceiveMessageAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/UnableToReceiveMessage.phtml'),
+            $this->twig->render('Authentication/View/Feedback/UnableToReceiveMessage.phtml'),
             400
         );
     }
@@ -64,7 +64,7 @@ class FeedbackController
     public function voMembershipRequiredAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/Vomembershiprequired.phtml'),
+            $this->twig->render('Authentication/View/Feedback/Vomembershiprequired.phtml'),
             403
         );
     }
@@ -75,7 +75,7 @@ class FeedbackController
      */
     public function sessionLostAction()
     {
-        return new Response($this->engineBlockView->render('Authentication/View/Feedback/SessionLost.phtml'), 400);
+        return new Response($this->twig->render('Authentication/View/Feedback/SessionLost.phtml'), 400);
     }
 
     /**
@@ -85,12 +85,22 @@ class FeedbackController
      */
     public function unknownIssuerAction(Request $request)
     {
-        $viewData = [
-            'entity-id' => $request->get('entity-id'),
-            'destination' => $request->get('destination')
-        ];
+        // Add feedback info from url
+        $customFeedbackInfo['EntityID'] = $request->get('entity-id');
+        $customFeedbackInfo['Destination'] = $request->get('destination');
 
-        $body = $this->engineBlockView->setData($viewData)->render('Authentication/View/Feedback/UnknownIssuer.phtml');
+        $session = $request->getSession();
+        if (!$session->has('feedbackInfo')){
+            $session->set('feedbackInfo', []);
+        }
+        $session->set('feedbackInfo', array_merge($customFeedbackInfo, $session->get('feedbackInfo')));
+
+        $body = $this->twig->render(
+            '@theme/Authentication/View/Feedback/unknown-issuer.html.twig',
+            [
+                'wide' => true,
+            ]
+        );
 
         return new Response($body, 404);
     }
@@ -103,7 +113,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
 
-        return new Response($this->engineBlockView->render('Authentication/View/Feedback/NoIdps.phtml'));
+        return new Response($this->twig->render('Authentication/View/Feedback/NoIdps.phtml'));
     }
 
     /**
@@ -113,7 +123,7 @@ class FeedbackController
     public function invalidAcsLocationAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/InvalidAcsLocation.phtml'),
+            $this->twig->render('Authentication/View/Feedback/InvalidAcsLocation.phtml'),
             400
         );
     }
@@ -126,7 +136,7 @@ class FeedbackController
     public function unsupportedSignatureMethodAction(Request $request)
     {
         return new Response(
-            $this->engineBlockView
+            $this->twig
                 ->setData([
                     'signature-method' => $request->get('signature-method')
                 ])
@@ -144,7 +154,7 @@ class FeedbackController
     {
         $viewData = ['entity-id' => $request->get('entity-id')];
 
-        $body = $this->engineBlockView
+        $body = $this->twig
             ->setData($viewData)
             ->render('Authentication/View/Feedback/UnknownServiceProvider.phtml');
 
@@ -158,7 +168,7 @@ class FeedbackController
     public function missingRequiredFieldsAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/MissingRequiredFields.phtml'),
+            $this->twig->render('Authentication/View/Feedback/MissingRequiredFields.phtml'),
             400
         );
     }
@@ -169,7 +179,7 @@ class FeedbackController
      */
     public function customAction()
     {
-        return new Response($this->engineBlockView->render('Authentication/View/Feedback/Custom.phtml'));
+        return new Response($this->twig->render('Authentication/View/Feedback/Custom.phtml'));
     }
 
     /**
@@ -179,7 +189,7 @@ class FeedbackController
     public function invalidAcsBindingAction()
     {
         // @todo Send 4xx or 5xx header depending on invalid binding came from request or configured metadata
-        return new Response($this->engineBlockView->render('Authentication/View/Feedback/InvalidAcsBinding.phtml'));
+        return new Response($this->twig->render('Authentication/View/Feedback/InvalidAcsBinding.phtml'));
     }
 
     /**
@@ -190,7 +200,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/ReceivedErrorStatusCode.phtml')
+            $this->twig->render('Authentication/View/Feedback/ReceivedErrorStatusCode.phtml')
         );
     }
 
@@ -202,7 +212,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/ReceivedInvalidSignedResponse.phtml')
+            $this->twig->render('Authentication/View/Feedback/ReceivedInvalidSignedResponse.phtml')
         );
     }
 
@@ -214,7 +224,7 @@ class FeedbackController
     {
         // @todo Send 4xx or 5xx header?
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/ReceivedInvalidResponse.phtml')
+            $this->twig->render('Authentication/View/Feedback/ReceivedInvalidResponse.phtml')
         );
     }
 
@@ -224,7 +234,7 @@ class FeedbackController
      */
     public function noConsentAction()
     {
-        return new Response($this->engineBlockView->render('Authentication/View/Feedback/NoConsent.phtml'));
+        return new Response($this->twig->render('Authentication/View/Feedback/NoConsent.phtml'));
     }
 
     /**
@@ -234,7 +244,7 @@ class FeedbackController
     public function unknownServiceAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/UnknownService.phtml'),
+            $this->twig->render('Authentication/View/Feedback/UnknownService.phtml'),
             400
         );
     }
@@ -246,7 +256,7 @@ class FeedbackController
     public function authorizationPolicyViolationAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/AuthorizationPolicyViolation.phtml'),
+            $this->twig->render('Authentication/View/Feedback/AuthorizationPolicyViolation.phtml'),
             400
         );
     }
@@ -258,7 +268,7 @@ class FeedbackController
     public function unknownPreselectedIdpAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/UnknownPreselectedIdp.phtml'),
+            $this->twig->render('Authentication/View/Feedback/UnknownPreselectedIdp.phtml'),
             400
         );
     }
@@ -269,7 +279,7 @@ class FeedbackController
     public function stuckInAuthenticationLoopAction()
     {
         return new Response(
-            $this->engineBlockView->render('Authentication/View/Feedback/StuckInAuthenticationLoop.phtml'),
+            $this->twig->render('Authentication/View/Feedback/StuckInAuthenticationLoop.phtml'),
             400
         );
     }

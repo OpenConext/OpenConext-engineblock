@@ -1,11 +1,6 @@
 {% extends '@themeLayouts/scripts/default.html.twig' %}
 
-{# Prepare the page title #}
-{% set pageTitle = 'error_generic'|trans %}
 {% set feedbackInfo = feedbackInfo() %}
-
-{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ pageTitle }}{% endblock %}
 
 {% block content %}
 
@@ -13,9 +8,8 @@
 
     <div class="box">
         <div class="mod-content">
-            <h1>{{ pageTitle }}</h1>
-
-            {{ 'error_generic_desc'|trans|raw }}
+            <h1>{% block pageTitle %}{% endblock %}</h1>
+            {% block errorMessage %}{% endblock %}
 
             <div class="l-overflow">
                 <table class="comp-table">

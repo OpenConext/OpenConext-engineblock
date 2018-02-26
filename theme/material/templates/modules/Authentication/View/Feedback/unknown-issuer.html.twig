@@ -1,30 +1,9 @@
-<?php
+{% extends '@theme/Default/View/Error/error.html.twig' %}
 
-/**
- * @var Zend_Layout $layout
- */
-$layout = $this->layout();
+{# Prepare the page title #}
+{% set pageTitle = 'error_unknown_issuer'|trans %}
+{% block pageTitle %}{{ pageTitle }}{% endblock %}
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block page_heading %}{{ pageTitle }}{% endblock %}
 
-// Set Layout properties
-$layout->title = $layout->title. ' - ' .$this->t('error_unknown_issuer');
-$layout->header = $layout->title;
-$layout->subheader = $this->t('error_unknown_issuer');
-$layout->wide = true;
-
-?>
-<div class="box">
-  <div class="mod-content">
-    <h1><?php echo $this->t('error_unknown_issuer'); ?></h1>
-    <?= $this->t('error_unknown_issuer_desc');
-
-    // Add feedback info from url
-    $customFeedbackInfo['EntityID'] = $this->_data['entity-id'];
-    $customFeedbackInfo['Destination'] = $this->_data['destination'];
-    if (!isset($_SESSION['feedbackInfo'])) {
-        $_SESSION['feedbackInfo'] = array();
-    }
-    $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
-
-    require_once realpath(__DIR__ . '/../../../Default/View/Error/include/footer.php'); ?>
-  </div>
-</div>
+{% block errorMessage %}{{ 'error_unknown_issuer_desc'|trans|raw }}{% endblock %}
