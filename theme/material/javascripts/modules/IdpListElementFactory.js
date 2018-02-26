@@ -36,6 +36,7 @@ export class IdpListElementFactory {
                 actionElement.textContent = this.messages['pressEnterToSelect'];
             } else {
                 actionElement.textContent = this.messages['requestAccess'];
+                actionElement.setAttribute('data-entity-id', idpList[i].entityId);
             }
 
             idpElement.appendChild(logoElement);

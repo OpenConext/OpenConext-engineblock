@@ -178,18 +178,21 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         }
 
         $postedVariables = $request->request;
-        if ($postedVariables->get('institution', false) !== false) {
-            $this->requestAccessMailer->sendRequestAccessToInstitutionEmail(
+        if ($postedVariables->get('idpEntityId', false) !== false) {
+            $this->requestAccessMailer->sendRequestAccessEmailForIdp(
+                $postedVariables->get('spName'),
                 $postedVariables->get('spEntityId'),
+                $postedVariables->get('institution'),
+                $postedVariables->get('idpEntityId'),
                 $postedVariables->get('name'),
                 $postedVariables->get('email'),
-                $postedVariables->get('institution'),
                 $postedVariables->get('comment')
             );
         } else {
-            $this->requestAccessMailer->sendRequestAccessEmail(
-                $postedVariables->get('idpEntityId'),
+            $this->requestAccessMailer->sendRequestAccessEmailForInstitution(
+                $postedVariables->get('spName'),
                 $postedVariables->get('spEntityId'),
+                $postedVariables->get('institution'),
                 $postedVariables->get('name'),
                 $postedVariables->get('email'),
                 $postedVariables->get('comment')

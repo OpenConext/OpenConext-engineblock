@@ -6,11 +6,11 @@ export class RequestAccessModalHelper {
         this.requestAccessUrl     = requestAccessUrl;
     }
 
-    openRequestAccessModal(institutionName) {
-        sendGetRequest(this.requestAccessUrl, (responseText) => this.renderRequestAccessModal(responseText, institutionName));
+    openRequestAccessModal(institutionName, idpEntityId) {
+        sendGetRequest(this.requestAccessUrl, (responseText) => this.renderRequestAccessModal(responseText, institutionName, idpEntityId));
     }
 
-    renderRequestAccessModal(responseText, institutionName) {
+    renderRequestAccessModal(responseText, institutionName, idpEntityId) {
         document.body.style.overflowY = 'auto';
         this.requestAccessElement.innerHTML = responseText;
 
@@ -20,7 +20,8 @@ export class RequestAccessModalHelper {
         const $closeModalButton = this.requestAccessElement.querySelector('.close-modal');
         const $submitButton     = this.requestAccessElement.querySelector('#request_access_submit');
         const $nameField        = this.requestAccessElement.querySelector('#name');
-        const $institutionField = this.requestAccessElement.querySelector('#institution');
+        let $institutionField   = this.requestAccessElement.querySelector('#institution');
+        let $idpEntityIdField   = this.requestAccessElement.querySelector('input[name="idpEntityId"]');
 
         $container.removeEventListener('click', this.containerClickHandler());
         $container.addEventListener('click', this.containerClickHandler($container));
@@ -39,6 +40,10 @@ export class RequestAccessModalHelper {
             $institutionField.value = institutionName;
         }
 
+        if (typeof idpEntityId === "string") {
+            $idpEntityIdField.value = idpEntityId;
+        }
+
         if ($nameField) {
             $nameField.focus();
         }
@@ -55,13 +60,14 @@ export class RequestAccessModalHelper {
                 (isUnconnectedIdpRow(event.target.parentElement))
             ) {
                 const $institutionTitle = event.target.parentElement.querySelector('h3');
-                var institutionName = '';
+                let institutionName = '';
+                let idpEntityId = event.target.getAttribute('data-entity-id');
 
                 if ($institutionTitle) {
                     institutionName = $institutionTitle.innerText;
                 }
 
-                this.openRequestAccessModal(institutionName);
+                this.openRequestAccessModal(institutionName, idpEntityId);
             }
         }
     }
@@ -80,11 +86,18 @@ export class RequestAccessModalHelper {
             const $requestAccessForm = this.requestAccessElement.querySelector('#request_access_form');
 
             const formData = {
+                spName: $requestAccessForm.spName.value,
+                spEntityId: $requestAccessForm.spEntityId.value,
                 name: $requestAccessForm.name.value,
                 email: $requestAccessForm.email.value,
                 institution: $requestAccessForm.institution.value,
                 comment: $requestAccessForm.comment.value
             };
+
+            const idpEntityId = $requestAccessForm.idpEntityId.value;
+            if (typeof idpEntityId === "string" && idpEntityId.length > 0) {
+                formData.idpEntityId = idpEntityId;
+            }
 
             sendPostRequest('/authentication/idp/performRequestAccess', formData, (responseText) => {
                 this.renderRequestAccessModal(responseText);
