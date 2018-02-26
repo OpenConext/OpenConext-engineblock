@@ -547,6 +547,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
+        $showMailFlashMessage = false;
+        if (isset($_POST['mail']) && $_POST['mail'] === 'true') {
+            $showMailFlashMessage = true;
+        }
+
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['debugIdpResponse'];
 
@@ -556,13 +561,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $attributes = $response->getAssertion()->getAttributes();
 
-        $this->_server->sendOutput($this->_server->renderTemplate(
-            'debugidpresponse',
-            array(
+        $validationResult = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeValidator()
+            ->validate($attributes);
+
+        $this->_server->sendOutput($this->twig->render(
+            '@theme/Authentication/View/Proxy/debug-idp-response.html.twig',
+            [
+                'wide' => true,
                 'idp' => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()),
-                'response' => $response,
-                'attributes' => $attributes
-            )
+                'nameId' => $response->getAssertion()->getNameId(),
+                'attributes' => $attributes,
+                'validationResult' => $validationResult,
+                'showMailFlashMessage' => $showMailFlashMessage,
+            ]
         ));
         return true;
     }
