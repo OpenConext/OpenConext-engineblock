@@ -42,6 +42,7 @@ class Feedback extends Twig_Extension
             new TwigFunction('flushLog', [$this, 'flushLog'], ['is_safe' => ['html']]),
             new TwigFunction('var_export', [$this, 'varExport'], ['is_safe' => ['html']]),
             new TwigFunction('var_dump', [$this, 'varDump'], ['is_safe' => ['html']]),
+            new TwigFunction('print_r', [$this, 'printHumanReadable'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -80,6 +81,16 @@ class Feedback extends Twig_Extension
     public function varExport($expression)
     {
         return var_export($expression, true);
+    }
+
+    /**
+     * Returns the output of print_r with the added instruction to return the output as a string.
+     * @param mixed $expression
+     * @return string
+     */
+    public function printHumanReadable($expression)
+    {
+        return print_r($expression, true);
     }
 
     /**

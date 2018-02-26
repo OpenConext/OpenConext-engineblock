@@ -25,7 +25,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\FeedbackController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
             - "@engineblock.compat.logger"
 
     engineblock.controller.authentication.metadata:

@@ -90,7 +90,8 @@ class EngineBlock_Test_Corto_ProxyServerTest extends PHPUnit_Framework_TestCase
 
     private function factoryProxyServer()
     {
-        $proxyServer = new EngineBlock_Corto_ProxyServer();
+        $twig = Mockery::mock(Twig_Environment::class);
+        $proxyServer = new EngineBlock_Corto_ProxyServer($twig);
         $proxyServer->setHostName('test-host');
 
         $proxyServer->setRepository(new InMemoryMetadataRepository(

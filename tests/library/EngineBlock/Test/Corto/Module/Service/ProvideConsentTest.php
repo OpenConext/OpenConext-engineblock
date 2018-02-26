@@ -92,9 +92,11 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
      */
     private function mockProxyServer()
     {
+        // Mock twig, a dependency of proxy server
+        $twigMock = Phake::mock(Twig_Environment::class);
         // Mock proxy server
         /** @var EngineBlock_Corto_ProxyServer $proxyServerMock */
-        $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer');
+        $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer', $twigMock);
         $proxyServerMock->setHostname('test-host');
 
         $proxyServerMock->setRepository(new InMemoryMetadataRepository(

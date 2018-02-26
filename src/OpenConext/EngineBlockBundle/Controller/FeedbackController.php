@@ -8,6 +8,7 @@ use EngineBlock_View;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig_Environment;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Mimics the previous methodology, will be refactored
@@ -21,9 +22,9 @@ class FeedbackController
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var EngineBlock_View
+     * @var Twig_Environment
      */
-    private $engineBlockView;
+    private $twig;
 
     /**
      * @var LoggerInterface
@@ -32,15 +33,15 @@ class FeedbackController
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView,
+        Twig_Environment $twig,
         LoggerInterface $logger
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView = $engineBlockView;
+        $this->twig = $twig;
         $this->logger = $logger;
 
         // we have to start the old session in order to be able to retrieve the feedback info
-        $server = new EngineBlock_Corto_ProxyServer();
+        $server = new EngineBlock_Corto_ProxyServer($twig);
         $server->startSession();
     }
 

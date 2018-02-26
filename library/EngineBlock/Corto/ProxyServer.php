@@ -16,13 +16,13 @@ class EngineBlock_Corto_ProxyServer
 {
     const ID_PREFIX = 'CORTO';
 
-    const MODULE_BINDINGS   = 'Bindings';
-    const MODULE_SERVICES   = 'Services';
+    const MODULE_BINDINGS = 'Bindings';
+    const MODULE_SERVICES = 'Services';
 
     const TEMPLATE_SOURCE_FILESYSTEM = 'filesystem';
-    const TEMPLATE_SOURCE_MEMORY     = 'memory';
+    const TEMPLATE_SOURCE_MEMORY = 'memory';
 
-    const MESSAGE_TYPE_REQUEST  = 'SAMLRequest';
+    const MESSAGE_TYPE_REQUEST = 'SAMLRequest';
     const MESSAGE_TYPE_RESPONSE = 'SAMLResponse';
 
     protected $_serviceToControllerMapping = array(
@@ -71,9 +71,15 @@ class EngineBlock_Corto_ProxyServer
      */
     private $_repository;
 
-    public function __construct()
+    /**
+     * @var Twig_Environment
+     */
+    private $twig;
+
+    public function __construct(Twig_Environment $twig)
     {
         $this->_server = $this;
+        $this->twig = $twig;
     }
 
 //////// GETTERS / SETTERS /////////
@@ -281,18 +287,18 @@ class EngineBlock_Corto_ProxyServer
         if (!$this->_processingMode) {
             // Append the key identifier
             if ($this->_keyId && $serviceName === 'singleSignOnService') {
-                $mappedUri .= '/key:' . $this->_keyId;
+                $mappedUri .= '/key:'.$this->_keyId;
             }
         }
 
         // Append the Transparent identifier
         if ($remoteEntityId) {
             if (!$this->_processingMode && $serviceName !== 'idpMetadataService' && $serviceName !== 'singleLogoutService') {
-                $mappedUri .= '/' . md5($remoteEntityId);
+                $mappedUri .= '/'.md5($remoteEntityId);
             }
         }
 
-        return $scheme . '://' . $host . $mappedUri;
+        return $scheme.'://'.$host.$mappedUri;
     }
 
     /**
@@ -380,8 +386,8 @@ class EngineBlock_Corto_ProxyServer
     {
         $response = $this->_createBaseResponse($request);
         $response->setStatus([
-            'Code'    => Constants::STATUS_RESPONDER,
-            'SubCode' => Constants::STATUS_PROXY_COUNT_EXCEEDED,
+                'Code' => Constants::STATUS_RESPONDER,
+                'SubCode' => Constants::STATUS_PROXY_COUNT_EXCEEDED,
         ]);
 
         return $response;
@@ -391,8 +397,8 @@ class EngineBlock_Corto_ProxyServer
     {
         $response = $this->_createBaseResponse($request);
         $response->setStatus([
-            'Code'    => Constants::STATUS_RESPONDER,
-            'SubCode' => Constants::STATUS_NO_PASSIVE,
+                'Code' => Constants::STATUS_RESPONDER,
+                'SubCode' => Constants::STATUS_NO_PASSIVE,
         ]);
 
         return $response;
@@ -598,7 +604,7 @@ class EngineBlock_Corto_ProxyServer
         EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request,
         ServiceProvider $serviceProvider
     ) {
-        $requestWasSigned    = $request->wasSigned();
+        $requestWasSigned = $request->wasSigned();
 
         /** @var AuthnRequest $request */
 
@@ -614,8 +620,8 @@ class EngineBlock_Corto_ProxyServer
         if ($request->getAssertionConsumerServiceURL() && $request->getProtocolBinding()) {
             if ($requestWasSigned) {
                 $this->_server->getLogger()->info(
-                    "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
-                        "and ProtocolBinding '{$request->getProtocolBinding()}' from signed request. "
+                    "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
+                    "and ProtocolBinding '{$request->getProtocolBinding()}' from signed request. "
                 );
                 return new Service($request->getAssertionConsumerServiceURL(), $request->getProtocolBinding());
             }
@@ -624,7 +630,7 @@ class EngineBlock_Corto_ProxyServer
                 foreach ($serviceProvider->assertionConsumerServices as $entityAcs) {
                     $requestAcsIsRegisteredInMetadata = (
                         $entityAcs->location === $request->getAssertionConsumerServiceURL() &&
-                        $entityAcs->binding  === $request->getProtocolBinding()
+                        $entityAcs->binding === $request->getProtocolBinding()
                     );
                     if ($requestAcsIsRegisteredInMetadata) {
                         break;
@@ -632,19 +638,19 @@ class EngineBlock_Corto_ProxyServer
                 }
                 if ($requestAcsIsRegisteredInMetadata) {
                     $this->_server->getLogger()->info(
-                        "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
-                            "and ProtocolBinding '{$request->getProtocolBinding()}' from unsigned request, " .
-                            "it's okay though, the ACSLocation and Binding were registered in the metadata"
+                        "Using AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
+                        "and ProtocolBinding '{$request->getProtocolBinding()}' from unsigned request, ".
+                        "it's okay though, the ACSLocation and Binding were registered in the metadata"
                     );
-                    return new Service($request->getAssertionConsumerServiceURL(),$request->getProtocolBinding());
+                    return new Service($request->getAssertionConsumerServiceURL(), $request->getProtocolBinding());
                 }
                 else {
                     $this->_server->getLogger()->notice(
-                        "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
-                            "and ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, " .
-                            "but the AuthnRequest was not signed, and the ACSLocation and Binding were not found in " .
-                            "the metadata for the SP, so I am disallowed from acting upon it." .
-                            "Trying the default endpoint.."
+                        "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
+                        "and ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, ".
+                        "but the AuthnRequest was not signed, and the ACSLocation and Binding were not found in ".
+                        "the metadata for the SP, so I am disallowed from acting upon it.".
+                        "Trying the default endpoint.."
                     );
                 }
             }
@@ -656,8 +662,8 @@ class EngineBlock_Corto_ProxyServer
                 // But what should we do if we don't have both? Pick out a random counterpart from the metadata?
                 // Seems a little hard to predict for the SP, so we go with the default endpoint.
                 $this->_server->getLogger()->notice(
-                    "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' " .
-                    "or ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, " .
+                    "AssertionConsumerServiceLocation '{$request->getAssertionConsumerServiceURL()}' ".
+                    "or ProtocolBinding '{$request->getProtocolBinding()}' were mentioned in request, ".
                     "but not both! Ignoring... "
                 );
             }
@@ -669,7 +675,7 @@ class EngineBlock_Corto_ProxyServer
             // Find the indexed ACS in the metadata.
             $indexedAssertionConsumerService = null;
             foreach ($serviceProvider->assertionConsumerServices as $assertionConsumerService) {
-                if ((int) $assertionConsumerService->serviceIndex === $index) {
+                if ((int)$assertionConsumerService->serviceIndex === $index) {
                     $indexedAssertionConsumerService = $assertionConsumerService;
                     break;
                 }
@@ -684,8 +690,8 @@ class EngineBlock_Corto_ProxyServer
             else {
                 $this->_server->getLogger()->notice(
                     "AssertionConsumerServiceIndex was mentioned in request, but we don't know any ACS by ".
-                        "index '$index'? Maybe the metadata was updated and we don't have that endpoint yet? " .
-                        "Trying the default endpoint.."
+                    "index '$index'? Maybe the metadata was updated and we don't have that endpoint yet? ".
+                    "Trying the default endpoint.."
                 );
             }
         }
@@ -804,7 +810,7 @@ class EngineBlock_Corto_ProxyServer
     {
         $this->getLogger()->info("Rendering template '$templateName'");
 
-        $templateFileName = ENGINEBLOCK_FOLDER_MODULES . 'Authentication/View/Proxy/' . $templateName . '.phtml';
+        $templateFileName = ENGINEBLOCK_FOLDER_MODULES.'Authentication/View/Proxy/'.$templateName.'.phtml';
 
         if ($layout === null) {
             $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
@@ -832,7 +838,7 @@ class EngineBlock_Corto_ProxyServer
         $rawGet = array();
         foreach (explode("&", $_SERVER['QUERY_STRING']) as $parameter) {
             if (preg_match("/^(.+)=(.*)$/", $parameter, $keyAndValue)) {
-                 $rawGet[$keyAndValue[1]] = $keyAndValue[2];
+                $rawGet[$keyAndValue[1]] = $keyAndValue[2];
             }
         }
         return $rawGet;
@@ -843,7 +849,13 @@ class EngineBlock_Corto_ProxyServer
         $this->getLogger()->info("Redirecting to $location");
 
         if ($this->getConfig('debug', true)) {
-            $output = $this->renderTemplate('redirect', array('location'=>$location, 'message' => $message));
+            $output = $this->twig->render(
+                '@theme/Authentication/View/Proxy/redirect.html.twig',
+                [
+                    'location' => $location,
+                    'message' => $message,
+                ]
+            );
             $this->sendOutput($output);
         } else {
             $this->sendHeader('Location', $location);
@@ -869,7 +881,7 @@ class EngineBlock_Corto_ProxyServer
     /**
      * Sign a Corto_XmlToArray array with XML.
      *
-     * @param EngineBlock_Corto_XmlToArray $element    Element to sign
+     * @param EngineBlock_Corto_XmlToArray $element Element to sign
      * @return array Signed element
      */
     public function sign(array $element)
@@ -929,7 +941,7 @@ class EngineBlock_Corto_ProxyServer
         // Note that the current element may not be the first or last, because we might include comments, so look for
         // the actual XML element
         $xpath = new DOMXPath($canonicalXmlDom);
-        $nodes = $xpath->query('/*[@ID="' . $element['_ID'] . '"]');
+        $nodes = $xpath->query('/*[@ID="'.$element['_ID'].'"]');
         if ($nodes->length < 1) {
             throw new EngineBlock_Corto_ProxyServer_Exception(
                 "Unable to sign message can't find element with id to sign?",
@@ -942,12 +954,12 @@ class EngineBlock_Corto_ProxyServer
 
         // Hash it, encode it in Base64 and include that as the 'Reference'
         $signature['ds:SignedInfo']['ds:Reference'][0]['ds:DigestValue']['__v'] = base64_encode(sha1($canonicalXml, true));
-        $signature['ds:SignedInfo']['ds:Reference'][0]['_URI'] = "#" . $element['_ID'];
+        $signature['ds:SignedInfo']['ds:Reference'][0]['_URI'] = "#".$element['_ID'];
 
         // Now we start the actual signing, instead of signing the entire (possibly large) document,
         // we only sign the 'SignedInfo' which includes the 'Reference' hash
         $canonicalXml2Dom = DOMDocumentFactory::fromString(
-          EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo'])
+            EngineBlock_Corto_XmlToArray::array2xml($signature['ds:SignedInfo'])
         );
         $canonicalXml2 = $canonicalXml2Dom->firstChild->C14N(true, false);
 
@@ -973,9 +985,9 @@ class EngineBlock_Corto_ProxyServer
     public function getParametersFromUrl($url)
     {
         $parameters = array(
-            'EntityCode'        => 'main',
-            'ServiceName'       => '',
-            'RemoteIdPMd5Hash'  => '',
+            'EntityCode' => 'main',
+            'ServiceName' => '',
+            'RemoteIdPMd5Hash' => '',
         );
         $urlPath = parse_url($url, PHP_URL_PATH); // /authentication/x/ServiceName[/remoteIdPMd5Hash]
 
@@ -1031,19 +1043,19 @@ class EngineBlock_Corto_ProxyServer
             $privateKeyPem = $certificates['private'];
         }
         else if (!empty($certificates['privateFile'])) {
-            if (!file_exists($certificates['privateFile'])) {
-                throw new EngineBlock_Corto_ProxyServer_Exception(
-                    'Private key PEM not found at: ' . $certificates['privateFile']
-                );
-            }
-            $privateKeyPem = file_get_contents($certificates['privateFile']);
+                if (!file_exists($certificates['privateFile'])) {
+                    throw new EngineBlock_Corto_ProxyServer_Exception(
+                        'Private key PEM not found at: '.$certificates['privateFile']
+                    );
+                }
+                $privateKeyPem = file_get_contents($certificates['privateFile']);
         }
         else {
-            throw new EngineBlock_Corto_ProxyServer_Exception(
-                'Current entity has no private key, unable to sign message! Please set ["certificates"]["privateFile"]!',
-                EngineBlock_Exception::CODE_WARNING
-            );
-        }
+                throw new EngineBlock_Corto_ProxyServer_Exception(
+                    'Current entity has no private key, unable to sign message! Please set ["certificates"]["privateFile"]!',
+                    EngineBlock_Exception::CODE_WARNING
+                );
+            }
 
         $privateKey = openssl_pkey_get_private($privateKeyPem);
         if ($privateKey === false) {
