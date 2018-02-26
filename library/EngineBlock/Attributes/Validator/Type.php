@@ -33,9 +33,19 @@ class EngineBlock_Attributes_Validator_Type extends EngineBlock_Attributes_Valid
                 break;
 
             case 'HostName':
-                $hostnameValidator = new Zend_Validate_Hostname();
                 foreach ($attributeValues as $attributeValue) {
-                    if (!$hostnameValidator->isValid($attributeValue)) {
+                    // The goal of this validation is only to see if the value
+                    // looks like a hostname, to make sure it is not a
+                    // completely different value like a phone number, or a
+                    // text containing newlines or null bytes. Checking if it
+                    // is truely a valid hostname is not EngineBlocks
+                    // responsibility.
+                    //
+                    // Below regex checks if the value is alfanumeric (or
+                    // contains hyphens, which are also allowed in hostnames)
+                    // and if the value does not contains only dots, or
+                    // multiple subsequent dots.
+                    if (!preg_match('/^([[:alnum:]\-]+\.)*[[:alnum:]0-9\-]+$/', $attributeValue)) {
                         $this->_messages[] = array(
                             self::ERROR_ATTRIBUTE_VALIDATOR_HOSTNAME,
                             $this->_attributeName,
