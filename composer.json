@@ -31,7 +31,8 @@
         "ramsey/uuid": "^3.3.0",
         "sensio/generator-bundle": "^3.0",
         "guzzlehttp/guzzle": "^6.0",
-        "openconext/monitor-bundle": "^1.0"
+        "openconext/monitor-bundle": "^1.0",
+        "swiftmailer/swiftmailer": "^5.4"
     },
     "require-dev": {
         "phake/phake": "2.1",
