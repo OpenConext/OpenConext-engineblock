@@ -43,6 +43,19 @@ class EngineBlock_Test_TypeTest extends PHPUnit_Framework_TestCase
                         '?'
                     )
                 )
+            ),
+            array(
+                'attributeName' => 'foo',
+                'options' => 'HostName',
+                'attributes' => array(
+                    'foo' => array(
+                        'example',
+                        'example.org',
+                        'test.example.org',
+                        'test-test.example.org',
+                        'test-test.example',
+                    )
+                )
             )
         );
     }
