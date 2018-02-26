@@ -4,6 +4,7 @@ export class RequestAccessModalHelper {
         this.scrollerElement      = scrollerElement;
         this.searchBarElement     = searchBarElement;
         this.requestAccessUrl     = requestAccessUrl;
+        this.isOpen               = false;
     }
 
     openRequestAccessModal(institutionName, idpEntityId) {
@@ -47,6 +48,8 @@ export class RequestAccessModalHelper {
         if ($nameField) {
             $nameField.focus();
         }
+
+        this.isOpen = true;
     }
 
     requestAccessClickHandler() {
@@ -120,6 +123,12 @@ export class RequestAccessModalHelper {
 
         const $container = this.scrollerElement.querySelector('#request-access-container');
         $container.removeEventListener('click', this.containerClickHandler());
+
+        this.isOpen = false;
+    }
+
+    modalIsOpen() {
+        return this.isOpen;
     }
 }
 
