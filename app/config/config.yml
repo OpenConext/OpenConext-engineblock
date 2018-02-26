@@ -23,6 +23,9 @@ open_conext_engine_block:
         eb.encrypted_assertions_require_outer_signature: "%feature_eb_encrypted_assertions_require_outer_signature%"
         eb.run_all_manipulations_prior_to_consent: "%feature_run_all_manipulations_prior_to_consent%"
 
+swiftmailer:
+    transport: sendmail
+
 framework:
     #esi:             ~
     #translator:      { fallbacks: ["%locale%"] }
