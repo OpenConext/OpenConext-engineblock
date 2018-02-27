@@ -50,7 +50,7 @@ class Debug extends Twig_Extension
     {
         ob_start();
         var_dump(func_get_args());
-        return ob_get_flush();
+        return ob_get_clean();
     }
 
     /**
