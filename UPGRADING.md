@@ -55,6 +55,21 @@ https://www.pivotaltracker.com/story/show/155358923
 
 Also see the upgraded [theme wiki][eb-wiki-theme-development] page.
 
+### Changes to translation files
+
+The following files have been renamed:
+
+ - languages/nl.php -> languages/messages.nl.php
+ - languages/en.php -> languages/messages.en.php
+
+The placeholder format for translations has been changed from sprintf-style to symfony-style. The following command can
+be used to effortlessly convert the placeholders in your existing translation files:
+
+      sed 's,%\([sd]\),%arg1%,;s,%\([sd]\),%arg2%,;s,%\([sd]\),%arg3%,;s,%\([0-9]\)$[sd],%arg\1%,g' -i languages/*.php
+
+Above command will replace placeholders like '%s' and '%d' with named arguments %arg1% through %arg3%, and placeholders
+like '%x$s' and '%x$d' with named arguments '%argx%'.
+
 ## 5.x -> 5.2
 
 ### Consent API

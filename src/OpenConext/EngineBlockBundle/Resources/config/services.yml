@@ -123,13 +123,6 @@ services:
         tags:
              - { name: 'twig.extension' }
 
-    engineblock.twig.extension.i18n:
-        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n
-        arguments:
-            - "@engineblock.compat.translator"
-        tags:
-             - { name: 'twig.extension' }
-
     engineblock.twig.extension.locale:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Locale
         arguments:
@@ -142,7 +135,7 @@ services:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Metadata
         arguments:
             - "@engineblock.compat.metadata.definitions"
-            - "@engineblock.compat.translator"
+            - "@translator"
         tags:
              - { name: 'twig.extension' }
 
@@ -157,6 +150,6 @@ services:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf
         arguments:
             - "@request_stack"
-            - "@engineblock.compat.translator"
+            - "@translator"
         tags:
              - { name: 'twig.extension' }

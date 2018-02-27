@@ -21,7 +21,7 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 use EngineBlock_Attributes_Metadata;
 use Mockery as m;
 use PHPUnit\Framework\TestCase;
-use Zend_Translate;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class MetadataTest extends TestCase
 {
@@ -36,7 +36,7 @@ class MetadataTest extends TestCase
     private $metadataDefinition;
 
     /**
-     * @var Zend_Translate
+     * @var TranslatorInterface
      */
     private $translator;
 
@@ -45,7 +45,7 @@ class MetadataTest extends TestCase
         // Note that this unit tests depends on a real EngingeBlock_EngineBlock_Attributes_Metadata instance from the
         // Di container.
         $this->metadataDefinition = \EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getAttributeMetadata();
-        $this->translator = m::mock(Zend_Translate::class);
+        $this->translator = m::mock(TranslatorInterface::class);
         $this->metadata = new Metadata($this->metadataDefinition, $this->translator);
     }
 

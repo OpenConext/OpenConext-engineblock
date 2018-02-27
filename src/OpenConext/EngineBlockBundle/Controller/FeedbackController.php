@@ -8,8 +8,8 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
-use Zend_Translate;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods) Mimics the previous methodology, will be refactored
@@ -18,7 +18,7 @@ use Zend_Translate;
 class FeedbackController
 {
     /**
-     * @var Zend_Translate
+     * @var TranslatorInterface
      */
     private $translator;
 
@@ -33,7 +33,7 @@ class FeedbackController
     private $logger;
 
     public function __construct(
-        Zend_Translate $translator,
+        TranslatorInterface $translator,
         Twig_Environment $twig,
         LoggerInterface $logger
     ) {
@@ -172,8 +172,8 @@ class FeedbackController
     {
         $currentLocale = $this->translator->getLocale();
 
-        $title = $this->translator->translate('error_generic');
-        $description = $this->translator->translate('error_generic_desc');
+        $title = $this->translator->trans('error_generic');
+        $description = $this->translator->trans('error_generic_desc');
 
         if ($session->has('feedback_custom')) {
             $feedbackCustom = $session->get('feedback_custom');

@@ -27,10 +27,10 @@ return array(
     'statusMessage'         => 'Statusbericht',
 
     //WAYF
-    'idp_selection_title'       => 'Identity Provider Selectie - %s',
+    'idp_selection_title'       => 'Identity Provider Selectie - %arg1%',
     'idp_selection_subheader'   => 'Login via je eigen instelling',
     'search'                    => 'Zoek een instelling...',
-    'idp_selection_desc'        => 'Selecteer een instelling en login bij <i>%s</i>',
+    'idp_selection_desc'        => 'Selecteer een instelling en login bij <i>%arg1%</i>',
     'our_suggestion'            => 'Eerder gekozen:',
     'idps_with_access'          => 'Instellingen met toegang',
     'idps_without_access'       => 'Instellingen zonder toegang',
@@ -46,7 +46,7 @@ return array(
     'request_access'            => 'Toegang aanvragen',
     'no_idp_results'            => 'Je zoekterm heeft geen resultaten opgeleverd.',
     'no_idp_results_request_access' => 'Kun je je instelling niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
-    'more_idp_results'          => '%d resultaten worden niet getoond. Verfijn je zoekopdracht voor specifiekere resultaten.',
+    'more_idp_results'          => '%arg1% resultaten worden niet getoond. Verfijn je zoekopdracht voor specifiekere resultaten.',
     'return_to_sp'              => 'Keer terug naar Service Provider',
     'remember_choice'           => 'Onthoud mijn keuze',
 
@@ -140,12 +140,12 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     // Consent theme before EB 2.3.0
     'external_link'                     => 'opent in een nieuw venster',
-    'consent_header'                    => '%s verzoekt jouw informatie',
-    'consent_subheader'                 => '%s verzoekt jouw informatie',
-    'consent_intro'                     => '%s verzoekt deze informatie die %s voor jou heeft opgeslagen:',
+    'consent_header'                    => '%arg1% verzoekt jouw informatie',
+    'consent_subheader'                 => '%arg1% verzoekt jouw informatie',
+    'consent_intro'                     => '%arg1% verzoekt deze informatie die %arg2% voor jou heeft opgeslagen:',
     'consent_idp_provides'              => 'wilt de volgende informatie vrijgeven:',
     'consent_sp_is_provided'            => 'aan',
-    'consent_terms_of_service'          => 'Deze informatie zal worden doorgegeven aan %s. Gebruiksvoorwaarden van %s en %s zijn van toepassing.',
+    'consent_terms_of_service'          => 'Deze informatie zal worden doorgegeven aan %arg1%. Gebruiksvoorwaarden van %arg2% en %arg3% zijn van toepassing.',
 
     'consent_accept'                    => 'Ja, deel deze gegevens',
     'consent_decline'                   => 'Nee, ik wil geen gebruik maken van deze dienst',
@@ -153,15 +153,15 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
 
     // Consent theme before EB 5.5.0
     'consent_header_info'               => 'Verzoek voor doorgeven van jouw informatie',
-    'consent_sp_idp_info'               => 'Om met je instellingsaccount in te kunnen loggen op de dienst <strong class="service-provider">%1$s</strong> maakt <strong class="identity-provider">%2$s</strong> gebruik van SURFconext. Voor het functioneren van deze dienst is het noodzakelijk dat <strong class="identity-provider">%2$s</strong> een aantal gegevens via SURFconext deelt met deze dienst. Hiervoor is jouw toestemming nodig. Het gaat om de volgende gegevens:',
-    'consent_aggregated_attributes_info' => '<strong class="service-provider">%1$s</strong> heeft ook toegang nodig tot gegevens uit de gegevensbron <strong class="attribute-source">%2$s</strong>. Het gaat om de volgende aanvullende gegevens:',
-    'sp_terms_of_service'               => 'Bekijk de %s\'s <a href="%s" target="_blank">gebruiksvoorwaarden</a>',
+    'consent_sp_idp_info'               => 'Om met je instellingsaccount in te kunnen loggen op de dienst <strong class="service-provider">%arg1%</strong> maakt <strong class="identity-provider">%arg2%</strong> gebruik van SURFconext. Voor het functioneren van deze dienst is het noodzakelijk dat <strong class="identity-provider">%arg2%</strong> een aantal gegevens via SURFconext deelt met deze dienst. Hiervoor is jouw toestemming nodig. Het gaat om de volgende gegevens:',
+    'consent_aggregated_attributes_info' => '<strong class="service-provider">%arg1%</strong> heeft ook toegang nodig tot gegevens uit de gegevensbron <strong class="attribute-source">%arg2%</strong>. Het gaat om de volgende aanvullende gegevens:',
+    'sp_terms_of_service'               => 'Bekijk de %arg1%\'s <a href="%arg2%" target="_blank">gebruiksvoorwaarden</a>',
     'name_id'                           => 'SURFconext gebruikers ID',
 
     // Consent theme EB 5.5.0 and later
-    'consent_header_title'                    => 'Om in te loggen heeft %s jouw gegevens nodig',
-    'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw instelling veilig verstuurd naar %s via <a class="help" data-slidein="about">SURFconext</a>.',
-    'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %s:',
+    'consent_header_title'                    => 'Om in te loggen heeft %arg1% jouw gegevens nodig',
+    'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw instelling veilig verstuurd naar %arg1% via <a class="help" data-slidein="about">SURFconext</a>.',
+    'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %arg1%:',
     'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst',
     'consent_attributes_correction_link'      => 'Kloppen deze gegevens niet?',
     'consent_attributes_show_more'            => 'Toon alle gegevens',
@@ -175,11 +175,11 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_attribute_source_logo_url_orcid' => 'https://static.surfconext.nl/media/aa/orcid.png',
     'consent_attribute_source_logo_url_surfmarket_entitlements' => 'https://static.surfconext.nl/media/aa/surfmarket_entitlements.png',
     'consent_buttons_title'                   => 'Ga je akkoord met het doorsturen van deze gegevens?',
-    'consent_buttons_ok'                      => 'Ja, ga door naar %s',
+    'consent_buttons_ok'                      => 'Ja, ga door naar %arg1%',
     'consent_buttons_nok'                     => 'Nee, ik ga niet akkoord',
-    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="%1$s" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
-    'consent_footer_text_plural'              => 'Je gebruikt al %1$s diensten via SURFconext. <a href="%2$s" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
-    'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via SURFconext. <a href="%1$s" target="_blank">Bekijk hier je profielinformatie.</a>',
+    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via SURFconext. <a href="%arg1%" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
+    'consent_footer_text_plural'              => 'Je gebruikt al %arg1% diensten via SURFconext. <a href="%arg2%" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
+    'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via SURFconext. <a href="%arg1%" target="_blank">Bekijk hier je profielinformatie.</a>',
     'consent_slidein_details_email'           => 'Email',
     'consent_slidein_details_phone'           => 'Telefoon',
     'consent_slidein_text_contact'            => 'Neem voor vragen hierover contact op met de helpdesk van je instelling. De volgende gegevens zijn bij SURFconext bekend:',
@@ -189,14 +189,14 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'consent_slidein_correction_title' => 'Kloppen de getoonde gegevens niet?',
     'consent_slidein_correction_text_idp'  => 'SURFconext ontvangt de gegevens rechtstreeks van jouw instelling en slaat deze zelf niet op. Neem contact op met de helpdesk van je instelling als je gegevens niet kloppen.',
     'consent_slidein_correction_text_aa'  => 'SURFconext ontvangt de gegevens rechtstreeks van de attribuutbron en slaat deze zelf niet op. Neem contact op met de getoonde attribuutbron als je gegevens niet kloppen. Als je daarbij hulp nodig hebt, kun je contact opnemen met de helpdesk van je eigen instelling.',
-    'consent_slidein_correction_details_title' => 'Contactgegevens %1$s:',
+    'consent_slidein_correction_details_title' => 'Contactgegevens %arg1%:',
 
     // Consent slidein: About SURFconext
     'consent_slidein_about_text'  => <<<'TXT'
 <h1>Inloggen met SURFconext</h1>
 <img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
 <p>Via SURFconext loggen onderzoekers, medewerkers en studenten met hun eigen instellingsaccount veilig en gemakkelijk in bij clouddiensten van verschillende aanbieders. SURFconext biedt extra privacy-bescherming doordat een minimaal aantal persoonlijke gegevens wordt doorgegeven aan deze clouddiensten.</p>
-<p>Zien waar je al eerder toestemming voor hebt gegeven? Bekijk hier je <a href="%1$s" target="_blank">SURFconext profielpagina</a>.</p>
+<p>Zien waar je al eerder toestemming voor hebt gegeven? Bekijk hier je <a href="%arg1%" target="_blank">SURFconext profielpagina</a>.</p>
 
 <h1>SURFconext is onderdeel van SURF</h1>
 <p>SURF is de ICT-samenwerkingsorganisatie van het onderwijs en onderzoek in Nederland.</p>
@@ -254,12 +254,12 @@ Bezoek <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=52331093" t
     'error_invalid_acs_binding'        => 'Onjuist ACS Binding Type',
     'error_invalid_acs_binding_desc'        => 'Het opgegeven of geconfigureerde "Assertion Consumer Service" Binding Type is onjuist of bestaat niet.',
     'error_unsupported_signature_method' => 'Ondertekeningsmethode wordt niet ondersteund',
-    'error_unsupported_signature_method_desc' => 'De ondertekeningsmethode %1$s wordt niet ondersteund, upgrade naar RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
+    'error_unsupported_signature_method_desc' => 'De ondertekeningsmethode %arg1% wordt niet ondersteund, upgrade naar RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_preselected_idp' => 'Error - Instelling is niet gekoppeld aan dienst',
     'error_unknown_preselected_idp_desc' => '<p>
         De instelling waarmee je wilt inloggen heeft toegang tot deze dienst niet geactiveerd. Dat betekent dat jij geen gebruik kunt maken van deze dienst via SURFconext. Neem contact op met de helpdesk van jouw instelling als je toegang wilt krijgen tot deze dienst. Geef daarbij aan om welke dienst het gaat (de &lsquo;Service Provider&rsquo;) en waarom je toegang wilt.
     </p>',
-    'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%s\'',
+    'error_unknown_service_provider'              => 'Error - Kan geen metadata ophalen voor EntityID \'%arg1%\'',
     'error_unknown_service_provider_desc'     => '<p>
         Er kon geen Service Provider worden gevonden met het opgegeven EntityID.
         Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
@@ -289,7 +289,7 @@ Inloggen is niet gelukt en we kunnen je niet precies vertellen waarom. Probeer h
     </p>',
     'error_group_oauth'            =>  'Error - Groepautorisatie is mislukt',
     'error_group_oauth_desc'       => '<p>
-        De extere groepprovider <b>%s</b> retourneerde een fout.<br />
+        De extere groepprovider <b>%arg1%</b> retourneerde een fout.<br />
         Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
         <br />
     </p>',
@@ -311,19 +311,19 @@ Je instelling heeft je de toegang geweigerd tot deze dienst. Je zult dus contact
      * %3 (optional) Value
      * @url http://nl3.php.net/sprintf
      */
-    'error_attribute_validator_type_uri'            => '\'%3$s\' is geen geldige URI',
-    'error_attribute_validator_type_urn'            => '\'%3$s\' is geen geldige URN',
-    'error_attribute_validator_type_url'            => '\'%3$s\' is geen geldige URL',
-    'error_attribute_validator_type_hostname'       => '\'%3$s\' is geen geldige hostname',
-    'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is geen geldig emailadres',
-    'error_attribute_validator_minlength'           => '\'%3$s\' is niet lang genoeg (minimaal %2$d karakters)',
-    'error_attribute_validator_maxlength'           => '\'%3$s\' is te lang (maximaal %2$d karakters)',
-    'error_attribute_validator_min'                 => '%1$s heeft minimaal %2$d waardes nodig (%3$d gegeven)',
-    'error_attribute_validator_max'                 => '%1$s heeft maximaal %2$d waardes (%3$d gegeven)',
-    'error_attribute_validator_regex'               => '\'%3$s\' voldoet niet aan de voorwaarden voor waardes van dit attribuut (%2$s)',
-    'error_attribute_validator_not_in_definitions'  => '%1$s is niet bekend in het SURFconext schema',
-    'error_attribute_validator_allowed'             => '\'%3$s\' is geen toegestane waarde voor dit attribuut',
-    'error_attribute_validator_availability'        => '\'%3$s\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
+    'error_attribute_validator_type_uri'            => '\'%arg3%\' is geen geldige URI',
+    'error_attribute_validator_type_urn'            => '\'%arg3%\' is geen geldige URN',
+    'error_attribute_validator_type_url'            => '\'%arg3%\' is geen geldige URL',
+    'error_attribute_validator_type_hostname'       => '\'%arg3%\' is geen geldige hostname',
+    'error_attribute_validator_type_emailaddress'   => '\'%arg3%\' is geen geldig emailadres',
+    'error_attribute_validator_minlength'           => '\'%arg3%\' is niet lang genoeg (minimaal %arg2% karakters)',
+    'error_attribute_validator_maxlength'           => '\'%arg3%\' is te lang (maximaal %arg2% karakters)',
+    'error_attribute_validator_min'                 => '%arg1% heeft minimaal %arg2% waardes nodig (%arg3% gegeven)',
+    'error_attribute_validator_max'                 => '%arg1% heeft maximaal %arg2% waardes (%arg3% gegeven)',
+    'error_attribute_validator_regex'               => '\'%arg3%\' voldoet niet aan de voorwaarden voor waardes van dit attribuut (%arg2%)',
+    'error_attribute_validator_not_in_definitions'  => '%arg1% is niet bekend in het SURFconext schema',
+    'error_attribute_validator_allowed'             => '\'%arg3%\' is geen toegestane waarde voor dit attribuut',
+    'error_attribute_validator_availability'        => '\'%arg3%\' is a gereserveerde SchacHomeOrganization voor een andere Identity Provider',
 
     'error_unknown_service'         => 'Error - Deze dienst is niet geregistreerd bij SURFconext.',
     'error_unknown_service_desc'    => '<p>Deze dienst is niet bekend. Neem contact op met de SURFconext helpdesk op <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',

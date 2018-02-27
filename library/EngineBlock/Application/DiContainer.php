@@ -97,23 +97,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * It has been done with the check to be backwards compatible. Ideally this would be
-     * hidden behind a compatibility layer rather than here and in the consumers of this
-     * service, but since this will be removed in the future there is no need to
-     * introduce additional code for this particular case.
-     *
-     * @return Zend_Cache_Backend_Apc
-     */
-    public function getApplicationCache()
-    {
-        if ($this->container->has('engineblock.compat.zend.apc_cache')) {
-            return $this->container->get('engineblock.compat.zend.apc_cache');
-        }
-
-        return null;
-    }
-
-    /**
      * @return \OpenConext\EngineBlockBundle\AttributeAggregation\AttributeAggregationClientInterface
      */
     public function getAttributeAggregationClient()
@@ -320,11 +303,11 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return \Zend_Translate
+     * @return \Symfony\Component\Translation\TranslatorInterface
      */
     public function getTranslator()
     {
-        return $this->container->get('engineblock.compat.translator');
+        return $this->container->get('translator');
     }
 
     /**

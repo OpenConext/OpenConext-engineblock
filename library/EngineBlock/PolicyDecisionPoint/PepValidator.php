@@ -90,6 +90,6 @@ class EngineBlock_PolicyDecisionPoint_PepValidator
 
     private function getLocale()
     {
-        return EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter()->getLocale();
+        return EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTranslator()->getLocale();
     }
 }

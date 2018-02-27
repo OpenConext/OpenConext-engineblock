@@ -5,7 +5,7 @@
 {% set idpName = idp.displayName(locale()) %}
 
 {# Prepare the page title #}
-{% set pageTitle = 'consent_header_title'|trans(spName) %}
+{% set pageTitle = 'consent_header_title'|trans({'%arg1%': spName}) %}
 
 {# Load the sorded/ordered and normalized attributes #}
 {% set attributesBySource = sortByDisplayOrder(attributes, attributeSources) %}
@@ -20,7 +20,7 @@
             <header>
                 <h1>{{ pageTitle }}</h1>
                 <p>
-                    {{ 'consent_header_text'|trans(spName)|raw }}
+                    {{ 'consent_header_text'|trans({'%arg1%': spName})|raw }}
                 </p>
                 {% if sp.termsOfServiceUrl is not null %}
                     <p>
@@ -33,7 +33,7 @@
             </header>
 
             <section class="privacy">
-                <h2>{{ 'consent_privacy_title'|trans(spName) }}</h2>
+                <h2>{{ 'consent_privacy_title'|trans({'%arg1%': spName}) }}</h2>
             </section>
 
             <section class="attributes">
@@ -116,7 +116,7 @@
                     <input id="accept_terms_button"
                            class="submit c-button"
                            type="submit"
-                           value="{{ 'consent_buttons_ok'|trans(spName) }}"
+                           value="{{ 'consent_buttons_ok'|trans({'%arg1%': spName}) }}"
                     />
                 </form>
 
@@ -129,11 +129,11 @@
             <footer>
                 <p>
                     {% if consentCount == 0 %}
-                        {{ 'consent_footer_text_first_consent'|trans(profileUrl)|raw }}
+                        {{ 'consent_footer_text_first_consent'|trans({'%arg1%': profileUrl})|raw }}
                     {% elseif consentCount == 1 %}
-                        {{ 'consent_footer_text_singular'|trans(profileUrl)|raw }}
+                        {{ 'consent_footer_text_singular'|trans({'%arg1%': profileUrl})|raw }}
                     {% else %}
-                        {{ 'consent_footer_text_plural'|trans(consentCount, profileUrl)|raw }}
+                        {{ 'consent_footer_text_plural'|trans({'%arg1%%': consentCount, '%arg2%': profileUrl})|raw }}
                     {% endif %}
                 </p>
             </footer>
