@@ -3,7 +3,6 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\ServiceProviderController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
             - "@session"
 
     engineblock.controller.authentication.identity_provider:
@@ -32,7 +31,6 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\MetadataController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
 
     engineblock.controller.authentication.certificate:
         class: OpenConext\EngineBlockBundle\Controller\CertificateController

@@ -4,7 +4,6 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
-use EngineBlock_View;
 use OpenConext\EngineBlockBridge\ResponseFactory;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,17 +14,10 @@ class MetadataController
      */
     private $engineBlockApplicationSingleton;
 
-    /**
-     * @var EngineBlock_View
-     */
-    private $engineBlockView;
-
     public function __construct(
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView
+        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView                 = $engineBlockView;
     }
 
     /**

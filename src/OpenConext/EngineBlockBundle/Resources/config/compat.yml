@@ -28,11 +28,6 @@ services:
         class: Doctrine\DBAL\Connection
         factory: ["@engineblock.compat.doctrine.entity_manager", getConnection]
 
-    engineblock.compat.view:
-        class: EngineBlock_View
-        calls:
-            - ['setLayout', ["@engineblock.compat.layout"]]
-
     engineblock.compat.layout:
         class: Zend_Layout
         calls:
