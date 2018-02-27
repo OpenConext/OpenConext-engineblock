@@ -111,6 +111,10 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@engineblock.repository.service_provider"
             - "@engineblock.repository.identity_provider"
+    engineblock.twig.extension.debug:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug
+        tags:
+             - { name: 'twig.extension' }
 
     engineblock.twig.extension.feedback:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Feedback

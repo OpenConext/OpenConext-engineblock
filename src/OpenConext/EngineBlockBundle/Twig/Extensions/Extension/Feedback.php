@@ -40,9 +40,6 @@ class Feedback extends Twig_Extension
         return [
             new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo'], ['is_safe' => ['html']]),
             new TwigFunction('flushLog', [$this, 'flushLog'], ['is_safe' => ['html']]),
-            new TwigFunction('var_export', [$this, 'varExport'], ['is_safe' => ['html']]),
-            new TwigFunction('var_dump', [$this, 'varDump'], ['is_safe' => ['html']]),
-            new TwigFunction('print_r', [$this, 'printHumanReadable'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -55,42 +52,6 @@ class Feedback extends Twig_Extension
     public function getFeedbackInfo()
     {
         return $this->retrieveFeedbackInfo();
-    }
-
-    /**
-     * Provides var dump functionality for use in Twig templates
-     *
-     * @SuppressWarnings(PHPMD.CamelCaseParameterName)
-     *
-     * @param mixed $expression
-     * @param mixed $_
-     * @return string
-     */
-    public function varDump($expression, $_ = null)
-    {
-        ob_start();
-        var_dump(func_get_args());
-        return ob_get_flush();
-    }
-
-    /**
-     * Provide var export functionality for use in Twig templates
-     * @param mixed $expression
-     * @return string
-     */
-    public function varExport($expression)
-    {
-        return var_export($expression, true);
-    }
-
-    /**
-     * Returns the output of print_r with the added instruction to return the output as a string.
-     * @param mixed $expression
-     * @return string
-     */
-    public function printHumanReadable($expression)
-    {
-        return print_r($expression, true);
     }
 
     /**
