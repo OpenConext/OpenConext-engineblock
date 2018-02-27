@@ -36,7 +36,11 @@ export class KeyboardListener {
         }
 
         if (keyCode === ENTER) {
-            this.idpPicker.selectIdpUnderFocus();
+            // Don't interfer with ENTER on input fields or textareas
+            // inside the request-access modal dialog.
+            if (!this.requestAccessModalHelper.modalIsOpen()) {
+                this.idpPicker.selectIdpUnderFocus();
+            }
         }
     }
 }
