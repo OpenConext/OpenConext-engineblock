@@ -54,7 +54,7 @@ class UserAgent extends Twig_Extension
     {
         switch ($isOfType) {
             case 'safari':
-                $pattern = '~Version/(\d)[\\.\d]+ Safari/~';
+                $pattern = '~Version/(\d+)[\\.\d]+ Safari/~';
                 return preg_match($pattern, $this->httpUserAgent, $matches) ? 'safari' . $matches[1] : '';
                 break;
             default:
