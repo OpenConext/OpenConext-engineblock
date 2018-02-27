@@ -18,7 +18,6 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
-use OpenConext\EngineBlockBundle\Exception\RuntimeException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFunction;
 use Twig_Extension;
