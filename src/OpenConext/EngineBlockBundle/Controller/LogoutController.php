@@ -2,8 +2,8 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
-use EngineBlock_View;
 use Symfony\Component\HttpFoundation\Response;
+use Twig_Environment;
 
 /**
  * @SuppressWarnings(PHPMD.Superglobals) see docblock at logoutAction
@@ -11,13 +11,13 @@ use Symfony\Component\HttpFoundation\Response;
 class LogoutController
 {
     /**
-     * @var EngineBlock_View
+     * @var Twig_Environment
      */
-    private $engineBlockView;
+    private $twig;
 
-    public function __construct(EngineBlock_View $engineBlockView)
+    public function __construct(Twig_Environment $twig)
     {
-        $this->engineBlockView = $engineBlockView;
+        $this->twig = $twig;
     }
 
     /**
@@ -29,7 +29,7 @@ class LogoutController
      */
     public function logoutAction()
     {
-        $response = new Response($this->engineBlockView->render('Logout/View/Index/Index.phtml'));
+        $response = new Response($this->twig->render('@theme/Logout/View/Index/index.html.twig'));
 
         if (empty($_SESSION)) {
             return $response;
