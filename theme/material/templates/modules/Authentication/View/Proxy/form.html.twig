@@ -1,0 +1,55 @@
+{% extends '@themeLayouts/scripts/empty.html.twig' %}
+
+{% block content %}
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="robots" content="noindex, nofollow"/>
+        <meta content="ie=edge,chrome=1" http-equiv="x-ua-compatible">
+        <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport">
+        <meta content="translucent-black" name="apple-mobile-web-app-status-bar-style">
+        <link href="/favicon.ico" rel="shortcut icon">
+        <!--[if lte IE 8]>
+        <script src="/javascripts/html5shiv.min.js"></script><![endif]-->
+        <link href="/stylesheets/application.css" rel="stylesheet" type="text/css"/>
+        <title>{{ defaultTitle }} - {{ 'post_data'|trans }}</title>
+    </head>
+    <body class="index" {% if trace is empty %}onload="document.forms[0].submit()"{% endif %}>
+    <div class="mod-redirect">
+        <img class="rotate-img" src="/images/spinner.svg" alt=""/>
+
+        <h1>{{ 'processing'|trans }}</h1>
+
+        <p>{{ 'processing_waiting'|trans }}</p>
+
+        <p>{{ 'processing_long'|trans }}</p>
+        <noscript>
+            <p>
+                <strong>{{ 'note'|trans }}:</strong>
+                {{ 'note_no_script'|trans }}
+            </p>
+        </noscript>
+        <form id="ProcessForm" method="post" action="{{ action }}">
+            <input type="hidden" name="{{ name }}" value="{{ message }}"/>
+
+            {{ xtra|raw }}
+
+            <noscript><input type="submit" value="Submit" class="c-button"/></noscript>
+
+            {% if trace is not empty %}
+                <input id="submitbutton" type="submit" value="Submit" class="c-button"/>
+                <pre style="text-align: left; margin: 0 auto; width: 500px; height: 800px;">
+            {{ trace }}
+            </pre>
+                <script type="text/javascript">
+                    document.getElementById('submitbutton').focus();
+                </script>
+            {% endif %}
+
+        </form>
+    </div>
+
+    </body>
+    </html>
+{% endblock %}

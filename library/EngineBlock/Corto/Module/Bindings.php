@@ -72,14 +72,20 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
      */
     private $_logger;
 
+    /**
+     * @var Twig_Environment
+     */
+    private $twig;
+
     public function __construct(EngineBlock_Corto_ProxyServer $server)
     {
         parent::__construct($server);
 
         $diContainer                       = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         $this->_sspmodSamlMessageClassName = $diContainer->getMessageUtilClassName();
-        $this->_featureConfiguration       = $diContainer->getFeatureConfiguration();
-        $this->_logger                     = EngineBlock_ApplicationSingleton::getLog();
+        $this->_featureConfiguration = $diContainer->getFeatureConfiguration();
+        $this->_logger = EngineBlock_ApplicationSingleton::getLog();
+        $this->twig = $diContainer->getTwigEnvironment();
     }
 
     /**
@@ -566,15 +572,27 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $log = $this->_server->getLogger();
             $log->info('HTTP-Post: Sending Message', array('saml_message' => $xml));
 
-            $output = $this->_server->renderTemplate(
-                'form',
-                array(
+            $type = $message->getMessageType();
+
+            if (!isset($action)) {
+                throw new EngineBlock_View_Exception('No action given to HTTP Post screen');
+            }
+            if (!isset($type)) {
+                throw new EngineBlock_View_Exception('No message type (SAMLRequest or SAMLResponse) given to HTTP Post screen');
+            }
+            if (!isset($encodedMessage)) {
+                throw new EngineBlock_View_Exception('No message given to HTTP Post screen');
+            }
+
+            $output = $this->twig->render(
+                '@theme/Authentication/View/Proxy/form.html.twig',
+                [
                     'action' => $action,
                     'message' => $encodedMessage,
                     'xtra' => $extra,
-                    'name' => $message->getMessageType(),
+                    'name' => $type,
                     'trace' => $this->getTraceHtml($xml),
-                )
+                ]
             );
             $this->_server->sendOutput($output);
 
