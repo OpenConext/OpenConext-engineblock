@@ -45,7 +45,6 @@ class EngineBlock_Application_Bootstrapper
         $this->_bootstrapHttpCommunication();
         $this->_bootstrapSaml2();
 
-        $this->_bootstrapLayout();
         $this->_bootstrapTranslations();
 
         $this->_bootstrapped = true;
@@ -120,24 +119,6 @@ class EngineBlock_Application_Bootstrapper
         set_exception_handler       (array($errorHandler, 'exception'));
 
         $this->_application->setErrorHandler($errorHandler);
-    }
-
-    protected function _bootstrapLayout()
-    {
-        $layout = new Zend_Layout();
-
-        // Set a layout script path:
-        $layout->setLayoutPath(ENGINEBLOCK_FOLDER_APPLICATION . 'layouts/scripts/');
-
-        // Defaults
-        $defaultsConfig = $this->_application->getDiContainer()->getViewConfiguration();
-        $layout->title  = $defaultsConfig['title'];
-        $layout->header = $defaultsConfig['header'];
-
-        // choose a different layout script:
-        $layout->setLayout($defaultsConfig['layout']);
-
-        $this->_application->setLayout($layout);
     }
 
     protected function _bootstrapTranslations()

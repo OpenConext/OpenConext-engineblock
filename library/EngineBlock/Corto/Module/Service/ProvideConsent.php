@@ -109,10 +109,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
-        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
-        $layout->hideHeader = true;
-        $layout->hideFooter = true;
-
         // Profile url is configurable in application.ini (profile.baseUrl)
         $profileUrl = '#';
         $configuredUrl = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getProfileBaseUrl();

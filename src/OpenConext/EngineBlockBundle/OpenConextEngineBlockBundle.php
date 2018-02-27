@@ -16,8 +16,5 @@ class OpenConextEngineBlockBundle extends Bundle
             $this->container->get('engineblock.request.request_id'),
             $this->container
         );
-
-        // set the configured layout on the application singleton
-        $engineBlockApplicationSingleton->setLayout($this->container->get('engineblock.compat.layout'));
     }
 }

@@ -56,11 +56,6 @@ class EngineBlock_ApplicationSingleton
     protected $_translator;
 
     /**
-     * @var Zend_Layout
-     */
-    protected $_layout;
-
-    /**
      * @var EngineBlock_Application_Bootstrapper
      */
     protected $_bootstrapper;
@@ -351,24 +346,6 @@ class EngineBlock_ApplicationSingleton
         $this->reportError($exception, $messageSuffix);
         $_SESSION['feedbackInfo'] = array_merge($feedbackInfo, $_SESSION['feedbackInfo']);
         $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
-    }
-
-    /**
-     * @return Zend_Layout
-     */
-    public function getLayout()
-    {
-        return $this->_layout;
-    }
-
-    /**
-     * @param Zend_Layout $layout
-     * @return EngineBlock_ApplicationSingleton
-     */
-    public function setLayout(Zend_Layout $layout)
-    {
-        $this->_layout = $layout;
-        return $this;
     }
 
     /**
