@@ -1,27 +1,10 @@
-{% macro form(currentLanguage) %}
-
-    {#<?php if (strtoupper($_SERVER['REQUEST_METHOD']) === 'POST'): ?>#}
-    {#<form method="post" action="">#}
-    {#<?php foreach ($_POST as $key => $value): ?>#}
-    {#<input type="hidden" name="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($key) ?>"#}
-    {#value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($value) ?>">#}
-    {#<?php endforeach ?>#}
-    {#<ul class="comp-language">#}
-    {#<li>#}
-    {#<button type="submit" name="lang" value="en"#}
-    {#<?php if ($currentLanguage==='en'): ?> class="selected"<?php endif; ?>>EN</button>#}
-    {#</li>#}
-    {#<li>#}
-    {#<button type="submit" name="lang" value="nl"#}
-    {#<?php if ($currentLanguage==='nl'): ?> class="selected"<?php endif; ?>>NL</button>#}
-    {#</li>#}
-    {#</ul>#}
-    {#</form>#}
-    {#<?php else: ?>#}
+{% macro form(currentLanguage, postData) %}
     <form method="post" action="">
-        {#<?php foreach ($_POST as $key => $value): ?>#}
-        {#<input type="hidden" name="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($key) ?>" value="<?= EngineBlock_View::htmlSpecialCharsAttributeValue($value) ?>">#}
-        {#<?php endforeach ?>#}
+        {% if postData is not empty %}
+            {% for name, value in postData %}
+                <input type="hidden" name="{{ name }}" value="{{ value }}">
+            {% endfor %}
+        {% endif %}
         <ul class="comp-language">
             <li>
                 <button type="submit" name="lang" value="en" {% if currentLanguage == 'en' %} class="selected" {% endif %}>EN</button>
@@ -31,5 +14,4 @@
             </li>
         </ul>
     </form>
-    {#<?php endif ?>#}
 {% endmacro form %}

@@ -18,6 +18,7 @@
 
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\TwigFunction;
 use Twig_Extension;
@@ -33,16 +34,32 @@ class Locale extends Twig_Extension
      */
     private $locale;
 
+    /**
+     * @var null|Request
+     */
+    private $request;
+
     public function __construct(RequestStack $requestStack, $defaultLocale)
     {
+        $this->request = $requestStack->getCurrentRequest();
         $this->locale = $this->retrieveLocale($requestStack, $defaultLocale);
     }
 
     public function getFunctions()
     {
         return [
-            new TwigFunction('locale', [$this, 'getLocale'], ['is_safe' => ['html']])
+            new TwigFunction('locale', [$this, 'getLocale'], ['is_safe' => ['html']]),
+            new TwigFunction('postData', [$this, 'getPostData'], ['is_safe' => ['html']])
         ];
+    }
+
+    public function getPostData()
+    {
+        $postArray = [];
+        if ($this->request->isMethod(Request::METHOD_POST)) {
+            $postArray = $this->request->request->all();
+        }
+        return $postArray;
     }
 
     public function getLocale()

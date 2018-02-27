@@ -42,7 +42,7 @@
     <div class="meta">
 
         {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
-            {{ languageSwitcher.form(locale()) }}
+            {{ languageSwitcher.form(locale(), postData()) }}
         {% endif %}
 
         <ul class="comp-links">
@@ -80,7 +80,7 @@
 
             <li class="nav-row">
                 {% if displayLanguageSwitcher is not defined or displayLanguageSwitcher == true %}
-                    {{ languageSwitcher.form(locale()) }}
+                    {{ languageSwitcher.form(locale(), postData()) }}
                 {% endif %}
             </li>
 
