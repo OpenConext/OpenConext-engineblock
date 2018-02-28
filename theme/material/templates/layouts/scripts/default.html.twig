@@ -30,13 +30,11 @@
 {% if hideHeader is not defined or hideHeader == false %}
 <div class="mod-header">
     <h1 class="title">
-        <h1>
-            {% block pageHeading %}{{ defaultHeader }}{% endblock %}
+        {% block pageHeading %}{{ defaultHeader }}{% endblock %}
 
-            {% if greenHeader is defined %}
-            <strong>{{ greenHeader }}</strong>
-            {% endif %}
-        </h1>
+        {% if greenHeader is defined %}
+        <strong>{{ greenHeader }}</strong>
+        {% endif %}
     </h1>
 
     <div class="meta">
