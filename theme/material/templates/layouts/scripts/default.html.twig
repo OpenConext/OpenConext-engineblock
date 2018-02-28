@@ -31,7 +31,7 @@
 <div class="mod-header">
     <h1 class="title">
         <h1>
-            {% block page_heading %}{% endblock %}
+            {% block page_heading %}{{ defaultHeader }}{% endblock %}
 
             {% if greenHeader is defined %}
             <strong>{{ greenHeader }}</strong>

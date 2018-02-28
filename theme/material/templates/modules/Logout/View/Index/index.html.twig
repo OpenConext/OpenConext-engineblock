@@ -3,7 +3,7 @@
 {% set pageTitle = 'logout'|trans %}
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ pageTitle }}{% endblock %}
+{% block page_heading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block content %}
 <div class="box">

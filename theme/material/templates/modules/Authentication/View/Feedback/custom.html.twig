@@ -4,6 +4,6 @@
 {% set pageTitle = title %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ pageTitle }}{% endblock %}
+{% block page_heading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}{{ description|raw }}{% endblock %}

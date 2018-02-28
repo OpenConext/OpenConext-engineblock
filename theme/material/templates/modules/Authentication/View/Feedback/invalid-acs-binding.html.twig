@@ -4,6 +4,6 @@
 {% set pageTitle = 'error_invalid_acs_binding'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ pageTitle }}{% endblock %}
+{% block page_heading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}{{ 'error_invalid_acs_binding_desc'|trans|raw }}{% endblock %}

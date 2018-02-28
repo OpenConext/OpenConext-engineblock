@@ -31,6 +31,7 @@ configuration files and will be ignored otherwise.
     auth.simplesamlphp.*
     engine.simplesamlphp.*
     defaults.subheader
+    defaults.layout
     logger.factory
     logger.conf.handlers
     logger.conf.handler.syslog.factory

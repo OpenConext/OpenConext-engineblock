@@ -4,7 +4,7 @@
 {% set pageTitle = 'error_404'|trans %}
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ pageTitle }}{% endblock %}
+{% block page_heading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block content %}
 <div class="box">

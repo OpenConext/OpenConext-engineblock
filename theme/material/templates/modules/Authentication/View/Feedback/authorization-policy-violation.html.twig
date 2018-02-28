@@ -4,7 +4,7 @@
 {% set pageTitle = 'error_authorization_policy_violation'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ pageTitle }}{% endblock %}
+{% block page_heading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}
 

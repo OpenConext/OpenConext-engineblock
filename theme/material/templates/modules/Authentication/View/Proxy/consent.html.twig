@@ -11,7 +11,7 @@
 {% set attributesBySource = sortByDisplayOrder(attributes, attributeSources) %}
 
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ pageTitle }}{% endblock %}
+{% block page_heading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block content %}
 

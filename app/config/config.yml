@@ -58,6 +58,7 @@ twig:
     globals:
         assetsVersion: %asset_version%
         defaultTitle: %view_default_title%
+        defaultHeader: %view_default_header%
 
 doctrine:
     dbal:

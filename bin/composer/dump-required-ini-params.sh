@@ -182,7 +182,6 @@ $ymlContent = array(
         'wayf.remember_choice'                                    => (bool) $config->get('wayf.rememberChoice', false),
         'time_frame_for_authentication_loop_in_seconds'           => (int) $config->get('engineblock.timeFrameForAuthenticationLoopInSeconds'),
         'maximum_authentication_procedures_allowed'               => (int) $config->get('engineblock.maximumAuthenticationProceduresAllowed'),
-        'view_default_layout'                                     => $config->get('defaults.layout'),
         'view_default_title'                                      => $config->get('defaults.title'),
         'view_default_header'                                     => $config->get('defaults.header'),
         'ui_return_to_sp_link'                                    => (bool) $config->get('ui.return_to_sp_link.active'),
