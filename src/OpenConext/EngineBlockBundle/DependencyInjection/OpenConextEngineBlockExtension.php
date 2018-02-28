@@ -26,11 +26,6 @@ class OpenConextEngineBlockExtension extends Extension
         $loader->load('bridge_event_listeners.yml');
         $loader->load('compat.yml');
 
-        $isApcEnabled = extension_loaded('apc') && ini_get('apc.enabled');
-        if ($isApcEnabled) {
-            $loader->load('compat_apc.yml');
-        }
-
         $this->overwriteDefaultLogger($container);
         $this->setUrlParameterBasedOnEnv($container);
         $this->setFeatureConfiguration($container, $configuration['features']);

@@ -20,9 +20,9 @@ namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig\TwigFunction;
 use Twig_Extension;
-use Zend_Translate;
 
 class Wayf extends Twig_Extension
 {
@@ -31,7 +31,7 @@ class Wayf extends Twig_Extension
 
 
     /**
-     * @var Zend_Translate
+     * @var TranslatorInterface
      */
     private $translator;
 
@@ -40,7 +40,7 @@ class Wayf extends Twig_Extension
      */
     private $previousSelection;
 
-    public function __construct(RequestStack $requestStack, Zend_Translate $translator)
+    public function __construct(RequestStack $requestStack, TranslatorInterface $translator)
     {
         $this->previousSelection = $this->loadPreviousSelectionFromCookie($requestStack);
         $this->translator = $translator;
@@ -153,9 +153,9 @@ class Wayf extends Twig_Extension
                 'rememberChoiceCookieName' => self::REMEMBER_CHOICE_COOKIE_NAME,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'messages' => [
-                    'pressEnterToSelect' => $this->translator->translate('press_enter_to_select'),
-                    'moreIdpResults' => $this->translator->translate('more_idp_results'),
-                    'requestAccess' => $this->translator->translate('request_access'),
+                    'pressEnterToSelect' => $this->translator->trans('press_enter_to_select'),
+                    'moreIdpResults' => $this->translator->trans('more_idp_results'),
+                    'requestAccess' => $this->translator->trans('request_access'),
                 ],
                 'requestAccessUrl' => '/authentication/idp/requestAccess?'.http_build_query(
                     [

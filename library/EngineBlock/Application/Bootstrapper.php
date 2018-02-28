@@ -45,8 +45,6 @@ class EngineBlock_Application_Bootstrapper
         $this->_bootstrapHttpCommunication();
         $this->_bootstrapSaml2();
 
-        $this->_bootstrapTranslations();
-
         $this->_bootstrapped = true;
 
         return $this;
@@ -119,12 +117,5 @@ class EngineBlock_Application_Bootstrapper
         set_exception_handler       (array($errorHandler, 'exception'));
 
         $this->_application->setErrorHandler($errorHandler);
-    }
-
-    protected function _bootstrapTranslations()
-    {
-        $this->_application->setTranslator(
-            $this->_application->getDiContainer()->getTranslator()
-        );
     }
 }

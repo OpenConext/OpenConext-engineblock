@@ -28,7 +28,10 @@ swiftmailer:
 
 framework:
     #esi:             ~
-    #translator:      { fallbacks: ["%locale%"] }
+    translator:
+        fallbacks: ["%locale%"]
+        paths:
+          - '%kernel.root_dir%/../languages'
     secret:          "%secret%"
     router:
         resource: "%kernel.root_dir%/config/routing.yml"

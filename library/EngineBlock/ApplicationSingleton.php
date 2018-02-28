@@ -13,11 +13,6 @@ define('ENGINEBLOCK_FOLDER_VENDOR'    , ENGINEBLOCK_FOLDER_ROOT . 'vendor/');
 
 require_once ENGINEBLOCK_FOLDER_VENDOR . 'autoload.php';
 
-// @todo this only necessary for code which bypasses autoloading like Zend_Translate
-$includePath = get_include_path();
-$includePath = ENGINEBLOCK_FOLDER_VENDOR .  'zendframework/zendframework1/library' . PATH_SEPARATOR . $includePath;
-set_include_path($includePath);
-
 class EngineBlock_ApplicationSingleton
 {
     /**
@@ -49,11 +44,6 @@ class EngineBlock_ApplicationSingleton
      * @var Psr\Log\LoggerInterface
      */
     protected $_log;
-
-    /**
-     * @var Zend_Translate
-     */
-    protected $_translator;
 
     /**
      * @var EngineBlock_Application_Bootstrapper
@@ -340,24 +330,6 @@ class EngineBlock_ApplicationSingleton
         $this->reportError($exception, $messageSuffix);
         $_SESSION['feedbackInfo'] = array_merge($feedbackInfo, $_SESSION['feedbackInfo']);
         $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
-    }
-
-    /**
-     * @return Zend_Translate
-     */
-    public function getTranslator()
-    {
-        return $this->_translator;
-    }
-
-    /**
-     * @param Zend_Translate $translator
-     * @return EngineBlock_ApplicationSingleton
-     */
-    public function setTranslator(Zend_Translate $translator)
-    {
-        $this->_translator = $translator;
-        return $this;
     }
 
     //////////// HTTP COMMUNICATION

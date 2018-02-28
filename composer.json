@@ -18,7 +18,6 @@
         "simplesamlphp/saml2": "^3.1",
         "simplesamlphp/simplesamlphp": "^1.15",
         "sybio/image-workshop": "~2.0.7",
-        "zendframework/zendframework1":"~1.12",
         "symfony/symfony": "^2.8",
         "sensio/distribution-bundle": "~4.0",
         "sensio/framework-extra-bundle": "^3.0.2",
@@ -54,8 +53,7 @@
     },
     "scripts": {
         "pre-autoload-dump": [
-            "bin/composer/simplesamlphp-post-install.sh",
-            "bin/composer/zend-framework-post-install.sh"
+            "bin/composer/simplesamlphp-post-install.sh"
         ],
         "post-autoload-dump": [
             "bin/composer/dump-required-ini-params.sh"

@@ -4,7 +4,7 @@ namespace OpenConext\EngineBlockBridge\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use OpenConext\EngineBlockBundle\Localization\LocaleProvider;
-use Zend_Translate_Adapter;
+use Symfony\Component\Translation\TranslatorInterface;
 
 /**
  * This listener depends on the LocaleListener in the EngineBlockBundle (which has to scope the LocaleProvider with the
@@ -20,14 +20,14 @@ final class SetCortoTranslationsLocaleListener
     private $localeProvider;
 
     /**
-     * @var Zend_Translate_Adapter
+     * @var TranslatorInterface
      */
     private $translator;
 
     public function __construct(LocaleProvider $localeProvider)
     {
         $this->localeProvider = $localeProvider;
-        $this->translator = EngineBlock_ApplicationSingleton::getInstance()->getTranslator()->getAdapter();
+        $this->translator = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTranslator();
     }
 
     public function onKernelRequest()

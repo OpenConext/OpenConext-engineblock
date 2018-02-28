@@ -19,9 +19,9 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use EngineBlock_Attributes_Metadata;
+use Symfony\Component\Translation\TranslatorInterface;
 use Twig\TwigFunction;
 use Twig_Extension;
-use Zend_Translate;
 
 /**
  * Used to perform certain view related operations on metadata. For example this extension provides a function that
@@ -35,11 +35,11 @@ class Metadata extends Twig_Extension
     private $attributeMetadata;
 
     /**
-     * @var Zend_Translate
+     * @var TranslatorInterface
      */
     private $translator;
 
-    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, Zend_Translate $translator)
+    public function __construct(EngineBlock_Attributes_Metadata $attributesMetadata, TranslatorInterface $translator)
     {
         $this->attributeMetadata = $attributesMetadata;
         $this->translator = $translator;
@@ -106,7 +106,7 @@ class Metadata extends Twig_Extension
      */
     public function getAttributeSourceLogoUrl($source)
     {
-        return $this->translator->translate('consent_attribute_source_logo_url_' . strtolower($source));
+        return $this->translator->trans('consent_attribute_source_logo_url_' . strtolower($source));
     }
 
     /**
@@ -117,7 +117,7 @@ class Metadata extends Twig_Extension
      */
     public function getAttributeSourceDisplayName($source)
     {
-        return $this->translator->translate('consent_attribute_source_' . strtolower($source));
+        return $this->translator->trans('consent_attribute_source_' . strtolower($source));
     }
 
     /**

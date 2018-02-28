@@ -27,10 +27,10 @@ return array(
     'statusMessage'         => 'Status Message',
 
     // WAYF
-    'idp_selection_title'       => 'Identity Provider Selection - %s',
+    'idp_selection_title'       => 'Identity Provider Selection - %arg1%',
     'idp_selection_subheader'   => 'Login via your institution',
     'search'                    => 'Search for an institution...',
-    'idp_selection_desc'        => 'Select an institution to login to <i>%s</i>',
+    'idp_selection_desc'        => 'Select an institution to login to <i>%arg1%</i>',
     'our_suggestion'            => 'Previously chosen:',
     'idps_with_access'          => 'Identity Providers with access',
     'idps_without_access'       => 'Identity Providers without access',
@@ -47,7 +47,7 @@ return array(
     'request_access'            => 'Request access',
     'no_idp_results'            => 'Your search did not return any results.',
     'no_idp_results_request_access' => 'Can\'t find your institution? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
-    'more_idp_results'          => '%d results not shown. Refine your search to show more specific results.',
+    'more_idp_results'          => '%arg1% results not shown. Refine your search to show more specific results.',
     'return_to_sp'              => 'Return to Service Provider',
 
     // Remove cookies
@@ -142,12 +142,12 @@ If you have any questions about your privacy and the policy applied, please visi
 
     // Consent theme before EB 2.3.0
     'external_link'                     => 'opens in a new window',
-    'consent_header'                    => '%s requests your information',
-    'consent_subheader'                 => '%s requests your information',
-    'consent_intro'                     => '%s requests this information that %s has stored for you:',
+    'consent_header'                    => '%arg1% requests your information',
+    'consent_subheader'                 => '%arg1% requests your information',
+    'consent_intro'                     => '%arg1% requests this information that %arg2% has stored for you:',
     'consent_idp_provides'              => 'wants to provide the following information:',
     'consent_sp_is_provided'            => 'to',
-    'consent_terms_of_service'          => 'This information will be passed on to %s. Terms of service of %s and %s apply.',
+    'consent_terms_of_service'          => 'This information will be passed on to %arg1%. Terms of service of %arg2% and %arg3% apply.',
 
     'consent_accept'                    => 'Yes, share this data',
     'consent_decline'                   => 'No, I don\'t want to use this service',
@@ -155,15 +155,15 @@ If you have any questions about your privacy and the policy applied, please visi
 
     // Consent theme before EB 5.5.0
     'consent_header_info'               => 'Request for release of your information',
-    'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%1$s</strong> using your institutional account, <strong class="identity-provider">%2$s</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%2$s</strong> shares certain information with this service. For this, your permission is required. The service needs the following information:',
-    'consent_aggregated_attributes_info' => '<strong class="service-provider">%1$s</strong> also requires access to information from the source <strong class="attribute-source">%2$s</strong>. The service needs the following additional information:',
-    'sp_terms_of_service'               => 'View %s\'s <a href="%s" target="_blank">Terms of Service</a>',
+    'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%arg1%</strong> using your institutional account, <strong class="identity-provider">%arg2%</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%arg2%</strong> shares certain information with this service. For this, your permission is required. The service needs the following information:',
+    'consent_aggregated_attributes_info' => '<strong class="service-provider">%arg1%</strong> also requires access to information from the source <strong class="attribute-source">%arg2%</strong>. The service needs the following additional information:',
+    'sp_terms_of_service'               => 'View %arg1%\'s <a href="%arg2%" target="_blank">Terms of Service</a>',
     'name_id'                           => 'SURFconext user ID',
 
     // Consent theme EB 5.5.0 and later
-    'consent_header_title'                    => '%s needs your information before logging in',
-    'consent_header_text'                     => 'The service needs the following information to function properly. These data will be sent securely from your institution towards %1$s via <a class="help" href="#" data-slidein="about">SURFconext</a>.',
-    'consent_privacy_title'                   => 'The following information will be shared with %s:',
+    'consent_header_title'                    => '%arg1% needs your information before logging in',
+    'consent_header_text'                     => 'The service needs the following information to function properly. These data will be sent securely from your institution towards %arg1% via <a class="help" href="#" data-slidein="about">SURFconext</a>.',
+    'consent_privacy_title'                   => 'The following information will be shared with %arg1%:',
     'consent_privacy_link'                    => 'Read the privacy policy of this service',
     'consent_attributes_correction_link'      => 'Are your details incorrect?',
     'consent_attributes_show_more'            => 'Show more information',
@@ -177,11 +177,11 @@ If you have any questions about your privacy and the policy applied, please visi
     'consent_attribute_source_logo_url_orcid' => 'https://static.surfconext.nl/media/aa/orcid.png',
     'consent_attribute_source_logo_url_surfmarket_entitlements' => 'https://static.surfconext.nl/media/aa/surfmarket_entitlements.png',
     'consent_buttons_title'                   => 'Do you agree with sharing this data?',
-    'consent_buttons_ok'                      => 'Yes, proceed to %s',
+    'consent_buttons_ok'                      => 'Yes, proceed to %arg1%',
     'consent_buttons_nok'                     => 'No, I do not agree',
-    'consent_footer_text_singular'            => 'You are using one other service via SURFconext. <a href="%1$s" target="_blank">View the list of services and your profile information.</a>',
-    'consent_footer_text_plural'              => 'You are using %1$s services via SURFconext. <a href="%2$s" target="_blank">View the list of services and your profile information.</a>',
-    'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="%1$s" target="_blank">View your profile information.</a>',
+    'consent_footer_text_singular'            => 'You are using one other service via SURFconext. <a href="%arg1%" target="_blank">View the list of services and your profile information.</a>',
+    'consent_footer_text_plural'              => 'You are using %arg1% services via SURFconext. <a href="%arg2%" target="_blank">View the list of services and your profile information.</a>',
+    'consent_footer_text_first_consent'       => 'You are not using any services via SURFconext. <a href="%arg1%" target="_blank">View your profile information.</a>',
     'consent_slidein_details_email'           => 'Email',
     'consent_slidein_details_phone'           => 'Phone',
     'consent_slidein_text_contact'            => 'If you have any questions about this page, please contact the help desk of your institution. SURFconext has the following contact information:',
@@ -197,7 +197,7 @@ If you have any questions about your privacy and the policy applied, please visi
 <h1>Logging in through SURFconext</h1>
 <img src="/images/about-surfconext.png" alt="SURFconext diagram"/>
 <p>Via SURFconext, researchers, staff and students can easily and securely log in into various cloud services using their own institutional account. SURFconext offers extra privacy protection by sending a minimum set of personal data to these cloud services.</p>
-<p>Curious about which services already received your information before through SURFconext? Visit your <a href="%1$s">SURFconext profile page</a>.</p>
+<p>Curious about which services already received your information before through SURFconext? Visit your <a href="%arg1%">SURFconext profile page</a>.</p>
 
 <h1>SURFconext is part of SURF</h1>
 <p>SURF is the collaborative ICT organisation for Dutch education and research.</p>
@@ -255,12 +255,12 @@ Visit <a href="https://wiki.surfnet.nl/x/jq9WAw" target="_blank">the SURFconext 
     'error_invalid_acs_binding'     => 'Invalid ACS Binding Type',
     'error_invalid_acs_binding_desc'     => 'The provided or configured "Assertion Consumer Service" Binding Type is unknown or invalid.',
     'error_unsupported_signature_method' => 'Signature method is not supported',
-    'error_unsupported_signature_method_desc' => 'The signature method %1$s is not supported, please upgrade to RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
+    'error_unsupported_signature_method_desc' => 'The signature method %arg1% is not supported, please upgrade to RSA-SHA256 (http://www.w3.org/2001/04/xmldsig-more#rsa-sha256).',
     'error_unknown_preselected_idp' => 'Error - No connection between institution and service',
     'error_unknown_preselected_idp_desc' => '<p>
         The institution that you want to use to login to this service did not activate access to this service. This means you are unable to use this service through SURFconext. Please contact your institution\'s helpdesk to request access to this service. State what service it is about (the &lsquo;Service Provider&rsquo;) and why you need access.
     </p>',
-    'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%s\'',
+    'error_unknown_service_provider'          => 'Error - Cannot provide metadata for EntityID \'%arg1%\'',
     'error_unknown_service_provider_desc'     => '<p>
 Your requested service couldn\'t be found. Visit <a href="https://wiki.surfnet.nl/x/k69WAw" target="_blank">the SURFconext supportpages</a> for more extensive support on this error.
     </p>',
@@ -289,7 +289,7 @@ Your log-in has failed and we don\'t know exactly why. Try again first, and if t
     </p>',
     'error_group_oauth'            =>  'Error - Group authorization failed',
     'error_group_oauth_desc'       => '<p>
-        The external group provider <b>%s</b> reported an error. </p>
+        The external group provider <b>%arg1%</b> reported an error. </p>
         <p>Please contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
        </p>',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
@@ -309,19 +309,19 @@ Your institution has denied you access to this service. You will have to contact
      * %3 (optional) Value
      * @url http://nl3.php.net/sprintf
      */
-    'error_attribute_validator_type_uri'            => '\'%3$s\' is not a valid URI',
-    'error_attribute_validator_type_urn'            => '\'%3$s\' is not a valid URN',
-    'error_attribute_validator_type_url'            => '\'%3$s\' is not a valid URL',
-    'error_attribute_validator_type_hostname'       => '\'%3$s\' is not a valid hostname',
-    'error_attribute_validator_type_emailaddress'   => '\'%3$s\' is not a valid email address',
-    'error_attribute_validator_minlength'           => '\'%3$s\' is not long enough (minimum is %2$d characters)',
-    'error_attribute_validator_maxlength'           => '\'%3$s\' is too long (maximum is %2$d characters)',
-    'error_attribute_validator_min'                 => '%1$s should have at least %2$d values (%3$d given)',
-    'error_attribute_validator_max'                 => '%1$s may have no more than %2$d values (%3$d given)',
-    'error_attribute_validator_regex'               => '\'%3$s\' does not match the expected format of this attribute (%2$s)',
-    'error_attribute_validator_not_in_definitions'  => '%1$s is not known in the SURFconext schema',
-    'error_attribute_validator_allowed'             => '\'%3$s\' is not an allowed value for this attribute',
-    'error_attribute_validator_availability'        => '\'%3$s\' is a reserved schacHomeOrganization for another Identity Provider',
+    'error_attribute_validator_type_uri'            => '\'%arg3%\' is not a valid URI',
+    'error_attribute_validator_type_urn'            => '\'%arg3%\' is not a valid URN',
+    'error_attribute_validator_type_url'            => '\'%arg3%\' is not a valid URL',
+    'error_attribute_validator_type_hostname'       => '\'%arg3%\' is not a valid hostname',
+    'error_attribute_validator_type_emailaddress'   => '\'%arg3%\' is not a valid email address',
+    'error_attribute_validator_minlength'           => '\'%arg3%\' is not long enough (minimum is %arg2% characters)',
+    'error_attribute_validator_maxlength'           => '\'%arg3%\' is too long (maximum is %arg2% characters)',
+    'error_attribute_validator_min'                 => '%arg1% should have at least %arg2% values (%arg3% given)',
+    'error_attribute_validator_max'                 => '%arg1% may have no more than %arg2% values (%arg3% given)',
+    'error_attribute_validator_regex'               => '\'%arg3%\' does not match the expected format of this attribute (%arg2%)',
+    'error_attribute_validator_not_in_definitions'  => '%arg1% is not known in the SURFconext schema',
+    'error_attribute_validator_allowed'             => '\'%arg3%\' is not an allowed value for this attribute',
+    'error_attribute_validator_availability'        => '\'%arg3%\' is a reserved schacHomeOrganization for another Identity Provider',
 
     'error_unknown_service'         => 'Error - Unknown service',
     'error_unknown_service_desc'    => '<p>Your requested service couldn\'t be found.Please contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
