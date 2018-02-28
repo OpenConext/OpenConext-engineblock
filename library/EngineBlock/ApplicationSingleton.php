@@ -325,13 +325,7 @@ class EngineBlock_ApplicationSingleton
             return $configHostname;
         }
 
-        $httpRequestHostname = $_SERVER['HTTP_HOST'];
-        $validator = new Zend_Validate_Hostname();
-        if ($validator->isValid($httpRequestHostname)) {
-            return $httpRequestHostname;
-        }
-
-        throw new EngineBlock_Exception('No hostname configured and Host header is invalid.');
+        return $_SERVER['HTTP_HOST'];
     }
 
     /**
