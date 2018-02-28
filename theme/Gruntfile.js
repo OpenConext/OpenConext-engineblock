@@ -82,8 +82,6 @@ module.exports = function(grunt) {
         copy: {
             material: {
                 files: [
-                    { expand: true, cwd: 'material/templates/layouts/', src: ['**'], dest: '../app/Resources/views/layouts' },
-                    { expand: true, cwd: 'material/templates/modules/', src: ['**'], dest: '../app/Resources/views/modules' },
                     { expand: true, cwd: 'material/images/', src: ['**'], dest: '../web/images' },
                 ]
             }
@@ -94,10 +92,6 @@ module.exports = function(grunt) {
             },
             material: {
                 src: [
-                    '../app/Resources/views/layouts',
-                    '../app/Resources/views/modules/Authentication/View',
-                    '../app/Resources/views/modules/Default/View',
-                    '../app/Resources/views/modules/Logout/View',
                     '../web/images/**/*',
                     '../web/javascripts/**/*',
                     '../web/stylesheets/**/*'
@@ -135,7 +129,6 @@ module.exports = function(grunt) {
                 options: {
                     comments: ["This file is generated. Please edit the files of the appropriate theme in the 'theme/' directory."],
                     syntaxes: {
-                        '.phtml': ['<?php /*', '*/ ?>'],
                         '.css': ['/*', '*/']
                     }
                 },
@@ -143,8 +136,6 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: __dirname + '/..',
                     src: [
-                        'app/Resources/views/layouts/**/*.phtml',
-                        'app/Resources/views/modules/**/*.phtml',
                         'web/javascripts/**/*.js',
                         'wev/stylesheets/**/*.css'
                     ],
