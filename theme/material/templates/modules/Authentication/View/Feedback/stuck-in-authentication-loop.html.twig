@@ -4,6 +4,6 @@
 {% set pageTitle = 'error_stuck_in_authentication_loop'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block page_heading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}{{ 'error_stuck_in_authentication_loop_desc'|trans|raw }}{% endblock %}
