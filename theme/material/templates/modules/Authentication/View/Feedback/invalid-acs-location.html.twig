@@ -4,6 +4,6 @@
 {% set pageTitle = 'error_no_message'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+{% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}{{ 'error_invalid_acs_location'|trans|raw }}{% endblock %}
