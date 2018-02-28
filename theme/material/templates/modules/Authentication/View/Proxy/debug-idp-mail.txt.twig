@@ -14,11 +14,11 @@ NameID             {{ nameId.value }}
 Attributes
 ==========
 {% for error in validationResult.errorsForMissingAttributes %}
-Error: {{ error[0]|format(error[:1]) }}
+Error: {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
 {% endfor %}
 
 {% for warning in validationResult.warningsForMissingAttributes %}
-Warning: {{ warning[0]|format(warning[:1]) }}
+Warning: {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
 {% endfor %}
 
 {% for attributeName, attributeValues in attributes %}
@@ -32,11 +32,11 @@ Values:
 {% endfor %}
 
 {% for error in validationResult.errors(attributeName) %}
-Error: {{ error|trans }}
+Error: {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
 {% endfor %}
 
 {% for warning in validationResult.warnings(attributeName) %}
-Warning: {{ warning|trans }}
+Warning: {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
 {% endfor %}
 {% endfor %}
 

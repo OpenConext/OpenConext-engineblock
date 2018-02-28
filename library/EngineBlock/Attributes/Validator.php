@@ -68,6 +68,8 @@ class EngineBlock_Attributes_Validator
                 $this->warnings[$attributeName] = array(array(
                     'error_attribute_validator_not_in_definitions',
                     $attributeName,
+                    null,
+                    null
                 ));
             }
             $validAttributeSet = false;
