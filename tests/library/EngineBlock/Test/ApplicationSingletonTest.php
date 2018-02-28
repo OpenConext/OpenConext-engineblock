@@ -40,14 +40,4 @@ class EngineBlock_Test_ApplicationSingletonTest extends PHPUnit_Framework_TestCa
         //        but that's not easy to test because the application class does
         //        no use DI.
     }
-
-    /**
-     * @expectedException EngineBlock_Exception
-     */
-    public function testGetHostnameRefusesInvalidHostname()
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-        $_SERVER['HTTP_HOST'] = '145.100.191.206"><foo>alert(1)';
-        $application->getHostname();
-    }
 }
