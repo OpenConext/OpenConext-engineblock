@@ -49,7 +49,8 @@ class Locale extends Twig_Extension
     {
         return [
             new TwigFunction('locale', [$this, 'getLocale'], ['is_safe' => ['html']]),
-            new TwigFunction('postData', [$this, 'getPostData'], ['is_safe' => ['html']])
+            new TwigFunction('postData', [$this, 'getPostData'], ['is_safe' => ['html']]),
+            new TwigFunction('queryStringFor', [$this, 'getQueryStringFor'], ['is_safe' => ['html']])
         ];
     }
 
@@ -60,6 +61,29 @@ class Locale extends Twig_Extension
             $postArray = $this->request->request->all();
         }
         return $postArray;
+    }
+
+    /**
+     * Reads the query string parameters, adds the lang parameter and returns the merged query string.
+     * @param $locale
+     * @return string
+     */
+    public function getQueryStringFor($locale)
+    {
+        $params = ['lang' => $locale];
+        // re-create URL from GET parameters
+        $params = array_merge(
+            $this->request->query->all(),
+            $params
+        );
+
+        $query = '';
+        foreach ($params as $key => $value) {
+            $query .= (strlen($query) == 0) ? '?' : '&' ;
+            $query .= $key. '=' .urlencode($value);
+        }
+
+        return $query;
     }
 
     public function getLocale()
