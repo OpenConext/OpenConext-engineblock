@@ -127,7 +127,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attributes' => $attributes,
                 'attributeSources' => $this->getAttributeSources($request->getId()),
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
-                'profileUrl' => $profileUrl
+                'profileUrl' => $profileUrl,
+                'hideHeader' => true,
+                'hideFooter' => true,
             ]
         );
 

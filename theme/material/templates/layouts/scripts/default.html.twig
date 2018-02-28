@@ -70,6 +70,7 @@
     {% block content %}{% endblock %}
 </div>
 
+{% if hideFooter is not defined or hideFooter == false %}
 <div id="footer" class="l-footer">
     <nav class="mod-footer">
         <ul class="footer-menu">
@@ -109,6 +110,7 @@
         </ul>
     </nav>
 </div>
+{% endif %}
 
 {% if beforeScriptHtml is defined %}
     {{ beforeScriptHtml|raw }}
