@@ -87,6 +87,52 @@ be used to effortlessly convert the placeholders in your existing translation fi
 Above command will replace placeholders like '%s' and '%d' with named arguments %arg1% through %arg3%, and placeholders
 like '%x$s' and '%x$d' with named arguments '%argx%'.
 
+The following translation messages are not used by EB5.x and can be removed from the translation files:
+
+ - english
+ - dutch
+ - back
+ - attribute
+ - authentication\_urls
+ - idp\_selection\_title
+ - idp\_selection\_subheader
+ - idp\_selection\_desc
+ - our\_suggestion
+ - no\_access
+ - no\_access\_more\_info
+ - no\_results
+ - error\_header
+ - edit
+ - done
+ - remove
+ - cookie\_not\_set
+ - footer
+ - close\_question
+ - sorry
+ - form\_description
+ - deleteuser\_success\_header
+ - deleteuser\_success\_subheader
+ - deleteuser\_success\_desc
+ - external\_link
+ - consent\_header
+ - consent\_subheader
+ - consent\_intro
+ - consent\_idp\_provides
+ - consent\_sp\_is\_provided
+ - consent\_terms\_of\_service
+ - consent\_accept
+ - consent\_decline
+ - consent\_notice
+ - consent\_header\_info
+ - consent\_sp\_idp\_info
+ - consent\_aggregated\_attributes\_info
+ - sp\_terms\_of\_service
+ - name\_id
+ - error\_authorization\_policy\_violation\_name
+ - error\_group\_oauth
+ - error\_group\_oauth\_desc
+ - info\_mail\_link
+
 ## 5.x -> 5.2
 
 ### Consent API

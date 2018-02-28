@@ -1,11 +1,7 @@
 <?php
 
 return array(
-    'dutch'                 => 'Nederlands',
-
     //General
-    'back'                  => 'terug',
-    'attribute'             => 'Attribuut',
     'value'                 => 'Waarde',
     'post_data'             => 'POST Data',
     'processing'            => 'Verbinden met de dienst',
@@ -14,10 +10,9 @@ return array(
     'go_back'               => '&lt;&lt; Ga terug',
     'note'                  => 'Mededeling',
     'note_no_script'        => 'Jouw browser ondersteunt geen JavaScript. Je moet op de onderstaande knop drukken om door te gaan.',
-    'authentication_urls'   => 'Authenticatie URLs',
-    'timestamp'             => 'Timestamp',
 
      // Feedback
+    'timestamp'             => 'Timestamp',
     'requestId'             => 'Uniek Request ID',
     'identityProvider'      => 'Identity Provider',
     'serviceProvider'       => 'Service Provider',
@@ -27,22 +22,12 @@ return array(
     'statusMessage'         => 'Statusbericht',
 
     //WAYF
-    'idp_selection_title'       => 'Identity Provider Selectie - %arg1%',
-    'idp_selection_subheader'   => 'Login via je eigen instelling',
     'search'                    => 'Zoek een instelling...',
-    'idp_selection_desc'        => 'Selecteer een instelling en login bij <i>%arg1%</i>',
-    'our_suggestion'            => 'Eerder gekozen:',
     'idps_with_access'          => 'Instellingen met toegang',
     'idps_without_access'       => 'Instellingen zonder toegang',
-    'no_access'                 => 'Geen toegang.',
-    'no_access_more_info'       => 'Geen toegang. &raquo;',
-    'no_results'                => 'Geen resultaten gevonden.',
     'log_in_to'                 => 'Selecteer een instelling en login bij',
     'press_enter_to_select'     => 'Druk op enter om te kiezen',
     'loading_idps'              => 'Instellingen worden geladen...',
-    'edit'                      => 'Bewerken',
-    'done'                      => 'Klaar',
-    'remove'                    => 'Verwijderen',
     'request_access'            => 'Toegang aanvragen',
     'no_idp_results'            => 'Je zoekterm heeft geen resultaten opgeleverd.',
     'no_idp_results_request_access' => 'Kun je je instelling niet vinden? &nbsp;<a href="#no-access" class="noaccess">Vraag toegang aan</a>&nbsp;of pas je zoekopdracht aan.',
@@ -51,7 +36,6 @@ return array(
     'remember_choice'           => 'Onthoud mijn keuze',
 
     //Remove cookies
-    'cookie_not_set'            => 'Geen waarde',
     'cookie_removal_header'     => 'Cookies verwijderen',
     'cookie_remove_button'      => 'Verwijderen',
     'cookie_remove_all_button'  => 'Alles verwijderen',
@@ -63,7 +47,6 @@ return array(
     'service_by'            => 'Deze dienst is verbonden via',
     'serviceprovider_link'  => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>',
     'terms_of_service_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29" target="_blank">Gebruiksvoorwaarden</a>',
-    'footer'                => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28NL%29">Gebruiksvoorwaarden</a>',
 
     //Help
     'help'                  => 'Help',
@@ -71,8 +54,6 @@ return array(
     'help_description'      => '<p>Heb je vragen over dit scherm of de SURFconext dienstverlening, bekijk dan de antwoorden bij de FAQ hieronder.</p>
 
     <p>Staat je vraag er niet bij, of ben je niet tevreden met een antwoord? Bezoek dan <a href="https://wiki.surfnet.nl/display/conextsupport/">de SURFconext support pagina</a> of stuur een mail naar <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
-
-    'close_question'        =>      'Sluit',
 
     //Help questions
     // general help questions
@@ -106,10 +87,6 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     'answer_cannot_select'              =>      '<p>Het keuzescherm van SURFconext is te gebruiken in de meest gangbare browsers waaronder, Internet Explorer, Firefox, Chrome en Safari. Andere browsers worden mogelijk niet ondersteund. Verder moet je browser het gebruik van cookies en javascript toestaan.</p>',
 
     // Request Access Form
-    'sorry'                 => 'Helaas,',
-    'form_description'      => 'heeft geen toegang tot deze dienst. Wat nu?</h2>
-            <p>Wil je toch graag toegang tot deze dienst, vul dan
-      het onderstaande formulier in. Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>',
     'request_access_instructions' => '<h2>Helaas, je hebt geen toegang tot de dienst die je zoekt. Wat nu?</h2>
                                 <p>Wil je toch graag toegang tot deze dienst, vul dan het onderstaande formulier in.
                                    Wij sturen je verzoek door naar de juiste persoon binnen jouw instelling.</p>',
@@ -131,32 +108,6 @@ Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lez
     <p>SURFnet faciliteert het doorsturen van je verzoek maar heeft geen controle over de snelheid waarmee je antwoord of toegang krijgt.</p>
 
     <p>Heb je vragen over je verzoek, neem dan contact op met <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
-
-    // Delete User
-    'deleteuser_success_header'         => 'SURFconext exit procedure',
-    'deleteuser_success_subheader'      => 'U bent bijna klaar...',
-    'deleteuser_success_desc'           => '<strong>Belangrijk!</strong> Om de exit procedure succesvol af te ronden, moet je nu de browser afsluiten.',
-
-
-    // Consent theme before EB 2.3.0
-    'external_link'                     => 'opent in een nieuw venster',
-    'consent_header'                    => '%arg1% verzoekt jouw informatie',
-    'consent_subheader'                 => '%arg1% verzoekt jouw informatie',
-    'consent_intro'                     => '%arg1% verzoekt deze informatie die %arg2% voor jou heeft opgeslagen:',
-    'consent_idp_provides'              => 'wilt de volgende informatie vrijgeven:',
-    'consent_sp_is_provided'            => 'aan',
-    'consent_terms_of_service'          => 'Deze informatie zal worden doorgegeven aan %arg1%. Gebruiksvoorwaarden van %arg2% en %arg3% zijn van toepassing.',
-
-    'consent_accept'                    => 'Ja, deel deze gegevens',
-    'consent_decline'                   => 'Nee, ik wil geen gebruik maken van deze dienst',
-    'consent_notice'                    => '(We zullen dit nogmaals vragen als jouw informatie wijzigt)',
-
-    // Consent theme before EB 5.5.0
-    'consent_header_info'               => 'Verzoek voor doorgeven van jouw informatie',
-    'consent_sp_idp_info'               => 'Om met je instellingsaccount in te kunnen loggen op de dienst <strong class="service-provider">%arg1%</strong> maakt <strong class="identity-provider">%arg2%</strong> gebruik van SURFconext. Voor het functioneren van deze dienst is het noodzakelijk dat <strong class="identity-provider">%arg2%</strong> een aantal gegevens via SURFconext deelt met deze dienst. Hiervoor is jouw toestemming nodig. Het gaat om de volgende gegevens:',
-    'consent_aggregated_attributes_info' => '<strong class="service-provider">%arg1%</strong> heeft ook toegang nodig tot gegevens uit de gegevensbron <strong class="attribute-source">%arg2%</strong>. Het gaat om de volgende aanvullende gegevens:',
-    'sp_terms_of_service'               => 'Bekijk de %arg1%\'s <a href="%arg2%" target="_blank">gebruiksvoorwaarden</a>',
-    'name_id'                           => 'SURFconext gebruikers ID',
 
     // Consent theme EB 5.5.0 and later
     'consent_header_title'                    => 'Om in te loggen heeft %arg1% jouw gegevens nodig',
@@ -246,7 +197,6 @@ Bezoek <a href="https://wiki.surfnet.nl/pages/viewpage.action?pageId=52331093" t
     'error_authorization_policy_violation_desc'       => '<p>
         Je bent succesvol ingelogd bij jouw instelling, maar je kunt geen gebruik maken van deze dienst omdat je geen toegang hebt. Voor deze dienst (de &lsquo;Service Provider&rsquo;) heeft jouw instelling met <i>autorisatieregels</i> ingesteld dat alleen bepaalde gebruikers toegang krijgen. Neem contact op met de (IT-)servicedesk van je instelling als je vindt dat je wel toegang moet hebben.
     </p>',
-    'error_authorization_policy_violation_name'       => 'Omschrijving autorisatieregels',
     'error_authorization_policy_violation_info'       => 'Bericht van je instelling: ',
     'error_no_message'                  => 'Error - Geen bericht ontvangen',
     'error_no_message_desc'             => 'We verwachtten een bericht, maar we hebben er geen ontvangen. Er is iets fout gegaan. Probeer het alstublieft opnieuw.',
@@ -286,12 +236,6 @@ Inloggen is niet gelukt en we kunnen je niet precies vertellen waarom. Probeer h
             <li>UID</li>
             <li>schacHomeOrganization</li>
         </ul>
-    </p>',
-    'error_group_oauth'            =>  'Error - Groepautorisatie is mislukt',
-    'error_group_oauth_desc'       => '<p>
-        De extere groepprovider <b>%arg1%</b> retourneerde een fout.<br />
-        Neem contact op met de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-        <br />
     </p>',
 
     'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
@@ -345,7 +289,4 @@ Je instelling heeft je de toegang geweigerd tot deze dienst. Je zult dus contact
     'logout' => 'uitloggen',
     'logout_description' => 'Deze applicatie maakt gebruik van centrale login. Hiermee is het mogelijk om met single sign on bij verschillende applicaties in te loggen. Om er 100% zeker van te zijn dat je uitgelogd bent, moet je de browser helemaal afsluiten.',
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Uitloggen+SURFconext">Meer informatie over veilig uitloggen</a>',
-
-    // Internal
-    'info_mail_link' => '<a href="support@surfconext.nl">support@surfconext.nl</a>',
 );

@@ -1,11 +1,7 @@
 <?php
 
 return array(
-    'english'               => 'English',
-
     // General
-    'back'                  => 'back',
-    'attribute'             => 'Attribute',
     'value'                 => 'Value',
     'post_data'             => 'POST Data',
     'processing'            => 'Connecting to the service',
@@ -14,10 +10,9 @@ return array(
     'go_back'               => '&lt;&lt; Go back',
     'note'                  => 'Note',
     'note_no_script'        => 'Since your browser does not support JavaScript, you must press the button below to proceed.',
-    'authentication_urls'   => 'Authentication URLs',
-    'timestamp'             => 'Timestamp',
 
     // Feedback
+    'timestamp'             => 'Timestamp',
     'requestId'             => 'Unique Request ID',
     'identityProvider'      => 'Identity Provider',
     'serviceProvider'       => 'Service Provider',
@@ -27,23 +22,12 @@ return array(
     'statusMessage'         => 'Status Message',
 
     // WAYF
-    'idp_selection_title'       => 'Identity Provider Selection - %arg1%',
-    'idp_selection_subheader'   => 'Login via your institution',
     'search'                    => 'Search for an institution...',
-    'idp_selection_desc'        => 'Select an institution to login to <i>%arg1%</i>',
-    'our_suggestion'            => 'Previously chosen:',
     'idps_with_access'          => 'Identity Providers with access',
     'idps_without_access'       => 'Identity Providers without access',
-    'no_access'                 => 'No access',
-    'no_access_more_info'       => 'No access. &raquo;',
-    'no_results'                => 'Your search did not return any results.',
-    'error_header'              => 'Error',
     'log_in_to'                 => 'Select an institution to login to the service:',
     'press_enter_to_select'     => 'Press enter to select',
     'loading_idps'              => 'Loading Identity Providers...',
-    'edit'                      => 'Edit List',
-    'done'                      => 'Done',
-    'remove'                    => 'Remove',
     'request_access'            => 'Request access',
     'no_idp_results'            => 'Your search did not return any results.',
     'no_idp_results_request_access' => 'Can\'t find your institution? &nbsp;<a href="#no-access" class="noaccess">Request access</a>&nbsp;or try tweaking your search.',
@@ -52,7 +36,6 @@ return array(
 
     // Remove cookies
     'remember_choice'           => 'Remember my choice',
-    'cookie_not_set'            => 'Not set',
     'cookie_removal_header'     => 'Remove cookies',
     'cookie_remove_button'      => 'Remove',
     'cookie_remove_all_button'  => 'Remove all',
@@ -64,7 +47,6 @@ return array(
     'service_by'            => 'This is a service connected through',
     'serviceprovider_link'  => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>',
     'terms_of_service_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29" target="_blank">Terms of Service</a>',
-    'footer'                => '<a href="https://www.surfconext.nl/" target="_blank">SURFconext</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;<a href="https://wiki.surfnet.nl/display/conextsupport/Terms+of+Service+%28EN%29">Terms of Service</a>',
 
     // Help
     'help'                  => 'Help',
@@ -73,8 +55,6 @@ return array(
 
     <p>For more detailed information, please visit <a href="https://support.surfconext.nl/">the SURFconext support page</a>
         or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
-
-    'close_question'        =>      'Close',
 
     // Help questions
     // general help questions
@@ -108,9 +88,6 @@ If you have any questions about your privacy and the policy applied, please visi
     'answer_cannot_select'              =>      '<p>The dialog box to select your institution can be used in most popular browsers, including Internet Explorer, Firefox, Chrome, and Safari. Other browsers may not be supported. Your browser must support the use of cookies and JavaScript.</p>',
 
     //Form
-    'sorry'                 => 'Unfortunately,',
-    'form_description'      => 'does not have access to this service. What can you do?</h2>
-            <p>If you want to access this service, please fill out the form below. We will then forward your request to the person responsible for the services portfolio management at your institution.</p>',
     'request_access_instructions' => '<h2>Unfortunately, you do not have access to the service you are looking for.
                                    What can you do?</h2>
                                 <p>If you want to access this service, please fill out the form below.
@@ -134,31 +111,6 @@ If you have any questions about your privacy and the policy applied, please visi
     <p>SURFnet has forwarded your request, but the decision and planning to make this service available depends on the ICT policy of your institution.</p>
 
     <p>If you have any questions about your request, please contact <a href="mailto:help@surfconext.nl">help@surfconext.nl</a></p>',
-
-    //Delete User
-    'deleteuser_success_header'         => 'SURFconext exit procedure',
-    'deleteuser_success_subheader'      => 'You are almost done...',
-    'deleteuser_success_desc'           => '<strong>Important!</strong> To finalize the exit procedure you must close your browser.',
-
-    // Consent theme before EB 2.3.0
-    'external_link'                     => 'opens in a new window',
-    'consent_header'                    => '%arg1% requests your information',
-    'consent_subheader'                 => '%arg1% requests your information',
-    'consent_intro'                     => '%arg1% requests this information that %arg2% has stored for you:',
-    'consent_idp_provides'              => 'wants to provide the following information:',
-    'consent_sp_is_provided'            => 'to',
-    'consent_terms_of_service'          => 'This information will be passed on to %arg1%. Terms of service of %arg2% and %arg3% apply.',
-
-    'consent_accept'                    => 'Yes, share this data',
-    'consent_decline'                   => 'No, I don\'t want to use this service',
-    'consent_notice'                    => '(We will ask you again when the information changes)',
-
-    // Consent theme before EB 5.5.0
-    'consent_header_info'               => 'Request for release of your information',
-    'consent_sp_idp_info'               => 'In order to log in to <strong class="service-provider">%arg1%</strong> using your institutional account, <strong class="identity-provider">%arg2%</strong> uses SURFconext. This service is only accessible through SURFconext if <strong class="identity-provider">%arg2%</strong> shares certain information with this service. For this, your permission is required. The service needs the following information:',
-    'consent_aggregated_attributes_info' => '<strong class="service-provider">%arg1%</strong> also requires access to information from the source <strong class="attribute-source">%arg2%</strong>. The service needs the following additional information:',
-    'sp_terms_of_service'               => 'View %arg1%\'s <a href="%arg2%" target="_blank">Terms of Service</a>',
-    'name_id'                           => 'SURFconext user ID',
 
     // Consent theme EB 5.5.0 and later
     'consent_header_title'                    => '%arg1% needs your information before logging in',
@@ -247,7 +199,6 @@ Visit <a href="https://wiki.surfnet.nl/x/jq9WAw" target="_blank">the SURFconext 
     'error_authorization_policy_violation_desc'       => '<p>
         You have successfully logged in at your institution, but unfortunately you cannot use this service (the &lsquo;Service Provider&rsquo;) because you have no access. Your institution limits access to this service with an <i>authorization policy</i>. Please contact your institution\'s helpdesk if you think you should be allowed access to this service.
     </p>',
-    'error_authorization_policy_violation_name'       => 'Authorization policy message',
     'error_authorization_policy_violation_info'       => 'Message from your institution: ',
     'error_no_message'              => 'Error - No message received',
     'error_no_message_desc'         => 'We were expecting a message, but did not get one? Something went wrong. Please try again.',
@@ -287,11 +238,6 @@ Your log-in has failed and we don\'t know exactly why. Try again first, and if t
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
-    'error_group_oauth'            =>  'Error - Group authorization failed',
-    'error_group_oauth_desc'       => '<p>
-        The external group provider <b>%arg1%</b> reported an error. </p>
-        <p>Please contact the SURFconext team at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
-       </p>',
     'error_received_error_status_code'     => 'Error - Identity Provider error',
     'error_received_error_status_code_desc'=> '<p>
 Your institution has denied you access to this service. You will have to contact your own (IT-)servicedesk to see if this can be fixed.
@@ -343,7 +289,4 @@ Your institution has denied you access to this service. You will have to contact
     'logout' => 'logout',
     'logout_description' => 'This application uses centralized log in, which provides single sign on for several applications. To be sure your log out is 100% secure you should close your browser completely.',
     'logout_information_link' => '<a href="https://wiki.surfnet.nl/display/conextsupport/Log+out+SURFconext">More information about secure log out</a>',
-
-    // Internal
-    'info_mail_link' => '<a href="support@surfconext.nl">support@surfconext.nl</a>',
 );
