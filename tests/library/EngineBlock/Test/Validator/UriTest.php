@@ -26,7 +26,7 @@ class EngineBlock_Test_Validator_UriTest extends PHPUnit_Framework_TestCase
     {
         return array(
             array('http://example.com'), // Pretty standard http url
-            array('urn:mace:dir:entitlement:common-lib-terms') // Saml entitlement (not valid when using Zend_Uri)
+            array('urn:mace:dir:entitlement:common-lib-terms') // Saml entitlement
         );
     }
 }

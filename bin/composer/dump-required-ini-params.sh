@@ -52,7 +52,7 @@ $forbiddenSignatureMethods = array_filter(
  *     phpSettings.memory_limit = "128M"
  *     phpSettings.date.timezone = "Europe/Amsterdam"
  *
- * Which was parsed by Zend_Config as:
+ * Which is parsed by `parse_ini_file` in EngineBlockIniFileLoader as:
  *
  *     [
  *         "memory_limit" => "128M",

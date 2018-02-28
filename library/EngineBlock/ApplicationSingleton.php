@@ -13,10 +13,6 @@ define('ENGINEBLOCK_FOLDER_VENDOR'    , ENGINEBLOCK_FOLDER_ROOT . 'vendor/');
 
 require_once ENGINEBLOCK_FOLDER_VENDOR . 'autoload.php';
 
-$includePath = get_include_path();
-$includePath = ENGINEBLOCK_FOLDER_VENDOR .  'zendframework/zendframework1/library' . PATH_SEPARATOR . $includePath;
-set_include_path($includePath);
-
 class EngineBlock_ApplicationSingleton
 {
     /**
