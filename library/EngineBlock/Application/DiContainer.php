@@ -368,18 +368,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * @return array
-     */
-    public function getViewConfiguration()
-    {
-        return (array) [
-            'layout' => $this->container->getParameter('view_default_layout'),
-            'title' => $this->container->getParameter('view_default_title'),
-            'header' => $this->container->getParameter('view_default_header'),
-        ];
-    }
-
-    /**
      * @return bool
      */
     public function isConsentStoreValuesActive()
