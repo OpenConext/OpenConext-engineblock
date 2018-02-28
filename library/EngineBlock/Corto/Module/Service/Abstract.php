@@ -11,11 +11,18 @@ abstract class EngineBlock_Corto_Module_Service_Abstract
      */
     protected $_xmlConverter;
 
-    public function __construct(EngineBlock_Corto_ProxyServer $server, EngineBlock_Corto_XmlToArray $xmlConverter)
-    {
+    /**
+     * @var Twig_Environment
+     */
+    protected $twig;
+
+    public function __construct(
+        EngineBlock_Corto_ProxyServer $server,
+        EngineBlock_Corto_XmlToArray $xmlConverter,
+        Twig_Environment $twig
+    ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
+        $this->twig = $twig;
     }
-
-
 }

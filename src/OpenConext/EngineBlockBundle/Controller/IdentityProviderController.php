@@ -20,7 +20,6 @@ namespace OpenConext\EngineBlockBundle\Controller;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Adapter;
-use EngineBlock_View;
 use Exception;
 use OpenConext\EngineBlock\Service\RequestAccessMailer;
 use OpenConext\EngineBlockBridge\ResponseFactory;
@@ -31,6 +30,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Twig_Environment;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects) Due to the compatibility requirements
@@ -43,9 +43,9 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
     private $engineBlockApplicationSingleton;
 
     /**
-     * @var EngineBlock_View
+     * @var Twig_Environment
      */
-    private $engineBlockView;
+    private $twig;
 
     /**
      * @var LoggerInterface
@@ -64,16 +64,16 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
 
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView,
+        Twig_Environment $twig,
         LoggerInterface $loggerInterface,
         RequestAccessMailer $requestAccessMailer,
         Session $session
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView                 = $engineBlockView;
-        $this->logger                          = $loggerInterface;
-        $this->requestAccessMailer             = $requestAccessMailer;
-        $this->session                         = $session;
+        $this->twig = $twig;
+        $this->logger = $loggerInterface;
+        $this->requestAccessMailer = $requestAccessMailer;
+        $this->session = $session;
     }
 
     /**
@@ -144,11 +144,10 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
      */
     public function requestAccessAction(Request $request)
     {
-        $body = $this->engineBlockView
-            ->setData([
-                'queryParameters' => $request->query->all()
-            ])
-            ->render('Authentication/View/IdentityProvider/RequestAccess.phtml');
+        $body = $this->twig->render(
+            '@theme/Authentication/View/IdentityProvider/request-access.html.twig',
+            ['queryParameters' => $request->query->all()]
+        );
 
         return new Response($body);
     }
@@ -170,9 +169,10 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
 
             $viewData['queryParameters'] = filter_input_array(INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
-            $body = $this->engineBlockView
-                ->setData($viewData)
-                ->render('Authentication/View/IdentityProvider/RequestAccess.phtml');
+            $body = $this->twig->render(
+                '@theme/Authentication/View/IdentityProvider/request-access.html.twig',
+                $viewData
+            );
 
             return new Response($body);
         }
@@ -200,7 +200,7 @@ class IdentityProviderController implements AuthenticationLoopThrottlingControll
         }
 
         return new Response(
-            $this->engineBlockView->render('Authentication/View/IdentityProvider/PerformRequestAccess.phtml')
+            $this->twig->render('@theme/Authentication/View/IdentityProvider/perform-request-access.html.twig')
         );
     }
 

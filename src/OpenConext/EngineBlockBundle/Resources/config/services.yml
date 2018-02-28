@@ -111,3 +111,52 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@engineblock.repository.service_provider"
             - "@engineblock.repository.identity_provider"
+    engineblock.twig.extension.debug:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Debug
+        tags:
+             - { name: 'twig.extension' }
+
+    engineblock.twig.extension.feedback:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Feedback
+        arguments:
+            - "@engineblock.compat.application"
+        tags:
+             - { name: 'twig.extension' }
+
+    engineblock.twig.extension.i18n:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n
+        arguments:
+            - "@engineblock.compat.translator"
+        tags:
+             - { name: 'twig.extension' }
+
+    engineblock.twig.extension.locale:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Locale
+        arguments:
+            - "@request_stack"
+            - "%locale%"
+        tags:
+             - { name: 'twig.extension' }
+
+    engineblock.twig.extension.metadata:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Metadata
+        arguments:
+            - "@engineblock.compat.metadata.definitions"
+            - "@engineblock.compat.translator"
+        tags:
+             - { name: 'twig.extension' }
+
+    engineblock.twig.extension.user_agent:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\UserAgent
+        arguments:
+            - "@request_stack"
+        tags:
+             - { name: 'twig.extension' }
+
+    engineblock.twig.extension.wayf:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Wayf
+        arguments:
+            - "@request_stack"
+            - "@engineblock.compat.translator"
+        tags:
+             - { name: 'twig.extension' }

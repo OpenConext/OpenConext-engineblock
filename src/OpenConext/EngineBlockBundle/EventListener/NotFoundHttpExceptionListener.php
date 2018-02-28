@@ -3,12 +3,12 @@
 namespace OpenConext\EngineBlockBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
-use EngineBlock_View;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiHttpException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig_Environment;
 
 /**
  * When there was nothing to dispatch to, the dispatcher invoked a 404 page. This mimics that behaviour. When
@@ -18,9 +18,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class NotFoundHttpExceptionListener
 {
     /**
-     * @var EngineBlock_View
+     * @var Twig_Environment
      */
-    private $engineBlockView;
+    private $twig;
     /**
      * @var LoggerInterface
      */
@@ -32,17 +32,17 @@ class NotFoundHttpExceptionListener
 
     /**
      * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
-     * @param EngineBlock_View                  $engineBlockView
-     * @param LoggerInterface                   $logger
+     * @param Twig_Environment $twig
+     * @param LoggerInterface $logger
      */
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView,
+        Twig_Environment $twig,
         LoggerInterface $logger
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView                 = $engineBlockView;
-        $this->logger                          = $logger;
+        $this->twig = $twig;
+        $this->logger = $logger;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
@@ -63,7 +63,7 @@ class NotFoundHttpExceptionListener
         ));
 
         $response = new Response(
-            $this->engineBlockView->render('Default/View/Error/NotFound.phtml'),
+            $this->twig->render('@theme/Default/View/Error/not-found.html.twig'),
             404
         );
 

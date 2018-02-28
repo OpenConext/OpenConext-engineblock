@@ -77,7 +77,8 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $server,
                     $diContainer->getXmlConverter(),
                     $diContainer->getConsentFactory(),
-                    $diContainer->getConsentService()
+                    $diContainer->getConsentService(),
+                    $diContainer->getTwigEnvironment()
                 );
             case EngineBlock_Corto_Module_Service_ProcessConsent::class :
                 return new EngineBlock_Corto_Module_Service_ProcessConsent(
@@ -92,7 +93,7 @@ class EngineBlock_Corto_Module_Services extends EngineBlock_Corto_Module_Abstrac
                     $diContainer->getSession()
                 );
             default :
-                return new $className($server, $diContainer->getXmlConverter());
+                return new $className($server, $diContainer->getXmlConverter(), $diContainer->getTwigEnvironment());
         }
     }
 }

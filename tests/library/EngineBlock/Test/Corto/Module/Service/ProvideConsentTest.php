@@ -4,15 +4,9 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationLoopGuard;
-use OpenConext\EngineBlockBundle\Authentication\AuthenticationState;
-use OpenConext\Value\Saml\Entity;
-use OpenConext\Value\Saml\EntityId;
-use OpenConext\Value\Saml\EntityType;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Response;
-use Symfony\Component\HttpFoundation\Session\Session;
 
 class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_Framework_TestCase
 {
@@ -31,8 +25,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     /** @var EngineBlock_Corto_ProxyServer */
     private $proxyServerMock;
 
-    /** @var Session */
-    private $sessionMock;
+    /** @var Twig_Environment */
+    private $twig;
 
     public function setup() {
         $diContainer              = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -42,6 +36,7 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $this->consentFactoryMock = $diContainer->getConsentFactory();
         $this->consentMock        = $this->mockConsent();
         $this->consentService     = $this->mockConsentService();
+        $this->twig               = $this->mockTwig();
     }
 
     public function testConsentRequested()
@@ -49,9 +44,6 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         $provideConsentService = $this->factoryService();
 
         $provideConsentService->serve(null);
-
-        Phake::verify($this->proxyServerMock)
-            ->renderTemplate(Phake::anyParameters());
     }
 
     public function testConsentIsSkippedWhenPriorConsentIsStored()
@@ -100,9 +92,11 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
      */
     private function mockProxyServer()
     {
+        // Mock twig, a dependency of proxy server
+        $twigMock = Phake::mock(Twig_Environment::class);
         // Mock proxy server
         /** @var EngineBlock_Corto_ProxyServer $proxyServerMock */
-        $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer');
+        $proxyServerMock = Phake::partialMock('EngineBlock_Corto_ProxyServer', $twigMock);
         $proxyServerMock->setHostname('test-host');
 
         $proxyServerMock->setRepository(new InMemoryMetadataRepository(
@@ -225,6 +219,17 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
         return $mock;
     }
 
+
+    private function mockTwig()
+    {
+        $mock = Phake::mock(\Twig\Environment::class);
+        Phake::when($mock)
+            ->render(Phake::anyParameters())
+            ->thenReturn('');
+
+        return $mock;
+    }
+
     /**
      * @return EngineBlock_Corto_Module_Service_ProvideConsent
      */
@@ -234,7 +239,8 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
             $this->proxyServerMock,
             $this->xmlConverterMock,
             $this->consentFactoryMock,
-            $this->consentService
+            $this->consentService,
+            $this->twig
         );
     }
 }

@@ -1,0 +1,112 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'log_in_to'|trans %}
+
+{# Data object containing the formatted IdP's #}
+{% set connectedIdps = connectedIdps(idpList, locale()) %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+
+{% block content %}
+
+    <form class="mod-search hidden" method="post" action="{{ action }}">
+        <input type="hidden" name="ID" value="{{ requestId }}"/>
+        <input type="hidden" id="form-idp" name="idp" value=""/>
+
+        <h2 class="search-institutions">{{ 'search'|trans }}</h2>
+        <input placeholder="{{ 'search'|trans }}" type="search" tabindex="0" class="mod-search-input active">
+
+        <button class="search">Search</button>
+    </form>
+    <script id="wayf-configuration" type="application/json">
+      {{ wayfConfig(
+        connectedIdps,
+        serviceProvider,
+        locale(),
+        showRequestAccess,
+        rememberChoiceFeature,
+        cutoffPointForShowingUnfilteredIdps)|raw }}
+    </script>
+
+    <div id="connected-idp-picker">
+        <div class="preselection mod-results hidden">
+            <div class="idp-list">
+            </div>
+        </div>
+
+        {% if rememberChoiceFeature %}
+        <div id="rememberChoiceDiv" class="selection mod-results">
+            <header>
+                <h2>{{ 'idps_with_access'|trans }}</h2>
+                <form method="post" action="{{ action }}">
+                    <label for="rememberChoice">{{ 'remember_choice'|trans }}</label>
+                    <input type="checkbox" name="rememberChoice" id="rememberChoice"/>
+                </form>
+            </header>
+            {% else %}
+            <div class="selection mod-results">
+                <header>
+                    <h2>{{ 'idps_with_access'|trans }}</h2>
+                </header>
+                {% endif %}
+
+                <div class="loading spinner hidden">
+                    <div class="logo">
+                        <img class="rotate-img" src="/images/spinner.svg" alt=""/>
+                    </div>
+                    {{ 'loading_idps'|trans }}
+                </div>
+
+                <div class="idp-list">
+                </div>
+
+                <noscript>
+                    <div class="list show-buttons">
+                        {% for key, idp in connectedIdps.mergedIdpList %}
+                            <a class="result active access" href="#" tabindex="-1">
+                                <div class="logo">
+                                    <img class="logo" src="/images/placeholder.png"
+                                         data-original="{{ idp['logo'] }}"/>
+                                </div>
+                                <h3>{{ idp['displayTitle'] }}</h3>
+                                <form class="mod-search login" method="post" action="{{ action }}">
+                                    <input type="hidden" name="ID" value="{{ requestId }}"/>
+                                    <input type="hidden" name="idp" value="{{ idp['entityId'] }}"/>
+                                    <input type="submit" data-entityid="{{ idp['entityId'] }}" class="c-button white"
+                                           value="Login"/>
+                                </form>
+                            </a>
+                        {% endfor %}
+                    </div>
+                </noscript>
+                <div class="loading hidden noresults">
+                    <div class="logo">
+                        <div class="letter">??</div>
+                    </div>
+                    <p>{{ 'no_idp_results'|trans }}</p>
+                </div>
+            </div>
+        </div>
+
+        {% if showRequestAccess %}
+            <div id="unconnected-idp-picker" class="idp-picker hidden">
+                <div class="selection mod-results">
+                    <header>
+                        <h2>{{ 'idps_without_access'|trans }}</h2>
+                    </header>
+
+                    <div class="idp-list">
+                    </div>
+
+                    <div class="loading hidden noresults">
+                        <div class="logo">
+                            <div class="letter">??</div>
+                        </div>
+                        <p>{{ 'no_idp_results_request_access'|trans|raw }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+{% endblock %}

@@ -3,14 +3,13 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\ServiceProviderController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
             - "@session"
 
     engineblock.controller.authentication.identity_provider:
         class: OpenConext\EngineBlockBundle\Controller\IdentityProviderController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
             - "@engineblock.compat.logger"
             - "@engineblock.service.request_access_mailer"
             - "@session"
@@ -18,21 +17,20 @@ services:
     engineblock.controller.authentication.index:
         class: OpenConext\EngineBlockBundle\Controller\IndexController
         arguments:
-            - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
+            - "%encryption_keys%"
 
     engineblock.controller.authentication.feedback:
         class: OpenConext\EngineBlockBundle\Controller\FeedbackController
         arguments:
-            - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@engineblock.compat.translator"
+            - "@twig"
             - "@engineblock.compat.logger"
 
     engineblock.controller.authentication.metadata:
         class: OpenConext\EngineBlockBundle\Controller\MetadataController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
 
     engineblock.controller.authentication.certificate:
         class: OpenConext\EngineBlockBundle\Controller\CertificateController
@@ -49,7 +47,7 @@ services:
         class: OpenConext\EngineBlockBundle\Controller\WayfController
         arguments:
             - "@engineblock.compat.application"
-            - "@engineblock.compat.view"
+            - "@twig"
 
     engineblock.controller.authentication.proxy:
         class: OpenConext\EngineBlockBundle\Controller\ProxyController
@@ -59,7 +57,7 @@ services:
     engineblock.controller.authentication.logout:
         class: OpenConext\EngineBlockBundle\Controller\LogoutController
         arguments:
-            - "@engineblock.compat.view"
+            - "@twig"
 
     engineblock.service.request_access_mailer:
         class: OpenConext\EngineBlock\Service\RequestAccessMailer

@@ -1,0 +1,174 @@
+{% extends '@themeLayouts/scripts/default.html.twig' %}
+
+{# Prepare the page title #}
+{% set pageTitle = 'idp_debugging_title'|trans %}
+
+{% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
+{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+
+{% block content %}
+
+    <div class="box">
+        <div class="mod-content">
+            {% if showMailFlashMessage %}
+                <table class="comp-table">
+                    <tr>
+                        <td>
+                            <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;"/>
+                            {{ 'attributes_data_mailed'|trans }}
+                        </td>
+                    </tr>
+                </table>
+            {% endif %}
+
+            <h1>{{ pageTitle }}</h1>
+            <p>
+                {% if validationResult.isValid %}
+                    <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;"/>
+                    {{ 'attributes_validation_succeeded'|trans }}
+                {% else %}
+                    {% if validationResult.errors|length > 0 %}
+                        <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#x274c;"/>
+                    {% else %}
+                        <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;"/>
+                    {% endif %}
+
+                    {{ 'attributes_validation_failed'|trans }}
+                {% endif %}
+            </p>
+
+            <form method="post">
+                <input type="hidden" name="clear" value="true"/>
+                <input type="submit" class="c-button" value="{{ 'retry'|trans }}"/>
+            </form>
+
+            <h2>Identity Provider</h2>
+            <div class="l-overflow">
+                <table class="comp-table">
+                    <tr>
+                        <th>
+                            Logo
+                        </th>
+                        <td>
+                            <img class="logo"
+                                 src="{% if idp.logo is defined %}{{ idp.logo.url }}{% else %} {{ '/images/placeholder.png' }}{% endif %}"
+                                 alt="IdP logo"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            {{ 'name'|trans }}
+                        </th>
+                        <td>
+                            {{ idp.nameEn }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Entity ID
+                        </th>
+                        <td>
+                            {{ idp.entityId }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            Workflow Status
+                        </th>
+                        <td {% if idp.workflowState == 'prodaccepted' %}{{ 'style="color: green"' }}{% endif %}>
+                            {{ idp.workflowState }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2>SAML2 Subject</h2>
+            <div class="l-overflow">
+                <table class="comp-table">
+                    <tr>
+                        <th>NameID</th>
+
+                        <td>
+                            {{ nameId.value }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <h2>{{ 'attributes'|trans }}</h2>
+            {% for error in validationResult.errors %}
+                <p class="error">
+                    <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#x274c;"/> {{ error|trans }}</p>
+            {% endfor %}
+            {% for warning in validationResult.warnings %}
+                <p class="warning">
+                    <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;"/> {{ warning|trans }}</p>
+            {% endfor %}
+            <div class="l-overflow">
+                <table class="comp-table">
+                    <thead>
+                    <tr>
+                        <th>
+                            SURFconext Display Name
+                        </th>
+                        <th>
+                            {{ 'name'|trans }}
+                        </th>
+                        <th>
+                            {{ 'value'|trans }}
+                        </th>
+                        <th>
+                            {{ 'validation'|trans }}
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for attributeName, attributeValues in attributes %}
+                        <tr>
+                            <td>
+                                {{ attributeName(attributeName, 'en') }}
+                            </td>
+                            <td>
+                                {{ attributeName }}
+                            </td>
+                            <td>
+                                {% if attributeValues|length == 1 %}
+                                    {{ attributeValues[0] }}
+                                {% else %}
+                                    <ul>
+                                        {% for attributeValue in attributeValues %}
+                                            <li>{{ attributeValue }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if validationResult.isValid(attributeName) %}
+                                    <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;"/>
+                                {% else %}
+                                    {% for error in validationResult.errors(attributeName) %}
+                                        <p class="error">
+                                            <img src="/images/error.svg" class="c-icon c-icon-error"
+                                                 alt="&#x274c;"/> {{ error|trans }}</p>
+                                    {% endfor %}
+                                    {% for warning in validationResult.warnings(attributeName) %}
+                                        <p class="warning"><img src="/images/warning.svg" class="c-icon c-icon-warning"
+                                                                alt="&#9888;"/> {{ warning|trans }}</p>
+                                    {% endfor %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <p>{{ 'idp_debugging_mail_explain'|trans }}</p>
+
+            <form method="post">
+                <input type="hidden" name="mail" value="true"/>
+                <input type="submit" class="c-button" value="{{ 'idp_debugging_mail_button'|trans }}"/>
+            </form>
+        </div>
+    </div>
+{% endblock %}

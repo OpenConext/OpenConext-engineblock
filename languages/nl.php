@@ -93,16 +93,6 @@ Persoonsgegevens worden alleen verstrekt aan een dienstaanbieder wanneer dat noo
 Het privacybeleid voor deze dienstverlening is in detail beschreven en na te lezen op <a href="https://wiki.surfnet.nl/display/conextsupport/">de SURFconext support pagina</a>. Heb je vragen ten aanzien van het privacybeleid van SURFconext, mail deze dan naar de SURFconext helpdesk via <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
 
-    // consent help questions
-    'question_consentscreen'           	=>      'Waarom dit scherm?',
-    'answer_consentscreen'             	=>      '<p>Om toegang te krijgen tot deze dienst is het noodzakelijk dat een aantal persoonlijke gegevens wordt gedeeld met deze dienst.</p>',
-    'question_consentinfo'           	=>      'Wat gebeurt er met mijn gegevens?',
-    'answer_consentinfo'             	=>      '<p>Indien je akkoord gaat met het verstrekken van je gegevens aan de dienst dan zullen de getoonde gegevens met deze dienst gedeeld worden. De dienstverlener zal de gegevens gebruiken en mogelijk opslaan voor een goede werking van de dienst. Op dit scherm vind je tevens een link naar de gebruiksvoorwaarden van de dienst en SURFconext welke meer informatie geven over de omgang met persoonlijke gegevens.</p>',
-    'question_consentno'           		=>      'Wat gebeurt er als ik mijn gegevens niet wil delen?',
-    'answer_consentno'             		=>      '<p>Als je niet akkoord gaat met het delen van je gegevens kun je geen gebruik maken van de dienst. De getoonde gegevens zullen in dit geval niet met de dienst worden gedeeld.</p>',
-    'question_consentagain'           	=>      'Ik heb eerder al toestemming gegeven voor het delen van mijn gegevens, waarom krijg ik deze vraag opnieuw?',
-    'answer_consentagain'             	=>      '<p>Indien de gegevens die doorgegeven worden aan deze dienst zijn gewijzigd zal er nogmaals gevraagd worden of je akkoord gaat met het delen van jouw gegevens.</p>',
-
     // WAYF help questions
     'question_screen'                   =>      'Waarom dit scherm?',
     'answer_screen'                     =>      '<p>Je kunt met je instellingsaccount inloggen bij deze dienst. In dit scherm geef je aan via welke instelling je wilt inloggen.</p>',

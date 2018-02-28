@@ -31,6 +31,7 @@ configuration files and will be ignored otherwise.
     auth.simplesamlphp.*
     engine.simplesamlphp.*
     defaults.subheader
+    defaults.layout
     logger.factory
     logger.conf.handlers
     logger.conf.handler.syslog.factory
@@ -45,6 +46,14 @@ configuration files and will be ignored otherwise.
     error.action
     symfony.logPath
     symfony.cachePath
+
+### Migration to Twig as template render engine
+All .phtml templates (Zend_Layout) have been rewritten to Twig templates. Any custom theme should be rewritten to
+utilize Twig templates. 
+
+https://www.pivotaltracker.com/story/show/155358923
+
+Also see the upgraded [theme wiki][eb-wiki-theme-development] page.
 
 ## 5.x -> 5.2
 
@@ -187,3 +196,4 @@ The users are now stored in the database, and optionally also in the LDAP (to fa
 [basic-auth]: https://en.wikipedia.org/wiki/Basic_access_authentication
 [uuid]: https://github.com/ramsey/uuid
 [sf]: https://symfony.com
+[eb-wiki-theme-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development

@@ -1,0 +1,53 @@
+{% extends '@themeLayouts/scripts/empty.html.twig' %}
+
+{% block content %}
+IdP
+===
+Name               {{ idp.nameEn }}
+Entity ID          {{ idp.entityId }}
+Workflow Status:   {{ idp.workflowState }}
+
+SAML2 Subject
+=============
+NameID             {{ nameId.value }}
+
+Attributes
+==========
+{% for error in validationResult.errorsForMissingAttributes %}
+Error: {{ error[0]|format(error[:1]) }}
+{% endfor %}
+
+{% for warning in validationResult.warningsForMissingAttributes %}
+Warning: {{ warning[0]|format(warning[:1]) }}
+{% endfor %}
+
+{% for attributeName, attributeValues in attributes %}
+"{{ attributeName }}"
+----------------------------------------------------------
+Name: {{ attributeName(attributeName, 'en') }}
+
+Values:
+{% for attributeValue in attributeValues %}
+  * {{ attributeValue  }}
+{% endfor %}
+
+{% for error in validationResult.errors(attributeName) %}
+Error: {{ error|trans }}
+{% endfor %}
+
+{% for warning in validationResult.warnings(attributeName) %}
+Warning: {{ warning|trans }}
+{% endfor %}
+{% endfor %}
+
+Raw data
+========
+
+Entity.php
+----------------------------------------------------------
+{{ var_export(idp) }}
+
+Response.php
+----------------------------------------------------------
+{{ var_export(response) }}
+{% endblock %}

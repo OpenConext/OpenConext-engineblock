@@ -2,36 +2,47 @@
 
 namespace OpenConext\EngineBlockBundle\Controller;
 
-use EngineBlock_ApplicationSingleton;
-use EngineBlock_View;
 use Symfony\Component\HttpFoundation\Response;
+use Twig\Environment;
 
 class IndexController
 {
     /**
-     * @var EngineBlock_ApplicationSingleton
+     * @var Environment
      */
-    private $engineBlockApplicationSingleton;
+    private $twig;
 
     /**
-     * @var EngineBlock_View
+     * @var array
      */
-    private $engineBlockView;
+    private $keyPairs;
 
-    public function __construct(
-        EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView
-    ) {
-        $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView                 = $engineBlockView;
+    public function __construct(Environment $twig, array $keyPairs)
+    {
+        $this->twig = $twig;
+        $this->keyPairs = $keyPairs;
     }
 
     /**
      * @return Response
-     * @throws \EngineBlock_Exception
      */
     public function indexAction()
     {
-        return new Response($this->engineBlockView->render('Authentication/View/Index/Index.phtml'));
+        $keyPairIds = [];
+        if ($this->keyPairs) {
+            $keyPairIds = array_keys($this->keyPairs);
+        }
+
+        return new Response(
+            $this->twig->render(
+                '@theme/Authentication/View/Index/index.html.twig',
+                [
+                    'subHeader' => 'IdP Certificate and Metadata',
+                    'wide' => true,
+                    'displayLanguageSwitcher' => false,
+                    'keyPairIds' => $keyPairIds
+                ]
+            )
+        );
     }
 }

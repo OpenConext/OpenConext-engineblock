@@ -338,24 +338,31 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         $action = $this->_server->getUrl('continueToIdP');
 
         $application = EngineBlock_ApplicationSingleton::getInstance();
-        $cookies = $application->getDiContainer()->getSymfonyRequest()->cookies->all();
+        $container = $application->getDiContainer();
 
+        $currentLocale = $container->getLocaleProvider()->getLocale();
+
+        $cookies = $container->getSymfonyRequest()->cookies->all();
         $serviceProvider = $this->findOriginalServiceProvider($request, $application->getLogInstance());
+        $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest(), $currentLocale);
+        $rememberChoiceFeature = $container->getRememberChoice();
 
-        $idpList = $this->_transformIdpsForWAYF($candidateIdpEntityIds, $request->isDebugRequest());
-        $rememberChoiceFeature = $application->getDiContainer()->getRememberChoice();
-
-        $output = $this->_server->renderTemplate(
-            'discover',
-            array(
-                'action'                              => $action,
-                'cutoffPointForShowingUnfilteredIdps' => $application->getDiContainer()->getCutoffPointForShowingUnfilteredIdps(),
-                'rememberChoiceFeature'               => $rememberChoiceFeature,
-                'ID'                                  => $request->getId(),
-                'idpList'                             => $idpList,
-                'metaDataSP'                          => $serviceProvider,
-                'cookies'                             => $cookies,
-            )
+        $output = $this->twig->render(
+            '@theme/Authentication/View/Proxy/wayf.html.twig',
+            [
+                'action' => $action,
+                'greenHeader' => $serviceProvider->getDisplayName(),
+                'helpLink' => '/authentication/idp/help-discover?lang=' . $currentLocale,
+                'backLink' => $container->isUiOptionReturnToSpActive(),
+                'cutoffPointForShowingUnfilteredIdps' => $container->getCutoffPointForShowingUnfilteredIdps(),
+                'rememberChoiceFeature' => $rememberChoiceFeature,
+                'showRequestAccess' => $serviceProvider->displayUnconnectedIdpsWayf,
+                'requestId' => $request->getId(),
+                'serviceProvider' => $serviceProvider,
+                'idpList' => $idpList,
+                'cookies' => $cookies,
+                'beforeScriptHtml' => '<div id="request-access-scroller"><div id="request-access-container"><div id="request-access"></div></div></div>',
+            ]
         );
         $this->_server->sendOutput($output);
     }
@@ -391,7 +398,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
         return $issuingServiceProvider;
     }
 
-    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest)
+    protected function _transformIdpsForWayf(array $idpEntityIds, $isDebugRequest, $currentLocale)
     {
         $identityProviders = $this->_server->getRepository()->findIdentityProvidersByEntityId($idpEntityIds);
 
@@ -420,6 +427,13 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $wayfIdps[] = $wayfIdp;
         }
 
+        $nameSort = function ($a, $b) use ($currentLocale) {
+            return strtolower($a['Name_' . $currentLocale]) > strtolower($b['Name_' . $currentLocale]);
+        };
+
+        // Sort the IdP entries by name
+        usort($wayfIdps, $nameSort);
+
         return $wayfIdps;
     }
 
@@ -428,25 +442,24 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
      */
     protected function _sendDebugMail(EngineBlock_Saml2_ResponseAnnotationDecorator $response)
     {
-        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
-        $oldLayout = $layout->getLayout();
-        $layout->setLayout('empty');
-
-        $wasEnabled = $layout->isEnabled();
-        if ($wasEnabled) {
-            $layout->disableLayout();
-        }
-
         $identityProvider = $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer());
 
         $attributes = $response->getAssertion()->getAttributes();
-        $output = $this->_server->renderTemplate(
-            'debugidpmail',
-            array(
-                'idp'       => $identityProvider,
-                'response'  => $response,
-                'attributes'=> $attributes,
-            )
+
+        $validationResult = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeValidator()
+            ->validate($attributes);
+
+        $output = $this->twig->render(
+            '@theme/Authentication/View/Proxy/debug-idp-mail.txt.twig',
+            [
+                'idp' => $identityProvider,
+                'response' => $response,
+                'attributes' => $attributes,
+                'validationResult' => $validationResult,
+                'nameId' => $response->getAssertion()->getNameId()
+            ]
         );
 
         $diContainer = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
@@ -460,8 +473,6 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             ->setBody($output, 'text/plain');
 
         $diContainer->getMailer()->send($message);
-
-        $layout->setLayout($oldLayout);
     }
 
     private function getNameNl(
@@ -536,6 +547,11 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             return false;
         }
 
+        $showMailFlashMessage = false;
+        if (isset($_POST['mail']) && $_POST['mail'] === 'true') {
+            $showMailFlashMessage = true;
+        }
+
         /** @var Response|EngineBlock_Saml2_ResponseAnnotationDecorator $response */
         $response = $_SESSION['debugIdpResponse'];
 
@@ -545,13 +561,21 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
 
         $attributes = $response->getAssertion()->getAttributes();
 
-        $this->_server->sendOutput($this->_server->renderTemplate(
-            'debugidpresponse',
-            array(
+        $validationResult = EngineBlock_ApplicationSingleton::getInstance()
+            ->getDiContainer()
+            ->getAttributeValidator()
+            ->validate($attributes);
+
+        $this->_server->sendOutput($this->twig->render(
+            '@theme/Authentication/View/Proxy/debug-idp-response.html.twig',
+            [
+                'wide' => true,
                 'idp' => $this->_server->getRepository()->fetchIdentityProviderByEntityId($response->getIssuer()),
-                'response' => $response,
-                'attributes' => $attributes
-            )
+                'nameId' => $response->getAssertion()->getNameId(),
+                'attributes' => $attributes,
+                'validationResult' => $validationResult,
+                'showMailFlashMessage' => $showMailFlashMessage,
+            ]
         ));
         return true;
     }

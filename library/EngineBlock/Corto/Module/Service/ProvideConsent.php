@@ -3,6 +3,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use SAML2\Constants;
+use Twig\Environment;
 
 /**
  * Ask the user for consent over all of the attributes being sent to the SP.
@@ -25,16 +26,23 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
     /** @var ConsentServiceInterface */
     private  $_consentService;
 
+    /**
+     * @var Environment
+     */
+    private $twig;
+
     public function __construct(
         EngineBlock_Corto_ProxyServer $server,
         EngineBlock_Corto_XmlToArray $xmlConverter,
         EngineBlock_Corto_Model_Consent_Factory $consentFactory,
-        ConsentServiceInterface $consentService
+        ConsentServiceInterface $consentService,
+        Environment $twig
     ) {
         $this->_server = $server;
         $this->_xmlConverter = $xmlConverter;
         $this->_consentFactory = $consentFactory;
         $this->_consentService = $consentService;
+        $this->twig = $twig;
     }
 
     public function serve($serviceName)
@@ -101,10 +109,6 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
-        $layout = EngineBlock_ApplicationSingleton::getInstance()->getLayout();
-        $layout->hideHeader = true;
-        $layout->hideFooter = true;
-
         // Profile url is configurable in application.ini (profile.baseUrl)
         $profileUrl = '#';
         $configuredUrl = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getProfileBaseUrl();
@@ -112,22 +116,19 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $profileUrl = $configuredUrl;
         }
 
-        $html = $this->_server->renderTemplate(
-            'consent',
-            array(
-                'action'            => $this->_server->getUrl('processConsentService'),
-                'ID'                => $response->getId(),
-                'attributes'        => $attributes,
-                'attribute_sources' => $this->getAttributeSources($request->getId()),
-                'sp'                => $serviceProviderMetadata,
-                'idp'               => $identityProvider,
-                'idp_support'       => $this->getSupportContact($identityProvider),
-                'consent_count'     => $this->_consentService->countAllFor(
-                    $response->getNameIdValue()
-                ),
-                'profile_url'       => $profileUrl
-            ),
-            $layout
+        $html = $this->twig->render(
+            '@theme/Authentication/View/Proxy/consent.html.twig',
+            [
+                'action' => $this->_server->getUrl('processConsentService'),
+                'responseId' => $response->getId(),
+                'sp' => $serviceProviderMetadata,
+                'idp' => $identityProvider,
+                'idpSupport' => $this->getSupportContact($identityProvider),
+                'attributes' => $attributes,
+                'attributeSources' => $this->getAttributeSources($request->getId()),
+                'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
+                'profileUrl' => $profileUrl
+            ]
         );
 
         $this->_server->sendOutput($html);

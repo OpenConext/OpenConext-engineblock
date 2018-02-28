@@ -412,7 +412,8 @@ class EngineBlock_Corto_Adapter
 
     protected function _getCoreProxy()
     {
-        return new EngineBlock_Corto_ProxyServer();
+        $twig = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getTwigEnvironment();
+        return new EngineBlock_Corto_ProxyServer($twig);
     }
 
     /**

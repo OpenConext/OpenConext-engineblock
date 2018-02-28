@@ -205,4 +205,19 @@ class IdentityProvider extends AbstractRole
     {
         $visitor->visitIdentityProvider($this);
     }
+
+    public function getDisplayName($preferredLocale = '')
+    {
+        $idpName = '';
+        if ($preferredLocale === 'nl') {
+            $idpName = $this->nameNl;
+        }
+        if (empty($idpName)) {
+            $idpName = $this->nameEn;
+        }
+        if (empty($idpName)) {
+            $idpName = $this->entityId;
+        }
+        return $idpName;
+    }
 }

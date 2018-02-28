@@ -95,16 +95,6 @@ Personal details are only provided to a service provider if these details are ne
 If you have any questions about your privacy and the policy applied, please visit <a href="https://wiki.surfnet.nl/display/conextsupport/">the SURFconext support page</a> for more information or contact the SURFconext helpdesk at <a href="mailto:help@surfconext.nl">help@surfconext.nl</a>.
 </p>',
 
-    // consent help questions
-    'question_consentscreen'            =>      'Why this screen?',
-    'answer_consentscreen'              =>      '<p>To be able to use this service it is necessary to share some of your personal information with this service.</p>',
-    'question_consentinfo'              =>      'What happens with my information?',
-    'answer_consentinfo'                =>      '<p>When you agree to share your information with the service the information shown will be provided to the service. The service provider will use and possibly store this information in order to ensure a proper functioning service. On this screen there is a link to the "Terms of Service" of the service and of SURFconext which will give you more information on how the personal data is handled.</p>',
-    'question_consentno'                =>      'What happens when i don\'t want to share my information?',
-    'answer_consentno'                  =>      '<p>When you don\'t agree to share your information with the service you cannot use the service. In this case, the information shown will not be shared with the service.</p>',
-    'question_consentagain'             =>      'I\'ve previously shared my information with the service, but why do i get the same question again?',
-    'answer_consentagain'               =>      '<p>When your information previously provided to the service has changed, you will be asked again if you allow the sharing of your information.</p>',
-
     // WAYF help questions
     'question_screen'                   =>      'Why this screen?',
     'answer_screen'                     =>      '<p>You can log in to this service with your institutional account. In this screen, you select the institution you are affiliated with.</p>',

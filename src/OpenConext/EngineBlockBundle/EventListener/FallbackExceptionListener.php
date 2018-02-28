@@ -4,11 +4,11 @@ namespace OpenConext\EngineBlockBundle\EventListener;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Exception;
-use EngineBlock_View;
 use OpenConext\EngineBlockBridge\ErrorReporter;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
+use Twig_Environment;
 
 /**
  * The Dispatcher in the old code wrapped everything in a try/catch to allow for graceful recovery.
@@ -23,9 +23,9 @@ class FallbackExceptionListener
      */
     private $engineBlockApplicationSingleton;
     /**
-     * @var EngineBlock_View
+     * @var Twig_Environment
      */
-    private $engineBlockView;
+    private $twig;
     /**
      * @var LoggerInterface
      */
@@ -37,20 +37,20 @@ class FallbackExceptionListener
 
     /**
      * @param EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton
-     * @param EngineBlock_View                 $engineBlockView
-     * @param LoggerInterface                  $logger
-     * @param ErrorReporter                    $errorReporter
+     * @param Twig_Environment $twig
+     * @param LoggerInterface $logger
+     * @param ErrorReporter $errorReporter
      */
     public function __construct(
         EngineBlock_ApplicationSingleton $engineBlockApplicationSingleton,
-        EngineBlock_View $engineBlockView,
+        Twig_Environment $twig,
         LoggerInterface $logger,
         ErrorReporter $errorReporter
     ) {
         $this->engineBlockApplicationSingleton = $engineBlockApplicationSingleton;
-        $this->engineBlockView                 = $engineBlockView;
-        $this->logger                          = $logger;
-        $this->errorReporter                   = $errorReporter;
+        $this->twig = $twig;
+        $this->logger = $logger;
+        $this->errorReporter = $errorReporter;
     }
 
     public function onKernelException(GetResponseForExceptionEvent $event)
@@ -65,13 +65,18 @@ class FallbackExceptionListener
             );
         }
 
-        $viewData = [];
+        $context = [
+            'wide' => true,
+        ];
         if ($this->engineBlockApplicationSingleton->getDiContainer()->isDebug()) {
-            $viewData['exception'] = $exception;
+            $context['exception'] = $exception;
         }
 
         $response = new Response(
-            $this->engineBlockView->setData($viewData)->render('Default/View/Error/Display.phtml'),
+            $this->twig->render(
+                '@theme/Default/View/Error/display.html.twig',
+                $context
+            ),
             500
         );
 
