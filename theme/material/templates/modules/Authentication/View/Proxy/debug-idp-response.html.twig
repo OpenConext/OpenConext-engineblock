@@ -96,6 +96,18 @@
             </div>
 
             <h2>{{ 'attributes'|trans }}</h2>
+            {% for error in validationResult.errorsForMissingAttributes %}
+                <p class="error">
+                    <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#x274c;"/>
+                    {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
+                </p>
+            {% endfor %}
+            {% for warning in validationResult.warningsForMissingAttributes %}
+                <p class="warning">
+                    <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;"/>
+                    {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
+                </p>
+            {% endfor %}
             <div class="l-overflow">
                 <table class="comp-table">
                     <thead>
