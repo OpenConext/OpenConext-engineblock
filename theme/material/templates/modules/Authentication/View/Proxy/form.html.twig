@@ -39,9 +39,9 @@
 
             {% if trace is not empty %}
                 <input id="submitbutton" type="submit" value="Submit" class="c-button"/>
-                <pre style="text-align: left; margin: 0 auto; width: 500px; height: 800px;">
-            {{ trace }}
-            </pre>
+                <pre class="trace">
+                    {{ trace }}
+                </pre>
                 <script type="text/javascript">
                     document.getElementById('submitbutton').focus();
                 </script>
