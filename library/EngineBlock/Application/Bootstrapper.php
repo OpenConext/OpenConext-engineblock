@@ -80,6 +80,15 @@ class EngineBlock_Application_Bootstrapper
     protected function _bootstrapHttpCommunication()
     {
         $httpRequest = EngineBlock_Http_Request::createFromEnvironment();
+
+        $configuredHostname = $this->_application->getDiContainer()->getHostname();
+        if (empty($configuredHostname)) {
+            throw new RuntimeException(
+                "The 'hostname' application.ini setting is required"
+            );
+        }
+        $httpRequest->setHostName($configuredHostname);
+
         $this->_application->getLogInstance()->info(
             sprintf(
                 'Handling incoming request: %s %s',

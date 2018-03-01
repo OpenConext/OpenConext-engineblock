@@ -338,7 +338,7 @@ class EngineBlock_Corto_Adapter
         $application = EngineBlock_ApplicationSingleton::getInstance();
         $settings = $application->getDiContainer();
 
-        $proxyServer->setHostName($application->getHostname());
+        $proxyServer->setHostName($settings->getHostname());
 
         $proxyServer->setConfigs(array(
             'debug' => $settings->isDebug(),

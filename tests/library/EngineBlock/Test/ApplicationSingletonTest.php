@@ -28,16 +28,4 @@ class EngineBlock_Test_ApplicationSingletonTest extends PHPUnit_Framework_TestCa
         unset($_SERVER['REMOTE_ADDR']);
         $this->assertEquals(EngineBlock_ApplicationSingleton::IP_ADDRESS_CLI, $application->getClientIpAddress());
     }
-
-    public function testGetHostname()
-    {
-        $application = EngineBlock_ApplicationSingleton::getInstance();
-
-        $_SERVER['HTTP_HOST'] = 'engine2.example.edu';
-        $this->assertEquals('engine2.example.edu', $application->getHostname());
-
-        // @TODO: the 'hostname' configuration options should override this value,
-        //        but that's not easy to test because the application class does
-        //        no use DI.
-    }
 }
