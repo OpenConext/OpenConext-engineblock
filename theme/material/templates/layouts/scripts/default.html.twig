@@ -30,13 +30,11 @@
 {% if hideHeader is not defined or hideHeader == false %}
 <div class="mod-header">
     <h1 class="title">
-        <h1>
-            {% block pageHeading %}{{ defaultHeader }}{% endblock %}
+        {% block pageHeading %}{{ defaultHeader }}{% endblock %}
 
-            {% if greenHeader is defined %}
-            <strong>{{ greenHeader }}</strong>
-            {% endif %}
-        </h1>
+        {% if greenHeader is defined %}
+        <strong>{{ greenHeader }}</strong>
+        {% endif %}
     </h1>
 
     <div class="meta">
@@ -70,6 +68,7 @@
     {% block content %}{% endblock %}
 </div>
 
+{% if hideFooter is not defined or hideFooter == false %}
 <div id="footer" class="l-footer">
     <nav class="mod-footer">
         <ul class="footer-menu">
@@ -109,6 +108,7 @@
         </ul>
     </nav>
 </div>
+{% endif %}
 
 {% if beforeScriptHtml is defined %}
     {{ beforeScriptHtml|raw }}

@@ -9,16 +9,18 @@
             <br>
         {% endif %}
 
-        {% if idpSupport.emailAddress is defined %}
+        {% if idpSupport.emailAddress is defined and idpSupport.emailAddress is not empty %}
             {{ 'consent_slidein_details_email'|trans }}:
             <a href="mailto:{{ idpSupport.emailAddress }}">
                 {{ idpSupport.emailAddress }}
             </a>
         {% endif %}
 
-        {% if idpSupport.telephoneNumber is defined %}
+        {% if idpSupport.telephoneNumber is defined and idpSupport.telephoneNumber is not empty %}
             <br>
-            {{ 'consent_slidein_details_phone'|trans }}: {{ idpSupport.telephoneNumber }}
+            {{ 'consent_slidein_details_phone'|trans }}:
+            <a href="tel:{{ idpSupport.telephoneNumber }}">
+                {{ idpSupport.telephoneNumber }}
             </a>
         {% endif %}
     {% else %}

@@ -1,10 +1,9 @@
 {% macro form(currentLanguage, postData) %}
+    {% if postData is not empty %}
     <form method="post" action="">
-        {% if postData is not empty %}
-            {% for name, value in postData %}
-                <input type="hidden" name="{{ name }}" value="{{ value }}">
-            {% endfor %}
-        {% endif %}
+        {% for name, value in postData %}
+            <input type="hidden" name="{{ name }}" value="{{ value }}">
+        {% endfor %}
         <ul class="comp-language">
             <li>
                 <button type="submit" name="lang" value="en" {% if currentLanguage == 'en' %} class="selected" {% endif %}>EN</button>
@@ -14,4 +13,14 @@
             </li>
         </ul>
     </form>
+    {% else %}
+        <ul class="comp-language">
+            <li>
+                <a{% if currentLanguage == 'en' %} class="selected"{% endif %} href="{{ queryStringFor('en') }}">EN</a>
+            </li>
+            <li>
+                <a{% if currentLanguage == 'nl' %} class="selected"{% endif %} href="{{ queryStringFor('nl') }}">NL</a>
+            </li>
+        </ul>
+    {% endif %}
 {% endmacro form %}

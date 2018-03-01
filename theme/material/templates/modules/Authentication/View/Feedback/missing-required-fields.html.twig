@@ -4,6 +4,6 @@
 {% set pageTitle = 'error_missing_required_fields'|trans %}
 {% block pageTitle %}{{ pageTitle }}{% endblock %}
 {% block title %}{{ parent() }} - {{ pageTitle }} {% endblock %}
-{% block pageHeading %}{{ parent() }} - {{ pageTitle }}{% endblock %}
+{% block pageHeading %}{{ pageTitle }}{% endblock %}
 
 {% block errorMessage %}{{ 'error_missing_required_fields_desc'|trans|raw }}{% endblock %}
