@@ -197,9 +197,10 @@ $ymlContent = array(
         // Guest qualifier for the AddGuestStatus filter.
         'addgueststatus_guestqualifier'                           => $config->get('addgueststatus.guestqualifier', ''),
 
-        // OpenConext terms-of-use URL.
+        // OpenConext support and terms-of-use URL.
         // Note the escaping of '%' to support URLs like '/Terms+of+Service+%28EN%29'.
-        'openconext_terms_of_use'                                 => escapeYamlValue($config->get('openconext.termsOfUse')),
+        'openconext_support_url'                                  => escapeYamlValue($config->get('openconext.supportUrl')),
+        'openconext_terms_of_use_url'                             => escapeYamlValue($config->get('openconext.termsOfUse')),
 
         // Email configuration
         'email_request_access_address'                            => $config->get('email.help'),

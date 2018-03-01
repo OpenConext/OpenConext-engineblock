@@ -17,7 +17,7 @@ Feature:
     And I pass through EngineBlock
     And I pass through the IdP
     And I should see "Error - No access"
-    And I should see "Message from your institution:"
+    And I should see "Message from your organisation:"
     And I should see "Students of MyIdP do not have access to this resource"
     And the response should contain "idp-logo.jpg"
 
@@ -28,7 +28,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
       And I should see "Error - No access"
-      And I should see "Message from your institution:"
+      And I should see "Message from your organisation:"
 
   Scenario: Access is denied because of an Indeterminate policy
     Given SP "Dummy SP" requires a policy enforcement decision
@@ -37,7 +37,7 @@ Feature:
       And I pass through EngineBlock
       And I pass through the IdP
       And I should see "Error - No access"
-      And I should see "Message from your institution:"
+      And I should see "Message from your organisation:"
 
   Scenario: Access is permitted because of a Permit policy
     Given SP "Dummy SP" requires a policy enforcement decision

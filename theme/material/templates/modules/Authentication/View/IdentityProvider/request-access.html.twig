@@ -42,7 +42,7 @@
       </div>
 
       <div class="input">
-        <label for="institution">{{ 'institution'|trans }}:</label>
+        <label for="institution">{{ 'institution'|trans|capitalize }}:</label>
         <input name="institution" type="text" id="institution" value="{{ queryParameters['institution']|default('') }}" />
       </div>
 

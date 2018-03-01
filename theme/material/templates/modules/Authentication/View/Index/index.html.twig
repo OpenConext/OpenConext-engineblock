@@ -11,7 +11,7 @@
         <h1>{{ subHeader }}</h1>
         <dl class="metadata-certificates-list">
             <dt>
-                The Public SAML Signing certificate of the SURFconext IdP
+                The Public SAML Signing certificate of the {{ 'suite_name'|trans }} IdP
             </dt>
             <dd>
                 <ul>
@@ -22,7 +22,7 @@
                 </ul>
             </dd>
             <dt>
-                The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy
+                The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} IdP Proxy
             </dt>
             <dd>
                 <ul>
@@ -33,7 +33,7 @@
                 </ul>
             </dd>
             <dt>
-                The Public SAML metadata (the entities descriptor) for all the SURFconext IdPs
+                The Public SAML metadata (the entities descriptor) for all the {{ 'suite_name'|trans }} IdPs
             </dt>
             <dd>
                 <ul>
@@ -48,7 +48,7 @@
                     case you want a custom WAYF for your SP</p>
             </dt>
             <dt>
-                The Public SAML metadata (the entity descriptor) of the SURFconext IdP Proxy for SP
+                The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} IdP Proxy for SP
                 with entityID "urn:example.org". Please replace "urn:example.org" with the entityID
                 of your own SP before testing this metadata request. The resulting metadata will include
                 the public key specific to your Service Provider, which, in the case of key rollover,
@@ -63,11 +63,11 @@
                 </ul>
             </dd>
             <dt>
-                The Public SAML metadata (the entities descriptor) of the SURFconext IdPs which allow
+                The Public SAML metadata (the entities descriptor) of the {{ 'suite_name'|trans }} IdPs which allow
                 access to SP with entityID "urn:example.org". Please replace "urn:example.org" with
                 the entityID of your own SP before testing. The resulting metadata will include all
-                SURFconext IdPs that allow access to the service, as well as the SP metadata, if
-                configured for SURFconext. Please note this information is generated dynamically, so
+                {{ 'suite_name'|trans }} IdPs that allow access to the service, as well as the SP metadata, if
+                configured for {{ 'suite_name'|trans }}. Please note this information is generated dynamically, so
                 the number of available IdPs may change over time.
             </dt>
             <dd>
@@ -94,7 +94,7 @@
                   </ul>
               </dd>
               <dt>
-                  The Public SAML Signing certificate of the SURFconext SP
+                  The Public SAML Signing certificate of the {{ 'suite_name'|trans }} SP
               </dt>
               <dd>
                   <ul>
@@ -105,7 +105,7 @@
                   </ul>
               </dd>
               <dt>
-                  The Public SAML metadata (the entity descriptor) of the SURFconext SP Proxy
+                  The Public SAML metadata (the entity descriptor) of the {{ 'suite_name'|trans }} SP Proxy
               </dt>
               <dd>
                   <ul>
@@ -122,7 +122,7 @@
           <h1>eduGAIN Metadata</h1>
           <dl class="metadata-certificates-list">
               <dt>
-                  The SURFconext eduGain SAML metadata consists out of all IdPs and SPs that are included of
+                  The {{ 'suite_name'|trans }} eduGain SAML metadata consists out of all IdPs and SPs that are included of
                   the <a href="http://mds.edugain.org/" data-external-link="true" target="_blank">eduGain metadata</a>.
               </dt>
               <dd>
