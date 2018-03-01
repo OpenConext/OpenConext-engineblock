@@ -111,18 +111,32 @@ final class AttributeReleasePolicyController
      */
     public function readArpAction(Request $request)
     {
-        if (!$request->isMethod(Request::METHOD_GET)) {
-            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_GET]);
+        if (!$request->isMethod(Request::METHOD_POST)) {
+            throw ApiMethodNotAllowedHttpException::methodNotAllowed($request->getMethod(), [Request::METHOD_POST]);
         }
 
         if (!$this->authorizationChecker->isGranted('ROLE_API_USER_PROFILE')) {
             throw new ApiAccessDeniedHttpException('Access to the ARP API requires the role ROLE_API_USER_PROFILE');
         }
 
-        $entityIds = explode(',', $request->get('entityIds'));
+        $body = JsonRequestHelper::decodeContentAsArrayOf($request);
+        if (!is_array($body)) {
+            throw new BadApiRequestHttpException(sprintf(
+                'Unrecognized structure for JSON: expected decoded root value to be an array, got "%s"',
+                gettype($body)
+            ));
+        }
+
+        if (!isset($body['entityIds'])) {
+            throw new BadApiRequestHttpException('Invalid JSON structure: key "entityIds" not found');
+        }
+
+        if (!is_array($body['entityIds']) || empty($body['entityIds'])) {
+            throw new BadApiRequestHttpException('Invalid JSON structure: "entityIds" must be a non-empty array');
+        }
 
         $arpCollection = [];
-        foreach ($entityIds as $entityId) {
+        foreach ($body['entityIds'] as $entityId) {
             $arp = $this->metadataService->findArpForServiceProviderByEntityId(new EntityId($entityId));
             if ($arp) {
                 $arpCollection[$entityId] = $arp->getAttributeRules();
