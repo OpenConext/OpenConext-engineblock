@@ -20,7 +20,7 @@
         "openconext/engineblock-metadata": "^2.4.0",
         "openconext/stoker-metadata": "~0.1",
         "pimple/pimple": "~2.1",
-        "simplesamlphp/saml2": "1.10.3 as 1.9.1",
+        "simplesamlphp/saml2": "1.10.5 as 1.9.1",
         "simplesamlphp/simplesamlphp": "^1.14",
         "sybio/image-workshop": "~2.0.7",
         "zendframework/zendframework1":"~1.12",
