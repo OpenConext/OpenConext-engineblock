@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "48325d54a6237b5e11c957a6d717b115",
+    "content-hash": "c1366263d7611e2a41435ec282bf1118",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2210,16 +2210,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v1.10.3",
+            "version": "v1.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "3f268c25ca5e9748652834faad04525746227ef7"
+                "reference": "62becfe2567e2a4db9088ece22a4f0536e01c013"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/3f268c25ca5e9748652834faad04525746227ef7",
-                "reference": "3f268c25ca5e9748652834faad04525746227ef7",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/62becfe2567e2a4db9088ece22a4f0536e01c013",
+                "reference": "62becfe2567e2a4db9088ece22a4f0536e01c013",
                 "shasum": ""
             },
             "require": {
@@ -2246,7 +2246,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-2.1"
+                "LGPL-2.1-or-later"
             ],
             "authors": [
                 {
@@ -2255,7 +2255,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2016-12-02T12:15:53+00:00"
+            "time": "2018-02-26T15:21:52+00:00"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
@@ -4471,7 +4471,7 @@
                     "name": "Manuel Pichler",
                     "email": "github@manuel-pichler.de",
                     "homepage": "https://github.com/manuelpichler",
-                    "role": "Project founder"
+                    "role": "Project Founder"
                 },
                 {
                     "name": "Other contributors",
@@ -5535,7 +5535,7 @@
         {
             "alias": "1.9.1",
             "alias_normalized": "1.9.1.0",
-            "version": "1.10.3.0",
+            "version": "1.10.5.0",
             "package": "simplesamlphp/saml2"
         }
     ],
