@@ -85,6 +85,8 @@ Copy over the example configuration file from the *docs* directory to */etc/open
     sudo mkdir /etc/openconext
     sudo cp docs/example.engineblock.ini /etc/openconext/engineblock.ini
 
+For the development VM, you should replace all occurrences of demo.openconext.org with vm.openconext.org.
+
 Then edit this file with your favorite editor and review the settings to make sure it matches your configuration.
 The settings in the *example.engineblock.ini* are a subset of all configuration options, which can be found, along
 with their default value in *application/configs/application.ini*.

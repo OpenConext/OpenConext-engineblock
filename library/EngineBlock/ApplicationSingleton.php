@@ -297,23 +297,6 @@ class EngineBlock_ApplicationSingleton
     }
 
     /**
-     * Get the hostname that EngineBlock is hosted on and should use in absolute URLs.
-     *
-     * @return string
-     * @throws EngineBlock_Exception
-     */
-    public function getHostname()
-    {
-        $configHostname = $this->getDiContainer()->getHostname();
-
-        if (is_string($configHostname) && !empty($configHostname)) {
-            return $configHostname;
-        }
-
-        return $_SERVER['HTTP_HOST'];
-    }
-
-    /**
      * Logs exception and redirects user to feedback page
      *
      * @param Exception $exception

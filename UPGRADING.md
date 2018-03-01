@@ -23,6 +23,23 @@ If those options are not removed from the configuration, they will be ignored.
 
 https://www.pivotaltracker.com/story/show/154839908
 
+### Configuration of hostname is required
+The INI setting 'hostname' was previously optional. EngineBlock used the Host header from the request (HTTP_HOST) when
+omitted. Starting from EB5.7, the hostname setting is required and must be present in application.ini or
+/etc/openconext/engineblock.ini.
+
+Make sure your INI file contains the hostname setting before deploying EB5.7.
+
+    hostname = engine.example.org
+
+For the development VM:
+
+    hostname = engine.vm.openconext.org
+
+For the demo environment:
+
+    hostname = engine.demo.openconext.org
+
 ### Removal of legacy INI settings
 
 The following INI settings are inherited from EB4.x and were never used in EB5.x. They can be safely removed from

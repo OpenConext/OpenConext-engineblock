@@ -115,7 +115,7 @@ $ymlContent = array(
         // setting. For example:
         //
         //    domain = vm.openconext.org
-        //    hostname = empty, or engine.vm.openconext.org
+        //    hostname = engine.vm.openconext.org
         'domain'                                                  => $config->get('base_domain'),
         'hostname'                                                => $config->get('hostname'),
 
