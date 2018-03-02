@@ -8,6 +8,7 @@ use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Configuration\Feature;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
+use OpenConext\Value\Saml\NameIdFormat;
 use Symfony\Bundle\FrameworkBundle\Client;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -171,6 +172,7 @@ final class ConsentControllerTest extends WebTestCase
         $serviceProvider = new ServiceProvider($spEntityId);
         $serviceProvider->displayNameEn = 'My Test SP';
         $serviceProvider->displayNameNl = 'Mijn Test SP';
+        $serviceProvider->nameIdFormat = NameIdFormat::TRANSIENT_IDENTIFIER;
         $serviceProvider->supportUrlNl = 'https://my-test-sp.test/help-nl';
         $serviceProvider->supportUrlEn = 'https://my-test-sp.test/help-en';
         $serviceProvider->contactPersons = [
@@ -208,6 +210,7 @@ final class ConsentControllerTest extends WebTestCase
                     ],
                     'eula_url' => $serviceProvider->termsOfServiceUrl,
                     'support_email' => $firstSupportContact->emailAddress,
+                    'name_id_format' => $serviceProvider->nameIdFormat,
                 ],
                 'consent_type' => $consentType,
                 'consent_given_on' => (new DateTime($consentDate))->format(DATE_ATOM),

@@ -62,6 +62,7 @@ final class Consent
             ],
             'eula_url' => $this->serviceProvider->termsOfServiceUrl,
             'support_email' => $supportEmail,
+            'name_id_format' => $this->serviceProvider->nameIdFormat,
         ];
 
         return [
