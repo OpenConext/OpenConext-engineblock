@@ -23,6 +23,10 @@ If those options are not removed from the configuration, they will be ignored.
 
 https://www.pivotaltracker.com/story/show/154839908
 
+### Stored metadata incompatibility
+Metadata pushed to EngineBlock in earlier versions (EB<5.7) is not compatible with this version. A metadata push is
+required after upgrading to EB 5.7.
+
 ### Configuration of hostname is required
 The INI setting 'hostname' was previously optional. EngineBlock used the Host header from the request (HTTP_HOST) when
 omitted. Starting from EB5.7, the hostname setting is required and must be present in application.ini or
