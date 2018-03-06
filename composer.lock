@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1366263d7611e2a41435ec282bf1118",
+    "content-hash": "e0d712d6023c3010b1e0e67a1941eece",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -2210,16 +2210,16 @@
         },
         {
             "name": "simplesamlphp/saml2",
-            "version": "v1.10.5",
+            "version": "v1.10.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/simplesamlphp/saml2.git",
-                "reference": "62becfe2567e2a4db9088ece22a4f0536e01c013"
+                "reference": "93fef13dea9c46dc238eb59e414d3ae76559d8c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/62becfe2567e2a4db9088ece22a4f0536e01c013",
-                "reference": "62becfe2567e2a4db9088ece22a4f0536e01c013",
+                "url": "https://api.github.com/repos/simplesamlphp/saml2/zipball/93fef13dea9c46dc238eb59e414d3ae76559d8c4",
+                "reference": "93fef13dea9c46dc238eb59e414d3ae76559d8c4",
                 "shasum": ""
             },
             "require": {
@@ -2255,7 +2255,7 @@
                 }
             ],
             "description": "SAML2 PHP library from SimpleSAMLphp",
-            "time": "2018-02-26T15:21:52+00:00"
+            "time": "2018-03-02T14:46:25+00:00"
         },
         {
             "name": "simplesamlphp/simplesamlphp",
@@ -5535,7 +5535,7 @@
         {
             "alias": "1.9.1",
             "alias_normalized": "1.9.1.0",
-            "version": "1.10.5.0",
+            "version": "1.10.6.0",
             "package": "simplesamlphp/saml2"
         }
     ],
