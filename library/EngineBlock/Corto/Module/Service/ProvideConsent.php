@@ -109,9 +109,10 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             return;
         }
 
+        $settings = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
         // Profile url is configurable in application.ini (profile.baseUrl)
         $profileUrl = '#';
-        $configuredUrl = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer()->getProfileBaseUrl();
+        $configuredUrl = $settings->getProfileBaseUrl();
         if (!empty($configuredUrl)) {
             $profileUrl = $configuredUrl;
         }
@@ -128,6 +129,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attributeSources' => $this->getAttributeSources($request->getId()),
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
                 'profileUrl' => $profileUrl,
+                'supportUrl' => $settings->getOpenConextSupportUrl(),
                 'hideHeader' => true,
                 'hideFooter' => true,
             ]

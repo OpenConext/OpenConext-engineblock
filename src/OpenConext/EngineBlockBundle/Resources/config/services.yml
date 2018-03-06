@@ -123,6 +123,13 @@ services:
         tags:
              - { name: 'twig.extension' }
 
+    engineblock.twig.extension.i18n:
+        class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\I18n
+        arguments:
+            - "@translator"
+        tags:
+             - { name: 'twig.extension' }
+
     engineblock.twig.extension.locale:
         class: OpenConext\EngineBlockBundle\Twig\Extensions\Extension\Locale
         arguments:

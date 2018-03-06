@@ -133,7 +133,7 @@
                     {% elseif consentCount == 1 %}
                         {{ 'consent_footer_text_singular'|trans({'%arg1%': profileUrl})|raw }}
                     {% else %}
-                        {{ 'consent_footer_text_plural'|trans({'%arg1%%': consentCount, '%arg2%': profileUrl})|raw }}
+                        {{ 'consent_footer_text_plural'|trans({'%arg1%': consentCount, '%arg2%': profileUrl})|raw }}
                     {% endif %}
                 </p>
             </footer>

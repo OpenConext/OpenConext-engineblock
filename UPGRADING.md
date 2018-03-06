@@ -64,6 +64,14 @@ configuration files and will be ignored otherwise.
     symfony.logPath
     symfony.cachePath
 
+### New configuration parameter openconext.supportUrl
+
+A new INI parameter `openconext.supportUrl` has been added. It is currently only used on the 'about OpenConext' slide-in
+on the consent page.
+
+It defaults to "https://www.example.org/support" and should contain a URL to a support page for users to read more about
+the platform.
+
 ### Migration to Twig as template render engine
 All .phtml templates (Zend_Layout) have been rewritten to Twig templates. Any custom theme should be rewritten to
 utilize Twig templates. 
@@ -79,13 +87,34 @@ The following files have been renamed:
  - languages/nl.php -> languages/messages.nl.php
  - languages/en.php -> languages/messages.en.php
 
-The placeholder format for translations has been changed from sprintf-style to symfony-style. The following command can
-be used to effortlessly convert the placeholders in your existing translation files:
+The placeholder format for translations has been changed from sprintf-style (%1$s) to symfony-style (%named%).
 
-      sed 's,%\([sd]\),%arg1%,;s,%\([sd]\),%arg2%,;s,%\([sd]\),%arg3%,;s,%\([0-9]\)$[sd],%arg\1%,g' -i languages/*.php
+In order to make the default translations less specific to deployment in the educational world, and less specific to
+SURFconext, all occurrences of SURFconext and the noun 'institution' are configurable. Instead of translations like:
 
-Above command will replace placeholders like '%s' and '%d' with named arguments %arg1% through %arg3%, and placeholders
-like '%x$s' and '%x$d' with named arguments '%argx%'.
+    'More information about SURFconext'
+    'Find your institution'
+
+We now write the translations as:
+
+    'More information about %suiteName%
+    'Find your %organisationNoun%
+
+The values of suiteName and organisationNoun are themselves translations, defaulting to:
+
+    'suite_name'        => 'OpenConext',
+    'organisation_noun' => 'organisation',
+
+It is possible to override all translations by placing a overrides.en.php or overrides.nl.php inside the languages
+folder. For SURFconext, on deployment the two files will have to be added containing at least:
+
+
+    <?php
+
+    return [
+        'suite_name'        => 'SURFconext,
+        'organisation_noun' => 'institution,
+    ];
 
 ## 5.x -> 5.2
 

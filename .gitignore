@@ -14,3 +14,4 @@ bin/ignore_me.php
 /app/config/ini_parameters.yml
 /app/config/config_local.yml
 .idea
+/languages/overrides.*.php

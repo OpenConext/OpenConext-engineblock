@@ -377,9 +377,17 @@ class EngineBlock_Application_DiContainer extends Pimple
     /**
      * @return string
      */
+    public function getOpenConextSupportUrl()
+    {
+        return (string) $this->container->getParameter('openconext_support_url');
+    }
+
+    /**
+     * @return string
+     */
     public function getOpenConextTermsOfUseUrl()
     {
-        return (string) $this->container->getParameter('openconext_terms_of_use');
+        return (string) $this->container->getParameter('openconext_terms_of_use_url');
     }
 
     /**

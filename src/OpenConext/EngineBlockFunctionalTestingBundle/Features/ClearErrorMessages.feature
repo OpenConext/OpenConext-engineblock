@@ -181,7 +181,7 @@ Feature:
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
      When I log in at SP "Dummy SP" which attempts to preselect nonexistent IdP "DoesNotExist"
      Then the url should match "/authentication/feedback/unknown-preselected-idp"
-      And I should see "No connection between institution and service"
+      And I should see "No connection between organisation and service"
       And I should see "Timestamp:"
       And I should see "Unique Request Id:"
       And I should see "User Agent:"
