@@ -37,8 +37,8 @@ class EngineBlock_Saml2_NameIdResolver
         $collabPersonId
     ) {
         $customNameId = $response->getCustomNameId();
-        if (!empty($customNameId)) {
-            return NameID::fromArray($customNameId);
+        if (!is_null($customNameId)) {
+            return $customNameId;
         }
 
         $nameIdFormat = $this->_getNameIdFormat($request, $destinationMetadata);

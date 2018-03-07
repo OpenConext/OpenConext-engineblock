@@ -3,6 +3,7 @@
 use SAML2\Assertion;
 use SAML2\EncryptedAssertion;
 use SAML2\Response;
+use SAML2\XML\saml\NameID;
 
 /**
  * Annotate the response with our own metadata
@@ -29,7 +30,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $originalIssuer;
 
     /**
-     * @var null|\SAML2\XML\saml\NameID
+     * @var null|NameID
      */
     protected $originalNameId;
 
@@ -49,7 +50,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     protected $collabPersonId;
 
     /**
-     * @var array
+     * @var NameID
      */
     protected $customNameId;
 
@@ -80,7 +81,7 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return NameID|null The name identifier of the assertion.
      */
     public function getNameId()
     {
@@ -159,17 +160,30 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @param null|\SAML2\XML\saml\NameID $originalNameId
+     * @param array|NameID|null $originalNameId
      * @return $this
+     * @throws EngineBlock_Exception
      */
     public function setOriginalNameId($originalNameId)
     {
+        // This is added to support old style manipulation code where NameID is represented as an array
+        if (is_array($originalNameId)) {
+            $originalNameId = NameID::fromArray($originalNameId);
+        }
+
+        if (!$originalNameId instanceof NameID && !is_null($originalNameId)) {
+            throw new EngineBlock_Exception(
+                'An unsupported type for OriginalNameId was provided. It can either be array, NameID or null'
+            );
+        }
+
         $this->originalNameId = $originalNameId;
+
         return $this;
     }
 
     /**
-     * @return null|\SAML2\XML\saml\NameID
+     * @return null|NameID
      */
     public function getOriginalNameId()
     {
@@ -177,17 +191,29 @@ class EngineBlock_Saml2_ResponseAnnotationDecorator extends EngineBlock_Saml2_Me
     }
 
     /**
-     * @param array $customNameId
+     * @param $customNameId
      * @return $this
+     * @throws EngineBlock_Exception
      */
-    public function setCustomNameId(array $customNameId)
+    public function setCustomNameId($customNameId)
     {
+        // This is added to support old style manipulation code where NameID is represented as an array
+        if (is_array($customNameId)) {
+            $customNameId = NameID::fromArray($customNameId);
+        }
+
+        if (!$customNameId instanceof NameID && !is_null($customNameId)) {
+            throw new EngineBlock_Exception(
+                'An unsupported type for CustomNameId was provided. It can either be array, NameID or null'
+            );
+        }
+
         $this->customNameId = $customNameId;
         return $this;
     }
 
     /**
-     * @return array
+     * @return NameID
      */
     public function getCustomNameId()
     {
