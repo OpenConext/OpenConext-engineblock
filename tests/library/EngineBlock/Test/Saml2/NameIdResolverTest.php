@@ -70,7 +70,73 @@ class EngineBlock_Test_Saml2_NameIdResolverTest extends PHPUnit_Framework_TestCa
 
         // Test
         $this->assertEquals(NameID::fromArray($nameId), $resolvedNameID, 'CustomNameId is used');
+        $this->assertEquals(NameID::fromArray($nameId), $this->response->getCustomNameId());
     }
+
+    public function testSetCustomNameIdWithObject()
+    {
+        // Input
+        $nameId = new NameID();
+        $nameId->value = 'test-value';
+        $nameId->Format = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
+
+        $this->response->setCustomNameId($nameId);
+
+        // Run
+        $resolvedNameID = $this->resolver->resolve($this->request, $this->response, $this->serviceProvider, $this->collabPersonId);
+
+        // Test
+        $this->assertEquals($nameId, $resolvedNameID, 'CustomNameId is used');
+        $this->assertEquals($nameId, $this->response->getCustomNameId());
+    }
+
+    public function testSetCustomNameIdCanBeNull()
+    {
+        $this->response->setCustomNameId(null);
+        $this->assertNull($this->response->getCustomNameId());
+    }
+
+    public function testSetCustomNameIdThrowsError()
+    {
+        $this->expectException(EngineBlock_Exception::class);
+        $this->expectExceptionMessage('An unsupported type for CustomNameId was provided. It can either be array, NameID or null');
+        $this->response->setCustomNameId('Throw exception');
+    }
+
+    public function testSetOriginalNameIdFromArray()
+    {
+        $nameId = array(
+            'Format' => '',
+            'Value' => '',
+        );
+        $this->response->setOriginalNameId($nameId);
+        $this->assertEquals(NameID::fromArray($nameId), $this->response->getOriginalNameId());
+    }
+
+    public function testSetOriginalNameIdWithObject()
+    {
+        $nameId = new NameID();
+        $nameId->value = 'test-value';
+        $nameId->Format = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
+
+        $this->response->setOriginalNameId($nameId);
+
+        $this->assertEquals($nameId, $this->response->getOriginalNameId());
+    }
+
+    public function testSetOriginalNameIdCanBeNull()
+    {
+        $this->response->setOriginalNameId(null);
+        $this->assertNull($this->response->getOriginalNameId());
+    }
+
+    public function testSetOriginalNameIdThrowsError()
+    {
+        $this->expectException(EngineBlock_Exception::class);
+        $this->expectExceptionMessage('An unsupported type for OriginalNameId was provided. It can either be array, NameID or null');
+        $this->response->setOriginalNameId('Throw exception');
+    }
+
 
     public function testNameIdPolicyInAuthnRequest()
     {
