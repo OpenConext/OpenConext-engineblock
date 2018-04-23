@@ -6,7 +6,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Mockery;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Filter\FilterInterface;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\DisableDisallowedEntitiesInWayfVisitor;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -58,5 +60,27 @@ class CachedDoctrineMetadataRepositoryTest extends PHPUnit_Framework_TestCase
 
         $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
         $repository->fetchServiceProviderByEntityId('test');
+    }
+
+    public function testAppendVisitor()
+    {
+        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
+        $doctrineRepository->shouldReceive('appendVisitor');
+
+        $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
+        $repository->appendVisitor(
+            Mockery::mock(VisitorInterface::class)
+        );
+    }
+
+    public function testAppendFilter()
+    {
+        $doctrineRepository = Mockery::mock('OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository');
+        $doctrineRepository->shouldReceive('appendFilter');
+
+        $repository = new CachedDoctrineMetadataRepository($doctrineRepository);
+        $repository->appendFilter(
+            Mockery::mock(FilterInterface::class)
+        );
     }
 }
