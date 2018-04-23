@@ -500,4 +500,18 @@ class MockSpContext extends AbstractSubContext
             ->displayUnconnectedIdpsForSp($sp->entityId(), false)
             ->save();
     }
+
+    /**
+     * @Given /^SP "([^"]*)" scopes its request to IDP "([^"]*)"$/
+     */
+    public function spAuthnRequestScopedToIdp($spName, $idpName)
+    {
+        /** @var MockServiceProvider $mockSp */
+        $mockSp = $this->mockSpRegistry->get($spName);
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+
+        $mockSp->addIdpToScope($mockIdp->entityId());
+
+        $this->mockSpRegistry->save();
+    }
 }
