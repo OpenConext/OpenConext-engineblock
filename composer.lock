@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "15b1950a5bb52f5c93abd6fe97dfbbfe",
@@ -1684,16 +1684,16 @@
         },
         {
             "name": "openconext/engineblock-metadata",
-            "version": "3.1.1",
+            "version": "3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/OpenConext-engineblock-metadata.git",
-                "reference": "49e685c38398af9ab0b0a48c9e98bac5151ba10e"
+                "reference": "e3c4df6a22df1ba657bd4ced3f122e87958ded5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/49e685c38398af9ab0b0a48c9e98bac5151ba10e",
-                "reference": "49e685c38398af9ab0b0a48c9e98bac5151ba10e",
+                "url": "https://api.github.com/repos/OpenConext/OpenConext-engineblock-metadata/zipball/e3c4df6a22df1ba657bd4ced3f122e87958ded5f",
+                "reference": "e3c4df6a22df1ba657bd4ced3f122e87958ded5f",
                 "shasum": ""
             },
             "require": {
@@ -1718,7 +1718,7 @@
                 "Apache-2.0"
             ],
             "description": "OpenConext component for EngineBlock Entity Metadata",
-            "time": "2018-02-14T11:27:03+00:00"
+            "time": "2018-04-23T16:00:57+00:00"
         },
         {
             "name": "openconext/monitor-bundle",
