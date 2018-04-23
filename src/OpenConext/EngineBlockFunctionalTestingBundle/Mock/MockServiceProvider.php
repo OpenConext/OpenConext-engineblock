@@ -127,6 +127,25 @@ class MockServiceProvider extends AbstractMockEntityRole
         $this->descriptor->Extensions['SAMLRequest']->setIsPassive(true);
     }
 
+    /**
+     * @param string $idpEntityId
+     */
+    public function addIdpToScope($idpEntityId)
+    {
+        $scope = $this->getScoping();
+        $scope[] = $idpEntityId;
+
+        $this->descriptor->Extensions['SAMLRequest']->setIDPList($scope);
+    }
+
+    /**
+     * @return array
+     */
+    public function getScoping()
+    {
+        return $this->descriptor->Extensions['SAMLRequest']->getIDPList();
+    }
+
     protected function getRoleClass()
     {
         return SPSSODescriptor::class;
