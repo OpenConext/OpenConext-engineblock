@@ -68,6 +68,8 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     {
         $this->repository->appendFilter($filter);
 
+        $this->clearResultsCache();
+
         return $this;
     }
 
@@ -79,7 +81,23 @@ class CachedDoctrineMetadataRepository implements MetadataRepositoryInterface
     {
         $this->repository->appendVisitor($visitor);
 
+        $this->clearResultsCache();
+
         return $this;
+    }
+
+    /**
+     * Reset the results cache.
+     *
+     * The cache is only valid for a specific combination of filters and
+     * visitors. If a filter or visitor is appended, the previously cached
+     * results are discarded by calling this method. In practice,
+     * visitor/filter setup is only done in the beginning of the request so
+     * resetting the cache has little impact on the total number of queries.
+     */
+    private function clearResultsCache()
+    {
+        $this->cache = array();
     }
 
     /**
