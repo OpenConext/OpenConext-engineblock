@@ -6,6 +6,11 @@ use SAML2\Compat\AbstractContainer;
 final class EngineBlock_Saml2_Container extends AbstractContainer
 {
     /**
+     * The fixed length of random identifiers.
+     */
+    const ID_LENGTH = 43;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -23,9 +28,14 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
         return $this->logger;
     }
 
+    /**
+     * See SimpleSAMLphp SimpleSAML\Utils\Random::generateId().
+     *
+     * @return string
+     */
     public function generateId()
     {
-        return SimpleSAML\Utils\Random::generateID();
+        return '_' . bin2hex(openssl_random_pseudo_bytes((int)((self::ID_LENGTH - 1)/2)));
     }
 
     public function debugMessage($message, $type)
@@ -35,11 +45,19 @@ final class EngineBlock_Saml2_Container extends AbstractContainer
 
     public function redirect($url, $data = array())
     {
-        SimpleSAML\Utils\HTTP::redirectTrustedURL($url, $data);
+        throw new BadMethodCallException(sprintf(
+            "%s:%s may not be called in the Surfnet\\SamlBundle as it doesn't work with Symfony2",
+            __CLASS__,
+            __METHOD__
+        ));
     }
 
     public function postRedirect($url, $data = array())
     {
-        SimpleSAML\Utils\HTTP::submitPOSTData($url, $data);
+        throw new BadMethodCallException(sprintf(
+            "%s:%s may not be called in the Surfnet\\SamlBundle as it doesn't work with Symfony2",
+            __CLASS__,
+            __METHOD__
+        ));
     }
 }
