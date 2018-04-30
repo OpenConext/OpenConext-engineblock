@@ -58,11 +58,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     protected $_server;
 
     /**
-     * @var string
-     */
-    protected $_sspmodSamlMessageClassName;
-
-    /**
      * @var OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
      */
     private $_featureConfiguration;
@@ -82,7 +77,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         parent::__construct($server);
 
         $diContainer                       = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $this->_sspmodSamlMessageClassName = $diContainer->getMessageUtilClassName();
         $this->_featureConfiguration = $diContainer->getFeatureConfiguration();
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();
         $this->twig = $diContainer->getTwigEnvironment();
@@ -176,8 +170,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         if ($wantRequestsSigned) {
             // Check the Signature on the Request, if there is no signature, or verification fails
             // throw an exception.
-            $className = $this->_sspmodSamlMessageClassName;
-            if (!$className::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
+            if (!EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException(
                     'Validation of received messages enabled, but no signature found on message.'
                 );
@@ -306,8 +299,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         try {
             // 'Process' the response, verify the signature, verify the timings.
-            $className = $this->_sspmodSamlMessageClassName;
-
             if ($this->hasEncryptedAssertion($sspResponse)
                 && !$this->_featureConfiguration->isEnabled('eb.encrypted_assertions')
             ) {
@@ -335,7 +326,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
 
             try {
-                $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
+                $assertions = EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
             } catch (sspmod_saml_Error $exception) {
                 // Pass through, show specific feedback for responses with error status codes
                 throw $exception;

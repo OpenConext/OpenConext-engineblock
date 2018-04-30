@@ -170,7 +170,7 @@ class MockIdentityProvider extends AbstractMockEntityRole
             return null;
         }
 
-        $key = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, ['type' => 'public']);
+        $key = new XMLSecurityKey(XMLSecurityKey::RSA_OAEP_MGF1P, ['type' => 'public']);
         $key->loadKey($this->findFile($this->descriptor->Extensions['EncryptionCert']), true, true);
 
         return $key;
