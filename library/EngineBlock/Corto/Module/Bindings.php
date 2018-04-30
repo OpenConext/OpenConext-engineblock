@@ -6,12 +6,15 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
+use SAML2\Certificate\KeyLoader;
+use SAML2\Configuration\ServiceProvider as Saml2ServiceProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\EncryptedAssertion;
 use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use SAML2\Message;
 use SAML2\Response;
+use SAML2\Signature\PublicKeyValidator;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -152,11 +155,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        // Load the metadata for this IdP in SimpleSAMLphp style
-        $sspSpMetadata = SimpleSAML_Configuration::loadFromArray(
-            $this->mapCortoEntityMetadataToSspEntityMetadata($serviceProvider)
-        );
-
         // Determine if we should check the signature of the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
@@ -168,13 +166,25 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // If we should, then check it.
         if ($wantRequestsSigned) {
-            // Check the Signature on the Request, if there is no signature, or verification fails
-            // throw an exception.
-            if (!EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
+            $signatureVerifier = new PublicKeyValidator(
+                $this->_logger,
+                new KeyLoader()
+            );
+
+            $saml2Config = $this->mapEngineBlockSpToSaml2Sp($serviceProvider);
+            $saml2Message = $ebRequest->getSspMessage();
+
+            if (!$signatureVerifier->canValidate($saml2Message, $saml2Config)) {
+                throw new EngineBlock_Corto_Module_Bindings_VerificationException(
+                    'Validation of received messages enabled, but no keys are configured for service provider.'
+                );
+            } elseif (!$signatureVerifier->hasValidSignature($saml2Message, $saml2Config)) {
+                // Exceptions are thrown for specific validation errors.
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException(
                     'Validation of received messages enabled, but no signature found on message.'
                 );
             }
+
             /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest */
             $ebRequest->setWasSigned();
         }
@@ -703,6 +713,31 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
         return $config;
+    }
+
+    /**
+     * @param ServiceProvider $serviceProvider
+     * @return Saml2ServiceProvider
+     */
+    protected function mapEngineBlockSpToSaml2Sp(ServiceProvider $serviceProvider)
+    {
+        /** @var EngineBlock_X509_Certificate[] $certificates */
+        $certificates = $serviceProvider->certificates;
+
+        $config = array(
+            'entityId'            => $serviceProvider->entityId,
+            'keys'                => array(),
+        );
+
+        foreach ($certificates as $certificate) {
+            $config['keys'][] = array(
+                'signing'         => true,
+                'type'            => 'X509Certificate',
+                'X509Certificate' => $certificate->toCertData(),
+            );
+        }
+
+        return new Saml2ServiceProvider($config);
     }
 
     /**
