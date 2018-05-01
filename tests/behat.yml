@@ -4,7 +4,7 @@ default:
     formatter:
         name: progress
     filters:
-        tags: "~@WIP"
+        tags: "~@WIP&&~@SKIP"
     extensions:
         Behat\Symfony2Extension\Extension:
             mink_driver: true
@@ -24,7 +24,7 @@ wip:
         parameters:
             verbose: true
     filters:
-        tags: "@WIP"
+        tags: "@WIP&&~@SKIP"
     extensions:
         Behat\Symfony2Extension\Extension:
             mink_driver: true
