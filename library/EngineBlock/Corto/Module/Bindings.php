@@ -351,7 +351,48 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
             } catch (PreconditionNotMetException $exception) {
                 // Pass through, show specific feedback for responses with error status codes
+                // SAML2 throws a 'precondition not met' exception if the response
+                // was unsuccessful. The specific 'no success response' case
+                // should be handled here, so we can show specific information to
+                // the user.
+                if ($sspResponse->isSuccess()) {
+                    throw new ResponseProcessingFailedException(
+                        sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
+                    );
+                }
+
+                $status = $sspResponse->getStatus();
+
+                $log->notice(
+                    'Received an Error Response',
+                    array(
+                        'exception_message' => $exception->getMessage(),
+                        'status'            => $status['Code'],
+                        'substatus'         => $status['SubCode'],
+                        'status_message'    => $status['Message'],
+                    )
+                );
+
+                $statusCodeDescription = $status['Code'];
+                if (isset($status['SubCode'])) {
+                    $statusCodeDescription .= '/' . $status['SubCode'];
+                }
+                $statusCodeDescription = str_replace('urn:oasis:names:tc:SAML:2.0:status:', '', $statusCodeDescription);
+
+                $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
+
+                // Throw the exception here instead of in the Corto Filters as Corto assumes the presence of an Assertion
+                $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
+                    'Response received with Status: ' .
+                    $statusCodeDescription .
+                    ' - ' .
+                    $statusMessage
+                );
+                $exception->setFeedbackStatusCode($statusCodeDescription);
+                $exception->setFeedbackStatusMessage($statusMessage);
+
                 throw $exception;
+
             } catch (Exception $exception) {
                 throw new ResponseProcessingFailedException(
                     sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
@@ -374,47 +415,9 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             // Passthrough, should be handled at a different level protecting against oracle attacks
             throw $e;
         }
-        // This misnamed exception is only thrown when the Response status code is not Success
-        catch (PreconditionNotMetException $e) {
-            $status = $sspResponse->getStatus();
-
-            $log->notice(
-                'Received an Error Response',
-                array(
-                    'exception_message' => $e->getMessage(),
-                    'status'            => $status['Code'],
-                    'substatus'         => $status['SubCode'],
-                    'status_message'    => $status['Message'],
-                )
-            );
-
-            $statusCodeDescription = $status['Code'];
-            if (isset($status['SubCode'])) {
-                $statusCodeDescription .= '/' . $status['SubCode'];
-            }
-            $statusCodeDescription = str_replace('urn:oasis:names:tc:SAML:2.0:status:', '', $statusCodeDescription);
-
-            $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
-
-            // Throw the exception here instead of in the Corto Filters as Corto assumes the presence of an Assertion
-            $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
-                'Response received with Status: ' .
-                $statusCodeDescription .
-                ' - ' .
-                $statusMessage
-            );
-            $exception->setFeedbackStatusCode($statusCodeDescription);
-            $exception->setFeedbackStatusMessage($statusMessage);
-
-            throw $exception;
-        }
-        // Thrown when timings are out of whack or other some such verification exceptions.
-        catch (InvalidSubjectConfirmationException $e) {
-            throw new EngineBlock_Corto_Module_Bindings_VerificationException(
-                $e->getMessage(),
-                EngineBlock_Exception::CODE_NOTICE,
-                $e
-            );
+        catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
+            // This exception is generated above, and should be shown as a distinct error to the user
+            throw $e;
         }
         catch (Exception $e) {
             // Signature could not be verified by SSP
