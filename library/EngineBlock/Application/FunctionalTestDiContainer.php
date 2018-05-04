@@ -9,12 +9,6 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 class EngineBlock_Application_FunctionalTestDiContainer extends EngineBlock_Application_DiContainer
 {
-
-    public function getMessageUtilClassName()
-    {
-        return 'EngineBlock_Ssp_sspmod_saml_Message';
-    }
-
     public function getUserDirectory()
     {
         return new FakeUserDirectory(new Filesystem());

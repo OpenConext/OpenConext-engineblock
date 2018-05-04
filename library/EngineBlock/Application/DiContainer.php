@@ -161,16 +161,6 @@ class EngineBlock_Application_DiContainer extends Pimple
     }
 
     /**
-     * Classname to use for Message utilities.
-     *
-     * @return string
-     */
-    public function getMessageUtilClassName()
-    {
-       return 'EngineBlock_Ssp_sspmod_saml_SymfonyRequestUriMessage';
-    }
-
-    /**
      * @return EntityManager
      */
     public function getEntityManager()

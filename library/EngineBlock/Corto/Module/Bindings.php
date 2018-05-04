@@ -6,12 +6,20 @@ use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlockBundle\Exception\ResponseProcessingFailedException;
 use SAML2\AuthnRequest;
 use SAML2\Binding;
+use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
+use SAML2\Certificate\KeyLoader;
+use SAML2\Configuration\Destination;
+use SAML2\Configuration\IdentityProvider as Saml2IdentityProvider;
+use SAML2\Configuration\PrivateKey;
+use SAML2\Configuration\ServiceProvider as Saml2ServiceProvider;
 use SAML2\DOMDocumentFactory;
 use SAML2\EncryptedAssertion;
+use SAML2\Response\Exception\PreconditionNotMetException;
 use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use SAML2\Message;
 use SAML2\Response;
+use SAML2\Signature\PublicKeyValidator;
 
 /**
  * The bindings module for Corto, which implements support for various data
@@ -58,11 +66,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     protected $_server;
 
     /**
-     * @var string
-     */
-    protected $_sspmodSamlMessageClassName;
-
-    /**
      * @var OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration
      */
     private $_featureConfiguration;
@@ -82,7 +85,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
         parent::__construct($server);
 
         $diContainer                       = EngineBlock_ApplicationSingleton::getInstance()->getDiContainer();
-        $this->_sspmodSamlMessageClassName = $diContainer->getMessageUtilClassName();
         $this->_featureConfiguration = $diContainer->getFeatureConfiguration();
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();
         $this->twig = $diContainer->getTwigEnvironment();
@@ -158,11 +160,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             );
         }
 
-        // Load the metadata for this IdP in SimpleSAMLphp style
-        $sspSpMetadata = SimpleSAML_Configuration::loadFromArray(
-            $this->mapCortoEntityMetadataToSspEntityMetadata($serviceProvider)
-        );
-
         // Determine if we should check the signature of the message
         $wantRequestsSigned = (
             // If the destination wants the AuthnRequests signed
@@ -174,14 +171,25 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         // If we should, then check it.
         if ($wantRequestsSigned) {
-            // Check the Signature on the Request, if there is no signature, or verification fails
-            // throw an exception.
-            $className = $this->_sspmodSamlMessageClassName;
-            if (!$className::checkSign($sspSpMetadata, $ebRequest->getSspMessage())) {
+            $signatureVerifier = new PublicKeyValidator(
+                $this->_logger,
+                new KeyLoader()
+            );
+
+            $saml2Config = $this->mapEngineBlockSpToSaml2Sp($serviceProvider);
+            $saml2Message = $ebRequest->getSspMessage();
+
+            if (!$signatureVerifier->canValidate($saml2Message, $saml2Config)) {
+                throw new EngineBlock_Corto_Module_Bindings_VerificationException(
+                    'Validation of received messages enabled, but no keys are configured for service provider.'
+                );
+            } elseif (!$signatureVerifier->hasValidSignature($saml2Message, $saml2Config)) {
+                // Exceptions are thrown for specific validation errors.
                 throw new EngineBlock_Corto_Module_Bindings_VerificationException(
                     'Validation of received messages enabled, but no signature found on message.'
                 );
             }
+
             /** @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator $ebRequest */
             $ebRequest->setWasSigned();
         }
@@ -241,9 +249,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             return $sspResponse;
         }
 
-        // Compose the metadata for the 'SP' (which is us in this case) for use by SSP.
-        $sspSpMetadata = $this->getSspOwnMetadata();
-
         // Detect the binding being used from the global variables (GET, POST, SERVER)
         $sspBinding = Binding::getCurrentBinding();
 
@@ -288,11 +293,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             $sspResponse->getDestination()
         );
 
-        // Load the metadata for this IdP in SimpleSAMLphp style
-        $sspIdpMetadata = SimpleSAML_Configuration::loadFromArray(
-            $this->mapCortoEntityMetadataToSspEntityMetadata($cortoIdpMetadata)
-        );
-
         // Make sure it has a InResponseTo (Unsolicited is not supported) but don't actually check that what it's
         // in response to is actually a message we sent quite yet.
         if ($sspResponse->getInResponseTo() === null) {
@@ -306,8 +306,6 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
 
         try {
             // 'Process' the response, verify the signature, verify the timings.
-            $className = $this->_sspmodSamlMessageClassName;
-
             if ($this->hasEncryptedAssertion($sspResponse)
                 && !$this->_featureConfiguration->isEnabled('eb.encrypted_assertions')
             ) {
@@ -319,10 +317,7 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
             }
 
-            if ($this->hasEncryptedAssertion($sspResponse)
-                && $this->_featureConfiguration->isEnabled('eb.encrypted_assertions_require_outer_signature')
-                && !$sspResponse->isMessageConstructedWithSignature()
-            ) {
+            if ($this->hasEncryptedAssertion($sspResponse) && !$sspResponse->isMessageConstructedWithSignature()) {
                 $this->_logger->warning(
                     'Received encrypted assertion without outer signature, outer signature is required'
                 );
@@ -335,10 +330,69 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
             }
 
             try {
-                $assertions = $className::processResponse($sspSpMetadata, $sspIdpMetadata, $sspResponse);
-            } catch (sspmod_saml_Error $exception) {
+                $expectedDestination = $this->_server->getUrl('assertionConsumerService');
+                if ($sspResponse->getDestination() === null) {
+                    // SAML2 requires a destination, while EngineBlock allows
+                    // messages without Destination element.
+                    $sspResponse->setDestination($expectedDestination);
+                }
+
+                // We don't actually require IDPs to encrypt their assertions, but if the
+                // feature is enabled in EB, and an encrypted assertion is received,
+                // we require the SAML2 library to decrypt it.
+                $requireEncryption = $this->hasEncryptedAssertion($sspResponse);
+
+                $processor = new Response\Processor($this->_logger);
+                $assertions = $processor->process(
+                    $this->getSaml2OwnMetadata($requireEncryption),
+                    $this->mapEngineBlockIdpToSaml2Idp($cortoIdpMetadata, $requireEncryption),
+                    new Destination($expectedDestination),
+                    $sspResponse
+                );
+            } catch (PreconditionNotMetException $exception) {
                 // Pass through, show specific feedback for responses with error status codes
+                // SAML2 throws a 'precondition not met' exception if the response
+                // was unsuccessful. The specific 'no success response' case
+                // should be handled here, so we can show specific information to
+                // the user.
+                if ($sspResponse->isSuccess()) {
+                    throw new ResponseProcessingFailedException(
+                        sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
+                    );
+                }
+
+                $status = $sspResponse->getStatus();
+
+                $log->notice(
+                    'Received an Error Response',
+                    array(
+                        'exception_message' => $exception->getMessage(),
+                        'status'            => $status['Code'],
+                        'substatus'         => $status['SubCode'],
+                        'status_message'    => $status['Message'],
+                    )
+                );
+
+                $statusCodeDescription = $status['Code'];
+                if (isset($status['SubCode'])) {
+                    $statusCodeDescription .= '/' . $status['SubCode'];
+                }
+                $statusCodeDescription = str_replace('urn:oasis:names:tc:SAML:2.0:status:', '', $statusCodeDescription);
+
+                $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
+
+                // Throw the exception here instead of in the Corto Filters as Corto assumes the presence of an Assertion
+                $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
+                    'Response received with Status: ' .
+                    $statusCodeDescription .
+                    ' - ' .
+                    $statusMessage
+                );
+                $exception->setFeedbackStatusCode($statusCodeDescription);
+                $exception->setFeedbackStatusMessage($statusMessage);
+
                 throw $exception;
+
             } catch (Exception $exception) {
                 throw new ResponseProcessingFailedException(
                     sprintf('Response processing failed: %s', $exception->getMessage()), null, $exception
@@ -353,53 +407,17 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 );
             }
 
-            $sspResponse->setAssertions($assertions);
+            $sspResponse->setAssertions([
+                $assertions->getOnlyElement()
+            ]);
         }
         catch (ResponseProcessingFailedException $e) {
             // Passthrough, should be handled at a different level protecting against oracle attacks
             throw $e;
         }
-        // This misnamed exception is only thrown when the Response status code is not Success
-        catch (sspmod_saml_Error $e) {
-            $log->notice(
-                'Received an Error Response',
-                array(
-                    'exception_message' => $e->getMessage(),
-                    'status'            => $e->getStatus(),
-                    'substatus'         => $e->getSubStatus(),
-                    'status_message'    => $e->getStatusMessage(),
-                )
-            );
-
-            $status = $sspResponse->getStatus();
-
-            $statusCodeDescription = $status['Code'];
-            if (isset($status['SubCode'])) {
-                $statusCodeDescription .= '/' . $status['SubCode'];
-            }
-            $statusCodeDescription = str_replace('urn:oasis:names:tc:SAML:2.0:status:', '', $statusCodeDescription);
-
-            $statusMessage = !empty($status['Message']) ? $status['Message'] : '(No message provided)';
-
-            // Throw the exception here instead of in the Corto Filters as Corto assumes the presence of an Assertion
-            $exception = new EngineBlock_Corto_Exception_ReceivedErrorStatusCode(
-                'Response received with Status: ' .
-                $statusCodeDescription .
-                ' - ' .
-                $statusMessage
-            );
-            $exception->setFeedbackStatusCode($statusCodeDescription);
-            $exception->setFeedbackStatusMessage($statusMessage);
-
-            throw $exception;
-        }
-        // Thrown when timings are out of whack or other some such verification exceptions.
-        catch (SimpleSAML_Error_Exception $e) {
-            throw new EngineBlock_Corto_Module_Bindings_VerificationException(
-                $e->getMessage(),
-                EngineBlock_Exception::CODE_NOTICE,
-                $e
-            );
+        catch (EngineBlock_Corto_Exception_ReceivedErrorStatusCode $e) {
+            // This exception is generated above, and should be shown as a distinct error to the user
+            throw $e;
         }
         catch (Exception $e) {
             // Signature could not be verified by SSP
@@ -686,24 +704,47 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
     }
 
     /**
-     * @param ServiceProvider $cortoEntityMetadata
-     * @return array
+     * @param IdentityProvider $idp
+     * @param bool $requireEncryption
+     * @return \SAML2\Configuration\IdentityProvider
      */
-    protected function mapCortoEntityMetadataToSspEntityMetadata(AbstractRole $cortoEntityMetadata)
+    protected function mapEngineBlockIdpToSaml2Idp(IdentityProvider $idp, $requireEncryption = true)
     {
         /** @var EngineBlock_X509_Certificate[] $certificates */
-        $certificates = $cortoEntityMetadata->certificates;
+        $certificates = $idp->certificates;
 
         $config = array(
-            'entityid'            => $cortoEntityMetadata->entityId,
-            'keys'                => array(),
+            'entityId'                   => $idp->entityId,
+            'keys'                       => array(),
+            'assertionEncryptionEnabled' => $requireEncryption,
         );
-        if ($cortoEntityMetadata instanceof IdentityProvider) {
-            $config['SingleSignOnService'] = $cortoEntityMetadata->singleSignOnServices[0]->location;
+        foreach ($certificates as $certificate) {
+            $config['keys'][] = array(
+                'signing'                    => true,
+                'type'                       => 'X509Certificate',
+                'X509Certificate'            => $certificate->toCertData(),
+            );
         }
-        if ($cortoEntityMetadata instanceof ServiceProvider) {
-            $config['AssertionConsumerService'] = $cortoEntityMetadata->assertionConsumerServices[0]->location;
-        }
+
+        return new Saml2IdentityProvider($config);
+    }
+
+    /**
+     * @param ServiceProvider $serviceProvider
+     * @param bool $requireEncryption
+     * @return Saml2ServiceProvider
+     */
+    protected function mapEngineBlockSpToSaml2Sp(ServiceProvider $serviceProvider, $requireEncryption = true)
+    {
+        /** @var EngineBlock_X509_Certificate[] $certificates */
+        $certificates = $serviceProvider->certificates;
+
+        $config = array(
+            'entityId'                   => $serviceProvider->entityId,
+            'keys'                       => array(),
+            'assertionEncryptionEnabled' => $requireEncryption,
+        );
+
         foreach ($certificates as $certificate) {
             $config['keys'][] = array(
                 'signing'         => true,
@@ -711,41 +752,39 @@ class EngineBlock_Corto_Module_Bindings extends EngineBlock_Corto_Module_Abstrac
                 'X509Certificate' => $certificate->toCertData(),
             );
         }
-        return $config;
+
+        return new Saml2ServiceProvider($config);
     }
 
     /**
-     * @return SimpleSAML_Configuration
+     * @param bool $requireEncryption
+     * @return Saml2ServiceProvider
      */
-    protected function getSspOwnMetadata()
+    protected function getSaml2OwnMetadata($requireEncryption = true)
     {
         $keyPair = $this->_server->getSigningCertificates();
-
-        $spMetadata = SimpleSAML_Configuration::loadFromArray(
-            array(
-                'entityid'            => $this->_server->getUrl('spMetadataService'),
-                'SingleSignOnService' => array(
-                    array(
-                        'Binding'  => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
-                        'Location' => $this->_server->getUrl('spMetadataService'),
-                    ),
+        $config = array(
+            'entityId'                   => $this->_server->getUrl('spMetadataService'),
+            'assertionEncryptionEnabled' => $requireEncryption,
+            'keys'                       => array(
+                array(
+                    'signing'         => true,
+                    'type'            => 'X509Certificate',
+                    'X509Certificate' => $keyPair->getCertificate()->toCertData(),
                 ),
-                'keys'                => array(
-                    array(
-                        'signing'         => true,
-                        'type'            => 'X509Certificate',
-                        'X509Certificate' => $keyPair->getCertificate()->toCertData(),
-                    ),
-                    array(
-                        'signing'         => true,
-                        'type'            => 'X509Certificate',
-                        'X509Certificate' => $keyPair->getCertificate()->toCertData(),
-                    ),
-                ),
-                'privatekey' => $keyPair->getPrivateKey() ? $keyPair->getPrivateKey()->filePath() : '',
-            )
+            ),
         );
-        return $spMetadata;
+
+        $privateKey = $keyPair->getPrivateKey();
+
+        if ($privateKey) {
+            $config['privateKeys'][] = new PrivateKey(
+                $privateKey->filePath(),
+                PrivateKey::NAME_DEFAULT
+            );
+        }
+
+        return new Saml2ServiceProvider($config);
     }
 
     /**

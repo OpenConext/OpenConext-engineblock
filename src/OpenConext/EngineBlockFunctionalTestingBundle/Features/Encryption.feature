@@ -1,3 +1,4 @@
+@WIP
 Feature:
   In order to protect my Responses from prying eyes
   As an IdP
@@ -67,6 +68,9 @@ Feature:
      Then the url should match "authentication/feedback/received-invalid-response"
       And I should see "Invalid Identity Provider response"
 
+  # This scenario is currently not supported by EngineBlock,
+  # see https://www.pivotaltracker.com/story/show/155703943
+  @SKIP
   Scenario: EngineBlock accepts encrypted responses without an outer signature if the feature "eb.encrypted_assertions_require_outer_signatures" is disabled
     Given the SP uses the HTTP POST Binding
       And feature "eb.encrypted_assertions" is enabled
