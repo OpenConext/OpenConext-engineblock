@@ -52,10 +52,6 @@ final class Consent
 
         $serviceProvider = [
             'entity_id'    => $this->serviceProvider->entityId,
-            'display_name' => [
-                'en' => $this->serviceProvider->displayNameEn,
-                'nl' => $this->serviceProvider->displayNameNl,
-            ],
             'support_url' => [
                 'en' => $this->serviceProvider->supportUrlEn,
                 'nl' => $this->serviceProvider->supportUrlNl,
@@ -65,10 +61,33 @@ final class Consent
             'name_id_format' => $this->serviceProvider->nameIdFormat,
         ];
 
+        $serviceProvider += $this->getDisplayNameFields();
+
         return [
             'service_provider' => $serviceProvider,
             'consent_given_on' => $this->consent->getDateConsentWasGivenOn()->format(DateTime::ATOM),
             'consent_type'     => $this->consent->getConsentType()->jsonSerialize(),
         ];
+    }
+
+    private function getDisplayNameFields()
+    {
+        if (!empty($this->serviceProvider->displayNameEn)) {
+            $fields['display_name']['en'] = $this->serviceProvider->displayNameEn;
+        } else if (!empty($this->serviceProvider->nameEn)) {
+            $fields['display_name']['en'] = $this->serviceProvider->nameEn;
+        } else {
+            $fields['display_name']['en'] = $this->serviceProvider->entityId;
+        }
+
+        if (!empty($this->serviceProvider->displayNameNl)) {
+            $fields['display_name']['nl'] = $this->serviceProvider->displayNameNl;
+        } else if (!empty($this->serviceProvider->nameNl)) {
+            $fields['display_name']['nl'] = $this->serviceProvider->nameNl;
+        } else {
+            $fields['display_name']['nl'] = $this->serviceProvider->entityId;
+        }
+
+        return $fields;
     }
 }
