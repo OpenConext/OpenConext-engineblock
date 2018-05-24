@@ -58,8 +58,6 @@ final class Consent
             ],
             'eula_url' => $this->serviceProvider->termsOfServiceUrl,
             'support_email' => $supportEmail,
-            'support_url_en' => $this->serviceProvider->supportUrlEn,
-            'support_url_nl' => $this->serviceProvider->supportUrlNl,
             'name_id_format' => $this->serviceProvider->nameIdFormat,
         ];
 
