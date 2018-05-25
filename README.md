@@ -45,7 +45,7 @@ To setup the required tooling on the VM, the following steps might be useful:
 * MySQL > 5.x with settings:
     - default-storage-engine=InnoDB
     - default-collation=utf8_unicode_ci
-* [Janus][janus]
+* [Manage][manage]
 * NPM (optional for theme deployment)
 * Grunt-cli (optional for theme deployment)
 
@@ -220,7 +220,7 @@ Also, the following documentation can be found in the [docs][docs] directory:
 [upgrading]: UPGRADING.md
 [comp]: https://getcomposer.org/
 [op-dep]: https://github.com/OpenConext/OpenConext-deploy
-[janus]: https://github.com/janus-ssp/janus
+[manage]: https://github.com/OpenConext/OpenConext-manage
 [eb-wiki-theme-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines#theme-development
 [wiki]: https://github.com/OpenConext/OpenConext-engineblock/wiki
 [wiki-development]: https://github.com/OpenConext/OpenConext-engineblock/wiki/Development-Guidelines
