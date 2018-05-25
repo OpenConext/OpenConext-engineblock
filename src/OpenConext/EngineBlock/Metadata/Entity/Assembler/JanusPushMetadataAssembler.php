@@ -253,6 +253,8 @@ class JanusPushMetadataAssembler
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:signature_method'), 'signatureMethod');
         $properties += $this->setPathFromObject(array($connection, 'metadata:redirect:sign'), 'requestsMustBeSigned');
         $properties += $this->setPathFromObject(array($connection, 'manipulation_code'), 'manipulation');
+        $properties += $this->setPathFromObject(array($connection, 'metadata:url:en'), 'supportUrlEn');
+        $properties += $this->setPathFromObject(array($connection, 'metadata:url:nl'), 'supportUrlNl');
 
         return $properties;
     }
