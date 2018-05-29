@@ -133,4 +133,4 @@ function showElement(element) {
     element.className = element.className.replace(pattern, '');
 }
 
-initialize();
+window.onload = initialize();
