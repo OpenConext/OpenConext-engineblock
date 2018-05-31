@@ -26,6 +26,9 @@ services:
             - "@engineblock.service.metadata"
             - "@engineblock.compat.logger"
 
+    engineblock.service.deprovision:
+        class: OpenConext\EngineBlock\Service\DeprovisionService
+
     engineblock.service.metadata:
         class: OpenConext\EngineBlock\Service\MetadataService
         arguments:
