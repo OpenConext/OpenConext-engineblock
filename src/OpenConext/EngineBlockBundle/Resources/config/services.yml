@@ -28,6 +28,11 @@ services:
 
     engineblock.service.deprovision:
         class: OpenConext\EngineBlock\Service\DeprovisionService
+        arguments:
+            - "@engineblock.repository.consent"
+            - "@engineblock.authentication.user_directory"
+            - "@engineblock.repository.saml_persistent_id"
+            - "@engineblock.repository.service_provider_uuid"
 
     engineblock.service.metadata:
         class: OpenConext\EngineBlock\Service\MetadataService

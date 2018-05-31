@@ -12,4 +12,11 @@ interface ConsentRepository
      * @return Consent[]
      */
     public function findAllFor($userId);
+
+    /**
+     * @param string $userId
+     *
+     * @return Consent[]
+     */
+    public function deleteAllFor($userId);
 }

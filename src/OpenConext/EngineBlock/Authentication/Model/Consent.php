@@ -3,10 +3,11 @@
 namespace OpenConext\EngineBlock\Authentication\Model;
 
 use DateTime;
+use JsonSerializable;
 use OpenConext\EngineBlock\Assert\Assertion;
 use OpenConext\EngineBlock\Authentication\Value\ConsentType;
 
-final class Consent
+final class Consent implements JsonSerializable
 {
     /**
      * The NameID of the user.
@@ -33,16 +34,23 @@ final class Consent
     private $consentType;
 
     /**
+     * @var string
+     */
+    private $attributeHash;
+
+    /**
      * @param string $userId
      * @param string $serviceProviderEntityId
      * @param DateTime $consentGivenOn
      * @param ConsentType $consentType
+     * @param string $attributeHash
      */
     public function __construct(
         $userId,
         $serviceProviderEntityId,
         DateTime $consentGivenOn,
-        ConsentType $consentType
+        ConsentType $consentType,
+        $attributeHash = null
     ) {
         Assertion::nonEmptyString($userId, 'userId');
         Assertion::nonEmptyString($serviceProviderEntityId, 'serviceProviderEntityId');
@@ -51,6 +59,7 @@ final class Consent
         $this->serviceProviderEntityId = $serviceProviderEntityId;
         $this->consentGivenOn          = $consentGivenOn;
         $this->consentType             = $consentType;
+        $this->attributeHash           = $attributeHash;
     }
 
     /**
@@ -77,5 +86,21 @@ final class Consent
     public function getConsentType()
     {
         return $this->consentType;
+    }
+
+    /**
+     * Specify data which should be serialized to JSON.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            'user_id' => $this->userId,
+            'service_provider_entity_id' => $this->getServiceProviderEntityId(),
+            'consent_given_on' => $this->getDateConsentWasGivenOn()->format(DateTime::ATOM),
+            'consent_type' => $this->getConsentType(),
+            'attribute_hash' => $this->attributeHash,
+        ];
     }
 }

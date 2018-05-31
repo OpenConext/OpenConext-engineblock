@@ -2,16 +2,18 @@
 
 namespace OpenConext\EngineBlock\Service;
 
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
+
 interface DeprovisionServiceInterface
 {
     /**
-     * @param string $collabPersonId
+     * @param CollabPersonId $id
      * @return array
      */
-    public function read($collabPersonId);
+    public function read(CollabPersonId $id);
 
     /**
-     * @param string $collabPersonId
+     * @param CollabPersonId $id
      */
-    public function delete($collabPersonId);
+    public function delete(CollabPersonId $id);
 }

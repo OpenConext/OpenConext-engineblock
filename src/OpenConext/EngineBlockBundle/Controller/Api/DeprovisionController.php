@@ -2,6 +2,8 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
+use InvalidArgumentException;
+use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfigurationInterface;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
 use OpenConext\EngineBlock\Service\DeprovisionService;
@@ -66,10 +68,12 @@ final class DeprovisionController
         $this->assertDeprovisionApiIsEnabled();
         $this->assertUserHasDeprovisionRole();
 
-        $userData = $this->deprovisionService->read($collabPersonId);
+        $id = $this->createCollabPersonIdValueObject($collabPersonId);
+
+        $userData = $this->deprovisionService->read($id);
 
         if ($request->isMethod(Request::METHOD_DELETE)) {
-            $this->deprovisionService->delete($collabPersonId);
+            $this->deprovisionService->delete($id);
         }
 
         return $this->createResponse('OK', $userData);
@@ -86,7 +90,9 @@ final class DeprovisionController
         $this->assertDeprovisionApiIsEnabled();
         $this->assertUserHasDeprovisionRole();
 
-        $userData = $this->deprovisionService->read($collabPersonId);
+        $userData = $this->deprovisionService->read(
+            $this->createCollabPersonIdValueObject($collabPersonId)
+        );
 
         return $this->createResponse('OK', $userData);
     }
@@ -147,6 +153,26 @@ final class DeprovisionController
         if (!$this->authorizationChecker->isGranted('ROLE_API_USER_DEPROVISION')) {
             throw new ApiAccessDeniedHttpException(
                 'Access to the content listing API requires the role ROLE_API_USER_DEPROVISION'
+            );
+        }
+    }
+
+    /**
+     * @param string $id
+     * @return CollabPersonId
+     *
+     * @throws ApiNotFoundHttpException
+     */
+    private function createCollabPersonIdValueObject($id)
+    {
+        try {
+            return new CollabPersonId($id);
+        } catch (InvalidArgumentException $e) {
+            throw new ApiNotFoundHttpException(
+                sprintf(
+                    'User ID is not valid: %s',
+                    $e->getMessage()
+                )
             );
         }
     }
