@@ -81,6 +81,7 @@ final class DeprovisionService implements DeprovisionServiceInterface
      */
     private function findPersistentIds(User $user)
     {
+        $idsWithSpEntityId = [];
         $idsWithoutSpEntityId = $this->persistentIdRepository->findByUuid(
             $user->getCollabPersonUuid()
         );
