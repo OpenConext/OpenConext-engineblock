@@ -12,6 +12,21 @@ services:
         arguments:
             - 'OpenConext\EngineBlockBundle\Authentication\Entity\User'
 
+    engineblock.repository.saml_persistent_id:
+        public: false
+        class: OpenConext\EngineBlockBundle\Authentication\Repository\SamlPersistentIdRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - 'OpenConext\EngineBlockBundle\Authentication\Entity\SamlPersistentId'
+
+
+    engineblock.repository.service_provider_uuid:
+        public: false
+        class: OpenConext\EngineBlockBundle\Authentication\Repository\ServiceProviderUuidRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - 'OpenConext\EngineBlockBundle\Authentication\Entity\ServiceProviderUuid'
+
     engineblock.repository.service_provider:
         public: false
         class: Doctrine\ORM\EntityRepository

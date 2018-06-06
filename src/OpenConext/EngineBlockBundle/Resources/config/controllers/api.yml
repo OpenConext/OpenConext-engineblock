@@ -13,6 +13,14 @@ services:
             - "@engineblock.features"
             - "@engineblock.service.consent"
 
+    engineblock.controller.api.deprovision:
+        class: OpenConext\EngineBlockBundle\Controller\Api\DeprovisionController
+        arguments:
+            - "@security.authorization_checker"
+            - "@engineblock.features"
+            - "@engineblock.service.deprovision"
+            - 'EngineBlock'
+
     engineblock.controller.api.heartbeat:
         class: OpenConext\EngineBlockBundle\Controller\Api\HeartbeatController
 

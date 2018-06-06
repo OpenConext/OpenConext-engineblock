@@ -40,6 +40,7 @@ final class DbalConsentRepository implements ConsentRepository
                 service_id
             ,   consent_date
             ,   consent_type
+            ,   attribute
             FROM
                 consent
             WHERE
@@ -59,10 +60,27 @@ final class DbalConsentRepository implements ConsentRepository
                     $userId,
                     $row['service_id'],
                     new DateTime($row['consent_date']),
-                    new ConsentType($row['consent_type'])
+                    new ConsentType($row['consent_type']),
+                    $row['attribute']
                 );
             },
             $rows
         );
+    }
+
+    /**
+     * @param string $userId
+     *
+     * @throws RuntimeException
+     */
+    public function deleteAllFor($userId)
+    {
+        $sql = 'DELETE FROM consent WHERE hashed_user_id = :hashed_user_id';
+
+        try {
+            $this->connection->executeQuery($sql, ['hashed_user_id' => sha1($userId)]);
+        } catch (DBALException $exception) {
+            throw new RuntimeException('Could not delete user consents from the database', 0, $exception);
+        }
     }
 }

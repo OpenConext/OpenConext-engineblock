@@ -2,9 +2,10 @@
 
 namespace OpenConext\EngineBlock\Authentication\Value;
 
+use JsonSerializable;
 use OpenConext\EngineBlock\Assert\Assertion;
 
-final class ConsentType
+final class ConsentType implements JsonSerializable
 {
     const TYPE_EXPLICIT = 'explicit';
     const TYPE_IMPLICIT = 'implicit';

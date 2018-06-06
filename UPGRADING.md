@@ -1,5 +1,15 @@
 # UPGRADE NOTES
 
+## Development
+
+### New user data deprovision API
+
+A new API for deprovisioning user data can be enabled by configuring the following INI settings:
+
+    engineApi.features.deprovision = 1
+    api.users.deprovision.username = "..."
+    api.users.deprovision.password = "..."
+
 ## 5.2 -> 5.7
 
 ### Database migration tooling

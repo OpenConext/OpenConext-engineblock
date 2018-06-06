@@ -19,6 +19,20 @@ api_consent_user:
     defaults:
         _controller: engineblock.controller.api.consent:userAction
 
+api_deprovision_delete_user_data_dry_run:
+    path:    /deprovision/{collabPersonId}/dry-run
+    requirements:
+        collabPersonId: .+
+    defaults:
+        _controller: engineblock.controller.api.deprovision:dryRunAction
+
+api_deprovision_get_user_data:
+    path:    /deprovision/{collabPersonId}
+    requirements:
+        collabPersonId: .+
+    defaults:
+        _controller: engineblock.controller.api.deprovision:userDataAction
+
 api_metadata_idp:
     path:    /metadata/idp
     defaults:
