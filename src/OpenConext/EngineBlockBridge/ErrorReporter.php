@@ -75,10 +75,7 @@ class ErrorReporter
         if ($exception instanceof EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
             $feedback = array_merge($feedback, $exception->getFeedbackInfo());
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
-            $feedback = array_merge(
-                $feedback,
-                ['error_authorization_policy_decision' => $exception->getPolicyDecision()]
-            );
+            $_SESSION['error_authorization_policy_decision'] = $exception->getPolicyDecision();
         }
 
         $_SESSION['feedbackInfo'] = array_merge(
