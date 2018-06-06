@@ -178,9 +178,9 @@ final class PolicyDecision
     }
 
     /**
-     * @param Logo $logoUri
+     * @param Logo|null $logoUri
      */
-    public function setIdpLogo(Logo $logoUri)
+    public function setIdpLogo(Logo $logoUri = null)
     {
         $this->idpLogo = $logoUri;
     }
