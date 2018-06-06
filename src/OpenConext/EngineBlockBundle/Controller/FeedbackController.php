@@ -276,9 +276,9 @@ class FeedbackController
         $logo = null;
         $policyDecisionMessage = null;
 
-        if (isset($_SESSION['feedbackInfo']['error_authorization_policy_decision'])) {
+        if (isset($_SESSION['error_authorization_policy_decision'])) {
             /** @var PolicyDecision $policyDecision */
-            $policyDecision = $_SESSION['feedbackInfo']['error_authorization_policy_decision'];
+            $policyDecision = $_SESSION['error_authorization_policy_decision'];
 
             if ($policyDecision->hasLocalizedDenyMessage()) {
                 $policyDecisionMessage = $policyDecision->getLocalizedDenyMessage($locale, 'en');
