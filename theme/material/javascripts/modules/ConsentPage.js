@@ -1,6 +1,9 @@
 export function initConsentPage() {
+    const tippy = require('./../../../node_modules/tippy.js/dist/tippy.all.min.js');
+
     focusAcceptButton();
     initAttributesToggle();
+    initTooltips();
     initSlideIns();
 
     function focusAcceptButton() {
@@ -21,6 +24,29 @@ export function initConsentPage() {
         const windowHeight = window.innerHeight;
         const elementTopPosition = document.getElementById(elementId).offsetTop;
         return windowHeight > elementTopPosition;
+    }
+
+    function initTooltips() {
+        const anchors = document.querySelectorAll('a.tooltip');
+
+        tippy(
+            anchors,
+            {
+                animation: 'scale',
+                arrow: true,
+                duration: 200,
+                placement: 'top',
+                theme: 'light bordered'
+            }
+        );
+
+        Array.prototype.forEach.call(
+            anchors,
+            (anchor) => anchor.addEventListener(
+                'click',
+                (event) => event.preventDefault()
+            )
+        );
     }
 
     function initAttributesToggle() {
