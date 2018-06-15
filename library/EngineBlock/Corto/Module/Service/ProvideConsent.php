@@ -189,7 +189,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
             $motivations[$attributeName] = $this->getAttributeMotivation($sp, $attributeName);
         }
 
-        return $motivations;
+        return array_filter($motivations);
     }
 
     /**
