@@ -3,6 +3,7 @@
 use EngineBlock_Corto_Filter_Command_CollabPersonIdModificationInterface as CollabPersonIdModificationInterface;
 use EngineBlock_Corto_Filter_Command_ResponseAttributeSourcesModificationInterface as ResponseAttributeSourcesModificationInterface;
 use EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface as ResponseAttributesModificationInterface;
+use EngineBlock_Corto_Filter_Command_ResponseAttributeValueTypesModificationInterface as ResponseAttributeValueTypesModificationInterface;
 use EngineBlock_Corto_Filter_Command_ResponseModificationInterface as ResponseModificationInterface;
 use OpenConext\Component\EngineBlockMetadata\Entity\IdentityProvider;
 use OpenConext\Component\EngineBlockMetadata\Entity\ServiceProvider;
@@ -33,6 +34,8 @@ abstract class EngineBlock_Corto_Filter_Abstract
      * @param IdentityProvider                            $identityProvider
      * @throws EngineBlock_Exception
      * @throws Exception
+     *
+     * @see \EngineBlock_Corto_ProxyServer::callAttributeFilter is where this filter is applied.
      */
     public function filter(
         EngineBlock_Saml2_ResponseAnnotationDecorator &$response,
@@ -91,6 +94,9 @@ abstract class EngineBlock_Corto_Filter_Abstract
             }
             if ($command instanceof ResponseAttributesModificationInterface) {
                 $responseAttributes = $command->getResponseAttributes();
+            }
+            if ($command instanceof ResponseAttributeValueTypesModificationInterface) {
+                $response->getAssertion()->setAttributesValueTypes($command->getResponseAttributeValueTypes());
             }
             if ($command instanceof ResponseAttributeSourcesModificationInterface) {
                 $_SESSION[$request->getId()]['attribute_sources'] = $command->getResponseAttributeSources();
