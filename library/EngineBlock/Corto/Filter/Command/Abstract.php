@@ -26,6 +26,11 @@ abstract class EngineBlock_Corto_Filter_Command_Abstract implements EngineBlock_
     protected $_responseAttributes;
 
     /**
+     * @var array
+     */
+    protected $_responseAttributeValueTypes = [];
+
+    /**
      * @var EngineBlock_Saml2_AuthnRequestAnnotationDecorator
      */
     protected $_request;
