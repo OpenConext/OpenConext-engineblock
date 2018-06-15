@@ -33,7 +33,9 @@ class EngineBlock_Arp_AttributeReleasePolicyEnforcer
                 continue;
             }
 
-            foreach ($attributeValues as $attributeValue) {
+            // The attributeIndex is kept to preserve the original keys in $newAttributes
+            // this to be able to remove the matching attribute value types
+            foreach ($attributeValues as $attributeIndex => $attributeValue) {
                 if (!$arp->isAllowed($attributeName, $attributeValue)) {
                     EngineBlock_ApplicationSingleton::getLog()->info(
                         "ARP: non allowed attribute value '$attributeValue' for attribute '$attributeName'"
@@ -50,12 +52,36 @@ class EngineBlock_Arp_AttributeReleasePolicyEnforcer
                         'value' => $attributeValue,
                         'source' => $arp->getSource($attributeName),
                     );
-                    $newAttributes[$attributeName][] = $attribute;
+                    $newAttributes[$attributeName][$attributeIndex] = $attribute;
                 } else {
-                    $newAttributes[$attributeName][] = $attributeValue;
+                    $newAttributes[$attributeName][$attributeIndex] = $attributeValue;
                 }
             }
         }
         return $newAttributes;
+    }
+
+    /**
+     * Update the attribute value types
+     *
+     * The value types array should match the index of the attributes array.
+     * This method should be used after enforcing the attribute release
+     * policy.
+     *
+     * @param array $attributes
+     * @param array $attributeValueTypes
+     * @return array
+     */
+    public function updateAttributeValueTypes(array $attributes, array $attributeValueTypes)
+    {
+        $newAttributeValueTypes = [];
+        foreach ($attributes as $attributeIdentifier => $attributeValues) {
+            if (isset($attributeValueTypes[$attributeIdentifier])) {
+                foreach ($attributeValues as $attributeIndex => $attributeValue) {
+                    $newAttributeValueTypes[$attributeIndex] = array_intersect_key($attributeValue, $attributes[$attributeIndex]);
+                }
+            }
+        }
+        return $newAttributeValueTypes;
     }
 }
