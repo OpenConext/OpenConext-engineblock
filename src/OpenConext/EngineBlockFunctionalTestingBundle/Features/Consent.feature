@@ -10,13 +10,13 @@ Feature:
       And a Service Provider named "Dummy-SP"
       And SP "Dummy-SP" allows the following attributes:
 
-        | Name                                                    | Value | Source |
-        | urn:mace:dir:attribute-def:uid                          | *     |        |
-        | urn:mace:terena.org:attribute-def:schacHomeOrganization | *     |        |
-        | urn:mace:dir:attribute-def:cn                           | *     |        |
-        | urn:mace:dir:attribute-def:displayName                  | *     |        |
-        | urn:mace:dir:attribute-def:eduPersonAffiliation         | *     |        |
-        | urn:mace:dir:attribute-def:eduPersonOrcid               | *     | voot   |
+        | Name                                                    | Value | Source | Motivation                 |
+        | urn:mace:dir:attribute-def:uid                          | *     |        | Motivation for uid         |
+        | urn:mace:terena.org:attribute-def:schacHomeOrganization | *     |        | Motivation for sho         |
+        | urn:mace:dir:attribute-def:cn                           | *     |        | Motivation for cn          |
+        | urn:mace:dir:attribute-def:displayName                  | *     |        | Motivation for dn          |
+        | urn:mace:dir:attribute-def:eduPersonAffiliation         | *     |        | Motivation for affiliation |
+        | urn:mace:dir:attribute-def:eduPersonOrcid               | *     | voot   | Motivation for orcid       |
 
       And the IdP "Dummy-IdP" sends attribute "urn:mace:dir:attribute-def:cn" with value "test"
       And the IdP "Dummy-IdP" sends attribute "urn:mace:dir:attribute-def:displayName" with value "test"
@@ -38,3 +38,12 @@ Feature:
      Then the response should contain "+31612345678"
      When I give my consent
      Then I pass through EngineBlock
+
+  Scenario: The user is can read why the service providers requires an attribute
+    Given I log in at "Dummy-SP"
+      And I pass through EngineBlock
+      And I pass through the IdP
+     Then the response should contain "Motivation for cn"
+     Then the response should contain "Motivation for dn"
+     Then the response should contain "Motivation for affiliation"
+     Then the response should contain "Motivation for orcid"

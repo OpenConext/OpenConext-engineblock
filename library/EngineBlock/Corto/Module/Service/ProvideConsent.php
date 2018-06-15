@@ -127,6 +127,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'idpSupport' => $this->getSupportContact($identityProvider),
                 'attributes' => $attributes,
                 'attributeSources' => $this->getAttributeSources($request->getId()),
+                'attributeMotivations' => $this->getAttributeMotivations($serviceProviderMetadata, $attributes),
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
                 'profileUrl' => $profileUrl,
                 'supportUrl' => $settings->getOpenConextSupportUrl(),
@@ -171,6 +172,41 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
         }
 
         return [];
+    }
+
+    /**
+     * Find motivations in SP ARP for all given attributes.
+     *
+     * @param ServiceProvider $sp
+     * @param array $attributes
+     * @return array
+     */
+    private function getAttributeMotivations(ServiceProvider $sp, array $attributes)
+    {
+        $motivations = [];
+
+        foreach (array_keys($attributes) as $attributeName) {
+            $motivations[$attributeName] = $this->getAttributeMotivation($sp, $attributeName);
+        }
+
+        return $motivations;
+    }
+
+    /**
+     * Find motivation text in SP ARP for given attribute.
+     *
+     * @param ServiceProvider $sp
+     * @param string $attributeName
+     * @return string
+     */
+    private function getAttributeMotivation(ServiceProvider $sp, $attributeName)
+    {
+        $arp = $sp->getAttributeReleasePolicy();
+        if ($arp === null) {
+            return null;
+        }
+
+        return $arp->getMotivation($attributeName);
     }
 
     /**

@@ -365,8 +365,14 @@ class MockSpContext extends AbstractSubContext
         $sp = $this->mockSpRegistry->get($spName);
 
         foreach ($attributes->getHash() as $attribute) {
+            $motivation = null;
+
+            if (isset($attribute['Motivation'])) {
+                $motivation = $attribute['Motivation'];
+            }
+
             $this->serviceRegistryFixture
-                ->allowAttributeValueForSp($sp->entityId(), $attribute['Name'], $attribute['Value'], $attribute['Source'])
+                ->allowAttributeValueForSp($sp->entityId(), $attribute['Name'], $attribute['Value'], $attribute['Source'], $motivation)
                 ->save();
         }
     }
