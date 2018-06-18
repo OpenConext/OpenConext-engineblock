@@ -128,6 +128,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attributes' => $attributes,
                 'attributeSources' => $this->getAttributeSources($request->getId()),
                 'attributeMotivations' => $this->getAttributeMotivations($serviceProviderMetadata, $attributes),
+                'minimalConsent' => $identityProvider->getConsentSettings()->isMinimal($serviceProviderMetadata->entityId),
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
                 'profileUrl' => $profileUrl,
                 'supportUrl' => $settings->getOpenConextSupportUrl(),
@@ -151,7 +152,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 return true;
             }
 
-            if (in_array($serviceProvider->entityId, $identityProvider->spsEntityIdsWithoutConsent)) {
+            if (!$identityProvider->getConsentSettings()->isEnabled($serviceProvider->entityId)) {
                 return true;
             }
         }

@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Fixtures;
 
 use Doctrine\ORM\EntityManager;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
@@ -350,6 +351,18 @@ QUERY;
         $logo->width = 100;
 
         $this->getIdentityProvider($entityId)->logo = $logo;
+
+        return $this;
+    }
+
+    public function setConsentType($idpEntityId, $spEntityId, $consentType)
+    {
+        $this->getIdentityProvider($idpEntityId)->consentSettings = new ConsentSettings([
+            [
+                'name' => $spEntityId,
+                'type' => $consentType,
+            ]
+        ]);
 
         return $this;
     }

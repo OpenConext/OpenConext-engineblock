@@ -2,6 +2,10 @@
 
 ## Development
 
+### Stored metadata incompatibility
+Metadata pushed to EngineBlock in earlier versions (EB<5.8) is not compatible with this version. A metadata push is
+required after upgrading to EB 5.8.
+
 ### New user data deprovision API
 
 A new API for deprovisioning user data can be enabled by configuring the following INI settings:

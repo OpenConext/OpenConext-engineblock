@@ -29,21 +29,54 @@ Feature:
         | Name                                      |  Value | Source |
         | urn:mace:dir:attribute-def:eduPersonOrcid | 123456 | voot   |
 
+  # The default behaviour of EB should be to ask for default consent.
   Scenario: The user is asked for consent to share information with the SP
     Given I log in at "Dummy-SP"
       And I pass through EngineBlock
       And I pass through the IdP
+     Then the response should contain "Do you agree with sharing this data?"
+     Then the response should contain "Yes, proceed to Dummy-SP"
+     Then the response should contain "No, I do not agree"
      Then the response should contain "Dummy-SP needs your information before logging in"
      Then the response should contain "support@openconext.org"
      Then the response should contain "+31612345678"
      When I give my consent
      Then I pass through EngineBlock
 
+  Scenario: The user is not asked for consent when disabled for a SP
+    Given I log in at "Dummy-SP"
+    And the IdP "Dummy-IdP" requires no consent for SP "Dummy-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I pass through EngineBlock
+    Then the url should match "functional-testing/Dummy-SP/acs"
+
+  Scenario: The user is asked for minimal consent
+    Given I log in at "Dummy-SP"
+    And the IdP "Dummy-IdP" requires minimal consent for SP "Dummy-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should not contain "Do you agree with sharing this data?"
+    Then the response should not contain "Yes, proceed to Dummy-SP"
+    Then the response should contain "Proceed to Dummy-SP"
+    Then the response should not contain "No, I do not agree"
+    Then the response should contain "Cancel"
+
+  Scenario: The user is asked for default consent
+    Given I log in at "Dummy-SP"
+    And the IdP "Dummy-IdP" requires default consent for SP "Dummy-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "Do you agree with sharing this data?"
+    Then the response should contain "Yes, proceed to Dummy-SP"
+    Then the response should contain "No, I do not agree"
+    Then the response should not contain "Cancel"
+
   Scenario: The user is can read why the service providers requires an attribute
     Given I log in at "Dummy-SP"
-      And I pass through EngineBlock
-      And I pass through the IdP
-     Then the response should contain "Motivation for cn"
-     Then the response should contain "Motivation for dn"
-     Then the response should contain "Motivation for affiliation"
-     Then the response should contain "Motivation for orcid"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "Motivation for cn"
+    Then the response should contain "Motivation for dn"
+    Then the response should contain "Motivation for affiliation"
+    Then the response should contain "Motivation for orcid"

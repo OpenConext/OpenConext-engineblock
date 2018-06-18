@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlock\Metadata\Entity\Assembler;
 
 use DateTime;
 use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
+use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -214,7 +215,7 @@ class JanusPushMetadataAssembler
         $properties += $this->assembleSingleSignOnServices($connection);
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:guest_qualifier'), 'guestQualifier');
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:schachomeorganization'), 'schacHomeOrganization');
-        $properties += $this->assembleSpEntityIdsWithoutConsent($connection);
+        $properties += $this->assembleConsentSettings($connection);
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:hidden'), 'hidden');
         $properties += $this->assembleShibMdScopes($connection);
 
@@ -407,19 +408,16 @@ class JanusPushMetadataAssembler
         return array('singleSignOnServices' => $services);
     }
 
-    private function assembleSpEntityIdsWithoutConsent(stdClass $connection)
+    private function assembleConsentSettings(stdClass $connection)
     {
         if (empty($connection->disable_consent_connections)) {
             return array();
         }
 
         return array(
-            'spsEntityIdsWithoutConsent' => array_map(
-                function ($disableConsentConnection) {
-                    return $disableConsentConnection->name;
-                },
-                $connection->disable_consent_connections
-            )
+            'consentSettings' => new ConsentSettings(
+                (array)$connection->disable_consent_connections
+            ),
         );
     }
 
