@@ -35,8 +35,9 @@ export function initConsentPage() {
                 animation: 'scale',
                 arrow: true,
                 duration: 200,
+                followCursor: true,
                 placement: 'top',
-                theme: 'light bordered'
+                theme: 'light bordered',
             }
         );
 
