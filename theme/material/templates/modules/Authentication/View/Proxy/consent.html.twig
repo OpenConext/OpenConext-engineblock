@@ -73,9 +73,11 @@
                                     {# Single attribute value #}
                                     {% if attributeValues|length == 1 %}
                                         {% if attributeMotivations[attributeIdentifier] is defined %}
+                                            {% spaceless %}
                                             <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
                                                 <span>{{ attributeValues[0] }}</span>
                                             </a>
+                                            {% endspaceless %}
                                         {% else %}
                                             {{ attributeValues[0] }}
                                         {% endif %}
@@ -85,9 +87,11 @@
                                             {% for value in attributeValues %}
                                                 <li>
                                                     {% if attributeMotivations[attributeIdentifier] is defined %}
+                                                        {% spaceless %}
                                                         <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
                                                             <span>{{ value }}</span>
                                                         </a>
+                                                        {% endspaceless %}
                                                     {% else %}
                                                         {{ value }}
                                                     {% endif %}
