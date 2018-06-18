@@ -34,10 +34,12 @@ export function initConsentPage() {
             {
                 animation: 'scale',
                 arrow: true,
+                arrowTransform: 'scale(2)',
+                distance: 30,
                 duration: 200,
                 followCursor: true,
                 placement: 'top',
-                theme: 'light bordered',
+                theme: 'light',
             }
         );
 
