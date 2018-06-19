@@ -215,7 +215,17 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $assertions[0]->setAttributes($newAttributes);
     }
 
-    public function setAttribute($attributeName, array $attributeValues)
+    /**
+     * Set an attribute on the assertion.
+     *
+     * You can optionally set the attribute type, effectively
+     * setting the xsi:type attribute on the value element.
+     *
+     * @param $attributeName
+     * @param array $attributeValues
+     * @param bool $attributeType
+     */
+    public function setAttribute($attributeName, array $attributeValues, $attributeType = false)
     {
         $role = $this->getSsoRole();
 
@@ -229,6 +239,11 @@ class MockIdentityProvider extends AbstractMockEntityRole
         $newAttributes[$attributeName] = $attributeValues;
 
         $assertions[0]->setAttributes($newAttributes);
+
+        if ($attributeType) {
+            $arrayTypes = array_fill(0, count($newAttributes), $attributeType);
+            $assertions[0]->setAttributesValueTypes($arrayTypes);
+        }
     }
 
     public function useResponseSigning()

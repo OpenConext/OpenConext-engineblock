@@ -158,7 +158,7 @@ class MockIdpContext extends AbstractSubContext
         /** @var MockIdentityProvider $mockIdp */
         $mockIdp = $this->mockIdpRegistry->get($idpName);
         /** @var MockServiceProvider $mockSp */
-        $mockSp  = $this->mockSpRegistry->get($spName);
+        $mockSp = $this->mockSpRegistry->get($spName);
 
         $this->serviceRegistryFixture->allow($mockSp->entityid(), $mockIdp->entityId());
 
@@ -329,6 +329,28 @@ class MockIdpContext extends AbstractSubContext
 
         $mockIdp->setAttribute($attributeName, [$attributeValue]);
 
+        $this->mockIdpRegistry->save();
+    }
+
+    /**
+     * Please provide the attribute values in a a comma separated manner.
+     *
+     * @Given /^the IdP "([^"]*)" sends attribute "([^"]*)" with values "([^"]*)" and xsi:type is "([^"]*)"$/
+     * @param string $idpName
+     * @param string $attributeName
+     * @param $attributeValues
+     * @param $attributeValueType
+     */
+    public function theIdPSendsAttributeWithValuesAndType(
+        $idpName,
+        $attributeName,
+        $attributeValues,
+        $attributeValueType
+    ) {
+        /** @var MockIdentityProvider $mockIdp */
+        $mockIdp = $this->mockIdpRegistry->get($idpName);
+        $explosion = explode(',', $attributeValues);
+        $mockIdp->setAttribute($attributeName, $explosion, $attributeValueType);
         $this->mockIdpRegistry->save();
     }
 }
