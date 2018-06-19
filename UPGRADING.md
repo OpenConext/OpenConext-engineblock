@@ -10,6 +10,8 @@ A new API for deprovisioning user data can be enabled by configuring the followi
     api.users.deprovision.username = "..."
     api.users.deprovision.password = "..."
 
+Please note that these settings for now are mandatory! For Engine to work correctly specify a username and password.
+
 ## 5.2 -> 5.7
 
 ### Database migration tooling
