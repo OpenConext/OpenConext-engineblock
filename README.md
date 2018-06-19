@@ -41,7 +41,6 @@ To setup the required tooling on the VM, the following steps might be useful:
 * Apache
 * PHP 5.6:
     - libxml
-    - mcrypt
 * MySQL > 5.x with settings:
     - default-storage-engine=InnoDB
     - default-collation=utf8_unicode_ci
