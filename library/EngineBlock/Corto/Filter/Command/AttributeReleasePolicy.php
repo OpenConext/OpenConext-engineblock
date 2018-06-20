@@ -1,7 +1,8 @@
 <?php
 
-class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBlock_Corto_Filter_Command_Abstract
-    implements EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface
+class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBlock_Corto_Filter_Command_Abstract implements
+    EngineBlock_Corto_Filter_Command_ResponseAttributesModificationInterface,
+    EngineBlock_Corto_Filter_Command_ResponseAttributeValueTypesModificationInterface
 {
     /**
      * {@inheritdoc}
@@ -9,6 +10,11 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
     public function getResponseAttributes()
     {
         return $this->_responseAttributes;
+    }
+
+    public function getResponseAttributeValueTypes()
+    {
+        return $this->_responseAttributeValueTypes;
     }
 
     public function execute()
@@ -36,6 +42,11 @@ class EngineBlock_Corto_Filter_Command_AttributeReleasePolicy extends EngineBloc
 
             $logger->info("Applying attribute release policy for $spEntityId");
             $attributes = $enforcer->enforceArp($arp, $attributes);
+
+            $this->_responseAttributeValueTypes = $enforcer->updateAttributeValueTypes(
+                $attributes,
+                $this->_responseAttributeValueTypes
+            );
         }
 
         $this->_responseAttributes = $attributes;
