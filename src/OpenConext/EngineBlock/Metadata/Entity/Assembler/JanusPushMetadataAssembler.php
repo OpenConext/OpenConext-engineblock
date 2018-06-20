@@ -411,13 +411,21 @@ class JanusPushMetadataAssembler
             return array();
         }
 
+        $entityIds = array_map(
+            function ($disableConsentConnection) {
+                // Detect manage >=2.0.18. If a type property is present, it
+                // could be set to something other than 'no_consent'.
+                if (isset($disableConsentConnection->type) && $disableConsentConnection->type !== 'no_consent') {
+                    return;
+                }
+
+                return $disableConsentConnection->name;
+            },
+            $connection->disable_consent_connections
+        );
+
         return array(
-            'spsEntityIdsWithoutConsent' => array_map(
-                function ($disableConsentConnection) {
-                    return $disableConsentConnection->name;
-                },
-                $connection->disable_consent_connections
-            )
+            'spsEntityIdsWithoutConsent' => array_filter($entityIds),
         );
     }
 
