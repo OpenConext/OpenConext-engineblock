@@ -70,7 +70,7 @@ class IdentityProvider extends AbstractRole
      *
      * @ORM\Column(name="consent_settings", type="json_array")
      */
-    public $consentSettings;
+    private $consentSettings;
 
     /**
      * @var bool
@@ -224,13 +224,26 @@ class IdentityProvider extends AbstractRole
     }
 
     /**
+     * @param ConsentSettings $settings
+     * @return IdentityProvider
+     */
+    public function setConsentSettings(ConsentSettings $settings)
+    {
+        $this->consentSettings = $settings;
+
+        return $this;
+    }
+
+    /**
      * @return ConsentSettings
      */
     public function getConsentSettings()
     {
         if (!$this->consentSettings instanceof ConsentSettings) {
-            $this->consentSettings = new ConsentSettings(
-                (array)$this->consentSettings
+            $this->setConsentSettings(
+                new ConsentSettings(
+                    (array)$this->consentSettings
+                )
             );
         }
 

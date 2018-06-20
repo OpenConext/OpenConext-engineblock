@@ -79,12 +79,14 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
     {
         $idp = $this->proxyServerMock->getRepository()->fetchIdentityProviderByEntityId('testIdP');
 
-        $idp->consentSettings = new ConsentSettings([
-            [
-                'name' => 'testSp',
-                'type' => 'no_consent',
-            ]
-        ]);
+        $idp->setConsentSettings(
+            new ConsentSettings([
+                [
+                    'name' => 'testSp',
+                    'type' => 'no_consent',
+                ]
+            ])
+        );
 
         $provideConsentService = $this->factoryService();
 

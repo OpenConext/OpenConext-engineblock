@@ -357,12 +357,14 @@ QUERY;
 
     public function setConsentType($idpEntityId, $spEntityId, $consentType)
     {
-        $this->getIdentityProvider($idpEntityId)->consentSettings = new ConsentSettings([
-            [
-                'name' => $spEntityId,
-                'type' => $consentType,
-            ]
-        ]);
+        $this->getIdentityProvider($idpEntityId)->setConsentSettings(
+            new ConsentSettings([
+                [
+                    'name' => $spEntityId,
+                    'type' => $consentType,
+                ]
+            ])
+        );
 
         return $this;
     }
