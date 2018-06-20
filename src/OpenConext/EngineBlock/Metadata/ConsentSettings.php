@@ -2,12 +2,14 @@
 
 namespace OpenConext\EngineBlock\Metadata;
 
+use JsonSerializable;
+
 /**
  * Value object for IDP consent settings.
  *
  * @package OpenConext\EngineBlock\Metadata
  */
-class ConsentSettings implements \JsonSerializable
+class ConsentSettings implements JsonSerializable
 {
     const CONSENT_DISABLED = 'no_consent';
     const CONSENT_MINIMAL = 'minimal_consent';
