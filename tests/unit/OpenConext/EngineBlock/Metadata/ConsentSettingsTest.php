@@ -78,4 +78,17 @@ class ConsentSettingsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($settings->isMinimal('https://example.org/test3'));
         $this->assertFalse($settings->isEnabled('https://example.org/test3'));
     }
+
+    public function testInterpretsNullConsentTypeAsDefault()
+    {
+        $settings = new ConsentSettings([
+            [
+                'name' => 'https://example.org/test1',
+                'type' => null,
+            ]
+        ]);
+
+        $this->assertFalse($settings->isMinimal('https://example.org/test1'));
+        $this->assertTrue($settings->isEnabled('https://example.org/test1'));
+    }
 }
