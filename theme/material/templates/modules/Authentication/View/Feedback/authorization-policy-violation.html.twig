@@ -23,3 +23,6 @@
         {{ 'error_authorization_policy_violation_desc'|trans|raw }}
     {% endif %}
 {% endblock %}
+
+{# The PDP error page should not show the table with the feedback information. #}
+{% block feedbackInfo %}{% endblock %}
