@@ -4,6 +4,7 @@ namespace OpenConext\EngineBlockBridge\Logger;
 
 use EngineBlock_UserDirectory;
 use Mockery as m;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
@@ -48,6 +49,7 @@ class AuthenticationLoggerAdapterTest extends UnitTest
                             new Entity(new EntityId($spProxy2EntityId), EntityType::SP()),
                         ]
                     ),
+                    AbstractRole::WORKFLOW_STATE_PROD,
                     new ValueObjectEqualsMatcher(new KeyId($keyIdValue)),
                 ]
             )

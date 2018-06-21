@@ -31,6 +31,7 @@ class AuthenticationLogger
      * @param Entity         $identityProvider
      * @param CollabPersonId $collabPersonId
      * @param array          $proxiedServiceProviders
+     * @param string         $workflowState
      * @param KeyId|null     $keyId
      */
     public function logGrantedLogin(
@@ -38,6 +39,7 @@ class AuthenticationLogger
         Entity $identityProvider,
         CollabPersonId $collabPersonId,
         array $proxiedServiceProviders,
+        $workflowState,
         KeyId $keyId = null
     ) {
         $proxiedServiceProviderEntityIds = array_map(
@@ -57,6 +59,7 @@ class AuthenticationLogger
                 'idp_entity_id'         => $identityProvider->getEntityId()->getEntityId(),
                 'key_id'                => $keyId ? $keyId->getKeyId() : null,
                 'proxied_sp_entity_ids' => $proxiedServiceProviderEntityIds,
+                'workflow_state'        => $workflowState
             ]
         );
     }
