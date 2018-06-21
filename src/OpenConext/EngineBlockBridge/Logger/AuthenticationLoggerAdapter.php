@@ -51,6 +51,7 @@ class AuthenticationLoggerAdapter
             new Entity(new EntityId($identityProvider->entityId), EntityType::IdP()),
             new CollabPersonId($collabPersonId),
             $proxiedSpEntities,
+            $serviceProvider->workflowState,
             $keyId
         );
     }

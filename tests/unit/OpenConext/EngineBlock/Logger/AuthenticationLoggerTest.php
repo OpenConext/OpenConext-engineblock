@@ -6,6 +6,7 @@ use EngineBlock_UserDirectory;
 use Mockery as m;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
 use OpenConext\EngineBlock\Authentication\Value\KeyId;
+use OpenConext\EngineBlock\Metadata\Entity\AbstractRole;
 use OpenConext\Value\Saml\Entity;
 use OpenConext\Value\Saml\EntityId;
 use OpenConext\Value\Saml\EntityType;
@@ -47,6 +48,7 @@ class AuthenticationLoggerTest extends UnitTest
             'user_id' => $collabPersonIdValue,
             'key_id' => $keyIdValue,
             'proxied_sp_entity_ids' => [$spProxy1EntityId, $spProxy2EntityId],
+            'workflow_state' => AbstractRole::WORKFLOW_STATE_PROD,
         ];
 
         $mockLogger = m::mock('\Psr\Log\LoggerInterface');
@@ -79,6 +81,7 @@ class AuthenticationLoggerTest extends UnitTest
             $identityProvider,
             $collabPersonId,
             [$serviceProviderProxy1, $serviceProviderProxy2],
+            AbstractRole::WORKFLOW_STATE_PROD,
             $keyId
         );
     }

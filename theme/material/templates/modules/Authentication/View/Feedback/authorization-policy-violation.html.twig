@@ -20,6 +20,10 @@
 
     {% if policyDecisionMessage is not null %}
         <h2>{{ policyDecisionMessage }}</h2>
-        {{ 'error_authorization_policy_violation_desc'|trans|raw }}
     {% endif %}
+    {{ 'error_authorization_policy_violation_desc'|trans|raw }}
 {% endblock %}
+
+{# The PDP error page should not show the table with the feedback information and back button. #}
+{% block feedbackInfo %}{% endblock %}
+{% block backButton %}{% endblock %}
