@@ -6,8 +6,15 @@ export class KeyboardListener {
     }
 
     handle(keyCode) {
-        if (keyCode === ESCAPE) {
-            this.requestAccessModalHelper.closeRequestAccessModal();
+        if (this.requestAccessModalHelper.modalIsOpen()) {
+
+            if (keyCode === ESCAPE) {
+                this.requestAccessModalHelper.closeRequestAccessModal();
+                return;
+            }
+
+            // Don't interfere with the IDP selection list when
+            // the request-access modal dialog is open.
             return;
         }
 
@@ -36,11 +43,7 @@ export class KeyboardListener {
         }
 
         if (keyCode === ENTER) {
-            // Don't interfer with ENTER on input fields or textareas
-            // inside the request-access modal dialog.
-            if (!this.requestAccessModalHelper.modalIsOpen()) {
-                this.idpPicker.selectIdpUnderFocus();
-            }
+            this.idpPicker.selectIdpUnderFocus();
         }
     }
 }
