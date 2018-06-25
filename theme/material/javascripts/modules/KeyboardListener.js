@@ -7,13 +7,14 @@ export class KeyboardListener {
 
     handle(keyCode) {
         if (this.requestAccessModalHelper.modalIsOpen()) {
-            // Don't interfer with the IDP selection list when
-            // the request-access modal dialog is open.
-            return;
-        }
 
-        if (keyCode === ESCAPE) {
-            this.requestAccessModalHelper.closeRequestAccessModal();
+            if (keyCode === ESCAPE) {
+                this.requestAccessModalHelper.closeRequestAccessModal();
+                return;
+            }
+
+            // Don't interfere with the IDP selection list when
+            // the request-access modal dialog is open.
             return;
         }
 
