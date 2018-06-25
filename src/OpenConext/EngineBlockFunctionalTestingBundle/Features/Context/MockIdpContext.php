@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 
+use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlockFunctionalTestingBundle\Fixtures\ServiceRegistryFixture;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\EntityRegistry;
 use OpenConext\EngineBlockFunctionalTestingBundle\Mock\MockIdentityProvider;
@@ -274,5 +275,47 @@ class MockIdpContext extends AbstractSubContext
         $explosion = explode(',', $attributeValues);
         $mockIdp->setAttribute($attributeName, $explosion, $attributeValueType);
         $this->mockIdpRegistry->save();
+    }
+
+    /**
+     * @Given /^the IdP "([^"]*)" requires minimal consent for SP "([^"]*)"$/
+     * @param string $idpName
+     * @param string $spName
+     */
+    public function theIdpRequiresMinimalConsentForSp($idpName, $spName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture->setConsentType($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_MINIMAL);
+        $this->serviceRegistryFixture->save();
+    }
+
+    /**
+     * @Given /^the IdP "([^"]*)" requires default consent for SP "([^"]*)"$/
+     * @param string $idpName
+     * @param string $spName
+     */
+    public function theIdpRequiresDefaultConsentForSp($idpName, $spName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture->setConsentType($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_DEFAULT);
+        $this->serviceRegistryFixture->save();
+    }
+
+    /**
+     * @Given /^the IdP "([^"]*)" requires no consent for SP "([^"]*)"$/
+     * @param string $idpName
+     * @param string $spName
+     */
+    public function theIdpRequiresNoConsentForSp($idpName, $spName)
+    {
+        $idp = $this->mockIdpRegistry->get($idpName);
+        $sp = $this->mockSpRegistry->get($spName);
+
+        $this->serviceRegistryFixture->setConsentType($idp->entityId(), $sp->entityId(), ConsentSettings::CONSENT_DISABLED);
+        $this->serviceRegistryFixture->save();
     }
 }

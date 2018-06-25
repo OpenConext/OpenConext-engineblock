@@ -3,6 +3,8 @@
 namespace OpenConext\EngineBlock\Metadata\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use OpenConext\EngineBlock\Authentication\Dto\Consent;
+use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Logo;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\Visitor\VisitorInterface;
 use OpenConext\EngineBlock\Metadata\Organization;
@@ -64,11 +66,11 @@ class IdentityProvider extends AbstractRole
     public $schacHomeOrganization = null;
 
     /**
-     * @var string[]
+     * @var ConsentSettings
      *
-     * @ORM\Column(name="sps_entity_ids_without_consent", type="array")
+     * @ORM\Column(name="consent_settings", type="json_array")
      */
-    public $spsEntityIdsWithoutConsent = array();
+    private $consentSettings;
 
     /**
      * @var bool
@@ -118,7 +120,7 @@ class IdentityProvider extends AbstractRole
      * @param null $schacHomeOrganization
      * @param array $shibMdScopes
      * @param array $singleSignOnServices
-     * @param array $spsEntityIdsWithoutConsent
+     * @param ConsentSettings $consentSettings
      */
     public function __construct(
         $entityId,
@@ -157,7 +159,7 @@ class IdentityProvider extends AbstractRole
         $schacHomeOrganization = null,
         $shibMdScopes = array(),
         $singleSignOnServices = array(),
-        $spsEntityIdsWithoutConsent = array()
+        ConsentSettings $consentSettings = null
     ) {
         parent::__construct(
             $entityId,
@@ -195,7 +197,7 @@ class IdentityProvider extends AbstractRole
         $this->schacHomeOrganization = $schacHomeOrganization;
         $this->shibMdScopes = $shibMdScopes;
         $this->singleSignOnServices = $singleSignOnServices;
-        $this->spsEntityIdsWithoutConsent = $spsEntityIdsWithoutConsent;
+        $this->consentSettings = $consentSettings;
     }
 
     /**
@@ -219,5 +221,32 @@ class IdentityProvider extends AbstractRole
             $idpName = $this->entityId;
         }
         return $idpName;
+    }
+
+    /**
+     * @param ConsentSettings $settings
+     * @return IdentityProvider
+     */
+    public function setConsentSettings(ConsentSettings $settings)
+    {
+        $this->consentSettings = $settings;
+
+        return $this;
+    }
+
+    /**
+     * @return ConsentSettings
+     */
+    public function getConsentSettings()
+    {
+        if (!$this->consentSettings instanceof ConsentSettings) {
+            $this->setConsentSettings(
+                new ConsentSettings(
+                    (array)$this->consentSettings
+                )
+            );
+        }
+
+        return $this->consentSettings;
     }
 }

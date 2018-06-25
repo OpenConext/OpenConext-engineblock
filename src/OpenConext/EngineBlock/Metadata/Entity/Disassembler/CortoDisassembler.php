@@ -90,7 +90,7 @@ class CortoDisassembler
             $cortoEntity['SchacHomeOrganization'] = $entity->schacHomeOrganization;
         }
 
-        $cortoEntity['SpsWithoutConsent'] = $entity->spsEntityIdsWithoutConsent;
+        $cortoEntity['SpsWithoutConsent'] = $entity->getConsentSettings()->getSpEntityIdsWithoutConsent();
         $cortoEntity['isHidden'] = $entity->hidden;
 
         $cortoEntity['shibmd:scopes'] = array();

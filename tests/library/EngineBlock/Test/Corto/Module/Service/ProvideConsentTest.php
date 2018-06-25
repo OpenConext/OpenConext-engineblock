@@ -1,5 +1,6 @@
 <?php
 
+use OpenConext\EngineBlock\Metadata\ConsentSettings;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\InMemoryMetadataRepository;
@@ -76,7 +77,16 @@ class EngineBlock_Test_Corto_Module_Service_ProvideConsentTest extends PHPUnit_F
 
     public function testConsentIsSkippedWhenDisabledPerSp()
     {
-        $this->proxyServerMock->getRepository()->fetchIdentityProviderByEntityId('testIdP')->spsEntityIdsWithoutConsent[] = 'testSp';
+        $idp = $this->proxyServerMock->getRepository()->fetchIdentityProviderByEntityId('testIdP');
+
+        $idp->setConsentSettings(
+            new ConsentSettings([
+                [
+                    'name' => 'testSp',
+                    'type' => 'no_consent',
+                ]
+            ])
+        );
 
         $provideConsentService = $this->factoryService();
 

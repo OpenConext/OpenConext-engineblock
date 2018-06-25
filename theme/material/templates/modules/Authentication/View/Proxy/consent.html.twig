@@ -123,7 +123,9 @@
             </section>
 
             <section class="buttons">
-                <h2>{{ 'consent_buttons_title'|trans }}</h2>
+                {% if not minimalConsent %}
+                    <h2>{{ 'consent_buttons_title'|trans }}</h2>
+                {% endif %}
                 <!-- YES -->
                 <form id="accept" method="post"
                       action="{{ action }}">
@@ -133,13 +135,21 @@
                     <input id="accept_terms_button"
                            class="submit c-button"
                            type="submit"
+                           {%  if minimalConsent %}
+                           value="{{ 'consent_buttons_ok_minimal'|trans({'%arg1%': spName}) }}"
+                           {% else %}
                            value="{{ 'consent_buttons_ok'|trans({'%arg1%': spName}) }}"
+                           {% endif %}
                     />
                 </form>
 
                 <!-- NO -->
                 <a id="decline-terms" class="reject c-button c-button-link" href="#" data-slidein="reject">
-                    {{ 'consent_buttons_nok'|trans }}
+                    {%  if minimalConsent %}
+                        {{ 'consent_buttons_nok_minimal'|trans }}
+                    {% else %}
+                        {{ 'consent_buttons_nok'|trans }}
+                    {% endif %}
                 </a>
             </section>
 
