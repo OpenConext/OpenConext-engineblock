@@ -66,19 +66,36 @@
                         {% for attributeIdentifier, attributeValues in attributes %}
 
                             <tr>
-                                <td class="attr-name"
-                                    data-identifier="{{ attributeIdentifier }}">
+                                <td class="attr-name" data-identifier="{{ attributeIdentifier }}">
                                     {{ attributeShortName(attributeIdentifier, locale()) }}
                                 </td>
                                 <td class="attr-value">
                                     {# Single attribute value #}
                                     {% if attributeValues|length == 1 %}
-                                        {{ attributeValues[0] }}
+                                        {% if attributeMotivations[attributeIdentifier] is defined %}
+                                            {% spaceless %}
+                                            <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
+                                                <span>{{ attributeValues[0] }}</span>
+                                            </a>
+                                            {% endspaceless %}
+                                        {% else %}
+                                            {{ attributeValues[0] }}
+                                        {% endif %}
                                         {# Multiple attribute values #}
                                     {% else %}
                                         <ul>
                                             {% for value in attributeValues %}
-                                                <li>{{ value }}</li>
+                                                <li>
+                                                    {% if attributeMotivations[attributeIdentifier] is defined %}
+                                                        {% spaceless %}
+                                                        <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
+                                                            <span>{{ value }}</span>
+                                                        </a>
+                                                        {% endspaceless %}
+                                                    {% else %}
+                                                        {{ value }}
+                                                    {% endif %}
+                                                </li>
                                             {% endfor %}
                                         </ul>
                                     {% endif %}

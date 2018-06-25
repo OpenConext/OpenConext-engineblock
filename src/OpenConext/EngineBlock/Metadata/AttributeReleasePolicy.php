@@ -174,6 +174,25 @@ class AttributeReleasePolicy
     }
 
     /**
+     * Loads the motivation text for an attribute.
+     *
+     * @param $attributeName
+     * @return string
+     */
+    public function getMotivation($attributeName)
+    {
+        if (!$this->hasAttribute($attributeName)) {
+            return;
+        }
+
+        if (empty($this->attributeRules[$attributeName][0]['motivation'])) {
+            return;
+        }
+
+        return $this->attributeRules[$attributeName][0]['motivation'];
+    }
+
+    /**
      * Loads the first source it finds in the list of attribute rules for the given attributeName.
      *
      * @param $attributeName

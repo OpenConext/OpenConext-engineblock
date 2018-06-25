@@ -308,7 +308,7 @@ QUERY;
         return $this;
     }
 
-    public function allowAttributeValueForSp($entityId, $arpAttribute, $attributeValue, $attributeSource = null)
+    public function allowAttributeValueForSp($entityId, $arpAttribute, $attributeValue, $attributeSource = null, $motivation = null)
     {
         /** @var AttributeReleasePolicy $arp */
         $arp = $this->getServiceProvider($entityId)->attributeReleasePolicy;
@@ -326,6 +326,7 @@ QUERY;
         $arpRule = [
             'value' => $attributeValue,
             'source' => $attributeSource,
+            'motivation' => $motivation,
         ];
 
         $rules[$arpAttribute] = [$arpRule];
