@@ -116,6 +116,7 @@ HTML
     'consent_buttons_ok_minimal'              => 'Proceed to %arg1%',
     'consent_buttons_nok'                     => 'No, I do not agree',
     'consent_buttons_nok_minimal'             => 'Cancel',
+    'consent_explanation_title'               => 'Pay attention when using this service',
     'consent_footer_text_singular'            => 'You are using one other service via %suiteName%. <a href="%arg1%" target="_blank">View the list of services and your profile information.</a>',
     'consent_footer_text_plural'              => 'You are using %arg1% services via %suiteName%. <a href="%arg2%" target="_blank">View the list of services and your profile information.</a>',
     'consent_footer_text_first_consent'       => 'You are not using any services via %suiteName%. <a href="%arg1%" target="_blank">View your profile information.</a>',
