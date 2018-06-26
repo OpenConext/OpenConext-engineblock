@@ -132,6 +132,9 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
                 'profileUrl' => $profileUrl,
                 'supportUrl' => $settings->getOpenConextSupportUrl(),
+                'showConsentExplanation' => $identityProvider->getConsentSettings()->hasConsentExplanation($serviceProviderMetadata->entityId),
+                'consentSettings' => $identityProvider->getConsentSettings(),
+                'spEntityId' => $serviceProviderMetadata->entityId,
                 'hideHeader' => true,
                 'hideFooter' => true,
             ]
