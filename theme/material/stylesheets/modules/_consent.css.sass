@@ -249,6 +249,36 @@
                 & > *
                   display: block
 
+    &.idp-consent-explanation
+      background-color: $light-pink
+      border: 2em solid white
+      padding: 0.75em
+      position: relative
+
+      .idp-logo
+        float: right
+      .title::before
+        background-image: url(../images/error.svg)
+        background-size: cover
+        background-position: 0 0
+        background-repeat: no-repeat
+        content: ''
+        display: inline-block
+        height: 1.2em
+        left: 0.75em
+        margin-right: 0.75em
+        vertical-align: middle
+        width: 1.2em
+        position: absolute
+      .title
+        font-weight: bold
+        margin-left: 1.95em
+        margin-right: 3em
+      .text
+        margin-left: 1.95em
+        margin-right: 3em
+
+
   footer
     border-top: 1px solid $border-dark
     clear: both
