@@ -73,8 +73,8 @@
                                 <td class="attr-value">
                                     {# Single attribute value #}
                                     {% if attributeValues|length == 1 %}
-                                        {{ attributeValues[0] }}
-                                        {# Multiple attribute values #}
+                                        {{ attributeValues|first }}
+                                    {# Multiple attribute values #}
                                     {% else %}
                                         <ul>
                                             {% for value in attributeValues %}
