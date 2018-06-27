@@ -74,23 +74,23 @@
                                     {% if attributeValues|length == 1 %}
                                         {% if attributeMotivations[attributeIdentifier] is defined %}
                                             {% spaceless %}
-                                            <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
-                                                <span>{{ attributeValues[0] }}</span>
-                                            </a>
+                                                <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
+                                                    <span>{{ attributeValues|first }}</span>
+                                                </a>
                                             {% endspaceless %}
                                         {% else %}
-                                            {{ attributeValues[0] }}
+                                            {{ attributeValues|first }}
                                         {% endif %}
-                                        {# Multiple attribute values #}
+                                    {# Multiple attribute values #}
                                     {% else %}
                                         <ul>
                                             {% for value in attributeValues %}
                                                 <li>
                                                     {% if attributeMotivations[attributeIdentifier] is defined %}
                                                         {% spaceless %}
-                                                        <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
-                                                            <span>{{ value }}</span>
-                                                        </a>
+                                                            <a class="help tooltip" title="{{ attributeMotivations[attributeIdentifier] }}" href="#">
+                                                                <span>{{ value }}</span>
+                                                            </a>
                                                         {% endspaceless %}
                                                     {% else %}
                                                         {{ value }}
@@ -108,7 +108,7 @@
                                     <span class="show-more">
                                         {{ 'consent_attributes_show_more'|trans }}
                                     </span>
-                                                    <span class="show-less">
+                                    <span class="show-less">
                                         {{ 'consent_attributes_show_less'|trans }}
                                     </span>
                                 </a>
@@ -135,11 +135,11 @@
                     <input id="accept_terms_button"
                            class="submit c-button"
                            type="submit"
-                           {%  if minimalConsent %}
-                           value="{{ 'consent_buttons_ok_minimal'|trans({'%arg1%': spName}) }}"
-                           {% else %}
-                           value="{{ 'consent_buttons_ok'|trans({'%arg1%': spName}) }}"
-                           {% endif %}
+                            {%  if minimalConsent %}
+                                value="{{ 'consent_buttons_ok_minimal'|trans({'%arg1%': spName}) }}"
+                            {% else %}
+                                value="{{ 'consent_buttons_ok'|trans({'%arg1%': spName}) }}"
+                            {% endif %}
                     />
                 </form>
 
