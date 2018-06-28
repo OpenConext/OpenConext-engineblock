@@ -23,7 +23,6 @@
       margin-left: 5px
       vertical-align: middle
       width: 1.2em
-
     &.help::after
       background-image: url(../images/question-circle-o.svg)
 
@@ -134,7 +133,10 @@
 
                 span.show-less
                   display: none
-
+            a.small[target="_blank"]::after
+              background: none
+              margin: 0
+              width: 0
           &.expanded
             tr
               display: table-row !important
