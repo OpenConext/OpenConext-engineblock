@@ -157,7 +157,7 @@ class Metadata extends Twig_Extension
             'idp' => array(),
         );
 
-        if ($nameID && ($nameID->Format == NameIdFormat::PERSISTENT_IDENTIFIER || $nameID->Format == NameIdFormat::TRANSIENT_IDENTIFIER)) {
+        if ($nameID && ($nameID->Format == NameIdFormat::PERSISTENT_IDENTIFIER || $nameID->Format == NameIdFormat::UNSPECIFIED)) {
             $groupedAttributes['engineblock']['name_id'] = $nameID->value;
         }
 
