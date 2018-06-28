@@ -187,6 +187,7 @@ $ymlContent = array(
         'maximum_authentication_procedures_allowed'               => (int) $config->get('engineblock.maximumAuthenticationProceduresAllowed'),
         'view_default_title'                                      => $config->get('defaults.title'),
         'view_default_header'                                     => $config->get('defaults.header'),
+        'view_default_logo'                                       => $config->get('defaults.logo'),
         'ui_return_to_sp_link'                                    => (bool) $config->get('ui.return_to_sp_link.active'),
 
         // Store attributes with their values, meaning that if an Idp suddenly
@@ -204,6 +205,7 @@ $ymlContent = array(
         // Note the escaping of '%' to support URLs like '/Terms+of+Service+%28EN%29'.
         'openconext_support_url'                                  => escapeYamlValue($config->get('openconext.supportUrl')),
         'openconext_terms_of_use_url'                             => escapeYamlValue($config->get('openconext.termsOfUse')),
+        'openconext_support_name_id_url'                          => escapeYamlValue($config->get('openconext.supportUrlNameId')),
 
         // Email configuration
         'email_request_access_address'                            => $config->get('email.help'),
