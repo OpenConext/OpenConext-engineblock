@@ -19,6 +19,8 @@
 namespace OpenConext\EngineBlockBundle\Twig\Extensions\Extension;
 
 use EngineBlock_Attributes_Metadata;
+use OpenConext\Value\Saml\NameIdFormat;
+use SAML2\XML\saml\NameID;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig\TwigFunction;
 use Twig_Extension;
@@ -84,9 +86,10 @@ class Metadata extends Twig_Extension
      *
      * @param $attributes
      * @param array|null $attributeSources
+     * @param NaneID|null $nameId
      * @return array
      */
-    public function sortByDisplayOrder($attributes, array $attributeSources = null)
+    public function sortByDisplayOrder($attributes, array $attributeSources = null, NameID $nameId = null)
     {
         $sortedAttributes = $this->attributeMetadata->sortByDisplayOrder($attributes);
         $normalizedAttributes = $this->attributeMetadata->normalizeEptiAttributeValue($sortedAttributes);
@@ -95,7 +98,7 @@ class Metadata extends Twig_Extension
             return $normalizedAttributes;
         }
 
-        return $this->groupAttributesBySource($normalizedAttributes, $attributeSources);
+        return $this->groupAttributesBySource($normalizedAttributes, $attributeSources, $nameId);
     }
 
     /**
@@ -148,11 +151,15 @@ class Metadata extends Twig_Extension
         return $this->attributeMetadata->getName($attributeId, $preferedLocale);
     }
 
-    private function groupAttributesBySource($attributes, array $attributeSources = array())
+    private function groupAttributesBySource($attributes, array $attributeSources = array(), NameID $nameID = null)
     {
         $groupedAttributes = array(
             'idp' => array(),
         );
+
+        if ($nameID && ($nameID->Format == NameIdFormat::PERSISTENT_IDENTIFIER || $nameID->Format == NameIdFormat::TRANSIENT_IDENTIFIER)) {
+            $groupedAttributes['engineblock']['name_id'] = $nameID->value;
+        }
 
         foreach ($attributes as $attributeName => $attributeValue) {
             if (isset($attributeSources[$attributeName])) {
