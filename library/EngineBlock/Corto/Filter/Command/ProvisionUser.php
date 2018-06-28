@@ -30,13 +30,15 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
         $collabPersonIdValue = $user->getCollabPersonId()->getCollabPersonId();
         $this->setCollabPersonId($collabPersonIdValue);
 
-        $this->_response->setCollabPersonId($collabPersonIdValue);
-        $this->_response->setOriginalNameId($this->_response->getNameId());
+        $resolver = new EngineBlock_Saml2_NameIdResolver();
+        $nameId = $resolver->resolve(
+            $this->_request,
+            $this->_response,
+            $this->_serviceProvider,
+            $this->_collabPersonId
+        );
 
         // Adjust the NameID in the OLD response (for consent), set the collab:person uid
-        $this->_response->getAssertion()->setNameId(array(
-            'Value' => $collabPersonIdValue,
-            'Format' => Constants::NAMEID_PERSISTENT,
-        ));
+        $this->_response->getAssertion()->setNameId($nameId);
     }
 }
