@@ -118,23 +118,6 @@
           </dl>
       </div>
 
-      <div class="main">
-          <h1>eduGAIN Metadata</h1>
-          <dl class="metadata-certificates-list">
-              <dt>
-                  The {{ 'suite_name'|trans }} eduGain SAML metadata consists out of all IdPs and SPs that are included of
-                  the <a href="http://mds.edugain.org/" data-external-link="true" target="_blank">eduGain metadata</a>.
-              </dt>
-              <dd>
-                  <ul>
-                      <li><a href="/authentication/proxy/edugain-metadata">Open link</a></li>
-                      {% for keyId in keyPairIds %}
-                      <li><a href="/authentication/proxy/edugain-metadata/key:{{ keyId }}">Open link</a></li>
-                      {% endfor %}
-                  </ul>
-              </dd>
-          </dl>
-      </div>
     </div>
   </div>
 </div>
