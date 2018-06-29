@@ -24,6 +24,21 @@ class EngineBlock_Saml2_NameIdResolver
     );
 
     /**
+     * NameId cache.
+     *
+     * Only persistent name id's are cached for each request. Transient name id's are stored
+     * in session and the unspecified id is already known to us.
+     *
+     * The values are indexed by a combination of name id and sp-entity id.
+     *
+     * Example:
+     * 'urn:collab:person:example.com:admin:https://my-sp-entity-id/saml2/metadata'
+     *
+     * @var string[]
+     */
+    private $cache = array();
+    
+    /**
      * @param EngineBlock_Saml2_AuthnRequestAnnotationDecorator $request
      * @param EngineBlock_Saml2_ResponseAnnotationDecorator $response
      * @param ServiceProvider $destinationMetadata
@@ -164,8 +179,26 @@ class EngineBlock_Saml2_NameIdResolver
         );
     }
 
+    /**
+     * Retrieve the Persistent name id for a user for a given service provider
+     *
+     * The id is stored to cache as EB will retrieve this data multiple times per request. This
+     * prevents unnecessary database traffic.
+     *
+     * @param $originalCollabPersonId
+     * @param $spEntityId
+     * @return bool|string
+     * @throws EngineBlock_Exception
+     */
     protected function _getPersistentNameId($originalCollabPersonId, $spEntityId)
     {
+        // Attempt to load the result from cache
+        $cacheIdentifier = $originalCollabPersonId . ':' .$spEntityId;
+        if (isset($this->cache[$cacheIdentifier])) {
+            return $this->cache[$cacheIdentifier];
+        }
+
+        // Generate the persistent id
         $serviceProviderUuid = $this->_getServiceProviderUuid($spEntityId);
         $userUuid            = $this->_getUserUuid($originalCollabPersonId);
         $persistentId = $this->_fetchPersistentId($serviceProviderUuid, $userUuid);
@@ -174,6 +207,10 @@ class EngineBlock_Saml2_NameIdResolver
             $persistentId = $this->_generatePersistentId($serviceProviderUuid, $userUuid);
             $this->_storePersistentId($persistentId, $serviceProviderUuid, $userUuid);
         }
+
+        // Store the persistent name id in cache for the duration of the request
+        $this->cache[$cacheIdentifier] = $persistentId;
+        
         return $persistentId;
     }
 

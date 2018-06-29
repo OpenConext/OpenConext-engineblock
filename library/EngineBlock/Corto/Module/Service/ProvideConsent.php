@@ -1,4 +1,5 @@
 <?php
+
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
@@ -130,6 +131,8 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'attributeMotivations' => $this->getAttributeMotivations($serviceProviderMetadata, $attributes),
                 'minimalConsent' => $identityProvider->getConsentSettings()->isMinimal($serviceProviderMetadata->entityId),
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
+                'nameId' => $response->getNameId(),
+                'nameIdSupportUrl' => $settings->getOpenConextNameIdSupportUrl(),
                 'profileUrl' => $profileUrl,
                 'supportUrl' => $settings->getOpenConextSupportUrl(),
                 'showConsentExplanation' => $identityProvider->getConsentSettings()->hasConsentExplanation($serviceProviderMetadata->entityId),
