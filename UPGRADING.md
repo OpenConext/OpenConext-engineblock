@@ -16,6 +16,13 @@ A new API for deprovisioning user data can be enabled by configuring the followi
 
 Please note that these settings for now are mandatory! For Engine to work correctly specify a username and password.
 
+### Consent screen additions
+The consent screen can now show an IdP provided message. To render this information correctly two new configuration
+parameters where introduced:
+
+1. `defaults.logo` The logo of the suite engine block is configured for. This logo isrendered in the NameID section on the consent screen but might be used in other situations.
+2. `openconext.supportUrlNameId` A link to the support page giving more information on the NameID strategies available in the OpenConext platform.
+
 ## 5.2 -> 5.7
 
 ### Database migration tooling
