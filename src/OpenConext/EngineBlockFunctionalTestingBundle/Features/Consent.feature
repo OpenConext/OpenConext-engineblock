@@ -80,3 +80,10 @@ Feature:
     Then the response should contain "Motivation for dn"
     Then the response should contain "Motivation for affiliation"
     Then the response should contain "Motivation for orcid"
+
+  Scenario: The user presented with an institution provided consent text
+    Given I log in at "Dummy-SP"
+    And the IdP "Dummy-IdP" provides a consent message "Institutional privacy message" for SP "Dummy-SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    Then the response should contain "Institutional privacy message"

@@ -91,4 +91,34 @@ class ConsentSettingsTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($settings->isMinimal('https://example.org/test1'));
         $this->assertTrue($settings->isEnabled('https://example.org/test1'));
     }
+
+    public function testHandlesMultilingualExplanations()
+    {
+        $settings = new ConsentSettings([
+            [
+                'name' => 'https://example.org/test1',
+                'type' => null,
+                'explanation:en' => 'English explanation',
+                'explanation:nl' => 'Uitleg in het Nederlands',
+                'explanation:es' => 'Si señor',
+            ]
+        ]);
+
+        $this->assertTrue($settings->hasConsentExplanation('https://example.org/test1'));
+        $this->assertFalse($settings->hasConsentExplanation('https://bogus.example.org'));
+
+        $this->assertCount(3, $settings->getConsentExplanations('https://example.org/test1'));
+        $this->assertCount(0, $settings->getConsentExplanations('https://bogus.example.org'));
+
+        $this->assertTrue($settings->hasConsentExplanationIn('en', 'https://example.org/test1'));
+        $this->assertTrue($settings->hasConsentExplanationIn('es', 'https://example.org/test1'));
+        $this->assertTrue($settings->hasConsentExplanationIn('nl', 'https://example.org/test1'));
+        $this->assertFalse($settings->hasConsentExplanationIn('de', 'https://example.org/test1'));
+
+        $this->assertFalse($settings->hasConsentExplanationIn('jp', 'https://bogus.example.org'));
+
+        $this->assertEquals('English explanation', $settings->getConsentExplanationIn('en', 'https://example.org/test1'));
+        $this->assertEquals('Si señor', $settings->getConsentExplanationIn('es', 'https://example.org/test1'));
+        $this->assertEquals('Uitleg in het Nederlands', $settings->getConsentExplanationIn('nl', 'https://example.org/test1'));
+    }
 }

@@ -122,6 +122,19 @@
                 </table>
             </section>
 
+            {% if showConsentExplanation and consentSettings.consentExplanationIn(app.request.locale, spEntityId) %}
+            <section class="idp-consent-explanation">
+                {% if idp.logo is not null %}
+                    <div class="idp-logo">
+                        <img class="idp-logo" width="30" height="30" src="{{ idp.logo.url }}" alt=""/>
+                    </div>
+                {% endif %}
+                <p class="title">{{ 'consent_explanation_title'|trans }}</p>
+                <p class="text">{{ consentSettings.consentExplanationIn(app.request.locale, spEntityId) }}</p>
+
+            </section>
+            {% endif %}
+
             <section class="buttons">
                 {% if not minimalConsent %}
                     <h2>{{ 'consent_buttons_title'|trans }}</h2>

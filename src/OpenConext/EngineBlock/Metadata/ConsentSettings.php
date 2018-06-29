@@ -21,12 +21,19 @@ class ConsentSettings implements JsonSerializable
     private $settings = [];
 
     /**
+     * @var MultilingualValue[]
+     */
+    private $explanations = [];
+
+    /**
      * @param array $settings
      */
     public function __construct(array $settings = array())
     {
         foreach ($settings as $values) {
-            $this->settings[] = (object) $values;
+            $setting = (object) $values;
+            $this->explanations[$setting->name] = $this->extractExplanations($setting);
+            $this->settings[] = $setting;
         }
     }
 
@@ -49,6 +56,7 @@ class ConsentSettings implements JsonSerializable
 
     /**
      * @param string $entityId
+     * @return bool
      */
     public function isEnabled($entityId)
     {
@@ -62,6 +70,7 @@ class ConsentSettings implements JsonSerializable
 
     /**
      * @param string $entityId
+     * @return bool
      */
     public function isMinimal($entityId)
     {
@@ -71,6 +80,51 @@ class ConsentSettings implements JsonSerializable
         }
 
         return false;
+    }
+
+    public function hasConsentExplanation($entityId)
+    {
+        return isset($this->explanations[$entityId]);
+    }
+
+    /**
+     * @param string $entityId
+     * @return array
+     */
+    public function getConsentExplanations($entityId)
+    {
+        if ($this->hasConsentExplanation($entityId)) {
+            return $this->explanations[$entityId];
+        }
+        return [];
+    }
+
+    /**
+     * @param string $language
+     * @param string $entityId
+     * @return bool
+     */
+    public function hasConsentExplanationIn($language, $entityId)
+    {
+        if ($this->hasConsentExplanation($entityId)) {
+            $explanations = $this->getConsentExplanations($entityId);
+            return isset($explanations[$language]);
+        }
+        return false;
+    }
+
+    /**
+     * @param string $language
+     * @param string $entityId
+     * @return string
+     */
+    public function getConsentExplanationIn($language, $entityId)
+    {
+        if ($this->hasConsentExplanationIn($language, $entityId)) {
+            $explanations = $this->getConsentExplanations($entityId);
+            return $explanations[$language]->getValue();
+        }
+        return '';
     }
 
     /**
@@ -93,5 +147,31 @@ class ConsentSettings implements JsonSerializable
     public function jsonSerialize()
     {
         return $this->settings;
+    }
+
+    /**
+     * @param object $setting
+     * @return MultilingualValue[]
+     */
+    private function extractExplanations($setting)
+    {
+        $fieldNames = get_object_vars($setting);
+        $explanationFieldNames = preg_grep('/^explanation:/', array_keys($fieldNames));
+
+        // The explanations will be pulled from the settings object and turned into a multi lang array of explanations.
+        $multilingualValues = array_map(
+            function ($langField) use ($setting) {
+                $langCode = explode(':', $langField)[1];
+                return new MultilingualValue($setting->$langField, $langCode);
+            },
+            $explanationFieldNames
+        );
+
+        // Index the explanations array on the language
+        $explanations = [];
+        foreach ($multilingualValues as $explanation) {
+            $explanations[$explanation->getLanguage()] = $explanation;
+        }
+        return $explanations;
     }
 }

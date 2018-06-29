@@ -113,6 +113,7 @@ HTML
     'consent_buttons_ok_minimal'              => 'Ga door naar %arg1%',
     'consent_buttons_nok'                     => 'Nee, ik ga niet akkoord',
     'consent_buttons_nok_minimal'             => 'Annuleren',
+    'consent_explanation_title'               => 'Let op bij het gebruik van deze dienst',
     'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via %suiteName%. <a href="%arg1%" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
     'consent_footer_text_plural'              => 'Je gebruikt al %arg1% diensten via %suiteName%. <a href="%arg2%" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
     'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via %suiteName%. <a href="%arg1%" target="_blank">Bekijk hier je profielinformatie.</a>',

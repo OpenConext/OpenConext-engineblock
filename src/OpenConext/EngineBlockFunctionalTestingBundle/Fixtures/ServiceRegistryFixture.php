@@ -355,13 +355,15 @@ QUERY;
         return $this;
     }
 
-    public function setConsentType($idpEntityId, $spEntityId, $consentType)
+    public function setConsentSettings($idpEntityId, $spEntityId, $consentType, $message = '')
     {
         $this->getIdentityProvider($idpEntityId)->setConsentSettings(
             new ConsentSettings([
                 [
                     'name' => $spEntityId,
                     'type' => $consentType,
+                    'explanation:en' => $message,
+                    'explanation:nl' => $message,
                 ]
             ])
         );
