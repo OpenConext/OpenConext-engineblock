@@ -7,7 +7,7 @@ use Swift_Message;
 
 class RequestAccessMailer
 {
-    const REQUEST_IDP_ACCESS_SUBJECT = 'Request for IdP access %s';
+    const REQUEST_IDP_ACCESS_SUBJECT = 'Request for IdP access';
     const REQUEST_IDP_ACCESS_TEMPLATE = <<<TPL
 There has been a request to allow access for IdP %s ('%s') to SP %s ('%s'). The request was made by:
 
@@ -18,7 +18,7 @@ The comment was:
 %s
 
 TPL;
-    const REQUEST_INSTITUTION_ACCESS_SUBJECT = 'Request for institution access (%s)';
+    const REQUEST_INSTITUTION_ACCESS_SUBJECT = 'Request for institution access';
     const REQUEST_INSTITUTION_ACCESS_TEMPLATE = <<<TPL
 There has been a request to allow access for institution '%s' to SP %s ('%s'). The request was made by:
 
@@ -63,7 +63,7 @@ TPL;
      */
     public function sendRequestAccessEmailForIdp($spName, $spEntityId, $institution, $idpEntityId, $name, $email, $comment)
     {
-        $subject = sprintf(self::REQUEST_IDP_ACCESS_SUBJECT, gethostname());
+        $subject = self::REQUEST_IDP_ACCESS_SUBJECT;
         $body = sprintf(
             self::REQUEST_IDP_ACCESS_TEMPLATE,
             $institution,
@@ -97,7 +97,7 @@ TPL;
      */
     public function sendRequestAccessEmailForInstitution($spName, $spEntityId, $institution, $name, $email, $comment)
     {
-        $subject = sprintf(self::REQUEST_INSTITUTION_ACCESS_SUBJECT, gethostname());
+        $subject = self::REQUEST_INSTITUTION_ACCESS_SUBJECT;
         $body = sprintf(
             self::REQUEST_INSTITUTION_ACCESS_TEMPLATE,
             $institution,
