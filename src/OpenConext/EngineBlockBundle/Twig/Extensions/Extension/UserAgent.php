@@ -44,8 +44,7 @@ class UserAgent extends Twig_Extension
         return [
             new TwigFunction(
                 'userAgent',
-                [$this, 'userAgent'],
-                ['is_safe' => ['html']]
+                [$this, 'userAgent']
             )
         ];
     }
