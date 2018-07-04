@@ -38,8 +38,8 @@ class Feedback extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo'], ['is_safe' => ['html']]),
-            new TwigFunction('flushLog', [$this, 'flushLog'], ['is_safe' => ['html']]),
+            new TwigFunction('feedbackInfo', [$this, 'getFeedbackInfo']),
+            new TwigFunction('flushLog', [$this, 'flushLog']),
         ];
     }
 
