@@ -77,10 +77,15 @@
                                 <tr>
                                     <td class="attr-name" data-identifier="{{ attributeIdentifier }}">{{ 'consent_name_id_label'|trans }}</td>
                                     <td class="attr-value" data-identifier="{{ attributeIdentifier }}">
+
                                         {% spaceless %}
+                                            {% if nameIdIsPersistent %}
                                             <a class="help tooltip" title="{{ 'consent_name_id_value_tooltip'|trans({'%arg1%': 'suite_name'|trans }) }}" href="#">
+                                            {% endif %}
                                                 <span>{{ attributeValues }}</span>
+                                            {% if nameIdIsPersistent %}
                                             </a>
+                                            {% endif %}
                                         {% endspaceless %}
                                     </td>
                                 </tr>

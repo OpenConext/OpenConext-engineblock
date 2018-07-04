@@ -4,6 +4,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Service\ConsentServiceInterface;
 use SAML2\Constants;
+use SAML2\XML\saml\NameID;
 use Twig\Environment;
 
 /**
@@ -133,6 +134,7 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 'consentCount' => $this->_consentService->countAllFor($response->getNameIdValue()),
                 'nameId' => $response->getNameId(),
                 'nameIdSupportUrl' => $settings->getOpenConextNameIdSupportUrl(),
+                'nameIdIsPersistent' => $this->isNameIdFormatPersistent($response->getNameId()),
                 'profileUrl' => $profileUrl,
                 'supportUrl' => $settings->getOpenConextSupportUrl(),
                 'showConsentExplanation' => $identityProvider->getConsentSettings()->hasConsentExplanation($serviceProviderMetadata->entityId),
@@ -226,5 +228,14 @@ class EngineBlock_Corto_Module_Service_ProvideConsent
                 return $contact;
             }
         }
+    }
+
+    /**
+     * @param NameID $nameId
+     * @return bool
+     */
+    private function isNameIdFormatPersistent(NameID $nameId)
+    {
+        return $nameId->Format === Constants::NAMEID_PERSISTENT;
     }
 }
