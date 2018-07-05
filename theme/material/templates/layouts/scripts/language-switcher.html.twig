@@ -16,10 +16,10 @@
     {% else %}
         <ul class="comp-language">
             <li>
-                <a{% if currentLanguage == 'en' %} class="selected"{% endif %} href="{{ queryStringFor('en')|escape('url') }}">EN</a>
+                <a{% if currentLanguage == 'en' %} class="selected"{% endif %} href="{{ queryStringFor('en')|escape('html_attr') }}">EN</a>
             </li>
             <li>
-                <a{% if currentLanguage == 'nl' %} class="selected"{% endif %} href="{{ queryStringFor('nl')|escape('url') }}">NL</a>
+                <a{% if currentLanguage == 'nl' %} class="selected"{% endif %} href="{{ queryStringFor('nl')|escape('html_attr') }}">NL</a>
             </li>
         </ul>
     {% endif %}
