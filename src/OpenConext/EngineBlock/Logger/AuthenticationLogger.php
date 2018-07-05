@@ -49,11 +49,12 @@ class AuthenticationLogger
             $proxiedServiceProviders
         );
 
+        $timestamp = $this->generateTimestamp();
+
         $this->logger->info(
             'login granted',
             [
-                //This is actually ISO 8601, the DateTime::ISO8601 misses the colon in the TZ part (known bug)
-                'login_stamp'           => (new DateTime())->format(DateTime::ATOM),
+                'login_stamp'           => $timestamp,
                 'user_id'               => $collabPersonId->getCollabPersonId(),
                 'sp_entity_id'          => $serviceProvider->getEntityId()->getEntityId(),
                 'idp_entity_id'         => $identityProvider->getEntityId()->getEntityId(),
@@ -62,5 +63,23 @@ class AuthenticationLogger
                 'workflow_state'        => $workflowState
             ]
         );
+    }
+
+    /**
+     * Generates a timestamp that is equal to the RFC3339_EXTENDED format
+     *
+     * This format is introduced in PHP7, as PHP5 does not support this kind of precision.
+     * This method fakes the PHP7 behaviour by adding the microseconds manually.
+     *
+     * One day when the PHP5 dependency is lost, we can simply use RFC3339_EXTENDED
+     *
+     * @return string
+     */
+    private function generateTimestamp()
+    {
+        $microTime = microtime(true);
+        $microseconds = sprintf("%06d", ($microTime - floor($microTime)) * 1000000);
+        $timestamp = new DateTime(date('Y-m-d H:i:s.' . $microseconds, $microTime));
+        return $timestamp->format('Y-m-d\TH:i:s.uP');
     }
 }
