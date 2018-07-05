@@ -45,7 +45,7 @@
                         <tr class="source-info">
                             <td colspan="2">
                                 {% if attributeSource != 'idp' %}
-                                    <img width="30" height="30" src="{{ attributeSourceLogoUrl(attributeSource) }}"
+                                    <img width="30" height="30" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
                                          alt=""/>
                                     <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
                                 {% else %}

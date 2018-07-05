@@ -2,7 +2,7 @@
     {% if postData is not empty %}
     <form method="post" action="">
         {% for name, value in postData %}
-            <input type="hidden" name="{{ name }}" value="{{ value }}">
+            <input type="hidden" name="{{ name|escape('html_attr') }}" value="{{ value|escape('html_attr') }}">
         {% endfor %}
         <ul class="comp-language">
             <li>
@@ -16,10 +16,10 @@
     {% else %}
         <ul class="comp-language">
             <li>
-                <a{% if currentLanguage == 'en' %} class="selected"{% endif %} href="{{ queryStringFor('en') }}">EN</a>
+                <a{% if currentLanguage == 'en' %} class="selected"{% endif %} href="{{ queryStringFor('en')|escape('html_attr') }}">EN</a>
             </li>
             <li>
-                <a{% if currentLanguage == 'nl' %} class="selected"{% endif %} href="{{ queryStringFor('nl') }}">NL</a>
+                <a{% if currentLanguage == 'nl' %} class="selected"{% endif %} href="{{ queryStringFor('nl')|escape('html_attr') }}">NL</a>
             </li>
         </ul>
     {% endif %}

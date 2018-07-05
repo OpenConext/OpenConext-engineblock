@@ -48,9 +48,9 @@ class Locale extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new TwigFunction('locale', [$this, 'getLocale'], ['is_safe' => ['html']]),
-            new TwigFunction('postData', [$this, 'getPostData'], ['is_safe' => ['html']]),
-            new TwigFunction('queryStringFor', [$this, 'getQueryStringFor'], ['is_safe' => ['html']])
+            new TwigFunction('locale', [$this, 'getLocale']),
+            new TwigFunction('postData', [$this, 'getPostData']),
+            new TwigFunction('queryStringFor', [$this, 'getQueryStringFor'])
         ];
     }
 
