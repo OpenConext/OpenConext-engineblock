@@ -57,8 +57,7 @@ class Metadata extends Twig_Extension
             ),
             new TwigFunction(
                 'attributeSourceLogoUrl',
-                [$this, 'getAttributeSourceLogoUrl'],
-                ['is_safe' => ['html']]
+                [$this, 'getAttributeSourceLogoUrl']
             ),
             new TwigFunction(
                 'attributeSourceDisplayName',

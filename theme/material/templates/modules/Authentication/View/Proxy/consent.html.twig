@@ -49,7 +49,7 @@
                                          alt=""/>
                                     <h2>{{ 'suite_name'|trans }}</h2>
                                 {% elseif attributeSource != 'idp' %}
-                                    <img width="30" height="30" src="{{ attributeSourceLogoUrl(attributeSource) }}"
+                                    <img width="30" height="30" src="{{ attributeSourceLogoUrl(attributeSource)|escape('html_attr') }}"
                                          alt=""/>
                                     <h2>{{ attributeSourceDisplayName(attributeSource) }}</h2>
                                 {% else %}

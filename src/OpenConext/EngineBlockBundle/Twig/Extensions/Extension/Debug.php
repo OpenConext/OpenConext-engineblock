@@ -31,9 +31,9 @@ class Debug extends Twig_Extension
     public function getFunctions()
     {
         return [
-            new TwigFunction('var_export', [$this, 'varExport'], ['is_safe' => ['html']]),
-            new TwigFunction('var_dump', [$this, 'varDump'], ['is_safe' => ['html']]),
-            new TwigFunction('print_r', [$this, 'printHumanReadable'], ['is_safe' => ['html']]),
+            new TwigFunction('var_export', [$this, 'varExport']),
+            new TwigFunction('var_dump', [$this, 'varDump']),
+            new TwigFunction('print_r', [$this, 'printHumanReadable']),
         ];
     }
 
