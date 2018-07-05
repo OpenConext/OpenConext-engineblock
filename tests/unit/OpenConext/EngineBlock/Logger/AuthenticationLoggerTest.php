@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlock\Logger;
 
+use DateTime;
 use EngineBlock_UserDirectory;
 use Mockery as m;
 use OpenConext\EngineBlock\Authentication\Value\CollabPersonId;
@@ -60,6 +61,11 @@ class AuthenticationLoggerTest extends UnitTest
                     if (!array_key_exists('login_stamp', $context)) {
                         return false;
                     }
+
+                    if (!$this->assertFormatting($context['login_stamp'], 'Y-m-d\TH:i:s.uP')) {
+                        return false;
+                    }
+
                     foreach ($expected as $key => $value) {
                         if (!isset($context[$key])) {
                             return false;
@@ -84,5 +90,12 @@ class AuthenticationLoggerTest extends UnitTest
             AbstractRole::WORKFLOW_STATE_PROD,
             $keyId
         );
+    }
+
+    private function assertFormatting($loginStamp, $format)
+    {
+        $dateTime = DateTime::createFromFormat($format, $loginStamp);
+
+        return $dateTime && $dateTime->format($format) === $loginStamp;
     }
 }
