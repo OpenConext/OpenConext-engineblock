@@ -53,7 +53,7 @@ class EngineBlock_Corto_Filter_Command_ProvisionUser extends EngineBlock_Corto_F
 
             // To actually set the collabPersonIdValue, override it with the one we just generated. The resolver used the
             // intended name id format for this purpose (but this is not set yet)
-            if ($nameId->Format == Constants::NAMEFORMAT_UNSPECIFIED) {
+            if ($nameId->Format == Constants::NAMEID_UNSPECIFIED) {
                 $nameId->value = $collabPersonIdValue;
             }
         }
