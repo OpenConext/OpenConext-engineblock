@@ -1,6 +1,6 @@
 # UPGRADE NOTES
 
-## Development
+## 5.7 -> 5.8
 
 ### Stored metadata incompatibility
 Metadata pushed to EngineBlock in earlier versions (EB<5.8) is not compatible with this version. A metadata push is
