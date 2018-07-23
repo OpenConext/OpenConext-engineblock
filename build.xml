@@ -186,15 +186,15 @@
     <target name="enable-test-env"
             description="Set the environment in app_dev.php test">
         <replace file="${basedir}/web/app_dev.php"
-                 token="new AppKernel('dev', false)"
-                 value="new AppKernel('test', false)"/>
+                 token="new AppKernel('dev', true)"
+                 value="new AppKernel('test', true)"/>
     </target>
 
     <target name="disable-test-env"
             description="Set the environment in app_dev.php dev">
         <replace file="${basedir}/web/app_dev.php"
-                 token="new AppKernel('test', false)"
-                 value="new AppKernel('dev', false)"/>
+                 token="new AppKernel('test', true)"
+                 value="new AppKernel('dev', true)"/>
     </target>
 
     <target name="prepare-env"
