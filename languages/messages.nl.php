@@ -52,7 +52,7 @@ return $overrides + [
     'our_suggestion'            => 'Onze suggestie:',
     'idps_with_access'          => '%organisationNounPlural% met toegang',
     'idps_without_access'       => '%organisationNounPlural% zonder toegang',
-    'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij',
+    'log_in_to'                 => 'Selecteer een %organisationNoun% en login bij service',
     'press_enter_to_select'     => 'Druk op enter om te kiezen',
     'loading_idps'              => '%organisationNounPlural% worden geladen...',
     'request_access'            => 'Toegang aanvragen',
