@@ -50,6 +50,7 @@ return $overrides + [
 
     // WAYF
     'search'                    => 'Search for an %organisationNoun%...',
+    'our_suggestion'            => 'Previously chosen:',
     'idps_with_access'          => 'Identity Providers with access',
     'idps_without_access'       => 'Identity Providers without access',
     'log_in_to'                 => 'Select an %organisationNoun% to login to the service:',
