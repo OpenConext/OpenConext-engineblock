@@ -277,7 +277,16 @@ QUERY;
 
     public function requireAttributeAggregationForSp($entityId)
     {
-        $this->getServiceProvider($entityId)->attributeAggregationRequired = true;
+        $arp = $this->getServiceProvider($entityId)->attributeReleasePolicy;
+
+        $rules = [];
+        if ($arp !== null) {
+            $rules = $arp->getAttributeRules();
+        }
+
+        $rules['test'] = [ 'source' => 'no-idp', 'value' => 'test' ];
+
+        $this->getServiceProvider($entityId)->attributeReleasePolicy = new AttributeReleasePolicy($rules);
 
         return $this;
     }

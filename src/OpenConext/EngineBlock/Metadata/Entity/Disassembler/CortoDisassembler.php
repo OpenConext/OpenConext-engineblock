@@ -56,7 +56,7 @@ class CortoDisassembler
         if ($entity->policyEnforcementDecisionRequired) {
             $cortoEntity['PolicyEnforcementDecisionRequired'] = true;
         }
-        if ($entity->attributeAggregationRequired) {
+        if ($entity->isAttributeAggregationRequired()) {
             $cortoEntity['AttributeAggregationRequired'] = true;
         }
 

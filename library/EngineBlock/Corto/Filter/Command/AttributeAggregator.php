@@ -80,7 +80,7 @@ class EngineBlock_Corto_Filter_Command_AttributeAggregator extends EngineBlock_C
             $serviceProvider = $this->_serviceProvider;
         }
 
-        if (!$serviceProvider->attributeAggregationRequired) {
+        if (!$serviceProvider->isAttributeAggregationRequired()) {
             $this->logger->info("No Attribute Aggregation for " . $serviceProvider->entityId);
             return;
         }

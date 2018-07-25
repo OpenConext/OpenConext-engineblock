@@ -190,13 +190,6 @@ class JanusPushMetadataAssembler
             ),
             'policyEnforcementDecisionRequired'
         );
-        $properties += $this->setPathFromObject(
-            array(
-                $connection,
-                'metadata:coin:attribute_aggregation_required'
-            ),
-            'attributeAggregationRequired'
-        );
 
         return Utils::instantiate(
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
