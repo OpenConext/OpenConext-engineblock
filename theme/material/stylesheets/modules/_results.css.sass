@@ -1,16 +1,3 @@
-.mod-results
-  a.result
-    &:active,
-    &:hover
-      outline: none
-      background: $blue
-      color: #fff
-      border-bottom: 1px solid $blue
-
-  a.result.noaccess:hover
-    .action
-      display: inline-block
-
 .idp-picker
   &.hidden
     display: none
@@ -45,6 +32,10 @@
     align-items: center
     text-decoration: none
     border-bottom: 1px solid $border
+
+    *
+      pointer-events: none
+
     .lt-ie9 &
       padding: 0.75em 1.25em
 
@@ -54,12 +45,6 @@
         display: none
 
     &.focussed
-      outline: none
-      background: $blue
-      color: #fff
-      border-bottom: 1px solid $blue
-
-    &:focus
       outline: none
       background: $blue
       color: #fff
@@ -143,7 +128,8 @@
 
   // Default displaying for the button
   .action
-    display: none
+    +max-width($medium)
+      display: none
     margin-left: auto
 
     // Let clicks fall through to underlying a.result

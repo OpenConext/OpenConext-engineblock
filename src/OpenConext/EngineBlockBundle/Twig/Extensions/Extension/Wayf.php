@@ -153,7 +153,6 @@ class Wayf extends Twig_Extension
                 'rememberChoiceCookieName' => self::REMEMBER_CHOICE_COOKIE_NAME,
                 'rememberChoiceFeature' => $rememberChoiceFeature,
                 'messages' => [
-                    'pressEnterToSelect' => $this->translator->trans('press_enter_to_select'),
                     'moreIdpResults' => $this->translator->trans('more_idp_results'),
                     'requestAccess' => $this->translator->trans('request_access'),
                 ],

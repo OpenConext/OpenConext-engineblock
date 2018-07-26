@@ -55,7 +55,6 @@ return $overrides + [
     'idps_with_access'          => 'Identity Providers with access',
     'idps_without_access'       => 'Identity Providers without access',
     'log_in_to'                 => 'Select an %organisationNoun% to login to the service:',
-    'press_enter_to_select'     => 'Press enter to select',
     'loading_idps'              => 'Loading Identity Providers...',
     'request_access'            => 'Request access',
     'no_idp_results'            => 'Your search did not return any results.',
