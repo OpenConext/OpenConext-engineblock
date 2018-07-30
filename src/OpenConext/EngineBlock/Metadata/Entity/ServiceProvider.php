@@ -291,10 +291,15 @@ class ServiceProvider extends AbstractRole
     {
         $spName = '';
         if ($preferredLocale === 'nl') {
-            $spName = $this->nameNl;
-        }
-        if (empty($spName)) {
-            $spName = $this->nameEn;
+            $spName = $this->displayNameNl;
+            if (empty($spName)) {
+                $spName = $this->nameNl;
+            }
+        } else {
+            $spName = $this->displayNameEn;
+            if (empty($spName)) {
+                $spName = $this->nameEn;
+            }
         }
         if (empty($spName)) {
             $spName = $this->entityId;
