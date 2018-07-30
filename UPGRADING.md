@@ -11,8 +11,8 @@ required after upgrading to EB 5.8.
 A new API for deprovisioning user data can be enabled by configuring the following INI settings:
 
     engineApi.features.deprovision = 1
-    api.users.deprovision.username = "..."
-    api.users.deprovision.password = "..."
+    engineApi.users.deprovision.username = "..."
+    engineApi.users.deprovision.password = "..."
 
 Please note that these settings for now are mandatory! For Engine to work correctly specify a username and password.
 
