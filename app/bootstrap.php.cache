@@ -34,7 +34,7 @@ $this->parameters = array_replace($this->parameters, $parameters);
 public function get($key, $default = null, $deep = false)
 {
 if ($deep) {
-@trigger_error('Using paths to find deeper items in '.__METHOD__.' is deprecated since version 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
+@trigger_error('Using paths to find deeper items in '.__METHOD__.' is deprecated since Symfony 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
 }
 if (!$deep || false === $pos = strpos($key,'[')) {
 return array_key_exists($key, $this->parameters) ? $this->parameters[$key] : $default;
@@ -114,7 +114,7 @@ $filters[filter_id($tmp)] = 1;
 }
 }
 if (is_bool($filter) || !isset($filters[$filter]) || is_array($deep)) {
-@trigger_error('Passing the $deep boolean as 3rd argument to the '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0. Remove it altogether as the $deep argument will be removed in 3.0.', E_USER_DEPRECATED);
+@trigger_error('Passing the $deep boolean as 3rd argument to the '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0. Remove it altogether as the $deep argument will be removed in 3.0.', E_USER_DEPRECATED);
 $tmp = $deep;
 $deep = $filter;
 $filter = $options;
@@ -652,14 +652,23 @@ $content = $this->getContent();
 } catch (\LogicException $e) {
 return trigger_error($e, E_USER_ERROR);
 }
+$cookieHeader ='';
+$cookies = array();
+foreach ($this->cookies as $k => $v) {
+$cookies[] = $k.'='.$v;
+}
+if (!empty($cookies)) {
+$cookieHeader ='Cookie: '.implode('; ', $cookies)."\r\n";
+}
 return
 sprintf('%s %s %s', $this->getMethod(), $this->getRequestUri(), $this->server->get('SERVER_PROTOCOL'))."\r\n".
-$this->headers."\r\n".
+$this->headers.
+$cookieHeader."\r\n".
 $content;
 }
 public function overrideGlobals()
 {
-$this->server->set('QUERY_STRING', static::normalizeQueryString(http_build_query($this->query->all(), null,'&')));
+$this->server->set('QUERY_STRING', static::normalizeQueryString(http_build_query($this->query->all(),'','&')));
 $_GET = $this->query->all();
 $_POST = $this->request->all();
 $_SERVER = $this->server->all();
@@ -691,7 +700,7 @@ return self::$trustedProxies;
 public static function setTrustedHosts(array $hostPatterns)
 {
 self::$trustedHostPatterns = array_map(function ($hostPattern) {
-return sprintf('#%s#i', $hostPattern);
+return sprintf('{%s}i', $hostPattern);
 }, $hostPatterns);
 self::$trustedHosts = array();
 }
@@ -744,7 +753,7 @@ return self::$httpMethodParameterOverride;
 public function get($key, $default = null, $deep = false)
 {
 if ($deep) {
-@trigger_error('Using paths to find deeper items in '.__METHOD__.' is deprecated since version 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
+@trigger_error('Using paths to find deeper items in '.__METHOD__.' is deprecated since Symfony 2.8 and will be removed in 3.0. Filter the returned value in your own code instead.', E_USER_DEPRECATED);
 }
 if ($this !== $result = $this->query->get($key, $this, $deep)) {
 return $result;
@@ -1276,7 +1285,7 @@ return (string) $pathInfo;
 }
 protected static function initializeFormats()
 {
-static::$formats = array('html'=> array('text/html','application/xhtml+xml'),'txt'=> array('text/plain'),'js'=> array('application/javascript','application/x-javascript','text/javascript'),'css'=> array('text/css'),'json'=> array('application/json','application/x-json'),'xml'=> array('text/xml','application/xml','application/x-xml'),'rdf'=> array('application/rdf+xml'),'atom'=> array('application/atom+xml'),'rss'=> array('application/rss+xml'),'form'=> array('application/x-www-form-urlencoded'),
+static::$formats = array('html'=> array('text/html','application/xhtml+xml'),'txt'=> array('text/plain'),'js'=> array('application/javascript','application/x-javascript','text/javascript'),'css'=> array('text/css'),'json'=> array('application/json','application/x-json'),'jsonld'=> array('application/ld+json'),'xml'=> array('text/xml','application/xml','application/x-xml'),'rdf'=> array('application/rdf+xml'),'atom'=> array('application/atom+xml'),'rss'=> array('application/rss+xml'),'form'=> array('application/x-www-form-urlencoded'),
 );
 }
 private function setPhpDefaultLocale($locale)
@@ -1374,7 +1383,7 @@ class Response
 {
 const HTTP_CONTINUE = 100;
 const HTTP_SWITCHING_PROTOCOLS = 101;
-const HTTP_PROCESSING = 102; const HTTP_OK = 200;
+const HTTP_PROCESSING = 102; const HTTP_EARLY_HINTS = 103; const HTTP_OK = 200;
 const HTTP_CREATED = 201;
 const HTTP_ACCEPTED = 202;
 const HTTP_NON_AUTHORITATIVE_INFORMATION = 203;
@@ -1560,7 +1569,7 @@ $this->sendHeaders();
 $this->sendContent();
 if (function_exists('fastcgi_finish_request')) {
 fastcgi_finish_request();
-} elseif ('cli'!== PHP_SAPI) {
+} elseif (!\in_array(PHP_SAPI, array('cli','phpdbg'), true)) {
 static::closeOutputBuffers(0, true);
 }
 return $this;
@@ -2164,7 +2173,7 @@ $this->parameterBag->set($name, $value);
 public function set($id, $service, $scope = self::SCOPE_CONTAINER)
 {
 if (!in_array($scope, array('container','request')) || ('request'=== $scope &&'request'!== $id)) {
-@trigger_error('The concept of container scopes is deprecated since version 2.8 and will be removed in 3.0. Omit the third parameter.', E_USER_DEPRECATED);
+@trigger_error('The concept of container scopes is deprecated since Symfony 2.8 and will be removed in 3.0. Omit the third parameter.', E_USER_DEPRECATED);
 }
 if (self::SCOPE_PROTOTYPE === $scope) {
 throw new InvalidArgumentException(sprintf('You cannot set service "%s" of scope "prototype".', $id));
@@ -2298,7 +2307,7 @@ return array_unique(array_merge($ids, array_keys($this->services)));
 public function enterScope($name)
 {
 if ('request'!== $name) {
-@trigger_error('The '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
+@trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
 }
 if (!isset($this->scopes[$name])) {
 throw new InvalidArgumentException(sprintf('The scope "%s" does not exist.', $name));
@@ -2327,7 +2336,7 @@ $this->scopedServices[$name] = array();
 public function leaveScope($name)
 {
 if ('request'!== $name) {
-@trigger_error('The '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
+@trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
 }
 if (!isset($this->scopedServices[$name])) {
 throw new InvalidArgumentException(sprintf('The scope "%s" is not active.', $name));
@@ -2359,7 +2368,7 @@ public function addScope(ScopeInterface $scope)
 $name = $scope->getName();
 $parentScope = $scope->getParentName();
 if ('request'!== $name) {
-@trigger_error('The '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
+@trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
 }
 if (self::SCOPE_CONTAINER === $name || self::SCOPE_PROTOTYPE === $name) {
 throw new InvalidArgumentException(sprintf('The scope "%s" is reserved.', $name));
@@ -2380,13 +2389,13 @@ $parentScope = $this->scopes[$parentScope];
 public function hasScope($name)
 {
 if ('request'!== $name) {
-@trigger_error('The '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
+@trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
 }
 return isset($this->scopes[$name]);
 }
 public function isScopeActive($name)
 {
-@trigger_error('The '.__METHOD__.' method is deprecated since version 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
+@trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.8 and will be removed in 3.0.', E_USER_DEPRECATED);
 return isset($this->scopedServices[$name]);
 }
 public static function camelize($id)
@@ -2485,11 +2494,11 @@ protected $booted = false;
 protected $name;
 protected $startTime;
 protected $loadClassCache;
-const VERSION ='2.8.31';
-const VERSION_ID = 20831;
+const VERSION ='2.8.41';
+const VERSION_ID = 20841;
 const MAJOR_VERSION = 2;
 const MINOR_VERSION = 8;
-const RELEASE_VERSION = 31;
+const RELEASE_VERSION = 41;
 const EXTRA_VERSION ='';
 const END_OF_MAINTENANCE ='11/2018';
 const END_OF_LIFE ='11/2019';
@@ -2505,13 +2514,13 @@ $this->startTime = microtime(true);
 $defClass = new \ReflectionMethod($this,'init');
 $defClass = $defClass->getDeclaringClass()->name;
 if (__CLASS__ !== $defClass) {
-@trigger_error(sprintf('Calling the %s::init() method is deprecated since version 2.3 and will be removed in 3.0. Move your logic to the constructor method instead.', $defClass), E_USER_DEPRECATED);
+@trigger_error(sprintf('Calling the %s::init() method is deprecated since Symfony 2.3 and will be removed in 3.0. Move your logic to the constructor method instead.', $defClass), E_USER_DEPRECATED);
 $this->init();
 }
 }
 public function init()
 {
-@trigger_error('The '.__METHOD__.' method is deprecated since version 2.3 and will be removed in 3.0. Move your logic to the constructor method instead.', E_USER_DEPRECATED);
+@trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.3 and will be removed in 3.0. Move your logic to the constructor method instead.', E_USER_DEPRECATED);
 }
 public function __clone()
 {
@@ -2575,7 +2584,7 @@ return $this->bundles;
 }
 public function isClassInActiveBundle($class)
 {
-@trigger_error('The '.__METHOD__.' method is deprecated since version 2.6 and will be removed in version 3.0.', E_USER_DEPRECATED);
+@trigger_error('The '.__METHOD__.' method is deprecated since Symfony 2.6 and will be removed in version 3.0.', E_USER_DEPRECATED);
 foreach ($this->getBundles() as $bundle) {
 if (0 === strpos($class, $bundle->getNamespace())) {
 return true;
@@ -3165,7 +3174,7 @@ $this->debug = (bool) $debug;
 }
 public function __toString()
 {
-@trigger_error('ConfigCache::__toString() is deprecated since version 2.7 and will be removed in 3.0. Use the getPath() method instead.', E_USER_DEPRECATED);
+@trigger_error('ConfigCache::__toString() is deprecated since Symfony 2.7 and will be removed in 3.0. Use the getPath() method instead.', E_USER_DEPRECATED);
 return $this->getPath();
 }
 public function isFresh()
@@ -3226,10 +3235,10 @@ public function terminate(Request $request, Response $response)
 {
 $this->dispatcher->dispatch(KernelEvents::TERMINATE, new PostResponseEvent($this, $request, $response));
 }
-public function terminateWithException(\Exception $exception)
+public function terminateWithException(\Exception $exception, Request $request = null)
 {
-if (!$request = $this->requestStack->getMasterRequest()) {
-throw new \LogicException('Request stack is empty', 0, $exception);
+if (!$request = $request ?: $this->requestStack->getMasterRequest()) {
+throw $exception;
 }
 $response = $this->handleException($exception, $request, self::MASTER_REQUEST);
 $response->sendHeaders();
@@ -3251,7 +3260,7 @@ $event = new FilterControllerEvent($this, $controller, $request, $type);
 $this->dispatcher->dispatch(KernelEvents::CONTROLLER, $event);
 $controller = $event->getController();
 $arguments = $this->resolver->getArguments($request, $controller);
-$response = call_user_func_array($controller, $arguments);
+$response = \call_user_func_array($controller, $arguments);
 if (!$response instanceof Response) {
 $event = new GetResponseForControllerResultEvent($this, $request, $type, $response);
 $this->dispatcher->dispatch(KernelEvents::VIEW, $event);
@@ -3352,7 +3361,7 @@ public function __construct(EventDispatcherInterface $dispatcher, ContainerInter
 {
 parent::__construct($dispatcher, $controllerResolver, $requestStack);
 if ($triggerDeprecation) {
-@trigger_error('The '.__CLASS__.' class is deprecated since version 2.7 and will be removed in 3.0. Use the Symfony\Component\HttpKernel\HttpKernel class instead.', E_USER_DEPRECATED);
+@trigger_error('The '.__CLASS__.' class is deprecated since Symfony 2.7 and will be removed in 3.0. Use the Symfony\Component\HttpKernel\HttpKernel class instead.', E_USER_DEPRECATED);
 }
 $this->container = $container;
 if (!$container->hasScope('request')) {
