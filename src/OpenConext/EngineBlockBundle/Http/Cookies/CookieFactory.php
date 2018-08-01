@@ -3,8 +3,8 @@
 namespace OpenConext\EngineBlockBundle\Http\Cookies;
 
 use DateInterval;
+use DateTimeImmutable;
 use OpenConext\EngineBlock\Assert\Assertion;
-use OpenConext\EngineBlock\DateTime\DateTime;
 use Symfony\Component\HttpFoundation\Cookie;
 
 final class CookieFactory
@@ -35,13 +35,20 @@ final class CookieFactory
     private $secure;
 
     /**
-     * @param string   $name
-     * @param string   $domain
-     * @param int|null $expiryInSeconds
-     * @param bool     $httpOnly
-     * @param bool     $secure
+     * @var DateTimeImmutable
      */
-    public function __construct($name, $domain, $expiryInSeconds = null, $httpOnly = false, $secure = false)
+    private $now;
+
+    /**
+     * @param string $name
+     * @param string $domain
+     * @param int|null $expiryInSeconds
+     * @param bool $httpOnly
+     * @param bool $secure
+     * @param DateTimeImmutable|null $now
+     * @throws \Assert\AssertionFailedException
+     */
+    public function __construct($name, $domain, $expiryInSeconds = null, $httpOnly = false, $secure = false, DateTimeImmutable $now = null)
     {
         Assertion::boolean($httpOnly);
         Assertion::boolean($secure);
@@ -51,6 +58,11 @@ final class CookieFactory
         $this->expiryInSeconds = $expiryInSeconds;
         $this->httpOnly = $httpOnly;
         $this->secure = $secure;
+
+        if (is_null($now)) {
+            $now = new DateTimeImmutable();
+        }
+        $this->now = $now;
     }
 
     /**
@@ -63,7 +75,7 @@ final class CookieFactory
         $expiresAt = 0;
 
         if ($this->expiryInSeconds) {
-            $expiresAt = (new DateTime())->add(DateInterval::createFromDateString($this->expiryInSeconds . ' seconds'));
+            $expiresAt = $this->now->add(DateInterval::createFromDateString($this->expiryInSeconds . ' seconds'));
         }
 
         return new Cookie(
