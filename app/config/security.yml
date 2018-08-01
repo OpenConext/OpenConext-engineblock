@@ -3,9 +3,9 @@ security:
         in_memory:
             memory:
                 users:
-                    "%api.users.janus.username%":
-                        password: "%api.users.janus.password%"
-                        roles: 'ROLE_API_USER_JANUS'
+                    "%api.users.metadataPush.username%":
+                        password: "%api.users.metadataPush.password%"
+                        roles: 'ROLE_API_USER_METADATA_PUSH'
                     "%api.users.profile.username%":
                         password: "%api.users.profile.password%"
                         roles: 'ROLE_API_USER_PROFILE'

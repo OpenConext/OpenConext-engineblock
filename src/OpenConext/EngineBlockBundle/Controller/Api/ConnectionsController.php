@@ -2,7 +2,7 @@
 
 namespace OpenConext\EngineBlockBundle\Controller\Api;
 
-use OpenConext\EngineBlock\Metadata\Entity\Assembler\JanusPushMetadataAssembler;
+use OpenConext\EngineBlock\Metadata\Entity\Assembler\PushMetadataAssembler;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\DoctrineMetadataRepository;
 use OpenConext\EngineBlockBundle\Configuration\FeatureConfiguration;
 use OpenConext\EngineBlockBundle\Http\Exception\ApiAccessDeniedHttpException;
@@ -60,9 +60,9 @@ class ConnectionsController
             throw new ApiNotFoundHttpException('Metadata push API is disabled');
         }
 
-        if (!$this->authorizationChecker->isGranted(['ROLE_API_USER_JANUS'])) {
+        if (!$this->authorizationChecker->isGranted(['ROLE_API_USER_METADATA_PUSH'])) {
             throw new ApiAccessDeniedHttpException(
-                'Access to the metadata push API requires the role ROLE_API_USER_JANUS'
+                'Access to the metadata push API requires the role ROLE_API_USER_METADATA_PUSH'
             );
         }
 
@@ -74,7 +74,7 @@ class ConnectionsController
             throw new BadApiRequestHttpException('Unrecognized structure for JSON');
         }
 
-        $assembler = new JanusPushMetadataAssembler();
+        $assembler = new PushMetadataAssembler();
         $roles     = $assembler->assemble($body->connections);
         $result    = $this->repository->synchronize($roles);
 
