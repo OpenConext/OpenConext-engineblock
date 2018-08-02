@@ -87,13 +87,6 @@ module.exports = function(grunt) {
                 src: ['node_modules/font-awesome-sass/assets/fonts/font-awesome/*'],
                 dest: '../web/fonts'
             },
-            font_awesome_scss: {
-                flatten: false,
-                expand: true,
-                cwd: 'node_modules/font-awesome-sass/assets/stylesheets',
-                src: ['**'],
-                dest: 'material/stylesheets/utilities/font-awesome'
-            },
             material: {
                 files: [
                     { expand: true, cwd: 'material/images/', src: ['**'], dest: '../web/images' },
