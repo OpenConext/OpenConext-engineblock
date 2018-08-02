@@ -11,5 +11,8 @@ More information about our release strategy can be found in the [Development Gui
 This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related 
 features.
 
-### Improvements
+### New features
+
+### Bugfixes and other improvements
  * Remove attribute_aggregation_required metadata setting #572
+ * Symfony was upgraded to 2.8.44 to harden against CVE-2018-14773
