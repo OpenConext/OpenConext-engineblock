@@ -20,11 +20,9 @@ use RuntimeException;
 use stdClass;
 
 /**
- * Class JanusPushMetadataAssembler
- * @package OpenConext\EngineBlock\Metadata\Entity\Assembler
  * @SuppressWarnings(PMD)
  */
-class JanusPushMetadataAssembler
+class PushMetadataAssembler
 {
     public function assemble($connections)
     {

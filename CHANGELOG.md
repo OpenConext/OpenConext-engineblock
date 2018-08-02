@@ -11,8 +11,13 @@ More information about our release strategy can be found in the [Development Gui
 This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related 
 features.
 
-### New features
+### Bugfixes
+ * Optimize consent viewport on xs #573
+ * Revert suggestion title on WAYF screen #571
+ * Fix SP displayName regression #568 (thanks tvdijen)
+ * Update the IdP placeholder logo reference #574
 
-### Bugfixes and other improvements
+### Chores and other improvements
+ * References to Janus have been removed #581
  * Remove attribute_aggregation_required metadata setting #572
- * Symfony was upgraded to 2.8.44 to harden against CVE-2018-14773
+ * Symfony was upgraded to 2.8.44 to harden against CVE-2018-14773 #582

@@ -1,6 +1,6 @@
 parameters:
-    engineblock.functional_testing.service_registry_data_store.dir:           "%kernel.root_dir%/../tmp/eb-fixtures/janus/"
-    engineblock.functional_testing.service_registry_data_store.file:          "%kernel.root_dir%/../tmp/eb-fixtures/janus/entities"
+    engineblock.functional_testing.service_registry_data_store.dir:           "%kernel.root_dir%/../tmp/eb-fixtures/metadata-push/"
+    engineblock.functional_testing.service_registry_data_store.file:          "%kernel.root_dir%/../tmp/eb-fixtures/metadata-push/entities"
     engineblock.functional_testing.features_data_store.file:                  "%kernel.root_dir%/../tmp/eb-fixtures/features.json"
     engineblock.functional_testing.authentication_loop_guard_data_store.file: "%kernel.root_dir%/../tmp/eb-fixtures/authentication-loop-guard.json"
     engineblock.functional_testing.pdp_data_store.file:                       "%kernel.root_dir%/../tmp/eb-fixtures/policy_decision.json"

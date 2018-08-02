@@ -130,8 +130,8 @@ $ymlContent = array(
         // settings.
         'php_settings'                                            => legacyPhpSettingsToYaml($config->get('phpSettings', [])->toArray()),
 
-        'api.users.janus.username'                                => $config->get('engineApi.users.janus.username'),
-        'api.users.janus.password'                                => escapeYamlValue($config->get('engineApi.users.janus.password')),
+        'api.users.metadataPush.username'                         => $config->get('engineApi.users.metadataPush.username'),
+        'api.users.metadataPush.password'                         => escapeYamlValue($config->get('engineApi.users.metadataPush.password')),
         'api.users.profile.username'                              => $config->get('engineApi.users.profile.username'),
         'api.users.profile.password'                              => escapeYamlValue($config->get('engineApi.users.profile.password')),
         'api.users.deprovision.username'                          => $config->get('engineApi.users.deprovision.username'),

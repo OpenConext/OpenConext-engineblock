@@ -2,6 +2,21 @@
 
 ## 5.8 -> 5.9
 
+### Who's Janus?
+All references to Janus have been removed from the EngineBlock codebase and has been substituted with metadata push. 
+This also includes the configuration settings. Be sure to set the correct values in the INI settings for the push 
+mechanism to work.
+
+```
+; old
+engineApi.users.janus.username = "..."
+engineApi.users.janus.password = "..."
+
+; new
+engineApi.users.metadataPush.username = "..."
+engineApi.users.metadataPush.password = "..."
+```
+
 ### Attribute aggregation required setting
 The attribute aggregation was enabled/disabled explicitly in previous releases of Engineblock. This value was based on a
 feature flag set in the metadata repository (Manage). This is no longer required as we can distill whether or not this
