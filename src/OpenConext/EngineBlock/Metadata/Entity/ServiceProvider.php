@@ -100,13 +100,6 @@ class ServiceProvider extends AbstractRole
     public $policyEnforcementDecisionRequired;
 
     /**
-     * @var bool
-     *
-     * @ORM\Column(name="attribute_aggregation_required", type="boolean")
-     */
-    public $attributeAggregationRequired;
-
-    /**
      * @var null|RequestedAttribute[]
      *
      * @ORM\Column(name="requested_attributes", type="array")
@@ -164,7 +157,6 @@ class ServiceProvider extends AbstractRole
      * @param null $requestedAttributes
      * @param bool $skipDenormalization
      * @param bool $policyEnforcementDecisionRequired
-     * @param bool $attributeAggregationRequired
      * @param string $manipulation
      * @param AttributeReleasePolicy $attributeReleasePolicy
      * @param string|null $supportUrlEn
@@ -210,7 +202,6 @@ class ServiceProvider extends AbstractRole
         $requestedAttributes = null,
         $skipDenormalization = false,
         $policyEnforcementDecisionRequired = false,
-        $attributeAggregationRequired = false,
         $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
         $supportUrlEn = null,
@@ -257,7 +248,6 @@ class ServiceProvider extends AbstractRole
         $this->requestedAttributes = $requestedAttributes;
         $this->skipDenormalization = $skipDenormalization;
         $this->policyEnforcementDecisionRequired = $policyEnforcementDecisionRequired;
-        $this->attributeAggregationRequired = $attributeAggregationRequired;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
     }
@@ -305,5 +295,19 @@ class ServiceProvider extends AbstractRole
             $spName = $this->entityId;
         }
         return $spName;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAttributeAggregationRequired()
+    {
+        if (is_null($this->attributeReleasePolicy)) {
+            return false;
+        }
+
+        $rules = $this->attributeReleasePolicy->getRulesWithSourceSpecification();
+
+        return count($rules) > 0;
     }
 }

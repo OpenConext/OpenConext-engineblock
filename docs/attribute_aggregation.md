@@ -26,9 +26,6 @@ attributeAggregation.password = "secret"
 To use Attribute Aggregation, you configure it in
 Serviceregistry on the SP side.
 
-* First, it is required that the SP has the
-`coin:attribute_aggregation_required` setting enabled in
-Serviceregistry. (We might lift this requirement later.)
 * In the ARP for the SP, each attribute has a 'source'
 column, defauling to IdP. When set to a different value,
 that attribute will be sourced from the Attribute Aggregator.

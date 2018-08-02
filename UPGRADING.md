@@ -1,5 +1,15 @@
 # UPGRADE NOTES
 
+## 5.8 -> 5.9
+
+### Attribute aggregation required setting
+The attribute aggregation was enabled/disabled explicitly in previous releases of Engineblock. This value was based on a
+feature flag set in the metadata repository (Manage). This is no longer required as we can distill whether or not this
+feature should be enabled based on the existence (or lack of) source indications on the attribute values.
+
+This changes means that a column was dropped from the `sso_provider_roles_eb5` schema. Running the `Version20180724175453`
+migration takes care of this. Leaving the column in the database should not prove problematic for the time being.
+
 ## 5.7 -> 5.8
 
 ### Stored metadata incompatibility
