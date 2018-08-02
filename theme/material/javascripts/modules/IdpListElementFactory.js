@@ -70,11 +70,10 @@ export class IdpListElementFactory {
             const actionElement = document.createElement('span');
             actionElement.className = 'c-button action outline deleteable img';
 
-            const imageElement = document.createElement('img');
-            imageElement.className = 'deleteable';
-            imageElement.setAttribute('src', '/images/cross.svg');
-            imageElement.setAttribute('alt', 'delete');
-            actionElement.appendChild(imageElement);
+            const iconElement = document.createElement('i');
+            iconElement.className = 'deleteable fa fa-times';
+            iconElement.setAttribute('title', 'delete');
+            actionElement.appendChild(iconElement);
 
             idpElement.appendChild(logoElement);
             idpElement.appendChild(titleElement);

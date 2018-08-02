@@ -12,22 +12,26 @@
     &.small
       font-size: 80%
 
+    &.help,
+    &[target="_blank"]
+      text-decoration: none
+
+    &.help span,
+    &[target="_blank"] span
+      text-decoration: underline
+
     &.help::after,
     &[target="_blank"]::after
-      background-size: cover
-      background-position: 0 0
-      background-repeat: no-repeat
-      content: ''
       display: inline-block
+      font-family: FontAwesome
       height: 1.2em
       margin-left: 5px
       vertical-align: middle
       width: 1.2em
     &.help::after
-      background-image: url(../images/question-circle-o.svg)
-
+      content: $fa-var-question-circle-o
     &[target="_blank"]::after
-      background-image: url(../images/external-link.svg)
+      content: $fa-var-external-link
 
   p
     margin: 0
@@ -125,22 +129,26 @@
 
               a
                 color: $blue
+                text-decoration: none
 
                 &::after
-                  content: ''
-                  background: url(../images/chevron-down.svg) 0 0 no-repeat
-                  background-size: cover
+                  content: $fa-var-chevron-down
+                  color: $blue
+                  font-family: FontAwesome
                   display: inline-block
                   height: 0.7em
                   width: 0.7em
 
                 span.show-more
                   display: inline
+                  text-decoration: underline
 
                 span.show-less
                   display: none
+                  text-decoration: underline
             a.small[target="_blank"]::after
               background: none
+              content: ''
               margin: 0
               width: 0
           &.expanded
@@ -153,7 +161,10 @@
               &.toggle-attributes
                 a
                   &::after
-                    background-image: url(../images/chevron-up.svg)
+                    content: $fa-var-chevron-up
+                    color: $blue
+                    font-family: FontAwesome
+                    text-decoration: none
 
                   span.show-more
                     display: none
@@ -277,11 +288,9 @@
           border-radius: 50%
 
       .title::before
-        background-image: url(../images/warning-triangle.svg)
-        background-size: cover
-        background-position: 0 0
-        background-repeat: no-repeat
-        content: ''
+        content: $fa-var-warning
+        font-family: FontAwesome
+        color: $red
         display: inline-block
         height: 1.2em
         left: 0.75em

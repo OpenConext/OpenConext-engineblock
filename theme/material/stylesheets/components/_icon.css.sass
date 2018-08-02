@@ -5,27 +5,32 @@
   position: relative
   top: -1px
   margin-right: 0.5rem
+  font-family: FontAwesome
   .lt-ie9 &
     max-width: .75em
     margin-right: .5em
 
+  &.c-icon-warning,
+  &.c-icon-error
+    width: 19px
+    max-width: 19px
+    height: 19px
+    display: inline-block
+    border-radius: 3px
+    color: white
+    padding: 0px 7px
+
   &.c-icon-warning
-    width: 12px
-    height: 12px
-    .lt-ie9 &
-      background: #ffcc00
+    background: $yellow
 
   &.c-icon-error
-    width: 12px
-    height: 12px
-    .lt-ie9 &
-      background: #dd3939
+    background: $red
 
   &.c-icon-checkmark
     width: 12px
     height: 9px
+    color: $green
     .lt-ie9 &
-      background: green
       width: 12px
       height: 12px
 

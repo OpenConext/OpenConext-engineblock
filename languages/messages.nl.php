@@ -104,7 +104,7 @@ HTML
 
     // Consent page
     'consent_header_title'                    => 'Om in te loggen heeft %arg1% jouw gegevens nodig',
-    'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw %organisationNoun% veilig verstuurd naar %arg1% via <a class="help" data-slidein="about">%suiteName%</a>.',
+    'consent_header_text'                     => 'De dienst heeft deze gegevens nodig om goed te kunnen functioneren. De gegevens worden vanuit jouw %organisationNoun% veilig verstuurd naar %arg1% via <a class="help" data-slidein="about"><span>%suiteName%</span></a>.',
     'consent_privacy_title'                   => 'De volgende gegevens worden doorgestuurd naar %arg1%:',
     'consent_privacy_link'                    => 'Lees het privacybeleid van deze dienst',
     'consent_attributes_correction_link'      => 'Kloppen deze gegevens niet?',
@@ -116,9 +116,9 @@ HTML
     'consent_buttons_nok'                     => 'Nee, ik ga niet akkoord',
     'consent_buttons_nok_minimal'             => 'Annuleren',
     'consent_explanation_title'               => 'Let op bij het gebruik van deze dienst',
-    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via %suiteName%. <a href="%arg1%" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
-    'consent_footer_text_plural'              => 'Je gebruikt al %arg1% diensten via %suiteName%. <a href="%arg2%" target="_blank">Bekijk hier het overzicht en je profielinformatie.</a>',
-    'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via %suiteName%. <a href="%arg1%" target="_blank">Bekijk hier je profielinformatie.</a>',
+    'consent_footer_text_singular'            => 'Je gebruikt al één andere dienst via %suiteName%. <a href="%arg1%" target="_blank"><span>Bekijk hier het overzicht en je profielinformatie.</span></a>',
+    'consent_footer_text_plural'              => 'Je gebruikt al %arg1% diensten via %suiteName%. <a href="%arg2%" target="_blank"><span>Bekijk hier het overzicht en je profielinformatie.</span></a>',
+    'consent_footer_text_first_consent'       => 'Je gebruikt nog geen diensten via %suiteName%. <a href="%arg1%" target="_blank"><span>Bekijk hier je profielinformatie.</span></a>',
     'consent_name_id_label'                   => 'Identifier',
     'consent_name_id_support_link'            => 'Uitleg',
     'consent_name_id_value_tooltip'           => 'De identifier voor deze dienst wordt door %arg1% zelf gegenereerd en verschilt per dienst je via %arg1% gebruikt. De dienst kan jou dus wel herkennen als dezelfde gebruiker als je opnieuw inlogt, maar diensten kunnen onderling niet zien dat het om dezelfde gebruiker gaat.',
