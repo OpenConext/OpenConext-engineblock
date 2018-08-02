@@ -80,6 +80,16 @@
         </exec>
     </target>
 
+    <target name="phpcbf"
+            description="Fix coding standard violations using PHP_CodeSniffer">
+        <exec dir="${basedir}" executable="vendor/bin/phpcbf" failonerror="true">
+            <arg value="--standard=ci/travis/phpcs.xml" />
+            <arg value="--extensions=php" />
+            <arg value="--no-patch" />
+            <arg path="src" />
+        </exec>
+    </target>
+
     <target name="security-checker" description="Check for vulnerable dependencies with SensioLabs Security Checker">
         <exec dir="${basedir}" executable="vendor/bin/security-checker" failonerror="true">
             <arg value="security:check" />
