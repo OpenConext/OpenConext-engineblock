@@ -189,6 +189,14 @@ class PushMetadataAssembler
             'policyEnforcementDecisionRequired'
         );
 
+        $properties += $this->setPathFromObject(
+            array(
+                $connection,
+                'metadata:coin:requesterid_required'
+            ),
+            'requesteridRequired'
+        );
+
         return Utils::instantiate(
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
             $properties

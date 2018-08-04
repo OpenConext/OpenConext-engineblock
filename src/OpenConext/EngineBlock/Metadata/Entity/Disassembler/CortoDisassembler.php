@@ -59,6 +59,9 @@ class CortoDisassembler
         if ($entity->isAttributeAggregationRequired()) {
             $cortoEntity['AttributeAggregationRequired'] = true;
         }
+        if ($entity->requesteridRequired) {
+            $cortoEntity['requesteridRequired'] = true;
+        }
 
         return $cortoEntity;
     }
