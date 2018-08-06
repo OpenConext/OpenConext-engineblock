@@ -21,3 +21,4 @@ features.
  * References to Janus have been removed #581
  * Remove attribute_aggregation_required metadata setting #572
  * Symfony was upgraded to 2.8.44 to harden against CVE-2018-14773 #582
+ * Add requesterid_required metadata setting to enforce the use of a RequesterId on trusted proxies (#540)

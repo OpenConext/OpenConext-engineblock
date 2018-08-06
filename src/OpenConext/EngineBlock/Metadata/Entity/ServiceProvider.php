@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package OpenConext\EngineBlock\Metadata\Entity
  * @ORM\Entity
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class ServiceProvider extends AbstractRole
@@ -100,6 +101,13 @@ class ServiceProvider extends AbstractRole
     public $policyEnforcementDecisionRequired;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="requesterid_required", type="boolean")
+     */
+    public $requesteridRequired;
+
+    /**
      * @var null|RequestedAttribute[]
      *
      * @ORM\Column(name="requested_attributes", type="array")
@@ -157,6 +165,7 @@ class ServiceProvider extends AbstractRole
      * @param null $requestedAttributes
      * @param bool $skipDenormalization
      * @param bool $policyEnforcementDecisionRequired
+     * @param bool $requesteridRequired
      * @param string $manipulation
      * @param AttributeReleasePolicy $attributeReleasePolicy
      * @param string|null $supportUrlEn
@@ -202,6 +211,7 @@ class ServiceProvider extends AbstractRole
         $requestedAttributes = null,
         $skipDenormalization = false,
         $policyEnforcementDecisionRequired = false,
+        $requesteridRequired = false,
         $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
         $supportUrlEn = null,
@@ -248,6 +258,7 @@ class ServiceProvider extends AbstractRole
         $this->requestedAttributes = $requestedAttributes;
         $this->skipDenormalization = $skipDenormalization;
         $this->policyEnforcementDecisionRequired = $policyEnforcementDecisionRequired;
+        $this->requesteridRequired = $requesteridRequired;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
     }

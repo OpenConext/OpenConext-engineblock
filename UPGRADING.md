@@ -25,6 +25,14 @@ feature should be enabled based on the existence (or lack of) source indications
 This changes means that a column was dropped from the `sso_provider_roles_eb5` schema. Running the `Version20180724175453`
 migration takes care of this. Leaving the column in the database should not prove problematic for the time being.
 
+### RequesterId required setting
+The use of a RequesterId can now be enforced on a trusted proxy. To do so, a new metadata flag can be set in the metadata
+repository (Manage).
+
+This change means that a column was added from the `sso_provider_roles_eb5` schema. Running the `Version20180804090135`
+migration takes care of this.
+
+
 ## 5.7 -> 5.8
 
 ### Stored metadata incompatibility
