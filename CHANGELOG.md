@@ -16,6 +16,7 @@ features.
  * Revert suggestion title on WAYF screen #571
  * Fix SP displayName regression #568 (thanks tvdijen)
  * Update the IdP placeholder logo reference #574
+ * Prevent adding empty 'return' hidden input field #584
 
 ### Chores and other improvements
  * References to Janus have been removed #581
