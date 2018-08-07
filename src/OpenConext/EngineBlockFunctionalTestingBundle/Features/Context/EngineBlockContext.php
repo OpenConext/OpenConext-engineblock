@@ -278,6 +278,34 @@ HTML;
     }
 
     /**
+     * @Then /^The process form should have the "([^"]*)" field$/
+     */
+    public function iSeeACertainFormFieldOnTheProcessForm($formFieldName)
+    {
+        $selector = 'input[name="' . $formFieldName . '"]';
+        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
+        $formField = $mink->find('css', $selector);
+
+        if (!$formField) {
+            throw new RuntimeException(sprintf('The %s form field should have been on the form.', $formFieldName));
+        }
+    }
+
+    /**
+     * @Then /^The process form should not have the "([^"]*)" field$/
+     */
+    public function iDoNotSeeACertainFormFieldOnTheProcessForm($formFieldName)
+    {
+        $selector = 'input[name="' . $formFieldName . '"]';
+        $mink = $this->getMainContext()->getMinkContext()->getSession()->getPage();
+        $formField = $mink->find('css', $selector);
+
+        if (!is_null($formField)) {
+            throw new RuntimeException(sprintf('The %s form field should not have been on the form.', $formFieldName));
+        }
+    }
+
+    /**
      * @Then /^I should see the "Request access" button$/
      */
     public function iSeeTheRequestAccessButton()

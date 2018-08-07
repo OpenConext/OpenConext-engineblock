@@ -22,3 +22,10 @@ Feature:
     When I log in at "SSO-Foobar"
     Then I should see "SSO-Foobar"
      And I should see "SSO-IdP"
+
+  Scenario: EngineBlock should not add the return parameter to the process form when no processedAssertionConsumerService is available
+    When I log in at "SSO-SP"
+     And I select "SSO-IdP" on the WAYF
+    Then The process form should have the "SAMLRequest" field
+     And The process form should not have the "return" field
+     And The process form should not have the "RelayState" field
