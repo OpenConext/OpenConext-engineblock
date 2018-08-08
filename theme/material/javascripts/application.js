@@ -5,6 +5,7 @@ import {ConnectedIdpPicker} from "./modules/ConnectedIdpPicker";
 import {UnconnectedIdpPicker} from "./modules/UnconnectedIdpPicker";
 import {PreviousSelectionList} from "./modules/PreviousSelectionList";
 import {KeyboardListener} from "./modules/KeyboardListener";
+import {MouseListener} from "./modules/MouseListener";
 import {PreviousSelectionStorage} from "./modules/PreviousSelectionStorage";
 import {IdpListElementFactory} from "./modules/IdpListElementFactory";
 import {RequestAccessModalHelper} from "./modules/RequestAccessModalHelper";
@@ -69,6 +70,7 @@ function initialize() {
         configuration.requestAccessUrl
     );
     const keyboardListener         = new KeyboardListener(connectedIdpPicker, $searchBar, requestAccessModalHelper);
+    const mouseListener         = new MouseListener(connectedIdpPicker, $searchBar, requestAccessModalHelper);
 
     // Keyup, click and input are registered events for cross-browser compatibility with HTML5 'search' input
     $searchBar.addEventListener('keyup', throttle(event => connectedIdpPicker.searchBy(event.target.value), throttleAmountInMs));
@@ -79,6 +81,7 @@ function initialize() {
     showElement($searchForm);
 
     document.addEventListener('keyup', event => keyboardListener.handle(event.keyCode));
+    document.addEventListener('mousemove', event => mouseListener.handle(event.target));
 
     $searchForm.addEventListener('submit', (event) => {
         event.preventDefault();

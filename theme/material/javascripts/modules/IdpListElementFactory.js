@@ -29,19 +29,17 @@ export class IdpListElementFactory {
             const titleElement = document.createElement('h3');
             titleElement.textContent = idpList[i].displayTitle;
 
-            const actionElement = document.createElement('span');
-            actionElement.className = 'c-button white action';
-
-            if (idpList[i].connected) {
-                actionElement.textContent = this.messages['pressEnterToSelect'];
-            } else {
-                actionElement.textContent = this.messages['requestAccess'];
-                actionElement.setAttribute('data-entity-id', idpList[i].entityId);
-            }
-
             idpElement.appendChild(logoElement);
             idpElement.appendChild(titleElement);
-            idpElement.appendChild(actionElement);
+
+            if (!idpList[i].connected) {
+                const actionElement = document.createElement('span');
+                actionElement.className = 'c-button white action';
+
+                actionElement.textContent = this.messages['requestAccess'];
+                actionElement.setAttribute('data-entity-id', idpList[i].entityId);
+                idpElement.appendChild(actionElement);
+            }
 
             idpListElement.appendChild(idpElement);
         }
