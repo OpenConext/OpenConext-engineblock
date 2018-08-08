@@ -11,6 +11,9 @@ More information about our release strategy can be found in the [Development Gui
 This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related 
 features.
 
+### Features
+ * Add CodeStyle fixer to the project #583
+
 ### Bugfixes
  * Optimize consent viewport on xs #573
  * Revert suggestion title on WAYF screen #571
