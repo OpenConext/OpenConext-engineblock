@@ -1,10 +1,31 @@
 # UPGRADE NOTES
 
-## 5.8 -> 5.9
+## 5.7 -> 5.8
+
+### Stored metadata incompatibility
+Metadata pushed to EngineBlock in earlier versions (EB<5.8) is not compatible with this version. A metadata push is
+required after upgrading to EB 5.8.
+
+### New user data deprovision API
+
+A new API for deprovisioning user data can be enabled by configuring the following INI settings:
+
+    engineApi.features.deprovision = 1
+    engineApi.users.deprovision.username = "..."
+    engineApi.users.deprovision.password = "..."
+
+Please note that these settings for now are mandatory! For Engine to work correctly specify a username and password.
+
+### Consent screen additions
+The consent screen can now show an IdP provided message. To render this information correctly two new configuration
+parameters where introduced:
+
+1. `defaults.logo` The logo of the suite engine block is configured for. This logo isrendered in the NameID section on the consent screen but might be used in other situations.
+2. `openconext.supportUrlNameId` A link to the support page giving more information on the NameID strategies available in the OpenConext platform.
 
 ### Who's Janus?
-All references to Janus have been removed from the EngineBlock codebase and has been substituted with metadata push. 
-This also includes the configuration settings. Be sure to set the correct values in the INI settings for the push 
+All references to Janus have been removed from the EngineBlock codebase and has been substituted with metadata push.
+This also includes the configuration settings. Be sure to set the correct values in the INI settings for the push
 mechanism to work.
 
 ```
@@ -31,30 +52,6 @@ repository (Manage).
 
 This change means that a column was added from the `sso_provider_roles_eb5` schema. Running the `Version20180804090135`
 migration takes care of this.
-
-
-## 5.7 -> 5.8
-
-### Stored metadata incompatibility
-Metadata pushed to EngineBlock in earlier versions (EB<5.8) is not compatible with this version. A metadata push is
-required after upgrading to EB 5.8.
-
-### New user data deprovision API
-
-A new API for deprovisioning user data can be enabled by configuring the following INI settings:
-
-    engineApi.features.deprovision = 1
-    engineApi.users.deprovision.username = "..."
-    engineApi.users.deprovision.password = "..."
-
-Please note that these settings for now are mandatory! For Engine to work correctly specify a username and password.
-
-### Consent screen additions
-The consent screen can now show an IdP provided message. To render this information correctly two new configuration
-parameters where introduced:
-
-1. `defaults.logo` The logo of the suite engine block is configured for. This logo isrendered in the NameID section on the consent screen but might be used in other situations.
-2. `openconext.supportUrlNameId` A link to the support page giving more information on the NameID strategies available in the OpenConext platform.
 
 ## 5.2 -> 5.7
 

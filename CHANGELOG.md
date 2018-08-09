@@ -7,7 +7,7 @@ More information about our release strategy can be found in the [Development Gui
 
 ## Development
 
-## 5.9.0
+## 5.8.2
 This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related 
 features.
 
