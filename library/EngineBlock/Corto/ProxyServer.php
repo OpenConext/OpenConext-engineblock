@@ -4,6 +4,7 @@ use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
 use OpenConext\EngineBlock\Metadata\MetadataRepository\MetadataRepositoryInterface;
 use OpenConext\EngineBlock\Metadata\Service;
+use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
@@ -1050,18 +1051,18 @@ class EngineBlock_Corto_ProxyServer
         return $privateKey;
     }
 
-    public function setLogger(\Psr\Log\LoggerInterface $logger)
+    public function setLogger(LoggerInterface $logger)
     {
         $this->_logger = $logger;
     }
 
     /**
      * Getter for the Logger. If the logger is not yet present it is loaded from the ApplicationSingleton.
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
     public function getLogger()
     {
-        if ($this->_logger instanceof \Psr\Log\LoggerInterface) {
+        if ($this->_logger instanceof LoggerInterface) {
             return $this->_logger;
         }
         $this->_logger = EngineBlock_ApplicationSingleton::getLog();

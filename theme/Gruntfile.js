@@ -73,6 +73,7 @@ module.exports = function(grunt) {
                 options: {
                     sassDir: 'material/stylesheets',
                     cssDir: '../web/stylesheets',
+                    fontsDir: '../web/fonts',
                     imagesDir: 'material/images',
                     outputStyle: 'compressed',
                     raw: 'preferred_syntax = :sass\n'
@@ -80,6 +81,12 @@ module.exports = function(grunt) {
             }
         },
         copy: {
+            font_awesome_font: {
+                expand: true,
+                flatten: true,
+                src: ['node_modules/font-awesome-sass/assets/fonts/font-awesome/*'],
+                dest: '../web/fonts'
+            },
             material: {
                 files: [
                     { expand: true, cwd: 'material/images/', src: ['**'], dest: '../web/images' },

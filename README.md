@@ -103,15 +103,14 @@ the `composer` part above with `bin/composer.phar`. This version is regularly up
 being outdated.
 
 
-### Install database schema
+### Install database schema updates
 
-To install the initial database, just call the 'migrate' script in *bin/*, followed by migration tool introduced in 5.x,
-like so:
+To install possible database updates, call doctrine migrations by using the following console command:
 
-    (cd bin && ./migrate && cd .. && app/console doctrine:migrations:migrate --env=prod)
+    app/console doctrine:migrations:migrate --env=prod
 
 _**Note**:
-EngineBlock requires database settings, without it the install script will not function. Furthermore, this assumes that
+EngineBlock requires database settings, without it doctrine migrate will not function. Furthermore, this assumes that
 the application must use the production settings (`--env=prod`), this could be replaced with `dev` should you run a 
 development version._
 

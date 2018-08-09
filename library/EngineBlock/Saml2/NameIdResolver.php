@@ -163,7 +163,7 @@ class EngineBlock_Saml2_NameIdResolver
         }
 
         // So neither a NameIDFormat is explicitly set in the metadata OR a (valid) NameIDPolicy is set in the AuthnRequest
-        // so we check what the SP supports (or what JANUS claims that it supports) and
+        // so we check what the SP supports (or what Manage claims that it supports) and
         // return the least privacy sensitive one.
         if (!empty($spEntityMetadata->supportedNameIdFormats)) {
             foreach ($this->SUPPORTED_NAMEID_FORMATS as $supportedNameIdFormat) {

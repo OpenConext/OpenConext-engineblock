@@ -245,10 +245,9 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
     {
         $result = new SynchronizationResult();
 
-        $repository = $this;
-        $this->entityManager->transactional(function (EntityManager $em) use ($roles, $repository, $result) {
-            $idpsToBeRemoved = $repository->findAllIdentityProviderEntityIds();
-            $spsToBeRemoved = $repository->findAllServiceProviderEntityIds();
+        $this->entityManager->transactional(function (EntityManager $em) use ($roles, $result) {
+            $idpsToBeRemoved = $this->findAllIdentityProviderEntityIds();
+            $spsToBeRemoved = $this->findAllServiceProviderEntityIds();
 
             foreach ($roles as $role) {
                 if ($role instanceof IdentityProvider) {
@@ -264,7 +263,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
                         unset($idpsToBeRemoved[$index]);
 
                         // The IDP already exists: update it.
-                        $identityProvider = $repository->findIdentityProviderByEntityId($role->entityId);
+                        $identityProvider = $this->findIdentityProviderByEntityId($role->entityId);
                         $role->id = $identityProvider->id;
                         $em->persist($em->merge($role));
                         $result->updatedIdentityProviders[] = $role->entityId;
@@ -284,7 +283,7 @@ class DoctrineMetadataRepository extends AbstractMetadataRepository
                         unset($spsToBeRemoved[$index]);
 
                         // The SP already exists: update it.
-                        $serviceProvider = $repository->findServiceProviderByEntityId($role->entityId);
+                        $serviceProvider = $this->findServiceProviderByEntityId($role->entityId);
                         $role->id = $serviceProvider->id;
                         $em->persist($em->merge($role));
                         $result->updatedServiceProviders[] = $role->entityId;

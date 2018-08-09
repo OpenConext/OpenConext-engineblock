@@ -120,8 +120,6 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
 
         $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([]);
 
-        $this->sp->attributeAggregationRequired = true;
-
         $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setProxyServer($server);
         $command->setRequest($this->request);
@@ -130,8 +128,8 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
 
         $command->execute();
 
-        $aggregationNotConfiguredLogged = $this->handler->hasWarning(
-            'No attribute rules configured for aggregation for SP'
+        $aggregationNotConfiguredLogged = $this->handler->hasInfo(
+            'No Attribute Aggregation for SP'
         );
 
         $this->assertTrue($aggregationNotConfiguredLogged, 'Logging that no attributes are configured in ARP for aggregation');
@@ -155,8 +153,6 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
                 ],
             ],
         ]);
-
-        $this->sp->attributeAggregationRequired = true;
 
         $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
@@ -186,8 +182,6 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
                 ],
             ],
         ]);
-
-        $this->sp->attributeAggregationRequired = true;
 
         $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
@@ -229,8 +223,6 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
                 ],
             ],
         ]);
-
-        $this->sp->attributeAggregationRequired = true;
 
         $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
@@ -280,8 +272,6 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
             ],
         ]);
 
-        $this->sp->attributeAggregationRequired = true;
-
         $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
         $command->setCollabPersonId('subjectId');
         $command->setProxyServer($server);
@@ -303,4 +293,65 @@ class EngineBlock_Test_Corto_Filter_Command_AttributeAggregatorTest extends Unit
         $this->assertEquals([], $command->getResponseAttributes());
     }
 
+    public function testAggregatorCalledWhenThereAreNonIdpSources()
+    {
+        $client = Mockery::mock(AttributeAggregationClientInterface::class);
+        $client->shouldReceive('aggregate')
+            ->andReturn(Response::fromData([]));
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
+
+        $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([
+            'name' => [
+                [
+                    'value' => 'value',
+                    'source' => 'non-idp',
+                ],
+            ],
+        ]);
+
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
+        $command->setCollabPersonId('subjectId');
+        $command->setProxyServer($server);
+        $command->setRequest($this->request);
+        $command->setResponse($this->response);
+        $command->setServiceProvider($this->sp);
+
+        $command->execute();
+    }
+
+    public function testAggregatorNotCalledWhenThereAreIdpSources()
+    {
+        $client = Mockery::mock(AttributeAggregationClientInterface::class);
+        $client->shouldNotReceive('aggregate');
+
+        $server = Mockery::mock(EngineBlock_Corto_ProxyServer::class);
+        $server->shouldReceive('getRepository')
+            ->andReturn($this->repository);
+
+        $this->sp->attributeReleasePolicy = new AttributeReleasePolicy([
+            'name' => [
+                [
+                    'value' => 'value',
+                    'source' => 'idp',
+                ],
+            ],
+        ]);
+
+        $command = new EngineBlock_Corto_Filter_Command_AttributeAggregator($this->logger, $client);
+        $command->setProxyServer($server);
+        $command->setRequest($this->request);
+        $command->setResponse($this->response);
+        $command->setServiceProvider($this->sp);
+
+        $command->execute();
+
+        $aggregationNotConfiguredLogged = $this->handler->hasInfo(
+            'No Attribute Aggregation for SP'
+        );
+
+        $this->assertTrue($aggregationNotConfiguredLogged, 'Logging that there are no idp sources ARP for aggregation');
+    }
 }

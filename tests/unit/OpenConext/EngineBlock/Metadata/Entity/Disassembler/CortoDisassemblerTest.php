@@ -2,6 +2,7 @@
 
 namespace OpenConext\EngineBlock\Metadata\Entity\Disassembler;
 
+use OpenConext\EngineBlock\Metadata\AttributeReleasePolicy;
 use OpenConext\EngineBlock\Metadata\ContactPerson;
 use OpenConext\EngineBlock\Metadata\Entity\IdentityProvider;
 use OpenConext\EngineBlock\Metadata\Entity\ServiceProvider;
@@ -23,7 +24,16 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
         $serviceProvider->isConsentRequired = false;
         $serviceProvider->skipDenormalization = true;
         $serviceProvider->policyEnforcementDecisionRequired = true;
-        $serviceProvider->attributeAggregationRequired = true;
+
+        // set a non-idp arp rule to enable attribute aggregation
+        $serviceProvider->attributeReleasePolicy = new AttributeReleasePolicy([
+            'name' => [
+                [
+                    'value' => 'value',
+                    'source' => 'source',
+                ],
+            ],
+        ]);
 
         $contact = new ContactPerson('support');
         $contact->emailAddress = 't@t.t';
@@ -45,7 +55,8 @@ class CortoDisassemblerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(!$serviceProvider->isConsentRequired    , $cortoServiceProvider['NoConsentRequired']);
         $this->assertEquals($serviceProvider->skipDenormalization   , $cortoServiceProvider['SkipDenormalization']);
         $this->assertEquals($serviceProvider->policyEnforcementDecisionRequired   , $cortoServiceProvider['PolicyEnforcementDecisionRequired']);
-        $this->assertEquals($serviceProvider->attributeAggregationRequired        , $cortoServiceProvider['AttributeAggregationRequired']);
+        $this->assertEquals($serviceProvider->isAttributeAggregationRequired()        , true);
+        $this->assertEquals($serviceProvider->isAttributeAggregationRequired()        , $cortoServiceProvider['AttributeAggregationRequired']);
         $this->assertEquals($contact->contactType, $cortoServiceProvider['ContactPersons'][0]['ContactType']);
         $this->assertEquals($contact->emailAddress, $cortoServiceProvider['ContactPersons'][0]['EmailAddress']);
         $this->assertEquals($contact->telephoneNumber, $cortoServiceProvider['ContactPersons'][0]['TelephoneNumber']);

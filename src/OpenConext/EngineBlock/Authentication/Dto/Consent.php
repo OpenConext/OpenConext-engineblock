@@ -74,7 +74,7 @@ final class Consent
     {
         if (!empty($this->serviceProvider->displayNameEn)) {
             $fields['display_name']['en'] = $this->serviceProvider->displayNameEn;
-        } else if (!empty($this->serviceProvider->nameEn)) {
+        } elseif (!empty($this->serviceProvider->nameEn)) {
             $fields['display_name']['en'] = $this->serviceProvider->nameEn;
         } else {
             $fields['display_name']['en'] = $this->serviceProvider->entityId;
@@ -82,7 +82,7 @@ final class Consent
 
         if (!empty($this->serviceProvider->displayNameNl)) {
             $fields['display_name']['nl'] = $this->serviceProvider->displayNameNl;
-        } else if (!empty($this->serviceProvider->nameNl)) {
+        } elseif (!empty($this->serviceProvider->nameNl)) {
             $fields['display_name']['nl'] = $this->serviceProvider->nameNl;
         } else {
             $fields['display_name']['nl'] = $this->serviceProvider->entityId;

@@ -11,8 +11,8 @@ required after upgrading to EB 5.8.
 A new API for deprovisioning user data can be enabled by configuring the following INI settings:
 
     engineApi.features.deprovision = 1
-    api.users.deprovision.username = "..."
-    api.users.deprovision.password = "..."
+    engineApi.users.deprovision.username = "..."
+    engineApi.users.deprovision.password = "..."
 
 Please note that these settings for now are mandatory! For Engine to work correctly specify a username and password.
 
@@ -22,6 +22,36 @@ parameters where introduced:
 
 1. `defaults.logo` The logo of the suite engine block is configured for. This logo isrendered in the NameID section on the consent screen but might be used in other situations.
 2. `openconext.supportUrlNameId` A link to the support page giving more information on the NameID strategies available in the OpenConext platform.
+
+### Who's Janus?
+All references to Janus have been removed from the EngineBlock codebase and has been substituted with metadata push.
+This also includes the configuration settings. Be sure to set the correct values in the INI settings for the push
+mechanism to work.
+
+```
+; old
+engineApi.users.janus.username = "..."
+engineApi.users.janus.password = "..."
+
+; new
+engineApi.users.metadataPush.username = "..."
+engineApi.users.metadataPush.password = "..."
+```
+
+### Attribute aggregation required setting
+The attribute aggregation was enabled/disabled explicitly in previous releases of Engineblock. This value was based on a
+feature flag set in the metadata repository (Manage). This is no longer required as we can distill whether or not this
+feature should be enabled based on the existence (or lack of) source indications on the attribute values.
+
+This changes means that a column was dropped from the `sso_provider_roles_eb5` schema. Running the `Version20180724175453`
+migration takes care of this. Leaving the column in the database should not prove problematic for the time being.
+
+### RequesterId required setting
+The use of a RequesterId can now be enforced on a trusted proxy. To do so, a new metadata flag can be set in the metadata
+repository (Manage).
+
+This change means that a column was added from the `sso_provider_roles_eb5` schema. Running the `Version20180804090135`
+migration takes care of this.
 
 ## 5.2 -> 5.7
 

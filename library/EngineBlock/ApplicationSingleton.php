@@ -1,6 +1,7 @@
 <?php
 
 use OpenConext\EngineBlock\Logger\Handler\FingersCrossed\ManualOrDecoratedActivationStrategy;
+use OpenConext\EngineBlock\Metadata\MetadataRepository\EntityNotFoundException;
 use OpenConext\EngineBlock\Request\RequestId;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -239,6 +240,7 @@ class EngineBlock_ApplicationSingleton
         // Find the current identity provider
         if (isset($_SESSION['currentServiceProvider'])) {
             $feedbackInfo['serviceProvider'] = $_SESSION['currentServiceProvider'];
+            $feedbackInfo['serviceProviderName'] = $this->getServiceProviderName($_SESSION['currentServiceProvider']);
         }
 
         // @todo  reset this when login is succesful
@@ -398,5 +400,18 @@ class EngineBlock_ApplicationSingleton
     public function getDiContainer()
     {
         return $this->_diContainer;
+    }
+
+    /**
+     * @param string $serviceProviderId
+     * @return string
+     */
+    private function getServiceProviderName($serviceProviderId){
+        try {
+            $serviceProvider = $this->getDiContainer()->getMetadataRepository()->fetchServiceProviderByEntityId($serviceProviderId);
+            return $serviceProvider->getDisplayName($this->getDiContainer()->getLocaleProvider()->getLocale());
+        } catch (EntityNotFoundException $e) {}
+
+        return '';
     }
 }

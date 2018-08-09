@@ -85,15 +85,14 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincip
      */
     private function buildScopeList(array $scopes)
     {
-        $self   = $this;
         $scopes = array_map(
-            function (ShibMdScope $scope) use ($self) {
+            function (ShibMdScope $scope) {
                 if (!$scope->regexp) {
                     return ShibbolethMetadataScope::literal($scope->allowed);
                 }
 
                 if (!RegularExpression::isValidRegularExpression($scope->allowed)) {
-                    $self->logger->warning(sprintf(
+                    $this->logger->warning(sprintf(
                         'Ignoring scope "%s" as it is not a valid regular expression',
                         $scope->allowed
                     ));

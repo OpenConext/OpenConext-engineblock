@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<ruleset name="Ibuildings QA Tools Compat Wrapper">
+    <description>
+        This is used by the Ibuildings QA tools to wrap the coding standard of your choice.
+        By default it is less stringent about long lines than other coding standards
+    </description>
+
+    <exclude-pattern>src/*/*Bundle/Resources</exclude-pattern>
+    <exclude-pattern>src/*/*Bundle/Tests</exclude-pattern>
+    <exclude-pattern>src/*/Bundle/*Bundle/Resources</exclude-pattern>
+    <exclude-pattern>src/*/Bundle/*Bundle/Tests</exclude-pattern>
+    <exclude-pattern>*/Tests/*</exclude-pattern>
+
+    <!-- Run against the PHPCompatibility ruleset -->
+    <rule ref="PHPCompatibility"/>
+
+    <!-- Configuration to allow the PHPCompatibility check -->
+    <config name="installed_paths" value="vendor/phpcompatibility/php-compatibility" />
+    <config name="testVersion" value="7.2-"/>
+</ruleset>

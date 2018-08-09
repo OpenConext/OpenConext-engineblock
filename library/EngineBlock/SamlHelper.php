@@ -89,6 +89,12 @@ class EngineBlock_SamlHelper
         $lastRequesterEntityId = end($requesterIds);
 
         if (!$lastRequesterEntityId) {
+            if ($serviceProvider->requesteridRequired) {
+                throw new EngineBlock_Exception_UnknownServiceProvider(
+                    $serviceProvider,
+                    'No RequesterID specified'
+                );
+            }
             return null;
         }
 

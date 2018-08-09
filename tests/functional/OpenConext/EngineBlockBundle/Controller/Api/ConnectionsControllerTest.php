@@ -14,7 +14,7 @@ class ConnectionsControllerTest extends WebTestCase
      * @test
      * @group Api
      * @group Connections
-     * @group Janus
+     * @group MetadataPush
      */
     public function authentication_is_required_for_pushing_metadata()
     {
@@ -27,7 +27,7 @@ class ConnectionsControllerTest extends WebTestCase
      * @test
      * @group Api
      * @group Connections
-     * @group Janus
+     * @group MetadataPush
      *
      * @dataProvider invalidHttpMethodProvider
      * @param string $invalidHttpMethod
@@ -35,8 +35,8 @@ class ConnectionsControllerTest extends WebTestCase
     public function only_post_requests_are_allowed_when_pushing_metadata($invalidHttpMethod)
     {
         $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.janus.username'),
-            'password' => $this->getContainer()->getParameter('api.users.janus.password'),
+            'username' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
+            'password' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
 
         $client->request($invalidHttpMethod, 'https://engine-api.vm.openconext.org/api/connections');
@@ -50,14 +50,14 @@ class ConnectionsControllerTest extends WebTestCase
      * @test
      * @group Api
      * @group Connections
-     * @group Janus
+     * @group MetadataPush
      * @group FeatureToggle
      */
     public function cannot_push_metadata_if_feature_is_disabled()
     {
         $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.janus.username'),
-            'password' => $this->getContainer()->getParameter('api.users.janus.password'),
+            'username' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
+            'password' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
 
         $this->disableMetadataPushApiFeatureFor($client);
@@ -73,9 +73,9 @@ class ConnectionsControllerTest extends WebTestCase
      * @test
      * @group Api
      * @group Connections
-     * @group Janus
+     * @group MetadataPush
      */
-    public function cannot_push_metadata_if_user_does_not_have_janus_role()
+    public function cannot_push_metadata_if_user_does_not_have_manage_role()
     {
         $client = $this->makeClient([
             'username' => 'no_roles',
@@ -95,7 +95,7 @@ class ConnectionsControllerTest extends WebTestCase
      * @test
      * @group Api
      * @group Connections
-     * @group Janus
+     * @group MetadataPush
      *
      * @dataProvider invalidJsonPayloadProvider
      * @param string $invalidJsonPayload
@@ -103,8 +103,8 @@ class ConnectionsControllerTest extends WebTestCase
     public function cannot_push_invalid_content_to_the_metadata_push_api($invalidJsonPayload)
     {
         $client = $this->makeClient([
-            'username' => $this->getContainer()->getParameter('api.users.janus.username'),
-            'password' => $this->getContainer()->getParameter('api.users.janus.password'),
+            'username' => $this->getContainer()->getParameter('api.users.metadataPush.username'),
+            'password' => $this->getContainer()->getParameter('api.users.metadataPush.password'),
         ]);
 
         $this->enableMetadataPushApiFeatureFor($client);

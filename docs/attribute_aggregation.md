@@ -26,9 +26,6 @@ attributeAggregation.password = "secret"
 To use Attribute Aggregation, you configure it in
 Serviceregistry on the SP side.
 
-* First, it is required that the SP has the
-`coin:attribute_aggregation_required` setting enabled in
-Serviceregistry. (We might lift this requirement later.)
 * In the ARP for the SP, each attribute has a 'source'
 column, defauling to IdP. When set to a different value,
 that attribute will be sourced from the Attribute Aggregator.
@@ -61,7 +58,7 @@ for _x_; the attribute will be omitted).
 
 New sources are added in the Attribute Aggregator,
 according to the instructions in its README. In order
-for it to be configurable in serviceregistry, add it
+for it to be configurable in Manage, add it
 to the list of
 [`janus_attribute_sources`](https://github.com/OpenConext/OpenConext-deploy/blob/2b6e5ef385ec41ceba58d271be049fb6a17b06ac/environments/docker/group_vars/docker.yml#L115-L116).
 Engineblock itself is agnostic of which sources exist

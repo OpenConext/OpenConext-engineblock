@@ -29,19 +29,17 @@ export class IdpListElementFactory {
             const titleElement = document.createElement('h3');
             titleElement.textContent = idpList[i].displayTitle;
 
-            const actionElement = document.createElement('span');
-            actionElement.className = 'c-button white action';
-
-            if (idpList[i].connected) {
-                actionElement.textContent = this.messages['pressEnterToSelect'];
-            } else {
-                actionElement.textContent = this.messages['requestAccess'];
-                actionElement.setAttribute('data-entity-id', idpList[i].entityId);
-            }
-
             idpElement.appendChild(logoElement);
             idpElement.appendChild(titleElement);
-            idpElement.appendChild(actionElement);
+
+            if (!idpList[i].connected) {
+                const actionElement = document.createElement('span');
+                actionElement.className = 'c-button white action';
+
+                actionElement.textContent = this.messages['requestAccess'];
+                actionElement.setAttribute('data-entity-id', idpList[i].entityId);
+                idpElement.appendChild(actionElement);
+            }
 
             idpListElement.appendChild(idpElement);
         }
@@ -70,11 +68,10 @@ export class IdpListElementFactory {
             const actionElement = document.createElement('span');
             actionElement.className = 'c-button action outline deleteable img';
 
-            const imageElement = document.createElement('img');
-            imageElement.className = 'deleteable';
-            imageElement.setAttribute('src', '/images/cross.svg');
-            imageElement.setAttribute('alt', 'delete');
-            actionElement.appendChild(imageElement);
+            const iconElement = document.createElement('i');
+            iconElement.className = 'deleteable fa fa-times';
+            iconElement.setAttribute('title', 'delete');
+            actionElement.appendChild(iconElement);
 
             idpElement.appendChild(logoElement);
             idpElement.appendChild(titleElement);

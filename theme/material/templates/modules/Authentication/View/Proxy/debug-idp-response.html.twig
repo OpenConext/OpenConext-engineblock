@@ -14,7 +14,7 @@
                 <table class="comp-table">
                     <tr>
                         <td>
-                            <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;"/>
+                            <i class="c-icon c-icon-checkmark fa-check" alt="&#9989;"></i>
                             {{ 'attributes_data_mailed'|trans }}
                         </td>
                     </tr>
@@ -24,13 +24,13 @@
             <h1>{{ pageTitle }}</h1>
             <p>
                 {% if validationResult.isValid %}
-                    <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;"/>
+                    <i class="c-icon c-icon-checkmark fa-check"></i>
                     {{ 'attributes_validation_succeeded'|trans }}
                 {% else %}
                     {% if validationResult.errors|length > 0 %}
-                        <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#x274c;"/>
+                        <i class="c-icon fa c-icon-error fa-exclamation"></i>
                     {% else %}
-                        <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;"/>
+                        <i class="c-icon c-icon-warning fa-exclamation"></i>
                     {% endif %}
 
                     {{ 'attributes_validation_failed'|trans }}
@@ -98,13 +98,13 @@
             <h2>{{ 'attributes'|trans }}</h2>
             {% for error in validationResult.errorsForMissingAttributes %}
                 <p class="error">
-                    <img src="/images/error.svg" class="c-icon c-icon-error" alt="&#x274c;"/>
+                    <i class="c-icon c-icon-error fa-exclamation"></i>
                     {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
                 </p>
             {% endfor %}
             {% for warning in validationResult.warningsForMissingAttributes %}
                 <p class="warning">
-                    <img src="/images/warning.svg" class="c-icon c-icon-warning" alt="&#9888;"/>
+                    <i class="c-icon c-icon-warning fa-exclamation"></i>
                     {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
                 </p>
             {% endfor %}
@@ -148,19 +148,17 @@
                             </td>
                             <td>
                                 {% if validationResult.isValid(attributeName) %}
-                                    <img src="/images/checkmark.svg" class="c-icon c-icon-checkmark" alt="&#9989;"/>
+                                    <i class="c-icon c-icon-checkmark fa-check" alt="&#9989;"></i>
                                 {% else %}
                                     {% for error in validationResult.errors(attributeName) %}
                                         <p class="error">
-                                            <img src="/images/error.svg" class="c-icon c-icon-error"
-                                                 alt="&#x274c;"/>
-                                                 {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
+                                            <i class="c-icon c-icon-error fa-exclamation"></i>
+                                            {{ error[0]|trans({'%arg1%': error[1], '%arg2%': error[2], '%arg3%': error[3]}) }}
                                         </p>
                                     {% endfor %}
                                     {% for warning in validationResult.warnings(attributeName) %}
-                                        <p class="warning"><img src="/images/warning.svg" class="c-icon c-icon-warning"
-                                                                alt="&#9888;"/>
-                                                                {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
+                                        <p class="warning"><i class="c-icon c-icon-warning fa-exclamation"></i>
+                                           {{ warning[0]|trans({'%arg1%': warning[1], '%arg2%': warning[2], '%arg3%': warning[3]}) }}
                                         </p>
                                     {% endfor %}
                                 {% endif %}

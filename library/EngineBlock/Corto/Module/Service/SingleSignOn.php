@@ -418,7 +418,7 @@ class EngineBlock_Corto_Module_Service_SingleSignOn extends EngineBlock_Corto_Mo
             $wayfIdp = array(
                 'Name_nl'   => $this->getNameNl($identityProvider, $additionalInfo),
                 'Name_en'   => $this->getNameEn($identityProvider, $additionalInfo),
-                'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/media/idp-logo-not-found.png',
+                'Logo'      => $identityProvider->logo ? $identityProvider->logo->url : '/images/placeholder.png',
                 'Keywords'  => $this->getKeywords($identityProvider),
                 'Access'    => $identityProvider->enabledInWayf || $isDebugRequest ? '1' : '0',
                 'ID'        => md5($identityProvider->entityId),
