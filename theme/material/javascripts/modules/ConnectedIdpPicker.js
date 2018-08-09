@@ -137,9 +137,14 @@ export class ConnectedIdpPicker extends AbstractIdpPicker {
             this.previousSelectionList.editing = !this.previousSelectionList.editing;
             this.previousSelectionList.render();
 
-            this.updateDeleteIdpFromPreviousSelectionClickListeners();
             this.indexElements();
             this.focusOnIdpByIndex(this.indexOfIdpUnderFocus);
+
+            if (this.previousSelectionList.editing) {
+                this.updateDeleteIdpFromPreviousSelectionClickListeners();
+            } else {
+                this.updateResultSelectedClickListeners();
+            }
         }
     }
 
