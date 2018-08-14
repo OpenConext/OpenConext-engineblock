@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
     "content-hash": "63a7ed00a1887e490cf3f846089665f1",
@@ -1358,16 +1358,16 @@
         },
         {
             "name": "openconext/monitor-bundle",
-            "version": "1.0.0",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/OpenConext/Monitor-bundle.git",
-                "reference": "b9be093828385e857ff23a106b4429155d7f8d58"
+                "reference": "1455a292376a03e28465195202c572aa243f0ddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/OpenConext/Monitor-bundle/zipball/b9be093828385e857ff23a106b4429155d7f8d58",
-                "reference": "b9be093828385e857ff23a106b4429155d7f8d58",
+                "url": "https://api.github.com/repos/OpenConext/Monitor-bundle/zipball/1455a292376a03e28465195202c572aa243f0ddb",
+                "reference": "1455a292376a03e28465195202c572aa243f0ddb",
                 "shasum": ""
             },
             "require": {
@@ -1399,7 +1399,7 @@
             "license": [
                 "Apache-2.0"
             ],
-            "description": "A Symfony2 bundle that facilitates health and info endpoints to a Symfony application",
+            "description": "A Symfony 3 bundle that facilitates health and info endpoints to a Symfony application. The bundle is backwards compatible with Symfony 2 projects.",
             "keywords": [
                 "OpenConext",
                 "health",
@@ -1407,7 +1407,7 @@
                 "stepup",
                 "surfnet"
             ],
-            "time": "2017-12-07T14:41:46+00:00"
+            "time": "2018-08-16T13:07:30+00:00"
         },
         {
             "name": "openconext/saml-value-object",
