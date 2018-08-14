@@ -222,7 +222,8 @@ $ymlContent = array(
             $config->get(
                 'attributeDefinitionFile', $projectRoot . 'application/configs/attributes-v2.2.0.json'
             )
-        )
+        ),
+        'monitor_database_health_check_query'                     => $config->get('openconext.monitor_bundle_health_query', '')
     )
 );
 
