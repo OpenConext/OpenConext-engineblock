@@ -117,6 +117,24 @@ Feature:
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
      And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="NOOT"]'
 
+  # See: https://www.pivotaltracker.com/story/show/159760842
+  Scenario: The Service Provider can replace the NameID by setting the CustomNameID with an object representation of the NameID
+    Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
+      """
+      $response['__']['CustomNameId'] = \SAML2\XML\saml\NameID::fromArray(['Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient', 'Value' => 'MIES']);
+      """
+     And SP "SP-with-Attribute-Manipulations" uses the Unspecified NameID format
+    When I log in at "SP-with-Attribute-Manipulations"
+     And I select "Dummy-IdP" on the WAYF
+     And I pass through EngineBlock
+     And I pass through the IdP
+    Then I should not see "MIES"
+    When I give my consent
+     And I pass through EngineBlock
+    Then the url should match "functional-testing/SP-with-Attribute-Manipulations/acs"
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:AttributeStatement/saml:Attribute[@Name="urn:mace:dir:attribute-def:eduPersonTargetedID"]/saml:AttributeValue/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="MIES"]'
+     And the response should match xpath '/samlp:Response/saml:Assertion/saml:Subject/saml:NameID[@Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient" and text()="MIES"]'
+
   Scenario: The Service Provider cannot have the SubjectID manipulated by manipulating the responseObj using the unspecified NameID Format
     Given SP "SP-with-Attribute-Manipulations" has the following Attribute Manipulation:
       """
