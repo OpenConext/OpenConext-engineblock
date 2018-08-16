@@ -5,13 +5,12 @@ namespace OpenConext\EngineBlockFunctionalTestingBundle\Features\Context;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Behat\Symfony2Extension\Context\KernelAwareInterface;
-use Behat\Behat\Context\BehatContext;
+use Behat\Behat\Context\Context;
 
 /**
  * Class FeatureContext
  */
-class FeatureContext extends BehatContext implements KernelAwareInterface
+class FeatureContext implements Context
 {
     const SUB_CONTEXT_MINK          = 'mink';
     const SUB_CONTEXT_ENGINE_BLOCK  = 'engine';
