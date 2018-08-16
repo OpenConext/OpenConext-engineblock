@@ -60,10 +60,10 @@ twig:
         "%kernel.root_dir%/../theme/material/templates/modules": theme
         "%kernel.root_dir%/../theme/material/templates/layouts": themeLayouts
     globals:
-        assetsVersion: %asset_version%
-        defaultTitle: %view_default_title%
-        defaultHeader: %view_default_header%
-        defaultLogo: %view_default_logo%
+        assetsVersion: "%asset_version%"
+        defaultTitle: "%view_default_title%"
+        defaultHeader: "%view_default_header%"
+        defaultLogo: "%view_default_logo%"
 
 doctrine:
     dbal:
