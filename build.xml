@@ -208,7 +208,7 @@
             description="Execute the behat test suite"
             depends="create-test-db">
         <exec executable="vendor/bin/behat" failonerror="true">
-            <arg line="-c ./tests/behat.yml '@OpenConextEngineBlockFunctionalTestingBundle'"/>
+            <arg line="-c ./tests/behat.yml"/>
             <arg line="--profile ${profile}"/>
         </exec>
     </target>
