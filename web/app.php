@@ -11,8 +11,6 @@ $symfonyEnvironment = getenv('SYMFONY_ENV') ?: 'prod';
 $request = Request::createFromGlobals();
 
 $kernel = new AppKernel($symfonyEnvironment, false);
-$kernel->loadClassCache();
-
 $kernel->boot();
 
 $trustedProxies = $kernel->getContainer()->getParameter('trusted_proxies');
