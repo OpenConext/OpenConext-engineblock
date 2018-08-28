@@ -17,11 +17,20 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganis
      */
     private $logger;
 
-    public function __construct(LoggerInterface $logger)
+    /**
+     * @var bool
+     */
+    private $blockUserOnViolation;
+
+    public function __construct(LoggerInterface $logger, $blockUserOnViolation)
     {
         $this->logger = $logger;
+        $this->blockUserOnViolation = (bool)$blockUserOnViolation;
     }
 
+    /**
+     * @throws EngineBlock_Corto_Exception_InvalidAttributeValue
+     */
     public function execute()
     {
         $this->logger->info('Verifying if schacHomeOrganization is allowed by configured IdP shibmd:scopes');
@@ -43,10 +52,16 @@ class EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganis
         $scopeList = $this->buildScopeList($scopes);
 
         if (!$scopeList->inScope($schacHomeOrganization)) {
-            $this->logger->warning(sprintf(
+            $message = sprintf(
                 'schacHomeOrganization attribute value "%s" is not allowed by configured ShibMdScopes for IdP "%s"',
                 $schacHomeOrganization, $this->_identityProvider->entityId
-            ));
+            );
+
+            $this->logger->warning($message);
+
+            if ($this->blockUserOnViolation) {
+                throw new EngineBlock_Corto_Exception_InvalidAttributeValue($message, 'schacHomeOrganization', $schacHomeOrganization);
+            }
         }
     }
 

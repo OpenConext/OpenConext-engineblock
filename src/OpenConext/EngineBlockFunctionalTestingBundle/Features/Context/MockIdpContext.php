@@ -210,6 +210,16 @@ class MockIdpContext extends AbstractSubContext
         $this->mockIdpRegistry->save();
     }
 
+
+    /**
+     * @Given /^the Idp with name "([^"]*)" has shibd scope "([^"]*)"$/
+     */
+    public function theIdpWithNameHasShibdScope($name, $scope)
+    {
+        $mockIdp = $this->mockIdpRegistry->get($name);
+        $this->serviceRegistryFixture->setIdpScope($mockIdp->entityId(), $scope)->save();
+    }
+
     /**
      * @Given /^no registered Idps/
      */

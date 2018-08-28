@@ -38,6 +38,11 @@ authentication_feedback_missing_required_fields:
     methods:    [GET]
     defaults:   { _controller: engineblock.controller.authentication.feedback:missingRequiredFieldsAction }
 
+authentication_feedback_invalid_attribute_value:
+    path:       '/invalid-attribute-value'
+    methods:    [GET]
+    defaults:   { _controller: engineblock.controller.authentication.feedback:invalidAttributeValueAction }
+
 authentication_feedback_custom:
     path:       '/custom'
     methods:    [GET]

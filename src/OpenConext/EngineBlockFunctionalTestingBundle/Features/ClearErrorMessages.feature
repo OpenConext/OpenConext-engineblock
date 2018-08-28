@@ -1,3 +1,4 @@
+@WIP
 Feature:
   In order to explain my login problem's to the helpdesk
   As a user
@@ -187,6 +188,29 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+
+  Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has an invalid attribute.
+    Given feature "eb.block_user_on_violation" is enabled
+    And the IdP "Dummy Idp" sends attribute "urn:mace:shibboleth:metadata:1.0" with value "test"
+    And the Idp with name "Dummy Idp" has shibd scope "invalid"
+    And SP "Dummy SP" allows the following attributes:
+
+      | Name                                                    | Value | Source | Motivation                 |
+      | urn:mace:terena.org:attribute-def:schacHomeOrganization | test  |        | Motivation for sho         |
+
+  When I log in at "Dummy SP"
+    And I pass through EngineBlock
+    And I pass through the IdP
+    And I give my consent
+  Then I should see "Attribute value not allowed"
+    And I should see "Your organisation used a value for attribute schacHomeOrganization (\"engine-test-stand.openconext.org\") which is not allowed for this organisation. Therefore you cannot log in."
+    And I should see "Timestamp:"
+    And I should see "Unique Request Id:"
+    And I should see "User Agent:"
+    And I should see "IP Address:"
+    And I should see "Service Provider:"
+    And I should see "Service Provider Name:"
+    And I should see "Identity Provider:"
 
   Scenario: The session has been lost after passing through EngineBlock
     When I log in at "Dummy SP"

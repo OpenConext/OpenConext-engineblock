@@ -27,6 +27,7 @@ use EngineBlock_Corto_Exception_PEPNoAccess;
 use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
 use EngineBlock_Corto_Exception_UnknownIssuer;
 use EngineBlock_Corto_Exception_UnknownPreselectedIdp;
+use EngineBlock_Corto_Exception_InvalidAttributeValue;
 use EngineBlock_Corto_Module_Bindings_SignatureVerificationException;
 use EngineBlock_Corto_Module_Bindings_UnableToReceiveMessageException;
 use EngineBlock_Corto_Module_Bindings_UnsupportedBindingException;
@@ -149,6 +150,9 @@ class RedirectToFeedbackPageExceptionListener
             $redirectToRoute = 'authentication_feedback_unknown_preselected_idp';
 
             $redirectParams = ['idp-hash' => $exception->getRemoteIdpMd5Hash()];
+        } elseif ($exception instanceof EngineBlock_Corto_Exception_InvalidAttributeValue) {
+            $message         = $exception->getMessage();
+            $redirectToRoute = 'authentication_feedback_invalid_attribute_value';
         } elseif ($exception instanceof StuckInAuthenticationLoopException) {
             $message         = 'Stuck in authentication loop';
             $redirectToRoute = 'authentication_feedback_stuck_in_authentication_loop';

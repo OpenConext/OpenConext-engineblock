@@ -20,6 +20,8 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
         $featureConfiguration = $diContainer->getFeatureConfiguration();
         $logger               = EngineBlock_ApplicationSingleton::getLog();
 
+        $blockUsersOnViolation = $featureConfiguration->isEnabled('eb.block_user_on_violation');
+
         $commands = array(
             // Convert all OID attributes to URN and remove the OID variant
             new EngineBlock_Corto_Filter_Command_NormalizeAttributes(),
@@ -33,9 +35,9 @@ class EngineBlock_Corto_Filter_Input extends EngineBlock_Corto_Filter_Abstract
                 EngineBlock_Corto_Filter_Command_RunAttributeManipulations::TYPE_IDP
             ),
 
-            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($logger),
+            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsSchacHomeOrganisation($logger, $blockUsersOnViolation),
 
-            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($logger),
+            new EngineBlock_Corto_Filter_Command_VerifyShibMdScopingAllowsEduPersonPrincipalName($logger, $blockUsersOnViolation),
 
             // Check whether this IdP is allowed to send a response to the destination SP
             new EngineBlock_Corto_Filter_Command_ValidateAllowedConnection(),

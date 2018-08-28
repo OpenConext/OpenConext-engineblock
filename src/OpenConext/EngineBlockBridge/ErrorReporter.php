@@ -4,7 +4,7 @@ namespace OpenConext\EngineBlockBridge;
 
 use EngineBlock_ApplicationSingleton;
 use EngineBlock_Corto_Exception_PEPNoAccess;
-use EngineBlock_Corto_Exception_ReceivedErrorStatusCode;
+use EngineBlock_Corto_Exception_HasFeedbackInfoInterface;
 use EngineBlock_Exception;
 use Exception;
 use Psr\Log\LoggerInterface;
@@ -72,7 +72,7 @@ class ErrorReporter
             $feedback = [];
         }
 
-        if ($exception instanceof EngineBlock_Corto_Exception_ReceivedErrorStatusCode) {
+        if ($exception instanceof EngineBlock_Corto_Exception_HasFeedbackInfoInterface) {
             $feedback = array_merge($feedback, $exception->getFeedbackInfo());
         } elseif ($exception instanceof EngineBlock_Corto_Exception_PEPNoAccess) {
             $_SESSION['error_authorization_policy_decision'] = $exception->getPolicyDecision();
