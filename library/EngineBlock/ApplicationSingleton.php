@@ -204,7 +204,7 @@ class EngineBlock_ApplicationSingleton
 
         // Store some valuable debug info in session so it can be displayed on feedback pages
         session_start();
-        $_SESSION['feedbackInfo'] = $this->collectFeedbackInfo();
+        $this->getSession()->set('feedbackInfo', $this->collectFeedbackInfo());
 
         // flush all messages in queue, something went wrong!
         $this->flushLog('An error was caught');
@@ -313,7 +313,7 @@ class EngineBlock_ApplicationSingleton
     {
         $messageSuffix = '-> Redirecting to feedback page';
         $this->reportError($exception, $messageSuffix);
-        $_SESSION['feedbackInfo'] = array_merge($feedbackInfo, $_SESSION['feedbackInfo']);
+        $this->getSession()->set('feedbackInfo', array_merge($feedbackInfo, $this->getSession()->get('feedbackInfo', [])));
         $this->getHttpResponse()->setRedirectUrl($feedbackUrl);
     }
 
@@ -392,6 +392,14 @@ class EngineBlock_ApplicationSingleton
     {
         $this->_errorHandler = $errorHandler;
         return $this;
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Session\Session
+     */
+    public function getSession()
+    {
+        return $this->getDiContainer()->getSession();
     }
 
     /**

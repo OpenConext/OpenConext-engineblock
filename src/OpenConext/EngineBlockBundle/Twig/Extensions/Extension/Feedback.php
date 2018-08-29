@@ -57,15 +57,11 @@ class Feedback extends Twig_Extension
     /**
      * Loads the feedbackInfo from the session and filters out empty valued entries.
      *
-     * @SuppressWarnings(PHPMD.Superglobals) In this case the SESSION super global is used to read error feedback. This
-     *                                       feedback is not yet stored in a Symfony managed session but uses the
-     *                                       super global.
-     *
      * @return array|mixed
      */
     private function retrieveFeedbackInfo()
     {
-        $feedbackInfo = $_SESSION['feedbackInfo'];
+        $feedbackInfo = $this->application->getSession()->get('feedbackInfo');
 
         // Remove the empty valued feedback info entries.
         if (!empty($feedbackInfo)) {

@@ -28,6 +28,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, but the IdP gives a message that I don't have access.
@@ -44,6 +45,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, but I don't have access.
@@ -58,6 +60,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, that does not send assertions, but they give a message that I don't have access.
@@ -74,6 +77,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
     Scenario: I log in at my Identity Provider, that does not send assertions, but I don't have access.
@@ -89,6 +93,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: I log in at my Identity Provider, but it has changed (private/public) keys without notifying OpenConext
@@ -103,6 +108,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: I want to log on, but this Service Provider may not access any Identity Providers
@@ -113,6 +119,7 @@ Feature:
      And I should see "User Agent:"
      And I should see "IP Address:"
      And I should see "Service Provider:"
+     And I should see "Service Provider Name:"
      And I should not see "Identity Provider:"
 
   Scenario: I want to log on but this Service Provider is not yet registered at OpenConext
@@ -136,6 +143,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
       And I should see "https://wrong.example.edu/metadata"
 
@@ -149,6 +157,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: An Identity Provider sends a response without a SHO
@@ -163,6 +172,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: An Identity Provider sends a response without a uid
@@ -177,6 +187,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
       And I should see "Identity Provider:"
 
   Scenario: An SP sends a AuthnRequest transparently for an IdP that doesn't exist
@@ -188,6 +199,7 @@ Feature:
       And I should see "User Agent:"
       And I should see "IP Address:"
       And I should see "Service Provider:"
+      And I should see "Service Provider Name:"
 
   Scenario: I log in at my Identity Provider, that has the 'block_user_on_violation' feature activated, and has an invalid attribute.
     Given feature "eb.block_user_on_violation" is enabled
