@@ -102,6 +102,10 @@ class EngineBlock_Attributes_Metadata
             if (isset($definitions[$b]['DisplayOrder'])) {
                 $orderB = $definitions[$b]['DisplayOrder'];
             }
+            // fix to get same results on php7 and < php7
+            if ($orderA === $orderB) {
+                return ($a < $b ? 1 : -1);
+            }
             return $orderA - $orderB;
         });
         return $attributes;
