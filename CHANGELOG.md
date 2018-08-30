@@ -7,6 +7,9 @@ More information about our release strategy can be found in the [Development Gui
 
 ## Development
 
+### Chores and other improvements
+ * Symfony was upgrade from version 2.8 to 3.4. This required the upgrade of quite some other (mainly dev) dependencies. #590
+
 ### Features
  * A custom database health check is added for the Monitor bundle. #589 
 
