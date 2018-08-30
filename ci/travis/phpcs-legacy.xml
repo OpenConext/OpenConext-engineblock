@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<ruleset name="Ibuildings QA Tools Standard Wrapper">
+    <description>
+        This is used by the Ibuildings QA tools to wrap the coding standard of your choice.
+        By default it is less stringent about long lines than other coding standards
+    </description>
+
+    <exclude-pattern>src/*/*Bundle/Resources</exclude-pattern>
+    <exclude-pattern>src/*/*Bundle/Tests</exclude-pattern>
+    <exclude-pattern>src/*/Bundle/*Bundle/Resources</exclude-pattern>
+    <exclude-pattern>src/*/Bundle/*Bundle/Tests</exclude-pattern>
+    <exclude-pattern>*/Tests/*</exclude-pattern>
+
+    <!-- This is the rule we inherit from. If you want to exlude some specific rules, see the docs on how to do that -->
+    <rule ref="PSR2"/>
+
+    <!-- Lines can be a little bit longer before they break the build -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="150"/>
+        </properties>
+    </rule>
+
+    <!-- legacy code style support -->
+    <rule ref="PSR2">
+        <exclude name="PSR1.Classes.ClassDeclaration.MissingNamespace"/>
+        <exclude name="Squiz.Classes.ValidClassName.NotCamelCaps"/>
+        <exclude name="PSR2.Classes.PropertyDeclaration.Underscore"/>
+        <exclude name="PSR2.Methods.MethodDeclaration.Underscore"/>
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace"/>
+        <exclude name="PSR2.Files.EndFileNewline.NoneFound"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.Indent"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.ImplementsLine"/>
+        <exclude name="PSR2.ControlStructures.ElseIfDeclaration.NotAllowed"/>
+        <exclude name="Squiz.Scope.MethodScope.Missing"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingBeforeClose"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.CloseBraceAfterBody"/>
+        <exclude name="PSR2.Methods.FunctionCallSignature.MultipleArguments"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.NewlineBeforeOpenBrace"/>
+        <exclude name="Generic.Functions.FunctionCallArgumentSpacing.SpaceBeforeComma"/>
+        <exclude name="Generic.WhiteSpace.ScopeIndent.IncorrectExact"/>
+        <exclude name="Generic.PHP.LowerCaseConstant.Found"/>
+        <exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeCloseBracket"/>
+        <exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonCASE"/>
+        <exclude name="PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.FirstInterfaceSameLine"/>
+        <exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine"/>
+        <exclude name="Generic.WhiteSpace.ScopeIndent.Incorrect"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseParenthesis"/>
+        <exclude name="Squiz.Functions.MultiLineFunctionDeclaration.SpaceBeforeUse"/>
+        <exclude name="Squiz.WhiteSpace.ControlStructureSpacing.SpacingAfterOpen"/>
+        <exclude name="PSR2.Methods.FunctionCallSignature.SpaceAfterOpenBracket"/>
+        <exclude name="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose"/>
+        <exclude name="Squiz.WhiteSpace.ScopeKeywordSpacing.Incorrect"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.SpaceBeforeName"/>
+        <exclude name="PSR1.Classes.ClassDeclaration.MultipleClasses"/>
+        <exclude name="PSR1.Files.SideEffects.FoundWithSymbols"/>
+        <exclude name="Generic.Functions.FunctionCallArgumentSpacing.TooMuchSpaceAfterComma"/>
+        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceBeforeEquals"/>
+        <exclude name="Squiz.Functions.FunctionDeclarationArgumentSpacing.SpaceAfterDefault"/>
+        <exclude name="PSR2.ControlStructures.SwitchDeclaration.SpaceBeforeColonDEFAULT"/>
+        <exclude name="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace"/>
+        <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.ContentBefore"/>
+        <exclude name="PSR2.Namespaces.UseDeclaration.SpaceAfterLastUse"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.SpaceBeforeBrace"/>
+        <exclude name="Squiz.WhiteSpace.ScopeClosingBrace.Indent"/>
+        <exclude name="PSR2.Classes.ClassDeclaration.ExtendsLine"/>
+        <exclude name="Generic.PHP.LowerCaseKeyword.Found"/>
+        <exclude name="PSR2.Files.EndFileNewline.TooMany"/>
+    </rule>
+</ruleset>

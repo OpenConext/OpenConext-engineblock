@@ -6,7 +6,7 @@
     <target name="functional-tests" depends="api-functional-tests, behat-travis" />
     <target name="functional-tests-wip" depends="behat-travis-wip" />
     <target name="code-quality-ci" depends="test-suites,code-quality"/>
-    <target name="code-quality" depends="php-lint,phpmd,phpcs"/>
+    <target name="code-quality" depends="php-lint,phpmd,phpcs,phpcs-legacy"/>
     <target name="security-tests" depends="security-checker-travis-fix" />
     <target name="test-suites" depends="eb4-tests,unit-tests,integration-tests"/>
 
@@ -77,6 +77,18 @@
             <arg value="--warning-severity=0" />
             <arg value="--extensions=php" />
             <arg path="src" />
+        </exec>
+    </target>
+
+    <target name="phpcs-legacy"
+            description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+        <exec dir="${basedir}" executable="vendor/bin/phpcs" failonerror="true">
+
+            <arg value="--standard=ci/travis/phpcs-legacy.xml" />
+            <arg value="--warning-severity=0" />
+            <arg value="--extensions=php" />
+            <arg value="-s" />
+            <arg path="library" />
         </exec>
     </target>
 
