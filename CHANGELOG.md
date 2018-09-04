@@ -10,7 +10,6 @@ More information about our release strategy can be found in the [Development Gui
 ### Features
  * A custom database health check is added for the Monitor bundle. #589
  * A feature toggle to disallow users on attribute violations is added. #591
- * A custom database health check is added for the Monitor bundle. #589 
 
 ## 5.8.2
 This is mainly a release that consists of fixes of technical debt, longer standing quirks and other maintenance related 
