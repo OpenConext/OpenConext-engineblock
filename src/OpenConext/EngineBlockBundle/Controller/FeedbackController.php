@@ -7,6 +7,7 @@ use OpenConext\EngineBlockBundle\Pdp\PolicyDecision;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Twig_Environment;
 
@@ -77,7 +78,7 @@ class FeedbackController
         $customFeedbackInfo['EntityID'] = $request->get('entity-id');
         $customFeedbackInfo['Destination'] = $request->get('destination');
 
-        $this->setFeedbackInformationOnSession($customFeedbackInfo);
+        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
         $body = $this->twig->render('@theme/Authentication/View/Feedback/unknown-issuer.html.twig');
 
@@ -137,7 +138,7 @@ class FeedbackController
 
         // Add feedback info from url
         $customFeedbackInfo['EntityID'] = $entityId;
-        $this->setFeedbackInformationOnSession($customFeedbackInfo);
+        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
         $body = $this->twig->render(
             '@theme/Authentication/View/Feedback/unknown-service-provider.html.twig',
@@ -162,18 +163,41 @@ class FeedbackController
     }
 
     /**
-     * @SuppressWarnings(PHPMD.Superglobals) This is required to mimic the existing functionality
-     *
      * @param Request $request
      * @return Response
      */
-    public function customAction()
+    public function invalidAttributeValueAction(Request $request)
+    {
+        $feedbackInfo = $request->getSession()->get('feedbackInfo');
+
+        $attributeName = $feedbackInfo['attributeName'];
+        $attributeValue = $feedbackInfo['attributeValue'];
+
+        return new Response(
+            $this->twig->render(
+                '@theme/Authentication/View/Feedback/invalid-attribute-value.html.twig',
+                [
+                    'attributeName' => $attributeName,
+                    'attributeValue' => $attributeValue,
+                ]
+            ),
+            403
+        );
+    }
+
+
+    /**
+     * @param Request $request
+     * @return Response
+     */
+    public function customAction(Request $request)
     {
         $currentLocale = $this->translator->getLocale();
 
         $title = $this->translator->trans('error_generic');
         $description = $this->translator->trans('error_generic_desc');
 
+        $session = $request->getSession();
         if ($session->has('feedback_custom')) {
             $feedbackCustom = $session->get('feedback_custom');
             if (isset($feedbackCustom['title'][$currentLocale])) {
@@ -264,20 +288,19 @@ class FeedbackController
     }
 
     /**
-     * @SuppressWarnings(PHPMD.Superglobals) This is required to mimic the existing functionality
-     *
      * @param Request $request
      * @return Response
      */
-    public function authorizationPolicyViolationAction()
+    public function authorizationPolicyViolationAction(Request $request)
     {
         $locale = $this->translator->getLocale();
         $logo = null;
         $policyDecisionMessage = null;
 
-        if (isset($_SESSION['error_authorization_policy_decision'])) {
+        $session = $request->getSession();
+        if ($session->has('error_authorization_policy_decision')) {
             /** @var PolicyDecision $policyDecision */
-            $policyDecision = $_SESSION['error_authorization_policy_decision'];
+            $policyDecision = $session->get('error_authorization_policy_decision');
 
             if ($policyDecision->hasLocalizedDenyMessage()) {
                 $policyDecisionMessage = $policyDecision->getLocalizedDenyMessage($locale, 'en');
@@ -308,7 +331,7 @@ class FeedbackController
     {
         // Add feedback info from url
         $customFeedbackInfo['Idp Hash'] = $request->get('idp-hash');
-        $this->setFeedbackInformationOnSession($customFeedbackInfo);
+        $this->setFeedbackInformationOnSession($request->getSession(), $customFeedbackInfo);
 
         return new Response(
             $this->twig->render('@theme/Authentication/View/Feedback/unknown-preselected-idp.html.twig'),
@@ -328,15 +351,12 @@ class FeedbackController
     }
 
     /**
-     * @SuppressWarnings(PHPMD.Superglobals) This is required to mimic the existing functionality
-     *
+     * @param SessionInterface $session
      * @param array $customFeedbackInfo
      */
-    private function setFeedbackInformationOnSession(array $customFeedbackInfo)
+    private function setFeedbackInformationOnSession(SessionInterface $session, array $customFeedbackInfo)
     {
-        if (!isset($_SESSION['feedbackInfo'])) {
-            $_SESSION['feedbackInfo'] = [];
-        }
-        $_SESSION['feedbackInfo'] = array_merge($customFeedbackInfo, $_SESSION['feedbackInfo']);
+        $feedbackInfo = $session->get('feedbackInfo', []);
+        $session->set('feedbackInfo', array_merge($customFeedbackInfo, $feedbackInfo));
     }
 }

@@ -47,6 +47,8 @@ return $overrides + [
     'ipAddress'             => 'IP-adres',
     'statusCode'            => 'Statuscode',
     'statusMessage'         => 'Statusbericht',
+    'attributeName'         => 'Attribuutnaam',
+    'attributeValue'        => 'Attribuutwaarde',
 
     // WAYF
     'search'                    => 'Zoek een %organisationNoun%...',
@@ -211,7 +213,13 @@ Inloggen is niet gelukt en we kunnen je niet precies vertellen waarom. Probeer h
             <li>schacHomeOrganization</li>
         </ul>
     </p>',
-
+    'error_invalid_attribute_value' => 'Attribuutwaarde niet toegestaan',
+    'error_invalid_attribute_value_desc' => '<p>
+        Je %organisationNoun% geeft een waarde door in het attribuut %attributeName% ("%attributeValue%") die niet is toegestaan voor deze %organisationNoun%. Inloggen is daarom niet mogelijk.
+     <p>
+     </p>
+        Alleen jouw %organisationNoun% kan dit oplossen. Neem dus contact op met de servicedesk van je eigen %organisationNoun%.
+    </p>',
     'error_received_error_status_code'     => 'Error - Fout bij Identity Provider',
     'error_received_error_status_code_desc'=> '<p>
 Je %organisationNoun% heeft je de toegang geweigerd tot deze dienst. Je zult dus contact moeten opnemen met de (IT-)servicedesk van je eigen %organisationNoun% om te kijken of dit verholpen kan worden.

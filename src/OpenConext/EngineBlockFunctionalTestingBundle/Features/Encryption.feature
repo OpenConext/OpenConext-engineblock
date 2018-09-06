@@ -1,4 +1,3 @@
-@WIP
 Feature:
   In order to protect my Responses from prying eyes
   As an IdP
