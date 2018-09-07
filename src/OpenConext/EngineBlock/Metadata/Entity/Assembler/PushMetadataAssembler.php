@@ -197,6 +197,14 @@ class PushMetadataAssembler
             'requesteridRequired'
         );
 
+        $properties += $this->setPathFromObject(
+            array(
+                $connection,
+                'metadata:coin:attribute_aggregation_required'
+            ),
+            'attributeAggregationRequired'
+        );
+
         return Utils::instantiate(
             'OpenConext\EngineBlock\Metadata\Entity\ServiceProvider',
             $properties
@@ -215,6 +223,7 @@ class PushMetadataAssembler
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:guest_qualifier'), 'guestQualifier');
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:schachomeorganization'), 'schacHomeOrganization');
         $properties += $this->assembleConsentSettings($connection);
+        $properties += $this->assembleSpEntityIdsWithoutConsent($connection);
         $properties += $this->setPathFromObject(array($connection, 'metadata:coin:hidden'), 'hidden');
         $properties += $this->assembleShibMdScopes($connection);
 
@@ -405,6 +414,22 @@ class PushMetadataAssembler
             $services[] = new Service($singleSignOnServiceMetadata->Location, $singleSignOnServiceMetadata->Binding);
         }
         return array('singleSignOnServices' => $services);
+    }
+
+    private function assembleSpEntityIdsWithoutConsent(stdClass $connection)
+    {
+        if (empty($connection->disable_consent_connections)) {
+            return array();
+        }
+
+        return array(
+            'spsEntityIdsWithoutConsent' => array_map(
+                function ($disableConsentConnection) {
+                    return $disableConsentConnection->name;
+                },
+                $connection->disable_consent_connections
+            )
+        );
     }
 
     private function assembleConsentSettings(stdClass $connection)
