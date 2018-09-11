@@ -5,6 +5,15 @@
 ### Metadata push memory configurable
 The memory used in php for the metadata push is now configurable with the `engineblock.metadata_push_memory_limit` configuration option.
 
+### Rolling update column cleanup
+The features from 5.8.3 to suport rolling updates could be dropped because they are no longer used.
+Running the migrations `Version20180910134145` and `Version20180910175453` will take care of this.
+Be aware that the logic used to update the columns are also dropped in this release.
+
+The features removed:
+ * Implement a minimal variant of the consent screen #544
+ * Remove attribute_aggregation_required metadata setting #572
+
 ## 5.7 -> 5.8
 
 ### Stored metadata incompatibility

@@ -7,7 +7,7 @@ More information about our release strategy can be found in the [Development Gui
 
 ## Next release
 
-The 5.10 release focuses on making EngineBlock more robust. The biggest aim is to improve error reporting. 
+The 5.10 release focuses on making EngineBlock more robust. The biggest aim is to improve error reporting.
 
 ### Features
  * SSO and ACS mis-use is logged earlier in the process #641 #642
@@ -17,6 +17,7 @@ The 5.10 release focuses on making EngineBlock more robust. The biggest aim is t
  * Allow for more than one in-flight authentication session per user session #649
  * Added further support for Portuguese language #650 (thanks @domgon!)
  * Update release script and  remove minified assets from VCS #666
+ * Cleanup rolling update 5.8 compatibility support #683 (this was added in 5.8.3)
 
 ## 5.9.4
 
