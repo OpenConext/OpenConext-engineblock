@@ -103,13 +103,6 @@ class ServiceProvider extends AbstractRole
     /**
      * @var bool
      *
-     * @ORM\Column(name="attribute_aggregation_required", type="boolean")
-     */
-    public $attributeAggregationRequired;
-
-    /**
-     * @var bool
-     *
      * @ORM\Column(name="requesterid_required", type="boolean")
      */
     public $requesteridRequired;
@@ -219,7 +212,6 @@ class ServiceProvider extends AbstractRole
         $requestedAttributes = null,
         $skipDenormalization = false,
         $policyEnforcementDecisionRequired = false,
-        $attributeAggregationRequired = false,
         $requesteridRequired = false,
         $manipulation = '',
         AttributeReleasePolicy $attributeReleasePolicy = null,
@@ -267,7 +259,6 @@ class ServiceProvider extends AbstractRole
         $this->requestedAttributes = $requestedAttributes;
         $this->skipDenormalization = $skipDenormalization;
         $this->policyEnforcementDecisionRequired = $policyEnforcementDecisionRequired;
-        $this->attributeAggregationRequired = $attributeAggregationRequired;
         $this->requesteridRequired = $requesteridRequired;
         $this->supportUrlEn = $supportUrlEn;
         $this->supportUrlNl = $supportUrlNl;
