@@ -57,10 +57,8 @@ class DoctrineConnectionHealthCheck implements HealthCheckInterface
         // Was the entityManager injected? When it is not the project does not use Doctrine ORM
         if (!is_null($this->entityManager)) {
             try {
-                $this->entityManager->getConnection()->exec($this->query);
+                $this->entityManager->getConnection()->query($this->query);
             } catch (Exception $e) {
-                // On error close the connection to prevent sleeping processes
-                $this->entityManager->getConnection()->close();
                 return HealthReport::buildStatusDown('Unable to execute a query on the database.');
             }
         }
